@@ -21,106 +21,75 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh,v 1.1 2001-12-05 18:56:43 nartallo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelAnalysisManager.cc                       *     
+// * -------                                                            *
+// *                                                                    *
+// * Version:           0.2                                             *
+// * Date:              30/11/00                                        *
+// * Author:            A. Pfeiffer, G. Barrand, MG Pia, R Nartallo     *
+// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
+// *                                                                    *
+// **********************************************************************
 //
-// Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
-//         (copy of his UserAnalyser class)
+// CHANGE HISTORY
+// --------------
 //
-// History:
-// -----------
-//  7 Nov 2001   MGP  Implemented according to A. Pfeiffer's instructions
+// 07.12.2001 A.Pfeiffer
+// - merged with Guy Barrand's AIDA 2.2 port
 //
-// -------------------------------------------------------------------
-// Class description:
-// Example of analysis in a simulation application (histograms, ntuples etc.)
-// This class follows the singleton design pattern; 
-// it is responsible for the analysis management and algorithms 
-// Histograms are compliant with AIDA 1.0 (the header files are
-// copies from the Anaphe Interfaces directory), except for the usage of
-// IHistoManager which is Anaphe/Lizard-specific
-// For ntuples, for which the AIDA interfaces and compliant implementations
-// are still in progress at the time of the current Geant4 release, 
-// an implementation with Anaphe/Lizard is shown
-// Other implementations specific to an analysis system are possible too
-// (see, for instance, JAS and OpenScientist documentation from the links
-// in http://aida.freehep.org/)
-// The implementation of the usage of ntuples shown in this example
-// is expected to change in future Geant4 releases, when AIDA interfaces 
-// and related implementations would be available
-// Further documentation is available from: http://www.ge.infn.it/geant4/lowE/
-//                                          http://aida.freehep.org/
-//                                          http://cern.ch/anaphe/
+// 30.11.2000 M.G. Pia, R. Nartallo
+// - Simplification of code
+// - Inheritance directly from the base class G4VAnalysisManager instead
+//   of the derived class G4AnalysisManager
+//
+// 16.10.2000 G. Barrand
+// - First implementation of XrayAnalysisManager class
+// - Provision of code for various AIDA and non-AIDA systems
+//
+// **********************************************************************
 
-// -------------------------------------------------------------------
-
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#ifndef XrayTelAnalysis_h
+#define XrayTelAnalysis_h 1
 
 #include "globals.hh"
-
-// Histogramming from AIDA (through their copy in Anaphe)
-#include "Interfaces/IHistogram1D.h"
-#include "Interfaces/IHistogram2D.h"
-
-// Histogramming from Anaphe
-#include "Interfaces/IHistoManager.h"
-
-// Ntuples from Anaphe
-#include "NtupleTag/LizardNTupleFactory.h"
-#include "NtupleTag/LizardQuantity.h"
-
-// Vectors from Anaphe
-#include "Interfaces/IVector.h"
-#include "Interfaces/IVectorFactory.h"
-
-// Plotting from Anaphe
-#include "Interfaces/IPlotter.h"
+#include "g4std/vector"
+#include "G4ThreeVector.hh"                                                                         
 
 class G4Track;
-class NTuple;
 
-class XrayTelAnalysis
-{
+class IAnalysisFactory;
+class ITree;
+class IHistogram1D;
+class IHistogram2D;
+class IPlotter;
+
+class XrayTelAnalysis {
 public:
 
-  ~XrayTelAnalysis();
+  virtual ~XrayTelAnalysis();
 
-  void book();
-  
-  void finish();
-  
+  void book(); 
+  void finish(); 
   void analyseStepping(const G4Track& track, G4bool entering);
 
-  static XrayTelAnalysis* getInstance();
+  static XrayTelAnalysis* getInstance(int = 0, char** = 0);
 
 private:
 
-  XrayTelAnalysis();
-
-  void plot1D(IHistogram1D* histo);
-  void plot2D(IHistogram2D* histo);
+  XrayTelAnalysis(int,char**);
 
   static XrayTelAnalysis* instance;
 
-  IHistoManager* histoManager;
-  IVectorFactory* vectorFactory;
+  IAnalysisFactory* analysisFactory;
+  ITree* tree;
+  IHistogram1D* enteringEnergyHistogram;
+  IHistogram2D* yzHistogram;
   IPlotter* plotter;
-
-  // ---- NOTE ----
-  // Histograms are compliant to AIDA interfaces, ntuples are Lizard specific
- 
-  Lizard::NTuple* ntuple;
-  Lizard::NTupleFactory* ntFactory;
-
-  // Quantities for the ntuple
-  Lizard::Quantity<float> eKin;
-  Lizard::Quantity<float> y;
-  Lizard::Quantity<float> z;
-  Lizard::Quantity<float> dirX;
-  Lizard::Quantity<float> dirY;
-  Lizard::Quantity<float> dirZ;
-
 };
 
-#endif 
+#endif
+

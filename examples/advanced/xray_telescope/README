@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2001-12-05 18:55:45 nartallo Exp $
+$Id: README,v 1.8 2001-12-07 19:20:15 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,9 +29,10 @@ in Geant4:
 
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are provided for the Linux environment only
-   with the Lizard system at present, other analysis systems such as 
-   OpenScientist and JAS will be implemented at a later stage
+ - histograming facilities are presently provided for the Linux environment 
+   either by using the AIDA interfaces, or through the Anaphe/Lizard system.
+   The AIDA compliant version has not been tested by the developers and is
+   here as a example of "forward compatibility" on how to use analysis.
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
@@ -66,9 +67,20 @@ setenv G4VIS_USE_DAWN               1
 setenv G4VIS_USE_DAWNFILE           1
 setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
-#set up Lizard for the gcc-2.95 compiler
-setenv G4ANALYSIS_SYSTEM Lizard
+# flag that we want to use analysis:
 setenv G4ANALYSIS_USE               1
+
+# select analysis system: any AIDA 2.2 compliant system or Anaphe 3.6.5
+
+# set up for AIDA 2.2 compliancy:
+# Compilation and link flags to hook and AIDA compliant system 
+# are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
+# that should come with any AIDA compliant system. Examples are:
+# setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
+# setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --libs`
+
+#set up Anaphe/Lizard for the gcc-2.95 compiler
+setenv G4ANALYSIS_SYSTEM Lizard
 setenv G4ANALYSIS_USE_LIZARD        1
 setenv G4ANALYSIS_BUILD             1
 setenv G4ANALYSIS_BUILD_LIZARD      1
@@ -122,7 +134,7 @@ To execute a run without visualisation use
   - test.mac
 
 
-If the Lizard analysis options are set, histograming windows will
+If the analysis options are set, histograming windows will
 automatically open and the corresponding files will be created.
 A 2D histogram (scatter plot) will display in real time every proton 
 hit that reaches the detector. 
@@ -154,21 +166,20 @@ http://www.space.dera.gov.uk/space_env/gspm.html
 
 6. Analysis
 
-At present the analysis package implemented is Lizard. As this is still
-under development only simple histograming is used. The main purpose of 
-including this facility was to provide the basis for the implementation of 
-AIDA interfaces between Geant4 and analysis packages, in particular
-Lizard, OpenScientist and JAS. More complex analysis features may be
-implemented in future releases.
+At present there are two options for analysis packages: either 
+explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
+or any AIDA-2.2 compliant analysis system is chosen.  This dual
+approach will be removed in the next release when only the AIDA
+compliant version will be present. Presently, the OpenScientist 
+package (version 8) provides an implementation of AIDA 2.2, 
+other packages as Anaphe and JAS will follow soon. The AIDA 
+compliant version has not been tested by the developers and is
+here as a example of "forward compatibility" on how to use analysis.
 
-The current implementation of the analysis class is very preliminary 
-and new tags of this example are anticipated to be released soon after 
-the general release 
-
-Lizard is not currently implemented on platforms other than Linux. 
-To build and execute the example on other platforms the analysis 
-environment variables must not be set, except for G4ANALYSIS_BUILD 
-which is required for building the executable.
+To build and execute the example on platforms where there is no
+implementation of the analysis system, the environment variables 
+must not be set, except for G4ANALYSIS_BUILD which is required for 
+building the executable.
 
 
 
