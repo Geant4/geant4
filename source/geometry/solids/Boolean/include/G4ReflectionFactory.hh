@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.2 2003-01-27 10:43:30 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.3 2003-05-12 12:35:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,12 @@ class G4ReflectionFactory
     G4String GetVolumesNameExtension() const;				  
       // Returns the name extension for the reflected solids
       // and logical volumes.
- 
+
+    void     SetScalePrecision(G4double scaleValue);
+    G4double GetScalePrecision() const;
+      // Sets/gets precision factor for the scale consistency check
+      // The default value is set to 10*kCarTolerance.
+
   protected:	  
 
     G4ReflectionFactory();
@@ -180,7 +185,7 @@ class G4ReflectionFactory
     G4bool IsReflection(const G4Scale3D& scale) const;
       // Returns true if the scale is negative, false otherwise.
 
-    void   CheckScale(const G4Scale3D& scale) const;
+    void CheckScale(const G4Scale3D& scale) const;
       // Checks if scale correspond to fScale, if not gives exception.
 
     void PrintConstituentLVMap();				  
@@ -191,7 +196,8 @@ class G4ReflectionFactory
     static G4ReflectionFactory* fInstance;
     static const G4String       fDefaultNameExtension;
     static const G4Scale3D      fScale;
-    
+    G4double                    fScalePrecision;
+
     G4int              fVerboseLevel;
     G4String           fNameExtension;
     LogicalVolumesMap  fConstituentLVMap;
