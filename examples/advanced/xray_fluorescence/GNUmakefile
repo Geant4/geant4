@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2001-12-07 16:48:16 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2001-12-07 17:12:54 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -20,13 +20,13 @@ include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_AIDA_CONFIG_CFLAGS
 # AIDA (version 2.2 for now) selected
-  FOO := $(shell cp include/XrayFluoAnalysisManager.hh-AIDA include/XrayFluoAnalysisManager.hh )
-  FOO := $(shell cp src/XrayFluoAnalysisManager.cc-AIDA src/XrayFluoAnalysisManager.cc )
+  FOO := $(shell cp -p include/XrayFluoAnalysisManager.hh-AIDA include/XrayFluoAnalysisManager.hh )
+  FOO := $(shell cp -p src/XrayFluoAnalysisManager.cc-AIDA src/XrayFluoAnalysisManager.cc )
 else
 # Anaphe selected 
   include anaphe.gmk
-  FOO := $(shell cp include/XrayFluoAnalysisManager.hh-Anaphe include/XrayFluoAnalysisManager.hh )
-  FOO := $(shell cp src/XrayFluoAnalysisManager.cc-Anaphe src/XrayFluoAnalysisManager.cc )
+  FOO := $(shell cp -p include/XrayFluoAnalysisManager.hh-Anaphe include/XrayFluoAnalysisManager.hh )
+  FOO := $(shell cp -p src/XrayFluoAnalysisManager.cc-Anaphe src/XrayFluoAnalysisManager.cc )
 endif
 
 # End Analysis.
