@@ -4,14 +4,13 @@
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHandle.hh"
+#include "G4VGFlashSensitiveDetector.hh"
 
 #include "GFlashHitMaker.hh"
+#include "G4GFlashSpot.hh"
 
 GFlashHitMaker::GFlashHitMaker()
 {
-	fFakeStep          = new G4Step();
-	fFakePreStepPoint  = fFakeStep->GetPreStepPoint();
-	fFakePostStepPoint = fFakeStep->GetPostStepPoint();
 	fTouchableHandle   = new G4TouchableHistory(); // talk to ?@@@
 	fpNavigator        = new G4Navigator();
 	fNaviSetup         = false;
@@ -19,11 +18,10 @@ GFlashHitMaker::GFlashHitMaker()
 
 GFlashHitMaker::~GFlashHitMaker()
 {
-	delete fFakeStep;
 	delete fpNavigator;
 }
 
-void GFlashHitMaker::make(const GFlashEnergySpot &Spot)
+void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
 {
 	// Locate the spot
 	if (!fNaviSetup)
@@ -32,42 +30,45 @@ void GFlashHitMaker::make(const GFlashEnergySpot &Spot)
 		SetWorldVolume(G4TransportationManager::GetTransportationManager()->
 		GetNavigatorForTracking()->GetWorldVolume() );
 		fpNavigator->
-		LocateGlobalPointAndUpdateTouchable(Spot.GetPosition(), fTouchableHandle(), false);
+		LocateGlobalPointAndUpdateTouchable(aSpot->GetPosition(), fTouchableHandle(), false);
 		fNaviSetup = true;
 	}
 	else
 	{
 		fpNavigator->
-		LocateGlobalPointAndUpdateTouchable(Spot.GetPosition(), fTouchableHandle());
+		LocateGlobalPointAndUpdateTouchable(aSpot->GetPosition(), fTouchableHandle());
 	}
+	
 	//--------------------------------------
 	// Fills attribute of the G4Step needed
 	// by our sensitive detector:
 	//-------------------------------------
 	// set spot information:
-	fFakePreStepPoint->SetTouchableHandle(fTouchableHandle);
-	fFakePreStepPoint->SetPosition(Spot.GetPosition());
-	fFakeStep->SetTotalEnergyDeposit(Spot.GetEnergy());	
+	G4GFlashSpot theSpot(aSpot, aT, fTouchableHandle());
 	//--------------------------------------
 	// Produce Hits
 	// call sensitive part: taken/adapted from the stepping:
 	// Send G4Step information to Hit/Dig if the volume is sensitive
 	//--------------G4TouchableHistory----------------------------------------
 	
-	G4VPhysicalVolume* pCurrentVolume = fFakeStep->GetPreStepPoint()->GetPhysicalVolume();		
+	G4VPhysicalVolume* pCurrentVolume = fTouchableHandle()->GetVolume();		
 	G4VSensitiveDetector* pSensitive;
 	if( pCurrentVolume != 0 )
 	{
 		pSensitive = pCurrentVolume->GetLogicalVolume()->GetSensitiveDetector();
-		if( pSensitive != 0 )
+		G4VGFlashSensitiveDetector * gflashSensitive = 
+		               dynamic_cast<G4VGFlashSensitiveDetector * > (pSensitive);
+		if( gflashSensitive )
 		{
-			pSensitive->Hit(fFakeStep);
+			gflashSensitive->Hit(&theSpot);
 		}
 		else // below for conservative programming
 		{  
-			#ifdef GFLASH_DEBUG
-			std::cout << "Out of SD = "<<fFakeStep->GetPreStepPoint()->GetPosition()<<endl; 
-			#endif
+		  std::cout<<std::endl;
+			std::cout<<"When using GFlash in geant4, please implement the "<<std::endl;
+			std::cout<<"G4VGFlashSensitiveDetector interface in addition to the"<<std::endl;
+			std::cout<<"G4VSensitiveDetector interface in the relevant sensitive detector."<<std::endl;
+			G4Exception("GFlashHitMaker: G4VGFlashSensitiveDetector interface not implemented");
 		}
 	}
 	else
@@ -77,5 +78,3 @@ void GFlashHitMaker::make(const GFlashEnergySpot &Spot)
 		#endif
 	}
 }
-
-

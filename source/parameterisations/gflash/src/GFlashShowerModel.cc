@@ -151,7 +151,6 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 	fastStep.KillPrimaryTrack();
 	fastStep.SetPrimaryTrackPathLength(0.0);
 	fastStep.SetTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
-	feSpotList.clear();
 	
 	//-----------------------------
 	// Get track parameters 
@@ -173,7 +172,6 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 	///Initialisation of long. loop variables
 	G4VSolid *SolidCalo = fastTrack.GetEnvelopeSolid();
 	G4ThreeVector pos   = fastTrack.GetPrimaryTrackLocalPosition();
-	G4ThreeVector start  = fastTrack.GetPrimaryTrack()->GetPosition();
 	G4ThreeVector dir   = fastTrack.GetPrimaryTrackLocalDirection();
 	G4double Bound      = SolidCalo->DistanceToOut(pos,dir); 
 	
@@ -248,10 +246,6 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 		{ 
 			NSpotDeposited=NSpotDeposited++;
 			GFlashEnergySpot Spot;      
-			if (i == 0)
-			{
-				Spot.SetStart(start);
-			}
 			
 			//Spot energy: the same for all spots
 			Spot.SetEnergy( DEne / DNsp );
@@ -266,11 +260,8 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 			RSpot*sin(PhiSpot)*CrossShower;      
 			Spot.SetPosition(SpotPosition);
 			
-			// Record the Spot:
-			feSpotList.push_back(Spot);
-			// Spot.Print();
 			//Generate Hits of this spot      
-			HMaker->make(Spot);
+			HMaker->make(&Spot, &fastTrack);
 		}
 	}
 	while(EnergyNow > 0.0 && Bound> 0.0);     
@@ -330,15 +321,4 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 	
 }
 
-void GFlashShowerModel::NeutrinoDoIt(const G4FastTrack& fastTrack, G4FastStep& fastStep)
-{ 
-	
-	if( fastTrack.GetPrimaryTrack()->GetKineticEnergy() > EnergyStop )
-		return;
-	
-	// Kill the particle to be parametrised
-	fastStep.KillPrimaryTrack();
-	// fastStep.SetPrimaryTrackPathLength(0.0);
-	//fastStep.SetTotalEnergyDeposited(0.0);
-}
 */

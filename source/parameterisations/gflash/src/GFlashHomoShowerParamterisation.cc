@@ -3,7 +3,6 @@
  #include "GFlashHomoShowerParamterisation.hh"
  #include <cmath>
  #include <CLHEP/Random/Randomize.h>
- #include "RandomGamma.hh"
  #include "G4ios.hh"
  #include "G4Material.hh"
  #include "Gamma.hh" // @@@@

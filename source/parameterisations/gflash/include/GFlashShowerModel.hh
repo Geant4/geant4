@@ -55,7 +55,6 @@ class GFlashShowerModel : public G4VFastSimulationModel
 	G4int FlagParamType;    	///0=no GFlash 1=only em showers parametrized
 	G4int FlagParticleContainment;  ///0=no check  ///1=only fully contained...
 	G4double StepInX0;  
-	std::vector<GFlashEnergySpot> feSpotList;
 	G4double EnergyStop;
 	
 	// private methods
