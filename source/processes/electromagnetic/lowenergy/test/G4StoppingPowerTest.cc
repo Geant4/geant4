@@ -84,7 +84,6 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-
 HepTupleManager* hbookManager;
 
 int main(int argc,char** argv)

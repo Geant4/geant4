@@ -230,7 +230,7 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
   }
        
   dedx = coeff * zParticle * zParticle * (l0Term
-       - zParticle * fBetheVelocity * l1Term 
+       + zParticle * fBetheVelocity * l1Term 
        + zParticle * zParticle * fBetheVelocity * fBetheVelocity * l2Term);
 
   //  G4cout << " E(MeV)= " << kineticEnergy/MeV 
