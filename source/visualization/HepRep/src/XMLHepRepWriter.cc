@@ -37,9 +37,22 @@ XMLHepRepWriter::~XMLHepRepWriter() {
     delete xml;
 }
 
+bool XMLHepRepWriter::addProperty(std::string key, std::string value) {
+    properties[key] = value;
+    return true;
+}
+
 bool XMLHepRepWriter::close() {
     xml->closeDoc(true);
     if (zip != NULL) {
+        zip->putNextEntry(ZipCDirEntry("heprep.properties"));
+        
+        map<string, string>::iterator i = properties.begin();
+        while (i != properties.end()) {
+            *zip << (*i).first << "=" << (*i).second << endl;
+            i++;
+        }
+        zip->closeEntry();
         zip->finish();
         zip->close();
     }
