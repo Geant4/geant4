@@ -19,6 +19,8 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
     G4ExcitationHandler theHandler;
     G4PreCompoundModel theProjectileFragmentation;
     G4HadFinalState theResult;
+    G4bool EnergyAndMomentumCorrector(G4ReactionProductVector* products,
+    				G4LorentzVector& TotalCollisionMom);
 };
 
 #endif
