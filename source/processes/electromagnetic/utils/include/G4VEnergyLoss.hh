@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.6 2000-06-22 13:29:46 maire Exp $
+// $Id: G4VEnergyLoss.hh,v 1.7 2000-08-08 17:08:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
                               G4Material* aMaterial,
-                              G4double	 threshold);
+                              G4double	 MeanLoss);
 
 
    private:
