@@ -5,6 +5,7 @@
 #
 
 $ActiveExamination="doit";
+$ShowStt=1;
 
 open(CONFIG,"OnTest") || die "Failed to open OnTest configuration file $! ";
 ($DevDir,$Tag)=split(' ',<CONFIG>);
@@ -18,7 +19,7 @@ $TestLogDir="/afs/cern.ch/sw/geant4/stt/$DevDir/testtools/geant4/tests/tools/bin
 &SetInitialTable();
 
 opendir(TL,"$TestLogDir") || die "Failed to opendir TestLog  $TestLogDir $!";
-@testlogs=grep(m/^\w+\.dev\d\.\w+.*\.log/,readdir(TL));
+@testlogs=grep(m/^\w+\.(dev\d|prod)\.\w+.*\.log/,readdir(TL));
 closedir(TL);
 foreach $testlog (@testlogs) {
     next unless ((-M "$TestLogDir/$testlog") < 60 );
@@ -32,7 +33,8 @@ foreach $testlog (@testlogs) {
     $lines=0;
     $title=0;
     $copy=0;
-    undef($Step); undef($ResultsDir); undef(%Start); undef(%Disabled); undef(%Finish);
+    undef($Step); undef($ResultsDir); 
+    undef(%Start); undef(%Disabled); undef(%Finish); undef(%Missing);
     open(TLC,"$TestLogDir/$testlog") || die "Failed to open read $TestLogDir/$testlog $!";
     while ($line = <TLC> ) {
         $lines++;
@@ -83,6 +85,11 @@ foreach $testlog (@testlogs) {
             if ( $line =~ m/^Starting (test\d+) in/ ) { $Start{$1}=$line }
             if ( $line =~ /Finished (test\d+) in/ ) { $Finish{$1}=$line }
             if ( $line =~ /Disabled (test\d+) in/ ) { $Disabled{$1}=$line }
+            if ( $line =~ /Missing (test\d+) in/ ) { $Missing{$1}=$line }
+            if ( $line =~ m/^Starting (test\d+\.\w+) in/ ) { $Start{$1}=$line }
+            if ( $line =~ /Finished (test\d+\.\w+) in/ ) { $Finish{$1}=$line }
+            if ( $line =~ /Disabled (test\d+\.\w+) in/ ) { $Disabled{$1}=$line }
+            if ( $line =~ /Missing (test\d+\.\w+) in/ ) { $Missing{$1}=$line }
             if ( $line =~ m/syntax\s+error/ ) {
                 $syntaxerror=$line;
                 print "syntax error reported\n$line\n";
@@ -113,6 +120,22 @@ foreach $testlog (@testlogs) {
     foreach $testnum (keys (%Start)) {
         $TestState{$testnum}="S";
         if (defined($Finish{$testnum})) {$TestState{$testnum}.="F"}
+        &change_table("$testnum",$platform,"$TestState{$testnum}");
+        $num=$testnum;
+        $num=~s/test//;
+        $pl.=sprintf("%4d",$num);
+        $sl.=sprintf("%4s",$TestState{$testnum});
+    }
+    foreach $testnum (keys (%Disabled)) {
+        $TestState{$testnum}="D";
+        &change_table("$testnum",$platform,"$TestState{$testnum}");
+        $num=$testnum;
+        $num=~s/test//;
+        $pl.=sprintf("%4d",$num);
+        $sl.=sprintf("%4s",$TestState{$testnum});
+    }
+    foreach $testnum (keys (%Missing)) {
+        $TestState{$testnum}="M";
         &change_table("$testnum",$platform,"$TestState{$testnum}");
         $num=$testnum;
         $num=~s/test//;
