@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.32 2003-06-03 15:31:35 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.33 2003-06-05 10:36:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -80,6 +80,11 @@ class G4PropagatorInField
    inline void SetChargeMomentumMass( G4double charge,     // in e+ units
                                       G4double momentum,   // in Geant4 units
                                       G4double pMass );  
+     // Inform this and all associated classes of q, p, m 
+
+   G4FieldManager*  FindAndSetFieldManager(G4VPhysicalVolume* pCurrentPhysVol);
+     // Set the correct field manager (global or local), if one exists
+     //  and return it
 
    inline G4ChordFinder* GetChordFinder();
 
@@ -173,7 +178,8 @@ class G4PropagatorInField
 
    G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
 				    const G4FieldTrack &EstimtdEndStateB,
-				    double              curveDist);
+				    double              linearDistSq,
+ 				    double              curveDist);
      // Return new estimate for state after curveDist 
      //    starting from CurrentStateA,  to replace EstimtdEndStateB,
      //    (and report displacement -- if field is compiled verbose.)
