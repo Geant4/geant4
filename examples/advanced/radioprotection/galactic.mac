@@ -32,4 +32,4 @@
 /gun/generator Interplanetary
 /run/data gcrZ=1.txt
 /run/initialize
-/run/beamOn 500
+/run/beamOn 10

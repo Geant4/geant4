@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.4 2004-05-18 10:23:24 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,12 +62,12 @@ RemSimDetectorConstruction::~RemSimDetectorConstruction()
 G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
 { 
   pMaterial -> DefineMaterials();
-  G4Material* vacuum = pMaterial->GetMaterial("Galactic") ;
-  G4Material* water = pMaterial ->GetMaterial("Water");
+  G4Material* vacuum = pMaterial -> GetMaterial("Galactic") ;
+  G4Material* water = pMaterial -> GetMaterial("Water");
  
-  G4double expHall_x = 20.0*m;
-  G4double expHall_y = 20.0*m;
-  G4double expHall_z = 20.0*m;
+  G4double expHall_x = 30.0*m;
+  G4double expHall_y = 30.0*m;
+  G4double expHall_z = 30.0*m;
   
   G4Box* experimentalHall_box
     = new G4Box("world",expHall_x,expHall_y,expHall_z);
@@ -136,5 +136,5 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
 }
 void RemSimDetectorConstruction::ConstructVolume()
 {
-  pVehicle ->ConstructComponent( experimentalHall_phys);
+  pVehicle -> ConstructComponent(experimentalHall_phys);
 }

@@ -12,7 +12,5 @@ public:
 
   virtual void ConstructComponent(G4VPhysicalVolume*)=0;
   virtual void DestroyComponent()=0;
-  virtual G4double GetDensity()=0;
-  virtual void ChangeMaterial(G4String)=0;
 };
 #endif
