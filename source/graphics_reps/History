@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.47 2003-09-18 11:03:10 johna Exp $
+cvs log $Id: History,v 1.48 2004-03-30 15:43:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18th September 2003  John Alison  (greps-V05-02-00)
+30th March 2004  G.Cosmo  (greps-V06-01-00)
+- Implemented constructor and destructor for G4AttDefStore, to properly
+  delete objects in the static map, allocated through explicit calls to
+  GetInstance().
+
+18th September 2003  J.Allison  (greps-V05-02-00)
 - Introduced G4Colour<->G4ThreeVector conversion operators.
 
 3rd April 2003  G.Cosmo  (greps-V05-00-00)
