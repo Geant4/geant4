@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformElectricField.cc,v 1.2 1999-12-15 14:49:50 gunter Exp $
+// $Id: G4UniformElectricField.cc,v 1.3 2001-03-27 09:43:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,9 @@
 
 G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
 {
+      fFieldComponents[0] = 0.0;
+      fFieldComponents[1] = 0.0;
+      fFieldComponents[2] = 0.0;
       fFieldComponents[3] = FieldVector.x();
       fFieldComponents[4] = FieldVector.y();
       fFieldComponents[5] = FieldVector.z();
@@ -33,6 +36,9 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
       vTheta >= 0 && vTheta <= pi && 
       vPhi >= 0 && vPhi <= twopi)
    {
+      fFieldComponents[0] = 0.0;
+      fFieldComponents[1] = 0.0;
+      fFieldComponents[2] = 0.0;
       fFieldComponents[3] = vField*sin(vTheta)*cos(vPhi) ;
       fFieldComponents[4] = vField*sin(vTheta)*sin(vPhi) ;
       fFieldComponents[5] = vField*cos(vTheta) ;
@@ -50,13 +56,13 @@ G4UniformElectricField::~G4UniformElectricField()
 
 G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
 {
-   for (G4int i=3; i<6; i++)
+   for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];
 }
 
 G4UniformElectricField& G4UniformElectricField::operator = (const G4UniformElectricField &p)
 {
-   for (G4int i=3; i<6; i++)
+   for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];
    return *this;
 }
@@ -65,11 +71,14 @@ G4UniformElectricField& G4UniformElectricField::operator = (const G4UniformElect
 
 
 void G4UniformElectricField::GetFieldValue (const G4double [3],
-                                             G4double E[3]  ) const 
+                                             G4double fieldBandE[6]  ) const 
 {
-   E[0]= fFieldComponents[3] ;
-   E[1]= fFieldComponents[4] ;
-   E[2]= fFieldComponents[5] ;
+   fieldBandE[0]= 0.0;
+   fieldBandE[1]= 0.0;
+   fieldBandE[2]= 0.0;
+   fieldBandE[3]= fFieldComponents[3] ;
+   fieldBandE[4]= fFieldComponents[4] ;
+   fieldBandE[5]= fFieldComponents[5] ;
    return ;
 }
 
