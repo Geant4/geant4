@@ -112,15 +112,15 @@ public:
   };
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
+  G4InuclElementaryParticle generateNucleon(G4int type, 
+					    G4int zone) const;
+
 private: 
 G4int verboseLevel;
   G4bool passFermi(const G4std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
   void boundaryTransition(G4CascadParticle& cparticle);
-
-  G4InuclElementaryParticle generateNucleon(G4int type, 
-					    G4int zone) const;
 
   G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
 						 G4int type2,

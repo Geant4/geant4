@@ -20,7 +20,6 @@
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
 
-#include "G4FragmentVector.hh"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -200,33 +199,31 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   }
 
   // Get nuclei fragments
+  G4DynamicParticle * aFragment(0);
+  G4ParticleDefinition * aIonDef(0);
+  G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
 
-    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
+    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
+    {
       G4double eKin = ifrag->getKineticEnergy() * GeV;
       G4std::vector<G4double> mom = ifrag->getMomentum();
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
       aMom = aMom.unit();
-      G4LorentzVector momentum(aMom, eKin); // fix eKin to eTotal
 
-      G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
-      G4int A = G4int(ifrag->getA());
-      G4int Z = G4int(ifrag->getZ());
+      // hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
 
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << G4endl;
 	ifrag->printParticle();
       }
-
-      G4FragmentVector * theFragments = new G4FragmentVector;
-
-      G4Fragment* fragment = new G4Fragment(A, Z, momentum);
-
-      fragment->SetExcitationEnergy(fragmentExitation); // ::: is dummy routine. 
-    
-      theFragments->push_back(fragment);
-      // :::  theResult.AddSecondary(theFragments); 
+      G4int A = G4int(ifrag->getA());
+      G4int Z = G4int(ifrag->getZ());
+      aIonDef = theTableOfParticles->FindIon(Z,A,0,Z);
+      
+      aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
+      theResult.AddSecondary(aFragment); 
     }
   }
 
