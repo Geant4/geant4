@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialsTest.cc,v 1.3 2001-01-28 16:58:59 maire Exp $
+// $Id: G4MaterialsTest.cc,v 1.4 2001-02-16 17:07:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,7 +184,7 @@ G4cout << " Nuclear interaction length of Lead: "
 G4cout << " Nuclear interaction length of Water: " 
        << H2O->GetNuclearInterLength()/cm << " cm" << G4endl;
        
- G4cout << " Nuclear interaction length of Aerogel: " 
+G4cout << " Nuclear interaction length of Aerogel: " 
        << Aerog->GetNuclearInterLength()/cm << " cm" << G4endl;
              
 return EXIT_SUCCESS;
