@@ -43,7 +43,6 @@
 #include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
 
-#include "HbookHistogram.hh"
 
 
 class G4LEnp : public G4HadronicInteraction
@@ -61,7 +60,6 @@ class G4LEnp : public G4HadronicInteraction
    G4VParticleChange* ApplyYourself(const G4Track& aTrack,
                                     G4Nucleus& targetNucleus);
 
-   HbookHistogram* HAngCM;
 
  private:
 
