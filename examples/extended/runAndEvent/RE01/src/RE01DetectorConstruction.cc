@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RE01DetectorConstruction.cc,v 1.1 2004-11-26 07:37:42 asaim Exp $
+// $Id: RE01DetectorConstruction.cc,v 1.2 2004-11-26 17:20:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   //-------------------------------------------------------------------------
   // Magnetic field
   //-------------------------------------------------------------------------
-
+/******************************************************************
   static G4bool fieldIsInitialized = false;
   if(!fieldIsInitialized)
   {
@@ -81,7 +81,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
     fieldMgr->CreateChordFinder(myField);
     fieldIsInitialized = true;
   }
-
+*******************************************************************/
   //-------------------------------------------------------------------------
   // Materials
   //-------------------------------------------------------------------------
