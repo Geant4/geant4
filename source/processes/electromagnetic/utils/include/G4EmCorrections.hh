@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.1 2005-02-11 19:28:55 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.2 2005-02-15 19:35:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,6 +87,10 @@ public:
                            const G4Material* material,
                                  G4double kineticEnergy);
 
+  G4double DensityCorrection(const G4ParticleDefinition* p,
+                             const G4Material* material,
+                                   G4double kineticEnergy);
+
   G4double BarkasCorrection(const G4ParticleDefinition* p,
                             const G4Material* material,
                                   G4double kineticEnergy);
@@ -118,6 +122,14 @@ private:
 
   G4double LShell(G4double theta, G4double eta); 
 
+  G4int Index(G4double x, G4double* y, G4int n); 
+
+  G4double Value(G4double xv, G4double x1, G4double x2, G4double y1, G4double y2); 
+
+  G4double Value2(G4double xv, G4double yv, G4double x1, G4double x2,
+                  G4double y1, G4double y2,
+                  G4double z11, G4double z21, G4double z12, G4double z22); 
+
   G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2, 
                                             G4double m1, G4double m2);
 
@@ -135,7 +147,8 @@ private:
 
   G4int        nK;
   G4int        nL;
-  G4int        nEta;
+  G4int        nEtaK;
+  G4int        nEtaL;
 
   G4double     ZD[11];
 
@@ -144,6 +157,7 @@ private:
   G4double     TK[20];
   G4double     UK[20];
   G4double     VK[20];
+  G4double     ZK[20];
 
   G4double     TheL[26];
   G4double     SL[26];
@@ -161,6 +175,28 @@ private:
 inline void G4EmCorrections::SetNuclearLossFluctuations(G4bool val) 
 {
   lossFlucFlag = val;
+}
+
+inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n) 
+{
+  G4int idx = n;
+  do {idx--;} while (idx>0 && x<y[idx]);
+  return idx;
+}
+
+inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2, 
+                                       G4double y1, G4double y2) 
+{
+  return y1 + (y2 - y1)*(xv - x1)/(x2 - x1);
+}
+
+inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, G4double x1, G4double x2,
+                                        G4double y1, G4double y2,
+					G4double z11, G4double z21, G4double z12, G4double z22)
+{
+  return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) + 
+	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
+         / ((x2-x1)*(y2-y1));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

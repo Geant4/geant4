@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.53 2005-01-25 19:10:23 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.54 2005-02-15 19:35:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,7 @@
 #include "G4VEmProcess.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4EmCorrections.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -131,6 +132,7 @@ G4LossTableManager::G4LossTableManager()
   theMessenger = new G4EnergyLossMessenger();
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
+  emCorrections= new G4EmCorrections();
   integral = true;
   integralActive = false;
   buildPreciseRange = false;
