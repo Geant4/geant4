@@ -164,8 +164,8 @@ examples                                         examples-V06-00-02
   o Rich (Rich-V06-00-00)
     + Fixed compilation errors and warnings for gcc-3.2.
 - extended/medical:
-  o DICOM (DICOM-V06-00-00)
-    + ????.
+  o DICOM (DICOM-V06-00-01)
+    + Added History file, changed README.
 - novice
   o N06 (exampleN06-V06-00-00)
     + DetectorConstruction: changed surface model between
