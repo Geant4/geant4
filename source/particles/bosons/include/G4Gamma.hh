@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: G4Gamma.hh,v 1.8 2001-10-20 01:36:24 kurasige Exp $
+//// $Id: G4Gamma.hh,v 1.9 2001-11-17 04:29:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,7 @@ inline
  G4double G4Gamma::ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
 {
   return ComputeCrossSection(AtomicNumber,KineticEnergy);
-};
+}
 
 inline 
  void G4Gamma::BuildRangeVector(
