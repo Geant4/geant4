@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.29 2000-02-18 12:39:18 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.30 2000-03-22 09:46:01 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,8 @@
 //      ---------- G4LowEnergyIonisation low energy modifications -----------
 //                by Alessandra Forti May 1999  
 // **************************************************************
+//   22.03.2000 VL
+// - 1 bug corrected in SelectRandomAtom method (units)
 //   17.02.2000 Veronique Lefebure
 // - 5 bugs corrected: 
 //   *in Fluorescence, 2 bugs affecting 
@@ -403,7 +405,7 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 
     else{
 
-      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector));
+      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector))*barn;
 
     }
 
@@ -757,7 +759,7 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex, const G4do
 
     else{
 
-      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector));
+      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector))*barn;
 
     }
     
