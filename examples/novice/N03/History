@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2004-11-11 17:50:52 gbarrand Exp $
+$Id: History,v 1.78 2004-11-12 11:11:54 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ track of all tags.
      ----------------------------------------------------------
      
 11-11-04 Guy Barrand
+- ExN03DetectorConstruction.cc : add commented vis attributes
+  in order that someone can test / play with the interactive  
+  expansion / contraction geometry system of the vis/OpenInventor driver.
 - gui.mac : gun pulldown menu.
 - exN03Vis[5,10.mac] : rm an unnecessary update and bad comments.
 

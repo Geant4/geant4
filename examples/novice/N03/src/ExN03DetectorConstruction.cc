@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.19 2003-11-25 14:23:44 gcosmo Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.20 2004-11-12 11:11:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -341,10 +341,31 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
   // Visualization attributes
   //
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   logicCalor->SetVisAttributes(simpleBoxVisAtt);
+
+ /*
+  // Below are vis attributes that permits someone to test / play 
+  // with the interactive expansion / contraction geoemtry system of the
+  // vis/OpenInventor driver :
+ {G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  simpleBoxVisAtt->SetVisibility(true);
+  delete logicCalor->GetVisAttributes();
+  logicCalor->SetVisAttributes(simpleBoxVisAtt);}
+
+ {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,0.0,0.0));
+  logicLayer->SetVisAttributes(atb);}
   
+ {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  atb->SetForceSolid(true);
+  logicAbsorber->SetVisAttributes(atb);}
+  
+ {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  logicGap->SetVisAttributes(atb);}
+  */
+
   //
   //always return the physical World
   //
