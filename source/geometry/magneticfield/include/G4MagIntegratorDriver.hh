@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.9 2001-10-25 09:11:09 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.10 2001-11-09 19:17:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -142,7 +142,6 @@ class G4MagInt_Driver
      inline G4double GetVerboseLevel() const;
 
    protected:  // without description
-
      void WarnSmallStepSize( G4double hnext, G4double hstep, 
 			     G4double h,     G4double xDone,
 			     G4int noSteps);
@@ -157,6 +156,7 @@ class G4MagInt_Driver
 			G4double             xstart,
 			const G4double*      CurrentArr, 
 			G4double             xcurrent, 
+			G4double             requestStep, 
 			G4int                subStepNo);
      void PrintStatus(  const G4FieldTrack&  StartFT,
 			const G4FieldTrack&  CurrentFT, 
@@ -167,6 +167,15 @@ class G4MagInt_Driver
 			 G4double             actualStep,
 			 G4int                subStepNo);       
        //  Verbose output for debugging
+
+#ifdef QUICK_ADV_TWO
+     G4bool QuickAdvance(        G4double     yarrin[],     // In
+			   const G4double     dydx[],  
+				 G4double     hstep,        
+				 G4double     yarrout[],    // Out
+				 G4double&    dchord_step,  // Out
+				 G4double&    dyerr );      //     in length
+#endif
 
    private:
 
