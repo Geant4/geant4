@@ -2207,14 +2207,18 @@
       tempV.Initialize( vecLen+2 );
       G4bool constantCrossSection = true;
       G4int tempLen = 0;
-      for( i=0; i<vecLen+2; ++i )tempV.SetElement( tempLen++, &tempR[i] );
+      G4double totEsys = 0;
+      for( i=0; i<vecLen+2; ++i )
+      {
+        tempV.SetElement( tempLen++, &tempR[i] );
+        totEsys += tempR[i].GetTotalEnergy()/MeV;
+      }
 
       if( tempLen >= 2 )
       {
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-        wgt = GenerateNBodyEvent(
-         pseudoParticle[4].GetTotalEnergy()/MeV+pseudoParticle[5].GetTotalEnergy()/MeV,
-         constantCrossSection, tempV, tempLen );
+        G4double etot=
+        wgt = GenerateNBodyEvent(totEsys, constantCrossSection, tempV, tempLen );
         theoreticalKinetic = 0.0;
         for( i=0; i<vecLen+2; ++i )
         {
