@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.3 1999-06-29 18:07:02 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.4 1999-07-03 10:51:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -378,7 +378,7 @@ void G4OpenGLXViewer::spewWireframeEPS (FILE* file, GLint size, GLfloat* buffer,
   glGetFloatv (GL_POINT_SIZE, &pointSize);
 
   fputs ("%!PS-Adobe-2.0 EPSF-2.0\n", file);
-  fprintf (file, "%%%%Creator: %s (using OpenGL feedback)\n", file, cr);
+  fprintf (file, "%%%%Creator: %s (using OpenGL feedback)\n", cr);
   fprintf (file, "%%%%BoundingBox: %g %g %g %g\n", viewport[0], viewport[1], viewport[2], viewport[3]);
   fputs ("%%EndComments\n", file);
   fputs ("\n", file);
