@@ -52,9 +52,10 @@
 
     G4ReactionProductVector * result = 0;
     G4V3DNucleus * fancyNucleus(0);
+    G4V3DNucleus * projectile(0);
     while(!result)
     {
-      G4V3DNucleus * projectile = new G4Fancy3DNucleus;
+      projectile = new G4Fancy3DNucleus;
       projectile->Init(a1, z1);
       fancyNucleus = new G4Fancy3DNucleus;  
       fancyNucleus->Init(a2, z2);
@@ -96,7 +97,6 @@
       debug.push_back("################# Result size");
       debug.push_back(result->size());
       debug.dump();
-      delete projectile;
       for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
       delete initalState;
       
@@ -104,6 +104,7 @@
       {
         delete result; result=0;
         delete fancyNucleus;
+        delete projectile;
       } 
       else
       {
@@ -113,11 +114,11 @@
     debug.push_back("################# Through the loop ? "); debug.dump();
     
     //inverse transformation in case we swapped.
-    fancyNucleus->StartLoop();  
+    projectile->StartLoop();  
     G4int resA(0), resZ(0); 
     G4Nucleon * aNuc;
     debug.push_back("getting at the hits"); debug.dump();
-    while( (aNuc=fancyNucleus->GetNextNucleon()) )
+    while( (aNuc=projectile->GetNextNucleon()) )
     {
       debug.push_back("getting the hits"); debug.dump();
       if(!aNuc->AreYouHit())
@@ -132,6 +133,7 @@
       debug.push_back("collected a hit"); debug.dump();
     }
     delete fancyNucleus;
+    delete projectile;
     debug.push_back("have the hits"); 
     debug.push_back(resA);
     debug.push_back(resZ);
@@ -144,7 +146,7 @@
     G4int i(0);
     for(i=0; i<result->size(); i++)
     {
-      if( (*result)[i]->GetNewlyAdded() ) 
+      // hpw if( (*result)[i]->GetNewlyAdded() ) 
       {
         fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
       }
@@ -162,7 +164,8 @@
 
     // call precompound model
     G4ReactionProductVector * proFrag(0);
-    proFrag = theProjectileFragmentation.DeExcite(aProRes);
+    if(resA>0) proFrag = theProjectileFragmentation.DeExcite(aProRes);
+    else proFrag=new G4ReactionProductVector;
 
     // collect the evaporation part
     G4ReactionProductVector::iterator ii;
