@@ -88,7 +88,7 @@ G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s){
   out << "Sum(x^2)                            : " << s.GetXXsum() << "\n";
   
   return out;
-};
+}
 
 
 
