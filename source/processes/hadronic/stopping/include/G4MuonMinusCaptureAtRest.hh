@@ -79,6 +79,10 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
 
      G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
+     virtual G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*)
+     {
+       return 0;
+     }
   private:
 
   //   void GetCaptureIsotope(const G4Track& track);
