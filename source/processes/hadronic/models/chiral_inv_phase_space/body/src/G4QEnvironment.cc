@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.20 2000-09-26 13:11:00 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.21 2000-09-27 12:21:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -879,7 +879,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         totChg+=totS;                            // Charge reduction (totS<0!)
         totS=0;                                  // Anti-strangness goes to anti-Kaons
 	  }
-      else if (totBN>0&&totS<0)                  // => "additional aK0" case
+      else if (totBN>0&&totS<0)                 // => "additional aK0" case
 	  {
         aKPDG=311;
         NaK=-totS;
@@ -911,15 +911,31 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         NPi=totChg-totBN+totS;
         MPi=mPi*NPi;
         totQC-=NPi*PiQC;
-        totChg=totBN-totS;
+        totChg-=NPi;
 	  }
       else if (totBN>0&&totChg<0)                // => "additional PI-" case
 	  {// @@ Here Sigma- check should be added totChg<0
         PiPDG=-211;
         NPi=-totChg;
         MPi=mPi*NPi;
-        totQC-=totChg*PiQC;                       // Now anti-Pions must be subtracted
-        totChg=0;
+        totQC+=NPi*PiQC;                         // Now anti-Pions must be subtracted
+        totChg+=NPi;
+	  }
+      else if (!totBN&&totChg>1-totS)            // => "additional PI++" case
+	  {// @@ Here Sigma+ check should be added totChg=1>totBn=1-totS=1
+        PiPDG=211;
+        NPi=totChg+totS-1;
+        MPi=mPi*NPi;
+        totQC-=NPi*PiQC;
+        totChg-=NPi;
+	  }
+      else if (!totBN&&totChg<-1-totS)           // => "additional PI-" case
+	  {// @@ Here Sigma- check should be added totChg<0
+        PiPDG=-211;
+        NPi-=totChg+totS+1;
+        MPi=mPi*NPi;
+        totQC+=NPi*PiQC;                         // Now anti-Pions must be subtracted
+        totChg+=NPi;
 	  }
       G4QNucleus     totN(totQC,tot4M);          // Excited nucleus for the Total System
       G4double      totRM=totN.GetMZNS();        // min (GroundSt) Mass of the Subtracted System
