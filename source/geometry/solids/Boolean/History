@@ -1,5 +1,5 @@
 
-$Id: History,v 1.43 2003-11-03 17:49:01 gcosmo Exp $
+$Id: History,v 1.44 2003-12-01 09:32:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Dec 01, 2003   G.Cosmo                   geom-bool-V05-02-04
+  - G4ReflectedSolid.cc: fixed trivial leak in constructor.
 
  Nov 03, 2003   G.Cosmo                   geom-bool-V05-02-03
   - Code cleanup and headers inclusion review
