@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.10 1999-12-15 14:49:22 gunter Exp $
+// $Id: exampleN03.cc,v 1.11 2000-06-13 10:30:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,8 +16,6 @@
 //      CERN, IT Division, ASD Group
 // --------------------------------------------------------------
 // Comments
-//
-//#define G4UI_USE_XM 
 //
 // --------------------------------------------------------------
 
@@ -89,6 +87,10 @@ int main(int argc,char** argv) {
     {
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute prerunN03.mac");    
+#ifdef G4UI_USE_XM
+      // Customize the G4UIXm menubar with a macro file :
+      UI->ApplyCommand("/control/execute gui.mac");
+#endif
       session->SessionStart();
       delete session;
     }

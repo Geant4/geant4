@@ -33,7 +33,3 @@
 #
 # Flush visualization
 /vis/viewer/update
-#
-# Customize the GUI menubar (if supported by the choosed G4UI session) 
-/control/execute gui.mac
-#
