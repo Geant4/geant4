@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2003-06-18 08:19:49 gcosmo Exp $
+$Id: History,v 1.91 2003-06-19 13:24:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- June 19, 2003  V.Ivantchenko
+- G4DynamicParticle.cc: use condition m^2<0.001MeV^2 to identify massless
+  particles (tag partman-V05-01-02).
 
 - June 18, 2003  G.Cosmo
 - G4ProductionCutsTable.cc: removed usage of G4USE_STD_NAMESPACE after
