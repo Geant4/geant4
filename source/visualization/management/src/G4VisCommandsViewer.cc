@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.13 2000-02-21 16:51:25 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.14 2000-02-24 12:17:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -365,10 +365,12 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
   }
 
   if (found) {
+    G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
+	   << G4endl;
     viewer -> ClearView ();
     viewer -> SetViewParameters (fpVisManager -> GetCurrentViewParameters ());
     viewer -> DrawView ();
-    G4cout << "Viewer \"" << refreshName << "\"" << " refreshed."
+    G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
 	   "\n  (You might also need \"/vis/viewer/show\".)" << G4endl;
   }
   else {
