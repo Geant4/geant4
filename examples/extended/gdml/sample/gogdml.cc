@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: gogdml.cc,v 1.2 2002-06-03 12:09:36 radoone Exp $
+// $Id: gogdml.cc,v 1.3 2002-08-19 07:28:52 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,8 @@
 // Comments
 //
 // --------------------------------------------------------------
+
+#include "globals.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
