@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.5 2001-07-11 09:59:14 gunter Exp $
+// $Id: testProElectroMagField.cc,v 1.6 2001-11-09 20:39:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -231,18 +231,17 @@ G4FieldManager* SetupField(G4int type)
  
     G4MagIntegratorStepper *pStepper;
 
+    G4int nvar = 8;  // Use 8 variable in order to integrate Time!!
+
     switch ( type ) 
     {
-      case 0: pStepper = new G4ExplicitEuler( fEquation ); break;
-      case 1: pStepper = new G4ImplicitEuler( fEquation ); break;
-      case 2: pStepper = new G4SimpleRunge( fEquation ); break;
-      case 3: pStepper = new G4SimpleHeum( fEquation ); break;
-      case 4: pStepper = new G4ClassicalRK4( fEquation ); break;
-	//      case 5: pStepper = new G4HelixExplicitEuler( fEquation ); break;
-	//      case 6: pStepper = new G4HelixImplicitEuler( fEquation ); break;
-	//      case 7: pStepper = new G4HelixSimpleRunge( fEquation ); break;
-      case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
-      case 9: pStepper = new G4RKG3_Stepper( fEquation );    break;
+      case 0: pStepper = new G4ExplicitEuler( fEquation, nvar ); break;
+      case 1: pStepper = new G4ImplicitEuler( fEquation, nvar  ); break;
+      case 2: pStepper = new G4SimpleRunge( fEquation, nvar  ); break;
+      case 3: pStepper = new G4SimpleHeum( fEquation, nvar  ); break;
+      case 4: pStepper = new G4ClassicalRK4( fEquation, nvar  ); break;
+      case 8: pStepper = new G4CashKarpRKF45( fEquation, nvar  );    break;
+	// case 9: pStepper = new G4RKG3_Stepper( fEquation, nvar  );    break;
       default: pStepper = 0;
     }
     
