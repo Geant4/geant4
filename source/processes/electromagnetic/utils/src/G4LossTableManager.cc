@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.52 2005-01-13 16:44:47 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.53 2005-01-25 19:10:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 13-01-04 Fix problem which takes place for inactivate eIoni (V.Ivanchenko)
+// 25-01-04 Fix initialisation problem for ions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -255,7 +256,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 {
   if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
     all_tables_are_built = true;
-    loss_map.clear();
+    
     for (G4int i=0; i<n_loss; i++) {
       G4VEnergyLossProcess* el = loss_vector[i];
 
