@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.17 2004-10-10 10:15:14 johna Exp $
+// $Id: G4VSolid.hh,v 1.18 2004-10-13 13:06:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,8 +193,8 @@ class G4VSolid
       // Create a G4Polyhedron/G4NURBS/...  (It is the caller's responsibility
       // to delete it).  A null pointer means "not created".
     virtual G4Polyhedron* GetPolyhedron () const;
-    // Smart access function - creates on request and stores for future
-    // access.  A null pointer means "not available".
+      // Smart access function - creates on request and stores for future
+      // access.  A null pointer means "not available".
 
     virtual const G4VSolid* GetConstituentSolid(G4int no) const;
     virtual       G4VSolid* GetConstituentSolid(G4int no);

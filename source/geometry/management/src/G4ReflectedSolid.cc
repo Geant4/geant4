@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.2 2004-10-10 10:15:21 johna Exp $
+// $Id: G4ReflectedSolid.cc,v 1.3 2004-10-13 13:06:51 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -53,7 +53,7 @@
 G4ReflectedSolid::G4ReflectedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   G4RotationMatrix rotMatrix ;
@@ -560,8 +560,8 @@ G4Polyhedron*
 G4ReflectedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
+  {
+    fpPolyhedron = CreatePolyhedron ();
+  }
   return fpPolyhedron;
 }
