@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2004-12-07 13:03:40 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2005-03-15 17:45:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,7 +101,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
-    } else if( particleName == "GenericIon" ) { 
+    } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
 
