@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionPlus.cc,v 1.4 2000-02-27 05:57:46 kurasige Exp $
+// $Id: G4PionPlus.cc,v 1.5 2000-06-28 06:54:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ G4PionPlus G4PionPlus::thePionPlus(
 		    0,              -1,             0,          
 		    2,              +2,            -1,             
 	      "meson",               0,             0,         211,
-		 true,       26.030*ns,          NULL
+		false,       26.030*ns,          NULL
 );
 
 G4PionPlus*  G4PionPlus::PionPlusDefinition(){return &thePionPlus;}
