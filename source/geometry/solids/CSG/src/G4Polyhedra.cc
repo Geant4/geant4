@@ -147,14 +147,16 @@ void G4Polyhedra::Create( const G4double phiStart,
 
 	numCorner = rz->NumVertices();
 
+
+	startPhi = phiStart;
+	while( startPhi < 0 ) startPhi += 2*M_PI;
         //
         // Phi opening? Account for some possible roundoff, and interpret
         // nonsense value as representing no phi opening
         //
         if (phiTotal <= 0 || phiTotal > 2.0*M_PI*(1-DBL_EPSILON)) {
                 phiIsOpen = false;
-		startPhi = 0;
-                endPhi = 2*M_PI;
+                endPhi = phiStart+2*M_PI;
         }
         else {
                 phiIsOpen = true;
@@ -162,9 +164,6 @@ void G4Polyhedra::Create( const G4double phiStart,
 		//
 		// Convert phi into our convention
 		//
-		startPhi = phiStart;
-		while( startPhi < 0 ) startPhi += 2*M_PI;
-		
 		endPhi = phiStart+phiTotal;
 		while( endPhi < startPhi ) endPhi += 2*M_PI;
         }
