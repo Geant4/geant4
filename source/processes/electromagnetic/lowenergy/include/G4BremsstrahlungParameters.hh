@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.4 2001-10-10 16:45:56 pia Exp $
+// $Id: G4BremsstrahlungParameters.hh,v 1.5 2001-10-24 22:02:03 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -76,9 +76,6 @@ private:
   G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
 
   void LoadData();
-
-  // The interpolation algorithm
-  G4VDataSetAlgorithm* interpolation;
 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > paramA;
 
