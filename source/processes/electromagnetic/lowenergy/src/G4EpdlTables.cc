@@ -176,7 +176,7 @@ void G4EpdlTables::FillDataTable() {
 
 	numTable++;
 	lineMatch = FALSE;
-	vecList.clear();
+	vecList.clearAndDestroy();
 
 	if(numTable == 99){
 	  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.8 1999-06-05 13:43:15 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.9 1999-06-05 14:04:07 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -474,11 +474,14 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   G4double BindingEn = (*(*theBindEnVec)[1])[subShellIndex];
   G4double theEnergyDeposit = BindingEn; // inc energy - deltaray energy = binding energy
 
+#ifdef G4VERBOSE
   cout<<"theBindingEnergyTable length: "<<theBindingEnergyTable->entries()<<endl;
   cout<<"theBindEnVec length: "<<theBindEnVec->entries()<<endl;
   cout<<"subShell index: "<<subShellIndex<<endl;
   cout<<"thePrimaryShell: "<<thePrimaryShell<<endl;
   cout<<"theBindEnergy: "<<BindingEn<<endl;
+#endif
+
   // delta ray kinematics
   G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
                                                        2. * electron_mass_c2 ));

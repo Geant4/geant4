@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.5 1999-06-04 14:01:10 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.6 1999-06-05 14:04:07 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -224,7 +224,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theCrossSectionTable = table.GetFstDataTable();
 }
 
 void G4LowEnergyCompton::BuildScatteringFunctionTable(){
@@ -238,7 +238,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theScatteringFunctionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theScatteringFunctionTable = table.GetFstDataTable();
 }
 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){

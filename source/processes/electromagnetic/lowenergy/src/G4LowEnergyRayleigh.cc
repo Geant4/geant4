@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.5 1999-06-04 14:01:12 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.6 1999-06-05 14:04:07 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,7 +170,7 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theCrossSectionTable = table.GetFstDataTable();
 }
 
 void G4LowEnergyRayleigh::BuildFormFactorTable(){
@@ -184,7 +184,7 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theFormFactorTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theFormFactorTable = table.GetFstDataTable();
 }
 
 void G4LowEnergyRayleigh::BuildMeanFreePathTable(){

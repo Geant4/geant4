@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.7 1999-06-05 13:43:14 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.8 1999-06-05 14:04:06 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,12 +73,12 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
      }
 
      if (ATable) {
-       // ATable->clearAndDestroy();
+
         delete ATable;
      }
 
      if (BTable) {
-       //  BTable->clearAndDestroy();
+
         delete BTable;
      }
 
@@ -590,7 +590,6 @@ void G4LowEnergyBremsstrahlung::BuildBTable(){
 
   if (BTable) {
     
-    //BTable->clearAndDestroy(); 
     delete BTable; 
   }
 
