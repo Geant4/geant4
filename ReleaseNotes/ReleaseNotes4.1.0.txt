@@ -89,10 +89,11 @@ Contents
   1. Supported and Tested Platforms
   2. CLHEP 1.4
   3. The Standard Template Library (STL)
-  4. Compiler Specific Problems
-  5. Known Run-Time Problems
-  6. Compilation Warnings
-  7. Known Run-Time Warnings
+  4. Persistency
+  5. Compiler Specific Problems
+  6. Known Run-Time Problems
+  7. Compilation Warnings
+  8. Known Run-Time Warnings
 
 
 1. Supported and Tested Platforms
@@ -170,7 +171,100 @@ size of libraries and executables may appear considerably larger than the
 previous Rogue-Wave based versions.
 
 
-4. Compiler Specific Problems
+4. Persistency
+--------------
+
+- Platforms
+
+  Persistency in Geant4 1.0 release has been tested on the following
+  platforms/software versions:
+
+  G4SYSTEM       OS        C++ compiler   HepODBMS   Objectivity
+  ---------  -----------   ------------   ---------  -----------
+   SUN-CC    SunOS 5.6      CC 4.2         0.3.1.0      5.2
+   HP-aCC    HP-UX 10.20    aCC A.01.18    0.3.0.1      5.1.2
+  Linux-g++  Linux  RH5.1   egcs 1.1.2     0.3.0.1      5.1.2
+           
+  A patch to run persistency examples on DEC-cxx will be released
+  later, pending a fix to HepODBMS library.
+
+- Known Problems
+
+  1) The following warning messages appear on some platforms during the
+     installation of the libraries and the compilation of the example
+     files. The message comes from the parser of the Objectivity
+     preprocessor. It can be ignored.
+
+  -------------------------------------------------------------------------
+  "/opt/SUNWspro/SC4.2/include/CC/generic.h", line 29: warning: omission of
+            explicit type is nonstandard ("int" assumed)
+    extern genericerror(int, char*);
+           ^
+  "/opt/SUNWspro/SC4.2/include/CC/iostream.h", line 781: warning: integer
+            conversion resulted in a change of sign
+          unsafe_istream& wignore(int=1, wchar_t=WEOF);
+                                                 ^
+  "/opt/SUNWspro/SC4.2/include/CC/iostream.h", line 962: warning: integer
+            conversion resulted in a change of sign
+          istream& wignore(int=1, wchar_t=WEOF);
+  -------------------------------------------------------------------------
+
+  2) The following warning messages appear during the installation of the
+     library. This is due to a design choice of the persitent object
+     and it can be safely ignored.
+
+  -------------------------------------------------------------------------
+  warning: persistent-capable class member type is a problem
+            The type of base class vector<G4VPhysicalVolume * > is a problem
+            The type of member vector<G4VPhysicalVolume * >::start_ is pointer
+            The type of member vector<G4VPhysicalVolume * >::finish_ is pointer
+            The type of member vector<G4VPhysicalVolume * >::end_of_storage_
+                      is pointer
+            The type of member vector<G4VPhysicalVolume * >::alloc_ is a
+                      problem
+            The type of member allocator<G4VPhysicalVolume * >::impl_ is
+                      pointer
+        G4VPhysVolRefVArray  transPhysVolPtrs;
+                                             ^
+  -------------------------------------------------------------------------
+
+  3) The following warning messages appears during the installation of the
+     libraries and the compileation of the example files.  Dependency
+     file is used to solve the GNUmake dependencies inside the Geant4
+     categories and it can be safely ignored.
+
+  -------------------------------------------------------------------------
+  In file included from /afs/cern.ch/sw/lhcxx/specific/@sys/HepODBMS/0.3.1.0/
+  include/HepODBMS/odbms/HepODBMS.h:75,
+                 from include/G4PersistentTypes.hh:21,
+                 from include/G4VPersistentSubMan.hh:34,
+                 from src/G4VPersistentSubMan.cc:16:
+  /afs/cern.ch/sw/lhcxx/specific/sun/Objectivity/5.2/include/oo.h:57:
+  warning: No include path in which to find generic.h
+  -------------------------------------------------------------------------
+
+  4) The following error messages appear at the end of the library
+     installation, and it can be safely ignored.
+
+  -------------------------------------------------------------------------
+  installing schema header files ...
+  cp: cannot access /afs/cern.ch/sw/geant4/stt/ref+/AIX-xlC/debug/persistency/
+  STL/tmp/SUN-CC/G4pglobal/*.hh
+    schema header file does not exist, so ignore the error message...
+  -------------------------------------------------------------------------
+
+  5) The following warning message appears at the runtime of the persistency
+     examples, which is generaged by HepDbApplication in HepODBMS.
+     It can be ignored.
+
+  -------------------------------------------------------------------------
+  Opening federated database OO_FD_BOOT.
+  WARNING: g4example: Could not find naming root directory:
+  Naming will be disabled.
+  -------------------------------------------------------------------------
+
+
+5. Compiler Specific Problems
 -----------------------------
 
   o DEC V4.0, cxx C++ V6.1-027.
@@ -198,7 +292,7 @@ previous Rogue-Wave based versions.
           __imp__MessageBoxA@16". 
 
 
-5. Known Run-Time Problems
+6. Known Run-Time Problems
 --------------------------
 
   o Reading STEP files on DEC with optimised libraries causes a Memory
@@ -208,7 +302,7 @@ previous Rogue-Wave based versions.
     behavior has been observed on SUN and it's under investigation.
  
 
-6. Compilation Warnings
+7. Compilation Warnings
 -----------------------
 
 There are compilation warnings on some platforms.  We do not believe
@@ -216,7 +310,7 @@ that any will lead to incorrect run-time behaviour, but we are working
 on reducing them.
 
 
-7. Known Run-Time Warnings
+8. Known Run-Time Warnings
 --------------------------
 
 The following messages are written to error output while tracking.  We
@@ -229,3 +323,4 @@ believe none give rise to incorrect behaviour.
   o Warning in G4Navigator::ComputeStep: The Step's starting point has
       moved...
   o SOME WORDS ABOUT exampleN02 and muons !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
