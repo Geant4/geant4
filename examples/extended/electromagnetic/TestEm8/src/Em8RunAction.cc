@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8RunAction.cc,v 1.3 2000-06-27 10:51:11 grichine Exp $
+// $Id: Em8RunAction.cc,v 1.4 2000-06-27 13:29:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include <g4std/iomanip>
+#include "g4std/iomanip"
 
 #include "Randomize.hh"
 #include "CLHEP/Hist/HBookFile.h"
@@ -970,7 +970,7 @@ void Em8RunAction::FillTh(G4double Th)
       {  
         G4double thdeg=Th*180./pi;
         G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << setprecision(4) << thdeg << G4endl;
+               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
         wg=0. ; 
       }
       distTh[ibin] += wg  ;
@@ -1009,7 +1009,7 @@ void Em8RunAction::FillThBack(G4double Th)
       {  
         G4double thdeg=Th*180./pi;
         G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << setprecision(4) << thdeg << G4endl;
+               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
         wg=0. ; 
       }
       distThback[ibin] += wg  ;

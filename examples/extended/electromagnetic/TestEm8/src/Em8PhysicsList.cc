@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PhysicsList.cc,v 1.3 2000-06-27 10:50:22 grichine Exp $
+// $Id: Em8PhysicsList.cc,v 1.4 2000-06-27 13:29:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -25,7 +25,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include <g4std/iomanip> 
+#include "g4std/iomanip"
                
 #include "G4FastSimulationManagerProcess.hh"
 

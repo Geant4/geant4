@@ -1,22 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8StepCut.hh,v 1.1 2000-01-07 14:50:23 grichine Exp $
+// $Id: Em8StepCut.hh,v 1.2 2000-06-27 13:29:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
-// ------------------------------------------------------------
-//                  05 March 1999  L.Urban
-// ------------------------------------------------------------
 
 #ifndef Em8StepCut_h
 #define Em8StepCut_h 1

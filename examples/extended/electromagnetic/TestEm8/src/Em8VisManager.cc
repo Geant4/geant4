@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8VisManager.cc,v 1.1 2000-01-07 14:50:48 grichine Exp $
+// $Id: Em8VisManager.cc,v 1.2 2000-06-27 13:29:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,7 @@ void Em8VisManager::RegisterGraphicsSystems () {
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-	 << endl;
+	 << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }
