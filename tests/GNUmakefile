@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.57 2003-11-13 10:53:19 sadilov Exp $
+# $Id: GNUmakefile,v 1.58 2003-11-17 09:21:29 jwellisc Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -72,6 +72,7 @@ SUBDIRS += test22
 SUBDIRS += test24
 SUBDIRS += test25
 SUBDIRS += test26
+SUBDIRS += test27
 # SUBDIRS += test30 ## Not in testing yet!
 # SUBDIRS += test31 ## Not in testing yet!
 SUBDIRS += test32
