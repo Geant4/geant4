@@ -67,7 +67,7 @@ particles                               particles-V05-00-05
   occasionally resulting in computation of negative interaction length. 
   Fixes problem report #360. 
 
-processes/electromagnetic/lowenergy     emlowen-V05-00-11
+processes/electromagnetic/lowenergy     emlowen-V05-00-12
 -----------------------------------
 - Minor design iteration in view of the Penelope model for Bremsstrahlung
   process to accomodate variable name of file with parameters. 
