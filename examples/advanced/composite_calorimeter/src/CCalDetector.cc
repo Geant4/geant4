@@ -38,10 +38,9 @@
 
 G4String CCalDetector::pathName = getenv("CCAL_GEOMPATH");
 
-CCalDetector::CCalDetector(const G4String &name):
-  detectorName(name) {
+CCalDetector::CCalDetector(const G4String &name): detectorName(name) {
 #ifdef ddebug
-    cout << "CCAL_GEOMPATH=" << pathName << endl;
+    G4cout << "CCAL_GEOMPATH=" << pathName << G4endl;
 #endif
     fileName      = 
       CCalGeometryConfiguration::getInstance()->getFileName(name);
@@ -51,7 +50,7 @@ CCalDetector::CCalDetector(const G4String &name):
 
 CCalDetector::~CCalDetector() {
   CCalDetectorTable::iterator ite;
-  for( ite = theDetectorsInside.begin(); ite != theDetectorsInside.end(); ite++ ) {
+  for (ite=theDetectorsInside.begin(); ite !=theDetectorsInside.end(); ite++) {
     delete *ite;
   }
   theDetectorsInside.clear();
@@ -59,7 +58,7 @@ CCalDetector::~CCalDetector() {
 
 void CCalDetector::construct() {
 #ifdef debug
-  cout << "===> Entering CCalDetector::construct() for " << CCalDetectorName << endl;
+  G4cout << "===> Entering CCalDetector::construct() for " << Name() << G4endl;
 #endif
   int isgood = 0;
 
@@ -77,8 +76,7 @@ void CCalDetector::construct() {
     }
   }
 #ifdef debug
-  cout << "===> Exiting CCalDetector::construct() for " << detectorName 
-       << endl;
+  G4cout << "===> Exiting CCalDetector::construct() for " << Name() << G4endl;
 #endif
 }
 

@@ -36,9 +36,7 @@
 //#define debug
 //#define ddebug
 
-CCalStackingAction::CCalStackingAction():
-isInitialized(false)
-{}
+CCalStackingAction::CCalStackingAction(): isInitialized(false) {}
 
 
 CCalStackingAction::~CCalStackingAction(){}
@@ -59,15 +57,15 @@ void CCalStackingAction::initialize(){
  
   numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
-  cout << "CCalStackingAction look for " << numberOfSD 
-       << " calorimeter-like SD" << endl;
+  G4cout << "CCalStackingAction look for " << numberOfSD 
+	 << " calorimeter-like SD" << G4endl;
 #endif
   int i = 0;
   for (i=0; i<numberOfSD; i++) {
     G4String theName(CCalSDList::getInstance()->getCaloSDName(i));
     SDName[i] = theName;
 #ifdef debug
-    cout << "Found SD  name " << theName << endl;
+    G4cout << "Found SD  name " << theName << G4endl;
 #endif
     theCaloSD[i] = 0;
   }   
@@ -80,8 +78,8 @@ void CCalStackingAction::initialize(){
       G4VSensitiveDetector* aSD = sd->FindSensitiveDetector(SDName[i]);
       if (aSD==0) {
 #ifdef debug
-	cout << "CCalStackingAction::initialize: No SD with name " << SDName[i]
-	     << " in this Setup " << endl;
+	G4cout << "CCalStackingAction::initialize: No SD with name " << SDName[i]
+	       << " in this Setup " << G4endl;
 #endif
       } else {
 	theCaloSD[i] = dynamic_cast<CCaloSD*>(aSD);
@@ -89,8 +87,8 @@ void CCalStackingAction::initialize(){
       }	   
     }
 #ifdef debug
-    cout << "CCalStackingAction::initialize: Could not get SD Manager !" 
-	 << endl;
+    G4cout << "CCalStackingAction::initialize: Could not get SD Manager !" 
+	   << G4endl;
 #endif
   }
    
@@ -102,15 +100,15 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
   int parentID = aTrack->GetParentID();
 #ifdef ddebug
   G4TrackStatus status = aTrack->GetTrackStatus();
-  cout << "Classifying track " << aTrack->GetTrackID()
-       << " with status " << aTrack->GetTrackStatus() << endl;  
+  G4cout << "Classifying track " << aTrack->GetTrackID()
+	 << " with status " << aTrack->GetTrackStatus() << G4endl;  
 #endif
     
   if (parentID < 0) {
 #ifdef debug     
-    cout << "Killing track " << aTrack->GetTrackID() 
-	 << " from previous event. Should not happen" << endl;
-    cout << "returning classification= " << classification << endl;
+    G4cout << "Killing track " << aTrack->GetTrackID() 
+	   << " from previous event. Should not happen" << G4endl;
+    G4cout << "returning classification= " << classification << G4endl;
 #endif
     return classification= fKill;
   }
@@ -118,8 +116,9 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
   if (aTrack->GetDefinition()->GetParticleName() == "gamma" && 
       aTrack->GetKineticEnergy() < 1.*eV) {
 #ifdef debug
-    cout << "Kills particle " << aTrack->GetDefinition()->GetParticleName() 
-	 << " of energy " << aTrack->GetKineticEnergy()/MeV << " MeV" << endl;
+    G4cout << "Kills particle " << aTrack->GetDefinition()->GetParticleName() 
+	   << " of energy " << aTrack->GetKineticEnergy()/MeV << " MeV" 
+	   << G4endl;
 #endif
     return classification= fKill;
   }
@@ -162,8 +161,8 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
     classification = G4UserStackingAction::ClassifyNewTrack(aTrack);
 
 #ifdef ddebug
-  cout << " returning classification= " << classification
-       << " for track "<< aTrack->GetTrackID() << endl;
+  G4cout << " returning classification= " << classification
+	 << " for track "<< aTrack->GetTrackID() << G4endl;
 #endif
   return classification;
 
@@ -173,7 +172,7 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
 void CCalStackingAction::NewStage(){
 
 #ifdef ddebug
-  cout << "In NewStage with stage = " << stage << endl;
+  G4cout << "In NewStage with stage = " << stage << G4endl;
 #endif
   if (stage <end) {
     nurgent = 0;		    

@@ -60,8 +60,9 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
       G4String opFilestr = "ccal.his";
       if (opFileptr) opFilestr = opFileptr;
       G4cout << "********************************************" << G4endl
-	   << "* o/p file on " << opFilestr << G4endl
-	   << "********************************************" << G4endl << G4endl;
+	     << "* o/p file on " << opFilestr << G4endl
+	     << "********************************************" << G4endl 
+	     << G4endl;
       bool readOnly = false; // we want to write.
       bool createNew = true; // create file if it doesn't exist.
       tree = treeFactory->create(opFilestr, "hbook", readOnly,createNew);
@@ -109,7 +110,7 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	  }
 	  // Total energy deposit
  	  energy  =  histoFactory->createHistogram1D("4000", "Total energy deposited   in GeV", 
-					    100, 0., 100.0);
+						     100, 0., 100.0);
 
 	  // Time slices	  
 	  for (int i=0; i<numberOfTimeSlices; i++){
@@ -178,7 +179,8 @@ void CCalAnalysis::InsertEnergyHcal(float* v) {
     }    
   }
 #ifdef debug
-      G4cout << "\t total filled Energy Hcal histo " << totalFilledEnergyHcal << G4endl;
+  G4cout << "\t total filled Energy Hcal histo " << totalFilledEnergyHcal 
+	 << G4endl;
 #endif      
 }
 
@@ -199,7 +201,8 @@ void CCalAnalysis::InsertEnergyEcal(float* v) {
     }
   }
 #ifdef debug
-      G4cout << "\t total filled Energy Ecal histo " << totalFilledEnergyEcal << G4endl;
+  G4cout << "\t total filled Energy Ecal histo " << totalFilledEnergyEcal 
+	 << G4endl;
 #endif      
 }
 
@@ -220,7 +223,8 @@ void CCalAnalysis::InsertLateralProfile(float* v) {
     }
   }
 #ifdef debug
-  G4cout << "\t total filled Profile Hcal histo " << totalFilledProfileHcal << G4endl;
+  G4cout << "\t total filled Profile Hcal histo " << totalFilledProfileHcal 
+	 << G4endl;
 #endif      
 }
 
@@ -253,7 +257,8 @@ void CCalAnalysis::InsertTime(float* v) {
     }
   }
 #ifdef debug
-  G4cout << "\t total filled Time profile histo " << totalFilledTimeProfile << G4endl;
+  G4cout << "\t total filled Time profile histo " << totalFilledTimeProfile 
+	 << G4endl;
 #endif      
 }
 

@@ -31,7 +31,7 @@
 #include "G4StepPoint.hh"
 
 CCalHcalOrganization::~CCalHcalOrganization() {
-  G4cout << " Deleting CCalHcalOrganization" << G4endl;
+  G4cout << "CCalHcalOrganization deleted" << G4endl;
 }
 
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.8 2003-06-12 15:25:20 ribon Exp $
+$Id: README,v 1.9 2003-10-31 18:28:12 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -147,8 +147,20 @@ $Id: README,v 1.8 2003-06-12 15:25:20 ribon Exp $
    *DO FLDM
      0.0   9               652.0
  for example, if you want a magnetic field of 3.0 Tesla the last
- line must be set as follows:
-     3.0   9               652.0
+ line must be set as follows (the magnetic field unity is kilo Gauss).
+     30.0   9               652.0
+
+ The default stepper in magnetic field is G4ClassicalRK4, but other
+ possibilities can be selected by editing the file 
+ src/CCalDetectorConstruction.cc  (look at the string "***STEPPER***").
+
+ In order to deactivate either the ECAL or the HCAL, it is enough
+ to comment out the corresponding line in the file g4testbeamhcal96.conf, 
+ using "#" as the comment character. For instance, to have only the HCAL
+ without ECAL:
+ "HcalTB96"                      "tbhcal96"              1
+ #"CrystalMatrixModule"           "tbhcal96xtal"          1  
+
 
  In this test-beam setup, at the back of ECAL, there is also some 
  material for support and readout, which has been considered in the 
@@ -400,7 +412,7 @@ No Noise and Digitization
                           ( ID histo = 400 + radial distance in cm ).
 
   Histogram  4000 : total energy deposit (in GeV) in the sensitive parts
-                   of either the electromagnetic or hadronic calorimeters. 
+                    of either the electromagnetic or hadronic calorimeters. 
   Ntuple variable  edep provides the same information.
 
   Other ntuple variables are the following:  

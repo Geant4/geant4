@@ -42,7 +42,7 @@ unsigned int CCaloOrganization::packindex(int det, int z, int eta,
   idx+=(phi&1023);                 //bits  0-9
 #ifdef debug
   G4cout << " ECAL packing " << det << " " << z << " " << eta << " " << phi 
-       << "  into " << idx << G4endl;
+	 << "  into " << idx << G4endl;
 #endif
   return idx;
 }
@@ -61,7 +61,7 @@ unsigned int CCaloOrganization::packindex(int det, int depth, int z, int eta,
   idx+=(phi&1023);                //bits  0-9
 #ifdef debug
   G4cout << " HCAL packing " << det << " " << depth << " " << z << " " << eta 
-       << " " << phi  << "  into " << idx << G4endl;
+	 << " " << phi  << "  into " << idx << G4endl;
 #endif
   return idx;
 }
@@ -102,12 +102,14 @@ int CCaloOrganization::getUnitWithMaxEnergy(std::map<int,float,std::less<int> >&
       UnitWithMaxEnergy = (*iter).first;
     }				
   }	
+#ifdef debug
   G4cout << " *** max energy of " << maxEnergy << " MeV was found in Unit id "
-       << UnitWithMaxEnergy;
+	 << UnitWithMaxEnergy;
   int det,z,eta,phi;
   unpackindex(UnitWithMaxEnergy, det, z, eta, phi);
   G4cout << " corresponding to z= " << z << " eta= " << eta << " phi = " << phi
-       << G4endl;
+	 << G4endl;
+#endif
   return UnitWithMaxEnergy;
 
 }
@@ -134,16 +136,18 @@ float CCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
       int index = this->packindex(det,z,ieta,iphi);
       totalEnergy += themap[index];
       ncristals+=1;
-      G4cout<<"ieta - iphi - E = "<<ieta<<"  "<<iphi<<" "<<themap[index]<<G4endl;
+#ifdef debug
+      G4cout << "ieta - iphi - E = " << ieta << "  " << iphi << " " 
+	     << themap[index] << G4endl;
+#endif
     }
   }
 	
-    
-      	
-  G4cout<<"energy in "<<nCellInEta<<" cells in eta times "
-      <<nCellInPhi<<" cells in phi matrix = "<<totalEnergy
-      <<" for "<<ncristals<<" cristals"
-      <<G4endl;			
+#ifdef debug
+  G4cout << "Energy in " << nCellInEta << " cells in eta times "
+	 << nCellInPhi << " cells in phi matrix = " << totalEnergy
+	 << " for " << ncristals << " crystals" << G4endl;
+#endif
   return totalEnergy;
 
 }   

@@ -56,8 +56,9 @@ CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
 
 
 CCaloSD::~CCaloSD() {
- if (theDescription) 
-   delete theDescription;
+  G4cout << "CCaloSD: " << SDname << " deleted" << G4endl;
+  if (theDescription) 
+    delete theDescription;
 }
 
 

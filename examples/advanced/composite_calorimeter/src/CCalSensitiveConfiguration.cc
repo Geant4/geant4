@@ -51,9 +51,9 @@ int CCalSensitiveConfiguration::getSensitiveFlag(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     flag = (*it).second.SensitiveFlag;
   else {
-    G4cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
-	 << "G4String& n)" << G4endl 
-	 << "       " << n << " not found in configuration file" << G4endl;
+    G4cerr << "ERROR: In CCalSensitiveConfiguration::getSensitiveFlag(const "
+	   << "G4String& n)" << G4endl 
+	   << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return flag;
@@ -66,16 +66,15 @@ G4String CCalSensitiveConfiguration::getFileName(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     fn = (*it).second.FileName;
   else {
-    G4cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
-	 << "G4String& n)" << G4endl 
-	 << "       " << n << " not found in configuration file" << G4endl;
+    G4cerr << "ERROR: In CCalSensitiveConfiguration::getFileName(const "
+	   << "G4String& n)" << G4endl 
+	   << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return fn;
 }
 
-CCalSensitiveConfiguration::CCalSensitiveConfiguration():
-  theConfiguration() {
+CCalSensitiveConfiguration::CCalSensitiveConfiguration(): theConfiguration() {
   
   ///////////////////////////////////////////////////////////////
   // Open the file
@@ -102,8 +101,8 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
     is >> gcinfo.SensitiveFlag >> jump;
 #ifdef debug
     G4cout << "CCalSensitiveConfiguration constructor: Read \"" << name 
-	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag 
-	 << G4endl;
+	   << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag
+	   << G4endl;
 #endif
     theConfiguration[name] = gcinfo;
   }

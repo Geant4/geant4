@@ -52,7 +52,7 @@ CCalSteppingAction::CCalSteppingAction(){
 
 
 CCalSteppingAction::~CCalSteppingAction(){
-  G4cout <<"Deleting CCalSteppingAction"<<G4endl;
+  G4cout << "CCalSteppingAction deleted" << G4endl;
 }
   
 
