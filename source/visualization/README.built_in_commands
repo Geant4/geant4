@@ -259,10 +259,6 @@ NI /vis/viewer/clone
   Moves the camera to this position right and up relative to standard target
     point.
 
-/vis/viewer/select <viewer-name>
-  default:          no default
-  This viewer becomes current.
-
 /vis/viewer/refresh [<viewer-name>]
   default:       current viewer name
   Re-traverses graphical data, which is enough in some cases to refresh the
@@ -277,6 +273,10 @@ NI /vis/viewer/clone
 /vis/viewer/reset [<viewer-name>]
   default:      current viewer name
   Resets view parameters to defaults.
+  This viewer becomes current.
+
+/vis/viewer/select <viewer-name>
+  default:          no default
   This viewer becomes current.
 
 /vis/viewer/zoom [<factor>]
