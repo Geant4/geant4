@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.14 2001-01-31 16:59:21 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.15 2001-03-16 16:27:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -16,6 +16,8 @@
 // 28.11.98 V.Grichine, J. Apostolakis, while loops in DistToIn/Out 
 // 27.07.99 V.Grichine, modifications in Distance ToOut(p,v,...)
 //                      while -> do-while
+// 16.03.01 V.Grichine, modifications in calculateExtent 
+//                      based on D.Williams proposal
 
 #include "G4UnionSolid.hh"
 // #include "G4PlacedSolid.hh"
@@ -92,16 +94,23 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
 				     const G4AffineTransform& pTransform,
 				     G4double& pMin, G4double& pMax) const 
 {
-  G4bool   touchesA, touchesB;
-  G4double minA, minB, maxA, maxB; 
+  G4bool   touchesA, touchesB, out ;
+  G4double minA = + kInfinity, minB = + kInfinity, 
+           maxA = - kInfinity, maxB = - kInfinity; 
 
-  touchesA= fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
-  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
+  touchesA = fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
+                                          pTransform, minA, maxA);
+  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
+                                         pTransform, minB, maxB);
+  if( touchesA || touchesB )
+  {
+    pMin = G4std::min( minA, minB ); 
+    pMax = G4std::max( maxA, maxB );
+    out  = true ; 
+  }
+  else out = false ;
 
-  pMin = G4std::min( minA, minB ); 
-  pMax = G4std::max( maxA, maxB ); 
-
-  return touchesA || touchesB ;  // It exists in this slice if either one does.
+  return out ;  // It exists in this slice if either one does.
 }
  
 /////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectionSolid.cc,v 1.9 2000-11-02 12:25:47 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.10 2001-03-16 16:27:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -14,6 +14,8 @@
 //
 // 12.09.98 V.Grichine 
 // 29.07.99 V.Grichine, modifications in DistanceToIn(p,v)
+// 16.03.01 V.Grichine, modifications in calculateExtent and Inside 
+//                      based on D.Williams proposal
 
 #include "G4IntersectionSolid.hh"
 // #include "G4DisplacedSolid.hh"
@@ -90,16 +92,20 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
 				     const G4AffineTransform& pTransform,
 				     G4double& pMin, G4double& pMax) const 
 {
-  G4bool   retA, retB;
-  G4double minA, minB, maxA, maxB; 
+  G4bool   retA, retB, out ;
+  G4double minA, minB, maxA, maxB ; 
 
   retA= fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
   retB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
+  if(retA && retB)
+  {
+    pMin = G4std::max( minA, minB ) ; 
+    pMax = G4std::min( maxA, maxB ) ;
+    out  = true ;
+  }
+  else out = false ;
 
-  pMin = G4std::max( minA, minB ); 
-  pMax = G4std::min( maxA, maxB ); 
-
-  return retA && retB ; // It exists in this slice only if both exist in it.
+  return out ; // It exists in this slice only if both exist in it.
 }
  
 /////////////////////////////////////////////////////
@@ -109,6 +115,9 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
 EInside G4IntersectionSolid::Inside(const G4ThreeVector& p) const
 {
   EInside positionA = fPtrSolidA->Inside(p) ;
+
+  if( positionA == kOutside ) return kOutside ;
+
   EInside positionB = fPtrSolidB->Inside(p) ;
   
   if(positionA == kInside && positionB == kInside)
