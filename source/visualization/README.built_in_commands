@@ -125,7 +125,8 @@ NI                      [<copy-no>] [<depth>]
   drawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000
   in pixels at each step and auxiliary point, if any.  So drawing-mode
   == 5000 is a good choice.  (Enable storing with
-  "/tracking/storeTrajectory 1".)  See also "/vis/scene/endOfEventAction".
+  "/tracking/storeTrajectory 1".)  See also "/vis/scene/endOfEventAction"
+  and "/vis/scene/endOfRunAction".
 
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
   default:                     world                -1         -1
@@ -140,11 +141,18 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/endOfEventAction [accumulate|refresh]
   default:                        refresh
-  The scene handler for this scene will, when a viewer of this scene is
-  current, be requested to accumulate "transient" objects, such as hits,
-  event by event or to erase them (refresh the screen) before drawing the
-  transient objects of the next event.  Any "run-persistent" objects, such
-  as dectector geometry components, are unaffected and remain in the viewer.
+  The scene handler for this scene will, when a viewer of this scene
+  is current, be requested:
+  a) (accumulate) to accumulate "transient" objects, such as hits and
+     trajectories event by event, or
+  b) (refresh) to show them at end of event or, for direct-screen
+     viewers, refresh the screen just before drawing the next event.
+  Any "run-persistent" objects, such as dectector geometry components,
+  are unaffected or are redrawn.
+
+/vis/scene/endOfRunAction [accumulate|refresh]
+  default:                        refresh
+  As endOfEventAction, but for end of run.
 
 /vis/scene/list [<scene-name>] [<verbosity>]
   default:           all             0

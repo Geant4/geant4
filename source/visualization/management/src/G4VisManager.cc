@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.55 2003-11-27 09:55:53 johna Exp $
+// $Id: G4VisManager.cc,v 1.56 2003-11-27 11:48:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -809,6 +809,7 @@ void G4VisManager::RegisterMessengers () {
   fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneCreate);
   fMessengerList.push_back (new G4VisCommandSceneEndOfEventAction);
+  fMessengerList.push_back (new G4VisCommandSceneEndOfRunAction);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.push_back (new G4VisCommandSceneRemove);
@@ -938,6 +939,12 @@ void G4VisManager::EndOfEvent () {
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
+  if (GetConcreteInstance() && IsValidView ()) {
+    if (fpScene->GetRefreshAtEndOfRun()) {
+      fpViewer->ShowView();  // ...for systems needing post processing.
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    }
+  }
 }
 
 void G4VisManager::ClearTransientStoreIfMarked(){
