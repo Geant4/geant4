@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.10 2000-01-11 17:22:31 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.11 2000-01-14 15:30:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -340,9 +340,11 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
   G4String refreshShortName = ShortName (refreshName);
 
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  G4bool found = true;
-  if (refreshShortName != ShortName (viewer -> GetName ())) {
-    found = false;
+  G4bool found = false;
+  if (viewer && refreshShortName == ShortName (viewer -> GetName ())) {
+    found = true;
+  }
+  else {
     const G4SceneHandlerList& sceneHandlerList =
       fpVisManager -> GetAvailableSceneHandlers ();
     G4int nHandlers = sceneHandlerList.entries ();
@@ -584,9 +586,11 @@ void G4VisCommandViewerShow::SetNewValue (G4UIcommand* command,
   G4String showShortName = ShortName (showName);
 
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  G4bool found = true;
-  if (showShortName != ShortName (viewer -> GetName ())) {
-    found = false;
+  G4bool found = false;
+  if (viewer && showShortName == ShortName (viewer -> GetName ())) {
+    found = true;
+  }
+  else {
     const G4SceneHandlerList& sceneHandlerList =
       fpVisManager -> GetAvailableSceneHandlers ();
     G4int nHandlers = sceneHandlerList.entries ();
