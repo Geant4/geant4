@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-07-28 10:56:35 gcosmo Exp $
+$Id: History,v 1.21 2000-08-08 15:55:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 08,   00   V. Grichine               geom-solids-csg-V02-00-01
+- G4Cons.cc, G4Tubs.cc:
+  o fixes to DistanceToOut(p,v,...) to make roots of quadratic equations
+    more stable.
+  o added check if point is outside in G4Tubes::DistanceToOut(p),
+    some code formatting.
 
 Jul 27,   00   V. Grichine               geom-solids-csg-V02-00-00
 - G4Cons.cc:
