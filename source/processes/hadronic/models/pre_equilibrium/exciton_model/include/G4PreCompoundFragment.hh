@@ -1,0 +1,86 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// by V. Lara
+
+#ifndef G4PreCompoundFragment_h
+#define G4PreCompoundFragment_h 1
+
+#include "G4VPreCompoundFragment.hh"
+
+class G4PreCompoundFragment : public G4VPreCompoundFragment
+{
+protected:
+  // default constructor
+  G4PreCompoundFragment() {};
+    
+public:  
+  // copy constructor
+  G4PreCompoundFragment(const G4PreCompoundFragment &right);
+    
+  // constructor  
+  G4PreCompoundFragment(const G4double anA, const G4double aZ,
+			G4VCoulombBarrier * aCoulombBarrier,
+			const G4String &  aName);
+  
+  virtual ~G4PreCompoundFragment();
+  
+  // ==========
+  // operators 
+  // ========== 
+  
+  const G4PreCompoundFragment& 
+  operator= (const G4PreCompoundFragment &right);
+  
+  G4int operator==(const G4PreCompoundFragment &right) const;
+  
+  G4int operator!=(const G4PreCompoundFragment &right) const;
+      
+public:
+  
+  // Initialization method
+  void Initialize(const G4Fragment & aFragment);
+    
+  // ================================================
+  // Methods for calculating the emission probability
+  // ================================================
+  
+  // Calculates the total (integrated over kinetic energy) emission
+  // probability of a fragment
+  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+  
+  G4double GetKineticEnergy(const G4Fragment & aFragment);
+
+private:	
+  // This method performs integration for probability function over 
+  // fragment kinetic energy
+  G4double IntegrateEmissionProbability(const G4double & Low, 
+					const G4double & Up, 
+					const G4Fragment & aFragment);	
+protected:
+
+  virtual G4double 
+  ProbabilityDistributionFunction(const G4double K, 
+				  const G4Fragment & aFragment) = 0;  
+};
+
+#endif
