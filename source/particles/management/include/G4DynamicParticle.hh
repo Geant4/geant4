@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.6 1999-12-15 14:51:10 gunter Exp $
+// $Id: G4DynamicParticle.hh,v 1.7 2000-10-18 14:51:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,7 +154,7 @@ class G4DynamicParticle
       //   Set/Get particle definition  
 
      
-     G4DecayProducts *GetPreAssignedDecayProducts();
+     const G4DecayProducts *GetPreAssignedDecayProducts() const;
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
       //   Set/Get pre-assigned decay channel
  
