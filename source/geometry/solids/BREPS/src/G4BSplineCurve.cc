@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.cc,v 1.3 2000-08-28 08:57:56 gcosmo Exp $
+// $Id: G4BSplineCurve.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,6 +64,39 @@ G4BSplineCurve::~G4BSplineCurve()
   if (weightsData) delete weightsData;
 }
 
+
+// add by L. Broglia to pass linkage
+
+G4double G4BSplineCurve::GetPMax() const
+{
+  return 0.0;
+}
+
+G4Point3D G4BSplineCurve::GetPoint(G4double param) const
+{
+  return G4Point3D(0, 0, 0);
+}
+
+G4double  G4BSplineCurve::GetPPoint(const G4Point3D& p) const
+{
+  return 0.0;
+}
+
+/*
+#include "G4CurveRayIntersection.hh"
+
+void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
+                                    G4CurveRayIntersection& is)
+{
+}
+*/
+
+G4int G4BSplineCurve::IntersectRay2D(const G4Ray& ray)
+{
+  // L. Broglia
+  G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
+  return 0;
+}
 
 /*
 void G4BSplineCurve::CalcCurvePlaneNormal()

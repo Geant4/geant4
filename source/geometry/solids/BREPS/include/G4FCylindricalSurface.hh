@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.8 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.9 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ class G4FCylindricalSurface : public G4Surface
   G4FCylindricalSurface(const G4FCylindricalSurface& c);
     // Copy constructor.
 
-  inline G4int operator==( const G4FCylindricalSurface& c );
+  inline G4int operator==( const G4FCylindricalSurface& c ) const;
     // Equality operator.
 
 
@@ -78,7 +78,7 @@ class G4FCylindricalSurface : public G4Surface
     // Returns 1 if the point x is Inside the G4FCylindricalSurface,
     // returns 0 otherwise.
 
-  inline G4String GetEntityType();
+  inline G4String GetEntityType() const;
     // Returns the shape identifier.
 
   G4int Intersect(const G4Ray&);	

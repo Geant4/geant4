@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.hh,v 1.6 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BSplineCurve.hh,v 1.7 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,9 +44,9 @@ public:  // with description
 			   G4Transform3D::Identity);
     // Transforms and projects all control points.
 
-  virtual G4double  GetPMax();
-  virtual G4Point3D GetPoint(G4double param);
-  virtual G4double  GetPPoint(const G4Point3D& p);
+  virtual G4double  GetPMax() const;
+  virtual G4Point3D GetPoint(G4double param) const;
+  virtual G4double  GetPPoint(const G4Point3D& p) const;
     // Accessors methods.
 
   void Init(G4int degree0, G4Point3DVector* controlPointsList0,
@@ -60,7 +60,7 @@ public:  // with description
     // The object is responsible for deleting the containers passed
     // to the Init method.
 
-public:
+public:  // without description
 
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
     // Returns false. Empty implementation.

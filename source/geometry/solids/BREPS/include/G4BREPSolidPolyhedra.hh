@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.4 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.5 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -92,7 +92,7 @@ public:
   G4Polyhedron* CreatePolyhedron () const;
     // Creates a G4Polyhedron
 
-  inline void Reset() const;
+  void Reset() const;
     // Resets all distance attributes.
 
 private:
@@ -100,7 +100,8 @@ private:
   //   The following is only utilised in storing the shape parameters for
   //  use in visualising this shape.  J.A. Feb  24, 1997
   //
-  struct PGonParameters {
+  struct PGonParameters
+  {
      G4double  Start_angle;
      G4double  Opening_angle;		   
      int       Sides; 
@@ -111,15 +112,5 @@ private:
      G4double  *Rmax;
   }  original_parameters;
 };
-
-inline void G4BREPSolidPolyhedra::Reset() const
-{
-  Active(1);
-  ((G4BREPSolidPolyhedra*)this)->intersectionDistance=kInfinity;
-  StartInside(0);
-  for(register int a=0;a<nb_of_surfaces;a++)
-    SurfaceVec[a]->Reset();
-  ShortestDistance = kInfinity;
-}
 
 #endif

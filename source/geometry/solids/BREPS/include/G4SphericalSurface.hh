@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.hh,v 1.5 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4SphericalSurface.hh,v 1.6 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,7 +59,7 @@ public:  // with description
   inline G4int operator==( const G4SphericalSurface& s );
     // Equality operator.
 
-  inline G4String GetEntityType();
+  inline G4String GetEntityType() const;
     // Returns the type identifier.
 
   virtual const char* NameOf() const;

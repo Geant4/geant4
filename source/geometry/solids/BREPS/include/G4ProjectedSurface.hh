@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.hh,v 1.3 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4ProjectedSurface.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -63,7 +63,7 @@ private:
   void ConvertToBezier (G4SurfaceList& p, G4SurfaceList& b);
     // Converts surface into a Bezier surface to b.
 
-  inline G4int GetOrder(G4int direction);	
+  inline G4int GetOrder(G4int direction) const;
   inline void PutOrder(G4int direction, G4int value);
   
   void SplitNURBSurface();
@@ -87,9 +87,9 @@ private:
     // This algorithm is described in the paper "Making the Oslo-algorithm
     // more efficient" in SIAM J.NUMER.ANAL. Vol.23, No. 3, June '86.
 
-  inline G4int Amax(G4int i, G4int j);
-  inline G4int Amin(G4int i, G4int j);
-  inline G4int AhIndex(G4int j, G4int t, G4int iorder);
+  inline G4int Amax(G4int i, G4int j) const;
+  inline G4int Amin(G4int i, G4int j) const;
+  inline G4int AhIndex(G4int j, G4int t, G4int iorder) const;
 
 private:
 

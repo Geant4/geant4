@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.8 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4FPlane.cc,v 1.9 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -182,7 +182,7 @@ void G4FPlane::Project()
 }
 
 
-G4int G4FPlane::IsConvex()
+G4int G4FPlane::IsConvex() const
 {
   return -1;  
 }

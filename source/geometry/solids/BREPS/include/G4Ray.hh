@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.hh,v 1.3 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4Ray.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -89,8 +89,8 @@ public:  // with description
     // Implicit return argument:
     //      plane   The G4Plane equation coefficients are stored here.
 
-  inline G4double P2(G4double x);
-  inline G4int NearZero(G4double val, G4double epsilon);
+  inline G4double P2(G4double x) const;
+  inline G4int NearZero(G4double val, G4double epsilon) const;
   void MatVecOrtho(register G4Vector3D &out, register const G4Vector3D in);
     // Utility methods.
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.icc,v 1.1 2000-08-28 08:57:50 gcosmo Exp $
+// $Id: G4ToroidalSurface.icc,v 1.2 2000-08-28 15:00:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,36 +17,36 @@
 // --------------------------------------------------------------------
 
 inline
-G4String G4ToroidalSurface::GetEntityType()
+G4String G4ToroidalSurface::GetEntityType() const
 {
   return G4String("Toroidal_Surface");
 }
 
 inline
-G4Vector3D G4ToroidalSurface::GetDirection()
+G4Vector3D G4ToroidalSurface::GetDirection() const
 {
   return Placement.GetRefDirection();
 }
 
 inline
-G4Vector3D G4ToroidalSurface::GetAxis()
+G4Vector3D G4ToroidalSurface::GetAxis() const
 {
   return Placement.GetAxis();
 }
 
 inline
-G4Point3D G4ToroidalSurface::GetLocation()
+G4Point3D G4ToroidalSurface::GetLocation() const
 {
   return Placement.GetLocation();
 }
 
 inline
-G4double G4ToroidalSurface::GetMinRadius()
+G4double G4ToroidalSurface::GetMinRadius() const
 {
   return MinRadius;
 }
 
-inline G4double G4ToroidalSurface::GetMaxRadius()
+inline G4double G4ToroidalSurface::GetMaxRadius() const
 {
   return MaxRadius;
 }
@@ -94,7 +94,7 @@ void G4ToroidalSurface::MultiplyVectorByMatrix(G4Vector3D& DCos)
 }
 
 inline
-G4int G4ToroidalSurface::IsZero(G4double x)
+G4int G4ToroidalSurface::IsZero(G4double x) const
 {
   if((x) > -EQN_EPS && (x) < EQN_EPS) 
     return 1;

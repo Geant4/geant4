@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.hh,v 1.5 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4CylindricalSurface.hh,v 1.6 2000-08-28 15:00:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,10 +44,10 @@ class G4CylindricalSurface : public G4Surface
   virtual ~G4CylindricalSurface();
     // Destructor.
 
-  inline G4int operator==( const G4CylindricalSurface& c );
+  inline G4int operator==( const G4CylindricalSurface& c ) const;
     // Equality operator.
 
-  inline G4String GetEntityType();
+  inline G4String GetEntityType() const;
     // Returns the shape identifier.
 
   virtual const char* NameOf() const;

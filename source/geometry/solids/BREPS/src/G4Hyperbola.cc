@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4Hyperbola.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Hyperbola.hh"
+#include "G4CurvePoint.hh"
 
 G4Hyperbola::G4Hyperbola()
 {

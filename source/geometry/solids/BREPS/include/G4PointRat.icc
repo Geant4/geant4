@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.icc,v 1.1 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4PointRat.icc,v 1.2 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4Point3D G4PointRat::pt() const
 }
 
 inline
-G4double G4PointRat::PlaneDistance(const G4Plane3D& Pl)
+G4double G4PointRat::PlaneDistance(const G4Plane3D& Pl) const
 {
   return ((Pl.a()*pt3d.x() + Pl.b()*pt3d.y() + Pl.c()*pt3d.z()) - Pl.d());
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.hh,v 1.4 2000-08-28 08:57:46 gcosmo Exp $
+// $Id: G4KnotVector.hh,v 1.5 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ class G4KnotVector
   inline G4int GetSize() const;
     // Gets number of knots.
 
-  inline G4double GetKnot(G4int knot_number);
+  inline G4double GetKnot(G4int knot_number) const;
     // Retrieves knot from knot vector index knot_number.
 
   inline void PutKnot(G4int knot_number, G4double value);
@@ -55,7 +55,7 @@ class G4KnotVector
     // Creates the new vector by merging the old vector with the
     // knots in the vector knots_to_add.
 
-  G4int CheckKnotVector(G4double val);
+  G4int CheckKnotVector(G4double val) const;
     // Finds out how many times val occurs in the knot vector.
 
   void ExtractKnotVector(G4KnotVector* kv, G4int upper, G4int lower);
@@ -63,7 +63,7 @@ class G4KnotVector
     // the new knot vector values to the knot vectors of the
     // new surfaces created by splitting.
 
-  G4int GetKnotIndex(G4double k_value, G4int order);
+  G4int GetKnotIndex(G4double k_value, G4int order) const;
     // Searches the knot vector for the value and returns the index
     // This is used in the evaluation of the intersection to find
     // out between which knots the intersection point is on the b-spline
@@ -76,7 +76,7 @@ class G4KnotVector
 
  private:
 
-  inline G4double ApxEq(G4double x, G4double y);
+  inline G4double ApxEq(G4double x, G4double y) const;
 
  private:
 

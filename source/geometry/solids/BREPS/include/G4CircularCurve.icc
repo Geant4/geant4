@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.icc,v 1.3 2000-08-28 08:57:43 gcosmo Exp $
+// $Id: G4CircularCurve.icc,v 1.4 2000-08-28 15:00:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -28,46 +28,4 @@ inline
 G4double G4CircularCurve::GetRadius() const
 {
   return radius;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-inline
-G4double G4CircularCurve::GetPMax()
-{
-  return twopi;
-}
-
-inline G4Point3D G4CircularCurve::GetPoint(G4double param) {
-  return position.GetLocation()+radius*
-    ( cos(param)*position.GetPX() + sin(param)*position.GetPY() );
-}
-
-inline
-G4double G4CircularCurve::GetPPoint(const G4Point3D& pt)
-{
-  G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
-  G4double angle= atan2(ptLocal.y(), ptLocal.x());
-  return (angle<0)? angle+twopi: angle;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-#include "G4CurveRayIntersection.hh"
-
-/*
-inline
-void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
-				     G4CurveRayIntersection& is)
-{
-  G4Exception("G4CircularCurve is always 3D!");
-  exit(1);
-}
-*/
-
-inline
-G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
-{
-  G4Exception("G4CircularCurve is always 3D!");
-  return 0;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.icc,v 1.1 2000-08-28 08:57:41 gcosmo Exp $
+// $Id: G4BREPSolid.icc,v 1.2 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -26,7 +26,7 @@ inline void G4BREPSolid::IntersectionDistance(G4double d) const
   ((G4BREPSolid*)this)->intersectionDistance=d;
 }   
 
-inline G4Surface* G4BREPSolid::GetSurface(G4int nr)
+inline G4Surface* G4BREPSolid::GetSurface(G4int nr) const
 {
   return SurfaceVec[nr];
 }

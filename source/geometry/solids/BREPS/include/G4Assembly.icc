@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.icc,v 1.1 2000-08-28 08:57:40 gcosmo Exp $
+// $Id: G4Assembly.icc,v 1.2 2000-08-28 15:00:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -16,12 +16,12 @@
 // Implementation of inline methods of G4Assembly
 // --------------------------------------------------------------------
 
-inline G4PlacedSolid* G4Assembly::GetPlacedSolid(G4int solidNumber)
+inline G4PlacedSolid* G4Assembly::GetPlacedSolid(G4int solidNumber) const
 {
   return placedVec[solidNumber];
 }
 
-inline G4int G4Assembly::GetNumberOfSolids()
+inline G4int G4Assembly::GetNumberOfSolids() const
 {
   return numberOfSolids;
 }

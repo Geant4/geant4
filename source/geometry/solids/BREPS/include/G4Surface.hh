@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Surface.hh,v 1.4 2000-08-28 08:57:49 gcosmo Exp $
+// $Id: G4Surface.hh,v 1.5 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@ public:  // with description
   G4int operator==( const G4Surface& s );
     // Equality operator.
 
-  virtual G4String GetEntityType();
+  virtual G4String GetEntityType() const;
     // Returns type information, needed for STEP output.
 
   virtual const char* Name() const;
@@ -96,8 +96,8 @@ public:  // without description
     // Utility function returning the projection (Coord) of a point Pt
     // on a plane Pl.
 
-  virtual G4double GetUHit();
-  virtual G4double GetVHit();
+  virtual G4double GetUHit() const;
+  virtual G4double GetVHit() const;
     // Overriden by BSplineSurface.
     // uhit and vhit are never set.
 
@@ -114,20 +114,20 @@ public:  // without description
   virtual void CalcNormal();
     // Used only in G4FPlane. Should be private to that class?
 
-  virtual G4int IsConvex();
+  virtual G4int IsConvex() const;
     // Only in G4FPlane. BREPSolid::IsConvex uses it.
     // But who uses BREPSolid::IsConvex? Thus: probably not needed.
     // However, knowing if the surface is convex could be used for
     // optimization. 
 
-  virtual G4int GetConvex();
+  virtual G4int GetConvex() const;
     // Only in G4FPlane, but G4BREPSolid uses them.
 
-  virtual G4int GetNumberOfPoints();
-  virtual const G4Point3D& GetPoint(G4int Count);
+  virtual G4int GetNumberOfPoints() const;
+  virtual const G4Point3D& GetPoint(G4int Count) const;
     // ???
 
-  virtual G4Ray* Norm();
+  virtual G4Ray* Norm() const;
   virtual G4Vector3D SurfaceNormal(const G4Point3D& Pt) const = 0;  
     // There is Normal as well -- so what do these do?
 

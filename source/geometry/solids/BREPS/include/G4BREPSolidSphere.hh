@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidSphere.hh,v 1.3 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BREPSolidSphere.hh,v 1.4 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,21 +71,10 @@ class G4BREPSolidSphere : public G4BREPSolid
     // solid to any boundary of this solid.
     // Return 0 if the point is already outside.	
 
- public:
+ public:  // without description
 
-  inline void SphReset() const;
+  inline void SphReset() const { ((G4BREPSolidSphere*)this)->active=1; }
 
 };
 
-inline void G4BREPSolidSphere::SphReset() const
-{
-  ((G4BREPSolidSphere*)this)->active=1;
-}
-
 #endif
-
-
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.hh,v 1.5 2000-08-28 08:57:50 gcosmo Exp $
+// $Id: G4ThreeMat.hh,v 1.6 2000-08-28 15:00:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ public:  // with description
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
     // Printing functions (derived classes do not need to overwrite operator <<).
 
-  G4int operator==( const G4ThreeMat& m );
+  G4int operator==( const G4ThreeMat& m ) const;
     // Equality operator.
 
   void operator=( const G4ThreeMat& m );
@@ -63,7 +63,7 @@ public:  // with description
   friend G4ThreeMat operator*( const G4ThreeMat& m1, const G4ThreeMat& m2 );
     // Overload operators =, +, -, +=, -=, *
 
-  G4double Determinant();
+  G4double Determinant() const;
     // Determinant of matrix.
 
 private:

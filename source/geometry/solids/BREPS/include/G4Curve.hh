@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.hh,v 1.5 2000-08-28 08:57:44 gcosmo Exp $
+// $Id: G4Curve.hh,v 1.6 2000-08-28 15:00:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,43 +70,43 @@ class G4Curve
     // If no intersection it returns false, otherwise it returns true,
     // the intersection point is ray.start+ray.dir*intersection0.
 
-  const G4Point3D& GetStart() const;
-  const G4Point3D& GetEnd() const;
+  inline const G4Point3D& GetStart() const;
+  inline const G4Point3D& GetEnd() const;
     // Return start and endpoints in 3D space.
 
-  G4double GetPStart() const;
-  G4double GetPEnd() const;
+  inline G4double GetPStart() const;
+  inline G4double GetPEnd() const;
     // Return start and endpoints in parameter space.
 
-  void SetBounds(G4double p1, G4double p2);
-  void SetBounds(G4double p1, const G4Point3D& p2);
-  void SetBounds(const G4Point3D& p1, G4double p2);
-  void SetBounds(const G4Point3D& p1, const G4Point3D& p2);
+  inline void SetBounds(G4double p1, G4double p2);
+  inline void SetBounds(G4double p1, const G4Point3D& p2);
+  inline void SetBounds(const G4Point3D& p1, G4double p2);
+  inline void SetBounds(const G4Point3D& p1, const G4Point3D& p2);
     // Set start and endpoints, given points as parameter values
     // or 3D points.
 
-  G4bool IsBounded() const;
+  inline G4bool IsBounded() const;
     // Returns if the curve is bounded.
 
-  G4bool IsPOn(G4double param);
+  inline G4bool IsPOn(G4double param) const;
     // Returns if the parameter is on the curve.
 
-  void   SetSameSense(G4int sameSense0);
-  G4int  GetSameSense() const;
+  inline void   SetSameSense(G4int sameSense0);
+  inline G4int  GetSameSense() const;
     // The sameSense flag can be used to reverse the orientation
     // of the curve (value false).
     // The curves themselves never use the value of this flag;
     // this is just a convenient mean of storing this piece of
     // topological information.
 
-  virtual G4double GetPMax()= 0;
+  virtual G4double GetPMax() const = 0;
     // If the parameter space is closed, return the max value
     // if not, return <=0.
 
-  virtual G4Point3D GetPoint(G4double param)= 0;
+  virtual G4Point3D GetPoint(G4double param) const = 0;
     // Return the point in the 3D space, given correspondent parameter.
 
-  virtual G4double GetPPoint(const G4Point3D& p)= 0;
+  virtual G4double GetPPoint(const G4Point3D& p) const = 0;
     // Return parapmeter give a point in space.
     // In case the point is further off the curve than some tolerance
     // the result is undefined.

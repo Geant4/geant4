@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedSolid.icc,v 1.1 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4PlacedSolid.icc,v 1.2 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -23,19 +23,19 @@ G4bool G4PlacedSolid::operator==(const G4PlacedSolid& ps) const
 }
 
 inline
-G4VSolid* G4PlacedSolid::GetSolid()
+G4VSolid* G4PlacedSolid::GetSolid() const
 {
   return solid;
 }
 
 inline
-G4RotationMatrix* G4PlacedSolid::GetRotation()
+G4RotationMatrix* G4PlacedSolid::GetRotation() const
 {
   return solidRotation;
 }
 
 inline
-G4ThreeVector* G4PlacedSolid::GetTranslation()
+G4ThreeVector* G4PlacedSolid::GetTranslation() const
 {
   return solidTranslation;
 } 

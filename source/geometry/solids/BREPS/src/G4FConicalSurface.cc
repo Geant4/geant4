@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.10 2000-08-28 08:57:57 gcosmo Exp $
+// $Id: G4FConicalSurface.cc,v 1.11 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -154,7 +154,7 @@ void G4FConicalSurface::PrintOn( G4std::ostream& os ) const
 }
 
 
-G4int G4FConicalSurface::operator==( const G4FConicalSurface& c )
+G4int G4FConicalSurface::operator==( const G4FConicalSurface& c ) const
 {
   return ( origin             == c.origin                &&
 	   Position.GetAxis() == c.Position.GetAxis()    &&

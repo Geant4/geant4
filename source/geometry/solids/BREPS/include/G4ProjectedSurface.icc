@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.icc,v 1.1 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4ProjectedSurface.icc,v 1.2 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -23,7 +23,7 @@ G4Vector3D G4ProjectedSurface::SurfaceNormal(const G4Point3D& Pt) const
 }
 
 inline
-G4int G4ProjectedSurface::GetOrder(G4int direction)
+G4int G4ProjectedSurface::GetOrder(G4int direction) const
 {
   return order[direction];
 }
@@ -35,19 +35,19 @@ void G4ProjectedSurface::PutOrder(G4int direction, G4int value)
 }
 
 inline
-G4int G4ProjectedSurface::Amax(G4int i, G4int j) 
+G4int G4ProjectedSurface::Amax(G4int i, G4int j) const
 {
   return( (i) > (j) ? (i) : (j) );
 }
   
 inline
-G4int G4ProjectedSurface::Amin(G4int i, G4int j) 
+G4int G4ProjectedSurface::Amin(G4int i, G4int j) const
 {
   return( (i) < (j) ? (i) : (j) );
 }
   
 inline
-G4int G4ProjectedSurface::AhIndex(G4int j, G4int t, G4int iorder)
+G4int G4ProjectedSurface::AhIndex(G4int j, G4int t, G4int iorder) const
 {
   return(( (j) * ((j)+1)/2) + (t) - ((iorder-1) - (j)));
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.hh,v 1.3 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BezierSurface.hh,v 1.4 2000-08-28 15:00:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,23 +42,23 @@ public:  // with description
   ~G4BezierSurface();
     // Constructors & destructor
 
-  inline G4Point3D AveragePoint();
+  inline G4Point3D AveragePoint() const;
   inline void SetAveragePoint(G4Point3D p);
 
-  inline G4double UAverage();
-  inline G4double VAverage();
+  inline G4double UAverage() const;
+  inline G4double VAverage() const;
 
   inline void Dir(G4int d);
   inline void ChangeDir();
 
-  inline G4double SMin();
-  inline G4double SMax();
+  inline G4double SMin() const;
+  inline G4double SMax() const;
 
-  inline G4int GetOrder(G4int direction);
+  inline G4int GetOrder(G4int direction) const;
   inline void PutOrder(G4int direction, G4int value);
 
-  inline G4double GetU();
-  inline G4double GetV();
+  inline G4double GetU() const;
+  inline G4double GetV() const;
 
   void CalcBBox();
 
@@ -71,14 +71,14 @@ public:  // with description
 
   friend void CopySurface(G4BezierSurface& bez);
 
-public:
+public:  // without description
 
   G4SurfaceList* bezier_list;
 
-  // Test variables 
   static G4int Clips;
   static G4int Splits;    
   static G4double Tolerance;
+    // Test variables 
 
 private:
 
@@ -93,14 +93,15 @@ private:
   void CalcOsloMatrix();
   void MapSurface(G4Surface*);
 
-  // For ClipSurface...
-  inline G4double Findzero(G4double x0, G4double x1, G4double y0, G4double y1);
-  inline G4int Sign(G4double a);
+  inline G4double Findzero(G4double x0, G4double x1,
+                           G4double y0, G4double y1) const;
+  inline G4int Sign(G4double a) const;
+    // For ClipSurface...
 
-  // For calc_G4OsloMatrix...
-  inline G4int Amax(G4int i, G4int j);
-  inline G4int Amin(G4int i, G4int j);
-  inline G4int AhIndex(G4int j, G4int t, G4int iorder);
+  inline G4int Amax(G4int i, G4int j) const;
+  inline G4int Amin(G4int i, G4int j) const;
+  inline G4int AhIndex(G4int j, G4int t, G4int iorder) const;
+    // For calc_G4OsloMatrix...
 
 private:
 

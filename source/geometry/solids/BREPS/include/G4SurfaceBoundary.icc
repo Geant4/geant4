@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.icc,v 1.1 2000-08-28 08:57:49 gcosmo Exp $
+// $Id: G4SurfaceBoundary.icc,v 1.2 2000-08-28 15:00:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -29,13 +29,13 @@ const G4BoundingBox3D& G4SurfaceBoundary::BBox() const
 }
 
 inline
-G4int G4SurfaceBoundary::GetNumberOfPoints()
+G4int G4SurfaceBoundary::GetNumberOfPoints() const
 {
   return points.length();
 }
 
 inline
-const G4Point3D& G4SurfaceBoundary::GetPoint(G4int Count)
+const G4Point3D& G4SurfaceBoundary::GetPoint(G4int Count) const
 {
   return points.ref(Count);
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CurvePoint.hh,v 1.2 2000-08-28 08:57:44 gcosmo Exp $
+// $Id: G4CurvePoint.hh,v 1.3 2000-08-28 15:00:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,8 +49,8 @@ public: // with description
   inline void Reset(G4double u0, const G4Point3D& p0);
     // Resets point's attributes.
 
-  G4double GetPPoint();
-  const G4Point3D& GetPoint();
+  inline G4double GetPPoint();
+  inline const G4Point3D& GetPoint();
     // Returns point as parameter or as point in space.
 
 protected:

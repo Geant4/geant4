@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Surface.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.5 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@ G4int G4Surface::operator==( const G4Surface& s )
   return origin == s.origin;
 }
 
-G4String G4Surface::GetEntityType()
+G4String G4Surface::GetEntityType() const
 {
   return G4String("Surface");
 }
@@ -56,12 +56,12 @@ void G4Surface::InitBounded()
 {
 }
 
-G4double G4Surface::GetUHit()
+G4double G4Surface::GetUHit() const
 {
   return uhit;
 }
 
-G4double G4Surface::GetVHit()
+G4double G4Surface::GetVHit() const
 {
   return vhit;
 }
@@ -244,28 +244,28 @@ void G4Surface::CalcNormal()
 {
 }  
 
-G4int G4Surface::IsConvex()
+G4int G4Surface::IsConvex() const
 {
   return -1;
 }
 
-G4int G4Surface::GetConvex()
+G4int G4Surface::GetConvex() const
 {
   return 0;
 }
 
-G4int G4Surface::GetNumberOfPoints()
+G4int G4Surface::GetNumberOfPoints() const
 {
   return 0;
 }
 
-const G4Point3D& G4Surface::GetPoint(G4int Count)
+const G4Point3D& G4Surface::GetPoint(G4int Count) const
 {
   const G4Point3D* tmp= new G4Point3D(0,0,0);
   return *tmp;
 }
 
-G4Ray* G4Surface::Norm()
+G4Ray* G4Surface::Norm() const
 {
   return (G4Ray*)0;
 }

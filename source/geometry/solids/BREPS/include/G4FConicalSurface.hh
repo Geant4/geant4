@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.7 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4FConicalSurface.hh,v 1.8 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -67,7 +67,7 @@ class G4FConicalSurface : public G4Surface
   G4int Inside( const G4Vector3D& x ) const;
     // Returns 0 if point x is outside G4ConicalSurface, 1 if Inside.
 
-  inline G4String GetEntityType();
+  inline G4String GetEntityType() const;
     // Returns the type identifier.
 
   virtual const char* Name() const;
@@ -76,7 +76,7 @@ class G4FConicalSurface : public G4Surface
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
     // Printing function.
 
-  G4int operator==( const G4FConicalSurface& c );
+  G4int operator==( const G4FConicalSurface& c ) const;
     // Equality operator.
 
   G4int Intersect( const G4Ray& ry );

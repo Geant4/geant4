@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.icc,v 1.1 2000-08-28 08:57:43 gcosmo Exp $
+// $Id: G4BezierSurface.icc,v 1.2 2000-08-28 15:00:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,7 +17,7 @@
 // --------------------------------------------------------------------
 
 inline
-G4Point3D G4BezierSurface::AveragePoint()
+G4Point3D G4BezierSurface::AveragePoint() const
 {
   return average_pt;
 }
@@ -29,13 +29,13 @@ void G4BezierSurface::SetAveragePoint(G4Point3D p)
 }
 
 inline
-G4double G4BezierSurface::UAverage()
+G4double G4BezierSurface::UAverage() const
 {
   return average_u;
 }
 
 inline
-G4double G4BezierSurface::VAverage()
+G4double G4BezierSurface::VAverage() const
 {
   return average_v;
 }
@@ -53,19 +53,19 @@ void G4BezierSurface::ChangeDir()
 }
 
 inline
-G4double G4BezierSurface::SMin()
+G4double G4BezierSurface::SMin() const
 {
   return smin;
 }
 
 inline
-G4double G4BezierSurface::SMax()
+G4double G4BezierSurface::SMax() const
 {
   return smax;
 }
 
 inline
-G4int G4BezierSurface::GetOrder(G4int direction)
+G4int G4BezierSurface::GetOrder(G4int direction) const
 {
   return order[direction];
 }
@@ -77,13 +77,13 @@ void G4BezierSurface::PutOrder(G4int direction, G4int value)
 }
 
 inline
-G4double G4BezierSurface::GetU()
+G4double G4BezierSurface::GetU() const
 {
   return (u_min + u_max)/2.0;
 }
 
 inline
-G4double G4BezierSurface::GetV()
+G4double G4BezierSurface::GetV() const
 {
   return (v_min + v_max)/2.0;
 }
@@ -109,31 +109,31 @@ void G4BezierSurface::LocalizeClipValues()
 
 inline
 G4double G4BezierSurface::Findzero(G4double x0, G4double x1,
-                                   G4double y0, G4double y1) 
+                                   G4double y0, G4double y1) const
 {
   return(x0 - y0 * ( x1 - x0) / (y1-y0));
 }
   
 inline
-G4int G4BezierSurface::Sign(G4double a)	
+G4int G4BezierSurface::Sign(G4double a)	const
 {
   return ((a < 0.0)? -1 : 1);
 }
 
 inline
-G4int G4BezierSurface::Amax(G4int i, G4int j)
+G4int G4BezierSurface::Amax(G4int i, G4int j) const
 {
   return( (i) > (j) ? (i) : (j) );
 }
 
 inline
-G4int G4BezierSurface::Amin(G4int i, G4int j)
+G4int G4BezierSurface::Amin(G4int i, G4int j) const
 {
   return( (i) < (j) ? (i) : (j) );
 }
 	
 inline
-G4int G4BezierSurface::AhIndex(G4int j, G4int t, G4int iorder)   
+G4int G4BezierSurface::AhIndex(G4int j, G4int t, G4int iorder) const
 {
   return(( (j) * ((j)+1)/2) + (t) - ((iorder-1) - (j)));
 }

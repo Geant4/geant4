@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 1.8 2000-08-28 08:57:46 gcosmo Exp $
+// $Id: G4FPlane.hh,v 1.9 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -74,16 +74,16 @@ public:  // with description
   void Project();
     // Computes the projection of the plane.
   
-  inline G4int GetConvex();
+  inline G4int GetConvex() const;
     // Return plane's convexity, if so.
 
-  inline G4int GetNumberOfPoints();
+  inline G4int GetNumberOfPoints() const;
     // Gets the number of the points on the surface boundary.
 
-  inline G4Point3D GetSrfPoint();
+  inline G4Point3D GetSrfPoint() const;
     // Gets the location point on the surface.
 
-  inline const G4Point3D& GetPoint(G4int Count);
+  inline const G4Point3D& GetPoint(G4int Count) const;
     // Gets a surface boundary point.
 
   void CalcNormal();
@@ -111,13 +111,13 @@ public:  // without description
   inline G4int MyType() const;
     // Returns the shape type (used in G4BREPSolid).
   
-  G4int IsConvex(); 
+  G4int IsConvex() const; 
     // Returns -1.  (?)
 
   inline void Deactivate();
     // Deactive, used in G4Surface.
 
-  inline G4Ray* Norm();
+  inline G4Ray* Norm() const;
     // Returns the normal (used in BREPSolid).
 
   G4Point3D hitpoint;
@@ -129,7 +129,7 @@ protected:
   
 private:
 
-  inline G4int Sign(G4double a);
+  inline G4int Sign(G4double a) const;
 
 private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.icc,v 1.2 2000-08-28 08:57:41 gcosmo Exp $
+// $Id: G4Axis2Placement3D.icc,v 1.3 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -16,10 +16,10 @@
 // Implementation of inline methods of G4AxisPlacement3D
 // --------------------------------------------------------------------
 
-inline void
-G4Axis2Placement3D::Init( const G4Vector3D& refDirection0 ,
-			  const G4Vector3D& axis0         ,
-			  const G4Point3D& location0       ) 
+inline
+void G4Axis2Placement3D::Init( const G4Vector3D& refDirection0 ,
+			       const G4Vector3D& axis0         ,
+			       const G4Point3D& location0       ) 
 {
   refDirection = refDirection0;
   axis         = axis0;
@@ -49,52 +49,52 @@ G4Axis2Placement3D::G4Axis2Placement3D(const G4Vector3D& refDirection0,
 }
 
 
-inline G4Point3D
-G4Axis2Placement3D::GetLocation() const
+inline
+G4Point3D G4Axis2Placement3D::GetLocation() const
 {
   return location;
 }
 
-inline G4Vector3D
-G4Axis2Placement3D::GetAxis() const
+inline
+G4Vector3D G4Axis2Placement3D::GetAxis() const
 {
   return axis;
 }
 
-inline G4Vector3D
-G4Axis2Placement3D::GetRefDirection() const 
+inline
+G4Vector3D G4Axis2Placement3D::GetRefDirection() const 
 {
   return refDirection;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-inline const G4Transform3D&
-G4Axis2Placement3D::GetToPlacementCoordinates() const 
+inline
+const G4Transform3D& G4Axis2Placement3D::GetToPlacementCoordinates() const 
 {
   return toPlacementCoordinates;
 }
 
-inline const G4Transform3D&
-G4Axis2Placement3D::GetFromPlacementCoordinates() const 
+inline
+const G4Transform3D& G4Axis2Placement3D::GetFromPlacementCoordinates() const 
 {
   return fromPlacementCoordinates;
 }
 
-inline G4Vector3D
-G4Axis2Placement3D::GetPX() const
+inline
+G4Vector3D G4Axis2Placement3D::GetPX() const
 {
   return pX;
 }
 
-inline G4Vector3D
-G4Axis2Placement3D::GetPY() const
+inline
+G4Vector3D G4Axis2Placement3D::GetPY() const
 {
   return pY;
 }
 
-inline G4Vector3D
-G4Axis2Placement3D::GetPZ() const
+inline
+G4Vector3D G4Axis2Placement3D::GetPZ() const
 {
   return pZ;
 }

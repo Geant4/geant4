@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.hh,v 1.3 2000-08-28 08:57:49 gcosmo Exp $
+// $Id: G4SurfaceBoundary.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,8 +90,8 @@ public:  // without description
     // It is the caller's responsibility to delete them.
     // To be implemented yet.
 
-  inline G4int GetNumberOfPoints();
-  inline const G4Point3D& GetPoint(G4int Count);
+  inline G4int GetNumberOfPoints() const;
+  inline const G4Point3D& GetPoint(G4int Count) const;
     // Functions probably not used and should be removed in the future
 
   // void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.icc,v 1.1 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4CylindricalSurface.icc,v 1.2 2000-08-28 15:00:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,7 +17,7 @@
 // --------------------------------------------------------------------
 
 inline
-G4int G4CylindricalSurface::operator==( const G4CylindricalSurface& c )
+G4int G4CylindricalSurface::operator==( const G4CylindricalSurface& c ) const
 {
   return ( origin == c.origin    &&  
 	   axis   == c.axis      && 
@@ -25,7 +25,7 @@ G4int G4CylindricalSurface::operator==( const G4CylindricalSurface& c )
 }
 
 inline
-G4String G4CylindricalSurface::GetEntityType()
+G4String G4CylindricalSurface::GetEntityType() const
 {
   return G4String("Cylindrical_Surface");
 }

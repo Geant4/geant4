@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.hh,v 1.4 2000-08-28 08:57:46 gcosmo Exp $
+// $Id: G4Line.hh,v 1.5 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,9 +40,9 @@ public:  // with description
     // Returns tangent to line at a given point, if existing.
     // The tangent is computed from the 3D point representation.
 
-  inline G4double  GetPMax();
-  inline G4Point3D GetPoint(G4double param);
-  inline G4double  GetPPoint(const G4Point3D& pt);
+  inline G4double  GetPMax() const;
+  inline G4Point3D GetPoint(G4double param) const;
+  inline G4double  GetPPoint(const G4Point3D& pt) const;
     // Accessors methods.
 
   inline G4Point3D  GetPnt() const;

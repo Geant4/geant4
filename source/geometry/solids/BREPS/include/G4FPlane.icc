@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.icc,v 1.1 2000-08-28 08:57:46 gcosmo Exp $
+// $Id: G4FPlane.icc,v 1.2 2000-08-28 15:00:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,7 +17,7 @@
 // --------------------------------------------------------------------
 
 inline
-G4int G4FPlane::GetConvex()
+G4int G4FPlane::GetConvex() const
 {
   return Convex;
 }
@@ -29,25 +29,25 @@ void G4FPlane::Deactivate()
 }
 
 inline
-G4int G4FPlane::GetNumberOfPoints() 
+G4int G4FPlane::GetNumberOfPoints() const
 {
   return (surfaceBoundary.GetNumberOfPoints());
 }
 
 inline
-G4Point3D G4FPlane::GetSrfPoint()
+G4Point3D G4FPlane::GetSrfPoint() const
 {
   return pplace.GetLocation();
 }
 
 inline
-const G4Point3D& G4FPlane::GetPoint(G4int Count)
+const G4Point3D& G4FPlane::GetPoint(G4int Count) const
 {
   return surfaceBoundary.GetPoint(Count);
 }  
 
 inline
-G4Ray* G4FPlane::Norm()
+G4Ray* G4FPlane::Norm() const
 {
   return NormalX;
 }
@@ -83,7 +83,7 @@ G4int G4FPlane::MyType() const
 }
 
 inline 
-G4int G4FPlane::Sign(G4double a)
+G4int G4FPlane::Sign(G4double a) const
 {
   register G4int i=1; 
   if(a<0) 

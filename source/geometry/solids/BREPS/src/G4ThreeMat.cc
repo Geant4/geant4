@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.cc,v 1.3 2000-08-28 08:58:00 gcosmo Exp $
+// $Id: G4ThreeMat.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -95,7 +95,7 @@ void G4ThreeMat::PrintOn( G4std::ostream& os ) const
 }
 
 
-G4int G4ThreeMat::operator==( const G4ThreeMat& m )
+G4int G4ThreeMat::operator==( const G4ThreeMat& m ) const
 {
   for ( G4int i = 0; i < 3 ; i++ ) 
   {
@@ -239,7 +239,7 @@ G4ThreeMat operator*( const G4ThreeMat& m1, const G4ThreeMat& m2 )
 }
 
 
-G4double G4ThreeMat::Determinant()
+G4double G4ThreeMat::Determinant() const
 { 
   //  Determinant of a three by three matrix
   return element[0][0] * ( element[1][1] * element[2][2]

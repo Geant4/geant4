@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.hh,v 1.3 2000-08-28 08:57:40 gcosmo Exp $
+// $Id: G4Assembly.hh,v 1.4 2000-08-28 15:00:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,8 +43,8 @@ public: // with description
     // Constructor & destructor
 
   void SetPlacedVector(G4PlacedVector&);
-  inline G4PlacedSolid* GetPlacedSolid(G4int solidNumber);
-  inline G4int GetNumberOfSolids();
+  inline G4PlacedSolid* GetPlacedSolid(G4int solidNumber) const;
+  inline G4int GetNumberOfSolids() const;
 
 private:  
 

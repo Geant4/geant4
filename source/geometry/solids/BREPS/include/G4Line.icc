@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.icc,v 1.4 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4Line.icc,v 1.5 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,19 +17,19 @@
 // --------------------------------------------------------------------
 
 inline
-G4double G4Line::GetPMax()
+G4double G4Line::GetPMax() const
 {
   return -1;
 }
 
 inline
-G4Point3D G4Line::GetPoint(G4double param)
+G4Point3D G4Line::GetPoint(G4double param) const
 {
   return pnt+param*dir;
 }
 
 inline
-G4double G4Line::GetPPoint(const G4Point3D& pt) 
+G4double G4Line::GetPPoint(const G4Point3D& pt) const
 { 
   return (pt-pnt)*invDir; 
 }

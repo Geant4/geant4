@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.7 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BSplineSurface.hh,v 1.8 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,16 +45,16 @@ class G4BSplineSurface : public G4Surface
     // Finds the bounds of the b-spline surface.
     // The bounding box is used for a preliminary check of intersection.
   
-  inline G4double GetUHit();
-  inline G4double GetVHit();
+  inline G4double GetUHit() const;
+  inline G4double GetVHit() const;
     	 
   G4double ClosestDistanceToPoint(const G4Point3D&);
 
   inline void Reset();
 
-  inline G4int GetRows();
-  inline G4int GetCols();
-  inline G4Point3D GetControlPoint(G4int a, G4int b);
+  inline G4int GetRows() const;
+  inline G4int GetCols() const;
+  inline G4Point3D GetControlPoint(G4int a, G4int b) const;
     // Accessors for control points.
 
 public:
@@ -65,7 +65,7 @@ private:
 
   void FindIntersections(const G4Ray&);
 
-  inline G4int GetOrder(G4int direction);
+  inline G4int GetOrder(G4int direction) const;
   inline void PutOrder(G4int direction, G4int value);
 
   void AddHit(G4double u, G4double v);

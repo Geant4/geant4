@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Conic.hh,v 1.3 2000-08-28 08:57:43 gcosmo Exp $
+// $Id: G4Conic.hh,v 1.4 2000-08-28 15:00:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,12 +33,12 @@ public:  // with description
   virtual ~G4Conic();
     // Constructor & destructor.
 
-  const G4Axis2Placement3D* GetPosition() const;
-  G4double GetPShift() const;
-  void SetPShift(G4double pShift0); 
+  inline const G4Axis2Placement3D* GetPosition() const;
+  inline G4double GetPShift() const;
+  inline void SetPShift(G4double pShift0); 
     // Get/Set geometric data.
 
-public:
+public:  // without description
 
   //inline G4Placement GetPosition() {return Position;}
   //virtual const char *Name(){return "G4ConicalCurve";}

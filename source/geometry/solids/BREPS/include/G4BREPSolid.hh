@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.hh,v 1.6 2000-08-28 08:57:41 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.7 2000-08-28 15:00:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ public: // with description
     //       tolerance, it is ignored. This allows for a point within a
     //       tolerant boundary to leave immediately.
 
-  G4Point3D Scope();
+  G4Point3D Scope() const;
     // Utility function to determine the maximum scope of the solid
     // in the coordinates X, Y, Z. Returned as a G4Point3D.
 
@@ -109,7 +109,7 @@ public: // with description
     // Gets the roughly calculated closest intersection point for
     // a b_spline and the accurate point for others.
 
-  inline G4Surface* GetSurface(G4int nr);
+  inline G4Surface* GetSurface(G4int nr) const;
   inline void Active(G4int) const;  
   inline G4int Active() const;
   inline G4double GetShortestDistance() const;
@@ -144,7 +144,7 @@ protected:
     // Calculates the bounding boxes for the surfaces and for the solid.
 
   void    CheckSurfaceNormals();
-  void    RemoveHiddenFaces(register const G4Ray& G4Rayref, G4int)const;   
+  void    RemoveHiddenFaces(register const G4Ray& G4Rayref, G4int) const;   
     // Deactivates the planar faces that are on the "back" side of a solid.
     // B-splines are not handled by this function. Also cases where the ray
     // starting point is Inside the bbox of the solid are ignored as we don't

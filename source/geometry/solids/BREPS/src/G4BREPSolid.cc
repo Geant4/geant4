@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.13 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.14 2000-08-28 15:00:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1452,7 +1452,7 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 }
  
 
-G4Point3D G4BREPSolid::Scope()
+G4Point3D G4BREPSolid::Scope() const
 {
   G4Point3D scope;
   G4Point3D Max = bbox->GetBoxMax();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.7 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4PointRat.hh,v 1.8 2000-08-28 15:00:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:  // with description
   inline G4Point3D pt() const;
     // Get/Set methods for attributes.
 
-  inline G4double PlaneDistance(const G4Plane3D& Pl);
+  inline G4double PlaneDistance(const G4Plane3D& Pl) const;
     // Returns distance from a given plane.
 
 public:  // without description

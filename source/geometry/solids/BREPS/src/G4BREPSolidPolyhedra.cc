@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.12 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.13 2000-08-28 15:00:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -307,6 +307,16 @@ void G4BREPSolidPolyhedra::Initialize()
     IsConvex();
   
   CalcBBoxes();
+}
+
+void G4BREPSolidPolyhedra::Reset() const
+{
+  Active(1);
+  ((G4BREPSolidPolyhedra*)this)->intersectionDistance=kInfinity;
+  StartInside(0);
+  for(register int a=0;a<nb_of_surfaces;a++)
+    SurfaceVec[a]->Reset();
+  ShortestDistance = kInfinity;
 }
 
 EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const

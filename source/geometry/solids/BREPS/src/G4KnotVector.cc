@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4KnotVector.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,7 +44,7 @@ G4KnotVector::G4KnotVector(const G4KnotVector& old_kv)
   for(register G4int a=0; a < old_kv.k_size; a++)knots[a]=old_kv.knots[a];
 }
 
-G4int G4KnotVector::GetKnotIndex(G4double k_value, G4int order)
+G4int G4KnotVector::GetKnotIndex(G4double k_value, G4int order) const
 {
   G4int	   i, knot_index;
   G4double knt;
@@ -125,7 +125,7 @@ G4double* G4KnotVector::MergeKnotVector(const G4double* knots_to_add,
 }
 
 
-int G4KnotVector::CheckKnotVector(G4double val)
+G4int G4KnotVector::CheckKnotVector(G4double val) const
 {
   G4int	num = 0;
   

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CompositeCurve.icc,v 1.2 2000-08-28 08:57:43 gcosmo Exp $
+// $Id: G4CompositeCurve.icc,v 1.3 2000-08-28 15:00:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -29,29 +29,3 @@ const G4CurveVector& G4CompositeCurve::GetSegments() const
 {
   return segments;
 }
-
-/////////////////////////////////////////////////////////////////////////////
-
-inline
-G4double G4CompositeCurve::GetPMax() 
-{
-  G4Exception("G4CompositeCurve::GetPMax");
-  return 0;
-}
-
-inline
-G4Point3D G4CompositeCurve::GetPoint(G4double param) 
-{
-  G4Exception("G4CompositeCurve::GetPoint");
-  // Fake return value
-  return G4Point3D();
-}
-
-inline
-G4double G4CompositeCurve::GetPPoint(const G4Point3D& pt) 
-{
-  G4Exception("G4CompositeCurve::GetPPoint");
-  return 0;
-}
-
-////////////////////////////////////////////////////////////////////////////

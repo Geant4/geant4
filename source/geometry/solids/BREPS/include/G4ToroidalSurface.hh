@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.hh,v 1.3 2000-08-28 08:57:50 gcosmo Exp $
+// $Id: G4ToroidalSurface.hh,v 1.4 2000-08-28 15:00:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4ToroidalSurface : public G4Surface
   virtual ~G4ToroidalSurface();
     // Constructors & destructor.
 
-  inline G4String GetEntityType();
+  inline G4String GetEntityType() const;
     // Returns type identifier of the shape.
 
   G4int Intersect(const G4Ray&);
@@ -49,11 +49,11 @@ class G4ToroidalSurface : public G4Surface
   void CalcBBox();
     // Computes the bounding-box.
 
-  inline G4Vector3D  	GetDirection();
-  inline G4Vector3D 	GetAxis();
-  inline G4Point3D	GetLocation();
-  inline G4double   	GetMinRadius();
-  inline G4double   	GetMaxRadius();
+  inline G4Vector3D  	GetDirection() const;
+  inline G4Vector3D 	GetAxis()      const;
+  inline G4Point3D	GetLocation()  const;
+  inline G4double   	GetMinRadius() const;
+  inline G4double   	GetMaxRadius() const;
     // Accessors to geometrical data.
 
   G4double ClosestDistanceToPoint(const G4Point3D& x);
@@ -69,7 +69,7 @@ class G4ToroidalSurface : public G4Surface
 
 private:
 
-  inline G4int IsZero(G4double x);
+  inline G4int IsZero(G4double x) const;
   G4int SolveQuartic(G4double c[], G4double s[]);	
   G4int SolveCubic  (G4double c[], G4double s[]);
   G4int SolveQuadric(G4double c[], G4double s[]);
