@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.14 2001-10-11 01:37:58 asaim Exp $
+// $Id: G4UImanager.hh,v 1.15 2001-10-11 13:29:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,8 +29,7 @@
 #define G4UImanager_h 1
 
 #include "globals.hh"
-#include "g4rw/ctoken.h"
-//#include "g4rw/tvordvec.h"
+
 #include "g4std/vector"
 #include "g4std/fstream"
 #include "G4VStateDependent.hh"

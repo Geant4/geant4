@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.8 2001-10-11 01:37:58 asaim Exp $
+// $Id: G4UIcommand.hh,v 1.9 2001-10-11 13:29:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,6 @@
 class G4UImessenger;
 #include "globals.hh"
 #include "G4ApplicationState.hh"
-//#include "g4rw/tpordvec.h"
-//#include "g4rw/tvordvec.h"
 #include "g4std/vector"
 #include "G4UItokenNum.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.9 2001-10-11 01:37:58 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.10 2001-10-11 13:29:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,6 @@
 
 #include "G4UIcommand.hh"
 #include "globals.hh"
-//#include "g4rw/tpordvec.h"
 #include "g4std/vector"
 
 // class description:

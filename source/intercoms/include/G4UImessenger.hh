@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh,v 1.5 2001-07-11 10:01:14 gunter Exp $
+// $Id: G4UImessenger.hh,v 1.6 2001-10-11 13:29:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,8 +64,8 @@ class G4UImessenger
       // to value(s) of type(s) of the parameter(s). Convert methods corresponding
       // to the type of the command can be used if the command is an object of
       // G4UIcmdXXX classes.
+
   public:
-      // For G4RWTPtrOrderedVector...
       G4bool operator == (const G4UImessenger& messenger) const;
 
   protected:
