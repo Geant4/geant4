@@ -132,10 +132,14 @@ AtRestGetPhysicalInteractionLength(const G4Track& track, G4ForceCondition* condi
 G4VParticleChange* G4MuonMinusCaptureAtRest::
 AtRestDoIt(const G4Track& track,const G4Step&)
 {
+  static int reactionCount=0;
+  if(getenv("MuonMinusCaptureAtRestPrint"))
+  {
+    G4cout << " ++ G4MuonMinusCaptureAtRest::AtRestDoIt is start " << ++reactionCount<<G4endl;
+  }
   aParticleChange.Initialize(track);
 
  // if (verboseLevel > 1) {
-    G4cout << "G4MuonMinusCaptureAtRest::AtRestDoIt is invoked " << G4endl;
  // }
 
   // select element and get Z,A.
@@ -211,6 +215,10 @@ AtRestDoIt(const G4Track& track,const G4Step&)
 
   ResetNumberOfInteractionLengthLeft();
 
+  if(getenv("MuonMinusCaptureAtRestPrint"))
+  {
+    G4cout << " -- G4MuonMinusCaptureAtRest::AtRestDoIt is end " << reactionCount<<G4endl;
+  }
   return &aParticleChange;
 
 }
@@ -241,7 +249,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
     35.25,35.36,35.46,35.57,35.67,35.78 };
 
   // Get the muon 4-vector
-    G4cout << "G4MuonMinusCaptureAtRest::DoMuCapture called " << G4endl;
+  //  G4cout << "G4MuonMinusCaptureAtRest::DoMuCapture called " << G4endl;
   G4int idxx = G4lrint(targetCharge)-1;
   if(idxx>99) idxx=99;  
   G4double q = zeff[idxx];
@@ -262,10 +270,10 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
   G4double eEx=0;
   G4double eRest = 0;
   G4ReactionProduct* aNu=0;
+  theN.Init(targetAtomicMass, targetCharge); 
   do
   {
     G4ThreeVector fermiMom;
-    theN.Init(targetAtomicMass, targetCharge); 
     G4Nucleon * aNucleon(0);
     G4int theProtonCounter = G4lrint( 0.5 + targetCharge * G4UniformRand() );
     G4int counter = 0;
@@ -335,16 +343,23 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
   G4ReactionProductVector * aPreResult = theHandler.BreakItUp(anInitialState);
 
   G4ReactionProductVector::iterator ires;
+  G4double eBal = availableEnergy;
   for(ires=aPreResult->begin(); ires!=aPreResult->end(); ires++)
   {
     G4LorentzVector itV((*ires)->GetTotalEnergy(), (*ires)->GetMomentum());
     itV*=fromBreit;
     (*ires)->SetTotalEnergy(itV.t());
     (*ires)->SetMomentum(itV.vect());
+    eBal-=itV.t()-itV.mag();
   }
   // fill neutrino into result
   aPreResult->push_back(aNu);
-    
+  eBal-=aNu->GetMomentum().mag();
+  if(getenv("MuonMinusCaptureAtRestPrint"))
+  {
+    G4cout << "    Rough energy balance is "<<eBal<<" "
+           <<availableEnergy<<" "<<aNu->GetMomentum().mag()<<G4endl;
+  }    
   // return
   return aPreResult;
 } 
