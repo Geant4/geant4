@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2003-03-25 13:48:11 maire Exp $
+$Id: History,v 1.42 2003-04-09 16:32:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+09 Apr 03: V.Ivant (muons-V05-00-06)
+-G4VeMuEnergyLoss : make finalRange to be region aware
+
 25 Mar 03: mma (muons-V05-00-05)
 -G4VeMuEnergyLoss : add finalRangeRequested
 

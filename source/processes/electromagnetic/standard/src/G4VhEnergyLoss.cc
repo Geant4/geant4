@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.42 2003-04-08 18:04:25 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.43 2003-04-09 16:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -204,21 +204,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
   if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
-/*
-  else
-   {
-    for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
-     {
-      G4double rcut = theCoupleTable->GetMaterialCutsCouple(idxMate)
-                       ->GetProductionCuts()->GetProductionCut(1);
 
-      if (finalRange > rcut) finalRange = rcut;
-     }
-   }
-  c1lim = dRoverRange;
-  c2lim = 2.*(1.-dRoverRange)*finalRange;
-  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
-*/
   // create table if there is no table or there is a new cut value
   // create/fill proton or antiproton tables depending on the charge
   G4double Charge = aParticleType.GetPDGCharge()/eplus;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.icc,v 1.9 2003-04-08 18:04:25 vnivanch Exp $
+// $Id: G4VeEnergyLoss.icc,v 1.10 2003-04-09 16:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,13 +53,12 @@ inline G4double G4VeEnergyLoss::GetConstraints(
   fRangeNow =
            G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,couple);
 
-  // compute the (random) Step limit
+  // compute the Step limit
   G4double r = G4std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
   if (fRangeNow>r)
   {
     StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
-    //    StepLimit = c1lim*fRangeNow+c2lim+c3lim/fRangeNow;
     //randomise this value
     if (rndmStepFlag) StepLimit = finalRange +
                           (StepLimit-finalRange)*G4UniformRand();

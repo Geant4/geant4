@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.26 2003-03-25 13:48:12 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.27 2003-04-09 16:32:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -51,6 +51,7 @@
 // 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 25-03-03 add finalRangeRequested (mma)
+// 09-04-03 finalRange is region aware (V.Ivanchenko)
 // --------------------------------------------------------------
  
 
@@ -159,17 +160,6 @@ void G4VMuEnergyLoss::BuildDEDXTable(
   //set physically consistent value for finalRange
   //  and parameters for en.loss step limit
   if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
-  else
-   {   
-    for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
-     {
-      G4double rcut = (*(theCoupleTable->GetRangeCutsVector(1)))[idxMate];
-      if(finalRange > rcut) finalRange = rcut;
-     }
-   }
-  c1lim = dRoverRange ;
-  c2lim = 2.*(1.-dRoverRange)*finalRange ;
-  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   G4bool MakeTable ;
   ParticleMass = aParticleType.GetPDGMass() ;
@@ -454,15 +444,17 @@ G4double G4VMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
          fRangeNow = (RangeCoeffA*KineticEnergy+RangeCoeffB)
                     *KineticEnergy+RangeCoeffC ;
 
-  //   compute the (random) Step limit ..............
-     if(fRangeNow>finalRange)
+  //   compute the Step limit ..............
+     G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+     if(fRangeNow>r)
        {
-         StepLimit = c1lim*fRangeNow+c2lim+c3lim/fRangeNow ;
+         StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
 
         //  randomise this value
          if(rndmStepFlag) StepLimit = finalRange+(StepLimit-finalRange)*
                                                            G4UniformRand() ;
-            if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
+         if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
        }
        else
          StepLimit = fRangeNow ;
