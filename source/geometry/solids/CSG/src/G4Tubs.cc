@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.27 2001-02-21 15:05:20 grichine Exp $
+// $Id: G4Tubs.cc,v 1.28 2001-02-21 15:47:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,7 +145,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 {
   G4Box box("box",fRMax,fRMax,fDz) ;
   return box.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax) ;
-
+/*
   if ( !pTransform.IsRotated() && fDPhi == 2.0*M_PI && fRMin == 0 )
   {
 // Special case handling for unrotated solid tubes
@@ -331,6 +331,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     delete vertices;
     return existsAfterClip;
   }
+*/
 }
 
 
