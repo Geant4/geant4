@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.4 2002-12-04 10:50:14 gcosmo Exp $
+// $Id: G4PersistencyManager.cc,v 1.5 2002-12-04 11:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -142,8 +142,6 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     // hepevt= f_GenCenter-> GetGenEvent();
   }
 
-#endif
-
   // Store MCTruth event
   //
   obj = "MCTruth";
@@ -167,6 +165,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       }
     } // end of if ( mctevt != 0 )
   }
+
+#endif
 
   // Store hits collection
   //

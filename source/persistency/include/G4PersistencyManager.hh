@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.hh,v 1.3 2002-12-04 10:50:14 gcosmo Exp $
+// $Id: G4PersistencyManager.hh,v 1.4 2002-12-04 11:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.hh
@@ -13,13 +13,13 @@
 #ifndef WIN32
   #include "CLHEP/HepMC/GenEvent.h"
   #include "G4VHepMCIO.hh"
+  #include "G4VMCTruthIO.hh"
 #endif
 #include "G4HCIOcatalog.hh"
 #include "G4DCIOcatalog.hh"
 #include "G4VPEventIO.hh"
 #include "G4VPHitIO.hh"
 #include "G4VPDigitIO.hh"
-#include "G4VMCTruthIO.hh"
 #include "G4VTransactionManager.hh"
 #include <string>
 
@@ -130,11 +130,11 @@ class G4PersistencyManager
       virtual G4VHepMCIO* HepMCIO() { return 0; };
       // Returns the current HepMC I/O handling manager
       // Each derived class should return the pointer of actual manager.
-#endif
+
       virtual G4VMCTruthIO* MCTruthIO() { return 0; };
       // Returns the current MCTruth I/O handling manager
       // Each derived class should return the pointer of actual manager.
-
+#endif
       virtual G4VTransactionManager* TransactionManager() { return 0; };
       // Returns the current transaction manager
       // Each derived class should return the pointer of actual manager.

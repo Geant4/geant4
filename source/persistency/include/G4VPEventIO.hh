@@ -1,4 +1,4 @@
-// $Id: G4VPEventIO.hh,v 1.3 2002-12-04 11:33:44 gcosmo Exp $
+// $Id: G4VPEventIO.hh,v 1.4 2002-12-04 11:44:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPEventIO.hh
@@ -42,11 +42,11 @@ class G4VPEventIO
       // virtual G4bool Store( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, const G4Event* anEvent ) =0;
       virtual G4bool Store( HepMC::GenEvent* hepevt, const G4Event* anEvent ) =0;
       // Store a Geant4 event.
-#endif
-      virtual G4bool Retrieve( G4Event*& anEvent ) =0;
-      // Retrieve a Geant4 event.
 
       virtual G4bool Retrieve( G4Pevent*& anEvent ) =0;
+      // Retrieve a Geant4 event.
+#endif
+      virtual G4bool Retrieve( G4Event*& anEvent ) =0;
       // Retrieve a Geant4 event.
 
     protected:
