@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.3 2004-08-05 10:23:35 vnivanch Exp $
+// $Id: StepMax.cc,v 1.4 2004-08-05 10:29:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -28,7 +28,6 @@
 
 #include "StepMax.hh"
 #include "StepMaxMessenger.hh"
-#include "Histo.hh"
 #include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
