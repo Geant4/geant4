@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.1 2001-04-10 15:09:35 johna Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.2 2001-06-05 09:59:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ModelingParameters.hh"
 
 G4int G4VTreeSceneHandler::fSceneIdCount = 0;
 // Counter for Tree scene handlers.
@@ -44,4 +45,26 @@ void G4VTreeSceneHandler::EstablishSpecials
   pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
 					&fpCurrentPV,
 					&fpCurrentLV);
+}
+
+void G4VTreeSceneHandler::BeginModeling() {
+  G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
+  // Force culling off...
+  if (fpModel) {
+    fpOriginalMP = fpModel->GetModelingParameters();
+    if (fpOriginalMP) {
+      fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
+      fpNonCullingMP->SetCulling(false);
+      ((G4VModel*)fpModel)->SetModelingParameters(fpNonCullingMP);
+      // Note the deliberate casting away of const.
+    }
+  }
+}
+
+void G4VTreeSceneHandler::EndModeling() {
+  if (fpModel && fpOriginalMP) {
+    ((G4VModel*)fpModel)->SetModelingParameters(fpOriginalMP);
+    delete fpNonCullingMP;
+  }
+  G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.1 2001-04-10 15:08:49 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.2 2001-06-05 09:59:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4ModelingParameters;
 
 class G4VTreeSceneHandler: public G4VSceneHandler {
 
@@ -68,6 +69,9 @@ public:
   virtual void AddPrimitive (const G4Polyhedron&) {}
   virtual void AddPrimitive (const G4NURBS&)      {}
 
+  virtual void BeginModeling();
+  virtual void EndModeling();
+
   static G4int GetSceneCount();
 
 protected:
@@ -78,6 +82,8 @@ protected:
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
   const G4Transform3D* fpCurrentObjectTransformation;
+  const G4ModelingParameters* fpOriginalMP;  // Keeps pointer to original.
+  G4ModelingParameters* fpNonCullingMP;      // For temporary non-culling.
 };
 
 #include "G4VTreeSceneHandler.icc"

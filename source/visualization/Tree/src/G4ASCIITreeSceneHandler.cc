@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.5 2001-06-04 15:02:11 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.6 2001-06-05 09:59:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPVParameterisation.hh"
-#include "G4ModelingParameters.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler(G4VGraphicsSystem& system,
 						 const G4String& name):
@@ -30,6 +29,8 @@ G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler(G4VGraphicsSystem& system,
 G4ASCIITreeSceneHandler::~G4ASCIITreeSceneHandler () {}
 
 void G4ASCIITreeSceneHandler::BeginModeling () {
+
+  G4VTreeSceneHandler::BeginModeling ();  // To re-use "culling off" code.
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
@@ -44,26 +45,13 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
     "\n  >=  2: prints solid name and type."
     "\n  Note: all culling, if any, is switched off so all volumes are seen."
     "\n  Now printing with verbosity " << verbosity << G4endl;
-
-  // Force culling off...
-  if (fpModel) {
-    fpOriginalMP = fpModel->GetModelingParameters();
-    if (fpOriginalMP) {
-      fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
-      fpNonCullingMP->SetCulling(false);
-      ((G4VModel*)fpModel)->SetModelingParameters(fpNonCullingMP);
-      // Note the deliberate casting away of const.
-    }
-  }
 }
 
 void G4ASCIITreeSceneHandler::EndModeling () {
-  if (fpModel && fpOriginalMP) {
-    ((G4VModel*)fpModel)->SetModelingParameters(fpOriginalMP);
-    delete fpNonCullingMP;
-  }
   fLVSet.clear();
   fReplicaSet.clear();
+  G4cout << "G4ASCIITreeSceneHandler::EndModeling" << G4endl;
+  G4VTreeSceneHandler::EndModeling ();  // To re-use "culling off" code.
 }
 
 void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
