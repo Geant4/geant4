@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.cc,v 1.5 1999-12-15 14:50:36 gunter Exp $
+// $Id: G4VMarker.cc,v 1.6 2001-02-03 18:29:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,31 @@
 #include "G4VMarker.hh"
 
 #include "G4VisAttributes.hh"
+
+G4VMarker::G4VMarker ():
+  fPosition   (G4Point3D ()),
+  fWorldSize  (0.),
+  fScreenSize (0.),
+  fFillStyle  (noFill),
+  fInfo       (G4String())
+{}
+
+G4VMarker::G4VMarker (const G4VMarker& marker):
+  G4VVisPrim  (marker),
+  fPosition   (marker.fPosition),
+  fWorldSize  (marker.fWorldSize),
+  fScreenSize (marker.fScreenSize),
+  fFillStyle  (marker.fFillStyle),
+  fInfo       (marker.fInfo)
+{}  
+
+G4VMarker::G4VMarker (const G4Point3D& pos):
+  fPosition   (pos),
+  fWorldSize  (0.),
+  fScreenSize (0.),
+  fFillStyle  (noFill),
+  fInfo       (G4String())
+{}
 
 G4VMarker::~G4VMarker () {}
 

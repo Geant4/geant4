@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Text.hh,v 1.5 1999-12-15 14:50:34 gunter Exp $
+// $Id: G4Text.hh,v 1.6 2001-02-03 18:29:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@ public: // With description
   G4Text (const G4String& text);
   G4Text (const G4String& text, const G4Point3D& pos);
   G4Text (const G4VMarker& marker);
+  virtual ~G4Text ();
 
   virtual G4Visible&  operator = (const G4Visible& from);
   virtual G4VVisPrim& operator = (const G4VVisPrim& from);

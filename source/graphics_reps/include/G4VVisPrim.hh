@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisPrim.hh,v 1.6 1999-12-15 16:46:08 gcosmo Exp $
+// $Id: G4VVisPrim.hh,v 1.7 2001-02-03 18:29:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,5 @@ public: // With description
   virtual G4bool operator == (const G4VVisPrim& right) const;
 
 };
-
-#include "G4VVisPrim.icc"
 
 #endif

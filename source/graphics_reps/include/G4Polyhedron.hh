@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.8 2000-03-30 16:01:41 stesting Exp $
+// $Id: G4Polyhedron.hh,v 1.9 2001-02-03 18:29:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -85,6 +85,7 @@
 class G4Polyhedron : public HepPolyhedron, public G4VVisPrim {
 public:
   G4Polyhedron ();
+  virtual ~G4Polyhedron ();
   G4Polyhedron (const G4Polyhedron& from);
   G4Polyhedron (const HepPolyhedron& from);
   virtual G4Visible& operator = (const G4Visible& from) {
@@ -102,6 +103,7 @@ public:
 class G4PolyhedronBox: public G4Polyhedron {
 public:
   G4PolyhedronBox (G4double dx, G4double dy, G4double dz);
+  virtual ~G4PolyhedronBox ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -117,6 +119,7 @@ class G4PolyhedronCone: public G4Polyhedron {
 public:
   G4PolyhedronCone (G4double Rmn1, G4double Rmx1, 
                     G4double Rmn2, G4double Rmx2, G4double Dz);
+  virtual ~G4PolyhedronCone (); 
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -133,6 +136,7 @@ public:
   G4PolyhedronCons (G4double Rmn1, G4double Rmx1, 
                     G4double Rmn2, G4double Rmx2, G4double Dz,
                     G4double Phi1, G4double Dphi);
+  virtual ~G4PolyhedronCons ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -148,6 +152,7 @@ class G4PolyhedronPara: public G4Polyhedron {
 public:
   G4PolyhedronPara (G4double Dx, G4double Dy, G4double Dz,
                     G4double Alpha, G4double Theta, G4double Phi);
+  virtual ~G4PolyhedronPara ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -165,6 +170,7 @@ public:
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  virtual ~G4PolyhedronPcon ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -182,6 +188,7 @@ public:
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  virtual ~G4PolyhedronPgon ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -198,6 +205,7 @@ public:
   G4PolyhedronSphere (G4double rmin, G4double rmax,
                       G4double phi, G4double dphi,
                       G4double the, G4double dthe);
+  virtual ~G4PolyhedronSphere ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -213,6 +221,7 @@ class G4PolyhedronTorus: public G4Polyhedron {
 public:
   G4PolyhedronTorus (G4double rmin, G4double rmax, G4double rtor,
                     G4double phi, G4double dphi);
+  virtual ~G4PolyhedronTorus ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -231,6 +240,7 @@ public:
                     G4double Dx1, G4double Dx2, G4double Alp1,
                     G4double Dy2,
                     G4double Dx3, G4double Dx4, G4double Alp2);
+  virtual ~G4PolyhedronTrap ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -246,6 +256,7 @@ class G4PolyhedronTrd1: public G4Polyhedron {
 public:
   G4PolyhedronTrd1 (G4double Dx1, G4double Dx2,
                     G4double Dy, G4double Dz);
+  virtual ~G4PolyhedronTrd1 ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -261,6 +272,7 @@ class G4PolyhedronTrd2: public G4Polyhedron {
 public:
   G4PolyhedronTrd2 (G4double Dx1, G4double Dx2,
                     G4double Dy1, G4double Dy2, G4double Dz);
+  virtual ~G4PolyhedronTrd2 ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -275,6 +287,7 @@ public:
 class G4PolyhedronTube: public G4Polyhedron {
 public:
   G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz);
+  virtual ~G4PolyhedronTube ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -290,6 +303,7 @@ class G4PolyhedronTubs: public G4Polyhedron {
 public:
   G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
                     G4double Phi1, G4double Dphi);
+  virtual ~G4PolyhedronTubs ();
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }

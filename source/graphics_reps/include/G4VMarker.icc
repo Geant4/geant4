@@ -5,35 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.icc,v 1.4 1999-12-16 15:22:05 johna Exp $
+// $Id: G4VMarker.icc,v 1.5 2001-02-03 18:29:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-inline G4VMarker::G4VMarker ():
-  fPosition   (G4Point3D ()),
-  fWorldSize  (0.),
-  fScreenSize (0.),
-  fFillStyle  (noFill),
-  fInfo()
-{}
-
-inline G4VMarker::G4VMarker (const G4VMarker& marker):
-  G4VVisPrim  (marker),
-  fPosition   (marker.fPosition),
-  fWorldSize  (marker.fWorldSize),
-  fScreenSize (marker.fScreenSize),
-  fFillStyle  (marker.fFillStyle),
-  fInfo       (marker.fInfo)
-{}  
-
-inline G4VMarker::G4VMarker (const G4Point3D& pos):
-  fPosition   (pos),
-  fWorldSize  (0.),
-  fScreenSize (0.),
-  fFillStyle  (noFill),
-  fInfo       ()
-{}
 
 inline G4Point3D G4VMarker::GetPosition () const {
   return fPosition;

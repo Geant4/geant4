@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2000-06-06 10:53:38 johna Exp $
+$Id: History,v 1.26 2001-02-03 18:29:25 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd February 2001  John Allison  (greps-V03-00-00)
+- Tidied for CodeWizard.  Note: G4Circle.icc and G4VVisPrim.icc removed, so
+  "gmake clean" all relevant directories before updating.
 
 5th June May 2000  Evgeni Chernaev (greps-V01-01-04)
 - Bug fix in BooleanProcessor.src.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Circle.hh,v 1.4 1999-12-15 14:50:31 gunter Exp $
+// $Id: G4Circle.hh,v 1.5 2001-02-03 18:29:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,5 @@ public: // With description
   virtual G4Circle &  operator = (const G4Circle& right);
 
  };
-
-#include "G4Circle.icc"
 
 #endif
