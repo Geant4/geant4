@@ -1,4 +1,4 @@
-$Id: History,v 1.24 1999-05-11 18:20:13 gcosmo Exp $
+$Id: History,v 1.25 1999-05-12 21:28:37 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12th May 1999  Gabriele Cosmo
+- architecture.gmk: modified path to STL wrapper files directory to point to
+  $RWINC/wrappers/$G4SYSTEM. Wrappers are now differenciated according to
+  the architecture type.
 
 11th May 1999  Gabriele Cosmo
 - architecture.gmk: merged Isidro's OSPACE setup for HP-aCC.

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.19 1999-05-11 18:54:13 gcosmo Exp $
+# $Id: architecture.gmk,v 1.20 1999-05-12 21:28:38 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -427,7 +427,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   VISLIBS  +=  -L/usr/lib -lsocket -lnsl
   ifdef G4USE_STL
-    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
@@ -474,10 +474,12 @@ ifeq ($(G4SYSTEM),HP-aCC)
     endif
   endif
   ifdef G4USE_STL
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
     CXXFLAGS += -ext
   endif
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS -D__HPACC_NOEH
+    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    CPPFLAGS += -D__HPACC_NOEH -DOS_STL_FUNCTION_H
     CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
@@ -540,7 +542,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
   ifdef G4USE_STL
-    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
     CXXFLAGS += -nostdnew
   endif
   ifdef G4USE_OSPACE
