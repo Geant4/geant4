@@ -1,0 +1,526 @@
+Compiling Tst17PhysicsListMessenger.cc ...
+Compiling Tst17PrimaryGeneratorAction.cc ...
+Compiling Tst17PrimaryGeneratorMessenger.cc ...
+Compiling Tst17RunAction.cc ...
+Compiling Tst17RunMessenger.cc ...
+Compiling Tst17StepCut.cc ...
+Compiling Tst17SteppingAction.cc ...
+Compiling Tst17SteppingMessenger.cc ...
+Compiling Tst17VisManager.cc ...
+Creating/replacing object files in /afs/cern.ch/sw/geant4/stt/dev/SUN-CC/debug_STL/tmp/SUN-CC/test17/libtest17.a
+Compiling test17.cc ...
+Using granular libraries.
+Linking test17 ...
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hrout.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbook1.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbook2.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbookn.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcdir.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hdelet.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfill.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfilpf.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfn.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hgnf.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hgnpar.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hlimit.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hloop.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hmachi.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hmdir.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hnoent.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hspace.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hlogpf.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hnbfwr.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hnbufd.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hnbuff.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hntdel.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hntmpd.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hntmpf.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kuvdel.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kuvect.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxcrv2.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(mzpaw.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(zfatal.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(zfatam.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(ztell.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(lzlast.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(zshunt.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzcdir.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzclos.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzend.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzfdir.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzfree.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rziodo.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzmdir.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzmods.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzout.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzrtop.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzsave.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzused.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzvcyc.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol slate_ defined in /cern/pro/lib/libpacklib.a(datime.o) with alignment 0x4 --
+	previously defined with alignment 0x8 --
+	choosing greater definition 0x8
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hrin.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol czsock_ defined in /cern/pro/lib/libpacklib.a(hrzcd.o) with size 0x18 --
+	previously defined with size 0xe10 --
+	choosing greater definition 0xe10
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hrzin.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hrzkey.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcopyn.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcopyt.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hf1.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hf1aut.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hf2.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfidp.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfind.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hopera.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hreset.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hrez0.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hsupis.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hnmset.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hntrset.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol quest_ defined in /cern/pro/lib/libpacklib.a(kuinit.o) with alignment 0x4 --
+	previously defined with alignment 0x8 --
+	choosing greater definition 0x8
+ild: (warning) symbol kcwork_ defined in /cern/pro/lib/libpacklib.a(kuinit.o) with alignment 0x4 --
+	previously defined with alignment 0x8 --
+	choosing greater definition 0x8
+ild: (warning) symbol kcvect_ defined in /cern/pro/lib/libpacklib.a(kuinit.o) with alignment 0x4 --
+	previously defined with alignment 0x8 --
+	choosing greater definition 0x8
+ild: (warning) symbol kcutil_ defined in /cern/pro/lib/libpacklib.a(kuinit.o) with alignment 0x4 --
+	previously defined with alignment 0x8 --
+	choosing greater definition 0x8
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kiinit.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol sikuip_ defined in /cern/pro/lib/libpacklib.a(kiinit.o) with alignment 0x8 --
+	previously defined with alignment 0x1 --
+	choosing greater definition 0x8
+ild: (warning) symbol kcparc_ defined in /cern/pro/lib/libpacklib.a(kiinit.o) with alignment 0x8 --
+	previously defined with alignment 0x1 --
+	choosing greater definition 0x8
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzidia.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziffn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziffx.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzilin.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzimtb.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzirec.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzitrn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzoffn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzoffx.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon1.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon2.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon3.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon4.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon5.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzon6.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzorec.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzotab.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzotrn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzotxt.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzdiv.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzmark.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzpudx.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzfgap.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzgarb.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mztabc.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mztabh.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzwipe.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzdvac.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzixco.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzxrup.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(zphase.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(zpostm.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzallo.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzdelk.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzexpd.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzfile.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzin.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzink.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzins.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzllok.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzlock.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzmake.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzobkn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzpurf.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzread.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzveri.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzwrt.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hqputf.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbar2.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbarx.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hbary.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcopy.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcx.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hcxy.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hdcofl.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfcxy.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hlabeq.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hoper1.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hsifla.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxcopv.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxlisv.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxreav.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxvope.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kxwriv.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzsnap.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzipha.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziphd.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziphm.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziphr.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziprl.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzophr.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzcopy.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzend.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzmaps.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(mzwork.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzdlok.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzver1.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfc1.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hfcx.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hlgnxt.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(hlpos.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol pawc_ defined in /cern/pro/lib/libpacklib.a(kuvec.o) with size 0x9c40 --
+	previously defined with size 0x36eeac --
+	choosing greater definition 0x36eeac
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzare1.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzbkup.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzbkxr.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzdata.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzmap.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzshpr.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dztyp.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fziasc.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzoasc.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(rzprnk.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzbkdv.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzbkhd.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dziopr.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzialn.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzoaln.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(fzoapk.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dziopd.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558
+ild: (warning) symbol mzca_ defined in /cern/pro/lib/libpacklib.a(dzioph.o) with size 0x1c8 --
+	previously defined with size 0x558 --
+	choosing greater definition 0x558

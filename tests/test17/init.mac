@@ -1,0 +1,53 @@
+#
+# Macro file for the initialization phase of "test17" based on "TestEm6.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+/run/verbose 2
+/run/initialize
+#
+/calor/setAbsMat Aluminium
+/calor/setAbsThick 5 mm
+/calor/setAbsRad 20 mm
+/calor/update
+#
+#
+/lowenergy/lowlimE 250 eV
+/lowenergy/lowlimG 250 eV
+/lowenergy/secphotcut 1. keV
+#
+/calor/cutG 1.   micrometer    
+/calor/cutE 0.01   micrometer
+
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/create OGLIX
+#
+# Create a viewer
+/vis/viewer/create
+#
+# Draw scene
+/vis/camera/zoom 1.5
+/vis/scene/notifyHandlers
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/event/drawTracks all
+#
+# initialize  EVERYTHING
+#
+/run/initialize
+/run/particle/dumpCutValues
+#
+#
+
