@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.3 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.4 2001-09-10 13:48:29 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -44,6 +44,7 @@
 // some corrections by L.Urban on 27/05/98 , (but other corrections come soon!) 
 // cleanup L.Urban on 23/10/98
 // corrections due to new e.m. structure L.Urban 10/02/00
+// loss+ mechanism has been implemented (subcutoff delta rays), L.Urban 10/09/01
 // ------------------------------------------------------------
  
 #ifndef G4VMuEnergyLoss_h
@@ -219,6 +220,10 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* themuminusRangeCoeffCTable;
 
     static G4EnergyLossMessenger* eLossMessenger;
+
+    static G4double cN ;    // coeff to compute nb of deltas
+    static G4int Ndeltamax ;             // upper limit for nb of subcutoff
+                                         // delta rays in one step
 
 };
  
