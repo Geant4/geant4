@@ -543,7 +543,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(const G4DynamicParticle *aPartic
 
       dx = G4EnergyLossTables::GetRange( theProton,
                                  ParamHighEnergy, aMaterial) * linLossLimit ;
-      fRangeNow = min (fRangeNow, dx) ;
+      fRangeNow = G4std::min (fRangeNow, dx) ;
     }
 
     // Antiprotons and negative hadrons 
@@ -560,7 +560,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(const G4DynamicParticle *aPartic
       fdEdx = GetPreciseDEDX (aMaterial, KineticEnergy, theParticle) ;
       dx = G4EnergyLossTables::GetRange( theAntiProton,
                                  ParamHighEnergy, aMaterial) * linLossLimit ;
-      fRangeNow = min (fRangeNow, dx) ;
+      fRangeNow = G4std::min (fRangeNow, dx) ;
     }
   }
 
@@ -2313,7 +2313,7 @@ G4double G4hLowEnergyIonisation::MolecIsInZiegler1988(const G4Material* material
 
   // If the meterial is in the table then the Stopping Power at 125 keV exist
   // In that case the return value ExpStopPower125 > 0
-  G4int ExpStopPower125 = -1.0;
+  G4double ExpStopPower125 = -1.0;
   
   const G4String chFormula = material->GetChemicalFormula() ;
   if (" " == chFormula ) return ExpStopPower125 ;
