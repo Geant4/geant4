@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2001-02-06 22:07:17 johna Exp $
+$Id: History,v 1.28 2001-04-11 15:02:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th April 2001  John Allison  (greps-V03-03-00)
+- Some code has been added to cover unforeseen earlier situation
+  during preselection of faces without intersection (Evgeni).
+- Moved #include <CLHEP/config/TemplateFunctions.h> and others from
+  HepPolyhedron.h to HepPolyhedron.cc (Evgeni).
+- Fixed stupid warnings about possible use of uninitialized variables (Evgeni).
+- Made GetNumberOfRotationSteps() static and public (John).
 
 6th February 2001  John Allison  (greps-V03-00-01)
 - More tidying for CodeWizard.  Added virtual destructors to
