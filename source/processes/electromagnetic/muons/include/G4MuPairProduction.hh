@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.hh,v 1.3 1999-12-15 14:51:43 gunter Exp $
+// $Id: G4MuPairProduction.hh,v 1.4 2000-02-10 08:29:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -43,8 +42,6 @@ class G4MuPairProduction : public G4MuEnergyLoss
     ~G4MuPairProduction();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetPhysicsTableBining(G4double lowE,G4double highE,G4int nBins);
 
      void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
 
@@ -110,9 +107,11 @@ class G4MuPairProduction : public G4MuEnergyLoss
 
      G4OrderedTable PartialSumSigma;     
 
-     G4double LowestKineticEnergy; 
-     G4double HighestKineticEnergy; 
-     G4int TotBin;                      
+     G4double LowerBoundLambda ; // bining for lambda table
+     G4double UpperBoundLambda ;
+     G4int    NbinLambda ;
+     G4double LowestKineticEnergy,HighestKineticEnergy ;
+     G4int    TotBin ;
 
      const G4double* ElectronCutInKineticEnergy;
      const G4double* PositronCutInKineticEnergy;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.6 1999-12-15 14:51:44 gunter Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.7 2000-02-10 08:32:22 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -41,15 +41,16 @@ G4double G4MuBremsstrahlung::proba[5][8][1000]={0.};
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& processName)
   : G4MuEnergyLoss(processName),  
     theMeanFreePathTable(NULL),
-    LowestKineticEnergy (1.*GeV),
-    HighestKineticEnergy (1000000.*TeV),
-    TotBin(100)
+    LowerBoundLambda(1.*keV),
+    UpperBoundLambda(10000.*TeV),
+    NbinLambda(100)
 {  }
  
 G4MuBremsstrahlung::~G4MuBremsstrahlung()
 {
    if (theMeanFreePathTable) {
       theMeanFreePathTable->clearAndDestroy();
+
       delete theMeanFreePathTable;
    }
    if (&PartialSumSigma) {
@@ -57,15 +58,14 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
    }
 }
  
-void G4MuBremsstrahlung::SetPhysicsTableBining(G4double lowE, G4double highE,
-                                               G4int nBins)
-{
-  LowestKineticEnergy = lowE; HighestKineticEnergy = highE ; TotBin = nBins ;
-}
-
 void G4MuBremsstrahlung::BuildPhysicsTable(
                                  const G4ParticleDefinition& aParticleType)
 {
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
+
   BuildLossTable(aParticleType) ;
  
   if(&aParticleType==theMuonMinus)
@@ -209,11 +209,12 @@ void G4MuBremsstrahlung::BuildLambdaTable(
   G4PhysicsLogVector* ptrVector;
   for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
   { 
-    ptrVector=new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
-                                           TotBin ) ;
+    ptrVector = new G4PhysicsLogVector(
+              LowerBoundLambda,UpperBoundLambda,NbinLambda);
+
     const G4Material* material= (*theMaterialTable)[J];
 
-    for ( G4int i = 0 ; i < TotBin ; i++ )      
+    for ( G4int i = 0 ; i < NbinLambda ; i++ )      
     {
       LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
       Value = ComputeMeanFreePath( &ParticleType, LowEdgeEnergy,

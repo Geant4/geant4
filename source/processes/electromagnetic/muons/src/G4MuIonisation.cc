@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.5 1999-12-15 14:51:44 gunter Exp $
+// $Id: G4MuIonisation.cc,v 1.6 2000-02-10 08:32:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,10 @@
  
 G4MuIonisation::G4MuIonisation(const G4String& processName)
    : G4MuEnergyLoss(processName),
-     LowestKineticEnergy(1.00*keV),
-     HighestKineticEnergy(1000000.*TeV),
      theMeanFreePathTable(NULL),
-     TotBin(100)
+     LowerBoundLambda(1.*keV),
+     UpperBoundLambda(10000.*TeV),
+     NbinLambda(100)
 {  }
 
 G4MuIonisation::~G4MuIonisation() 
@@ -51,16 +51,14 @@ G4MuIonisation::~G4MuIonisation()
 
 }
 
-void G4MuIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
-                                            G4int nBins)
-{
-  LowestKineticEnergy = lowE; HighestKineticEnergy = highE; 
-  TotBin = nBins;
-}
-
 void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
+
   BuildLossTable(aParticleType) ;
   G4double Charge = aParticleType.GetPDGCharge();     
 
@@ -265,7 +263,8 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   for (G4int J=0 ; J < numOfMaterials; J++)
   { 
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-               LowestKineticEnergy, HighestKineticEnergy, TotBin);
+               LowerBoundLambda,UpperBoundLambda,NbinLambda);
+
     const G4Material* material= (*theMaterialTable)[J];
     const G4ElementVector* theElementVector=
                          material->GetElementVector() ;
@@ -275,7 +274,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
                          material->GetNumberOfElements() ;
     DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
 
-    for ( G4int i = 0 ; i < TotBin ; i++ )
+    for ( G4int i = 0 ; i < NbinLambda ; i++ )
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
       sigma = 0. ;

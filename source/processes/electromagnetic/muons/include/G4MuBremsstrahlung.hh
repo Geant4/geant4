@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.3 1999-12-15 14:51:42 gunter Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.4 2000-02-10 08:29:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -42,8 +42,6 @@ class G4MuBremsstrahlung : public G4MuEnergyLoss
     ~G4MuBremsstrahlung();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
      void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
 
@@ -103,9 +101,11 @@ class G4MuBremsstrahlung : public G4MuEnergyLoss
 
      G4OrderedTable PartialSumSigma;   
 
-     G4double LowestKineticEnergy;  
-     G4double HighestKineticEnergy;  
-     G4int TotBin;  
+     G4double LowerBoundLambda ; // bining for lambda table
+     G4double UpperBoundLambda ;
+     G4int    NbinLambda ;
+     G4double LowestKineticEnergy,HighestKineticEnergy ;
+     G4int    TotBin ;
 
      const G4double* GammaCutInKineticEnergy;
 
