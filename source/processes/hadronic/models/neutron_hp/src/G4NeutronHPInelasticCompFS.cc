@@ -40,8 +40,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   G4bool dbool;
   G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, tString, aFSType, dbool);
   G4String filename = aFile.GetName();
-  theBaseA = aFile.GetA();
-  theBaseZ = aFile.GetZ();
+    theBaseA = A;
+    theBaseZ = G4int(Z+.5);
   if(!dbool)
   {
     hasAnyData = false;

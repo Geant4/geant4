@@ -51,12 +51,14 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
 G4double G4NeutronHPFissionData::GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE)
 {
-  G4double result;
+  G4double result = 0;
   G4bool outOfRange;
   G4int index = anE->GetIndex();
     
-  if(anE->GetZ()<90) return 0;
+  if(anE->GetZ()<90) return result;
   result = (*((*theCrossSections)(index))).GetValue(
                              aP->GetKineticEnergy(), outOfRange);
+  cout << "Element "<<anE->GetZ()<<endl;
+  cout << "FissionHPCrossSection = "<<result<<endl;
   return result;
 }

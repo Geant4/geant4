@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureTest.cc,v 1.4 2000-08-10 12:52:59 hpw Exp $
+// $Id: G4NeutronHPCaptureTest.cc,v 1.5 2001-02-09 17:46:13 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -248,11 +248,16 @@
 //      theU->AddElement( elU, 1 );
 //     theMaterials[22] = theU;
 //     
-     G4Material *theAu = new G4Material(name="Gold", density=18.95*g/cm3, nEl=1);
-     G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.2*g/mole);
-     theAu->AddElement( elAu, 1 );
-     theMaterials[23] = theAu;
+//     G4Material *theAu = new G4Material(name="Gold", density=18.95*g/cm3, nEl=1);
+//     G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.2*g/mole);
+//     theAu->AddElement( elAu, 1 );
+//     theMaterials[23] = theAu;
     
+     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
+     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
+     theC->AddElement( elC, 1 );
+     theMaterials[23] = theC;
+
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
     G4cin >> inputNumber;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.4 2000-11-09 16:13:38 hpw Exp $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.5 2001-02-09 17:46:12 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
@@ -88,5 +88,8 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   
   G4NeutronHPDeExGammas theGammas;
   G4String gammaPath;
+  
+  G4double theCurrentA;
+  G4double theCurrentZ;
 };
 #endif

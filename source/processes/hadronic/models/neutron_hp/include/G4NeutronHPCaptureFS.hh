@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureFS.hh,v 1.4 1999-07-06 14:16:55 hpw Exp $
+// $Id: G4NeutronHPCaptureFS.hh,v 1.5 2001-02-09 17:46:12 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPCaptureFS_h
@@ -50,5 +50,8 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4NeutronHPPhotonDist theFinalStatePhotons;
   
   G4NeutronHPNames theNames;
+  
+  G4double theCurrentA;
+  G4double theCurrentZ;
 };
 #endif
