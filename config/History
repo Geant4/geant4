@@ -1,4 +1,4 @@
-$Id: History,v 1.80 1999-11-22 07:56:14 gcosmo Exp $
+$Id: History,v 1.81 1999-11-23 14:51:36 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23rd November 1999  Gabriele Cosmo (config-V00-01-13)
+- architecture.gmk: added setup for ISO/ANSI installation on DEC-cxx.
+  If using native STL (i.e. G4USE_OSPACE not set), G4USE_STD_NAMESPACE is
+  implicitly defined and a strict-ANSI installation is assumed. Note that
+  in this case, also CLHEP must have been installed in strict-ANSI mode.
 
 20th November 1999  Youhei Morita (config-V00-01-12)
 - common.gmk: added G4OODDLX_SCHEMA_NAME to use Geant4 named schema
