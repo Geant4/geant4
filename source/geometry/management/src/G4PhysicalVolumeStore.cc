@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.10 2003-05-13 18:39:21 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.cc,v 1.11 2003-05-14 09:33:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PhysicalVolumeStore
@@ -134,7 +134,8 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    pVolume->GetMotherLogical()->RemoveDaughter(pVolume);
+    G4LogicalVolume* motherLogical = pVolume->GetMotherLogical();
+    if (motherLogical) motherLogical->RemoveDaughter(pVolume);
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)
