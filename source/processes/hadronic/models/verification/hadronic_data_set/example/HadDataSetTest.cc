@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadDataSetTest.cc,v 1.1 2003-10-27 08:36:14 grichine Exp $
+// $Id: HadDataSetTest.cc,v 1.2 2003-11-04 14:20:19 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,8 +51,8 @@
 #include "G4HadFileFinder.hh"
 #include "G4HadFileSpec.hh"
 
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 #include <string.h>
 
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
        exit(1);
      }
    
-   G4std::ifstream* fin = new G4std::ifstream();
+   std::ifstream* fin = new std::ifstream();
    G4String fname = argv[1];
    fin->open(fname.c_str());
    

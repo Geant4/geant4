@@ -13,9 +13,12 @@ Last update: 24/10/2003
 The use of the Geant4 Hadronic Data Set (G4HDS) requires the declaration 
 of three environmental variables:
 	
-	G4HADWORKING = where the example file is located
+	G4HADWORKING = where the example file is located 
+	               (the input file location)
 	G4HADATASET=$G4HADWORKING/../HadronicDataSet 
-	G4HADWRITTINGRIGHTS=0
+	               (the database location, including the name 
+		        of the database)
+	G4HADWRITTINGRIGHTS=0 (0=read, 1=write)
 
 G4HADWORKING tells to the G4HDS where the program is located
 G4HADATASET tells to the program where the data sets is located
