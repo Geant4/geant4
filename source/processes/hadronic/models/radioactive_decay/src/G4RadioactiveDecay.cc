@@ -1334,8 +1334,8 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
       //
       // Kill the parent particle.
       //
-      fParticleChangeForRadDecay.SetStatusChange( fStopAndKill ) ;
-      fParticleChangeForRadDecay.SetLocalEnergyDeposit(0.0);
+      fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
+      fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
       ClearNumberOfInteractionLengthLeft();
       return &fParticleChangeForRadDecay;
     }
@@ -1360,8 +1360,8 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
       //
       // Kill the parent particle.
       //
-      fParticleChangeForRadDecay.SetStatusChange( fStopAndKill ) ;
-      fParticleChangeForRadDecay.SetLocalEnergyDeposit(0.0);
+      fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
+      fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
       ClearNumberOfInteractionLengthLeft();
       return &fParticleChangeForRadDecay;
     }
@@ -1391,8 +1391,8 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
       //
       // Kill the parent particle.
       //
-      fParticleChangeForRadDecay.SetStatusChange( fStopAndKill ) ;
-      fParticleChangeForRadDecay.SetLocalEnergyDeposit(0.0);
+      fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
+      fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
       ClearNumberOfInteractionLengthLeft();
       return &fParticleChangeForRadDecay;
     }
@@ -1685,10 +1685,10 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
       //
       // Kill the parent particle.
       //
-      fParticleChangeForRadDecay.SetStatusChange( fStopAndKill ) ;
-      fParticleChangeForRadDecay.SetLocalEnergyDeposit(energyDeposit);
+      fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
+      fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(energyDeposit);
       // 
-      fParticleChangeForRadDecay.SetTimeChange( finalGlobalTime );
+      fParticleChangeForRadDecay.ProposeGlobalTime( finalGlobalTime );
       //
       // Reset NumberOfInteractionLengthLeft.
       //

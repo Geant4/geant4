@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.2 2004-11-09 14:17:53 hpw Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.3 2004-11-30 17:18:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -376,9 +376,9 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    // check against insufficient energy
    if (epmax <= epmin )   
    {
-     aParticleChange.SetMomentumChange( ParticleDirection );
-     aParticleChange.SetEnergyChange( KineticEnergy );
-     aParticleChange.SetLocalEnergyDeposit (0.); 
+     aParticleChange.ProposeMomentumDirection( ParticleDirection );
+     aParticleChange.ProposeEnergy( KineticEnergy );
+     aParticleChange.ProposeLocalEnergyDeposit (0.); 
      aParticleChange.SetNumberOfSecondaries(0);
      return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
    }
@@ -488,8 +488,8 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
 
    // G4double Q2=2.*(TotalEnergy*Ef-initMomentum*finalMomentum*cos(theta)-Mass*Mass) ;
 
-   aParticleChange.SetMomentumChange( finalDirection );
-   aParticleChange.SetEnergyChange( NewKinEnergy );
+   aParticleChange.ProposeMomentumDirection( finalDirection );
+   aParticleChange.ProposeEnergy( NewKinEnergy );
 
    G4LorentzVector primaryMomentum(initMomentum*ParticleDirection, TotalEnergy);
    G4LorentzVector fsMomentum(finalMomentum*finalDirection, Ef);

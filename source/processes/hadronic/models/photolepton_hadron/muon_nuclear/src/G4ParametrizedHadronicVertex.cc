@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.2 2004-11-09 19:22:31 hpw Exp $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.3 2004-11-30 17:18:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -35,9 +35,9 @@ ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
     static G4ParticleChange theTotalResult; 
 
     theTotalResult.Clear();
-    theTotalResult.SetLocalEnergyDeposit(0.);
+    theTotalResult.ProposeLocalEnergyDeposit(0.);
     theTotalResult.Initialize(thePhoton);
-    theTotalResult.SetStatusChange(fAlive);
+    theTotalResult.ProposeTrackStatus(fAlive);
     G4double theKineticEnergy = thePhoton.GetKineticEnergy();
     G4HadFinalState * aR = 0;
     G4HadProjectile thePro(thePhoton);
@@ -54,24 +54,24 @@ ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
     aR->SetTrafoToLab(thePro.GetTrafoToLab());
     if(aR->GetStatusChange()==stopAndKill)
     {
-      theTotalResult.SetStatusChange(fStopAndKill);
-      theTotalResult.SetEnergyChange( 0.0 );
+      theTotalResult.ProposeTrackStatus(fStopAndKill);
+      theTotalResult.ProposeEnergy( 0.0 );
     }
     if(aR->GetStatusChange()==suspend)
     {
-      theTotalResult.SetStatusChange(fSuspend);
+      theTotalResult.ProposeTrackStatus(fSuspend);
     }
     if(aR->GetStatusChange()!=stopAndKill )
     {
       G4double newWeight = aR->GetWeightChange()*thePhoton.GetWeight();
-      theTotalResult.SetWeightChange(newWeight); 
-      if(aR->GetEnergyChange()>-.5) theTotalResult.SetEnergyChange(aR->GetEnergyChange());
+      theTotalResult.ProposeParentWeight(newWeight); 
+      if(aR->GetEnergyChange()>-.5) theTotalResult.ProposeEnergy(aR->GetEnergyChange());
       G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
       newDirection*=aR->GetTrafoToLab();
-      theTotalResult.SetMomentumDirectionChange(newDirection.vect());
+      theTotalResult.ProposeMomentumDirection(newDirection.vect());
     }
 
-    theTotalResult.SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
+    theTotalResult.ProposeLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
     theTotalResult.SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
 
     G4ThreeVector it(0., 0., 1.);

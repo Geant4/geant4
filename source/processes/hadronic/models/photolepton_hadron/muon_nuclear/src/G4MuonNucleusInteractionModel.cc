@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.1 2003-11-11 19:08:58 hpw Exp $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.2 2004-11-30 17:18:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -219,9 +219,9 @@
       = muonDynamics->GetMomentum() - P1*muonDirection;
     G4double muonKineticEnergy 
       = sqrt(P1*P1 + muonMass*muonMass) - muonMass;
-    aParticleChange.SetMomentumChange(muonDirection);
-    aParticleChange.SetEnergyChange(muonKineticEnergy);
-    aParticleChange.SetStatusChange(fAlive);
+    aParticleChange.ProposeMomentumDirection(muonDirection);
+    aParticleChange.ProposeEnergy(muonKineticEnergy);
+    aParticleChange.ProposeTrackStatus(fAlive);
 
 
     // virtual photon is exchanged with a pion of same Q2
@@ -277,7 +277,7 @@
     // add local energy deposit
     G4double localEnergyDeposited = 0.0;
     localEnergyDeposited = pionChange->GetLocalEnergyDeposit();
-    aParticleChange.SetLocalEnergyDeposit(localEnergyDeposited);
+    aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposited);
 
 
     // register secondary particles
