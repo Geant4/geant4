@@ -130,7 +130,7 @@ G4VParticleChange* HpdSiEnergyLoss::AlongStepDoIt(const G4Track& aTrack,
   G4double Effs = 1.0 -  backscaprob * bckratio;
   G4double Randbsk =  G4UniformRand();
   if(Randbsk <= Effs && Eloss > 0.0 ) {
-           aParticleChange.SetLocalEnergyDeposit(Eloss);
+           aParticleChange.ProposeLocalEnergyDeposit(Eloss);
 
 #ifdef G4ANALYSIS_USE
   
@@ -143,10 +143,10 @@ G4VParticleChange* HpdSiEnergyLoss::AlongStepDoIt(const G4Track& aTrack,
     // G4int tpreVP =  pPreStepPoint -> GetPhysicalVolume()->GetCopyNo();
   }
   if (aKinEnergyFinal <= MinKineticEnergy ) {
-       aParticleChange.SetStatusChange(fStopAndKill);
+       aParticleChange.ProposeTrackStatus(fStopAndKill);
   
    }else { 
-     aParticleChange.SetEnergyChange(aKinEnergyFinal);
+     aParticleChange.ProposeEnergy(aKinEnergyFinal);
 
    }
   return &aParticleChange;
