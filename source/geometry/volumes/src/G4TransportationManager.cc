@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.9 2001-10-24 15:33:49 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.10 2002-07-24 10:41:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,14 +42,6 @@
 
 G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
 G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
-
-// Ditto: correct order initialisation of class (class) data members
-const G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.1 * mm;
-const G4double G4FieldManager::fDefault_Delta_One_Step_Value = 0.25 * mm;
-
-// const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
-// const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
-// const G4double G4PropagatorInField::fEpsilonMin = 1.0e-10 ;
 
 G4TransportationManager* G4TransportationManager::fTransportationManager=0;
 

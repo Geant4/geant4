@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2002-07-23 08:50:33 gcosmo Exp $
+$Id: History,v 1.83 2002-07-24 10:41:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 24th, 2002       G. Cosmo - geomvol-V04-01-01
+- Removed static initialisations of data of G4FieldManager.
+  Coworks with tag "field-V04-01-01".
 
 Jul 23rd, 2002       G. Cosmo - geomvol-V04-01-00
 - Some code cleanup and cosmetics...

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.32 2002-06-18 12:54:01 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.33 2002-07-24 10:41:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -44,11 +44,6 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"
  
-// Initialisation moved to G4TransportationManager.cc, to ensure
-//   correct order initialisation of static (class) data members
-//const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
-//const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
-
 const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
 const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;
 
