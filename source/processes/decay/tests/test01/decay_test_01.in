@@ -1,0 +1,7 @@
+/run/initialize
+/gun/energy 1 MeV
+/tracking/verbose 1
+/gun/decayTime 1.0 ns
+/run/beamOn 1
+/gun/decayTime 10.0 ns
+/run/beamOn 1
