@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.4 2001-11-29 22:39:51 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.5 2001-11-30 00:52:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,7 +218,7 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
   G4int iMax = 16;
   G4DataVector p;
 
-  G4double amaj, k;
+  G4double amaj;
 
   // Below 10 MeV EEDL data base spectrum 
   if(e < 10000000.*MeV) {

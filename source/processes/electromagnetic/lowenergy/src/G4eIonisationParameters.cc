@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.16 2001-11-29 22:39:51 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.17 2001-11-30 00:52:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -233,7 +233,7 @@ void G4eIonisationParameters::LoadData()
         // End of set for a shell, fill the map
 	for (size_t k=0; k<length; k++) {
 
-	  G4int id = Z*20 + k;
+	  // 	  G4int id = Z*20 + k;
 	  G4VDataSetAlgorithm* interp  = new G4LogLogInterpolation();
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.10 2001-11-29 22:39:52 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.11 2001-11-30 00:52:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -343,8 +343,8 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
 				       const G4DataVector& p) const
 {
 
-  G4double x1 = 1.;
-  G4double x2 = 1.;
+  //  G4double x1 = 1.;
+  //  G4double x2 = 1.;
   G4double x  = log(xMax/xMin) 
               + 0.5*(1. - p[7])*(xMax*xMax - xMin*xMin)
               + 1./(1. - xMax) - 1./(1. - xMin) 
@@ -362,7 +362,7 @@ G4double G4eIonisationSpectrum::Function(G4double x,
   // Please comment what Function does
 
 
-  G4double x1 = 1.0;
+  //  G4double x1 = 1.0;
   G4double f  = 1.0 - p[7]*x + x*x*(1.0 - p[7]
               + (1.0/(1.0 - x) - p[7])/(1.0 - x) )
               + p[1]*p[3]/x;
