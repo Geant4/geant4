@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.cc,v 1.1 2001-03-27 16:22:20 grichine Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.2 2001-03-28 16:51:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -16,6 +16,7 @@
 #include "F01ElectroMagneticField.hh"
 
 #include "G4UniformMagField.hh"
+#include "G4MagneticField.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4Mag_UsualEqRhs.hh"
@@ -38,49 +39,26 @@
 //  Constructors:
 
 F01ElectroMagneticField::F01ElectroMagneticField()
-  : G4UniformMagField(G4ThreeVector())
 {
-
-  G4UniformMagField* magField = new G4UniformMagField(
-                                    G4ThreeVector(0.0,0.2*tesla,0.0));
+  fMagneticField = new G4UniformMagField(G4ThreeVector(0.0,0.2*tesla,0.0));
 
   //  G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()
   //                         ->GetFieldManager();  
-  //  fieldMgr->SetDetectorField(magField);
-  //  fieldMgr->CreateChordFinder(magField);
+  //  fieldMgr->SetDetectorField(fMagneticField);
+  //  fieldMgr->CreateChordFinder(fMagneticField);
 
-  G4FieldManager*         pFieldMgr;
-  G4ChordFinder*          pChordFinder;
-  G4Mag_UsualEqRhs*       fEquation = new G4Mag_UsualEqRhs(magField); 
-  G4MagIntegratorStepper* pStepper;
+  
+ 
+  fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
+ 
+  fMinStep     = 1.0*mm ;
 
   fStepperType = 4 ;
 
-  switch ( fStepperType ) 
-  {
-    case 0:  pStepper = new G4ExplicitEuler( fEquation );      break;
-    case 1:  pStepper = new G4ImplicitEuler( fEquation );      break;
-    case 2:  pStepper = new G4SimpleRunge( fEquation );        break;
-    case 3:  pStepper = new G4SimpleHeum( fEquation );         break;
-    case 4:  pStepper = new G4ClassicalRK4( fEquation );       break;
-    case 5:  pStepper = new G4HelixExplicitEuler( fEquation ); break;
-    case 6:  pStepper = new G4HelixImplicitEuler( fEquation ); break;
-    case 7:  pStepper = new G4HelixSimpleRunge( fEquation );   break;
-      // case 8:  pStepper = new G4CashKarpRKF45( fEquation );      break;
-    case 9:  pStepper = new G4RKG3_Stepper( fEquation );       break;
-    default: pStepper = 0;
-  }
-  pFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  fFieldManager = G4TransportationManager::GetTransportationManager()
+                                         ->GetFieldManager();
 
-  pFieldMgr->SetDetectorField(magField );
-
-  G4double minStep = 1.0*mm ;
-
-  pChordFinder = new G4ChordFinder( magField, minStep,pStepper);
-
-  pFieldMgr->SetChordFinder( pChordFinder );
-
-
+  UpdateField();
 
   //  GetGlobalFieldManager()->CreateChordFinder(this);
 }
@@ -88,8 +66,8 @@ F01ElectroMagneticField::F01ElectroMagneticField()
 /////////////////////////////////////////////////////////////////////////////////
 
 F01ElectroMagneticField::F01ElectroMagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
 {    
+  fMagneticField = new G4UniformMagField(fieldVector);
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
@@ -98,6 +76,55 @@ F01ElectroMagneticField::F01ElectroMagneticField(G4ThreeVector fieldVector)
 F01ElectroMagneticField::~F01ElectroMagneticField()
 {
   // GetGlobalFieldManager()->SetDetectorField(0);
+
+  if(fMagneticField) delete fMagneticField;
+  if(fChordFinder)   delete fChordFinder;
+  if(fStepper)       delete fStepper;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Update field
+//
+
+void F01ElectroMagneticField::UpdateField()
+{
+  SetStepper();
+
+  fFieldManager->SetDetectorField(fMagneticField );
+
+  if(fChordFinder) delete fChordFinder;
+  fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
+
+  fFieldManager->SetChordFinder( fChordFinder );
+
+  return;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Set stepper according to the stepper type
+//
+
+void F01ElectroMagneticField::SetStepper()
+{
+  if(fStepper) delete fStepper;
+
+  switch ( fStepperType ) 
+  {
+    case 0:  fStepper = new G4ExplicitEuler( fEquation );      break;
+    case 1:  fStepper = new G4ImplicitEuler( fEquation );      break;
+    case 2:  fStepper = new G4SimpleRunge( fEquation );        break;
+    case 3:  fStepper = new G4SimpleHeum( fEquation );         break;
+    case 4:  fStepper = new G4ClassicalRK4( fEquation );       break;
+    case 5:  fStepper = new G4HelixExplicitEuler( fEquation ); break;
+    case 6:  fStepper = new G4HelixImplicitEuler( fEquation ); break;
+    case 7:  fStepper = new G4HelixSimpleRunge( fEquation );   break;
+    case 8:  fStepper = new G4CashKarpRKF45( fEquation );      break;
+    case 9:  fStepper = new G4RKG3_Stepper( fEquation );       break;
+    default: fStepper = 0;
+  }
+  return; 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -107,7 +134,9 @@ F01ElectroMagneticField::~F01ElectroMagneticField()
 
 void F01ElectroMagneticField::SetFieldValue(G4double fieldValue)
 {
-   G4UniformMagField::SetFieldValue(G4ThreeVector(0,0,fieldValue));
+  if(fMagneticField) delete fMagneticField;
+  fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldValue));
+  UpdateField();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,7 +151,11 @@ void F01ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     
   if(fieldVector != G4ThreeVector(0.,0.,0.))
   { 
-    G4UniformMagField::SetFieldValue(fieldVector);
+    if(fMagneticField) delete fMagneticField;
+    fMagneticField = new  G4UniformMagField(fieldVector);
+
+    UpdateField();
+   
     fieldMgr->SetDetectorField(this);
   }
   else 
@@ -130,8 +163,8 @@ void F01ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
 
-    G4MagneticField* magField = NULL;
-    fieldMgr->SetDetectorField(magField);
+    G4MagneticField* fMagneticField = NULL;
+    fieldMgr->SetDetectorField(fMagneticField);
   }
 }
 
@@ -142,7 +175,7 @@ void F01ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
 G4FieldManager*  F01ElectroMagneticField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
-	     ->GetFieldManager();
+	                        ->GetFieldManager();
 }
     
 

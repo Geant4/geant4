@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.hh,v 1.1 2001-03-27 16:21:26 grichine Exp $
+// $Id: F01ElectroMagneticField.hh,v 1.2 2001-03-28 16:50:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,30 +25,51 @@
 #ifndef F01ElectroMagneticField_H
 #define F01ElectroMagneticField_H
 
+#include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
 
 class G4FieldManager;
+class G4ChordFinder;
+class G4Mag_UsualEqRhs;
+class G4MagIntegratorStepper;
 
-class F01ElectroMagneticField: public G4UniformMagField
+class F01ElectroMagneticField: public G4MagneticField
 {
 public:
-      F01ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
-      F01ElectroMagneticField() ;               //  A zero field
+  F01ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
+  F01ElectroMagneticField() ;               //  A zero field
 
-     ~F01ElectroMagneticField() ;  
+ ~F01ElectroMagneticField() ;  
       
-      // Set the field to (0, 0, fieldValue)
+  void  GetFieldValue( const  G4double Point[3],
+			      G4double *Bfield ) const {};
+  
+  void SetStepperType(G4int i){ fStepperType = i ; } ;
+  void SetStepper();
 
-      void SetFieldValue(G4ThreeVector fieldVector) ;
-      void SetFieldValue(G4double      fieldValue) ;
-      G4ThreeVector GetConstantFieldValue();
+  void SetMinStep(G4double s){ fMinStep = s ; } ;
+
+  void UpdateField();
+
+  void SetFieldValue(G4ThreeVector fieldVector) ;
+  void SetFieldValue(G4double      fieldValue) ;
+  G4ThreeVector GetConstantFieldValue();
 
 protected:
 
       // Find the global Field Manager
 
-      G4FieldManager* GetGlobalFieldManager() ;   // static 
-      G4int fStepperType ;
+  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+
+  G4FieldManager*         fFieldManager ;
+  G4ChordFinder*          fChordFinder ;
+  G4Mag_UsualEqRhs*       fEquation ; 
+  G4MagneticField*        fMagneticField ; 
+
+  G4MagIntegratorStepper* fStepper ;
+  G4int                   fStepperType ;
+
+  G4double                fMinStep ;
 };
 
 #endif
