@@ -89,6 +89,7 @@
 // 12 Apr   2003 V.Ivanchenko Cut per region for fluo AlongStep
 // 18 Apr   2003 V.Ivanchenko finalRange redefinition
 // 26 Apr   2003 V.Ivanchenko fix for stepLimit
+// 06 May   2004 V.Ivanchenko Migrate to G4VEnergyLossProcess interface
 
 // -----------------------------------------------------------------------
 
@@ -97,6 +98,7 @@
 
 #include "G4hLowEnergyIonisationMA.hh"
 #include "Randomize.hh"
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
@@ -112,16 +114,14 @@
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
-#include "G4Gamma.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4ProcessManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4IonFluctuations.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4Region.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -141,8 +141,8 @@ G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
 {
   lowEnergy          = 0.1*keV;
   highEnergy         = 10.*MeV;
-  minGammaEnergy     = 25.*GeV;
-  minElectronEnergy  = 25.*GeV;
+  minGammaEnergy     = 25.*keV;
+  minElectronEnergy  = 25.*keV;
   verboseLevel       = 0;
   SetDEDXBinning(360);
   SetLambdaBinning(360);
@@ -164,6 +164,7 @@ G4hLowEnergyIonisationMA::~G4hLowEnergyIonisationMA()
     }
     zFluoDataVector.clear();
   }
+  regionsWithFluo.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -265,8 +266,6 @@ void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
                              G4AtomicTransitionManager::Instance();
 
   G4double bindingEnergy;
-  //  G4double x;
-  //  G4double y;
 
   //  loop for materials
   for (size_t j=0; j<numOfCouples; j++) {
@@ -284,7 +283,7 @@ void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
     G4VDataSetAlgorithm* interp1 = new G4SemiLogInterpolation();
     G4VEMDataSet* xsis1 = new G4CompositeEMDataSet(interp1, 1., 1.);
 
-    G4double tCut = cutForDelta[j];
+    G4double tCut = (*theCoupleTable->GetEnergyCutsVector(1))[j];
     G4double elDensity = 1.;
 
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
@@ -834,7 +833,16 @@ G4double G4hLowEnergyIonisationMA::BlochTerm(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hLowEnergyIonisationMA::ActivateAugerElectronProduction(G4bool val)
+void G4hLowEnergyIonisationMA::ActivateFluorescence(
+                               G4bool val, const G4Region*)
+{
+  theFluo = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisationMA::ActivateAugerElectronProduction(
+                               G4bool val, const G4Region*)
 {
   if(val) theFluo = val;
   deexcitationManager.ActivateAugerElectronProduction(val);

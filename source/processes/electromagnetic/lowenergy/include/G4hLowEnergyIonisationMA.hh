@@ -69,6 +69,7 @@
 #ifndef G4hLowEnergyIonisationMA_h
 #define G4hLowEnergyIonisationMA_h 1
 
+#include "G4VEnergyLossProcess.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -77,11 +78,11 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4VEnergyLossProcess.hh"
 
 class G4ShellVacancy;
 class G4VhShellCrossSection;
 class G4VEMDataSet;
+class G4Region;
 
 class G4hLowEnergyIonisationMA : public G4VEnergyLossProcess
 {
@@ -139,11 +140,18 @@ public: // With description
   void SetBarkasOff() {theBarkas = false;};
   // This method switch off calculation of the Barkas and Bloch effects.
 
-  void ActivateFluorescence(const G4bool val) {theFluo = val;};
+  virtual void ActivateFluorescence(G4bool val, const G4Region* r=0);
+  void SetFluorescence(G4bool val) {ActivateFluorescence(val);};
   // This method switch on/off simulation of the fluorescence of the media.
 
-  void ActivateAugerElectronProduction(G4bool val);
+  virtual void ActivateAugerElectronProduction(G4bool val, const G4Region* r=0);
   // Set Auger electron production flag on/off
+
+  void SetCutForSecondaryPhotons(G4double cut) {minGammaEnergy = cut;};
+  // Set threshold energy for fluorescence
+
+  void SetCutForAugerElectrons(G4double cut) {minElectronEnergy = cut;};
+  // Set threshold energy for Auger electron production
 
 protected:
 
@@ -177,11 +185,12 @@ private:
   // Function to compute the Bloch term	for protons
 
 
-  std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
- 					              G4double incidentEnergy,
-					              G4double tmax,
-					              G4double hMass,
-					              G4double eLoss);
+  std::vector<G4DynamicParticle*>* DeexciteAtom(
+                         const G4MaterialCutsCouple* couple,
+ 			       G4double incidentEnergy,
+			       G4double tmax,
+			       G4double hMass,
+			       G4double eLoss);
 
   G4int SelectRandomAtom(const G4MaterialCutsCouple* couple,
                                G4double kineticEnergy) const;
@@ -193,37 +202,38 @@ private:
 private:
 
   // name of parametrisation table of electron stopping power
-  G4String                    theTable;
+  G4String                     theTable;
 
   // interval of parametrisation of electron stopping power
-  G4double                    lowEnergy;
-  G4double                    highEnergy;
+  G4double                     lowEnergy;
+  G4double                     highEnergy;
 
-  G4DataVector                cutForDelta;
-  G4DataVector                cutForGamma;
+  G4DataVector                 cutForDelta;
+  G4DataVector                 cutForGamma;
 
-  G4VEmFluctuationModel*      flucModel;
-  G4AtomicDeexcitation        deexcitationManager;
-  G4ShellVacancy*             shellVacancy;
-  G4VhShellCrossSection*      shellCS;
-  std::vector<G4VEMDataSet*>  zFluoDataVector;
+  G4VEmFluctuationModel*       flucModel;
+  G4AtomicDeexcitation         deexcitationManager;
+  G4ShellVacancy*              shellVacancy;
+  G4VhShellCrossSection*       shellCS;
+  std::vector<G4VEMDataSet*>   zFluoDataVector;
+  std::vector<const G4Region*> regionsWithFluo;
 
   // cash
-  const G4Material*           theMaterial;
-  const G4ParticleDefinition* currentParticle;
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
-  G4double                    minGammaEnergy;
-  G4double                    minElectronEnergy;
+  const G4Material*            theMaterial;
+  const G4ParticleDefinition*  currentParticle;
+  const G4ParticleDefinition*  theParticle;
+  const G4ParticleDefinition*  theBaseParticle;
+  G4double                     minGammaEnergy;
+  G4double                     minElectronEnergy;
 
-  G4double                    chargeCorrection;
-  G4double                    chargeLowLimit;
-  G4double                    energyLowLimit;
+  G4double                     chargeCorrection;
+  G4double                     chargeLowLimit;
+  G4double                     energyLowLimit;
 
-  size_t                      fluobins;
-  G4bool                      theBarkas;
-  G4bool                      theFluo;
-  G4bool                      isInitialised;
+  size_t                       fluobins;
+  G4bool                       theBarkas;
+  G4bool                       theFluo;
+  G4bool                       isInitialised;
 
 };
 
