@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.cc,v 1.11 2001-10-24 10:04:57 kurasige Exp $
+// $Id: G4AntiLambda.cc,v 1.12 2001-10-28 05:08:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,7 @@ G4AntiLambda* G4AntiLambda::AntiLambda(){return &theAntiLambda;}
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4AntiLambda::CalcEnergyCuts()
+void G4AntiLambda::CalcEnergyCuts( const G4Material* )
 {
   
 

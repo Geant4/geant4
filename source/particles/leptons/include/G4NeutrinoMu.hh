@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.hh,v 1.7 2001-10-24 10:02:44 kurasige Exp $
+// $Id: G4NeutrinoMu.hh,v 1.8 2001-10-28 05:05:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4NeutrinoMu : public G4VLepton
    static G4NeutrinoMu* NeutrinoMuDefinition();
    static G4NeutrinoMu* NeutrinoMu();
 
-   virtual void CalcEnergyCuts(); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

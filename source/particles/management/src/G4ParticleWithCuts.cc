@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.16 2001-10-20 04:42:19 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.17 2001-10-28 05:08:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -407,7 +407,7 @@ G4bool  G4ParticleWithCuts::CheckEnergyBinSetting() const
 }
 
 
-void  G4ParticleWithCuts::CalcEnergyCuts() 
+void  G4ParticleWithCuts::CalcEnergyCuts(const G4Material* theMaterial) 
 {
   // check LowestEnergy/ HighestEnergy/TotBin 
   CheckEnergyBinSetting();
@@ -417,8 +417,13 @@ void  G4ParticleWithCuts::CalcEnergyCuts()
 
   // Create the vector of cuts in energy
   // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [numberOfMaterials];
+  if( !theMaterial) {
+    if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
+    theKineticEnergyCuts = new G4double [numberOfMaterials];
+  } else {
+    if(!theKineticEnergyCuts) theKineticEnergyCuts = new G4double [numberOfMaterials];
+  }             
+
                     
   G4double Charge = this->GetPDGCharge() ;
 
@@ -430,6 +435,10 @@ void  G4ParticleWithCuts::CalcEnergyCuts()
     G4double massRatio = proton_mass_c2/(this->GetPDGMass()) ;
     
     for (size_t J=0; J<numberOfMaterials; J +=1) {
+      if  (theMaterial!=0) {
+        if  ( theMaterial->GetIndex() != J ) continue;
+      }
+
       G4double protonEnergyCut = (theProton->GetEnergyCuts())[J] ;           
       // cut energy is rescaled by using charge and mass ratio
       theKineticEnergyCuts[J] = ChargeSquare*protonEnergyCut/massRatio ; 
@@ -447,8 +456,12 @@ void  G4ParticleWithCuts::CalcEnergyCuts()
     G4double density ;
     const G4MaterialTable * materialTable = G4Material::GetMaterialTable();
     for (size_t J=0; J<numberOfMaterials; J +=1){
+      if  (theMaterial!=0) {
+        if  ( theMaterial->GetIndex() != J ) continue;
+      }
+
       G4RangeVector* rangeVector = new
-	G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
+      G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
       G4Material* aMaterial = (*materialTable)[J];
       density = aMaterial->GetDensity() ;
       if(density == 0.) {
@@ -640,7 +653,7 @@ void G4ParticleWithCuts::SetRangeCut(G4double aCut, const G4Material* aMaterial)
   SetCutInMaxInteractionLength(aCut, aMaterial);
 
   // calculate energy cut values
-  CalcEnergyCuts();
+  CalcEnergyCuts(aMaterial);
 }
 
 void G4ParticleWithCuts::SetRangeCutVector(G4std::vector<G4double>& cuts)

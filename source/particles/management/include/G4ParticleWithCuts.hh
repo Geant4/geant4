@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.12 2001-10-18 05:59:56 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.13 2001-10-28 05:08:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,7 +162,7 @@ class G4ParticleWithCuts : public G4ParticleDefinition
     void    SetEnergyCutValues(G4double energyCuts);
     // Set a energy cut value for all materials
 
-    virtual   void  CalcEnergyCuts();
+    virtual   void  CalcEnergyCuts(const G4Material* material=0);
     // Calculate energy cut values by using range cuts
 
     // BuildPhysicsTable is defined as a dummy routine

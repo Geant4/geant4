@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacZero.cc,v 1.9 2001-10-24 10:05:07 kurasige Exp $
+// $Id: G4SigmacZero.cc,v 1.10 2001-10-28 05:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,7 +105,7 @@ G4SigmacZero* G4SigmacZero::SigmacZero(){return &theSigmacZero;}
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4SigmacZero::CalcEnergyCuts()
+void G4SigmacZero::CalcEnergyCuts( const G4Material* )
 {
   
 

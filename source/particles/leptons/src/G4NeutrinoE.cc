@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.cc,v 1.9 2001-10-24 10:02:53 kurasige Exp $
+// $Id: G4NeutrinoE.cc,v 1.10 2001-10-28 05:05:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4NeutrinoE* G4NeutrinoE::NeutrinoE() {return &theNeutrinoE;}
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4NeutrinoE::CalcEnergyCuts()
+void G4NeutrinoE::CalcEnergyCuts( const G4Material* )
 {
   
   

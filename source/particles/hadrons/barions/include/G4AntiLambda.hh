@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.hh,v 1.8 2001-10-24 10:04:44 kurasige Exp $
+// $Id: G4AntiLambda.hh,v 1.9 2001-10-28 05:06:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ class G4AntiLambda : public G4VBaryon
    static G4AntiLambda* AntiLambdaDefinition();
    static G4AntiLambda* AntiLambda();
 
-   virtual void CalcEnergyCuts(); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonZero.cc,v 1.9 2001-10-24 10:05:24 kurasige Exp $
+// $Id: G4DMesonZero.cc,v 1.10 2001-10-28 05:01:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ G4DMesonZero*  G4DMesonZero::DMesonZero(){return &theDMesonZero;}
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4DMesonZero::CalcEnergyCuts()
+void G4DMesonZero::CalcEnergyCuts( const G4Material* )
 {
   
 

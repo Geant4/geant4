@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.cc,v 1.9 2001-10-24 10:05:22 kurasige Exp $
+// $Id: G4AntiBMesonZero.cc,v 1.10 2001-10-28 05:01:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ G4AntiBMesonZero G4AntiBMesonZero::theAntiBMesonZero(
 G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZeroDefinition(){return &theAntiBMesonZero;}
 G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZero(){return &theAntiBMesonZero;}
 
-void G4AntiBMesonZero::CalcEnergyCuts()
+void G4AntiBMesonZero::CalcEnergyCuts( const G4Material* )
 {
   
 

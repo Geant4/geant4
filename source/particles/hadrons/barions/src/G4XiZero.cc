@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.11 2001-10-24 10:05:07 kurasige Exp $
+// $Id: G4XiZero.cc,v 1.12 2001-10-28 05:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ G4XiZero* G4XiZero::XiZero(){return &theXiZero;}
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4XiZero::CalcEnergyCuts()
+void G4XiZero::CalcEnergyCuts( const G4Material* )
 {
   
 

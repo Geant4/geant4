@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegacZero.cc,v 1.10 2001-10-24 10:05:06 kurasige Exp $
+// $Id: G4OmegacZero.cc,v 1.11 2001-10-28 05:08:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ G4OmegacZero* G4OmegacZero::OmegacZero(){return &theOmegacZero;}
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4OmegacZero::CalcEnergyCuts()
+void G4OmegacZero::CalcEnergyCuts( const G4Material* )
 {
   
 

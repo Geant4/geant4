@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiDMesonZero.cc,v 1.9 2001-10-24 10:05:23 kurasige Exp $
+// $Id: G4AntiDMesonZero.cc,v 1.10 2001-10-28 05:01:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ G4AntiDMesonZero G4AntiDMesonZero::theAntiDMesonZero(
 G4AntiDMesonZero*  G4AntiDMesonZero::AntiDMesonZeroDefinition(){return &theAntiDMesonZero;}
 G4AntiDMesonZero*  G4AntiDMesonZero::AntiDMesonZero(){return &theAntiDMesonZero;}
 
-void G4AntiDMesonZero::CalcEnergyCuts()
+void G4AntiDMesonZero::CalcEnergyCuts( const G4Material* )
 {
 
   // Set Energy Cut values to lowest  for all materials

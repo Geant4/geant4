@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicZero.hh,v 1.7 2001-10-24 10:04:54 kurasige Exp $
+// $Id: G4XicZero.hh,v 1.8 2001-10-28 05:08:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4XicZero : public G4VBaryon
    static G4XicZero* XicZeroDefinition();
    static G4XicZero* XicZero();
 
-   virtual void CalcEnergyCuts(); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif
