@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PrimaryGeneratorAction.cc,v 1.4 2001-10-17 14:04:16 maire Exp $
+// $Id: Em4PrimaryGeneratorAction.cc,v 1.5 2001-12-10 16:05:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,10 +68,13 @@ void Em4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   //
-  G4double theta = pi*G4UniformRand(), phi = twopi*G4UniformRand();
-  G4double ux = sin(theta)*cos(phi),
-           uy = sin(theta)*sin(phi),
-           uz = cos(theta);
+  //distribution uniform in solid angle
+  //
+  G4double cosTheta = 2*G4UniformRand() - 1., phi = twopi*G4UniformRand();
+  G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
+  G4double ux = sinTheta*cos(phi),
+           uy = sinTheta*sin(phi),
+           uz = cosTheta;
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
   
