@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.14 2001-10-02 00:02:15 perl Exp $
+// $Id: MyVisManager.cc,v 1.15 2001-11-06 13:03:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,10 +43,6 @@
 // Needing external packages or libraries...
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_HEPREP
-#include "G4HepRep.hh"
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -99,10 +95,6 @@ void MyVisManager::RegisterGraphicsSystems () {
   // Graphics systems needing external packages or libraries...
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_HEPREP
-  RegisterGraphicsSystem (new G4HepRep);
 #endif
 
 #ifdef G4VIS_USE_OPACS
