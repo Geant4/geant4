@@ -19,11 +19,9 @@
 // 23/05/2000 MGP  Made compliant to design
 //  
 // Class Description:
-// Quantal Harmonic Oscillator Model for energy loss
-// of slow antiprotons 
+// Quantal Harmonic Oscillator Model for energy loss of slow antiprotons 
 // Class Description - End
-
-// ************************************************************
+//
 // ------------------------------------------------------------
 
  
@@ -54,21 +52,18 @@ public:
   virtual G4bool IsInCharge(G4double energy, 
 			    const G4ParticleDefinition* particleDefinition,
 			    const G4Material* material) const;
-  // returns true if the model is applyable at that energy for
-  // thet particle for that material
+  // returns true if the model is applicable at that energy for
+  // that particle for that material
   
   virtual G4double EnergyLoss(const G4DynamicParticle* particle,
 			      const G4Material* material) const;
-  // returns the energy loss via the quantal harmonic
-  // oscillator model 
+  // returns the energy loss via the quantal harmonic oscillator model 
   
 private:
   
   // hide assignment operator 
   G4QAOLowEnergyLoss & operator=( G4QAOLowEnergyLoss &right);
   G4QAOLowEnergyLoss( G4QAOLowEnergyLoss&);
-  
-private:
   
   // get number of shell, energy and oscillator strenghts for material
   G4int GetNumberOfShell(const G4Material* material) const;
@@ -82,8 +77,6 @@ private:
   // terms in Z^3
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
-  
-private:
   
   //  material at now avaliable for the model
   static const G4String materialAvailable[6];
@@ -110,7 +103,10 @@ private:
   static const G4double L0[67][2];
   static const G4double L1[22][2];
   static const G4double L2[14][2];
-  
+
+  G4int sizeL0;
+  G4int sizeL1;
+  G4int sizeL2;
   
 }; 
 

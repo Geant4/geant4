@@ -63,8 +63,7 @@ public: // Without description
 
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
   
-  G4double GetMeanFreePath(
-			   const G4Track& track,
+  G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition ) ;
   
@@ -77,12 +76,11 @@ public: // Without description
   
 protected:
   
-  virtual G4double ComputeMicroscopicCrossSection(
-						  const G4ParticleDefinition& aParticleType,
+  virtual G4double ComputeMicroscopicCrossSection(const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
 						  G4double AtomicNumber,
                                                   G4double ExcEnergy);
-      
+  
 public: // With description
   
   void SetStoppingPowerTableName(const G4String& dedxTable);
@@ -104,12 +102,12 @@ public: // With description
   		        	       const G4double KinEnergy,
 			               const G4double DeltaRayCutNow);
   // This method returns parametrised energy loss.
-
+  
   G4double GetPreciseDEDX(G4Material* aMaterial,
   			  const G4double KinEnergy,
 		          const G4ParticleDefinition* aParticleType);
   // This method returns electron ionisation energy loss for any energy.
-
+  
   G4double GetNuclearDEDX(G4Material* aMaterial,
   			  const G4double KinEnergy,
 		          const G4ParticleDefinition* aParticleType);
