@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02VisManager.cc,v 1.1 1999-01-07 16:05:51 gunter Exp $
+// $Id: ExN02VisManager.cc,v 1.2 1999-08-04 16:40:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,10 +54,6 @@
 
 #ifdef G4VIS_USE_OIWIN32
 #include "G4OpenInventorWin32.hh"
-#endif
-
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -112,10 +108,6 @@ void ExN02VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
-#endif
-
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
 #endif
 
 #ifdef G4VIS_USE_VRML
