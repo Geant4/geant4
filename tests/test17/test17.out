@@ -385,18 +385,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.53s Real=5.86s Sys=1.6s
+  User=3.77s Real=8.99s Sys=1.68s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.20717 +- 0.00690887  microns 
-    CSDA  Range  in absorber = 9.08054 +- 0.00632747  microns 
+    Track Length in absorber = 9.22908 +- 0.00676988  microns 
+    CSDA  Range  in absorber = 9.09971 +- 0.00622613  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.148171 +- 0.00690887 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.211543 +- 0.00632747 microns 
+    Track Length (G4 - ICRU49) = 0.17008 +- 0.00676988 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.230708 +- 0.00622613 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -409,12 +409,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.9s Real=6.85s Sys=1.97s
+  User=4.12s Real=9.34s Sys=2.08s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.58976 +- 0.00675116  microns 
-    CSDA  Range  in absorber = 9.4316 +- 0.00672693  microns 
+    Track Length in absorber = 9.59243 +- 0.00685424  microns 
+    CSDA  Range  in absorber = 9.42756 +- 0.00823664  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -430,12 +430,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.27s Real=6.34s Sys=1.92s
+  User=4.35s Real=9.39s Sys=1.69s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.63871 +- 0.00446065  microns 
-    CSDA  Range  in absorber = 7.90146 +- 0.0217797  microns 
+    Track Length in absorber = 8.57553 +- 0.00501884  microns 
+    CSDA  Range  in absorber = 7.89474 +- 0.0205421  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -453,24 +453,25 @@ Average Number photons per event   = 0
 /run/beamOn 1000
 ### Run 3 start.
 Start Run processing.
+EvtNo= 596  length= 0.00950248  xend= 0.000886175
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=190.26s Real=249.34s Sys=38.18s
+  User=157.39s Real=243.46s Sys=5.93s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.21723 +- 0.00682233  microns 
-    CSDA  Range  in absorber = 9.08769 +- 0.00612836  microns 
+ end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.22641 +- 0.00667333  microns 
+    CSDA  Range  in absorber = 9.09003 +- 0.00740298  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.158227 +- 0.00682233 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.218685 +- 0.00612836 microns 
+    Track Length (G4 - ICRU49) = 0.167409 +- 0.00667333 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.221031 +- 0.00740298 microns 
 
-Average Number electrons per event = 70.766
-Average Number photons per event   = 22.467
+Average Number electrons per event = 73.6126
+Average Number photons per event   = 22.7477
 
 #
 G4 kernel has come to Quit state.
