@@ -1,0 +1,446 @@
+
+                 Geant4 3.1 Release Notes
+                 ------------------------
+
+                                                      6th April 2001
+
+These are the main new features/fixes included in this release since
+release 3.0 (for the detailed list of fixes/additions, please refer to the
+related History files):
+
+  o Configuration:
+    -------------
+    - Added/enabled code in configuration files to store path to dynamic
+      library from example/test directory in the executable.
+
+  o Digits+Hits:
+    -----------
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+
+  o Event:
+    -----
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+    - Added proper time to G4PrimaryParticle.
+    - Fixed bug in G4GeneralParticleSource.
+
+  o Electromagnetic Processes (Low-energy):
+    --------------------------------------
+    - Changes for STL migration of G4OrderedTable and G4DataVector.
+    - Removed obsolete class G4Data.
+
+  o Electromagnetic Processes (Standard):
+    ------------------------------------
+    - Small corrections in e/hEnergyLoss to ensure consistency between
+      cut in range and step limitation due to energy loss (finalRange
+      data member <-> cut in range)
+    - Change in energy loss computation in eBrems process.
+      Parametrisation of energy loss due to soft brems has been corrected
+      for big cut values.
+    - Bug-fix in e/hEnergyLoss processes for AlongStepDoIt().
+      Do not use PostStep information in AlongStepDoIt() when generating
+      sub-cutoff delta rays.
+    - Small corrections in MuEnergyLoss process.
+    - Bug fixed in MultipleScattering: there was an error in computation
+      of the transport cross section, the cross section was too small for
+      low energy (below few MeV for electrons).
+    - Bug fixed in G4MuBremstrahlung::PostStepDoIt() in sampling energy
+      of generated photons. Fixes the problem sometimes occuring of
+      negative interaction length detected.
+    - Fix at small cut value for error in loss fluctuations 
+      (for example in Al 100 microns).
+    - Suppressed protection in PhotoElectric process.
+    - Adopt fStopButAlive in eplusAnnihilation process.
+    - Introduced new module 'integral' for integral processes: moved
+      existing integral processes (G4I*, G4VI*) therein.
+
+  o General Processes, Parameterisation, Decay, Optical:
+    ---------------------------------------------------
+    - Modified G4OpRayleigh to allow for Rayleigh scattering length to
+      be defined for arbitrary material through the use of 
+      G4MaterialPropertyTable. This deals with bug report #199.
+    - Fixes in the DoIt of G4OpRayleigh: to allow for positive and negative
+      CosTheta and to force the new momentum direction of the photon after
+      scattering to be in the same plane as the new and old polarization 
+      vectors. Deals with bug report #207.
+    - Added abstract class G4VExtDecayer for external decayer and modified
+      G4Decay accordingly.
+    - Modified Store/RetrievePhysicsTable() methods: added a bool argument
+      to specify ascii/binary mode.
+
+  o Geometry:
+    --------
+    - Boolean solids:
+      o Minor fix to labels in G4Exception calls.
+        Fixes problem report #200. 
+      o G4IntersectionSolid:
+        - Fix in CalculateExtent() for computation of 'pMin'
+          and 'pMax', to avoid assignment in case CalculateExtent() of
+          one component solid fails. 
+        - Fix in Inside() to return 'kOutside' in case first component
+          solid's Inside() returns 'kOutside'. 
+      o G4UnionSolid:
+        - Fix in DistanceToOut(p,v,...) for assignment of argument *n to
+          happen only if calcNorm is false. 
+        - Fix in CalculateExtent() for computation of 'pMin' and 'pMax'.
+
+    - CSG solids
+      o G4Tubs:
+        - Corrections in phi-section algorithm of Inside(p). 
+        - Fixed condition from (pPhi<0) to (pPhi<-0.5*kAngleTolerance) 
+          in Inside(p). Fixes problem report #198.
+        - Fixed bug in function Inside(p) in computation of pPhi 
+          for points at phi = 0 if the (start phi)+(delta phi) is
+	  at phi = 0. 
+        - Temporarly modified CalculateExtent(...), now simply based
+          on G4Box::CalculateExtent(...).
+      o G4Box:
+        - Introduced checks against negative (or <2*kCarTolerance)
+          dimensions in methods SetXHalfLength(), SetYHalfLength() and
+          SetZHalfLength().
+        - Fixes to algorithm for computation of rotated vertices in
+	  CalculateExtent(). 
+      o G4Torus:
+        - Extracted logic for G4PolynomialSolver now included
+          in global/HEPNumerics. 
+
+    - Specific solids:
+      o Fix in G4Hype::DistanceToOut(p,v,...): added protection against
+        zero v.z.
+      o G4IntersectingCone: make small adjustment to help with roundoff
+        error in LineHitsCone1() and LineHitsCone2(). 
+
+    - Magnetic Field
+      o Minor fix to G4MagneticField.hh: added explicit call to G4Field()
+        in copy constructor. Fixes problem report #205.
+      o Fixed G4MagHelicalStepper::AdvanceHelix for momentum, allowing
+        the possibility of (correct) use of all Helical Steppers. 
+      o Corrected field components in G4UniformElectricField. 
+
+    - Management
+      o Introduced G4AssemblyVolume: helper class to combine
+        volumes together in an arbitrary way in the 3D space. 
+
+    - Volumes
+      o Fix in G4ReplicaNavigation::ComputeTransformation() to consider
+        'pVol' for SetPhiTransformation() in the kPhi case.
+      o Fix in G4ReplicaNavigation::ComputeStep() to initialise 'ourStep'
+        to kCarTolerance.
+
+  o Global:
+    ------
+    - Migrated G4PhysicsTable, G4PhysicsVector and all related classes
+      to use STL <vector> instead of RW wrappers.
+    - Fix to G4Allocator destructor: bug report #181.
+    - Added generic class G4PolynomialSolver in HEPNumerics module.
+    - Removed from G4PhysicsVector dependency over G4PhysicsTable. 
+      Removed methods: LinkPhysicsTable(), IsLinkedTableExist() and 
+      GetNextTable(). Removed data-member ptrNextTable. 
+    - Added new unit 'parsec' to SystemOfUnits.h 
+    - Fixed bug in constructor of G4PhysicsLnVector: initialised
+      'dataVector' to zero. 
+    - Added Store/RetrievePhysicsTable methods in G4PhysicsTable. 
+    - Added Store/Retrieve and GetType methods in G4PhysicsVector and
+      related. 
+    - Introduced G4PhysicsVectorType class (enumeration). 
+    - G4UnitsTable: resolved ambiguity of old/new style iostream for
+      formatting in operator<<. 
+
+  o Graphics Representations:
+    ------------------------
+    - Tidying for CodeWizard. Added virtual destructors to
+      HepPolyhedronBox, etc. Also made all constructors non-inline. 
+    - Removed G4Circle.icc and G4VVisPrim.icc.
+
+  o Hadronic Processes:
+    ------------------
+    - Bug fix for very low energy ion cross-sections; should have no
+      visible effect.
+    - Moved inline implementation of G4Solver to G4Solver.icc. 
+
+  o Materials:
+    ---------
+    - Bug fixed in G4IonisParamMat.cc : E100eV instead of E100keV
+      This bug affected the values of the density correction parameters
+      in the energy loss (dE/dx) computation: ~3-5 % error in dE/dx in
+      the energy range 1 MeV - 50 MeV !
+    - Added new method G4Material::GetNuclearInterLength().
+    - Bug fix concerning units in G4SandiaTable::GetSandiaCofPerAtom().
+      Reimplemented G4SandiaTable::ComputeMatSandiaMatrix().
+    - Added protection in GetSandiaCofForMaterial().
+    - fnulcof added as data member in G4SandiaTable. 
+    - Revision of destructor, copy constructor, assignement operator in 
+      G4IonisParam, G4Isotope, G4Element and G4Material, according to
+      problem report #106.
+    - Removed warning to cerr in GetIsotope(name), GetElement(name), 
+      and GetMaterial(name). 
+
+  o Particles:
+    ---------
+    - Added pre-assignedDecayTime to G4DynamicParticle.
+    - Bug fix in calculation of electron energy in G4MuDecayChannel.
+      Fixes problem report #224.
+    - Fixed a bug in G4DynamicParticle::SetDefinition() for problem
+      report #228.
+    - Added RestoreCuts() methods to G4ParticleWithCuts class.
+
+  o Persistency:
+    -----------
+    - G4PDCofThisEvent.ddl: fixed a bug in GetNumberOfCollections(). 
+
+  o Readout:
+    -------
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+
+  o Run and Intercoms:
+    -----------------
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+
+  o Tracking & Track:
+    ----------------
+    - Changes for STL migration of G4OrderedTable and G4DataVector.
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+    - Added comments to headers for the Software Reference Manual. 
+    - Added copy constructor for G4Track.
+    - Fix in G4Track::GetVelocity() for Gamma
+    - Fixes to G4StepPoint::GetVelocity() for problem report #208
+      and to return correct value in case of optical-photon.
+    - Added call to SetVelocity() in G4Step::InitializeStep().
+    - G4PArticleChange: fix in case momentum is zero, (even if
+      energy>0.0 and very small) to overcome problems due to
+      precision issues.
+
+  o Transportation:
+    --------------
+    - Improved calculation of energy at the end of the field.
+    - G4Transportation modified to use new FieldTrack, and get Kinetic
+      Energy from it. This implements integration in Momentum (*c-light)
+      instead of velocity. 
+
+  o Visualization:
+    -------------
+    - Changed rotation of phi-replicas in G4PhysicalVolumeModel.cc to
+      ensure correspondence with rule that phi=0 bisects the replica. 
+
+      WARNING: Prior to this fix the graphics did NOT correspond to the
+      replica navigation. If you have been relying on the graphics to
+      position daughter volumes in a phi-replica, navigation will have
+      been incorrect, possibly without causing a crash. The above fix
+      will change the apparent position as shown by the graphics and you
+      will have to correct the positioning of daughters. Make sure the 
+      daughters are all properly enclosed within the replica. Graphics 
+      and navigation now correspond. 
+    - Added auto-refresh facility for OpenGL. 
+    - Bug fixes for problems: 
+      #120: improved up vector calculation to avoid view "flipping"
+            at (90, 90). 
+      #157: fixed crash when viewer was defined before scene. 
+      #204: fixed failure to change number of sides per circle. 
+    - Fixed problem when requested physical volume was at depth 2 or more. 
+    - Migrated classes to use STL <vector> instead of RW wrappers.
+    - Introduced many new commands (listed below). Old commands print a
+      DEPRECATED warning. 
+      o New compound command: 
+        /vis/drawView [<theta-deg>] [<phi-deg>] 
+                      [<pan-right>] [<pan-up>] [<pan-unit>] 
+                      [<zoom-factor>] [<dolly>] [<dolly-unit>]
+      o New primitive commands: 
+        /vis/enable [true|false] 
+        /vis/disable 
+        /vis/verbose [] 
+        /vis/viewer/set/lineSegmentsPerCircle [] 
+        /vis/viewer/set/sectionPlane ... 
+        /vis/viewer/set/autoRefresh 
+        /vis/viewer/set/projection 
+        /vis/viewer/dolly 
+        /vis/viewer/dollyTo 
+        /vis/viewer/lightsThetaPhi 
+        /vis/viewer/lightsVector 
+        /vis/viewer/pan 
+        /vis/viewer/panTo 
+        /vis/viewer/viewpointThetaPhi 
+        /vis/viewer/viewpointVector 
+        /vis/viewer/zoom 
+        /vis/viewer/zoomTo 
+        /vis/viewer/set/hiddenMarker 
+        /vis/viewer/set/lightsMove
+
+  o G4toG4 Tool:
+    -----------
+    - Fixed bug in G3toG4BuildTree(G3VolTableEntry*, G3VolTableEntry*) 
+      when positioning volume copies. Index is now decremented. 
+      Added -DG3G4DEBUG to CPPFLAGS in GNUmakefile.
+      Fixes bug report #188.
+    - Added support for replicated "PARA" shapes in
+      G3Division::CreateSolid(...). Slices are placed with
+      G4PVPlacement instead of G4PVReplica for this particular case.
+    - G3toG4MakeSolid.cc: fixed bug in construction of G4Sphere where
+      'theta' and 'phi' parameters were reversed according to G4Sphere
+      constructor. Fixes problem report #230. 
+
+  o Examples:
+    --------
+    - Introduced modular Physics List in exampleN04.
+    - ExampleN02: fix to ExN02ChamberParameterisation and
+      ExN02DetectorConstruction to cope with bug report #186.
+    - Added G4MuonMinusCaptureAtRest in physics list of ExampleN04.
+
+
+Notes: 
+
+  o  Geant4 3.1 is based on STL and can be installed with strict
+     ISO/ANSI C++ compliant setup or not. See notes below.
+
+The code and some binary libraries are available through our "Source Code"
+Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+Updates to the documentation for Geant4 3.1 are expected to be published as
+usual within three weeks from the release date.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. ANAPHE and CLHEP
+  3. The Standard Template Library (STL)
+  4. Persistency
+  5. Compiler Specific Problems
+  6. Known Run-Time Problems
+  7. Compilation Warnings
+  8. Known Run-Time Warnings
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.6/5.7, C++ 4.2 Patch 104631-04, C++ 5.2 Patch 109508-02.
+  o HP 10.20, aCC C++ B3910B A.01.23
+  o Linux 2.2.17-7, gcc C++ egcs-2.91.66 (egcs 1.1.2), gcc 2.95.2.
+      This configuration was tested with the RedHat 6.1 distribution, but
+      versions of Geant4 have also been compiled successfully on Debian
+      and Suse distributions.
+  o NT 4.0 with Service Pack 4 and Cygnus Tools b20 with:
+      Visual C++ 6.0 Service Pack 2
+
+Platforms also tested but giving rise to some problems - see below:
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+Platforms configured but not tested and not supported:
+  o SGI V6.5.5, CC 7.2.1 with ObjectSpace
+  o AIX 4.3.2, xlC compiler with ObjectSpace
+
+
+2. ANAPHE and CLHEP
+-------------------
+
+Geant4 3.1 requires the installation of CLHEP. 
+
+See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
+CLHEP</A>. Tests have been performed with CLHEP 1.6.0.0.
+
+By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
+if the compiler is capable. You need to explicitly disable CLHEP settings in
+case you wish non-ISO/ANSI setup on specific compilers.
+
+Geant4 3.1 coworks with ANAPHE 3.2.0 and components included therein:
+  Objectivity 5.2.1 
+  ObjectSpace 2.1
+  HepODBMS 0.3.1.4
+  CLHEP 1.6.0.0
+
+For more information about ANAPHE 3.2.0, see:
+  <A href="http://wwwinfo.cern.ch/asd/lhc++/release/3.2.0/3.2.0.html">ANAPHE 3.2.0</A>
+
+
+3. The Standard Template Library
+--------------------------------
+
+The following versions of STL have been tested:
+
+   ObjectSpace STL on SUN (CC 4.2).
+
+          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+
+   "Native" STL on: Windows/NT, Linux, HP, DEC and SUN (CC 5.2).
+
+This is selected at installation/compile time by the environment variable
+G4USE_OSPACE in the case of the former - see documentation.
+
+NOTES:
+- Be aware that by default, the installation scripts will expect to use
+  the native STL implementation. You must set the G4USE_OSPACE variable
+  in the environment in order to select the ObjectSpace implementation.
+
+- Platform specific setup:
+  o DEC:   ObjectSpace is required in non ISO/ANSI setup.
+           Native STL is required for ISO/ANSI setup.
+  o HP:    either ObjectSpace or native STL can be used (non ISO/ANSI setup).
+  o SUN:   ObjectSpace is required in non ISO/ANSI setup (CC 4.2).
+           Native STL is required for ISO/ANSI setup (CC 5.2 only).
+  o Linux: Native STL is required (non ISO/ANSI setup).
+  o NT:    Native STL and ISO/ANSI setup required.
+
+In the interest of stability, part of the code in Geant4 3.1 still makes use
+of the "STL Interface" wrapper classes, used for allowing the migration from
+Rogue Wave Tools.h++ container library.  For these the emphasis has remained
+on correct behaviour, rather than performance.
+
+
+4. Persistency
+--------------
+
+  See release notes for Geant4 3.0.   
+
+5. Compiler Specific Problems
+-----------------------------
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+    - We have found cases of mis-compilation of min and max templates
+      on DEC.  We have traced those which cause serious malfunction
+      but there is no guarantee that there are no other cases.
+      Detailed inspection of assembler output suggests that this
+      problem might not be confined to min and max.  This has been
+      reported to DEC/Compaq.  We understand a new version 6.2 of the
+      compiler is now available.  However we cannot guarantee correct
+      execution of Geant4 on DEC with the current version of the
+      compiler.
+    - A bug in cin.getline() system function causes an anomalous
+      behavior when running in interactive-mode on DEC-cxx 6.1 in
+      ISO/ANSI mode. We tested the bug has been fixed in more recent
+      versions of the compiler.
+
+
+6. Known Run-Time Problems and Limitations
+------------------------------------------
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+Geant4 Problem Reporting System, available on the Web at this address:
+
+    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+
+
+7. Compilation Warnings
+-----------------------
+
+There are compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, but we are working
+on reducing them.
+
+
+8. Known Run-Time Warnings
+--------------------------
+
+The following messages can be written to error output while tracking.  We
+believe none give rise to incorrect behaviour.
+
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field  while a maximum of 10000
+       are allowed. 
