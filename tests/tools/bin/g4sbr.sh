@@ -132,14 +132,6 @@ ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
 #${G4INSTALL}/tests/tools/bin/build.sh test all
 fi
 
-#
-# Shortlived solution for DEC6-AFS problems with templates
-#
-if [ X$G4SYSTEM = XDEC-cxx  ]
-then
-chmod +x ${G4WORKDIR}/bin/${G4SYSTEM}/*
-fi
-
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
 ${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
