@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2000-11-05 15:36:52 pia Exp $
+$Id: History,v 1.50 2000-11-16 14:28:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16.11.2000 - MGP, tag emlowen-V02-00-18
+             Same as emlowen-V02-00-16, with on top modifications to
+             G4LowEnergyUtilities to replace the obsolete HepString 
+             with G4String in several places
+
+16.11.2000 - MGP, tag emlowen-V02-00-17
+             Same as emlowen-V02-00-15, with on top modifications to
+             G4LowEnergyUtilities to replace the obsolete HepString 
+             with G4String in several places
 
 05.11.2000 - MGP, tag emlowen-V02-00-16
              Remove the temporary const cast introduced with emlowen-V02-00-08
