@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.1 2003-03-13 17:23:03 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.2 2003-11-07 12:26:08 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -30,6 +30,7 @@
 // History:
 // -----------
 // 04 Feb 2003  L. Pandola       1st implementation
+// 07 Nov 2003  L. Pandola       Added method for testing
 // Class description:
 // Calculation of angular distribution for Penelope Bremsstrahlung
 // --------------------------------------------------------------
@@ -53,7 +54,8 @@ public:
   G4PenelopeBremsstrahlungAngular(G4int Zmat); 
   ~G4PenelopeBremsstrahlungAngular();
   G4double ExtractCosTheta(G4double PrimaryEnergy,G4double GammaEnergy);
- 
+  G4int GetAtomicNumber(); //testing purpose
+  
 private:
 
   void InterpolationTableForZ(); //Initialization of tables (part 1)
