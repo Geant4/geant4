@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.1 2001-10-10 17:37:57 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.2 2001-10-11 13:59:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 					    G4double tMax, 
 					    G4double e,
 					    G4int shell,
-					    const G4ParticleDefinition*) const
+					    const G4ParticleDefinition* part) const
 {
   // Please comment what Probability does and what are the three 
   // functions mentioned below
@@ -94,8 +94,12 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   G4int i;
   G4int iMax = 14;
-  G4DataVector p(iMax);
-  for(i=0; i<iMax; i++) {p[i] = (theParam->Parameter(Z, shell, i, e));}
+  G4DataVector p;
+
+  for (i=0; i<iMax; i++) 
+  {
+    p.push_back(theParam->Parameter(Z, shell, i, e));
+  }
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
@@ -169,7 +173,7 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 					      G4double tMax, 
 					      G4double e,
 					      G4int shell,
-					      const G4ParticleDefinition*) const
+					      const G4ParticleDefinition* part) const
 {
   // Please comment what AverageEnergy does and what are the three 
   // functions mentioned below
@@ -195,11 +199,15 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   G4int i;
   G4int iMax = 14;
-  G4DataVector p(iMax);
-  for(i=0; i<iMax; i++) {p[i] = (theParam->Parameter(Z, shell, i, e));}
+  G4DataVector p;
 
+  for (i=0; i<iMax; i++) 
+  {
+    p.push_back(theParam->Parameter(Z, shell, i, e));
+  }
+ 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
-                           Shell(Z, shell)->BindingEnergy();
+    Shell(Z, shell)->BindingEnergy();
     
   G4double val = 0.0;
   G4double nor = 0.0;
@@ -274,13 +282,13 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 					     G4double tMax, 
 					     G4double e,
 					     G4int shell,
-					     const G4ParticleDefinition*) const
+					     const G4ParticleDefinition* part) const
 {
   // Please comment what SampleEnergy does
-  G4double tdel = 0.0;
+  G4double tDelta = 0.0;
   G4double t0 = G4std::max(tMin, lowestE);
   G4double tm = G4std::min(tMax, MaxEnergyOfSecondaries(e));
-  if(t0 > tm) return tdel;
+  if(t0 > tm) return tDelta;
 
   if(verbose > 1 && Z == 14) {
     G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
@@ -294,10 +302,13 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4double t2 = theParam->Parameter(Z, shell, 15, 0.0);
   G4int i;
   G4int iMax = 14;
-  G4DataVector p(iMax);
-  for(i=0; i<iMax; i++) {p[i] = (theParam->Parameter(Z, shell, i, e));}
-  G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
-                           Shell(Z, shell)->BindingEnergy();
+  G4DataVector p;
+  for (i=0; i<iMax; i++) 
+  {
+    p.push_back(theParam->Parameter(Z, shell, i, e));
+  }
+  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  G4double bindingEnergy = (transitionManager->Shell(Z, shell))->BindingEnergy();
 
   G4double aria1 = 0.0;
   G4double a1 = G4std::min(t0,t1);
@@ -326,8 +337,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     do {
 
-      tdel = a1 + G4UniformRand()*(a2 - a1);
-      fun  = Function(6, tdel, bindingEnergy, p);
+      tDelta = a1 + G4UniformRand()*(a2 - a1);
+      fun  = Function(6, tDelta, bindingEnergy, p);
 
       if(fun > amaj) {
         G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
@@ -350,7 +361,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     a1 = pow(a1, c2);
     a2 = pow(a2, c2);
     q  = a1 + G4UniformRand()*(a2 - a1);
-    tdel = pow(q, 1.0/c2);
+    tDelta = pow(q, 1.0/c2);
 
   //======= Third function to sample =====
 
@@ -362,8 +373,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     do {
 
-      tdel = a1 + G4UniformRand()*(a2 - a1);
-      fun  = Function(4, tdel, bindingEnergy, p);
+      tDelta = a1 + G4UniformRand()*(a2 - a1);
+      fun  = Function(4, tDelta, bindingEnergy, p);
 
       if(fun > amaj) {
         G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
@@ -379,7 +390,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   p.clear();
 
-  return tdel; 
+  return tDelta; 
 }
 
 
