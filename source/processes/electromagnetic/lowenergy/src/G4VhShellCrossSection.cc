@@ -34,6 +34,7 @@
 // -----------
 // 20 Oct 2001 V.Ivanchenko   1st implementation
 // 24 Oct 2001 MGP            Minor clean-up
+// 29 Oct 2001 VI             Add delta energy
 //
 // -------------------------------------------------------------------
 
@@ -49,11 +50,11 @@ G4VhShellCrossSection::~G4VhShellCrossSection()
 
 
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
-                                               G4double kineticEnergy,
+                                               G4double incidentEnergy,
 					       G4double mass, 
-					       G4double momentum) const 
+					       G4double deltaEnergy) const 
 {
-  G4std::vector<G4double> p = Probabilities(Z,kineticEnergy,mass,momentum);
+  G4std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
   G4int shell = 0;
   size_t nShells = p.size();
   G4double q = G4UniformRand();

@@ -50,7 +50,7 @@ G4hShellCrossSection::~G4hShellCrossSection()
 
 
 G4std::vector<G4double> G4hShellCrossSection::Probabilities(G4int Z, 
-							    G4double eKin, 
+			                                    G4double eKin, 
 							    G4double mass, 
 							    G4double p) const
 {

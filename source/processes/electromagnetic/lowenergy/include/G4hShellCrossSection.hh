@@ -33,6 +33,7 @@
 // -----------
 // 23 Oct 2001 A. Mantero   1st implementation
 // 24 Oct 2001 MGP          Cleaned up
+// 29 Oct 2001 VI           Add delta energy
 //
 // -------------------------------------------------------------------
 
@@ -58,9 +59,9 @@ public:
 protected:
 
   virtual G4std::vector<G4double> Probabilities(G4int Z,
-						G4double kineticEnergy,
+						G4double incidentEnergy,
 						G4double mass,
-						G4double momentum) const;
+						G4double deltaEnergy) const;
 
 private:
 
