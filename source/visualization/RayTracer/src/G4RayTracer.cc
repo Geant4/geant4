@@ -186,16 +186,16 @@ G4bool G4RayTracer::GenerateColour(G4Event* anEvent)
 
   G4Colour rayColour;
   G4Colour initialColour(1.,1.,1.);
-  if( trajectory->GetPoint(nPoint-1)->GetPostStepAtt() )
-  { initialColour = GetSurfaceColour(trajectory->GetPoint(nPoint-1)); }
-  rayColour = Attenuate(trajectory->GetPoint(nPoint-1),initialColour);
+  if( trajectory->GetPointC(nPoint-1)->GetPostStepAtt() )
+  { initialColour = GetSurfaceColour(trajectory->GetPointC(nPoint-1)); }
+  rayColour = Attenuate(trajectory->GetPointC(nPoint-1),initialColour);
 
   for(int i=nPoint-2;i>=0;i--)
   {
-    G4Colour surfaceColour = GetSurfaceColour(trajectory->GetPoint(i));
+    G4Colour surfaceColour = GetSurfaceColour(trajectory->GetPointC(i));
     G4double weight = 1.0 - surfaceColour.GetAlpha();
     G4Colour mixedColour = GetMixedColour(rayColour,surfaceColour,weight);
-    rayColour = Attenuate(trajectory->GetPoint(i),mixedColour);
+    rayColour = Attenuate(trajectory->GetPointC(i),mixedColour);
   }
     
   G4int iEvent = anEvent->GetEventID();

@@ -1,6 +1,7 @@
 #ifndef G4RTJpegCoderTable_H
 #define G4RTJpegCoderTable_H 1
 
+#include "G4RTJpeg.hh"
 
 //QuantumTable
 
@@ -295,3 +296,4 @@ static const u_char	CAcDht[] = {
 };
 
 #endif
+

@@ -2,7 +2,7 @@
 #define G4RTJpegMaker_H 1
 
 #include "G4VFigureFileMaker.hh"
-
+#include "G4RTJpeg.hh"
 
 class G4RTJpegMaker : public G4VFigureFileMaker
 {

@@ -1,5 +1,6 @@
 #ifndef G4RTJpegCoder_H
 #define G4RTJpegCoder_H 1
+#include "G4RTJpeg.hh"
 
 //HuffmanTable
 struct

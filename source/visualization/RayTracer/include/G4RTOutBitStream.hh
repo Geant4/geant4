@@ -1,5 +1,6 @@
 #ifndef G4RTOutBitStream_H
 #define G4RTOutBitStream_H 1
+#include "G4RTJpeg.hh"
 
 static const u_char BitFullMaskT[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f
 , 0xff};
