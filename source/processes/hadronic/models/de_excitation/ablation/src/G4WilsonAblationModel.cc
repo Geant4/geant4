@@ -215,8 +215,8 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   G4int ZF = 0;
   if (AF > 0)
   {
-    G4double AFd = (G4double) AF;
-    G4double R = 11.8 / pow(static_cast<double>(AF), 0.45);
+    G4double AFd = static_cast<G4double>(AF);
+    G4double R = 11.8 / pow(AFd, 0.45);
     G4int minZ = Z - DAabl;
     if (minZ <= 0) minZ = 1;
 //
@@ -226,27 +226,27 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //    
     G4double sig[100];
     G4double sum = 0.0;
-    for (G4int i=minZ; i<= Z; i++)
+    for (G4int ii=minZ; ii<= Z; ii++)
     {
-      sum   += exp(-R*pow(abs((G4double) i - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
-      sig[i] = sum;
+      sum   += exp(-R*pow(abs(ii - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
+      sig[ii] = sum;
     }
 //
 //
 // Now sample that distribution to determine a value for ZF.
 //
     G4double xi  = G4UniformRand();
-    G4int i      = minZ;
+    G4int iz     = minZ;
     G4bool found = false;
-    while (i <= Z && !found)
+    while (iz <= Z && !found)
     {
-      found = (xi <= sig[i]/sum);
-      if (!found) i++;
+      found = (xi <= sig[iz]/sum);
+      if (!found) iz++;
     }
-    if (i > Z)
+    if (iz > Z)
       ZF = Z;
     else
-      ZF = i;
+      ZF = iz;
   }
   G4int DZabl = Z - ZF;
   if (verboseLevel >= 2)
@@ -263,12 +263,12 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //
   G4double totalEpost = 0.0;
   evapType.clear();
-  for (G4int i=0; i<nFragTypes; i++)
+  for (G4int ift=0; ift<nFragTypes; ift++)
   {
-    G4ParticleDefinition *type = fragType[i];
+    G4ParticleDefinition *type = fragType[ift];
     G4double n  = floor((G4double) DAabl / type->GetBaryonNumber() + 1.0E-10);
     G4double n1 = 1.0E+10;
-    if (fragType[i]->GetPDGCharge() > 0.0)
+    if (fragType[ift]->GetPDGCharge() > 0.0)
       n1 = floor((G4double) DZabl / type->GetPDGCharge() + 1.0E-10);
     if (n > n1) n = n1;
     if (n > 0.0)
@@ -346,11 +346,11 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       G4cout <<"Evaporated particles :" <<G4endl;
       G4cout <<"----------------------" <<G4endl;
     }
-    G4int i = 0;
+    G4int ie = 0;
     G4FragmentVector::iterator iter;
     for (iter = fragmentVector->begin(); iter != fragmentVector->end(); ++iter)
     {
-      if (i == nEvap)
+      if (ie == nEvap)
       {
         G4cout <<*iter  <<G4endl;
         G4cout <<"---------------------------------" <<G4endl;
