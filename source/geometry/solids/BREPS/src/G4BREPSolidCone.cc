@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCone.cc,v 1.5 2001-04-20 19:55:26 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.6 2001-07-11 07:34:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   G4Vector3D   tmporigin(origin);  
   G4Point3D    tmppoint;
 
-  tmppoint= origin + (length*tmpaxis);
+  tmppoint= G4Point3D(origin) + (length*tmpaxis);
   G4Point3D origin2(tmppoint.x(), tmppoint.y(), tmppoint.z());
 
   tmppoint=  origin2 + (large_radius*tmpaxis);

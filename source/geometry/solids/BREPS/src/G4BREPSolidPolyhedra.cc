@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.15 2000-11-20 17:54:38 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.16 2001-07-11 07:34:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -194,8 +194,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       GapPointList[Count] = LocalOrigin + (RMAX[d]*TmpAxis);
       GapPointList[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis);	    
       
-      GapPointList2[Count] = LocalOrigin + (RMAX[d]*TmpAxis2);
-      GapPointList2[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
+      GapPointList2[Count] = LocalOrigin + (RMAX[d]*G4Vector3D(TmpAxis2));
+      GapPointList2[points-1-Count] = LocalOrigin + (RMIN[d]*G4Vector3D(TmpAxis2));	 
    	         
       Count++;
 

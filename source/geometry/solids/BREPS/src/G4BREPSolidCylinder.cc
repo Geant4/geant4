@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.5 2001-04-20 19:55:26 gcosmo Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.6 2001-07-11 07:34:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
 
   // Creation of the second circular surface
   G4Point3D  origin2   = G4Point3D( origin  + ( length*axis ) );  
-  G4Point3D  ArcStart2 = G4Point3D( origin2 + ( radius*direction ) );
+  G4Point3D  ArcStart2 = origin2 + G4Point3D( radius*direction );
   G4Vector3D axis2     = axis1;
 
   tmp = new G4CircularCurve;

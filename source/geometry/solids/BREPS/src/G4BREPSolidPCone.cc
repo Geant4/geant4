@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.18 2001-04-20 19:55:26 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.19 2001-07-11 07:34:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -445,7 +445,7 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 
   G4ThreeVector IntersectionPoint = Pttmp + sqrt(dist)*Vtmp;
   G4ThreeVector Normal = SurfaceVec[WhichSurface]->SurfaceNormal(IntersectionPoint);
-  if ( Normal*Vtmp > 0 ) return kInside;
+  if ( G4Vector3D(Normal)*Vtmp > 0 ) return kInside;
   return kOutside;
 
 }
