@@ -1,0 +1,13 @@
+
+ ============   Cone test   ================
+
+Cone created ! 
+Dir =  -1,0,0
+Start 19000,1,0
+Dist to in : 3.57211e+08
+Start 0,0,0
+Dist to out: 9998
+Point 0,0,50
+Dist to out: 0
+Point 100000,0,50
+Dist to in: 99899
