@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.23 1999-12-15 14:51:12 gunter Exp $
+// $Id: G4IonTable.cc,v 1.24 2000-01-26 10:52:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,6 +114,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 
   G4double life = -1.0;
   G4DecayTable* decayTable =0;
+  G4bool stable = true;
 
   G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
   if (fProperty !=0 ){
@@ -122,7 +123,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
     life = fProperty->GetLifeTime();
     decayTable = fProperty->GetDecayTable();
   }
-
+  stable = (life <= 0.);
   G4double mass =  GetNucleusMass(Z, A)+ E;
   G4double charge =  G4double(Z)*eplus;
   
@@ -133,7 +134,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 			 J,              +1,             0,          
 			 0,               0,             0,             
 		 "nucleus",               0,             A,           0,
-		      true,            life,    decayTable);
+		    stable,            life,    decayTable);
+
+  // Set Excitation Energy
+  ((G4Ions*)(ion))->SetExcitationEnergy(E);
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -543,25 +547,10 @@ G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
 ////////////////////
 G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int J)
 {
-  G4IsotopeProperty* fProperty = new G4IsotopeProperty();   
-
-  // Set Isotope Property
-  fProperty->SetAtomicNumber(Z);
-  fProperty->SetAtomicMass(A);
-  fProperty->SetEnergy(E);
-  fProperty->SetiSpin(J);
-  fProperty->SetLifeTime(-1.0);
-  fProperty->SetDecayTable(0);
-
   if (fIsotopeTable ==0) return 0;
 
-  // ask IsotopeTable
-  if (fIsotopeTable->FindIsotope(fProperty)) {
-    return fProperty;
-  } else {
-    delete fProperty;
-    return 0;
-  }
+  // ask IsotopeTable // ask IsotopeTable
+  return fIsotopeTable->GetIsotope(Z,A,E);
 }
 
 

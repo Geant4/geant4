@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIsotopeTable.hh,v 1.2 1999-10-28 23:24:14 kurasige Exp $
+// $Id: G4VIsotopeTable.hh,v 1.3 2000-01-26 10:52:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@ class G4VIsotopeTable
  public: // With Description
   // pure virtual method
   virtual G4bool FindIsotope(G4IsotopeProperty* property) = 0;  
+  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E) = 0;
   // Search the isotope in the G4VIsotopeTable. 
   // The isotope is desingated by 
   //    G4int    Z:  number of proton (Atomic number)
