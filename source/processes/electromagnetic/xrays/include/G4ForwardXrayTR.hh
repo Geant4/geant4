@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.hh,v 1.1 1999-01-07 16:11:28 gunter Exp $
+// $Id: G4ForwardXrayTR.hh,v 1.2 1999-04-13 09:08:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR -- header file
@@ -51,12 +51,12 @@ public:
 
 // Constructors
 
-     G4ForwardXrayTR() ;
+  //     G4ForwardXrayTR() ;
 
 
-  G4ForwardXrayTR(        G4Material* pMat1,
-                          G4Material* pMat2,     
-                    const G4String&   processName="XrayTR"     ) ;
+  G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
+		    const G4String& matName2,   //  G4Material* pMat2,     
+                    const G4String& processName="XrayTR"     ) ;
 
 //  G4ForwardXrayTR(const G4ForwardXrayTR& right) ;
 
@@ -69,10 +69,19 @@ public:
 // G4int operator!=(const G4ForwardXrayTR& right)const ;
 
 ///////////////////////    Methods    /////////////////////////////////
-//
+
+        void BuildXrayTRtables();
+
+	G4double GetMeanFreePath(const G4Track& aTrack,
+				 G4double previousStepSize,
+				 G4ForceCondition* condition)
+        {
+          *condition = Forced;
+	  return DBL_MAX;      // so TR doesn't limit mean free path
+        }
 
 	G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
-				        const G4Step&  aStep    )   ;
+				         const G4Step&  aStep    )   ;
 
         G4double GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const ;
        
@@ -111,8 +120,8 @@ G4double EnergySum( G4double energy1,
 
 ///////////////////////////   Access functions  ////////////////////////////
 
-  static G4PhysicsTable* GetAngleDistrTable()  { return fAngleDistrTable  ; } ;
-  static G4PhysicsTable* GetEnergyDistrTable() { return fEnergyDistrTable ; } ;
+  G4PhysicsTable* GetAngleDistrTable()  { return fAngleDistrTable  ; } ;
+  G4PhysicsTable* GetEnergyDistrTable() { return fEnergyDistrTable ; } ;
 
   static G4int    GetSympsonNumber()       { return fSympsonNumber ;  } ;
   static G4int            GetBinTR()       { return fBinTR ;       } ;
@@ -131,8 +140,10 @@ G4Gamma* fPtrGamma ;  // pointer to TR photon
 G4double* fGammaCutInKineticEnergy ; // TR photon cut in energy array
 G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
 
-static G4PhysicsTable* fAngleDistrTable ;
-static G4PhysicsTable* fEnergyDistrTable ;
+G4PhysicsTable* fAngleDistrTable ;
+G4PhysicsTable* fEnergyDistrTable ;
+
+static G4PhysicsLogVector* fProtonEnergyVector ;
 
 static G4int fSympsonNumber ;                // Accuracy of Sympson integration 
 
