@@ -37,6 +37,8 @@
           if (Anucleus >10)  R0 = sqrt(0.84);          
           if (Anucleus >20)  R0 = sqrt((35.34+0.5*Anucleus)
                                   /(40.97+Anucleus));
+          if (Anucleus == 16) R0 = sqrt(0.75);
+          if (Anucleus == 58) R0 = sqrt(0.6);
 
 //          R0      =  sqrt(0.64);
 

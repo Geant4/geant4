@@ -3,6 +3,8 @@
 #ifndef G4ElasticHadrNucleusHE_h
 #define G4ElasticHadrNucleusHE_h 1
 
+#include <vector>
+
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
@@ -20,60 +22,83 @@
 
 #define   ONQ2     150      //  The number of steps on Q2
 #define   ONE      5        //  The number of steps on E
-#define   AreaNumb 6        //  The number of decimal areas on E
+#define   AreaNumb 6        //  The number of order steps on E
 #define   ONQ2XE   ONQ2*ONE //  The dimension of a distr. func. array
 #define   MaxN     10       //  The atomic number where the calculation
                             //  on the formula is changed on the integral
                             //  one
 
+   class ElasticData
+   {
+   public:
+     G4String  hadrName;
+     G4int     nuclAtomicNumber;
+     G4double  TableE[ONE*AreaNumb];
+     G4double  TableQ2[ONQ2];
+     G4double  TableCrossSec[ONQ2XE*AreaNumb];
+    
+     ElasticData() {;}
+    ~ElasticData(){;}
+
+     ElasticData (const ElasticData &t)
+     {
+       G4int k;
+
+          hadrName         = t.hadrName;
+          nuclAtomicNumber = t.nuclAtomicNumber;
+          for(k = 0; k<ONE*AreaNumb; k++)
+	       TableE[k] = t.TableE[k];
+
+          for(k = 0; k<ONQ2; k++)
+	       TableQ2[k] = t.TableQ2[k];
+
+          for(k = 0; k< ONQ2XE*AreaNumb; k++)
+	    TableCrossSec[k] = t.TableCrossSec[k];
+     }
+
+     ElasticData & operator=(const ElasticData &t)
+     {
+       G4int k;
+         if(this!=&t)
+	 {
+          hadrName         = t.hadrName;
+          nuclAtomicNumber = t.nuclAtomicNumber;
+          for(k = 0; k<ONE*AreaNumb; k++)
+	       TableE[k] = t.TableE[k];
+
+          for(k = 0; k<ONQ2; k++)
+	       TableQ2[k] = t.TableQ2[k];
+
+          for(k = 0; k< ONQ2XE*AreaNumb; k++)
+	    TableCrossSec[k] = t.TableCrossSec[k];
+         }
+     return *this;
+     }
+   };
+
    class G4ElasticHadrNucleusHE : public G4DiffElasticHadrNucleus,
                                          G4HadronicInteraction
-//                                        ,G4IntegrHadrNucleus 
    {
-
  public:
-         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
-                                      G4Nucleus         * aNucleus);
+         G4ElasticHadrNucleusHE(const G4ParticleDefinition * aHadron,
+                                      G4Nucleus            * aNucleus);
 
-         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
-                                      G4Nucleus         * aNucleus,
-                                      G4double             dEbeg,
-                                      G4double             dEend,
-                                      G4int                iNpoE,
-                                      G4String          sNameFile);
-
-         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
-                                      G4Nucleus         * aNucleus,
-                                      G4String          sNameFile);  
-
-         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
-                                      G4Nucleus         * aNucleus,
-                                      G4double             dEbeg,
-                                      G4double             dEend,
-                                      G4int                iNpoE);
-
-         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
-                                      G4Nucleus         * aNucleus,
-                                      G4int                 iNpoE);  
+         G4ElasticHadrNucleusHE();
 
         ~G4ElasticHadrNucleusHE() {;}
-//  ----------------------------------------------------------
-////         G4VParticleChange * ApplyYourself( const G4Track   &aTrack,
-////                                                  G4Nucleus &aNucleus);
-//  ----------------------------------------------------------
 
          G4HadFinalState * ApplyYourself( const G4HadProjectile  &aTrack,
                                                 G4Nucleus        &aNucleus);
 
-         G4bool IsApplicable(const G4HadProjectile &aTrack, 
-                               G4Nucleus & targetNucleus);
-			       
-         G4double RandomElastic0( const G4DynamicParticle *   aHadron,
-                                        G4Nucleus *           aNucleus);
+         G4double RandomElastic0();
 
          G4double RandomElastic1( const G4DynamicParticle *   aHadron,
-                                        G4Nucleus *           aNucleus);
+                                  const ElasticData       *   aData);
+
  private:
+         G4int   ReadOfData(G4ParticleDefinition * aParticle,
+                            G4Nucleus            * aNucleus);
+
          G4String GetHadronName(const G4DynamicParticle * aHadron);
 
          G4double GetQ2limit(G4double R1);
@@ -90,7 +115,6 @@
          G4double InterPol(G4double X1, G4double X2, G4double X3,
                            G4double Y1, G4double Y2, G4double Y3, 
                            G4double X);
-
 //    +++++++++++++++++++++++++++++++++++++++++++++++++++++
    G4double Factorial1(G4int N)
      {
@@ -106,8 +130,9 @@
                          571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
               return Res;
       }
-
 //     ++++++++++++++++++++++++++++++++++++++++++++++++++
+         std::vector<ElasticData> SetOfElasticData;
+
          G4IonTable                * MyIonTable;
          G4DiffElasticHadrNucleus    aDiffElHadNcls;
 //         G4HadFinalState  FinState; 
@@ -117,16 +142,18 @@
                    iContr,        //
                    iPoE;          // The number of steps on E
          G4int     iTypeWork;
-         G4double  aNucleon, 
-                 * pTableCrSec,   //  The array of distr. func.
-                                  //  at all energies
-                 * pTableE;       //  The array of E values
+         G4double  aNucleon;  //, 
+//                 * pTableCrSec,   //  The array of distr. func.
+//                                  //  at all energies
+//                 * pTableE;       //  The array of E values
          G4double  iQ2[ONQ2],     //  The array of Q2 values
+                   pTableCrSec[ONQ2XE*AreaNumb],
+                   pTableE[ONE*AreaNumb],
                    iIntgr[ONQ2],  //  The array of distr. func.   
                                   //    at one energy
                    Factorials1[250]; // The array for factorials
          G4double  dEbeg1, dEend1, dQ2, maxQ2;
 
        };     //   The end of the class description
-  
+
 #endif

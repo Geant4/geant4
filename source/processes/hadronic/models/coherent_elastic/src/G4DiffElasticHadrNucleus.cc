@@ -11,30 +11,47 @@
       G4int       Nucleus  = (int)aNucleus->GetN();
   
                   if(Nucleus == 208)
-                    {
+                    {  //  R1 = 20.73; R2 = 15.74.
                   R1       = 4.1408*pow(Nucleus,0.3018);
                   R2       = 3.806*pow(Nucleus-10.068,0.2685);
-                  Pnucl    = 0.95;
-                  Aeff     = 1.0;
+                  Pnucl    = 0.9;
+                  Aeff     = 1.1;
+                  R1       = 19.5;
+                  R2       = 15.74;
+                  Pnucl    = 0.4;
+                  Aeff     = 0.7;
                     }
+
+                  else if(Nucleus == 90) 
+                    {
+                      R1    = 16.50;
+                      R2    = 11.62;
+                      Pnucl = 0.4;
+                      Aeff  = 0.9;
+                      R1    = 16.5;
+                      R2    = 11.62;
+                      Pnucl = 0.4;
+                      Aeff  = 0.7;
+                    }
+
 
                   else if(Nucleus == 58) 
                     {
-                      R1    = 15.6;
+                      R1    = 15.0;
                       R2    = 9.9;
-                      Pnucl = 0.95;
-                      Aeff  = 1.1;
+                      Pnucl = 0.45;
+                      Aeff  = 0.85;
                     }
                   else if(Nucleus == 16)
                     {
-                      R1    = 11.6;
+                      R1    = 10.50;
                       R2    = 5.5;
-                      Pnucl = 0.9;
-                      Aeff  = 1.1;
-                      R1    = 11.3;
-                      R2    = 2.5;
-                      Pnucl = 0.75;
-                      Aeff  = 0.9;
+                      Pnucl = 0.7;
+                      Aeff  = 0.98;
+//                      R1    = 11.3;
+//                      R2    = 2.5;
+//                      Pnucl = 0.75;
+//                      Aeff  = 0.9;
 
                     }
                   else
@@ -52,17 +69,18 @@
                {
                   R1    = 9.0;
                   R2    = 7.0;
-                  Pnucl = 0.1910;
+                  Pnucl = 0.190;
                   Aeff  = 0.9;
                }
-
+/*
                if(Nucleus == 12) 
                {
-                  R1    = 9.8036;
-                  R2    = 7.63;
-                  Pnucl = 0.27;
-                  Aeff  = 0.8;
+                  R1    = 9.336;
+                  R2    = 5.63;
+                  Pnucl = 0.197;
+                  Aeff  = 01.0;
                }
+*/
 /*
                if(Nucleus == 11) 
                {
@@ -99,14 +117,16 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(Nucleus>238)
+  if(Nucleus>208)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
 
-  if(HadrEnergy < 1.5)
-  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
-
+  if(HadrEnergy < 1.4999)
+  {
+  G4cout<<HadrEnergy<<G4endl;
+  G4Exception(" The hadron energy is very low for this model: E= ");
+  }
       G4HadronValues::GetHadronValues(aHadron);
       GetTotalCrossSection(aHadron, aNucleus);
 
@@ -116,7 +136,7 @@
 
       G4double Q2 = aQ2/1000/1000;                           //  GeV
 
-      G4double MomentumCMN, S, MassH, MassN, EcmH/*, CrSecT*/;
+      G4double MomentumCMN, S, MassH, MassN, EcmH;
 
                MassH       = aHadron->GetMass()/1000;
                MassN       = Nucleus*0.938;
@@ -136,15 +156,15 @@
       G4double    R22      = R2*R2;
       G4double    R12B     = R12+2*Bhad;
       G4double    R22B     = R22+2*Bhad;
-      //G4double    R12Bp    = R12+20;
-      //G4double    R22Bp    = R22+20;
-      // G4double    R13Bp    = R12*R1/R12Bp;
-      // G4double    R23Bp    = R22*R2/R22Bp;
+//      G4double    R12Bp    = R12+20;
+//      G4double    R22Bp    = R22+20;
+//      G4double    R13Bp    = R12*R1/R12Bp;
+//      G4double    R23Bp    = R22*R2/R22Bp;
       G4double    R12Ap    = R12+20;
       G4double    R22Ap    = R22+20;
       G4double    R13Ap    = R12*R1/R12Ap;
       G4double    R23Ap    = R22*R2/R22Ap*Pnuclp;
-      // G4double    R23App   = R22*R2/R22Ap*Pnuclp;
+//      G4double    R23App   = R22*R2/R22Ap*Pnuclp;
       G4double    R23dR13  = R23Ap/R13Ap;
       G4double    R12Apd   = 2/R12Ap;
       G4double    R22Apd   = 2/R22Ap;
@@ -264,7 +284,7 @@
 //  ----------------  dSigma/dOmegaCM,  mb/Ster  -----------------
 
 // tam:
-    G4double Corr0=Tot00/Tot1/1.0/* , Corr1=DTot00/DTot1/1.0*/;
+   G4double Corr0=Tot00/Tot1/1.0; // Corr1=DTot00/DTot1/1.0;
 
              ImElasticAmpl0 *= Corr0;
 //             Din1           *= Corr1;
