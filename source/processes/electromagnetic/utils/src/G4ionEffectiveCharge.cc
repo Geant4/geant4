@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.4 2004-09-13 09:19:12 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.5 2004-10-14 12:08:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,7 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
+  // energyHighLimit  = 1.*MeV;
   energyHighLimit  = 25.*MeV;
   //  energyLowLimit   = 3.25*keV;
   energyLowLimit   = 1.0*keV;
@@ -199,7 +200,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
     G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (zi13 * (6.0 + q)) ;
     chargeCorrection = sq * (q + 0.5*(1.0 - q)*log(1.0 + lambda*lambda)/(vF*vF) );
-    if(q > 0.0) sq /= q;
+    if(q > 0.0) chargeCorrection /= q;
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 

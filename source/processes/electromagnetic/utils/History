@@ -1,4 +1,4 @@
-$Id: History,v 1.165 2004-09-27 11:42:43 maire Exp $
+$Id: History,v 1.166 2004-10-14 12:11:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 October 04: V.Ivanchenko (utils-V06-02-10)
+- Bug fix in effective charge sampling
      
 27 september 04: L.Urban (utils-V06-02-09)
 - G4Mscmodel.cc: change in the tail of the angular distribution, 
