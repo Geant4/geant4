@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.36 2000-04-11 10:07:09 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.37 2000-04-19 13:28:18 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,15 +68,15 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
      theBindingEnergyTable(0),
      theFluorTransitionTable(0),
      theSamplingCoeffTable(0),
-     LowestKineticEnergy(10.*eV),
-     HighestKineticEnergy(100.*GeV),
      CutForLowEnergySecondaryPhotons(0.),
      CutForLowEnergySecondaryElectrons(0.),
      ZNumVec(0),
      ZNumVecFluor(0),
-     TotBin(200),
      theMeanFreePathTable(0)
 { 
+    LowestKineticEnergy  = GetLowerBoundEloss();
+    HighestKineticEnergy = GetUpperBoundEloss();
+    TotBin = GetNbinEloss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1760,7 +1760,7 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
   G4String comments = "Low energy ionisation code ";
            comments += "with first implementation of the continuous dE/dx part.";  
            comments += "\n At present it can be used for electrons only ";
-           comments += " in the energy range [250 eV,100 GeV]";
+           comments += " in the energy range [250eV,100GeV]";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 
 }
