@@ -23,7 +23,7 @@
 // Code developed by:
 //  S.Guatelli
 //
-// $Id: BrachyRunMessenger.cc,v 1.1 2004-05-25 07:32:37 guatelli Exp $
+// $Id: BrachyRunMessenger.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,17 +43,17 @@ BrachyRunMessenger::BrachyRunMessenger( BrachyRunAction* pBrachyRun):
  runManager(pBrachyRun)
 { 
   runDir = new G4UIdirectory("/run/");
-  runDir->SetGuidance("Control gamma energy.");
+  runDir -> SetGuidance("Control gamma energy spectrum.");
   
   primaryParticleEnergySpectrumCmd = 
                               new G4UIcmdWithAString("/run/energy",this);
-  primaryParticleEnergySpectrumCmd->SetGuidance("Select the energy of gamma emitted by the source.");
-  primaryParticleEnergySpectrumCmd->SetGuidance(" Iodium:  Iodium Source ");
-  primaryParticleEnergySpectrumCmd->SetGuidance("  Iridium: Iridium  Source  "  );
-  primaryParticleEnergySpectrumCmd->SetParameterName("choice",true);
-  primaryParticleEnergySpectrumCmd->SetDefaultValue("Iridium");
-  primaryParticleEnergySpectrumCmd->SetCandidates("Iridium / Iodium");
-  primaryParticleEnergySpectrumCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  primaryParticleEnergySpectrumCmd -> SetGuidance("Select the energy of gamma emitted by the source.");
+  primaryParticleEnergySpectrumCmd -> SetGuidance(" Iodium:  Iodium Source ");
+  primaryParticleEnergySpectrumCmd -> SetGuidance("  Iridium: Iridium  Source  "  );
+  primaryParticleEnergySpectrumCmd -> SetParameterName("choice",true);
+  primaryParticleEnergySpectrumCmd -> SetDefaultValue("Iridium");
+  primaryParticleEnergySpectrumCmd -> SetCandidates("Iridium / Iodium");
+  primaryParticleEnergySpectrumCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 BrachyRunMessenger::~BrachyRunMessenger()
@@ -66,8 +66,8 @@ void BrachyRunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
  if(command == primaryParticleEnergySpectrumCmd)
   {
-   if (newValue == "Iodium") runManager->SelectEnergy(1);
-   else  runManager->SelectEnergy(0);
+   if (newValue == "Iodium") runManager -> SelectEnergy(1);
+   else  runManager -> SelectEnergy(0);
   }   
 }
 

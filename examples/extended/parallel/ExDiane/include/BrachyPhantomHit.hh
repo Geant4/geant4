@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomHit.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyPhantomHit.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,7 +31,7 @@
 //    *                              *
 //    ********************************
 //
-//Code developed by: S. Guatelli, M.Tropeano
+//Code developed by: S. Guatelli
 //
 // It manages the hits and the enrgy deposit in the phantom associated with 
 // each hit ...

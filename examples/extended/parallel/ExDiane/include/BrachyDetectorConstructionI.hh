@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionI.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyDetectorConstructionI.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ****************************************
@@ -29,8 +29,8 @@
 //    *    BrachyDetectorConstructionI.hh     *
 //    *                                      *
 //    ****************************************
-//Management of the Iodium source
-
+//Author: Susanna Guatelli
+//
 #ifndef BrachyDetectorConstructionI_H
 #define BrachyDetectorConstructionI_H 1
 

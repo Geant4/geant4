@@ -20,8 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//Author: Susanna Guatelli
 //
-// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    *************************************************
@@ -51,7 +52,6 @@ class BrachyPrimaryGeneratorAction;
 class BrachyPrimaryGeneratorActionIr: public G4VUserPrimaryGeneratorAction
 {
 public:
-
   BrachyPrimaryGeneratorActionIr();
   ~BrachyPrimaryGeneratorActionIr();
 
@@ -59,11 +59,9 @@ public:
   G4double GetEnergy(){return primaryParticleEnergy;};
      
 private:
-
   G4ParticleGun* particleGun;
   G4double primaryParticleEnergy;
 };
-
 #endif
 
 

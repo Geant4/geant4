@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//Author: Susanna Guatelli
+//
 //
 //    *****************************************
 //    *                                       *
@@ -27,7 +29,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyDetectorMessenger.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +57,6 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-
   BrachyDetectorConstruction*  detector;//pointer to detector
   G4UIdirectory*               detectorDir; 
   G4UIcmdWithAString*          phantomMaterialCmd; // change phantom material

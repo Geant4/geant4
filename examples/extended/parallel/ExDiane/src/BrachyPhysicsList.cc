@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    **********************************
 //    *                                *
@@ -30,7 +29,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.1 2004-05-25 07:32:37 guatelli Exp $
+// $Id: BrachyPhysicsList.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
@@ -106,38 +105,38 @@ void BrachyPhysicsList::ConstructProcess()
 
 void BrachyPhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
   while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
+    G4ParticleDefinition* particle = theParticleIterator -> value();
+    G4ProcessManager* pmanager = particle -> GetProcessManager();
+    G4String particleName = particle -> GetParticleName();
     
     //processes
     
     if (particleName == "gamma") {
       //gamma  
       lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(lowePhot);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+      pmanager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
+      pmanager -> AddDiscreteProcess(lowePhot);
+      pmanager -> AddDiscreteProcess(new G4LowEnergyCompton);
+      pmanager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
       
     } else if (particleName == "e-") {
       //electron
       loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
       loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-      loweBrem->SetAngularGenerator("tsai");
+      loweBrem -> SetAngularGenerator("tsai");
     
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);      
+      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(loweIon,     -1, 2,2);
+      pmanager -> AddProcess(loweBrem,    -1,-1,3);      
       
     } else if (particleName == "e+") {
       //positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
+      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);      
       
     }
   }  
@@ -157,59 +156,4 @@ void BrachyPhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-void BrachyPhysicsList::SetGammaLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
 
-void BrachyPhysicsList::SetElectronLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
-
-void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    G4cout << "BrachyPhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowcut,1e5);
-}
-
-void BrachyPhysicsList::SetGammaCut(G4double val)
-{
-  ResetCuts();
-  cutForGamma = val;
-}
-
-void BrachyPhysicsList::SetElectronCut(G4double val)
-{
-  cutForElectron = val;
-}
-
-void BrachyPhysicsList::SetPositronCut(G4double val)
-{
-  cutForPositron = val;
-}
-
-void BrachyPhysicsList::SetLowEnSecPhotCut(G4double cut)
-{  
-  G4cout<<"Low energy secondary photons cut is now set to: "
-	<<cut*MeV
-        <<" (MeV)"<<G4endl;
-
-  G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
-
-  lowePhot->SetCutForLowEnSecPhotons(cut);
-  loweIon->SetCutForLowEnSecPhotons(cut);
-  loweBrem->SetCutForLowEnSecPhotons(cut);
-}
-
-void BrachyPhysicsList::SetLowEnSecElecCut(G4double cut)
-{  
-  G4cout<<"Low energy secondary electrons cut is now set to: "
-        <<cut*MeV
-        <<" (MeV)"<<G4endl;
-  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-  loweIon->SetCutForLowEnSecElectrons(cut);
-}

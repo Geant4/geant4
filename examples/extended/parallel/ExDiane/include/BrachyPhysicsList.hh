@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhysicsList.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyPhysicsList.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -29,14 +29,14 @@
 //    *      BrachyPhysicsList.hh      *
 //    *                                *
 //    **********************************
-
+//
+//Author: Susanna Guatelli
+//
 #ifndef BrachyPhysicsList_h
 #define BrachyPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
@@ -44,52 +44,36 @@ class G4LowEnergyBremsstrahlung;
 
 class BrachyPhysicsList: public G4VUserPhysicsList
 {
-  public:
-    BrachyPhysicsList();
-   ~BrachyPhysicsList();
+public:
+  BrachyPhysicsList();
+  ~BrachyPhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
-  
-  public: 
-    // Set Cuts
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetPositronCut(G4double);
+protected:
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+  void SetCuts();
     
-    void SetGammaLowLimit(G4double);
-    void SetElectronLowLimit(G4double);
-    void SetGELowLimit(G4double);
-    void SetLowEnSecPhotCut(G4double);
-    void SetLowEnSecElecCut(G4double);
+private:
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
     
-  private:
+protected:
+  // these methods Construct particles 
+  void ConstructBosons();
+  void ConstructLeptons();
     
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    
-  protected:
+protected:
   // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  void ConstructGeneral();
+  void ConstructEM();
 
-  private:
+private:
   G4LowEnergyIonisation*  loweIon;
   G4LowEnergyPhotoElectric* lowePhot;
-  G4LowEnergyBremsstrahlung* loweBrem;
-  
+  G4LowEnergyBremsstrahlung* loweBrem;  
 };
-
 #endif
 
 

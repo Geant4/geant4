@@ -33,7 +33,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionI.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyDetectorConstructionI.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -67,11 +67,11 @@
 #include "G4Colour.hh"
 
 BrachyDetectorConstructionI::BrachyDetectorConstructionI()
-: defaultTub(0), defaultTubLog(0),defaultTubPhys(0),
-  capsule(0),capsuleLog(0),capsulePhys(0),
-  capsuleTip(0),capsuleTipLog(0),capsuleTipPhys1(0),capsuleTipPhys2(0),
-  iodiumCore(0),iodiumCoreLog(0),iodiumCorePhys(0),
-  marker(0),markerLog(0),markerPhys(0)
+: defaultTub(0), defaultTubLog(0), defaultTubPhys(0),
+  capsule(0), capsuleLog(0), capsulePhys(0),
+  capsuleTip(0), capsuleTipLog(0),capsuleTipPhys1(0), 
+  capsuleTipPhys2(0), iodiumCore(0), iodiumCoreLog(0),
+  iodiumCorePhys(0), marker(0), markerLog(0), markerPhys(0)
 { 
   pMaterial = new BrachyMaterial();
 }
@@ -86,10 +86,10 @@ void BrachyDetectorConstructionI::ConstructIodium(G4VPhysicalVolume* mother)
   // source Bebig Isoseed I-125 ...
 
   //Get materials for source construction ...
-  G4Material* titanium = pMaterial->GetMat("titanium");
-  G4Material* air = pMaterial->GetMat("Air");
-  G4Material* iodium = pMaterial->GetMat("Iodium");
-  G4Material* gold = pMaterial->GetMat("gold");
+  G4Material* titanium = pMaterial -> GetMat("titanium");
+  G4Material* air = pMaterial -> GetMat("Air");
+  G4Material* iodium = pMaterial -> GetMat("Iodium");
+  G4Material* gold = pMaterial -> GetMat("gold");
 
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
@@ -135,7 +135,7 @@ void BrachyDetectorConstructionI::ConstructIodium(G4VPhysicalVolume* mother)
                                       0);
 
   G4RotationMatrix* rotateMatrix = new G4RotationMatrix();
-  rotateMatrix->rotateX(180.0*deg);
+  rotateMatrix -> rotateX(180.0*deg);
   capsuleTipPhys2 = new G4PVPlacement(rotateMatrix, 
                                       G4ThreeVector(0,0,-1.84*mm),
                                       "CapsuleTipPhys2",
@@ -165,23 +165,23 @@ void BrachyDetectorConstructionI::ConstructIodium(G4VPhysicalVolume* mother)
                                  false,
                                  0);
   // Visual attributes ...
-  G4VisAttributes* simpleMarkerVisAtt= new G4VisAttributes(lblue);
-  simpleMarkerVisAtt->SetVisibility(true);
-  simpleMarkerVisAtt->SetForceSolid(true);
-  markerLog->SetVisAttributes( simpleMarkerVisAtt);  
+  G4VisAttributes* simpleMarkerVisAtt = new G4VisAttributes(lblue);
+  simpleMarkerVisAtt -> SetVisibility(true);
+  simpleMarkerVisAtt -> SetForceSolid(true);
+  markerLog -> SetVisAttributes(simpleMarkerVisAtt);  
 
-  G4VisAttributes* simpleiodiumVisAtt= new G4VisAttributes(magenta);
-  simpleiodiumVisAtt->SetVisibility(true);
-  simpleiodiumVisAtt->SetForceWireframe(true);
-  iodiumCoreLog->SetVisAttributes(simpleiodiumVisAtt);
+  G4VisAttributes* simpleiodiumVisAtt = new G4VisAttributes(magenta);
+  simpleiodiumVisAtt -> SetVisibility(true);
+  simpleiodiumVisAtt -> SetForceWireframe(true);
+  iodiumCoreLog -> SetVisAttributes(simpleiodiumVisAtt);
 
-  G4VisAttributes* simpleCapsuleVisAtt= new G4VisAttributes(red);
-  simpleCapsuleVisAtt->SetVisibility(true);  
-  simpleCapsuleVisAtt->SetForceWireframe(true);
-  capsuleLog->SetVisAttributes( simpleCapsuleVisAtt);
+  G4VisAttributes* simpleCapsuleVisAtt = new G4VisAttributes(red);
+  simpleCapsuleVisAtt -> SetVisibility(true);  
+  simpleCapsuleVisAtt -> SetForceWireframe(true);
+  capsuleLog -> SetVisAttributes(simpleCapsuleVisAtt);
 
-  G4VisAttributes* simpleCapsuleTipVisAtt= new G4VisAttributes(red);
-  simpleCapsuleTipVisAtt->SetVisibility(true); 
-  simpleCapsuleTipVisAtt->SetForceSolid(true);
-  capsuleTipLog->SetVisAttributes( simpleCapsuleTipVisAtt);
+  G4VisAttributes* simpleCapsuleTipVisAtt = new G4VisAttributes(red);
+  simpleCapsuleTipVisAtt -> SetVisibility(true); 
+  simpleCapsuleTipVisAtt -> SetForceSolid(true);
+  capsuleTipLog -> SetVisAttributes(simpleCapsuleTipVisAtt);
 }

@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryIr.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyFactoryIr.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -47,7 +47,7 @@
 
 BrachyFactoryIr:: BrachyFactoryIr()
 {
-  iridiumSource=new  BrachyDetectorConstructionIr();
+  iridiumSource =new  BrachyDetectorConstructionIr();
 }
 
 BrachyFactoryIr:: ~BrachyFactoryIr()

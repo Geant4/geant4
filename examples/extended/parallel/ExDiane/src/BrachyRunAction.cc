@@ -35,7 +35,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.1 2004-05-25 07:32:37 guatelli Exp $
+// $Id: BrachyRunAction.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,23 +58,21 @@
 #include "BrachyFactoryI.hh"
 #include "BrachyFactory.hh"
 #include "BrachyRunAction.hh"
-BrachyRunAction::BrachyRunAction(G4String &SDNAME)
+
+BrachyRunAction::BrachyRunAction()
 {
-  sensitiveDetectorName = SDNAME;
-  detector = new BrachyDetectorConstruction(sensitiveDetectorName);
   runMessenger = new BrachyRunMessenger(this);
 }
 
 BrachyRunAction::~BrachyRunAction()
 { 
   delete runMessenger;
-  delete detector; 
 }
 void BrachyRunAction::BeginOfRunAction(const G4Run*)
 { 
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-  analysis->book();
+  analysis -> book();
 #endif  
   G4RunManager* runManager = G4RunManager::GetRunManager();
 
@@ -88,16 +86,16 @@ void BrachyRunAction::BeginOfRunAction(const G4Run*)
 	  factory = new BrachyFactoryIr; 
       }      
     G4VUserPrimaryGeneratorAction* sourcePrimaryParicle = 
-                                     factory->CreatePrimaryGeneratorAction();
+                                     factory -> CreatePrimaryGeneratorAction();
       
-    if(sourcePrimaryParicle)runManager->SetUserAction(sourcePrimaryParicle);     
+    if(sourcePrimaryParicle) runManager -> SetUserAction(sourcePrimaryParicle);     
     }
 }
 
 void BrachyRunAction::SelectEnergy(G4int choice)
 {
   sourceChoice = choice;
-  if (sourceChoice == 1)factory = new BrachyFactoryI;
+  if (sourceChoice == 1) factory = new BrachyFactoryI;
   else factory = new BrachyFactoryIr; 
 }
 
@@ -106,11 +104,12 @@ void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
 #endif
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
+  G4cout << "number of event = " << aRun -> GetNumberOfEvent() << G4endl;
   
 #ifdef G4ANALYSIS_USE      
-  analysis->finish();
+  analysis -> finish();
 #endif
+
   delete factory;    
 }
 

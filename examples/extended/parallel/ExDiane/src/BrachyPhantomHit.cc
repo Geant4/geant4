@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    ********************************
 //    *                              *
@@ -30,7 +29,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomHit.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyPhantomHit.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomHit.hh"
@@ -42,8 +41,10 @@
 
 G4Allocator<BrachyPhantomHit> BrachyPhantomHitAllocator;
 
-BrachyPhantomHit::BrachyPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int YID,G4int ZID)
-  :logicalVolume(logVol),xHitPosition(XID),zHitPosition(ZID),yHitPosition(YID)
+BrachyPhantomHit::BrachyPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int YID,G4int ZID): logicalVolume(logVol),
+       xHitPosition(XID),
+       zHitPosition(ZID),
+       yHitPosition(YID)
 {
  energyDeposit = 0;
 }

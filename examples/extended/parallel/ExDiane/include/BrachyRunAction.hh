@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunAction.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyRunAction.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+//Author: Susanna Guatelli
 //
 //    ********************************************
 //    *                                          *
@@ -50,7 +50,7 @@ class BrachyFactoryI;
 class BrachyRunAction : public G4UserRunAction
 {
 public:
-  BrachyRunAction(G4String& );
+  BrachyRunAction();
   ~BrachyRunAction();
 
 public:
@@ -59,9 +59,6 @@ public:
   void SelectEnergy(G4int); 
 
 private:
- 
-  G4String sensitiveDetectorName;
-  BrachyDetectorConstruction* detector;
   BrachyRunMessenger* runMessenger;
   BrachyFactory *factory; 
   G4int sourceChoice; //select primary particle 

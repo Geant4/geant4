@@ -25,8 +25,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    ********************************************
 //    *                                          *
@@ -34,7 +33,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.1 2004-05-25 07:32:37 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
@@ -66,8 +65,8 @@ BrachyPrimaryGeneratorActionI::BrachyPrimaryGeneratorActionI()
 
 BrachyPrimaryGeneratorActionI::~BrachyPrimaryGeneratorActionI()
 {
- if(particleGun)
-	delete particleGun;
+  if(particleGun)
+    delete particleGun;
 }
 
 void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
@@ -78,7 +77,7 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String ParticleName = "gamma";
-  G4ParticleDefinition* particle = particleTable->FindParticle(ParticleName);
+  G4ParticleDefinition* particle = particleTable -> FindParticle(ParticleName);
 
   particleGun->SetParticleDefinition(particle);
 
@@ -88,14 +87,14 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   G4double radiusMin = 0.085*mm;
  
   do{
-     x = (G4UniformRand()-0.5)*(radiuMax)/0.5;
-     y = (G4UniformRand()-0.5)*(radiuMax)/0.5;
+    x = (G4UniformRand()-0.5)*(radiuMax)/0.5;
+    y = (G4UniformRand()-0.5)*(radiuMax)/0.5;
   }while(((x*x+y*y )> (radiuMax*radiuMax))||((x*x+y*y)<(radiusMin*radiusMin)));
  
   z = (G4UniformRand()-0.5)*1.75*mm/0.5 ;
 
   G4ThreeVector position(x,y,z);
-  particleGun->SetParticlePosition(position);
+  particleGun -> SetParticlePosition(position);
 
   // Random generation of the impulse direction of primary particles ...
   G4double a,b,c;
@@ -112,7 +111,7 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   c /= n;
 
   G4ThreeVector direction(a,b,c);
-  particleGun->SetParticleMomentumDirection(direction);
+  particleGun -> SetParticleMomentumDirection(direction);
  
   G4double random = G4UniformRand();
   G4double sum = 0;
@@ -124,16 +123,18 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   if(i==1){primaryParticleEnergy = 27.4*keV;}
   else{ 
     if(i==2){primaryParticleEnergy = 31.4*keV;}
-    else {primaryParticleEnergy = 35.5*keV;}}
+    else {primaryParticleEnergy = 35.5*keV;}
+      }
 
-  particleGun->SetParticleEnergy(primaryParticleEnergy);
+  particleGun -> SetParticleEnergy(primaryParticleEnergy);
 
   // Fill 1D histogram with gamma energy spectrum ...
 #ifdef G4ANALYSIS_USE    
-  analysis-> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
+  analysis -> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
 #endif  
+
   // generate primary particle
-  particleGun->GeneratePrimaryVertex(anEvent);
+  particleGun -> GeneratePrimaryVertex(anEvent);
 }
  
 G4double  BrachyPrimaryGeneratorActionI::GetEnergy()

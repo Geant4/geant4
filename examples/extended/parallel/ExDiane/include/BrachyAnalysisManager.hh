@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyAnalysisManager.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -67,33 +67,23 @@ public:
   ~BrachyAnalysisManager();
   static BrachyAnalysisManager* getInstance();
   void book();
-  void FillNtupleWithEnergy(G4double,G4double,G4double,G4float);
   void FillHistogramWithEnergy(G4double,G4double,G4double);
   void PrimaryParticleEnergySpectrum(G4double);
   void DoseDistribution(G4double,G4double);
   void finish();
 
-  
 private:
-
-  //  G4double xx,zz,yy;
-  //G4float  en; 
-  //G4double  x,y,z;
   static BrachyAnalysisManager* instance;
 
 private:
-
   AIDA::IAnalysisFactory*  aFact;
   AIDA::ITree*             theTree;
   AIDA::IHistogramFactory *histFact;
-  AIDA::ITupleFactory     *tupFact;
   AIDA::ITreeFactory      *treeFact;
   AIDA::IHistogram2D *h1;
   AIDA::IHistogram1D *h2;
   AIDA::IHistogram1D *h3;
-  AIDA::ITuple *ntuple;
 };
-
 #endif
 #endif
 

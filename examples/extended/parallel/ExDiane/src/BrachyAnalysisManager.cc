@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -53,30 +53,26 @@
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
 BrachyAnalysisManager::BrachyAnalysisManager() : 
-  aFact(0), theTree(0), histFact(0), tupFact(0),h1(0),h2(0),ntuple(0)
+  aFact(0), theTree(0), histFact(0), h1(0), h2(0)
   
 {
   //build up  the  factories
   aFact = AIDA_createAnalysisFactory();
 
-  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory(); 
+  AIDA::ITreeFactory *treeFact = aFact -> createTreeFactory(); 
  
   //parameters for the TreeFactory
  
   std::string fileName = "brachytherapy.xml";
-  theTree = treeFact->create(fileName,"xml",false, true, "uncompressed");
+  theTree = treeFact -> create(fileName,"xml",false, true, "uncompressed");
 
   delete treeFact;
  
-  histFact = aFact->createHistogramFactory( *theTree );
-  tupFact  = aFact->createTupleFactory    ( *theTree ); 
+  histFact = aFact -> createHistogramFactory( *theTree );
 }
 
 BrachyAnalysisManager::~BrachyAnalysisManager() 
 { 
-  delete tupFact;
-  tupFact = 0;
-
   delete histFact;
   histFact = 0;
 
@@ -96,75 +92,42 @@ BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
 void BrachyAnalysisManager::book() 
 {
   //creating a 1D histogram ...
-  h1 = histFact->createHistogram2D("10","Energy, pos", //histoID,histo name
-				    300 ,-150.,150.,   //bins'number,xmin,xmax 
-                                    300,-150.,150.    );//bins'number,ymin,ymax 
+  h1 = histFact -> createHistogram2D("10","Energy, pos", //histoID,histo name
+				     300 ,-150.,150.,   //bins'number,xmin,xmax 
+				     300,-150.,150.    );//bins'number,ymin,ymax 
   //creating a 2D histogram ...
-  h2 = histFact->createHistogram1D("20","Initial Energy", //histoID,histo name 
-				  100,0.,1.); //bins' number, xmin, xmax
+  h2 = histFact -> createHistogram1D("20","Initial Energy", //histoID,histo name 
+				     100,0.,1.); //bins' number, xmin, xmax
   
-  h3 = histFact->createHistogram1D("30","Dose Distribution", 
-				  300,-150.,150.); //bins' number, xmin, xmax
-
-  //defining the ntuple columns' name ...
-  std::string columnNames = "float energy; float x; float y; float z";
-  std::string options = "";
-  
-  //creating a ntuple ...
-  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
-  // check for non-zero ...
-  if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
+  h3 = histFact -> createHistogram1D("30","Dose Distribution", 
+				      300,-150.,150.); //bins' number, xmin, xmax
 }
  
-void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
-                                                 G4double yy, 
-                                                 G4double zz,
-                                                 G4float en)
-{
-  if (ntuple == 0) 
-   {
-     G4cout << "AAAAAAAGH..... The Ntuple is 0" << G4endl;
-     return;
-    }
-  
-  G4int indexX = ntuple->findColumn( "x" );
-  G4int indexY = ntuple->findColumn( "y" );
-  G4int indexZ = ntuple->findColumn( "z" );
-  G4int indexEnergy = ntuple->findColumn( "energy" );
-  ntuple->fill(indexEnergy, en);// fill ( int column, double value )
-  ntuple->fill(indexX, xx);
-  ntuple->fill(indexY, yy);
-  ntuple->fill(indexZ, zz);
-
-  ntuple->addRow();
-}
-
 void BrachyAnalysisManager::FillHistogramWithEnergy(G4double x,
                                                     G4double z, 
                                                     G4double energyDeposit)
 {
-  //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
-  h1->fill(x,z,energyDeposit);
+  h1 -> fill(x,z,energyDeposit);
 }
 
 void BrachyAnalysisManager::PrimaryParticleEnergySpectrum(G4double primaryParticleEnergy)
 {
   //1DHisotgram: energy spectrum of primary particles  
-  h2->fill(primaryParticleEnergy);
+  h2 -> fill(primaryParticleEnergy);
 }
 void BrachyAnalysisManager::DoseDistribution(G4double x,G4double energy)
 {
   //1DHisotgram: energy spectrum of primary particles  
-  h3->fill(x, energy);
+  h3 -> fill(x,energy);
 }
 
 void BrachyAnalysisManager::finish() 
 {  
   // write all histograms to file ...
-  theTree->commit();
+  theTree -> commit();
 
   // close (will again commit) ...
-  theTree->close();
+  theTree -> close();
 }
 #endif
 

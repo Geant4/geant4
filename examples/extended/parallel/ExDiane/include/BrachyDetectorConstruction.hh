@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstruction.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyDetectorConstruction.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 //    ****************************************
@@ -29,8 +29,6 @@
 //    *    BrachyDetectorConstruction.hh     *
 //    *                                      *
 //    ****************************************
-// this class manages the geometry of the simulation set up
-//
 
 #ifndef BrachyDetectorConstruction_H
 #define BrachyDetectorConstruction_H 1
@@ -64,7 +62,7 @@ public:
   ~BrachyDetectorConstruction();
 
   G4VPhysicalVolume*   Construct();  
-  void SwitchBrachytherapicSeed(); //Change radiactive source through GUI
+  void SwitchBrachytherapicSeed(); 
   void SelectBrachytherapicSeed(G4String val);
   void ConstructPhantom(); 
   void ConstructSensitiveDetector();

@@ -25,8 +25,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    ********************************************
 //    *                                          *
@@ -34,7 +33,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.1 2004-05-25 07:32:37 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionIr.hh"
@@ -77,7 +76,7 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
  
   //  Random generation of gamma source point inside the Iodium core
   G4double x,y,z;
-  G4double radius= 0.30*mm;
+  G4double radius = 0.30*mm;
   do{
     x = (G4UniformRand()-0.5)*(radius)/0.5;
     y = (G4UniformRand()-0.5)*(radius)/0.5;
@@ -102,15 +101,15 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
   c /= n;
 
   G4ThreeVector direction(a,b,c);
-  particleGun->SetParticleMomentumDirection(direction);
+  particleGun -> SetParticleMomentumDirection(direction);
 
   primaryParticleEnergy = 356*keV;
-  particleGun->SetParticleEnergy(primaryParticleEnergy);
+  particleGun -> SetParticleEnergy(primaryParticleEnergy);
  
   //1D Histogram of primary particle energy ...
 #ifdef G4ANALYSIS_USE
-  analysis->PrimaryParticleEnergySpectrum(primaryParticleEnergy);
+  analysis -> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
 #endif   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  particleGun -> GeneratePrimaryVertex(anEvent);
 }
 

@@ -25,8 +25,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    ****************************************
 //    *                                      *
@@ -34,7 +33,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -68,10 +67,10 @@
 #include "G4Colour.hh"
 
 BrachyDetectorConstructionIr::BrachyDetectorConstructionIr()
- : capsule(0),capsuleLog(0),capsulePhys(0),
-   capsuleTip(0),capsuleTipLog(0),capsuleTipPhys(0),
-   iridiumCore(0),iridiumCoreLog(0),iridiumCorePhys(0),
-   simpleCapsuleVisAtt(0),simpleCapsuleTipVisAtt(0),simpleIridiumVisAtt(0)
+ : capsule(0), capsuleLog(0), capsulePhys(0),
+   capsuleTip(0), capsuleTipLog(0), capsuleTipPhys(0),
+   iridiumCore(0), iridiumCoreLog(0), iridiumCorePhys(0),
+   simpleCapsuleVisAtt(0), simpleCapsuleTipVisAtt(0), simpleIridiumVisAtt(0)
 {
   pMat = new BrachyMaterial();
 }
@@ -86,8 +85,8 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
-  G4Material* capsuleMat = pMat->GetMat("Stainless steel");
-  G4Material* iridiumMat = pMat->GetMat("Iridium");
+  G4Material* capsuleMat = pMat -> GetMat("Stainless steel");
+  G4Material* iridiumMat = pMat -> GetMat("Iridium");
 
   // Capsule main body
   capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
@@ -134,19 +133,19 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
                                       0);
 
   simpleCapsuleVisAtt = new G4VisAttributes(red);
-  simpleCapsuleVisAtt->SetVisibility(true);  
-  simpleCapsuleVisAtt->SetForceWireframe(true);
-  capsuleLog->SetVisAttributes(simpleCapsuleVisAtt);
+  simpleCapsuleVisAtt -> SetVisibility(true);  
+  simpleCapsuleVisAtt -> SetForceWireframe(true);
+  capsuleLog -> SetVisAttributes(simpleCapsuleVisAtt);
 
   simpleCapsuleTipVisAtt = new G4VisAttributes(red);
-  simpleCapsuleTipVisAtt->SetVisibility(true);  
-  simpleCapsuleTipVisAtt->SetForceSolid(true);
-  capsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
+  simpleCapsuleTipVisAtt -> SetVisibility(true);  
+  simpleCapsuleTipVisAtt -> SetForceSolid(true);
+  capsuleTipLog -> SetVisAttributes(simpleCapsuleTipVisAtt);
 
   simpleIridiumVisAtt = new G4VisAttributes(magenta);
-  simpleIridiumVisAtt->SetVisibility(true);
-  simpleIridiumVisAtt->SetForceWireframe(true);
-  iridiumCoreLog->SetVisAttributes(simpleIridiumVisAtt);
+  simpleIridiumVisAtt -> SetVisibility(true);
+  simpleIridiumVisAtt -> SetForceWireframe(true);
+  iridiumCoreLog -> SetVisAttributes(simpleIridiumVisAtt);
 }
 
 void BrachyDetectorConstructionIr::CleanIridium()

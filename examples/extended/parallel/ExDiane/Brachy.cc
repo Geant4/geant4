@@ -25,22 +25,19 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
-//                 GEANT 4 - Brachytherapy example
+//                 GEANT 4 - ExDiane example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
-
-
+// Code developed by: S.Guatelli
 
 #include "BrachySimulation.hh"
 int main(int argc, char** argv){
 
   BrachySimulation * simulation = new BrachySimulation(0);  
 
-  simulation->initialize(argc,argv);
+  simulation -> initialize(argc,argv);
 
-  std::string mn;
+  G4String mn;
 
   if(argc>1)
     mn = argv[1];
@@ -51,7 +48,7 @@ int main(int argc, char** argv){
       return -1;
     }
   
-  simulation->executeMacro(mn);
+  simulation -> executeMacro(mn);
   
   delete simulation;
 

@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,19 +49,19 @@
 BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det): detector(Det)
 { 
   detectorDir = new G4UIdirectory("/phantom/");
-  detectorDir->SetGuidance(" phantom control.");
+  detectorDir -> SetGuidance(" phantom control.");
       
   phantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
-  phantomMaterialCmd->SetGuidance("Select Material of the detector.");
-  phantomMaterialCmd->SetParameterName("choice",false);
-  phantomMaterialCmd->AvailableForStates(G4State_Idle);
+  phantomMaterialCmd -> SetGuidance("Select Material of the detector.");
+  phantomMaterialCmd -> SetParameterName("choice",false);
+  phantomMaterialCmd -> AvailableForStates(G4State_Idle);
   
   sourceCmd = new G4UIcmdWithAString("/source/switch",this);
-  sourceCmd->SetGuidance("Assign the selected geometry to G4RunManager."); 
-  sourceCmd->SetParameterName("choice",true);
-  sourceCmd->SetDefaultValue(" ");
-  sourceCmd->SetCandidates("Iridium Iodium Leipzig ");
-  sourceCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  sourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
+  sourceCmd -> SetParameterName("choice",true);
+  sourceCmd -> SetDefaultValue(" ");
+  sourceCmd -> SetCandidates("Iridium Iodium Leipzig ");
+  sourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
 BrachyDetectorMessenger::~BrachyDetectorMessenger()
@@ -74,14 +74,14 @@ BrachyDetectorMessenger::~BrachyDetectorMessenger()
 void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == phantomMaterialCmd )
-   { detector->SetPhantomMaterial(newValue);}
+   { detector -> SetPhantomMaterial(newValue);}
 
   if( command == sourceCmd )
    {
     if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
      { 
-       detector->SelectBrachytherapicSeed(newValue); 
-       detector->SwitchBrachytherapicSeed();
+       detector -> SelectBrachytherapicSeed(newValue); 
+       detector -> SwitchBrachytherapicSeed();
       }
    }
 }

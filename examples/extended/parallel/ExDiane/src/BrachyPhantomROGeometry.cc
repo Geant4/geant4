@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    ************************************
 //    *                                  *
@@ -30,7 +29,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -177,7 +176,7 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      numberOfVoxelsAlongZ,
 							      voxelXThickness);
   BrachyDummySD *dummySD = new BrachyDummySD;
-  ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
+  ROPhantomYDivisionLog -> SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
 }

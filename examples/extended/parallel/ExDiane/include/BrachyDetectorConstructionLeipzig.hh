@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.hh,v 1.1 2004-05-25 07:32:35 guatelli Exp $
+// $Id: BrachyDetectorConstructionLeipzig.hh,v 1.2 2004-05-25 08:36:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//Author: Susanna Guatelli
 //
 //    ************************************************
 //    *                                              *
@@ -39,7 +40,6 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4LogicalVolume.hh"
-
 
 class G4LogicalVolume;
 class G4Tubs;
@@ -81,5 +81,4 @@ private:
 
   BrachyMaterial* pMaterial;   
 };
-
 #endif

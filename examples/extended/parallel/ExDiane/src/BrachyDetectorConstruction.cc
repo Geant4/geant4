@@ -24,8 +24,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by: S.Guatelli
 //
 //
 //    ****************************************
@@ -34,7 +33,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -82,12 +81,12 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
   Phantom(0), PhantomLog(0), PhantomPhys(0),
   phantomAbsorberMaterial(0)
 {
-  phantomDimensionX=15.*cm ;
-  phantomDimensionY=15.*cm;
-  phantomDimensionZ=15.*cm;
+  phantomDimensionX = 15.*cm ;
+  phantomDimensionY = 15.*cm;
+  phantomDimensionZ = 15.*cm;
 
-  numberOfVoxelsAlongX=300;
-  numberOfVoxelsAlongZ=300;
+  numberOfVoxelsAlongX = 300;
+  numberOfVoxelsAlongZ = 300;
 
   ComputeDimVoxel();
 
@@ -101,7 +100,7 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
 
   factory = new BrachyFactoryIr();
 
-  pMaterial= new BrachyMaterial();
+  pMaterial = new BrachyMaterial();
 }
 
 
@@ -115,9 +114,9 @@ BrachyDetectorConstruction::~BrachyDetectorConstruction()
 
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 {
-  pMaterial-> DefineMaterials();
+  pMaterial -> DefineMaterials();
   ConstructPhantom();
-  factory->CreateSource(PhantomPhys);
+  factory ->CreateSource(PhantomPhys);
   ConstructSensitiveDetector();
 
   return WorldPhys;
@@ -125,7 +124,7 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 
 void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 {
-  factory->CleanSource();
+  factory -> CleanSource();
   delete factory;
   switch(detectorChoice)
   { 
@@ -142,7 +141,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
       factory = new BrachyFactoryIr();
       break;
   }
-  factory->CreateSource(PhantomPhys);
+  factory -> CreateSource(PhantomPhys);
 
   // Notify run manager that the new geometry has been built
 
@@ -176,8 +175,8 @@ void BrachyDetectorConstruction::ConstructPhantom()
 {
   G4Colour  lblue   (0.0, 0.0, .75);
 
-  G4Material* air=pMaterial->GetMat("Air") ;
-  G4Material* water=pMaterial->GetMat("Water");
+  G4Material* air = pMaterial -> GetMat("Air") ;
+  G4Material* water = pMaterial -> GetMat("Water");
 
   ComputeDimVoxel();
 
@@ -193,11 +192,10 @@ void BrachyDetectorConstruction::ConstructPhantom()
 
   WorldLog->SetVisAttributes (G4VisAttributes::Invisible);
 
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(lblue);
-  simpleBoxVisAtt->SetVisibility(true);
-  simpleBoxVisAtt->SetForceWireframe(true);
-
-  PhantomLog->SetVisAttributes(simpleBoxVisAtt);
+  G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(lblue);
+  simpleBoxVisAtt -> SetVisibility(true);
+  simpleBoxVisAtt -> SetForceWireframe(true);
+  PhantomLog -> SetVisAttributes(simpleBoxVisAtt);
 }
 
 void  BrachyDetectorConstruction::ConstructSensitiveDetector()
@@ -207,13 +205,19 @@ void  BrachyDetectorConstruction::ConstructSensitiveDetector()
 
   if(!phantomSD)
   {
-    phantomSD = new BrachyPhantomSD(sensitiveDetectorName,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
+    phantomSD = new BrachyPhantomSD(sensitiveDetectorName,
+                                    numberOfVoxelsAlongX,
+                                    numberOfVoxelsAlongZ);
     G4String ROGeometryName = "PhantomROGeometry";
-    phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,phantomDimensionX,phantomDimensionZ,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
-    phantomROGeometry->BuildROGeometry();
-    phantomSD->SetROgeometry(phantomROGeometry);
-    pSDManager->AddNewDetector(phantomSD);
-    PhantomLog->SetSensitiveDetector(phantomSD);
+    phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,
+                                                    phantomDimensionX,
+                                                    phantomDimensionZ,
+                                                    numberOfVoxelsAlongX,
+                                                    numberOfVoxelsAlongZ);
+    phantomROGeometry -> BuildROGeometry();
+    phantomSD -> SetROgeometry(phantomROGeometry);
+    pSDManager -> AddNewDetector(phantomSD);
+    PhantomLog -> SetSensitiveDetector(phantomSD);
   }
 }
 
@@ -234,7 +238,7 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
          << dimVoxel/mm
          << "mm" << G4endl 
          << "material of the box : "
-         << phantomAbsorberMaterial->GetName() <<G4endl
+         << phantomAbsorberMaterial -> GetName() <<G4endl
          << "the source is at the center  of the detector" << G4endl
          << "-------------------------------------------------------------------------"
          << G4endl;
@@ -248,7 +252,7 @@ void BrachyDetectorConstruction::SetPhantomMaterial(G4String materialChoice)
   if (pttoMaterial)
   {
     phantomAbsorberMaterial = pttoMaterial;
-    PhantomLog->SetMaterial(pttoMaterial); 
+    PhantomLog -> SetMaterial(pttoMaterial); 
     PrintDetectorParameters();
   } 
   else

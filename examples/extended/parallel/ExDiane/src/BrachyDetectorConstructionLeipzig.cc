@@ -25,8 +25,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S.Guatelli
+// Code developed by: S.Guatelli
 //
 //    *******************************************
 //    *                                         *
@@ -35,7 +34,7 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.1 2004-05-25 07:32:36 guatelli Exp $
+// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,11 +71,11 @@
 // Leipzig Applicator ...
 
 BrachyDetectorConstructionLeipzig::BrachyDetectorConstructionLeipzig()
-: capsule(0),capsuleLog(0),capsulePhys(0),
-  capsuleTip(0),capsuleTipLog(0),capsuleTipPhys(0),
-  iridiumCore(0),iridiumCoreLog(0),iridiumCorePhys(0),
-  applicator1(0),applicator1Log(0),applicator1Phys(0),
-  applicator2(0),applicator2Log(0),applicator2Phys(0)
+: capsule(0), capsuleLog(0), capsulePhys(0),
+  capsuleTip(0), capsuleTipLog(0), capsuleTipPhys(0),
+  iridiumCore(0), iridiumCoreLog(0), iridiumCorePhys(0),
+  applicator1(0), applicator1Log(0), applicator1Phys(0),
+  applicator2(0), applicator2Log(0), applicator2Phys(0)
 { 
   pMaterial = new BrachyMaterial();
 }
@@ -90,9 +89,9 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
 {
   G4Colour  red     (1.0, 0.0, 0.0) ;
 
-  G4Material* capsuleMat = pMaterial->GetMat("Stainless steel");
-  G4Material* iridium = pMaterial->GetMat("Iridium");
-  G4Material* tungsten =pMaterial->GetMat("Tungsten");
+  G4Material* capsuleMat = pMaterial -> GetMat("Stainless steel");
+  G4Material* iridium = pMaterial -> GetMat("Iridium");
+  G4Material* tungsten =pMaterial -> GetMat("Tungsten");
 
   //Iridium source ...
 
@@ -152,13 +151,13 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                       false,
                                       0);
 
-  G4VisAttributes* simpleCapsuleVisAtt= new G4VisAttributes(red); 
-  simpleCapsuleVisAtt->SetVisibility(true); 
-  simpleCapsuleVisAtt->SetForceSolid(true); 
-  capsuleLog->SetVisAttributes(simpleCapsuleVisAtt); 
+  G4VisAttributes* simpleCapsuleVisAtt = new G4VisAttributes(red); 
+  simpleCapsuleVisAtt -> SetVisibility(true); 
+  simpleCapsuleVisAtt -> SetForceSolid(true); 
+  capsuleLog -> SetVisAttributes(simpleCapsuleVisAtt); 
 
-  G4VisAttributes* simpleCapsuleTipVisAtt= new G4VisAttributes(red); 
-  simpleCapsuleTipVisAtt->SetVisibility(true); 
-  simpleCapsuleTipVisAtt->SetForceSolid(true); 
-  capsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
+  G4VisAttributes* simpleCapsuleTipVisAtt = new G4VisAttributes(red); 
+  simpleCapsuleTipVisAtt -> SetVisibility(true); 
+  simpleCapsuleTipVisAtt -> SetForceSolid(true); 
+  capsuleTipLog -> SetVisAttributes(simpleCapsuleTipVisAtt);
 }
