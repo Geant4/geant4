@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.1 1999-01-07 16:11:20 gunter Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.2 1999-10-28 15:25:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,9 @@
 #include "G4EnergyLossMessenger.hh"
 
 #include "G4eEnergyLoss.hh"
+#include "G4hEnergyLoss.hh"
+#include "G4eEnergyLossPlus.hh"
+#include "G4hEnergyLossPlus.hh"
 
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -78,10 +81,18 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if (command == RndmStepCmd)
-   { G4eEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue)); }
+   { G4eEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+     G4hEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+     G4eEnergyLossPlus::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+     G4hEnergyLossPlus::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+   }
    
   if (command == EnlossFlucCmd)
-   { G4eEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue)); }
+   { G4eEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+     G4hEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+     G4eEnergyLossPlus::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+     G4hEnergyLossPlus::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue)); 
+   }
 
   if (command == StepFuncCmd)
    {
@@ -93,6 +104,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4String unt = unts;
      v2 *= G4UIcommand::ValueOf(unt);
      G4eEnergyLoss::SetStepFunction(v1,v2);
+     G4hEnergyLoss::SetStepFunction(v1,v2);
+     G4eEnergyLossPlus::SetStepFunction(v1,v2);
+     G4hEnergyLossPlus::SetStepFunction(v1,v2);    
    }
 }
 
