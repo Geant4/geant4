@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.4 1999-06-16 11:42:33 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.5 1999-08-30 08:28:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,8 @@
 #include "G4DecayTable.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
+
+const G4String G4VDecayChannel::noName = " ";
 
 G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
                :kinematics_name(aName),

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronOccupancy.hh,v 1.1 1999-08-18 09:15:11 kurasige Exp $
+// $Id: G4ElectronOccupancy.hh,v 1.2 1999-08-30 08:27:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #define G4ElectronOccupancy_h 1
 
 #include "globals.hh"
+#include "G4Allocator.hh"
 #include "G4ios.hh"
 
 class G4ElectronOccupancy 
@@ -47,6 +48,11 @@ class G4ElectronOccupancy
    G4ElectronOccupancy( const G4ElectronOccupancy& right );
 
    virtual    	       ~G4ElectronOccupancy();
+
+  //  new/delete operators are oberloded to use G4Allocator
+     inline void *operator new(size_t);
+     inline void operator delete(void *aElectronOccupancy);
+
  
   //- operators
      G4ElectronOccupancy & operator=(const G4ElectronOccupancy &right);
@@ -64,7 +70,7 @@ class G4ElectronOccupancy
    G4int  RemoveElectron(G4int orbit, G4int number = 1);
    
    G4int  GetSizeOfOrbit() const;
-   void DumpInfo() const;
+   void   DumpInfo() const;
 
  private:
    G4int  theSizeOfOrbit;
@@ -72,6 +78,24 @@ class G4ElectronOccupancy
    G4int* theOccupancies;
 
 };
+
+extern G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+
+// ------------------------
+// Inlined operators
+// ------------------------
+
+inline void * G4ElectronOccupancy::operator new(size_t)
+{
+  void * aElectronOccupancy;
+  aElectronOccupancy = (void *) aElectronOccupancyAllocator.MallocSingle();
+  return aElectronOccupancy;
+}
+
+inline void G4ElectronOccupancy::operator delete(void * aElectronOccupancy)
+{
+  aElectronOccupancyAllocator.FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+}
 
 inline
  G4int  G4ElectronOccupancy::GetSizeOfOrbit() const

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.2 1999-04-13 07:58:35 kurasige Exp $
+// $Id: G4VDecayChannel.hh,v 1.3 1999-08-30 08:27:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,9 +76,9 @@ class G4VDecayChannel
      G4ParticleDefinition * GetDaughter(G4int anIndex);
 
      //get the name of the parent particle
-     G4String& GetParentName() const;
+     const G4String& GetParentName() const;
      //get the name of a daughter particle
-     G4String& GetDaughterName(G4int anIndex) const;
+     const G4String& GetDaughterName(G4int anIndex) const;
 
      // get mass of parent
      G4double GetParentMass() const; 
@@ -143,6 +143,7 @@ class G4VDecayChannel
     //  1: Warning message
     //  2: More
 
+    static const G4String   noName;
 };
 
 inline
@@ -168,9 +169,8 @@ inline
 }
 
 inline
- G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
+ const G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
 {
-  static G4String noName = "";
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
     return *daughters_name[anIndex];
   } else {
@@ -206,7 +206,7 @@ inline
 }
 
 inline
- G4String& G4VDecayChannel::GetParentName() const
+ const G4String& G4VDecayChannel::GetParentName() const
 {
   return *parent_name;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.7 1999-08-18 09:15:27 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.8 1999-08-30 08:27:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -38,7 +38,7 @@ const G4int G4ParticleTableDefaultBucket = 32;
 const G4int G4ParticleTableMaxInABucket = 64;
 
 ////////////////////
-G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0)
+G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" ")
 {
   DictionaryBucketSize = G4ParticleTableDefaultBucket;
   fDictionary = new G4PTblDictionary(G4ParticleTable::HashFun,DictionaryBucketSize);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.13 1999-08-24 02:32:11 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.14 1999-08-30 08:27:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L)
 {
-  if ( (A<1) || (Z>numberOfElements) || (Z<0) || (L<0)) {
+  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (L<0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetIon() : illegal atomic number/mass or excitation level " << endl;
@@ -180,7 +180,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
 {
-  if ( (A<1) || (Z>numberOfElements) || (Z<0) || (L<0)) {
+  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (L<0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << endl;
@@ -211,7 +211,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
       anExcitaionLevel =0;
     } else  {
       anAtomicNumber   = ((const G4Ions*)(ion))->GetAtomicNumber();
-      anAtomicMass    =  ((const G4Ions*)(ion))->GetAtomicNumber();
+      anAtomicMass    =  ((const G4Ions*)(ion))->GetAtomicMass();
       anExcitaionLevel = ((const G4Ions*)(ion))->GetExcitationLevel();
     }
 

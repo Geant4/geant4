@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.4 1999-08-18 09:15:14 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.5 1999-08-30 08:27:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,6 +189,8 @@ class G4ParticleTable
 
    G4IonTable*            fIonTable;
    G4ShortLivedTable*     fShortLivedTable;
+
+   G4String               noName;
 };
 
 inline 
@@ -287,7 +289,6 @@ inline G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
 inline 
  const G4String& G4ParticleTable::GetParticleName(G4int index)
 {
-  static G4String noName = "";
   G4ParticleDefinition* aParticle =GetParticle(index);
   if (aParticle != 0) {
     return aParticle->GetParticleName();
