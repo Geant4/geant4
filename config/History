@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2000-08-01 12:38:18 gcosmo Exp $
+$Id: History,v 1.108 2000-08-22 06:34:43 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd August 2000  Gunter Folger
+- globlib.gmk: fix for protection from infinite loops when a dir does
+  not exist (G.Folger).
 
 1st August 2000  Gabriele Cosmo (config-V02-00-01)
 - Added setup WIN32-g++ for Windows/NT/9X with Cygwin and g++ compiler.
