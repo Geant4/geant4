@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2000-06-08 13:10:59 johna Exp $
+$Id: History,v 1.53 2000-06-09 08:22:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 8th June 2000  John Allison  (examples-V01-01-06)
-- geant4-01-01-ref-05 + exampleN03-V01-01-00 + PersistentEx01-V01-00-00
-  + PersistentEx01-V01-00-00.
+- geant4-01-01-ref-05 + exampleN03-V01-01-00 + exampleN03-V01-01-01 +
+  PersistentEx01-V01-00-00 + PersistentEx01-V01-00-00 .
 
 5th June 2000  Steve O'Neale (examples-V01-01-05) 
 - Updated N02 and N04.out for geant4-01-01-ref-05
