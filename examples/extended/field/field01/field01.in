@@ -8,7 +8,7 @@
 #
 /field/setStepperType 4
 #
-/field/setMinStep 0.1 mm
+/field/setMinStep 0.1 mm  
 #
 /field/update
 #
