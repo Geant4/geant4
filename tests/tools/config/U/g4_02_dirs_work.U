@@ -32,7 +32,7 @@ g4message=`cat << EOM
 
 2) G4LIB:		$g4lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
