@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.7 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.8 2000-05-16 17:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,12 @@ class G4PropagatorInField
                                     
    void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
      // Sets both accuracies, maintaining a particular ratio
-     // Delta Interaction / OneStep.
+     //  for accuracties of volume Intersection and Integration (in One Step)
+
+   void    SetDeltaOneStep(G4double deltaOneStep);  
+     // Set accuracy for integration of one step.   (only)
+   void    SetDeltaIntersection(G4double deltaIntersection);
+     // Set accuracy of  intersection of a volume.  (only)
 
    G4int   GetMaxLoopCount();
    void    SetMaxLoopCount(G4int new_max);
