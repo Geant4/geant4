@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectricTest.cc,v 1.4 2003-07-09 12:34:49 pandola Exp $
+// $Id: G4PenelopePhotoElectricTest.cc,v 1.5 2003-12-18 12:20:38 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -243,9 +243,9 @@ G4int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
  
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable();
   //cutsTable->DumpCouples();
@@ -481,13 +481,13 @@ G4int main()
 	  meanFreePath=gammaStdProcess
 	    ->GetMeanFreePath(*gTrack, sti, condition);
 	}
+
+      //G4cout << "Energia cinetica: " << Tkin[i]/MeV << G4endl;
+      //G4cout << "Mean free path: " << meanFreePath/cm << G4endl;
+
       ntuple3->fill(ntuple3->findColumn("kinen"),log10(Tkin[i]));
       ntuple3->fill(ntuple3->findColumn("mfp"),log10(meanFreePath/cm));
       ntuple3->addRow();
-
-    
-      //      G4cout << meanFreePath/cm << G4endl;
-
     }
   G4cout << "Mean Free Path OK" << G4endl;
   
@@ -522,7 +522,7 @@ G4int main()
       
       G4VParticleChange* dummy;
       dummy = gammaProcess->PostStepDoIt(*gTrack, *step);
-     
+      
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       
       // Primary physical quantities 
@@ -656,8 +656,8 @@ G4int main()
 	  particleChange->Clear();
 	  delete particleChange->GetSecondary(i);
 	}       
-    } 
-  
+      particleChange->Clear();
+    }
   
   G4cout  << "Iteration number: "  <<  iter << G4endl;
   
