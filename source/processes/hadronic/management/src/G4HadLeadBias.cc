@@ -92,7 +92,7 @@
         if(++cLepton==randomLepton) 
 	{
 	  aCatch = true;
-	  weight = baryonWeight;
+	  weight = leptonWeight;
 	}
       }
       else if(aSecTrack->GetDefinition()==G4Gamma::Gamma())
@@ -100,7 +100,7 @@
         if(++cgamma==randomGamma) 
 	{
 	  aCatch = true;
-	  weight = baryonWeight;
+	  weight = gammaWeight;
 	}
       }
       else if(aSecTrack->GetDefinition()==G4PionZero::PionZero())
@@ -108,7 +108,7 @@
         if(++cpi0==randomPi0) 
 	{
 	  aCatch = true;
-	  weight = baryonWeight;
+	  weight = npi0Weight;
 	}
       }
       else
@@ -116,7 +116,7 @@
         if(++cMeson==randomMeson) 
 	{
 	  aCatch = true;
-	  weight = baryonWeight;
+	  weight = mesonWeight;
 	}
       }
       if(aCatch)
@@ -132,7 +132,7 @@
     result->Clear();
     result->SetNumberOfSecondaries(buffer.size());
     // G4cerr << "pre"<<G4endl;
-    for(i=0;i<buffer.size();i++)
+    for(i=0;i<static_cast<G4int>(buffer.size());i++)
     {
       result->AddSecondary(buffer[i]);
     }
