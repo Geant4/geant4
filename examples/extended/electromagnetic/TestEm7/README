@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2004-03-24 18:29:45 maire Exp $
+$Id: README,v 1.6 2004-03-31 17:09:45 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -106,14 +106,14 @@ $Id: README,v 1.5 2004-03-24 18:29:45 maire Exp $
      The result is a 1D histogram  which is the total energy deposited along 
      the trajectory of the incident particle.
      
-     The histogram is saved in paw (testem7.paw) or root format (testem7.root)
+     The histogram is saved in paw (testem7.paw) 
      
      The bin size is egal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
      The total energy deposited is plotted in MeV/mm.  
 
      Note that, by default, histograms are disabled. To activate them, uncomment
-     G4ANALYSIS_USE and USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile.
+     G4ANALYSIS_USE in GNUmakefile.
      
   7- DOSE IN 'TEST-VOLUMES'
   
@@ -139,12 +139,3 @@ $Id: README,v 1.5 2004-03-24 18:29:45 maire Exp $
  /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
  (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
  
- 9- ROOT
- 
- To install root, see http://root.cern.ch
- Make sure that the environment variable ROOTSYS, used in GNUmakefile, is
- defined:
- 
- setenv ROOTSYS /???/ROOT/root_v3_10_02
- setenv PATH ${PATH}:${ROOTSYS}/bin
- setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:/usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2004-03-10 12:32:49 maire Exp $
+// $Id: RunAction.cc,v 1.6 2004-03-31 17:09:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,11 +41,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/AIDA.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TFile.h"
- #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,14 +96,6 @@ void RunAction::bookHisto()
  delete tf;
  delete af;
 #endif
-
-#ifdef USE_ROOT
- // Create a ROOT file
- tree = new TFile("testem7.root","recreate");
- 
- // Create histograms
- histo[0] = new TH1F("1","Edep (MeV/mm)",nbBins, 0,length); 
-#endif 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,12 +107,6 @@ void RunAction::cleanHisto()
   tree->close();        // and closing the tree (and the file)
   delete tree;
 #endif
-
-#ifdef USE_ROOT
-  tree->Write();        // Writing the histograms to the file
-  tree->Close();        // and closing the file  
-  delete tree;
-#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

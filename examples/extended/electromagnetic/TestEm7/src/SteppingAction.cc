@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2004-03-10 12:32:49 maire Exp $
+// $Id: SteppingAction.cc,v 1.4 2004-03-31 17:09:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +35,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,12 +61,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));
 #endif
 
-#ifdef USE_ROOT
- G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
- G4double binLength = runAction->GetBinLength();
- runAction->GetHisto(0)->Fill(x, (edep/binLength)/(MeV/mm));
-#endif
- 
  //fill tallies
  //
  G4VPhysicalVolume* pVolume = aStep->GetTrack()->GetVolume();
