@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.2 1999-11-16 17:40:40 gcosmo Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.3 2001-01-09 01:18:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,15 +27,17 @@
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
 //                            user introduced.
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
 #ifndef G4PhysicsLinearVector_h
 #define G4PhysicsLinearVector_h 1
 
+
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
+#include "G4DataVector.hh"
 
 
 class G4PhysicsLinearVector : public G4PhysicsVector  
@@ -62,7 +64,8 @@ class G4PhysicsLinearVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
+inline 
+ size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsLinearVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.

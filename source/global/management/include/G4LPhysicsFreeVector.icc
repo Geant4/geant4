@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.2 1999-11-23 15:00:03 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.3 2001-01-09 01:18:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 // A subdivision method is used to find the energy|momentum bin.
 //
 // F.W. Jones, TRIUMF, 04-JUN-96
+//  11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
 // --------------------------------------------------------------------------
 
 // G4PhysicsVector has PutValue() but it is inconvenient.
@@ -28,8 +29,8 @@
 inline
 void G4LPhysicsFreeVector::PutValues(size_t binNumber, G4double binValue, G4double dataValue)
 {
-   binVector(binNumber) = binValue;
-   dataVector(binNumber) = dataValue;
+   binVector[binNumber] = binValue;
+   dataVector[binNumber] = dataValue;
 }
 
 // Note that theEnergy could be energy, momentum, or whatever.
@@ -47,33 +48,35 @@ G4double G4LPhysicsFreeVector::GetValue(G4double theEnergy, G4bool& isOutRange)
    if (theEnergy < edgeMin) {
       isOutRange = true;
 
+#ifdef G4VERBOSE
       if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " <<
-         theEnergy << " " << dataVector(0) << " " << isOutRange << G4endl;
-
-      returnValue = dataVector(0);
+         theEnergy << " " << dataVector[0] << " " << isOutRange << G4endl;
+#endif
+      returnValue = dataVector[0];
    } 
    else if (theEnergy > edgeMax) {
       isOutRange = true;
 
+#ifdef G4VERBOSE
       if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " <<
-         theEnergy << " " << dataVector(numberOfBin - 1) << " " << 
+         theEnergy << " " << dataVector[numberOfBin - 1] << " " << 
          isOutRange << G4endl;
-
-      returnValue = dataVector(numberOfBin - 1);
+#endif
+      returnValue = dataVector[numberOfBin - 1];
    } 
    else {
      isOutRange = false;
 
      G4int n = FindBinLocation(theEnergy);
 
-     G4double dsde = (dataVector(n + 1) - dataVector(n))/
-                     (binVector(n + 1) - binVector(n));
-
+     G4double dsde = (dataVector[n + 1] - dataVector[n])/
+                     (binVector[n + 1] - binVector[n]);
+#ifdef G4VERBOSE
      if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " << 
-        theEnergy << " " << dataVector(n) + (theEnergy - binVector(n))*dsde <<
+        theEnergy << " " << dataVector[n] + (theEnergy - binVector[n])*dsde <<
         " " << isOutRange << G4endl;
-
-     returnValue = dataVector(n) + (theEnergy - binVector(n))*dsde;
+#endif
+     returnValue = dataVector[n] + (theEnergy - binVector[n])*dsde;
    }
    return returnValue;
 }                                                                  
@@ -109,13 +112,15 @@ size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
    G4int n2 = numberOfBin/2;
    G4int n3 = numberOfBin - 1;
    while (n1 != n3 - 1) {
-      if (theEnergy > binVector(n2))
+      if (theEnergy > binVector[n2])
          n1 = n2;
       else
          n3 = n2;
       n2 = n1 + (n3 - n1 + 1)/2;
    }
+#ifdef G4VERBOSE
    if (verboseLevel > 1) G4cout << 
       "G4LPhysicsFreeVector::FindBinLocation:  returning " << n1 << G4endl;
+#endif
    return (size_t)n1;
 }

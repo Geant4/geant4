@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.3 2000-11-20 17:26:49 gcosmo Exp $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.4 2001-01-09 01:19:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -21,6 +21,8 @@
 //              1998-11-11 by Peter Gumplinger
 //              > initialize all data members of the base class in 
 //                derived class constructors
+//              2000-11-11 by H.Kurashige
+//              > use g4std/vector for dataVector and binVector
 // mail:        gum@triumf.ca
 //
 //
@@ -50,13 +52,13 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 
 	numberOfBin = VectorLength;
 
-	for (size_t i = 0 ; i < VectorLength ; i++)
+	for (G4int i = 0 ; i < VectorLength ; i++)
 	{
-		binVector.insert(Energies[i]);	
-		dataVector.insert(Values[i]); 
+		binVector.push_back(Energies[i]);	
+		dataVector.push_back(Values[i]); 
 	}
-        edgeMin = binVector.first();
-        edgeMax = binVector.last();
+        edgeMin = binVector.front();
+        edgeMax = binVector.back();
 }
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
@@ -85,11 +87,11 @@ G4PhysicsOrderedFreeVector::~G4PhysicsOrderedFreeVector() {}
 void 
 G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 {
-        binVector.insert(energy);
-        dataVector.insert(value);
+        binVector.push_back(energy);
+        dataVector.push_back(value);
 	numberOfBin++;
-        edgeMin = binVector.first();
-        edgeMax = binVector.last();
+        edgeMin = binVector.front();
+        edgeMax = binVector.back();
 
 }
 
@@ -122,7 +124,7 @@ G4PhysicsOrderedFreeVector::FindValueBinLocation(G4double aValue)
    G4int n2 = numberOfBin/2;
    G4int n3 = numberOfBin - 1;
    while (n1 != n3 - 1) {
-      if (aValue > dataVector(n2))
+      if (aValue > dataVector[n2])
          n1 = n2;
       else
          n3 = n2;
@@ -135,9 +137,9 @@ G4double
 G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue,
 						        size_t theLocBin)
 {
-  G4double intplFactor = (aValue-dataVector(theLocBin))
-     / (dataVector(theLocBin+1)-dataVector(theLocBin)); // Interpolation factor
+  G4double intplFactor = (aValue-dataVector[theLocBin])
+     / (dataVector[theLocBin+1]-dataVector[theLocBin]); // Interpolation factor
 
-  return binVector(theLocBin) +
-         ( binVector(theLocBin+1)-binVector(theLocBin) ) * intplFactor;
+  return binVector[theLocBin] +
+         ( binVector[theLocBin+1]-binVector[theLocBin] ) * intplFactor;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.3 2000-11-20 17:26:46 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.4 2001-01-09 01:18:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,16 +30,17 @@
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
 //                            user introduced.
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
 #ifndef G4PhysicsFreeVector_h
 #define G4PhysicsFreeVector_h 1
 
-#include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4PhysicsVector.hh"
 
+#include "globals.hh"
+#include "G4PhysicsVector.hh"
+#include "G4DataVector.hh"
 
 class G4PhysicsFreeVector : public G4PhysicsVector  
 {
@@ -75,13 +76,14 @@ class G4PhysicsFreeVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
+inline 
+size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsFreeVector, FindBinLocation is implemented using
   // the binary search algorithm.
   //
   // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhysicsVector object for most usages. In this
+  // pointer to the G4PhyiscsVector object for most usages. In this
   // case, 'inline' will not be invoked. However, there is a possibility 
   // that the user access to the G4PhysicsFreeVector object directly and 
   // not through pointers or references. In this case, the 'inline' will
@@ -90,13 +92,13 @@ inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   size_t lowerBound = 0;
   size_t upperBound = numberOfBin-1;
 
-  while (lowerBound <= upperBound) {
+  do {
     size_t midBin = (lowerBound + upperBound)/2;
-    if( theEnergy < binVector(midBin) )
+    if( theEnergy < binVector[midBin] )
        upperBound = midBin-1;
     else
        lowerBound = midBin+1;
-  } 
+  } while (lowerBound <= upperBound); 
 
   return upperBound;
 }

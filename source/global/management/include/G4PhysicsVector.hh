@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.4 2000-11-20 17:26:46 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.5 2001-01-09 01:18:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,15 +28,18 @@
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Now GetValue not virtual. 
 //    21 Sep. 1996, K.Amako : Added [] and () operators. 
+//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
 //
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
 #define G4PhysicsVector_h 1
 
+
+
 #include "globals.hh"
-#include "G4DataVector.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
+#include  "G4PhysicsTable.hh"
 
 class G4PhysicsVector 
 {
@@ -85,11 +88,11 @@ class G4PhysicsVector
     G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    void LinkPhysicsTable(G4RWTPtrOrderedVector<G4PhysicsVector>& theTable);
+    void LinkPhysicsTable(G4PhysicsTable& theTable);
          // Link the given G4PhysicsTable to the current G4PhyiscsVector.
     G4bool IsLinkedTableExist() const;
          // Has this physics vector an extended physics table?
-    const G4RWTPtrOrderedVector<G4PhysicsVector>* GetNextTable() const;
+    const G4PhysicsTable* GetNextTable() const;
          // Returns the pointer to a physics table created for elements 
          // or isotopes (when the cross-sesctions or energy-losses 
          // depend explicitly on them).
@@ -101,6 +104,8 @@ class G4PhysicsVector
          // Retrieve the comment of the G4PhysicsVector.
 
   protected:
+    // Use STL Vector 
+    typedef G4std::vector<G4double> G4PVDataVector;
 
     G4double edgeMin;           // Lower edge value of the lowest bin
     G4double edgeMax;           // Lower edge value of the highest bin
@@ -110,22 +115,16 @@ class G4PhysicsVector
     G4double lastValue;         // Cache the last output value   
     size_t lastBin;             // Cache the last bin location
 
-    G4DataVector dataVector;    // Vector to keep the crossection/energyloss
-    G4DataVector binVector;     // Vector to keep the low edge value of bin
+    G4PVDataVector dataVector;    // Vector to keep the crossection/energyloss
+    G4PVDataVector binVector;     // Vector to keep the low edge value of bin
 
-    G4RWTPtrOrderedVector<G4PhysicsVector>* ptrNextTable;  
+    G4PhysicsTable* ptrNextTable;  
                                 // Link to the connected physics table
 
     G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
          // Linear interpolation function
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
-
-  private:
-
-    G4PhysicsVector(const G4PhysicsVector&);
-    G4PhysicsVector& operator=(const G4PhysicsVector&);
-         // Private copy constructor and assignment operator.
 
   private:
 

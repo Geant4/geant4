@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.cc,v 1.4 2000-11-20 17:26:48 gcosmo Exp $
+// $Id: G4PhysicsLnVector.cc,v 1.5 2001-01-09 01:19:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,11 +16,11 @@
 //
 //  History:
 //    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector
+//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
 //
 // --------------------------------------------------------------
 
 #include "G4PhysicsLnVector.hh"
-
 
 G4PhysicsLnVector::G4PhysicsLnVector()
   : dBin(0.), baseBin(0.)
@@ -32,8 +32,8 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
-  dataVector.resize(theNbin+1);
-  binVector.resize(theNbin+1); 
+  dataVector.reserve(theNbin+1);
+  binVector.reserve(theNbin+1); 
 
   ptrNextTable = 0;
   numberOfBin = theNbin;
@@ -46,7 +46,12 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   lastBin = INT_MAX;
   lastEnergy = -DBL_MAX;
   lastValue = DBL_MAX;
-}  
+
+  for (int i=0; i<=numberOfBin; i++) {
+     binVector.push_back(0.0);
+     dataVector.push_back(0.0);
+  }
+ }  
 
 
 G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin, 
@@ -55,20 +60,22 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
-  dataVector.resize(theNbin+1);
-  binVector.resize(theNbin+1); 
+  dataVector.reserve(theNbin+1);
+  binVector.reserve(theNbin+1); 
 
   ptrNextTable = 0;
   numberOfBin = theNbin;
   dBin = log(theEmax/theEmin) / numberOfBin;
   baseBin = log(theEmin)/dBin;
 
-  for (size_t i=0; i<numberOfBin+1; i++) {
-    binVector(i) = exp(log(theEmin)+i*dBin);
+  for (G4int i=0; i<numberOfBin+1; i++) {
+    binVector.push_back(exp(log(theEmin)+i*dBin));
   }
+  binVector.push_back(0.0);
+  dataVector.push_back(0.0);
 
-  edgeMin = binVector(0);
-  edgeMax = binVector(numberOfBin-1);
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfBin-1];
 
   lastBin = INT_MAX;
   lastEnergy = -DBL_MAX;
