@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-07 13:31:04 stesting Exp $
+$Id: History,v 1.6 1999-05-19 13:43:37 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th May 1999  John Allison  (examples-01-00-05)
+- Removed #ifdef GNU_GCC in exampleN03.cc.
+- Updated .out files for geant4-00-ref-08 and, hopefully, the May Release.
+- ExN05CalorimeterHit.hh: Added correct delete operators for
+  preallocation (Frank Behner).
+- E02: Minor update for Sun (Youhei Morita).
 
 7th May 1999  John Allison  (examples-01-00-04)
 - Removed /vis/clear/scene from exampleN03.in.
