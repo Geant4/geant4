@@ -1,0 +1,14 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Assembly Volume Test
+                            --------------------
+
+The purpose of this test is to excercise the functionality of the G4AssemblyVolume class
+and compare it with the geometry created by using of the G4PVPlacements only.
+
+This test provides the possibility to vizualize the geometries either in VRML (see visVRML.mac)
+or DAWN (visDAWN.mac).
+

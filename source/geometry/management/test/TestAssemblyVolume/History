@@ -1,0 +1,42 @@
+$Id: History,v 1.2 2001-02-01 21:24:24 radoone Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    History file
+                    ------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-Feb-2001
+  Added to G4 CVS repository
+
+29-Jan-2001
+  Added visualization of trjectories. Somehow does not work.
+  Has to be investigated.
+
+28-Jan-2001
+  Input macros separated to have one for batch test and one for
+  visualization in VRML and one for DAWN.
+  Batch macro contains now particle gun setup to shoot consequently
+  into all quadrants of the geometry setup.
+
+25-Jan-2001
+  Found out the problem with the reset of G4Navigator state.
+  After geometry switch the dummy call to G4Navigator method
+  LocateGlobalPointAndSetup(...) will reset the navigator's state
+  and forces the re-optimization of geometry from the top.
+
+20-Jan-2001
+  Finished implmentation of geometry flip-flop from scratch which
+  means deleting the whole old geometry and building the new one
+
+14-Dec-2000, Radovan Chytracek
+- Created.
+

@@ -1,0 +1,31 @@
+/tracking/verbose 1
+/run/verbose 1
+/run/initialize
+/gun/particle geantino
+/gun/position  600  600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position -600  600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position -600 -600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position  600 -600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/geom/switch assembly
+/run/initialize
+/gun/position  600  600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position -600  600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position -600 -600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+/gun/position  600 -600 -601 mm
+/gun/direction 0      0    1
+/run/beamOn 1
+exit
