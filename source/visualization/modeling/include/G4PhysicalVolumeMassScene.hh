@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.1 2004-09-13 18:08:20 johna Exp $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.2 2004-12-10 18:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,8 +100,7 @@ public:
   void AddThis (const G4VSolid& s) {AccrueMass (s);}
   void AddThis (const G4VTrajectory&) {}
   void AddThis (const G4VHit&) {}
-  void PreAddThis (const G4Transform3D& objectTransformation,
-		   const G4VisAttributes&) {}
+  void PreAddThis (const G4Transform3D&, const G4VisAttributes&) {}
   void PostAddThis () {}
   void EstablishSpecials (G4PhysicalVolumeModel&);
 
