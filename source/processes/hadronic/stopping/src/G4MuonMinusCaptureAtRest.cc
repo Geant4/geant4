@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.7 2001-08-01 17:12:31 hpw Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.8 2002-08-31 15:40:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -39,6 +39,8 @@
 // **************************************************************
 //      V.Ivanchenko   7 Apr 2000 Advance model for electromagnetic
 //                                capture and cascade
+//      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition 
+//                                of secondaries
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -284,14 +286,16 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
   // Store nuclear cascade
   if(nGkine > 0) {
     for ( G4int isec = 0; isec < nGkine; isec++ ) {
-      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
-      aNewParticle->SetDefinition( Gkin[isec].GetParticleDef() );
-      aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
+      G4ParticleDefinition* pd = Gkin[isec].GetParticleDef();
+      if(pd) {
+        G4DynamicParticle* aNewParticle = new G4DynamicParticle();
+        aNewParticle->SetDefinition( pd );
+        aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
 
-      localtime = globalTime + Gkin[isec].GetTOF();
-
-      G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
-      aParticleChange.AddSecondary( aNewTrack );
+        localtime = globalTime + Gkin[isec].GetTOF();
+        G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position);
+        aParticleChange.AddSecondary( aNewTrack );
+      }
     }
   }
 
@@ -301,12 +305,15 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
     localtime = globalTime*s + tDelay;
 
     for ( G4int isec = 0; isec < nCascade; isec++ ) {
-      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
-      aNewParticle->SetDefinition( Cascade[isec].GetParticleDef() );
-      aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
+      G4ParticleDefinition* pd = Gkin[isec].GetParticleDef();
+      if(pd) {
+        G4DynamicParticle* aNewParticle = new G4DynamicParticle;
+        aNewParticle->SetDefinition( pd );
+        aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
 
-      G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
-      aParticleChange.AddSecondary( aNewTrack );
+        G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
+        aParticleChange.AddSecondary( aNewTrack );
+      }
     }
   }
 
