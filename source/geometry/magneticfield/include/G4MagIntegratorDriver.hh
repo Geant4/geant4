@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.1 1999-01-07 16:07:05 gunter Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.2 1999-07-23 14:11:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Provides Driver that talks to Integrator Stepper, and insures that 
@@ -49,7 +49,8 @@ class G4MagInt_Driver
       // Access functions
       // ----------------
       //
-      G4double Hmin(){ return hminimum_val;} 
+      G4double GetHmin(){ return hminimum_val;} 
+      G4double Hmin()   { return hminimum_val;}     // Obsolete
       G4double GetSafety(){ return safety; }
       G4double GetPshrnk(){ return pshrnk;} 
       G4double GetPgrow(){ return pgrow;} 
@@ -121,7 +122,19 @@ class G4MagInt_Driver
       G4double ComputeNewStepSize_WithinLimits( 
 			  G4double  errMaxNorm,    // normalised error
 			  G4double  hstepCurrent); // current step size
-   private:
+
+protected:
+      //  Issue warnings for undesirable situations
+      void WarnSmallStepSize( G4double hnext, G4double hstep, 
+			      G4double h,     G4double xDone,
+			      G4int noSteps);
+      void WarnTooManyStep( G4double x1start, G4double x2end, G4double xCurrent);
+      void WarnEndPointTooFar (G4double  endPointDist, 
+			       G4double  hStepSize , 
+			       G4double  epsilonRelative,
+			       G4int     debugFlag);
+
+private:
       G4double hminimum_val;  //  Minimum Step allowed in a Step
 
       const G4int nvar;
