@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2003-11-12 16:16:20 johna Exp $
+$Id: History,v 1.70 2003-11-25 14:24:10 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-03 G.Cosmo (exampleN03-V05-02-06)
+- Open the geometry before cleaning stores in ConstructCalorimeter().
 
 12-11-03 J.Allison (exampleN03-V05-02-05)
 - ExN03EventAction: changed drawing mode from 2000 to 1000.
