@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.6 2000-06-22 13:25:09 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.7 2000-07-18 10:45:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,8 +17,9 @@
 // 01/03/99 : creation of sub-cutoff delta rays, L.Urban
 // 28/04/99 : bug fixed in DoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 18/07/00 : bug fix in AlongStepDoIt V.Ivanchenko
+// --------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VhEnergyLoss.hh"
@@ -455,7 +456,9 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                                          theAntiProton,
                                          rscaled-sscaled,aMaterial) ;
         }
-        MeanLoss /= (massratio*ChargeSquare) ;
+	// V.Ivanchenko fix: Charge^2 is taken into account already
+	//        MeanLoss /= (massratio*ChargeSquare) ;
+        MeanLoss /= massratio ;
       }
       else MeanLoss = Step*fdEdx ;
     }

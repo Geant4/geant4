@@ -31,6 +31,7 @@
 // 03 April  2000 V.Ivanchenko Nuclear Stopping power for antiprotons
 // 23 May    2000 MG Pia  Clean up for QAO model 
 // 24 May    2000 MG Pia  Code properly indented to improve legibility
+// 17 July   2000 V.Ivanchenko Bug in scaling AlongStepDoIt method
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -648,23 +649,20 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(const G4Track& trackDat
       
       if(Charge>0.)
         {
-          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-								theProton,
-								rscaled        ,aMaterial) -
-	    G4EnergyLossTables::GetPreciseEnergyFromRange(
-							  theProton,
-							  rscaled-sscaled,aMaterial) ;
+          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(theProton,
+					 rscaled,        aMaterial) -
+	          G4EnergyLossTables::GetPreciseEnergyFromRange(theProton,
+					 rscaled-sscaled,aMaterial) ;
         }
       else
         {
-          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-								theAntiProton,
-								rscaled        ,aMaterial) -
-	    G4EnergyLossTables::GetPreciseEnergyFromRange(
-							  theAntiProton,
-							  rscaled-sscaled,aMaterial) ;
+          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(theAntiProton,
+					 rscaled        ,aMaterial) -
+	          G4EnergyLossTables::GetPreciseEnergyFromRange(theAntiProton,
+					 rscaled-sscaled,aMaterial) ;
         }
-      Eloss /= (MassRatio*ChargeSquare) ;
+
+    Eloss /= MassRatio ;
       
     } else Eloss = Step*fdEdx ;
   }

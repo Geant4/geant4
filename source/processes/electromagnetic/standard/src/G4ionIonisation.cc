@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ionIonisation.cc,v 1.4 1999-12-15 14:51:54 gunter Exp $
+// $Id: G4ionIonisation.cc,v 1.5 2000-07-18 10:45:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -20,17 +20,22 @@
 // **************************************************************
 // It is the first implementation of the ionisation for IONS    
 // --------------------------------------------------------------
+// 18/07/00 : bug fix in AlongStepDoIt and in GetConstrain V.Ivanchenko
+// --------------------------------------------------------------
  
 
 #include "G4ionIonisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4EnergyLossTables.hh"
 
 // constructor and destructor
  
 G4ionIonisation::G4ionIonisation(const G4String& processName)
    : G4VContinuousDiscreteProcess(processName),
      ParticleMass(proton_mass_c2),Charge(eplus),
-     dEdx(1.*MeV/mm),MinKineticEnergy(1.*keV)
+     dEdx(1.*MeV/mm),MinKineticEnergy(1.*keV),
+     theProton (G4Proton::Proton()),
+     theAntiProton (G4AntiProton::AntiProton())
 { PrintInfoDefinition() ; }
 
      
@@ -57,7 +62,19 @@ G4double G4ionIonisation::GetConstraints(const G4DynamicParticle *aParticle,
   G4double Tscaled= KineticEnergy*massratio ;
   G4double ChargeSquare = Charge*Charge ;
 
-  dEdx=ComputedEdx(aParticle,aMaterial) ;
+
+  if(Charge>0.) {
+
+     dEdx = G4EnergyLossTables::GetDEDX( theProton,Tscaled,aMaterial) ;
+     
+  } else {
+        
+     dEdx = G4EnergyLossTables::GetDEDX( theAntiProton,Tscaled,aMaterial) ;
+     
+  }
+     
+  dEdx *= ChargeSquare ;
+
   StepLimit = 0.2*KineticEnergy/dEdx ;
   if(StepLimit < minstep)
     StepLimit = minstep ;
@@ -91,7 +108,8 @@ G4VParticleChange* G4ionIonisation::AlongStepDoIt(
   else
   {
      MeanLoss = Step*dEdx ;
-     MeanLoss /= (massratio*ChargeSquare) ;
+     //   V.Ivanchenko fix: Charge^2 is taken into account already
+     //     MeanLoss /= (massratio*ChargeSquare) ;
   }
   finalT = E - MeanLoss ;
 
