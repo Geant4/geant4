@@ -1,0 +1,276 @@
+
+     =========================================================
+ 		      Geant4 - Hadrontherapy example
+     =========================================================
+
+                             README
+                      ---------------------
+
+This example is developed by G.A.Pablo Cirrone, Giorgio Russo and Francesco Di Rosa
+of the 
+
+Laboratori Nazionali del Sud - Istituto Nazionale di Fisica Nucleare
+Via S. Sofia, 44 Catania, Sicily, Italy (www.lns.infn.it)
+
+The authors are supported by Laboratori Nazionali del Sud, Catania  and by the
+Dipartimento di Fisica of Catania University, Catania.
+
+Authors wish to tanks Susanna Guatelli and Maria Grazia Pia for their support
+in the realization of the sensitive detector and
+Harald Paganetti (from NPTC, Massachussets (US)) for the
+help in the realization of the movement of the modulator wheel.
+------------------------------------------------------------------------
+----> Introduction.                                                    
+                                                                       
+Hadrontherapy example permits the simulation of an hadron therapy 
+beam line. 
+In particular actually the example simulate the specific proton
+therapy beam line installed at Laboratori Nazionali del Sud (INFN)
+in Catania, Sicily (I).
+If you want more information on the proton therapy center of Catania
+or/and proton/hadron therapy in general, please visit the
+pages:
+www.lns.infn.it/~catana
+
+In the nearest future user will be able to change position, dimension
+and material of all the elements of a such typical beam line.
+
+The elements simulated are:
+
+1. The scattering system (to geometrically spread the beam);
+2. The system of collimators, to avoid the scatterig radiation;
+3. The modulation system, that spread the beam in energy and
+   produces the so-called spread out bragg peak;
+   It is constitued by a rotating wheel of different thichness.
+   The wheel rotates around is axis (parallel to the proton
+   beam axis) and its movement is can be obtained by means of a 
+   messenger between each run.
+4. A set of monitor chambers (special transmission ionisation 
+   chambers used to control hadron flux during the irradiation;
+5. The "nozzle" and the final collimator: the define the final shape
+   of the beam before to reach the patient.
+6. The water phantom: it is a box of water inside of which the 
+   dosimeter to perform the measurements of dose distributions are placed.
+   Use of water phantom is required by the international protocol
+   on the measure of dose in proton and ion beams (IAEA 398, 2000)
+7. The "Markus" ionisation chamber. It permits the reconstruction
+   of the depth dose distribution (Bragg curve).
+
+8. A radiographic film. It permits an estimation of the beam lateral dose
+   dose distribution registering the spatial distribution of the 
+   primary particles
+
+------------------------------------------------------------------------
+----> 1.Experimental set-up.                                            
+The application fully simulates the proton therapy beam line
+installed at Laboratori Nazionali del Sud. Inside the water
+phantom (placed at the end of the proton beam line) the Markus ionisation
+chamber and a radiographic film are located. These permit the
+reconstruction of the Bragg curve (registered on the file BraggPeak.out)
+and of the lateral and energy distribution of the particles (registered
+on the files energyDistribution.out and angularDistribution.out). Please
+see later for the description of the produced files.
+The Markus chamber is realized by means of a water cylinder,
+(placed inside the water phantom)
+with its main axis coincident with proton beam axis. Cylinder is
+divided in small slices and energy deposited is each slide in 
+collected at the end of each run. Thefault thickness of the slices
+is 2 micron. 
+The radiographic film is simulated by a plane. It is located, by default,
+at the entrance window of the water phantom (the isocenter point) and
+its thickness is 1 millimeter.
+The plane position and thichness can be varied actually changing the 
+SteppingAction file. User will be able to change plane position 
+and thickness via messengers. 
+in the next future
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                                                        
+ -example enviroment with the compiler 3.2                              
+ -a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.2
+G4SYSTEM = linux-g++                                                    
+
+The following section reports the necessary environment variables 
+necessary for the run of Hadrontherapy.                     
+-------------------------------------------------------------------------
+----> 2.1  ENVIROMENT VARIABLES
+
+export G4SYSTEM=Linux-g++
+
+export G4INSTALL              points to the installation directory of GEANT4;
+
+export G4LIB                  point to the compiled libraries of GEANT4;
+
+export G4WORKDIR              points to the work directory;
+
+export CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
+
+export G4LEVELGAMMADATA       points to the photoevaporation library;
+
+export NeutronHPCrossSections points to the neutron data files;
+.
+export G4RADIOACTIVEDATA      points to the libraries for radio-active decay hadronic processes;
+ 
+export G4LEDATA               points to the low energy electromagnetic libraries
+
+export LD_LIBRARY_PATH=$CLHEP_BASE_DIR/lib
+
+#************************************************************
+#     VISUALIZATION DRIVERS
+#-------------------------------------
+#	SET UP	VRML VIEW DRIVERS
+#-------------------------------------
+
+export G4VIS_BUILD_VRML_DRIVER=1 
+export G4VIS_USE_VRML=1
+export G4VIS_USE_VRMLFILE=1
+export G4VRMLFILE_MAX_FILE_NUM=100
+export G4VRML_VIEWER "netscape"
+export G4VRMLFILE_VIEWER=vrmlview    #if installed
+export PATH=$PATH:~/VRML
+
+#***********************************************************
+#-------------------------------------
+#	SET UP	OpenGL o Mesa
+#-------------------------------------
+
+export G4VIS_BUILD_OPENGLX_DRIVER=1
+export G4VIS_USE_OPENGLX=1
+export OGLHOME=/home/cirrone/Mesa-5.0.1    
+
+#***********************************************************
+#-------------------------------------
+#	SET UP	DAWN
+#-------------------------------------
+
+#export G4VIS_BUILD_DAWN_DRIVER=1
+#export G4VIS_BUILD_DOWNFILE_DRIVER=1
+#export G4VIS_USE_DAWN=1
+#export G4VIS_USE_DAWNFILE=1
+#export PATH=$PATH:~/dawn_3_85d
+#************************************************************
+
+------------------------------------------------------------------------
+----> 3.How to run the example.                                         
+
+In interactive mode:
+$G4WORDIR/bin/Linux-g++/Hadrontherapy
+
+In this way, once compiled, the defaultMacro.mac is executed.
+The primary beam parameter are:
+Radiation:                proton beam;
+Energy distribution:      gaussian;
+Mean energy:              63.4 MeV;
+Energy spread:            300 keV;
+Beam spot size:           1 mm;
+Beam angular spread:      0.057 deg;
+
+
+Cut per region feature permits to set different cut ni different regions.
+In our example it is sufficient to set a small cut inside the dosemeters
+(where informations on dose distributions want be collected).
+Default is: 
+cut = 10 mm along the beam line;
+cut = 0.2 mm inside the dosemeter;
+
+
+The modulator wheel can be rotated via the messenger:
+
+Idle>/modulator/angle/modAngle xx deg
+
+In order to obtain a Spread Out Bragg Peak (SOBP)
+is sufficient to rotate the modulator 
+from 0 deg (default position) to 45 deg 
+using 1 deg steps.
+
+Modulator wheel can be omitted setting its material air.
+-----------------------------------------------------------------------
+----> 4. The physics
+In order to accurately reconstruct the dose deposited by an ion 
+beam the electromagnetic, as well as the hadronic procsses must
+be activated.
+The electromagnetic physic uses the LowEnergy library,
+specifically provided from GEANT4 to treat low energy processes.
+All the process are activated for electrons and photons that are 
+produced as secondary particles when a ion intercts with the
+matter.
+The default tables for atomic stopping power are that from ICRU 49
+report.
+
+Hadronic physics is implemented. The user can see is a difference accurs
+if hadronic processes are swiched on or off setting the
+
+G4int Hadronic 
+
+variable in the HadrontherapyPhysicsList.cc file 
+different from 1.
+
+------------------------------------------------------------------------
+----> 5. Simulation output                                              
+Actually, strctly following uses cases caming from our medical physicists
+the format of the output files is a simple ASCII.
+Hadrontherapy produces three .out files below described:
+
+1.) BraggPeak.out: a two columns file. First column represent depth in water
+(in mm), the second contains energy deposited (in MeV).
+Simply plotting depth versus energy deposited, user can obtain
+Bragg peak in water. 
+
+2.) energyDistribution.out: a two columns file. First column contains
+the energy deposited (in MeV) by a primary particle when it interacts with the
+plane positioned at isocenter. The plane simulates the radiographic film.
+The second column indicates the number of the primary particle 
+responsible for the deposit of energy.
+
+3.) angularDistribution.out: a three columns file. It contains
+the coordinates in millimeters (x, y, z) of a primary particle interacting with the plane
+representing the radiographic film. x direction is along the beam direction, 
+y and z directions are orthogonal to the beam direction.
+
+As soon as possible AIDA interface will be implemented and 
+.xml files will be produced as output, in order to satisfy
+the use cases.
+
+------------------------------------------------------------------------
+----> 5.Visualisation                                                    
+
+Visualisation using the OpenGL drivers
+can be obtained, using a provided macro visualisation.mac.
+
+run 
+$G4WORKDIR/bin/Linux-g++/Hadrontherapy visualisation.mac
+
+------------------------------------------------------------------------
+----> 6. Future plans
+
+A lot of features will be added in the next months.These 
+will following the use cases  we collected (and are still collecting)
+in our medical physics community.
+
+Next improvments will be:
+** Addition of messengers to interactively change position, dimension
+   and composition of all the beam line elements and of the 
+   simulated dosimetric systems and to change
+   cut values;
+
+** Addition of messenger to change energy, energy spread,
+   beam spot size and angular divergence of the proton beam;
+
+** Realization of the read-out-geometry: this will permit
+   the collection of energy deposited inside a voxelized three dimensional
+   volume. The user will be then able to obtain information about dose
+   distributions along any plane;
+
+** Implementation of the AIDA classes for the generation of 
+   .xml output files;
+ --------------------------------------------------------------------------
+
+for comments, advices, doubts and questions please send an e-mail to 
+cirrone@lns.infn.it or giorgiorusso@lns.infn.it
+
+
+last modified: G.A.P.Cirrone 04, April 2003.
+
