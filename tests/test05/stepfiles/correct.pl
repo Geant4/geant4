@@ -13,20 +13,20 @@ print "\nModifying STEP file for NIST toolkit...";
 
 foreach  (@filebuf)
 {
-    if(/.*VERTEX\_POINT.*/)
+if(/.*VERTEX\_POINT.*/)
 {
-    s/VERTEX\_POINT\(\'\'\,/VERTEX\_POINT\(\'\'\,\'\'\,/g ;
-    s/VERTEX\_POINT\(\'NONE\'\,/VERTEX\_POINT\(\'NONE\'\,\'\'\,/g ;
+    s/VERTEX\_POINT\s*\(\s*\'\s*\'\s*\,/VERTEX\_POINT\(\'\'\,\'\'\,/g ;
+    s/VERTEX\_POINT\s*\(\s*\'NONE\'\s*\,/VERTEX\_POINT\(\'NONE\'\,\'\'\,/g ;
 }
 elsif(/.*EDGE\_LOOP.*/)
 {
-    s/EDGE\_LOOP\(\'\'\,/EDGE\_LOOP\(\'\'\,\'\'\,/g;
-    s/EDGE\_LOOP\(\'NONE\'\,/EDGE\_LOOP\(\'NONE\'\,\'\'\,/g;
+    s/EDGE\_LOOP\s*\(\s*\'\s*\'\s*\,/EDGE\_LOOP\(\'\'\,\'\'\,/g;
+    s/EDGE\_LOOP\s*\(\s*\'NONE\'\s*\,/EDGE\_LOOP\(\'NONE\'\,\'\'\,/g;
 }
 elsif(/.*POLY\_LOOP.*/)
 {
-    s/POLY\_LOOP\(\'\'\,/POLY\_LOOP\(\'\'\,\'\'\,/g;
-    s/POLY\_LOOP\(\'NONE\'\,/POLY\_LOOP\(\'NONE\'\,\'\'\,/g;
+    s/POLY\_LOOP\s*\(\s*\'\s*\'\s*\,/POLY\_LOOP\(\'\'\,\'\'\,/g;
+    s/POLY\_LOOP\s*\(\s*\'NONE\'\s*\,/POLY\_LOOP\(\'NONE\'\,\'\'\,/g;
 }
 elsif(/.*ADVANCED\_FACE.*/)
 {
