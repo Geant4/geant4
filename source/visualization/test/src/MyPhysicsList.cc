@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyPhysicsList.cc,v 1.3 1999-12-15 14:54:34 gunter Exp $
+// $Id: MyPhysicsList.cc,v 1.4 2001-03-15 12:30:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,34 +203,41 @@ void MyPhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      G4MultipleScattering *ms = new G4MultipleScattering();
+      ms->SetLateralDisplacementFlag(false);
+      pmanager->AddProcess(ms,-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
   
     } else if (particleName == "e+") {
-    //positron
+      //positron
       // Construct processes for positron
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-     
-     pmanager->AddProcess(new G4eIonisation(),-1,2,2);
-     pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
-     pmanager->AddProcess(new G4eplusAnnihilation(),0,-1,4);
+      G4MultipleScattering *ms = new G4MultipleScattering();
+      ms->SetLateralDisplacementFlag(false);
+      pmanager->AddProcess(ms,-1,1,1);
+      pmanager->AddProcess(new G4eIonisation(),-1,2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
+      pmanager->AddProcess(new G4eplusAnnihilation(),0,-1,4);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
     //muon  
      // Construct processes for muon+
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-     pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
+      G4MultipleScattering *ms = new G4MultipleScattering();
+      ms->SetLateralDisplacementFlag(false);
+      pmanager->AddProcess(ms,-1,1,1);
+      pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);       
      
     } else { 
       if ((particle->GetPDGCharge() != 0.0) && 
           (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino
-       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-       pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
+	// all others charged particles except geantino
+	G4MultipleScattering *ms = new G4MultipleScattering();
+	ms->SetLateralDisplacementFlag(false);
+	pmanager->AddProcess(ms,-1,1,1);
+	pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
      }
     }
   }
