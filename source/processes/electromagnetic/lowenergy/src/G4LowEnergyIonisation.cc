@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.66 2001-10-11 12:01:59 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.67 2001-10-12 12:36:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1363,15 +1363,15 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   // transitionTable contains all the transition probabilities of one atom:
   // loop on subshell is inside the method.
 
-  // when the last subshell is reached CollIsFull becomes FALSE.
-  G4bool ColIsFull = FALSE;
+  // when the last subshell is reached CollIsFull becomes false.
+  G4bool ColIsFull = false;
   G4int ShellNum = 0;
   //  G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
      G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;
-     return FALSE;
+     return false;
   }   
   if(thePrimShell <= (*(*(*TransitionTable)[maxNumOfShells])[0])[0]){
 
@@ -1410,7 +1410,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
 	TransParam[0] = (*(*(*TransitionTable)[ShellNum])[SubShellCol])[TransProb];
 	TransParam[1] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	TransParam[2] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
-	ColIsFull = TRUE;
+	ColIsFull = true;
 	break;
       }
       
@@ -1420,7 +1420,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   }
   else{
 
-    ColIsFull = FALSE;
+    ColIsFull = false;
   }
 
   return ColIsFull;

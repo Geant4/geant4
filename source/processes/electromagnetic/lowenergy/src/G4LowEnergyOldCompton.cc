@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldCompton.cc,v 1.3 2001-09-23 23:08:57 pia Exp $
+// $Id: G4LowEnergyOldCompton.cc,v 1.4 2001-10-12 12:36:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,7 +174,7 @@ void G4LowEnergyOldCompton::BuildZVec(){
 
       G4double Zel = (*theElementVector)[iel]->GetZ();
 
-      if(ZNumVec->contains(Zel) == FALSE){
+      if(ZNumVec->contains(Zel) == false){
 	ZNumVec->push_back(Zel);
       }  else{
 	continue;

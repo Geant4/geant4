@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldBremsstrahlung.cc,v 1.1 2001-10-09 11:26:38 vnivanch Exp $
+// $Id: G4LowEnergyOldBremsstrahlung.cc,v 1.2 2001-10-12 12:36:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

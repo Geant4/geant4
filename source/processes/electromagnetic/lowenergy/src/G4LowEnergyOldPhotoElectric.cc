@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldPhotoElectric.cc,v 1.3 2001-09-23 23:08:57 pia Exp $
+// $Id: G4LowEnergyOldPhotoElectric.cc,v 1.4 2001-10-12 12:36:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -277,7 +277,7 @@ void G4LowEnergyOldPhotoElectric::BuildZVec(){
 
       G4double Zel = (*theElementVector)[iel]->GetZ();
 
-      if(ZNumVec->contains(Zel) == FALSE){
+      if(ZNumVec->contains(Zel) == false){
 	ZNumVec->push_back(Zel);
       } else{
 	continue;
@@ -465,11 +465,11 @@ G4VParticleChange* G4LowEnergyOldPhotoElectric::PostStepDoIt(const G4Track& aTra
 
     if(AtomNum > 5){
       
-      G4bool ThereAreShells = TRUE;
+      G4bool ThereAreShells = true;
       G4int AtomInd = ZNumVecFluor->index(AtomNum);
       oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomInd];
       
-      while(ThereAreShells == TRUE){
+      while(ThereAreShells == true){
 	
 	// Select the second transition from another subshell
 	// fluorPar[0] = SubShell 
@@ -497,7 +497,7 @@ G4VParticleChange* G4LowEnergyOldPhotoElectric::PostStepDoIt(const G4Track& aTra
 	G4ThreeVector newPartDirection(dirx, diry, dirz);
 	/////newPartDirection.rotateUz(PhotonDirection);
 	
-	if(ThereAreShells != FALSE){
+	if(ThereAreShells != false){
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
 
@@ -674,15 +674,15 @@ G4bool G4LowEnergyOldPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   // transitionTable contains all the transition probabilities of one atom:
   // loop on subshell is inside the method.
 
-  // when the last subshell is reached CollIsFull becomes FALSE.
-  G4bool ColIsFull = FALSE;
+  // when the last subshell is reached CollIsFull becomes false.
+  G4bool ColIsFull = false;
   G4int ShellNum = 0;
   //  G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
      G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;
-     return FALSE;
+     return false;
   }   
   if(thePrimShell <= (*(*(*TransitionTable)[maxNumOfShells])[0])[0]){
 
@@ -726,7 +726,7 @@ G4bool G4LowEnergyOldPhotoElectric::SelectRandomTransition(G4int thePrimShell,
 	  TransParam[0] = (*(*(*TransitionTable)[ShellNum])[SubShellCol])[TransProb];
 	  TransParam[1] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	  TransParam[2] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
- 	  ColIsFull = TRUE;
+ 	  ColIsFull = true;
 	  break;
 	}
 	
@@ -735,7 +735,7 @@ G4bool G4LowEnergyOldPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   }
   else{
 
-    ColIsFull = FALSE;
+    ColIsFull = false;
   }
 
   return ColIsFull;
