@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.43 2003-06-18 16:54:04 vnivanch Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.44 2003-06-19 13:03:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,8 +65,8 @@
 #include "G4MaterialCutsCouple.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/fstream"
+#include <iomanip>
+#include <fstream>
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
