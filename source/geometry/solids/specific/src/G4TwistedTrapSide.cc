@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.12 2004-12-02 16:40:51 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.13 2004-12-02 18:05:10 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,7 +371,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       xxonsurface = SurfacePoint(PhiR[k],uR[k]) ;
       surfacenormal = NormAng(PhiR[k],uR[k]) ;
       tmpdist[k] = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx[k]); 
-      G4double deltaXtmp = ( tmpxx[0] - xxonsurface ).mag() ; 
+      G4double deltaXtmp = ( tmpxx[k] - xxonsurface ).mag() ; 
 
 #ifdef G4SPECSDEBUG
       G4cout << "Step i = " << i << ", distance = " << tmpdist[k] << ", " << deltaXtmp << G4endl ;
@@ -382,9 +382,9 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
  
       GetPhiUAtX(tmpxx[k], PhiR[k], uR[k]) ; // the new point xx is accepted and phi/u replaced
       
-      //#ifdef G4SPECSDEBUG
-      //G4cout << "approximated phiR = " << PhiR[k] << ", uR = " << uR[k] << G4endl ; 
-      //#endif
+#ifdef G4SPECSDEBUG
+      G4cout << "approximated phiR = " << PhiR[k] << ", uR = " << uR[k] << G4endl ; 
+#endif
 
       deltaX = deltaXtmp ;
 
