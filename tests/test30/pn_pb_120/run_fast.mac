@@ -7,10 +7,10 @@
 #verbose
 0
 #events
-50000
+100000
 //--------Proton_processes
 #particle
-proton 
+proton
 //--------
 #material
 Pb
@@ -19,9 +19,9 @@ Pb
 #emax(MeV)
 120
 #nbinse
-60
+120
 #nbinsd
-60
+120
 #elim(MeV)
 30.
 #nangle
@@ -31,8 +31,6 @@ Pb
 #dangle
 5.
 //--------
-#kBound
-0.1
 #generator
 binary
 #paw

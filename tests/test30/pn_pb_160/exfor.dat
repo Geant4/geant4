@@ -1,13 +1,3 @@
-                EXFOR: Experimental Nuclear Reaction Data Retrievals
-                                         HELP
-               Other Databases: EVA, CINDA, Program abstracts
-
-  ------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-ENTRY            O0181          0
-SUBENT        O0181001          0
-BIB                 14         43
 TITLE      Preequilibrium (P,N)Reaction As a Probe For the
            Effective Nucleon-Nucleon Interaction in Multistep
            Direct Processes.
@@ -51,12 +41,6 @@ ERR-ANALYS The Relative Uncertainties Within Angular Distributions
 STATUS     (TABLE).Data Tables on Floppy Disk Which have Been
            Prepared by the Authors. This Disk was Received From
            Nea Data Bank.
-ENDBIB              43
-NOCOMMON
-ENDSUBENT           46
-------------------------------------------------------------------------
-SUBENT        O0181044     960816
-BIB                  3          8
 REACTION   (82-PB-208(P,X)0-NN-1,,DA/DE,,,EXP)
 SAMPLE     Self-Supporting Target of Isotopically Enriched (98.7%)
            Pb-208, Thicknesses 102 and 176E-3 G/Cm**2,was Used.
@@ -65,8 +49,6 @@ COMMENT    -By Compiler-
            Energy Less Than 29.75 MeV. These Data were Excluded by
            Compiler From Data Table. Probably Low Energy Neutrons
            Could not Be Detected.
-ENDBIB               8
-COMMON               2          3
 EN         ANG
 MEV        ADEG
       160.3         0.
