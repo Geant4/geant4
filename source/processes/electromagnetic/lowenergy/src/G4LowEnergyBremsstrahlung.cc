@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.8 1999-06-05 14:04:06 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.9 1999-06-05 14:12:05 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
   G4double KineticEnergy,TotalEnergy,bremloss,Z,x,
            losslim,loss,rate,natom,Cut;
 
-  const G4double MinKineticEnergy = 1.*keV;
+  const G4double MinKinEnergy = 1.*keV;
   const G4double MinCut = 1.*keV;
   const G4double Thigh = 100.*GeV;
   const G4double Cuthigh = 50.*GeV;
@@ -184,7 +184,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 
           bremloss = 0.;
 
-          if (KineticEnergy>MinKineticEnergy)
+          if (KineticEnergy>MinKinEnergy)
             {
              if (Cut > KineticEnergy) Cut = KineticEnergy ;
 
