@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.2 1999-03-27 19:22:03 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.3 1999-04-01 06:40:50 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,8 +103,8 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // The random number techniques of Butcher & Messel are used 
 // (Nuc Phys 20(1960),15). GEANT4 internal units
 //
-
-  //  aParticleChange.Initialize(aTrack);
+  cout<<"************** Starting RE DoIt ****************"<<endl;
+  aParticleChange.Initialize(aTrack);
   
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -118,37 +118,52 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
 
   // sample the energy rate of the scattered gamma 
-  G4double Val, ffPar;
-  G4double cosTh2, sinTheta, greject;
-  G4double oneOnWlGamma = GammaEnergy0/h_Planck*c_light;
 
-  do {
+  G4double wlGamma = h_Planck*c_light/GammaEnergy0;
+  G4double elementZ = theElement->GetZ();
+  G4double tableIndex = elementZ - 1;
+
+  G4double Theta, DataFormFactor;
+  G4double cosTheta, greject;
+  G4double Theta_Half, x, SinThHalf, RandomFormFactor;
+  G4double sinTheta;
+  do{
+    
+    //    do{
+    
+    Theta_Half = G4UniformRand()*pi/2;
+    SinThHalf = sin(Theta_Half);
+    x = SinThHalf/wlGamma;
+    
+    DataFormFactor = DataLogInterpolation(x, tableIndex, theFormFactorTable)/cm;
+    
+    RandomFormFactor = G4UniformRand()*elementZ;
       
-    Val = G4UniformRand()*theElement->GetZ();
+      //  }while(DataFormFactor < RandomFormFactor);
 
-    G4double sinThOnLambda = DataLogInterpolation(Val, theElement->GetZ(), theFormFactorTable)/cm;
+    Theta = Theta_Half*2;
+    cosTheta = cos(Theta);
+    sinTheta = sin(Theta);
+    
+    greject = cosTheta*cosTheta*DataFormFactor;
 
-    sinTheta = sinThOnLambda/oneOnWlGamma;
-    G4double cosTh = 1-2*sinTheta*sinTheta;
-    cosTh2 = cosTh*cosTh;
-    greject = (1+cosTh2)/2;
+  }while( greject < RandomFormFactor);
 
-  }while( (greject < G4UniformRand()));
+  
+  // scattered gamma angles. ( Z - axis along the parent gamma)
+  G4double Phi = twopi * G4UniformRand() ;
+  G4double dirx = sinTheta*cos(Phi) , diry = sinTheta*sin(Phi) , dirz = cosTheta ;
+  
+  // update G4VParticleChange for the scattered gamma 
+  G4ThreeVector GammaDirection1(dirx, diry, dirz);
 
-
-   // scattered gamma angles. ( Z - axis along the parent gamma)
-   G4double cosTheta = sqrt (cosTh2);
-   G4double Phi     = twopi * G4UniformRand() ;
-   G4double dirx = sinTheta*cos(Phi) , diry = sinTheta*sin(Phi) , dirz = cosTheta ;
-
-   // update G4VParticleChange for the scattered gamma 
-   G4ThreeVector GammaDirection1 (dirx, diry, dirz);
-   GammaDirection1.rotateUz(GammaDirection0);
-   aParticleChange.SetMomentumChange(GammaDirection1) ;
-
-   aParticleChange.SetNumberOfSecondaries(0);
-
-   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
+  GammaDirection1.rotateUz(GammaDirection0);
+  aParticleChange.SetEnergyChange(GammaEnergy0);
+  aParticleChange.SetMomentumChange(GammaDirection1);
+  
+  aParticleChange.SetNumberOfSecondaries(0);
+  
+  return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
 void G4LowEnergyRayleigh::BuildCrossSectionTable(){
@@ -163,6 +178,7 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  cout<<"************** RE CS ****************"<<endl;
 
 }
 
@@ -178,7 +194,7 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theFormFactorTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-
+  cout<<"************** RE FF ****************"<<endl;
 }
 
 void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
@@ -215,12 +231,15 @@ void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
-	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, (*theElementVector)(k)->GetZ(), theCrossSectionTable)*barn;
+
+	G4double tableIndex = (*theElementVector)(k)->GetZ() - 1;
+	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy,tableIndex, theCrossSectionTable)*barn;
+
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
-      }       
+
+      }
       
       Value = SIGMA<=0.0 ? BigPath : 1./SIGMA ;
-      
       ptrVector->PutValue( i , Value ) ;
     }
     
@@ -249,7 +268,9 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
       crossSection = 0. ;
     else {
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
-      crossSection = DataLogInterpolation(GammaEnergy, (*theElementVector)(i)->GetZ(), theCrossSectionTable)*barn;
+
+      G4double tableIndex = (*theElementVector)(i)->GetZ() - 1;
+      crossSection = DataLogInterpolation(GammaEnergy, tableIndex, theCrossSectionTable)*barn;
       
     }
     
@@ -258,7 +279,7 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << endl;
-  return 0;
+  return (*theElementVector)(0);
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.2 1999-03-27 19:16:33 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.3 1999-04-01 06:42:56 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,12 @@ public:
   
   void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
   
-  G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize, G4ForceCondition* condition);
+  G4double GetMeanFreePath(const G4Track& aTrack, 
+			   G4double previousStepSize, 
+			   G4ForceCondition* condition);
+
+  G4double GetCrossSection(G4DynamicParticle* aDynamicGamma,
+			    G4Element* anElement);
   
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
   
@@ -113,7 +118,7 @@ private:
   
   G4double MeanFreePath;           
   //  HepTupleManager* PEPsdiManager;
-  HepTupleManager* PEManager;
+  //  HepTupleManager* PEManager;
 
 };
 

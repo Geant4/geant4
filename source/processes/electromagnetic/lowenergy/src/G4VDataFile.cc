@@ -94,6 +94,7 @@ void G4VDataFile::SetBufferSize(G4int sz){
 
   _bufSize = sz;
   buf = new char[_bufSize+1];
+  
 }
 
 void G4VDataFile::GetLine(){

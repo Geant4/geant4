@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.1 1999-03-02 17:16:29 aforti Exp $
+// $Id: G4LowEnergyRayleigh.hh,v 1.2 1999-04-01 06:42:57 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,8 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Step.hh"
+#include <iostream.h>
+#include <iomanip.h>
 
 class G4LowEnergyRayleigh : public G4VDiscreteProcess {
 
@@ -79,10 +81,16 @@ private:
   G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
 
   G4double DataLogInterpolation(G4double Argument, 
-				G4double AtomicNumber, 
+				G4double tableIndex, 
 				G4PhysicsTable* Table);
 
   G4int FindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
+
+  G4double InvDataLogInterpolation(G4double Argument, 
+				   G4double tableIndex, 
+				   G4PhysicsTable* Table);
+
+  G4int InvFindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
 
   G4PhysicsTable* theCrossSectionTable; 
   G4PhysicsTable* theFormFactorTable;

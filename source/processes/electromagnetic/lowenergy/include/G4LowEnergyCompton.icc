@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.icc,v 1.2 1999-03-27 19:15:58 aforti Exp $
+// $Id: G4LowEnergyCompton.icc,v 1.3 1999-04-01 06:43:38 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,11 +48,14 @@ G4LowEnergyCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCond
 
 inline G4double G4LowEnergyCompton::DataLogInterpolation(G4double Argument, G4double TableIndex, G4PhysicsTable* Table){
 
+
   G4PhysicsVector* theVec = (*Table)(TableIndex);
   G4int theLoc = FindBinLocation(Argument, theVec); 
 
   G4double val1 = (*theVec)(theLoc), val2 = (*theVec)(theLoc+1);
   G4double arg1 = theVec->GetLowEdgeEnergy(theLoc), arg2 = theVec->GetLowEdgeEnergy(theLoc+1);
+
+  if(arg1 == 0.0) arg1 = 1e-17;	if(val1 == 0.0) val1 = 1e-17;
 
   G4double theVal = (log10(val1)*log10(arg2/Argument)
 		     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.1 1999-03-27 19:18:13 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.2 1999-04-01 06:42:55 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ class G4LowEnergyBremsstrahlung : public G4eEnergyLoss
 { 
 public:
  
-  G4LowEnergyBremsstrahlung(const G4String& processName = "eBrem");
+  G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
   
   ~G4LowEnergyBremsstrahlung();
   
@@ -127,11 +127,17 @@ private:
   
   RWTPtrSlist< RWTPtrSlist<G4DataVector> >* ATable; 
   RWTPtrSlist<G4DataVector>* BTable;
-
-  G4OrderedTable PartialSumSigma;    // partial sum of total crosssection
   
-  G4double LowestKineticEnergy;      // low  energy limit of the crossection formula
-  G4double HighestKineticEnergy;     // high energy limit of the crossection formula 
+  // partial sum of total crosssection
+  G4OrderedTable PartialSumSigma;
+  
+  // low  energy limit of the crossection formula
+  G4double LowestKineticEnergy;      
+  
+  // high energy limit of the crossection formula 
+  G4double HighestKineticEnergy;     
+  
+  //  G4double MeanFreePath; // here there is no need of a global MeanFreePath variable        
   G4int    TotBin;                   // number of bins in the tables 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.2 1999-03-27 19:21:48 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.3 1999-04-01 06:40:48 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,8 +103,8 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // Note 2 : The differential cross section implicitly takes account of 
 // pair creation in both nuclear and atomic electron fields. However triplet 
 // prodution is not generated.
- 
-  // aParticleChange.Initialize(aTrack);
+ cout<<"************** Starting PP DoIt ****************"<<endl;
+  aParticleChange.Initialize(aTrack);
   G4Material* aMaterial = aTrack.GetMaterial();
   
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -269,7 +269,7 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-
+  cout<<"************** PP CS ****************"<<endl;
 }
 
 void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
@@ -306,9 +306,10 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
-
-	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, (*theElementVector)(k)->GetZ(), theCrossSectionTable)*barn;
+	G4int tableIndex = (*theElementVector)(k)->GetZ()-1;
+	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, tableIndex, theCrossSectionTable)*barn;
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
+
       }       
       
       Value = SIGMA<=0.0 ? BigPath : 1./SIGMA ;
@@ -349,6 +350,8 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << endl;
-  return 0;
+  return (*theElementVector)(0);
 }
+
+
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.2 1999-03-27 19:21:26 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.3 1999-04-01 06:40:47 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,8 +115,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 // (Nuc Phys 20(1960),15).
 // GEANT4 internal units
 //
-
-  //  aParticleChange.Initialize(aTrack);
+  cout<<"************** Starting CE DoIt ****************"<<endl;
+  aParticleChange.Initialize(aTrack);
 
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -124,97 +124,94 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
 
-  //  cout<<"GammaEnergy "<<GammaEnergy0<<endl;
   // Select randomly one element 
   G4Material* aMaterial = aTrack.GetMaterial();
   const G4int numOfElem = aMaterial->GetNumberOfElements();
   
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-  //  cout<<"TheElement Name "<<theElement->GetName()<<endl;
+  G4int elementZ = theElement->GetZ();
+  G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
+  G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
+  G4double alpha1   = - log(epsilon0)  , alpha2 = 0.5*(1.- epsilon0sq);
+  G4double ScatteringFunction, x;
+  G4double wlGamma = h_Planck*c_light/GammaEnergy0;
+  
   // sample the energy rate of the scattered gamma 
-  G4double Val, sfPar;
-  G4double ERate, ERate2, onecost, sint2; 
-  
-  G4double ERateMin  = 1./(1.+2*E0_m) , ERateMin2 = ERateMin*ERateMin;
-  G4double NormF1 = - log(ERateMin),  NormF2 = 0.5*(1.- ERateMin2);
-  
-  do {
-
-    if ( NormF1/(NormF1+NormF2) > G4UniformRand() ){ 
-
-      ERate  = exp(-NormF1*G4UniformRand());     // pow(ERateMin,G4UniformRand())
-      ERate2 = ERate*ERate; 
-    }
-
-    else {
-
-      ERate2 = ERateMin2 + (1.- ERateMin2)*G4UniformRand();
-      ERate  = sqrt(ERate2);
-    }
-
-    onecost = (1.- ERate)/(ERate*E0_m);
-    sint2 = onecost*(2.-onecost);
-
-    G4double oneOnWlGamma = GammaEnergy0/h_Planck*c_light;
-    sfPar = sqrt(onecost/2)*oneOnWlGamma;
-      
-    Val = DataLogInterpolation(sfPar, theElement->GetZ(), theScatteringFunctionTable)*1/cm;
+  do{
     
-  }  while(Val <  theElement->GetZ()*G4UniformRand());
+    if ( alpha1/(alpha1+alpha2) > G4UniformRand()){
+      
+      epsilon   = exp(-alpha1*G4UniformRand());  // pow(epsilon0,G4UniformRand())
+      epsilonsq = epsilon*epsilon; 
+    }
+    else{
+      
+      epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+      epsilon   = sqrt(epsilonsq);
+    }
+    
+    onecost = (1.- epsilon)/(epsilon*E0_m);
+    sint2   = onecost*(2.-onecost);
+    
+    x = sqrt(onecost/2)/wlGamma;
+    
+    ScatteringFunction = DataLogInterpolation(x, elementZ - 1, theScatteringFunctionTable)/cm;
+    greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
+    
+  }  while(greject < elementZ*G4UniformRand());
   
-   G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
-   G4double Phi     = twopi * G4UniformRand() ;
-   G4double dirx = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
-   //   cout<<"CosTh: "<<cosTeta<<" phy: "<<Phi<<endl;
-   //
-   // update G4VParticleChange for the scattered gamma 
-   //
-   
-   G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
-   GammaDirection1.rotateUz(GammaDirection0);
-   aParticleChange.SetMomentumChange( GammaDirection1 ) ;
-   G4double GammaEnergy1 = ERate*GammaEnergy0;
-   if (GammaEnergy1 > 0.)
-     {
-       aParticleChange.SetEnergyChange( GammaEnergy1 ) ;
-     }
-   else
-     {    
-       aParticleChange.SetEnergyChange(0.) ;
-       aParticleChange.SetStatusChange(fStopAndKill);
+  G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
+  G4double Phi     = twopi * G4UniformRand() ;
+  G4double dirx = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
 
-     }
-       
-   //
-   // kinematic of the scattered electron
-   //
+  //
+  // update G4VParticleChange for the scattered gamma 
+  //
+  
+  G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
+  
+  GammaDirection1.rotateUz(GammaDirection0);
+  aParticleChange.SetMomentumChange( GammaDirection1 ) ;
+  G4double GammaEnergy1 = epsilon*GammaEnergy0;
+  if (GammaEnergy1 > 0.)
+    {
+      aParticleChange.SetEnergyChange( GammaEnergy1 ) ;
+    }
+  else
+    {    
+      aParticleChange.SetEnergyChange(0.) ;
+      aParticleChange.SetStatusChange(fStopAndKill);
+      
+    }
+  
+  //
+  // kinematic of the scattered electron
+  //
+  
+  G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
+  
+  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElecKineEnergy, aMaterial)
+      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
 
-   G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
-   
-   if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElecKineEnergy, aMaterial)
-       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
-
-     G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
-     G4ThreeVector ElecDirection((GammaEnergy0*GammaDirection0 - 
-				  GammaEnergy1*GammaDirection1)*(1./ElecMomentum));
-     
-     // create G4DynamicParticle object for the electron.  
-     G4DynamicParticle* aElectron= new G4DynamicParticle (G4Electron::Electron(),
+    G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
+    G4ThreeVector ElecDirection((GammaEnergy0*GammaDirection0 - 
+				 GammaEnergy1*GammaDirection1)*(1./ElecMomentum));
+    
+    // create G4DynamicParticle object for the electron.  
+    G4DynamicParticle* aElectron= new G4DynamicParticle (G4Electron::Electron(),
 							  ElecDirection, ElecKineEnergy) ;
-     aParticleChange.SetNumberOfSecondaries(1);
-     aParticleChange.AddSecondary( aElectron );
-     aParticleChange.SetLocalEnergyDeposit (0.); 
+    aParticleChange.SetNumberOfSecondaries(1);
+    aParticleChange.AddSecondary( aElectron );
+    aParticleChange.SetLocalEnergyDeposit (0.); 
+  }
+  else{
+    
+    aParticleChange.SetNumberOfSecondaries(0);
+    aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy);
    }
-   else{
-     
-     aParticleChange.SetNumberOfSecondaries(0);
-     aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy);
-   }
-
-   //  Reset NbOfInteractionLengthLeft and return aParticleChange
-   //   cout<<"End of Compton PostStepDoIt"<<endl;
-   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
+  
+  return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
 void G4LowEnergyCompton::BuildCrossSectionTable(){
@@ -229,7 +226,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-
+  cout<<"************** CE CS ****************"<<endl;
 }
 
 void G4LowEnergyCompton::BuildScatteringFunctionTable(){
@@ -244,7 +241,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theScatteringFunctionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-
+  cout<<"************** CE SF ****************"<<endl;
 }
 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
@@ -319,7 +316,6 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
     else {
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
       crossSection = DataLogInterpolation(GammaEnergy, (*theElementVector)(i)->GetZ(), theCrossSectionTable)*barn;
-     cout<<"MFP: "<<MeanFreePath<<"   crossSection: "<<crossSection<<endl;
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
@@ -330,7 +326,7 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
   cout<<"         *************************     "<<endl;
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
 	 << "' has no elements, NULL pointer returned." << endl;
-  return 0;
+  return (*theElementVector)(0);
 }
 
 
