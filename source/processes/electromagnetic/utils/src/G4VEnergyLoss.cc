@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.16 2000-11-22 20:44:50 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.17 2001-02-01 15:17:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -922,9 +922,6 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  
-  if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation ?
@@ -934,9 +931,13 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
     siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity*ChargeSquare/beta2) ;
     loss = G4RandGauss::shoot(MeanLoss,siga) ;
+
     if(loss < 0.) loss = 0. ;
     return loss ;
   }
+
+  if (Tm <= ipotFluct) Tm = ipotFluct ;
+  if(Tm > threshold) Tm = threshold;
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
