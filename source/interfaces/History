@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2004-04-08 08:19:16 gbarrand Exp $
+$Id: History,v 1.68 2004-04-09 19:51:31 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th April 2004  John Allison  (interfaces-V06-01-00 + vis-V06-01-00)
+- Tagged G4[UI]Win32[.hh,.cc] as below.  Joint with vis-V06-01-00.
 
 08 April 2004, Guy Barrand
 - G4[UI]Win32[.hh,.cc] : modify things in order to be able to use
