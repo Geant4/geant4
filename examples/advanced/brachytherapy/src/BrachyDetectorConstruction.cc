@@ -35,9 +35,6 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-//cubo di lato 30 cm....il cubo d'acqua e' messo in un worldvolume di 4m di 
-//lato riempito d'aria
-
 BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName):
   MaterialBox(0),DefaultMaterial(0),Iodio(0),Gold(0),titanium(0)
 {
@@ -116,11 +113,13 @@ void BrachyDetectorConstruction::DefineMaterials()
  G4Element* elFe  = new G4Element("Iron","Fe",Z=26.,A);
 
  // Lead material
+ /*
+
  A = 207.19*g/mole;
  d = 11.35*g/cm3;
  G4Material* matPb = new G4Material("Lead",Z=82.,A,d);
  
-
+ */
  //titanium
  A=47.88*g/mole;
  d=4.50*g/cm3;
@@ -145,9 +144,11 @@ void BrachyDetectorConstruction::DefineMaterials()
  G4Material* gold=new G4Material("gold",Z=79.,A,d);
 
  // Iridium (Medical Physics, Vol 25, No 10, Oct 1998)
+ /*
  d = 22.42*g/cm3;
  A = 191.96260*g/mole ;
  G4Material* matIr192 = new G4Material("Iridium",Z=77.,A,d);
+ */
 
  //IodiumCore(chimica degli elementi N.N Greenwood,A.Earnshaw)
  A=124.9*g/mole;
@@ -189,14 +190,9 @@ G4VPhysicalVolume* BrachyDetectorConstruction::ConstructDetector()
  G4double ExpHall_y = 4.0*m;
  G4double ExpHall_z = 4.0*m;
 
-  G4Colour  white   (1.0, 1.0, 1.0) ;
-  G4Colour  grey    (0.5, 0.5, 0.5) ;
-  G4Colour  lgrey   (.75, .75, .75) ;
+
   G4Colour  red     (1.0, 0.0, 0.0) ;
-  G4Colour  blue    (0.0, 0.0, 1.0) ;
-  G4Colour  cyan    (0.0, 1.0, 1.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
-  G4Colour  yellow  (1.0, 1.0, 0.0) ;
   G4Colour  lblue   (0.0, 0.0, .75);
 
   // Rotation Matrix
