@@ -321,8 +321,3 @@ void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
 }
 
 
-
-
-
-
-
