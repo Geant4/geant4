@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.4 2001-07-11 10:09:02 gunter Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.5 2001-08-24 21:19:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -46,6 +46,7 @@ public:
   void AddPrimitive(const G4Polyhedron&){}
   void AddPrimitive(const G4NURBS&){}
   void AddPrimitive(const G4Polymarker&){}
+  void AddPrimitive(const G4Scale&){}
 
   void AddThis(const G4Box&){}
   void AddThis(const G4Cons&){}
