@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.12 2000-05-15 11:18:58 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.13 2000-05-18 13:45:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -200,23 +200,14 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
     }
   }
 
-  G4String sceneName;
-  const G4VSceneHandler* scene = fpVisManager -> GetCurrentSceneHandler ();
-  if (scene) {
-    sceneName = scene -> GetName ();
-  }
-  else {
-    sceneName = "none";
-  }
-
-  return graphicsSystemName + " " + NextName () + " " + sceneName;
+  return graphicsSystemName + " " + NextName ();
 }
 
 void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-  G4String graphicsSystem, newName, sceneName;
+  G4String graphicsSystem, newName;
   G4std::istrstream is ((char*)newValue.data());
-  is >> graphicsSystem >> newName >> sceneName;
+  is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
     fpVisManager -> GetAvailableGraphicsSystems ();
@@ -279,8 +270,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
 
   // Attach scene.
-  G4String commandString = "/vis/sceneHandler/attach " + sceneName;
-  G4UImanager::GetUIpointer () -> ApplyCommand (commandString);
+  G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
 
   UpdateCandidateLists ();
 }
