@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.8 1999-12-15 14:50:43 gunter Exp $
+// $Id: G4UIGAG.cc,v 1.9 1999-12-17 12:09:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -140,13 +140,13 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
 
 G4int G4UIGAG::ReceiveG4cout(G4String coutString)
 {
-  cout << coutString << G4std::flush;
+  G4std::cout << coutString << G4std::flush;
   return 0;
 }
 
 G4int G4UIGAG::ReceiveG4cerr(G4String cerrString)
 {
-  G4cerr << cerrString << G4std::flush;
+  G4std::cerr << cerrString << G4std::flush;
   return 0;
 }                                                    
 
