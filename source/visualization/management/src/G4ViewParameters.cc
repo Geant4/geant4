@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.2 1999-01-09 16:31:17 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.3 1999-01-10 13:25:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,8 +39,8 @@ G4ViewParameters::G4ViewParameters ():
   fActualLightpointDirection (G4Vector3D (1., 1., 1.)),
   fLightsMoveWithCamera (false),
   fViewGeom (true),
-  fViewHits (false),
-  fViewDigis (false),
+  fViewHits (true),
+  fViewDigis (true),
   fDefaultTextVisAttributes (G4Colour (0., 0., 1.)),
   fGlobalMarkerScale (1.),
   fMarkerNotHidden (true),
@@ -367,8 +367,8 @@ ostream& operator << (ostream& os, const G4ViewParameters& v) {
   os << "\n  Global marker scale: " << v.fGlobalMarkerScale;
 
   os << "\n  Marker ";
-  if (v.fMarkerNotHidden) os << "not";
-  os << " hidden by surfaces.";
+  if (v.fMarkerNotHidden) os << "not ";
+  os << "hidden by surfaces.";
 
   os << "\n  Window size hint: "
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;

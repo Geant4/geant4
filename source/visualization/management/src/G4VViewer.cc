@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.1 1999-01-09 16:31:16 allison Exp $
+// $Id: G4VViewer.cc,v 1.2 1999-01-10 13:25:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,26 +84,6 @@ void G4VViewer::ProcessView () {
     fNeedKernelVisit = false;
     fScene.ProcessScene (*this);
   }
-
-  /*********************************************
-
-Note that hits and digi drawing is totally the responsibility of the
-"user" at present.  So the following code just represents an
-alternative approach, namely, the user sets a flag, then the Vis
-Manager draws them.  I will leave the code hear for now; also the
-flags and methods in G4ViewParameters.
-
-  // If event data is available...
-  G4Event* pEvent = G4VisManager::GetInstance () -> GetEvent ();
-  if (pEvent) {
-    if (fVP.IsViewHits ()) {
-      G4cout << "Drawing hits..." << endl;
-    }
-    if (fVP.IsViewDigis ()) {
-      G4cout << "Drawing digis..." << endl;
-    }
-  }
-  ***********************************************/
 }
 
 void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {

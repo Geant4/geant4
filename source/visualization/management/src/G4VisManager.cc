@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.3 1999-01-09 16:31:33 allison Exp $
+// $Id: G4VisManager.cc,v 1.4 1999-01-10 13:25:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -317,11 +317,13 @@ void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (line);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -330,11 +332,13 @@ void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -343,11 +347,13 @@ void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -356,11 +362,13 @@ void G4VisManager::Draw (const G4Square& Square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (Square);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -369,11 +377,13 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polymarker);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -382,11 +392,13 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -395,11 +407,13 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (nurbs);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -409,11 +423,13 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> PreAddThis (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddThis ();
     fpSceneHandler -> SetModel (0);
+    delete pModel;
     delete pMP;
   }
 }
@@ -440,11 +456,17 @@ G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
   if(stateManager -> GetPreviousState () == EventProc &&
      requestedState == GeomClosed) {
     if (fpConcreteInstance && IsValidView ()) {
+      G4ModelingParameters* pMP =
+	fpSceneHandler -> CreateModelingParameters ();
       const RWTPtrOrderedVector <G4VModel>& EOEModelList =
 	fSD.GetEndOfEventModelList ();
       for (int i = 0; i < EOEModelList.entries (); i++) {
-	EOEModelList [i] -> DescribeYourselfTo (*fpSceneHandler);
+	G4VModel* pModel = EOEModelList [i];
+	pModel -> SetModelingParameters (pMP);
+	pModel -> DescribeYourselfTo (*fpSceneHandler);
+	pModel -> SetModelingParameters (0);
       }
+      delete pMP;
     }
   }
   return true;

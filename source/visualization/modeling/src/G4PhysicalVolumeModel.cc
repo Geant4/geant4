@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.2 1999-01-08 16:33:56 gunter Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.3 1999-01-10 13:25:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,14 +58,17 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   G4BoundingSphereScene bsScene;
   const G4ModelingParameters* tempMP = fpMP;
   G4ModelingParameters mParams
-    (0,     // No default vis attributes.
+    (0,      // No default vis attributes.
      G4ModelingParameters::wireframe,
-     true,  // Global culling.
-     true,  // Cull invisible volumes.
-     false, // Density culling.
-     0.,    // Density (not relevant if density culling false).
-     true,  // Cull daughters of opaque mothers.
-     24);   // No of sides (not relevant for this operation).
+     true,   // Global culling.
+     true,   // Cull invisible volumes.
+     false,  // Density culling.
+     0.,     // Density (not relevant if density culling false).
+     true,   // Cull daughters of opaque mothers.
+     24,     // No of sides (not relevant for this operation).
+     true,   // View geometry.
+     false,  // View hits - not relevant for physical volume model.
+     false); // View digis - not relevant for physical volume model.
   fpMP = &mParams;
   //bsScene.SetBoundingSphereExtent
   //  (fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ());
@@ -76,35 +79,38 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 
 void G4PhysicalVolumeModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
 
-  scene.EstablishSpecials (*this);
-  // See .hh file for explanation of this mechanism.
+  if (fpMP && fpMP -> IsViewGeom ()) {
 
-  fCurrentDepth = 0;
-  // Store in working space (via pointer to working space).
-  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+    scene.EstablishSpecials (*this);
+    // See .hh file for explanation of this mechanism.
 
-  //G4Transform3D startingTransformation = fTransform;
-  G4Transform3D startingTransformation;
+    fCurrentDepth = 0;
+    // Store in working space (via pointer to working space).
+    if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
 
-  VisitGeometryAndGetVisReps (fpTopPV,
-			      fSoughtDepth,
-			      startingTransformation,
-			      scene);
+    //G4Transform3D startingTransformation = fTransform;
+    G4Transform3D startingTransformation;
 
-  // Clear current data and working space (via pointers to working space).
-  fCurrentDepth = 0;
-  fpCurrentPV   = 0;
-  fpCurrentLV   = 0;
-  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
-  if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
-  if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
+    VisitGeometryAndGetVisReps (fpTopPV,
+				fSoughtDepth,
+				startingTransformation,
+				scene);
 
-  scene.DecommissionSpecials (*this);
+    // Clear current data and working space (via pointers to working space).
+    fCurrentDepth = 0;
+    fpCurrentPV   = 0;
+    fpCurrentLV   = 0;
+    if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+    if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
+    if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
 
-  // Clear pointers to working space.
-  fpCurrentDepth = 0;
-  fppCurrentPV   = 0;
-  fppCurrentLV   = 0;
+    scene.DecommissionSpecials (*this);
+
+    // Clear pointers to working space.
+    fpCurrentDepth = 0;
+    fppCurrentPV   = 0;
+    fppCurrentLV   = 0;
+  }
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {

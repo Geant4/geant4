@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.1 1999-01-09 16:31:15 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.2 1999-01-10 13:25:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,41 +205,39 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
   // Clear stored scene, if any, i.e., display lists, scene graphs.
   ClearStore ();
 
-  if (fpView -> GetViewParameters ().IsViewGeom ()) {
+  // Traverse geometry tree and send drawing primitives to window(s).
 
-    // Traverse geometry tree and send drawing primitives to window(s).
+  const RWTPtrOrderedVector <G4VModel>& runDurationModelList =
+    fSD.GetRunDurationModelList ();
 
-    const RWTPtrOrderedVector <G4VModel>& runDurationModelList =
-      fSD.GetRunDurationModelList ();
-
-    if (runDurationModelList.entries ()) {
-      G4cout << "Traversing scene data..." << endl;
-      G4ModelingParameters* pMP = CreateModelingParameters ();
-      for (int i = 0; i < runDurationModelList.entries (); i++) {
-	G4VModel* pModel = runDurationModelList[i];
-	const G4ModelingParameters* tempMP =
-	  pModel -> GetModelingParameters ();
-	// NOTE THAT tempMP COULD BE ZERO.
-	// (Not sure the above is necessary; but in future we might
-	// want to take notice of the modeling parameters with which
-	// the model was created.  For the time being we are ignoring
-	// them and simply using the view parameters.  When the time
-	// comes to do this, then perhaps there should be a default
-	// set of modeling parameters in the view parameters for the
-	// case of a zero modeling parameters pointer.)
-	pModel -> SetModelingParameters (pMP);
-	SetModel (pModel);  // Store for use by derived class.
-	BeginModeling ();
-	pModel -> DescribeYourselfTo (*this);
-	EndModeling ();
-	pModel -> SetModelingParameters (tempMP);
-      }
-      delete pMP;
-      SetModel (0);  // Flags invalid model.
+  if (runDurationModelList.entries ()) {
+    G4cout << "Traversing scene data..." << endl;
+    G4ModelingParameters* pMP = CreateModelingParameters ();
+    for (int i = 0; i < runDurationModelList.entries (); i++) {
+      G4VModel* pModel = runDurationModelList[i];
+      const G4ModelingParameters* tempMP =
+	pModel -> GetModelingParameters ();
+      // NOTE THAT tempMP COULD BE ZERO.
+      // (Not sure the above is necessary; but in future we might
+      // want to take notice of the modeling parameters with which
+      // the model was created.  For the time being we are ignoring
+      // them and simply using the view parameters.  When the time
+      // comes to do this, then perhaps there should be a default
+      // set of modeling parameters in the view parameters for the
+      // case of a zero modeling parameters pointer.)
+      // (I think for the G4 Vis System we'll rely on view parameters and convert.  
+      pModel -> SetModelingParameters (pMP);
+      SetModel (pModel);  // Store for use by derived class.
+      BeginModeling ();
+      pModel -> DescribeYourselfTo (*this);
+      EndModeling ();
+      pModel -> SetModelingParameters (tempMP);
     }
-    else {
-      G4cerr << "No run-duration models in scene data." << endl;
-    }
+    delete pMP;
+    SetModel (0);  // Flags invalid model.
+  }
+  else {
+    G4cerr << "No run-duration models in scene data." << endl;
   }
 
   fReadyForTransients = true;
@@ -285,7 +283,11 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
      vp.IsDensityCulling (),
      vp.GetVisibleDensity (),
      reallyCullCovered,
-     vp.GetNoOfSides ());
+     vp.GetNoOfSides (),
+     vp.IsViewGeom (),
+     vp.IsViewHits (),
+     vp.IsViewDigis ()
+     );
 
   return pModelingParams;
 }

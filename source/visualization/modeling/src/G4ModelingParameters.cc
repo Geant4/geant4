@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.cc,v 1.1 1999-01-07 16:15:37 gunter Exp $
+// $Id: G4ModelingParameters.cc,v 1.2 1999-01-10 13:25:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,11 @@ G4ModelingParameters::G4ModelingParameters ():
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
-  fNoOfSides             (24) {}
+  fNoOfSides             (24),
+  fViewGeom              (true),
+  fViewHits              (true),
+  fViewDigis             (true)
+{}
 
 G4ModelingParameters::G4ModelingParameters
 (const G4VisAttributes* pDefaultVisAttributes,
@@ -35,7 +39,8 @@ G4ModelingParameters::G4ModelingParameters
  G4bool isDensityCulling,
  G4double visibleDensity,
  G4bool isCullingCovered,
- G4int noOfSides):
+ G4int noOfSides
+ ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fRepStyle       (repStyle),
   fCulling        (isCulling),
@@ -43,7 +48,37 @@ G4ModelingParameters::G4ModelingParameters
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides) {}
+  fNoOfSides      (noOfSides),
+  fViewGeom       (true),
+  fViewHits       (true),
+  fViewDigis      (true)
+{}
+
+G4ModelingParameters::G4ModelingParameters
+(const G4VisAttributes* pDefaultVisAttributes,
+ G4ModelingParameters::RepStyle repStyle,
+ G4bool isCulling,
+ G4bool isCullingInvisible,
+ G4bool isDensityCulling,
+ G4double visibleDensity,
+ G4bool isCullingCovered,
+ G4int noOfSides,
+ G4bool isViewGeom,
+ G4bool isViewHits,
+ G4bool isViewDigis
+ ):
+  fpDefaultVisAttributes (pDefaultVisAttributes),
+  fRepStyle       (repStyle),
+  fCulling        (isCulling),
+  fCullInvisible  (isCullingInvisible),
+  fDensityCulling (isDensityCulling),
+  fVisibleDensity (visibleDensity),
+  fCullCovered    (isCullingCovered),
+  fNoOfSides      (noOfSides),
+  fViewGeom       (isViewGeom),
+  fViewHits       (isViewHits),
+  fViewDigis      (isViewDigis)
+{}
 
 G4ModelingParameters::~G4ModelingParameters () {}
 
@@ -86,7 +121,10 @@ void G4ModelingParameters::PrintDifferences
       (fDensityCulling        != that.fDensityCulling)        ||
       (fVisibleDensity        != that.fVisibleDensity)        ||
       (fCullCovered           != that.fCullCovered)           ||
-      (fNoOfSides             != that.fNoOfSides))
+      (fNoOfSides             != that.fNoOfSides)             ||
+      (fViewGeom              != that.fViewGeom)              ||
+      (fViewHits              != that.fViewHits)              ||
+      (fViewDigis             != that.fViewDigis))
     G4cout << "Difference in 1st batch." << endl;
 }
 
@@ -128,6 +166,18 @@ ostream& operator << (ostream& os, const G4ModelingParameters& mp) {
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
+  os << "\n  View geometry: ";
+  if (mp.fViewGeom) os << "true";
+  else os << "false";
+
+  os << "\n  View hits    : ";
+  if (mp.fViewHits) os << "true";
+  else os << "false";
+
+  os << "\n  View digits  : ";
+  if (mp.fViewDigis) os << "true";
+  else os << "false";
+
   return os;
 }
 
@@ -141,7 +191,10 @@ G4bool operator != (const G4ModelingParameters& mp1,
       (mp1.fCullInvisible          != mp2.fCullInvisible)          ||
       (mp1.fDensityCulling         != mp2.fDensityCulling)         ||
       (mp1.fCullCovered            != mp2.fCullCovered)            ||
-      (mp1.fNoOfSides              != mp2.fNoOfSides))
+      (mp1.fNoOfSides              != mp2.fNoOfSides)              ||
+      (mp1.fViewGeom               != mp2.fViewGeom)               ||
+      (mp1.fViewHits               != mp2.fViewHits)               ||
+      (mp1.fViewDigis              != mp2.fViewDigis))
     return true;
 
   if (mp1.fDensityCulling &&

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.hh,v 1.1 1999-01-07 16:15:35 gunter Exp $
+// $Id: G4ModelingParameters.hh,v 1.2 1999-01-10 13:25:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,23 @@ public:
 			G4bool isDensityCulling,
 			G4double visibleDensity,
 			G4bool isCullingCovered,
-			G4int noOfSides);
+			G4int noOfSides
+			);
+  // noOfSides is suggested no. of sides per circle in case a
+  // polygonal representation is produced.
+
+  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
+			RepStyle repStyle,
+			G4bool isCulling,
+			G4bool isCullingInvisible,
+			G4bool isDensityCulling,
+			G4double visibleDensity,
+			G4bool isCullingCovered,
+			G4int noOfSides,
+			G4bool isViewGeom,
+			G4bool isViewHits,
+			G4bool isViewDigis
+			);
   // noOfSides is suggested no. of sides per circle in case a
   // polygonal representation is produced.
 
@@ -65,6 +81,9 @@ public:
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
   G4int            GetNoOfSides                  () const;
+  G4bool           IsViewGeom                    () const;
+  G4bool           IsViewHits                    () const;
+  G4bool           IsViewDigis                   () const;
 
   // Set functions...
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
@@ -75,6 +94,12 @@ public:
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
   void SetNoOfSides            (G4int);
+  void SetViewGeom             ();
+  void UnsetViewGeom           ();
+  void SetViewHits             ();
+  void UnsetViewHits           ();
+  void SetViewDigis            ();
+  void UnsetViewDigis          ();
 
   // Other functions...
   void PrintDifferences (const G4ModelingParameters& that) const;
@@ -90,6 +115,9 @@ private:
   G4double    fVisibleDensity;  // ...density lower than this not drawn.
   G4bool      fCullCovered;     // Cull daughters covered by opaque mothers.
   G4int       fNoOfSides;       // ...if polygon approximates circle.
+  G4bool      fViewGeom;        // View geometry objects.
+  G4bool      fViewHits;        // View hits, if any.
+  G4bool      fViewDigis;       // View digis, if any.
 
 };
 
