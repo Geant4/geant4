@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-01-20 10:51:11 gcosmo Exp $
+$Id: History,v 1.17 2000-04-13 10:26:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 13th, 2000   J. Apostolakis - field-V01-01-00
+
+- Modified signature to function DumbStepper() in classes:
+  G4HelixExplicitEuler, G4HelixHeum, G4HelixImplicitEuler,
+  G4HelixSimpleRunge and G4MagHelicalStepper.
+- Modified signature and implementation of function MagFieldEvaluate()
+  in G4MagHelicalStepper, to use Field (as ThreeVector) in place of dydx.
+- Made Richardson extrapolation optional (it is unclear if
+  it offers benefit) in G4MagHelicalStepper.
+- Updated unit test testPropagateMagField and reference output.
+- G4LineSection: fixes to prevent divisions by 0. and sqrt(<0)
+  (V.Grichine).
 
 January  19th, 2000   G. Cosmo - field-V01-00-00
 
