@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.5 2004-12-01 18:01:01 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.6 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 30-06-04 G4EmProcess is pure discrete (V.Ivanchenko)
+// 24-03-05 Add ApplyCuts and RandomStep (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -290,6 +291,32 @@ void G4EmProcessOptions::SetStepLimits(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4EmProcessOptions::SetRandomStep(G4bool val)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); itr++) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) p->SetRandomStep(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetApplyCuts(G4bool val)
+{
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->SetApplyCuts(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4EmProcessOptions::SetBuildPreciseRange(G4bool val)
 {
   theManager->SetBuildPreciseRange(val);
@@ -350,41 +377,21 @@ void G4EmProcessOptions::SetLambdaFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::ActivateFluorescence(G4bool val, const G4Region* r)
+void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->ActivateFluorescence(val,r);
+    if(p) p->ActivateDeexcitation(val,r);
   }
   const std::vector<G4VEmProcess*>& w =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itp;
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
-    if(q) q->ActivateFluorescence(val,r);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmProcessOptions::ActivateAugerElectronProduction(G4bool val, const G4Region* r)
-{
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->ActivateAugerElectronProduction(val,r);
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->ActivateAugerElectronProduction(val,r);
+    if(q) q->ActivateDeexcitation(val,r);
   }
 }
 

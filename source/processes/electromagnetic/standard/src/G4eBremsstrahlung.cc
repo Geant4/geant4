@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.40 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.41 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,11 +100,12 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
                                                     const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
+    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 

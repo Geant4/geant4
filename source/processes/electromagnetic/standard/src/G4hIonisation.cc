@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.54 2004-12-01 19:37:16 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.55 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 24-03-05 Optimize internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -130,13 +131,14 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   G4double massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.0*MeV*massFactor);
+  eth = 2.0*MeV*mass/proton_mass_c2;
+  em->SetHighEnergyLimit(eth);
 
   flucModel = new G4UniversalFluctuation();
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.0*MeV*massFactor);
+  em1->SetLowEnergyLimit(eth);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
@@ -151,17 +153,11 @@ void G4hIonisation::PrintInfoDefinition()
 {
   G4VEnergyLossProcess::PrintInfoDefinition();
 
-  G4cout << "      Bether-Bloch model for Escaled > 2 MeV, "
-         << "parametrisation of Bragg peak below, "
-         << "Integral mode " << IsIntegral()
+  G4cout << "      Scaling relation is used to proton dE/dx and range"
+         << G4endl
+         << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
+         << "parametrisation for protons below."
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hIonisation::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.18 2005-03-17 20:17:15 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.19 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,19 +80,43 @@ public:
 
   virtual ~G4VEmProcess();
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  //------------------------------------------------------------------------
+  // Virtual methods to be implemented in concrete processes
+  //------------------------------------------------------------------------
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
-    // True for all charged particles
-
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
-  // Initialise for build of tables
-
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-  // Build physics table during initialisation
 
   virtual void PrintInfoDefinition();
-  // Print out of the class parameters
+
+protected:
+
+  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
+
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                 G4VEmModel*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*) = 0;
+
+  //------------------------------------------------------------------------
+  // Methods with standard implementation; may be overwritten if needed 
+  //------------------------------------------------------------------------
+
+  virtual G4double RecalculateLambda(G4double kinEnergy,
+                               const G4MaterialCutsCouple* couple);
+
+
+  //------------------------------------------------------------------------
+  // Generic methods common to all processes 
+  //------------------------------------------------------------------------
+public:
+
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  void PreparePhysicsTable(const G4ParticleDefinition&);
+  // Initialise for build of tables
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+  // Build physics table during initialisation
 
   void SetLambdaBinning(G4int nbins);
   G4int LambdaBinning() const;
@@ -127,9 +151,6 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
 
-  virtual G4double RecalculateLambda(G4double kinEnergy,
-                               const G4MaterialCutsCouple* couple);
-
   G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
 
@@ -146,33 +167,26 @@ public:
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* SecondaryParticle() const;
 
-  virtual void ActivateFluorescence(G4bool, const G4Region* r = 0);
-  virtual void ActivateAugerElectronProduction(G4bool, const G4Region* r = 0);
+  void ActivateDeexcitation(G4bool, const G4Region* r = 0);
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
   void SetIntegral(G4bool val);
   G4bool IsIntegral() const;
 
+  void SetApplyCuts(G4bool val);
+  
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
-  
   void SetParticle(const G4ParticleDefinition* p);
   
   void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  virtual G4double GetMeanFreePath(const G4Track& track,
-                                         G4double previousStepSize,
-                                         G4ForceCondition* condition);
+  G4double GetMeanFreePath(const G4Track& track,
+			   G4double previousStepSize,
+			   G4ForceCondition* condition);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-			     const G4DynamicParticle*,
-                                   G4double& edep) = 0;
-
-  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   G4VEmModel* SelectModel(G4double& kinEnergy);
 
@@ -184,8 +198,6 @@ protected:
   G4double GetElectronEnergyCut();
 
   void SetBuildTableFlag(G4bool val);
-  void SetKillPrimaryFlag(G4bool val);
-  void SetApplyCutsFlag(G4bool val);
 
 private:
 
@@ -227,6 +239,9 @@ private:
 
   const G4ParticleDefinition*  particle;
   const G4ParticleDefinition*  secondaryParticle;
+  const G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition*  theElectron;
+  const G4ParticleDefinition*  thePositron;
 
   const std::vector<G4double>* theCutsGamma;
   const std::vector<G4double>* theCutsElectron;
@@ -252,13 +267,11 @@ private:
   G4bool                       meanFreePath;
   G4bool                       aboveCSmax;
   G4bool                       buildLambdaTable;
-  G4bool                       killPrimary;
   G4bool                       applyCuts;
 
   G4int                        nRegions;
   std::vector<G4Region*>       regions;
-  std::vector<G4bool>          flagsFluo;
-  std::vector<G4bool>          flagsAuger;
+  std::vector<G4bool>          flagsDeexcitation;
 
 };
 
@@ -350,7 +363,8 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " 
+  //  <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
 }
 

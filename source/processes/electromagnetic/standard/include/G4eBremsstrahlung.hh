@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.27 2005-03-18 12:48:25 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.28 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,6 +69,7 @@
 #define G4eBremsstrahlung_h 1
 
 #include "G4VEnergyLossProcess.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
@@ -121,6 +122,7 @@ private:
   G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
   G4eBremsstrahlung(const G4eBremsstrahlung&);
 
+  const G4ParticleDefinition* particle;
   G4double gammaThreshold;
   G4bool   isInitialised;
 
@@ -172,19 +174,20 @@ inline void G4eBremsstrahlung::SecondariesPostStep(
                                                       G4double& tcut,
                                                       G4double& kinEnergy)
 {
-  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut, kinEnergy);
+  G4ThreeVector dir = dp->GetMomentumDirection();
+  G4double edep;
+  std::vector<G4DynamicParticle*>* newp = model->PostStepDoIt(couple, particle, kinEnergy, edep, 
+                                          dir, dir, tcut, kinEnergy);
   G4DynamicParticle* gamma = (*newp)[0];
   G4double gammaEnergy = gamma->GetKineticEnergy();
-  kinEnergy -= gammaEnergy;
+
   G4int nSecond = 1;
   if(gammaEnergy > gammaThreshold) nSecond = 2;
   fParticleChange.SetNumberOfSecondaries(nSecond);
   fParticleChange.AddSecondary(gamma);
   if(nSecond == 2) {
     fParticleChange.ProposeTrackStatus(fStopAndKill);
-    G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
-                                                  dp->GetMomentumDirection(),
-                                                  kinEnergy);
+    G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),dir,kinEnergy);
     fParticleChange.AddSecondary(el);
   }
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.26 2005-03-18 12:48:25 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.27 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -120,6 +120,7 @@ private:
   G4eIonisation(const G4eIonisation&);
 
   const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* particle;
   G4VEmFluctuationModel* flucModel;
 
   G4bool subCutoff;
@@ -187,15 +188,13 @@ inline void G4eIonisation::SecondariesPostStep(
                                                   G4double& tcut,
                                                   G4double& kinEnergy)
 {
-  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut, kinEnergy);
-  G4DynamicParticle* delta = (*newp)[0];
-  G4ThreeVector finalP = dp->GetMomentum();
-  kinEnergy -= delta->GetKineticEnergy();
-  finalP -= delta->GetMomentum();
-  finalP = finalP.unit();
+  G4ThreeVector dir = dp->GetMomentumDirection();
+  G4double edep;
+  std::vector<G4DynamicParticle*>* newp = model->PostStepDoIt(couple, particle, kinEnergy, edep, 
+                                          dir, dir, tcut, kinEnergy);
   fParticleChange.SetNumberOfSecondaries(1);
-  fParticleChange.AddSecondary(delta);
-  fParticleChange.SetProposedMomentumDirection(finalP);
+  fParticleChange.AddSecondary( (*newp)[0] );
+  fParticleChange.SetProposedMomentumDirection(dir);
   delete newp;
 }
 

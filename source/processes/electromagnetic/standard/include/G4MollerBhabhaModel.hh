@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.9 2005-03-18 12:48:25 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.10 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,16 @@ public:
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
+
+  virtual std::vector<G4DynamicParticle*>* PostStepDoIt(
+                                const G4MaterialCutsCouple*,
+                                const G4ParticleDefinition*,
+				G4double& kinEnergy,
+				G4double& edep,
+				G4ThreeVector& direction,
+				G4ThreeVector& polarization,
+				G4double tmin,
+				G4double tmax);
 
 protected:
 

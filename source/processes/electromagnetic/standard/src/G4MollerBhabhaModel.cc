@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.16 2005-03-18 12:48:25 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.17 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -357,6 +357,116 @@ vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  vdp->push_back(delta);
+  return vdp;
+}
+
+std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::PostStepDoIt(
+                                const G4MaterialCutsCouple*,
+                                const G4ParticleDefinition*,
+				G4double& kineticEnergy,G4double&,
+				G4ThreeVector& direction, G4ThreeVector&,
+				G4double tmin,
+				G4double maxEnergy)
+{
+  vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(particle, kineticEnergy));
+  if(tmin > tmax) tmin = tmax;
+
+  G4double energy = kineticEnergy + electron_mass_c2;
+  G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
+  G4double xmin   = tmin/kineticEnergy;
+  G4double xmax   = tmax/kineticEnergy;
+  G4double gam    = energy/electron_mass_c2;
+  G4double gamma2 = gam*gam;
+  G4double beta2  = 1.0 - 1.0/gamma2;
+  G4double x, z, q, grej;
+
+  //Moller (e-e-) scattering
+  if (isElectron) {
+
+    G4double g = (2.0*gam - 1.0)/gamma2;
+    G4double y = 1.0 - xmax;
+    grej = 1.0 - g*xmax + xmax*xmax*(1.0 - g + (1.0 - g*y)/(y*y));
+
+    do {
+      q = G4UniformRand();
+      x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+      y = 1.0 - x;
+      z = 1.0 - g*x + x*x*(1.0 - g + (1.0 - g*y)/(y*y));
+      /*
+      if(z > grej) {
+        G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
+               << "Majorant " << grej << " < "
+               << z << " for x= " << x
+               << " e-e- scattering"
+               << G4endl;
+      }
+      */
+    } while(grej * G4UniformRand() > z);
+
+  //Bhabha (e+e-) scattering
+  } else {
+
+    G4double y   = 1.0/(1.0 + gam);
+    G4double y2  = y*y;
+    G4double y12 = 1.0 - 2.0*y;
+    G4double b1  = 2.0 - y2;
+    G4double b2  = y12*(3.0 + y2);
+    G4double y122= y12*y12;
+    G4double b4  = y122*y12;
+    G4double b3  = b4 + y122;
+
+    y     = xmax*xmax;
+    grej  = -xmin*b1;
+    grej += y*b2;
+    grej -= xmin*xmin*xmin*b3;
+    grej += y*y*b4;
+    grej *= beta2;
+    grej += 1.0;
+    do {
+      q  = G4UniformRand();
+      x  = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+      z  = -x*b1;
+      y  = x*x;
+      z += y*b2;
+      y *= x;
+      z -= y*b3;
+      y *= x;
+      z += y*b4;
+      z *= beta2;
+      z += 1.0;
+      /*
+      if(z > grej) {
+        G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
+               << "Majorant " << grej << " < "
+               << z << " for x= " << x
+               << " e+e- scattering"
+               << G4endl;
+      }
+      */
+    } while(grej * G4UniformRand() > z);
+  }
+
+  G4double deltaKinEnergy = x * kineticEnergy;
+
+  G4double deltaMomentum =
+           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+                                   (deltaMomentum * totalMomentum);
+  G4double sint = sqrt(1.0 - cost*cost);
+
+  G4double phi = twopi * G4UniformRand() ;
+
+  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
+  deltaDirection.rotateUz(direction);
+
+  // create G4DynamicParticle object for delta ray
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
+  direction = dir.unit();
+
   vdp->push_back(delta);
   return vdp;
 }

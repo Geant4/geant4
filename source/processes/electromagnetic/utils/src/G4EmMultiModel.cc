@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.2 2005-03-18 12:48:31 vnivanch Exp $
+// $Id: G4EmMultiModel.cc,v 1.3 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,8 +57,6 @@ G4EmMultiModel::G4EmMultiModel(const G4String& nam)
   : G4VEmModel(nam),
   nModels(0)
 {
-  highKinEnergy = 100.0*GeV;
-  lowKinEnergy  = 0.1*keV;
   model.clear();
   tsecmin.clear();
   cross_section.clear();
@@ -97,20 +95,6 @@ G4double G4EmMultiModel::MinEnergyCut(const G4ParticleDefinition* p,
     cut = (model[0])->MinEnergyCut(p, couple);
   } 
   return cut;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4EmMultiModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  G4bool yes = true;
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {
-      G4bool x = (model[i])->IsInCharge(p);
-      if( !x ) yes = false;
-    }
-  } 
-  return yes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.28 2004-12-01 19:37:13 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.29 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
+#include "G4VEmModel.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
@@ -89,37 +90,26 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&);
-
-  virtual void SecondariesPostStep(
+  std::vector<G4DynamicParticle*>*  SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
-
-  void SetSubCutoff(G4bool val);
+                                   G4double);
 
   void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
-
-  void InitialiseProcess();
 
   // hide assignment operator
   G4hIonisation & operator=(const G4hIonisation &right);
@@ -132,8 +122,10 @@ private:
   const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
 
-  G4bool                      subCutoff;
   G4bool                      isInitialised;
+
+  G4double                    eth;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -171,46 +163,13 @@ inline G4double G4hIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynPa
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VSubCutoffProcessor.hh"
-
-inline std::vector<G4Track*>*  G4hIonisation::SecondariesAlongStep(
-                           const G4Step&   step,
-	             	         G4double& tmax,
-			         G4double& eloss,
-                                 G4double& kinEnergy)
-{
-  std::vector<G4Track*>* newp = 0;
-  if(subCutoff) {
-    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
-    if (sp) {
-      G4VEmModel* model = SelectModel(kinEnergy);
-      newp = sp->SampleSecondaries(step,tmax,eloss,model);
-    }
-  }
-  return newp;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VEmModel.hh"
-
-inline void G4hIonisation::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4hIonisation::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
-                                                  G4double& tcut,
-                                                  G4double& kinEnergy)
+                                                  G4double tcut)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  if (delta) {
-    fParticleChange.SetNumberOfSecondaries(1);
-    fParticleChange.AddSecondary(delta);
-    G4ThreeVector finalP = dp->GetMomentum();
-    kinEnergy -= delta->GetKineticEnergy();
-    finalP -= delta->GetMomentum();
-    finalP  = finalP.unit();
-    fParticleChange.SetProposedMomentumDirection(finalP);
-  }
+  return model->SampleSecondaries(couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.31 2004-12-01 19:37:16 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.32 2005-03-28 23:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,6 +79,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
   SetVerboseLevel(0);
+  corr = G4LossTableManager::Instance()->EmCorrections();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,14 +103,19 @@ void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* pa
   SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
 
+  if(theBaseParticle) baseMass = theBaseParticle->GetPDGMass();
+  else                baseMass = theParticle->GetPDGMass();
+
   flucModel = new G4IonFluctuations();
+
+  eth = 2.0*MeV;
 
   G4VEmModel* em = new G4BraggIonModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.0*MeV);
+  em->SetHighEnergyLimit(eth);
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.0*MeV);
+  em1->SetLowEnergyLimit(eth);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
@@ -126,8 +133,8 @@ void G4ionIonisation::PrintInfoDefinition()
 
   G4cout << "      Scaling relation is used to proton dE/dx and range"
          << G4endl
-         << "      Bether-Bloch model for Escaled > 2 MeV, "
-         << "parametrisation of Bragg peak below."
+         << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
+         << "parametrisation for alpha particles below."
          << G4endl;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.2 2004-10-25 13:34:48 vnivanch Exp $
+// $Id: G4EmMultiModel.hh,v 1.3 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,18 +67,9 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*) {return highKinEnergy;};
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*) {return lowKinEnergy;};
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                                const G4ParticleDefinition*,
@@ -126,9 +117,6 @@ private:
   std::vector<G4VEmModel*>      model;
   G4DataVector                  tsecmin;
   G4DataVector                  cross_section;
-
-  G4double                      highKinEnergy;
-  G4double                      lowKinEnergy;
 
 };
 

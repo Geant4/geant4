@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.25 2005-03-11 15:32:06 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.26 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
 // 26-01-04 Fix in energy range conditions (V.Ivanchenko)
+// 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -292,9 +293,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     for (G4int ii=0; ii<nEmModels; ii++) {
 
       G4VEmModel* model = models[ii];
-      if ( (model->IsInCharge(particle)) &&
-           (0 == regions[ii] || region == regions[ii]) )
-      {
+      if ( 0 == regions[ii] || region == regions[ii] ) {
 
         G4double tmin = model->LowEnergyLimit(particle);
         G4double tmax = model->HighEnergyLimit(particle);

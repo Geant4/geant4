@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.21 2005-03-17 20:17:15 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.22 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,13 +85,15 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   meanFreePath(true),
   aboveCSmax(true),
   buildLambdaTable(true),
-  killPrimary(true),
   applyCuts(false),
   nRegions(0)
 {
   SetVerboseLevel(1);
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*GeV;
+  theGamma     = G4Gamma::Gamma();
+  theElectron  = G4Electron::Electron();
+  thePositron  = G4Positron::Positron();
 
   pParticleChange = &fParticleChange;
 
@@ -234,6 +236,7 @@ void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, const G4Region* region)
 {
   modelManager->AddEmModel(order, p, 0, region);
+  if(p) p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -272,9 +275,6 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
 
   G4VEmModel* currentModel = SelectModel(finalT);
-  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-
-  //  currentModel->SelectRandomAtomAndShell(currentMaterial,dynParticle,fluo,auger);
 
   /*
   if(0 < verboseLevel) {
@@ -287,52 +287,43 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
   */
 
-  G4double edep = fParticleChange.GetLocalEnergyDeposit();
   std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(currentModel,
                                                               currentCouple,
-		                                              dynParticle,
-                                                              edep);
+		                                              track.GetDynamicParticle());
   if (newp) {
     G4int num = newp->size();
-    G4int n1  = 0;
-    if( !killPrimary ) n1 = 1;
-
-    if(num > n1) {
-      fParticleChange.SetNumberOfSecondaries(num);
-      G4double gcut = (*theCutsGamma)[currentMaterialIndex];
-      G4double ecut = (*theCutsElectron)[currentMaterialIndex];
-      G4double pcut = (*theCutsPositron)[currentMaterialIndex];
+    fParticleChange.SetNumberOfSecondaries(num);
+    G4double edep = fParticleChange.GetLocalEnergyDeposit();
      
-      for (G4int i=n1; i<num; i++) {
-        G4DynamicParticle* dp = (*newp)[i];
-        const G4ParticleDefinition* p = dp->GetDefinition();
-        G4double e = dp->GetKineticEnergy();
-	G4bool good = true;
-	if (p == G4Gamma::Gamma()) {
-	   if (e < gcut) good = false;
+    for (G4int i=0; i<num; i++) {
+      G4DynamicParticle* dp = (*newp)[i];
+      const G4ParticleDefinition* p = dp->GetDefinition();
+      G4double e = dp->GetKineticEnergy();
+      G4bool good = true;
+      if (p == theGamma) {
+	if (e < (*theCutsGamma)[currentMaterialIndex]) good = false;
 
-	} else if (p == G4Electron::Electron()) {
-	   if (e < ecut) good = false;
+      } else if (p == theElectron) {
+	if (e < (*theCutsElectron)[currentMaterialIndex]) good = false;
 
-	} else if (p == G4Positron::Positron()) {
-	   if (e < pcut) {
-             good = false;
-             e += 2.0*electron_mass_c2;
-	   }
-        }
-
-        if (good || !applyCuts) {
-          fParticleChange.AddSecondary(dp);
-
-	} else {
-          delete dp;
-          edep += e;
+      } else if (p == thePositron) {
+	if (e < (*theCutsPositron)[currentMaterialIndex]) {
+	  good = false;
+	  e += 2.0*electron_mass_c2;
 	}
       }
-    }
+
+      if (good || !applyCuts) {
+	fParticleChange.AddSecondary(dp);
+	
+      } else {
+	delete dp;
+	edep += e;
+      }
+    } 
+    fParticleChange.ProposeLocalEnergyDeposit(edep);
     delete newp;
   }
-  fParticleChange.ProposeLocalEnergyDeposit(edep);
 
   return G4VDiscreteProcess::PostStepDoIt(track,step);
 }
@@ -536,12 +527,7 @@ G4double G4VEmProcess::MaxKinEnergy() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::ActivateFluorescence(G4bool, const G4Region*)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
+void G4VEmProcess::ActivateDeexcitation(G4bool, const G4Region*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -582,14 +568,7 @@ void G4VEmProcess::SetBuildTableFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::SetKillPrimaryFlag(G4bool val)
-{
-  killPrimary = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::SetApplyCutsFlag(G4bool val)
+void G4VEmProcess::SetApplyCuts(G4bool val)
 {
   applyCuts = val;
 }

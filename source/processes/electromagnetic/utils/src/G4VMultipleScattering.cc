@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.31 2005-03-11 12:28:46 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.32 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -195,6 +195,7 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
+  if(p) p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.49 2005-03-18 12:48:31 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.50 2005-03-28 23:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -373,6 +373,7 @@ void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuati
                                 const G4Region* region)
 {
   modelManager->AddEmModel(order, p, fluc, region);
+  if(p) p->SetParticleChange(pParticleChange, fluc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -680,36 +681,15 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
+  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
+ 
   G4double finalT = preStepKinEnergy - eloss;
   if (finalT <= lowestKinEnergy) finalT = 0.0;
   eloss = preStepKinEnergy-finalT;
 
   fParticleChange.SetProposedKineticEnergy(finalT);
+  fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  // Subcutoff and/or deexcitation
-  std::vector<G4Track*>* newp =
-           SecondariesAlongStep(step, tmax, eloss, preStepScaledEnergy);
-
-  if(newp) {
-
-    G4int n = newp->size();
-    if(n > 0) {
-      fParticleChange.SetNumberOfSecondaries(n);
-      G4Track* t;
-      G4double e;
-      for (G4int i=0; i<n; i++) {
-        t = (*newp)[i];
-        e = t->GetKineticEnergy();
-        const G4ParticleDefinition* pd = t->GetDefinition();
-        if (pd != G4Positron::Positron() ) e += electron_mass_c2;
-        if (e > eloss) e = eloss;
-
-        eloss -= e;
-        pParticleChange->AddSecondary(t);
-      }
-    }
-    delete newp;
-  }
   /*
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
@@ -719,7 +699,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
   return &fParticleChange;
 }
@@ -748,16 +727,23 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   G4VEmModel* currentModel = SelectModel(postStepScaledEnergy);
-  G4double tcut = (*theCuts)[currentMaterialIndex];
-  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
+  G4double tmax = (*theCuts)[currentMaterialIndex];
 
-  if (tcut < tmax)
-    SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
+  std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(
+       currentModel, currentCouple, track.GetDynamicParticle(), tmax);
+
+  if (newp) {
+    G4int num = newp->size();
+    fParticleChange.SetNumberOfSecondaries(num);
+    for (G4int i=0; i<num; i++) {
+      fParticleChange.AddSecondary((*newp)[i]);
+    }
+    delete newp;
+  }
 
   /*
   if(-1 < verboseLevel) {
-    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
+    const G4ParticleDefinition* pd = track.GetDynamicParticle()->GetDefinition();
     G4cout << GetProcessName()
            << "::PostStepDoIt: Sample secondary; E= " << finalT/MeV
            << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
@@ -766,14 +752,12 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  //  if (finalT <= 0.0) finalT = 0.0;
   
+  finalT = fParticleChange.GetProposedKineticEnergy();
   if (finalT <= lowestKinEnergy) {
     fParticleChange.SetProposedKineticEnergy(0.0);
     return &fParticleChange;
   }
-  
-  fParticleChange.SetProposedKineticEnergy(finalT);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
@@ -1319,6 +1303,13 @@ void G4VEnergyLossProcess::SetSubCutoff(G4bool)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEnergyLossProcess::SetRandomStep(G4bool val)
+{
+  rndmStepFlag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VEnergyLossProcess::SetMinSubRange(G4double val)
 {
   minSubRange = val;
@@ -1397,13 +1388,7 @@ G4double G4VEnergyLossProcess::MaxKinEnergy() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::ActivateFluorescence(G4bool, const G4Region*)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
-
+void G4VEnergyLossProcess::ActivateDeexcitation(G4bool, const G4Region*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
