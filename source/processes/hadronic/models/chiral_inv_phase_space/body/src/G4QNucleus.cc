@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.22 2001-10-31 17:34:03 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.23 2001-11-12 15:08:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -2524,23 +2524,23 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 // End of "EvaporateBaryon"
 
 // Randomize bimomial low 
-G4int G4QNucleus::RandomizeBinom(G4double p,G4int N)
+G4int G4QNucleus::RandomizeBinom(G4double p,G4int aN)
 {//  ===============================================
   G4double r = G4UniformRand();
   G4double d = 1.-p;
-  G4double v = pow(d,N);
+  G4double v = pow(d,aN);
   G4double s = v;
   if(r<s) return 0;
   G4int i=0;
-  G4int j=N+1;
+  G4int j=aN+1;
   G4double f=p/d;
-  while(r>s && i<N)
+  while(r>s && i<aN)
   {
     j--;
 	i++;
 	v*=j*f/i;
     s+=v;
-    //if(i>N)G4cout<<"***G4QN::RandB for N="<<N<<", p="<<p<<": r="<<r<<", s="<<s<<", v="<<v<<G4endl;
+    //if(i>aN)G4cout<<"***G4QN::RandB for N="<<aN<<", p="<<p<<": r="<<r<<", s="<<s<<", v="<<v<<G4endl;
   }
   return i;
 }
@@ -2752,7 +2752,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 }// End of PrepareCandidates
 
 //Coulomb Barrier Calculation
-G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ,G4double dA)
+G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4double delZ,G4double dA)
 {//                  ===============================================================================
   static const G4double third=1./3.;
   //return 0.;                                       //@@ Temporary for test
@@ -2762,7 +2762,7 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   if(dA) rA-=dA;
   //G4double rZ=Z;
   G4double rZ=Z-cZ;
-  if(dZ) rZ-=dZ;
+  if(delZ) rZ-=delZ;
   G4double zz=rZ*cZ;
   // Complicated GEANT4 radius
   //G4double r=(pow(rA,third)+pow(cA,third))*(1.51+.00921*zz)/(1.+.009443*zz);
@@ -2773,17 +2773,17 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
 } // End of "CoulombBarier"
 
 //Coulomb Binding Energy for the cluster
-G4double G4QNucleus::BindingEnergy(const G4double& cZ, const G4double& cA, G4double dZ,G4double dA)
+G4double G4QNucleus::BindingEnergy(const G4double& cZ, const G4double& cA, G4double delZ,G4double dA)
 {//                  ==============================================================================
   G4double GSM=GetGSMass();
   G4int iZ=static_cast<int>(cZ);
   G4int cN=static_cast<int>(cA-cZ);
   G4int sZ=iZ;
   G4int sN=cN;
-  if(dZ||dA)
+  if(delZ||dA)
   {
-    G4int dz=static_cast<int>(dZ);
-    G4int dn=static_cast<int>(dA-dZ);
+    G4int dz=static_cast<int>(delZ);
+    G4int dn=static_cast<int>(dA-delZ);
     GSM=G4QNucleus(Z-dz,N-dn,S).GetGSMass();
     sZ-=dz;
     sN-=dn;

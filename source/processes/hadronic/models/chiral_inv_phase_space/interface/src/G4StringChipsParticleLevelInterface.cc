@@ -24,6 +24,7 @@
 #include "globals.hh"
 #include "G4Pair.hh"
 #include "g4std/list"
+#include "g4std/vector"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Proton.hh"
@@ -167,7 +168,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "sorted rapidities event start"<<G4endl;
   G4QHadronVector projHV;
   G4std::vector<G4QContent> theContents;
-  G4std::vector<G4LorentzVector> theMomenta;
+  G4std::vector<G4LorentzVector *> theMomenta;
   G4ReactionProductVector * theResult = new G4ReactionProductVector;
   G4ReactionProduct * theSec;
   G4KineticTrackVector * secondaries;
@@ -237,15 +238,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 //    G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
 //    G4cout << "G4QContent is constructed"<<endl;
     theContents.push_back(aProjectile);
-    theMomenta.push_back(1./MeV*proj4Mom);
+    G4LorentzVector * aVec = new G4LorentzVector(1./MeV*proj4Mom);
+    theMomenta.push_back(aVec);
   }
   G4std::vector<G4QContent> theFinalContents;
-  G4std::vector<G4LorentzVector> theFinalMomenta;
+  G4std::vector<G4LorentzVector*> theFinalMomenta;
   if(theContents.size()<hitCount || 1)
   {
     for(unsigned int hp = 0; hp<theContents.size(); hp++)
     {
-      G4QHadron* aHadron = new G4QHadron(theContents[hp], theMomenta[hp]);
+      G4QHadron* aHadron = new G4QHadron(theContents[hp], *(theMomenta[hp]) );
       projHV.push_back(aHadron);
     }
   }
@@ -256,7 +258,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       G4QContent co(0, 0, 0, 0, 0, 0);
       theFinalContents.push_back(co);
-      G4LorentzVector mo(0,0,0,0);
+      G4LorentzVector * mo = new G4LorentzVector(0,0,0,0);
       theFinalMomenta.push_back(mo);
     }
     unsigned int running = 0;
@@ -265,18 +267,22 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       for(hp = 0; hp<hitCount; hp++)
       {
         theFinalContents[hp] +=theContents[running];
-	theFinalMomenta[hp]+=theMomenta[running];
+	*(theFinalMomenta[hp])+=*(theMomenta[running]);
 	running++;
 	if(running == theContents.size()) break;
       }
     }
     for(hp = 0; hp<hitCount; hp++)
     {
-      G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], theFinalMomenta[hp]);
+      G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], *theFinalMomenta[hp]);
       projHV.push_back(aHadron);
     }
   }
   // construct the quasmon
+  for (size_t i=0; i<theFinalMomenta.size(); i++) delete theFinalMomenta[i];
+  for (size_t i=0; i<theMomenta.size();      i++) delete theMomenta[i];
+  theFinalMomenta.clear();
+  theMomenta.clear();
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QuasmonVector.hh,v 1.6 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4QuasmonVector.hh,v 1.7 2001-11-12 15:08:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QuasmonVector_h
@@ -24,7 +24,7 @@
 #include "G4Quasmon.hh"
 #include "g4std/vector"
 
-typedef vector<G4Quasmon *> G4QuasmonVector;
+typedef G4std::vector<G4Quasmon *> G4QuasmonVector;
 struct DeleteQuasmon{ void operator()(G4Quasmon *aN){delete aN;} };
 
 #endif
