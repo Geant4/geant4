@@ -1,0 +1,51 @@
+?RCS:
+?MAKE:g4wlib_build_g3tog4 g4w_use_g3tog4 :\
+	 Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4wlib_build_g3tog4" in
+'')
+	g4wlib_build_g3tog4=n
+	;;
+esac
+
+case "$g4w_use_g4tog4" in
+'')
+	g4w_use_g3tog4=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_G3TOG4
+  G4USE_G3TOG4  
+
+If this variable is set, it will be built G3TOG4 module.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4wlib_build_g3tog4
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_g3tog4=n
+		g4w_use_g4tog4=n
+		;;
+	y*|Y*) 
+		g4wlib_build_g3tog4=y
+		g4w_use_g3tog4=y
+		;;
+	esac
+
