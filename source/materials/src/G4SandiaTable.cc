@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.14 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4SandiaTable.cc,v 1.15 2003-05-19 13:00:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -46,7 +46,7 @@ G4double G4SandiaTable::fSandiaCofPerAtom[4];
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4SandiaTable::G4SandiaTable(G4int matIndex)
+G4SandiaTable::G4SandiaTable(G4int)
 { 
   fMatSandiaMatrix = 0 ; 
   fPhotoAbsorptionCof = 0 ;
