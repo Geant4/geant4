@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.7 1999-10-29 15:52:05 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.8 1999-10-29 16:40:32 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,8 +27,10 @@
 #include "G4ios.hh"
 #include <iomanip.h>
  
-const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
-const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
+// Initialisation moved to G4TransportationManager.cc, to ensure
+//   correct order initialisation of static (class) data members
+//const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
+//const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 // -------------------------------------------------------------------------
 G4double 
