@@ -11,10 +11,10 @@ rewrites the file G4HepRep.xml.
 View the file using the WIRED Event Display, available from:
 http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
 
-WIRED can ready xml files in zipped format as well as unzipped,
+WIRED can read xml files in zipped format as well as unzipped,
 so you can save space by applying gzip to the xml file.
 This will reduce the file to about five percent of its original size.
 
 Joseph Perl
-6 November 2001
+9 November 2001
 
