@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.16 1999-11-05 12:10:46 urban Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.17 1999-12-05 18:26:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -749,7 +749,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn*pow((lowEnergyCut/ElectKinEn),R2);   
   }
-  else if(p1 < R1 <= p1+p2){
+  else if ((p1 < R1) && (R1 <= p1+p2)){
     
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
