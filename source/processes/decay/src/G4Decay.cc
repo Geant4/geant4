@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.6 2000-10-20 11:28:27 kurasige Exp $
+// $Id: G4Decay.cc,v 1.7 2000-10-25 00:01:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -228,6 +228,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   // get particle 
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+
+  // check if  the particle is stable
+  if (aParticleDef->GetPDGStable()) return &fParticleChangeForDecay ;
+ 
 
   //check if thePreAssignedDecayProducts exists
   const G4DecayProducts* o_products = (aParticle->GetPreAssignedDecayProducts());
@@ -239,12 +244,12 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     products = new G4DecayProducts(*o_products); 
   } else {
     // decay acoording to decay table
-    G4DecayTable   *decaytable = aParticle->GetDefinition()->GetDecayTable();
+    G4DecayTable   *decaytable = aParticleDef->GetDecayTable();
  
     if (decaytable == NULL){
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for";
+	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
         G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
       }
 #endif
