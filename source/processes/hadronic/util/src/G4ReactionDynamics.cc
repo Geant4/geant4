@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionDynamics.cc,v 1.4 1999-06-17 13:41:37 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
  // original by H.P. Wellisch
@@ -34,6 +32,8 @@
  // J. Allison, 17-Jun-99:  Replaced a min function to get correct behaviour on DEC.
  
 #include "G4ReactionDynamics.hh"
+#include "G4AntiProton.hh"
+#include "G4AntiNeutron.hh"
 #include "Randomize.hh"
 #include <iostream.h>
 // #include "DumpFrame.hh"
@@ -64,6 +64,8 @@
     //
     // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
+    G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
+    G4ParticleDefinition *anAntiNeutron = G4AntiNeutron::AntiNeutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
@@ -428,7 +430,7 @@
               + dndl[l-1];
         }
         innerCounter = 0;
-        // bug: reset the x,y components of the momentum, please.
+        // bug: reset the x,y components of the momentum, please. @@@@@@@
         //
         //   start of inner iteration loop
         //
@@ -955,7 +957,9 @@
     {
       if( (vec[i]->GetDefinition() == aProton) ||
           (vec[i]->GetDefinition() == aNeutron) )++numberofFinalStateNucleons;
-      vec[i]->Lorentz( *vec[i], pseudoParticle[1] );
+       if( (vec[i]->GetDefinition() == anAntiProton) ||
+          (vec[i]->GetDefinition() == anAntiNeutron) )--numberofFinalStateNucleons;
+     vec[i]->Lorentz( *vec[i], pseudoParticle[1] );
     }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     numberofFinalStateNucleons = max( 1, numberofFinalStateNucleons );
@@ -3239,11 +3243,13 @@
         {
           vec[0]->SetDefinition( aNeutron );
           p1->SetDefinition( anAntiNeutron );
+          (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
         }
         else
         {
           vec[0]->SetDefinition( aProton );
           p1->SetDefinition( anAntiProton );
+          (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
         }
         vec.SetElement( vecLen++, p1 );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
@@ -3305,6 +3311,7 @@
            p1->SetDefinition( aKaonMinus );
            break;
         }
+        (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
         vec.SetElement( vecLen++, p1 );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
@@ -3464,7 +3471,7 @@
       energyCheck -= vec[i]->GetMass()/GeV;
       if( energyCheck < 0.0 )      // chop off the secondary List
       {
-        vecLen = max( 0, --i );
+        vecLen = max( 0, --i ); // looks like a memory leak @@@@@@@@@@@@
         break;
       }
     }
