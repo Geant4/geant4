@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.16 2000-10-26 13:10:18 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.17 2000-11-10 17:46:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,12 +54,6 @@ G4Torus::G4Torus(const G4String &pName,
 	       G4double pDPhi)
     : G4CSGSolid(pName)
 {
-  G4cout << pName << " " ;
-  G4cout << pRmin << " " ;
-  G4cout << pRmax << " " ;
-  G4cout << pRtor << " " ;
-  G4cout << pSPhi << " " ;
-  G4cout << pDPhi << G4endl ;
   SetAllParameters(pRmin, pRmax, pRtor, pSPhi, pDPhi);
 }
 
