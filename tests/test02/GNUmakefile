@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-06-05 14:35:57 stesting Exp $
+# $Id: GNUmakefile,v 1.3 1999-06-07 17:54:45 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -22,6 +22,14 @@ CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
 ifeq ($(G4SYSTEM),HP-aCC)
 COMPILER := $(shell aCC -V 2>&1)
 ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
+$(G4TMP)/$(G4SYSTEM)/$(name)/Tst02PhysicsList.o: src/Tst02PhysicsList.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/Tst02PhysicsList.cc
+endif
+endif
+
+ifeq ($(G4SYSTEM),Linux-g++)
+COMPILER := $(shell g++ -v 2>&1 | grep version)
+ifeq ($(COMPILER), gcc version egcs-2.91.60 19981201 (egcs-1.1.1 release))
 $(G4TMP)/$(G4SYSTEM)/$(name)/Tst02PhysicsList.o: src/Tst02PhysicsList.cc
 	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/Tst02PhysicsList.cc
 endif
