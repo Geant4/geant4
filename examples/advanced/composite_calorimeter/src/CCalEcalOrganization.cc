@@ -28,7 +28,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
-#include "SystemOfUnits.h"
 
 CCalEcalOrganization::~CCalEcalOrganization(){
   G4cout << " Deleting CCalEcalOrganization" << G4endl;

@@ -29,7 +29,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
-#include "SystemOfUnits.h"
 
 CCalHcalOrganization::~CCalHcalOrganization() {
   G4cout << " Deleting CCalHcalOrganization" << G4endl;
