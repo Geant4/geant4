@@ -1,0 +1,40 @@
+cd Aluminum
+../paw -b dAl.kumac
+../paw -b pAl.kumac
+../paw -b pipAl.kumac
+../paw -b tAl.kumac
+cd ../Beryllium
+../paw -b dBe.kumac
+../paw -b pBe.kumac
+../paw -b pipBe.kumac
+../paw -b tBe.kumac
+cd ../Carbon
+../paw -b dC.kumac
+../paw -b pC.kumac
+../paw -b pipC.kumac
+../paw -b tC.kumac
+cd ../Copper
+../paw -b dCu.kumac
+../paw -b pCu.kumac
+../paw -b pipCu.kumac
+../paw -b tCu.kumac
+# cd ../Helium
+# ../paw -b heliums.kumac
+cd ../Lithium
+../paw -b dLi.kumac
+../paw -b pLi.kumac
+../paw -b pipLi.kumac
+../paw -b tLi.kumac
+# cd ../Misc
+# ../paw -b kTa.kumac
+# ../paw -b pAngle.kumac
+# ../paw -b piminus.kumac
+# ../paw -b pipAngle.kumac
+# ../paw -b piplus.kumac
+# ../paw -b protons.kumac
+cd ../Tantalum
+# ../paw -b Ta90deg.kumac
+../paw -b dTa.kumac
+../paw -b pTa.kumac
+../paw -b pipTa.kumac
+../paw -b tTa.kumac

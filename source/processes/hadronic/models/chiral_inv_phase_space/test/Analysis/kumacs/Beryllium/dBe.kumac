@@ -1,0 +1,103 @@
+fo/file 66 dBe.ps
+meta 66 -111
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6 (400 GeV)'
+ opt logy
+ve/cr q(003)
+ve/cr v(4,003)
+ve/in v(1:4,001)      1.7000E-01     0.0000E+00     2.8200E-01     2.5000E-02
+ve/in v(1:4,002)      2.5000E-01     0.0000E+00     1.1900E-01     9.0000E-03
+ve/in v(1:4,003)      3.3000E-01     0.0000E+00     3.5000E-02     3.0000E-03
+ve/copy v(1,1:003) x
+ve/copy v(2,1:003) q
+ve/copy v(3,1:003) y
+ve/copy v(4,1:003) e
+ null   0.   0.6    1.E-04   10.
+exec ../analyse ../../logs/liste.p_be.deuteron.70degree.p_Be.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15    5. 'P BE - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 003 29 0.2
+ text    0.250000    0.285000 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ ve/de *
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     4.5800E-01     2.6000E-02
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     2.9900E-01     1.8000E-02
+ve/in v(1:4,003)      1.3000E-01     0.0000E+00     3.1100E-01     2.4000E-02
+ve/in v(1:4,004)      1.4000E-01     0.0000E+00     1.9600E-01     1.2000E-02
+ve/in v(1:4,005)      2.3000E-01     0.0000E+00     3.5400E-02     2.5000E-03
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null   0.   0.6    1.E-04   10.
+exec ../analyse ../../logs/liste.p_be.deuteron.90degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15    5. 'P BE - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 005 25 0.2
+text    0.165000    0.447912 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ ve/de *
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      7.0000E-02     0.0000E+00     4.9000E-01     4.0000E-02
+ve/in v(1:4,002)      9.0000E-02     0.0000E+00     2.3800E-01     1.6000E-02
+ve/in v(1:4,003)      1.3000E-01     0.0000E+00     7.9000E-02     7.0000E-03
+ve/in v(1:4,004)      1.9000E-01     0.0000E+00     1.1100E-02     8.0000E-04
+ve/in v(1:4,005)      2.3000E-01     0.0000E+00     5.0000E-03     4.0000E-04
+ve/in v(1:4,006)      2.9000E-01     0.0000E+00     1.8000E-03     1.5000E-04
+ve/in v(1:4,007)      3.3000E-01     0.0000E+00     9.3000E-04     1.0000E-04
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null   0.   0.6    1.E-04   10.
+exec ../analyse ../../logs/liste.p_be.deuteron.118degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15    5. 'P BE - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 007 21 0.2
+ text    0.200000    0.251189 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ ve/de *
+ve/cr q(003)
+ve/cr v(4,003)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     1.4600E-01     1.1000E-02
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     1.6700E-02     1.1000E-03
+ve/in v(1:4,003)      2.3000E-01     0.0000E+00     2.3900E-03     1.6000E-04
+ve/copy v(1,1:003) x
+ve/copy v(2,1:003) q
+ve/copy v(3,1:003) y
+ve/copy v(4,1:003) e
+ null   0.   0.6    1.E-04   10.
+exec ../analyse ../../logs/liste.p_be.deuteron.137degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15    5. 'P BE - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
+ text    0.160000    0.144618 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ ve/de *
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      7.0000E-02     0.0000E+00     2.8800E-01     2.3000E-02
+ve/in v(1:4,002)      1.0000E-01     0.0000E+00     1.1400E-01     8.0000E-03
+ve/in v(1:4,003)      1.2000E-01     0.0000E+00     4.2000E-02     3.0000E-03
+ve/in v(1:4,004)      1.6000E-01     0.0000E+00     1.2900E-02     1.0000E-03
+ve/in v(1:4,005)      1.9000E-01     0.0000E+00     5.2000E-03     8.0000E-04
+ve/in v(1:4,006)      2.3000E-01     0.0000E+00     2.2100E-03     1.4000E-04
+ve/in v(1:4,007)      3.2000E-01     0.0000E+00     3.1000E-04     3.0000E-05
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null   0.   0.6    1.E-04   10.
+exec ../analyse ../../logs/liste.p_be.deuteron.160degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15    5. 'P BE - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ text    0.195000    0.251189 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+
+
+
+close 66

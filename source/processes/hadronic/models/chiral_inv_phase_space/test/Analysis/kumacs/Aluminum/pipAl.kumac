@@ -1,0 +1,114 @@
+fo/file 66 pipal.ps
+meta 66 -111
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 80   ITEP-80-37 (400 GeV)'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      1.9000E-01     0.0000E+00     9.1800E+00     1.2700E+00
+ve/in v(1:4,002)      2.8000E-01     0.0000E+00     4.2700E+00     2.9000E-01
+ve/in v(1:4,003)      4.7000E-01     0.0000E+00     1.1600E+00     8.0000E-02
+ve/in v(1:4,004)      5.6000E-01     0.0000E+00     5.7400E-01     4.4000E-02
+ve/in v(1:4,005)      6.5000E-01     0.0000E+00     3.1900E-01     2.4000E-02
+ve/in v(1:4,006)      8.2000E-01     0.0000E+00     8.3900E-02     1.2200E-02
+ve/in v(1:4,007)      1.0300E+00     0.0000E+00     1.9900E-02     3.1000E-03
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null   0.    1.4    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.70degree.p_al
+ atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
+ text    0.2     25. 'P AL - PI+ X' 0.3
+text    0.610000     25.1189 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ ve/de *
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      1.8000E-01     0.0000E+00     4.5700E+00     6.5000E-01
+ve/in v(1:4,002)      2.6000E-01     0.0000E+00     1.6200E+00     1.6000E-01
+ve/in v(1:4,003)      3.2000E-01     0.0000E+00     1.2300E+00     1.4000E-01
+ve/in v(1:4,004)      3.7000E-01     0.0000E+00     7.3600E-01     6.1000E-02
+ve/in v(1:4,005)      4.7000E-01     0.0000E+00     3.4400E-01     2.3000E-02
+ve/in v(1:4,006)      5.2000E-01     0.0000E+00     2.2300E-01     1.1000E-02
+ve/in v(1:4,007)      5.7000E-01     0.0000E+00     1.3700E-01     9.0000E-03
+ve/in v(1:4,008)      8.0000E-01     0.0000E+00     1.4300E-02     2.7000E-03
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null   0.    1.4    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.90degree.p_al
+ atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
+ text    0.2     25. 'P AL - PI+ X' 0.3
+ text    0.490000     3.54813 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ ve/de *
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     9.2500E+00     1.2300E+00
+ve/in v(1:4,002)      1.8000E-01     0.0000E+00     2.4400E+00     3.4000E-01
+ve/in v(1:4,003)      2.8000E-01     0.0000E+00     8.3200E-01     6.2000E-02
+ve/in v(1:4,004)      3.6000E-01     0.0000E+00     3.4400E-01     2.7000E-02
+ve/in v(1:4,005)      4.6000E-01     0.0000E+00     1.1900E-01     1.1000E-02
+ve/in v(1:4,006)      5.6000E-01     0.0000E+00     2.9600E-02     4.6000E-03
+ve/in v(1:4,007)      7.4000E-01     0.0000E+00     2.2900E-03     3.7000E-04
+ve/in v(1:4,008)      8.4000E-01     0.0000E+00     7.4600E-04     1.6200E-04
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null   0.    1.4    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.118degree.p_al
+ atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
+ text    0.2     25. 'P AL - PI+ X' 0.3
+ text    0.470000     12.5893 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ ve/de *
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      1.8000E-01     0.0000E+00     1.6300E+00     2.3000E-01
+ve/in v(1:4,002)      2.8000E-01     0.0000E+00     4.6200E-01     3.9000E-02
+ve/in v(1:4,003)      4.6000E-01     0.0000E+00     5.2200E-02     5.8000E-03
+ve/in v(1:4,004)      6.4000E-01     0.0000E+00     3.3900E-03     5.1000E-04
+ve/in v(1:4,005)      8.2000E-01     0.0000E+00     2.5300E-04     7.6000E-05
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null   0.    1.4    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 005 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.137degree.p_al
+ atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
+ text    0.2     25. 'P AL - PI+ X' 0.3
+ text    0.500000     1.77828 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ ve/de *
+ve/cr q(011)
+ve/cr v(4,011)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     6.5800E+00     9.9000E-01
+ve/in v(1:4,002)      1.4000E-01     0.0000E+00     3.0500E+00     4.6000E-01
+ve/in v(1:4,003)      1.8000E-01     0.0000E+00     1.2800E+00     1.9000E-01
+ve/in v(1:4,004)      2.3000E-01     0.0000E+00     6.7200E-01     1.1400E-01
+ve/in v(1:4,005)      2.7000E-01     0.0000E+00     4.1700E-01     6.4000E-02
+ve/in v(1:4,006)      3.6000E-01     0.0000E+00     1.2700E-01     2.0000E-02
+ve/in v(1:4,007)      4.7000E-01     0.0000E+00     2.6100E-02     4.8000E-03
+ve/in v(1:4,008)      5.5000E-01     0.0000E+00     5.4000E-03     8.8000E-04
+ve/in v(1:4,009)      6.4000E-01     0.0000E+00     1.3600E-03     3.8000E-04
+ve/in v(1:4,010)      7.4000E-01     0.0000E+00     8.4600E-04     2.4800E-04
+ve/in v(1:4,011)      8.1000E-01     0.0000E+00     1.8900E-04     8.6000E-05
+ve/copy v(1,1:011) x
+ve/copy v(2,1:011) q
+ve/copy v(3,1:011) y
+ve/copy v(4,1:011) e
+ null   0.    1.4    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 011 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.160degree.p_al
+ atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
+ text    0.2     25. 'P AL - PI+ X' 0.3
+text    0.455000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

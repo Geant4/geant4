@@ -1,0 +1,29 @@
+echo ">>>>>>>"
+echo ">>>>>>> STARTING TEST $1 $2 <<<<<<<"
+echo ">>>>>>>"
+echo ""
+cd ../src
+export G4TARGET=$1
+export G4DEBUG=$1
+echo ">>>>>>>"
+echo ">>>>>>> Now building $1 <<<<<<<"
+echo ">>>>>>>"
+# rm ./$1
+# gmake clean
+# gmake
+echo ">>>>>>>"
+echo ">>>>>>> Now running $1 <<<<<<<"
+echo ">>>>>>>"
+pwd
+rm ../logs/$1.$2.log
+ln -s ../../../../../../../../bin/Linux-g++/$1 $1
+./$1 < ../inputs/$1.$2.in > ../logs/$1.$2.log
+echo ">>>>>>>"
+echo ">>>>>>> Stripping out the info <<<<<<<"
+echo ">>>>>>>"
+cd ../logs
+./doit $1.$2.log $2
+echo ">>>>>>>"
+echo ">>>>>>> TEST $1 $2 TERMINATED <<<<<<<"
+echo ">>>>>>>"
+echo ""

@@ -1,0 +1,30 @@
+fo/file 66 kplus.ps
+meta 66 -111
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 80   ITEP-80-37'
+ opt liny
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      1.3000E-01     0.0000E+00     4.6700E-01     9.8000E-02
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     1.5400E-01     1.1200E-01
+ve/in v(1:4,003)      2.3000E-01     0.0000E+00     1.2100E-01     4.8000E-02
+ve/in v(1:4,004)      2.7000E-01     0.0000E+00     7.0000E-02     1.8600E-02
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null   0.116000   0.284000   -1.03000E-02   0.617300
+exec ../analyse ../../logs/liste.p_ta.kaonplus.90degree.p_ta
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.200000    0.585920 'RE   P TA --> K+ X' 0.3
+ text    0.200000    0.554540 'E IN GEV   400.00' 0.3
+ text    0.200000    0.523160 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.200000    0.491780 'A   180.95' 0.3
+close 66
