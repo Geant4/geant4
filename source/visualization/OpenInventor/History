@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2004-11-23 21:51:04 gbarrand Exp $
+$Id: History,v 1.54 2004-11-24 14:59:38 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+24th November 2004  Guy Barrand
+- G4OpenInventor[Xt,Win]Viewer, SceneHandler : handle reduced wire frame
+  at the level of the view.
+- SoPolyhedron : reducedWireFramw field.
 
 23th November 2004  Guy Barrand
 - So*.cc : have #ifdef G4VIS_BUILD_OIX_DRIVER.

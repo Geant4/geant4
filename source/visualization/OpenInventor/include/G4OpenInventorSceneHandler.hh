@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.22 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.23 2004-11-24 14:59:38 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,7 @@ private:
   SoSeparator* fTransientRoot;
   SoSeparator* fCurrentSeparator;
   G4bool fModelingSolid;
+  G4bool fReducedWireFrame;
   Geant4_SoStyleCache* fStyleCache;
   bool fPreviewAndFull;
 };

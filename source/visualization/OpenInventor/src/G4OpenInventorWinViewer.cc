@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.19 2004-11-23 09:34:10 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.20 2004-11-24 14:59:39 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -72,10 +72,12 @@ public:
 #define ID_ETC_ERASE_EVENT 102
 #define ID_ETC_SET_SOLID 103
 #define ID_ETC_SET_WIRE_FRAME 104
-#define ID_ETC_SET_PREVIEW 105
-#define ID_ETC_SET_PREVIEW_AND_FULL 106
-#define ID_ETC_UPDATE_SCENE 107
-#define ID_ETC_STATS 108
+#define ID_ETC_SET_REDUCED_WIRE_FRAME 105
+#define ID_ETC_SET_FULL_WIRE_FRAME 106
+#define ID_ETC_SET_PREVIEW 107
+#define ID_ETC_SET_PREVIEW_AND_FULL 108
+#define ID_ETC_UPDATE_SCENE 109
+#define ID_ETC_STATS 110
 // Help :
 #define ID_HELP_CONTROLS 201
 
@@ -131,7 +133,11 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
+    //::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_REDUCED_WIRE_FRAME,
+                      "Set (G4) reduced wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_FULL_WIRE_FRAME,
+                      "Set (G4) full wire frame");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW,
                       "Visible mothers + invisible daughters");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW_AND_FULL,
@@ -264,6 +270,10 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
           This->SetSolid();
         } else if(aWParam==ID_ETC_SET_WIRE_FRAME) {
           This->SetWireFrame();
+        } else if(aWParam==ID_ETC_SET_REDUCED_WIRE_FRAME) {
+          This->SetReducedWireFrame(true);
+        } else if(aWParam==ID_ETC_SET_FULL_WIRE_FRAME) {
+          This->SetReducedWireFrame(false);
         } else if(aWParam==ID_ETC_SET_PREVIEW) {
           This->SetPreview();
         } else if(aWParam==ID_ETC_SET_PREVIEW_AND_FULL) {

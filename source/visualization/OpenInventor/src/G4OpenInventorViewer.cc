@@ -274,6 +274,16 @@ void G4OpenInventorViewer::DeselectionCB(
   G4cout << "Deselect : " << name << G4endl;
 }
 */
+
+void G4OpenInventorViewer::DrawDetector() {
+  // DrawView does a ClearStore. Do not clear the transient store :
+  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
+  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
+  DrawView();  
+  fG4OpenInventorSceneHandler.fTransientRoot->unref();
+  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 /// Menu items callbacks /////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -396,24 +406,14 @@ void G4OpenInventorViewer::SetPreviewAndFull() {
   fG4OpenInventorSceneHandler.fPreviewAndFull = true;
 
   NeedKernelVisit();
-  // DrawView does a ClearStore. Do not clear the transient store :
-  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
-  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  DrawView();  
-  fG4OpenInventorSceneHandler.fTransientRoot->unref();
-  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+  DrawDetector();
 }
 
 void G4OpenInventorViewer::SetPreview() {
   fG4OpenInventorSceneHandler.fPreviewAndFull = false;
 
   NeedKernelVisit();
-  // DrawView does a ClearStore. Do not clear the transient store :
-  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
-  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  DrawView();  
-  fG4OpenInventorSceneHandler.fTransientRoot->unref();
-  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+  DrawDetector();
 }
 
 void G4OpenInventorViewer::SetSolid() {
@@ -443,13 +443,8 @@ void G4OpenInventorViewer::SetSolid() {
   }
 */
   //FIXME : waiting fSoCameraSensor.
-  fModified = false;
-  // DrawView does a ClearStore. Do not clear the transient store :
-  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
-  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  DrawView();  
-  fG4OpenInventorSceneHandler.fTransientRoot->unref();
-  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+  fModified = false; //To avoid a SetView that will change the camera.
+  DrawDetector();
 }
 void G4OpenInventorViewer::SetWireFrame() {
   G4ViewParameters vp = GetViewParameters();
@@ -478,14 +473,48 @@ void G4OpenInventorViewer::SetWireFrame() {
   }
 */
   //FIXME : waiting fSoCameraSensor.
-  fModified = false;
-  // DrawView does a ClearStore. Do not clear the transient store :
-  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
-  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  DrawView();  
-  fG4OpenInventorSceneHandler.fTransientRoot->unref();
-  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+  fModified = false; //To avoid a SetView that will change the camera.
+  DrawDetector();
 }
+
+
+void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
+  // Set wire frame :
+  G4ViewParameters vp = GetViewParameters();
+  G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
+  //From G4VisCommandsViewerSet : /vis/viewer/set/style wire.
+  switch (existingStyle) {
+  case G4ViewParameters::wireframe:
+    break;
+  case G4ViewParameters::hlr:
+    break;
+  case G4ViewParameters::hsr:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
+    break;
+  case G4ViewParameters::hlhsr:
+    vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  }
+  SetViewParameters(vp);
+/*FIXME : fSoCameraSensor : when ready, should use the below.
+  if (vp.IsAutoRefresh()) {
+    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    SetView();
+    ClearView();
+    //FIXME : do not clear transient store.
+    DrawView();
+  }
+*/
+  //FIXME : waiting fSoCameraSensor.
+  fModified = false; //To avoid a SetView that will change the camera.
+
+  // Set the wire frame kind :
+  fG4OpenInventorSceneHandler.fReducedWireFrame = aValue;
+
+  NeedKernelVisit(); //Just in case it was alread in wire framw.
+  DrawDetector();
+}
+
 void G4OpenInventorViewer::UpdateScene() {
   fG4OpenInventorSceneHandler.ClearStore();
   //FIXME : fSoCameraSensor : when ready, should use the below.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.10 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.11 2004-11-24 14:59:38 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,8 @@ private:
   static void EraseEventCbk(Widget,XtPointer,XtPointer);
   static void SetSolidCbk(Widget,XtPointer,XtPointer);
   static void SetWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetReducedWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetFullWireFrameCbk(Widget,XtPointer,XtPointer);
   static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
   static void HelpCbk(Widget,XtPointer,XtPointer);
   static void HelpCancelCbk(Widget,XtPointer,XtPointer);

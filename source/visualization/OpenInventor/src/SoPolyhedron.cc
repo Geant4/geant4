@@ -46,6 +46,7 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
 {
   SO_NODE_CONSTRUCTOR(Geant4_SoPolyhedron);
   SO_NODE_ADD_FIELD(solid,(TRUE));
+  SO_NODE_ADD_FIELD(reducedWireFrame,(TRUE));
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(
@@ -172,6 +173,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
       do {
         HVPoint3D vertex;
         notLastEdge = fPolyhedron->GetNextVertex(vertex,edgeFlag);
+        if(reducedWireFrame.getValue()==FALSE) edgeFlag = 1;        
         if(firstEdge) {
           if(edgeFlag) {
             pvb.setNormal(normal);

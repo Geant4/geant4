@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.18 2004-11-23 09:34:10 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.19 2004-11-24 14:59:39 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -115,7 +115,9 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     AddButton(menu,"Erase detector",EraseDetectorCbk);
     AddButton(menu,"Erase event",EraseEventCbk);
     AddButton(menu,"Set solid",SetSolidCbk);
-    AddButton(menu,"Set (G4) wire frame",SetWireFrameCbk);
+/*    AddButton(menu,"Set (G4) wire frame",SetWireFrameCbk);*/
+    AddButton(menu,"Set (G4) reduced wire frame",SetReducedWireFrameCbk);
+    AddButton(menu,"Set (G4) full wire frame",SetFullWireFrameCbk);
     AddButton(menu,"Visible mothers + invisible daughters",SetPreviewCbk);
     AddButton(menu,"Visible mothers + visible daughters",SetPreviewAndFullCbk);
     AddButton(menu,"Update scene",UpdateSceneCbk);
@@ -292,6 +294,18 @@ void G4OpenInventorXtViewer::SetWireFrameCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->SetWireFrame();
+}
+
+void G4OpenInventorXtViewer::SetReducedWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetReducedWireFrame(true);
+}
+
+void G4OpenInventorXtViewer::SetFullWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetReducedWireFrame(false);
 }
 
 void G4OpenInventorXtViewer::UpdateSceneCbk(

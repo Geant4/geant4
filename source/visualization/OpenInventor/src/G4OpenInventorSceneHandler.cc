@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.33 2004-11-23 09:34:10 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.34 2004-11-24 14:59:39 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,7 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,fTransientRoot(0)
 ,fCurrentSeparator(0)
 ,fModelingSolid(false)
+,fReducedWireFrame(true)
 ,fStyleCache(0)
 ,fPreviewAndFull(false)
 {
@@ -367,6 +368,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   SbName sbName(fpCurrentLV?fpCurrentLV->GetName().c_str():"");
   soPolyhedron->setName(sbName);
   soPolyhedron->solid.setValue(fModelingSolid);
+  soPolyhedron->reducedWireFrame.setValue(fReducedWireFrame?TRUE:FALSE);
   fCurrentSeparator->addChild(soPolyhedron);  
 }
 
@@ -553,14 +555,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   const double green = g4Col.GetGreen ();
   const double blue = g4Col.GetBlue ();
   double transparency = 1 - g4Col.GetAlpha();
-/*
-  if(pVisAttribs->IsForceDrawingStyle()
-    &&(pVisAttribs->GetForcedDrawingStyle()==G4VisAttributes::solid)) {
-    fModelingSolid = true;
-  } else {
-    fModelingSolid = false;
-  }
-*/
+
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle(pVisAttribs);
   switch (drawing_style) {
   case (G4ViewParameters::wireframe):    
@@ -572,6 +567,9 @@ void G4OpenInventorSceneHandler::PreAddThis
     fModelingSolid = true;
     break;
   }	
+
+  //G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  //fReducedWireFrame = !isAuxEdgeVisible;
 
   //printf("debug : PreAddThis : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());

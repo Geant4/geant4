@@ -68,6 +68,7 @@ protected:
   void SetPreview();
   void SetSolid();
   void SetWireFrame();
+  void SetReducedWireFrame(bool);
   void UpdateScene();
   G4String Help(const G4String& topic = "controls");
 private:
@@ -76,6 +77,7 @@ private:
   static void CameraSensorCB(void*,SoSensor*);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
+  void DrawDetector();
 private:
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 protected:
