@@ -190,6 +190,7 @@ int main(int argc, char** argv)
   G4cout << "#nbins" << G4endl;
   G4cout << "#nbinsa" << G4endl;
   G4cout << "#nbinse" << G4endl;
+  G4cout << "#nbinsd" << G4endl;
   G4cout << "#nangle" << G4endl;
   G4cout << "#angles" << G4endl;
   G4cout << "#dangle" << G4endl;
@@ -237,6 +238,8 @@ int main(int argc, char** argv)
         (*fin) >> nbinse;
       } else if(line == "#nbinsa") {
         (*fin) >> nbinsa;
+      } else if(line == "#nbinsd") {
+        (*fin) >> nbinsd;
       } else if(line == "#nangle") {
         (*fin) >> nangl;
       } else if(line == "#dangle") {
