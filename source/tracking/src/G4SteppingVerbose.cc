@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.cc,v 1.6 1999-12-15 14:53:58 gunter Exp $
+// $Id: G4SteppingVerbose.cc,v 1.7 2001-02-08 07:39:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,15 +70,15 @@ void G4SteppingVerbose::AtRestDoItInvoked()
      G4cout << " **List of AtRestDoIt invoked:" << G4endl;
      for(size_t np=0; np < MAXofAtRestLoops; np++){
        size_t npGPIL = MAXofAtRestLoops-np-1;
-       if( (*fSelectedAtRestDoItVector)(npGPIL) == 2 ){
+       if( (*fSelectedAtRestDoItVector)[npGPIL] == 2 ){
 	 npt++;                
-	 ptProcManager = (*fAtRestDoItVector)(np);
+	 ptProcManager = (*fAtRestDoItVector)[np];
 	 G4cout << "   # " << npt << " : " 
 	   << ptProcManager->GetProcessName() 
 	     << " (Forced)" << G4endl;
-       } else if ( (*fSelectedAtRestDoItVector)(npGPIL) == 1 ){
+       } else if ( (*fSelectedAtRestDoItVector)[npGPIL] == 1 ){
 	 npt++;                
-	 ptProcManager = (*fAtRestDoItVector)(np);
+	 ptProcManager = (*fAtRestDoItVector)[np];
 	 G4cout << "   # " << npt << " : " 
 	   << ptProcManager->GetProcessName() << G4endl;
        }
@@ -89,8 +89,8 @@ void G4SteppingVerbose::AtRestDoItInvoked()
      if( fN2ndariesAtRestDoIt > 0 ){
        G4cout << "   -- List of secondaries generated : " 
 	 << "(x,y,z,kE,t,PID) --" << G4endl; 
-       for( G4int lp1=(*fSecondary).entries()-fN2ndariesAtRestDoIt; 
-	   lp1<(*fSecondary).entries(); lp1++){
+       for( G4int lp1=(*fSecondary).size()-fN2ndariesAtRestDoIt; 
+	   lp1<(*fSecondary).size(); lp1++){
 	 G4cout << "      "
 		<< G4std::setw( 9)
 		<< G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
@@ -141,10 +141,10 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
         G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
              << "  No. of secodaries = " 
-             << (*fSecondary).entries() << G4endl;
+             << (*fSecondary).size() << G4endl;
 
-        if((*fSecondary).entries()>0){
-           for(G4int lp1=0; lp1<(*fSecondary).entries(); lp1++){
+        if((*fSecondary).size()>0){
+           for(G4int lp1=0; lp1<(*fSecondary).size(); lp1++){
                G4cout << "      "
                     << G4std::setw( 9)
                     << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
@@ -182,15 +182,15 @@ void G4SteppingVerbose::PostStepDoItAllDone()
 
         for(size_t np=0; np < MAXofPostStepLoops; np++){
 	    size_t npGPIL = MAXofPostStepLoops-np-1;
-            if((*fSelectedPostStepDoItVector)(npGPIL) == 2){
+            if( (*fSelectedPostStepDoItVector)[npGPIL] == 2){
                npt++;                
-               ptProcManager = (*fPostStepDoItVector)(np);
+               ptProcManager = (*fPostStepDoItVector)[np];
                G4cout << "      " << npt << ") " 
                     << ptProcManager->GetProcessName()  
                     << " (Forced)" << G4endl;
-	     } else if ((*fSelectedPostStepDoItVector)(npGPIL) == 1){
+	     } else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1){
                npt++;                
-               ptProcManager = (*fPostStepDoItVector)(np);
+               ptProcManager = (*fPostStepDoItVector)[np];
                G4cout << "      " << npt << ") " 
                     << ptProcManager->GetProcessName() << G4endl;
 	     }
@@ -201,12 +201,12 @@ void G4SteppingVerbose::PostStepDoItAllDone()
         G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
              << "  No. of secodaries = " 
-             << (*fSecondary).entries() << G4endl;
+             << (*fSecondary).size() << G4endl;
         G4cout << "      [Note]Secondaries from AlongStepDoIt included."
              << G4endl; 
 
-        if((*fSecondary).entries()>0){
-	  for(G4int lp1=0; lp1<(*fSecondary).entries(); lp1++){
+        if((*fSecondary).size()>0){
+	  for(G4int lp1=0; lp1<(*fSecondary).size(); lp1++){
                G4cout << "      "
                     << G4std::setw( 9)
                     << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
@@ -300,12 +300,12 @@ void G4SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw( 9)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
@@ -486,8 +486,8 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
 	       << fN2ndariesAlongStepDoIt << G4endl;
 
         if(fN2ndariesAlongStepDoIt>0){
-           for(G4int lp1=(*fSecondary).entries()-fN2ndariesAlongStepDoIt; 
-                     lp1<(*fSecondary).entries(); lp1++){
+           for(G4int lp1=(*fSecondary).size()-fN2ndariesAlongStepDoIt; 
+                     lp1<(*fSecondary).size(); lp1++){
                G4cout << "      "
                     << G4std::setw( 9)
                     << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
@@ -532,8 +532,8 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
              << fN2ndariesPostStepDoIt << G4endl;
 
         if(fN2ndariesPostStepDoIt>0){
-           for(G4int lp1=(*fSecondary).entries()-fN2ndariesPostStepDoIt; 
-                     lp1<(*fSecondary).entries(); lp1++){
+           for(G4int lp1=(*fSecondary).size()-fN2ndariesPostStepDoIt; 
+                     lp1<(*fSecondary).size(); lp1++){
                G4cout << "      "
                     << G4std::setw( 9)
                     << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "

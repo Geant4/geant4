@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.cc,v 1.5 1999-12-15 14:53:59 gunter Exp $
+// $Id: G4TrackingManager.cc,v 1.6 2001-02-08 07:39:53 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,8 +55,15 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   fpTrack = apValueG4Track;
 
   // Clear 2ndary particle vector
-  GimmeSecondaries()->clearAndDestroy();    
-
+  //  GimmeSecondaries()->clearAndDestroy();    
+  //  G4std::vector<G4Track*>::iterator itr;
+  G4int itr;
+  //  for(itr=GimmeSecondaries()->begin();itr=GimmeSecondaries()->end();itr++){ 
+  for(itr=0;itr<GimmeSecondaries()->size();itr++){ 
+     delete GimmeSecondaries()->at(itr);
+  }
+  GimmeSecondaries()->clear();  
+  
   // Pre tracking user intervention process.
   fpTrajectory = NULL;
   if( fpUserTrackingAction != NULL ) {

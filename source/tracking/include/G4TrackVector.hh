@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackVector.hh,v 1.6 2000-11-11 06:34:10 tsasaki Exp $
+// $Id: G4TrackVector.hh,v 1.7 2001-02-08 07:39:51 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -27,11 +27,11 @@
 #ifndef G4TrackVector_h
 #define G4TrackVector_h 1
 
-#include "g4rw/tpordvec.h"           // Include from 'RogueWave'
+#include "g4std/vector"
 #include "G4Track.hh"              // Include form 'tracking'
 
 ///////////////////////////////////////////////////
-typedef G4RWTPtrOrderedVector<G4Track> G4TrackVector;
+typedef G4std::vector<G4Track*> G4TrackVector;
 ///////////////////////////////////////////////////
 
 #endif

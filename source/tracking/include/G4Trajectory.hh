@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.10 2000-11-11 06:34:10 tsasaki Exp $
+// $Id: G4Trajectory.hh,v 1.11 2001-02-08 07:39:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@ class G4Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include "g4rw/tpordvec.h"            // G4RWTValOrderedVector
+#include "g4std/vector"            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -86,7 +86,7 @@ public: // with description
    virtual void ShowTrajectory() const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
    virtual void AppendStep(const G4Step* aStep);
-   virtual int GetPointEntries() const { return positionRecord->entries(); }
+   virtual int GetPointEntries() const { return positionRecord->size(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
@@ -97,7 +97,7 @@ public: // with description
    private:
 //---------
 
-  G4RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
+  G4std::vector<G4VTrajectoryPoint*>* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;

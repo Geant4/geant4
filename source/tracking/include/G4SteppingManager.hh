@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.13 2000-11-11 06:34:09 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.14 2001-02-08 07:39:51 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -29,7 +29,6 @@
 //---------------------------------------------------------------
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 
-#include "g4rw/tvordvec.h"            // Include from 'RogueWave'
 
 class G4SteppingManager;
 
@@ -38,6 +37,7 @@ class G4SteppingManager;
 
 #include "G4ios.hh"                 // Include from 'system'
 #include "g4std/iomanip"                  // Include from 'system'
+#include "g4std/vector"                  // Include from 'system'
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
 #include "G4Navigator.hh"             // Include from 'geometry'
@@ -61,13 +61,12 @@ class G4VSensitiveDetector;
 #include "G4TouchableHistory.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
-static const G4int SIZEofSelectedDoIt=100;
 // RogueWave Tools.h++
-   typedef G4RWTValOrderedVector<G4int> 
+   typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-   typedef G4RWTValOrderedVector<G4int> 
+   typedef G4std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-   typedef G4RWTValOrderedVector<G4int>
+   typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
 
 
@@ -257,9 +256,9 @@ public: //without description
 
    G4int verboseLevel;
 
-   G4SelectedAtRestDoItVector *fSelectedAtRestDoItVector;
-   G4SelectedAlongStepDoItVector *fSelectedAlongStepDoItVector;
-   G4SelectedPostStepDoItVector *fSelectedPostStepDoItVector;
+   G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
+   G4SelectedAlongStepDoItVector* fSelectedAlongStepDoItVector;
+   G4SelectedPostStepDoItVector* fSelectedPostStepDoItVector;
 
    G4double   fPreviousStepSize;
 
@@ -529,7 +528,7 @@ public: //without description
     }
   }
 
-#include "G4SteppingManager.icc"
+//#include "G4SteppingManager.icc"
 
 #endif
 

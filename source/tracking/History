@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2001-02-05 18:10:35 gcosmo Exp $
+$Id: History,v 1.16 2001-02-08 07:39:40 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+Feb 08, 01 T.Sasaki (tracing-V03-00-03)
+- STL migration: get rid of most of RW vectors
 Feb 05, 01 G.Cosmo (tracking-V03-00-02)
 - STL migration for G4OrderedTable and G4DataVector.
   Modified files: G4VSteppingVerbose.hh.

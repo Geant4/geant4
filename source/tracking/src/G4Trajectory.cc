@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.8 2000-01-26 04:20:34 asaim Exp $
+// $Id: G4Trajectory.cc,v 1.9 2001-02-08 07:39:53 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,8 +57,9 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
-   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
-   positionRecord->insert(new G4TrajectoryPoint(aTrack->GetPosition()));
+   //   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
+   //   G4std::vector<G4VTrajectoryPoint*> *positionRecord;
+   positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
 //////////////////////////////////////////
@@ -70,11 +71,12 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   PDGEncoding = right.PDGEncoding;
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
-  positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
-  for(int i=0;i<right.positionRecord->entries();i++)
+  //  positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
+  //  G4std::vector<G4VTrajectoryPoint*> *positionRecord;
+  for(int i=0;i<right.positionRecord->size();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
-    positionRecord->insert(new G4TrajectoryPoint(*rightPoint));
+    positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
   }
 }
 
@@ -83,7 +85,13 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
 G4Trajectory::~G4Trajectory()
 /////////////////////////////
 {
-  positionRecord->clearAndDestroy();
+  //  positionRecord->clearAndDestroy();
+  G4int i;
+  for(i=0;i<positionRecord->size();i++){
+    delete  positionRecord->at(i);
+  }
+  positionRecord->clear();
+
   delete positionRecord;
 }
 
@@ -95,10 +103,10 @@ void G4Trajectory::ShowTrajectory() const
         << ":ParentID=" << fParentID << G4endl;
    G4cout << "Particle name : " << ParticleName 
         << "  Charge : " << PDGCharge << G4endl;
-   G4cout << "  Current trajectory has " << positionRecord->entries() 
+   G4cout << "  Current trajectory has " << positionRecord->size() 
         << " points." << G4endl;
 
-   for( size_t i=0 ; i < positionRecord->entries() ; i++){
+   for( size_t i=0 ; i < positionRecord->size() ; i++){
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        G4cout << "Point[" << i << "]" 
             << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
@@ -116,7 +124,7 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
    if(i_mode>=0)
    {
      G4Polyline pPolyline;
-     for (int i = 0; i < positionRecord->entries() ; i++) {
+     for (int i = 0; i < positionRecord->size() ; i++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        pos = aTrajectoryPoint->GetPosition();
        pPolyline.append( pos );
@@ -137,7 +145,7 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 
    if(i_mode!=0)
    {
-     for(int j=0; j<positionRecord->entries(); j++) {
+     for(int j=0; j<positionRecord->size(); j++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
        pos = aTrajectoryPoint->GetPosition();
        G4Circle circle( pos );
@@ -156,7 +164,7 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 void G4Trajectory::AppendStep(const G4Step* aStep)
 ////////////////////////////////////////////
 {
-   positionRecord->append( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
+   positionRecord->push_back( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
                                  GetPosition() ));
 }
   
@@ -175,10 +183,13 @@ void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 
   G4Trajectory* seco = (G4Trajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
-  for(int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
+  for(G4int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
   { 
-    positionRecord->append(seco->positionRecord->removeAt(1));
+    positionRecord->push_back((*(seco->positionRecord))[i]);
+    //    positionRecord->push_back(seco->positionRecord->removeAt(1));
   }
+  delete seco->positionRecord->at(0);
+  seco->positionRecord->clear();
 }
 
 

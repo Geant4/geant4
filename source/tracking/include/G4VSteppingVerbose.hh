@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.8 2001-02-05 18:10:36 gcosmo Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.9 2001-02-08 07:39:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -149,15 +149,15 @@ protected:
 
   G4int verboseLevel;
 
-  typedef G4RWTValOrderedVector<G4int> 
+  typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-  typedef G4RWTValOrderedVector<G4int> 
+  typedef G4std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-  typedef G4RWTValOrderedVector<G4int>
+  typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
-  G4SelectedAtRestDoItVector *fSelectedAtRestDoItVector;
-  G4SelectedAlongStepDoItVector *fSelectedAlongStepDoItVector;
-  G4SelectedPostStepDoItVector *fSelectedPostStepDoItVector;
+  G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
+  G4SelectedAlongStepDoItVector* fSelectedAlongStepDoItVector;
+  G4SelectedPostStepDoItVector* fSelectedPostStepDoItVector;
 
   G4double   fPreviousStepSize;
 
