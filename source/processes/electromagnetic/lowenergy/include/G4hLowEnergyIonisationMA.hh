@@ -72,17 +72,18 @@
 #include "G4VEnergyLossProcess.hh"
 #include "globals.hh"
 #include "G4Track.hh"
-#include "G4Step.hh"
 #include "G4DataVector.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ionEffectiveCharge.hh"
 
 class G4ShellVacancy;
 class G4VhShellCrossSection;
 class G4VEMDataSet;
 class G4Region;
+class G4Step;
 
 class G4hLowEnergyIonisationMA : public G4VEnergyLossProcess
 {
@@ -168,12 +169,6 @@ private:
 
   void BuildDataForFluorescence();
 
-  G4double EffectiveChargeSquare(const G4Track& track);
-
-  G4double EffectiveCharge(const G4ParticleDefinition* p,
-                           const G4Material* material,
-                                 G4double kineticEnergy);
-
   G4double BarkasTerm(const G4Material* material,
                             G4double kineticEnergy) const;
   // Function to compute the Barkas term for protons
@@ -208,6 +203,8 @@ private:
 
   G4DataVector                 cutForDelta;
   G4DataVector                 cutForGamma;
+
+  G4ionEffectiveCharge         effCharge;
 
   G4VEmFluctuationModel*       flucModel;
   G4AtomicDeexcitation         deexcitationManager;
@@ -271,29 +268,21 @@ inline G4double G4hLowEnergyIonisationMA::MaxSecondaryEnergy(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hLowEnergyIonisationMA::GetMeanFreePath(
-         const G4Track& track, G4double, G4ForceCondition*)
+         const G4Track& track, G4double, G4ForceCondition* cond)
 {
-  G4double mRatio    = proton_mass_c2/track.GetDynamicParticle()->GetMass();
-  G4double q_2       = EffectiveChargeSquare(track);
+  G4double mRatio = proton_mass_c2/track.GetDynamicParticle()->GetMass();
+  currentParticle = track.GetDefinition();
+  theMaterial     = track.GetMaterial();
+  G4double q_2    = effCharge.EffectiveChargeSquareRatio(currentParticle,theMaterial,
+                                                         track.GetKineticEnergy());
+
   SetMassRatio(mRatio);
   SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
-  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, 0);
+  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, cond);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4hLowEnergyIonisationMA::EffectiveChargeSquare(const G4Track& track)
-{
-  currentParticle    = track.GetDefinition();
-  theMaterial        = track.GetMaterial();
-  G4double kinEnergy = track.GetKineticEnergy();
-  G4double charge    = EffectiveCharge(currentParticle,theMaterial,kinEnergy)
-                     *chargeCorrection/eplus;
-
-  return charge*charge;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
