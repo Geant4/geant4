@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.40 2002-12-06 13:35:29 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.41 2002-12-09 07:10:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -145,21 +145,10 @@ G4Quasmon::G4Quasmon(G4Quasmon* right)
 
 G4Quasmon::~G4Quasmon()
 {
-  G4int nCan=theQCandidates.size();
 #ifdef sdebug
-  G4cout<<"G4Quasmon::Destructor before theQCandidates nC="<<nCan<<G4endl;
+  G4cout<<"G4Quasmon::Destructor before theQCandidates delete"<<G4endl;
 #endif
-  if(nCan) for (G4int ic=0; ic<nCan; ic++)
-  {
-#ifdef sdebug
-    G4cout<<"G4Quasmon::Destructor delete the QCandidate #"<<ic<<G4endl;
-#endif
-    delete theQCandidates[ic];
-#ifdef sdebug
-    G4cout<<"G4Quasmon::Destructor after delete"<<G4endl;
-#endif
-  }
-  //theQCandidates.clearAndDestroy();
+  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQHadrons"<<G4endl;
 #endif
@@ -416,7 +405,10 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       else q4Mom.setE(p);
     }
     G4double quasM= sqrt(qM2);                     // Current mass of Quasmon
-    G4double qurF=quasM/(q4Mom.e()-q4Mom.rho());   // Factor for k Lor.Trans. to LS
+    G4double tmpEq=q4Mom.e();                      // Energy of Quasmon
+    G4double tmpPq=q4Mom.rho();                    // Momentum of Quasmon
+	if(tmpEq<tmpPq) G4cerr<<"*G4Q::HQ:*Boost* q4M="<<q4Mom<<",P="<<tmpPq<<" > E="<<tmpEq<<G4endl;
+    G4double qurF=quasM/(tmpEq-tmpPq);             // Factor for k Lor.Trans. to LS
     G4ThreeVector qltb = q4Mom.boostVector();      // Boost vector for backward Lor.Trans. in LS
     //////////G4double b2=qltb.mag2();                       // beta^2 of Quasmon
 #ifdef debug
@@ -481,6 +473,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4int    totPDG=totN.GetPDG();                 // Total PDG Code for the Current compound
 	G4cout<<"G4Q::HQ: tPDG="<<totPDG<<",tM="<<totMass<<",rPDG="<<resNPDG<<G4endl;
 #endif
+	if(tot4M.e()<tot4M.rho()) G4cerr<<"*G4Q::HQ:*Boost* tot4M="<<tot4M<<G4endl;
     G4ThreeVector totBoost = tot4M.boostVector();  // Boost vector for Total System (backward)
     G4ThreeVector totRBoost= -totBoost;            // Boost vector for Total System (forward)
     G4int    iniPDG =valQ.GetSPDGCode();
@@ -2024,7 +2017,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 	  }
       G4double dm=quasM-sMass;
 #ifdef debug
-      G4cout<<"G4Q::HQ:f="<<fprob<<",d="<<dm<<",rPDG="<<rPDG<<",rM="<<rMass<<",M="<<reMass<<G4endl;
+      G4cout<<"G4Q::HQ:f="<<fprob<<",d="<<dm<<",rPDG="<<rPDG<<",rM="<<rMass<<",M="<<reMass
+            <<",sM="<<sMass<<G4endl;
 #endif
       if(abs(dm)<.000001)
 	  {
@@ -2044,12 +2038,19 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       if(rPDG!=10&&rMass>dm&&!rWi) // Try to use a width of the h-resonance or reduce its spin state
 	  {
         G4double sWi=G4QPDGCode(sPDG).GetWidth();
+        G4double sMM=G4QPDGCode(sPDG).GetMass();
         if(sWi)                                      // Hadron is a resonance
 		{
           G4double ddm=quasM-rMass;
-          if(sMass-ddm<1.5*sWi-.01)
+          if(fabs(sMM-ddm)<1.5*sWi-.001)
           {
+            G4double msm=sMass;
             sMass=GetRandomMass(sPDG,ddm);           // Randomize mass of the Reson-Hadron
+            if(fabs(sMass)<.001)
+            {
+              G4cerr<<"***G4Q::HQ: CHANGE to M=0, sPDG="<<sPDG<<",dm="<<ddm<<",M_old="<<msm<<G4endl;
+              sMass=msm;
+            }
 #ifdef debug
             G4cout<<"G4Q::HQ: "<<sPDG<<" mass's changed to "<<sMass<<",d="<<ddm<<",W="<<sWi<<G4endl;
 #endif
@@ -3471,7 +3472,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
 #endif
 					if(resPDG&&minM>0.) // Kinematical analysis of hadronization
                     {
-#ifdef debug
+#ifdef pdebug
                       if(baryn<5)G4cout<<"G4Q::CHP: fM="<<frM<<",bM="<<boundM<<",rM="<<tmpTM<<",tM="
                                        <<totMass<<G4endl;
 #endif
@@ -4459,7 +4460,7 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
 #ifdef pdebug
   G4cout<<"G4Quasmon::Fragment after HadronizeQuasmon nH="<<nHadrs<<G4endl;
 #endif
-  G4QHadronVector* theFragments = new G4QHadronVector;
+  G4QHadronVector* theFragments = new G4QHadronVector; // user is responsible for delition !!
   if(nHadrs) for (int hadron=0; hadron<nHadrs; hadron++)
   {
     G4QHadron* curHadr = new G4QHadron(theQHadrons[hadron]);
