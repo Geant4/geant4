@@ -1,4 +1,4 @@
-$Id: History,v 1.240 2004-04-07 09:52:02 gbarrand Exp $
+$Id: History,v 1.241 2004-04-08 15:48:25 gbarrand Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th April 2004  Guy Barrand
+- architecture.gmk : revisit Inventor default. In Particular
+  remove HEPVis dependancies (the Inventor vis driver does
+  not needed these libraries anymore).
 
 7th April 2004  Guy Barrand
 - Darwin-g++.gmk : correct the options to build shared libs ;

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.92 2004-04-05 12:15:35 gcosmo Exp $
+# $Id: architecture.gmk,v 1.93 2004-04-08 15:48:25 gbarrand Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -223,21 +223,19 @@ XAWLIBS    := -lXaw
 # are set below.  Most system-dependent code assumes OGLHOME is set.
 #
 # ------------- OpenInventor -----------------
-# The path to the installation of HEPVis and OpenInventor must be specified
-# in HEPVISDIR -only- if the packages are installed in a location different
+# The path to the installation of OpenInventor must be specified
+# if the package is installed in a location different
 # than default system directories (like... /usr or /usr/local).
 #
-ifndef HEPVISINC
-  HEPVISINC := $(HEPVISDIR)/include
-endif
-ifndef HEPVISLIB
-  HEPVISLIB := $(HEPVISDIR)/lib
+
+ifndef OIVHOME
+  OIVHOME  := /usr/local
 endif
 ifndef OIVFLAGS
-  OIVFLAGS  := -I${HEPVISINC}
+  OIVFLAGS  := -I$(OIVHOME)/include 
 endif
 ifndef OIVLIBS
-  OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lHEPVisXt -lInventor -lInventorXt
+  OIVLIBS   := -L$(OIVHOME)/lib -lInventorXt -lInventor
 endif
 
 # For cfront compilers the repository location is set to
