@@ -28,6 +28,7 @@
 #include "G4Clebsch.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
+#include "G4HadTmpUtil.hh"
 
 G4Clebsch::G4Clebsch()
 {
@@ -107,7 +108,7 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
   G4double m2 = iso3In2 / 2.0;
   G4double m3 = - (m1 + m2);
 
-  G4int n = lrint(m3+j1+j2+.1);
+  G4int n = G4lrint(m3+j1+j2+.1);
   G4double argument = 2. * j3 + 1.;
   if (argument < 0.) 
     throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::ClebschGordan - sqrt of negative argument");
@@ -205,7 +206,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     }
 
     const std::vector<G4double> logVector = GetLogs();
-    size_t n1 = lrint(n[0]);
+    size_t n1 = G4lrint(n[0]);
 
     // Some boundary checks
     G4int logEntries = logVector.size() - 1;

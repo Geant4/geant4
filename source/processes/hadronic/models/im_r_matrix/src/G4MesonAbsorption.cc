@@ -8,6 +8,7 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4HadTmpUtil.hh"
 
 // first prototype
 
@@ -44,15 +45,15 @@ FindAndFillCluster(G4KineticTrackVector & result,
 {
   std::vector<G4KineticTrack *>::iterator j=someCandidates.begin();
   G4KineticTrack * aTarget = result[0];
-  G4int chargeSum = lrint(aTarget->GetDefinition()->GetPDGCharge());
-  chargeSum+=lrint(aProjectile->GetDefinition()->GetPDGCharge());
+  G4int chargeSum = G4lrint(aTarget->GetDefinition()->GetPDGCharge());
+  chargeSum+=G4lrint(aProjectile->GetDefinition()->GetPDGCharge());
   G4ThreeVector firstBase = aTarget->GetPosition();
   G4double min = DBL_MAX;
   G4KineticTrack * partner = 0;
   for(; j != someCandidates.end(); ++j)
   {
     if(*j == aTarget) continue;
-    G4int cCharge = lrint((*j)->GetDefinition()->GetPDGCharge());
+    G4int cCharge = G4lrint((*j)->GetDefinition()->GetPDGCharge());
     if (chargeSum+cCharge > 2) continue;
     if (chargeSum+cCharge < 0) continue;
     // get the one with the smallest distance. 
@@ -79,7 +80,7 @@ GetFinalState(G4KineticTrack * projectile,
   G4LorentzVector theT2 = targets[1]->Get4Momentum();
   G4LorentzVector incoming = thePro + theT1 + theT2;
   G4double energyBalance = incoming.t();
-  G4int chargeBalance = lrint(projectile->GetDefinition()->GetPDGCharge()
+  G4int chargeBalance = G4lrint(projectile->GetDefinition()->GetPDGCharge()
                        + targets[0]->GetDefinition()->GetPDGCharge()
                        + targets[1]->GetDefinition()->GetPDGCharge());
 		       
@@ -188,7 +189,7 @@ GetFinalState(G4KineticTrack * projectile,
   for(size_t hpw=0; hpw<result->size(); hpw++)
   {
     energyBalance-=result->operator[](hpw)->Get4Momentum().t();
-    chargeBalance-=lrint(result->operator[](hpw)->GetDefinition()->GetPDGCharge());
+    chargeBalance-=G4lrint(result->operator[](hpw)->GetDefinition()->GetPDGCharge());
     baryonBalance-=result->operator[](hpw)->GetDefinition()->GetBaryonNumber();
   }
   if(getenv("AbsorptionEnergyBalanceCheck"))

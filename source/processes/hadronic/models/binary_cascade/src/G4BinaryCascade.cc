@@ -1805,7 +1805,9 @@ G4Fragment * G4BinaryCascade::FindFragments()
 //GF  fragment->SetNumberOfParticles(excitons-holes);
   fragment->SetNumberOfParticles(excitons);
   fragment->SetNumberOfCharged(zCaptured);
-
+  G4ParticleDefinition * aIonDefinition =
+       G4ParticleTable::GetParticleTable()->FindIon(a,z,0.0,z);
+  fragment->SetParticleDefinition(aIonDefinition);
 #ifdef debug_G4BinaryCascade
    G4cout << "Fragment: a= " << a
  	 << " z= " << z

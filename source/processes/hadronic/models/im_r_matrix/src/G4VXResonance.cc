@@ -42,6 +42,7 @@
 #include "G4VXResonance.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
+#include "G4HadTmpUtil.hh"
 
 G4VXResonance::G4VXResonance()
 { }
@@ -97,8 +98,8 @@ G4double G4VXResonance::IsospinCorrection(const G4KineticTrack& trk1,
       std::vector<G4double> iso = clebsch.GenerateIso3(isoIn1,iso3In1, 
 						  isoIn2,iso3In2, 
 						  isoProton,isoProton);
-      G4int isoA = lrint(iso[0]);
-      G4int isoB = lrint(iso[1]);
+      G4int isoA = G4lrint(iso[0]);
+      G4int isoB = G4lrint(iso[1]);
       G4double rWeight =  clebsch.Weight(isoProton,isoA,
 					 isoProton,isoB,
 					 isoOut1,isoOut2);
