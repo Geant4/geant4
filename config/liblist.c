@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.15 2002-07-08 14:31:56 johna Exp $ */
+/* $Id: liblist.c,v 1.16 2002-11-19 16:36:34 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -9,7 +9,8 @@ of .d dependency files liblist produces:
      original libname.map file, then reordered according to the dependencies
      found in the .d files.  This option is used for compiling the file
      libname.map from all the dependencies.
-The .d files are specfied in the argument(s).
+  c) with -m option, the whole library list ordered according to the libname.map.
+The .d files are specified in the argument(s).
 The libname.map is on standard input.
 
 Usage:
@@ -18,6 +19,7 @@ Usage:
   liblist -l *.d < libname.map
   liblist -ld <ddir> < libname.map
   liblist -l -d <ddir> < libname.map
+  liblist -m < libname.map
 where <ddir> is a directory name of a directory which is recursively
 searched for dependency files.
 
@@ -124,7 +126,7 @@ int main (int argc, char** argv) {
   char static buffer[BUFSIZE],*bufferPtr,workbuf[256];
   char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
   char **rargv;
-  int i,optl=0,swapping,c,rargc;
+  int i,optl=0,optm=0,swapping,c,rargc;
   FILE *fp;
 
 #if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
@@ -144,7 +146,7 @@ int main (int argc, char** argv) {
   struct libmap_ *libmap=0,*libmapPtr=0,*libmapPtr1=0,*libmapPtr2=0,
     *prevPtr1,*prevPtr2,*tmpp,*userLibmapPtr;
 
-  while((c=getopt(argc,argv,"ld:"))!=EOF)
+  while((c=getopt(argc,argv,"ld: m::"))!=EOF)
     {
       switch(c)
 	{
@@ -154,6 +156,9 @@ int main (int argc, char** argv) {
 	case 'd':
 	  directory=strdup(optarg);
 	  break;
+        case 'm':
+          optm=1;
+          break;
 	}
     }
 	  
@@ -223,7 +228,7 @@ int main (int argc, char** argv) {
       libmapPtr->uses=(char**)calloc(NLIBMAX,sizeof(char*));
 
       /* If option -l not specified, fill uses list... */
-      if(!optl)
+      if(!optl && !optm)
 	{
 	  pp=libmapPtr->uses;
 	  if(ptr)
@@ -238,36 +243,39 @@ int main (int argc, char** argv) {
 	    }
 	}
 
-      /* Get directory name... */
-      gets(buffer);
-      ptr=strtok(buffer,"/");
-      if(!ptr)
-	{
-	  fprintf(stderr,"  ERROR: \"/\" before \"source\" expected.\n");
-	  exit(1);
-	}
-      while(ptr&&strcmp (ptr,"source"))ptr=strtok(NULL,"/");
-      ptr=strtok(NULL,"/");
-      if(!ptr)
-	{
-	  fprintf(stderr,"  ERROR: \"source\" expected.\n");
-	  exit(1);
-	}
-      libmapPtr->trigger=(char*)malloc(TRIGSIZE);
-      strcpy(libmapPtr->trigger,ptr);
-      ptr=strtok(NULL,"/");
-      while(ptr&&strcmp(ptr,"GNUmakefile"))
-	{
-	  strcat(libmapPtr->trigger,"/");
-	  strcat(libmapPtr->trigger,ptr);
-	  ptr=strtok(NULL,"/");
-	}
-      if(!ptr)
-	{
-	  fprintf
-	    (stderr,
-	     "  ERROR: \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
-	  exit(1);
+      if(!optm)
+        {
+          /* Get directory name... */
+          gets(buffer);
+          ptr=strtok(buffer,"/");
+          if(!ptr)
+	    {
+	      fprintf(stderr,"  ERROR: \"/\" before \"source\" expected.\n");
+	      exit(1);
+	    }
+          while(ptr&&strcmp (ptr,"source"))ptr=strtok(NULL,"/");
+          ptr=strtok(NULL,"/");
+          if(!ptr)
+	    {
+	      fprintf(stderr,"  ERROR: \"source\" expected.\n");
+	      exit(1);
+	    }
+          libmapPtr->trigger=(char*)malloc(TRIGSIZE);
+          strcpy(libmapPtr->trigger,ptr);
+          ptr=strtok(NULL,"/");
+          while(ptr&&strcmp(ptr,"GNUmakefile"))
+	    {
+	      strcat(libmapPtr->trigger,"/");
+	      strcat(libmapPtr->trigger,ptr);
+	      ptr=strtok(NULL,"/");
+	    }
+          if(!ptr)
+	    {
+	      fprintf
+	        (stderr,
+	         "  ERROR: \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
+	      exit(1);
+	    }
 	}
     }
 
@@ -320,69 +328,72 @@ int main (int argc, char** argv) {
 	  userLibmapPtr=0;
 	}
 
-      /* Look for a "used" library and add it to the "user" uses list... */
-      bufferPtr=strtok(NULL,"\n");  /* Start *after* ":". */
-      if (!bufferPtr) 
+      if(!optm)
 	{
-	  fprintf(stderr,"  WARNING: It seems there is nothing after \':\' in dependency file %s.\n", rargv[i]);
-	}
-      else {
-	do
-	  {
-	    for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
-	      {
-		/* Look for trigger string. */
-		strcpy(workbuf,libmapPtr->trigger);
-		strcat(workbuf,"/include");
-		ptr=strstr(bufferPtr,workbuf);
-		if(ptr && (userLibmapPtr != libmapPtr))
-		  {
-		    libmapPtr->used=1;
-		    if(userLibmapPtr)
-		      {
-			for(pp=userLibmapPtr->uses;*pp;pp++)
-			  {
-			    if(strcmp(*pp,libmapPtr->lib)==0)break;
-			  }
-			if(!*pp)*pp=libmapPtr->lib;
-		      }
-		  }
-		/* Also look for library name in case header files are
-		   placed in temporary directories under a subdirectory
-		   with the same name as the library name.  This can
-		   happen with Objectivity which makes header files
-		   from .ddl files and places them in a temporary
-		   directory. */
-		strcpy(workbuf,libmapPtr->lib);
-		strcat(workbuf,"/");
-		ptr=strstr(bufferPtr,workbuf);
-		if(ptr && (userLibmapPtr != libmapPtr))
-		  {
-		    libmapPtr->used=1;
-		    if(userLibmapPtr)
-		      {
-			for(pp=userLibmapPtr->uses;*pp;pp++)
-			  {
-			    if(strcmp(*pp,libmapPtr->lib)==0)break;
-			  }
-			if(!*pp)*pp=libmapPtr->lib;
-		      }
-		  }
-	      }
-	    fgets(buffer,BUFSIZE,fp);
-	    bufferPtr=buffer;
+	  /* Look for a "used" library and add it to the "user" uses list... */
+	  bufferPtr=strtok(NULL,"\n");  /* Start *after* ":". */
+	  if (!bufferPtr) 
+	    {
+	      fprintf(stderr,"  WARNING: It seems there is nothing after \':\' in dependency file %s.\n", rargv[i]);
+	    }
+	  else {
+	  do
+	    {
+	      for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
+	        {
+		  /* Look for trigger string. */
+		  strcpy(workbuf,libmapPtr->trigger);
+		  strcat(workbuf,"/include");
+		  ptr=strstr(bufferPtr,workbuf);
+		  if(ptr && (userLibmapPtr != libmapPtr))
+		    {
+		      libmapPtr->used=1;
+		      if(userLibmapPtr)
+		        {
+			  for(pp=userLibmapPtr->uses;*pp;pp++)
+			    {
+			      if(strcmp(*pp,libmapPtr->lib)==0)break;
+			    }
+			  if(!*pp)*pp=libmapPtr->lib;
+		        }
+		    }
+		  /* Also look for library name in case header files are
+		     placed in temporary directories under a subdirectory
+		     with the same name as the library name.  This can
+		     happen with Objectivity which makes header files
+		     from .ddl files and places them in a temporary
+		     directory. */
+		  strcpy(workbuf,libmapPtr->lib);
+		  strcat(workbuf,"/");
+		  ptr=strstr(bufferPtr,workbuf);
+		  if(ptr && (userLibmapPtr != libmapPtr))
+		    {
+		      libmapPtr->used=1;
+		      if(userLibmapPtr)
+		        {
+			  for(pp=userLibmapPtr->uses;*pp;pp++)
+			    {
+			      if(strcmp(*pp,libmapPtr->lib)==0)break;
+			    }
+			  if(!*pp)*pp=libmapPtr->lib;
+		        }
+		    }
+	        }
+	      fgets(buffer,BUFSIZE,fp);
+	      bufferPtr=buffer;
 
 #if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
-	    while ( ptr=strchr(buffer,'\\') ) *ptr='/';
+	      while ( ptr=strchr(buffer,'\\') ) *ptr='/';
 
-	    while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
-	      {
-		for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
-	      }
+	      while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
+	        {
+		  for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
+	        }
 #endif
 
-	  } while(!feof(fp));
-	fclose(fp);
+	    } while(!feof(fp));
+	  fclose(fp);
+        }
       }
     }
 
@@ -518,6 +529,15 @@ int main (int argc, char** argv) {
 	  printf("\n");
 	  printf("source/%s/GNUmakefile\n",libmapPtr->trigger);
 	}
+    }
+  else if (optm)
+    {
+      /* Write out full library list... */
+      for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
+      {
+        printf("-l%s ",libmapPtr->lib);
+        libmapPtr=libmapPtr->next;
+      }
     }
   else
     {
