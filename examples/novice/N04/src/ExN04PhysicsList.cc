@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN04PhysicsList.cc,v 1.1 1999-01-07 16:06:07 gunter Exp $
+// $Id: ExN04PhysicsList.cc,v 1.2 1999-03-24 10:42:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -639,7 +639,7 @@ void ExN04PhysicsList::AddParameterisation()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
+    if (!particle->IsShortLived()) pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 
