@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeIonisation.hh,v 1.1 1999-01-07 16:11:11 gunter Exp $
+// $Id: G4IeIonisation.hh,v 1.2 1999-05-04 14:29:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -71,6 +71,9 @@ class G4IeIonisation : public G4IeEnergyLoss
  
     G4VParticleChange *PostStepDoIt(const G4Track& track,
                                     const G4Step& Step ) ;
+
+    G4double GetNlambda(
+                   G4double KineticEnergy,G4Material* material);
 
   protected:
 
