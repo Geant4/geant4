@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.24 2005-03-16 12:14:33 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.25 2005-03-17 20:17:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,6 +138,10 @@ public:
                                       G4double tmin = 0.0,
                                       G4double tmax = DBL_MAX) = 0;
 
+  virtual void CurrentAtomAndShell(G4int& Z, G4int& shell);
+
+  virtual void SetDeexcitation(G4bool fluo, G4bool auger);
+
   G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
   const G4String& GetName() const;
@@ -167,8 +171,6 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
     				            G4double kineticEnergy);
 
-  virtual void SetDeexcitation(G4bool fluo, G4bool auger);
-
 private:
 
   //  hide assignment operator
@@ -178,6 +180,11 @@ private:
   const G4String  name;
   G4double        lowLimit;
   G4double        highLimit;
+
+protected:
+
+  G4int           currentZ;
+  G4int           currentShell;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -235,7 +242,7 @@ inline G4double G4VEmModel::CrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector() ;
-  const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
@@ -276,6 +283,12 @@ inline G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
+}
+
+inline void G4VEmModel::CurrentAtomAndShell(G4int& Z, G4int& shell)
+{
+  Z = currentZ;
+  shell = currentShell;
 }
 
 inline void G4VEmModel::SetDeexcitation(G4bool, G4bool)

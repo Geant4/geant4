@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.17 2005-03-14 18:36:25 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.18 2005-03-17 20:17:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,6 +129,7 @@ public:
 
   virtual G4double RecalculateLambda(G4double kinEnergy,
                                const G4MaterialCutsCouple* couple);
+
   G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
 
@@ -192,9 +193,13 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
+  void ComputeIntegralLambda();
+
   G4double GetLambda(G4double kinEnergy);
 
-  void ComputeLambda(G4double kinEnergy);
+  void NewIntegralLambda(G4double kinEnergy);
+
+  G4double ComputeCurrentLambda(G4double kinEnergy);
 
   void BuildLambdaTable();
 
@@ -266,7 +271,6 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
 
@@ -278,16 +282,24 @@ inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
   DefineMaterial(couple);
   G4double x = 0.0;
   if(theLambdaTable) x = GetLambda(kineticEnergy);
-  else               x = RecalculateLambda(kineticEnergy, couple);
+  else               x = ComputeCurrentLambda(kineticEnergy);
   return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::RecalculateLambda(
-                G4double, const G4MaterialCutsCouple*)
+inline G4double G4VEmProcess::RecalculateLambda(G4double e, const G4MaterialCutsCouple* couple)
 {
-  return 0.0;
+  DefineMaterial(couple);
+  return ComputeCurrentLambda(e);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
+{
+  G4VEmModel* currentModel = SelectModel(e);
+  return currentModel->CrossSectionPerVolume(currentMaterial,particle,e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -300,7 +312,7 @@ inline G4double G4VEmProcess::GetLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::ComputeLambda(G4double e)
+inline void G4VEmProcess::NewIntegralLambda(G4double e)
 {
   meanFreePath  = false;
   aboveCSmax    = false;
@@ -331,16 +343,23 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
 {
   *condition = NotForced;
   preStepKinEnergy = track.GetKineticEnergy();
-  if(aboveCSmax && preStepKinEnergy < mfpKinEnergy) ResetNumberOfInteractionLengthLeft();
   DefineMaterial(track.GetMaterialCutsCouple());
+  if(integral) ComputeIntegralLambda();
+  else         preStepLambda = GetLambda(preStepKinEnergy, currentCouple);
   if (meanFreePath) {
-    if (integral) ComputeLambda(preStepKinEnergy);
-    else          preStepLambda = GetLambda(preStepKinEnergy);
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::ComputeIntegralLambda()
+{
+  if(!meanFreePath || (aboveCSmax && preStepKinEnergy < mfpKinEnergy)) ResetNumberOfInteractionLengthLeft();
+  if( meanFreePath ) NewIntegralLambda(preStepKinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
