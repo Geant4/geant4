@@ -1,5 +1,5 @@
 
-$Id: History,v 1.16 2000-11-22 16:10:43 gcosmo Exp $
+$Id: History,v 1.17 2001-01-08 16:52:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Jan 08  2001  Vladimir Grichine    geom-solid-bool-V03-00-00
+
+  - Fix in G4UnionSolid::DistanceToOut(p,v,...) for assignment of
+    argument *n to happen only if calcNorm is false.
+    (courtesy of D.Williams)
+  - Updated unit tests testG4IntersectionSolid.cc, testG4SubtractionSolid.cc
+    and test/testG4UnionSolid.cc.
 
  Nov 22  2000  Vladimir Grichine    geom-solid-bool-V02-00-03
 
