@@ -4,32 +4,46 @@ test17
 
 System test for low energy e.m. processes for hadrons, antihadrons and ions
 
-Authors: Vladimir Ivanchenko and Stephane Chauvie
+Authors: Vladimir Ivanchenko 
 
 ======================================================================
 
 ---- Scope
+     The ionisation losses of low energy hadrons are sensitive to 
+     many details of the simulation code: accuracy of de/dx
+     calculation, accuracy of range calculation, accuracy of multiple
+     scattering calculation, cuts, steps, and others. This test
+     intend to demonstrate that all parts of the simulation of
+     electromagnetic physics are working togeather and that results
+     are corresponded to the expectations.
 
 ---- What it does
+     This test build an aplication with simple water
+     absorber and the set of Low Energy physics processes.
+     The main result of the test is the range and the stragling
+     of heavy particles in the absorber. The range can be compeared 
+     as with the reference output and with the range data from 
+     the ICRU49 report.
 
 ---- Description of the input
+     3 runs with proton, antiproton and C12 ion incident
 
 ---- Description of the output
-	Text output
-	Histograms
-	Ntuples
-	Other
+     Text output
 
 ---- Location of the reference output
+     test17.out and test17.large_N.out
 
 ---- Macros
-     test17.mac
+     test17.in and test17.large_N.in
 
 ---- Other files required
 
 ---- How to run it
-     test17 test17.mac
+     test17 test17.in >& result.out
+     test17 test17.large_N.in >& result.large_N.out
 
 ---- Contactperson
+     Vladimir.Ivantchenko@cern.ch
 
 ======================================================================
