@@ -1,4 +1,4 @@
-$Id: History,v 1.207 2002-12-04 08:39:26 gcosmo Exp $
+$Id: History,v 1.208 2002-12-04 14:45:20 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2002  Gabriele Cosmo (config-V04-01-08)
+- Removed obsolete setup for ObjectSpace-STL (G4USE_OSPACE and related
+  variables). Removed obsolete variable G4USE_STL.
 
 2nd December 2002  John Allison (config-V04-01-07)
 - common.gmk, binmake.gmk: New dependency file algorithm that avoids
