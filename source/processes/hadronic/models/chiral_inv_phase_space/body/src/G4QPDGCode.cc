@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.33 2003-10-08 14:48:24 hpw Exp $
+// $Id: G4QPDGCode.cc,v 1.34 2003-10-24 08:26:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -698,8 +698,28 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(Z==-1 && N== 1 && S== 2) return dKN;
   }
   // === Start mesonic extraction ===
-  G4double k=0.;                      // Mass Sum of K+ mesons
-  if(S<0&&Bn>0)                       // @@ Can be improved by K0/K+ search of minimum
+  G4double km=0.;                     // Mass Sum of K mesons (Correspond to G4E::DecayAntiStrang.)
+  G4int Zm=Z;
+  G4int Nm=N;
+  G4int Sm=S;
+  if(S<0&&Bn>0)                       // NEW: the free mass minimum
+  {
+    if(Zm>=-S)                        // Enough charge for K+'s
+	{
+      km=-S*mK;                       // Anti-Lambdas are compensated by protons
+	  Zm+=S;
+    }
+    else if(Zm>0)
+	{
+      km=Zm*mK-(S+Zm)*mK0;            // Anti-Lambdas are partially compensated by neutrons
+      Zm=0;
+      Nm+=S+Zm;
+    }
+  }
+  else Sm=0;                          // No alternative calculations
+  // Old algorithm
+  G4double k=0.;                      // Mass Sum of K mesons
+  if(S<0&&Bn>0)                       // OLD @@ Can be improved by K0/K+ search of minimum
   {
     G4int sH=(-S)/2;                  // SmallHalfS || The algorithm must be the same
     G4int bH=-S-sH;                   // BigHalhS   || as in G4QE::DecayAntiStrange
@@ -813,26 +833,26 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   if(N<0)
   {
     k+=-N*mPi;
-    Z+=N;                             // A=Z+N>=0
+    Z+=N;
     N=0;
   }
   if(Z<0)
   {
     k+=-Z*mPi;
-    N+=Z;                             // A=Z+N>=0
+    N+=Z;
     Z=0;
   }
   A=Z+N;
-  if (!A) return k+S*mL+S*eps;       // @@ multy LAMBDA states are not implemented
-  G4double m=k+A*um;                  // Expected mass in atomic units
-  G4double D=N-Z;                     // Isotopic shift of the nucleus
-  if(A+S<1&&k==0.||Z<0||N<0)          // @@ Can be generalized to anti-nuclei
+  if (!A) return k+S*mL+S*eps;     // @@ multy LAMBDA states are not implemented
+  G4double m=k+A*um;                 // Expected mass in atomic units
+  G4double D=N-Z;                    // Isotopic shift of the nucleus
+  if(A+S<1&&k==0.||Z<0||N<0)         // @@ Can be generalized to anti-nuclei
   {
 #ifdef debug
     G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");
 #endif
-    return 0.;                        // @@ Temporary
+    return 0.;                       // @@ Temporary
   }
   if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
   else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
@@ -844,6 +864,43 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+eps;       // @@ eps -- Wings of the Mass parabola
   if(m>maxM) m=maxM;
+  G4double mm=m;
+  if(Sm<0)                           // For the new algorithm of calculation 
+  {
+    if(Nm<0)
+    {
+      km+=-Nm*mPi;
+      Zm+=Nm;
+      Nm=0;
+    }
+    if(Zm<0)
+    {
+      km+=-Zm*mPi;
+      Nm+=Zm;
+      Zm=0;
+    }
+    G4int Am=Zm+Nm;
+    if(!Am) return km+eps;
+    mm=km+Am*um;                     // Expected mass in atomic units
+    G4double Dm=Nm-Zm;               // Isotopic shift of the nucleus
+    if(Am<1&&km==0.||Zm<0||Nm<0)     // @@ Can be generalized to anti-nuclei
+    {
+#ifdef debug
+      G4cerr<<"***G4QPDGCode::GetNucM:A="<<Am<<"<1 || Z="<<Zm<<"<0 || N="<<Nm<<"<0"<<G4endl;
+#endif
+    }
+    if     (!Zm) return km+Nm*(mN+.1);
+    else if(!Nm) return km+Zm*(mP+1.);
+    else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];
+    else 
+    {
+      if(G4NucleiPropertiesTable::IsInTable(Zm,Am)) mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
+      else mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(Am,b2)+b3*(1.-2./(1.+exp(b4*Dm)))+Zm*Zm*(b5*pow(Am,b9)+b6/Am);
+    }
+    G4double mM= km+Zm*mP+Nm*mN+eps;
+    if(mm>mM) mm=mM;
+  }
+  if(m>mm) m=mm;
   if(S>0)
   {
     G4double bs=0.;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.25 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4Quasmon.hh,v 1.26 2003-10-24 08:26:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -77,6 +77,7 @@ public:
 
   //Modifiers
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ); // Pub-wrapper for "HadronizeQuasmon(,)"
+  G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it is a Resonance or Chipolino
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
@@ -89,7 +90,10 @@ private:
   void             ModifyInMatterCandidates();
   void             InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
   void             CalculateNumberOfQPartons(G4double qMass);
-  void             CalculateHadronizationProbabilities(G4double excE, G4double kQ, G4double kLS,
+  //void           CalculateHadronizationProbabilities(G4double excE, G4double kQ, G4double kLS,
+  //                                                   G4bool piF, G4bool gaF);
+  void             CalculateHadronizationProbabilities(G4double excE, G4double kQ,
+                                                       G4LorentzVector k4M,
                                                        G4bool piF, G4bool gaF);
   void             FillHadronVector(G4QHadron* qHadron);
   G4int            RandomPoisson(G4double meanValue);

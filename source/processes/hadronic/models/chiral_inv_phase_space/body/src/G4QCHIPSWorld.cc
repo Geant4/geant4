@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.23 2003-10-08 14:48:23 hpw Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.24 2003-10-24 08:26:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------

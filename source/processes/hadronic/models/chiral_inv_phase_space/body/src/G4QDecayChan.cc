@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.19 2003-10-08 14:48:23 hpw Exp $
+// $Id: G4QDecayChan.cc,v 1.20 2003-10-24 08:26:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------

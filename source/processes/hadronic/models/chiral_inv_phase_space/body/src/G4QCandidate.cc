@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.23 2003-10-08 14:48:23 hpw Exp $
+// $Id: G4QCandidate.cc,v 1.24 2003-10-24 08:26:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -50,7 +50,8 @@ G4QCandidate::G4QCandidate(G4int PDGcode) :
   SetQC(QPDG.GetQuarkContent());
 }
 
-G4QCandidate::G4QCandidate(const G4QCandidate& right)
+G4QCandidate::G4QCandidate(const G4QCandidate& right) : 
+  G4QHadron(&right)
 {
   Set4Momentum         (right.Get4Momentum());
   SetQPDG              (right.GetQPDG());

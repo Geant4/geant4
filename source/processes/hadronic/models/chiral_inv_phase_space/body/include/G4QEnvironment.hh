@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.12 2003-09-15 17:11:01 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.13 2003-10-24 08:26:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -52,6 +52,8 @@ public:
   G4QNucleus       GetEnvironment() const;
   G4QuasmonVector* GetQuasmons();
   G4QHadronVector* GetQHadrons();
+
+  // Modifiers
   G4QHadronVector* Fragment();                        // Unresp. wrapper for HadronizeQEnvironment()
 
   // Static functions
@@ -62,6 +64,7 @@ public:
 
 private:  
   G4QHadronVector  HadronizeQEnvironment();           // Main HadronizationFunction used in Fragment
+  void             CopyAndDeleteHadronVector(G4QHadronVector* HV);// Copy theHadrVect to theOutputHV
   void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
   void             InitClustersVector(G4int maxC, G4int maxA); // Init.NucCclusters for 1st interact
   void             CleanUp();                         // Makes theEnvironment=vacuum & kill Quasmons
@@ -69,7 +72,7 @@ private:
   void             EvaporateResidual(G4QHadron* evap, G4bool corFlag = false);// Final Evaporation
   void             DecayDibaryon(G4QHadron* dB);      // Decay of any di-baryon (deuteron is kept)
   void             DecayIsonucleus(G4QHadron* dB);    // Decay nP+(Pi+) or nN+(Pi-) system
-  void             DecayThreeBaryon(G4QHadron* dB);   // Decay of ppp, nnn or LLL states
+  void             DecayMultyBaryon(G4QHadron* dB);   // Decay of Ap, An or AL states
   void             DecayAntiStrange(G4QHadron* dB);   // Decay of the nucleus, containing K+/K0
   void             DecayAlphaBar(G4QHadron* dB);      // Decay of alpha+p or alpha+n states
   void             DecayAlphaDiN(G4QHadron* dB);      // Decay of alpha+p+p states

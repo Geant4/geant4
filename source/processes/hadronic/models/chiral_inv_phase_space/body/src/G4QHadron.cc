@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.27 2003-09-15 17:11:07 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.28 2003-10-24 08:26:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -120,7 +120,7 @@ G4QHadron::G4QHadron(const G4QHadron& right)
   nFragm              = right.nFragm;
 }
 
-G4QHadron::G4QHadron(G4QHadron* right)
+G4QHadron::G4QHadron(const G4QHadron* right)
 {
   theMomentum         = right->theMomentum;
   theQPDG             = right->theQPDG;

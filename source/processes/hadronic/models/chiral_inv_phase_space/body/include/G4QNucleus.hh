@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.17 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QNucleus.hh,v 1.18 2003-10-24 08:26:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -48,7 +48,7 @@ public:
   G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
   ~G4QNucleus();                                           // Destructor
   // Overloaded Operators
-  const G4QNucleus & operator=(const G4QNucleus &right);
+  const G4QNucleus& operator=(const G4QNucleus& right);
   G4int operator==(const G4QNucleus &right) const;
   G4int operator!=(const G4QNucleus &right) const;
   // Specific Selectors
@@ -70,6 +70,8 @@ public:
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate one Baryon from Nucleus
   G4int      SplitBaryon();                                // Is it possible to split a baryon/alpha
+  G4int      HadrToNucPDG(G4int hPDG);                     // Converts hadronic PDGCode to nuclear
+  G4int      NucToHadrPDG(G4int nPDG);                     // Converts nuclear PDGCode to hadronic
   G4bool     Split2Baryons();                              // Is it possible to split two baryons?
   void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDG
   void       InitByQC(G4QContent newQC);                   // Init existing nucleus by new QCont
@@ -79,7 +81,8 @@ public:
   void       Reduce(G4int PDG);                            // Reduce Nucleus by PDG fragment
   void       CalculateMass();                              // Recalculate (calculate) the mass
   void       SetMaxClust(G4int maxC);                      // Set Max BarNum of Clusters
-  void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF, G4bool gaF);
+  void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF=false,
+                               G4bool gaF=false, G4LorentzVector LV=G4LorentzVector(0.,0.,0.,0.));
   G4int      UpdateClusters(G4bool din);                   // Return a#of clusters & calc. probab's
   G4QNucleus operator+=(const G4QNucleus& rhs);            // Add a cluster to the  nucleus
   G4QNucleus operator-=(const G4QNucleus& rhs);            // Subtract a cluster from a nucleus
@@ -200,6 +203,54 @@ inline G4QNucleus G4QNucleus::operator*=(const G4int& rhs)
   G4LorentzVector newLV = rhs*Get4Momentum();
   Set4Momentum   (newLV);
   return *this;
+} 
+
+// Converts hadronic PDG Code to nuclear PDG Code
+inline G4int G4QNucleus::HadrToNucPDG(G4int hPDG)
+//     ==========================================
+{
+  G4int  nPDG=hPDG;
+  if     (hPDG==2212) nPDG=90001000; // p
+  else if(hPDG==2112) nPDG=90000001; // n
+  else if(hPDG==3122) nPDG=91000000; // Lambda
+  else if(hPDG== 211) nPDG=90000999; // pi+
+  else if(hPDG==-211) nPDG=89999001; // pi-
+  else if(hPDG== 213) nPDG=89001000; // K0 (anti-strange)
+  else if(hPDG== 213) nPDG=89000001; // K+ (anti-strange)
+  else if(hPDG==-213) nPDG=90999000; // anti-K0 (strange)
+  else if(hPDG==-213) nPDG=90999999; // K-      (strange)
+  else if(hPDG==1114) nPDG=90001999; // Delta-
+  else if(hPDG==2224) nPDG=89999002; // Delta++
+  else if(hPDG==3112) nPDG=91000999; // Sigma-
+  else if(hPDG==3222) nPDG=90999001; // Sigma+
+  else if(hPDG==3312) nPDG=91999999; // Ksi-
+  else if(hPDG==3322) nPDG=91999000; // Ksi0
+  else if(hPDG==3334) nPDG=92998999; // Omega-
+  return nPDG;
+} 
+
+// Converts nuclear PDG Code to hadronic PDG Code
+inline G4int G4QNucleus::NucToHadrPDG(G4int nPDG)
+//     ==========================================
+{
+  G4int  hPDG=nPDG;
+  if     (nPDG==90001000) hPDG=2212; // p
+  else if(nPDG==90000001) hPDG=2112; // n
+  else if(nPDG==91000000) hPDG=3122; // Lambda
+  else if(nPDG==90000999) hPDG= 211; // pi+
+  else if(nPDG==89999001) hPDG=-211; // pi-
+  else if(nPDG==89001000) hPDG= 213; // K0 (anti-strange)
+  else if(nPDG==89000001) hPDG= 213; // K+ (anti-strange)
+  else if(nPDG==90999000) hPDG=-213; // anti-K0 (strange)
+  else if(nPDG==90999999) hPDG=-213; // K-      (strange)
+  else if(nPDG==90001999) hPDG=1114; // Delta-
+  else if(nPDG==89999002) hPDG=2224; // Delta++
+  else if(nPDG==91000999) hPDG=3112; // Sigma-
+  else if(nPDG==90999001) hPDG=3222; // Sigma+
+  else if(nPDG==91999999) hPDG=3312; // Ksi-
+  else if(nPDG==91999000) hPDG=3322; // Ksi0
+  else if(nPDG==92998999) hPDG=3334; // Omega-
+  return hPDG;
 } 
 
 // Private member functions
