@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test14.cc,v 1.8 2001-07-11 10:09:55 gunter Exp $
+// $Id: test14.cc,v 1.9 2003-02-23 22:42:32 pia Exp $
 //
 
 #include "Tst14DetectorConstruction.hh"
@@ -65,8 +65,10 @@ int main(int argc,char** argv) {
   if(argc==1)
   {
     // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    UImanager->ApplyCommand("/control/execute prerunTst14.mac");
+    //   G4UIsession* session = new G4UIterminal;
+    //   UImanager->ApplyCommand("/control/execute prerunTst14.mac");
+    G4UIsession * session = 0;
+    session = new G4UIterminal();
     session->SessionStart();
     delete session;
   }
