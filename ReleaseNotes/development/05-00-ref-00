@@ -72,8 +72,11 @@ processes                               process-V04-01-01
 ---------
 - Merged changes for migration to new G4ApplicationState.
 
-processes/electromagnetic/lowenergy     emlowen-V04-01-08
+processes/electromagnetic/lowenergy     emlowen-V04-01-09
 -----------------------------------
+- Fix in G4hLowEnergyIonisation for antiprotons: free electron gas 
+  model replaces constant extension of quantum oscillator model 
+  at low energies (< 25 keV) as for protons.
 - Updated unit tests
 
 processes/electromagnetic/muons         muons-V04-01-03
@@ -85,11 +88,12 @@ processes/electromagnetic/standard      stand-V04-01-07
 ----------------------------------
 - Fix d-electron spectra for STD prototype processes.
 
-processes/electromagnetic/utils         utils-V04-01-11
+processes/electromagnetic/utils         utils-V04-01-12
 -------------------------------
 - Removed compilation warnings on SUN-CC for G4SCProcessorStand
   and G4UniversalFluctuation
 - Merged changes for new G4ApplicationState in messengers.
+- Fix in multiple scattering for 1 MeV protons.
 - STD prototype processes: fixed model selection + delta-electron spectra   
 
 processes/hadronic/cross_sections                      gcross-V04-01-07
