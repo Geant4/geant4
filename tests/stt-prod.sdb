@@ -1,4 +1,4 @@
-# $Id: stt-ref.sdb,v 1.18 1999-07-15 15:35:37 stesting Exp $
+# $Id: stt-prod.sdb,v 1.1 1999-07-19 09:42:43 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
