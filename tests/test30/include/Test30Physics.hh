@@ -37,28 +37,33 @@
 
 #include "globals.hh"
 #include "Test30HadronProduction.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
 
 class G4VProcess;
 class G4Material;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Test30Physics 
+class Test30Physics
 {
   public:
-  
+
     Test30Physics();
    ~Test30Physics();
-     
-    G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);     
+
+    G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);
     G4double GetNucleusMass() {return theProcess->GetMass();};
-		                      
+    G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
+    G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
+
   private:
 
     void Initialise();
-	     
-    Test30HadronProduction* theProcess; 
-	
+
+    Test30HadronProduction* theProcess;
+    G4ExcitationHandler*    theDeExcitation;
+    G4PreCompoundModel*     thePreCompound;
 };
 
 #endif

@@ -78,25 +78,14 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4Evaporation.hh"
 
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
 
 #include "AIDA/AIDA.h"
-
-/*
-#include "AIDA/IAnalysisFactory.h"
-
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
-*/
 
 #include "G4Timer.hh"
 
@@ -133,6 +122,9 @@ int main(int argc, char** argv)
   G4double  emaxpi   = 200.*MeV;
   G4double ebinlog   = 2.0*MeV;
   G4Material* material = 0;
+  G4bool nevap = false;
+  G4bool gtran = false;
+  G4bool gemis = false;
 
   G4double ang[15] = {0.0};
   G4double bng1[15] = {0.0};
@@ -143,32 +135,32 @@ int main(int argc, char** argv)
   G4double bngpi2[10] = {0.0};
   G4double cngpi[10] = {0.0};
   float bestZ[250] = {
-    0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0,   //0 
-    4.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 9.0, 0.0,   //10 
-    10.0, 10.0, 11.0, 0.0, 11.0, 0.0, 13.0, 0.0, 0.0, 0.0,   //20 
-    0.0, 0.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //30 
-    0.0, 0.0, 0.0, 0.0, 21.0, 0.0, 21.0, 21.0, 23.0, 0.0,   //40 
-    0.0, 24.0, 25.0, 0.0, 25.0, 0.0, 27.0, 27.0, 27.0, 26.0,   //50 
-    27.0, 0.0, 0.0, 0.0, 0.0, 30.0, 31.0, 31.0, 32.0, 32.0,   //60 
-    33.0, 33.0, 33.0, 34.0, 33.0, 34.0, 35.0, 35.0, 0.0, 36.0,   //70 
-    36.0, 37.0, 36.0, 37.0, 37.0, 38.0, 39.0, 39.0, 41.0, 40.0,   //80 
-    41.0, 39.0, 41.0, 38.0, 39.0, 40.0, 40.0, 39.0, 40.0, 0.0,   //90 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //100 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //110 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //120 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140 
+    0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0,   //0
+    4.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 9.0, 0.0,   //10
+    10.0, 10.0, 11.0, 0.0, 11.0, 0.0, 13.0, 0.0, 0.0, 0.0,   //20
+    0.0, 0.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //30
+    0.0, 0.0, 0.0, 0.0, 21.0, 0.0, 21.0, 21.0, 23.0, 0.0,   //40
+    0.0, 24.0, 25.0, 0.0, 25.0, 0.0, 27.0, 27.0, 27.0, 26.0,   //50
+    27.0, 0.0, 0.0, 0.0, 0.0, 30.0, 31.0, 31.0, 32.0, 32.0,   //60
+    33.0, 33.0, 33.0, 34.0, 33.0, 34.0, 35.0, 35.0, 0.0, 36.0,   //70
+    36.0, 37.0, 36.0, 37.0, 37.0, 38.0, 39.0, 39.0, 41.0, 40.0,   //80
+    41.0, 39.0, 41.0, 38.0, 39.0, 40.0, 40.0, 39.0, 40.0, 0.0,   //90
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //100
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //110
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //120
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //190 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //200 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //210 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //220 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //230 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };        //240 
-  
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //190
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //200
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //210
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //220
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //230
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };        //240
+
 
 
   // Track
@@ -176,7 +168,7 @@ int main(int argc, char** argv)
   G4double      aTime     = 0. ;
   G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
- 
+
 
   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
@@ -202,12 +194,12 @@ int main(int argc, char** argv)
 
   Test30Material*  mate = new Test30Material();
   Test30Physics*   phys = new Test30Physics();
-	
-  // Geometry 
+
+  // Geometry
 
   G4double dimX = 100.0*cm;
   G4double dimY = 100.0*cm;
-  G4double dimZ = 100.0*cm;  
+  G4double dimZ = 100.0*cm;
 
   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
@@ -251,6 +243,9 @@ int main(int argc, char** argv)
   G4cout << "#time(ns)" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
+  G4cout << "#HETCEmission" << G4endl;
+  G4cout << "#GNASHTransition" << G4endl;
+  G4cout << "#GEMEvaporation" << G4endl;
 
 
 
@@ -344,45 +339,60 @@ int main(int argc, char** argv)
       } else if(line == "#exit") {
         end = false;
         break;
+      } else if(line == "#HETCEmission") {
+        gemis = true;
+      } else if(line == "#GNASHTransition") {
+        gtran = true;
+      } else if(line == "#GEMEvaporation") {
+        nevap = true;
       }
     } while(end);
 
     if(!end) break;
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
- 
+
     material = mate->GetMaterial(nameMat);
     if(!material) {
-      G4cout << "Material <" << nameMat  
-	     << "> is not found out" 
-	     << G4endl;			
+      G4cout << "Material <" << nameMat
+	     << "> is not found out"
+	     << G4endl;
 	     exit(1);
     }
 
     G4ParticleDefinition* part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
+    G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
+    if (gtran) thePreCompound->UseGNASHTransition();
+    if (gemis) thePreCompound->UseHETCEmission();
+    if (nevap) {
+      G4Evaporation* evp = new G4Evaporation();
+      evp->SetGEMChannel();
+      theDeExcitation->SetEvaporation(evp);
+    }
     G4double amass = phys->GetNucleusMass();
-				
+
     const G4ParticleDefinition* proton = G4Proton::Proton();
     const G4ParticleDefinition* neutron = G4Neutron::Neutron();
     const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
     const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
     const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
     const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-    const G4ParticleDefinition* tri = G4Triton::TritonDefinition();	
+    const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
     const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-		
+
     if(!proc) {
-      G4cout << "For particle: " << part->GetParticleName() 
+      G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
 	     << G4endl;
 	     exit(1);
     }
 
     G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1;
-    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1; 
-		
+    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
+
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;

@@ -146,26 +146,28 @@ void Test30Physics::Initialise()
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
-	
+
   G4GenericIon::GenericIonDefinition();
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
-  G4Triton::TritonDefinition();	
+  G4Triton::TritonDefinition();
   theProcess = 0;
+  theDeExcitation = 0;
+  thePreCompound = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VProcess* Test30Physics::GetProcess(const G4String& gen_name, 
+G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 		                      const G4String& part_name,
 		                            G4Material* mat)
 {
   G4cout <<  "Test30Physics entry" << G4endl;
   if(theProcess) delete theProcess;
   theProcess = 0;
-	
+
   G4ProcessManager* man = 0;
-	  
+
   if(part_name == "proton")   man = new G4ProcessManager(G4Proton::Proton());
   else if(part_name == "pi+") man = new G4ProcessManager(G4PionPlus::PionPlus());
   else if(part_name == "pi-") man = new G4ProcessManager(G4PionMinus::PionMinus());
@@ -178,7 +180,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   // Physics list for the given run
   Test30VSecondaryGenerator* sg = 0;
-   
+
   // Choose generator
 
   if(gen_name == "LEparametrisation") {
@@ -197,23 +199,37 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "stringCHIPS") {
     sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
-		
-    //G4cout <<  "Generator is ready" << G4endl;		
+
+    //G4cout <<  "Generator is ready" << G4endl;
     theProcess->SetSecondaryGenerator(sg);
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
 
 
   } else if(gen_name == "preCompound") {
-    sg = new Test30VSecondaryGenerator(new G4PreCompoundModel(new G4ExcitationHandler()),mat);
+    theDeExcitation = new G4ExcitationHandler();
+    G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
+    thePreCompound = pcm;
+    sg = new Test30VSecondaryGenerator(pcm,mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "kinetic") {
+  } else if(gen_name == "binary") {
+    theDeExcitation = new G4ExcitationHandler();
+    G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
+    thePreCompound = pcm;
     G4BinaryCascade* hkm = new G4BinaryCascade();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
+    hkm->SetDeExcitation(pcm);
+  
+  } else if(gen_name == "binary_no_pc") {
+    G4BinaryCascade* hkm = new G4BinaryCascade();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
@@ -222,7 +238,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else {
-    G4cout << gen_name 
+    G4cout << gen_name
            << " generator is unkown - no hadron production" << G4endl;
   }
   
