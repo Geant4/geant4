@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.9 2002-12-16 16:31:43 maire Exp $
+// $Id: ExN02DetectorMessenger.cc,v 1.10 2004-04-05 16:21:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,6 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in X direction.");
   FieldCmd->SetParameterName("Bx",false);
-  FieldCmd->SetDefaultUnit("tesla");
   FieldCmd->SetUnitCategory("Magnetic flux density");
   FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
