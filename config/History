@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-05-05 16:01:24 stesting Exp $
+$Id: History,v 1.16 1999-05-06 02:17:08 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th May 1999  Gabriele Cosmo
+- Fixed typo in architecture.gmk and defined OSPACEDIR to point to the G4
+  dev area where links to the ObjectSpace installations at CERN have been
+  created for all platforms. "pro" version points to ObjectSpace 2.1.
 
 5th May 1999  John Allison
 - Eliminated all references to RW in the case of G4USE_STL.
