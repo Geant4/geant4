@@ -36,7 +36,7 @@
 #ifndef G4AtomicShell_h 
 #define G4AtomicShell_h 1
 
-
+#include "G4DataVector.hh"
 #include "globals.hh"
 #include "g4std/vector"
 
@@ -44,50 +44,51 @@ class G4AtomicShell {
 
 public:
 
-  G4AtomicShell(G4int shellIdentifier, 
-		G4double theBindingEnergy,
-		G4std::vector<G4int> finalTransitionSubShellIdVect,
-		G4std::vector<G4double> transitionProbabilities,
-		G4std::vector<G4double> transitionEnergies);
-
-  G4AtomicShell();
-
-  // destructor
+ 
+  G4AtomicShell(G4int,G4double,const G4DataVector&,const G4DataVector&,const G4DataVector&);
+ 
   ~G4AtomicShell();
 
-  //these functions return shell datas 
-
-  //gives the binding energy of the subshell
+  //gives the binding energy of the shell whose identifier is shellId
   G4double BindingEnergy() const; 
 
-  //gives a vector of transition probabilities
-  const G4std::vector<G4double>& TransitionProbabilities() const; 
+  //the transitions considered are all the radiative transitions allowed from the 
+  //shell "shellId". The identity of the final shells are contained in the 
+  //vector "finalTransShellId".
+  //this vector contains the probabilities of the transitions from the "shellId"
+  //towards the "finalTransShellId".
+  //The i-th element of the vector contains the probability of the transition
+  //from the shell "shellId" towards the i-th element of the vector "finalTransShellId".
+ 
+const G4DataVector& TransitionProbabilities() const;
+  //gives the vector containing the energies of the photon emitted in the transition above 
+ 
+const G4DataVector& TransitionEnergies() const;
 
-  //gives a vector of transition energies
-  const G4std::vector<G4double>& TransitionEnergies() const;
+  //gives a vector of the shells available from the shell "shellId" by a radiative
+  //transition
+const G4DataVector& TransFinalShellIdentifiers() const;
+ 
+ //gives the starting shell 
+  G4int ShellId() const;
 
-  //gives a vector of the final subshells of the transitions
-  const G4std::vector<G4int>& TransSubShellIdentifiers() const;
-
-  //gives the shell which the subshell belongs to
-  G4int ShellId();
-
-  //gives the energy if the selected transition
+ 
+  //gives the energy of the selected transition
   G4double TransitionEnergy(G4int index) const;
 
-  //gives the final subshell ID
+  //gives the identity of the final shell
   G4int TransitionIdentifier(G4int index) const;
 
   //gives the probability of the the selected transition
   G4double TransitionProbability(G4int index) const;
 
 private:
-  // queste sono le variabili (vettori) dove vengono messi i dati
+  
   G4int shellId;
   G4double bindingEnergy;
-  G4std::vector<G4double> transProbabilities;
-  G4std::vector<G4double> transEnergies;
-  G4std::vector<G4int> finTranSubShellId;
+G4DataVector transProbabilities;
+G4DataVector transEnergies;
+G4DataVector finalTranShellId;
 
 };
 
