@@ -48,12 +48,12 @@ DicomGeometry::DicomGeometry()
 {
   patientConstructor = new DicomPatientConstructor();
   trabecularBone = 0;
-  dense_bone = 0;
+  denseBone = 0;
   liver = 0;  
   muscle = 0;
   phantom = 0;
   breast = 0;
-  adipose_tissue = 0;
+  adiposeTissue = 0;
   lungexhale = 0;
   lunginhale = 0;
   air = 0;
@@ -64,88 +64,16 @@ DicomGeometry::~DicomGeometry()
   delete air;
   delete lunginhale;
   delete lungexhale;
-  delete adipose_tissue;
+  delete adiposeTissue;
   delete breast;
   delete phantom;
   delete muscle;
   delete liver;
-  delete dense_bone;
+  delete denseBone;
   delete trabecularBone; 
   delete patientConstructor;
 }
-void DicomGeometry::PatientConstruction()
-{
-  DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->ReadDataFile();
-					
-  // images must have the same dimension ... 
-  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );
-  // open a .g4 file to read some values ...
-		
-  PatientX = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
-  PatientY = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
-  PatientZ = ((ReadConfiguration->GetSliceThickness()/2.0) *mm);
 
-  // Logical Box to place Parameteristion inside it
-  Attributes_param = new G4VisAttributes();
-  Attributes_param->SetForceSolid(false);
-  Attributes_param->SetColour(red=1.,green=0.,blue=0.,alpha=1.);
-  G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
-  G4int totalRows = ReadConfiguration->GetTotalRows(); 
-  G4int totalColumns = ReadConfiguration->GetTotalColumns();
-  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->GetXPixelSpacing())/2.*mm, totalRows*(ReadConfiguration->GetYPixelSpacing())/2.*mm, totalNumberOfFile*(ReadConfiguration->GetSliceThickness())/2.*mm);
-  logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
-  logical_param->SetVisAttributes(Attributes_param);
-
-  G4double MiddleLocationValue=0;
-  for (G4int i=0;i< totalNumberOfFile;i++)
-    {
-      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
-      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
-    }
-  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
-    
-  G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
-  physical_param =  new G4PVPlacement(0,origin,logical_param,"Parameterisation Mother (placement)",logicWorld,false,0);
-
-  //  Parametrisation of Patient put inside
-  LungINhale = new G4Box("LungINhale",PatientX,PatientY,PatientZ);
-  Logical_LungINhale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
-  //Logical_LungINhale->SetVisAttributes(Attributes_LungINhale);
-  G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
-  Param_LungINhale = new DicomPatientParameterisation(numberOfVoxels,
-                                                       2.0 , 0.207 ,
-						      lunginhale,
-						      lungexhale,
-						      adipose_tissue,
-						      breast,
-						      phantom,
-						      muscle,
-						      liver,
-						      dense_bone,
-						      trabecularBone);
-  Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
-}
-
-G4VPhysicalVolume* DicomGeometry::Construct()
-{
-  InitialisationOfMaterials();
-
-  world_x_width = 1.*m;
-  world_y_width = 1.*m;
-  world_z_width = 1.*m;
-
-  theWorldDim = G4ThreeVector(world_x_width,world_y_width,world_z_width);
-
-  solidWorld = new G4Box("WorldSolid",world_x_width,world_y_width,world_z_width);
-  logicWorld = new G4LogicalVolume( solidWorld, air, "WorldLogical", 0, 0, 0);
-  physiWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",logicWorld,0,false,0);
-
-  patientConstructor -> readContour();  // Contours are not mandatory and are NOT finish yet
-  PatientConstruction();
-
-  return physiWorld;
-}
 
 void DicomGeometry::InitialisationOfMaterials()
 {
@@ -208,76 +136,27 @@ void DicomGeometry::InitialisationOfMaterials()
   trabecularBone->AddElement(elK,0.001);
   trabecularBone->AddElement(elCa,0.044);
   trabecularBone->AddElement(elFe,0.001);
-
-  // Air
-  air = new G4Material("Air",1.290*mg/cm3,numberofElements=2);
-  air->AddElement(elN, 0.7);
-  air->AddElement(elO, 0.3);
-
-  //  LungINhale
-  lunginhale = new G4Material("Lung_Inhale", density = 217*kg/m3, numberofElements=9);
-  lunginhale->AddElement(elH,0.103);
-  lunginhale->AddElement(elC,0.105);
-  lunginhale->AddElement(elN,0.031);
-  lunginhale->AddElement(elO,0.749);
-  lunginhale->AddElement(elNa,0.002);
-  lunginhale->AddElement(elP,0.002);
-  lunginhale->AddElement(elS,0.003);
-  lunginhale->AddElement(elCl,0.002);
-  lunginhale->AddElement(elK,0.003);//=1
-
-  //  LungEXhale  (seulement la densite change)
-  lungexhale = new G4Material("Lung_Exhale", density = 508*kg/m3, numberofElements=9);
-  lungexhale->AddElement(elH,0.103);
-  lungexhale->AddElement(elC,0.105);
-  lungexhale->AddElement(elN,0.031);
-  lungexhale->AddElement(elO,0.749);
-  lungexhale->AddElement(elNa,0.002);
-  lungexhale->AddElement(elP,0.002);
-  lungexhale->AddElement(elS,0.003);
-  lungexhale->AddElement(elCl,0.002);
-  lungexhale->AddElement(elK,0.003);//=1
-
-  // Adipose tissue
-  adipose_tissue = new G4Material("Adipose_tissue", density = 967*kg/m3, numberofElements=7);
-  adipose_tissue->AddElement(elH,0.114);
-  adipose_tissue->AddElement(elC,0.598);
-  adipose_tissue->AddElement(elN,0.007);
-  adipose_tissue->AddElement(elO,0.278);
-  adipose_tissue->AddElement(elNa,0.001);
-  adipose_tissue->AddElement(elS,0.001);
-  adipose_tissue->AddElement(elCl,0.001);//=1
-
-  // Breast
-  breast = new G4Material("Breast", density = 990*kg/m3, numberofElements=8);
-  breast->AddElement(elH,0.109);
-  breast->AddElement(elC,0.506);
-  breast->AddElement(elN,0.023);
-  breast->AddElement(elO,0.358);
-  breast->AddElement(elNa,0.001);
-  breast->AddElement(elP,0.001);
-  breast->AddElement(elS,0.001);
-  breast->AddElement(elCl,0.001);	//=1
-
-  // Phantom
-  phantom = new G4Material("Phantom", density = 1.018*kg/m3, numberofElements=2);
-  phantom->AddElement(elH,0.112);
-  phantom->AddElement(elO,0.888);	//=1
-
-  // Muscle
-  muscle = new G4Material("Muscle", density = 1061*kg/m3, numberofElements=9);
-  muscle->AddElement(elH,0.102);
-  muscle->AddElement(elC,0.143);
-  muscle->AddElement(elN,0.034);
-  muscle->AddElement(elO,0.710);
-  muscle->AddElement(elNa,0.001);
-  muscle->AddElement(elP,0.002);
-  muscle->AddElement(elS,0.003);
-  muscle->AddElement(elCl,0.001);
-  muscle->AddElement(elK,0.004);	//=1
-
+  
+  // dense Bone
+  denseBone = new G4Material( "Skeleton_ribs", 
+                              density = 1575*kg/m3, 
+                              numberofElements = 11 );
+  denseBone->AddElement(elH,0.056);
+  denseBone->AddElement(elC,0.235);
+  denseBone->AddElement(elN,0.050);
+  denseBone->AddElement(elO,0.434);
+  denseBone->AddElement(elNa,0.001);
+  denseBone->AddElement(elMg,0.001);
+  denseBone->AddElement(elP,0.072);
+  denseBone->AddElement(elS,0.003);
+  denseBone->AddElement(elCl,0.001);
+  denseBone->AddElement(elK,0.001);
+  denseBone->AddElement(elCa,0.146);
+ 
   // Liver
-  liver = new G4Material("Liver", density = 1071*kg/m3, numberofElements=9);
+  liver = new G4Material( "Liver", 
+                          density = 1071*kg/m3, 
+                          numberofElements = 9);
   liver->AddElement(elH,0.102);
   liver->AddElement(elC,0.139);
   liver->AddElement(elN,0.030);
@@ -286,24 +165,161 @@ void DicomGeometry::InitialisationOfMaterials()
   liver->AddElement(elP,0.003);
   liver->AddElement(elS,0.003);
   liver->AddElement(elCl,0.002);
-  liver->AddElement(elK,0.003);	//=1
+  liver->AddElement(elK,0.003);	
+ 
+  // Muscle
+  muscle = new G4Material( "Muscle", 
+                           density = 1061*kg/m3, 
+                           numberofElements = 9 );
+  muscle->AddElement(elH,0.102);
+  muscle->AddElement(elC,0.143);
+  muscle->AddElement(elN,0.034);
+  muscle->AddElement(elO,0.710);
+  muscle->AddElement(elNa,0.001);
+  muscle->AddElement(elP,0.002);
+  muscle->AddElement(elS,0.003);
+  muscle->AddElement(elCl,0.001);
+  muscle->AddElement(elK,0.004);       
+  
+  // Phantom
+  phantom = new G4Material( "Phantom", 
+                            density = 1.018*kg/m3, 
+                            numberofElements = 2 );
+  phantom->AddElement(elH,0.112);
+  phantom->AddElement(elO,0.888);     
 
-  // Dense Bone (not sure about composition)
-  dense_bone = new G4Material("Skeleton_ribs", density = 1575*kg/m3, numberofElements=11);
-  dense_bone->AddElement(elH,0.056);
-  dense_bone->AddElement(elC,0.235);
-  dense_bone->AddElement(elN,0.050);
-  dense_bone->AddElement(elO,0.434);
-  dense_bone->AddElement(elNa,0.001);
-  dense_bone->AddElement(elMg,0.001);
-  dense_bone->AddElement(elP,0.072);
-  dense_bone->AddElement(elS,0.003);
-  dense_bone->AddElement(elCl,0.001);
-  dense_bone->AddElement(elK,0.001);
-  dense_bone->AddElement(elCa,0.146);
-  //dense_bone->AddElement(elCa,0.156);// not = 1
 
+  // Breast
+  breast = new G4Material( "Breast", 
+                           density = 990*kg/m3, 
+                           numberofElements = 8 );
+  breast->AddElement(elH,0.109);
+  breast->AddElement(elC,0.506);
+  breast->AddElement(elN,0.023);
+  breast->AddElement(elO,0.358);
+  breast->AddElement(elNa,0.001);
+  breast->AddElement(elP,0.001);
+  breast->AddElement(elS,0.001);
+  breast->AddElement(elCl,0.001); 
+
+ // Adipose tissue
+  adiposeTissue = new G4Material( "adipose_tissue", 
+                                  density = 967*kg/m3, 
+                                  numberofElements = 7);
+  adiposeTissue->AddElement(elH,0.114);
+  adiposeTissue->AddElement(elC,0.598);
+  adiposeTissue->AddElement(elN,0.007);
+  adiposeTissue->AddElement(elO,0.278);
+  adiposeTissue->AddElement(elNa,0.001);
+  adiposeTissue->AddElement(elS,0.001);
+  adiposeTissue->AddElement(elCl,0.001);
+
+  lungexhale = new G4Material( "Lung_Exhale", 
+                               density = 508*kg/m3, 
+                               numberofElements = 9 );
+  lungexhale->AddElement(elH,0.103);
+  lungexhale->AddElement(elC,0.105);
+  lungexhale->AddElement(elN,0.031);
+  lungexhale->AddElement(elO,0.749);
+  lungexhale->AddElement(elNa,0.002);
+  lungexhale->AddElement(elP,0.002);
+  lungexhale->AddElement(elS,0.003);
+  lungexhale->AddElement(elCl,0.002);
+  lungexhale->AddElement(elK,0.003);
+
+  //  LungINhale
+  lunginhale = new G4Material( "Lung_Inhale", 
+                               density = 217*kg/m3, 
+                               numberofElements = 9);
+  lunginhale->AddElement(elH,0.103);
+  lunginhale->AddElement(elC,0.105);
+  lunginhale->AddElement(elN,0.031);
+  lunginhale->AddElement(elO,0.749);
+  lunginhale->AddElement(elNa,0.002);
+  lunginhale->AddElement(elP,0.002);
+  lunginhale->AddElement(elS,0.003);
+  lunginhale->AddElement(elCl,0.002);
+  lunginhale->AddElement(elK,0.003);
+
+
+ // Air
+  air = new G4Material( "Air",
+                        1.290*mg/cm3,
+                        numberofElements = 2 );
+  air->AddElement(elN, 0.7);
+  air->AddElement(elO, 0.3); 
 }
 
+void DicomGeometry::PatientConstruction()
+{
+  DicomConfiguration* ReadConfiguration = new DicomConfiguration;
+  ReadConfiguration->ReadDataFile();
+					
+  // images must have the same dimension ... 
+  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );
+  // open a .g4 file to read some values ...
+		
+  PatientX = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
+  PatientY = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
+  PatientZ = ((ReadConfiguration->GetSliceThickness()/2.0) *mm);
 
+  // Logical Box to place Parameteristion inside it
+  Attributes_param = new G4VisAttributes();
+  Attributes_param->SetForceSolid(false);
+  Attributes_param->SetColour(red=1.,green=0.,blue=0.,alpha=1.);
+  G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
+  G4int totalRows = ReadConfiguration->GetTotalRows(); 
+  G4int totalColumns = ReadConfiguration->GetTotalColumns();
+  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->GetXPixelSpacing())/2.*mm, totalRows*(ReadConfiguration->GetYPixelSpacing())/2.*mm, totalNumberOfFile*(ReadConfiguration->GetSliceThickness())/2.*mm);
+  logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
+  logical_param->SetVisAttributes(Attributes_param);
 
+  G4double MiddleLocationValue=0;
+  for (G4int i=0;i< totalNumberOfFile;i++)
+    {
+      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
+      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
+    }
+  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
+    
+  G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
+  physical_param =  new G4PVPlacement(0,origin,logical_param,"Parameterisation Mother (placement)",logicWorld,false,0);
+
+  //  Parametrisation of Patient put inside
+  LungINhale = new G4Box("LungINhale",PatientX,PatientY,PatientZ);
+  Logical_LungINhale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
+  //Logical_LungINhale->SetVisAttributes(Attributes_LungINhale);
+  G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
+  Param_LungINhale = new DicomPatientParameterisation(numberOfVoxels,
+                                                       2.0 , 0.207 ,
+						      lunginhale,
+						      lungexhale,
+						      adiposeTissue,
+						      breast,
+						      phantom,
+						      muscle,
+						      liver,
+						      denseBone,
+						      trabecularBone);
+  Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
+}
+
+G4VPhysicalVolume* DicomGeometry::Construct()
+{
+  InitialisationOfMaterials();
+
+  world_x_width = 1.*m;
+  world_y_width = 1.*m;
+  world_z_width = 1.*m;
+
+  theWorldDim = G4ThreeVector(world_x_width,world_y_width,world_z_width);
+
+  solidWorld = new G4Box("WorldSolid",world_x_width,world_y_width,world_z_width);
+  logicWorld = new G4LogicalVolume( solidWorld, air, "WorldLogical", 0, 0, 0);
+  physiWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",logicWorld,0,false,0);
+
+  patientConstructor -> readContour();  // Contours are not mandatory and are NOT finish yet
+  PatientConstruction();
+
+  return physiWorld;
+}

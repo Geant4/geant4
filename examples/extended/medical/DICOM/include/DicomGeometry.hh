@@ -48,30 +48,36 @@ public:
 
   ~DicomGeometry();
 
+private:
+  void InitialisationOfMaterials();
+
+public:
   void PatientConstruction();
   G4VPhysicalVolume* Construct();// Construction of the geometry
 
-  // For the Primary Generator Action
   G4ThreeVector getWorldDim() { return theWorldDim; }
 
 private:
   G4Box* solidWorld;
   G4LogicalVolume* logicWorld;
   G4VPhysicalVolume* physiWorld;
-  
+
+private:  
+   
   DicomPatientConstructor* patientConstructor;
 
-private:
-
-  // Materials
-  void InitialisationOfMaterials();
-  
   //Materials ...
  
-  G4Material* trabecularBone; // Trabecular Bone
-  // Air
-
+  G4Material* trabecularBone; 
+  G4Material* denseBone;
+  G4Material* liver; 
+  G4Material* muscle; 
+  G4Material* phantom; 
+  G4Material* breast; 
+  G4Material* adiposeTissue; 
+  G4Material* lungexhale;
   G4Material* air;
+
   G4Box* AirBox;
   G4LogicalVolume* Logical_air;
 
@@ -83,42 +89,39 @@ private:
   G4VPVParameterisation* Param_LungINhale;
 
   //  LungEXhale
-  G4Material* lungexhale;
+  
   G4Box* LungEXhale;
   G4LogicalVolume* Logical_LungEXhale;
   G4VPhysicalVolume* Physical_LungEXhale;
   G4VPVParameterisation* Param_LungEXhale;
 
   // Adipose tissue
-  G4Material* adipose_tissue;
+  
   G4Box* Adipose;
   G4LogicalVolume* Logical_Adipose;
   G4VPhysicalVolume* Physical_Adipose;
   G4VPVParameterisation* Param_Adipose;
 
   // Breast
-  G4Material* breast;
+  
   G4Box* Breast;
   G4LogicalVolume* Logical_Breast;
   G4VPhysicalVolume* Physical_Breast;
   G4VPVParameterisation* Param_Breast;
 
   // Phantom
-  G4Material* phantom;
+  
   G4Box* Phantom;
   G4LogicalVolume* Logical_Phantom;
   G4VPhysicalVolume* Physical_Phantom;
   G4VPVParameterisation* Param_Phantom;
 
-  // Muscle
-  G4Material* muscle ;
+ 
   G4Box* Muscle;
   G4LogicalVolume* Logical_Muscle;
   G4VPhysicalVolume* Physical_Muscle;
   G4VPVParameterisation* Param_Muscle;
 
-  // Liver
-  G4Material* liver;
   G4Box* Liver;
   G4LogicalVolume* Logical_Liver;
   G4VPhysicalVolume* Physical_Liver;
@@ -130,8 +133,7 @@ private:
   G4VPhysicalVolume* Physical_TrabecularBone;
   G4VPVParameterisation* Param_TrabecularBone;
 
-  // Dense Bone
-  G4Material* dense_bone;
+ 
   G4Box* DenseBone;
   G4LogicalVolume* Logical_DenseBone;
   G4VPhysicalVolume* Physical_DenseBone;
