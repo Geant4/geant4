@@ -17,6 +17,15 @@ List of fixes included in this public patch since release 6.0:
 
   o Geometry:
     --------
+    + magneticfield:
+      o G4UniformMagField: added missing implementation for
+        GetConstantFieldValue(). Fixes bug report #575.
+    + navigation:
+      o Modified G4PropagatorInField::ReEstimateEndpoint() to cope with
+        a failure of AccurateAdvance(), by calling it iteratively up maximum
+        20 times.
+      o Fix in G4PropagatorInField::SetVerboseLevel(): now forwarding the
+        verbosity to integration driver.
     + solids/CSG:
       o Converted strong exceptions in warning notifications for rare
         anomalous conditions in DistanceToOut(p,v,..).
