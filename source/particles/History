@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2002-04-03 09:15:23 kurasige Exp $
+$Id: History,v 1.70 2002-05-30 02:20:18 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- Apr 2, 2002    
+- May 30, 2002     (particles-V04-00-03)
 - Fixed a bug in  G4NeutronBetaDecayChannel
+- Fixed warnings in G4NucleiProperties
 
 - Mar 28, 2002     (particles-V04-00-02)
 - Fixed a bug in  G4TauLeptonicDecayChannel (partman-V04-00-01)
