@@ -574,9 +574,12 @@ G4double G4hLowEnergyIonisation::GetZieglerLoss(const G4Material* material,
       ionloss += ion ;
     }
 
-    // Correction due to delta-electrons energy loss 
-    // Bethe-Bloch formulae is used
-    ionloss -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
+    // Correction due to delta-electrons energy loss Bethe-Bloch 
+    // formulae is used. Exception for standard G4 model of L.Urban, 
+    // where the effect is already taken into account.
+    if(DEDXtable != "UrbanModel") {
+      ionloss -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
+    }
 
   if ( ionloss <= 0.) ionloss = 0. ;
 
