@@ -24,7 +24,7 @@ class ExN06PhysicsList : public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     //
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
 
   protected:
     // these methods Construct particles
@@ -42,3 +42,4 @@ class ExN06PhysicsList : public G4VUserPhysicsList
 };
 
 #endif /* ExN06PhysicsList_h */
+

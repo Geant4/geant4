@@ -219,28 +219,12 @@ void ExN06PhysicsList::ConstructOp()
   }
 }
 
-void ExN06PhysicsList::SetCuts(G4double cut)
+void ExN06PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >1){
     G4cout << "ExN06PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton
-
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(GetDefaultCutValue());
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+  }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }

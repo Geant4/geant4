@@ -23,9 +23,9 @@ ExN06RunAction::~ExN06RunAction()
   delete timer;
 }
 
-void ExN06RunAction::BeginOfRunAction(G4Run* aRun)
+void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+   ((G4Run*)(aRun))->SetRunID(runIDcounter++);
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/event/verbose 1");
@@ -35,7 +35,7 @@ void ExN06RunAction::BeginOfRunAction(G4Run* aRun)
   timer->Start();
 }
 
-void ExN06RunAction::EndOfRunAction(G4Run* aRun)
+void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 
