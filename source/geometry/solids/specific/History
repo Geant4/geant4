@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2004-07-29 15:11:33 link Exp $
+$Id: History,v 1.41 2004-08-27 13:36:12 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,16 @@ committal in the CVS repository !
 <<<<<<< History
 <<<<<<< History
 <<<<<<< History
+
+27-Aug-2004, O.Link
+TwistedTrapezoid code update:
+-  cleanup of twisted tub related code: 
+   - remove/replace accessors
+   - remove old (unused) data members
+   - temporary remove of SetCorners/SetBoundaries
+-  new methods implemented: SurfacePoint, NormAng, GetPhiAtX
+-  work with testG4TwistedTrapezoid
+
 29-Jul-2004, O.Link 
 - first version of G4TwistedTrapezoid added. This solid-class is 
   adapted from G4TwistedTubs and is build on 4 twisted sides 

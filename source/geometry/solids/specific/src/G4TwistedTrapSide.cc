@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.1 2004-07-29 15:10:49 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.2 2004-08-27 13:36:59 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,14 +46,6 @@
 
 
 G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
-				     G4double      EndInnerRadius[2],
-				     G4double      EndOuterRadius[2],
-				     G4double      DPhi,
-				     G4double      EndPhi[2],
-				     G4double      EndZ[2], 
-				     G4double      InnerRadius,
-				     G4double      OuterRadius,
-				     G4double      Kappa,
 				     G4double      PhiTwist,
 				     G4double      halfzlen,
 				     G4double      HalfSides[2],
@@ -63,30 +55,18 @@ G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
    fHandedness = handedness;   // +z = +ve, -z = -ve
    fAxis[0]    = kXAxis; // in local coordinate system
    fAxis[1]    = kZAxis;
-   fAxisMin[0] = InnerRadius;  // Inner-hype radius at z=0
-   fAxisMax[0] = OuterRadius;  // Outer-hype radius at z=0
-   fAxisMin[1] = EndZ[0];
-   fAxisMax[1] = EndZ[1];
 
-
-   fKappa = Kappa;
    fSideX  = 2*HalfSides[0];
    fSideY  = 2*HalfSides[1];
    fZHalfLength = halfzlen ;
    fPhiTwist = PhiTwist ;
 
-   G4cout << "zlen/2 = " << fZHalfLength << G4endl ;
-   G4cout << "PhiTwist = " << fPhiTwist << G4endl ;
-   
+   fRot.rotateZ( fHandedness ) ; 
 
-   fRot.rotateZ( fHandedness > 0
-                 ? -0.5*DPhi
-                 :  0.5*DPhi );
    fTrans.set(0, 0, 0);
    fIsValidNorm = false;
    
-   SetCorners( EndInnerRadius, EndOuterRadius, EndPhi, EndZ) ;
-   SetBoundaries();
+
 }
 
 
@@ -125,7 +105,8 @@ G4ThreeVector G4TwistedTrapSide::GetNormal(const G4ThreeVector &tmpxx,
    G4double phi = tmpxx.z() / L  * fPhiTwist;
    G4double u   = ( fSideY/2 * cos(phi) - tmpxx.x() ) / ( fSideY/2 * sin(phi) ) ;
    G4ThreeVector normal = ( L * cos(phi) , L*sin(phi), fSideY/2*fPhiTwist*u ) ;
-   normal = normal/normal.mag() ;
+
+   //    normal = normal/normal.mag() ;
 
    if (isGlobal) {
       fCurrentNormal.normal = ComputeGlobalDirection(normal.unit());
@@ -175,8 +156,9 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     }
   }
 
-  G4ThreeVector p = gp;
-  G4ThreeVector v = gv;
+  G4ThreeVector p = ComputeLocalPoint(gp);
+  G4ThreeVector v = ComputeLocalDirection(gv);
+
   G4ThreeVector xx[2]; 
   
   // 
@@ -289,6 +271,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
       if ( i==maxint-1 ) {
 	distance[0] = kInfinity;
+	gxx[0]      = ComputeGlobalPoint(xx[0]);
 	fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
 				       areacode[0], isvalid[0],
 				       0, validate, &gp, &gv);
@@ -324,6 +307,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       }
     }
   
+    gxx[0]      = ComputeGlobalPoint(xx[0]);
 
     fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
@@ -345,230 +329,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4double       distance[],
                                                 G4int          areacode[])
 {  
-   fCurStat.ResetfDone(kDontValidate, &gp);
-
-   if (fCurStat.IsDone()) {
-      for (G4int i=0; i<fCurStat.GetNXX(); i++) {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   } else {
-      // initialize
-      for (G4int i=0; i<2; i++) {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
-   }
+  // to do
    
-   static const G4double halftol = 0.5 * kCarTolerance; 
-
-   G4ThreeVector  p       = ComputeLocalPoint(gp);
-   G4ThreeVector  xx;
-   G4int          parity  = (fKappa >= 0 ? 1 : -1);
- 
-   // 
-   // special case! 
-   // If p is on surface, or
-   // p is on z-axis, 
-   // return here immediatery.
-   //
-   
-   G4ThreeVector  lastgxx[2];
-   G4double       distfromlast[2];
-   for (G4int i=0; i<2; i++) {
-      lastgxx[i] = fCurStatWithV.GetXX(i);
-      distfromlast[i] = (gp - lastgxx[i]).mag();
-   } 
-
-   if  ((gp - lastgxx[0]).mag() < halftol
-     || (gp - lastgxx[1]).mag() < halftol) { 
-      // last winner, or last poststep point is on the surface.
-      xx = p;
-      distance[0] = 0;
-      gxx[0] = gp;
-
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
-      return 1;
-   }
-          
-   if (p.getRho() == 0) { 
-      // p is on z-axis. Namely, p is on twisted surface (invalid area).
-      // We must return here, however, returning distance to x-minimum
-      // boundary is better than return 0-distance.
-      //
-      G4bool isvalid = true;
-      if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-         distance[0] = DistanceToBoundary(sAxis0 & sAxisMin, xx, p);
-         areacode[0] = sInside;
-      } else {
-         distance[0] = 0;
-         xx.set(0., 0., 0.);
-      }
-      gxx[0] = ComputeGlobalPoint(xx);
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 0, kDontValidate, &gp);
-      return 1;
-   } 
-
-   // 
-   // special case end
-   //
-
-   // set corner points of quadrangle try area ...
-
-   G4ThreeVector A;  // foot of normal from p to boundary of sAxis0 & sAxisMin
-   G4ThreeVector C;  // foot of normal from p to boundary of sAxis0 & sAxisMax
-   G4ThreeVector B;       // point on boundary sAxis0 & sAxisMax at z = A.z()
-   G4ThreeVector D;       // point on boundary sAxis0 & sAxisMin at z = C.z()
-   G4double      distToA; // distance from p to A
-   G4double      distToC; // distance from p to C 
-
-   distToA = DistanceToBoundary(sAxis0 & sAxisMin, A, p);
-   distToC = DistanceToBoundary(sAxis0 & sAxisMax, C, p);
-   
-   // is p.z between a.z and c.z?
-   // p.z must be bracketed a.z and c.z.
-   if (A.z() > C.z()) {
-      if (p.z() > A.z()) {
-         A = GetBoundaryAtPZ(sAxis0 & sAxisMin, p);
-      } else if (p.z() < C.z()) {
-         C = GetBoundaryAtPZ(sAxis0 & sAxisMax, p);
-      }
-   } else {
-      if (p.z() > C.z()) {
-         C = GetBoundaryAtPZ(sAxis0 & sAxisMax, p);
-      } else if (p.z() < A.z()) {
-         A = GetBoundaryAtPZ(sAxis0 & sAxisMin, p);
-      }
-   }
-
-   G4ThreeVector  d[2];     // direction vectors of boundary
-   G4ThreeVector  x0[2];    // foot of normal from line to p 
-   G4int          btype[2]; // boundary type
-
-   for (G4int i=0; i<2; i++) {
-      if (i == 0) {
-         GetBoundaryParameters((sAxis0 & sAxisMax), d[i], x0[i], btype[i]);
-         B = x0[i] + ((A.z() - x0[i].z()) / d[i].z()) * d[i]; 
-         // x0 + t*d , d is direction unit vector.
-      } else {
-         GetBoundaryParameters((sAxis0 & sAxisMin), d[i], x0[i], btype[i]);
-         D = x0[i] + ((C.z() - x0[i].z()) / d[i].z()) * d[i]; 
-      }
-   }
-
-   // In order to set correct diagonal, swap A and D, C and B if needed.  
-   G4ThreeVector pt(p.x(), p.y(), 0.);
-   G4double      rc = fabs(p.x());
-   G4ThreeVector surfacevector(rc, rc * fKappa * p.z(), 0.); 
-   G4int         pside = AmIOnLeftSide(pt, surfacevector); 
-   G4double      test  = (A.z() - C.z()) * parity * pside;  
-
-   if (test == 0) {
-      if (pside == 0) {
-         // p is on surface.
-         xx = p;
-         distance[0] = 0;
-         gxx[0] = gp;
-
-         G4bool isvalid = true;
-         fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
-         return 1;
-      } else {
-         // A.z = C.z(). return distance to line.
-         d[0] = C - A;
-         distance[0] = DistanceToLine(p, A, d[0], xx);
-         areacode[0] = sInside;
-         gxx[0] = ComputeGlobalPoint(xx);
-         G4bool isvalid = true;
-         fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
-         return 1;
-      } 
-
-   } else if (test < 0) {
-
-      // wrong diagonal. vector AC is crossing the surface!  
-      // swap A and D, C and B
-      G4ThreeVector tmp;
-      tmp = A;
-      A = D;
-      D = tmp;
-      tmp = C;
-      C = B;
-      B = tmp; 
-
-   } else {
-      // correct diagonal. nothing to do.  
-   }
-
-   // Now, we chose correct diaglnal.
-   // First try. divide quadrangle into double triangle by diagonal and 
-   // calculate distance to both surfaces.
-
-   G4ThreeVector xxacb;   // foot of normal from plane ACB to p
-   G4ThreeVector nacb;    // normal of plane ACD
-   G4ThreeVector xxcad;   // foot of normal from plane CAD to p
-   G4ThreeVector ncad;    // normal of plane CAD
-   G4ThreeVector AB(A.x(), A.y(), 0);
-   G4ThreeVector DC(C.x(), C.y(), 0);
-
-   G4double distToACB = G4VSurface::DistanceToPlane(p, A, C-A, AB, xxacb, nacb) * parity;
-   G4double distToCAD = G4VSurface::DistanceToPlane(p, C, C-A, DC, xxcad, ncad) * parity;
-
-   // if calculated distance = 0, return  
-
-   if (fabs(distToACB) <= halftol || fabs(distToCAD) <= halftol) {
-      xx = (fabs(distToACB) < fabs(distToCAD) ? xxacb : xxcad); 
-      areacode[0] = sInside;
-      gxx[0] = ComputeGlobalPoint(xx);
-      distance[0] = 0;
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0] , areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
-      return 1;
-   }
-   
-   if (distToACB * distToCAD > 0 && distToACB < 0) {
-      // both distToACB and distToCAD are negative.
-      // divide quadrangle into double triangle by diagonal
-      G4ThreeVector normal;
-      distance[0] = DistanceToPlane(p, A, B, C, D, parity, xx, normal);
-   } else {
-      if (distToACB * distToCAD > 0) {
-         // both distToACB and distToCAD are positive.
-         // Take smaller one.
-         if (distToACB <= distToCAD) {
-            distance[0] = distToACB;
-            xx   = xxacb;
-         } else {
-            distance[0] = distToCAD;
-            xx   = xxcad;
-         }
-      } else {
-         // distToACB * distToCAD is negative.
-         // take positive one
-         if (distToACB > 0) {
-            distance[0] = distToACB;
-            xx   = xxacb;
-         } else {
-            distance[0] = distToCAD;
-            xx   = xxcad;
-         }
-      }
-      
-   }
-   areacode[0] = sInside;
-   gxx[0]      = ComputeGlobalPoint(xx);
-   G4bool isvalid = true;
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
    return 1;
 }
 
@@ -584,57 +346,9 @@ G4double G4TwistedTrapSide::DistanceToPlane(const G4ThreeVector &p,
                                                  G4ThreeVector &xx,
                                                  G4ThreeVector &n)
 {
-   static const G4double halftol = 0.5 * kCarTolerance;
-   
-   G4ThreeVector M = 0.5*(A + B);
-   G4ThreeVector N = 0.5*(C + D);
-   G4ThreeVector xxanm;  // foot of normal from p to plane ANM
-   G4ThreeVector nanm;   // normal of plane ANM
-   G4ThreeVector xxcmn;  // foot of normal from p to plane CMN
-   G4ThreeVector ncmn;   // normal of plane CMN
 
-   G4double distToanm = G4VSurface::DistanceToPlane(p, A, (N - A), (M - A), xxanm, nanm) * parity;
-   G4double distTocmn = G4VSurface::DistanceToPlane(p, C, (M - C), (N - C), xxcmn, ncmn) * parity;
-
-   // if p is behind of both surfaces, abort.
-   if (distToanm * distTocmn > 0 && distToanm < 0) {
-     G4Exception("G4TwistedTrapSide::DistanceToPlane()",
-                 "InvalidCondition", FatalException,
-                 "Point p is behind the surfaces.");
-   }
-
-   // if p is on surface, return 0.
-   if (fabs(distToanm) <= halftol) {
-      xx = xxanm;
-      n  = nanm * parity;
-      return 0;
-   } else if (fabs(distTocmn) <= halftol) {
-      xx = xxcmn;
-      n  = ncmn * parity;
-      return 0;
-   }
-   
-   if (distToanm <= distTocmn) {
-      if (distToanm > 0) {
-         // both distanses are positive. take smaller one.
-         xx = xxanm;
-         n  = nanm * parity;
-         return distToanm;
-      } else {
-         // take -ve distance and call the function recursively.
-         return DistanceToPlane(p, A, M, N, D, parity, xx, n);
-      }
-   } else {
-      if (distTocmn > 0) {
-         // both distanses are positive. take smaller one.
-         xx = xxcmn;
-         n  = ncmn * parity;
-         return distTocmn;
-      } else {
-         // take -ve distance and call the function recursively.
-         return DistanceToPlane(p, C, N, M, B, parity, xx, n);
-      }
-   }
+  // to do
+  return 0.0 ;
 }
 
 //=====================================================================
@@ -732,61 +446,6 @@ G4int G4TwistedTrapSide::GetAreaCode(const G4ThreeVector &xx,
 }
 
 //=====================================================================
-//* SetCorners( arglist ) -------------------------------------------------
-
-void G4TwistedTrapSide::SetCorners(
-                                  G4double      endInnerRad[2],
-                                  G4double      endOuterRad[2],
-                                  G4double      endPhi[2],
-                                  G4double      endZ[2])
-{
-   // Set Corner points in local coodinate.   
-
-   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-   
-      G4int zmin = 0 ;  // at -ve z
-      G4int zmax = 1 ;  // at +ve z
-
-      G4double x, y, z;
-      
-      // corner of Axis0min and Axis1min
-      x = endInnerRad[zmin]*cos(endPhi[zmin]);
-      y = endInnerRad[zmin]*sin(endPhi[zmin]);
-      z = endZ[zmin];
-      SetCorner(sCMin1Min, x, y, z);
-      
-      // corner of Axis0max and Axis1min
-      x = endOuterRad[zmin]*cos(endPhi[zmin]);
-      y = endOuterRad[zmin]*sin(endPhi[zmin]);
-      z = endZ[zmin];
-      SetCorner(sCMax1Min, x, y, z);
-      
-      // corner of Axis0max and Axis1max
-      x = endOuterRad[zmax]*cos(endPhi[zmax]);
-      y = endOuterRad[zmax]*sin(endPhi[zmax]);
-      z = endZ[zmax];
-      SetCorner(sCMax1Max, x, y, z);
-      
-      // corner of Axis0min and Axis1max
-      x = endInnerRad[zmax]*cos(endPhi[zmax]);
-      y = endInnerRad[zmax]*sin(endPhi[zmax]);
-      z = endZ[zmax];
-      SetCorner(sCMin1Max, x, y, z);
-
-   } else {
-      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistedTrapSide::SetCorners()",
-                  "NotImplemented", FatalException,
-                  "Feature NOT implemented !");
-   }
-}
-
-
-
-
-//=====================================================================
 //* SetCorners() ------------------------------------------------------
 
 void G4TwistedTrapSide::SetCorners()
@@ -803,41 +462,8 @@ void G4TwistedTrapSide::SetBoundaries()
 {
    // Set direction-unit vector of boundary-lines in local coodinate. 
    //   
-   G4ThreeVector direction;
-   
-   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-      
-      // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
-      direction = direction.unit();
-      SetBoundary(sAxis0 & (sAxisX | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisZ) ;
-      
-      // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
-      direction = direction.unit();
-      SetBoundary(sAxis0 & (sAxisX | sAxisMax), direction, 
-                  GetCorner(sCMax1Min), sAxisZ);
-                  
-      // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
-      direction = direction.unit();
-      SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisX);
-                  
-      // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
-      direction = direction.unit();
-      SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-                  GetCorner(sCMin1Max), sAxisX);
-                  
-   } else {
-      G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistedTrapSide::SetCorners()",
-                  "NotImplemented", FatalException,
-                  "Feature NOT implemented !");
-   }
+  G4Exception("G4TwistedTrapSide::SetCorners()",
+	      "NotImplemented", FatalException,
+	      "Feature NOT implemented !");
 }
 

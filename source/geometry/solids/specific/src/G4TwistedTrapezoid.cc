@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.cc,v 1.1 2004-07-29 15:09:49 link Exp $
+// $Id: G4TwistedTrapezoid.cc,v 1.2 2004-08-27 13:36:51 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,34 +61,16 @@
 
 G4TwistedTrapezoid::G4TwistedTrapezoid(const G4String &pname,
 				       G4double  twistedangle,
-				       G4double  endinnerrad,
-				       G4double  endouterrad,
 				       G4double  halfzlen,
 				       G4double  halfSideX,
 				       G4double  halfSideY,
 				       G4double  dphi)
-  : G4VSolid(pname), fDPhi(dphi), 
+  : G4VSolid(pname), 
      fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-     fSide90(0)
+    fSide90(0), fSide180(0), fSide270(0)
 {
-   if (endinnerrad < DBL_MIN) {
-      G4Exception("G4TwistedTrapezoid::G4TwistedTrapezoid()", "InvalidSetup",
-                  FatalException, "Invalid end-inner-radius!");
-   }
-            
-   G4double sinhalftwist = sin(0.5 * twistedangle);
 
-   G4double endinnerradX = endinnerrad * sinhalftwist;
-   G4double innerrad     = sqrt( endinnerrad * endinnerrad
-                                 - endinnerradX * endinnerradX );
-
-   G4double endouterradX = endouterrad * sinhalftwist;
-   G4double outerrad     = sqrt( endouterrad * endouterrad
-                                 - endouterradX * endouterradX );
-   
-   // temporary treatment!!
-
-   SetFields(twistedangle, innerrad, outerrad, -halfzlen, halfzlen, halfSideX, halfSideY);
+   SetFields(twistedangle, halfzlen, halfSideX, halfSideY);
    CreateSurfaces();
 
 }
@@ -101,10 +83,13 @@ G4TwistedTrapezoid::G4TwistedTrapezoid(const G4String &pname,
 G4TwistedTrapezoid::~G4TwistedTrapezoid()
 {
 
-   if (fSide0)      delete  fSide0 ;
-   if (fSide90)     delete  fSide90 ;
-   if (fSide180)    delete  fSide180 ;
-   if (fSide270)    delete  fSide270 ;
+  if (fLowerEndcap) delete fLowerEndcap ;
+  if (fUpperEndcap) delete fUpperEndcap ;
+
+  if (fSide0)      delete  fSide0 ;
+  if (fSide90)     delete  fSide90 ;
+  if (fSide180)    delete  fSide180 ;
+  if (fSide270)    delete  fSide270 ;
 
 
 }
@@ -132,198 +117,10 @@ G4bool G4TwistedTrapezoid::CalculateExtent( const EAxis              axis,
                                              G4double          &max ) const
 {
 
-  G4SolidExtentList  extentList( axis, voxelLimit );
-  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
-                             fEndOuterRadius[0] : fEndOuterRadius[1]);
-  G4double maxEndInnerRad = (fEndInnerRadius[0] > fEndInnerRadius[1] ?
-                             fEndInnerRadius[0] : fEndInnerRadius[1]);
-  G4double maxphi         = (fabs(fEndPhi[0]) > fabs(fEndPhi[1]) ?
-                             fabs(fEndPhi[0]) : fabs(fEndPhi[1]));
-   
-  //
-  // Choose phi size of our segment(s) based on constants as
-  // defined in meshdefs.hh
-  //
-  // G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = 2*maxphi + fDPhi;
-  G4double rFudge = 1.0/cos(0.5*sigPhi);
-  G4double fudgeEndOuterRad = rFudge * maxEndOuterRad;
-  
-  //
-  // We work around in phi building polygons along the way.
-  // As a reasonable compromise between accuracy and
-  // complexity (=cpu time), the following facets are chosen:
-  //
-  //   1. If fOuterRadius/maxEndOuterRad > 0.95, approximate
-  //      the outer surface as a cylinder, and use one
-  //      rectangular polygon (0-1) to build its mesh.
-  //
-  //      Otherwise, use two trapazoidal polygons that 
-  //      meet at z = 0 (0-4-1)
-  //
-  //   2. If there is no inner surface, then use one
-  //      polygon for each entire endcap.  (0) and (1)
-  //
-  //      Otherwise, use a trapazoidal polygon for each
-  //      phi segment of each endcap.    (0-2) and (1-3)
-  //
-  //   3. For the inner surface, if fInnerRadius/maxEndInnerRad > 0.95,
-  //      approximate the inner surface as a cylinder of
-  //      radius fInnerRadius and use one rectangular polygon
-  //      to build each phi segment of its mesh.   (2-3)
-  //
-  //      Otherwise, use one rectangular polygon centered
-  //      at z = 0 (5-6) and two connecting trapazoidal polygons
-  //      for each phi segment (2-5) and (3-6).
-  //
+  // missing 
+  G4cout << "Calculate Extent missing\n" << G4endl ;
+  return true ;
 
-  G4bool splitOuter = (fOuterRadius/maxEndOuterRad < 0.95);
-  G4bool splitInner = (fInnerRadius/maxEndInnerRad < 0.95);
-  
-  //
-  // Vertex assignments (v and w arrays)
-  // [0] and [1] are mandatory
-  // the rest are optional
-  //
-  //     +                     -
-  //      [0]------[4]------[1]      <--- outer radius
-  //       |                 |       
-  //       |                 |       
-  //      [2]---[5]---[6]---[3]      <--- inner radius
-  //
-
-  G4ClippablePolygon endPoly1, endPoly2;
-  
-  G4double phimax   = maxphi + 0.5*fDPhi;
-  G4double phimin   = - phimax;
-
-  G4ThreeVector v0, v1, v2, v3, v4, v5, v6;   // -ve phi verticies for polygon
-  G4ThreeVector w0, w1, w2, w3, w4, w5, w6;   // +ve phi verticies for polygon
-
-  //
-  // decide verticies of -ve phi boundary
-  //
-  
-  G4double cosPhi = cos(phimin);
-  G4double sinPhi = sin(phimin);
-
-  // Outer hyperbolic surface  
-
-  v0 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 
-                     + fZHalfLength));
-  v1 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 
-                     - fZHalfLength));
-  if (splitOuter) {
-     v4 = transform.TransformPoint(
-          G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 0));
-  }
-  
-  // Inner hyperbolic surface  
-
-  G4double zInnerSplit = 0.;
-  if (splitInner) {
-  
-     v2 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
-                        + fZHalfLength));
-     v3 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
-                        - fZHalfLength));
-      
-     // Find intersection of tangential line of inner
-     // surface at z = fZHalfLength and line r=fInnerRadius.
-     G4double dr = fZHalfLength * fTanInnerStereo2;
-     G4double dz = maxEndInnerRad;
-     zInnerSplit = fZHalfLength + (fInnerRadius - maxEndInnerRad) * dz / dr;
-
-     // Build associated vertices
-     v5 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
-                        + zInnerSplit));
-     v6 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
-                        - zInnerSplit));
-  } else {
-  
-     v2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
-                        + fZHalfLength));
-     v3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
-                        - fZHalfLength));
-  }
-
-  //
-  // decide vertices of +ve phi boundary
-  // 
-
-  cosPhi = cos(phimax);
-  sinPhi = sin(phimax);
-  
-  // Outer hyperbolic surface  
-  
-  w0 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi,
-                     + fZHalfLength));
-  w1 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi,
-                     - fZHalfLength));
-  if (splitOuter) {
-     G4double r = rFudge*fOuterRadius;
-     
-     w4 = transform.TransformPoint(G4ThreeVector( r*cosPhi, r*sinPhi, 0 ));
-      
-     AddPolyToExtent( v0, v4, w4, w0, voxelLimit, axis, extentList );
-     AddPolyToExtent( v4, v1, w1, w4, voxelLimit, axis, extentList );
-  } else {
-     AddPolyToExtent( v0, v1, w1, w0, voxelLimit, axis, extentList );
-  }
-  
-  // Inner hyperbolic surface
-  
-  if (splitInner) {
-  
-     w2 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
-                        + fZHalfLength));
-     w3 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
-                        - fZHalfLength));
-          
-     w5 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
-                        + zInnerSplit));
-     w6 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
-                        - zInnerSplit));
-                                   
-     AddPolyToExtent( v3, v6, w6, w3, voxelLimit, axis, extentList );
-     AddPolyToExtent( v6, v5, w5, w6, voxelLimit, axis, extentList );
-     AddPolyToExtent( v5, v2, w2, w5, voxelLimit, axis, extentList );
-     
-  } else {
-     w2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
-                        + fZHalfLength));
-     w3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
-                        - fZHalfLength));
-
-     AddPolyToExtent( v3, v2, w2, w3, voxelLimit, axis, extentList );
-  }
-
-  //
-  // Endplate segments
-  //
-  AddPolyToExtent( v1, v3, w3, w1, voxelLimit, axis, extentList );
-  AddPolyToExtent( v2, v0, w0, w2, voxelLimit, axis, extentList );
-  
-  //
-  // Return min/max value
-  //
-  return extentList.GetExtent( min, max );
 }
 
 
@@ -381,13 +178,13 @@ EInside G4TwistedTrapezoid::Inside(const G4ThreeVector& p) const
 
    G4cout << "inside called: p = " << p << G4endl ; 
    G4cout << "Trapezoid is : " << fHalfSides[0] << ", " << 
-     fHalfSides[1] << ", " << fZHalfLength << G4endl ;
+   fHalfSides[1] << ", " << fZHalfLength << G4endl ;
 
    G4cout << "distanceToOut = ( " << 
-     posx << ", " <<
-     posy << ", " <<
-     posz <<") " <<
-     G4endl ;
+    posx << ", " <<
+    posy << ", " <<
+    posz <<") " <<
+    G4endl ;
 
   if ( fabs(posx) <= fHalfSides[0] - kCarTolerance*0.5 )
   {
@@ -426,8 +223,6 @@ G4ThreeVector G4TwistedTrapezoid::SurfaceNormal(const G4ThreeVector& p) const
    //
 
 
-
-
    if (fLastNormal.p == p) {
 
      return fLastNormal.vec;
@@ -440,25 +235,23 @@ G4ThreeVector G4TwistedTrapezoid::SurfaceNormal(const G4ThreeVector& p) const
 
    G4double      distance = kInfinity;
 
-   G4VSurface *surfaces[4];
-
+   G4VSurface *surfaces[6];
 
    surfaces[0] = fSide0 ;
    surfaces[1] = fSide90 ;
+   surfaces[2] = fSide180 ;
+   surfaces[3] = fSide270 ;
+
    /*
-
-   surfaces[0] = fLatterTwisted;
-   surfaces[1] = fFormerTwisted;
-
-   surfaces[2] = fLowerEndcap;
-   surfaces[3] = fUpperEndcap;
+   surfaces[4] = fLowerEndcap;
+   surfaces[5] = fUpperEndcap;
    */
 
    G4ThreeVector xx;
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i< 1; i++) {
+   for (i=0; i< 4; i++) {
       G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
       if (tmpdistance < distance) {
          distance = tmpdistance;
@@ -531,10 +324,12 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p,
    G4double      distance = kInfinity;   
 
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[4];
+   G4VSurface *surfaces[6];
 
    surfaces[0] = fSide0;
    surfaces[1] = fSide90 ;
+   surfaces[2] = fSide180 ;
+   surfaces[3] = fSide270 ;
 
    /*
    surfaces[0] = fLowerEndcap;
@@ -549,7 +344,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i< 1; i++) {
+   for (i=0; i< 4; i++) {
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
       if (tmpdistance < distance) {
          distance = tmpdistance;
@@ -614,24 +409,22 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
 
          // find intersections and choose nearest one.
          G4VSurface *surfaces[6];
+
          surfaces[0] = fSide0;
 	 surfaces[1] = fSide90 ;
+	 surfaces[2] = fSide180 ;
+	 surfaces[3] = fSide270 ;
 
 	 /*
-         surfaces[0] = fLowerEndcap;
-         surfaces[1] = fUpperEndcap;
-         surfaces[2] = fLatterTwisted;
-         surfaces[3] = fFormerTwisted;
-
+         surfaces[4] = fLatterTwisted;
+         surfaces[5] = fFormerTwisted;
 	 */
-	 //         surfaces[4] = fInnerHype;
-         //surfaces[5] = fOuterHype;
 
          G4int i;
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 1; i++) {
+         for (i=0; i< 4; i++) {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
             if (tmpdistance < distance)  {
                distance = tmpdistance;
@@ -716,22 +509,22 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p,
    G4double      distance = kInfinity;
        
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[4];
+   G4VSurface *surfaces[6];
 
    surfaces[0] = fSide0;
    surfaces[1] = fSide90 ;
+   surfaces[2] = fSide180 ;
+   surfaces[3] = fSide270 ;
 
    /*
-   surfaces[0] = fLatterTwisted;
-   surfaces[1] = fFormerTwisted;
-   surfaces[2] = fLowerEndcap;
-   surfaces[3] = fUpperEndcap;
+   surfaces[4] = fLowerEndcap;
+   surfaces[5] = fUpperEndcap;
    */
    G4int i;
    G4int besti = -1;
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (i=0; i< 1; i++) {
+   for (i=0; i< 4; i++) {
       G4double tmpdistance = surfaces[i]->DistanceToOut(p, v, xx);
       if (tmpdistance < distance) {
          distance = tmpdistance;
@@ -805,18 +598,18 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
 
          surfaces[0] = fSide0;
 	 surfaces[1] = fSide90 ;
+	 surfaces[2] = fSide180 ;
+	 surfaces[3] = fSide270 ;
 
 	 /*
-         surfaces[0] = fLatterTwisted;
-         surfaces[1] = fFormerTwisted;
-         surfaces[2] = fLowerEndcap;
-         surfaces[3] = fUpperEndcap;
+         surfaces[4] = fLowerEndcap;
+         surfaces[5] = fUpperEndcap;
 	 */
          G4int i;
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 1; i++) {
+         for (i=0; i< 4; i++) {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
             if (tmpdistance < distance) {
                distance = tmpdistance;
@@ -851,7 +644,7 @@ std::ostream& G4TwistedTrapezoid::StreamInfo(std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4TwistedTrapezoid\n"
      << " Parameters: \n"
-     << "    phi-width of a piece   : " << fDPhi/degree << " degrees \n"
+     << "    Twist angle   : " << fPhiTwist/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;
@@ -871,11 +664,10 @@ void G4TwistedTrapezoid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4TwistedTrapezoid::GetExtent() const 
 {
-  // Define the sides of the box into which the G4Tubs instance would fit.
-  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
-  return G4VisExtent( -maxEndOuterRad, maxEndOuterRad, 
-                      -maxEndOuterRad, maxEndOuterRad, 
-                      -fZHalfLength, fZHalfLength );
+
+  return G4VisExtent(-fHalfSides[0], fHalfSides[0],
+		     -fHalfSides[1], fHalfSides[1],
+		     -fZHalfLength, fZHalfLength );
 }
 
 //=====================================================================
@@ -892,9 +684,8 @@ G4Polyhedron* G4TwistedTrapezoid::CreatePolyhedron () const
 
 G4NURBS* G4TwistedTrapezoid::CreateNURBS () const 
 {
-   G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
-   G4double maxEndInnerRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
-   return new G4NURBStube(maxEndInnerRad, maxEndOuterRad, fZHalfLength); 
+  G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
+   return new G4NURBStube(maxRad, maxRad, fZHalfLength); 
    // Tube for now!!!
 }
 
@@ -905,23 +696,11 @@ void G4TwistedTrapezoid::CreateSurfaces()
 {
    
    // create 6 surfaces of TwistedTub.
-   G4ThreeVector x0(0, 0, fEndZ[0]);
-   G4ThreeVector n (0, 0, -1);
 
-   fSide0 = new G4TwistedTrapSide("side0deg",
-					  fEndInnerRadius, fEndOuterRadius,
-					  fDPhi,	fEndPhi, fEndZ, 
-					  fInnerRadius, fOuterRadius, fKappa,
-					  fPhiTwist, fZHalfLength, fHalfSides,
-                                         1 ) ;
-   fSide90 = new G4TwistedTrapSide("side90deg",
-					  fEndInnerRadius, fEndOuterRadius,
-					  fDPhi,	fEndPhi, fEndZ, 
-					  fInnerRadius, fOuterRadius, fKappa,
-					  fPhiTwist, fZHalfLength, fHalfSides,
-                                         -1 ) ;
-
- 
+   fSide0 = new G4TwistedTrapSide("0deg", fPhiTwist, fZHalfLength, fHalfSides, 0) ;
+   fSide90 = new G4TwistedTrapSide("90deg", fPhiTwist, fZHalfLength, fHalfSides, 90) ;
+   fSide180 = new G4TwistedTrapSide("180deg", fPhiTwist, fZHalfLength, fHalfSides, 180) ;
+   fSide270 = new G4TwistedTrapSide("270deg", fPhiTwist, fZHalfLength, fHalfSides, 270) ;
 
 }
 

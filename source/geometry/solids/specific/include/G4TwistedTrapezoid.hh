@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.hh,v 1.1 2004-07-29 15:10:17 link Exp $
+// $Id: G4TwistedTrapezoid.hh,v 1.2 2004-08-27 13:37:12 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,22 +33,17 @@
 //
 // Class description:
 //
-//  G4TwistedTrapezoid is a sort of twisted cylinder.
-//  A twisted cylinder which is placed along with z-axis and is
-//  separated into phi-segments should become a hyperboloid, and
-//  its each segmented piece should be tilted with a stereo angle. 
-//  G4TwistedTrapezoid is a G4VSolid.
-//  It can have inner & outer surfaces as well as G4TwistedTrapezoid, 
-//  but cannot has different stereo angles between the inner surface
-//  and outer surface.
-
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//  G4TwistedTrapezoid is a sort of twisted box.
+//
+// Author:
+//                 O.Link (Oliver.Link@cern.ch)
 //
 // History:
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
+//                 see: Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
 // --------------------------------------------------------------------
+
 #ifndef __G4TWISTEDTRAPEZOID__
 #define __G4TWISTEDTRAPEZOID__
 
@@ -64,8 +59,6 @@ class G4TwistedTrapezoid : public G4VSolid
  
   G4TwistedTrapezoid(const G4String &pname,         // Name of instance
 		     G4double  twistedangle,  // Twisted angle
-		     G4double  endinnerrad,   // Inner radius at endcap 
-		     G4double  endouterrad,   // Outer radius at endcap 
 		     G4double  halfzlen,      // half z length 
 		     G4double  halfSideX,         // half length in x
 		     G4double  halfSideY,         // half length in y
@@ -108,35 +101,11 @@ class G4TwistedTrapezoid : public G4VSolid
 
   // accessors
   
-  inline G4double GetDPhi        () const { return fDPhi       ; }
   inline G4double GetPhiTwist    () const { return fPhiTwist   ; }
-  inline G4double GetInnerRadius () const { return fInnerRadius; }
-  inline G4double GetOuterRadius () const { return fOuterRadius; }
-  inline G4double GetInnerStereo () const { return fInnerStereo; }
-  inline G4double GetOuterStereo () const { return fOuterStereo; }
   inline G4double GetZHalfLength () const { return fZHalfLength; }
-  inline G4double GetKappa       () const { return fKappa      ; }
 
   inline G4double GetHalfSideX   () const { return fHalfSides[0] ; } 
   inline G4double GetHalfSideY   () const { return fHalfSides[1] ; } 
-
-  inline G4double GetTanInnerStereo () const { return fTanInnerStereo  ; }
-  inline G4double GetTanInnerStereo2() const { return fTanInnerStereo2 ; }
-  inline G4double GetTanOuterStereo () const { return fTanOuterStereo  ; }
-  inline G4double GetTanOuterStereo2() const { return fTanOuterStereo2 ; }
-  
-  inline G4double GetEndZ           (G4int i) const { return fEndZ[i]  ; }
-  inline G4double GetEndPhi         (G4int i) const { return fEndPhi[i]; }
-  inline G4double GetEndInnerRadius (G4int i) const
-                  { return fEndInnerRadius[i]; }
-  inline G4double GetEndOuterRadius (G4int i) const
-                  { return fEndOuterRadius[i]; }
-  inline G4double GetEndInnerRadius () const 
-                  { return (fEndInnerRadius[0] > fEndInnerRadius[1] ?
-                    fEndInnerRadius[0] : fEndInnerRadius[1]); }
-  inline G4double GetEndOuterRadius () const
-                  { return (fEndOuterRadius[0] > fEndOuterRadius[1] ?
-                    fEndOuterRadius[0] : fEndOuterRadius[1]); }
   
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
@@ -145,9 +114,8 @@ class G4TwistedTrapezoid : public G4VSolid
 
  private:
  
-  inline void  SetFields(G4double phitwist, G4double innerrad,
-                         G4double outerrad,
-                         G4double negativeEndz, G4double positiveEndz, G4double fHalfSideX, G4double fHalfSideY);
+  inline void  SetFields(G4double phitwist, G4double fHalfZ, 
+			 G4double fHalfSideX, G4double fHalfSideY);
                      
   void         CreateSurfaces();
 
@@ -162,41 +130,17 @@ class G4TwistedTrapezoid : public G4VSolid
  private:
  
   G4double fPhiTwist;       // Twist angle from -fZHalfLength to fZHalfLength
-  G4double fInnerRadius;    // Inner-hype radius at z=0
-  G4double fOuterRadius;    // Outer-hype radius at z=0
-  G4double fEndZ[2];        // z at endcaps, [0] = -ve z, [1] = +ve z
-  G4double fDPhi;           // Phi-width of a segment fDPhi > 0
   G4double fZHalfLength;    // Half length along z-axis
 
   G4double fHalfSides[2];   // Half length along x and y axis
      
-  G4double fInnerStereo;       // Inner-hype stereo angle
-  G4double fOuterStereo;       // Outer-hype stereo angle
-  G4double fTanInnerStereo;    // tan(innerStereoAngle)
-  G4double fTanOuterStereo;    // tan(outerStereoAngle)
-  G4double fKappa;             // tan(fPhiTwist/2)/fZHalfLen;
-  G4double fEndInnerRadius[2]; // Inner-hype radii endcaps [0] -ve z, [1] +ve z
-  G4double fEndOuterRadius[2]; // Outer-hype radii endcaps [0] -ve z, [1] +ve z
-  G4double fEndPhi[2];         // Phi endcaps, [0] = -ve z, [1] = +ve z
+  G4VSurface *fLowerEndcap ;  // surface of -ve z
+  G4VSurface *fUpperEndcap ;  // surface of +ve z
   
-  G4double fInnerRadius2;      // fInnerRadius * fInnerRadius
-  G4double fOuterRadius2;      // fOuterRadius * fOuterRadius
-  G4double fTanInnerStereo2;   // fInnerRadius * fInnerRadius
-  G4double fTanOuterStereo2;   // fInnerRadius * fInnerRadius
-  G4double fEndZ2[2];          // fEndZ * fEndZ
-  
-  G4VSurface *fLowerEndcap;    // Surface of -ve z
-  G4VSurface *fUpperEndcap;    // Surface of +ve z
-  G4VSurface *fLatterTwisted;  // Surface of -ve phi
-  G4VSurface *fFormerTwisted;  // Surface of +ve phi
-  //  G4VSurface *fInnerHype;      // Surface of -ve r
-  // G4VSurface *fOuterHype;      // Surface of +ve r
-    
   G4VSurface *fSide0 ;         // Twisted Side at phi = 0 deg
   G4VSurface *fSide90 ;        // Twisted Side at phi = 90 deg
   G4VSurface *fSide180 ;       // Twisted Side at phi = 180 deg
   G4VSurface *fSide270 ;       // Twisted Side at phi = 270 deg
-
 
   class LastState              // last Inside result
   {
@@ -277,50 +221,17 @@ class G4TwistedTrapezoid : public G4VSolid
 //---------------------
 
 inline
-void G4TwistedTrapezoid::SetFields(G4double phitwist, G4double innerrad, 
-                              G4double outerrad, G4double negativeEndz, 
-                              G4double positiveEndz, G4double fHalfSideX, G4double fHalfSideY)
+void G4TwistedTrapezoid::SetFields(G4double phitwist, G4double fHalfZ ,
+				   G4double fHalfSideX, G4double fHalfSideY)
 {
    fPhiTwist     = phitwist;
-   fEndZ[0]      = negativeEndz;
-   fEndZ[1]      = positiveEndz;
-   fEndZ2[0]     = fEndZ[0] * fEndZ[0];
-   fEndZ2[1]     = fEndZ[1] * fEndZ[1];
-   fInnerRadius  = innerrad;
-   fOuterRadius  = outerrad;
-   fInnerRadius2 = fInnerRadius * fInnerRadius;
-   fOuterRadius2 = fOuterRadius * fOuterRadius;
+
    fHalfSides[0]  = fHalfSideX ;
    fHalfSides[1]  = fHalfSideY ;
-   
-   G4int    maxi; 
-   if (fabs(fEndZ[0]) >= fabs(fEndZ[1])) {
-      fZHalfLength = fabs(fEndZ[0]);
-      maxi = 0;
-   } else {
-      fZHalfLength = fabs(fEndZ[1]);
-      maxi = 1;
-   }
 
-   G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
-   G4double tanHalfTwist   = tan(0.5 * fPhiTwist);
-   G4double innerNumerator = fabs(fInnerRadius * tanHalfTwist) * parity;
-   G4double outerNumerator = fabs(fOuterRadius * tanHalfTwist) * parity;
+   fZHalfLength = fHalfZ ;
 
-   fTanInnerStereo    = innerNumerator / fZHalfLength; 
-   fTanOuterStereo    = outerNumerator / fZHalfLength; 
-   fTanInnerStereo2   = fTanInnerStereo * fTanInnerStereo;
-   fTanOuterStereo2   = fTanOuterStereo * fTanOuterStereo;
-   fInnerStereo       = atan2(innerNumerator,  fZHalfLength); 
-   fOuterStereo       = atan2(outerNumerator,  fZHalfLength); 
-   fEndInnerRadius[0] = sqrt(fInnerRadius2 + fEndZ2[0] * fTanInnerStereo2);
-   fEndInnerRadius[1] = sqrt(fInnerRadius2 + fEndZ2[1] * fTanInnerStereo2);
-   fEndOuterRadius[0] = sqrt(fOuterRadius2 + fEndZ2[0] * fTanOuterStereo2);
-   fEndOuterRadius[1] = sqrt(fOuterRadius2 + fEndZ2[1] * fTanOuterStereo2);
-
-   fKappa          = tanHalfTwist / fZHalfLength;
-   fEndPhi[0]      = atan2(fEndZ[0] * tanHalfTwist, fZHalfLength);
-   fEndPhi[1]      = atan2(fEndZ[1] * tanHalfTwist, fZHalfLength);
+   //   G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrapezoid.cc,v 1.1 2004-07-29 15:13:10 link Exp $
+// $Id: testG4TwistedTrapezoid.cc,v 1.2 2004-08-27 13:36:29 link Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -74,16 +74,15 @@ G4bool testG4TwistedTrapezoid()
     G4ThreeVector pin1 = Pos( dphi/2., atan(a/b), b, L, dphi ) ;
     G4cout << "pin 1 = " << pin1 << G4endl ;
 
-    
-     G4TwistedTrapezoid t1("Solid Twisted Trapezoid #1",
+  
+    G4TwistedTrapezoid t1("Solid Twisted Trapezoid #1",
 					dphi ,    // twisted angle
 					20*cm,       // endcap inner radius
-					50*cm,       // endcap outer radius
-					L/2,      // half z-length
 					a/2,      // half x-length
 					b/2,      // half y-length
 					100.*deg ); 
     
+
 
 // Check name
 // assert(t1.GetName()=="Solid Twisted Trapezoid #1");
@@ -97,7 +96,7 @@ G4bool testG4TwistedTrapezoid()
 
     //assert(t1.Inside(pin1)==kOutside);
 
-    G4cout << "ende" << G4endl ;
+    G4cout << "test ended" << G4endl ;
 
     return true;
 }
@@ -110,4 +109,5 @@ int main()
     assert(testG4TwistedTrapezoid());
     return 0;
 }
+
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.1 2004-07-29 15:11:16 link Exp $
+// $Id: G4TwistedTrapSide.hh,v 1.2 2004-08-27 13:37:23 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,14 +49,6 @@ class G4TwistedTrapSide : public G4VSurface
   public:  // with description
    
   G4TwistedTrapSide(const G4String     &name,
-		    G4double      EndInnerRadius[2],
-		    G4double      EndOuterRadius[2],
-		    G4double      DPhi,
-		    G4double      EndPhi[2],
-		    G4double      EndZ[2], 
-		    G4double      InnerRadius,
-		    G4double      OuterRadius,
-		    G4double      Kappa,
 		    G4double      PhiTwist,
 		    G4double      halfzlen,
 		    G4double      HalfSides[2],
@@ -103,16 +95,10 @@ class G4TwistedTrapSide : public G4VSurface
 
    virtual void SetCorners();
 
-   virtual void SetCorners(  G4double      endInnerRad[2],
-                             G4double      endOuterRad[2],
-                             G4double      endPhi[2],
-                             G4double      endZ[2] ) ;
-
    virtual void SetBoundaries();
 
   private:
 
-  G4double       fKappa;          // tan(TwistedAngle/2)/HalfLenZ;
   G4double       fSideX;
   G4double       fSideY;
   G4double       fZHalfLength ;
@@ -164,7 +150,13 @@ G4ThreeVector G4TwistedTrapSide::ProjectAtPXPZ(const G4ThreeVector &p,
   } else {
      tmpp = p;
   }
-  G4ThreeVector xx(p.x(), p.x() * fKappa * p.z(), p.z());
+
+  G4double phi = p.z()/(2*fZHalfLength)*fPhiTwist ;
+  G4double sinphi = sin(phi) ;
+  G4double cosphi = cos(phi) ;
+  G4double bhalf = fSideY/2 ;
+  G4double y = bhalf *( sinphi + cosphi * ( bhalf * cosphi - p.x() ) / ( bhalf * sinphi ) ) ;
+  G4ThreeVector xx(p.x(), y  , p.z());
   if (isglobal) {
      return (fRot * xx + fTrans);
   } else {
