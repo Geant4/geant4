@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.hh,v 1.2 1999-04-13 09:43:30 kurasige Exp $
+// $Id: G4VParticleChange.hh,v 1.3 1999-05-06 11:42:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,8 +48,8 @@
 //   
 // ------------------------------------------------------------
 //   Implement Event Biasing Scheme   9 Nov.,98 H.Kurashige
-
-
+//   add CheckIt                    13  Apr.,99 H.Kurashige
+//   add accuracy leveles            5  May, 99 H.Kurashige
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
 
@@ -203,14 +203,21 @@ class G4VParticleChange
     //  The Verbose level
 
   public:
-    // for Debug 
+    // CheckIt method is provided for debug
     virtual G4bool CheckIt(const G4Track&);
+ 
+    // CheckIt method is activated 
+    // if debug flag is set and 'G4VERBOSE' is defined 
     void   ClearDebugFlag();
     void   SetDebugFlag();
-    G4bool GetDebugFlag() const;
-    
+    G4bool GetDebugFlag() const; 
+        
   protected: 
-    G4bool debugFlag;
+    G4bool   debugFlag;
+ 
+    // accuracy levels
+    static const G4double accuracyForWarning;
+    static const G4double accuracyForException; 
 
   //---- following methods and members are used for Event Biasing
   public:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.2 1999-04-13 09:44:29 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.cc,v 1.3 1999-05-06 11:42:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@ G4ParticleChangeForDecay::G4ParticleChangeForDecay():G4VParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << endl;
   }
 #endif
 }
@@ -40,7 +40,7 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << endl;
   }
 #endif
 }
@@ -141,21 +141,37 @@ void G4ParticleChangeForDecay::DumpInfo() const
 
 G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
 {
-  G4bool    itsOK = true;
+  G4bool    exitWithError = false;
 
-  if (theTimeChange - aTrack.GetGlobalTime() < -1.0*nanosecond*perMillion) {
-    G4cout << " !!! the global time goes back  !!!"
-         << " :  " << aTrack.GetGlobalTime()/ns
-         << " -> " << theTimeChange/ns
-         << "[ns] " <<endl;
+  G4double  accuracy;
+
+  // global time should not go back
+  G4bool itsOK =true;
+  accuracy = -1.0*(theTimeChange - aTrack.GetGlobalTime())/ns;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
+    G4cout << "the global time goes back  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[ns] " <<endl;
     itsOK = false;
+    if (accuracy > accuracyForException) exitWithError = true;
   }
+
+  // dump out information of this particle change
   if (!itsOK) { 
-    G4cout << " G4ParticleChangeForDecay:::CheckIt " <<endl;
+    G4cout << " G4ParticleChangeForDecay::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
-    G4Exception("G4ParticleChangeForDecay:::CheckIt");
   }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChangeForDecay::CheckIt");
+
+  // correction
+  if (!itsOK) {
+    theTimeChange = aTrack.GetGlobalTime();
+  }
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-04-28 12:30:36 kurasige Exp $
+$Id: History,v 1.9 1999-05-06 11:42:48 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 6, 1999 H.Kurashige (track-01-00-06)
+-  Modified CheckIt methods of G4VParticleChange and derived classes 
 
 Apr 28, 1999 H.Kurashige (track-01-00-05b)
 -  Protect proton mass against glanular libraly for G4Mars5Gev...(Makoto)

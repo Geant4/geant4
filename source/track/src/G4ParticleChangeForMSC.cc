@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.3 1999-04-13 09:44:32 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.cc,v 1.4 1999-05-06 11:42:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@ G4ParticleChangeForMSC::G4ParticleChangeForMSC():G4VParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForMSC::G4ParticleChangeForMSC() " << endl;
+    G4cout << "G4ParticleChangeForMSC::G4ParticleChangeForMSC() " << endl;
   }
 #endif
 }
@@ -39,7 +39,7 @@ G4ParticleChangeForMSC::~G4ParticleChangeForMSC()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForMSC::~G4ParticleChangeForMSC() " << endl;
+    G4cout << "G4ParticleChangeForMSC::~G4ParticleChangeForMSC() " << endl;
   }
 #endif
 }
@@ -48,7 +48,7 @@ G4ParticleChangeForMSC::G4ParticleChangeForMSC(
              const G4ParticleChangeForMSC &right): G4VParticleChange(right)
 {
    if (verboseLevel>1) {
-    G4cerr << "G4ParticleChangeForMSC::  copy constructor is called " << endl;
+    G4cout << "G4ParticleChangeForMSC::  copy constructor is called " << endl;
    }
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePositionChange = right.thePositionChange;
@@ -60,7 +60,7 @@ G4ParticleChangeForMSC & G4ParticleChangeForMSC::operator=(
                                    const G4ParticleChangeForMSC &right)
 {
    if (verboseLevel>1) {
-    G4cerr << "G4ParticleChangeForMSC:: assignment operator is called " << endl;
+    G4cout << "G4ParticleChangeForMSC:: assignment operator is called " << endl;
    }
    if (this != &right)
    {  
@@ -176,23 +176,42 @@ void G4ParticleChangeForMSC::DumpInfo() const
 G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
 {
   G4bool    itsOK = true;
-  if ( abs(theMomentumDirectionChange.mag2()-1.0) > perMillion ) {
-    G4cout << " !!! the Momentum Change is not unit vector !!!!"
-         << " :  " << theMomentumDirectionChange.mag()
-         << endl;
+  G4bool    exitWithError = false;
+
+  G4double  accuracy;
+
+  // check     
+
+  // MomentumDirection should be unit vector
+  accuracy = abs(theMomentumDirectionChange.mag2()-1.0);
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";
+    G4cout << "the Momentum Change is not unit vector !!" << endl;
+    G4cout << "  Difference:  " << accuracy << endl;
     itsOK = false;
+    if (accuracy > accuracyForException) exitWithError = true;
   }
 
+  // dump out information of this particle change
   if (!itsOK) { 
     G4cout << " G4ParticleChangeForMSC::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
-    G4Exception("G4ParticleChange::CheckIt");
   }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChangeForMSC::CheckIt");
+
+  //correction
+  if (!itsOK) {
+    G4double vmag = theMomentumDirectionChange.mag();
+    theMomentumDirectionChange = (1./vmag)*theMomentumDirectionChange;
+  }
+
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
-
-
 
 
 

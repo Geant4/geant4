@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.cc,v 1.2 1999-04-13 09:44:34 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.3 1999-05-06 11:42:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,9 @@
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
 #include "G4Mars5GeVMechanism.hh"
+
+const G4double G4VParticleChange::accuracyForWarning = 1.0e-9;
+const G4double G4VParticleChange::accuracyForException = 0.001;
 
 G4VParticleChange::G4VParticleChange():
    theNumberOfSecondaries(0),
@@ -172,6 +175,7 @@ void G4VParticleChange::DumpInfo() const
   G4cout << "        Energy Deposit (MeV): " 
        << setw(20) << theLocalEnergyDeposit/MeV
        << endl;
+
   G4cout << "        Track Status        : " 
        << setw(20);
        if( theStatusChange == fAlive ){
@@ -205,8 +209,51 @@ void G4VParticleChange::DumpInfo() const
 
 G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
 {
-  // this is dummy routine for base class 
-  G4bool    itsOK = true;
+
+  G4bool    exitWithError = false;
+  G4double  accuracy;
+  G4double  newEnergyDeposit;
+
+  // Energy deposit should not be negative
+  G4bool itsOKforEnergy = true;
+  accuracy = -1.0*theLocalEnergyDeposit/MeV;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4VParticleChange::CheckIt    : ";
+    G4cout << "the energy deposit  is negative  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    itsOKforEnergy = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+ 
+  // true path length should not be negative
+  G4bool itsOKforStepLength = true;
+  accuracy = -1.0*theTrueStepLength/mm;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4VParticleChange::CheckIt    : ";
+    G4cout << "the true step length is negative  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    itsOKforStepLength = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+
+  G4bool itsOK = itsOKforStepLength && itsOKforEnergy ;
+  // dump out information of this particle change
+  if (! itsOK ){
+    G4cout << " G4VParticleChange::CheckIt " <<endl;
+    G4cout << " pointer : " << this <<endl ;
+    DumpInfo();
+  }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4VParticleChange::CheckIt");
+
+  // correction 
+  if ( !itsOKforStepLength ) {
+    theTrueStepLength =  (1.e-12)*mm;
+  } 
+  if ( !itsOKforEnergy ) {
+    theLocalEnergyDeposit = 0.0;
+  }
   return itsOK;
 }
 
