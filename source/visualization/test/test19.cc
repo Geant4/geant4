@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.8 2000-07-03 10:32:24 johna Exp $
+// $Id: test19.cc,v 1.9 2001-03-15 12:29:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
 #include "MySteppingAction.hh"
+#include "G4TransportationManager.hh"
 
 #include "G4VTreeGraphicsScene.hh"
 #include "G4PhysicalVolumeModel.hh"
