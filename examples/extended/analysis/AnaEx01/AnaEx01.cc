@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01.cc,v 1.2 2000-09-14 12:43:10 barrand Exp $
+// $Id: AnaEx01.cc,v 1.3 2000-10-31 13:09:59 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,12 +53,11 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new AnaEx01PhysicsList);
   
+  AnaEx01AnalysisManager* analysisManager = 
 #ifdef G4ANALYSIS_USE
-  // Analysis manager
-  G4AnalysisManager* analysisManager = 
     new AnaEx01AnalysisManager(argc==1?"OpenScientist":argv[1]);
 #else
-  G4AnalysisManager* analysisManager = 0;
+    0;
 #endif
     
   // set user action classes

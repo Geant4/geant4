@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01EventAction.hh,v 1.1.1.1 2000-09-14 11:37:21 barrand Exp $
+// $Id: AnaEx01EventAction.hh,v 1.2 2000-10-31 13:10:00 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,17 +15,17 @@
 
 #include "G4UserEventAction.hh"
 
-class G4AnalysisManager;
+class AnaEx01AnalysisManager;
 
 class AnaEx01EventAction : public G4UserEventAction {
 public:
-  AnaEx01EventAction(G4AnalysisManager*);
+  AnaEx01EventAction(AnaEx01AnalysisManager*);
   virtual ~AnaEx01EventAction();
 public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
 private:
-  G4AnalysisManager* fAnalysisManager;
+  AnaEx01AnalysisManager* fAnalysisManager;
 };
 
 #endif

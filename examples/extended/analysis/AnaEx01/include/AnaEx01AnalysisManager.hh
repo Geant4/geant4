@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.2 2000-09-14 12:43:11 barrand Exp $
+// $Id: AnaEx01AnalysisManager.hh,v 1.3 2000-10-31 13:10:00 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,14 +18,19 @@
 // So all you have to do is set environment variables and compile and
 //   instantiate this in your main().
 
-#ifndef AnaEx01VisManager_h
-#define AnaEx01VisManager_h 1
+#ifndef AnaEx01AnalysisManager_h
+#define AnaEx01AnalysisManager_h 1
 
 #ifdef G4ANALYSIS_USE
 
 #include "G4AnalysisManager.hh"
 
+class G4Run;
+class G4Event;
+class G4Step;
+
 class IHistogram1D;
+//class ITuple;
 
 class AnaEx01AnalysisManager: public G4AnalysisManager {
 public:
@@ -42,6 +47,7 @@ private:
   IHistogram1D* fLAbs;
   IHistogram1D* fEGap;
   IHistogram1D* fLGap;
+  //ITuple* fTuple;
 };
 
 #endif
