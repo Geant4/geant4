@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.1 2003-03-13 17:35:10 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.2 2003-03-19 10:31:53 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,6 +112,7 @@ int main()
   G4int nIterations = 100000;
   G4int materialId = 3;
   G4int test=0;
+  G4int tPart=1;
   //G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield );
 
   // -------------------------------------------------------------------
@@ -167,9 +168,16 @@ int main()
 
 
   // Interactive set-up
+  G4cout << "Electrons [1] or Positrons [2] ?" << G4endl;
+  G4cin >> tPart;
+  if ( !(tPart == 1 || tPart == 2)) G4Exception("Wrong input");
+
+
   G4cout << "Test AlongStepDoIt [1] or PostStepDoIt [2] ?" << G4endl;
   G4cin >> test;
   if ( !(test == 1 || test == 2)) G4Exception("Wrong input");
+
+
 
   G4cout << "How many interactions? " << G4endl;
   G4cin >> nIterations;
@@ -183,6 +191,7 @@ int main()
   
   G4cout << "Enter the initial particle energy E (MeV)" << G4endl; 
   G4cin >> initEnergy ;
+
 
   initEnergy = initEnergy*MeV;
   
@@ -233,6 +242,14 @@ int main()
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
+  
+  
+  G4ParticleDefinition* realpt = G4Electron::ElectronDefinition();
+
+  if (tPart == 2)
+    {
+      realpt = G4Positron::PositronDefinition();
+    }
   
   G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
@@ -285,14 +302,14 @@ int main()
   // process manager  
   //----------------
 
-  // electron
+  // electron or positron
   
-  G4ProcessManager* eProcessManager = new G4ProcessManager(electron);
-  electron->SetProcessManager(eProcessManager);
-  eProcessManager->AddProcess(bremProcess);
+  
+  G4ProcessManager* ProcessManager = new G4ProcessManager(realpt);
+  realpt->SetProcessManager(ProcessManager);
+  ProcessManager->AddProcess(bremProcess);
   G4ForceCondition* condition=0;  //l'ho fissata a zero! E' onesto??
 
- 
   
   //--------------
   // set ordering   
@@ -350,16 +367,17 @@ int main()
   
   G4double eEnergy = initEnergy*MeV;
   G4ParticleMomentum eDirection(initX,initY,initZ);
-  G4DynamicParticle dynamicElectron(G4Electron::Electron(),eDirection,eEnergy);
+  //eEnergy is the KINETIK energy
+  G4DynamicParticle dynamicPrimary(realpt,eDirection,eEnergy);
 
-  dynamicElectron.DumpInfo(0);
+  dynamicPrimary.DumpInfo(0);
   
   // Track 
 
   G4ThreeVector aPosition(0.,0.,0.);
   G4double aTime = 0. ;
   
-  G4Track* eTrack = new G4Track(&dynamicElectron,aTime,aPosition);
+  G4Track* eTrack = new G4Track(&dynamicPrimary,aTime,aPosition);
   G4GRSVolume* touche = new G4GRSVolume(physicalFrame, NULL, aPosition);   
   eTrack->SetTouchableHandle(touche); //verificare!!!!!!!!!!!!
 
@@ -379,7 +397,7 @@ int main()
   
   // Check applicability
   
-  if (! (bremProcess->IsApplicable(*electron)))
+  if (! (bremProcess->IsApplicable(*realpt)))
     {
       G4Exception("Not Applicable");
     }
@@ -390,7 +408,7 @@ int main()
   
   // Initialize the physics tables (in which material?)
   //G4cout << "Prima del build" << G4endl;
-  bremProcess->BuildPhysicsTable(*electron);
+  bremProcess->BuildPhysicsTable(*realpt);
   //G4cout << "Dopo il buildt" << G4endl;
 
   G4cout<< "table OK" << G4endl;
@@ -424,20 +442,20 @@ int main()
   
   eTrack->SetStep(step);
 
-  G4PenelopeBremsstrahlung* electronLowEProcess =
+  G4PenelopeBremsstrahlung* LowEProcess =
     (G4PenelopeBremsstrahlung*) bremProcess;
-  G4LowEnergyBremsstrahlung* electronLowEProcess2 =
+  G4LowEnergyBremsstrahlung* LowEProcess2 =
     (G4LowEnergyBremsstrahlung*) bremProcess;
-  G4eBremsstrahlung* electronStdProcess =
+  G4eBremsstrahlung* StdProcess =
     (G4eBremsstrahlung*) bremProcess;
  
   
   for (G4int i=0 ; i<pntNum; i++)
     {
-      dynamicElectron.SetKineticEnergy(Tkin[i]);
+      dynamicPrimary.SetKineticEnergy(Tkin[i]);
       if (processType == 3)
 	{
-	  meanFreePath=electronLowEProcess
+	  meanFreePath=LowEProcess
 	    ->DumpMeanFreePath(*eTrack, sti, condition);
 	}
       else if (processType == 2)
@@ -448,7 +466,7 @@ int main()
 	}
       else if (processType == 1)
 	{ 
-	  meanFreePath=electronStdProcess
+	  meanFreePath=StdProcess
 	    ->GetMeanFreePath(*eTrack, sti, condition); 
 	}
 
@@ -467,7 +485,7 @@ int main()
   G4cout << "DoIt in " << material->GetName() << G4endl;
 
 
-  dynamicElectron.SetKineticEnergy(eEnergy);
+  dynamicPrimary.SetKineticEnergy(eEnergy);
   G4int iter;
   for (iter=0; iter<nIterations; iter++)
     {
