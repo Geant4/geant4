@@ -1,0 +1,9 @@
+Mar 22,   00   D. Williams
+ - G4PolyhedraSide.cc: fixed bug in G4PolyhedraSide::Normal(...).
+   The method Normal(...) (used by G4VCSGfaceted::SurfaceNormal) was
+   not filling in the argument bestDistance. This fixes a bug observed
+   in G4Polyhedra::SurfaceNormal.
+
+Mar 14,   00   V. Grichine
+ - Added diagnostics in G4Cons, G4Sphere and G4Torus in function
+   DistanceToOut(p,v,...).
