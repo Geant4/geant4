@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.11 2001-09-01 02:22:55 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.12 2001-11-07 05:23:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ class G4VProcess
 
   //  copy constructor copys the name but does not copy the 
   //  physics table (0 pointer is assigned)
-      G4VProcess(G4VProcess &right);
+      G4VProcess(const G4VProcess &right);
 
   public: 
   //  destructor 
@@ -295,7 +295,7 @@ class G4VProcess
      // !!! This method should be at the end of PostStepDoIt()
      // !!! and AtRestDoIt
 
- private: 
+ protected: 
       G4String theProcessName;
       //  The name of the process
 

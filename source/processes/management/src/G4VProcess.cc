@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.8 2001-07-11 10:08:21 gunter Exp $
+// $Id: G4VProcess.cc,v 1.9 2001-11-07 05:23:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ G4VProcess::~G4VProcess()
 {
 }
 
-G4VProcess::G4VProcess(G4VProcess& right)
+G4VProcess::G4VProcess(const G4VProcess& right)
           : pParticleChange(0),
             theNumberOfInteractionLengthLeft(-1.0),
             currentInteractionLength(-1.0),
