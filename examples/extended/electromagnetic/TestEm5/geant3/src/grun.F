@@ -32,9 +32,9 @@
          IEVENT=IEVENT+1
 *
 *             Initialises event partition
-         LOUT=9
+*
          CALL GTRIGI
-         LOUT=6
+*
 *             Process one event (trigger)
 *
          CALL GTRIG
@@ -47,6 +47,7 @@
 *
 *             Check time left
 *
+            go to 10 
             IF(ITIME.LE.0)GO TO 10
             IF(MOD(IEVENT,ITIME).NE.0)GO TO 10
             CALL TIMEL(TIMNOW)
