@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: excitationFunctionTest.cc,v 1.2 2001-07-11 10:03:54 gunter Exp $
+// $Id: excitationFunctionTest.cc,v 1.3 2001-11-15 17:58:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4 Bertini Evaporation.

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -25,8 +25,8 @@
 // Evaporation and De-excitation parts
 // T. Lampen, Helsinki Institute of Physics, May-2000
 
-#ifndef G4VChargedEvapCh_h
-#define G4VChargedEvapCh_h 1
+#ifndef G4BEChargedChannel_h
+#define G4BEChargedChannel_h 1
 
 #include "globals.hh"
 #include "G4BertiniEvaporationChannel.hh"
