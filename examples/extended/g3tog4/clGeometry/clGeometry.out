@@ -3,14 +3,14 @@
                                 (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/prod/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/prod/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -91,9 +91,9 @@ NEON                         121.65
 ALUMINIUM                    191.92
 IRON                         356.49
 COPPER                       380.82
-TUNGSTEN                     561.12
-LEAD                         370.87
-URANIUM                      529.59
+TUNGSTEN                     561.11
+LEAD                         370.83
+URANIUM                      529.64
                  AIR           0.99
 VACUUM                         0.99
 
@@ -129,9 +129,9 @@ NEON                         121.65
 ALUMINIUM                    191.92
 IRON                         356.49
 COPPER                       380.82
-TUNGSTEN                     561.12
-LEAD                         370.87
-URANIUM                      529.59
+TUNGSTEN                     561.11
+LEAD                         370.83
+URANIUM                      529.64
                  AIR           0.99
 VACUUM                         0.99
 
@@ -183,25 +183,25 @@ Set cuts for pi+
 Set cuts for pi-
 Set cuts for pi0
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+                            gamma              e-    
+Cut in range                  2 mm            2 mm 
 Cut in energy
- HYDROGEN                     990 eV          162 keV        1.81 MeV        4.78 MeV         990 eV 
- DEUTERIUM                    990 eV          271 keV        2.81 MeV        7.63 MeV         990 eV 
- HELIUM                       990 eV          145 keV         1.6 MeV        4.22 MeV         990 eV 
- LITHIUM                     1.33 keV         322 keV        3.18 MeV        8.52 MeV         990 eV 
- BERILLIUM                    2.4 keV         782 keV        6.26 MeV        16.8 MeV         990 eV 
- CARBON                       4.3 keV         976 keV        7.26 MeV        19.4 MeV         990 eV 
- NITROGEN                    3.34 keV         444 keV        4.07 MeV        10.8 MeV         990 eV 
- NEON                        5.38 keV         568 keV         4.9 MeV          13 MeV         990 eV 
- ALUMINIUM                   9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
- IRON                        29.5 keV        2.43 MeV        12.6 MeV        32.6 MeV         990 eV 
- COPPER                      35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
- TUNGSTEN                     133 keV        4.66 MeV        17.6 MeV        44.4 MeV         990 eV 
- LEAD                         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
- URANIUM                      169 keV        4.28 MeV        16.8 MeV        41.7 MeV         990 eV 
-                AIR         990 eV          990 eV         82.2 keV         174 keV         990 eV 
- VACUUM                       990 eV          990 eV          990 eV          990 eV          990 eV 
+ HYDROGEN                     990 eV          162 keV
+ DEUTERIUM                    990 eV          271 keV
+ HELIUM                       990 eV          145 keV
+ LITHIUM                     1.33 keV         322 keV
+ BERILLIUM                    2.4 keV         782 keV
+ CARBON                       4.3 keV         976 keV
+ NITROGEN                    3.34 keV         444 keV
+ NEON                        5.38 keV         568 keV
+ ALUMINIUM                   9.56 keV        1.03 MeV
+ IRON                        29.5 keV        2.43 MeV
+ COPPER                      35.7 keV        2.68 MeV
+ TUNGSTEN                     133 keV        4.66 MeV
+ LEAD                         121 keV        2.61 MeV
+ URANIUM                      169 keV        4.28 MeV
+                AIR         990 eV          990 eV 
+ VACUUM                       990 eV          990 eV 
 ===================================================
 Idle> #
 Idle> # Initialize GEANT4
@@ -229,7 +229,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.06s Sys=0s
 Idle> /gun/particle mu+
 Idle> /run/beamOn 1
 ### Run 1 start.
@@ -292,7 +292,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 Idle> #
 Idle> /gun/position   0. 1.5 0. mm
 Idle> /gun/direction  1.  0.   0.
@@ -359,7 +359,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /gun/particle e+
 Idle> /run/beamOn 1
 ### Run 7 start.
@@ -380,7 +380,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # Termination
 Idle> #
