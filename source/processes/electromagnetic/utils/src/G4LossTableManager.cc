@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.51 2004-12-09 10:38:02 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.52 2005-01-13 16:44:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,7 +52,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 13-01-04 Fix problem which takes place for inactivate eIoni (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -423,7 +424,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
 
   for (G4int i=0; i<n_loss; i++) {
     if (aParticle == part_vector[i] && !tables_are_built[i] && loss_vector[i]) {
-      if (loss_vector[i]->IsIonisationProcess()) {
+      if (loss_vector[i]->IsIonisationProcess() || !em) {
         em = loss_vector[i];
         iem= i;
       }
