@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2003-07-24 14:13:16 mantero Exp $
+$Id: README,v 1.8 2003-08-01 08:25:34 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -108,6 +108,11 @@ detector types can be added, creating other implementations of
 XrayFluoVDetectorType objects. 
 Detector type selection is made in  XrayFluoDetectorConstruction, and can be 
 modified trough /apparate/detector command of the UI.  
+Other commands (apparate/sample /apparate/sampleGranularity 
+/apparate/GrainDiameter) are present to simulate sample granulosity:
+ grains are spheres, disposed in a compact cubic structure, i.e superipmposition 
+of planes of maximum density with ABC ABC path. The fundamental cell is of type 
+cubic with centered-faces.
 
 4. Physics processes
 
@@ -124,7 +129,8 @@ XrayFluoParticleGeneratorAction.cc
 At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
 In the example the Anaphe toolkit is used.
 
-AIDA / Anaphe configuration for compilation and link are in GNUmakefile:
+AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
+is set the environmente as above:
 
 ifdef G4ANALYSIS_USE
  CPPFLAGS += `aida-config --include`
@@ -143,9 +149,10 @@ simulation is in progress. Graph window is updated every 1000 events.
 The example provides also a simple Python file used to display
 histograms with Lizard 3.0.0.x 
 
-Some commads are available for Geant4 UI. /analysis/outputFile and  
-/analysis/fileType respectively for changing the name and the 
-type (xml or Hbook) of the file in wich results are saved. 
+Various commads, with help,  are available for Geant4 UI. 
+/analysis/outputFile and /analysis/fileType respectively for 
+changing the name and the type (xml or Hbook) of the file in wich results 
+are saved. 
 If these commends are used, to make the changes effective, another
 command, /anaysis/update, must be executed.
 

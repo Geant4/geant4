@@ -39,6 +39,7 @@
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
+#include "G4Sphere.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -57,7 +58,8 @@
 
 
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
-  : detectorType(0),DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
+  : detectorType(0),sampleGranularity(false), DeviceSizeX(0),
+    DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
     solidSample (0),logicSample(0),physiSample (0),
@@ -72,16 +74,16 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     defaultMaterial(0),HPGeSD(0)
   
 { 
-  NbOfPixelRows     =  1;
-  NbOfPixelColumns  =  1;
+  NbOfPixelRows     =  1; // should be 1
+  NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       = 5 * cm;
+  PixelSizeXY       = 5 * cm; // should be 5
   PixelThickness = 3.5 * mm; //changed should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
 
-  ContactSizeXY     = 5*cm;
+  ContactSizeXY     = 5*cm; //should be 5
   SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
@@ -112,7 +114,11 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ;
 
+  grainDia = 1 * mm;
+
+
   PixelCopyNb=0;
+  grainCopyNb=0;
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
   SetDetectorType(defaultDetectorType);
@@ -674,7 +680,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       z = DistDe * cos(ThetaHPGe);
       y =DistDe * sin(ThetaHPGe);
       x = 0.*cm;
-      physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)),                                           "HPGeDetector",	//its name
+      physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)), 
+				    "HPGeDetector",	//its name
 				    logicHPGe,	//its logical volume
 				    physiWorld,	//its mother  volume
 				    false,		//no boolean operation
@@ -768,35 +775,157 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	PixelCopyNb += PixelCopyNb; 
 	G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
       }
-    }
 
+    }
   
 
 
     //Sample
-    
+
+  if (sampleGranularity) {
+
     solidSample=0;  logicSample=0;  physiSample=0;
-    
     if (SampleThickness > 0.)  
       {
 	solidSample = new G4Box("Sample",		//its name
 				SampleSizeXY/2,SampleSizeXY/2,SampleThickness/2);//size
 	
 	logicSample= new G4LogicalVolume(solidSample,	//its solid
-					 sampleMaterial,	//its material
-      				       "Sample");	//its name
+					 defaultMaterial,	//its material
+					 "Sample");	//its name
 	
 	physiSample = new G4PVPlacement(0,			//no rotation
 					G4ThreeVector(),	//at (0,0,0)
 					"Sample",	//its name
 					logicSample,	//its logical volume
-				      physiWorld,	//its mother  volume
+					physiWorld,	//its mother  volume
 					false,		//no boolean operation
 					0);		//copy number
 	
       }
+
+
+
+
+    G4int nbOfGrainsX = ((G4int)(SampleSizeXY/grainDia)) -1 ;
     
-    //Diaphragm1
+    // y dim of a max density plane is 2rn-(n-1)ar, wehere a = (1-(sqrt(3)/2)), n is 
+    // number of rows and r the radius of the grain. so the Y-dim of the sample must 
+    // be greater or equal to this. It results that nmust be <= (SampleY-a)/(1-a).
+    // Max Y shift of the planes superimposing along Z axis is minor (2/sqrt(3)r)
+
+    G4double a = (1.-(sqrt(3.)/2.));
+    G4int nbOfGrainsY =  (G4int) ( ((SampleSizeXY/(grainDia/2.)) -a)/(2.-a) ) -1;
+
+    // same for the z axis, but a = 2 * (sqrt(3) - sqrt(2))/sqrt(3)
+
+    G4double b = 2. * (sqrt(3.) - sqrt(2.))/sqrt(3.);
+    G4int nbOfGrainsZ =  (G4int) ( ((SampleThickness/(grainDia/2.)) -b)/(2.-b) )-1;
+
+    if (SampleThickness > 0.){
+      
+      solidGrain=0; logicGrain=0; physiGrain=0;
+      solidGrain = new G4Sphere("Grain",0.,			
+				grainDia/2,0., twopi, 0., pi);
+      
+      logicGrain = new G4LogicalVolume(solidGrain,	
+				       sampleMaterial,	//its material
+				       "Grain");	        //its name
+      G4ThreeVector grainPosition; 
+      G4double grainInitPositionX;
+      G4double grainInitPositionY;
+      G4double grainInitPositionZ = (-1.*SampleThickness/2.+grainDia/2.);
+      G4double grainStepX = grainDia;
+      G4double grainStepY = grainDia*(1.-(0.5-(sqrt(3.)/4.)));
+      G4double grainStepZ = grainDia*sqrt(2./3.);
+      
+      for ( G4int k=0; k < nbOfGrainsZ ; k++ ) {
+	for ( G4int j=0; j < nbOfGrainsY ; j++ ) {
+	  for ( G4int i=0; i < nbOfGrainsX ; i++ ) {
+	    
+	    // Now we identify the layer and the row where the grain is , to place it in the right position
+	    
+	    
+	    
+	    if (k%3 == 0) { // first or (4-multiple)th layer: structure is ABCABC
+	      grainInitPositionY = (-1.*SampleSizeXY/2.+grainDia/2.);    
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2.);
+	      }
+	      
+	      else if ( ((j+1) % 2)  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+ grainDia);		
+	      }
+	      
+	    }	      
+	    else if ( ((k+2) % 3) == 0 ) { // B-layer
+	      
+	      grainInitPositionY = ( (-1.*SampleSizeXY/2.) + (grainDia/2.)*(1. + (1./sqrt(3.)) ) );
+	      
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia);
+	      }
+	      
+	      else if ( (j+1)%2  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2);		
+	      }
+	      
+	    }
+	    
+	    else if ( (k+1)%3 == 0 ) { // B-layer
+	      
+	      grainInitPositionY = (-1.*SampleSizeXY/2.+(grainDia/2.)*(1.+2./sqrt(3.)) );
+	      
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2.);
+	      }
+	      
+	      else if ( (j+1)%2  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia);		
+	      }
+	      
+	    }
+	    
+	    physiGrain = new G4PVPlacement(0,	       
+					   G4ThreeVector( grainInitPositionX + i*grainStepX, 
+							  grainInitPositionY + j*grainStepY,
+							  grainInitPositionZ + k*grainStepZ),
+					   "Grain",  
+					   logicGrain,	 //its logical volume
+					   physiSample, //its mother  volume
+					   false,	 //no boolean operation
+					   grainCopyNb);//copy number    
+	    
+	    grainCopyNb = grainCopyNb +1; 
+	  }
+	}
+      }
+    }    
+  }
+  else {     
+      
+    solidSample=0;  logicSample=0;  physiSample=0;
+    if (SampleThickness > 0.)  
+      {
+	solidSample = new G4Box("Sample",		//its name
+				SampleSizeXY/2,SampleSizeXY/2,SampleThickness/2);//size
+	  
+	logicSample= new G4LogicalVolume(solidSample,	//its solid
+					 sampleMaterial,	//its material
+					 "Sample");	//its name
+	  
+	physiSample = new G4PVPlacement(0,			//no rotation
+					G4ThreeVector(),	//at (0,0,0)
+					"Sample",	//its name
+					logicSample,	//its logical volume
+					physiWorld,	//its mother  volume
+					false,		//no boolean operation
+					0);		//copy number
+	  
+      }  
+  }
+    
+  //Diaphragm1
     
   solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
   
@@ -819,11 +948,12 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       z = DistDia * cos(ThetaDia1);
       y =DistDia * sin(ThetaDia1);
       x = 0.*cm;
-      physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),                                           "Diaphragm1",	//its name
+      physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),
+				    "Diaphragm1",	//its name
 				    logicDia1,	//its logical volume
 				    physiWorld,	//its mother  volume
 				    false,		//no boolean operation
-                                   0);		//copy number
+				    0);		//copy number
     }  
  
   //Diaphragm3
@@ -878,12 +1008,14 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
    G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
    G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
    G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
+   G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
   red->SetVisibility(true);
   red->SetForceSolid(true);
   blue->SetVisibility(true);
-
+  gray->SetVisibility(true);
+  gray->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
  
   logicPixel->SetVisAttributes(red); //modified!!!
@@ -895,6 +1027,11 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
+
+
+
+  if (sampleGranularity)  logicGrain->SetVisAttributes(gray);
+
   //always return the physical World
     
   PrintApparateParameters();
@@ -930,10 +1067,42 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 
 void XrayFluoDetectorConstruction::UpdateGeometry()
 {
+
+  delete solidWorld;
+  delete logicWorld;
+  delete physiWorld;
+  delete solidHPGe;
+  delete logicHPGe;
+  delete physiHPGe;
+  delete solidPixel;
+  delete logicPixel;
+  delete physiPixel;
+  delete solidOhmicNeg;
+  delete logicOhmicNeg;
+  delete physiOhmicNeg;
+  delete solidOhmicPos;
+  delete logicOhmicPos;
+  delete physiOhmicPos;
+  delete solidSample;
+  delete logicSample;
+  delete physiSample;
+
+  zRotPhiHPGe.rotateX(-1.*PhiHPGe);
+  zRotPhiDia1.rotateX(-1.*AlphaDia1);
+  zRotPhiDia3.rotateX(-1.*AlphaDia3);
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
 }
 
 
+void XrayFluoDetectorConstruction::DeleteGrainObjects()
+{
+  if (sampleGranularity) { 
+    delete solidGrain; 
+    delete logicGrain;
+    delete physiGrain;
+  }
+
+}
 void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 

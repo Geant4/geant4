@@ -43,6 +43,8 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,7 +64,8 @@ private:
   G4UIcmdWithoutParameter*   UpdateCmd;
   G4UIcmdWithAString* sampleCmd;
   G4UIcmdWithAString* detectorCmd;
-
+  G4UIcmdWithABool* granularityFlagCmd;
+  G4UIcmdWithADoubleAndUnit* grainDiaCmd;
 };
 
 #endif

@@ -46,6 +46,7 @@
 
 class G4Box;
 class G4Tubs;
+class G4Sphere;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -76,6 +77,13 @@ public:
 
   static XrayFluoDetectorConstruction* GetInstance();
 
+  inline void SetSampleGranularity(G4bool granularity) 
+  {sampleGranularity = granularity;};
+
+  inline void SetGrainDia(G4double size)
+  {grainDia = size;};
+
+  void DeleteGrainObjects();
   
 public:
   
@@ -113,7 +121,6 @@ public:
   const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
   const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
   
-  
 private:
   
   XrayFluoDetectorConstruction();
@@ -121,6 +128,8 @@ private:
   static XrayFluoDetectorConstruction* instance;
 
   XrayFluoVDetectorType* detectorType;
+
+  G4bool sampleGranularity;
 
   G4double           DeviceSizeX;
   G4double           DeviceSizeY;
@@ -158,6 +167,11 @@ private:
   G4LogicalVolume*   logicPixel;  
   G4VPhysicalVolume* physiPixel;    
  
+  G4Sphere*          solidGrain;
+  G4LogicalVolume*   logicGrain;
+  G4VPhysicalVolume* physiGrain;
+
+
   //pointers to the materials used 
   G4Material*        OhmicPosMaterial;
   G4Material*        OhmicNegMaterial; 
@@ -180,15 +194,12 @@ private:
   G4Material*        mars1;
   G4Material*        anorthosite;
 
-
-
-
-
   G4double           OhmicPosThickness;
   
   G4double           OhmicNegThickness;
   
   G4int              PixelCopyNb;
+  G4int              grainCopyNb;
   G4int              NbOfPixels;
   G4int              NbOfPixelRows;
   G4int              NbOfPixelColumns;
@@ -208,6 +219,7 @@ private:
 
   G4double           SampleThickness;
   G4double           SampleSizeXY;
+  G4double           grainDia;
   G4double           SiSizeXY; 
   G4double           Dia1Thickness;
   G4double           Dia1SizeXY;

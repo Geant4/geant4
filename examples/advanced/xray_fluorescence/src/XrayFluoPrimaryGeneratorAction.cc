@@ -47,8 +47,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(
-							       XrayFluoDetectorConstruction* XrayFluoDC)
+XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
   :XrayFluoDetector(XrayFluoDC),rndmFlag("off"),
    beam("off"),spectrum("off"),isoVert("off")
 {
@@ -99,8 +98,8 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double z0 = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   G4double y0 = 0.*cm, x0 = 0.*cm;
   if (rndmFlag == "on")
-    {y0 = (XrayFluoDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
-    x0 = (XrayFluoDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
+    {y0 = (XrayFluoDetector->GetDia3SizeXY())/sqrt(2.)*(G4UniformRand()-0.5); // it was GetSampleSizeXY(), 
+    x0 = (XrayFluoDetector->GetDia3SizeXY())/sqrt(2.)*(G4UniformRand()-0.5); // not divided by sqrt(2.)
     } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   
