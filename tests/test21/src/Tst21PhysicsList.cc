@@ -276,7 +276,7 @@ void Tst21PhysicsList::ConstructEM()
 #include "G4HEOmegaMinusInelastic.hh"
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
-// -- geneator models
+// -- 
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
@@ -297,12 +297,7 @@ void Tst21PhysicsList::ConstructEM()
 //
 // ConstructHad()
 //
-// Makes discrete physics processes for the hadrons, at present limited
-// to those particles with GHEISHA interactions (INTRC > 0).
-// The processes are: Elastic scattering, Inelastic scattering,
-// Fission (for neutron only), and Capture (neutron).
-//
-// F.W.Jones  06-JUL-1998
+// Makes discrete physics processes for the hadrons, 
 //
 
 void Tst21PhysicsList::ConstructHad()
@@ -349,9 +344,7 @@ void Tst21PhysicsList::ConstructHad()
          G4LEPionPlusInelastic* theInelasticModel = 
                                 new G4LEPionPlusInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEPionPlusInelastic* theHEInelasticModel = 
-                                new G4HEPionPlusInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "pi-") {
@@ -361,9 +354,7 @@ void Tst21PhysicsList::ConstructHad()
          G4LEPionMinusInelastic* theInelasticModel = 
                                 new G4LEPionMinusInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEPionMinusInelastic* theHEInelasticModel = 
-                                new G4HEPionMinusInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "kaon+") {
@@ -372,9 +363,8 @@ void Tst21PhysicsList::ConstructHad()
                                   new G4KaonPlusInelasticProcess("inelastic");
          G4LEKaonPlusInelastic* theInelasticModel = new G4LEKaonPlusInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEKaonPlusInelastic* theHEInelasticModel = 
                                   new G4HEKaonPlusInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "kaon0S") {
@@ -384,9 +374,7 @@ void Tst21PhysicsList::ConstructHad()
          G4LEKaonZeroSInelastic* theInelasticModel = 
                              new G4LEKaonZeroSInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEKaonZeroInelastic* theHEInelasticModel = 
-                             new G4HEKaonZeroInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "kaon0L") {
@@ -396,9 +384,8 @@ void Tst21PhysicsList::ConstructHad()
          G4LEKaonZeroLInelastic* theInelasticModel = 
                              new G4LEKaonZeroLInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEKaonZeroInelastic* theHEInelasticModel = 
                              new G4HEKaonZeroInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "kaon-") {
@@ -408,9 +395,7 @@ void Tst21PhysicsList::ConstructHad()
          G4LEKaonMinusInelastic* theInelasticModel = 
                                  new G4LEKaonMinusInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HEKaonMinusInelastic* theHEInelasticModel = 
-                                 new G4HEKaonMinusInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "proton") {
@@ -445,9 +430,7 @@ void Tst21PhysicsList::ConstructHad()
                                     new G4NeutronInelasticProcess("inelastic");
          G4LENeutronInelastic* theInelasticModel = new G4LENeutronInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-         G4HENeutronInelastic* theHEInelasticModel = 
-                                    new G4HENeutronInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
           // fission
          G4HadronFissionProcess* theFissionProcess =
