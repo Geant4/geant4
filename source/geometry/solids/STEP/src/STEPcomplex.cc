@@ -10,8 +10,9 @@ ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS);
 
 
 STEPcomplex::STEPcomplex(Registry *registry, int fileid)
-: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), _registry(registry), visited(0)
 {
+    head = this;
 /*
     _complex = 1;
     _registry = registry;
@@ -22,11 +23,13 @@ STEPcomplex::STEPcomplex(Registry *registry, int fileid)
 
 STEPcomplex::STEPcomplex(Registry *registry, const SCLstring **names,
 			 int fileid, const char *schnm)
-: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), _registry(registry), visited(0)
 {
     char *nms[BUFSIZ];
     SCLstring *name;
     int j, k;
+
+    head = this;
 
     // Create a char ** list of names and call Initialize to build all:
     for ( j=0; names[j]; j++ ) {
@@ -42,8 +45,9 @@ STEPcomplex::STEPcomplex(Registry *registry, const SCLstring **names,
 
 STEPcomplex::STEPcomplex(Registry *registry, const char **names, int fileid,
 			 const char *schnm)
-: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), _registry(registry), visited(0)
 {
+    head = this;
     Initialize( names, schnm );
 }
 
