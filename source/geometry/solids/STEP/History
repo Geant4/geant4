@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-02-14 13:44:02 gcosmo Exp $
+$Id: History,v 1.3 2000-06-14 16:13:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 14, 2000		Gabriele Cosmo (STEP-V01-01-00)
+- Fixes for porting on Win/NT VC++:
+  o dirobj[.h.cc]: deactivated Reset() and Home() functions.
+  o scl_cf.h: undefine HAVE_UNISTD_H for WIN32.
+  o stat.h: don't use hard-coded path for <sys/stat.h> on WIN32.
+  o ExpDict.cc: don't declare external memmove() for WIN32.
+  o STEPcomplex.cc, SdaiCONFIG_CONTROL_DESIGN.cc: use explicit typedef
+    StepApplicationInstanceType for SDAI::Application_instance and
+    StepSelectType for SDAI::Select respectively, when invoking a method
+    of the base class in scope.
 
 February 14, 2000	Gabriele Cosmo (STEP-V01-00-01)
 - Fixes for porting on supported platforms/compilers:
