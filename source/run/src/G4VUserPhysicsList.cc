@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.6 1999-05-10 18:06:14 fbehner Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.7 1999-05-21 04:25:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,8 +155,8 @@ void G4VUserPhysicsList::RemoveProcessManager()
       G4cout  << "remove ProcessManager from ";
       G4cout  << particle->GetParticleName() << endl;
     }
-  } 
 #endif
+  } 
 }
 
 
