@@ -207,8 +207,8 @@ void G4OpenInventorViewer::SetView () {
   fSoCamera->pointAt(sbTarget);
 
   //fSoCamera->height.setValue(10);
-  fSoCamera->nearDistance.setValue(pnear);
-  fSoCamera->farDistance.setValue(pfar);
+  fSoCamera->nearDistance.setValue((float)pnear);
+  fSoCamera->farDistance.setValue((float)pfar);
   //fSoCamera->focalDistance.setValue((float)cameraDistance);
 }
 

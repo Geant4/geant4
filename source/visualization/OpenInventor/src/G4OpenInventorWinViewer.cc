@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.15 2004-11-22 11:09:58 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.16 2004-11-22 11:17:52 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -129,7 +129,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
     ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
     ::AppendMenu(casc,MF_STRING,ID_ETC_STATS,"Scene graph stats");}
 
