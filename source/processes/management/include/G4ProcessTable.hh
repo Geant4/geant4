@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.hh,v 1.5 1999-11-11 15:37:52 gunter Exp $
+// $Id: G4ProcessTable.hh,v 1.6 2000-03-02 01:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,8 @@
 //  which are registered in all particles
 //
 //  History:
-//      Added G4ProcessTableMesseneger      16 Aug. 1998, H.Kurashige
+//   Added G4ProcessTableMesseneger         16 Aug. 1998, H.Kurashige
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
 //
 // ------------------------------------------------------------
 
@@ -32,8 +33,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
@@ -112,8 +112,8 @@ class G4ProcessTable
   // These methods are provided to activate or inactivate processes
 
  public:
-  typedef G4RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
-  typedef G4RWTValOrderedVector<G4String> G4ProcNameVector;
+  typedef G4std::vector<G4ProcTblElement*>  G4ProcTableVector;
+  typedef G4std::vector<G4String> G4ProcNameVector;
 
  public: // with description
   G4ProcNameVector*  GetNameList();
@@ -170,24 +170,6 @@ class G4ProcessTable
    // controle flag for output message
 
 };
-
-inline 
- void  G4ProcessTable::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline 
- G4int G4ProcessTable::GetVerboseLevel() const
-{
-  return verboseLevel;
-}
-
-inline 
- G4int  G4ProcessTable::Length() const
-{
-  return fProcTblVector->length();
-}
 
 #include "G4ProcessTable.icc"
 #endif

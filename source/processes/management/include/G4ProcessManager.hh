@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.6 1999-11-11 15:37:52 gunter Exp $
+// $Id: G4ProcessManager.hh,v 1.7 2000-03-02 01:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 //   Add SetProcessOrdering methods     27 Mar 1998  H.Kurahige
 //   Add copy constructor (deep copy)   28 June 1998 H.Kurashige
 //   Add GetProcessActivation     3 May. 1999 H.Kurashige
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4ProcessManager_h
@@ -52,7 +53,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
@@ -258,7 +259,7 @@ class G4ProcessManager
       G4ProcessVector* theProcVector[SizeOfProcVectorArray];
       // vector for processes with GetPhysicalInteractionLength/DoIt
 
-      typedef G4RWTPtrOrderedVector<G4ProcessAttribute> G4ProcessAttrVector; 
+      typedef G4std::vector<G4ProcessAttribute*> G4ProcessAttrVector; 
       G4ProcessAttrVector*  theAttrVector;
       // vector for process attribute  
 

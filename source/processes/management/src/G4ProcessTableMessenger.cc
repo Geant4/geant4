@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.6 1999-12-15 14:53:43 gunter Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.7 2000-03-02 01:16:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,6 +20,8 @@
 //
 //  History:
 //    15 Aug. 1998, H. Kurashige  
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//
 //---------------------------------------------------------------
 
 #include "G4ProcessTableMessenger.hh"
@@ -161,12 +163,14 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       }
     }    
     G4int counter = 0;
-    for (idx = 0; idx < procNameVector->length(); idx++) {
-      G4String name = (*procNameVector)(idx);
-      tmpVector = theProcessTable->FindProcesses(name);
+    idx =0;
+    G4ProcessTable::G4ProcNameVector::iterator itr; 
+    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
+      idx +=1;
+      tmpVector = theProcessTable->FindProcesses(*itr);
       if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) ) {
         if ( counter%4 != 0) G4cout << ",";
-	G4cout << G4std::setw(19) << name;
+	G4cout << G4std::setw(19) <<*itr;
 	if ((counter++)%4 == 3) {
           G4cout << G4endl;
         }
@@ -188,10 +192,15 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     currentProcessName = G4String(next());
     G4bool isNameFound = false;
     G4bool isProcName = false; 
-    if ( procNameVector->contains(currentProcessName) ){
-      isNameFound = true;
-      isProcName  = true; 
-    } else {
+    G4ProcessTable::G4ProcNameVector::iterator itr; 
+    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
+      if ( (*itr) == currentProcessName ) {
+	isNameFound = true;
+	isProcName  = true; 
+	break;
+      }
+    }
+    if (!isProcName) {
       type  = GetProcessType(currentProcessName);
       if (type >=0) {
 	isNameFound = true;
@@ -301,8 +310,9 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
     // process name 
     param = command->GetParameter(0);
     candidates = "";
-    for (idx = 0; idx < procNameVector->length() ; idx ++ ) {
-      candidates += " " + (*procNameVector)(idx);
+    G4ProcessTable::G4ProcNameVector::iterator itr; 
+    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
+      candidates += " " + (*itr);
     }
     param->SetParameterCandidates((const char*)(candidates));
     // particle name

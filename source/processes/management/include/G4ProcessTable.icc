@@ -1,4 +1,38 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ProcessTable.icc,v 1.3 2000-03-02 01:16:05 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//  History:
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//
 #include "G4ParticleTable.hh"
+
+//////////////////////////
+inline 
+ void  G4ProcessTable::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
+
+//////////////////////////
+inline 
+ G4int G4ProcessTable::GetVerboseLevel() const
+{
+  return verboseLevel;
+}
+
+//////////////////////////
+inline 
+ G4int  G4ProcessTable::Length() const
+{
+  return fProcTblVector->size();
+}
 
 //////////////////////////
 inline 

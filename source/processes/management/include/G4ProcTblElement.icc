@@ -1,16 +1,53 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ProcTblElement.icc,v 1.4 2000-03-02 01:16:05 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+//
+//	For information related to this code contact:
+//	CERN, IT Division, ASD group
+//	History: first implementation, based on object model of
+//	4th Aug 1998, H.Kurashige
+// ------------------------------------------------------------
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+
+//////////////////////////
+inline 
+ const G4ProcTblElement::G4ProcMgrVector*   G4ProcTblElement::GetProcMgrVector() const 
+{ 
+  return pProcMgrVector; 
+}
+  
 //////////////////////////
 inline 
  G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
 {
-  return pProcMgrVector->contains(pManager);
+  G4ProcMgrVector::iterator i;
+  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+    if (*i==pManager) return true;
+  }
+  return false;
 }
 
 //////////////////////////
 inline 
  G4int  G4ProcTblElement::GetIndex(const G4ProcessManager* pManager) const
 {
-  if ( Contains(pManager) ) return pProcMgrVector->index(pManager);
-  else return -1;
+  G4int index = 0;
+  G4ProcMgrVector::iterator i;
+  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+    if (*i==pManager) return index;
+    index +=1;
+  }
+  return -1;
 }
 
 
@@ -18,20 +55,15 @@ inline
 inline 
  G4int  G4ProcTblElement::Length() const
 {
-  if (pProcMgrVector != 0) return pProcMgrVector->length();
-  else return -1;
+  return pProcMgrVector->size();
 } 
 
 //////////////////////////
 inline 
  G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
 {
-  if (pProcMgrVector != 0) {
-    if ((index < pProcMgrVector->length()) && (index>=0)){
-      return (*pProcMgrVector)(index);
-    } else {
-      return 0;
-    }
+  if ((index < pProcMgrVector->size()) && (index>=0)){
+    return (*pProcMgrVector)[index];
   } else {
     return 0;
   }
@@ -50,14 +82,20 @@ inline
 inline 
  void  G4ProcTblElement::Insert(G4ProcessManager* aProcMgr)
 {
-  if (pProcMgrVector != 0) pProcMgrVector->insert(aProcMgr);
+  pProcMgrVector->push_back(aProcMgr);
 } 
 
 //////////////////////////
 inline 
  void  G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
 {
-  if (pProcMgrVector != 0) pProcMgrVector->remove(aProcMgr);
+  G4ProcMgrVector::iterator i;
+  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+    if (*i==aProcMgr){
+      pProcMgrVector->erase(i); 
+      break;
+    } 
+  }
 } 
 
 //////////////////////////

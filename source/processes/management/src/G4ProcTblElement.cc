@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.cc,v 1.3 1999-12-15 14:53:42 gunter Exp $
+// $Id: G4ProcTblElement.cc,v 1.4 2000-03-02 01:16:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,8 @@
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
 // ------------------------------------------------------------
-
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//
 #include "G4ProcTblElement.hh"
 
 
@@ -41,8 +42,9 @@ G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
   pProcess       = right.pProcess;
   // copy all contents in  pProcMgrVector
   pProcMgrVector = new G4ProcMgrVector();
-  for (G4int idx=0; idx<pProcMgrVector->length(); idx++){
-    pProcMgrVector->insert((*(right.pProcMgrVector))[idx]);
+  G4ProcMgrVector::iterator i;
+  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+    pProcMgrVector->push_back(*i);
   }
 }
 
@@ -68,8 +70,9 @@ G4ProcTblElement & G4ProcTblElement::operator=(G4ProcTblElement &right)
       delete pProcMgrVector;
     }
     pProcMgrVector = new G4ProcMgrVector();
-    for (G4int idx=0; idx<pProcMgrVector->length(); idx++){
-      pProcMgrVector->insert((*(right.pProcMgrVector))[idx]);
+    G4ProcMgrVector::iterator i;
+    for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+      pProcMgrVector->push_back(*i);
     }
   }
   return *this;

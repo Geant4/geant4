@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.5 1999-11-11 15:37:50 gunter Exp $
+// $Id: G4ProcTblElement.hh,v 1.6 2000-03-02 01:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,8 @@
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
 // ------------------------------------------------------------
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//
 // Class Description  
 //  This class is used by G4ProcessTable ONLY for booking !!!
 //
@@ -26,7 +28,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
@@ -55,20 +57,21 @@ class G4ProcTblElement
     // equal / unequal operator
 
   protected:
-    typedef G4RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
+    // Use STL Vector 
+    typedef G4std::vector<G4ProcessManager*> G4ProcMgrVector;
 
-    inline G4int Length() const ;
-    inline void  Insert(G4ProcessManager* aProcMgr);
-    inline void  Remove(G4ProcessManager* aProcMgr);
+    G4int Length() const ;
+    void  Insert(G4ProcessManager* aProcMgr);
+    void  Remove(G4ProcessManager* aProcMgr);
 
-    inline G4VProcess*       GetProcess() const;
-    inline const G4String&   GetProcessName() const;
+    G4VProcess*       GetProcess() const;
+    const G4String&   GetProcessName() const;
  
-    inline G4ProcessManager* GetProcessManager(G4int index) const;
-    const G4ProcMgrVector*   GetProcMgrVector() const { return pProcMgrVector; }
+    G4ProcessManager* GetProcessManager(G4int index) const;
+    const G4ProcMgrVector*   GetProcMgrVector() const;
   
-    inline G4int      GetIndex(const G4ProcessManager* pManager) const ;
-    inline G4bool     Contains(const G4ProcessManager* pManager) const ;
+    G4int      GetIndex(const G4ProcessManager* pManager) const ;
+    G4bool     Contains(const G4ProcessManager* pManager) const ;
 
   private:
     G4VProcess*       pProcess;
