@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.26 2005-03-03 16:04:14 allison Exp $
+// $Id: G4UnionSolid.cc,v 1.27 2005-03-04 09:26:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -130,25 +130,24 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
-  EInside positionA = fPtrSolidA->Inside(p) ;
-  EInside positionB = fPtrSolidB->Inside(p) ;
-  
-  if( positionA == kInside  || positionB == kInside )
-  {    
-    return kInside ;
-  }
+  EInside positionA = fPtrSolidA->Inside(p);
+  EInside positionB = fPtrSolidB->Inside(p);
+
+#ifndef G4NEW_SURF_NORMAL  
+  if( positionA == kInside  || positionB == kInside )           return kInside;  
+#else
+    if( positionA == kInside  || positionB == kInside   ||
+        ( positionA == kSurface && positionB == kSurface &&
+          ( fPtrSolidA->SurfaceNormal(p) + 
+            fPtrSolidB->SurfaceNormal(p) ).mag2() < 
+            1000*kRadTolerance ) )                              return kInside;
+#endif    
   else
   {
-    if((positionA != kInside && positionB == kSurface) ||
-       (positionB != kInside && positionA == kSurface) ||
-       (positionA == kSurface && positionB == kSurface)   )
-    {
-      return kSurface ;
-    }
-    else
-    {
-      return kOutside ;
-    }
+    if( ( positionA != kInside  && positionB == kSurface ) ||
+        ( positionB != kInside  && positionA == kSurface ) ||
+        ( positionA == kSurface && positionB == kSurface )    )  return kSurface;
+    else                                                         return kOutside;    
   }
 }
 

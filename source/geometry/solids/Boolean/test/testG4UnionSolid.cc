@@ -120,23 +120,23 @@ int main()
 
     G4UnionSolid b1Ub2("b1Unionb2",&b1,&b2),
                         t1Ub2("t1Unionb2",&t1,&b2),
-                        c2Ub2("c2Unionb2",&c2,&b2) ;
+                        c2Ub2("c2Unionb2",&c2,&b2);
 
-    G4UnionSolid b4Ub5("b4Ub5",b4,b5) ;
+    G4UnionSolid b4Ub5("b4Ub5",b4,b5);
 
-    G4UnionSolid t2Ut4("t2Ut4",&t2,&t4) ;
+    G4UnionSolid t2Ut4("t2Ut4",&t2,&t4);
 
     // With placement
 
-    G4UnionSolid b1Ub3("b1Unionb3",&b1,&b3,transform) ;
+    G4UnionSolid b1Ub3("b1Unionb3",&b1,&b3,transform);
 
-    G4UnionSolid t1Ub3("t1Unionb3",&t1,&b3,transform) ;
+    G4UnionSolid t1Ub3("t1Unionb3",&t1,&b3,transform);
 
     G4UnionSolid t2Ut1Trans("t2Ut1Trans",&t2,&t1,
-                                         &identity,G4ThreeVector(0,0,110)) ;
+                                         &identity,G4ThreeVector(0,0,110));
 
     G4UnionSolid t2Ut1Ut1("t2Ut1Ut1",&t2Ut1Trans,&t1,
-                                         &identity,G4ThreeVector(0,0,-110)) ;
+                                         &identity,G4ThreeVector(0,0,-110));
 
     G4UnionSolid t2Ut3("t2Ut3",&t2,&t3,
                                          &identity,G4ThreeVector(0,0,50)) ;
@@ -151,7 +151,7 @@ int main()
                                          &identity,G4ThreeVector(0,0,-10)) ;
 
 
-
+    G4UnionSolid b4Ub4xtouch("b4Ub4xtouch",b4,b4,&identity,G4ThreeVector(100.,0,0));
 
 
     G4Box * box1 = new G4Box("Box1",1092.500000,240.103374,92.000000);
@@ -240,6 +240,16 @@ int main()
 
     side = envelope.Inside(pPos);
     G4cout<<"envelope.Inside(pPos) = "<<OutputInside(side)<<G4endl;
+
+    side = b4Ub4xtouch.Inside(G4ThreeVector(50.,0,0));
+    G4cout<<"b4Ub4xtouch.Inside(G4ThreeVector(50.,0,0)) = "<<OutputInside(side)<<G4endl;
+
+    side = b4Ub4xtouch.Inside(G4ThreeVector(50.,50.,0));
+    G4cout<<"b4Ub4xtouch.Inside(G4ThreeVector(50.,50.,0)) = "<<OutputInside(side)<<G4endl;
+
+
+
+
 
     assert(b1Ub2.Inside(pzero)==kInside);
     assert(b1Ub2.Inside(pbigz)==kOutside);

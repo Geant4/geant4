@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004-06-11 14:17:17 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2005-03-04 09:26:54 grichine Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for geometry/CSG library.  Gabriele Cosmo, 16/11/96.
 # ----------------------------------------------------------------
@@ -22,6 +22,9 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include \
 
 ifdef G4BOOLDEBUG
   CPPFLAGS += -DG4BOOLDEBUG
+endif
+ifdef G4NEW_SURF_NORMAL
+  CPPFLAGS += -DG4NEW_SURF_NORMAL
 endif
 
 include $(G4INSTALL)/config/common.gmk
