@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-11-09 09:24:30 gcosmo Exp $
+$Id: History,v 1.14 2000-11-16 16:21:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16, 2000  V.Grichine              geommng-V02-00-03
+- Fix in G4VSolid::CalculateClippedPoligonExtent(): removed assumption
+  that pMin<pMax by eliminating "else" condition. (D.Williams)
 
 November 9, 2000   G.Cosmo                 geommng-V02-00-02
 - Included test directory containing "voxel" test by L.Grainac.
