@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: ParticlesBuilder.hh,v 1.1 2004-05-04 08:32:51 vnivanch Exp $
+// $Id: ParticlesBuilder.hh,v 1.2 2004-09-17 10:51:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,17 +36,17 @@
 
 class ParticlesBuilder : public G4VPhysicsConstructor
 {
-public:
-  ParticlesBuilder(const G4String& name = "particles");
-  virtual ~ParticlesBuilder();
+  public:
+    ParticlesBuilder(const G4String& name = "particles");
+   ~ParticlesBuilder();
 
-public:
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
+  public:
+    // This method will be invoked in the Construct() method.
+    // each particle type will be instantiated
+    void ConstructParticle();
 
-  // This method is dummy.
-  virtual void ConstructProcess() {};
+    // This method is dummy.
+    void ConstructProcess() {};
 
 };
 

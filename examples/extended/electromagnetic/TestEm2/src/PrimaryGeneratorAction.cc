@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003-10-08 17:28:47 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004-09-17 10:51:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,8 +35,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                               DetectorConstruction* det)
+PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
 :Detector(det)
 {
   G4int n_particle = 1;

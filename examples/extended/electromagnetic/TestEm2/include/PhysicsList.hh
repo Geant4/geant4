@@ -20,21 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.hh,v 1.2 2004-05-04 07:36:40 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.3 2004-09-17 10:51:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsList
-//
-// Author:      V.Ivanchenko 03.05.2004
-//
 // Modified:
-//
-//----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,34 +40,29 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
+  public:
+    PhysicsList();
+   ~PhysicsList();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+    void ConstructParticle();
+    void ConstructProcess();
+    void SetCuts();
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
 
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
+    void AddPhysicsList(const G4String&);
+    void SetVerbose(G4int val);
 
-private:
+  private:
+    G4double cutForGamma;
+    G4double cutForElectron;
+    G4double cutForPositron;
+    G4int    verbose;
+    G4bool   emBuilderIsRegisted;
 
-  // hide assignment operator
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
+    PhysicsListMessenger* pMessenger;
 
 };
 

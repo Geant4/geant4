@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EmAcceptance.cc,v 1.2 2004-06-20 01:28:13 vnivanch Exp $
+// $Id: EmAcceptance.cc,v 1.3 2004-09-17 10:51:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,13 +38,12 @@ EmAcceptance::EmAcceptance()
 EmAcceptance::~EmAcceptance()
 {}
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
 {
   G4cout << G4endl;
-  G4cout << "<<<<<ACCEPTANCE>>>>> " << stat << " events for " << title << G4endl;
+  G4cout << "<<<<ACCEPTANCE>>>> " << stat << " events for " << title << G4endl;
   isAccepted = true;
 }
 
@@ -57,7 +53,7 @@ void EmAcceptance::EndOfAcceptance()
 {
   G4String resume = "IS ACCEPTED";
   if(!isAccepted) resume = "IS NOT ACCEPTED";
-  G4cout << "<<<<<END>>>>>   " << resume << G4endl;
+  G4cout << "<<<<END>>>>   " << resume << G4endl;
   G4cout << G4endl;
 }
 
@@ -70,9 +66,10 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
   G4double x = sqrt((G4double)stat);
   G4double dde = avr - avr0;
   G4double de = dde*x/rms;
-
-  G4cout << title << ": " << avr << "  del"<< title << "= " << dde << " nrms= " << de << G4endl;
   if(abs(de) > limit) isAccepted = false;
+  
+  G4cout << title << ": " << avr << "  del" << title << "= " << dde 
+                                 << " nrms= " << de << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

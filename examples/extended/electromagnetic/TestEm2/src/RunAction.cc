@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.10 2004-07-01 09:30:18 vnivanch Exp $
+// $Id: RunAction.cc,v 1.11 2004-09-17 10:51:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,8 @@
 
 #include "Randomize.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
+#include <memory>	//for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
@@ -74,7 +75,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   rmstrue  = 1.;
   limittrue = DBL_MAX;
   
-  histoName = "testem2.paw";
+  histoName = "testem2.aida";
   histoType = "hbook";  
 }
 
@@ -82,7 +83,6 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 
 RunAction::~RunAction()
 {
-  cleanHisto();
   delete runMessenger;  
 }
 
@@ -90,20 +90,21 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+  af = AIDA_createAnalysisFactory();
 
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(histoName, histoType, readOnly, createNew);
+  tree = tf->create(histoName, histoType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+  std::auto_ptr<AIDA::IHistogramFactory> hf(af->createHistogramFactory(*tree));
+  
   G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Det->GetdLradl();
   G4double dRradl = Det->GetdRradl();
@@ -145,20 +146,18 @@ void RunAction::bookHisto()
 
   histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
-
-  delete hf;
-  delete tf;
-  delete af;
 #endif
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   delete tree;
+  delete af;
 #endif
 }
 
@@ -248,7 +247,7 @@ void RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   //fill histograms
   //
   G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
@@ -296,7 +295,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
     G4double bin = i*dLradl;
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
@@ -326,7 +325,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i]
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
     G4double bin = i*dRradl;
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
@@ -409,6 +408,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
+  // save histos and close AnalysisFactory
+  cleanHisto();
+  
   // show Rndm status
   HepRandom::showEngineStatus();
 
