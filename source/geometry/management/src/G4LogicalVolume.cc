@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.24 2005-03-02 08:25:57 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.25 2005-03-02 08:26:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -345,7 +345,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
       // Subtract the daughter's portion for the mass and, if required,
       // add the real daughter's mass computed recursively
       //
-      fMass = fMass - subMass;
+      fMass -= subMass;
       if (propagate)
       {
         fMass += logDaughter->GetMass(true, true, daughterMaterial);
