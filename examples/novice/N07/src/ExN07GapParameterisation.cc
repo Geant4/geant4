@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07GapParameterisation.cc,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07GapParameterisation.cc,v 1.2 2003-05-28 11:24:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,8 +52,9 @@ void ExN07GapParameterisation::ComputeTransformation
   { physVol->SetName("Gap"); }
 }
 
-G4Material* ExN07GapParameterisation::ComputeMaterial
-(const G4int copyNo,G4VPhysicalVolume* physVol)
+G4Material*
+ExN07GapParameterisation::
+ComputeMaterial (const G4int copyNo, G4VPhysicalVolume*)
 {
   if(copyNo%2==0) { return absMaterial; }
   return gapMaterial;

@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MinEkineCuts.cc,v 1.4 2002-01-09 17:24:20 ranjard Exp $
+// $Id: ExN05MinEkineCuts.cc,v 1.5 2003-05-28 11:20:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
 //                   15 April 1998 M.Maire
 // --------------------------------------------------------------
@@ -53,7 +50,8 @@ ExN05MinEkineCuts::ExN05MinEkineCuts(const G4String& aName)
 ExN05MinEkineCuts::~ExN05MinEkineCuts()
 {}
 
-ExN05MinEkineCuts::ExN05MinEkineCuts(ExN05MinEkineCuts& right)
+ExN05MinEkineCuts::ExN05MinEkineCuts(ExN05MinEkineCuts&)
+  : ExN05SpecialCuts()
 {}
 
  
