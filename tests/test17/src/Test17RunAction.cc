@@ -78,8 +78,10 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
   xend2   /= nev;
   G4double sigl = length2 - length*length;
   if(sigl > 0.0) sigl = sqrt(sigl/nev);
+  else           sigl = 0.0;
   G4double sigx = xend2 - xend*xend;
-  if(sigl > 0.0) sigx = sqrt(sigx/nev);
+  if(sigx > 0.0) sigx = sqrt(sigx/nev);
+  else           sigx = 0.0;
   G4double nc = (G4double)nCharged / nev;
   G4double nn = (G4double)nNeutral / nev;
   G4bool icru = false;
@@ -87,13 +89,13 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
   G4double protR = 0.0;
   G4double protL = 0.0;
 
-  if(abs(kinEnergy0 - 500.0*keV)<0.1*keV && part0 == theProton) { 
+  if(abs(kinEnergy0 - 500.0*keV)<0.1*keV && part0 == theProton) {
     icru  = true;
     protL = 0.009059*mm;
     protR = 0.008869*mm;
   }
 
-  if(abs(kinEnergy0 - MeV)<0.1*keV && part0->GetParticleName() == "pi-") { 
+  if(abs(kinEnergy0 - MeV)<0.1*keV && part0->GetParticleName() == "pi-") {
     icru  = true;
     protL = 0.009158*cm*0.9059/0.8869;
     protR = 0.009158*cm;
@@ -107,15 +109,15 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
 
   G4cout << G4endl;
   //  G4int prec = G4cout.precision(6);
-  G4cout << " end of Run TotNbofEvents = " <<  nEvents 
+  G4cout << " end of Run TotNbofEvents = " <<  nEvents
          << " for " <<  name
          << " with Ekin = " << kinEnergy0/MeV << " MeV" << G4endl ;
   G4cout << "    Track Length in absorber = " <<
           length/micrometer     << " +- " << sigl/micrometer   <<
-          "  microns " << G4endl; 
+          "  microns " << G4endl;
   G4cout << "    CSDA  Range  in absorber = " <<
           xend/micrometer     << " +- " << sigx/micrometer   <<
-          "  microns " << G4endl; 
+          "  microns " << G4endl;
   G4cout << G4endl;
   G4cout << "    Energy deposit in absorber = " <<
            edepTot/MeV << "  MeV " << G4endl ;
@@ -123,12 +125,12 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
 
   if(icru) {
     G4cout << "### Comparison with the ICRU49 data: " << G4endl;
-    G4cout << "    Track Length (G4 - ICRU49) = " 
+    G4cout << "    Track Length (G4 - ICRU49) = "
            << (length - protL)/micrometer
            << " +- " << sigl/micrometer
-           << " microns " << G4endl; 
-    G4cout << "    CSDA  Range  (G4 - ICRU49) = " 
-           << (xend - protR)/micrometer 
+           << " microns " << G4endl;
+    G4cout << "    CSDA  Range  (G4 - ICRU49) = "
+           << (xend - protR)/micrometer
            << " +- " << sigx/micrometer
            << " microns " << G4endl;
     G4cout << G4endl ;
@@ -136,8 +138,8 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
 
   G4cout << "Average Number electrons per event = " << nc << G4endl;
   G4cout << "Average Number photons per event   = " << nn << G4endl;
-  G4cout << G4endl; 
-      
+  G4cout << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,44 +21,44 @@
 // ********************************************************************
 //
 //
+// $Id: G4EmHadronBuilder.hh,v 1.1 2004-05-26 11:39:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#ifndef G4EmHadronBuilder_h
+#define G4EmHadronBuilder_h 1
 
-#include "Test17StepCut.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-#include "G4Step.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Test17StepCut::Test17StepCut(const G4String& aName)
-  : G4VDiscreteProcess(aName),MaxChargedStep(DBL_MAX)
+class G4EmHadronBuilder : public G4VPhysicsConstructor
 {
-   if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
-   }
-}
+public:
+  G4EmHadronBuilder(const G4String& name = "EM_stand_had");
+  virtual ~G4EmHadronBuilder();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
 
-Test17StepCut::~Test17StepCut()
-{}
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+private:
 
-Test17StepCut::Test17StepCut(Test17StepCut& right)
-    :G4VDiscreteProcess(right)
-{}
+   // hide assignment operator
+  G4EmHadronBuilder & operator=(const G4EmHadronBuilder &right);
+  G4EmHadronBuilder(const G4EmHadronBuilder&);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+};
 
-void Test17StepCut::SetMaxStep(G4double step)
-{
-  MaxChargedStep = step ;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#endif
+
