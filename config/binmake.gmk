@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.96 2004-05-26 21:21:22 duns Exp $
+# $Id: binmake.gmk,v 1.97 2004-05-27 11:02:24 flei Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -78,7 +78,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
-              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
@@ -102,6 +103,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/util/include \
               -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
+	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
+	      -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/processes/hadronic/util/include \
