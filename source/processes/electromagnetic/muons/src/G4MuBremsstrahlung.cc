@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.4 1999-05-04 14:24:23 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.5 1999-06-14 13:26:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -425,6 +425,8 @@ void G4MuBremsstrahlung::MakeSamplingTables(
          }
        }
 
+       ya[NBIN] = 0. ;   //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
        if(CrossSection > 0.)
        {
          for(G4int ib=0; ib<=nbin; ib++)
@@ -504,7 +506,7 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
      } while ((proba[izz][itt][iy] < r)&&(iy < NBINminus1)) ;
 
   //sampling is Done uniformly in y in the bin
-  if( iy < NBINminus1 )
+  if( iy < NBIN )
     y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
   else
     y = ya[iy] ;
@@ -565,8 +567,8 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+  G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
+       << " has no elements, NULL pointer returned." << endl;
   return NULL;
 }
 

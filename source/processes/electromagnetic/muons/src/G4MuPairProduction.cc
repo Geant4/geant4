@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.5 1999-05-07 09:03:02 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.6 1999-06-14 13:26:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -394,6 +394,7 @@ void G4MuPairProduction::MakeSamplingTables(
           proba[iz][it][nbin] = CrossSection ;
         }
       }
+      ya[NBIN]=0. ;
 
       if(CrossSection > 0.)
       {
@@ -662,7 +663,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
       } while ((proba[izz][itt][iy] < r)&&(iy < NBINminus1)) ;
 
    //sampling is uniformly in y in the bin
-   if( iy < NBINminus1 )
+   if( iy < NBIN )
      y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy]) ;
    else
      y = ya[iy] ;
