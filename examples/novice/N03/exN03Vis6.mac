@@ -38,12 +38,10 @@
 /vis/scene/include/trajectories
 /tracking/storeTrajectory 1
 
-# Bird-eye view of events with the hidden-surface 
-#  drawing style.
+# Bird-eye view of events
 /vis/camera/reset
 /vis/camera/viewpoint    45 45 
-/vis/set/drawing_style   2 
-#
+
 # Attach the just created Go scene graph to the viewer.
 /vis/viewer/update
 # Attach the just created Go scene graph to the viewer.

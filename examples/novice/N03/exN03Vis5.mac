@@ -48,11 +48,9 @@
 /tracking/storeTrajectory 1
 /vis/scene/include/trajectories
 
-# Bird-eye view of events with the hidden-surface 
-#  drawing style.
+# Bird-eye view of events
 /vis/camera/reset
 /vis/camera/viewpoint    45 45 
-/vis/set/drawing_style   2 
 
 /run/beamOn 1
 
