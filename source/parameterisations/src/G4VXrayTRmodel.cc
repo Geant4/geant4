@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRmodel.cc,v 1.5 2001-09-18 09:02:04 gcosmo Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.6 2003-05-21 16:39:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -155,7 +155,7 @@ G4bool G4VXrayTRmodel::IsApplicable(const G4ParticleDefinition& particle)
 // to check distance from boundaries, see below  to allow the decision)
 //
 
-G4bool G4VXrayTRmodel::ModelTrigger(const G4FastTrack& fastTrack) 
+G4bool G4VXrayTRmodel::ModelTrigger(const G4FastTrack&) 
 {
   //  G4double mass = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGMass() ;
   //  G4double kinEnergy = fastTrack.GetPrimaryTrack()->GetKineticEnergy() ;
