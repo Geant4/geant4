@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-11-19 17:15:37 gcosmo Exp $
+$Id: History,v 1.46 2002-12-16 09:24:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 16, 2002  G. Cosmo                geommng-V05-00-00
+- Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
+  Included development for 'cuts-by-region'; introduced new classes
+  G4Region and G4RegionStore. Modified G4LogicalVolume to handle recursive
+  propagation of regions to daughters.
 
 November 19, 2002  G. Cosmo                geommng-V04-01-05
 - G4GeometryManager[.cc]
