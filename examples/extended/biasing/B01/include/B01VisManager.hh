@@ -21,42 +21,53 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc,v 1.6 2002-10-22 14:09:05 dressel Exp $
+// $Id: B01VisManager.hh,v 1.1 2002-10-22 14:09:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
 
-#include "globals.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "B01PrimaryGeneratorAction.hh"
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4Neutron.hh"
-#include "G4Gamma.hh"
-#include "G4Proton.hh"
-#include "G4ThreeVector.hh"
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
 
-B01PrimaryGeneratorAction::B01PrimaryGeneratorAction()
-  :
-  fParticleGun(new G4ParticleGun(1))
-{
-  if (!fParticleGun) {
-    G4std::G4Exception("B01PrimaryGeneratorAction::B01PrimaryGeneratorAction: new failed to create G4ParticleGun!");
-  }
-  fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  //  fParticleGun->SetParticleDefinition(G4Gamma::GammaDefinition());
-  //  fParticleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
-  fParticleGun->SetParticleEnergy(10.0*MeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
-}
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-B01PrimaryGeneratorAction::~B01PrimaryGeneratorAction()
-{
-  delete fParticleGun;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  fParticleGun->GeneratePrimaryVertex(anEvent);
-}
+#ifndef B01VisManager_h
+#define B01VisManager_h 1
+
+#ifdef G4VIS_USE
+
+#include "G4VisManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class B01VisManager: public G4VisManager {
+
+public:
+
+  B01VisManager ();
+  virtual ~B01VisManager();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+#endif

@@ -9,14 +9,16 @@
 class B01ConcreteShield : public B01VGeometry {
 public:
   B01ConcreteShield();
-  ~B01ConcreteShield();
+  virtual ~B01ConcreteShield();
 
-  G4VPhysicalVolume &GetWorldVolume() const;
-  const G4VPhysicalVolume *GetPhysicalVolumeByName(const G4String& name)
+  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  virtual const G4VPhysicalVolume *GetPhysicalVolumeByName(const G4String& name)
     const ;
-  G4String ListPhysNamesAsG4String() const ;
+  virtual G4String ListPhysNamesAsG4String() const ;
   
 private:
+  B01ConcreteShield(const B01ConcreteShield &);
+  B01ConcreteShield &operator=(const B01ConcreteShield &);
   void Construct();
   B01MaterialFactory fMaterialFactory;
   G4VPhysicalVolume *fWorldVolume;

@@ -1,47 +1,66 @@
 #include "B01MassImportance.hh"
-#include "G4RunManager.hh"
-#include "G4MassImportanceSampler.hh"
+#include "G4MassGeometrySampler.hh"
 #include "G4IStore.hh"
 #include "B01VGeometry.hh"
 #include "B01SlobedConcreteShield.hh"
-#include "B01Run.hh"
-#include "G4Pstring.hh"
+
 
 B01MassImportance::B01MassImportance()
   :
   fName("MassImportance"),
+  fWeightRoulette(false),
   fGeometry(0),
-  fRun(0),
   fIStore(0),
   fSampler(0)
 {}
 
 B01MassImportance::~B01MassImportance(){
-  if (fSampler) delete fSampler;
-  if (fIStore) delete fIStore;
-  if (fGeometry) delete fGeometry;
-  if (fRun) delete fRun;
+  if (fSampler) {
+    delete fSampler;
+  }
+  if (fIStore) {
+    delete fIStore;
+  }
+  if (fGeometry) {
+    delete fGeometry;
+  }
 }
 
-G4String B01MassImportance::GetName() const {
+const G4String &B01MassImportance::GetName() const {
   return fName;
 }
-void B01MassImportance::Construct() {
-  
-  fGeometry = new B01SlobedConcreteShield;
-  fRun = new B01Run;
-  fRun->SetDetector(fGeometry->GetWorldVolume());
-  fRun->Initialize();
 
-  // create an importance store and fill it with the importance
-  // per cell values
+G4VPhysicalVolume &B01MassImportance::GetMassGeometry(){
+  if (!fGeometry) {
+    fGeometry = new B01SlobedConcreteShield;
+    if (!fGeometry) {
+      G4std::G4Exception("B01MassImportance::GetMassGeometry: failed to create B01SlobedConcreteShield");
+    }
+  }
+  return fGeometry->GetWorldVolume();
+}
+
+const G4CellScorer *B01MassImportance::GetG4CellScorer(){
+  return 0;
+}
+
+void B01MassImportance::PrepareSampling(){
+  GetMassGeometry();
 
   fIStore = new G4IStore(fGeometry->GetWorldVolume());
+  if (!fIStore) {
+    G4std::G4Exception(" B01MassImportance::PrepareSampling: new failed to create G4IStore");
+  }
+  G4GeometryCell gWorldCell(fGeometry->GetWorldVolume(), -1);
+  fIStore->AddImportanceGeometryCell(1, gWorldCell);
 
-  G4int i;
-  for (i=1; i <= 18; i++) {
+  G4int i = 1;
+  for (i=1; i <= 19; i++) {
     G4String volname = fGeometry->GetCellName(i);
     G4double imp = pow(2,i-1);
+    if (i==19) {
+      imp = pow(2,17);
+    }
     
     const G4VPhysicalVolume *pvol = fGeometry->
       GetPhysicalVolumeByName(volname);
@@ -51,24 +70,26 @@ void B01MassImportance::Construct() {
     }
   }
   
-  // create a scorer
-
-  fSampler = new G4MassImportanceSampler(*fIStore,
-					 "neutron"); 
   
-  // to be done after fRun->Initialize()
-  fSampler->Initialize(); 
-
-
 }
 
-void B01MassImportance::Run(G4int nevents) {
-  if (!fRun) {
-    G4cout << "B01MassImportance::Run: no BooRun constructed yet!" << G4endl;
+void B01MassImportance::ConfigureSampling(){
+
+  fSampler = new G4MassGeometrySampler("neutron"); 
+  if (!fSampler) {
+    G4std::G4Exception("B01MassImportance::ConfigureSampling: new failed to create G4MassGeometrySampler!");
   }
-  else {
-    fRun->BeamOn(nevents);
+
+  fSampler->PrepareImportanceSampling(fIStore); 
+  if (fWeightRoulette) {
+    fSampler->PrepareWeightRoulett();
   }
+  fSampler->Configure();
+  
+}
+
+void B01MassImportance::SetWeightRoulette(G4bool wroulette){
+  fWeightRoulette = wroulette;
 }
 
 void B01MassImportance::PostRun(G4std::ostream *out) {

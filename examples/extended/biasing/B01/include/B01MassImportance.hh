@@ -4,27 +4,30 @@
 #include "B01VSimulation.hh"
 
 class B01SlobedConcreteShield;
-class B01Run;
-class G4MassImportanceSampler;
+class G4CellScorer;
+class G4VSampler;
 class G4IStore;
 
 class B01MassImportance : public B01VSimulation {
 public:
   B01MassImportance();
-  ~B01MassImportance();
-  G4String GetName() const;
-  void Construct();
-  void Run(G4int nevents);
-  void PostRun(G4std::ostream *);
+  virtual ~B01MassImportance();
+  virtual const G4String &GetName() const;
+  virtual G4VPhysicalVolume &GetMassGeometry();
+  virtual const G4CellScorer *GetG4CellScorer();
+  virtual void PrepareSampling();
+  virtual void ConfigureSampling();
+  virtual void SetWeightRoulette(G4bool wroulette);
+  virtual void PostRun(G4std::ostream *);
 private:
   B01MassImportance(const B01MassImportance &);
   B01MassImportance &operator=(const B01MassImportance &);
 
   G4String fName;
+  G4bool fWeightRoulette;
   B01SlobedConcreteShield *fGeometry;
-  B01Run *fRun;
   G4IStore *fIStore;
-  G4MassImportanceSampler *fSampler;
+  G4VSampler *fSampler;
 };
 
 #endif

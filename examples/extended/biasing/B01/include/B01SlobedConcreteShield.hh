@@ -9,17 +9,22 @@
 class B01SlobedConcreteShield : public B01VGeometry {
 public:
   B01SlobedConcreteShield();
-  ~B01SlobedConcreteShield();
+  virtual ~B01SlobedConcreteShield();
 
-  G4VPhysicalVolume &GetWorldVolume() const;
-  const G4VPhysicalVolume *GetPhysicalVolumeByName(const G4String& name)
+  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  virtual const G4VPhysicalVolume *GetPhysicalVolumeByName(const G4String& name)
     const ;
-  G4String ListPhysNamesAsG4String() const ;
-  G4String GetCellName(G4int i); 
+  virtual G4String ListPhysNamesAsG4String() const ;
+  virtual G4String GetCellName(G4int i); 
   
 
 private:
+  B01SlobedConcreteShield(const B01SlobedConcreteShield &);
+
   void Construct();
+
+  B01SlobedConcreteShield &operator=(const B01SlobedConcreteShield &);
+
   B01MaterialFactory fMaterialFactory;
   G4VPhysicalVolume *fWorldVolume;
   B01PVolumeStore fPVolumeStore;

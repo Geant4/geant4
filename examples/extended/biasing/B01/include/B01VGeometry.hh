@@ -7,7 +7,8 @@ class G4VPhysicalVolume;
 
 class B01VGeometry {
 public:
-  virtual ~B01VGeometry(){}
+  B01VGeometry();
+  virtual ~B01VGeometry();
 
   virtual G4VPhysicalVolume &GetWorldVolume() const = 0;
 

@@ -3,7 +3,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4GeometryCell.hh"
-#include "G4Pstring.hh"
+#include "G4StringConversion.hh"
 
 B01ParallelGeometry::B01ParallelGeometry()
   :
@@ -45,6 +45,9 @@ void B01ParallelGeometry::Construct(){
   fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
+  if (!fWorldVolume) {
+    G4std::G4Exception("B01ParallelGeometry::Construct(): new failed to create G4PVPlacement!");
+  }
   fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
 
 
@@ -72,9 +75,9 @@ void B01ParallelGeometry::Construct(){
 
   // physical parallel cells
 
-  G4int i;
+  G4int i = 1;
   G4double startz = -85*cm; 
-  for (i=1; i<=18; i++) {
+  for (i=1; i<=18; ++i) {
    
     name = GetCellName(i);
     
@@ -92,6 +95,42 @@ void B01ParallelGeometry::Construct(){
     G4GeometryCell cell(*pvol, 0);
     fPVolumeStore.AddPVolume(cell);
   }
+
+  // filling the rest of the world volumr behind the concrete with
+  // another slob which should get the same importance value as the 
+  // last slob
+  innerRadiusShield = 0*cm;
+  outerRadiusShield = 110*cm;
+  hightShield       = 10*cm;
+  startAngleShield  = 0*deg;
+  spanningAngleShield    = 360*deg;
+
+  G4Tubs *aRest = new G4Tubs("Rest",
+			     innerRadiusShield,
+			     outerRadiusShield,
+			     hightShield,
+			     startAngleShield,
+			     spanningAngleShield);
+  
+  G4LogicalVolume *aRest_log = 
+    new G4LogicalVolume(aRest, fGalactic, "aRest_log");
+  name = GetCellName(19);
+    
+  G4double pos_x = 0*cm;
+  G4double pos_y = 0*cm;
+  G4double pos_z = 100*cm;
+  G4VPhysicalVolume *pvol = 
+    new G4PVPlacement(0, 
+		      G4ThreeVector(pos_x, pos_y, pos_z),
+		      aRest_log, 
+		      name, 
+		      worldCylinder_log, 
+		      false, 
+		      0);
+  G4GeometryCell cell(*pvol, 0);
+  fPVolumeStore.AddPVolume(cell);
+  
+
 }
 
 G4VPhysicalVolume &B01ParallelGeometry::GetWorldVolume() const{
@@ -106,14 +145,16 @@ GetPhysicalVolumeByName(const G4String& name) const {
 
 
 G4String B01ParallelGeometry::ListPhysNamesAsG4String() const { 
-  return fPVolumeStore.GetPNames();
+  G4String names(fPVolumeStore.GetPNames());
+  return names;
 }
 
 G4String B01ParallelGeometry::GetCellName(G4int i) {
   G4String name("cell_");
   G4String zero("0");
-  if (i<10) name += zero;
-  
-  name += str(i);
+  if (i<10) {
+    name += zero;
+  }
+  name += G4std::str(i);
   return name;
 }

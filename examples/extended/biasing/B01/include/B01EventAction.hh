@@ -21,42 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc,v 1.6 2002-10-22 14:09:05 dressel Exp $
+// $Id: B01EventAction.hh,v 1.1 2002-10-22 14:09:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef B01EventAction_h
+#define B01EventAction_h 1
+
+#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "g4std/fstream"
 
-#include "B01PrimaryGeneratorAction.hh"
+class G4CellScorer;
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4Neutron.hh"
-#include "G4Gamma.hh"
-#include "G4Proton.hh"
-#include "G4ThreeVector.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B01PrimaryGeneratorAction::B01PrimaryGeneratorAction()
-  :
-  fParticleGun(new G4ParticleGun(1))
+class B01EventAction : public G4UserEventAction
 {
-  if (!fParticleGun) {
-    G4std::G4Exception("B01PrimaryGeneratorAction::B01PrimaryGeneratorAction: new failed to create G4ParticleGun!");
-  }
-  fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  //  fParticleGun->SetParticleDefinition(G4Gamma::GammaDefinition());
-  //  fParticleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
-  fParticleGun->SetParticleEnergy(10.0*MeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
-}
+  public:
+    B01EventAction(const G4CellScorer *, G4int time);
+    virtual ~B01EventAction();
 
-B01PrimaryGeneratorAction::~B01PrimaryGeneratorAction()
-{
-  delete fParticleGun;
-}
+  public:
+    virtual void   BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
+    
+  private:
+  B01EventAction(const B01EventAction &);
+  B01EventAction &operator=(const B01EventAction &);
+  const G4CellScorer *fCScorer;
+  G4int fEvStartTime;
+  G4int fProcessTime;
+  G4std::ofstream fOut;
+  G4int fMaxRunTime;
+};
 
-void B01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  fParticleGun->GeneratePrimaryVertex(anEvent);
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+    

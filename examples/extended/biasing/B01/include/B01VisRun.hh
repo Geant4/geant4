@@ -1,18 +1,21 @@
-#ifndef B01Run_hh
-#define B01Run_hh B01Run_hh
+#ifndef B01VisRun_hh
+#define B01VisRun_hh B01VisRun_hh
 
 #include "globals.hh"
+class G4UserEventAction;
 class G4VPhysicalVolume;
 class G4RunManager;
 
-class B01Run {
+class B01VisRun {
 public:
-  B01Run();
-  ~B01Run();
+  B01VisRun();
+  ~B01VisRun();
   void SetDetector(G4VPhysicalVolume &massworldvolume);
   void Initialize();
-  void BeamOn(G4int nevents) const;
+
 private:
+  B01VisRun(const B01VisRun &);
+  B01VisRun &operator=(const B01VisRun &);
   G4RunManager *fRunManager;
 };
 

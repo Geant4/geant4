@@ -5,50 +5,77 @@
 #include "B01ParallelGeometry.hh"
 #include "G4IStore.hh"
 #include "G4GeometryCell.hh"
-#include "G4ParallelImportanceSampler.hh"
-#include "B01Run.hh"
-#include "G4Pstring.hh"
+#include "G4ParallelGeometrySampler.hh"
+
 
 B01ParallelImportance::B01ParallelImportance()
   :
   fName("ParallelImportance"),
+  fWeightRoulette(0),
   fMassGeometry(0),
-  fRun(0),
   fParallelGeometry(0),
   fIStore(0),
   fSampler(0)
 {}
 
 B01ParallelImportance::~B01ParallelImportance(){
-  if (fSampler) delete fSampler;
-  if (fIStore) delete fIStore;
-  if (fParallelGeometry) delete fParallelGeometry;
-  if (fMassGeometry) delete fMassGeometry;
-  if (fRun) delete fRun;
+  if (fSampler) {
+    delete fSampler;
+  }
+  if (fIStore) {
+    delete fIStore;
+  }
+  if (fParallelGeometry) {
+    delete fParallelGeometry;
+  }
+  if (fMassGeometry) {
+    delete fMassGeometry;
+  }
 }
 
-G4String B01ParallelImportance::GetName() const {
+const G4String &B01ParallelImportance::GetName() const {
   return fName;
 }
 
-void B01ParallelImportance::Construct() {
-  
-  fMassGeometry = new B01ConcreteShield;
-  fRun = new B01Run;
-  fRun->SetDetector(fMassGeometry->GetWorldVolume());
-  fRun->Initialize();
-  
-  fParallelGeometry = new B01ParallelGeometry;
+G4VPhysicalVolume &B01ParallelImportance::GetMassGeometry(){
+  if (!fMassGeometry) {
+    fMassGeometry = new B01ConcreteShield;
+    if (!fMassGeometry) {
+      G4std::G4Exception("B01ParallelImportance::GetMassGeometry: new failed to create B01ConcreteShield!");
+    }
+  }
+  return fMassGeometry->GetWorldVolume();
+}
 
+const G4CellScorer *B01ParallelImportance::GetG4CellScorer(){
+  return 0;  
+}
+
+void B01ParallelImportance::PrepareSampling(){
+  GetMassGeometry();
+  fParallelGeometry = new B01ParallelGeometry;
+  if (!fParallelGeometry) {
+    G4std::G4Exception("B01ParallelImportance::PrepareSampling: new failed to create B01ParallelGeometry!");
+  }
   
   // create an importance store and fill it with the importance
   // per cell values
-  fIStore = new G4IStore(fParallelGeometry->GetWorldVolume());
+  const G4VPhysicalVolume &pworld = fParallelGeometry->GetWorldVolume();
+  fIStore = new G4IStore(pworld);
+  if (!fIStore) {
+    G4std::G4Exception("B01ParallelImportance::PrepareSampling: new failed to create  G4IStore!");
+  }
+  // adding GeometryCell for world volume. ReplicaNumer = -1 !
+  G4GeometryCell gWorldCell(pworld, -1);
+  fIStore->AddImportanceGeometryCell(1, gWorldCell);
 
-  G4int i;
-  for (i=1; i <= 18; i++) {
+  G4int i = 1;
+  for (i=1; i <= 19; ++i) {
     G4String volname = fParallelGeometry->GetCellName(i);
     G4double imp = pow(2,i-1);
+    if (i==19) {
+      imp = pow(2,17);
+    }
 
 
     const G4VPhysicalVolume *pvol = fParallelGeometry->
@@ -58,26 +85,30 @@ void B01ParallelImportance::Construct() {
       fIStore->AddImportanceGeometryCell(imp, gCell);
     }
   }
-  
-  // create importance sampler to importance sample neutrons
-  // in acording to the paralle geometry
-  fSampler = new
-    G4ParallelImportanceSampler(fParallelGeometry->GetWorldVolume(),
-				*fIStore, 
-				"neutron");
-  fSampler->Initialize();
- 
+
 }
 
-void B01ParallelImportance::Run(G4int nevents) {
-  if (!fRun) {
-    G4cout << "B01ParallelImportance::Run: no BooRun constructed yet!" << G4endl;
+void B01ParallelImportance::ConfigureSampling(){
+  fSampler = new
+    G4ParallelGeometrySampler(fParallelGeometry->GetWorldVolume(),
+			      "neutron");
+  if (!fSampler) {
+    G4std::G4Exception("B01ParallelImportance::ConfigureSampling: new failed to create G4ParallelGeometrySampler!");
   }
-  else {
-    fRun->BeamOn(nevents);
+  fSampler->PrepareImportanceSampling(fIStore); 
+  if (fWeightRoulette) {
+    fSampler->PrepareWeightRoulett();
   }
+  fSampler->Configure();
+
+}
+
+void B01ParallelImportance::SetWeightRoulette(G4bool wroulette){
+  fWeightRoulette = wroulette;
 }
 
 void B01ParallelImportance::PostRun(G4std::ostream *out) {
-  G4cout << "B01ParallelImportance::PostRun  no result since no scoring applied" << G4endl;
+  G4std::G4cout << "B01ParallelImportance::PostRun  no result since no scoring applied" << G4endl;
 }
+
+

@@ -75,6 +75,20 @@ The executable can be run by typing
 exampleB01 <simulation> <numberofenvents>.
 
 
+The geometry
+============
+In this example a 180 cm thick concrete cylinder with the 
+radius 100 cm is bombarded with neutrons. 
+In the examples using only the tracking geometry the concrete
+cylinder is subdivided into 18 slobs of 10 cm thickness.
+In the examples using a parallel geometry the single concrete
+cylinder is used as tracking or mass geometry. In addition a parallel 
+geometry is used which consists of 18 cylinders with radius 110 cm
+(so overlapping the tracking world volume) covering the concrete
+block of the mass geometry.
+
+
+
 I. Examples for scoring without biasing
 =======================================
 
@@ -82,7 +96,10 @@ I. 1. MassScoring
 -----------------
 This example shows how to  use scoring in the "tracking" geometry.
 It scores several values for neutrons for every physical volume
-in the tracking geometry. 
+in the tracking geometry.
+It uses the scorer G4Scorer. This scorer creates a cell-scorer
+for evry cell that is hit by a particle of a chosen type
+(neutron in this example).  
 Standard scores are printed after the run.
 
 
@@ -90,7 +107,8 @@ I. 2. ParallelScoring
 ---------------------
 This example shows how to use scoring in a "parallel" or "scoring" 
 geometry. In this example a tracking and a scoring geometry is 
-constructed. Neutrons are scored in the scoring geometry. 
+constructed. Neutrons are scored in the scoring geometry using
+a G4Scorer object.  
 Standard scores are printed after the run.
 
 
@@ -99,30 +117,37 @@ II. Examples for biasing without scoring
 
 II. 1. MassImportance
 ----------------------
-This example shows how to use biasing in the "tracking" geometry. 
+This example shows how to use importance sampling in the "tracking" 
+geometry. An object of type G4IStore is used to assign 
+importance values to cells.
 It does not do scoring. 
 
 
 II. 2. ParallelImportance
 -------------------------
-This example shows how to use biasing according to a "parallel" 
-or "importance" geometry. 
+This example shows how to use importance sampling according to a 
+"parallel" or "importance" geometry. 
+An object of type G4IStore is used to assign importance values to cells.
+It does not do scoring. 
 
 
 III. Examples for biasing and scoring
 =====================================
 
 III. 1. MassImportanceScoring
--------------------
-Biasing and Scoring in the "tracking" geometry.
+-----------------------------
+Importance sampling and scoring in the "tracking" geometry.
+In addition this is an example of how to chose which cells to score.
+In this example a G4CellScorerStore is used to specify
+the cells to be scored. For scoring the G4CellStoreScorer
+is used.
 Standard scores are printed after the run.
 
 
 III. 2. ParallelImportanceScoring
 -------------------
-Biasing and scoring in a "parallel" geometry.
-Standard scores are printed after the run.
-
+Importance sampling and scoring in a "parallel" geometry.
+Like (III. 1.) but for the parallel geometry.
 
 
 

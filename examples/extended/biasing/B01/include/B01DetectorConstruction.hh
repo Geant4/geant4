@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.3 2002-09-17 13:59:15 dressel Exp $
+// $Id: B01DetectorConstruction.hh,v 1.4 2002-10-22 14:09:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,12 +35,14 @@ class G4VPhysicalVolume;
 class B01DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  B01DetectorConstruction(G4VPhysicalVolume &worldvol);
-  ~B01DetectorConstruction();
+  explicit B01DetectorConstruction(G4VPhysicalVolume &worldvol);
+  virtual ~B01DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
 private:
+  B01DetectorConstruction(const B01DetectorConstruction &);
+  B01DetectorConstruction &operator=(const B01DetectorConstruction &);
   G4VPhysicalVolume* fWorldVolume;
 };
 

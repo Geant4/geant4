@@ -3,7 +3,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4GeometryCell.hh"
-#include "G4Pstring.hh"
 
 B01ConcreteShield::B01ConcreteShield()
   :
@@ -47,6 +46,9 @@ void B01ConcreteShield::Construct(){
   fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
+  if (!fWorldVolume) {
+    G4std::G4Exception("B01ConcreteShield::Construct(): new failed to create G4PVPlacement");
+  }
   fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
 
 
@@ -105,5 +107,6 @@ GetPhysicalVolumeByName(const G4String& name) const {
 
 
 G4String B01ConcreteShield::ListPhysNamesAsG4String() const { 
-  return fPVolumeStore.GetPNames();
+  G4String names(fPVolumeStore.GetPNames());
+  return names;
 }

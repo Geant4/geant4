@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.2 2002-04-19 10:54:26 gcosmo Exp $
+// $Id: B01PhysicsList.cc,v 1.3 2002-10-22 14:09:05 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -623,8 +623,8 @@ void B01PhysicsList::SetCuts()
 {
   if (verboseLevel >0)
   {
-    G4cout << "B01PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
+    G4std::G4cout << "B01PhysicsList::SetCuts:";
+    G4std::G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
   //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 

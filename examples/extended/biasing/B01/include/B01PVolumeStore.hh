@@ -4,6 +4,7 @@
 #include "globals.hh"
 #include "g4std/set"
 #include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
 
 typedef G4std::set< G4GeometryCell, G4GeometryCellComp > B01SetGeometryCell;
 
@@ -19,5 +20,7 @@ public:
 private:
   B01SetGeometryCell fSetGeometryCell;
 };
+
+
 
 #endif

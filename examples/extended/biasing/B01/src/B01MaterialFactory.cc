@@ -12,7 +12,7 @@ B01MaterialFactory::B01MaterialFactory(){
   FillElementMap("Carbon", "C", 6, 12.01*g/mole);
   FillElementMap("Oxygen", "O", 8,  16.00*g/mole);
   FillElementMap("Natrium", "Na", 11, 22.99*g/mole);
-  FillElementMap("Hg", "Hg", 80, 200.59*g/mole);
+  //  FillElementMap("Hg", "Hg", 80, 200.59*g/mole);
   FillElementMap("Aluminium", "Al", 14, 26.98*g/mole);
   FillElementMap("Silicon", "Si", 14, 28.09*g/mole);
   FillElementMap("K", "K", 19, 39.1*g/mole);
@@ -22,9 +22,9 @@ B01MaterialFactory::B01MaterialFactory(){
   fConcreteFractions[fMapSymbolElement["H"]] = 0.01;
   fConcreteFractions[fMapSymbolElement["O"]] = 0.529;
   fConcreteFractions[fMapSymbolElement["Na"]] = 0.016;
-  fConcreteFractions[fMapSymbolElement["Hg"]] = 0.002;
+  //  fConcreteFractions[fMapSymbolElement["Hg"]] = 0.002 ;
   fConcreteFractions[fMapSymbolElement["Al"]] = 0.034;
-  fConcreteFractions[fMapSymbolElement["Si"]] = 0.337;
+  fConcreteFractions[fMapSymbolElement["Si"]] = 0.337 + 0.002;
   fConcreteFractions[fMapSymbolElement["K"]] = 0.013;
   fConcreteFractions[fMapSymbolElement["Ca"]] = 0.044;
   fConcreteFractions[fMapSymbolElement["Fe"]] = 0.014;
@@ -41,19 +41,25 @@ void B01MaterialFactory::FillElementMap(const G4String &name,
 				   G4double A) {
   B01MapSymbolElement::iterator it = fMapSymbolElement.find(symbol);
   if (it!=fMapSymbolElement.end()) {
-    G4cout << "B01MaterialFactory::FillElementMap: symbol: " 
+    G4std::G4cout << "B01MaterialFactory::FillElementMap: symbol: " 
 	   << symbol << ", already defined" << G4endl;
-    return;
   }
-  fMapSymbolElement[symbol] = new G4Element(name, symbol, Z, A);
+  else {
+    fMapSymbolElement[symbol] = new G4Element(name, symbol, Z, A);
+    if (!fMapSymbolElement[symbol]) {
+      G4std::G4Exception("B01MaterialFactory::FillElementMap: new failed to create G4Element!");
+    }
+  }
   return;
 }
 
 G4Material *B01MaterialFactory::CreateConcrete(){
   G4double density = 2.03*g/cm3;
-  G4Material* Concrete = new G4Material("Concrete", density, 10);
+  G4Material* Concrete = 0;
+  Concrete = new G4Material("Concrete", density, 
+			    fConcreteFractions.size());
   for (B01MapElementFraction::iterator it = fConcreteFractions.begin();
-       it != fConcreteFractions.end(); it++) {
+       it != fConcreteFractions.end(); ++it) {
     Concrete->AddElement(it->first , it->second);
   }
 
@@ -63,9 +69,11 @@ G4Material *B01MaterialFactory::CreateConcrete(){
 
 G4Material *B01MaterialFactory::CreateLightConcrete(){
   G4double density = 0.0203*g/cm3;
-  G4Material* LightConcrete = new G4Material("LightConcrete", density, 10);
+  G4Material* LightConcrete = 0;
+  LightConcrete = new G4Material("LightConcrete", density, 
+				 fConcreteFractions.size());
   for (B01MapElementFraction::iterator it = fConcreteFractions.begin();
-       it != fConcreteFractions.end(); it++) {
+       it != fConcreteFractions.end(); ++it) {
     LightConcrete->AddElement(it->first , it->second);
   }
   return LightConcrete;

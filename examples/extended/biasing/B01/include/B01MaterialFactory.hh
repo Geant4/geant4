@@ -20,12 +20,17 @@ public:
   G4Material *CreateGalactic();
   
 private:
-  B01MapSymbolElement fMapSymbolElement;
-  B01MapElementFraction fConcreteFractions;
+  B01MaterialFactory(const B01MaterialFactory &);
+
   void FillElementMap(const G4String &name, 
 		      const G4String &symbol,
 		      G4int Z,
 		      G4double A);
+
+  B01MaterialFactory &operator=(const B01MaterialFactory &);
+
+  B01MapSymbolElement fMapSymbolElement;
+  B01MapElementFraction fConcreteFractions;
 };
 
 

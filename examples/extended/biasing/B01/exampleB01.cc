@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.13 2002-09-17 13:59:14 dressel Exp $
+// $Id: exampleB01.cc,v 1.14 2002-10-22 14:09:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,52 +35,32 @@
 // --------------------------------------------------------------
 
 #include "CLHEP/Random/Random.h"
-#include "B01SimulationFactory.hh"
-#include "B01VSimulation.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#include "G4UIsession.hh"
 
-void usage(const G4String &simnames){
-  G4cout << "exmpleB01: usage: " 
-	 << "\n"
-	 << "           exmpleB01 <simulationname> <numberofevents>"
-	 << "\n"
-	 << "           simulationname: \n" << simnames 
-	 << "\n" << G4endl;
-}
+#include "B01AppStarter.hh"
 
 int main(int argc, char **argv)
 {  
-  G4long myseed = 345354;
-  HepRandom::setTheSeed(myseed);
 
+  HepRandom::setTheSeed(345354);
 
+  B01AppStarter *appstarter = new B01AppStarter;
 
-  // construct the simulation factory
-  B01SimulationFactory simfac;
-
-  G4int nevents;
-  // check the argument
-  if (argc != 3) {
-    usage(simfac.GetSimulationNames());
-    return 0;
-  } 
-  else {
-    if (!simfac.SimulationExists(argv[1])) {
-       usage(simfac.GetSimulationNames());
-      return 0;
-    }
-    nevents = atoi(argv[2]);
-  }
-
-  // construct 
-  B01VSimulation *sim = simfac.Create(argv[1]);
-  if (sim) {
-    sim->Construct();
-    sim->Run(nevents);
-    sim->PostRun(&G4cout);
-    delete sim;
+  if (argc!=2) {
+    G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);      
+#else
+    session = new G4UIterminal();
+#endif    
+    session->SessionStart();
   }
   else {
-    G4cout << "No simulation constructed"  << G4endl;
+    G4UImanager::GetUIpointer()->
+      ApplyCommand(G4String("/control/execute ") + G4String(argv[1]));
   }
-  return 0;
+  delete appstarter;
 }
