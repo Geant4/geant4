@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.cc,v 1.2 2004-03-09 19:33:37 asaim Exp $
+// $Id: G4HCtable.cc,v 1.3 2004-03-15 19:16:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4HCtable.hh"
-#include "G4VsensitiveDetector.hh"
+#include "G4VSensitiveDetector.hh"
 
 G4HCtable::G4HCtable() {;}
 
@@ -76,20 +76,23 @@ G4int G4HCtable::GetCollectionID(G4VSensitiveDetector* aSD) const
 {
   if(aSD->GetNumberOfCollections()<1)
   {
-    G4cerr << "Sensitive detector <" << aSD->GetName() << "> does not have a registered hits collection."
+    G4cerr << "Sensitive detector <" << aSD->GetName()
+           << "> does not have a registered hits collection."
            << G4endl;
     return -1;
   }
   if(aSD->GetNumberOfCollections()>1)
   {
-    G4cerr << "Sensitive detector <" << aSD->GetName() << "> has more than one registered hits collections."
+    G4cerr << "Sensitive detector <" << aSD->GetName()
+           << "> has more than one registered hits collections."
            << G4endl;
     G4cerr << "Candidates are : ";
-    for(G4int j=0;j<aSD->GetNumberOfCollections();j++) G4cerr << aSD->GetCollectionName(j) << " ";
+    for(G4int j=0;j<aSD->GetNumberOfCollections();j++)
+    { G4cerr << aSD->GetCollectionName(j) << " "; }
     G4cerr << G4endl;
     return -1;
   }
-  for(size_t k=0;k<HClist.size();k++)
+  for(size_t k=0;k<SDlist.size();k++)
   { if(SDlist[k]==aSD->GetName()) return k; }
   return -1;
 }
