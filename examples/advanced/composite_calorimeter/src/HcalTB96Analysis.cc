@@ -54,11 +54,11 @@ HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0),
 	  // Create a tuple :
 	  G4String tag2, tag = "float";
 	  for (i=0; i<28; i++) {
-	    tag2 = tag + " Hcal" + i + ",";
+	    tag2 = tag + " hcal" + i + ",";
 	    tag  = tag2;
 	  }
 	  for (i=0; i<49; i++) {
-	    tag2 = tag + " Ecal" + i + ",";
+	    tag2 = tag + " ecal" + i + ",";
 	    tag  = tag2;
 	  }
 	  tag2 = tag  + " ELAB, XPOS, YPOS, ZPOS";
@@ -213,14 +213,14 @@ void HcalTB96Analysis::setNtuple(float* hcalE, float* ecalE, float elab,
 
   ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
   if (ntuple) {
-    G4String tag;
+    char tag[10];
     int i=0;
     for (i=0; i<28; i++) {
-      tag = "Hcal" + i;
+      sprintf (tag, "hcal%d", i);
       ntuple->fill(tuple->findColumn(tag),hcalE[i]);
     }
     for (i=0; i<49; i++) {
-      tag = "Ecal" + i;
+      sprintf (tag, "ecal%d", i);
       ntuple->fill(tuple->findColumn(tag),ecalE[i]);
     }
     ntuple->fill(tuple->findColumn("ELAB"),elab);
