@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003-05-30 11:06:37 gcosmo Exp $
+$Id: History,v 1.62 2003-06-04 16:30:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 June 2003, Gabriele Cosmo (interfaces-V05-01-01)
+- Fixes for inclusion of <strstream> in G4UIXm.cc, G4UItcsh.cc and
+  G4UIterminal.cc in view of the g4std wrappers migration.
 
 30 May 2003, Gabriele Cosmo (interfaces-V05-01-00)
 - Fixed few pedantic warnings...
