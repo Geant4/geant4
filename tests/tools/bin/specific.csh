@@ -44,7 +44,6 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv DAWN_BSD_UNIX_DOMAIN 1
@@ -71,7 +70,6 @@ if ( `uname -n | grep dxplus` != "" ) then
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv DAWN_BSD_UNIX_DOMAIN 1
@@ -95,7 +93,6 @@ if ( `uname -n | grep pcgeant` != "" ) then
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv DAWN_BSD_UNIX_DOMAIN 1
@@ -120,7 +117,6 @@ if ( `uname -n | grep sgmedia` != "" ) then
   #######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -143,7 +139,6 @@ if ( `uname -n | grep sun` != "" ) then
   #######setenv G4UI_BUILD_XM_SESSION       1
   #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -166,7 +161,6 @@ if ( `uname -n | grep hp` != "" ) then
   ######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  setenv G4VIS_BUILD_RAYX_DRIVER     1
   setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -189,7 +183,6 @@ setenv G4DEBUG   1
 setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
 setenv G4VIS_BUILD_DAWN_DRIVER     1
 setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -199,7 +192,6 @@ setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
-setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 setenv G4VIS_USE_DAWN              1
 setenv G4VIS_USE_DAWNFILE          1
@@ -248,7 +240,6 @@ setenv G4UI_BUILD_XM_SESSION       1
 setenv G4UI_BUILD_XAW_SESSION      1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-#setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
 setenv G4VIS_BUILD_DAWN_DRIVER     1
 setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -259,7 +250,6 @@ setenv G4UI_USE_XM                 1
 setenv G4UI_USE_XAW                1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
-#setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 setenv G4VIS_USE_DAWN              1
 setenv G4VIS_USE_DAWNFILE          1
@@ -300,7 +290,6 @@ setenv G4DEBUG   1
 setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
 setenv G4VIS_BUILD_DAWN_DRIVER     1
 setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -310,7 +299,6 @@ setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
-setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 setenv G4VIS_USE_DAWN              1
 setenv G4VIS_USE_DAWNFILE          1
@@ -361,7 +349,6 @@ setenv G4DEBUG   1
 setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
 setenv G4VIS_BUILD_DAWN_DRIVER     1
 setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -371,7 +358,6 @@ setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
-setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/SunOS-CC
