@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.8 2003-09-15 15:38:18 maire Exp $
+// $Id: ExN03SteppingAction.cc,v 1.9 2005-02-02 17:11:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,10 +64,8 @@ void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (track->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
       
-  if ((edep!=0.)) {
-    if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
-    if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
-  }
+  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
+  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
        
  // save the random number seed of this event, under condition
  //// if(condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
