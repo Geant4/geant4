@@ -16,13 +16,13 @@ macro run que=513-2-asd
   ***************meta -99 -[npx][npy][pln]
   meta 99 -112
   zone 2 3
-*           TITLE  NAME NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
-  exec phot ^1!H   h1   227 326 150. 4.e7 0.03 0.60 1.e4 0.18
-  exec phot ^2!H   h2   227 310   2. 2.e4 0.04 4.00 1.e3  0.6
-  exec phot ^12!C  c12  227 396  12. 1.e5 0.10 30.0 2.e3  2.0
-  exec phot ^27!Al al27 227 303  10. 1.e4 0.30 90.0 800.   6.
-  exec phot Cu     cu   227 144   8. 2.e5 2.00 120. 2.e3  20.
-  exec phot Pb     pb   227 185   7. 1.e5 7.00 700. 2.e3 100.
+*           TITLE  NAME   NTH NEX XMIN XMAX YMIN  YMAX  XTXT YTXT
+  exec phot ^1!H   h1_e   227 326 150. 4.e7 1.e-8 6.e-2 1.e6 1.e-7
+  exec phot ^2!H   h2_e   227 310   2. 2.e4 2.e-5 2.e-1 1.e3 1.e-4
+  exec phot ^12!C  c12_e  227 396  12. 1.e5 1.e-7 6.e-1 1.e4 1.e-6
+  exec phot ^27!Al al27_e 227 303  10. 1.e4 2.e-4    1. 1.e3 1.e-3
+  exec phot Cu     cu_e   227 144   8. 2.e5 1.e-3  100. 1.e4  0.01
+  exec phot Pb     pb_e   227 185   7. 1.e5 3.e-4   15. 1.e4 0.002
 print:
   meta 0
   for/clo 99
@@ -50,11 +50,12 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   gr/set hwid 3.
   gr/set pwid 5.
 *
-  title 'E?[g]! (MeV)' u
-  title 'Nuclear photoabsorbtion cross sections (in mb)'
+  title 'E?e! (MeV)' u
+  title 'Nuclear electrooabsorbtion cross sections (in mb)'
   opt date
   opt logx
   opt logy
+***  opt liny
   null [xmin] [xmax] [ymin] [ymax]
 * Switch to standard quality picture
 *  set pass 1
@@ -70,10 +71,10 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   igset MTYP 20
   SET TXFP -20
   SET LTYP 1
-  ve/re eg,ex,er [file].dat
-  igset PMCI 1
-  igset PLCI 1
-  gra/hp/errors eg ex de er [nex] 20 .1 1
+*  ve/re eg,ex,er [file].dat
+*  igset PMCI 1
+*  igset PLCI 1
+*  gra/hp/errors eg ex de er [nex] 20 .1 1
   SET CHHE 1.
   igset txci 1
   itx [xt] [yt]  [targ]

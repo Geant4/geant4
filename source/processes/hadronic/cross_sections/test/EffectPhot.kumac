@@ -15,14 +15,13 @@ macro run que=513-2-asd
 * define the metafile type to assemble the pictures
   ***************meta -99 -[npx][npy][pln]
   meta 99 -112
-  zone 2 3
-*           TITLE  NAME NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
-  exec phot ^1!H   h1   227 326 150. 4.e7 0.03 0.60 1.e4 0.18
-  exec phot ^2!H   h2   227 310   2. 2.e4 0.04 4.00 1.e3  0.6
-  exec phot ^12!C  c12  227 396  12. 1.e5 0.10 30.0 2.e3  2.0
-  exec phot ^27!Al al27 227 303  10. 1.e4 0.30 90.0 800.   6.
-  exec phot Cu     cu   227 144   8. 2.e5 2.00 120. 2.e3  20.
-  exec phot Pb     pb   227 185   7. 1.e5 7.00 700. 2.e3 100.
+****  zone 2 2
+  zone 2 2
+*           TITLE         NAME   NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
+  exec phot e+^1!H(1GeV)  h1_epl 100 326   0. 1.e3   1. 1.e7 5.e2 1.e5
+  exec phot e+^1!H(10TeV) h1_eph 100 310   0. 1.e7   1. 1.e7 5.e6 1.e5
+  exec phot e+Al(1GeV)    cu_epl 100 396   0. 1.e3   1. 1.e7 5.e2 1.e5
+  exec phot e+Al(10GeV)   cu_eph 100 303   0. 1.e4   1. 1.e7 5.e3 1.e5
 print:
   meta 0
   for/clo 99
@@ -51,10 +50,12 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   gr/set pwid 5.
 *
   title 'E?[g]! (MeV)' u
-  title 'Nuclear photoabsorbtion cross sections (in mb)'
+  title 'Energy distribution of the interacting effective photons'
   opt date
-  opt logx
+**  opt logx
+  opt linx
   opt logy
+***  opt liny
   null [xmin] [xmax] [ymin] [ymax]
 * Switch to standard quality picture
 *  set pass 1
@@ -70,10 +71,10 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   igset MTYP 20
   SET TXFP -20
   SET LTYP 1
-  ve/re eg,ex,er [file].dat
-  igset PMCI 1
-  igset PLCI 1
-  gra/hp/errors eg ex de er [nex] 20 .1 1
+*  ve/re eg,ex,er [file].dat
+*  igset PMCI 1
+*  igset PLCI 1
+*  gra/hp/errors eg ex de er [nex] 20 .1 1
   SET CHHE 1.
   igset txci 1
   itx [xt] [yt]  [targ]
