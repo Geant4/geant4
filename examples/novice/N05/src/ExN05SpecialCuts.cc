@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.cc,v 1.6 2003-05-28 11:20:25 gcosmo Exp $
+// $Id: ExN05SpecialCuts.cc,v 1.7 2004-05-09 11:02:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,9 @@ ExN05SpecialCuts::PostStepDoIt( const G4Track& aTrack, const G4Step& )
   // Stop the current particle, if requested by G4UserLimits 
   // 			    			    			    
   aParticleChange.Initialize(aTrack);
-  aParticleChange.SetEnergyChange(0.) ;
+  aParticleChange.ProposeEnergy(0.) ;
   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-  aParticleChange.SetStatusChange(fStopButAlive);
+  aParticleChange.ProposeTrackStatus(fStopButAlive);
   return &aParticleChange;
 }
 
