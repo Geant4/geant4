@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyRunAction.hh,v 1.3 2001-07-11 10:09:25 gunter Exp $
+// $Id: MyRunAction.hh,v 1.4 2003-09-02 14:19:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,8 +45,8 @@ class MyRunAction : public G4UserRunAction
     ~MyRunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    void BeginOfRunAction(const G4Run* aRun);
+    void EndOfRunAction(const G4Run* aRun);
 #ifdef G4VIS_USE_OPACS
     static OHistogram get_1d(){return myHisto1D; }
     static OHistogram Get2d(){return myHisto2D; }

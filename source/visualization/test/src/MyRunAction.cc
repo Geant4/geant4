@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyRunAction.cc,v 1.3 2001-07-11 10:09:28 gunter Exp $
+// $Id: MyRunAction.cc,v 1.4 2003-09-02 14:19:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,9 +47,10 @@ MyRunAction::~MyRunAction()
   delete timer;
 }
 
-void MyRunAction::BeginOfRunAction(G4Run* aRun)
+void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  G4Run* aModifiableRun = const_cast<G4Run*>(aRun);
+  aModifiableRun->SetRunID(runIDcounter++);
   //aRun->transient(true);
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -65,7 +66,7 @@ void MyRunAction::BeginOfRunAction(G4Run* aRun)
   timer->Start();
 }
 
-void MyRunAction::EndOfRunAction(G4Run* aRun)
+void MyRunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 
