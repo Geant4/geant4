@@ -28,7 +28,7 @@
 
   G4HadFinalState * G4HadLeadBias::Bias(G4HadFinalState * result)
   {
-    G4cerr << "bias enter"<<G4endl;
+    // G4cerr << "bias enter"<<G4endl;
     G4int nMeson(0), nBaryon(0), npi0(0), ngamma(0), nLepton(0);
     G4int i(0);
     G4int maxE = -1;
@@ -37,7 +37,7 @@
     {
       emax = result->GetEnergyChange();
     }
-    G4cout << "max energy "<<G4endl;
+    //G4cout << "max energy "<<G4endl;
     for(i=0;i<result->GetNumberOfSecondaries();i++)
     {
       if(result->GetSecondary(i)->GetParticle()->GetKineticEnergy()>emax)
@@ -46,7 +46,7 @@
 	emax = result->GetSecondary(i)->GetParticle()->GetKineticEnergy();
       }
     }
-    G4cout <<"loop1"<<G4endl;
+    //G4cout <<"loop1"<<G4endl;
     for(i=0; i<result->GetNumberOfSecondaries(); i++)
     {
       const G4DynamicParticle* aSecTrack = result->GetSecondary(i)->GetParticle();
@@ -74,8 +74,8 @@
         nMeson++;
       }
     }
-     G4cout << "BiasDebug 1 = "<<result->GetNumberOfSecondaries()<<" "
-            <<nMeson<<" "<< nBaryon<<" "<< npi0<<" "<< ngamma<<" "<< nLepton<<G4endl;
+     //G4cout << "BiasDebug 1 = "<<result->GetNumberOfSecondaries()<<" "
+     //       <<nMeson<<" "<< nBaryon<<" "<< npi0<<" "<< ngamma<<" "<< nLepton<<G4endl;
     G4double mesonWeight = nMeson;
     G4double baryonWeight = nBaryon;
     G4double gammaWeight = ngamma;
@@ -149,13 +149,13 @@
         delete aSecTrack;
       }
     }
-    result->Clear();
+    result->ClearSecondaries();
     // G4cerr << "pre"<<G4endl;
     for(i=0;i<static_cast<G4int>(buffer.size());i++)
     {
       result->AddSecondary(buffer[i]);
     }
-     G4cerr << "bias exit"<<G4endl;
+     // G4cerr << "bias exit"<<G4endl;
     
     return result;
   }
