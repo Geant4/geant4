@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2001-09-04 14:28:42 perl Exp $
+$Id: History,v 1.5 2001-11-06 11:32:34 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+6th November 2001  John Allison  (HepRep-Java-version)
+- Tagged before major revision.
 
 4th September 2001  Joseph Perl
 - minor improvements to README.
