@@ -1,18 +1,20 @@
 
-=======     PCon test      ========Z0=-20 Rmin0=30 Rmax0=70
-Z1=-10 Rmin1=30 Rmax1=70
-Z2=-10 Rmin2=0 Rmax2=70
-Z3=0 Rmin3=0 Rmax3=40
-Z4=10 Rmin4=0 Rmax4=40
-Z5=20 Rmin5=0 Rmax5=80
-Z6=30 Rmin6=40 Rmax6=80
-Z7=40 Rmin7=40 Rmax7=60
-start angle =0
-open angle =6.28319
-zstart =-20
-
+=======     PCon test      ========
 
 PCone created ! 
+Variety is G4BREPSolidPolycone
+Its parameters are: 
+ Z[0]=  -20 Rmin[0]=   30 Rmax[0]=   70
+ Z[1]=  -10 Rmin[1]=   30 Rmax[1]=   70
+ Z[2]=  -10 Rmin[2]=    0 Rmax[2]=   70
+ Z[3]=    0 Rmin[3]=    0 Rmax[3]=   40
+ Z[4]=   10 Rmin[4]=    0 Rmax[4]=   40
+ Z[5]=   20 Rmin[5]=    0 Rmax[5]=   80
+ Z[6]=   30 Rmin[6]=   40 Rmax[6]=   80
+ Z[7]=   40 Rmin[7]=   40 Rmax[7]=   60
+ start   angle =0
+ opening angle =6.28319
+ zstart =-20
 
 
 ==================================================
@@ -48,8 +50,8 @@ x=0  y=0  z=-15 is outside  distance to in=30  closest distance to in=5
 x=0  y=0  z=-10 is on the surface
 x=0  y=0  z=-5 is inside  distance to out=55  closest distance to out=5
 x=0  y=0  z=0 is inside  distance to out=40  closest distance to out=10
-x=0  y=0  z=5 is inside  distance to out=40  closest distance to out=5
-x=0  y=0  z=10 is inside  distance to out=40  closest distance to out=9.70143
+x=0  y=0  z=5 is inside  distance to out=40  closest distance to out=15
+x=0  y=0  z=10 is inside  distance to out=40  closest distance to out=10
 x=0  y=0  z=15 is inside  distance to out=60  closest distance to out=5
 x=0  y=0  z=20 is on the surface
 x=0  y=0  z=25 is outside  distance to in=20  closest distance to in=4.85071
@@ -70,12 +72,12 @@ Dir is (0, 1, 0)
   z=-10  distance to in=30  distance to in=0
   z=-5  distance to in=45  distance to in=5
   z=0  distance to in=60  distance to in=10
-  z=5  distance to in=60  distance to in=5
-  z=10  distance to in=60  distance to in=10
-  z=15  distance to in=40  distance to in=5
-  z=20  distance to in=20  distance to in=4.85071
-  z=25  distance to in=20  distance to in=5
-  z=30  distance to in=20  distance to in=8.94427
+  z=5  distance to in=60  distance to in=15
+  z=10  distance to in=60  distance to in=20
+  z=15  distance to in=40  distance to in=20.6155
+  z=20  distance to in=20  distance to in=20
+  z=25  distance to in=20  distance to in=15
+  z=30  distance to in=20  distance to in=10
   z=35  distance to in=30  distance to in=5
   z=40  distance to in=40  distance to in=0
   z=45  distance to in=9e+99  distance to in=5
