@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.3 1999-02-19 16:52:39 johna Exp $
+# $Id: binmake.gmk,v 1.4 1999-02-19 16:55:30 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -292,21 +292,21 @@ $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map: $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
 	@find $(G4INSTALL)/source \
-	  -name GNUmakefile -exec grep -l 'name :=' {} \; \
+	  -name GNUmakefile -exec ggrep -l 'name :=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles;
 	@echo "Weeding out global level GNUmakefiles and non-libraries..."
 	@for i in `cat /tmp/G4_all_lib_makefiles`; \
 	do \
-	  grep -q SUBDIR $$i || \
-	  grep -q G4hepgeometry $$i || \
+	  ggrep -q SUBDIR $$i || \
+	  ggrep -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles; \
 	done
 	@echo "Making libname.map starter file..."
 	@touch /tmp/G4libname.map.starter;
 	@for i in `cat /tmp/G4_granlib_makefiles`; \
 	do \
-	  grep 'name :=' $$i | cut -d \  -f 3 >> /tmp/G4libname.map.starter; \
+	  ggrep 'name :=' $$i | cut -d \  -f 3 >> /tmp/G4libname.map.starter; \
 	  echo $$i >> /tmp/G4libname.map.starter; \
 	done
 	@echo "Making libname.map..."
