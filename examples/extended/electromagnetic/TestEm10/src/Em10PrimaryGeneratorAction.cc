@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PrimaryGeneratorAction.cc,v 1.2 2001-07-11 09:57:24 gunter Exp $
+// $Id: Em10PrimaryGeneratorAction.cc,v 1.3 2001-11-21 11:57:14 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,8 +105,8 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     y0 = 0. ;
     z0 = 0. ; // -0.5*(Em10Detector->GetWorldSizeZ()) ;
   }
-  G4double r0,phi0 ;
   /* ****************************************************
+  G4double r0,phi0 ;
   if (rndmFlag == "on")
   {
       r0 = (Em10Detector->GetAbsorberRadius())*sqrt(G4UniformRand());

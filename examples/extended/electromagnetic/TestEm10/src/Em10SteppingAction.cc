@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10SteppingAction.cc,v 1.2 2001-07-11 09:57:27 gunter Exp $
+// $Id: Em10SteppingAction.cc,v 1.3 2001-11-21 11:57:15 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 Em10SteppingAction::Em10SteppingAction(Em10DetectorConstruction* DET,
                                      Em10EventAction* EA,
                                      Em10RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
+:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(0),
  IDold(-1) ,evnoold(-1)
 {
   steppingMessenger = new Em10SteppingMessenger(this);
@@ -67,8 +67,7 @@ Em10SteppingAction::~Em10SteppingAction()
 void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend ;
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+

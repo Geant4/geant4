@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.2 2001-07-11 09:57:24 gunter Exp $
+// $Id: Em10PhysicsList.cc,v 1.3 2001-11-21 11:57:14 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -51,16 +51,16 @@
 //
 
 Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
-:  G4VUserPhysicsList(),
- thePhotoElectricEffect(NULL),theComptonScattering(NULL),
- theGammaConversion(NULL),
- theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
- theeminusBremsstrahlung(NULL),
- theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
- theeplusBremsstrahlung(NULL),
- theeplusAnnihilation(NULL),
- theeminusStepCut(NULL),theeplusStepCut(NULL),
- MaxChargedStep(DBL_MAX)
+  :  G4VUserPhysicsList(),
+     MaxChargedStep(DBL_MAX),
+     thePhotoElectricEffect(0),      theComptonScattering(0),
+     theGammaConversion(0),
+     theeminusMultipleScattering(0), theeminusIonisation(0),
+     theeminusBremsstrahlung(0),
+     theeplusMultipleScattering(0),  theeplusIonisation(0),
+     theeplusBremsstrahlung(0),
+     theeplusAnnihilation(0),
+     theeminusStepCut(0),            theeplusStepCut(0)
 {
   pDet = p;
 

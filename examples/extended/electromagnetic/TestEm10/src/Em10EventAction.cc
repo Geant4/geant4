@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10EventAction.cc,v 1.2 2001-07-11 09:57:23 gunter Exp $
+// $Id: Em10EventAction.cc,v 1.3 2001-11-21 11:57:14 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,6 @@
 
 #include "Em10CalorHit.hh"
 #include "Em10EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -54,8 +52,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em10EventAction::Em10EventAction(Em10RunAction* Em10RA)
-:calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction(Em10RA),drawFlag("all"),printModulo(10000)
+:calorimeterCollID(-1),eventMessenger(0),
+ runaction(Em10RA),verboselevel(0),drawFlag("all"),printModulo(10000)
 {
   eventMessenger = new Em10EventActionMessenger(this);
 }
@@ -100,7 +98,7 @@ void Em10EventAction::BeginOfEventAction(const G4Event* evt)
 void Em10EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  Em10CalorHitsCollection* CHC = NULL;
+  Em10CalorHitsCollection* CHC = 0;
   if (HCE)
       CHC = (Em10CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
@@ -246,4 +244,5 @@ void Em10EventAction::SetRef()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
+
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10SteppingVerbose.cc,v 1.2 2001-07-11 09:57:27 gunter Exp $
+// $Id: Em10SteppingVerbose.cc,v 1.3 2001-11-21 11:57:15 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,12 +115,12 @@ void Em10SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
