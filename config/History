@@ -1,4 +1,4 @@
-$Id: History,v 1.57 1999-10-19 13:08:45 morita Exp $
+$Id: History,v 1.58 1999-10-20 10:33:05 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th October 1999  John Allison
+- architecture.gmk: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES (was needed
+    only for HP aCC; now not needed at all).
 
 19th Octobre 1999  Youhei Morita
 - common.gmk: Surpress verbose output for G4ODBMS if CPPVERBOSE 
