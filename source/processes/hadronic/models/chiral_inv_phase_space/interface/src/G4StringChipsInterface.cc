@@ -22,7 +22,7 @@
 //
 #include "G4StringChipsInterface.hh"
 #include "globals.hh"
-#include "G4Pair.hh"
+#include <utility>
 #include <list>
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
@@ -54,7 +54,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     throw G4HadronicException(__FILE__, __LINE__, "G4StringChipsInterface: Only one particle from String models!");
   
   // Calculate the mean energy lost
-  G4Pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();
+  std::pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();
   G4double impactX = theImpact.first;
   G4double impactY = theImpact.second;
   G4double inpactPar2 = impactX*impactX + impactY*impactY;
@@ -66,8 +66,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
-  std::list<G4Pair<G4double, G4KineticTrack *> > theSorted;
-  std::list<G4Pair<G4double, G4KineticTrack *> >::iterator current;
+  std::list<std::pair<G4double, G4KineticTrack *> > theSorted;
+  std::list<std::pair<G4double, G4KineticTrack *> >::iterator current;
   for(unsigned int secondary = 0; secondary<theSecondaries->size(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->operator[](secondary)->Get4Momentum();
@@ -79,7 +79,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
 
     G4double toSort = a4Mom.rapidity();
-    G4Pair<G4double, G4KineticTrack *> it;
+    std::pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
     it.second = theSecondaries->operator[](secondary);
     G4bool inserted = false;
@@ -111,7 +111,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int nAD = 0;
   G4int nAU = 0;
   G4int nAS = 0;
-  std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
+  std::list<std::pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
   G4int particleCount = 0;
   G4LorentzVector theLow = (*(theSorted.begin())).second->Get4Momentum();

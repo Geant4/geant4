@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
+// $Id: G4V3DNucleus.hh,v 1.3 2003-12-11 11:54:13 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4V3DNucleus_h
@@ -30,7 +30,7 @@
 class G4Nucleon;
 class G4VNuclearDensity;
 #include "G4DynamicParticle.hh"
-#include "G4Pair.hh"
+#include <utility>  
 #include "Randomize.hh"
 #include <vector>
 
@@ -66,17 +66,17 @@ class G4V3DNucleus
       virtual void DoTranslation(const G4ThreeVector & theShift) = 0;
       virtual const G4VNuclearDensity * GetNuclearDensity() const = 0;
   public:
-      G4Pair<G4double, G4double> ChooseImpactXandY(G4double maxImpact);
-      G4Pair<G4double, G4double> RefetchImpactXandY(){return theImpactParameter;}
+      std::pair<G4double, G4double> ChooseImpactXandY(G4double maxImpact);
+      std::pair<G4double, G4double> RefetchImpactXandY(){return theImpactParameter;}
 
   private:
   
-    G4Pair<G4double, G4double> theImpactParameter;
+    std::pair<G4double, G4double> theImpactParameter;
 
 };
 
 inline
-G4Pair<G4double, G4double> G4V3DNucleus::
+std::pair<G4double, G4double> G4V3DNucleus::
 ChooseImpactXandY(G4double maxImpact)
 {
   G4double x,y;

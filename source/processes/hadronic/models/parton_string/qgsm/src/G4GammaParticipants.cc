@@ -23,7 +23,7 @@
 #include "globals.hh"
 #include "G4GammaParticipants.hh"
 #include "G4LorentzVector.hh"
-#include "G4Pair.hh"
+#include <utility>
 
 // Class G4GammaParticipants 
 

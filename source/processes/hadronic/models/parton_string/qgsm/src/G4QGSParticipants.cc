@@ -23,7 +23,7 @@
 #include "globals.hh"
 #include "G4QGSParticipants.hh"
 #include "G4LorentzVector.hh"
-#include "G4Pair.hh"
+#include <utility>
 
 // Class G4QGSParticipants 
 
@@ -107,7 +107,7 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   while(theInteractions.size() == 0)
   {
     // choose random impact parameter HPW
-    G4Pair<G4double, G4double> theImpactParameter;
+    std::pair<G4double, G4double> theImpactParameter;
     theImpactParameter = theNucleus->ChooseImpactXandY(outerRadius+theNucleonRadius);
     G4double impactX = theImpactParameter.first; 
     G4double impactY = theImpactParameter.second;

@@ -26,7 +26,7 @@
 G4XpimNTotal::
  G4XpimNTotal()
  {
-   G4Pair<double,double> it;
+   std::pair<double,double> it;
    it.first=1105.46 ;it.second= 8.8;  theLowEData.push_back(it);
    it.first=1139.41 ;it.second= 13.6;  theLowEData.push_back(it);
    it.first=1165.12 ;it.second= 26.0;  theLowEData.push_back(it);
