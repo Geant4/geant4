@@ -14,7 +14,7 @@ case "$g4wlib_build_g3tog4" in
 	;;
 esac
 
-case "$g4w_use_g4tog4" in
+case "$g4w_use_g3tog4" in
 '')
 	g4w_use_g3tog4=n
 	;;
@@ -24,7 +24,7 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4USE_G3TOG4  
+  G4LIB_BUILD_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
 Do you want to set this variable ?
@@ -40,7 +40,7 @@ gans=$ans
 	
 	n*|N*) 
 		g4wlib_build_g3tog4=n
-		g4w_use_g4tog4=n
+		g4w_use_g3tog4=n
 		;;
 	y*|Y*) 
 		g4wlib_build_g3tog4=y
