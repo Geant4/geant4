@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.33 1999-06-04 07:03:35 stesting Exp $
+# $Id: architecture.gmk,v 1.34 1999-06-29 18:55:19 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -414,9 +414,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   FCLIBS := -lM77 -lF77 -lsunmath
   X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11 -I/usr/openwin/include
   X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXmu -lX11 -lXext 
-  
-  XMFLAGS   := -I/usr/include/Motif1.2
-  XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lX11
+  XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lXm -lX11
   XAWFLAGS  := -I/usr/openwin/include/X11
   XAWLIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext
   ifndef OGLFLAGS
