@@ -355,6 +355,9 @@ if ( `uname -n` == "lx1" ) then
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
   #setenv G4DEBUG   1
+  # Shareable library
+  setenv G4LIB_BUILD_SHARED 1
+  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
   # G4 build flags :
   #setenv G4UI_BUILD_XM_SESSION       1
   #setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
@@ -504,7 +507,9 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4LIB $G4WORKDIR/lib
   setenv G4DEBUG 1
   setenv CPPVERBOSE 1
+  # Shareable library
   setenv G4LIB_BUILD_SHARED 1
+  setenv DYLD_LIBRARY_PATH $G4LIB/$G4SYSTEM
   setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.1.0
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
