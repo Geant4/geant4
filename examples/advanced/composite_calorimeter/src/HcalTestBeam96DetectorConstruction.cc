@@ -11,8 +11,8 @@
 #include "G4Timer.hh"
 #endif
 
-#include "CMSMaterialFactory.hh"
-#include "CMSRotationMatrixFactory.hh"
+#include "CCalMaterialFactory.hh"
+#include "CCalRotationMatrixFactory.hh"
 #include "CMSSensAssign.hh"
 #include "TestBeamMagneticField.hh"
 #include "G4HcalTB96.hh"
@@ -40,12 +40,12 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
 #ifdef debug
   cout << "Retrieving materials...." << endl;
 #endif
-  CMSMaterialFactory::getInstance("material.cms");
+  CCalMaterialFactory::getInstance("material.cms");
 
 #ifdef debug
   cout << "Retrieving rotation matrices....." << endl;
 #endif
-  CMSRotationMatrixFactory::getInstance("rotation.cms");
+  CCalRotationMatrixFactory::getInstance("rotation.cms");
 
   //-------------------------------------------------------------------------
   // Magnetic field
@@ -54,10 +54,10 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
   static G4bool fieldIsInitialized = false;
   //And finally that it was not initialized previously
   if (!fieldIsInitialized) {
-    TestBeamMagneticField* cmsField=new TestBeamMagneticField("fmap.tb96");
-    G4double field = cmsField->GetConstantFieldvalue();
+    TestBeamMagneticField* ccalField=new TestBeamMagneticField("fmap.tb96");
+    G4double field = ccalField->GetConstantFieldvalue();
     if (field == 0) {
-      cmsField = NULL;
+      ccalField = NULL;
       cout << "***************************" << endl
            << "*                         *" << endl
            << "*  Magnetic Field is off  *" << endl
@@ -73,10 +73,10 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
     }
     G4FieldManager* fieldMgr
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    fieldMgr->SetDetectorField(cmsField);
-    G4Mag_UsualEqRhs *fEquation = new G4Mag_UsualEqRhs(cmsField); 
+    fieldMgr->SetDetectorField(ccalField);
+    G4Mag_UsualEqRhs *fEquation = new G4Mag_UsualEqRhs(ccalField); 
     G4MagIntegratorStepper *pStepper = new G4SimpleRunge (fEquation);
-    G4ChordFinder *pChordFinder = new G4ChordFinder(cmsField,
+    G4ChordFinder *pChordFinder = new G4ChordFinder(ccalField,
 						    1.0e-2*mm, pStepper);
     fieldMgr->SetChordFinder(pChordFinder);
     fieldIsInitialized = true;

@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSAMaterial.cc
-// Date: 16/03/98 I. Gonzalez
-// Modifications: 31/08/98 I.G. -> G4type moved to type for int, double.
+// File: CCalAMaterial.cc
+// Description: Specialised class to store information to make G4Material 
+//              from atomic proportion
 ///////////////////////////////////////////////////////////////////////////////
-#include "CMSAMaterial.hh"
+#include "CCalAMaterial.hh"
 
-CMSAMaterial::CMSAMaterial(G4String mat, G4double dens, int nconst, 
-			   CMSAMaterial** constituents, G4double* weights) {
+CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, int nconst, 
+			     CCalAMaterial** constituents, G4double* weights) {
   name=mat;
   nElem=0;
   int i=0;
@@ -30,13 +30,13 @@ CMSAMaterial::CMSAMaterial(G4String mat, G4double dens, int nconst,
   if (dens>0) 
     density=dens;
   else //Let's compute density
-    computeDensity(nconst,(CMSMaterial**)constituents, weights, FTVolume);
+    computeDensity(nconst,(CCalMaterial**)constituents, weights, FTVolume);
 
   computeAeff(nconst, constituents, weights);
   closeMaterial();
 }
 
-CMSAMaterial::CMSAMaterial(G4String elemat, double Aeff, double dens) {
+CCalAMaterial::CCalAMaterial(G4String elemat, double Aeff, double dens) {
   name=elemat;
   density=dens;
   nElem=1;
@@ -49,11 +49,11 @@ CMSAMaterial::CMSAMaterial(G4String elemat, double Aeff, double dens) {
   aEff=Aeff;
 }
 
-CMSAMaterial::~CMSAMaterial() {
+CCalAMaterial::~CCalAMaterial() {
   //The base class destructor is called?
 }
 
-CMSAMaterial::CMSAMaterial(const CMSAMaterial& mat){
+CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat){
   name    = mat.name;
   density = mat.density;
   nElem   = mat.nElem;
@@ -65,7 +65,7 @@ CMSAMaterial::CMSAMaterial(const CMSAMaterial& mat){
   }
 }
 
-CMSAMaterial& CMSAMaterial::operator=(const CMSAMaterial& mat){
+CCalAMaterial& CCalAMaterial::operator=(const CCalAMaterial& mat){
   if(theElements)
     delete[] theElements;
   if(theWeights)
@@ -85,15 +85,15 @@ CMSAMaterial& CMSAMaterial::operator=(const CMSAMaterial& mat){
   return *this;
 }
 
-void CMSAMaterial::computeAeff(int nconst, 
-			       CMSAMaterial** constituents, 
-			       double* weights){
+void CCalAMaterial::computeAeff(int nconst, 
+				CCalAMaterial** constituents, 
+				double* weights){
   aEff=0;
   for (int i=0; i<nconst; i++)
     aEff += weights[i] * constituents[i]->Aeff();
 }
 
-ostream& operator<<(ostream& os, const CMSAMaterial& mat) {
+ostream& operator<<(ostream& os, const CCalAMaterial& mat) {
   os << mat.name << endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem 

@@ -1,13 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSRotationMatrixFactory.hh
-// Date: 03/98 I. Gonzalez
-// Modification: 16/12/99 I.G. Updated for STL.  Needs revision!!! 
-//               27/03/00 S.B. In OSCAR
-// Description: CMSRotationFactory is a singleton class to get from a file
-//              the information to build CMS Rotation matrices.
+// File: CCalRotationMatrixFactory.hh
+// Description: CCalRotationFactory is a singleton class to get from a file
+//              the information to build CCal Rotation matrices.
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef CMSRotationMatrixFactory_h
-#define CMSRotationMatrixFactory_h 1
+#ifndef CCalRotationMatrixFactory_h
+#define CCalRotationMatrixFactory_h 1
 
 #include "g4std/map"
 #include "G4RotationMatrix.hh"
@@ -20,12 +17,12 @@ typedef G4std::map<G4String, G4RotationMatrixPtr, less<G4String> >::iterator G4R
 //typedef RWTPtrOrderedVector<G4RotationMatrix> G4RotationMatrixTable;
 //  Is an instantiation of the template class RWTPtrOrderedVector.
 
-class CMSRotationMatrixFactory {
+class CCalRotationMatrixFactory {
 public:
-  ~CMSRotationMatrixFactory();
+  ~CCalRotationMatrixFactory();
 
-  static CMSRotationMatrixFactory* getInstance();
-  static CMSRotationMatrixFactory* getInstance(const G4String& rotfile);
+  static CCalRotationMatrixFactory* getInstance();
+  static CCalRotationMatrixFactory* getInstance(const G4String& rotfile);
   static void setFileName(const G4String& rotfile);
 
   G4RotationMatrix* findMatrix(const G4String&);
@@ -35,10 +32,10 @@ public:
 			      G4double th3, G4double phi3); //
 
 private:
-  CMSRotationMatrixFactory();
+  CCalRotationMatrixFactory();
 
 private:
-  static CMSRotationMatrixFactory* instance;
+  static CCalRotationMatrixFactory* instance;
   static G4String file;
 
   G4RotationMatrixTable theMatrices; //Where the matrices are stored.

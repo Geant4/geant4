@@ -24,16 +24,14 @@
 #include "G4VisAttributes.hh"
 
 G4Able::G4Able(G4String name):
-  detPhysicalVolume(0),
-  visProperties(G4GeometryConfiguration::getInstance()->getFileName(name)+".vis"),
-  sensitivity(false),
-  g4ableName(name){
-    //Initialize g4VisAtt pointers
-    for (int i=0; i<Visualisable::TotalVisTypes; i++) {
-      g4VisAtt[i]=0;
-    }
-    sensitivity = 
-      G4GeometryConfiguration::getInstance()->getSensitiveFlag(name);
+  detPhysicalVolume(0), g4ableName(name), sensitivity(false),
+  visProperties(G4GeometryConfiguration::getInstance()->getFileName(name)+".vis") {
+  //Initialize g4VisAtt pointers
+  for (int i=0; i<Visualisable::TotalVisTypes; i++) {
+    g4VisAtt[i]=0;
+  }
+  sensitivity = 
+    G4GeometryConfiguration::getInstance()->getSensitiveFlag(name);
 }
 
 G4VPhysicalVolume* G4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
@@ -47,7 +45,7 @@ G4VPhysicalVolume* G4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
   if (GeometryConfiguration::getInstance()->getConstructFlag(G4Name())!=0) {
     if (!detPhysicalVolume) {
       detPhysicalVolume = constructIn(pv);
-      for(int i = 0; i < theG4DetectorsInside.size(); i++) {
+      for (unsigned int i = 0; i < theG4DetectorsInside.size(); i++) {
 	theG4DetectorsInside[i]->PhysicalVolume(detPhysicalVolume);
       }
       if (sensitivity) {
@@ -86,7 +84,7 @@ void G4Able::setVisType(Visualisable::visType vt, G4LogicalVolume* log) {
 		visProperties.colorBlue(vt));
     G4bool wf      = visProperties.isWireFrame(vt);
     G4bool visible = visProperties.isVisible(vt);
-
+    
 #ifdef debug
     G4cout << "Color: " 
 	   << visProperties.colorRed(vt)   << ", " 

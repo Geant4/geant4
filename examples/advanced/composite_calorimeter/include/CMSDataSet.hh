@@ -27,7 +27,7 @@ public:
     else
     {
       double x1,x2;
-      double y1,y2,y;
+      double y1,y2;
       if(anEnergy > theData[theData.size()-1].second)
       {
         // extrapolation
@@ -40,7 +40,7 @@ public:
       else
       {
         // linear search and interpolation
-        int i;
+        unsigned int i;
         for(i=0; i<theData.size(); i++)
         {
           if(theData[i].first>anEnergy) break;

@@ -8,8 +8,8 @@
 
 #include "G4CrystalMatrix.hh"
 
-#include "CMSMaterialFactory.hh"
-#include "CMSRotationMatrixFactory.hh"
+#include "CCalMaterialFactory.hh"
+#include "CCalRotationMatrixFactory.hh"
 #include "CMSSensitiveDetectors.hh"
 
 #include "utils.hh"
@@ -55,7 +55,7 @@ G4VPhysicalVolume* G4CrystalMatrix::constructIn(G4VPhysicalVolume* mother) {
   if (!crystalmatrixLog) {
     crystalmatrixLog = constructGlobal();
   }
-  CMSRotationMatrixFactory* rotfact = CMSRotationMatrixFactory::getInstance();
+  CCalRotationMatrixFactory* rotfact = CCalRotationMatrixFactory::getInstance();
 
   G4double x, y, z;
   if (mother != 0) {
@@ -124,8 +124,8 @@ G4VPhysicalVolume* G4CrystalMatrix::constructIn(G4VPhysicalVolume* mother) {
 G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
 
   //Pointers to the Materials and Rotation Matrix factory
-  CMSMaterialFactory* matfact       = CMSMaterialFactory::getInstance();
-  CMSRotationMatrixFactory* rotfact = CMSRotationMatrixFactory::getInstance();
+  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
+  CCalRotationMatrixFactory* rotfact = CCalRotationMatrixFactory::getInstance();
   
   G4Material* matter = matfact->findMaterial(getGenMat());
   G4VSolid* solid = new G4Box (idName, 0.5*getWidBox()*mm, 0.5*getWidBox()*mm,
@@ -233,7 +233,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
   setVisType(Visualisable::Support,slog);
 
   zp   = (-0.5 * getLengBox() + getCrystLength() + getLengFront() +
-	  0.5 * getDxSupp() + getDistSupp()) * mm;
+	  0.5 * getDzSupp() + getDistSupp()) * mm;
   for (i = 0; i < getCrystNum(); i++) {
     yp   = getLayPar(1) * (2*i + 1 - getCrystNum()) * mm;
     new G4PVPlacement(0, G4ThreeVector(0,yp,zp), slog, name, glog,

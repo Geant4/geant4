@@ -7,17 +7,19 @@
 #ifndef CaloOrganization_h
 #define CaloOrganization_h
 
-#include "VDetectorOrganization.hh"
+#include "G4Step.hh"
 #include "CMSCaloOrganization.hh"
 
-class CaloOrganization: public VDetectorOrganization{
+class CaloOrganization {
 
 public:
   CaloOrganization(){};
   virtual ~CaloOrganization(){};
 	 
-  virtual unsigned int GetUnitID(const G4Step* aStep) const {return 0;}
-      
+  virtual unsigned int GetUnitID(const G4Step* aStep) const = 0;
+  virtual int  Levels(const G4Step*) const;
+  virtual void DetectorLevel(const G4Step*, int&, int*, G4String*) const;
+     
 protected:
   CMSCaloOrganization theOrg;
 };

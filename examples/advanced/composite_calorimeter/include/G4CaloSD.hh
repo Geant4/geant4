@@ -29,14 +29,14 @@
 #include <iostream>
 #include <fstream>
 
-class VDetectorOrganization;
+class CaloOrganization;
 
 //#define debug
  
 class G4CaloSD : public G4VSensitiveDetector {
 
 public:
-  G4CaloSD(G4String aSDname, VDetectorOrganization* numberingScheme);
+  G4CaloSD(G4String aSDname, CaloOrganization* numberingScheme);
   virtual ~G4CaloSD();
 
   void Initialize(G4HCofThisEvent*HCE);
@@ -54,7 +54,7 @@ public:
 #endif
   }
   int  GetPrimaryID( )     {return PrimaryID;}
-  void SetOrganization(VDetectorOrganization* org);
+  void SetOrganization(CaloOrganization* org);
 
 private:
   
@@ -99,7 +99,7 @@ private:
   void summarize();
       
 private:
-  VDetectorOrganization* theDescription;
+  CaloOrganization* theDescription;
 
 };
 

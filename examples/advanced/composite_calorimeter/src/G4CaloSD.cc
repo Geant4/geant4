@@ -8,7 +8,7 @@
 #include "G4VProcess.hh"
 #include "G4SDManager.hh"
 #include "G4VTouchable.hh"
-#include "VDetectorOrganization.hh"
+#include "CaloOrganization.hh"
 #include "SDList.hh"
 
 #include<iostream>
@@ -16,10 +16,11 @@
 //#define debug
 //#define ddebug
  
-G4CaloSD::G4CaloSD(G4String name, VDetectorOrganization* numberingScheme):
-  G4VSensitiveDetector(name), SDname(name), theDescription(numberingScheme),
-  CurrentHit(0), theTrack(0), CurrentPV(0), PreviousPV(0), PreStepPoint(0), 
-  PostStepPoint(0), theHC(0), HCID(-1), UnitID(0), PreviousUnitID(0) {
+G4CaloSD::G4CaloSD(G4String name, CaloOrganization* numberingScheme):
+  G4VSensitiveDetector(name), HCID(-1), SDname(name), theHC(0),
+  CurrentHit(0), theTrack(0), CurrentPV(0), PreviousPV(0), UnitID(0), 
+  PreviousUnitID(0), PreStepPoint(0), PostStepPoint(0), 
+  theDescription(numberingScheme) {
   
   collectionName.insert(name);
   
@@ -256,7 +257,7 @@ void G4CaloSD::PrintAll() {
 } 
 
 
-void G4CaloSD::SetOrganization(VDetectorOrganization* org){
+void G4CaloSD::SetOrganization(CaloOrganization* org){
 
   if (theDescription!=0) 
     delete theDescription;

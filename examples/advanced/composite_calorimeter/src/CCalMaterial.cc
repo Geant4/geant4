@@ -1,17 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSMaterial.cc
-// Date: 12/03/98 I. Gonzalez
-// Modifications: 31/08/98 I.G. -> G4type moved to type for int, double.
+// File: CCalMaterial.cc
+// Description: CCalMaterial transient class to store information from 
+//              material table (database) which is used to make a G4Material
 ///////////////////////////////////////////////////////////////////////////////
-#include "CMSMaterial.hh"
+#include "CCalMaterial.hh"
 
 //#define debug
 
-CMSMaterial::CMSMaterial(G4String mat, double dens, int nconst, 
-			 CMSMaterial** constituents, double* weights,
-			 FractionType ft):
-  name(mat), density(dens)
-{
+CCalMaterial::CCalMaterial(G4String mat, double dens, int nconst, 
+			   CCalMaterial** constituents, double* weights,
+			   FractionType ft): name(mat), density(dens) {
   nElem = 0;
   
   int i=0;
@@ -41,9 +39,8 @@ CMSMaterial::CMSMaterial(G4String mat, double dens, int nconst,
   closeMaterial();
 }
 
-CMSMaterial::CMSMaterial(const CMSMaterial& mat):
-  name(mat.name), density(mat.density), nElem(mat.nElem)
-{
+CCalMaterial::CCalMaterial(const CCalMaterial& mat):
+  name(mat.name), density(mat.density), nElem(mat.nElem) {
   theElements = new G4String[nElem];
   theWeights  = new double[nElem];
   for (int i=0; i<nElem; i++){
@@ -52,16 +49,16 @@ CMSMaterial::CMSMaterial(const CMSMaterial& mat):
   }
 }
 
-CMSMaterial::~CMSMaterial() {
+CCalMaterial::~CCalMaterial() {
   if (theElements)
     delete[] theElements;
   if (theWeights)
     delete[] theWeights;
 }
 
-void CMSMaterial::computeDensity(int nconst, 
-				 CMSMaterial** constituents, double* weights, 
-				 FractionType ft){
+void CCalMaterial::computeDensity(int nconst, 
+				  CCalMaterial** constituents, 
+				  double* weights, FractionType ft) {
   double mass=0;
   double volume=0;
   for (int i=0; i<nconst; i++) {
@@ -77,7 +74,7 @@ void CMSMaterial::computeDensity(int nconst,
   density=mass/volume;
 }
 
-CMSMaterial& CMSMaterial::operator=(const CMSMaterial& mat){
+CCalMaterial& CCalMaterial::operator=(const CCalMaterial& mat){
   if(theElements)
     delete[] theElements;
   if(theWeights)
@@ -96,15 +93,15 @@ CMSMaterial& CMSMaterial::operator=(const CMSMaterial& mat){
   return *this;
 }
 
-G4bool CMSMaterial::operator==(const CMSMaterial& mat) const{
+G4bool CCalMaterial::operator==(const CCalMaterial& mat) const{
   return (name==mat.name);
 }
 
-G4bool CMSMaterial::operator!=(const CMSMaterial& mat) const{
+G4bool CCalMaterial::operator!=(const CCalMaterial& mat) const{
   return (name!=mat.name);
 }
 
-void CMSMaterial::closeMaterial() {
+void CCalMaterial::closeMaterial() {
   int trueConst=0;
 
   double norm=0;
@@ -152,7 +149,7 @@ void CMSMaterial::closeMaterial() {
   }
 }
 
-ostream& operator<<(ostream& os, const CMSMaterial& mat) {
+ostream& operator<<(ostream& os, const CCalMaterial& mat) {
   os << mat.name << endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem << endl;

@@ -1,29 +1,26 @@
 //////////////////////////////////////////////////////////////////////////////
-// File: CMSMaterial.hh
-// Description: CMSMaterial holds the basic information needed to make a
-//              G4Material. Temporary solution?... We'll see.
-// Date: 12/03/98 
-// Modifications: 31/08/98 I.G. -> G4type moved to type for int, double.
-//                                 NElements modified to return int, not double
+// File: CCalMaterial.hh
+// Description: CCalMaterial holds the basic information needed to make a
+//              G4Material. 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef CMSMaterial_h
-#define CMSMaterial_h 1
+#ifndef CCalMaterial_h
+#define CCalMaterial_h 1
 #include <iostream>
 #include "globals.hh"
 
-class CMSMaterial {
+class CCalMaterial {
 
-friend ostream& operator<<(ostream&, const CMSMaterial&);
+friend ostream& operator<<(ostream&, const CCalMaterial&);
   
 public:
   enum FractionType {FTWeight, FTVolume};
 
   //Constructors and destructors
-  CMSMaterial(G4String mat, double dens, int nelem, 
-	      CMSMaterial** constituents, double* weights,
-	      FractionType=FTWeight);
-  CMSMaterial(const CMSMaterial&);
-  virtual ~CMSMaterial();
+  CCalMaterial(G4String mat, double dens, int nelem, 
+	       CCalMaterial** constituents, double* weights,
+	       FractionType=FTWeight);
+  CCalMaterial(const CCalMaterial&);
+  virtual ~CCalMaterial();
 
   //Get methods
   G4String Name() const         {return name;}           //Material name.
@@ -33,20 +30,20 @@ public:
   double   Weight(int i) const  {return theWeights[i];}  //Should be protected.
 
   //Operators
-  G4bool       operator==(const CMSMaterial&) const; //Compares ONLY names
-  G4bool       operator!=(const CMSMaterial&) const; //Compares ONLY names
-  CMSMaterial& operator= (const CMSMaterial&);       //Assignment
+  G4bool        operator==(const CCalMaterial&) const; //Compares ONLY names
+  G4bool        operator!=(const CCalMaterial&) const; //Compares ONLY names
+  CCalMaterial& operator= (const CCalMaterial&);       //Assignment
 
 protected:
-  CMSMaterial(){} //Default constructor
+  CCalMaterial(){} //Default constructor
   void computeDensity(int nconst,
-		      CMSMaterial** constituents, double* weights,
+		      CCalMaterial** constituents, double* weights,
 		      FractionType ft);
   void closeMaterial(); //Closes material construction.
 
 protected:
   G4String  name;            //Material name
-  double    density;         //Density in g/cms3
+  double    density;         //Density in g/cm3
   int       nElem;           //Number of constituents.
   G4String* theElements;     //Basic constituents
   double*   theWeights;      //Elements' weight fractions

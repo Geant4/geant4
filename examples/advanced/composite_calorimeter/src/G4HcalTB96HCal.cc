@@ -5,8 +5,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4HcalTB96HCal.hh"
 
-#include "CMSMaterialFactory.hh"
-#include "CMSRotationMatrixFactory.hh"
+#include "CCalMaterialFactory.hh"
+#include "CCalRotationMatrixFactory.hh"
 #include "CMSSensitiveDetectors.hh"
 
 #include "utils.hh"
@@ -59,7 +59,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
     absLog[i] = 0;
 
   //Pointers to the Materials
-  CMSMaterialFactory* matfact       = CMSMaterialFactory::getInstance();
+  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
 
   //Mother volume
   G4Material* matter = matfact->findMaterial(getGenMat());
@@ -181,7 +181,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
 G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
 
   //Pointers to the Materials
-  CMSMaterialFactory* matfact       = CMSMaterialFactory::getInstance();
+  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
 
   //The scintillator layer
   G4Material* matter = matfact->findMaterial(getGenMat());
@@ -290,7 +290,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
 G4LogicalVolume* G4HcalTB96HCal::constructAbsorberLayer(G4int lay) {
 
   //Pointers to the Materials
-  CMSMaterialFactory* matfact       = CMSMaterialFactory::getInstance();
+  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
 
   //Now the absorber layer
   G4Material* matter = matfact->findMaterial(getAbsMat());

@@ -5,7 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4HcalTB96.hh"
 
-#include "CMSMaterialFactory.hh"
+#include "CCalMaterialFactory.hh"
 
 #include "G4HcalTB96HCal.hh"
 #include "G4CrystalMatrix.hh"
@@ -39,7 +39,7 @@ G4VPhysicalVolume* G4HcalTB96::constructIn(G4VPhysicalVolume* mother) {
 
   ///////////////////////////////////////////////////////////////
   //Pointers to the Rotation Matrices and to the Materials
-  CMSMaterialFactory* matfact       = CMSMaterialFactory::getInstance();
+  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
 
   //Experimental Hall. The mother volume....
 #ifdef debug

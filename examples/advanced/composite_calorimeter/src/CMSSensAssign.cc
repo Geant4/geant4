@@ -65,7 +65,7 @@ bool CMSSensAssign::stackingAction() {
 }
 
 bool CMSSensAssign::addCaloSD(G4String name, 
-			      VDetectorOrganization* numberingScheme) {
+			      CaloOrganization* numberingScheme) {
   sens_[name]         = new G4CaloSD(name, numberingScheme);
   return true;
 

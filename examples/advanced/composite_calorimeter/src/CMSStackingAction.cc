@@ -78,8 +78,8 @@ G4ClassificationOfNewTrack CMSStackingAction::ClassifyNewTrack(const G4Track* aT
 
   G4ClassificationOfNewTrack classification=fKill;
   int parentID = aTrack->GetParentID();
-  G4TrackStatus status = aTrack->GetTrackStatus();
 #ifdef ddebug
+  G4TrackStatus status = aTrack->GetTrackStatus();
   cout << "Classifying track " << aTrack->GetTrackID()
        << " with status " << aTrack->GetTrackStatus() << endl;  
 #endif

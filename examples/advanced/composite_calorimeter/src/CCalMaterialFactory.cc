@@ -1,10 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSMaterialFactory.cc
-// Date: 03/98 I. Gonzalez
-// Modifications: 13/03/98 I.G.
-//                27/03/00 S.B. Inside OSCAR
+// File: CCalMaterialFactory.cc
+// Description: CCalMaterialFactory is a factory class to vuild G4Material 
+//              from CCalMaterial and CCalAmaterial
 ///////////////////////////////////////////////////////////////////////////////
-#include "CMSMaterialFactory.hh"
+#include "CCalMaterialFactory.hh"
 #include "utils.hh"
 #include <fstream.h>
 #include <stdlib.h>
@@ -14,16 +13,16 @@
 //#define ddebug
 //#define debug
 
-typedef CMSMaterial* ptrCMSMaterial;
-typedef CMSAMaterial* ptrCMSAMaterial;
+typedef CCalMaterial*  ptrCCalMaterial;
+typedef CCalAMaterial* ptrCCalAMaterial;
 
 
-CMSMaterialFactory * CMSMaterialFactory::instance = 0;
-G4String CMSMaterialFactory::elementfile = "";
-G4String CMSMaterialFactory::mixturefile = "";
+CCalMaterialFactory * CCalMaterialFactory::instance = 0;
+G4String CCalMaterialFactory::elementfile = "";
+G4String CCalMaterialFactory::mixturefile = "";
 
-CMSMaterialFactory* CMSMaterialFactory::getInstance(const G4String & matfile,
-                                                    const G4String & mixfile){
+CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile,
+						      const G4String& mixfile){
   if ((matfile=="" || matfile==elementfile) &&
       (mixfile=="" || mixfile==mixturefile))
     return getInstance();
@@ -33,8 +32,7 @@ CMSMaterialFactory* CMSMaterialFactory::getInstance(const G4String & matfile,
          << mixfile << " while previously were retrieved from " 
          << elementfile << " and " << mixturefile << "." << endl;
     return 0;
-  }
-  else {
+  } else {
     if (elementfile == "") 
       elementfile=matfile;
     if (mixturefile == "") 
@@ -43,73 +41,76 @@ CMSMaterialFactory* CMSMaterialFactory::getInstance(const G4String & matfile,
   }
 }
 
-CMSMaterialFactory* CMSMaterialFactory::getInstance(const G4String & matfile){
-    return getInstance(matfile,matfile);
+CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile){
+  return getInstance(matfile,matfile);
 }
 
-CMSMaterialFactory* CMSMaterialFactory::getInstance(){
+CCalMaterialFactory* CCalMaterialFactory::getInstance(){
   if (elementfile=="" || mixturefile=="") {
-    cerr << "ERROR: You haven't defined files to be used for materials in CMSMaterialFactory::getInstance(const G4String&, const G4String&)" << endl;
+    cerr << "ERROR: You haven't defined files to be used for materials in "
+	 << "CCalMaterialFactory::getInstance(const G4String&,const G4String&)"
+	 << endl;
     return 0;
   }
 
   if (instance==0) {
-    instance = new CMSMaterialFactory;
+    instance = new CCalMaterialFactory;
     return instance;
   }
   else
     return instance;
 }
 
-CMSMaterialFactory::~CMSMaterialFactory(){
-  CMSMaterialTable::iterator ite;
-  for(ite = theCMSMaterials.begin(); ite != theCMSMaterials.end(); ite++ ){
+CCalMaterialFactory::~CCalMaterialFactory(){
+  CCalMaterialTable::iterator ite;
+  for(ite = theCCalMaterials.begin(); ite != theCCalMaterials.end(); ite++ ){
     delete *ite;
   }
-  theCMSMaterials.clear();
-  CMSAMaterialTable::iterator itea;
-  for(itea = theCMSAMaterials.begin(); itea != theCMSAMaterials.end(); itea++ ){
+  theCCalMaterials.clear();
+  CCalAMaterialTable::iterator itea;
+  for(itea = theCCalAMaterials.begin(); itea != theCCalAMaterials.end(); 
+      itea++ ){
     delete *itea;
   }
-  theCMSAMaterials.clear();
+  theCCalAMaterials.clear();
 }
   
-G4Material* CMSMaterialFactory::findMaterial(const G4String & mat) const {
+G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
   G4Material* theMat=findG4Material(mat);
 
   if (theMat) {
 #ifdef ddebug
-    cout << "Material " << mat << " already defined. Returning previous instance." << endl;
+    cout << "Material " << mat << " already defined. Returning previous "
+	 << "instance." << endl;
 #endif
     return theMat;
-  }
-  else { 
-    CMSMaterial* CMSmat=findCMSMaterial(mat);
-    if (CMSmat){
-      G4Material* G4Mat = new G4Material(CMSmat->Name(),
-					 CMSmat->Density()*g/cm3, 
-					 CMSmat->NElements());
-      for(G4int i=0; i<CMSmat->NElements(); i++) {
-	G4Element* elem = findElement(CMSmat->Element(i));
+  } else { 
+    CCalMaterial* CCalmat=findCCalMaterial(mat);
+    if (CCalmat){
+      G4Material* G4Mat = new G4Material(CCalmat->Name(),
+					 CCalmat->Density()*g/cm3, 
+					 CCalmat->NElements());
+      for(G4int i=0; i<CCalmat->NElements(); i++) {
+	G4Element* elem = findElement(CCalmat->Element(i));
 	if (!elem) {
 	  cerr << "       Could not build material " << mat << "." << endl;
 	  exit(-10);
 	}
-	G4Mat->AddElement(elem, CMSmat->Weight(i));
+	G4Mat->AddElement(elem, CCalmat->Weight(i));
       }
 #ifdef ddebug
     cout << "Material " << mat << " has been built successfully." << endl;
 #endif
       return G4Mat;
-    }
-    else {
-      cerr << "ERROR: Material " << mat << " not found in CMS database!!!" << endl;
+    } else {
+      cerr << "ERROR: Material " << mat << " not found in CCal database!!!" 
+	   << endl;
       return 0;
     }
   }
 }
 
-G4Element* CMSMaterialFactory::findElement(const G4String & mat) const {
+G4Element* CCalMaterialFactory::findElement(const G4String & mat) const {
   const G4ElementTable  theElements = *(G4Element::GetElementTable());
   for (unsigned int i=0; i<theElements.size(); i++)
     if (theElements[i]->GetName()==mat){
@@ -121,33 +122,33 @@ G4Element* CMSMaterialFactory::findElement(const G4String & mat) const {
   return 0;
 }
 
-G4Element* CMSMaterialFactory::addElement(const G4String & name,
-                                          const G4String & symbol,
-                                          G4double Z, G4double A,
-                                          G4double density) {
+G4Element* CCalMaterialFactory::addElement(const G4String & name,
+					   const G4String & symbol,
+					   G4double Z, G4double A,
+					   G4double density) {
 
   G4Element* theEl = new G4Element(name, symbol, Z, A*g/mole);
   //Make it also as a material.
-  CMSAMaterial* theMat = new CMSAMaterial(name,A,density);
-  theCMSAMaterials.push_back(theMat);
+  CCalAMaterial* theMat = new CCalAMaterial(name,A,density);
+  theCCalAMaterials.push_back(theMat);
 
 #ifdef ddebug
-    cout << "Element " << name << " created!" << endl;
+  cout << "Element " << name << " created!" << endl;
 #endif
   return theEl;
 }
 
-G4Material* CMSMaterialFactory::addMaterial(const G4String& name,
+G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
 					     G4double density,
 					     G4int nconst,
 					     G4String mats[],
 					     G4double prop[],
 					     MatDescription md){
-  addCMSMaterial(name, density, nconst, mats, prop, md);
+  addCCalMaterial(name, density, nconst, mats, prop, md);
   return findMaterial(name);
 }
 
-void CMSMaterialFactory::readElements(const G4String& matfile) {
+void CCalMaterialFactory::readElements(const G4String& matfile) {
 
   G4String path = getenv("OSCARGLOBALPATH");
   cout << " ==> Opening file " << matfile << " to read elements..." << endl;
@@ -160,13 +161,13 @@ void CMSMaterialFactory::readElements(const G4String& matfile) {
 
   // Find *DO GMAT
   findDO(is, G4String("GMAT"));
-
+  
   readElements(is);
-
+  
   is.close();
 }
 
-void CMSMaterialFactory::readMaterials(const G4String& matfile) {
+void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
   G4String path = getenv("OSCARGLOBALPATH");
   cout << " ==> Opening file " << matfile << " to read materials..." << endl;
@@ -188,7 +189,7 @@ void CMSMaterialFactory::readMaterials(const G4String& matfile) {
 //===========================================================================
 // Protected & private methods ==============================================
 
-G4Material* CMSMaterialFactory::findG4Material(const G4String & mat) const {
+G4Material* CCalMaterialFactory::findG4Material(const G4String & mat) const {
   const G4MaterialTable theG4Materials = *(G4Material::GetMaterialTable());
   for (unsigned int i=0; i<theG4Materials.size(); i++) {
     if (theG4Materials[i]->GetName()==mat){
@@ -198,24 +199,26 @@ G4Material* CMSMaterialFactory::findG4Material(const G4String & mat) const {
   return 0;
 }
 
-CMSMaterial* CMSMaterialFactory::findCMSMaterial(const G4String & mat) const {
-  for (unsigned int i=0; i<theCMSMaterials.size(); i++)
-    if (theCMSMaterials[i]->Name()==mat){
+CCalMaterial* CCalMaterialFactory::findCCalMaterial(const G4String & mat) 
+  const {
+  for (unsigned int i=0; i<theCCalMaterials.size(); i++)
+    if (theCCalMaterials[i]->Name()==mat){
 #ifdef ddebug
-      cout << "CMSMaterial " << mat << " found!" << endl;
+      cout << "CCalMaterial " << mat << " found!" << endl;
 #endif
-      return theCMSMaterials[i];
+      return theCCalMaterials[i];
     }
-  return (CMSMaterial*) findCMSAMaterial(mat);
+  return (CCalMaterial*) findCCalAMaterial(mat);
 }
 
-CMSAMaterial* CMSMaterialFactory::findCMSAMaterial(const G4String & mat) const {
-  for (unsigned int i=0; i<theCMSAMaterials.size(); i++)
-    if (theCMSAMaterials[i]->Name()==mat){
+CCalAMaterial* CCalMaterialFactory::findCCalAMaterial(const G4String & mat) 
+  const {
+  for (unsigned int i=0; i<theCCalAMaterials.size(); i++)
+    if (theCCalAMaterials[i]->Name()==mat){
 #ifdef ddebug
-      cout << "CMSMaterial " << mat << " found!" << endl;
+      cout << "CCalMaterial " << mat << " found!" << endl;
 #endif
-      return theCMSAMaterials[i];
+      return theCCalAMaterials[i];
     }
   return 0;
 }
@@ -223,23 +226,23 @@ CMSAMaterial* CMSMaterialFactory::findCMSAMaterial(const G4String & mat) const {
 
 
 
-CMSMaterial* CMSMaterialFactory::addCMSMaterial(const G4String& name, 
-						G4double density,
-						G4int nconst,
-						G4String mats[], 
-						G4double prop[],
-						MatDescription md){
-  ptrCMSMaterial* matcol=0;
-  ptrCMSAMaterial* amatcol=0;
+CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name, 
+						   G4double density,
+						   G4int nconst,
+						   G4String mats[], 
+						   G4double prop[],
+						   MatDescription md){
+  ptrCCalMaterial* matcol=0;
+  ptrCCalAMaterial* amatcol=0;
 
   if (md==byAtomic)
-    amatcol = new ptrCMSAMaterial[nconst];
+    amatcol = new ptrCCalAMaterial[nconst];
   else
-    matcol = new ptrCMSMaterial[nconst];
+    matcol = new ptrCCalMaterial[nconst];
     
   for (G4int i=0; i<nconst; i++){
     if (md==byAtomic) {
-      CMSAMaterial* amat = findCMSAMaterial(mats[i]);
+      CCalAMaterial* amat = findCCalAMaterial(mats[i]);
       if (amat)
 	amatcol[i]=amat;
       else {
@@ -251,7 +254,7 @@ CMSMaterial* CMSMaterialFactory::addCMSMaterial(const G4String& name,
       }
     } //by Atomic fractions
     else {
-      CMSMaterial* mat = findCMSMaterial(mats[i]);
+      CCalMaterial* mat = findCCalMaterial(mats[i]);
       if (mat)
 	matcol[i]=mat;
       else {
@@ -264,27 +267,26 @@ CMSMaterial* CMSMaterialFactory::addCMSMaterial(const G4String& name,
     }
   } //for
 
-  //Let's do the CMSMaterial!
+  //Let's do the CCalMaterial!
   if (md==byAtomic) {
-    CMSAMaterial* amaterial = new CMSAMaterial(name, density, nconst, 
-					       amatcol, prop);
+    CCalAMaterial* amaterial = new CCalAMaterial(name, density, nconst, 
+						 amatcol, prop);
     delete[] amatcol;
-    theCMSAMaterials.push_back(amaterial);
+    theCCalAMaterials.push_back(amaterial);
 #ifdef ddebug
     cout << *amaterial << endl;
 #endif
     return amaterial;
-  }  
-  else {
-    CMSMaterial::FractionType ft;
+  } else {
+    CCalMaterial::FractionType ft;
     if (md == byWeight)
-      ft=CMSMaterial::FTWeight;
+      ft=CCalMaterial::FTWeight;
     else
-      ft=CMSMaterial::FTVolume;
-    CMSMaterial* material = new CMSMaterial(name, density, nconst, 
+      ft=CCalMaterial::FTVolume;
+    CCalMaterial* material = new CCalMaterial(name, density, nconst, 
 					    matcol, prop, ft);
     delete[] matcol;
-    theCMSMaterials.push_back(material);
+    theCCalMaterials.push_back(material);
 #ifdef ddebug
     cout << *material << endl;
 #endif
@@ -293,10 +295,9 @@ CMSMaterial* CMSMaterialFactory::addCMSMaterial(const G4String& name,
 }
 
 
-
-void CMSMaterialFactory::readElements(ifstream& is){
+void CCalMaterialFactory::readElements(ifstream& is){
   G4String name, symbol;
-
+  
   cout << "     ==> Reading elements... " << endl;
 #ifdef debug
   cout << "       Element    \tsymbol\tA\tZ\tdensity\tX_0          abs_l"<< endl;
@@ -322,7 +323,9 @@ void CMSMaterialFactory::readElements(ifstream& is){
   cout << "     " << G4Element::GetElementTable()->size() 
        << " elements read from file" << endl << endl;
 }
-void CMSMaterialFactory::readMaterials(ifstream& is){
+
+
+void CCalMaterialFactory::readMaterials(ifstream& is){
   G4String name, matname;
 
   cout << "     ==> Reading materials... " << endl;
@@ -376,7 +379,7 @@ void CMSMaterialFactory::readMaterials(ifstream& is){
     else
       md = byVolume;
 
-    addCMSMaterial(matname, density, absnelem, mats, weights, md);
+    addCCalMaterial(matname, density, absnelem, mats, weights, md);
     delete[] mats;
     delete[] weights;
     
@@ -384,11 +387,11 @@ void CMSMaterialFactory::readMaterials(ifstream& is){
   };  //while
 
 
-  cout << "     " << theCMSMaterials.size() << " materials read from " 
+  cout << "     " << theCCalMaterials.size() << " materials read from " 
        << mixturefile << endl << endl;
 }
 
-CMSMaterialFactory::CMSMaterialFactory() {
+CCalMaterialFactory::CCalMaterialFactory() {
   readElements (elementfile);
   readMaterials(mixturefile);
 }
