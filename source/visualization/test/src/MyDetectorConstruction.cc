@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.14 2001-03-15 12:30:26 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.15 2001-05-29 13:57:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ MyDetectorConstruction::MyDetectorConstruction()
 
 MyDetectorConstruction::~MyDetectorConstruction()
 {
-  for (G4int i = 0; i < materialPointerStore.size(); i++) {
+  for (size_t i = 0; i < materialPointerStore.size(); i++) {
     delete materialPointerStore[i];
   }
 }
@@ -230,7 +230,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   const G4double eps = 10 * mm;
   const G4double alp = 10 * mrad;
-  G4int iCopy;
 
   G4VisAttributes * grey
     = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
@@ -257,6 +256,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   new G4PVReplica("divided_tube_phys",divided_tube_log,tube_log,
   		  kPhi,6,divided_tube_dPhi);
   /************ 
+  G4int iCopy;
   for (iCopy = 0; iCopy < 6; iCopy++) {
     new G4PVPlacement
       (G4Transform3D
@@ -367,10 +367,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4RotationMatrix rm;
 
-  G4PVPlacement* PD_physical
-    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
-                        "PD_physical", PD_log_crystal,
-                        experimentalHall_phys,false,0);
+  new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
+		    "PD_physical", PD_log_crystal,
+		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- Trapezoid
 
@@ -393,10 +392,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
               //              at y=-pDy2 to the centre at y=+pDy2 of the face at +pDz
      );
   G4LogicalVolume* trap1_log = new G4LogicalVolume (trap1_solid,Ar,"trap1_log");
-  G4PVPlacement* trap1_phys
-    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(-200.*cm,200.*cm,-200.*cm)),
-                        "trap1_phys", trap1_log,
-                        experimentalHall_phys,false,0);
+  new G4PVPlacement
+    (G4Transform3D(rm,G4ThreeVector(-200.*cm,200.*cm,-200.*cm)),
+     "trap1_phys", trap1_log,
+     experimentalHall_phys,false,0);
 
   G4Trap* trap2_solid = new G4Trap
     ("trap2_solid",
@@ -417,10 +416,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
               //              at y=-pDy2 to the centre at y=+pDy2 of the face at +pDz
      );
   G4LogicalVolume* trap2_log = new G4LogicalVolume (trap2_solid,Ar,"trap2_log");
-  G4PVPlacement* trap2_phys
-    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(-200.*cm,400.*cm,-200.*cm)),
-                        "trap2_phys", trap2_log,
-                        experimentalHall_phys,false,0);
+  new G4PVPlacement
+    (G4Transform3D(rm,G4ThreeVector(-200.*cm,400.*cm,-200.*cm)),
+     "trap2_phys", trap2_log,
+     experimentalHall_phys,false,0);
 
   //-------------------------------------------- visualization attributes
 

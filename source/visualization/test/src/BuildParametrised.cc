@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildParametrised.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
+// $Id: BuildParametrised.cc,v 1.3 2001-05-29 13:57:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,13 +68,12 @@ G4VPhysicalVolume* BuildParametrised ()
   logicalPAttributes = new G4VisAttributes(G4Colour(1.,0.,0.));
   theLogicalBox->SetVisAttributes(logicalPAttributes);
   ParametrisedBox* thePar = new ParametrisedBox;
-  G4PVParameterised * theParametrized=
-    new G4PVParameterised("theParametrizedtest",
-                theLogicalBox,
-                theMother,
-                kYAxis,
-                2,
-                thePar);
+  new G4PVParameterised("theParametrizedtest",
+			theLogicalBox,
+			theMother,
+			kYAxis,
+			2,
+			thePar);
 
   // The Mother of Replica.
   G4VSolid * box3 = new G4Box("aBox", 1 * m, 2 * m, 3 * m);
@@ -97,12 +96,11 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VisAttributes * logicalRAttributes;
   logicalRAttributes = new G4VisAttributes(G4Colour(0.,1.,0.));
   theLogicalRBox->SetVisAttributes(logicalRAttributes);
-  G4VPhysicalVolume * theReplica=
-    new G4PVReplica("theReplicatest",
-                theLogicalRBox,
-                theRMother,
-                kXAxis,
-                5, 0.4 * m, 0);
+  new G4PVReplica("theReplicatest",
+		  theLogicalRBox,
+		  theRMother,
+		  kXAxis,
+		  5, 0.4 * m, 0);
 
   // The Mother of Tubs Replica.
   G4VSolid * tubs = new G4Tubs ("aTubsBox", 0.5 * m, 1 * m, 2 * m,
@@ -127,12 +125,11 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VisAttributes * logicalTAttributes;
   logicalTAttributes = new G4VisAttributes(G4Colour(0.,0.,1.));
   theLogicalTubsPart->SetVisAttributes(logicalTAttributes);
-  G4VPhysicalVolume * theTReplica=
-    new G4PVReplica("theTReplicatest",
-                theLogicalTubsPart,
-                theTMother,
-                kPhi,
-                5, 36. * deg, 90. * deg);
+  new G4PVReplica("theTReplicatest",
+		  theLogicalTubsPart,
+		  theTMother,
+		  kPhi,
+		  5, 36. * deg, 90. * deg);
 
   /*************** Bloggs's box to workaround bug in G4SmartVoxelHeader.
 

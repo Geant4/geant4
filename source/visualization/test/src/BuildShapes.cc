@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildShapes.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
+// $Id: BuildShapes.cc,v 1.3 2001-05-29 13:57:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 
 G4VPhysicalVolume* TheWorld ()
 {
-  G4double a, iz, z, density;
+  G4double a, iz, density;
   G4String name, symbol;
   G4int nel;
   a = 14.01*g/mole;
@@ -82,11 +82,11 @@ G4VPhysicalVolume* BuildBox()
 	boxLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *boxPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						  "BoxPhys",
-						  boxLog,
-						  theWorld,
-						  false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "BoxPhys",
+			   boxLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -115,11 +115,11 @@ G4VPhysicalVolume* BuildCylinder()
 	tubsLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *tubsPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "tubsPhys",
-						   tubsLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "tubsPhys",
+			   tubsLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -149,11 +149,11 @@ G4VPhysicalVolume* BuildTubs()
 	tubsLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *tubsPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "tubsPhys",
-						   tubsLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "tubsPhys",
+			   tubsLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -183,11 +183,11 @@ G4VPhysicalVolume* BuildCons()
 	consLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *consPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "consPhys",
-						   consLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "consPhys",
+			   consLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -216,11 +216,11 @@ G4VPhysicalVolume* BuildTrd()
 	trdLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *trdPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						  "trdPhys",
-						  trdLog,
-						  theWorld,
-						  false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "trdPhys",
+			   trdLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -251,11 +251,11 @@ G4VPhysicalVolume* BuildTrap()
 	trapLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *trapPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "trapPhys",
-						   trapLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "trapPhys",
+			   trapLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -284,11 +284,11 @@ G4VPhysicalVolume* BuildSphereFull()
 	SphereLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *SpherePhys=new G4PVPlacement( 0,G4ThreeVector(),
-						     "SpherePhys",
-						     SphereLog,
-						     theWorld,
-						     false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "SpherePhys",
+			   SphereLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -317,11 +317,11 @@ G4VPhysicalVolume* BuildSphereSeg()
 	SphereLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *SpherePhys=new G4PVPlacement( 0,G4ThreeVector(),
-						     "SpherePhys",
-						     SphereLog,
-						     theWorld,
-						     false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "SpherePhys",
+			   SphereLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -352,11 +352,11 @@ G4VPhysicalVolume* BuildPara()
 	paraLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *paraPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "ParaPhys",
-						   paraLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "ParaPhys",
+			   paraLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -397,11 +397,11 @@ G4VPhysicalVolume* BuildPCon()
 	pconLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *pconPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "PconPhys",
-						   pconLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "PconPhys",
+			   pconLog,
+			   theWorld,
+			   false,0);
 
 	return theWorld;
 
@@ -446,11 +446,11 @@ G4VPhysicalVolume* BuildPGon()
 	pgonLog -> SetVisAttributes ( pVA );
 
 		//----- physical volume
-	G4PVPlacement *pgonPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "PgonPhys",
-						   pgonLog,
-						   theWorld,
-						   false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "PgonPhys",
+			   pgonLog,
+			   theWorld,
+			   false,0);
 	
 	return theWorld;
 #else
@@ -491,10 +491,10 @@ G4VPhysicalVolume* BuildForcedWireframeBox()
 						  boxLog,
 						  theWorld,
 						  false,0);
-	G4PVPlacement *tubsPhys=new G4PVPlacement( 0,G4ThreeVector(),
-						   "tubsPhys",
-						   tubsLog,
-						   boxPhys ,false,0);
+	new G4PVPlacement( 0,G4ThreeVector(),
+			   "tubsPhys",
+			   tubsLog,
+			   boxPhys ,false,0);
 	return theWorld;
 
 } // G4VPhysicalVolume* BuidlForcedWireFrameBox()

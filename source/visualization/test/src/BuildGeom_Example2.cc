@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildGeom_Example2.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
+// $Id: BuildGeom_Example2.cc,v 1.3 2001-05-29 13:57:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@ G4VPhysicalVolume* BuildGeom_Example2()
 
 //--------- Material definition ---------
 
-  G4double a, iz, z, density;
+  G4double a, iz, density;
   G4String name, symbol;
   G4int nel;
 
@@ -53,15 +53,15 @@ G4VPhysicalVolume* BuildGeom_Example2()
   a = 207.19*g/mole;
   G4Element* elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a);
 
-  a = 26.98*g/mole;
-  density = 2.7*g/cm3;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  a = 55.85*g/mole;
-  density = 7.87*g/cm3;
-  G4Material* Fe = new G4Material(name="Iron", z=26., a, density);
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
+  //a = 26.98*g/mole;
+  //density = 2.7*g/cm3;
+  //G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
+  //a = 55.85*g/mole;
+  //density = 7.87*g/cm3;
+  //G4Material* Fe = new G4Material(name="Iron", z=26., a, density);
+  //a = 207.19*g/mole;
+  //density = 11.35*g/cm3;
+  //G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
   density = 1.29e-03*g/cm3;
   G4Material* Air = new G4Material(name="Air", density, nel=2);
   Air->AddElement(elN, .7);
@@ -171,8 +171,8 @@ G4VPhysicalVolume* BuildGeom_Example2()
     calCellPhys = new G4PVPlacement(calCellRot,
 	       G4ThreeVector(calCellX,calCellY,0.*cm),
 	       "calRowPhys",calCellLog,calRowPhys,false,iCalCell);
-    G4RotationMatrix* tmpRot = calCellPhys->GetRotation();
 /*
+    G4RotationMatrix* tmpRot = calCellPhys->GetRotation();
     G4cout << "saved : " << tmpRot << G4endl;
     G4cout << tmpRot->xx() << " "
          << tmpRot->xy() << " "

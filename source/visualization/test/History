@@ -1,7 +1,10 @@
-$Id: History,v 1.10 2001-03-15 12:31:50 johna Exp $
+$Id: History,v 1.11 2001-05-29 13:56:58 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+29th May 2001  John Allison
+- Cleaned up Linux pedantic warnings (unused variables, comparisons, etc.)
 
 15th March 2001  John Allison  (vis-V03-00-08)
 - Major re-work of replica instantiation in MyDetectorConstruction.cc

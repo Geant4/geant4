@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19DetectorMessenger.cc,v 1.2 1999-12-15 14:54:35 gunter Exp $
+// $Id: test19DetectorMessenger.cc,v 1.3 2001-05-29 13:57:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,6 @@ void test19DetectorMessenger::SetNewValue
 #ifdef ATLAS
       ATLASdetector* atlas;
 #endif
-      G4UImanager* UI = G4UImanager::GetUIpointer ();
       switch (id) {
       default:
       case 0: pGeom = BuildCalorimeter (); break;
@@ -106,6 +105,7 @@ void test19DetectorMessenger::SetNewValue
 #ifdef ATLAS
       case 5:
 	atlas = new ATLASdetector();
+	//    G4UImanager* UI = G4UImanager::GetUIpointer ();
 	//    UI -> ApplyCommand ("/atlas/innerDetector/barrelSilicon 1");
 	//    UI -> ApplyCommand ("/atlas/innerDetector/pixel 1");
 	// Build ATLAS detector geometry
