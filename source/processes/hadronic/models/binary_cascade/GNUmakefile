@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-10-08 14:53:20 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2003-11-26 09:19:20 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -11,10 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
-
 CPPFLAGS += -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/STLInterface/g4rw \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
