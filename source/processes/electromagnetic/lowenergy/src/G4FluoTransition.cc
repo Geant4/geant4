@@ -63,7 +63,7 @@ const G4DataVector& G4FluoTransition::TransitionProbabilities() const
   return transitionProbabilities;
 }
 
-const G4int G4FluoTransition::FinalShellId() const
+G4int G4FluoTransition::FinalShellId() const
 { 
   return finalShellId;
 }

@@ -110,7 +110,7 @@ do
   return vectorOfParticles;
 }
 
-const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
+G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}

@@ -109,7 +109,7 @@ const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startS
   return dataSet; 
 }
 
-const G4int G4AugerTransition::FinalShellId() const
+G4int G4AugerTransition::FinalShellId() const
 { 
   return finalShellId;
 }

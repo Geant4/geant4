@@ -70,7 +70,7 @@ public:
   const G4DataVector& TransitionProbabilities() const;
   
   // Return the identity if the vacancy
-  const G4int FinalShellId() const;
+  G4int FinalShellId() const;
 
   // Given the index of the originating shells returns its identity
   G4int OriginatingShellId(G4int index) const;

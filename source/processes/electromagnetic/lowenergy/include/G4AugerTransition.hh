@@ -85,7 +85,7 @@ public:
 
 // returns the id of the shell in wich the transition electron arrives
 
-  const G4int FinalShellId() const;
+  G4int FinalShellId() const;
 
 // Returns the id of the shell from wich come the auger electron , given the shell
 // from wich the transition electron comes from and the index number.
