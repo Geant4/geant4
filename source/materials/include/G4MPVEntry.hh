@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.hh,v 1.1 1999-01-07 16:09:41 gunter Exp $
+// $Id: G4MPVEntry.hh,v 1.2 1999-10-30 01:43:08 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,8 @@
 // Version:	1.0
 // Created:	1996-02-08	
 // Author:	Juliet Armstrong
-// Updated:     1997-03-25 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class decriptors
+//              1997-03-25 by Peter Gumplinger
 //		> cosmetics (only)
 // mail:        gum@triumf.ca
 //
@@ -35,13 +36,18 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
+// Class Description:
+// A G4MPVEntry is an MaterialPropertyVector Entry.
+// One Material Property Vector contains many MPVEntries.
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
 
 class G4MPVEntry {
 
-public:
+public: // Without description
 
 	//////////////
 	// Operators
