@@ -31,7 +31,7 @@ In case your compiler do not provide 'native' STL and choose for a non
 ISO/ANSI installation, ObjectSpace STL (if available in your system) may
 be used and its installation path specified.
 
-Do you want to use ObjectSpace?
+Do you want to use ObjectSpace STL?
 EOM`
 
 dflt=$g4use_ospace
