@@ -95,6 +95,7 @@ Init(G4int A, G4int Z, G4double frac)
     {
       G4String aName;
       aDataSet >> aName;
+      aDataSet >> dummy >> dummy;
       theProductionData[i] = new G4NeutronIsoProdCrossSections(aName);
       theProductionData[i]->Init(aDataSet);
     }
