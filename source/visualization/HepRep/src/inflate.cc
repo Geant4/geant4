@@ -121,7 +121,8 @@ int ZEXPORT inflateInit2_(z_streamp z, int w, const char *version, int stream_si
 
   /* create inflate_blocks state */
   if ((z->state->blocks =
-      inflate_blocks_new(z, z->state->nowrap ? Z_NULL : adler32, (uInt)1 << w))
+      inflate_blocks_new(z, z->state->nowrap ? Z_NULL :
+        (unsigned long(*)(unsigned long,const unsigned char*,unsigned))adler32, (uInt)1 << w))
       == Z_NULL)
   {
     inflateEnd(z);

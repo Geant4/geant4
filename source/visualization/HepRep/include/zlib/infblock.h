@@ -11,7 +11,7 @@
 struct inflate_blocks_state;
 typedef struct inflate_blocks_state FAR inflate_blocks_statef;
 
-extern "C" inflate_blocks_statef * inflate_blocks_new OF((
+extern inflate_blocks_statef * inflate_blocks_new OF((
     z_streamp z,
     check_func c,               /* check function */
     uInt w));                   /* window size */
