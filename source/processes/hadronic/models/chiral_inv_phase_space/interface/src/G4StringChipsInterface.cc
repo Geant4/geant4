@@ -181,7 +181,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
     }
     G4cout << "Particle code produced = "<< pdgCode <<endl;
-    theSec = new G4ReactionProduct(current->second->GetDefinition());
+    theSec = new G4ReactionProduct(theDefinition);
     theSec->SetTotalEnergy(output->at(particle)->Get4Momentum().t());
     theSec->SetMomentum(output->at(particle)->Get4Momentum().vect());
     theResult->insert(theSec);
