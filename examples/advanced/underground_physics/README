@@ -128,6 +128,12 @@ Macros:
    Gammas are not killed at the concrete wall. Event summery is written
    to file "hits.out".
 
+   ambe_spectrum.mac
+   Produces a spectrum of neutrons according to an approximation of a Am/Be
+   neutron source.  However, this uses the GPS and therefore will only work
+   after compilation with the DMXENV_GPS_USE environment variable (see below)
+
+
    sourceAm241.mac
    Forces the decay of 241Am nuclei in the calibrator and tracks the
    resulting particles (237Np + alpha + gamma from 237Np
