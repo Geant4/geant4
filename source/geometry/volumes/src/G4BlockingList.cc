@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.cc,v 1.6 2002-08-06 08:23:37 gcosmo Exp $
+// $Id: G4BlockingList.cc,v 1.7 2002-11-27 17:50:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,7 @@
 #include "G4BlockingList.hh"
 
 G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
-  : fStride(stride), fBlockingList(maxDefault,0)
+  : fBlockTagNo(1), fStride(stride), fBlockingList(maxDefault,0)
 {
 }
 
