@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2001-11-06 13:18:54 johna Exp $
+$Id: History,v 1.168 2001-11-16 14:43:52 barrand Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16rd November 2001  Guy Barrand
+- analysis.gmk : add flags to use an AIDA 2.2 compliant analysis system.
 
 6th November 2001  John Allison  (config-V03-02-10)
 - Removed CPPFLAGS += -DG4UI_USE_GAG -DG4UI_USE_TCSH -DG4UI_USE_TERMINAL.

@@ -3,6 +3,18 @@
 # Analysis variables...
 #
 
+ANALYSISLIBS := 
+
+ifdef G4ANALYSIS_USE_AIDA
+  CPPFLAGS += -DG4ANALYSIS_USE
+  CPPFLAGS += $(G4ANALYSIS_AIDA_CONFIG_CFLAGS)
+  ANALYSISLIBS = $(G4ANALYSIS_AIDA_CONFIG_LIBS)
+endif
+
+# -----------------------------------
+#  All the below is in principle 
+# irrelevant if using an analysis system 
+# compliant with AIDA 2.2.
 # -----------------------------------
 
 ifdef G4ANALYSIS_USE
@@ -71,7 +83,6 @@ ifdef G4ANALYSIS_NON_AIDA
 endif
 
 # ------------- Hook packages -----------------
-ANALYSISLIBS := 
 #
 ifdef INC_ANALYSIS
   CPPFLAGS += -I$(G4BASE)/analysis/management/include
