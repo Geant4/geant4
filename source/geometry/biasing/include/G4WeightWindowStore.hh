@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.hh,v 1.1 2003-08-15 15:35:30 dressel Exp $
+// $Id: G4WeightWindowStore.hh,v 1.2 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,15 +29,9 @@
 //
 // Class description:
 //
-// An implementation of a "importance store" with the interface
-// G4VIStore. See description in G4VIStore.
-// This implementation uses G4GeometryCellImportance as the container
-// to store the "cells" together with the importance values.
-// Giving a cell the importance 0 is allowed as
-// a flagging that no biasing should happen between this
-// cell and it's neighbors
-// If a cell is not known by the importance store no biasing
-// should be applied between this cell and it's nighbors.
+// Implementation of a weight window store according to the
+// G4VWeightWindowStore interface.
+// See G4VWeightWindowStore.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -55,7 +49,7 @@ class G4WeightWindowStore: public G4VWeightWindowStore
 public:  // with description
 
   explicit G4WeightWindowStore(const G4VPhysicalVolume &worldvolume);
-    // initialise the importance store for the given geometry
+    // initialise the weight window store for the given geometry
 
   virtual ~G4WeightWindowStore();
     // destruct
@@ -71,7 +65,7 @@ public:  // with description
 
   virtual const G4VPhysicalVolume &GetWorldVolume() const;
     // return a reference to the wolrd volume of the 
-    // "importance" geometry
+    // geometry
 
   void AddLowerWeights(const G4GeometryCell &gCell,
 		       const std::vector<G4double> &lowerWeights);

@@ -21,14 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowExaminer.hh,v 1.1 2003-08-19 15:17:26 dressel Exp $
+// $Id: G4WeightWindowExaminer.hh,v 1.2 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowExaminer
 //
 // Class description:
-//
+// 
+// Implementation of an weight window examiner according to
+// G4VWeightWindowExaminer interface. 
+// See also description in G4VWeightWindowExaminer.hh
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -49,13 +52,15 @@ public:  // with description
   G4WeightWindowExaminer(const G4VWeightWindowAlgorithm &aWWalg,
 			 const G4VParallelStepper &astepper,
 			 const G4VWeightWindowStore &wwstore);
-    // initialisation and construct G4ImportanceFinder
+    // constructor 
 
   virtual ~G4WeightWindowExaminer();
-    // delete G4ImportanceFinder
+    // destructor
 
   virtual G4Nsplit_Weight Examine(G4double w, G4double energy) const; 
-    // Get  G4Nsplit_Weight for a given mother track weight.
+    // evaluate the number of tracks and their weight according
+    // to the initial track weight and energy
+
   
 
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.5 2002-10-14 12:36:00 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.6 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,10 +55,8 @@ public:  // with description
   G4ImportanceSplitExaminer(const G4VImportanceAlgorithm &aIalg,
 		      const G4VParallelStepper &astepper,
 		      const G4VIStore &istore);
-    // initialisation and construct G4ImportanceFinder
 
   virtual ~G4ImportanceSplitExaminer();
-    // delete G4ImportanceFinder
 
   virtual G4Nsplit_Weight Examine(G4double w) const; 
     // Get  G4Nsplit_Weight for a given mother track weight.

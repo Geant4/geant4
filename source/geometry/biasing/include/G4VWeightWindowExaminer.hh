@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowExaminer.hh,v 1.1 2003-08-19 15:17:26 dressel Exp $
+// $Id: G4VWeightWindowExaminer.hh,v 1.2 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,9 @@
 //
 // Class description:
 //
-
+// Interface class to a weight window examiner. The examiner
+// has to return the number of tracks and their weight according to
+// the initial track weight and the energy of the track.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -43,9 +45,17 @@ class G4VWeightWindowExaminer
 {
 
 public:  // with description
+  
+  // constructor and destructor
   G4VWeightWindowExaminer();
   virtual ~G4VWeightWindowExaminer();
+  
+  
+
   virtual G4Nsplit_Weight Examine(G4double w, G4double energy) const = 0; 
+    // evaluate the number of tracks and their weight according
+    // to the initial track weight and energy
+
 };
 
 #endif

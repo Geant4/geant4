@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowAlgorithm.hh,v 1.6 2003-08-15 15:34:45 dressel Exp $
+// $Id: G4VWeightWindowAlgorithm.hh,v 1.7 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,10 @@
 //
 // Class description:
 // 
-// 
+// Interface class for an weight window algorithm. It calculates
+// the number of tracks and their weight according to the inital
+// track weight and the lower energy bound in the energy-space
+// cell.
 //
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -50,7 +53,8 @@ public:  // with description
 
   virtual G4Nsplit_Weight Calculate(G4double init_w,
 				    G4double lowerWeightBound) const = 0;
-  
+    // calculate number of tracks and their weight according
+    // to the initial track weight and the lower energy bound
 
 };
 

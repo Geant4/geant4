@@ -21,13 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.hh,v 1.5 2003-08-15 15:34:45 dressel Exp $
+// $Id: G4WeightWindowAlgorithm.hh,v 1.6 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowAlgorithm
 // 
 // Class description:
+// Implementation of a weight window algorithm. 
+// The arguments in the constructor configure the algorithm:
+//   - upperLimitFaktor: the factor defining the upper weight limit 
+//      W_u = upperLimitFaktor * W_l (W_l lower weight bound)
+//   - survivalFaktor: used in calculating  the survival weight
+//      W_s = survivalFaktor * W_l
+//   - maxNumberOfSplits: the maximal number of splits allowed
+//     to be created in one go, and the reciprocal of the minimal
+//     survival probability in case of Russian roulette
+//
+// In case of upperLimitFaktor=survivalFaktor=1 the algorithm
+// becomes the expected weight algorithm of the importance sampling 
+// technique.
+//
 // see also G4VWeightWindowAlgorithm.
 //
 
@@ -52,6 +66,8 @@ public:  // with description
 
   virtual G4Nsplit_Weight Calculate(G4double init_w,
 				    G4double lowerWeightBound) const;
+    // calculate number of tracks and their weight according
+    // to the initial track weight and the lower energy bound
 
 private:
   G4double fUpperLimitFaktor;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowStore.hh,v 1.1 2003-08-15 15:35:30 dressel Exp $
+// $Id: G4VWeightWindowStore.hh,v 1.2 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,6 +29,8 @@
 //
 // Class description:
 //
+// Interface class for a weight window store. It defines how the lower 
+// weight window bound can be obtained from a weight window store.
 // 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -60,7 +62,7 @@ public:  // with description
 
   virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
     // return a reference to the wolrd volume of the 
-    // "importance" geometry
+    // geometry
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellWeight.hh,v 1.1 2003-08-15 15:35:30 dressel Exp $
+// $Id: G4GeometryCellWeight.hh,v 1.2 2003-08-19 15:44:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,8 +29,9 @@
 //
 // Class description:
 //
-// Used internally by importance sampling. 
-// It is acontainer for "cell" importance value pairs.
+// Used internally by weight window tehnique sampling. 
+// It is a map of geometry cells to maps of upper energy
+// to lower weight bounds.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
