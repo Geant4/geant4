@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.29 2004-07-16 14:33:29 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.30 2004-07-28 15:46:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -591,6 +591,14 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
     }
   }
   return style;
+}
+
+G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4Visible& visible) {
+  const G4VisAttributes* pVA = visible.GetVisAttributes ();
+  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
+  G4bool isAuxEdgeVisible = fpViewer->GetViewParameters().IsAuxEdgeVisible ();
+  if (pVA -> IsForceAuxEdgeVisible()) isAuxEdgeVisible = true;
+  return isAuxEdgeVisible;
 }
 
 G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker, 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.18 2002-05-08 13:24:19 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.19 2004-07-28 15:46:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -380,6 +380,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4LogicalVolume* PD_log_crystal
     = new G4LogicalVolume(PD_vol_crystal,Ar,"Test");
+
+  G4VisAttributes * PD_att_crystal
+    = new G4VisAttributes(G4Colour(1.,0.,1.));
+  PD_att_crystal->SetForceAuxEdgeVisible(true);
+  PD_log_crystal->SetVisAttributes(PD_att_crystal);
 
   G4RotationMatrix rm;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.14 2004-07-23 15:24:05 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.15 2004-07-28 15:46:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,13 +311,18 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 
   if (polyhedron.GetNoFacets() == 0) return;
 
+  // Check parameters that the user can force (thereby over-riding the
+  // view parameters).
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (polyhedron);
+ 
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
   //Get colour, etc..
   // const G4Colour& c = GetColour (polyhedron);
   
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  // Initial action depending on drwaing style.
   switch (drawing_style) {
   case (G4ViewParameters::hsr):
     {
@@ -353,7 +358,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     do {  // loop over edges...
       notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
       // Check to see if edge is visible or not...
-      if (fpViewer -> GetViewParameters().IsAuxEdgeVisible()) {
+      if (isAuxEdgeVisible) {
 	edgeFlag = G4int (true);
       }
       if (edgeFlag) {

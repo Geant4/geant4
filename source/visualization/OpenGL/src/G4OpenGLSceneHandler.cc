@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.24 2004-07-23 15:23:54 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.25 2004-07-28 15:46:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -350,7 +350,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   if (polyhedron.GetNoFacets() == 0) return;
 
+  // Check parameters that the user can force (thereby over-riding the
+  // view parameters).
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (polyhedron);
   
   //Get colour, etc..
   const G4Colour& c = GetColour (polyhedron);
@@ -420,7 +423,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
 					      edgeFlag[edgeCount]);
       // Check to see if edge is visible or not...
-      if (fpViewer -> GetViewParameters().IsAuxEdgeVisible()) {
+      if (isAuxEdgeVisible) {
 	edgeFlag[edgeCount] = G4int (true);
       }
       if (edgeFlag[edgeCount]) {

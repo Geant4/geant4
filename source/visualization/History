@@ -1,4 +1,4 @@
-$Id: History,v 1.257 2004-07-28 14:33:33 johna Exp $
+$Id: History,v 1.258 2004-07-28 15:46:15 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-28th July 2004  John Allison  (vis-V06-02-02)
+28th July 2004  John Allison  (vis-V06-02-02 with greps-V06-02-00)
+- Implemented force auxiliary edge visible feature of G4VisAttributes.
 - Included openinventor-V06-02-00 (minor revision - Guy Barrand).
 
 23rd July 2004  John Allison

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.20 2003-06-16 17:14:08 gunter Exp $
+// $Id: G4VSceneHandler.hh,v 1.21 2004-07-28 15:46:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -194,7 +194,7 @@ public: // With description
 
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4Visible&);
   // Returns drawing style of G4Visible object, i.e., the global
-  // default value unless ovewrridden by forced attributes.  And the
+  // default value unless over-ridden by forced attributes.  And the
   // attributes themselves can be specified or the global default is
   // used - see next function.  So use this function is you have a
   // G4Visible, or the next if all you have is a G4VisAttributes
@@ -203,6 +203,10 @@ public: // With description
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
   // Returns global default drawing style unless forced attributes are set.
   // So always use this to get the applicable drawing style.
+
+  G4bool GetAuxEdgeVisible (const G4Visible& visible);
+  // Returns auxiliary edge visiblility, unless over-ridden by forced
+  // attribute.
 
   G4double GetMarkerSize (const G4VMarker&, MarkerSizeType&);
   // Returns applicable marker size (diameter) and type (in second
