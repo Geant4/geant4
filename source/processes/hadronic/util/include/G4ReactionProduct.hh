@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.hh,v 1.5 2002-07-15 08:36:11 jwellisc Exp $
+// $Id: G4ReactionProduct.hh,v 1.6 2002-11-12 02:06:39 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
@@ -175,7 +175,12 @@
     inline void HasInitialStateParton(G4bool aFlag) { hasInitialStateParton = aFlag; }
     
     inline G4bool HasInitialStateParton() const { return hasInitialStateParton; }
-    
+ 
+#ifdef PRECOMPOUND_TEST
+     void SetCreatorModel(const G4String& aModel) { theCreatorModel = aModel; }
+     G4String GetCreatorModel() const { return theCreatorModel; }
+#endif
+ 
  private:
     
     G4ParticleDefinition *theParticleDefinition;
@@ -204,7 +209,11 @@
     //  "black track" particles, or as deuterons, tritons, and alphas
     G4bool NewlyAdded;
     G4bool MayBeKilled;
- };
+
+#ifdef PRECOMPOUND_TEST
+    G4String theCreatorModel;
+#endif
+};
  
 #endif
  
