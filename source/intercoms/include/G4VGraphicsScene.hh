@@ -5,11 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsScene.hh,v 1.2 1999-10-04 15:15:31 johna Exp $
+// $Id: G4VGraphicsScene.hh,v 1.3 1999-10-27 16:37:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 // John Allison  19th July 1996
+//
+// Class Description:
 // Abstract interface class for a graphics scene handler.
 // It is a minimal scene handler for the GEANT4 kernel.
 // See G4VSceneHadler for a fuller description.  G4VScenehandler is
@@ -41,10 +41,9 @@ class G4NURBS;
 
 #include "G4Transform3D.hh"
 
-// Scene Handler Interface - begin snippet.
 class G4VGraphicsScene {
 
-public:
+public: // With description
 
   ///////////////////////////////////////////////////////////////////
   // Functions for adding raw GEANT4 objects to the scene handler.
@@ -111,6 +110,5 @@ public:
   // Used to reverse the effect of EstablishSpecials, if required.
 
 };
-// Scene Handler Interface - end snippet.
 
 #endif

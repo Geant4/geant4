@@ -5,23 +5,45 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisManager.hh,v 1.2 1999-05-19 08:50:28 johna Exp $
+// $Id: G4VVisManager.hh,v 1.3 1999-10-27 16:37:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// Abstract interface for GEANT4 Visualization Manager.
 // John Allison 19/Oct/1996.
-
-// This is a "Singleton", i.e., only one instance of it may exist.
-// This is ensured by making the constructor private.
-
-// It has only one public access function which is used to obtain a pointer
-// to the concrete G4VisManager, should it exist.
-// G4VVisManager* pVVMan =  G4VVisManager::GetConcreteInstance ();
-// points to the real (concrete) G4VisManager, if a view is available for
-// drawing, otherwise is zero.  Thus all code must be protected,
-// for example, by:
+// 
+// Class Description:
+// G4VVisManager is an abstract interface for the GEANT4 Visualization Manager.
+// The inheritance hierarchy is:
+//   G4VVisManager <- G4VisManager <- YourVisManager
+//
+// See example/novice/N02 to see how to write YourVisManager and
+// instantiate it.  You should *not* access it directly; instead you
+// should obtain a pointer as follows:
+// 
+//   G4VVisManager* pVVMan =  G4VVisManager::GetConcreteInstance ();
+//
+// This ensures your code will link even if YourVisManager is not
+// instantiated or even if not provided in a library.  Please protect
+// your code by testing the pointer, for example, by:
+//
 //   if (pVVMan) pVVMan -> Draw (polyline);
+//
+// The Draw functions draw only "transient" objects.  This is useful
+// for debugging, e.g., drawing the step in your UserSteppingAction,
+// since G4Steps are not kept.
+//
+// Note: to draw "permanent" objects, i.e., objects which are always
+// available, such as detector geometry components, or available in an
+// event after tracking has finished, such as hits, digitisations and
+// trajectories, can be drawn in a transient way if you wish but it is
+// usually possible to draw them in a permanent way with /vis/
+// commands.  The advantage is that permanent objects can be redrawn,
+// e.g., when you change view or viewer; transient objects get
+// forgotten.
+//
+// Note that the G4Transform3D argument refers to the transformation
+// of the *object*, not the transformation of the coordinate syste.
+//
+// Note also that where a G4VisAttributes argument is specified, it
+// overrides any attributes belonging to the object itself.
 
 #ifndef G4VVISMANAGER_HH
 #define G4VVISMANAGER_HH
@@ -44,30 +66,18 @@ class G4VisAttributes;
 
 class G4VVisManager {
 
-public:
+public: // With description
 
   static G4VVisManager* GetConcreteInstance ();
   // Returns pointer to actual visualization manager if a view is
   // available for drawing, else returns null.  Always check value.
 
+public:
+
   virtual ~G4VVisManager ();
 
-  ///////////////////////////////////////////////////////////////////
-  // Functions to Draw "transient" objects, useful for hits, digis, etc.
+public: // With description
 
-  //1 Note that the {\tt G4Transform3D} objects refer to the
-  //1 transformation of the {\em object} being drawn.  However, for
-  //1 some functions, there is a version which takes a {\tt
-  //1 G4Translation} and a {\tt G4RotationMatrix}, the latter being a
-  //1 {\em system} rotation, as in {\tt G4PVPlacement}.
-  //1
-  //1 Note also that where a {\tt G4VisAttributes} argument is
-  //1 specified, it overrides any attributes belonging to the object
-  //1 itself.  Otherwise, the visualization attributes are assumed to
-  //1 be those belonging to the object being drawn (you can set its
-  //1 attributes --- see Section \ref{ap:setting_attribs}).
-
-  // VVisManager Interface - begin snippet.
   virtual void Draw (const G4Polyline&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
 
@@ -97,9 +107,6 @@ public:
 
   virtual void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
-  // VVisManager Interface - end snippet.
-
-  // Other management functions...
 
   virtual void GeometryHasChanged () = 0;
   // This is used by the run manager to notify a change of geometry.
