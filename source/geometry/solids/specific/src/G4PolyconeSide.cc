@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.7 2003-03-28 09:52:50 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.8 2004-10-22 21:25:15 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -834,13 +834,13 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 // of any phi segmentation
 //
 // Arguments:
-//  p    - (in) Point to check
-//  opposite  - (in) If true, check opposite hemisphere (see below)
-//  distOutside  - (out) Additional distance outside the edges of the
-//         surface
-//  edgeRZnorm  - (out) if negative, point is inside
+//  p             - (in) Point to check
+//  opposite      - (in) If true, check opposite hemisphere (see below)
+//  distOutside   - (out) Additional distance outside the edges of the surface
+//  edgeRZnorm    - (out) if negative, point is inside
+//
 //  return value = distance from the conical plane, if extrapolated beyond edges,
-//           signed by whether the point is in inside or outside the shape
+//                 signed by whether the point is in inside or outside the shape
 //
 // Notes:
 //  * There are two answers, depending on which hemisphere is considered.
@@ -915,7 +915,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       G4double dist = d1*rx;
       
       distOutside2 += dist*dist;
-      if (edgeRZnorm) *edgeRZnorm = fabs(dist);
+      if (edgeRZnorm) *edgeRZnorm = std::max(*edgeRZnorm,fabs(dist));
     }
   }
 
