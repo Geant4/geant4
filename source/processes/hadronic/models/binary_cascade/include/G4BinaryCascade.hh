@@ -64,7 +64,7 @@ public:
   G4BinaryCascade();
   G4BinaryCascade(const G4BinaryCascade & right);
 
-  ~G4BinaryCascade();
+  virtual ~G4BinaryCascade();
 
   const G4BinaryCascade& operator=(G4BinaryCascade & right);
   G4int operator==(G4BinaryCascade& right) {return (this == &right);}
@@ -72,7 +72,7 @@ public:
 
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus);
-  G4ReactionProductVector * Propagate(G4KineticTrackVector * secondaries,
+  virtual G4ReactionProductVector * Propagate(G4KineticTrackVector * secondaries,
 				      G4V3DNucleus * nucleus);
 
 private:
