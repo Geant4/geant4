@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2002-12-11 15:44:51 johna Exp $
+$Id: History,v 1.57 2002-12-12 13:16:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 12, 2002, G.Cosmo (tracking-V04-01-14)
+- Corrected problem introduced in the last tag and concerning the usage of abs()
+  (not defined of the std namespace!), causing compilation error on Windows.
 
 Dec 6, 2002, J.Allison (tracking-V04-01-13)
 - Last minute fix to G4VTrajectory::DrawTrajectory.
