@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2000-10-24 07:35:14 gunter Exp $
+$Id: History,v 1.114 2000-10-26 13:59:39 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,27 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24 October 2000   Gunter Folger
-- architecture.gmk,common.gmk,globlib.gmk, sys/(most files)
-  merge building shared libraries into makefiles; i.e. the MAKESHLIB script
-  is no longer used. 
-- Introduce new variables steering the building of archive/shared libs:
+24th October 2000   Gunter Folger (config-V02-00-03)
+- architecture.gmk, common.gmk, globlib.gmk, sys/*:
+  o merged building shared libraries into makefiles.
+    The MAKESHLIB script is no longer used.
+- Introduced new variables steering the building of archive/shared libs:
    G4LIB_BUILD_SHARED
    G4LIB_BUILD_ARCHIVE  (still default)
      note that G4MAKESHLIB set will internally set G4LIB_BUILD_SHARED for
      backwards compatiblity.
-- Introduce new variable (G4LIB_USE_GRANULAR) to force using of granular 
-   libraries, even when libG4global.a/.so exists.
-     
-14 September 2000  Guy Barrand : modifications to handle analysis directory.
-- note : things had been so that by default the analysis things 
-  are not taken into account.
-- analysis.gmk to handle analysis.
-- system/Linux-g++.gmk : add macro DLDLIBS for dynamic loading lib.
-- binmake.gmk : include the analysis.gmk file.
-- binmake.gmk : have LDLIBS3 += $(ANALYSISLIBS) after LDLIBS3 += $(INTYLIBS).
+- Introduced new variable (G4LIB_USE_GRANULAR) to force using of granular 
+  libraries, even when libG4global.a/.so exists.
 
-- Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
+14th September 2000  Guy Barrand 
+- Introduced changes to handle analysis module.
+  o added analysis.gmk.
+  o sys/Linux-g++.gmk: added macro DLDLIBS for library dynamic loading.
+  o binmake.gmk: added inclusion of analysis.gmk.
+  o binmake.gmk: place LDLIBS3 += $(ANALYSISLIBS) after LDLIBS3 += $(INTYLIBS).
+
 22nd August 2000  John Allison (config-V02-00-02)
 - Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
   This causes dependencies of both #include "..." and #include <...> to be
