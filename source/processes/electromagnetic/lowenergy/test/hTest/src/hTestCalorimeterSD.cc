@@ -214,8 +214,8 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
       for(j=0; j<i+1; j++) {
         EE[i] += energy[j];
       }  
-      theHisto->SaveToTuple(eSlice[i],energy[i]);      
-      theHisto->SaveToTuple(eInteg[i],EE[i]);      
+      //   theHisto->SaveToTuple(eSlice[i],energy[i]);      
+      // theHisto->SaveToTuple(eInteg[i],EE[i]);      
     }
   }
 
