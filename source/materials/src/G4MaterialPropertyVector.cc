@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.7 2001-07-17 15:54:41 verderi Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.8 2001-08-31 16:11:57 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -376,9 +376,8 @@ void G4MaterialPropertyVector::DumpVector()
 	for (G4int i = 0; i < NumEntries; i++) {
 		G4cout << "MPV["<< i << "]: ";
 		MPV[i]->DumpEntry();
-                G4cout << i << NumEntries << G4endl;
 	}
-        G4cout << " Done DumpVector " << G4endl;
+        G4cout << " Done DumpVector of " << NumEntries << " entries " << G4endl;
 
 } 
 
