@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryonToResonance.cc,v 1.1 2003-10-07 12:37:34 hpw Exp $ //
+// $Id: G4CollisionMesonBaryonToResonance.cc,v 1.2 2003-11-19 17:53:00 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionMesonBaryonToResonance.hh"
@@ -105,6 +105,7 @@ G4CollisionMesonBaryonToResonance::G4CollisionMesonBaryonToResonance()
   G4CollisionComposite::AddComponent(new G4ConcreteMesonBaryonToResonance(aProton, aPionp, aN2220, "N2220_Npi"));  
   G4CollisionComposite::AddComponent(new G4ConcreteMesonBaryonToResonance(aProton, aPionp, aN2250, "N2250_Npi"));  
 
+/*
   G4ParticleDefinition * aKaon = G4KaonPlus::KaonPlus();
   
 // sig=0  G4ParticleDefinition * aL1405 = G4ParticleTable::GetParticleTable()->FindParticle(13122);
@@ -147,4 +148,5 @@ G4CollisionMesonBaryonToResonance::G4CollisionMesonBaryonToResonance()
   G4CollisionComposite::AddComponent(new G4ConcreteMesonBaryonToResonance(aProton, aKaon, aS1915, "S1915_NKbar"));  
   G4CollisionComposite::AddComponent(new G4ConcreteMesonBaryonToResonance(aProton, aKaon, aS1940, "S1940_NKbar"));  
   G4CollisionComposite::AddComponent(new G4ConcreteMesonBaryonToResonance(aProton, aKaon, aS2030, "S2030_NKbar"));  
+*/
 }
