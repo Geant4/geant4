@@ -67,7 +67,7 @@ processes/decay                                  decay-V06-00-00
 ---------------
 - Fixed bug in PostStepGPIL() in case of stopping during AlongStep actions.
 
-processes/electromagnetic/lowenergy              emlowen-V06-00-08
+processes/electromagnetic/lowenergy              emlowen-V06-00-09
 -----------------------------------
 - Bug fixes in G4IonisationParameters, G4PenelopeCompton and
   G4PenelopeIonisation.
@@ -139,7 +139,7 @@ processes/hadronic                               ghad-V06-00-06
 - models/qgsm:
   o Introduced minimal transverse mass for diffractive scattering of
     gammas.
-- stopping
+- stopping (ghad-stop-V06-00-01)
   o Updated implementation of mu-nuclear absorption at rest.
 
 processes/optical                                op-V06-00-03
