@@ -1,12 +1,3 @@
-/***************************************************************************
-                          DicomPatientParameterisation.h  -  description
-                             -------------------
-    begin                : Sat Feb 1 2003
-    copyright            : (C) 2003 by Vincent Hubert-Tremblay
-    email                : vihut@phy.ulaval.ca
- ***************************************************************************/
-// library G4
-
 #ifndef DicomPatientParameterisation_h
 #define DicomPatientParameterisation_h 1
 
@@ -42,11 +33,11 @@ public:
   virtual void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
 
   //  virtual void ComputeDimensions (G4Box & voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
+
   virtual void ComputeDimensions (G4Box&, 
 				  const G4int, 
 				  const G4VPhysicalVolume* ) const;
 
-  // ---- MGP ---- The following are useless, added just to remove a pedantic warning
    virtual void ComputeDimensions(G4Tubs &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
@@ -78,22 +69,23 @@ public:
     virtual void ComputeDimensions(G4Hype &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
-  // ---- MGP ---- End of useless 
 
   virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
 
   void GetDensity( G4double maxDensity, G4double minDensity );
 
 private:
-  G4Material* P_lung_exhale;
-  G4Material* P_lung_inhale;
-  G4Material* P_adipose;
-  G4Material* P_breast;
-  G4Material* P_phantom;
-  G4Material* P_muscle;
-  G4Material* P_liver;
-  G4Material* P_dense_bone;
-  G4Material* P_trabecular_bone;
+ 
+  //materials ...
+  G4Material* lungExhale;
+  G4Material* lungInhale;
+  G4Material* adiposeTissue;
+  G4Material* breastTissue;
+  G4Material* phantomTissue;
+  G4Material* muscleTissue;
+  G4Material* liverTissue;
+  G4Material* denseBoneTissue;
+  G4Material* trabecularBoneTissue;
 
   G4double red;
   G4double green;
