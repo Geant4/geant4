@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.cc,v 1.14 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4QCandidate.cc,v 1.15 2001-11-21 11:21:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -23,7 +23,9 @@
 #include "G4QCandidate.hh"
 #include "g4std/algorithm"
 
-G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.) {};
+G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
+{
+}
 
 G4QCandidate::G4QCandidate(G4int PDGcode) :
   relativeProbability(0.),integralProbability(0.)

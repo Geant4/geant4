@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.20 2001-11-02 07:28:59 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.21 2001-11-21 11:21:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,10 +60,10 @@ const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
   return *this;
 }
 
-G4QPDGCode::~G4QPDGCode() {};
+G4QPDGCode::~G4QPDGCode() {}
 
 // Standard output for QPDGCode
-ostream& operator<<(ostream& lhs, G4QPDGCode& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QPDGCode& rhs)
 //       =========================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -71,7 +71,7 @@ ostream& operator<<(ostream& lhs, G4QPDGCode& rhs)
 }
 
 // Standard output for const QPDGCode
-ostream& operator<<(ostream& lhs, const G4QPDGCode& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QPDGCode& rhs)
 //       ===============================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -194,7 +194,7 @@ G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
                          2,1001,2000,1000001,1001000,1999001,2000000,2000999}; // sum 2
   if      (QCode<0)
   {
-    G4cerr<<"***G4QPDGCode::MakePDGCode: negative Q Code ="<<QCode<<endl;
+    G4cerr<<"***G4QPDGCode::MakePDGCode: negative Q Code ="<<QCode<<G4endl;
     return 0;
   }
   else if (QCode>=modi)
@@ -930,11 +930,11 @@ G4QContent G4QPDGCode::GetExQContent(G4int i, G4int o)  const
   if     (!i)   cQC.IncAD();
   else if(i==1) cQC.IncAU();
   else if(i==2) cQC.IncAS();
-  else cerr<<"***G4QPDGCode::GetExQContent: strange entering quark i="<<i<<endl;
+  else G4cerr<<"***G4QPDGCode::GetExQContent: strange entering quark i="<<i<<G4endl;
   if     (!o)   cQC.IncD();
   else if(o==1) cQC.IncU();
   else if(o==2) cQC.IncS();
-  else cerr<<"***G4QPDGCode::GetExQContent: strange exiting quark o="<<o<<endl;
+  else G4cerr<<"***G4QPDGCode::GetExQContent: strange exiting quark o="<<o<<G4endl;
   return cQC;
 }
 
@@ -1011,7 +1011,7 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
       else if(sub<9) return d02[rel];
       else           return m02[rel];
     }
-    else cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<endl;
+    else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<G4endl;
   }
   else if(i==1)
   {
@@ -1028,7 +1028,7 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
       else if(sub<9) return d12[rel];
       else           return m12[rel];
     }
-    else cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<endl;
+    else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<G4endl;
   }
   else if(i==2)
   {
@@ -1066,9 +1066,9 @@ G4int G4QPDGCode::GetNumOfComb(G4int i, G4int o) const
     if     (!o)   return parentQC.GetD();
     else if(o==1) return parentQC.GetU();
     else if(o==2) return parentQC.GetS();
-    else cerr<<"***G4QPDGCode:::GetNumOfComb: strange exiting quark o="<<o<<endl;
+    else G4cerr<<"***G4QPDGCode:::GetNumOfComb: strange exiting quark o="<<o<<G4endl;
   }
-  else cerr<<"***G4QPDGCode:::GetNumOfComb: strange entering quark i="<<i<<endl;
+  else G4cerr<<"***G4QPDGCode:::GetNumOfComb: strange entering quark i="<<i<<G4endl;
   return 0;
 }
 
@@ -1077,7 +1077,7 @@ G4int G4QPDGCode::GetTotNumOfComb(G4int i) const
 {//   ==========================================
   G4int tot=0;
   if(i>-1&&i<3) for(int j=0; j<3; j++) tot+=GetNumOfComb(i, j);
-  else cerr<<"***G4QPDGCode:::GetTotNumOfComb: strange entering quark i="<<i<<endl;
+  else G4cerr<<"***G4QPDGCode:::GetTotNumOfComb: strange entering quark i="<<i<<G4endl;
   return tot;
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.19 2001-10-30 13:40:06 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.20 2001-11-21 11:21:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -26,11 +26,11 @@
 
 G4QHadron::G4QHadron() :
   theQPDG(0),theMomentum(0.,0.,0.,0.),valQ(0,0,0,0,0,0),nFragm(0)
-{};
+{}
 
 G4QHadron::G4QHadron(G4LorentzVector p) :
   theQPDG(0),theMomentum(p),valQ(0,0,0,0,0,0),nFragm(0)
-{};
+{}
 
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
@@ -42,8 +42,8 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
     valQ=theQPDG.GetQuarkContent();
   }
   else if(PDGCode>80000000) DefineQC(PDGCode);
-  else cerr<<"***G4QHaron:(P) PDG="<<PDGCode<<", use other constructor"<<endl;
-};
+  else G4cerr<<"***G4QHaron:(P) PDG="<<PDGCode<<", use other constructor"<<G4endl;
+}
 
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
@@ -62,7 +62,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
 #endif
   }
 
-};
+}
 
 // Make sense Chipolino or Quasmon
 G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
@@ -70,23 +70,23 @@ G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
 {
   G4int curPDG=valQ.GetSPDGCode();
   if(curPDG&&curPDG!=10) theQPDG.SetPDGCode(curPDG);
-};
+}
 
 G4QHadron::G4QHadron(G4int PDGCode, G4double aMass, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0)
-{};
+{}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4double aMass, G4QContent QC) :
   theQPDG(QPDG),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0)
-{};
+{}
 
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(p),valQ(QC),nFragm(0)
-{};
+{}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC) :
   theQPDG(QPDG),theMomentum(p),valQ(QC),nFragm(0)
-{};
+{}
 
 G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
   theQPDG(pPart->GetQPDG()),theMomentum(0.,0.,0.,0.),nFragm(0)
@@ -95,7 +95,7 @@ G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
   G4cout<<"G4QHadron is created & randomized with maxM="<<maxM<<G4endl;
 #endif
   G4int PDGCode = theQPDG.GetPDGCode();
-  if(PDGCode<2) cerr<<"***G4QHaron:(M) PDGC="<<PDGCode<<", use other constructor"<<endl;
+  if(PDGCode<2) G4cerr<<"***G4QHaron:(M) PDGC="<<PDGCode<<", use other constructor"<<G4endl;
   valQ=theQPDG.GetQuarkContent();
   theMomentum.setE(RandomizeMass(pPart, maxM));
 }

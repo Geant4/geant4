@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.cc,v 1.11 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4QDecayChan.cc,v 1.12 2001-11-21 11:21:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -24,7 +24,7 @@
 #include "G4QDecayChanVector.hh"
 #include "g4std/algorithm"
 
-G4QDecayChan::G4QDecayChan(){};
+G4QDecayChan::G4QDecayChan(){}
 
 G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
   aDecayChanLimit(pLev)
@@ -95,7 +95,7 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 }
 
 // Standard output for QDecayChan
-ostream& operator<<(ostream& lhs, G4QDecayChan& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QDecayChan& rhs)
 //       =========================================
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 

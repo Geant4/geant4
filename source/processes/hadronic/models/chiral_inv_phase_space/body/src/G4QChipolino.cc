@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QChipolino.cc,v 1.11 2001-10-30 08:32:37 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.12 2001-11-21 11:21:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -41,7 +41,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   else        rQC.DecQAQ(-4); // Reduce pairs, keep only 4 quarks  (meson case)
   tot=rQC.GetTot();           // Final total number of quarks      (updated)
 #ifdef debug
-  cout<<"G4QChipolino is called with QC="<<QCont<<",rQC="<<rQC<<",tot="<<tot<<endl;
+  cout<<"G4QChipolino is called with QC="<<QCont<<",rQC="<<rQC<<",tot="<<tot<<G4endl;
 #endif
   minM=1000000.;              // Prototype of minimal mass         (@@ just a big number)
   theQPDG1   = Pi0;
@@ -49,12 +49,12 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   theQCont1  = Pi0QC;
   if      (!tot)              // Should not be here, just in case     (strange input)
   {
-    cerr<<"***G4QChipolino: shouldn't be here 1 QC="<<rQC<<endl;
+    G4cerr<<"***G4QChipolino: shouldn't be here 1 QC="<<rQC<<G4endl;
     G4Exception("G4QChipolino cannot be constructed as n_tot=0");
   }
   else if (tot==2 || tot==3)  // Should not be here (basic octet/singlet states)
   {
-    cerr<<"***G4QChipolino: shouldn't be here 2 QC="<<rQC<<endl;
+    G4cerr<<"***G4QChipolino: shouldn't be here 2 QC="<<rQC<<G4endl;
     theQCont1= rQC;
     theQPDG1.InitByQCont(rQC);
     theQCont = rQC+Pi0QC;
@@ -63,7 +63,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   {
     G4QContent bQC=rQC.IndQ();
 #ifdef debug
-    cout<<"G4QChipolino: tot=4,rQC="<<rQC<<",bQC="<<bQC<<endl;
+    cout<<"G4QChipolino: tot=4,rQC="<<rQC<<",bQC="<<bQC<<G4endl;
 #endif
     for(int j=0; j<2; j++)
     {
@@ -74,7 +74,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
       if(cQPDG.GetPDGCode()==221) M1=mPi0;
       G4QContent oQC=rQC-cQC;
 #ifdef debug
-	  cout<<"G4QChipolino: aQC="<<aQC<<", cQC="<<cQC<<", oQC="<<oQC<<endl;
+	  cout<<"G4QChipolino: aQC="<<aQC<<", cQC="<<cQC<<", oQC="<<oQC<<G4endl;
 #endif
       G4QPDGCode oQPDG(oQC);
       G4double                    M2=oQPDG.GetMass();
@@ -82,7 +82,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
       G4double m=M1+M2;
 #ifdef debug
 	  cout<<"G4QChipolino: c="<<cQPDG<<",cM="<<M1<<",o="<<oQPDG<<",oM="<<M2
-          <<",cM+0M="<<m<<", curMinM="<<minM<<endl;
+          <<",cM+0M="<<m<<", curMinM="<<minM<<G4endl;
 #endif
       if(m<minM)
       {
@@ -100,7 +100,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
     G4bool fl=nA>nQ;               // Flag of antibaryon case
 #ifdef pdebug
 	cout<<"G4QChipolino: Baryon case nQ="<<nQ<<",nA="<<nA<<",QC="<<rQC
-        <<",fl="<<fl<<endl;
+        <<",fl="<<fl<<G4endl;
 #endif
     G4QContent bQC;
     if (fl) bQC=rQC.IndQ();       // Antibaryon case
@@ -128,7 +128,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
     }
 #ifdef pdebug
 	cout<<"G4QChipolino: Baryon case minM="<<minM<<", M="<<theQCont1<<theQPDG1
-        <<", B="<<theQPDG2<<endl;
+        <<", B="<<theQPDG2<<G4endl;
 #endif
   }
   else if (tot==6)                 // Four possible combinations for the di-baryon
@@ -139,7 +139,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
       G4int nA=rQC.GetAQ();
       G4bool fl=nA>nQ;             // Flag of anti-dibaryon case
 #ifdef debug
-	  cout<<"G4QChipolino: Di-Baryon case nQ="<<nQ<<",nA="<<nA<<",QC="<<rQC<<",fl="<<fl<<endl;
+	  cout<<"G4QChipolino: Di-Baryon case nQ="<<nQ<<",nA="<<nA<<",QC="<<rQC<<",fl="<<fl<<G4endl;
 #endif
       for (int i=0; i<4; i++)
       {
@@ -195,16 +195,16 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
     G4int nA=rQC.GetAQ();
     G4bool fl=nA>nQ;           // Flag of anti-fragment case
 #ifdef debug
-	cout<<"G4QChipolino: NucFragment case nQ="<<nQ<<",nAQ="<<nA<<", QC="<<rQC<<",fl="<<fl<<endl;
+	cout<<"G4QChipolino: NucFragment case nQ="<<nQ<<",nAQ="<<nA<<", QC="<<rQC<<",fl="<<fl<<G4endl;
 #endif
 	if((fl&&kS>1)||(!fl&&mS>1))
     {
-      cerr<<"***G4QChipolino: ***Overfowed by strange quarks*** rQC="<<rQC<<endl;
+      G4cerr<<"***G4QChipolino: ***Overfowed by strange quarks*** rQC="<<rQC<<G4endl;
 	  G4Exception("G4QChipolino: Nuclear Fragment-Chipolino is overflowed by strange quarks");
     }
     else if(fl)                // ===> Anti-fragment
 	{
-      //cerr<<"***G4QChipolino: ***Anti-nuclear fragments*** rQC="<<rQC<<endl;
+      //G4cerr<<"***G4QChipolino: ***Anti-nuclear fragments*** rQC="<<rQC<<G4endl;
 	  //G4Exception("G4QChipolino: Antinuclear fragments are not yet supported");
       if(!mS)                                                           // No strange quarks
 	  {
@@ -240,7 +240,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		  }
           else
 		  {
-            cerr<<"***G4QChipolino: **A**Isotopic asymmetry (without S)*** rQC="<<rQC<<endl;
+            G4cerr<<"***G4QChipolino: **A**Isotopic asymmetry (without S)*** rQC="<<rQC<<G4endl;
 	        G4Exception("G4QChipolino: Exotic Isotopic asymmety of AntiMultyBaryon Quasmon");
 		  }
         }
@@ -261,7 +261,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		}
         else
 	    {
-          cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<endl;
+          G4cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<G4endl;
 	      G4Exception("G4QChipolino: Too much Kaons are needed together with AntiNuclearFragm");
 		}
 	  }
@@ -299,7 +299,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		  }
           else
 		  {
-            cerr<<"***G4QChipolino: **A**Isotopic assimetry (with S)*** rQC="<<rQC<<endl;
+            G4cerr<<"***G4QChipolino: **A**Isotopic assimetry (with S)*** rQC="<<rQC<<G4endl;
 	        G4Exception("G4QChipolino:Exotic Isotopics of Strange AntiMultyBaryon Quasmon");
 		  }
 		}
@@ -312,7 +312,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           G4int lS=mS-lam;                                              // Residual as-quarks
           if(lD+lU+lS!=3||lD<0||lU<0||lS<0)
 		  {
-            cerr<<"***G4QChipolino:*AntiFragm* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<endl;
+            G4cerr<<"***G4QChipolino:*AntiFragm* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<G4endl;
 	        G4Exception("G4QChipolino: Exotic superstrange AntiMultyBaryon");
 		  }
           if     ( !lD && lU==2) theQPDG2=G4QPDGCode(-3222);            // Anti-Sigma+
@@ -362,7 +362,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		  }
           else
 		  {
-            cerr<<"***G4QChipolino: ***Isotopic assimetry (without S)*** rQC="<<rQC<<endl;
+            G4cerr<<"***G4QChipolino: ***Isotopic assimetry (without S)*** rQC="<<rQC<<G4endl;
 	        G4Exception("G4QChipolino: Exotic Isotopic assimety of MultyBaryon Quasmon");
 		  }
         }
@@ -383,7 +383,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		}
         else
 	    {
-          cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<endl;
+          G4cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<G4endl;
 	      G4Exception("G4QChipolino: More than one Kaon is needed together with Nuclear Fragm");
 		}
 	  }
@@ -421,7 +421,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 		  }
           else
 		  {
-            cerr<<"***G4QChipolino: ***Isotopic assimetry (with S)*** rQC="<<rQC<<endl;
+            G4cerr<<"***G4QChipolino: ***Isotopic assimetry (with S)*** rQC="<<rQC<<G4endl;
 	        G4Exception("G4QChipolino:Exotic Isotopic Assimety of Strange MultyBaryon Quasmon");
 		  }
 		}
@@ -434,7 +434,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           G4int lS=kS-lam;                                              // Residual s-quarks
           if(lD+lU+lS!=3||lD<0||lU<0||lS<0)
 		  {
-            cerr<<"***G4QChipolino: *Fragment* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<endl;
+            G4cerr<<"***G4QChipolino: *Fragment* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<G4endl;
 	        G4Exception("G4QChipolino: Exotic superstrange Multy Baryon");
 		  }
           if     ( !lD && lU==2) theQPDG2=G4QPDGCode(3222);             // Sigma+
@@ -451,7 +451,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   }
   else
   {
-    cerr<<"***G4QChipolino: ***Exotics*** rQC="<<rQC<<endl;
+    G4cerr<<"***G4QChipolino: ***Exotics*** rQC="<<rQC<<G4endl;
 	G4Exception("G4QChipolino: can not be constructed for the exotic baryon or meson");
   }
 }
@@ -488,7 +488,7 @@ const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
 G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
-ostream& operator<<(ostream& lhs, G4QChipolino& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs)
 {//      ===========================================
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;

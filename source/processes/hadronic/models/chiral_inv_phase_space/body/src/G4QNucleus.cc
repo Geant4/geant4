@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.23 2001-11-12 15:08:59 hpw Exp $
+// $Id: G4QNucleus.cc,v 1.24 2001-11-21 11:21:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -24,7 +24,7 @@
 
 #include "G4QNucleus.hh"
 
-G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {};
+G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {}
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   Z(z),N(n),S(s),maxClust(0)
@@ -192,14 +192,14 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-ostream& operator<<(ostream& lhs, G4QNucleus& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QNucleus& rhs)
 {//      =========================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< ",M="<<rhs.GetGSMass()<<"}";
   return lhs;
 }
 
 // Standard output for const QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-ostream& operator<<(ostream& lhs, const G4QNucleus& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QNucleus& rhs)
 {//      ===============================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< "}";
   return lhs;
@@ -2518,7 +2518,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
     else return false;
 	return true;
   }
-  if(a<1) cerr<<"***G4QNucleus::EvaporateBaryon: A="<<a<<endl;
+  if(a<1) G4cerr<<"***G4QNucleus::EvaporateBaryon: A="<<a<<G4endl;
   return false;
 }
 // End of "EvaporateBaryon"

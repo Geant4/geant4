@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QSelector.cc,v 1.11 2001-10-30 08:32:39 mkossov Exp $
+// $Id: G4QSelector.cc,v 1.12 2001-11-21 11:21:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -19,9 +19,9 @@
 // -------------------------------------------------------------------
 #include "G4QSelector.hh"
 
-G4QSelector::G4QSelector(){};
+G4QSelector::G4QSelector(){}
 
-G4QSelector::G4QSelector(G4QHadronVector hadronVec) : theHadrons(hadronVec){};
+G4QSelector::G4QSelector(G4QHadronVector hadronVec) : theHadrons(hadronVec){}
 
 G4bool G4QSelector::SelectPDGSet(G4QPDGCodeVector thePDGCodes)
 {

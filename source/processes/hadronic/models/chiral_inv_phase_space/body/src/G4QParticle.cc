@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.cc,v 1.14 2001-11-02 07:28:59 mkossov Exp $
+// $Id: G4QParticle.cc,v 1.15 2001-11-21 11:21:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -23,7 +23,7 @@
 
 #include "G4QParticleVector.hh"
 
-G4QParticle::G4QParticle() {};
+G4QParticle::G4QParticle() {}
 
 G4QParticle::G4QParticle(G4int thePDG)
 {
@@ -83,13 +83,13 @@ const G4QParticle& G4QParticle::operator=(const G4QParticle &right)
 }
 
 // Standard output for QParticle
-ostream& operator<<(ostream& lhs, G4QParticle& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QParticle& rhs)
 //       =========================================
 {
   G4QPDGCode rhsQPDG = rhs.GetQPDG();
-  lhs << endl << "Particle with PDG=" << rhsQPDG << ", Spin=" << rhs.GetSpin()
-      << ", mass=" << rhs.GetMass() << ", width=" << rhs.GetWidth() << endl;
-  lhs << " Quark Content of the Particle=" << rhs.GetQContent() << ", Decay Channels:" << endl;
+  lhs << G4endl << "Particle with PDG=" << rhsQPDG << ", Spin=" << rhs.GetSpin()
+      << ", mass=" << rhs.GetMass() << ", width=" << rhs.GetWidth() << G4endl;
+  lhs << " Quark Content of the Particle=" << rhs.GetQContent() << ", Decay Channels:" << G4endl;
   G4QDecayChanVector DCV = rhs.GetDecayVector();
   G4int n = DCV.size();
   for (int i=0; i<n; i++)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.11 2001-09-17 14:19:48 mkossov Exp $
+// $Id: G4QContent.hh,v 1.12 2001-11-21 11:21:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for Quasmon initiated Contents used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -139,8 +139,8 @@ private:            //                       C    S
 };
 
 // Not member operators
-ostream&   operator<<(ostream& lhs, G4QContent& rhs);
-ostream&   operator<<(ostream& lhs, const G4QContent& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QContent& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QContent& rhs);
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator*(const G4QContent& lhs, const G4int&      rhs);
@@ -305,10 +305,3 @@ inline void  G4QContent::DecAS(G4int n){nAS-=n;}
 // Private member functions
 inline G4QContent G4QContent::GetThis()const{return G4QContent(nD,nU,nS,nAD,nAU,nAS);}
 #endif
-
-
-
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.hh,v 1.7 2001-10-04 20:00:21 hpw Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.8 2001-11-21 11:21:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for CHIPS World of particles in CHIPS Model
 // ------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "G4QParticleVector.hh"
 

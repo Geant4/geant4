@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.hh,v 1.8 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.9 2001-11-21 11:21:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for Hadron definition in CHIPS Model
 // ------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
@@ -92,8 +92,8 @@ private:
 };
 
 // Not member operators
-ostream&   operator<<(ostream& lhs, G4QPDGCode& rhs);
-ostream&   operator<<(ostream& lhs, const G4QPDGCode& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QPDGCode& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QPDGCode& rhs);
 G4int      operator+(const G4QPDGCode& lhs, const G4QPDGCode& rhs);
 G4int      operator+(const G4QPDGCode& lhs, const G4int&      rhs);
 G4int      operator+(const G4int&      lhs, const G4QPDGCode& rhs);

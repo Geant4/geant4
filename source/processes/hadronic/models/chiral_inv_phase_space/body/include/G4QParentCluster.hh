@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentCluster.hh,v 1.7 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.8 2001-11-21 11:21:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for a Parent nuclear cluster in the CHIPS Model
 // -------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "G4QContent.hh"
 
@@ -87,8 +87,8 @@ private:
 };
 
 // Not member operators
-ostream&   operator<<(ostream& lhs, G4QParentCluster& rhs);
-ostream&   operator<<(ostream& lhs, const G4QParentCluster& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QParentCluster& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QParentCluster& rhs);
 
 inline G4int G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
 inline G4int G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}

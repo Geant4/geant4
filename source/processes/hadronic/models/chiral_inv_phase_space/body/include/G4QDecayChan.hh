@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.hh,v 1.6 2001-09-17 14:19:48 mkossov Exp $
+// $Id: G4QDecayChan.hh,v 1.7 2001-11-21 11:21:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for Decay Channel definition in CHIPS Model
 // ------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "G4QPDGCodeVector.hh"
 
@@ -64,7 +64,7 @@ private:
 };
 
 // Not member operators
-ostream&   operator<<(ostream& lhs, G4QDecayChan& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QDecayChan& rhs);
 //----------------------------------------------------------------------------------------
 
 inline G4int G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}

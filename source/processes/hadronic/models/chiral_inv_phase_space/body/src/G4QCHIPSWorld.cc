@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.cc,v 1.14 2001-10-30 08:32:36 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.15 2001-11-21 11:21:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,7 @@ G4QCHIPSWorld::G4QCHIPSWorld(G4QCHIPSWorld* right)
   qWorld = right->qWorld;
 }
 
-G4QCHIPSWorld::~G4QCHIPSWorld() {};
+G4QCHIPSWorld::~G4QCHIPSWorld() {}
 
 const G4QCHIPSWorld& G4QCHIPSWorld::operator=(const G4QCHIPSWorld &right)
 {//   ===================================================================
@@ -48,7 +48,7 @@ const G4QCHIPSWorld& G4QCHIPSWorld::operator=(const G4QCHIPSWorld &right)
 }
 
 // Standard output for CHIPS World
-ostream& operator<<(ostream& lhs, G4QCHIPSWorld& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QCHIPSWorld& rhs)
 //       ============================================
 {
   // @@ Later make a list of activated particles and clusters

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QChipolino.hh,v 1.6 2001-09-17 14:19:48 mkossov Exp $
+// $Id: G4QChipolino.hh,v 1.7 2001-11-21 11:21:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,8 +64,8 @@ private:
   G4double              minM;                 // Minimal Mass of Chipolino
 };
 
-ostream& operator<<(ostream& lhs, G4QChipolino& rhs);
-//ostream& operator<<(ostream& lhs, const G4QChipolino& rhs);
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs);
+//G4std::ostream& operator<<(G4std::ostream& lhs, const G4QChipolino& rhs);
 inline G4int G4QChipolino::operator==(const G4QChipolino& right) const {return this==&right;}
 inline G4int G4QChipolino::operator!=(const G4QChipolino& right) const {return this!=&right;}
  

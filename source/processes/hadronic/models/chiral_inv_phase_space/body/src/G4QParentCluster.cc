@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentCluster.cc,v 1.10 2001-09-18 15:28:22 mkossov Exp $
+// $Id: G4QParentCluster.cc,v 1.11 2001-11-21 11:21:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -23,10 +23,10 @@
 
 #include "G4QParentClusterVector.hh"
 
-G4QParentCluster::G4QParentCluster(G4int PDGCode): thePDGCode(PDGCode), theProbability(0.){};
+G4QParentCluster::G4QParentCluster(G4int PDGCode): thePDGCode(PDGCode), theProbability(0.){}
 
 G4QParentCluster::G4QParentCluster(G4int PDGCode, G4double prob): 
-  thePDGCode(PDGCode), theProbability(prob){};
+  thePDGCode(PDGCode), theProbability(prob){}
 
 G4QParentCluster::G4QParentCluster(const G4QParentCluster& rhs)
 {
@@ -72,17 +72,17 @@ const G4QParentCluster& G4QParentCluster::operator=(const G4QParentCluster& rhs)
   return *this;
 }
 
-G4QParentCluster::~G4QParentCluster() {};
+G4QParentCluster::~G4QParentCluster() {}
 
 // Standard output for G4QParentCluster
-ostream& operator<<(ostream& lhs, G4QParentCluster& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;
 }
 
 // Standard output for const G4QParentCluster
-ostream& operator<<(ostream& lhs, const G4QParentCluster& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.hh,v 1.9 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.10 2001-11-21 11:21:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -106,8 +106,8 @@ private:
   G4double probVect[256];       // Cluster probability ("a#of issues" can be real) Vector
 };
 
-ostream& operator<<(ostream& lhs, G4QNucleus& rhs);
-ostream& operator<<(ostream& lhs, const G4QNucleus& rhs);
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QNucleus& rhs);
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QNucleus& rhs);
 
 inline G4int G4QNucleus::operator==(const G4QNucleus &right) const  {return this==&right;}
 inline G4int G4QNucleus::operator!=(const G4QNucleus &right) const  {return this!=&right;}

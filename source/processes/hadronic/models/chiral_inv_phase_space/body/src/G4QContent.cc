@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.17 2001-10-30 08:32:37 mkossov Exp $
+// $Id: G4QContent.cc,v 1.18 2001-11-21 11:21:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -79,7 +79,7 @@ const G4QContent& G4QContent::operator=(const G4QContent &right)
 }
 
 // Standard output for QC {d,u,s,ad,au,as}
-ostream& operator<<(ostream& lhs, G4QContent& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs)
 {//      =========================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
@@ -87,7 +87,7 @@ ostream& operator<<(ostream& lhs, G4QContent& rhs)
 }
 
 // Standard output for const QC {d,u,s,ad,au,as}
-ostream& operator<<(ostream& lhs, const G4QContent& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QContent& rhs)
 {//      ===============================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
