@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.5 2002-11-20 14:18:34 gcosmo Exp $
+// $Id: G4Scale.cc,v 1.6 2002-11-27 12:24:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4Scale & G4Scale::operator = (const G4Scale &from) {
   return *this;
 }
 
-G4String G4Scale::GuidanceString
+const G4String G4Scale::GuidanceString
 (
  "An annotated line in the specified direction with tick marks at the"
  "\nend.  If autoPlacing is true it is required to be centred at the"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.4 2002-11-20 14:18:34 gcosmo Exp $
+// $Id: G4Scale.hh,v 1.5 2002-11-27 12:24:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,10 +77,6 @@ public: // With description
 
   static const G4String& GetGuidanceString();
 
-public:  // without description
-
-  static G4String GuidanceString;
-
 private:
 
   G4double fLength;
@@ -88,6 +84,7 @@ private:
   Direction fDirection;
   G4bool fAutoPlacing;
   G4double fXmid, fYmid, fZmid;
+  static const G4String GuidanceString;
 };
 
 #include "G4Scale.icc"
