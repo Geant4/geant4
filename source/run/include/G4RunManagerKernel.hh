@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.1 2003-07-31 20:17:35 asaim Exp $
+// $Id: G4RunManagerKernel.hh,v 1.2 2003-10-21 20:45:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,6 +102,7 @@ class G4RunManagerKernel
   private:
     void ResetNavigator();
     void BuildPhysicsTables();
+    void CheckRegions();
 
   public: // with description
     void UpdateRegion();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.5 2003-10-03 14:46:15 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.6 2003-10-21 20:45:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -216,7 +216,7 @@ void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
   physicsList->Construct();
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   physicsList->SetCuts();
-
+  CheckRegions();
   physicsInitialized = true;
   if(geometryInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }
@@ -254,6 +254,7 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
+  CheckRegions();
   UpdateRegion();
   BuildPhysicsTables();
 
@@ -305,6 +306,23 @@ void G4RunManagerKernel::BuildPhysicsTables()
   physicsList->DumpCutValuesTableIfRequested();
 }
 
+void G4RunManagerKernel::CheckRegions()
+{
+  for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
+  { 
+    G4Region* region = (*(G4RegionStore::GetInstance()))[i];
+    G4ProductionCuts* cuts = region->GetProductionCuts();
+    if(!cuts)
+    {
+      G4cerr << "Warning : Region <" << region->GetName()
+             << "> does not have specific production cuts." << G4endl;
+      G4cerr << "Default cuts are used for this region." << G4endl;
+      region->SetProductionCuts(
+          G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+    }
+  }
+}
+
 void G4RunManagerKernel::DumpRegion(G4String rname) const
 {
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
@@ -331,6 +349,14 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
     }
     G4cout << G4endl;
     G4ProductionCuts* cuts = region->GetProductionCuts();
+    if(!cuts)
+    {
+      G4cerr << "Warning : Region <" << region->GetName()
+             << "> does not have specific production cuts." << G4endl;
+      G4cerr << "Default cuts are used for this region." << G4endl;
+      region->SetProductionCuts(
+          G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+    }
     G4cout << " Production cuts : "
            << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
            << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
@@ -338,4 +364,3 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
            << G4endl;
   }
 }
-
