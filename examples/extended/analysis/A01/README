@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2003-10-09 19:38:09 dwright Exp $
+$Id: README,v 1.5 2003-10-13 22:34:16 perl Exp $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -128,9 +128,11 @@ $Id: README,v 1.4 2003-10-09 19:38:09 dwright Exp $
   5. VISUALIZATION:
   
      Simulated events can be displayed on top of a representation of 
-     the spectrometer.  Each event is overlayed on the previous event 
-     until the view is refreshed.  Each particle type is represented by a 
-     different color. 
+     the spectrometer.  vis.mac outputs .heprep files suitable for
+     viewing in WIRED and .prims files suitable for viewing in DAWN.
+     For more information on visualization with this A01 example,
+     see the visualization tutorials at:
+     http://www.slac.stanford.edu/comp/physics/geant4/g4cd
 
   6. ANALYSIS:
 
