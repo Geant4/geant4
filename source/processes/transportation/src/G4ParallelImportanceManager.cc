@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
+// $Id: G4ParallelImportanceManager.cc,v 1.6 2002-05-30 12:55:42 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -104,6 +104,6 @@ G4ParallelImportanceManager::~G4ParallelImportanceManager()
     delete fParallelImportanceProcess;
   }
   if (fCreatedPM) delete &fParallelManager;
-  if (fDeleteAlg) delete &fIalgorithm;
+  if (fDeleteAlg) delete fIalgorithm;
   delete fSampler;
 }
