@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.2 1999-04-15 14:00:37 grichine Exp $
+// $Id: G4SandiaTable.hh,v 1.3 1999-04-20 13:31:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -49,11 +49,11 @@ public:
 //
 // Methods for PAI model
 
-         inline void SandiaSwap( G4double da[][5],
+         inline void SandiaSwap( G4double** da,
                                  G4int i,
                                  G4int j );
 
-         void SandiaSort( G4double da[][5],
+         void SandiaSort( G4double** da,
                           G4int sz );
 
 	 G4int SandiaIntervals( G4int Z[],
@@ -90,13 +90,17 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 //
-// data memebers for PAI model
+// data members for PAI model
 
          static const G4int    fNumberOfElements  ;
          static const G4int    fIntervalLimit ;
          static const G4int    fNumberOfIntervals  ;
 		
-	 G4double fPhotoAbsorptionCof[101][5] ;	// SandiaTable  for mixture
+         // G4double fPhotoAbsorptionCof[101][5] ; // SandiaTable  for mixture
+
+	 G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
+
+         // G4OrderedTable*
 	 G4int fMaxInterval ;
 
   
@@ -179,7 +183,7 @@ G4double G4SandiaTable::GetZtoA(G4int Z)
 
 inline
 void
-G4SandiaTable::SandiaSwap( G4double da[][5],
+G4SandiaTable::SandiaSwap( G4double** da ,
                            G4int i,
                            G4int j )
 {
