@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.3 2002-12-18 08:03:06 stesting Exp $
+// $Id: Em2RunAction.cc,v 1.4 2002-12-18 11:10:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -442,27 +442,26 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   sum2TranEnergy *= 100.;
   err            *= 100.;
 
-  G4double eMean = 95.0;
-  G4double rms   = 0.94;
-  G4double limit = 30.0*err;
+  G4double eMean = 95.102;
+  G4double rms   = 0.9456;
+  G4double limit = 3.0;
 
   sumTranEnergy  -= eMean; 
   rmsTranEnergy  -= rms; 
-  //  sumTranEnergy  /= err; 
-  //  rmsTranEnergy  /= err; 
+  sumTranEnergy  /= err; 
+  rmsTranEnergy  /= err; 
 
   prec = G4cout.precision(3);
   G4cout << G4endl;
-  G4cout << G4std::setw(37) << "SUMMARY TEST" << G4endl;
-  G4cout << G4std::setw(42) << "Mean energy deposit : " 
+  G4cout << G4std::setw(37) << "SUMMARY TEST: limit value in RMS units = " 
+         << limit << G4endl;
+  G4cout << G4std::setw(22) << "Mean energy deposit standard deviation : " 
          << G4std::setw(10)  << sumTranEnergy;
-  if(abs(sumTranEnergy) <= limit) G4cout << "     is accepted";
-  else                            G4cout << "     is NOT accepted";
+  if(abs(sumTranEnergy) <= limit) G4cout << "     IS accepted";
+  else                            G4cout << "     IS NOT accepted";
   G4cout << G4endl;         
-  G4cout << G4std::setw(42) << "RMS of mean energy  : " 
+  G4cout << G4std::setw(22) << "RMS of mean energy standard deviation  : " 
          << G4std::setw(10)  << rmsTranEnergy; 
-  if(abs(rmsTranEnergy) <= limit) G4cout << "     is accepted";
-  else                            G4cout << "     is NOT accepted";
   G4cout << G4endl;
                  
   G4cout.setf(mode,G4std::ios::floatfield);
