@@ -7,8 +7,6 @@ Some of the development/fixes included since the last reference tag are:
   o First implementation of Penelope low-energy EM processes for photons.
     New data set EMLOWEN2.0 required.
   o First implementation of G4AnnihiToMuPair standard EM process.
-  o Relevant updates in multiple-scattering: adopt new algorithm to reduce
-    the step dependence; adopt new sampling for geometrical path-lengths.
   o Fixes in EM processes for allowing definition of multiple regions.
   o Fixes for curved trajectories to overcome crashes in visualization.
   o Fixes to hadronic models for problems of irreproducibility of events.
@@ -92,12 +90,8 @@ processes/electromagnetic/standard      stand-V05-00-05
 - Fixed problems with lambda and range tables for STD hadrons/ions
   processes.
 
-processes/electromagnetic/utils         utils-V05-00-04
+processes/electromagnetic/utils         utils-V05-00-04a
 -------------------------------
-- Relevant updates in multiple-scattering:
-  o changes in data members
-  o new algorithm to reduce the step dependence.
-  o new sampling for the geometrical path-lengths.
 - Minor fixes for warnings on SUN for STD classes.
 - Added Initialise() method to STD classes to calculate PartialSumSigma.
 - Substituted Material by MaterialCutsCouple for PostStep in STD processes.
