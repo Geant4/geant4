@@ -78,6 +78,10 @@ Flibsources = $(filter-out $(Fbinsources),$(wildcard src/*.F))
 Flibobjects = $(patsubst src/%.F,$(G4TMPDIR)/%.o,$(Flibsources))
 Fdependencies = $(patsubst %.o,%.d,$(Fbinobjects) $(Flibobjects))
 
+ifdef G3G4DEBUG
+  CPPFLAGS += -DG3G4DEBUG
+endif
+
 ###############################################################################
 ### user beware! .rz files made with cernlib v 95a cannot be read with later
 ### versions. You can use cernlib -v option to specify the cernlib version 
