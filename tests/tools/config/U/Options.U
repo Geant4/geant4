@@ -1,4 +1,4 @@
-?RCS: $Id: Options.U,v 1.3 2002-12-12 22:53:36 sadilov Exp $
+?RCS: $Id: Options.U,v 1.4 2002-12-13 13:40:38 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.3  2002/12/12 22:53:36  sadilov
+?RCS: Introduce -libs.
+?RCS:
 ?RCS: Revision 1.2  2001/12/12 21:24:29  sadilov
 ?RCS: Move UU in .config
 ?RCS:
@@ -159,6 +162,9 @@ while test $# -gt 0; do
 	-e) shift; alldone=cont;;
 	-install) shift; install=yes;;
 	-libs) shift; g4liblist=yes;;
+	-cppflags) shift; g4cppflags=yes;;
+	-cxxflags) shift; g4cxxflags=yes;;
+	-incflags) shift; g4incflags=yes;;
 	-f)
 		shift
 		cd ../..

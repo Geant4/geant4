@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.12 2002-12-12 22:53:17 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.13 2002-12-13 13:40:34 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.12  2002/12/12 22:53:17  sadilov
+?RCS: Introduce -libs.
+?RCS:
 ?RCS: Revision 1.11  2002/07/01 11:07:26  sadilov
 ?RCS: Correction for 'solaris' system.
 ?RCS:
@@ -781,6 +784,55 @@ if [ X$install = X ] ; then
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
+	# create not_display flag
+
+if [ X$g4liblist != X -o X$g4cxxflags != X -o X$g4cppflags != X -o X$g4incflags != X ] ; then
+	g4non_display=yes
+#	echo g4non_display=$g4non_display
+fi
+
+	if [ X$g4cppflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo CPPFLAGS=$CPPFLAGS
+	echo $CPPFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of cppflags
+
+	if [ X$g4cxxflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo CXXFLAGS=$CXXFLAGS
+	echo $CXXFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of cxxflags
+
+	if [ X$g4incflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo INCFLAGS=$INCFLAGS
+	echo $INCFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of incflags
+
 	if [ X$g4liblist = Xyes ] ; then
 
 #	cat >&2 <<EOM
@@ -794,17 +846,25 @@ if [ X$install = X ] ; then
 	echo TEST
 
 	ls -l $G4INSTALL/config/scripts/GNUmakefile
-	gmake -n -p -f $G4INSTALL/config/scripts/GNUmakefile > $G4INSTALL/config/scripts/GNUmakefile.db
-	
-grep LOADLIBS= $G4INSTALL/config/scripts/GNUmakefile.db
-	LOADLIBS=`grep 'LOADLIBS :=' $G4INSTALL/config/scripts/GNUmakefile.db | awk -F := '{print $2}'`
+	ls -l $G4LIB/$G4SYSTEM/GNUmakefile.db
+
+	LOADLIBS=`grep 'LOADLIBS :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
 
 	echo LOADLIBS=$LOADLIBS
+	echo LDLIBS_2=$LDLIBS_2
 	echo TEST
 
 	if [ X$G4LIB_USE_GRANULAR = X ] ; then
 	
 # Global libs
+
+	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
+
+	echo "$LDLIBS_2 $c"
 
 	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
 
@@ -819,9 +879,9 @@ grep LOADLIBS= $G4INSTALL/config/scripts/GNUmakefile.db
 	$rm -rf .config/UU
 
 	exit 1
-	fi
+	fi #end of check for global/granular
 
-	else
+	else #if not -lib but user mode
 
 # header for User
 echo " "
@@ -863,8 +923,8 @@ cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
 
 	exit 1
-	fi
-else
+	fi #end of -lib or user
+else #there is no env.sh
 
 # header for Installer
 echo " "
@@ -884,8 +944,9 @@ echo " "
 	echo " "
 	$rm -rf .config/UU
 	exit 1
-	fi
-fi
+ fi #end of check for existence of env.sh 
+fi #end of check for "not -install"
+
 cd .config/UU
 
 case "$knowitall" in
