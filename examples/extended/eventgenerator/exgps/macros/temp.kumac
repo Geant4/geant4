@@ -1,0 +1,13 @@
+hi/file 0 test31.hbook
+fortran/file 66 test31.ps
+meta -66 -111
+zone 2 3
+hi/pl 1
+hi/pl 2
+hi/pl 3
+hi/pl 4
+hi/pl 5
+hi/pl 6
+close 66
+shell ps2gif test31.ps
+return
