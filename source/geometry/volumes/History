@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2003-06-21 00:50:02 japost Exp $
+$Id: History,v 1.103 2003-06-21 02:19:47 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 June 21st, 2003     J. Apostolakis - geomvol-V05-01-03
+** Coworks with field-V05-01-04 **
+
 - G4PropagatorInField:
 
   Likeliest to cause effect on Users is this:
@@ -35,6 +37,10 @@ June 21st, 2003     J. Apostolakis - geomvol-V05-01-03
          has been set for the current step
       The flag ensures that the method FindAndSetFieldManager is always
       called once for each call to ComputeStep.
+
+ G4TransportationManager
+ - Corrected the method SetFieldManager
+     * it now messages the current global PropagatorInField to notify it 
 
  - Changes from "g4std" to <std> incorporated.
 
