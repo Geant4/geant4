@@ -4,13 +4,17 @@
 
 Some of the development/fixes included since the last reference tag are:
 
-  o Introduced first implementation of 'cuts-by-region' technique,
-    allowing setup of different production cuts associated to different
-    regions (sub-detectors) of the detector geometry.
-  o Dismissed temporary implementation of 'cuts-per-material'. Codes
-    making use of this feature will be required to migrate to the new
-    scheme.
-
+  o First implementation of Penelope low-energy EM processes for photons.
+    New data set EMLOWEN2.0 required.
+  o First implementation of G4AnnihiToMuPair standard EM process.
+  o Relevant updates in multiple-scattering: adopt new algorithm to reduce
+    the step dependence; adopt new sampling for geometrical path-lengths.
+  o Fixes in EM processes for allowing definition of multiple regions.
+  o Fixes for curved trajectories to overcome crashes in visualization.
+  o Fixes to hadronic models for problems of irreproducibility of events.
+  o Revision of examples and tests according to new development for
+    cuts-by-region.
+  
 ---------- Reference-tag 'Release Notes' -----------
 
 Summarised, the list of changes is the following:
@@ -76,7 +80,7 @@ processes/electromagnetic/muons         muons-V05-00-04
 
 processes/electromagnetic/standard      stand-V05-00-05
 ----------------------------------
-- First implementation of AnnihiToMuPair process.
+- First implementation of G4AnnihiToMuPair process.
 - Minor fixes for warnings on SUN for STD classes.
 - Added Initialise() method to STD classes to calculate PartialSumSigma.
 - Substituted Material by MaterialCutsCouple for PostStep in STD processes.
