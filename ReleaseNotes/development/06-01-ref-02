@@ -131,14 +131,17 @@ processes/electromagnetic/utils                  utils-V06-01-07
   o Critical fix to avoid observed crashes in case of use of
     G4hLowEnergyIonisation for ions with multiple-scattering.
   o Use dynamic change for simulation of multiple scattering angle.
-  o Use truncate range table for estimation of energy loss.
-- Updated integral method taking into account 1 peak in cross section
-- Added options to G4EmProcessOptions.
-- Fixed minor problem at initialisation.
-- Add method GetCurrentRange
-- Add additional initialisation to fluctuations
-- Fix in printout format
+  o Use of range table from restricted dedx estimation.
+- Updated integral method taking into account 1 peak in cross section.
+- Added new methods to define simulation options to G4EmProcessOptions.
+- Added protected method GetCurrentRange() to G4VEnergyLossProcess.
+- Changed initialisation parameters in G4UniversalFluctuations.
+- Updated printout format in G4VenergyLossProcess.
 
+processes/hadronic/models/chiral.../body    ghad-chips-body-V06-01-04
+----------------------------------------
+- Fixed compilation problem on WIN32-VC7.
+ 
 processes/management                             procman-V06-01-00
 --------------------
 - Fixed a bug in G4ProcessManager::RemoveProcess() for the case
