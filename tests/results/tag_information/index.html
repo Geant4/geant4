@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV, 28-Jun-2002 -->
+<!-- Changed by: Serguei SADILOV,  1-Aug-2002 -->
 </head>
 
 <body>
@@ -11,12 +11,12 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<b><blink>geant4-04-01-ref-00</blink></b> development tag.
+<b><blink>geant4-04-01-ref-01</blink></b> development tag.
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
-              +         +         +          +           +         +          +          +          +        testing    +          testing
+              +         +         +          +           +         +          +          +          +        +          +          +
               ^         ^         ^          ^           ^         ^          ^          ^          ^        ^          ^          ^
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
@@ -24,7 +24,7 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test01     |         |         |          |          |          |          |          |          |         |         |         |         |
 test02     |         |         |          |          |          |          |          |          |         |         |         |         |
-test02.h   |         |         |          |          |          |          |          |          |  abend  |         | abend   |         |
+test02.h   |         |         |          |          |          |          |          |          | E3      |         | E3      |         |
 test05     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test06     |         |         |          |          |          |          |          |          |         |         |         |         |
@@ -32,26 +32,26 @@ test07     |         |         |          |          |          |          |    
 test09     |         |         |          |          |          |          |          |          |         |         |         |         |
 test10     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test11     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
-test12     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
-test13     | WL6     | WL6     | WL6      | WL6      | WL6      | WL6      | WL6      |          | abend   | W6      | abend   |         |
+test11     |         |         |          |          |          |          |          |          | E3      |         | E3      |         |
+test12     |         |         |          |          |          |          |          |          | E3      |         | E3      |         |
+test13     | WL6     | WL6     | WL6      | WL6      | WL6      | WL6      | WL6      |          | E4      |         | E4      |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
-test15     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
+test15     |         |         |          |          |          |          |          |          | E3      |         | E3      |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test16     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
+test16     |         |         |          |          |          |          |          |          | E3      |         | E3      |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
 test18     |         |         |          |          |          |          |          |          |         |         |         |         |
 test20     |         |         |          |          |          |          |          |          |         |         |         |         |
-test21     |         |         |          |          | WL6      |  WL6     |          |          | abend   | abend   | abend   | abend   |
+test21     |         |         |          |          | WL6      |  WL6     |          |          | E4      | E4      | E4      | E4      |
 test22     | EL3     | EL3     | EL3      |  EL3     | EL3      |  EL3     |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103    |         |         |          |          |          |          |          |          |         |         |         |         |
-test104    |         |         |          |          |          |          |          |          | abend   | abend   | abend   | abend   |
+test104    |         |         |          |          |          |          |          |          | E3      | E3      | E3      | E3      |
 test104.Em |         |         |          |          |          |          |          |          |         |         |         |         |
 test502    |         |         |          |          |          |          |          |          |         |         |         |         |
 test506    |         |         |          |          | E2       |  E2      |          |          |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
-test5010   |         |         |          |          |          |          |          |          |         |         | E1      | E1      |
+test5010   |         |         |          |          |          |          |          |          | E5      |         | E1      | E1      |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
  abend  - crash without clue
@@ -62,6 +62,7 @@ test5010   |         |         |          |          |          |          |    
  EL - error in large_N test
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
+ You can find debug info concerning these cases.
 
 E1
 ------
@@ -78,6 +79,18 @@ E2
 ------
 Crash with shared libs only!
 
+E3
+----
+Crash
+
+E4
+----
+Crash
+
+E5
+----
+Crash
+
 EL3
 ------
 Crash only in large_N!
@@ -89,8 +102,145 @@ WL6
     total mass (4.69395) >= total energy (4.51751)
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------
+E2
+Linux-g++/optim/test506
+-----------------
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons)\
+.
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins.
+ G4ParticleWithCuts::CalcEnergyCuts     proton energy cut is not defined !!
 
+*** G4Exception: Aborting execution ***
 
+Program received signal SIGABRT, Aborted.
+0x2b43dd21 in __kill () from /lib/libc.so.6
+(gdb) where
+#0  0x2b43dd21 in __kill () from /lib/libc.so.6
+#1  0x2b43d996 in raise () at ../sysdeps/posix/raise.c:28
+#2  0x2b43f0b8 in abort () at ../sysdeps/generic/abort.c:139
+#3  0x2b38a4b0 in G4Exception ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4globman.so
+#4  0x2b17d377 in G4ParticleWithCuts::UseProtonCut ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4partman.so
+#5  0x2b17da89 in G4ParticleWithCuts::CalcEnergyCuts ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4partman.so
+#6  0x2b17efdd in G4ParticleWithCuts::SetCuts ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4partman.so
+#7  0x2ae21026 in G4VUserPhysicsList::SetParticleCuts ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4run.so
+#8  0x2ae20c5a in G4VUserPhysicsList::SetCutValueForOthers ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4run.so
+#9  0x2aad63cf in PhysicsList::SetCuts ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/tmp/Linux-g++/Te\
+stEm6/libTestEm6.so
+#10 0x2ae0d3df in G4RunManager::InitializeCutOff ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4run.so
+#11 0x2ae0d1a0 in G4RunManager::Initialize ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4run.so
+#12 0x2ae18531 in G4RunMessenger::SetNewValue ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4run.so
+#13 0x2b2fbbea in G4UIcommand::DoIt ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#14 0x2b318844 in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#15 0x2b2f1639 in G4UIbatch::SessionStart ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#16 0x2b312bb8 in G4UImanager::ExecuteMacroFile ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#17 0x2b30f761 in G4UIcontrolMessenger::SetNewValue ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#18 0x2b2fbbea in G4UIcommand::DoIt ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#19 0x2b318844 in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#20 0x2b31717a in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/prod/Linux-g++/optim_NEWGCC/lib/Linux-g++/li\
+bG4intercoms.so
+#21 0x804d642 in main ()
+#22 0x2b4379cb in __libc_start_main () at ../sysdeps/generic/libc-start.c:122
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+E3
+DEC-cxx/optim/test104
+-----------------------
+### Run 0 start.
+Stage 0->1 : 1 hits found in the muon chamber.
+
+Program received signal SIGFPE, Arithmetic exception.
+0x1208cebf8 in rotate__11HepRotationXdRC10Hep3Vector ()
+(gdb) where
+#0  0x1208cebf8 in rotate__11HepRotationXdRC10Hep3Vector ()
+#1  0x1208d8bc4 in rotate__10Hep3VectorXdRC10Hep3Vector ()
+#2  0x120673a20 in Rotate__18G4ReactionDynamicsXCdRC10Hep3VectorRC17G4ReactionP\
+roductPC17G4DynamicParticleRC9G4NucleusR17G4ReactionProductR17G4ReactionProduct\
+R39G4FastVector__T17G4ReactionProduct_128_Ri ()
+#3  0x12066cb60 in GenerateXandPt__18G4ReactionDynamicsXR39G4FastVector__T17G4R\
+eactionProduct_128_RiR17G4ReactionProductPC17G4DynamicParticleR17G4ReactionProd\
+uctR17G4ReactionProductRC9G4NucleusRjbRjbjbR17G4ReactionProduct ()
+#4  0x120655760 in CalculateMomenta__22G4InelasticInteractionXR39G4FastVector__\
+T17G4ReactionProduct_128_RiPC17G4DynamicParticlePC17G4DynamicParticleR17G4React\
+ionProductR9G4NucleusR17G4ReactionProductR17G4ReactionProductRjbRjbjb ()
+#5  0x12060bee4 in ApplyYourself__23G4LEAntiProtonInelasticXRC7G4TrackR9G4Nucle\
+us ()
+#6  0x120652350 in GeneralPostStepDoIt__17G4HadronicProcessXRC7G4TrackRC6G4Step
+    ()
+#7  0x120280fc4 in __init_sti__ExN04HadronPhysics_cc_1d0982c9 ()
+#8  0x120708048 in InvokePostStepDoItProcs__17G4SteppingManagerXv ()
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+E4
+DEC-cxx/optim/test21
+-----------------------
+
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 100
+Event number 0
+Unaligned access pid=5892 <test21> va=0x3ff800d597c pc=0x3ff8019cc7c ra=0x3ff80\
+0d7134 inst=0xa560fff8
+
+Program received signal SIGSEGV, Segmentation fault.
+0x3ff8019cc7c in _OtsDivide64Unsigned () from /usr/shlib/libc.so
+(gdb) where
+#0  0x3ff8019cc7c in _OtsDivide64Unsigned () from /usr/shlib/libc.so
+#1  0x3ff800d7134 in free () from /usr/shlib/libc.so
+#2  0x3ff800d7134 in free () from /usr/shlib/libc.so
+-------------------------------------------------------------------------
+
+E5
+DEC-cxx/optim/test5010
+----------------------
+phot:  Total cross sections from Sandia parametrisation.
+Unaligned access pid=30550 <TestEm10> va=0x1402f200c pc=0x120228d70 ra=0x12022b\
+1b8 inst=0xa6090008
+Unaligned access pid=30550 <TestEm10> va=0x1402f2014 pc=0x120228d74 ra=0x12022b\
+1b8 inst=0xa4090010
+
+Program received signal SIGSEGV, Segmentation fault.
+0x120228d98 in AlongStepDoIt__14G4VeEnergyLossXRC7G4TrackRC6G4Step ()
+(gdb) where
+#0  0x120228d98 in AlongStepDoIt__14G4VeEnergyLossXRC7G4TrackRC6G4Step ()
+---------------------------------------------------------------------------
 
 </pre>
 
