@@ -1,4 +1,4 @@
-$Id: History,v 1.17 1999-11-02 21:19:08 barrand Exp $
+$Id: History,v 1.18 1999-11-08 04:26:21 masayasu Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+08 Nov 1999 Hajime Yoshida
+- tag interfaces--V00-01-02 for STT
+
+08 Nov 1999 Hajime Yoshida
+- GAG/src/G4UIGAG.cc RWT => STL vector
+- basic/include/G4UIterminal.hh, GAG/include/G4UIGAG.hh => documentation
 
 02 Nov 1999 Guy Barrand
 - doc comments for G4UIWin32.hh, G4UIXm.hh, G4UIXaw.hh, G4Xt.hh, G4Win32.hh, G4VInterativeSession.hh, G4VInteractorManager.hh.
