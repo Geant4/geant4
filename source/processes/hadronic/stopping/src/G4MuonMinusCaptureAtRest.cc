@@ -40,7 +40,7 @@
 
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   : G4VRestProcess (processName), nCascade(0), targetCharge(0),
-    targetAtomicMass(0), tDelay(0), theDeExcitation(&theHandler)
+    targetAtomicMass(0), tDelay(0)
 {
   Cascade     = new G4GHEKinematicsVector [17];
   pSelector = new G4StopElementSelector();

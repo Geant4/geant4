@@ -54,7 +54,6 @@
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4Fancy3DNucleus.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 
 class G4MuonMinusCaptureAtRest : public G4VRestProcess
@@ -97,7 +96,6 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4GHEKinematicsVector* Cascade;
      G4Fancy3DNucleus theN;
      G4ExcitationHandler theHandler;
-     G4PreCompoundModel theDeExcitation;
 
 };
 
