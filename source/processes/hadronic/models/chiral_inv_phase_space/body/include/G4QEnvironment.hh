@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.22 2004-03-17 13:01:39 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.23 2004-03-29 09:03:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -112,8 +112,3 @@ inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const
                                                                      {return this != &rhs;}
 inline G4QNucleus G4QEnvironment::GetEnvironment() const {return theEnvironment;}
 #endif
-
-
-
-
-

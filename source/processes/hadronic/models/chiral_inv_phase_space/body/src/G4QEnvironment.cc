@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.88 2004-03-25 08:15:16 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.89 2004-03-29 09:03:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7381,8 +7381,25 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
     if(!(curHadr->GetNFragments()))
     {
-      cfContSum+=curHadr->GetCharge();
-      bfContSum+=curHadr->GetBaryonNumber();
+      G4int chg=curHadr->GetCharge();
+      cfContSum+=chg;
+      G4int brn=curHadr->GetBaryonNumber();
+      bfContSum+=brn;
+      G4int str=curHadr->GetStrangeness();
+      if(brn>1&&(!str&&(chg==brn||!chg) || !chg&&str==brn)) // Check for multibaryon(split)
+	  {
+        G4int             bPDG=90000001; // Prototype: multineutron
+        if     (chg==brn) bPDG=90001000; // Multyproton
+        else if(str==brn) bPDG=91000000; // Multilambda
+        G4LorentzVector sp4m=curHadr->Get4Momentum()/brn; // Split 4-mom of the Multibaryon
+        curHadr->Set4Momentum(sp4m);
+        curHadr->SetQPDG(G4QPDGCode(bPDG)); // Substitute Multibaryon by a baryon
+        for (G4int ib=1; ib<brn; ib++)
+		{
+          G4QHadron* bH = new G4QHadron(bPDG, sp4m);
+         theFragments->push_back(bH);     //(del eq. - user is responsible for deleting)
+        }
+      }
       theFragments->push_back(curHadr);  //(del eq. - user is responsible for deleting)
     }
   }
