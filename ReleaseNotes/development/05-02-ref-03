@@ -1,0 +1,171 @@
+
+                       geant4-05-02-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Replaced implementation of standard electro-magnetic processes with
+    new STD processes, implementing new design based on model approach for
+    energy loss and multiple scattering.
+    + User interface and physics lists are unchanged.
+    + Old energy loss processes and multiple scattering are frozen at
+      release 5.2 versions. They are stored in classes with characters
+      "52" at the end (G4eIonisation52, G4hIonisation52...).
+  o Introduced first implementation of weight-window biasing technique.
+  o Introduced utility classes for controlling event information:
+    G4StackChecker, G4VUserEventInformation, G4VUserPrimaryVertexInformation
+    and G4VUserPrimaryParticleInformation.
+  o Introduced possibility of wavelength shifting in optical processes.
+  o Fixed major bug in G4HadronicProcess, affecting final state generation
+    in all materials with more than two elements.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                   event-V05-02-05
+-----
+- Introduced G4StackChecker class, utility class for checkin the event stack.
+- Introduced G4VUserEventInformation class. Objects of this class can be
+  associated by the user to G4Event.
+- Introduced new classes G4VUserPrimaryVertexInformation and
+  G4VUserPrimaryParticleInformation, which can be associated by the user to
+  G4PrimaryVertex and G4PrimaryParticle respectively.
+- Added treatment of "proper decay time" for preassigned decay products.
+
+geometry/biasing                        geombias-V05-02-01
+----------------
+- First implementation of weight-window biasing technique.
+- Removed obsolete class G4ImportanceFinder.
+
+geometry/volumes                        geomvol-V05-02-00
+----------------
+- Made optional the printing of information on 'looping' particles in
+  G4PropagatorInField. It is now controlled by the verbose flag. Addresses
+  problem report #509.
+
+graphics_reps                           greps-V05-02-00
+-------------
+- Introduced G4Colour <-> G4ThreeVector conversion operators.
+
+particles                               particles-V05-02-02
+---------
+- Fixed memory leak for 'theElectronOccupancy' in G4DynamicParticle
+  assignment operator.
+- Added DecayProperTime to deep copy of G4DecayProduct.
+
+processes/electromagnetic/muons         muons-V05-02-03
+-------------------------------
+- Substituted standard processes with new STD processes implementing
+  the new design based on model approach for energy loss and multiple
+  scattering.
+  o Interfaces are unchanged.
+  o Old energy loss processes are frozen at the release 5.2 versions.
+    They are stored in classes with characters "52" at the end
+    (G4MuIonisation52, G4PairProduction52...).
+
+processes/electromagnetic/standard      stand-V05-02-02
+----------------------------------
+- Substituted standard processes with new STD processes implementing
+  the new design based on model approach for energy loss and multiple
+  scattering.
+  o Interfaces are unchanged.
+  o Old energy loss processes are frozen at the release 5.2 versions.
+    They are stored in classes with characters "52" at the end
+    (G4eIonisation52, G4hIonisation52...).
+- The class G4ionIonisation is now assumed to be used for simulation of
+  the energy loss of GenericIons. Effective charge approach is introduced 
+  to G4ionIonisation. Dynamic change of ions is changed on each step.
+- Ion fluctuation models have been updated.
+
+processes/electromagnetic/utils         utils-V05-02-03
+-------------------------------
+- Substituted standard processes with new STD processes implementing
+  the new design based on model approach for energy loss and multiple
+  scattering.
+  o Interfaces are unchanged.
+  o Old multiple scattering process is frozen at the release 5.2 version.
+    It is stored in class G4MultipleScattering52.
+- Tuning of multiple-scattering model:
+  o fixed problems for width and tails of angular distributions.
+
+processes/hadronic/management                         ghad-man-V05-02-00
+-----------------------------
+- Fixed major bug in G4HadronicProcess, affecting final state generation
+  in all materials with more than two elements. It may fix shower-shape
+  problems in complex detectors.
+
+processes/optical                                     op-V05-02-00
+-----------------
+- Introduced optical process for wavelength shifting, G4OpWLS.
+
+processes/transportation                              transport-V05-02-02
+------------------------
+- Introduced first implementation of weight-window biasing technique.
+
+run                                                   run-V05-02-02
+---
+- Fixed typo for "neutron" in G4VUserPhysicsList.
+
+visualization                                         vis-V05-02-00
+-------------
+- RayTracer:
+  o Introduced G4VRTScanner and its default concrete implementation,
+    G4RTSimpleScanner.  It controls the shooting order of rays.
+  o Added new command /vis/rayTracer/backgroundColour.
+- Introduced Doxygen documentation for management, OpenGL and test.
+- Improved guidance for /vis/scene/notifyHandlers.
+- OpenGL: Cosmetic change to regularise names.
+- Minor fixes to clear pedantic warnings.
+
+examples                                              examples-V05-02-02
+--------
+- Updated reference outputs.
+- advanced:
+  o composite_calorimeter (ccal-V05-02-00)
+    + Fixed compilation problem due to migration to new EM processes.
+  o Tiara (Tiara-V05-02-00)
+- extended:
+  o biasing (exbiasing-V05-02-02)
+    + Extended to included new weight-window biasing technique.
+  o electromagnetic/TestEm1 (testem1-V05-02-00)
+    + Migration to model variant of EM physics.
+  o electromagnetic/TestEm5 (testem5-V05-02-02)
+    + Renamed all classes. Suppressed "Em5" in class names.
+    + Suppressed sensitive detector and hits.
+    + EmPhysicsList: use SetFacRange in multiple scattering.
+    + new classes HistoManager, TrackingAction, StackingAction in order 
+      to book and fill histograms.
+    + new UI command setHisto to control the binning of histograms.
+    + more histos and new numbering scheme: see README.
+    + StackingAction and its messenger: added possibility to kill secondaries.
+    + DetectorConstruction::DefineMaterials() invoked in constructor. 
+    + The UI commands /testem/det work in preInit state as well in Idle.
+    + Updated and renamed macros according to authors of experimental results.
+    + replaced G4NOHIST with G4ANALYSIS_USE.
+  o electromagnetic/TestEm8 (testem8-V05-02-00)
+    + Removed obsolete interfaces. Adopt PhysicsList with old EM processes.
+  o electromagnetic/TestEm9 (testem9-V05-02-01)
+    + New example implementing a crystal calorimeter with demonstration of
+      definition of different detector regions for cuts.
+  o electromagnetic/TestEm10 (testem10-V05-02-00)
+    + Removed obsolete interfaces. Adopt PhysicsList with old EM processes.
+  o field (fieldex-V05-02-00)
+    + Implemented complete migration to cuts-by-region.
+- novice:
+  o N03 (exampleN03-V05-02-00)
+    + Suppressed sensitive detector and hits.
+    + DetectorConstruction::DefineMaterials() invoked in constructor. 
+    + The UI commands /N03/det work in preInit state as well in Idle.
+    + Suppressed specific code for curved trajectories.
+  o N05 (exampleN05-V05-02-00)
+    + Implemented complete migration to cuts-by-region.
+
+tests                                                 tests-V05-02-01
+-----
+- Updated reference outputs.
+- test17 (test17-V05-02-00)
+  + Implemented complete migration to cuts-by-region.
+- test33 (test33-V05-02-02)
+  + Extended to include new weight-window biasing technique.
