@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.25 2002-05-14 01:40:10 asaim Exp $
+// $Id: G4UImanager.cc,v 1.26 2002-05-15 06:51:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

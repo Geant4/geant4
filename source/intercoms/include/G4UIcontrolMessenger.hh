@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.9 2001-10-11 01:37:58 asaim Exp $
+// $Id: G4UIcontrolMessenger.hh,v 1.10 2002-05-15 06:51:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@ class G4UIcommand;
 //   /control/shell
 //   /control/manual
 //   /control/createHTML
+//   /control/maximumStoredHistory
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {
@@ -78,6 +79,7 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcommand * foreachCommand;
       G4UIcmdWithAString * ManualCommand;
       G4UIcmdWithAString * HTMLCommand;
+      G4UIcmdWithAnInteger * maxStoredHistCommand;
 };
 
 #endif

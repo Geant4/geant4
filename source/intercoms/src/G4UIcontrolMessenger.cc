@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.8 2001-10-11 01:38:00 asaim Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.9 2002-05-15 06:51:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -138,6 +138,10 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   HTMLCommand->SetParameterName("dirPath",true);
   HTMLCommand->SetDefaultValue("/");
 
+  maxStoredHistCommand = new G4UIcmdWithAnInteger("/control/maximumStoredHistory",this);
+  maxStoredHistCommand->SetGuidance("Set maximum number of stored UI commands.");
+  maxStoredHistCommand->SetParameterName("max",true);
+  maxStoredHistCommand->SetDefaultValue(20);
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -155,6 +159,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete loopCommand;
   delete foreachCommand; 
   delete HTMLCommand;
+  delete maxStoredHistCommand;
   delete controlDirectory;
 }
 
@@ -214,6 +219,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   {
     UI->CreateHTML(newValue);
   }
+  if(command==maxStoredHistCommand)
+  {
+    UI->SetMaxHistSize(maxStoredHistCommand->GetNewIntValue(newValue));
+  }
 
 }
 
@@ -229,6 +238,10 @@ G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)
   if(command==suppressAbortionCommand)
   {
     currentValue = suppressAbortionCommand->ConvertToString(G4StateManager::GetStateManager()->GetSuppressAbortion());
+  }
+  if(command==maxStoredHistCommand)
+  {
+    currentValue = maxStoredHistCommand->ConvertToString(UI->GetMaxHistSize());
   }
   
   return currentValue;
