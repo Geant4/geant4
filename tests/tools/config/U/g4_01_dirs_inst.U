@@ -92,13 +92,12 @@ g4workdir=$g4install
 #################################
 g4message=`cat << EOM
 
-Where is Geant4 libraries and source should be installed?
-
-It will be $(your_prefix)/geant4/lib and $(your_prefix)/geant4.
+Specify the path where Geant4 libraries and source files should be
+installed.
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4final_install
+dflt=$g4install
 fn='d~'
 rp=$g4message
 . ./getfile
