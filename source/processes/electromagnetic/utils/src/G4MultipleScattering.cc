@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.6 2001-01-11 10:44:34 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.7 2001-05-16 10:14:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -28,6 +28,7 @@
 // 20/06/00: nuclear size correction for particles other than e+/e- only ,  L.Urban
 // 10/08/00 values of some data members has been changed, L.Urban
 // 09/11/00 bug corrected in sigma computation, L.Urban
+// 16/05/01 value of cpar changed back to the old value, L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -55,7 +56,7 @@
        Tlimit(1.*keV),
        scatteringparameter(0.9),
        tuning (1.00),
-       cpar (0.0),
+       cpar (1.50),
        NuclCorrPar (0.0615),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
