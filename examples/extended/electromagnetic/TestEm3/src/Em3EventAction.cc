@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3EventAction.cc,v 1.12 2001-11-28 17:54:46 maire Exp $
+// $Id: Em3EventAction.cc,v 1.13 2002-06-05 12:13:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 #include "G4UnitsTable.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +115,7 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
 #ifndef G4NOHIST        
          //fill histo
          //	 
-	 Em3Run->GetHisto(k)->accumulate(totEAbs/Ebeam);
+	 Em3Run->GetHisto(k)->fill(totEAbs/Ebeam);
 #endif  	 	 
        }
     }
