@@ -35,6 +35,7 @@
 // Modifications: 
 //
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 29-12-02 Change interface (VI)
 //
 // Class Description: 
 //
@@ -53,8 +54,8 @@
 class G4Step;
 class G4Track;
 class G4ParticleDefinition;
-class G4DynamicParticle;
-class G4EmModelManager;
+class G4VEmModel;
+class G4DataVector;
 class G4PhysicsTable;
 
 class G4VSubCutoffProcessor 
@@ -67,13 +68,14 @@ public:
   virtual ~G4VSubCutoffProcessor() {};
 
   virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
-                                                     const G4DynamicParticle*,
-						           G4double tmax,
-                                                           G4double meanLoss) = 0;
+						           G4double& tmax,
+						           G4double& meanLoss,
+                                                           G4VEmModel*) = 0;
 
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4ParticleDefinition*, 
-                                G4EmModelManager* ) = 0;
+                          const G4DataVector*,
+                          const G4DataVector*) = 0;
 
   virtual void SetLambdaSubTable(G4PhysicsTable*) = 0;
 

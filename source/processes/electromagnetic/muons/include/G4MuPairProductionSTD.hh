@@ -76,10 +76,9 @@ public:
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&, 
-                             const G4Material*, 
-                             const G4DynamicParticle*,
-			           G4double,
-                                   G4double);
+			           G4double&,
+			           G4double&,
+                                   G4double&);
 
   virtual void SecondariesPostStep(G4ParticleChange&, 
                                    G4VEmModel*, 
@@ -91,6 +90,8 @@ public:
   void SetSubCutoffProcessor(G4VSubCutoffProcessor*);
 
   G4VSubCutoffProcessor* SubCutoffProcessor() {return subCutoffProcessor;};
+
+  void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition() const;
   // Print out of the class parameters
@@ -111,7 +112,9 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
+
   G4VSubCutoffProcessor* subCutoffProcessor;
+  G4bool                      subCutoff;
 
 };
 
@@ -137,15 +140,15 @@ inline G4double G4MuPairProductionSTD::MaxSecondaryEnergy(const G4DynamicParticl
 #include "G4VSubCutoffProcessor.hh"
 
 inline G4std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
-                           const G4Step& step, 
-                           const G4Material*, 
-                           const G4DynamicParticle* dp,
-	             	         G4double tmax,
-                                 G4double eloss)
+                           const G4Step&   step, 
+	             	         G4double& tmax,
+			         G4double& eloss,
+                                 G4double& kinEnergy)
 {
   G4std::vector<G4Track*>* newp = 0;
-  if(subCutoffProcessor) {
-    newp = subCutoffProcessor->SampleSecondaries(step,dp,tmax,eloss);
+  if(subCutoff) {
+    G4VEmModel* model = SelectModel(kinEnergy);
+    newp = subCutoffProcessor->SampleSecondaries(step,tmax,eloss,model);
   }
   return newp;
 }

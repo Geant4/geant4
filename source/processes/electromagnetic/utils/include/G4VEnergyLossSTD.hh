@@ -86,17 +86,16 @@ public:
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&, 
-                             const G4Material*, 
-                             const G4DynamicParticle*,
-			           G4double,
-                                   G4double) = 0;
+			           G4double& tmax,
+			           G4double& eloss,
+                                   G4double& kinEnergy) = 0;
 
   virtual void SecondariesPostStep(G4ParticleChange&, 
                                    G4VEmModel*, 
                              const G4Material*, 
                              const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&) = 0;
+                                   G4double& tcut,
+                                   G4double& kinEnergy) = 0;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
     // True for all charged particles
@@ -157,9 +156,9 @@ public:
 
   void AddEmFluctuationModel(G4VEmFluctuationModel*);
 
-  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*) = 0;
+  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*) {};
 
-  virtual G4VSubCutoffProcessor* SubCutoffProcessor() = 0;
+  virtual G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
 
   virtual void SetSubCutoff(G4bool) {};
 
@@ -235,6 +234,8 @@ protected:
                                     const G4Material*, G4double cut) = 0;
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
+
+  G4VEmModel* SelectModel(G4double kinEnergy);
   
   void SetMassRatio(G4double val) {massRatio = val;};
 
@@ -275,27 +276,26 @@ private:
 
   const G4DataVector*    theCuts;
 
-  G4double minKinEnergy;
-  G4double maxKinEnergy;
-  G4int    nDEDXBins;
-  G4int    nLambdaBins;
-
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theElectron;
 
+  // cash
+  const G4Material* currentMaterial;
+  G4int             currentMaterialIndex;
+
+  G4int    nDEDXBins;
+  G4int    nLambdaBins;
+
+  G4double minKinEnergy;
+  G4double maxKinEnergy;
+
   G4double massRatio;
   G4double reduceFactor;
   G4double chargeSquare;
   G4double chargeSqRatio;
-
-  G4bool lossFluctuationFlag;
-  G4bool rndmStepFlag;
-  G4bool hasRestProcess;
-  G4bool tablesAreBuilt;
-  G4bool integral;
 
   G4double preStepLambda;
   G4double fRange;
@@ -310,9 +310,12 @@ private:
   G4double c2lim;
   G4double c3lim;
 
-  // cash
-  const G4Material* currentMaterial;
-  G4int             currentMaterialIndex;
+  G4bool lossFluctuationFlag;
+  G4bool rndmStepFlag;
+  G4bool hasRestProcess;
+  G4bool tablesAreBuilt;
+  G4bool integral;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -409,6 +412,13 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
   }
   
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEnergyLossSTD::SelectModel(G4double kinEnergy)
+{
+  return modelManager->SelectModel(kinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

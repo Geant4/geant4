@@ -67,8 +67,9 @@
 G4eIonisationSTD::G4eIonisationSTD(const G4String& name) 
   : G4VEnergyLossSTD(name),
     theElectron(G4Electron::Electron()),
-    isElectron(true),
-    subCutoffProcessor(0)
+    subCutoffProcessor(0),
+    subCutoff(false),
+    isElectron(true)
 {
   InitialiseProcess();
 }
@@ -123,6 +124,13 @@ void G4eIonisationSTD::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
 {
   if(subCutoffProcessor) delete subCutoffProcessor;
   subCutoffProcessor = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4eIonisationSTD::SetSubCutoff(G4bool val)
+{
+  if(subCutoffProcessor) subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

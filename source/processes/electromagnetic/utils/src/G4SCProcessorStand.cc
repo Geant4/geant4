@@ -59,8 +59,7 @@
 G4SCProcessorStand::G4SCProcessorStand() 
   : G4VSubCutoffProcessor(),
     theLambdaSubTable(0),
-    thePositron(G4Positron::Positron()),
-    modelManager(0)
+    thePositron(G4Positron::Positron())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,15 +73,15 @@ G4SCProcessorStand::~G4SCProcessorStand()
 
 void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
                                     const G4ParticleDefinition* sp, 
-                                          G4EmModelManager* m) 
+                                    const G4DataVector* vCuts,
+                                    const G4DataVector* vSubCuts) 
 {
   particle = p;
   secondaryParticle = sp;
-  modelManager = m;
   navigator = (G4TransportationManager::GetTransportationManager())
                                        ->GetNavigatorForTracking();
-  theCuts = modelManager->Cuts();
-  theSubCuts = modelManager->Cuts();
+  theCuts = vCuts;
+  theSubCuts = vSubCuts;
   initialMass= particle->GetPDGMass();
 
   // Access to materials
@@ -101,25 +100,26 @@ void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
-                    const G4Step& step,
-                    const G4DynamicParticle* dp,
-			  G4double tmax,
-                          G4double meanLoss)
+                    const G4Step&    step,
+			  G4double&  tmax,
+                          G4double&  meanLoss,
+                          G4VEmModel* currentModel)
 {
   G4bool b;
-  const G4Material* mat = (step.GetTrack())->GetMaterial();
+  const G4Track* track = step.GetTrack();
+  const G4Material* mat = track->GetMaterial();
 
   if(mat != material) {
     material = mat; 
     materialIndex = material->GetIndex();
-    cut    = (*theCuts)[materialIndex];
     subcut = (*theSubCuts)[materialIndex];
     rcut   = rangeCuts[materialIndex];
   }
 
-  if(subcut >= cut) return 0;
-  tmax = G4std::min(tmax,subcut);
+  if(subcut >= tmax) return 0;
 
+
+  const G4DynamicParticle* dp = track->GetDynamicParticle();
   G4double ekin  = dp->GetKineticEnergy();
   G4double effChargeFactor = 1.0;
   G4double massRatio = 1.0;
@@ -152,7 +152,6 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
   G4double length = step.GetStepLength();
   G4double inv_v = (ekin + mass)/(c_light*dp->GetTotalMomentum());
 
-  G4VEmModel* currentModel = modelManager->SelectModel(ekin);
   G4std::vector<G4Track*>* vtr = new G4std::vector<G4Track*>;
 
   do {

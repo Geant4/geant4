@@ -35,6 +35,7 @@
 // Modifications: 
 //
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 29-12-02 Change interface (VI)
 //
 // Class Description: 
 //
@@ -63,14 +64,15 @@ public:
 
   ~G4SCProcessorStand();
 
-  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step& step,
-                                                     const G4DynamicParticle*,
-						           G4double tmax,
-                                                           G4double meanLoss);
+  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
+						           G4double& tmax,
+						           G4double& meanLoss,
+                                                           G4VEmModel*) = 0;
 
-  virtual void Initialise(const G4ParticleDefinition*,
+  virtual void Initialise(const G4ParticleDefinition*, 
                           const G4ParticleDefinition*, 
-                                G4EmModelManager* );
+                          const G4DataVector*,
+                          const G4DataVector*) = 0;
 
   virtual void SetLambdaSubTable(G4PhysicsTable*);
 
@@ -88,7 +90,6 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* thePositron;
-  G4EmModelManager* modelManager;
   G4Navigator* navigator;
   const G4DataVector* theCuts;
   const G4DataVector* theSubCuts;

@@ -59,7 +59,8 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(G4Proton::Proton()),
-    subCutoffProcessor(0)
+    subCutoffProcessor(0),
+    subCutoff(false)
 {
   InitialiseProcess();
 }
@@ -123,6 +124,13 @@ void G4ionIonisation::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
 {
   if(subCutoffProcessor) delete subCutoffProcessor;
   subCutoffProcessor = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4ionIonisation::SetSubCutoff(G4bool val)
+{
+  if(subCutoffProcessor) subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

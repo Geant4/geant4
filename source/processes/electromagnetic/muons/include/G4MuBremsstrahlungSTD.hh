@@ -76,10 +76,9 @@ public:
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&, 
-                             const G4Material*, 
-                             const G4DynamicParticle*,
-			           G4double,
-                                   G4double) {return 0;};
+			           G4double&,
+			           G4double&,
+                                   G4double&) {return 0;};
 
   virtual void SecondariesPostStep(G4ParticleChange&, 
                                    G4VEmModel*, 
@@ -87,10 +86,6 @@ public:
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
-
-  void SetSubCutoffProcessor(G4VSubCutoffProcessor*) {};
-
-  G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
 
   void PrintInfoDefinition() const;
   // Print out of the class parameters

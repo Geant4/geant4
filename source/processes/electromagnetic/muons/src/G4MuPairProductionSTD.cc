@@ -70,7 +70,8 @@ G4MuPairProductionSTD::G4MuPairProductionSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoffProcessor(0)
+    subCutoffProcessor(0),
+    subCutoff(false)
 {
   InitialiseProcess();
 }
@@ -126,6 +127,13 @@ void G4MuPairProductionSTD::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
 {
   if(subCutoffProcessor) delete subCutoffProcessor;
   subCutoffProcessor = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4MuPairProductionSTD::SetSubCutoff(G4bool val)
+{
+  if(subCutoffProcessor) subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

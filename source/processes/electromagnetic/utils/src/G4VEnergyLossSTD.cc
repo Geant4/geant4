@@ -80,20 +80,20 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   theSecondaryRangeTable(0),
   theInverseRangeTable(0),
   theLambdaTable(0),
-  minKinEnergy(1.0*eV),
-  maxKinEnergy(100.0*GeV),
   particle(0),
   baseParticle(0),
   secondaryParticle(0),
   theGamma(G4Gamma::Gamma()),
   theElectron(G4Electron::Electron()),
+  minKinEnergy(1.0*eV),
+  maxKinEnergy(100.0*GeV),
+  linLossLimit(0.05),
+  minSubRange(0.1),
   lossFluctuationFlag(false),
   rndmStepFlag(false),
   hasRestProcess(true),
   tablesAreBuilt(false),
-  integral(true),
-  linLossLimit(0.05),
-  minSubRange(0.1)
+  integral(true)
 {
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -172,7 +172,8 @@ void G4VEnergyLossSTD::Initialise()
   G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
 
   if (subCutoffProcessor) {
-    subCutoffProcessor->Initialise(particle, secondaryParticle, modelManager);
+    const G4DataVector* theSubCuts = modelManager->SubCutoff();
+    subCutoffProcessor->Initialise(particle, secondaryParticle, theCuts, theSubCuts);
   }
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() is done " 
@@ -650,7 +651,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
   
     G4std::vector<G4Track*>* newp = 
-           SecondariesAlongStep(step, currentMaterial, dynParticle, tmax, eloss);
+           SecondariesAlongStep(step, tmax, eloss, preStepKinEnergy);
 
     if(newp) {
 
@@ -724,7 +725,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
-  G4VEmModel* currentModel = modelManager->SelectModel(finalT);
+  G4VEmModel* currentModel = SelectModel(finalT);
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 

@@ -83,8 +83,6 @@ private:
   G4double particleMass;
   G4double chargeSquare;
 
-  //  G4int materialIndex;
-
   // data members to speed up the fluctuation calculation
   G4double ipotFluct;
   G4double electronDensity;
