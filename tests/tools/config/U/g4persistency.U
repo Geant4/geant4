@@ -21,8 +21,9 @@ In Geant4, object persistency is provided as an optional category, so
 that the users could be able to run Geant4 with or without a commercial 
 ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
 objects is explained in documentation.
-Currently the only supported DB is Objectivity. For setting this you
-should have Objectivity installed and running!
+
+For setting this you should have an ODMG compliant database
+(Objectivity) installed and running on your system!
 EOM`
 
 dflt=$g4use_hepodbms

@@ -1,4 +1,4 @@
-?RCS: $Id: Config_sh.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS: $Id: Config_sh.U,v 1.2 2001-12-09 23:55:02 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.2  2000/12/12 23:38:17  sadilov
 ?RCS: Was added due to Gabriele's modification of Configure...
 ?RCS:
@@ -85,7 +88,7 @@ esac
 @end
 : create config.sh file
 echo " "
-echo "Creating config.sh..." >&4
+echo "Creating configuration setup file..." >&4
 mkdir -p $g4conf
 $spitshell <<EOT > $g4conf/config.sh
 $startsh

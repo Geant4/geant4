@@ -1,4 +1,4 @@
-?RCS: $Id: Instruct.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS: $Id: Instruct.U,v 1.2 2001-12-09 23:55:11 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.2  2000/12/16 14:57:04  sadilov
 ?RCS: Remove "instructions" in USER mode (because there is no questions...yet).
 ?RCS: But if we plan to ask about where $G4WORKDIR (and maybe where to "copy"
@@ -72,9 +75,8 @@ a question, you may use a ! shell escape to start a subshell or execute a
 command.  Many of the questions will have default answers in square brackets;
 typing carriage return will set the default.
 
-If asked for a path or file name, you are allowed to use the ~username
-construct to specify the AFS path.
-Questions where this is allowed will be marked "(~username ok)".
+On AFS it is allowed to specify either absolute or relative
+paths (i.e. starting with the ~username construct).
 
 EOH
 	rp=''
@@ -91,9 +93,9 @@ Everytime there is a substitution, you will have to confirm.  If there is an
 error (e.g. an unmatched backtick), the default answer will remain unchanged
 and you will be prompted again.
 
-Running 'Configure -d' will bypass nearly all the questions and use the
-computed defaults (or the previous answers if there was already a config.sh
-file generated).
+Running 'Configure -d' will bypass nearly all the questions and
+use the computed defaults (or answers saved in a configuration
+previously generated).
 
 Type 'Configure -h' for a list of options.
 
@@ -107,7 +109,7 @@ EOH
 Much effort has been spent to ensure that this shell script will run on any
 Unix system. If despite that you can't run Configure for some reason, you'll
 have to set the proper environment variables by hand and follow the "manual"
-installation.
+installation as specified in the Geant4 Installation Guide.
 
 EOH
 ?X: In case they played with the prompter...

@@ -20,8 +20,12 @@ echo ""
 g4message=`cat << EOM
 
   G4ANALYSIS_USE
-  Specifies to include using of the abstract G4analysisManager for
-  activating interfaces based on AIDA to analysis drivers.
+
+Activates the configuration setup for allowing plugins to
+analysis tools based on AIDA (Astract Interfaces for Data
+Analysis). In order to use AIDA features and compliant analysis
+tools, the proper environment for these tools will have to be
+set (see documentation for the specific analysis tools).
 EOM`
 
 dflt=$g4wanalysis_use

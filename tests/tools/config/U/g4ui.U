@@ -8,27 +8,32 @@
 ?S:.
 
 echo " "
+
+# Set by default!
 case "$g4ui_build_terminal_session" in
 '')
 	g4ui_build_terminal_session=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_terminal" in
 '')
 	g4ui_use_terminal=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_build_gag_session" in
 '')
-	g4ui_build_gag_session=n
+	g4ui_build_gag_session=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_gag" in
 '')
-	g4ui_use_gag=n
+	g4ui_use_gag=y
 	;;
 esac
 
@@ -38,21 +43,33 @@ case "$g4ui_build_xm_session" in
 	;;
 esac
 
-case "$g4ui_build_xaw_session" in
-'')
-	g4ui_build_xaw_session=n
-	;;
-esac
-
 case "$g4ui_use_xm" in
 '')
 	g4ui_use_xm=n
 	;;
 esac
 
+case "$g4ui_build_xaw_session" in
+'')
+	g4ui_build_xaw_session=n
+	;;
+esac
+
 case "$g4ui_use_xaw" in
 '')
 	g4ui_use_xaw=n
+	;;
+esac
+
+case "$g4ui_build_wo_session" in
+'')
+	g4ui_build_wo_session=n
+	;;
+esac
+
+case "$g4ui_use_wo" in
+'')
+	g4ui_use_wo=n
 	;;
 esac
 
@@ -68,9 +85,10 @@ case "$g4ui_use_win32" in
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_tcsh" in
 '')
-	g4ui_use_tcsh=n
+	g4ui_use_tcsh=y
 	;;
 esac
 
@@ -89,8 +107,9 @@ EOM`
 
 dflt=$g4ui_use_terminal
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -117,8 +136,9 @@ EOM`
 
 dflt=$g4ui_use_gag
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -219,6 +239,33 @@ gans=$ans
 
 g4message=`cat << EOM
 
+  G4UI_BUILD_WO_SESSION
+Gabriele, where can I take descriprion? 
+
+  G4UI_USE_WO
+Gabriele, where can I take descriprion? 
+
+EOM`
+
+dflt=$g4ui_use_wo
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_wo_session=n
+		g4ui_use_wo=n
+		;;
+	y*|Y*) 
+		g4ui_build_wo_session=y
+		g4ui_use_wo=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
   G4UI_USE_TCSH
   Specifies to use the tcsh-style terminal in the application
   to be built.
@@ -226,8 +273,9 @@ EOM`
 
 dflt=$g4ui_use_tcsh
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	

@@ -33,13 +33,10 @@ g4message=`cat << EOM
 (OPTIONAL) You can now customise installation directories:
   G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
   G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
-  G4BIN - bin/ containing final executable and scripts.
 
 1) G4TMP:		$g4tmp
 
 2) G4LIB:		$g4lib
-
-3) G4BIN:		$g4bin
 
 Select from list above (e.g. 2) 
 EOM`
@@ -68,13 +65,13 @@ gans=$ans
 		. ./getfile
 		g4lib=$ans
 		;;
-	3) 
-		dflt=$g4bin
-		fn='d~+'
-		rp="Where will be your Geant4 bin directory?"
-		. ./getfile
-		g4bin=$ans
-		;;
+#	3) 
+#		dflt=$g4bin
+#		fn='d~+'
+#		rp="Where will be your Geant4 bin directory?"
+#		. ./getfile
+#		g4bin=$ans
+#		;;
 
 #	[eE]) 
 #		break

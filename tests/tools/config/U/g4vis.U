@@ -8,9 +8,57 @@
 ?S:.
 
 echo " "
+case "$g4vis_none" in
+'')
+	g4vis_none=n
+	;;
+esac
+
+case "$g4vis_build_heprep_driver" in
+'')
+	g4vis_build_heprep_driver=n
+	;;
+esac
+
+case "$g4vis_use_heprep" in
+'')
+	g4vis_use_heprep=n
+	;;
+esac
+
+case "$g4vis_build_openglwin32_driver" in
+'')
+	g4vis_build_openglwin32_driver=n
+	;;
+esac
+
+case "$g4vis_use_openglwin32" in
+'')
+	g4vis_use_openglwin32=n
+	;;
+esac
+
+case "$g4vis_build_oiwin32_driver" in
+'')
+	g4vis_build_oiwin32_driver=n
+	;;
+esac
+
+case "$g4vis_use_oiwin32" in
+'')
+	g4vis_use_oiwin32=n
+	;;
+esac
+
 case "$g4vis_build_dawn_driver" in
 '')
 	g4vis_build_dawn_driver=n
+	;;
+esac
+
+case "$g4vis_use_dawn" in
+'')
+	g4vis_use_dawn=n
 	;;
 esac
 
@@ -21,9 +69,22 @@ case "$g4vis_build_dawnfile_driver" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_use_dawnfile" in
+'')
+	g4vis_use_dawnfile=y
+	;;
+esac
+
 case "$g4vis_build_opacs_driver" in
 '')
 	g4vis_build_opacs_driver=n
+	;;
+esac
+
+case "$g4vis_use_opacs" in
+'')
+	g4vis_use_opacs=n
 	;;
 esac
 
@@ -33,15 +94,33 @@ case "$g4vis_build_openglx_driver" in
 	;;
 esac
 
+case "$g4vis_use_openglx" in
+'')
+	g4vis_use_openglx=n
+	;;
+esac
+
 case "$g4vis_build_openglxm_driver" in
 '')
 	g4vis_build_openglxm_driver=n
 	;;
 esac
 
+case "$g4vis_use_openglxm" in
+'')
+	g4vis_use_openglxm=n
+	;;
+esac
+
 case "$g4vis_build_oix_driver" in
 '')
 	g4vis_build_oix_driver=n
+	;;
+esac
+
+case "$g4vis_use_oix" in
+'')
+	g4vis_use_oix=n
 	;;
 esac
 
@@ -52,9 +131,22 @@ case "$g4vis_build_raytracer_driver" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_use_raytracer" in
+'')
+	g4vis_use_raytracer=y
+	;;
+esac
+
 case "$g4vis_build_vrml_driver" in
 '')
 	g4vis_build_vrml_driver=n
+	;;
+esac
+
+case "$g4vis_use_vrml" in
+'')
+	g4vis_use_vrml=n
 	;;
 esac
 
@@ -66,66 +158,16 @@ case "$g4vis_build_vrmlfile_driver" in
 esac
 
 # Set by default!
-case "$g4vis_build_asciitree_driver" in
-'')
-	g4vis_build_asciitree_driver=y
-	;;
-esac
-
-case "$g4vis_use_dawn" in
-'')
-	g4vis_use_dawn=n
-	;;
-esac
-
-# Set by default!
-case "$g4vis_use_dawnfile" in
-'')
-	g4vis_use_dawnfile=y
-	;;
-esac
-
-case "$g4vis_use_opacs" in
-'')
-	g4vis_use_opacs=n
-	;;
-esac
-
-case "$g4vis_use_openglx" in
-'')
-	g4vis_use_openglx=n
-	;;
-esac
-
-case "$g4vis_use_openglxm" in
-'')
-	g4vis_use_openglxm=n
-	;;
-esac
-
-case "$g4vis_use_oix" in
-'')
-	g4vis_use_oix=n
-	;;
-esac
-
-# Set by default!
-case "$g4vis_use_raytracer" in
-'')
-	g4vis_use_raytracer=y
-	;;
-esac
-
-case "$g4vis_use_vrml" in
-'')
-	g4vis_use_vrml=n
-	;;
-esac
-
-# Set by default!
 case "$g4vis_use_vrmlfile" in
 '')
 	g4vis_use_vrmlfile=y
+	;;
+esac
+
+# Set by default!
+case "$g4vis_build_asciitree_driver" in
+'')
+	g4vis_build_asciitree_driver=y
 	;;
 esac
 
@@ -136,20 +178,135 @@ case "$g4vis_use_asciitree" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_build_gagtree_driver" in
+'')
+	g4vis_build_gagtree_driver=y
+	;;
+esac
+
+# Set by default!
+case "$g4vis_use_gagtree" in
+'')
+	g4vis_use_gagtree=y
+	;;
+esac
+
 echo ""
+
+g4message=`cat << EOM
+
+  G4VIS_NONE
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_none
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_none=n
+		;;
+	y*|Y*) 
+		g4vis_none=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_HEPREP_DRIVER
+  G4VIS_USE_HEPREP
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_heprep
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_heprep_driver=n
+		g4vis_use_heprep=n
+		;;
+	y*|Y*) 
+		g4vis_build_heprep_driver=y
+		g4vis_use_heprep=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPENGLWIN32_DRIVER
+  G4VIS_USE_OPENGLWIN32
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_openglwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglwin32_driver=n
+		g4vis_use_openglwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglwin32_driver=y
+		g4vis_use_openglwin32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OIWIN32_DRIVER
+  G4VIS_USE_OIWIN32
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_oiwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_oiwin32_driver=n
+		g4vis_use_oiwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_oiwin32_driver=y
+		g4vis_use_oiwin32=y
+		;;
+	esac
 
 g4message=`cat << EOM
 
   G4VIS_BUILD_DAWN_DRIVER
   G4VIS_USE_DAWN
 
-DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
-PostScript processor, and so well suited to prepare technical high
-quality outputs for presentation and/or documentation. 
-When Geant4 Visualization is performed with the DAWN driver, 
-the visualized view is automatically saved to a file
-named g4.eps in the current directory, which describes a vectorized 
-(Encapsulated) PostScript data of the view. 
+DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
+a vectorized 3D PostScript processor suited to prepare technical
+high quality outputs for presentation and/or documentation.
+
+The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
+named g4.prim in the current directory. The file g4.prim is able to 
+be re-visualized later without the help of Geant4. 
 EOM`
 
 dflt=$g4vis_use_dawn
@@ -231,11 +388,10 @@ g4message=`cat << EOM
   G4VIS_BUILD_OPENGLX_DRIVER
   G4VIS_USE_OPENGLX
 
-It is an interface to the de facto standard 3D graphics library, OpenGL. 
-It is well suited for real-time fast visualization
-and demonstration. Fast visualization is realized with hardware 
-acceleration, reuse of shapes stored in a display list, etc. 
-NURBS visualization is also supported. This is version for Xlib.
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries is
+required.
 EOM`
 
 dflt=$g4vis_use_openglx
@@ -260,11 +416,10 @@ g4message=`cat << EOM
   G4VIS_BUILD_OPENGLXM_DRIVER
   G4VIS_USE_OPENGLXM
 
-It is an interface to the de facto standard 3D graphics library, OpenGL. 
-It is well suited for real-time fast visualization
-and demonstration. Fast visualization is realized with hardware 
-acceleration, reuse of shapes stored in a display list, etc. 
-NURBS visualization is also supported. This is version for Motif.
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries is
+required.
 EOM`
 
 dflt=$g4vis_use_openglxm
@@ -289,10 +444,9 @@ g4message=`cat << EOM
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-These drivers are based on the "Hepvis class library". 
-The OpenInventor drivers and the Hepvis class library are based on the
-well-established OpenInventor technology for scientific visualization. 
-They have high extendibility. 
+This driver is based on the "Hepvis" class library.
+The OpenInventor driver and the Hepvis class library are based
+on OpenInventor technology for scientific visualization.
 EOM`
 
 dflt=$g4vis_use_oix
@@ -400,6 +554,7 @@ gans=y
 		;;
 	esac
 
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_ASCIITREE_DRIVER
@@ -412,6 +567,7 @@ dflt=$g4vis_use_asciitree
 rp=$g4message
 # Don't ask by default and set to 'y'!
 #. ./myread
+#gans=$ans
 gans=y
 
 	case $gans in
@@ -426,3 +582,30 @@ gans=y
 		;;
 	esac
 
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_GAGTREE_DRIVER
+  G4VIS_USE_GAGTREE
+
+Description????????????????????????
+EOM`
+
+dflt=$g4vis_use_gagtree
+rp=$g4message
+# Don't ask by default and set to 'y'!
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_gagtree_driver=n
+		g4vis_use_gagtree=n
+		;;
+	y*|Y*) 
+		g4vis_build_gagtree_driver=y
+		g4vis_use_gagtree=y
+		;;
+	esac
