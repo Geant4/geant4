@@ -1,13 +1,13 @@
-# $Id: stt-ref+.sdb,v 1.79 1999-07-03 14:16:02 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.80 1999-07-06 19:50:44 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
-geant4/config           geant4-00-cand-16
+geant4/config           config-01-00-10
 geant4/data             geant4-00-cand-16
 # geant4/documents - not currently part of reference versions
 geant4/environments     geant4-00-cand-16
-geant4/examples         geant4-00-cand-16
+geant4/examples         examples-01-00-13
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
@@ -17,12 +17,13 @@ geant4/source/event            geant4-00-cand-16
 geant4/source/g3tog4           geant4-00-cand-16
 geant4/source/geometry/GNUmakefile   geant4-00-cand-16
 geant4/source/geometry/History       geant4-00-cand-16
-geant4/source/geometry/magneticfield geant4-00-cand-16
+geant4/source/geometry/magneticfield field-01-00-07
 geant4/source/geometry/management    geant4-00-cand-16
 geant4/source/geometry/solids        geant4-00-cand-16
 geant4/source/geometry/solids/BREPS  geant4-00-cand-16
 geant4/source/geometry/volumes       geant4-00-cand-16
 geant4/source/global           geant4-00-cand-16
+geant4/source/global/STLInterface STLInterface-24
 geant4/source/graphics_reps    geant4-00-cand-16
 geant4/source/intercoms        geant4-00-cand-16
 geant4/source/interfaces       geant4-00-cand-16
@@ -33,7 +34,10 @@ geant4/source/processes/GNUmakefile         geant4-00-cand-16
 geant4/source/processes/History             geant4-00-cand-16
 geant4/source/processes/decay	            geant4-00-cand-16
 geant4/source/processes/electromagnetic	    geant4-00-cand-16
+geant4/source/processes/electromagnetic/lowenergy emlowen-01-00-09
 geant4/source/processes/hadronic            geant4-00-cand-16
+geant4/source/processes/hadronic/models/generator/management hadgenman-01-00-01
+geant4/source/processes/hadronic/models/neutron_hp neutron_hp-01-00-01a
 geant4/source/processes/management          geant4-00-cand-16
 geant4/source/processes/optical	            geant4-00-cand-16
 geant4/source/processes/parameterisation    geant4-00-cand-16
