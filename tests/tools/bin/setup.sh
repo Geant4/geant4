@@ -9,10 +9,22 @@
 #########set -x
 
 # Execute stt members specifc setup first :
-if [ `pwd | grep dev` ]; then
-. /afs/cern.ch/sw/geant4/stt/dev/src/geant4/tests/tools/bin/specific.sh
-else
-. /afs/cern.ch/sw/geant4/stt/prod/src/geant4/tests/tools/bin/specific.sh
+found=no
+if [ `pwd | grep /stt/dev1/` ]; then
+  . /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/tools/bin/specific.sh
+  found=yes
+fi
+if [ `pwd | grep /stt/dev2/` ]; then
+  . /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/tools/bin/specific.sh
+  found=yes
+fi
+if [ `pwd | grep /stt/prod/` ]; then
+  . /afs/cern.ch/sw/geant4/stt/prod/src/geant4/tests/tools/bin/specific.sh
+  found=yes
+fi
+if [ $found = no ]; then
+  echo Cannot find sensible tree - pwd should contain /stt/prod/, etc.
+  exit
 fi
 
 if [ -z "$G4SYSTEM" ]; then

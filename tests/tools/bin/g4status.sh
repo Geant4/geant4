@@ -30,13 +30,6 @@ do
 #    flavour=OPTIM
 #fi
 
-if [ `echo $devprod | grep dev` ]
-then
-  devprod=dev
-else
-  devprod=prod
-fi
-
 echo -e $pid "\t" $host "\t" $devprod "\t\t" $debopt
 
 #if [ X$PLATFORM = X$host -a X$MODE = X$flavour ]

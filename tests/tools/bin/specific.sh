@@ -8,11 +8,17 @@
 ####################################################
 #
 
-if [ `pwd | grep /dev/` ]; then
-  REF=dev
-else
+REF=undefined
+if [ `pwd | grep /stt/dev1/` ]; then
+  REF=dev1
+fi
+if [ `pwd | grep /stt/dev2/` ]; then
+  REF=dev2
+fi
+if [ `pwd | grep /stt/prod/` ]; then
   REF=prod
 fi
+
 
 if [ $G4DEBUG ]; then
   DEBOPT=debug
@@ -99,14 +105,14 @@ if [ `uname -n | grep sungeant` ]; then
     if [ X$G4USE_HEPODBMS = X ]; then
       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
       export G4EXAMPLE_FDID=207
-  fi
+    fi
   else
     export G4SYSTEM=SUN-CC5
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
-    # Persistency...
+    # No Persistency...
     unset G4USE_HEPODBMS
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs

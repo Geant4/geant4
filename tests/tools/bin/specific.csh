@@ -11,9 +11,14 @@
 # Guy Barrand barrand@lal.in2p3.fr
 ####################################################
 
-if ( `pwd | grep /dev/` != "" ) then
-  setenv REF dev
-else
+setenv REF undefined
+if ( `pwd | grep /stt/dev1/` != "" ) then
+  setenv REF dev1
+endif
+if ( `pwd | grep /stt/dev2/` != "" ) then
+  setenv REF dev2
+endif
+if ( `pwd | grep /stt/prod/` != "" ) then
   setenv REF prod
 endif
 
