@@ -1,4 +1,4 @@
-# $Id: TestEm6.in,v 1.4 2002-05-23 13:30:13 maire Exp $
+# $Id: TestEm6.in,v 1.5 2002-12-12 12:48:15 maire Exp $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -8,9 +8,9 @@
 #
 /run/initialize
 #
-/calor/setMat Iron
-/calor/setSize 500 m
-/calor/update
+/testem/det/setMat Iron
+/testem/det/setSize 500 m
+/testem/det/update
 #
 /gun/particle gamma
 /gun/energy 100 TeV

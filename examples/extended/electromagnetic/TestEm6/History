@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2002-06-05 14:20:59 maire Exp $
+$Id: History,v 1.7 2002-12-12 12:48:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+12-12-02 mma (testem6-V04-01-00)
+-migration to aida 3.0
+-UI directory /testem/
      
 05-06-02 mma (testem6-V04-00-01)
 -old histograming package clhep/hist replaced by AIDA 2.2/anaphe

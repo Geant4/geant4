@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.1 2002-05-23 13:30:17 maire Exp $
+// $Id: DetectorMessenger.hh,v 1.2 2002-12-12 12:48:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ class DetectorMessenger: public G4UImessenger
   
     DetectorConstruction*   Detector;
     
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             testemDir;
     G4UIcmdWithAString*        MaterCmd;
     G4UIcmdWithADoubleAndUnit* SizeCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;

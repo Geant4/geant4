@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2002-06-05 14:49:54 maire Exp $
+// $Id: RunAction.hh,v 1.4 2002-12-12 12:48:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,10 @@
 class G4Run;
 
 #ifndef G4NOHIST
+namespace AIDA {
  class ITree;
  class IHistogram1D;
+} 
 #endif
 
 class RunAction : public G4UserRunAction
@@ -56,7 +58,7 @@ class RunAction : public G4UserRunAction
     
 
 #ifndef G4NOHIST   
-    IHistogram1D* GetHisto(G4int id) {return histo[id];}
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
            
   private:  
@@ -65,8 +67,8 @@ class RunAction : public G4UserRunAction
 
 #ifndef G4NOHIST 
   private:      
-    ITree* tree;
-    IHistogram1D* histo[6];
+    AIDA::ITree* tree;
+    AIDA::IHistogram1D* histo[6];
 #endif                     
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2002-12-05 00:24:26 asaim Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.3 2002-12-12 12:48:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
 :Action(Gun)
 { 
-  RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
+  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
   RndmCmd->SetGuidance("random lateral extension on the beam");
   RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
   RndmCmd->SetParameterName("rBeam",false);
