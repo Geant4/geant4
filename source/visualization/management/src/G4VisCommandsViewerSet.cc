@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.23 2004-07-14 14:43:25 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.24 2004-07-14 15:39:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -162,9 +162,9 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/lightsVector  [<x>] [<y>] [<z>]");
   fpCommandLightsVector -> SetGuidance
     ("default: 1 1 1 - becomes \"current as default\"");
-   fpCommandLightsVector -> SetGuidance
+  fpCommandLightsVector -> SetGuidance
     ("Set direction from target to lights.");
- parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter = new G4UIparameter("x", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommandLightsVector -> SetParameter (parameter);
   parameter = new G4UIparameter("y", 'd', omitable = true);
@@ -252,7 +252,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/upThetaPhi", this);
   fpCommandUpThetaPhi -> SetGuidance
     ("/vis/viewer/set/upThetaPhi  [<theta>] [<phi>] [deg|rad]");
-  fpCommandUpVector -> SetGuidance
+  fpCommandUpThetaPhi -> SetGuidance
     ("Default: 90 90 deg - becomes \"current as default\"");
   fpCommandUpThetaPhi -> SetGuidance
     ("Set up vector.  Viewer will attempt always to show"
@@ -290,7 +290,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/viewpointThetaPhi", this);
   fpCommandViewpointThetaPhi -> SetGuidance
     ("/vis/viewer/set/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
-  fpCommandUpVector -> SetGuidance
+  fpCommandViewpointThetaPhi -> SetGuidance
     ("Default: 0 0 deg - becomes \"current as default\"");
   fpCommandViewpointThetaPhi -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
@@ -309,7 +309,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/viewpointVector", this);
   fpCommandViewpointVector -> SetGuidance
     ("/vis/viewer/set/viewpointVector  [<x>] [<y>] [<z>]");
-  fpCommandUpVector -> SetGuidance
+  fpCommandViewpointVector -> SetGuidance
     ("Default: 0 0 1 - becomes \"current as default\"");
   fpCommandViewpointVector -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
@@ -421,12 +421,6 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandAutoRefresh) {
     G4bool autoRefresh = GetNewBoolValue(newValue);
     vp.SetAutoRefresh(autoRefresh);
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"/vis/viewer/set/autoRefresh is a DEPRECATED COMMAND."
-	"\n  It will be removed from next major release."
-	     << G4endl;
-    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Views will ";
       if (!vp.IsAutoRefresh()) G4cout << "not ";
