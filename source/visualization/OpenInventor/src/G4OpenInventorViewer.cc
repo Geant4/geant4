@@ -30,6 +30,7 @@
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoWriteAction.h>
+#include <Inventor/sensors/SoNodeSensor.h>
 
 #include "HEPVis/nodes/SoImageWriter.h"
 #include "HEPVis/actions/SoGL2PSAction.h"
@@ -50,6 +51,7 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fSoCamera(0)
 ,fSoImageWriter(0)
 ,fGL2PSAction(0) //To be set be suclass.
+,fSoCameraSensor(0)
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
@@ -85,6 +87,9 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoCamera->focalDistance.setValue(10);
   fSoSelection->addChild(fSoCamera);
 
+  fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  fSoCameraSensor->attach(fSoCamera);
+
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
   // SoImageWriter should be the last.
@@ -94,7 +99,9 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  if(fSoSelection) fSoSelection->unref();
+  fSoCameraSensor->detach();
+  delete fSoCameraSensor;
+  fSoSelection->unref();
 }
 
 void G4OpenInventorViewer::KernelVisitDecision () {
@@ -216,12 +223,28 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
+void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) { 
+  G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
+
+/*
+  SbVec3f direction;
+  This->fSoCamera->orientation.getValue().multVec(SbVec3f(0,0,-1),direction);
+  This->fVP.SetViewpointDirection
+    (G4Vector3D(-direction[0],-direction[1],-direction[2]));
+
+  SbVec3f pos = This->fSoCamera->position.getValue();
+  SbVec3f target = pos + direction * This->fSoCamera->focalDistance.getValue();
+
+  This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
+*/
+}
+
 void G4OpenInventorViewer::SelectionCB(
- void* aData
+ void* aThis
 ,SoPath* aPath
 ) 
 {
-  G4OpenInventorViewer* This = (G4OpenInventorViewer*)aData;
+  G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
   SoNode* node = ((SoFullPath*)aPath)->getTail();
   G4String name((char*)node->getName().getString());
   G4String cls((char*)node->getTypeId().getName().getString());
@@ -241,11 +264,11 @@ void G4OpenInventorViewer::SelectionCB(
 }
 /*
 void G4OpenInventorViewer::DeselectionCB(
- void* aData
+ void* aThis
 ,SoPath* aPath
 ) 
 {
-  //G4OpenInventorViewer* This = (G4OpenInventorViewer*)aData;
+  //G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
   G4String name((char*)aPath->getTail()->getTypeId().getName().getString());
   G4cout << "Deselect : " << name << G4endl;
 }
@@ -294,26 +317,62 @@ void G4OpenInventorViewer::WriteInventor(const G4String& aFile) {
   writeAction.getOutput()->closeFile();
 }
 
-static void CountTriangleCB(
+struct Counter {
+ int fTriangles;
+ int fLineSegments;
+ int fPoints;
+};
+
+static void CountTrianglesCB(
  void* userData
 ,SoCallbackAction*
 ,const SoPrimitiveVertex*
+,const SoPrimitiveVertex*,
+const SoPrimitiveVertex*)
+{
+  Counter* counter = (Counter*)userData;
+  counter->fTriangles++;
+}
+
+static void CountLineSegmentsCB(
+ void* userData
+,SoCallbackAction*
 ,const SoPrimitiveVertex*
 ,const SoPrimitiveVertex*)
 {
-  int* number = (int*)userData;
-  (*number)++;
+  Counter* counter = (Counter*)userData;
+  counter->fLineSegments++;
 }
 
-void G4OpenInventorViewer::CountTriangles() {
+static void CountPointsCB(
+ void* userData
+,SoCallbackAction*
+,const SoPrimitiveVertex*)
+{
+  Counter* counter = (Counter*)userData;
+  counter->fPoints++;
+}
+
+void G4OpenInventorViewer::SceneGraphStatistics() {
+  Counter counter;
+  counter.fTriangles = 0;
+  counter.fLineSegments = 0;
+  counter.fPoints = 0;
+
   SoCallbackAction callbackAction;
-  int trianglen = 0;
   fSoSelection->ref();
   callbackAction.addTriangleCallback
-    (SoShape::getClassTypeId(),CountTriangleCB,(void*)&trianglen);
+    (SoShape::getClassTypeId(),CountTrianglesCB,(void*)&counter);
+  callbackAction.addLineSegmentCallback
+    (SoShape::getClassTypeId(),CountLineSegmentsCB,(void*)&counter);
+  callbackAction.addPointCallback
+    (SoShape::getClassTypeId(),CountPointsCB,(void*)&counter);
   callbackAction.apply(fSoSelection);
   fSoSelection->unrefNoDelete();
-  G4cout << "Number of triangles : " << trianglen << G4endl;
+
+  G4cout << "Number of triangles : " << counter.fTriangles << G4endl;
+  G4cout << "Number of line segments : " << counter.fLineSegments << G4endl;
+  G4cout << "Number of points : " << counter.fPoints << G4endl;
 }
 
 void G4OpenInventorViewer::EraseDetector() {
@@ -380,8 +439,7 @@ void G4OpenInventorViewer::UpdateScene() {
 void G4OpenInventorViewer::Help(const G4String& aTopic) {
   if(aTopic=="controls") {
   G4cout <<
-"\n\
- Controls on an Inventor examiner viewer are :\n\
+"Controls on an Inventor examiner viewer are :\n\
 - in picking mode (cursor is the upper left arrow)\n\
   Ctrl + pick a volume : see daughters.\n\
   Shift + pick a volume : see mother.\n\
@@ -390,8 +448,7 @@ void G4OpenInventorViewer::Help(const G4String& aTopic) {
   Ctrl+Left-button + pointer move : pane.\n\
   Ctrl+Shift+Left-button + pointer move : scale.\n\
   Middle-button + pointer move : pane.\n\
-  Right-button : popup menu.\n\
-" << G4endl;
+  Right-button : popup menu.\n" << G4endl;
   }
 }
 

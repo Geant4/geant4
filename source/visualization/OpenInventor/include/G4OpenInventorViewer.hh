@@ -33,9 +33,11 @@
 class SoSelection;
 class SoPath;
 class SoOrthographicCamera;
+class SoSensor;
+class SoNodeSensor;
+
 class Geant4_SoImageWriter;
 class Geant4_SoGL2PSAction;
-
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
 
@@ -59,7 +61,7 @@ protected:
   void WritePostScript(const G4String& file = "g4out.ps");
   void WritePixmapPostScript(const G4String& file = "g4out.ps");
   void WriteInventor(const G4String& file = "g4out.iv");
-  void CountTriangles();
+  void SceneGraphStatistics();
   void EraseDetector();
   void EraseEvent();
   void SetSolid();
@@ -69,6 +71,7 @@ protected:
 private:
   static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);
+  static void CameraSensorCB(void*,SoSensor*);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
 private:
@@ -80,6 +83,7 @@ protected:
   SoOrthographicCamera* fSoCamera;
   Geant4_SoImageWriter* fSoImageWriter;
   Geant4_SoGL2PSAction* fGL2PSAction;
+  SoNodeSensor* fSoCameraSensor;
 };
 
 #endif

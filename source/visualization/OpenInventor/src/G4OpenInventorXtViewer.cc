@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.14 2004-11-21 13:16:33 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.15 2004-11-22 11:09:59 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -109,13 +109,16 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     AddButton(menu,"Escape",EscapeCbk);}
 
    {Widget menu = AddMenu(menuBar,"Etc","Etc");
-    AddButton(menu,"Triangles",CountTrianglesCbk);
     AddButton(menu,"Erase detector",EraseDetectorCbk);
     AddButton(menu,"Erase event",EraseEventCbk);
     AddButton(menu,"Set solid",SetSolidCbk);
-    AddButton(menu,"Set wire frame",SetWireFrameCbk);
+    AddButton(menu,"Set (G4) wire frame",SetWireFrameCbk);
     AddButton(menu,"Update scene",UpdateSceneCbk);
-    AddButton(menu,"Help controls",HelpCbk);}
+    AddButton(menu,"Scene graph stats",SceneGraphStatisticsCbk);
+   }
+
+   {Widget menu = AddMenu(menuBar,"Help","Help");
+    AddButton(menu,"Controls",HelpCbk);}
 
     fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
     
@@ -224,10 +227,10 @@ void G4OpenInventorXtViewer::PixmapPostScriptCbk(
   This->WritePixmapPostScript();
 }
 
-void G4OpenInventorXtViewer::CountTrianglesCbk(
+void G4OpenInventorXtViewer::SceneGraphStatisticsCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->CountTriangles();
+  This->SceneGraphStatistics();
 }
 
 void G4OpenInventorXtViewer::WriteInventorCbk(

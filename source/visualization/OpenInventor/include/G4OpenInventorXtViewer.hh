@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.7 2004-11-21 13:16:33 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.8 2004-11-22 11:09:58 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ private:
   static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
   static void WriteInventorCbk(Widget,XtPointer,XtPointer);
   static void EscapeCbk(Widget,XtPointer,XtPointer);
-  static void CountTrianglesCbk(Widget,XtPointer,XtPointer);
+  static void SceneGraphStatisticsCbk(Widget,XtPointer,XtPointer);
   static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
   static void EraseEventCbk(Widget,XtPointer,XtPointer);
   static void SetSolidCbk(Widget,XtPointer,XtPointer);

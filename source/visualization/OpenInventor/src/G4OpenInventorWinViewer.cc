@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.14 2004-11-22 08:12:10 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.15 2004-11-22 11:09:58 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -68,13 +68,14 @@ public:
 #define ID_FILE_INVENTOR 3
 #define ID_FILE_ESCAPE 4
 // Etc : 
-#define ID_ETC_COUNT_TRIANGLES 101
-#define ID_ETC_ERASE_DETECTOR 102
-#define ID_ETC_ERASE_EVENT 103
-#define ID_ETC_SET_SOLID 104
-#define ID_ETC_SET_WIRE_FRAME 105
-#define ID_ETC_UPDATE_SCENE 106
-#define ID_ETC_HELP_CONTROLS 107
+#define ID_ETC_ERASE_DETECTOR 101
+#define ID_ETC_ERASE_EVENT 102
+#define ID_ETC_SET_SOLID 103
+#define ID_ETC_SET_WIRE_FRAME 104
+#define ID_ETC_UPDATE_SCENE 105
+#define ID_ETC_STATS 106
+// Help :
+#define ID_HELP_CONTROLS 201
 
 //static void SecondaryLoopPostAction ();
 
@@ -125,13 +126,16 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
 
    {HMENU casc = CreatePopupMenu();
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Etc");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_COUNT_TRIANGLES,"Triangles");
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set wire frame");
     ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_HELP_CONTROLS,"Help controls");}
+    ::AppendMenu(casc,MF_STRING,ID_ETC_STATS,"Scene graph stats");}
+
+   {HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Help");
+    ::AppendMenu(casc,MF_STRING,ID_HELP_CONTROLS,"Controls");}
 
     fShell = ::CreateWindow(className, shellName.c_str(), 
                             WS_OVERLAPPEDWINDOW |
@@ -246,8 +250,6 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
         } else if(aWParam==ID_FILE_ESCAPE) {
           This->Escape();
         // Etc :
-        } else if(aWParam==ID_ETC_COUNT_TRIANGLES) {
-          This->CountTriangles();
         } else if(aWParam==ID_ETC_ERASE_DETECTOR) {
           This->EraseDetector();
         } else if(aWParam==ID_ETC_ERASE_EVENT) {
@@ -258,7 +260,10 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
           This->SetWireFrame();
         } else if(aWParam==ID_ETC_UPDATE_SCENE) {
           This->UpdateScene();
-        } else if(aWParam==ID_ETC_HELP_CONTROLS) {
+        } else if(aWParam==ID_ETC_STATS) {
+          This->SceneGraphStatistics();
+        // Help :
+        } else if(aWParam==ID_HELP_CONTROLS) {
           This->Help();
         }
       }
