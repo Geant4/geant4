@@ -174,7 +174,6 @@ void hTestHisto::bookHisto()
 
   // book ntuple
   ntup = hbookManager->ntuple("Range/Energy");
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

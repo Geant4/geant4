@@ -67,6 +67,7 @@ public: // Without description
     void SetHadronPhysicsList(const G4String&);  
     inline void SetVerbose(G4int val) {verbose = val;};    
     inline G4int GetVerbose() const {return verbose;};    
+    inline G4double GetMaxChargedStep() const {return maxChargedStep;};    
 
 protected:
     // Construct particle and physics

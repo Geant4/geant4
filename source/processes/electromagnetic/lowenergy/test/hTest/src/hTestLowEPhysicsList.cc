@@ -59,14 +59,12 @@
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hLowEnergyIonisation.hh"
-#include "hTestStepCut.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestLowEPhysicsList::hTestLowEPhysicsList()
 {
   verbose = 0;
-  maxChargedStep = DBL_MAX;
   nuclStop = true;
   barkas = true;
   table = G4String("");
@@ -77,8 +75,6 @@ hTestLowEPhysicsList::hTestLowEPhysicsList()
 void hTestLowEPhysicsList::ConstructProcess()
 {
   G4cout << "LowEnergy Electromagnetic PhysicsList is initilized" << G4endl;
-  hTestStepCut* theStepCut = new hTestStepCut();
-  theStepCut->SetMaxStep(maxChargedStep);
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();     
   G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();     
 
@@ -104,7 +100,6 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScatteringx(), -1, 1,1);
       pmanager->AddProcess(new G4LowEnergyIonisation(),  -1, 2,2);
       pmanager->AddProcess(new G4LowEnergyBremsstrahlung(), -1,-1,3);   
-      pmanager->AddProcess(theStepCut, -1,-1,4);
 
     } else if (particleName == "e+") {
       if(0 < verbose) G4cout << "LowE e+" << G4endl; 
@@ -112,7 +107,6 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation(),   0,-1,4);
-      pmanager->AddProcess(theStepCut, -1,-1,5);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -122,7 +116,6 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);       	       
       pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
-      pmanager->AddProcess(theStepCut, -1,-1,5);
 
     } else if (
                 particleName == "proton"  
@@ -160,7 +153,6 @@ void hTestLowEPhysicsList::ConstructProcess()
       }
 
       pmanager->AddProcess(hIon,-1,2,2);		       
-      pmanager->AddProcess( theStepCut,  -1,-1,3);
    
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
@@ -193,7 +185,6 @@ void hTestLowEPhysicsList::ConstructProcess()
          iIon->SetElectronicStoppingPowerModel(proton,table);
 
       pmanager->AddProcess(iIon,-1,2,2);
-      pmanager->AddProcess(theStepCut, -1,-1,3);
     }
     if(2 < verbose) pmanager->DumpInfo();
   }

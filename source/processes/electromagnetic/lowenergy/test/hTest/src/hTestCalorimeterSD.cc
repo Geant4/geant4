@@ -115,8 +115,8 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
-  if(zstart > 0.0 && zstart < zmax 
-                  && (zend <= 0.0 || zend >= zmax)) outAbs = true;
+  G4double del = 0.001*micrometer;
+  if(zend <= del || zend >= zmax - del) outAbs = true;
 
   // new particle
   if(trIDnow != trIDold || evno != evnOld) {
@@ -124,20 +124,9 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     evnOld = evno;
   }
 
-  // After step in absorber
-  if(outAbs) {
-    if(zend >= zmax) leakEnergy += tkin;
-    else             backEnergy += tkin;
-
-    // primary particles
-    if(primary) {
-      theHisto->SaveToTuple("TEND",tkin/MeV);
-      theHisto->SaveToTuple("TETA",theta/deg);      
-    }
-  }
 
   // Primary particle stop 
-  if(primary && stop) {
+  if(primary && (stop || outAbs) && theHisto->GetTrackInAbsorber()) {
 
     G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
     G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
@@ -148,8 +137,15 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     theHisto->SaveToTuple("TEND",0.0);
     theHisto->SaveToTuple("TETA",0.0);      
 
-    // exclude cases when tack return back
+    // exclude cases when track return back
     if(theHisto->GetTrackLength() < 2.0*zend) theHisto->AddEndPoint(zend);
+  }
+
+  // After step in absorber
+  if(outAbs && theHisto->GetTrackInAbsorber()) {
+    theHisto->SetTrackOutAbsorber();
+    if(zend >= zmax) leakEnergy += tkin;
+    else             backEnergy += tkin;
   }
 
   return true;

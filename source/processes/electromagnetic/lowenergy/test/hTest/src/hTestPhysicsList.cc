@@ -46,6 +46,7 @@
 #include "hTestStanPhysicsList.hh"
 #include "hTestHadronPhysicsList.hh"
 #include "hTestHadronPhysicsList1.hh"
+#include "hTestStepCut.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -209,6 +210,7 @@ void hTestPhysicsList::ConstructDecay()
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
+  hTestStepCut* theStepCut = new hTestStepCut(G4String("user cut"),this);
 
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -220,6 +222,10 @@ void hTestPhysicsList::ConstructDecay()
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+    }
+    if (particle->GetPDGCharge()) { 
+      pmanager ->AddProcess(theStepCut);
+      pmanager ->SetProcessOrdering(theStepCut, idxPostStep);
     }
   }
 }
@@ -294,7 +300,6 @@ void hTestPhysicsList::SetProtonCut(G4double val)
 
 void hTestPhysicsList::SetElectronCutByEnergy(G4double energy)
 {
-  G4ParticleTable* thehTestParticleTable =  G4ParticleTable::GetParticleTable();
   G4Material* currMat = pDet->GetAbsorberMaterial();
   G4ParticleDefinition* part = G4Electron::ElectronDefinition();
 

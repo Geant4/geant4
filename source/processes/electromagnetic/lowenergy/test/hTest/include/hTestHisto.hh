@@ -80,7 +80,9 @@ public: // Without description
     void SaveToTuple(const G4String&, G4double, G4double);
     void SaveEvent();
     G4double GetTrackLength() const {return trackLength;};
-    void ResetTrackLength() {trackLength = 0.0;};
+    void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
+    G4bool SetTrackOutAbsorber() {trackAbs = false;};
+    G4bool GetTrackInAbsorber() const {return trackAbs;};
     void AddTrackLength(G4double x)   {trackLength += x;};
     void AddEndPoint(G4double);
     void AddEnergy(G4double, G4double);
@@ -98,7 +100,6 @@ public: // Without description
     G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
     void SetMaxEnergy(G4double val) {maxEnergy = val;};     
     G4double  GetMaxEnergy() const {return maxEnergy;};
-
 
 private:
 
@@ -123,6 +124,7 @@ private:
     G4int nAbsSaved;
     G4double maxEnergy;
     G4double trackLength;
+    G4bool trackAbs;        // Track is in absorber
 };
 
 #endif

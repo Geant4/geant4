@@ -57,14 +57,12 @@
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
-#include "hTestStepCut.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestStanPhysicsList::hTestStanPhysicsList()
 {
   verbose = 0;
-  maxChargedStep = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,8 +70,6 @@ hTestStanPhysicsList::hTestStanPhysicsList()
 void hTestStanPhysicsList::ConstructProcess()
 {
   G4cout << "Standard EM PhysicsList will be constructed" << G4endl;
-  hTestStepCut* theStepCut = new hTestStepCut();
-  theStepCut->SetMaxStep(maxChargedStep);          
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -94,7 +90,6 @@ void hTestStanPhysicsList::ConstructProcess()
 
       pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
-      pmanager->AddProcess(theStepCut,  -1,-1,4);
 
     } else if (particleName == "e+") {
 
@@ -102,7 +97,6 @@ void hTestStanPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-      pmanager->AddProcess(theStepCut,   -1,-1,5);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -112,7 +106,6 @@ void hTestStanPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
       pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
-      pmanager->AddProcess(theStepCut,   -1,-1,5);    
 
     } else if (
                 particleName == "proton"  
@@ -131,7 +124,6 @@ void hTestStanPhysicsList::ConstructProcess()
       G4hIonisation* hIon = new G4hIonisation() ;
 
       pmanager->AddProcess(hIon,-1,2,2);
-      pmanager->AddProcess(theStepCut,  -1,-1,3);
    
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
@@ -151,7 +143,6 @@ void hTestStanPhysicsList::ConstructProcess()
 
       G4hIonisation* iIon = new G4hIonisation();
       pmanager->AddProcess(iIon,-1,2,2);
-      pmanager->AddProcess(theStepCut,  -1,-1,3);
     }
   }
 }

@@ -45,15 +45,20 @@
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4VParticleChange.hh"
+#include "hTestPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class hTestPhysicsList;
 
 class hTestStepCut : public G4VDiscreteProcess
 {
 public: // Without description   
 
-   hTestStepCut(const G4String& processName = "UserStepCut" );
-   hTestStepCut(hTestStepCut &);
+   hTestStepCut(const G4String&, const hTestPhysicsList*);
 
   ~hTestStepCut();
 
@@ -62,12 +67,10 @@ public: // Without description
 
    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-   inline void SetMaxStep(G4double val) {maxChargedStep = val;};
-
 protected:
 
      // it is not needed here !
-   G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
 			    
 private:
   
@@ -75,35 +78,24 @@ private:
   hTestStepCut(const hTestStepCut &right);
   const hTestStepCut& operator=(const hTestStepCut &right);
 
-  G4double maxChargedStep;
+  const hTestPhysicsList* thePhysics;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 // inlined function members implementation
-
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double hTestStepCut::PostStepGetPhysicalInteractionLength(
                         const G4Track& aTrack,
-                              G4double   previousStepSize,
+                              G4double,
                               G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
    G4double step = DBL_MAX;
 
-   if((maxChargedStep > 0.) &&
-      (aTrack.GetVolume() != 0) &&
-      (aTrack.GetVolume()->GetName() == "Absorber") &&
-      (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
-        step = maxChargedStep;
+   if(aTrack.GetVolume()->GetName() == "Absorber")
+        step = thePhysics->GetMaxChargedStep();
 
    return step;
 }

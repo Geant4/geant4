@@ -47,8 +47,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestStepCut::hTestStepCut(const G4String& aName):G4VDiscreteProcess(aName),
-  maxChargedStep(DBL_MAX)
+hTestStepCut::hTestStepCut(const G4String& aName, const hTestPhysicsList* list)
+ :G4VDiscreteProcess(aName),
+  thePhysics(list)
 {
   if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;

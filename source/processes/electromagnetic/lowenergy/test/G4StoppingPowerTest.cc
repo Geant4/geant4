@@ -121,8 +121,9 @@ int main(int argc,char** argv)
   G4double cutG      = 10.0*mm;
   G4double cutE      = 10.0*mm;
   G4Material* material = 0; 
-  G4String name[3] = {"Ionisation", "Bremsstrahlung",
-                      "Ionisation+Bremsstrahlung"};
+  G4String name[4] = {"Ionisation", "Bremsstrahlung",
+                      "Ionisation+Bremsstrahlung",
+                      "Ionisation+Bremsstrahlung+PairProduction" };
   G4bool setBarkasOff = false;
   G4bool setNuclearOff= true;
 
@@ -148,7 +149,7 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[14];
+  G4Material* ma[15];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite","Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
@@ -168,6 +169,7 @@ int main(int argc,char** argv)
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
   ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
+
   ma[11] = new G4Material ("Water" , "H_2O", 1.*g/cm3, 2);
   ma[11]->AddElement(H,2);
   ma[11]->AddElement(O,1);
@@ -179,6 +181,9 @@ int main(int argc,char** argv)
   ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
   ma[13]->AddElement(Cs,1);
   ma[13]->AddElement(I,1);
+
+  ma[14] = new G4Material("LiqH2", 1., 1.01*g/mole, 0.0708*g/cm3);
+
   
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
@@ -205,6 +210,7 @@ int main(int argc,char** argv)
   G4ParticleDefinition* c12 = G4IonC12::IonC12Definition();
   G4ParticleDefinition* ar40 = G4IonAr40::IonAr40Definition();
   G4ParticleDefinition* part = electron;
+  G4ParticleDefinition* muon = G4MuonPlus::MuonPlusDefinition();
 
   G4hLowEnergyIonisation* hionle = 0;
   G4hLowEnergyIonisation* ionle = 0;
@@ -214,6 +220,9 @@ int main(int argc,char** argv)
   G4hIonisation* hionst = 0;
   G4eIonisation* eionst = 0;
   G4eBremsstrahlung* ebrst = 0;
+  G4MuIonisation*     muio = 0;
+  G4MuBremsstrahlung* mubr = 0;
+  G4MuPairProduction* mupa = 0; 
 
   G4cout  <<  "Process is initialized"  <<  G4endl;; 
 
@@ -336,6 +345,8 @@ int main(int argc,char** argv)
       part = c12;
     } else if(nPart == 6) {
       part = ar40;
+    } else if(nPart == 7) {
+      part = muon;
     } else {
       G4cout << "Particle #" << nPart 
              << " is absent in the list of particles: Exit" << G4endl;
@@ -441,7 +452,7 @@ int main(int argc,char** argv)
         hionle->BuildPhysicsTable(*antiproton);
         success = true;
 
-      } else if (nPart == 5 || nPart == 6) {
+      } else if (nPart == 5 || nPart == 6 || nPart == 7) {
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionle = new G4hLowEnergyIonisation();
@@ -483,6 +494,21 @@ int main(int argc,char** argv)
         if(nProcess == 2) {
           success = true;
 	}
+      } else if(nPart == 7 && nProcess == 2) {
+        muio = new G4MuIonisation();
+        mubr = new G4MuBremsstrahlung();
+        mupa = new G4MuPairProduction(); 
+        ionManager = new G4ProcessManager(part);
+        part->SetProcessManager(ionManager);
+        muio->SetEnlossFluc(false);
+        ionManager->AddProcess(muio);
+        ionManager->AddProcess(mubr);
+        ionManager->AddProcess(mupa);
+        muio->SetVerboseLevel(verbose);
+        muio->BuildPhysicsTable(*part);
+        mubr->BuildPhysicsTable(*part);
+        mupa->BuildPhysicsTable(*part);
+        success = true;
       } else if(nPart == 2) {
         positManager = new G4ProcessManager(positron);
         positron->SetProcessManager(positManager);
@@ -530,7 +556,7 @@ int main(int argc,char** argv)
         hionst->BuildPhysicsTable(*antiproton);
         success = true;
 
-      } else if (nPart == 5 || nPart == 6) {
+      } else if (nPart == 5 || nPart == 6 || nPart == 7) {
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionst = new G4hIonisation();
@@ -618,7 +644,7 @@ int main(int argc,char** argv)
           x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = hionle->AlongStepDoIt(*gTrack,*step);
 
-        } else if (nPart == 5 || nPart == 6) {
+        } else if (nPart == 5 || nPart == 6 || nPart == 7) {
           x = ionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = ionle->AlongStepDoIt(*gTrack,*step);
 
@@ -661,7 +687,7 @@ int main(int argc,char** argv)
           x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = hionst->AlongStepDoIt(*gTrack,*step);
 
-        } else if (nPart == 5 || nPart == 6) {
+        } else if (nPart == 5 || nPart == 6 || nPart == 7) {
           x = ionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = ionst->AlongStepDoIt(*gTrack,*step);
 	}

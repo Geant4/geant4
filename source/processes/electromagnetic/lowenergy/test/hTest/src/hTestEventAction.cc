@@ -96,7 +96,6 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 void hTestEventAction::EndOfEventAction(const G4Event* evt)
 {
 
-#ifdef G4VIS_USE  
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager) {
@@ -104,14 +103,13 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
     G4int n_trajectories = 0;
     if (trjc) n_trajectories = trjc->entries();  
 
-    for(i=0; i<n_trajectories; i++) {
+    for(G4int i=0; i<n_trajectories; i++) {
       G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
       if (drawFlag == "all") t->DrawTrajectory(50);
       else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
                              t->DrawTrajectory(50); 
     }
   }  
-#endif
 
   if(verbose > 0) {
     G4cout << "hTestEventAction: Event #" 

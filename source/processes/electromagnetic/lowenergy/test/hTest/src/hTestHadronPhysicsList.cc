@@ -54,6 +54,7 @@
 #include "G4AntiProtonInelasticProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
 #include "G4AntiNeutronInelasticProcess.hh"
+/*
 #include "G4LambdaInelasticProcess.hh"
 #include "G4AntiLambdaInelasticProcess.hh"
 #include "G4SigmaPlusInelasticProcess.hh"
@@ -64,11 +65,13 @@
 #include "G4XiMinusInelasticProcess.hh"
 #include "G4AntiXiZeroInelasticProcess.hh"
 #include "G4AntiXiMinusInelasticProcess.hh"
+#include "G4OmegaMinusInelasticProcess.hh"
+#include "G4AntiOmegaMinusInelasticProcess.hh"
+*/
+
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
 
 // Low-energy Models
 
@@ -84,6 +87,7 @@
 #include "G4LEAntiProtonInelastic.hh"
 #include "G4LENeutronInelastic.hh"
 #include "G4LEAntiNeutronInelastic.hh"
+/*
 #include "G4LELambdaInelastic.hh"
 #include "G4LEAntiLambdaInelastic.hh"
 #include "G4LESigmaPlusInelastic.hh"
@@ -94,11 +98,13 @@
 #include "G4LEXiMinusInelastic.hh"
 #include "G4LEAntiXiZeroInelastic.hh"
 #include "G4LEAntiXiMinusInelastic.hh"
+#include "G4LEOmegaMinusInelastic.hh"
+#include "G4LEAntiOmegaMinusInelastic.hh"
+*/
+
 #include "G4LEDeuteronInelastic.hh"
 #include "G4LETritonInelastic.hh"
 #include "G4LEAlphaInelastic.hh"
-#include "G4LEOmegaMinusInelastic.hh"
-#include "G4LEAntiOmegaMinusInelastic.hh"
 
 // High-energy Models
 
@@ -112,6 +118,7 @@
 #include "G4HEAntiProtonInelastic.hh"
 #include "G4HENeutronInelastic.hh"
 #include "G4HEAntiNeutronInelastic.hh"
+/*
 #include "G4HELambdaInelastic.hh"
 #include "G4HEAntiLambdaInelastic.hh"
 #include "G4HESigmaPlusInelastic.hh"
@@ -124,7 +131,7 @@
 #include "G4HEAntiXiMinusInelastic.hh"
 #include "G4HEOmegaMinusInelastic.hh"
 #include "G4HEAntiOmegaMinusInelastic.hh"
-
+*/
 // Stopping processes
 
 #ifdef TRIUMF_STOP_PIMINUS
