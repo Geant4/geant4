@@ -47,6 +47,7 @@ class hTestDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
@@ -81,6 +82,7 @@ public: // Without description
     G4UIcmdWithADoubleAndUnit* YMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
     G4UIcmdWithAString*        HistoCmd;
+    G4UIcmdWithABool*          ntupCmd;
     G4UIcmdWithAnInteger*      NumOfEvt;
     G4UIcmdWithAnInteger*      verbCmd;
     G4UIcmdWithAnInteger*      intCmd;

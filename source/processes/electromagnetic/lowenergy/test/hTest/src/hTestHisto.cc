@@ -72,7 +72,9 @@ hTestHisto::hTestHisto()
   histName = G4String("histo.hbook");
   ntup = 0;
   nHisto = 1;
+  nAbsSaved = 0;
   maxEnergy = 0.0;
+  nTuple = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,14 +147,14 @@ void hTestHisto::SaveEvent()
 
 void hTestHisto::SaveToTuple(const G4String& parname, G4double val)
 {
-  if(ntup) ntup->fill( ntup->findColumn(parname), val);
+  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestHisto::SaveToTuple(const G4String& parname,G4double val,G4double defval)
 {
-  if(ntup) ntup->fill( ntup->findColumn(parname), val);
+  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -186,27 +188,28 @@ void hTestHisto::bookHisto()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
 
-  if(0 < nHisto) histo[0] = hf->create1D("1",
+  if(0 < nHisto) histo[0] = hf->create1D("10",
     "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax);
 
-  if(1 < nHisto) histo[1] = hf->create1D("2",
+  if(1 < nHisto) histo[1] = hf->create1D("11",
     "Energy (MeV) of delta-electrons",50,0.0,maxEnergy/MeV);
 
-  if(2 < nHisto) histo[2] = hf->create1D("3",
+  if(2 < nHisto) histo[2] = hf->create1D("12",
     "Theta (degrees) of delta-electrons",36,0.0,180.);
 
-  if(3 < nHisto) histo[3] = hf->create1D("4",
+  if(3 < nHisto) histo[3] = hf->create1D("13",
     "Energy (MeV) of secondary gamma",50,0.0,maxEnergy/MeV);
 
-  if(4 < nHisto) histo[4] = hf->create1D("5",
+  if(4 < nHisto) histo[4] = hf->create1D("14",
     "Theta (degrees) of secondary gamma",36,0.0,180.);
 
   // Creating a tuple factory, whose tuples will be handled by the tree
-  // G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // If using Anaphe HBOOK implementation, there is a limitation on the 
   // length of the variable names in a ntuple
-  // ntup = tpf->create( "100", "Range/Energy", "float ekin, dedx" );
+  if(nTuple) ntup = tpf->create( "100", "Range/Energy", 
+  "float xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" );
 
 }
 

@@ -91,6 +91,7 @@ public: // Without description
     void SetVerbose(G4int val) {verbose = val;};
     G4int GetVerbose() const {return verbose;};
     void SetHistoNumber(G4int val) {nHisto = val;};
+    void SetNtuple(G4bool val) {nTuple = val;};
 
     void SetNumberOfAbsorbers(G4int val) {NumberOfAbsorbers = val;};     
     G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
@@ -127,7 +128,8 @@ private:
     G4int nAbsSaved;
     G4double maxEnergy;
     G4double trackLength;
-    G4bool trackAbs;        // Track is in absorber
+    G4bool trackAbs;
+    G4bool nTuple;
 };
 
 #endif

@@ -75,6 +75,7 @@ public: // Without description
       G4double zmax;
       G4double tkinold;
       G4double delta;
+      G4bool   part_is_out;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -43,6 +43,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
+#include "G4Positron.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +117,7 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4bool primary = false;
   G4bool outAbs = false;
   if(track->GetNextVolume()->GetName() == "World"
-     && (zend <= delta || zend >= zmax)  ) outAbs = true;
+     && (zend <= delta || zend >= zmax-delta)  ) outAbs = true;
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
@@ -125,6 +126,7 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if(trIDnow != trIDold || evno != evnOld) {
     trIDold = trIDnow;
     evnOld  = evno;
+    part_is_out = true;
     tkinold = aStep->GetPreStepPoint()->GetKineticEnergy();
   }
 
@@ -134,14 +136,14 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
       G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
       G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
-      theHisto->SaveToTuple("XEND",xend/mm);      
-      theHisto->SaveToTuple("YEND",yend/mm);      
-      theHisto->SaveToTuple("ZEND",zend/mm);      
-      theHisto->SaveToTuple("LTRK",(theHisto->GetTrackLength())/mm);      
-      theHisto->SaveToTuple("TEND",tkin);
-      theHisto->SaveToTuple("TETA",theta);      
-      theHisto->SaveToTuple("LOSS",(tkinold-tkin)/MeV);      
-      theHisto->SaveToTuple("DEDX",(tkinold-tkin)*mm/(zmax*MeV));      
+      theHisto->SaveToTuple("xend",xend/mm);      
+      theHisto->SaveToTuple("yend",yend/mm);      
+      theHisto->SaveToTuple("zend",zend/mm);      
+      theHisto->SaveToTuple("ltpk",(theHisto->GetTrackLength())/mm);      
+      theHisto->SaveToTuple("tend",tkin/MeV);
+      theHisto->SaveToTuple("teta",theta);      
+      theHisto->SaveToTuple("loss",(tkinold-tkin)/MeV);      
+      theHisto->SaveToTuple("dedx",(tkinold-tkin)*mm/(zmax*MeV));      
 
     // exclude cases when track return back
 
@@ -151,9 +153,13 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   // After step in absorber
 
-  if(outAbs) {
-      if(zend >= zmax)       leakEnergy += tkin;
-      else                   backEnergy += tkin;
+  if(outAbs && part_is_out) {
+    G4double e = tkin;
+    if(track->GetDefinition() == G4Positron::Positron()) 
+      e += 2.*electron_mass_c2;
+    if(zend > zmax-delta)       leakEnergy += e;
+    else if(zend < delta)       backEnergy += e;
+    part_is_out = false;
   }
   return true;
 }
@@ -164,8 +170,8 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int i, j;
 
-  theHisto->SaveToTuple(G4String("backE"),backEnergy);      
-  theHisto->SaveToTuple(G4String("leakE"),leakEnergy);      
+  theHisto->SaveToTuple("back",backEnergy);      
+  theHisto->SaveToTuple("leak",leakEnergy);      
   G4double etot = 0.0;
 
   // The histogramm on the energy deposition profile
@@ -178,8 +184,8 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
       theHisto->AddEnergy(energy[i], z);
     }
   }
-  theHisto->SaveToTuple(G4String("Edep"),etot);      
-  theHisto->SaveToTuple(G4String("Evt"),G4double(evno));      
+  theHisto->SaveToTuple(G4String("edep"),etot/MeV);      
+  //theHisto->SaveToTuple(G4String("Evt"),G4double(evno));      
 
   // Integrated energy deposition to nTuple
   G4int nMax = 60;
