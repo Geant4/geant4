@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.13 2001-03-12 06:25:24 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.14 2001-07-10 03:24:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -773,7 +773,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 #ifdef G4VERBOSE  
   if (verboseLevel>2){
     G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
-    G4cout << " Store material and cu values successfully" << G4endl;
+    G4cout << " Store material and cut values successfully" << G4endl;
   }
 #endif
 
@@ -787,11 +787,11 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
     for ( j=0; j < pVector->entries(); ++j) {
-      if (!(*pVector)[j]->StorePhysicsTable(directoryPhysicsTable,ascii)){   
+      if (!(*pVector)[j]->StorePhysicsTable(particle,directoryPhysicsTable,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
 	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
-	  G4cout << " Fail to retrieve for ";
+	  G4cout << " Fail to store for ";
 	  G4cout << (*pVector)[j]->GetProcessName();
 	  G4cout << "(" << particle->GetParticleName() <<")" << G4endl;
 	}
@@ -1022,7 +1022,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
   for ( j=0; j < pVector->entries(); ++j) {
     success[j] = 
-       (*pVector)[j]->RetrievePhysicsTable(directory,ascii);
+       (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
     if (!success[j]) {
 #ifdef G4VERBOSE  
