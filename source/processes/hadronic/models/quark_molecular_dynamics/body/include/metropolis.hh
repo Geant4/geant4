@@ -1,14 +1,14 @@
 #ifndef __METROPOLIS__
 #define __METROPOLIS__
 
-#include "g4std/iostream"
+#include <iostream>
 #include "newvector.hh"
 
 class Geometry;
 
 class Metropolis
 {
-  friend G4std::ostream& operator<<(G4std::ostream& o,const Metropolis& M);
+  friend std::ostream& operator<<(std::ostream& o,const Metropolis& M);
 protected:
   int N,N_init;
   double T,E_k,F;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.34 2003-06-13 09:42:42 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.35 2003-06-19 14:38:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -149,7 +149,7 @@ class G4PropagatorInField
   // Set the filter that examines & stores 'intermediate' 
   //  curved trajectory points.  Currently only position is stored.
 
-  G4std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
+  std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
   // Access the points which have passed by the filter.
   // Responsibility for deleting the points lies with the client.
   // This method MUST BE called exactly ONCE per step. 

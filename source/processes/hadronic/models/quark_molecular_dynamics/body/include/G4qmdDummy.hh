@@ -26,7 +26,7 @@
 #ifndef G4qmdDummy_h
 #define G4qmdDummy_h 1
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Propagation.hh"
@@ -47,8 +47,8 @@ class G4qmdDummy
       int operator==(const G4qmdDummy &right) const;
       int operator!=(const G4qmdDummy &right) const;
 
-      void skipline(G4std::istream& in);
-      double readEvent(G4std::istream& in);
+      void skipline(std::istream& in);
+      double readEvent(std::istream& in);
 
   public:
       void SetInputFile(G4String & anInputFile);

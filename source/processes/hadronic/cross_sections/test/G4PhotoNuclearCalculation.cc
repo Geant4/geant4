@@ -49,9 +49,9 @@
 // 
 //=====================================================================
 #include "globals.hh"
-#include "g4std/iostream"
-#include "g4std/fstream"
-#include "g4std/vector"
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include "G4ios.hh"
 
 int main()
@@ -79,10 +79,10 @@ int main()
   const G4double iE=log(106.);      // Start logarithm energy
   const G4double fE=log(50000.);    // Finish logarithm energy (each 2.75 percent)
   const G4double dE=(fE-iE)/(nC-1); // Step in logarithm energy
-  G4std::ofstream fileGDR("GDR.out", G4std::ios::out);
-  fileGDR.setf( G4std::ios::scientific, G4std::ios::floatfield );
-  G4std::ofstream fileRes("Res.out", G4std::ios::out);
-  fileRes.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream fileGDR("GDR.out", std::ios::out);
+  fileGDR.setf( std::ios::scientific, std::ios::floatfield );
+  std::ofstream fileRes("Res.out", std::ios::out);
+  fileRes.setf( std::ios::scientific, std::ios::floatfield );
   G4int np=0;
   for(G4int m=0; m<mN; m++)
   {

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticTest.cc,v 1.6 2002-10-24 12:15:11 jwellisc Exp $
+// $Id: G4NeutronHPElasticTest.cc,v 1.7 2003-06-19 14:42:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "G4TouchableHandle.hh"
  
 #include "G4Material.hh"

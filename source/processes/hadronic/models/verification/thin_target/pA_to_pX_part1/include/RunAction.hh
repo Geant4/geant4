@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003-05-29 15:32:39 dennis Exp $
+// $Id: RunAction.hh,v 1.3 2003-06-19 14:44:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ class RunAction : public G4UserRunAction
 
     EnergyAngleCrossSection* theData; 
 
-    G4std::vector<G4std::pair<G4double,G4double> > binEdges;
+    std::vector<std::pair<G4double,G4double> > binEdges;
 
     G4Material* material;
     G4double twopi; 

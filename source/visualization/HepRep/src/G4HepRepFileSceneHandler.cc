@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.13 2003-05-30 12:50:31 johna Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.14 2003-06-19 14:45:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,10 +256,10 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     G4cout << "G4HepRepFileSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
 #endif
 
-  G4std::vector<G4AttValue>* attValues = traj.CreateAttValues();
-  G4std::vector<G4AttValue>::iterator iAttVal;
-  const G4std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
-  G4std::map<G4String,G4AttDef>::const_iterator iAttDef;
+  std::vector<G4AttValue>* attValues = traj.CreateAttValues();
+  std::vector<G4AttValue>::iterator iAttVal;
+  const std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
+  std::map<G4String,G4AttDef>::const_iterator iAttDef;
   G4int i;
 
   // Open the HepRep output file if it is not already open.
@@ -314,9 +314,9 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     // different Types.
     if (traj.GetPointEntries()>0) {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
-      G4std::vector<G4AttValue>* pointAttValues
+      std::vector<G4AttValue>* pointAttValues
 	= aTrajectoryPoint->CreateAttValues();
-      const G4std::map<G4String,G4AttDef>* pointAttDefs
+      const std::map<G4String,G4AttDef>* pointAttDefs
 	= aTrajectoryPoint->GetAttDefs();
       if (pointAttValues && pointAttDefs) {
 	for (iAttVal = pointAttValues->begin();
@@ -357,7 +357,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   if (attValues && attDefs) {
     for (iAttVal = attValues->begin();
 	 iAttVal != attValues->end(); ++iAttVal) {
-      G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+      std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	attDefs->find(iAttVal->GetName());
       if (iAttDef == attDefs->end()) {
 	G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"
@@ -402,16 +402,16 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     hepRepXMLWriter->addInstance();
 
   // Copy the current trajectory point's G4AttValues to HepRepAttValues.
-    G4std::vector<G4AttValue>* pointAttValues
+    std::vector<G4AttValue>* pointAttValues
       = aTrajectoryPoint->CreateAttValues();
-    const G4std::map<G4String,G4AttDef>* pointAttDefs
+    const std::map<G4String,G4AttDef>* pointAttDefs
       = aTrajectoryPoint->GetAttDefs();
 
     if (pointAttValues && pointAttDefs) {
-      G4std::vector<G4AttValue>::iterator iAttVal;
+      std::vector<G4AttValue>::iterator iAttVal;
       for (iAttVal = pointAttValues->begin();
 	   iAttVal != pointAttValues->end(); ++iAttVal) {
-	G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	  pointAttDefs->find(iAttVal->GetName());
 	if (iAttDef == pointAttDefs->end()) {
 	  G4cout << "\nG4VTrajectory::ShowTrajectory:"

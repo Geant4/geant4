@@ -40,8 +40,8 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include <string>
 #include <iostream.h>
 #include <stdlib.h>

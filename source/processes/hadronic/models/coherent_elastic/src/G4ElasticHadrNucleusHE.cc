@@ -31,9 +31,9 @@
 #include  "globals.hh"
 #include  "G4ParticleTable.hh"
 #include  "G4NucleiProperties.hh"
-#include  "g4std/strstream"
-#include  "g4std/iostream"
-#include  "g4std/fstream"
+#include  <strstream>
+#include  <iostream>
+#include  <fstream>
 
 //  +++++++++++++++++  The constructor 1 ++++++++++++++++++
      G4ElasticHadrNucleusHE::
@@ -150,9 +150,9 @@
 
 //  ---------   The writing of array into sName File  ---------
 
-       G4std::ofstream TestFile(sNameFile, G4std::ios::out);
-             TestFile.setf(G4std::ios::scientific, 
-                           G4std::ios::floatfield);
+       std::ofstream TestFile(sNameFile, std::ios::out);
+             TestFile.setf(std::ios::scientific, 
+                           std::ios::floatfield);
              TestFile.precision(9);
 
      TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<endl;
@@ -201,7 +201,7 @@
   if(dHdrEnergy < 2) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
-        G4std::ifstream TestFile(sNameFile);
+        std::ifstream TestFile(sNameFile);
         TestFile.setf(ios::scientific);
 
         TestFile >> dEbeg1 >> dEend1 >> iPoE;
@@ -319,12 +319,12 @@
 
 //  ---------   The writing of array into sName File  ---------
 
-       G4std::ostrstream sNameFile;
+       std::ostrstream sNameFile;
        sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
 
-       G4std::ofstream TestFile(sNameFile.str(), G4std::ios::out);
-             TestFile.setf(G4std::ios::scientific, 
-                           G4std::ios::floatfield);
+       std::ofstream TestFile(sNameFile.str(), std::ios::out);
+             TestFile.setf(std::ios::scientific, 
+                           std::ios::floatfield);
              TestFile.precision(9);
 
        TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<G4endl;
@@ -381,7 +381,7 @@
   if(dHdrEnergy < 2) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
-        G4std::ostrstream sNameFile;
+        std::ostrstream sNameFile;
         sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
 
   G4cout <<" In constr. 5. Hadron - "<<sNameHdr
@@ -402,8 +402,8 @@
 
         G4double aNuc  = aNucleus->GetN();
 
-        G4std::ifstream TestFile(sNameFile.str(), G4std::ios::in);
-             TestFile.setf(G4std::ios::scientific);
+        std::ifstream TestFile(sNameFile.str(), std::ios::in);
+             TestFile.setf(std::ios::scientific);
 
         TestFile >> dEbeg1 >> dEend1 >> iPoE;
 

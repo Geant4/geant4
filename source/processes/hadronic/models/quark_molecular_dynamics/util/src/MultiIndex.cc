@@ -1,7 +1,7 @@
 #include "MultiIndex.hh"
-#include "g4std/iostream"
+#include <iostream>
 
-G4std::ostream& operator<<(G4std::ostream& o,MultiIndex& i) {
+std::ostream& operator<<(std::ostream& o,MultiIndex& i) {
   for (int k=0; k<i.N; k++) {
     o << i.array[k];
     if ( k<i.N-1 ) 

@@ -3,14 +3,14 @@
 #include "double.hh"
 //REAL double_a;
 //const REAL double_b=double_a,double_c=double_a;
-//REAL double_x=G4std::max(double_b,double_c);
+//REAL double_x=std::max(double_b,double_c);
 #else
 #include "double.hh"
 #endif
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include "Error.hh"
 #include <cmath>
 #include <algorithm>
@@ -28,7 +28,7 @@ const Double mathConstants::gamma = 0.5277; // [GeV*fm]
 
 //const Double NotDefined(IsNotDefined);
 
-G4std::ostream& operator<<(G4std::ostream& o,const Double& a)
+std::ostream& operator<<(std::ostream& o,const Double& a)
 {
   if (fabs(a) == Double::Infinity) 
     o << "Double::Infinity";
@@ -123,7 +123,7 @@ Double operator/(int a,const Double& b)
 Double sqrt(const Double& y)
 {
   if (y >= 0)
-    return sqrt(G4std::max(y.x,0.0));
+    return sqrt(std::max(y.x,0.0));
   else {
     if (fabs(y.x)>Double::EpsWarning)
       throw WrongArgument("sqrt",y.x);
@@ -219,7 +219,7 @@ Double coth(const Double& a)
 Double arcosh(const Double& y) 
 {
   if (y >= 1)
-    return acosh(G4std::max(y.x,1.0));
+    return acosh(std::max(y.x,1.0));
   else {
     if (fabs(y.x-1)>Double::EpsWarning) {
       throw WrongArgument("arcosh (x>=1)",y.x);
@@ -247,7 +247,7 @@ Double arcoth(const Double& y)
   }
 }
 
-G4std::ostream& operator<<(G4std::ostream& o,const Xdouble& x) 
+std::ostream& operator<<(std::ostream& o,const Xdouble& x) 
 {
   if (Valid(x))
     o << x.x;

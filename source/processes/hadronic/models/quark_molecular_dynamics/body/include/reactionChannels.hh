@@ -1,7 +1,7 @@
 #ifndef __REACTIONCHANNELS__
 #define __REACTIONCHANNELS__
 
-#include "g4std/vector"
+#include <vector>
 #include "newvector.hh"
 #include "genericRead.hh"
 #include "EventHandling.hh"
@@ -44,23 +44,23 @@ public:
 class decayMode
 {
   friend class CollisionType;
-  friend G4std::ostream& operator<<(G4std::ostream& o,decayMode&);
+  friend std::ostream& operator<<(std::ostream& o,decayMode&);
 
   FunctionType* sigmaPart;
   bool isoSet;
   bool elastic;
   double SumMass;
   selection select;
-  G4std::vector<isotop*> products;
+  std::vector<isotop*> products;
 public:
-  decayMode(int C,const G4std::vector<ParticleBase*>& P);
-  decayMode(G4std::istream&,const G4std::vector<ParticleType*>&);
+  decayMode(int C,const std::vector<ParticleBase*>& P);
+  decayMode(std::istream&,const std::vector<ParticleType*>&);
   int N() const { return products.size(); }
   bool isDecomposition() const { return (partialCrossection(1)<0); }
   bool isElastic() const { return elastic; }
   //  bool compareProducts(const vector<ParticleBase*>& P) const;
   double partialCrossection(double s) const { return sigmaPart->getValue(s); }
-  void performDecay(const G4std::vector<ParticleBase*>& p,double Etot,const Vektor3& beta,const Vektor3& x,bool force = false);
+  void performDecay(const std::vector<ParticleBase*>& p,double Etot,const Vektor3& beta,const Vektor3& x,bool force = false);
 #ifdef  IS_GCC
   decayMode& operator=(const decayMode&) { return *this; }
 #endif

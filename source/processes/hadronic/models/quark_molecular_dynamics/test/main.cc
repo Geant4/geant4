@@ -1,4 +1,4 @@
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
@@ -31,7 +31,7 @@
 #include "globals.hh"
 
  
-G4std::ostream* Output::fileout = 0;
+std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -122,7 +122,7 @@ void setPhaseSpace_stream(vector<Particle*>& L,Geometry& G,REAL T,double ymax)
   }
 }
 
-void waitfor(G4std::istream& in,const String &s) {
+void waitfor(std::istream& in,const String &s) {
   char c;
   while ( in ) {
     while ( in.get(c) && c != s[0] );
@@ -135,7 +135,7 @@ void waitfor(G4std::istream& in,const String &s) {
   }
 }
 
-void skipline(G4std::istream& in,int n=1) {
+void skipline(std::istream& in,int n=1) {
   char c;
   for (int i=0; i<n; i++) {
     //        G4cerr << "skip: ";
@@ -144,7 +144,7 @@ void skipline(G4std::istream& in,int n=1) {
   }
 }
 
-double readEvent(G4std::istream& in,bool final = true) 
+double readEvent(std::istream& in,bool final = true) 
 {
   bool readit = false;
   int S,C,col;
@@ -202,7 +202,7 @@ double readEvent(G4std::istream& in,bool final = true)
     return 0.0;
 }
 /*
-double readUQMD(G4std::istream& in) 
+double readUQMD(std::istream& in) 
 {
   ParticleType* quarks[3];
   const ParticleType& q = Knot<ParticleType>::FindKnot("q");
@@ -286,7 +286,7 @@ double readUQMD(G4std::istream& in)
   return t;
 }
 */
-double readUQMD(G4std::istream& in) 
+double readUQMD(std::istream& in) 
 {
   int N;
   double t,p0,mass,dummy,iso;
@@ -411,11 +411,11 @@ int main(int argc,char* argv[]) {
 	   >> deconf >> kapp >> len >> Thermalize >> M >> PtoN >> file
 	   >> ForceDecay >> transprof >> skip;
     inputStream >> ReadIn;
-    G4std::istream* in;
+    std::istream* in;
     if ( input == "-" ) 
       in = &cin;
     else
-      in = new G4std::ifstream((char*)String(input));
+      in = new std::ifstream((char*)String(input));
     *in >> ReadIn;
   }
   String pot = String(Potential);
@@ -458,12 +458,12 @@ int main(int argc,char* argv[]) {
   double tau = 1.0;   // fm, formation time of QGP
   double tau_c = 0.1; // fm, formation tiem of c-cbar
 
-  G4std::istream* readIn = 0;
+  std::istream* readIn = 0;
   if ( file.isValid() ) 
      if ( file == "-" ) 
 	readIn = &cin;
      else	
-        readIn = new G4std::ifstream((char*)(String)file);
+        readIn = new std::ifstream((char*)(String)file);
   G4cerr << "point 2\n";
   Geometry* Blob = 0;
   if ( Initial == "bjorken" )
@@ -480,10 +480,10 @@ int main(int argc,char* argv[]) {
   Blob->whatAmI(G4cerr);
   //halfSpace Blob(R);
   //  Box Blob(R); // 3 fm Kantenlänge
-  Output::fileout = new G4std::ofstream(Dir+"/output.out");
+  Output::fileout = new std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
-  //  G4std::ostream& final = G4cerr;
+  //  std::ostream& final = G4cerr;
   int n=0;
   G4cerr << "point 3\n";
   vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
@@ -574,7 +574,7 @@ int main(int argc,char* argv[]) {
       while ( ( box.Time() < Time || Time<0 ) && ( box.Nquark>0 || Time>0 ) ) {
 	double t1 = box.Time()+dt;
 	if ( Time>0 ) 
-	  t1 = G4std::min(t1,(double)Time);
+	  t1 = std::min(t1,(double)Time);
 	//      box.Correlation();
 	if ( box.Nquark ) {
 	  while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {

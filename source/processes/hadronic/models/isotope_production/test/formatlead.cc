@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "g4std/fstream"
-#include "g4std/iostream"
+#include <fstream>
+#include <iostream>
 #include <stdlib.h>
 #include "globals.hh"
 
@@ -29,7 +29,7 @@ int main()
 {
   G4String theName = "lead.inelasticxsec.kumac";
 
-  G4std::ifstream aDataSet(theName, G4std::ios::in);
+  std::ifstream aDataSet(theName, std::ios::in);
   int count = 0;
   aDataSet >> count;
   double * ee = new double[count];

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingActionMessenger.cc,v 1.3 2001-07-11 09:56:50 gunter Exp $
+// $Id: MySteppingActionMessenger.cc,v 1.4 2003-06-19 14:38:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ void MySteppingActionMessenger::SetNewValue(G4UIcommand * command,G4String newVa
   {
     G4int vl;
     const char* t = newValues;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> vl;
     mySteppingAction->SetDrawFlag(vl!=0);
   }

@@ -1,12 +1,12 @@
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <iomanip>
+#include <fstream>
+#include <strstream>
 
 #define maxLineLength 80
 
 template<class t>
-G4std::ostream& operator<<(G4std::ostream& o,ReadList<t>& L) 
+std::ostream& operator<<(std::ostream& o,ReadList<t>& L) 
 {
   for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
     o << *X << G4endl;
@@ -17,7 +17,7 @@ G4std::ostream& operator<<(G4std::ostream& o,ReadList<t>& L)
 
 template<class t>
 ReadList<t>::ReadList(char* fileName) 
-  : vector<t>(),N(0),file(new G4std::ifstream(fileName) ) {}
+  : vector<t>(),N(0),file(new std::ifstream(fileName) ) {}
 
 template<class t>
 void ReadList<t>::readIn()
@@ -31,7 +31,7 @@ void ReadList<t>::readIn()
     int j=0;
     while ( Line[j] == ' ' ) j++;
     if ( Line[j] != '#' && Line[j] ) {
-      G4std::istrstream inputLine(Line,strlen(Line));
+      std::istrstream inputLine(Line,strlen(Line));
       try {
 	t h(inputLine);
 	bookIn(h);
@@ -64,7 +64,7 @@ int ReadList<t>::getIndex(const t& h)
 // ----------------------------------------------------------------------
 
 template<class t>
-G4std::ostream& operator<<(G4std::ostream& o,ReadList_P<t>& L) 
+std::ostream& operator<<(std::ostream& o,ReadList_P<t>& L) 
 {
   for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
     o << *(*X) << G4endl;
@@ -75,7 +75,7 @@ G4std::ostream& operator<<(G4std::ostream& o,ReadList_P<t>& L)
 
 template<class t>
 ReadList_P<t>::ReadList_P(char* fileName) 
-  : vector<t*>(),N(0),file(new G4std::ifstream(fileName) ) {}
+  : vector<t*>(),N(0),file(new std::ifstream(fileName) ) {}
 
 template<class t>
 void ReadList_P<t>::readIn()
@@ -89,7 +89,7 @@ void ReadList_P<t>::readIn()
     int j=0;
     while ( Line[j] == ' ' ) j++;
     if ( Line[j] != '#' && Line[j] ) {
-      G4std::istrstream inputLine(Line,strlen(Line));
+      std::istrstream inputLine(Line,strlen(Line));
       try {
 	t* h = new t(inputLine);
 	bookIn(*h);

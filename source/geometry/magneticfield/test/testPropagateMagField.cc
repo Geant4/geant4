@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.18 2003-06-05 10:07:38 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.19 2003-06-19 14:38:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -53,7 +53,7 @@
 #include "G4UniformMagField.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 // Sample Parameterisation
 class G4LinScale : public G4VPVParameterisation
@@ -495,19 +495,19 @@ void report_endPV(G4ThreeVector    Position,
     {
        G4cout.precision(6);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-       G4cout << G4std::setw( 5) << "Step#" << " "
-            << G4std::setw( 9) << "X(mm)" << " "
-            << G4std::setw( 9) << "Y(mm)" << " "  
-            << G4std::setw( 9) << "Z(mm)" << " "
-            << G4std::setw( 9) << " N_x " << " "
-            << G4std::setw( 9) << " N_y " << " "
-            << G4std::setw( 9) << " N_z " << " "
-	   // << G4std::setw( 9) << "KinE(MeV)" << " "
-	   // << G4std::setw( 9) << "dE(MeV)" << " "  
-            << G4std::setw( 9) << "StepLen" << " "  
-            << G4std::setw( 9) << "PhsStep" << " "  
-            << G4std::setw( 9) << "Safety" << " "  
-            << G4std::setw(18) << "NextVolume" << " "
+       G4cout << std::setw( 5) << "Step#" << " "
+            << std::setw( 9) << "X(mm)" << " "
+            << std::setw( 9) << "Y(mm)" << " "  
+            << std::setw( 9) << "Z(mm)" << " "
+            << std::setw( 9) << " N_x " << " "
+            << std::setw( 9) << " N_y " << " "
+            << std::setw( 9) << " N_z " << " "
+	   // << std::setw( 9) << "KinE(MeV)" << " "
+	   // << std::setw( 9) << "dE(MeV)" << " "  
+            << std::setw( 9) << "StepLen" << " "  
+            << std::setw( 9) << "PhsStep" << " "  
+            << std::setw( 9) << "Safety" << " "  
+            << std::setw(18) << "NextVolume" << " "
             << G4endl;
     }
     //
@@ -526,32 +526,32 @@ void report_endPV(G4ThreeVector    Position,
     else // if( verboseLevel > 0 )
     {
        G4cout.precision(6);
-       G4cout << G4std::setw( 5) << Step << " "
-	    << G4std::setw( 9) << Position.x() << " "
-	    << G4std::setw( 9) << Position.y() << " "
-	    << G4std::setw( 9) << Position.z() << " "
-	    << G4std::setw( 9) << EndUnitVelocity.x() << " "
-	    << G4std::setw( 9) << EndUnitVelocity.y() << " "
-	    << G4std::setw( 9) << EndUnitVelocity.z() << " "
-	 //    << G4std::setw( 9) << KineticEnergy << " "
-	 //    << G4std::setw( 9) << EnergyDifference << " "
-	    << G4std::setw( 9) << step_len << " "
-	    << G4std::setw( 9) << physStep << " "
-	    << G4std::setw( 9) << safety << " ";
+       G4cout << std::setw( 5) << Step << " "
+	    << std::setw( 9) << Position.x() << " "
+	    << std::setw( 9) << Position.y() << " "
+	    << std::setw( 9) << Position.z() << " "
+	    << std::setw( 9) << EndUnitVelocity.x() << " "
+	    << std::setw( 9) << EndUnitVelocity.y() << " "
+	    << std::setw( 9) << EndUnitVelocity.z() << " "
+	 //    << std::setw( 9) << KineticEnergy << " "
+	 //    << std::setw( 9) << EnergyDifference << " "
+	    << std::setw( 9) << step_len << " "
+	    << std::setw( 9) << physStep << " "
+	    << std::setw( 9) << safety << " ";
        if( startVolume != 0) {
-	 G4cout << G4std::setw(12) << startVolume->GetName() << " ";
+	 G4cout << std::setw(12) << startVolume->GetName() << " ";
        } else {
-	 G4cout << G4std::setw(12) << "OutOfWorld" << " ";
+	 G4cout << std::setw(12) << "OutOfWorld" << " ";
        }
 
 #if 0
        if( endVolume != 0) 
        {
-	 G4cout << G4std::setw(12) << endVolume()->GetName() << " ";
+	 G4cout << std::setw(12) << endVolume()->GetName() << " ";
        } 
        else 
        {
-	 G4cout << G4std::setw(12) << "OutOfWorld" << " ";
+	 G4cout << std::setw(12) << "OutOfWorld" << " ";
        }
 #endif
        G4cout << G4endl;

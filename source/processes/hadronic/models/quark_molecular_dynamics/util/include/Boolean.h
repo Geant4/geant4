@@ -12,13 +12,13 @@ See README file for further details.
 #define BOOLEANH
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class Boolean {
   // I/O
 
-friend G4std::ostream& operator<<(G4std::ostream& s, Boolean  b);
-friend G4std::istream& operator>>(G4std::istream& s, Boolean& b);
+friend std::ostream& operator<<(std::ostream& s, Boolean  b);
+friend std::istream& operator>>(std::istream& s, Boolean& b);
 
 public:
     // Constants

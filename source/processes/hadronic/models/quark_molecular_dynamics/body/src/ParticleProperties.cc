@@ -97,7 +97,7 @@ ParticleProperties::ParticleProperties(const ParticleProperties& p)
 {
 }
 
-void ParticleProperties::writeOut(G4std::ostream& o) const
+void ParticleProperties::writeOut(std::ostream& o) const
 {
   Type.writeOut(o);
   o << c << "  " << color << "  " << iso3 << "  " << spin3 << "  ";
@@ -389,7 +389,7 @@ void ParticleProperties::setLifetime(double lt)
   if ( lt < 0 ) 
     lifetime = Time()+Type.getLifetime(); 
   else if ( Type.getWidth() > 0 ) {
-    G4std::vector<CollisionTab*>::iterator Y = CollisionTab::exists(this);
+    std::vector<CollisionTab*>::iterator Y = CollisionTab::exists(this);
     if ( Y != CollisionTab::Root.end() ) 
       CollisionTab::remove(Y);
     lifetime = lt;

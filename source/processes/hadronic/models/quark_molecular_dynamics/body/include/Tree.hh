@@ -6,7 +6,7 @@
 #endif
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "String.hh"
 
 
@@ -19,15 +19,15 @@ public:
   static Knot<t>* Root;
 private:
   t* ancestor;
-  G4std::vector<t*> successors;
+  std::vector<t*> successors;
   String name;
 
-  void printTree(G4std::ostream&,int) const;
-  void find(const t&,G4std::vector<t*>& ) const;
-  void find(const String&,G4std::vector<t*>& ) const;
+  void printTree(std::ostream&,int) const;
+  void find(const t&,std::vector<t*>& ) const;
+  void find(const String&,std::vector<t*>& ) const;
   void findKnot(const t&,t*&) const;
   void findKnot(const String&,t*&) const;
-  void flatten(G4std::vector<t*>&) const;
+  void flatten(std::vector<t*>&) const;
   void count(int& n) const;
 protected:
   Knot() : ancestor(0),name("root") {}
@@ -36,17 +36,17 @@ protected:
   t& Successor(int i) const { return *successors[i]; }
   int NSuccessors() const { return successors.size(); }
   virtual double isEqualTo(const t& x) const { return 0; }
-  virtual void ClassInfo(G4std::ostream& o) const { }
+  virtual void ClassInfo(std::ostream& o) const { }
 public:
-  G4std::vector<t*> getList() const;
-  void printTree(G4std::ostream& o) ;
+  std::vector<t*> getList() const;
+  void printTree(std::ostream& o) ;
   int countEntries();
   String Name() const { return name; }
   bool hasSuccessors() const { return successors.size() > 0; }
   bool isRoot() const { return !ancestor; }
   t& goUp() const { return *ancestor; }
-  static G4std::vector<t*> Find(const t&) ;
-  static G4std::vector<t*> Find(const String&) ;
+  static std::vector<t*> Find(const t&) ;
+  static std::vector<t*> Find(const String&) ;
   static t& FindKnot(const t&) ;
   static t& FindKnot(const String&) ;
   static void Insert(t& x,const String& name_);
@@ -56,7 +56,7 @@ public:
 // implementation from Tree.tcc:
 
 template<class t>
-void Knot<t>::printTree(G4std::ostream& o,int n) const
+void Knot<t>::printTree(std::ostream& o,int n) const
 {
   String s;
   for (int i=0; i<n; i++)
@@ -71,7 +71,7 @@ void Knot<t>::printTree(G4std::ostream& o,int n) const
 }
 
 template<class t>
-void Knot<t>::find(const t& x,G4std::vector<t*>& list) const
+void Knot<t>::find(const t& x,std::vector<t*>& list) const
 {
   if ( isEqualTo(x)>=0 || !ancestor ) {
     int l = successors.size();
@@ -79,7 +79,7 @@ void Knot<t>::find(const t& x,G4std::vector<t*>& list) const
       for (int i=0; i<successors.size(); i++)
         successors[i]->find(x,list);
       if ( successors.size() == l ) {
-        G4std::vector<t*> new_list;
+        std::vector<t*> new_list;
         flatten(new_list);
         list.insert(list.end(),new_list.begin(),new_list.end());
       }
@@ -90,7 +90,7 @@ void Knot<t>::find(const t& x,G4std::vector<t*>& list) const
 }
 
 template<class t>
-void Knot<t>::find(const String& s,G4std::vector<t*>& list) const
+void Knot<t>::find(const String& s,std::vector<t*>& list) const
 {
   if ( Name() == s ) 
     flatten(list);
@@ -122,7 +122,7 @@ void Knot<t>::findKnot(const String& x,t*& found) const
 }
 
 template<class t>
-void Knot<t>::flatten(G4std::vector<t*>& list) const
+void Knot<t>::flatten(std::vector<t*>& list) const
 {
   if ( !successors.size() ) 
     list.insert(list.end(),(t*)this);
@@ -182,15 +182,15 @@ void Knot<t>::insert(t& x)
 }
 
 template<class t>
-G4std::vector<t*> Knot<t>::getList() const
+std::vector<t*> Knot<t>::getList() const
 {
-  G4std::vector<t*> list;
+  std::vector<t*> list;
   flatten(list);
   return list;
 }
 
 template<class t>
-void Knot<t>::printTree(G4std::ostream& o) 
+void Knot<t>::printTree(std::ostream& o) 
 {
   printTree(o,1);
 }
@@ -204,17 +204,17 @@ int Knot<t>::countEntries()
 }
 
 template<class t>
-G4std::vector<t*> Knot<t>::Find(const t& x) 
+std::vector<t*> Knot<t>::Find(const t& x) 
 {
-  G4std::vector<t*> list;
+  std::vector<t*> list;
   Root->find(x,list);
   return list;
 }
 
 template<class t>
-G4std::vector<t*> Knot<t>::Find(const String& x) 
+std::vector<t*> Knot<t>::Find(const String& x) 
 {
-  G4std::vector<t*> list;
+  std::vector<t*> list;
   Root->find(x,list);
   return list;
 }

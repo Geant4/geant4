@@ -23,7 +23,7 @@
 #ifndef ANAPlot_h
 #define ANAPlot_h
 
-#include "g4std/vector"
+#include <vector>
 #include "HadronNuclear/batch_monitor/DataPoint.h"
 #include "HadronNuclear/batch_monitor/TVPlot.h"
 static double maximum;
@@ -75,7 +75,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
     G4int theStatistics;
     FilterType * theFilter;
     
-    G4std::vector<DataPointType> theDataPoints;
+    std::vector<DataPointType> theDataPoints;
     G4String theOutputFile;
 };
 

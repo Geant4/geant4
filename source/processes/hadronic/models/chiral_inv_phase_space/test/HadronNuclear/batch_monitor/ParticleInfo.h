@@ -23,7 +23,7 @@
 #ifndef ANAParticleInfo_h
 #define ANAParticleInfo_h
 #include <fstream>
-#include "g4std/vector"
+#include <vector>
 #include "HadronNuclear/batch_monitor/Particle.h"
 #include "HadronNuclear/batch_monitor/Plot.h"
 #include "HadronNuclear/batch_monitor/DataPoint.h"

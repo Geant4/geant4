@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRestTest.cc,v 1.3 2001-07-11 10:08:13 gunter Exp $
+// $Id: G4PiMinusAbsorptionAtRestTest.cc,v 1.4 2003-06-19 14:44:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4Element.hh"

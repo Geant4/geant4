@@ -6,7 +6,7 @@
 #endif
 
 #include <stdarg.h>
-#include "g4std/iostream"
+#include <iostream>
 
 
 template<class t> class Array;
@@ -14,7 +14,7 @@ template<class t> class Array;
 template<class t>
 class Array
 {
-  friend G4std::ostream& operator<<(G4std::ostream& o,const Array<t>& i){
+  friend std::ostream& operator<<(std::ostream& o,const Array<t>& i){
     o << "(";
     for (int k=0; k<i.N; k++) {
       o << i.array[k];

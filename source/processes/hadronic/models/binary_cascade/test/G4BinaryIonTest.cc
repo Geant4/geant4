@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
 {
   G4String a=G4Proton::ProtonDefinition()->GetParticleName();
   G4cout << " At Start " << a << G4endl;
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
 //  totalRes.Start();
   G4LeptonConstructor leptons;
   leptons.ConstructParticle();

@@ -655,7 +655,7 @@ SWIG_InstallConstants(PyObject *d, swig_const_info constants[]) {
 #define  SWIGTYPE_p_G4CellScorerStore swig_types[7] 
 #define  SWIGTYPE_p_G4VCellScorerStore swig_types[8] 
 #define  SWIGTYPE_p_B03AppBase swig_types[9] 
-#define  SWIGTYPE_p_G4std__ostream swig_types[10] 
+#define  SWIGTYPE_p_std__ostream swig_types[10] 
 #define  SWIGTYPE_p_G4CellStoreScorer swig_types[11] 
 #define  SWIGTYPE_p_G4CellScoreComposer swig_types[12] 
 #define  SWIGTYPE_p_G4GeometryCell swig_types[13] 
@@ -1909,7 +1909,7 @@ static PyObject *_wrap_G4ScoreTable_Print(PyObject *self, PyObject *args) {
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_G4ScoreTable,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_G4MapGeometryCellCellScorer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_G4std__ostream,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_std__ostream,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     (arg1)->Print((G4MapGeometryCellCellScorer const &)*arg2,arg3);
     
@@ -2239,7 +2239,7 @@ static swig_type_info _swigt__p_G4ParallelGeometrySampler[] = {{"_p_G4ParallelGe
 static swig_type_info _swigt__p_G4CellScorerStore[] = {{"_p_G4CellScorerStore", 0, "G4CellScorerStore *", 0},{"_p_G4CellScorerStore"},{0}};
 static swig_type_info _swigt__p_G4VCellScorerStore[] = {{"_p_G4VCellScorerStore", 0, "G4VCellScorerStore *", 0},{"_p_G4VCellScorerStore"},{"_p_G4CellScorerStore", _p_G4CellScorerStoreTo_p_G4VCellScorerStore},{0}};
 static swig_type_info _swigt__p_B03AppBase[] = {{"_p_B03AppBase", 0, "B03AppBase *", 0},{"_p_B03AppBase"},{0}};
-static swig_type_info _swigt__p_G4std__ostream[] = {{"_p_G4std__ostream", 0, "std::ostream *", 0},{"_p_G4std__ostream"},{0}};
+static swig_type_info _swigt__p_std__ostream[] = {{"_p_std__ostream", 0, "std::ostream *", 0},{"_p_std__ostream"},{0}};
 static swig_type_info _swigt__p_G4CellStoreScorer[] = {{"_p_G4CellStoreScorer", 0, "G4CellStoreScorer *", 0},{"_p_G4CellStoreScorer"},{0}};
 static swig_type_info _swigt__p_G4CellScoreComposer[] = {{"_p_G4CellScoreComposer", 0, "G4CellScoreComposer *", 0},{"_p_G4CellScoreComposer"},{0}};
 static swig_type_info _swigt__p_G4GeometryCell[] = {{"_p_G4GeometryCell", 0, "G4GeometryCell *", 0},{"_p_G4GeometryCell"},{0}};
@@ -2262,7 +2262,7 @@ _swigt__p_G4ParallelGeometrySampler,
 _swigt__p_G4CellScorerStore, 
 _swigt__p_G4VCellScorerStore, 
 _swigt__p_B03AppBase, 
-_swigt__p_G4std__ostream, 
+_swigt__p_std__ostream, 
 _swigt__p_G4CellStoreScorer, 
 _swigt__p_G4CellScoreComposer, 
 _swigt__p_G4GeometryCell, 

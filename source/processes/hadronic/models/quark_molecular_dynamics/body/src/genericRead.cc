@@ -1,4 +1,4 @@
-#include "g4std/strstream"
+#include <strstream>
 #include "G4ios.hh"
 #include "genericRead.hh"
 #include <ctype.h>
@@ -7,7 +7,7 @@
 genericRead::genericRead(char* file) : Name(file)
 {
   try {
-    in = new G4std::ifstream(file);
+    in = new std::ifstream(file);
   }
   catch ( ... ) {
     G4cerr << "Cannot open file " << file << G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.2 2002-12-16 17:05:08 vnivanch Exp $
+// $Id: Em2RunAction.hh,v 1.3 2003-06-19 14:46:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,9 +43,9 @@
 #include "G4Positron.hh"
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 
-typedef  G4std::vector<G4double> MyVector;
+typedef  std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

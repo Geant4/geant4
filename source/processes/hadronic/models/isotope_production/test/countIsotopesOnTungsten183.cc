@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "g4std/fstream"
-#include "g4std/iostream"
+#include <fstream>
+#include <iostream>
 // #include "G4NeutronHPNames.hh"
 // #include "G4SandiaTable.hh"
 #include <stdlib.h>
@@ -57,7 +57,7 @@ int main()
   int counter=0; // number of iso types produced
   for(i=0; i<11; i++)
   {
-    G4std::ifstream aDataSet(theNames[i], G4std::ios::in);
+    std::ifstream aDataSet(theNames[i], std::ios::in);
     for(j=0; j<1000000; j++) // 1000000 events each test-run 
     {
       G4String label;
@@ -94,7 +94,7 @@ int main()
     }
     cout <<G4endl;
   }
-  G4std::ifstream aDataSet("/data/NeutronProductionData/G4NDL0.2//IsotopeProduction/CrossSection/74_183_Tungsten", G4std::ios::in);
+  std::ifstream aDataSet("/data/NeutronProductionData/G4NDL0.2//IsotopeProduction/CrossSection/74_183_Tungsten", std::ios::in);
   int niso;
   aDataSet >> niso;
   double ** theXsec = new double * [niso+1];

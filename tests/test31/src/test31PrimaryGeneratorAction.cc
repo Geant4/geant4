@@ -146,7 +146,7 @@ void test31PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
            << G4endl;
     G4cout << "ParticleName= " << particleName 
            << "  PDGcode= " << particle->GetPDGEncoding()
-           << G4std::setprecision(5) 
+           << std::setprecision(5) 
 	   << "   KinEnergy(GeV)= "
 	   << energy/GeV 
 	   << "   x(mm)= "

@@ -62,7 +62,7 @@ parameter parameter::operator*(REAL y)
 REAL gasEnsemble::SumN(const parameter& p,signed int B) const
 {
   REAL S=0.0;
-  for (G4std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
     S += N(*(*X),p,B);
   }
   return S;
@@ -71,7 +71,7 @@ REAL gasEnsemble::SumN(const parameter& p,signed int B) const
 Vektor grandCanonicalEnsemble::q_tot(const parameter& p) const
 {
   Vektor vars(3);
-  for (G4std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
     REAL lambda = K->TdlnZ((*X)->getMass(),p.T);
     REAL netn = NetN(*(*X),p);
     REAL n = N(*(*X),p);
@@ -96,7 +96,7 @@ REAL grandCanonicalEnsemble::Mu(const ParticleType& h,const parameter& p,signed 
 REAL gasEnsemble::Etot(const parameter& p) const
 {
   REAL e = 0.0,zeta;
-  for (G4std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
     zeta = K->TdlnZ((*X)->getMass(),p.T);
     e += N(*(*X),p,0)*zeta;
   }
@@ -120,7 +120,7 @@ REAL grandCanonicalEnsemble::N(const ParticleType& h,const parameter& p,signed i
 REAL  gasEnsemble::Entropy(const parameter& p) const
 {
   REAL S = 0.0,zeta;
-  for (G4std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=List.begin(); X!=List.end(); X++) {
     zeta = K->TdlnZ((*X)->getMass(),p.T);
     S += N(*(*X),p,0)*(1+zeta);
   }

@@ -25,7 +25,7 @@
 //
 #include "G4qmdStringFragmentation.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 
 //
@@ -64,7 +64,7 @@ G4qmdStringFragmentation::G4qmdStringFragmentation()
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
   Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
-  G4std::vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
+  std::vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
   Colour::setQuarks(Quarks);
 
   theQuarkSystem = new Colour(theInternalTimestep);
@@ -336,8 +336,8 @@ void G4qmdStringFragmentation::SetupFromFile(const G4String & anInputFile)
     theInputFile = anInputFile;
   }
 
-  G4std::istream* readIn = 0;
-  readIn = new G4std::ifstream(theInputFile);
+  std::istream* readIn = 0;
+  readIn = new std::ifstream(theInputFile);
 
 
   Particle::Soup = theQuarkSystem;
@@ -372,7 +372,7 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 
       double t1 = theQuarkSystem->Time()+theOutputTimestep;
       if ( theFinalTime>0 ) 
-        t1 = G4std::min(t1,(double)theFinalTime);
+        t1 = std::min(t1,(double)theFinalTime);
 
       if ( theQuarkSystem->Nquark ) {
         while ( theQuarkSystem->Time() < t1 && ( theQuarkSystem->Nquark>0 || theFinalTime>0 ) ) {
@@ -417,13 +417,13 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 // --------------------------------------------
 //
 
-void G4qmdStringFragmentation::skipline(G4std::istream& in) 
+void G4qmdStringFragmentation::skipline(std::istream& in) 
 {
   char c;
   while ( in.get(c) && c != '\n' ) ;
 }
 
-double G4qmdStringFragmentation::readEvent(G4std::istream& in) 
+double G4qmdStringFragmentation::readEvent(std::istream& in) 
 {
   int S,C,col;
   double B,m,i,i3,s,s3,lt,time,flag;

@@ -39,11 +39,11 @@
 #include "globals.hh"
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/iostream"
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <assert.h>
-#include "g4std/vector"
+#include <vector>
 
 #include "CLHEP/Hist/TupleManager.h"
 #include "CLHEP/Hist/HBookFile.h"
@@ -141,7 +141,7 @@ int main()
 
   // ===== Delta =====
 
-  const G4std::vector<G4String> listDelta = resonanceList->DeltaNames();
+  const std::vector<G4String> listDelta = resonanceList->DeltaNames();
   G4int nDelta = listDelta.size();
   G4cout << G4endl << "===== Delta ===== " << G4endl;
 
@@ -162,7 +162,7 @@ int main()
 
   G4cout << G4endl << "===== Excited Nucleons ===== " << G4endl;
 
-  const G4std::vector<G4String> listNstar = resonanceList->NstarNames();
+  const std::vector<G4String> listNstar = resonanceList->NstarNames();
   G4int nNstar = listNstar.size();
 
   for (i=0; i<nNstar; i++)
@@ -180,7 +180,7 @@ int main()
 
   G4cout << G4endl << "===== Excited Deltas ===== " << G4endl;
 
-  const G4std::vector<G4String> listDeltastar = resonanceList->DeltastarNames();
+  const std::vector<G4String> listDeltastar = resonanceList->DeltastarNames();
   G4int nDeltastar = listDeltastar.size();
 
   for (i=0; i<nDeltastar; i++)
@@ -197,7 +197,7 @@ int main()
 
   G4cout << G4endl << "===== Lambdas ===== " << G4endl;
 
-  const G4std::vector<G4String> listLambda = resonanceList->LambdaNames();
+  const std::vector<G4String> listLambda = resonanceList->LambdaNames();
   G4int nLambda = listLambda.size();
 
   for (i=0; i<nLambda; i++)
@@ -215,7 +215,7 @@ int main()
 
   G4cout << G4endl << "===== Sigmas ===== " << G4endl;
   
-  const G4std::vector<G4String> listSigma = resonanceList->SigmaNames();
+  const std::vector<G4String> listSigma = resonanceList->SigmaNames();
   G4int nSigma = listSigma.size();
 
   for (i=0; i<nSigma; i++)
@@ -233,7 +233,7 @@ int main()
 
   G4cout << G4endl << "===== Xis ===== " << G4endl;
   
-  const G4std::vector<G4String> listXi = resonanceList->XiNames();
+  const std::vector<G4String> listXi = resonanceList->XiNames();
   G4int nXi = listXi.size();
 
   for (i=0; i<nXi; i++)

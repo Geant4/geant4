@@ -255,7 +255,7 @@ int main()
                pv[i].setSide(0);
                if(pv[i].getCharge() < -0.5) nnehmf++;
              }
-           G4double phmf1 = G4std::max(0., phmf*(1.+0.2*theInteraction.normal()));
+           G4double phmf1 = std::max(0., phmf*(1.+0.2*theInteraction.normal()));
            pv[i].SmulAndUpdate(pv[i], phmf1/phmf);
            pana[5].Lor(pv[i], pana[3]);
            xup = pana[5].getEnergy() + pana[5].getMomentum().z();
@@ -427,8 +427,8 @@ int main()
        aver[6]+= sqr(nshow+ngrey);
        aver[7]+= sqr(nshowm);
        aver[8]+= sqr(ngrey);
-       ngrey = G4std::min(ngrey,19);
-       ngrey = G4std::max(ngrey,0);
+       ngrey = std::min(ngrey,19);
+       ngrey = std::max(ngrey,0);
        aver[10+ngrey] += (G4double)nshow;
        aver[30+ngrey] += 1.;       
 
@@ -472,9 +472,9 @@ int main()
     aver[6] -= aver[1]*aver[1];
     aver[7] -= aver[2]*aver[2];
     aver[8] -= aver[3]*aver[3];
-    aver[6] = G4std::max(aver[6], 0.);
-    aver[7] = G4std::max(aver[7], 0.);
-    aver[8] = G4std::max(aver[8], 0.);
+    aver[6] = std::max(aver[6], 0.);
+    aver[7] = std::max(aver[7], 0.);
+    aver[8] = std::max(aver[8], 0.);
     aver[6] = sqrt(aver[6]);
     aver[7] = sqrt(aver[7]);
     aver[8] = sqrt(aver[8]);

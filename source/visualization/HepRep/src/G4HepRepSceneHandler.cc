@@ -28,11 +28,11 @@
 #include <stdio.h>
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/strstream"
-#include "g4std/iostream"
-#include "g4std/iomanip"
-#include "g4std/fstream"
+#include <vector>
+#include <strstream>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 
 //HepRep
 #include "HEPREP/HepRep.h"
@@ -130,9 +130,9 @@ void G4HepRepSceneHandler::open() {
     } else {
         G4cout << "G4HepRepSceneHandler::open() " << GetScene()->GetName() << "-" << fileNo << G4endl;
         char fileName [256];
-        G4std::ostrstream ost(fileName, 256);
-        ost << GetScene()->GetName()<< "-" << fileNo << ".heprep" << G4std::ends;
-        out = new G4std::ofstream(fileName);
+        std::ostrstream ost(fileName, 256);
+        ost << GetScene()->GetName()<< "-" << fileNo << ".heprep" << std::ends;
+        out = new std::ofstream(fileName);
         writer = dynamic_cast<XMLHepRepStreamer*>(factory->createHepRepWriter(out));
     }
     fileNo++;
@@ -158,15 +158,15 @@ void G4HepRepSceneHandler::openGeomHepRep() {
 //    G4cout << "GeomInstanceWriter " << geomInstanceWriter << G4endl;
 
     open();
-    G4std::ostrstream geomTypeOst(geomTypeFname, 256);
-    geomTypeOst << GetScene()->GetName()<< "-GeomType-" << fileNo-1 << ".tree" << G4std::ends;
-    geomTypeOut = new G4std::ofstream(geomTypeFname);
+    std::ostrstream geomTypeOst(geomTypeFname, 256);
+    geomTypeOst << GetScene()->GetName()<< "-GeomType-" << fileNo-1 << ".tree" << std::ends;
+    geomTypeOut = new std::ofstream(geomTypeFname);
     geomTypeWriter = geomTypeHepRepFactory->createHepRepWriter(geomTypeOut);
 
     // geometry instance writer
-    G4std::ostrstream geomInstanceOst(geomInstanceFname, 256);
-    geomInstanceOst << GetScene()->GetName() << "-GeomInstances-" << fileNo-1 << ".tree" << G4std::ends;
-    geomInstanceOut = new G4std::ofstream(geomInstanceFname);
+    std::ostrstream geomInstanceOst(geomInstanceFname, 256);
+    geomInstanceOst << GetScene()->GetName() << "-GeomInstances-" << fileNo-1 << ".tree" << std::ends;
+    geomInstanceOut = new std::ofstream(geomInstanceFname);
     geomInstanceWriter = geomInstanceHepRepFactory->createHepRepWriter(geomInstanceOut);
 
     // Create the HepRep that holds the Geometry Tree.
@@ -225,14 +225,14 @@ void G4HepRepSceneHandler::openEventHepRep() {
     open();
     if (eventTypeWriter != NULL || eventInstanceWriter != NULL) return;
 
-    G4std::ostrstream eventTypeOst(eventTypeFname, 256);
-    eventTypeOst << GetScene()->GetName() << "-EventTypes-" << fileNo-1 << ".tree" << G4std::ends;
-    eventTypeOut = new G4std::ofstream(eventTypeFname);
+    std::ostrstream eventTypeOst(eventTypeFname, 256);
+    eventTypeOst << GetScene()->GetName() << "-EventTypes-" << fileNo-1 << ".tree" << std::ends;
+    eventTypeOut = new std::ofstream(eventTypeFname);
     eventTypeWriter = eventTypeHepRepFactory->createHepRepWriter(eventTypeOut);
 
-    G4std::ostrstream eventInstanceOst(eventInstanceFname, 256);
-    eventInstanceOst << GetScene()->GetName() << "-EventInstances-" << fileNo-1 << ".tree" << G4std::ends;
-    eventInstanceOut = new G4std::ofstream(eventInstanceFname);
+    std::ostrstream eventInstanceOst(eventInstanceFname, 256);
+    eventInstanceOst << GetScene()->GetName() << "-EventInstances-" << fileNo-1 << ".tree" << std::ends;
+    eventInstanceOut = new std::ofstream(eventInstanceFname);
     eventInstanceWriter = eventInstanceHepRepFactory->createHepRepWriter(eventInstanceOut);
 
     // Create the HepRep that holds the Event TypeTree.
@@ -374,14 +374,14 @@ void G4HepRepSceneHandler::mergeAndDelete(char* fname) {
 
     G4cout << "Merging: " << fname << G4endl;
 
-    G4std::ifstream ifile( fname, G4std::ios::in );
+    std::ifstream ifile( fname, std::ios::in );
     if ( ifile.fail() ) {
         G4cerr << "Failed to open: " << fname << ", will not be merged." << G4endl;
         return;
     }
 
     G4String line;
-    while(!G4std::getline(ifile, line).eof()) {
+    while(!std::getline(ifile, line).eof()) {
         writer->printPlain(line);
         writer->printPlain("\n");
     }
@@ -679,8 +679,8 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
     G4cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
 #endif
 
-    G4std::vector<G4AttValue>* trajAttValues = traj.CreateAttValues();
-    const G4std::map<G4String,G4AttDef>* trajAttDefs = traj.GetAttDefs();
+    std::vector<G4AttValue>* trajAttValues = traj.CreateAttValues();
+    const std::map<G4String,G4AttDef>* trajAttDefs = traj.GetAttDefs();
 
     HepRepInstance* trajInstance = CreateEventInstance(G4String("Trajectory"), 0, trajAttDefs, trajAttValues);
 
@@ -708,8 +708,8 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
     for (i = 0; i < traj.GetPointEntries(); i++) {
         G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
 
-        G4std::vector<G4AttValue>* pointAttValues = aTrajectoryPoint->CreateAttValues();
-        const G4std::map<G4String,G4AttDef>* pointAttDefs = aTrajectoryPoint->GetAttDefs();
+        std::vector<G4AttValue>* pointAttValues = aTrajectoryPoint->CreateAttValues();
+        const std::map<G4String,G4AttDef>* pointAttDefs = aTrajectoryPoint->GetAttDefs();
 
         HepRepInstance* pointInstance = CreateEventInstance(G4String("Point"), 1, pointAttDefs, pointAttValues);
 
@@ -904,8 +904,8 @@ HepRepInstance* G4HepRepSceneHandler::CreateGeomInstance(G4String typeName, G4in
 
 
 HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4int depth,
-                                                          const G4std::map<G4String,G4AttDef>* attDefs,
-                                                          G4std::vector<G4AttValue>* attValues) {
+                                                          const std::map<G4String,G4AttDef>* attDefs,
+                                                          std::vector<G4AttValue>* attValues) {
 
     if (eventInstanceWriter == NULL)
         openEventHepRep();
@@ -946,8 +946,8 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
 
         // Specify additional attribute definitions.  Assumes that all attributes for
         //  the given type can be found from the first instance of this type.
-        G4std::vector<G4AttValue>::iterator iAttVal;
-        G4std::map<G4String,G4AttDef>::const_iterator iAttDef;
+        std::vector<G4AttValue>::iterator iAttVal;
+        std::map<G4String,G4AttDef>::const_iterator iAttDef;
         if (attValues && attDefs) {
 	        for (iAttVal = attValues->begin(); iAttVal != attValues->end(); ++iAttVal) {
 	            iAttDef = attDefs->find(iAttVal->GetName());
@@ -1006,10 +1006,10 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
     eventParentInstanceS.push(instance);
 
     // Copy the instance's G4AttValues to HepRepAttValues.
-    G4std::vector<G4AttValue>::iterator iAttVal;
+    std::vector<G4AttValue>::iterator iAttVal;
     if (attValues && attDefs) {
         for (iAttVal = attValues->begin(); iAttVal != attValues->end(); ++iAttVal) {
-	        G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	        std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	        attDefs->find(iAttVal->GetName());
 	        if (iAttDef == attDefs->end()) {
 //	            G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"

@@ -74,10 +74,10 @@ public:
 
 private:
 
-  G4int GetTotalCharge(G4std::vector<G4KineticTrack *> & aV)
+  G4int GetTotalCharge(std::vector<G4KineticTrack *> & aV)
   {
     G4int result = 0;
-    G4std::vector<G4KineticTrack *>::iterator i;
+    std::vector<G4KineticTrack *>::iterator i;
     for(i = aV.begin(); i != aV.end(); ++i)
     {
        if((*i)->GetDefinition() == G4Proton::Proton())
@@ -115,7 +115,7 @@ private:
   void ClearAndDestroy(G4ReactionProductVector * rpv);
 
 // for debugging purpose
-  void PrintKTVector(G4KineticTrackVector * ktv, G4std::string comment=G4std::string(""));
+  void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
 
 private:
   G4KineticTrackVector theProjectileList;

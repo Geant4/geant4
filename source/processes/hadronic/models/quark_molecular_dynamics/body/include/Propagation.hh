@@ -1,7 +1,7 @@
 #ifndef __PROPAGATION__
 #define __PROPAGATION__
 
-#include "g4std/vector"
+#include <vector>
 #include "newvector.hh"
 #include "Nbody.hh"
 #include "ParticleType.hh"
@@ -20,13 +20,13 @@
 
 struct connect
 {
-  friend G4std::ostream& operator<<(G4std::ostream& o,connect& x) { o << x.pointer << "  " << x.dist<< "  " << x.max << "  "<< x.force << "  "; return o;}
+  friend std::ostream& operator<<(std::ostream& o,connect& x) { o << x.pointer << "  " << x.dist<< "  " << x.max << "  "<< x.force << "  "; return o;}
   int pointer;
   double dist,max,force;
   double t1,t2;
 public:
 //
-// sps-2000-08-01: use of G4std::max produces error "max cannot be initialized in a constructor."
+// sps-2000-08-01: use of std::max produces error "max cannot be initialized in a constructor."
 //
   connect() : dist(1e30),pointer(0),max(0),force(0),t1(0),t2(0) {}
   void set(int i,double d) { pointer = i; dist = d;}
@@ -53,7 +53,7 @@ protected:
   int kk;
   REAL ToBeInverted(REAL x) const;
   REAL Derivative(REAL x) const;
-  G4std::vector<int> eraseList;
+  std::vector<int> eraseList;
 
 public:
 
@@ -74,7 +74,7 @@ public:
 
 	G4KineticTrackVector * GetNewHadrons() const { return TheNewHadrons; }
 
-  virtual void print(G4std::ostream& o);
+  virtual void print(std::ostream& o);
   void Correlation();
   void clusters(int i);
   void decomposition(int i);
@@ -83,7 +83,7 @@ public:
   void decompose(ParticleBase*);
   void decomposeAll();
   double field(const Vektor3& r);
-  void writeField(G4std::ostream&,double,double,double,double,double,double);
+  void writeField(std::ostream&,double,double,double,double,double,double);
   static ParticleType& selectQuark(criterion = ALL);
   static double kappa;
   static double alpha;
@@ -103,8 +103,8 @@ public:
   static double minDist;  // Units: [1]  (corresponds to factors of av. hadron radius)
   static double decompDist;  // Units: [fm]
   static PotentialBase* Pot;
-  static G4std::vector<ParticleType*> Quarks;
-  static void setQuarks(G4std::vector<ParticleType*>&);
+  static std::vector<ParticleType*> Quarks;
+  static void setQuarks(std::vector<ParticleType*>&);
   int Nquark;
   int NquarkEver;
   int NhadronEver;
@@ -226,7 +226,7 @@ class ColorString
 public:
 
   ColorString(const double& Mass0,const Vektor3& Ptot,const Vektor3& Rtot,int n,
-	 const QuantumState parray[],const G4std::vector<ParticleBase*>&, int NhadronEver);
+	 const QuantumState parray[],const std::vector<ParticleBase*>&, int NhadronEver);
   ~ColorString();
 
 	G4int GetPDGCode() const { return PDGCode; }

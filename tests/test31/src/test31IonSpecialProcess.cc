@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test31IonSpecialProcess.cc,v 1.1 2003-05-07 16:17:37 vnivanch Exp $
+// $Id: test31IonSpecialProcess.cc,v 1.2 2003-06-19 14:46:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
 // 04-06-98, in DoIt, secondary production condition:
-//                                     range>G4std::min(threshold,safety)
+//                                     range>std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation

@@ -12,7 +12,7 @@ G4PiKBuilder::
 void G4PiKBuilder::
 Build()
 {
-  G4std::vector<G4VPiKBuilder *>::iterator i;
+  std::vector<G4VPiKBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
     (*i)->Build(thePionPlusElasticProcess);

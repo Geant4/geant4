@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.14 2003-06-11 09:56:45 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.15 2003-06-19 14:45:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,17 +148,17 @@ void G4VParticleChange::DumpInfo() const
   G4cout.precision(3);
   G4cout << "      -----------------------------------------------" 
        << G4endl;
-  G4cout << "        G4ParticleChange Information  " << G4std::setw(20) << G4endl;
+  G4cout << "        G4ParticleChange Information  " << std::setw(20) << G4endl;
   G4cout << "      -----------------------------------------------" 
        << G4endl;
 
   G4cout << "        # of 2ndaries       : " 
-       << G4std::setw(20) << theNumberOfSecondaries
+       << std::setw(20) << theNumberOfSecondaries
        << G4endl;
 
   if (theNumberOfSecondaries >0) {
     G4cout << "        Pointer to 2ndaries : " 
-         << G4std::setw(20) << GetSecondary(0)
+         << std::setw(20) << GetSecondary(0)
          << G4endl;
     G4cout << "        (Showed only 1st one)"
          << G4endl;
@@ -167,11 +167,11 @@ void G4VParticleChange::DumpInfo() const
        << G4endl;
 
   G4cout << "        Energy Deposit (MeV): " 
-       << G4std::setw(20) << theLocalEnergyDeposit/MeV
+       << std::setw(20) << theLocalEnergyDeposit/MeV
        << G4endl;
 
   G4cout << "        Track Status        : " 
-       << G4std::setw(20);
+       << std::setw(20);
        if( theStatusChange == fAlive ){
          G4cout << " Alive";
        } else if( theStatusChange == fStopButAlive ){
@@ -187,10 +187,10 @@ void G4VParticleChange::DumpInfo() const
        }
        G4cout << G4endl;
   G4cout << "        True Path Length (mm) : " 
-       << G4std::setw(20) << theTrueStepLength/mm
+       << std::setw(20) << theTrueStepLength/mm
        << G4endl;
   G4cout << "        Stepping Control     : " 
-       << G4std::setw(20) << theSteppingControlFlag
+       << std::setw(20) << theSteppingControlFlag
        << G4endl;   
   G4cout << G4endl;      
 }

@@ -16,10 +16,10 @@
 #include "globals.hh"
 
 #include <assert.h>
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <vector>
 
 #include "ThyroidSteppingAction.hh"
 //
@@ -56,35 +56,35 @@ void ThyroidSteppingAction::UserSteppingAction(const G4Step*)
    if (StepNo==1){
  
     
-     G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber()-1 << "\t"
-            << G4std::setw( 6) << fTrack-> GetDefinition()->GetParticleName()<< "\t"
-	    << G4std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().x()*mm << "\t "
-	    << G4std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().y()*mm << "\t "
-	    << G4std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().z()*mm << "\t "
-	    << G4std::setw( 6) << fStep->GetPreStepPoint()->GetKineticEnergy() << "\t "
-	    << G4std::setw( 6) << 0 << "\t "
-	    << G4std::setw( 6) << 0 << "\t "
-	    << G4std::setw( 6) << 0  << "\t "
-            << G4std::setw( 6) <<  fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() << "\t"
-            << G4std::setw( 6) << "initStep" << "\t";
+     G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber()-1 << "\t"
+            << std::setw( 6) << fTrack-> GetDefinition()->GetParticleName()<< "\t"
+	    << std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().x()*mm << "\t "
+	    << std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().y()*mm << "\t "
+	    << std::setw( 6) << fStep->GetPreStepPoint()->GetPosition().z()*mm << "\t "
+	    << std::setw( 6) << fStep->GetPreStepPoint()->GetKineticEnergy() << "\t "
+	    << std::setw( 6) << 0 << "\t "
+	    << std::setw( 6) << 0 << "\t "
+	    << std::setw( 6) << 0  << "\t "
+            << std::setw( 6) <<  fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() << "\t"
+            << std::setw( 6) << "initStep" << "\t";
      G4cout << G4endl;
    }
  
 
        
-      G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << "\t"
-                << G4std::setw( 6) << fTrack-> GetDefinition()->GetParticleName()<< "\t"
-             << G4std::setw( 6) << fTrack->GetPosition().x() << "\t "
-             << G4std::setw( 6) << fTrack->GetPosition().y() << "\t "
-             << G4std::setw( 6) << fTrack->GetPosition().z() << "\t "
-             << G4std::setw( 6) << fTrack->GetKineticEnergy() << "  \t "
-             << G4std::setw( 6) << fStep->GetTotalEnergyDeposit() << "\t "
-             << G4std::setw( 6) << fStep->GetStepLength() << "\t "
-             << G4std::setw( 6) << fTrack->GetTrackLength()  << "\t ";
-     G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName() << "\t";
+      G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << "\t"
+                << std::setw( 6) << fTrack-> GetDefinition()->GetParticleName()<< "\t"
+             << std::setw( 6) << fTrack->GetPosition().x() << "\t "
+             << std::setw( 6) << fTrack->GetPosition().y() << "\t "
+             << std::setw( 6) << fTrack->GetPosition().z() << "\t "
+             << std::setw( 6) << fTrack->GetKineticEnergy() << "  \t "
+             << std::setw( 6) << fStep->GetTotalEnergyDeposit() << "\t "
+             << std::setw( 6) << fStep->GetStepLength() << "\t "
+             << std::setw( 6) << fTrack->GetTrackLength()  << "\t ";
+     G4cout << std::setw(10) << fTrack->GetVolume()->GetName() << "\t";
      if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
      G4cout << " \t " 
-            << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
+            << std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
   	                                ->GetProcessName();  }
      else { G4cout << "   UserLimit"; }
          G4cout << G4endl;} else 
@@ -110,9 +110,9 @@ void ThyroidSteppingAction::UserSteppingAction(const G4Step*)
        if(fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="LowEnPhotoElec"){ProcessCode=8;}
        if(fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="LowEnBrem"){ProcessCode=9;}
    //        
-      G4cout << G4std::setw(10) << VolumeCode << "\t "              
-             << G4std::setw( 6) << fStep->GetTotalEnergyDeposit() << "\t "
-             << G4std::setw(10) << ProcessCode << "\t";
+      G4cout << std::setw(10) << VolumeCode << "\t "              
+             << std::setw( 6) << fStep->GetTotalEnergyDeposit() << "\t "
+             << std::setw(10) << ProcessCode << "\t";
       G4cout << G4endl;
     }     
      }

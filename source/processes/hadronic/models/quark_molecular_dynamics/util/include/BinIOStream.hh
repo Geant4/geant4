@@ -1,15 +1,18 @@
 //
 // $RCSfile: BinIOStream.hh,v $
 //
-// $Revision: 1.3 $
-// $Date: 2000-08-02 09:24:33 $
-// $Author: sscherer $
+// $Revision: 1.4 $
+// $Date: 2003-06-19 14:43:17 $
+// $Author: gunter $
 // $Locker:  $
 // $State: Exp $
 // DOSfile: biostream.h
 // UNIXfile: BinIOStream.H
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.3  2000/08/02 09:24:33  sscherer
+// now using G4cout/G4cerr
+//
 // Revision 1.2  1999/12/15 14:53:30  gunter
 // Modifications to have a ISO C++ compliant source code
 //
@@ -31,7 +34,7 @@
 #define _BinIOStream_H
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #ifdef __MSDOS__
   #include "definiti.h"
@@ -39,7 +42,7 @@
   #include "Definitions.hh"
 #endif
 
-class BinOStream : public G4std::ostream { 
+class BinOStream : public std::ostream { 
   friend BinOStream& operator<<(BinOStream&,char c);
   friend BinOStream& operator<<(BinOStream&,signed char c);
   friend BinOStream& operator<<(BinOStream&,unsigned char c);
@@ -53,13 +56,13 @@ class BinOStream : public G4std::ostream {
   friend BinOStream& operator<<(BinOStream&,long double f);
   friend BinOStream& operator<<(BinOStream&,float f);
   public:
-    BinOStream(G4std::ostream& o, int);
+    BinOStream(std::ostream& o, int);
     inline BinOStream& flush(); 
   private:
-    G4std::ostream* os;
+    std::ostream* os;
 };
 
-class BinIStream : public G4std::istream { 
+class BinIStream : public std::istream { 
 friend BinIStream& operator>>(BinIStream&,char& c);
 friend BinIStream& operator>>(BinIStream&,signed char& c);
 friend BinIStream& operator>>(BinIStream&,unsigned char& c);
@@ -73,7 +76,7 @@ friend BinIStream& operator>>(BinIStream&,double& f);
 friend BinIStream& operator>>(BinIStream&,long double& f);
 friend BinIStream& operator>>(BinIStream&,float& f);
   public:
-    BinIStream(G4std::istream& i, int);
+    BinIStream(std::istream& i, int);
     inline void clear(int i = 0);
     inline int eof() const;
     inline int fail() const;
@@ -83,7 +86,7 @@ friend BinIStream& operator>>(BinIStream&,float& f);
     inline operator const void*() const;
     inline int operator!() const;
   private:
-    G4std::istream* is;  
+    std::istream* is;  
 };                          
 
 #include "BinIOStream.icc"

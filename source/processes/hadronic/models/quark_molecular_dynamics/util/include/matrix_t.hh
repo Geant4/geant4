@@ -7,7 +7,7 @@ void terminate();
 #endif
 
 #include "G4ios.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include <stdlib.h>
 #include <stdarg.h>
 #include "Subscript.hh"
@@ -32,14 +32,14 @@ template<class t> class arrayBase;
 template<class t>
 class arrayBase 
 {
-  friend G4std::ostream& operator<<(G4std::ostream& o,const arrayBase<t>& a){
+  friend std::ostream& operator<<(std::ostream& o,const arrayBase<t>& a){
 // -----------------------------------------------------
 // implementation from matrix_t.tcc:
     a.writeOut(o); 
     return o; 
 // -----------------------------------------------------
         }
-  friend G4std::istream& operator>>(G4std::istream& in,const arrayBase<t>& a){
+  friend std::istream& operator>>(std::istream& in,const arrayBase<t>& a){
 // -----------------------------------------------------
 // implementation from matrix_t.tcc:
     a.readIn(in); 
@@ -78,8 +78,8 @@ public:
   void set(Subscript n,const t& def);
   void set(Subscript n,const t* defArray);
   void set(const arrayBase<t>& a);
-  virtual void writeToStream(G4std::ostream& o) const;
-  virtual void readFromStream(G4std::istream& in);
+  virtual void writeToStream(std::ostream& o) const;
+  virtual void readFromStream(std::istream& in);
   operator t*() { return x; }
 protected:
   arrayBase() : size(0),x(0) {}
@@ -88,8 +88,8 @@ protected:
   arrayBase(Subscript n,const t* defArray);
   arrayBase(const arrayBase<t>& a);
 protected:
-  virtual void writeOut(G4std::ostream& o) const;
-  virtual void readIn(G4std::istream& i) const;
+  virtual void writeOut(std::ostream& o) const;
+  virtual void readIn(std::istream& i) const;
   Subscript size;
   t* x;
 };
@@ -180,7 +180,7 @@ void arrayBase<t>::set(const arrayBase<t>& a)
     }
 
 template<class t>
-void arrayBase<t>::writeToStream(G4std::ostream& o) const
+void arrayBase<t>::writeToStream(std::ostream& o) const
 {
   o << size << " ";
   for (int i=0; i<size; i++)
@@ -189,7 +189,7 @@ void arrayBase<t>::writeToStream(G4std::ostream& o) const
 }
 
 template<class t>
-void arrayBase<t>::readFromStream(G4std::istream& in)
+void arrayBase<t>::readFromStream(std::istream& in)
 {
   in >> size;
   set(size);
@@ -226,7 +226,7 @@ arrayBase<t>::arrayBase(const arrayBase<t>& a) : size(a.dim()),x(new t[size])
 }
 
 template<class t>
-void arrayBase<t>::writeOut(G4std::ostream& o) const
+void arrayBase<t>::writeOut(std::ostream& o) const
 {
   o << "(";
   for (int i=0; i<dim()-1; i++)
@@ -235,7 +235,7 @@ void arrayBase<t>::writeOut(G4std::ostream& o) const
 }
 
 template<class t>
-void arrayBase<t>::readIn(G4std::istream& i) const
+void arrayBase<t>::readIn(std::istream& i) const
 {
   char c;
   t y;
@@ -520,7 +520,7 @@ public:
 protected:
   Matrix<t>& multiply(const Matrix<t>& B,Matrix<t>& C) const;
 private:
-  void writeOut(G4std::ostream& o ) const;
+  void writeOut(std::ostream& o ) const;
   void addLine(Subscript j,Subscript k,const t& y);
   void swapLines(Subscript j,Subscript k);
   Subscript N,M;
@@ -904,7 +904,7 @@ Matrix<t>& Matrix<t>::multiply(const Matrix<t>& B,Matrix<t>& C) const
 }
 
 template<class t>
-void Matrix<t>::writeOut(G4std::ostream& o ) const
+void Matrix<t>::writeOut(std::ostream& o ) const
 {
   for (int i=1; i<=rows(); i++) {
     for (int j=1; j<=cols(); j++) {

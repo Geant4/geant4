@@ -23,7 +23,7 @@
 #define G4REGIONMODEL
 
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include <math.h>
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -31,7 +31,7 @@
 //#include "G4NucleusModel.hh"
 
 
-typedef G4std::vector<G4double>::const_iterator my_iterator; 
+typedef std::vector<G4double>::const_iterator my_iterator; 
 
 class G4RegionModel //:public G4VRegionModel
 {
@@ -50,15 +50,15 @@ private:
 
   G4int massNumber;
   G4int protonNumber;
-  G4std::vector<G4double> radius; //contains the outer radiuses of the shells
-  G4std::vector<G4double> density;
-  G4std::vector<G4double> protonFermiEnergy;
-  G4std::vector<G4double> neutronFermiEnergy;
-  G4std::vector<G4double> protonFermiMomentum;
-  G4std::vector<G4double> neutronFermiMomentum;
+  std::vector<G4double> radius; //contains the outer radiuses of the shells
+  std::vector<G4double> density;
+  std::vector<G4double> protonFermiEnergy;
+  std::vector<G4double> neutronFermiEnergy;
+  std::vector<G4double> protonFermiMomentum;
+  std::vector<G4double> neutronFermiMomentum;
   
-  G4std::vector<G4double> protonPotentialEnergy;
-  G4std::vector<G4double> neutronPotentialEnergy;
+  std::vector<G4double> protonPotentialEnergy;
+  std::vector<G4double> neutronPotentialEnergy;
 
   static const G4double radius0; 
   static const G4double BE;

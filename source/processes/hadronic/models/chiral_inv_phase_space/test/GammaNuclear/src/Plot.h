@@ -25,7 +25,7 @@
 
 //#define debug
 
-#include "g4std/vector"
+#include <vector>
 #include "GammaNuclear/src/DataPoint.h"
 #include "GammaNuclear/src/TVPlot.h"
 
@@ -81,7 +81,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
     G4int theStatistics;
     FilterType * theFilter;
     
-    G4std::vector<DataPointType> theDataPoints;
+    std::vector<DataPointType> theDataPoints;
     G4String theOutputFile;
 };
 

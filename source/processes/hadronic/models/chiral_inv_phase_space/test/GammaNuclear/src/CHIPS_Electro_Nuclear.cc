@@ -4,8 +4,8 @@
 #include "GammaNuclear/src/ParticleInfo.h"
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Timer.hh"
  
@@ -211,9 +211,9 @@
     //  G4cout << "12) NaI        13) CsI         14) Kapton   15) Hydrogen" << G4endl;
     //  G4cout << "16) Carbon     17) 6_3_Lithium 18) Tantalum 19) Calcium" << G4endl;
     //  G4cout << "Please enter the material code" << G4endl;
-    //  G4cout << "\tFrom: " << G4std::flush;
+    //  G4cout << "\tFrom: " << std::flush;
     //  G4cin >> kl;
-    //  G4cout << "\tTo: " << G4std::flush;
+    //  G4cout << "\tTo: " << std::flush;
     //  G4cin >> kr;
     //} while( kl < 0 || kr >= numberOfMaterials || kl > kr );
     // Now only for Carbon
@@ -222,12 +222,12 @@
     
     // energies of interest: 0.5, 1.0, 3.0, 12.0, 20.0 GeV
 
-    G4cout << "Please enter the initial kinetic energy (GeV): "<< G4std::flush;
+    G4cout << "Please enter the initial kinetic energy (GeV): "<< std::flush;
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV;
     
     G4int nEvents;
-    G4cout << "Please enter the number of events: "<< G4std::flush;
+    G4cout << "Please enter the number of events: "<< std::flush;
     G4cin >> nEvents;
        
     G4int nCPU = 0;
@@ -284,7 +284,7 @@
         aStep.SetPreStepPoint(&aStepPoint);
 	    aStep.SetPostStepPoint(&aStepPoint);
 #ifdef debug
-	    G4cout << "Event:" << G4std::setw(4) << l+1 << 
+	    G4cout << "Event:" << std::setw(4) << l+1 << 
 	              " Material:" << theMaterials[k]->GetName() <<
 	              " Particle:" << theElectron->GetParticleName() << '\t' << G4endl;
 #endif

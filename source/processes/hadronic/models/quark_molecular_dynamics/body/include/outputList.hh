@@ -1,18 +1,18 @@
-#include "g4std/iostream"
+#include <iostream>
 #include "newBinning.hh"
 
 class outputList
 {
   int N;
-  G4std::ostream** files;
+  std::ostream** files;
   bool* erase;
 public:
   outputList(int n);
   outputList(int n,char* file);
   ~outputList();
   int Number() const { return N; }
-  void add(int i,G4std::ostream*);
-  G4std::ostream& operator[](int i) { return *files[i]; }
+  void add(int i,std::ostream*);
+  std::ostream& operator[](int i) { return *files[i]; }
 };
 
 class PlotList : public outputList
@@ -22,7 +22,7 @@ public:
   PlotList(int n) : outputList(n),plots(new Binning*[n]) {}
   PlotList(int n,char* file) : outputList(n,file),plots(new Binning*[n]) {}
   ~PlotList() { delete [] plots; }
-  void add(int i,Binning& x,G4std::ostream* f = 0) { plots[i] = &x; if (f) outputList::add(i,f); }
+  void add(int i,Binning& x,std::ostream* f = 0) { plots[i] = &x; if (f) outputList::add(i,f); }
   Binning& content(int i) { return *plots[i]; }
 };
 

@@ -23,7 +23,7 @@
 #ifndef ANAParticleInfo_h
 #define ANAParticleInfo_h
 #include <fstream>
-#include "g4std/vector"
+#include <vector>
 #include "Analysis/src/Particle.h"
 #include "Analysis/src/Plot.h"
 #include "Analysis/src/DataPoint.h"

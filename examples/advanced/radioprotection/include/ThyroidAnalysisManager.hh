@@ -3,7 +3,7 @@
 #define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 
 class ITree;

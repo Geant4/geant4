@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BrTest.cc,v 1.1 2003-05-05 12:23:52 hpw Exp $
+// $Id: G4BrTest.cc,v 1.2 2003-06-19 14:39:18 gunter Exp $
 // -------------------------------------------------------------------
 //
 // -------------------------------------------------------------------
@@ -41,9 +41,9 @@
 #include "globals.hh"
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/iostream"
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <assert.h>
 
 #include "CLHEP/Hist/TupleManager.h"

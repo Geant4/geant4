@@ -14,7 +14,7 @@ bool operator==(const CollisionTab& x,const CollisionTab& y)
   return x.time == y.time; 
 }
 
-G4std::vector<CollisionTab*> CollisionTab::Root;
+std::vector<CollisionTab*> CollisionTab::Root;
 
 CollisionTab::Entry CollisionTab::find(double t) {
   Entry X = Root.begin();
@@ -36,13 +36,13 @@ void CollisionTab::erase() {
 }
 
 void CollisionTab::perform(double t,bool force) {
-  G4std::vector<CollisionTab*> toPerform;
-  G4std::vector<CollisionTab*>::iterator W;
+  std::vector<CollisionTab*> toPerform;
+  std::vector<CollisionTab*>::iterator W;
   for ( W = Root.begin(); W!=Root.end() && (*W)->time <= t; W++) {
     toPerform.insert(toPerform.end(),*W);
   }
   Root.erase(Root.begin(),W);
-  for (G4std::vector<CollisionTab*>::iterator X = toPerform.begin(); X!=toPerform.end(); X++) {
+  for (std::vector<CollisionTab*>::iterator X = toPerform.begin(); X!=toPerform.end(); X++) {
     CollisionTab* Y = *X;
       if ( Y->incoming.size() ) {
 	try {
@@ -102,9 +102,9 @@ void CollisionTab::addEntry(double t,const ParticleBase& in,selection which) {
   }
 }
 
-void CollisionTab::addEntry(double t,const G4std::vector<ParticleBase*>& in,selection which) {
+void CollisionTab::addEntry(double t,const std::vector<ParticleBase*>& in,selection which) {
   Entry x = find(t);
-  G4std::vector<Entry> existing;
+  std::vector<Entry> existing;
   unsigned int i;
   for ( i=0; i<in.size(); i++) {
     Entry y = exists(in[i]);
@@ -128,18 +128,18 @@ CollisionTab::Entry CollisionTab::remove(CollisionTab::Entry x) {
   return x;
 }
 
-CollisionTab::CollisionTab(double t,const CollisionType& type,const G4std::vector<ParticleBase*>& in,selection which) 
+CollisionTab::CollisionTab(double t,const CollisionType& type,const std::vector<ParticleBase*>& in,selection which) 
     : time(t),incoming(in),coll(type),select(which) {}
 
 CollisionTab::CollisionTab(double t,const CollisionType& type,const ParticleBase& in,selection which) 
-    : time(t),incoming(G4std::vector<ParticleBase*>(1)),coll(type),select(which) 
+    : time(t),incoming(std::vector<ParticleBase*>(1)),coll(type),select(which) 
 { 
   incoming[0] = &(ParticleBase&)in; 
 }
 
 CollisionType::CollisionType() : minimalMass(0) {}
 
-CollisionType::CollisionType(const G4std::vector<ParticleBase*>& P) : minimalMass(0)
+CollisionType::CollisionType(const std::vector<ParticleBase*>& P) : minimalMass(0)
 {
   for (unsigned int i=0; i<P.size(); i++)
     incoming.insert(incoming.end(),&((ParticleType&)(P[i]->getType())));
@@ -155,7 +155,7 @@ CollisionType::CollisionType(const ParticleType& P) : minimalMass(0)
   incoming.insert(incoming.end(),&(ParticleType&)P);
 }
 
-CollisionType::CollisionType(G4std::istream& in) : minimalMass(0)
+CollisionType::CollisionType(std::istream& in) : minimalMass(0)
 {
   String Name,CollName;
   try {
@@ -182,7 +182,7 @@ CollisionType::CollisionType(G4std::istream& in) : minimalMass(0)
   }
 }
 
-void CollisionType::print(G4std::ostream& o) const {
+void CollisionType::print(std::ostream& o) const {
   for (int i=0; i<incoming.size(); i++) { o << i << ". " << *incoming[i] << G4endl; }
   o << "channels: ";
   for (int j=0; j<channels.size(); j++) { o << j << ". " << *channels[j] << G4endl; }
@@ -196,7 +196,7 @@ double CollisionType::Crossection(double s) const
   return S;
 }
 
-CollisionType* CollisionType::checkCollision(const G4std::vector<ParticleBase*>& L)
+CollisionType* CollisionType::checkCollision(const std::vector<ParticleBase*>& L)
 {
   double rp = length(L[0]->Momentum()-L[1]->Momentum());
   if ( rp<1.0 ) return 0;
@@ -213,7 +213,7 @@ CollisionType* CollisionType::checkCollision(const G4std::vector<ParticleBase*>&
   catch ( ... ) { return 0; }
 }
 
-double CollisionType::FindDecomposition(int C,const CollisionType& X,const G4std::vector<ParticleBase*>& x)
+double CollisionType::FindDecomposition(int C,const CollisionType& X,const std::vector<ParticleBase*>& x)
 {
   CollisionType y;
   y.channels.insert(y.channels.end(),new decayMode(C,x));
@@ -232,7 +232,7 @@ double CollisionType::checkProducts(const CollisionType& x,bool& decFound) const
 {
   for (int l=0; l<channels.size(); l++) {
     decFound = decFound || channels[l]->isDecomposition();
-    G4std::vector< G4std::vector<isotop*> > Perm = Permutations(channels[l]->products);
+    std::vector< std::vector<isotop*> > Perm = Permutations(channels[l]->products);
     for (unsigned int i=0; i<Perm.size(); i++) {
       bool y = false,s=true;
       for (unsigned int j=0; j<channels[l]->products.size(); j++) {
@@ -253,7 +253,7 @@ double CollisionType::isEqualTo(const CollisionType& x) const
 {
     if ( incoming.size() != x.incoming.size() )
       return -1;
-    G4std::vector< G4std::vector<ParticleType*> > Perm = Permutations(incoming);
+    std::vector< std::vector<ParticleType*> > Perm = Permutations(incoming);
     int best = -1;
     double val = -1;
     for (unsigned int i=0; i<Perm.size(); i++) {
@@ -315,7 +315,7 @@ decayMode& CollisionType::chooseMode(double Emax,selection which,bool force) con
   return *act;
 }
 
-void CollisionType::perform(const G4std::vector<ParticleBase*>& p,selection which,bool force) const
+void CollisionType::perform(const std::vector<ParticleBase*>& p,selection which,bool force) const
 {
   if ( p.empty() ) 
     return;

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.14 2003-03-12 16:53:07 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.15 2003-06-19 14:42:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
  
 #include "G4Material.hh"
  
@@ -86,11 +86,11 @@
  
  int main()
   {
-    G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
-    G4std::ofstream outFile( "InInelasticAlpha.listing.GetMeanFreePath", G4std::ios::out);
-    outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
-    G4std::ofstream outFile1( "InInelasticAlpha.listing.DoIt", G4std::ios::out);
-    outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4cout.setf( std::ios::scientific, std::ios::floatfield );
+    std::ofstream outFile( "InInelasticAlpha.listing.GetMeanFreePath", std::ios::out);
+    outFile.setf( std::ios::scientific, std::ios::floatfield );
+    std::ofstream outFile1( "InInelasticAlpha.listing.DoIt", std::ios::out);
+    outFile1.setf( std::ios::scientific, std::ios::floatfield );
 
     G4String name, symbol;
     G4double a, iz, z, density;

@@ -24,7 +24,7 @@
 #define ANADataPoint_h
 
 #include <iostream>
-#include "g4std/vector"
+#include <vector>
 
 class ANADataPoint
 {
@@ -82,7 +82,7 @@ public:
 
   G4double highBin;
   G4double theMass;
-//  G4std::vector<G4double> input;
+//  std::vector<G4double> input;
   G4double meanK;
   G4int entries;
   G4double xSec;

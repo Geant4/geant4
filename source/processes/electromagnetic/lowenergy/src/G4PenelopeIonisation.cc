@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.1 2003-06-18 13:45:04 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.2 2003-06-19 14:39:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -73,10 +73,10 @@ G4PenelopeIonisation::G4PenelopeIonisation(const G4String& nam)
   cutForPhotons = 250.0*eV;
   cutForElectrons = 250.0*eV;
   verboseLevel = 0;
-  ionizationEnergy = new G4std::map<G4int,G4DataVector*>;
-  resonanceEnergy  = new G4std::map<G4int,G4DataVector*>;
-  occupationNumber = new G4std::map<G4int,G4DataVector*>;
-  shellFlag = new G4std::map<G4int,G4DataVector*>;
+  ionizationEnergy = new std::map<G4int,G4DataVector*>;
+  resonanceEnergy  = new std::map<G4int,G4DataVector*>;
+  occupationNumber = new std::map<G4int,G4DataVector*>;
+  shellFlag = new std::map<G4int,G4DataVector*>;
   ReadData(); //Read data from file
  
 }
@@ -238,7 +238,7 @@ void G4PenelopeIonisation::BuildLossTable(
 
     // the cut cannot be below lowest limit
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[m];
-    tCut = G4std::min(tCut,highKineticEnergy);
+    tCut = std::min(tCut,highKineticEnergy);
     cutForDelta.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -424,7 +424,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   }
   G4cout << "Oscillatore: " << iOsc << G4endl;
   G4cout << "Energie " << ionEnergy/keV << " " << bindingEnergy/keV << G4endl;
-  ionEnergy = G4std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
   G4double eKineticEnergy = energySecondary;
 
   size_t nTotPhotons=0;
@@ -434,12 +434,12 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t indx = couple->GetIndex();
   G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-  cutg = G4std::min(cutForPhotons,cutg);
+  cutg = std::min(cutForPhotons,cutg);
 
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cute = G4std::min(cutForPhotons,cute);
+  cute = std::min(cutForPhotons,cute);
   
-  G4std::vector<G4DynamicParticle*>* photonVector=0;
+  std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
   G4AtomicDeexcitation deexcitationManager;
 
@@ -521,7 +521,7 @@ G4bool G4PenelopeIonisation::IsApplicable(const G4ParticleDefinition& particle)
    return ( (&particle == G4Electron::Electron()) );
 }
 
-G4std::vector<G4DynamicParticle*>*
+std::vector<G4DynamicParticle*>*
 G4PenelopeIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 			                  G4double incidentEnergy,
 			                  G4double eLoss)
@@ -529,8 +529,8 @@ G4PenelopeIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   // create vector of secondary particles
   const G4Material* material = couple->GetMaterial();
 
-  G4std::vector<G4DynamicParticle*>* partVector =
-                                 new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* partVector =
+                                 new std::vector<G4DynamicParticle*>;
 
   if(eLoss > cutForPhotons && eLoss > cutForElectrons) {
 
@@ -540,7 +540,7 @@ G4PenelopeIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
     size_t nElements = material->GetNumberOfElements();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
-    G4std::vector<G4DynamicParticle*>* secVector = 0;
+    std::vector<G4DynamicParticle*>* secVector = 0;
     G4DynamicParticle* aSecondary = 0;
     G4ParticleDefinition* type = 0;
     G4double e;
@@ -550,7 +550,7 @@ G4PenelopeIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
     // sample secondaries
 
     G4double eTot = 0.0;
-    G4std::vector<G4int> n =
+    std::vector<G4int> n =
            shellVacancy->GenerateNumberOfIonisations(couple,
                                                      incidentEnergy,eLoss);
     for (size_t i=0; i<nElements; i++) {
@@ -653,7 +653,7 @@ void G4PenelopeIonisation::CalculateDiscrete(G4double ene,G4double cutoff,
   G4double cp = sqrt(cps);
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
-  G4double distantTransvCS0 = G4std::max(log(gamma2)-beta2-delta,0.0);
+  G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
   G4DataVector* qm = new G4DataVector();
@@ -906,8 +906,8 @@ void G4PenelopeIonisation::ReadData()
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/ion-pen.dat";
-  G4std::ifstream file(pathFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(pathFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (!(lsdp->is_open()))
     {
@@ -1083,14 +1083,14 @@ G4double G4PenelopeIonisation::CalculateStoppingPower(G4double ene,G4double resE
     }
   
   if (sdLong > 0) {
-    sdTrans = G4std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) sPower = sdDist;
   }
 
 
   // Close collisions (Moeller's cross section)
-  G4double wl = G4std::max(cutoff,resEne);
+  G4double wl = std::max(cutoff,resEne);
   G4double wu = 0.5*ene;
  
   if (wl < (wu-1*eV)) wu=wl;

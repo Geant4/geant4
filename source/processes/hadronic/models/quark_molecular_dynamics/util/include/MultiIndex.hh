@@ -2,11 +2,11 @@
 #define __MULTIINDEX__
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class MultiIndex
 {
-  friend G4std::ostream& operator<<(G4std::ostream& o,MultiIndex& i);
+  friend std::ostream& operator<<(std::ostream& o,MultiIndex& i);
   int N;
   int* array,*n_min,*n_max;
   bool valid;

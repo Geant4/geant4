@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.4 2001-08-01 17:04:04 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.5 2003-06-19 14:39:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 // Viktor Krylov, 6.Dec 1998: some corrections.
     
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Timer.hh"
  
@@ -339,7 +339,7 @@
     G4VPartonStringModel * theStringModel;
     G4int choice;
     do {
-      G4cout << "Please select String Model to test(1-FTF, 2-QGS): " << G4std::flush;
+      G4cout << "Please select String Model to test(1-FTF, 2-QGS): " << std::flush;
       G4cin >> choice;
       if(choice==1) theStringModel = new G4FTFModel;
       if(choice==2) theStringModel = new G4QGSModel;
@@ -639,9 +639,9 @@
       G4cout << "12) NaI        13) CsI         14) Kapton   15) Hydrogen" << G4endl;
       G4cout << "16) Carbon     17) 6_3_Lithium 18) Tantalum "<< G4endl;
       G4cout << "Please enter the material code" << G4endl;
-      G4cout << "\tFrom: " << G4std::flush;
+      G4cout << "\tFrom: " << std::flush;
       G4cin >> kl;
-      G4cout << "\tTo: " << G4std::flush;
+      G4cout << "\tTo: " << std::flush;
       G4cin >> kr;
     } while( kl < 0 || kr >= numberOfMaterials || kl > kr );
     
@@ -655,15 +655,15 @@
       G4cout << "20) anti_xi-     21) xi0           22) anti_xi0     23) omega-" << G4endl;
       G4cout << "24) anti_omega-" << G4endl;
       G4cout << "Please enter the particle type code"<< G4endl;
-      G4cout << "\tFrom: " << G4std::flush;
+      G4cout << "\tFrom: " << std::flush;
       G4cin >> il;
-      G4cout << "\tTo: " << G4std::flush;
+      G4cout << "\tTo: " << std::flush;
       G4cin >> ir;
     } while( il < 0 || ir > 24 || il > ir );
 
     // energies of interest: 0.5, 1.0, 3.0, 12.0, 20.0 GeV
 
-    G4cout << "Please enter the initial kinetic energy (GeV): "<< G4std::flush;
+    G4cout << "Please enter the initial kinetic energy (GeV): "<< std::flush;
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV/MeV;
 
@@ -675,7 +675,7 @@
 //    theTheoModel->SetTransport(theDummyCascade);
     
     G4int nEvents;
-    G4cout << "Please enter the number of events: "<< G4std::flush;
+    G4cout << "Please enter the number of events: "<< std::flush;
     G4cin >> nEvents;
     
     if( kl == kr && il == ir ) {
@@ -716,7 +716,7 @@
 	  aStepPoint.SetMaterial(theMaterials[k]);
           aStep.SetPreStepPoint(&aStepPoint);
 	  aStep.SetPostStepPoint(&aStepPoint);
-	  G4cout << "Event:" << G4std::setw(4) << l+1 << 
+	  G4cout << "Event:" << std::setw(4) << l+1 << 
 	            " Material:" << theMaterials[k]->GetName() <<
 	            " Particle:" << theParticles[i]->GetParticleName() << '\t' << G4endl;
 

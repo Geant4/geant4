@@ -1,7 +1,7 @@
 
 
 #include <stdlib.h>
-#include "g4std/fstream"
+#include <fstream>
 #include "ThyroidAnalysisManager.hh"
 
 #include "G4ios.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PenelopeIonisation.hh,v 1.1 2003-06-18 13:45:24 pandola Exp $
+// $Id: G4PenelopeIonisation.hh,v 1.2 2003-06-19 14:39:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -92,7 +92,7 @@ protected:
 
 protected:
 
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
+  virtual std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 							  G4double incidentEnergy,
 							  G4double eLoss);
 
@@ -128,10 +128,10 @@ private:
   G4int iOsc;
 
   //Parameters of atomic shells
-  G4std::map<G4int,G4DataVector*> *ionizationEnergy;
-  G4std::map<G4int,G4DataVector*> *resonanceEnergy;
-  G4std::map<G4int,G4DataVector*> *occupationNumber;
-  G4std::map<G4int,G4DataVector*> *shellFlag;
+  std::map<G4int,G4DataVector*> *ionizationEnergy;
+  std::map<G4int,G4DataVector*> *resonanceEnergy;
+  std::map<G4int,G4DataVector*> *occupationNumber;
+  std::map<G4int,G4DataVector*> *shellFlag;
 };
 
 #endif

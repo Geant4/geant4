@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonInelasticTest.cc,v 1.3 2001-07-11 10:06:54 gunter Exp $
+// $Id: G4ProtonInelasticTest.cc,v 1.4 2003-06-19 14:42:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 
@@ -44,9 +44,9 @@
 
 int main()
 {
-   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
-   G4std::ofstream outFile( "ProtonInelastic.listing", G4std::ios::out);
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   G4cout.setf( std::ios::scientific, std::ios::floatfield );
+   std::ofstream outFile( "ProtonInelastic.listing", std::ios::out);
+   outFile.setf( std::ios::scientific, std::ios::floatfield );
 
   G4Material* Al = new G4Material("Aluminium", 13., 26.98*g/mole, 2.7 *g/cm3 );
   G4Material* Fe = new G4Material("Iron",      26., 55.85*g/mole, 7.87*g/cm3 );

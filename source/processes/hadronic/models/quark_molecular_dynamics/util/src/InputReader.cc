@@ -30,7 +30,7 @@ InputReader::operator>>(InputItem& item) {
   return *this;
 }
 
-G4std::istream& operator>>(G4std::istream& is, InputReader& reader) {
+std::istream& operator>>(std::istream& is, InputReader& reader) {
   String key;
   int count = 0;
   while( is >> key ) {
@@ -77,7 +77,7 @@ InputReader::ErrDuplicateItem::ErrDuplicateItem(const InputReader::ErrDuplicateI
   : theKey(err.theKey) {}
 
 void
-InputReader::ErrDuplicateItem::writeMessage(G4std::ostream& os) const {
+InputReader::ErrDuplicateItem::writeMessage(std::ostream& os) const {
   os << "in function InputReader::operator>>(InputItem&)" << G4endl;
   os << "Duplicate key \"" << theKey << "\"";
 }
@@ -91,8 +91,8 @@ InputReader::ErrDuplicateInput::ErrDuplicateInput(const InputReader::ErrDuplicat
   : theKey(err.theKey),theCount(err.theCount) {}
 
 void
-InputReader::ErrDuplicateInput::writeMessage(G4std::ostream& os) const {
-  os << "in function operator>>(G4std::istream&,InputReader&)" << G4endl;
+InputReader::ErrDuplicateInput::writeMessage(std::ostream& os) const {
+  os << "in function operator>>(std::istream&,InputReader&)" << G4endl;
   os << "InputItem #" << theCount << G4endl;
   os << "\"" << theKey << "\" has already been set";
 }
@@ -106,8 +106,8 @@ InputReader::ErrReadFailed::ErrReadFailed(const InputReader::ErrReadFailed& err)
   : theKey(err.theKey),theCount(err.theCount) {}
 
 void
-InputReader::ErrReadFailed::writeMessage(G4std::ostream& os) const {
-  os << "in function operator>>(G4std::istream&,InputReader&)" << G4endl;
+InputReader::ErrReadFailed::writeMessage(std::ostream& os) const {
+  os << "in function operator>>(std::istream&,InputReader&)" << G4endl;
   os << "InputItem #" << theCount << G4endl;
   os << "value for \"" << theKey << "\" could not be read";
 }
@@ -121,8 +121,8 @@ InputReader::ErrNotKnown::ErrNotKnown(const InputReader::ErrNotKnown& err)
   : theKey(err.theKey),theCount(err.theCount) {}
 
 void
-InputReader::ErrNotKnown::writeMessage(G4std::ostream& os) const {
-  os << "in function operator>>(G4std::istream&,InputReader&)" << G4endl;
+InputReader::ErrNotKnown::writeMessage(std::ostream& os) const {
+  os << "in function operator>>(std::istream&,InputReader&)" << G4endl;
   os << "InputItem #" << theCount << G4endl;
   os << "key \"" << theKey << "\" not known";
 }

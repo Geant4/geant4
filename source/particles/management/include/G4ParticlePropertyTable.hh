@@ -1,7 +1,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyTable.hh,v 1.1 2003-06-11 07:20:06 kurasige Exp $
+// $Id: G4ParticlePropertyTable.hh,v 1.2 2003-06-19 14:38:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4ParticlePropertyData.hh"
 #include "G4ParticleDefinition.hh"
@@ -81,7 +81,7 @@ class G4ParticlePropertyTable
   static G4ParticlePropertyTable*  fgParticlePropertyTable;
   
  protected:
-  G4std::vector<G4ParticlePropertyData*> arrayDataObject; 
+  std::vector<G4ParticlePropertyData*> arrayDataObject; 
 };
 
 

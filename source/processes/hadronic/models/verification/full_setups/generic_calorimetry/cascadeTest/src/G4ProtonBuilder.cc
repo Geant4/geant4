@@ -12,7 +12,7 @@ G4ProtonBuilder::
 void G4ProtonBuilder::
 Build()
 {
-  G4std::vector<G4VProtonBuilder *>::iterator i;
+  std::vector<G4VProtonBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
     (*i)->Build(theProtonElasticProcess);

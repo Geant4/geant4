@@ -3,7 +3,7 @@
 #include "Random.hh"
 #include "Geometry.hh"
 
-G4std::ostream& operator<<(G4std::ostream& o,const Metropolis& M) {
+std::ostream& operator<<(std::ostream& o,const Metropolis& M) {
   for (int i=0; i<M.N; i++) {
     o << M.getX(i)[1] << "  " << M.getX(i)[2] << "  " << M.getX(i)[3] << "  "
       << M.getP(i)[1] << "  " << M.getP(i)[2] << "  " << M.getP(i)[3] << G4endl;

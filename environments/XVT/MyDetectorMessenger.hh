@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorMessenger.hh,v 1.3 2001-07-11 09:56:47 gunter Exp $
+// $Id: MyDetectorMessenger.hh,v 1.4 2003-06-19 14:38:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 #include "G4UImessenger.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 class G4UIcommand;
 class MyDetectorConstruction;

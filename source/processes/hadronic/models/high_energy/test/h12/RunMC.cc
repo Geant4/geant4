@@ -202,7 +202,7 @@ int main()
        plotE[1].Fill(etot,1.);
        plotE[2].Fill(ekin,1.);
       
-       G4int ichhmf =G4std::min(5,(nchhmf-2)/2+1);
+       G4int ichhmf =std::min(5,(nchhmf-2)/2+1);
        for(i=0; i<ngk; i++)
 	 {
            G4double rl, dl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em0RunAction.cc,v 1.5 2001-07-11 10:03:37 gunter Exp $
+// $Id: Em0RunAction.cc,v 1.6 2003-06-19 14:39:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,18 +74,18 @@ void Em0RunAction::EndOfRunAction(const G4Run* aRun)
   if (NbOfEvents)
     { G4double dNbOfEvents = double(NbOfEvents);
     
-      G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+      G4long oldform = G4cout.setf(std::ios::fixed,std::ios::floatfield);
       G4int  oldprec = G4cout.precision(2);
       
       G4cout << "\n nb tracks/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents     
+                      << "   neutral: " << std::setw(7) << NbOfTraks0/dNbOfEvents
+                      << "   charged: " << std::setw(7) << NbOfTraks1/dNbOfEvents     
              << "\n nb  steps/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+                      << "   neutral: " << std::setw(7) << NbOfSteps0/dNbOfEvents
+                      << "   charged: " << std::setw(7) << NbOfSteps1/dNbOfEvents
              << G4endl;
              
-      G4cout.setf(oldform,G4std::ios::floatfield);
+      G4cout.setf(oldform,std::ios::floatfield);
       G4cout.precision(oldprec);       
     }         
                              

@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 
-#include "g4std/iostream"
+#include <iostream>
 #include "String.hh"
 
 enum joker { DUMMY = 32767 };
@@ -15,7 +15,7 @@ template<class t> class undef;
 template<class t>
 class undef
 {
-  friend G4std::istream& operator>>(G4std::istream& in,undef<t>& x) {
+  friend std::istream& operator>>(std::istream& in,undef<t>& x) {
 // -----------------------------------------------------
 // implementation from undef.tcc:
     char c;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.22 2003-06-11 07:16:28 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.23 2003-06-19 14:45:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -369,49 +369,49 @@ void G4ParticleChange::DumpInfo() const
   G4cout.precision(3);
 
   G4cout << "        Mass (GeV)   : " 
-       << G4std::setw(20) << theMassChange/GeV
+       << std::setw(20) << theMassChange/GeV
        << G4endl; 
   G4cout << "        Charge (eplus)   : " 
-       << G4std::setw(20) << theChargeChange/eplus
+       << std::setw(20) << theChargeChange/eplus
        << G4endl; 
   G4cout << "        Position - x (mm)   : " 
-       << G4std::setw(20) << thePositionChange.x()/mm
+       << std::setw(20) << thePositionChange.x()/mm
        << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << G4std::setw(20) << thePositionChange.y()/mm
+       << std::setw(20) << thePositionChange.y()/mm
        << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << G4std::setw(20) << thePositionChange.z()/mm
+       << std::setw(20) << thePositionChange.z()/mm
        << G4endl;
   G4cout << "        Time (ns)           : " 
-       << G4std::setw(20) << theTimeChange/ns
+       << std::setw(20) << theTimeChange/ns
        << G4endl;
   G4cout << "        Proper Time (ns)    : " 
-       << G4std::setw(20) << theProperTimeChange/ns
+       << std::setw(20) << theProperTimeChange/ns
        << G4endl;
   G4cout << "        Momentum Direct - x : " 
-       << G4std::setw(20) << theMomentumDirectionChange.x()
+       << std::setw(20) << theMomentumDirectionChange.x()
        << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << G4std::setw(20) << theMomentumDirectionChange.y()
+       << std::setw(20) << theMomentumDirectionChange.y()
        << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << G4std::setw(20) << theMomentumDirectionChange.z()
+       << std::setw(20) << theMomentumDirectionChange.z()
        << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
-       << G4std::setw(20) << theEnergyChange/MeV
+       << std::setw(20) << theEnergyChange/MeV
        << G4endl;
   G4cout << "        Polarization - x    : " 
-       << G4std::setw(20) << thePolarizationChange.x()
+       << std::setw(20) << thePolarizationChange.x()
        << G4endl;
   G4cout << "        Polarization - y    : " 
-       << G4std::setw(20) << thePolarizationChange.y()
+       << std::setw(20) << thePolarizationChange.y()
        << G4endl;
   G4cout << "        Polarization - z    : " 
-       << G4std::setw(20) <<  thePolarizationChange.z()
+       << std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
   G4cout << "        Track Weight      : " 
-         << G4std::setw(20) <<  theWeightChange
+         << std::setw(20) <<  theWeightChange
          << G4endl;	
 }
 

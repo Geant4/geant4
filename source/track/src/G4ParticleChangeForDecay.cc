@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.8 2003-06-11 07:16:28 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.cc,v 1.9 2003-06-19 14:45:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,7 +147,7 @@ void G4ParticleChangeForDecay::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Time (ns)           : " 
-       << G4std::setw(20) << theTimeChange/ns
+       << std::setw(20) << theTimeChange/ns
        << G4endl;
 }
 

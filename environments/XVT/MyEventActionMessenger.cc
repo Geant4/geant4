@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventActionMessenger.cc,v 1.3 2001-07-11 09:56:48 gunter Exp $
+// $Id: MyEventActionMessenger.cc,v 1.4 2003-06-19 14:38:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ void MyEventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   {
     G4int vl;
     const char* t = newValues;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> vl;
     myEventAction->SetDrawFlag(vl!=0);
   }

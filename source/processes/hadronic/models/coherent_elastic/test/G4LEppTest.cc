@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEppTest.cc,v 1.8 2001-11-17 01:48:12 fjones Exp $
+// $Id: G4LEppTest.cc,v 1.9 2003-06-19 14:39:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
  
 #include "G4Material.hh"
  

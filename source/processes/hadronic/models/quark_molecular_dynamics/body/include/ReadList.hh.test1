@@ -6,11 +6,11 @@
 #endif
 
 #include "globals.hh"
-#include "g4std/iostream"
-#include "g4std/vector"
-#include "g4std/iomanip"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <fstream>
+#include <strstream>
 
 //
 //  Reads members of a class t from file.

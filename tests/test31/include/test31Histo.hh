@@ -42,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4DynamicParticle.hh"
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
@@ -121,7 +121,7 @@ private:
 
     G4String histName;
     G4String theName;
-    G4std::vector<AIDA::IHistogram1D*> histo;
+    std::vector<AIDA::IHistogram1D*> histo;
     AIDA::ITuple* ntup;
     AIDA::ITree* tree;
     G4int nHisto;

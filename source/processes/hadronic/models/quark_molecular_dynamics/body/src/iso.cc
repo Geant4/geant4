@@ -1,4 +1,4 @@
-#include "g4std/vector"
+#include <vector>
 #include "math.hh"
 #include "iso.hh"
 #include "clebsch.hh"
@@ -9,8 +9,8 @@
 
 void Iso::Projections(int n,double J,double M,double* jk,double* mk,bool* isSet)
 {
-  G4std::vector<MultiIndex*> all;
-  G4std::vector<double> probab;
+  std::vector<MultiIndex*> all;
+  std::vector<double> probab;
   Array<int> jkmax(n);
   {for ( int i=0; i<n; i++)
     mk[i] = 0;}

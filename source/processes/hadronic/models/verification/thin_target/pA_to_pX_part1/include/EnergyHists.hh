@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EnergyHists.hh,v 1.3 2003-05-29 15:33:03 dennis Exp $
+// $Id: EnergyHists.hh,v 1.4 2003-06-19 14:44:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 #define EnergyHists_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class RunAction;
 
@@ -48,13 +48,13 @@ class EnergyHists
 
     // energy distribution histograms
 
-    G4std::vector<G4double> hist5deg;
-    G4std::vector<G4double> hist11deg;
-    G4std::vector<G4double> hist15deg;
-    G4std::vector<G4double> hist20deg;
-    G4std::vector<G4double> hist30deg;
+    std::vector<G4double> hist5deg;
+    std::vector<G4double> hist11deg;
+    std::vector<G4double> hist15deg;
+    std::vector<G4double> hist20deg;
+    std::vector<G4double> hist30deg;
 
-    G4std::vector<G4std::vector<G4double>* > hists;
+    std::vector<std::vector<G4double>* > hists;
 
     G4double loBinEdge;
     G4double hiBinEdge;

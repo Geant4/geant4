@@ -23,7 +23,7 @@
 #ifndef ANAPlot_h
 #define ANAPlot_h
 
-#include "g4std/vector"
+#include <vector>
 #include "Analysis/src/DataPoint.h"
 #include "Analysis/src/TVPlot.h"
 
@@ -78,7 +78,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
     G4int theStatistics;
     FilterType * theFilter;
     
-    G4std::vector<DataPointType> theDataPoints;
+    std::vector<DataPointType> theDataPoints;
     G4String theOutputFile;
 };
 

@@ -11,7 +11,7 @@ class ConversionImpossible : public Error
 public:
    ConversionImpossible(char* Type,char* string);
    ~ConversionImpossible();
-   void writeMessage(G4std::ostream&) const;
+   void writeMessage(std::ostream&) const;
 private:
    char * String,* Type;
 };

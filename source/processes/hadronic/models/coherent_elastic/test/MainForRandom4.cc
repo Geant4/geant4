@@ -30,7 +30,7 @@
 #include "G4Nucleus.hh"
 #include "G4IonConstructor.hh"
 #include "G4ElasticHadrNucleusHE.hh"
-#include "g4std/fstream"
+#include <fstream>
 
  int main()
 
@@ -99,9 +99,9 @@
 
                 inVector =  aParticle->GetMomentum();
 
-            G4std::ofstream TestFile("q2from4.dat", G4std::ios::out);
+            std::ofstream TestFile("q2from4.dat", std::ios::out);
             TestFile.precision(9);
-            TestFile.setf(G4std::ios::scientific);
+            TestFile.setf(std::ios::scientific);
 
                for(G4int i2=1; i2<500001; i2++)
                   {

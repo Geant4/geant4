@@ -19,10 +19,10 @@ class Volume
   REAL T,mu,mu_s;
   grandCanonicalEnsemble Ensemble;
 protected:
-  G4std::vector<ParticleType*>& List;
+  std::vector<ParticleType*>& List;
   Geometry& G;
 public:
-  Volume(Geometry& G_,G4std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num = 0);
+  Volume(Geometry& G_,std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num = 0);
   double Etot() const { return Ensemble.Etot(parameter(T,G.getVolume(),mu,mu_s)); }
   void createParticles(double frac = 0.5);
 private:
@@ -33,7 +33,7 @@ private:
 // implementation from Volume.tcc:
 
 template<class t>
-Volume<t>::Volume(Geometry& G_,G4std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num) 
+Volume<t>::Volume(Geometry& G_,std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num) 
   : List(L),T(T_),mu(mu_),mu_s(mus_),Ensemble(NEW t,L),G(G_)
 {
 }
@@ -72,7 +72,7 @@ template<class t>
 class QuarkVolume : public Volume<t>
 {
 public:
-  QuarkVolume(Geometry& G_,G4std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num = 0)
+  QuarkVolume(Geometry& G_,std::vector<ParticleType*>& L,REAL T_,REAL mu_,REAL mus_,int num = 0)
     : Volume<t>(G_,L,T_,mu_,mus_,num) {}
 private:
   void setSpecies(int i,int n,int Nbar,double frac = 0.5);
@@ -84,7 +84,7 @@ private:
 template<class t>
 void QuarkVolume<t>::setSpecies(int r,int Nq,int Nqq,double frac)
 {
-  int N_both = G4std::min(Nq,Nqq);
+  int N_both = std::min(Nq,Nqq);
   int N_add = Nq-Nqq;
   N_add -= N_add % 3;  // ganze Baryonenzahl !!
   for (int i=0; i<N_both; i++) {

@@ -126,7 +126,7 @@ void test31DetectorConstruction::DefineMaterials()
   G4double fractionmass;
   G4double temperature, pressure;
 
-  //  G4std::vector<G4Material*> list;
+  //  std::vector<G4Material*> list;
   G4Material* ma = 0;
 
 //

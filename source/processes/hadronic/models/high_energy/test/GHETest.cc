@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: GHETest.cc,v 1.4 2001-08-01 17:10:20 hpw Exp $
+// $Id: GHETest.cc,v 1.5 2003-06-19 14:41:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 

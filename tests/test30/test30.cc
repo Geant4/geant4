@@ -39,8 +39,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
 
 
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
 
   // -------------------------------------------------------------------
@@ -183,7 +183,7 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  G4std::ifstream* fin = new G4std::ifstream();
+  std::ifstream* fin = new std::ifstream();
   G4String fname = argv[1];
   fin->open(fname.c_str());
   if( !fin->is_open()) {
@@ -417,17 +417,17 @@ int main(int argc, char** argv)
     // -------------------------------------------------------------------
 
     // Creating the analysis factory
-    G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,  "hbook", false, true) );
-    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,  "hbook", false, true) );
+    std::cout << "Tree store : " << tree->storeName() << std::endl;
 
     // Creating a tuple factory, whose tuples will be handled by the tree
-    //   G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+    //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
     const G4int nhisto = 56;
     AIDA::IHistogram1D* h[nhisto];
@@ -445,7 +445,7 @@ int main(int argc, char** argv)
     if(usepaw) {
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
   
@@ -584,17 +584,17 @@ int main(int argc, char** argv)
       for(G4int k=0; k<nangl; k++) {
    
         if(nangl == 1) {
-          bng1[0] = G4std::max(0.0,ang[0] - dangl);
-          bng2[0] = G4std::min(180., ang[0] + dangl);
+          bng1[0] = std::max(0.0,ang[0] - dangl);
+          bng2[0] = std::min(180., ang[0] + dangl);
         } else if(k == 0) {
-          bng1[0] = G4std::max(0.0,ang[0] - dangl);
-          bng2[0] = G4std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
+          bng1[0] = std::max(0.0,ang[0] - dangl);
+          bng2[0] = std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
         } else if(k < nangl-1) {
-          bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
-          bng2[k] = G4std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
+          bng1[k] = std::max(bng2[k-1], ang[k]-dangl);
+          bng2[k] = std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
         } else {
-          bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
-          bng2[k] = G4std::min(180., ang[k] + dangl);
+          bng1[k] = std::max(bng2[k-1], ang[k]-dangl);
+          bng2[k] = std::min(180., ang[k] + dangl);
         }
 
         cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
@@ -607,17 +607,17 @@ int main(int argc, char** argv)
       for(G4int k=0; k<nanglpi; k++) {
    
         if(nangl == 1) {
-          bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
-          bngpi2[0] = G4std::min(180., angpi[0] + dangl);
+          bngpi1[0] = std::max(0.0,angpi[0] - dangl);
+          bngpi2[0] = std::min(180., angpi[0] + dangl);
         } else if(k == 0) {
-          bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
-          bngpi2[0] = G4std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
+          bngpi1[0] = std::max(0.0,angpi[0] - dangl);
+          bngpi2[0] = std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
         } else if(k < nanglpi-1) {
-          bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
-          bngpi2[k] = G4std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
+          bngpi1[k] = std::max(bngpi2[k-1], angpi[k]-dangl);
+          bngpi2[k] = std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
         } else {
-          bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
-          bngpi2[k] = G4std::min(180., angpi[k] + dangl);
+          bngpi1[k] = std::max(bngpi2[k-1], angpi[k]-dangl);
+          bngpi2[k] = std::min(180., angpi[k] + dangl);
         }
 
         cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
@@ -879,9 +879,9 @@ int main(int argc, char** argv)
 
     // Committing the transaction with the tree
     if(usepaw) {
-      G4std::cout << "Committing..." << G4std::endl;
+      std::cout << "Committing..." << std::endl;
       tree->commit();
-      G4std::cout << "Closing the tree..." << G4std::endl;
+      std::cout << "Closing the tree..." << std::endl;
       tree->close();
     }
 

@@ -25,7 +25,7 @@
 //
 #include "G4qmdDummy.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "String.hh"
 
@@ -87,14 +87,14 @@ int G4qmdDummy::operator!=(const G4qmdDummy &right) const
 // --------------------------------------------
 //
 
-void G4qmdDummy::skipline(G4std::istream& in) 
+void G4qmdDummy::skipline(std::istream& in) 
 {
 	G4cout << "... read in line" << G4endl;
   char c;
   while ( in.get(c) && c != '\n' ) ;
 }
 
-double G4qmdDummy::readEvent(G4std::istream& in) 
+double G4qmdDummy::readEvent(std::istream& in) 
 {
   G4String name,checkstring;
 

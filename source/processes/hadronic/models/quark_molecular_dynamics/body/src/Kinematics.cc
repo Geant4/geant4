@@ -1,4 +1,4 @@
-#include "g4std/iomanip"
+#include <iomanip>
 #include <algorithm>
 #include "G4ios.hh"
 #include "Kinematics.hh"
@@ -99,7 +99,7 @@ void Kinematics::kin1(REAL& z,REAL& l)
 
 void Kinematics::kin2(REAL& z,REAL& l)
 {
-  REAL e = rand_gen::Random(eps_min,G4std::min(eps_max_0,eps));
+  REAL e = rand_gen::Random(eps_min,std::min(eps_max_0,eps));
   //  if ( e > eps_max_1 )
     z = inv_eps(e,-1);
     //  else

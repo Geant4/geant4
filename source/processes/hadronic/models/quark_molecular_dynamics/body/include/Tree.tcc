@@ -7,7 +7,7 @@ Knot<t>::~Knot()
 }
 
 template<class t>
-void Knot<t>::printTree(G4std::ostream& o,int n) const
+void Knot<t>::printTree(std::ostream& o,int n) const
 {
   String s;
   for (int i=0; i<n; i++)
@@ -186,7 +186,7 @@ t& Knot<t>::FindKnot(const String& x)
 }
 
 template<class t>
-void Knot<t>::printTree(G4std::ostream& o) 
+void Knot<t>::printTree(std::ostream& o) 
 {
   printTree(o,1);
 }

@@ -1,5 +1,5 @@
 #include "Random.hh"
-#include "g4std/iostream"
+#include <iostream>
   
 rand_gen rand_gen::Random;
 
@@ -30,7 +30,7 @@ rand_gen::rand_gen(long int seed) : rand_seed(seed)
   Set(seed);
 }
 
-G4std::ostream& operator<<(G4std::ostream& o,rand_gen& r)
+std::ostream& operator<<(std::ostream& o,rand_gen& r)
 {
   o << "Random Seed = " << r.rand_seed << G4endl;
   return o;

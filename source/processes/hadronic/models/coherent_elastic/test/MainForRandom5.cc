@@ -32,7 +32,7 @@
 #include "G4ElasticHadrNucleusHE.hh"
 #include "fstream.h"
 #include "iostream.h"
-#include "g4std/strstream"
+#include <strstream>
 
  int main()
 
@@ -74,7 +74,7 @@
         aNucleus.SetParameters( N, Z);
         pNucl   = &aNucleus;
   
-       G4std::ostrstream osTest;
+       std::ostrstream osTest;
        osTest<<" Atomic Number "<<N<<ends;
        G4cout<<osTest.str()<<endl;
 

@@ -12,7 +12,7 @@ Nbody::Nbody(double h_)
 
 Nbody::~Nbody() 
 {
-  G4std::vector<Particle*>::iterator X=List.begin(); 
+  std::vector<Particle*>::iterator X=List.begin(); 
   while ( !List.empty() ) {
     delete List.back();
   }
@@ -40,10 +40,10 @@ void Nbody::add(Particle* p,int i)
 void Nbody::sub(Particle* p)
 {
   int i=0;
-  G4std::vector<Particle*>::iterator X = List.begin();
+  std::vector<Particle*>::iterator X = List.begin();
   while ( *X != p && X != List.end() ) { ++i; ++X; }
   if ( X!=List.end() ) {
-    for (G4std::vector<Particle*>::iterator Y = X+1; Y!=List.end(); Y++) 
+    for (std::vector<Particle*>::iterator Y = X+1; Y!=List.end(); Y++) 
       (*Y)->offset-=6;
     sub(i);
   }
@@ -65,7 +65,7 @@ void Nbody::handleCollisions()
   /*
   for (int i=0; i<Npart; i++)
     for (int j=i+1; j<Npart; j++) {
-      G4std::vector<ParticleBase*> L;
+      std::vector<ParticleBase*> L;
       L.insert(L.end(),(ParticleBase*)List[i]);
       L.insert(L.end(),(ParticleBase*)List[j]);
       CollisionType* C = CollisionType::checkCollision(L);
@@ -122,7 +122,7 @@ void Nbody::one_step()
 }
 
 
-void Nbody::print(G4std::ostream& o) 
+void Nbody::print(std::ostream& o) 
 { 
   o << "#  time=" << Time() << ", Npart=" << Npart << G4endl;
   for (int i=0; i<Npart; i++) { o << *List[i] << G4endl; }

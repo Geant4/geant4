@@ -22,7 +22,7 @@
 //
 //  The main program for G4IntegralHadrNucleus class
 #include "G4IntegralHadrNucleus.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include "G4Proton.hh"
 #include "G4DynamicParticle.hh"
 

@@ -4,7 +4,7 @@
 #include "Definitions.hh"
 #include "Boolean.h"
 #include "Error.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class FallibleBase {
   public:
@@ -18,7 +18,7 @@ class FallibleBase {
       : public Error
     {
       public:
-        virtual void writeMessage(G4std::ostream& os) const;
+        virtual void writeMessage(std::ostream& os) const;
     };
 
   protected:

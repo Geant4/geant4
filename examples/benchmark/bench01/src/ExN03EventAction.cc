@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.1 2002-05-21 11:39:51 stesting Exp $
+// $Id: ExN03EventAction.cc,v 1.2 2003-06-19 14:38:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,14 +115,14 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "---> End of event: " << evtNb << G4endl;	
 
     G4cout
-       << "   Absorber: total energy: " << G4std::setw(7)
+       << "   Absorber: total energy: " << std::setw(7)
                                         << G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7)
+       << "       total track length: " << std::setw(7)
                                         << G4BestUnit(totLAbs,"Length")
        << G4endl
-       << "        Gap: total energy: " << G4std::setw(7)
+       << "        Gap: total energy: " << std::setw(7)
                                         << G4BestUnit(totEGap,"Energy")
-       << "       total track length: " << G4std::setw(7)
+       << "       total track length: " << std::setw(7)
                                         << G4BestUnit(totLGap,"Length")
        << G4endl;
 	  

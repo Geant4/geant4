@@ -25,7 +25,7 @@
 #define G4UPPTRACKVECTOR_H
 
 
-#include "g4std/vector"
+#include <vector>
 #include "G4UppTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
@@ -34,12 +34,12 @@
 class G4UppTrackChange;
 
 
-class G4UppTrackVector : public G4std::vector<G4UppTrack*>
+class G4UppTrackVector : public std::vector<G4UppTrack*>
 {
 public:
 
   void add(const G4KineticTrackVector& aTrackVector);
-  void add(const G4std::vector<G4Nucleon *> & aNucleonVector, 
+  void add(const std::vector<G4Nucleon *> & aNucleonVector, 
 	   const G4int nonInteractionGroup=0); 
 
   G4int getIndex(const G4UppTrack* trackPtr) const;

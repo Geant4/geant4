@@ -8,7 +8,7 @@
 #include "DList.hh"
 #include "Boolean.h"
 #include "Fallible.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #include "Conversions.hh"
 #include <string.h>
@@ -112,7 +112,7 @@ public:
     char ch;
     public:
       WrongOptionDeclarator(char c) : ch(c) {}
-      void writeMessage(G4std::ostream&) const;
+      void writeMessage(std::ostream&) const;
   };
 
   class IllegalOption : public Error
@@ -120,7 +120,7 @@ public:
     char* command,* option;
   public:
     IllegalOption(char* c,char* o);
-    void writeMessage(G4std::ostream&) const;
+    void writeMessage(std::ostream&) const;
   };
 
 private:

@@ -1,6 +1,6 @@
 #include "G4ios.hh"
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <iostream>
+#include <vector>
 #include <string.h>
 #include "math.hh"
 #include "ParticleType.hh"
@@ -55,7 +55,7 @@ RGB RGB::operator<<(int d)
   return y;
 }
 
-void QuantumNumbers::writeOut(G4std::ostream& o) const
+void QuantumNumbers::writeOut(std::ostream& o) const
 {
   o << B() << "  " << S() << "  " << Isospin() << "  " << Spin() << "  ";
 }
@@ -67,7 +67,7 @@ bool operator==(const ParticleType& x,const ParticleType& y)
 
 ParticleType::ParticleType() : minmass(0),width(0) {}
 
-ParticleType::ParticleType(G4std::istream& in) 
+ParticleType::ParticleType(std::istream& in) 
   : minmass(0),width(0)
 {
   static int id_counter = 0;
@@ -104,7 +104,7 @@ ParticleType::ParticleType(G4std::istream& in)
   Insert(*this,name);
 }
 
-void ParticleType::getProbab(double m,G4std::vector<double>& P,G4std::vector<ParticleType*>& L, bool Integral) const
+void ParticleType::getProbab(double m,std::vector<double>& P,std::vector<ParticleType*>& L, bool Integral) const
 {
   if ( hasSuccessors() ) {
     for (int i=0; i<NSuccessors(); i++) 
@@ -134,8 +134,8 @@ ParticleType::MassDist::MassDist(const ParticleType& h,double m)
 
 REAL ParticleType::MassDist::ToBeIntegrated(REAL x)
 {
-  G4std::vector<double> P;
-  G4std::vector<ParticleType*> L;
+  std::vector<double> P;
+  std::vector<ParticleType*> L;
   Type.getProbab(x,P,L);
   return P.back();
 }
@@ -153,8 +153,8 @@ double ParticleType::selectMass(double m_max) const
 
 ParticleType& ParticleType::selectType(double m) const
 {
-  G4std::vector<double> P;
-  G4std::vector<ParticleType*> L;
+  std::vector<double> P;
+  std::vector<ParticleType*> L;
   getProbab(m,P,L,true);
   if ( P.empty() )
     throw "No suitable ParticleType found...";
@@ -165,7 +165,7 @@ ParticleType& ParticleType::selectType(double m) const
   return *L[i];
 }
 
-ParticleType& ParticleType::selectType(int C_,const G4std::vector<ParticleBase*>& P,double m) const
+ParticleType& ParticleType::selectType(int C_,const std::vector<ParticleBase*>& P,double m) const
 {
   double y0 = 0;
   double i3= 0;
@@ -174,14 +174,14 @@ ParticleType& ParticleType::selectType(int C_,const G4std::vector<ParticleBase*>
     i3 += P[j]->Iso3();
     s3 += P[j]->Spin3();
   }
-  G4std::vector<double> y;
-  G4std::vector<int> list;
-  G4std::vector<ParticleType*> L = getList();
+  std::vector<double> y;
+  std::vector<int> list;
+  std::vector<ParticleType*> L = getList();
   for (int i=0; i<L.size(); i++) {
     CollisionType& X = Knot<CollisionType>::FindKnot(*L[i]);
     double pc = CollisionType::FindDecomposition(C_,X,P);
-    G4std::vector<double> P;
-    G4std::vector<ParticleType*> Lnew;
+    std::vector<double> P;
+    std::vector<ParticleType*> Lnew;
     L[i]->getProbab(m,P,Lnew,false);
     double px = 0.0;
     if ( P.size() ) 
@@ -225,8 +225,8 @@ ParticleType& ParticleType::selectType(int C_,const G4std::vector<ParticleBase*>
 
 ParticleType& ParticleType::selectType() const
 {
-  G4std::vector<double> P;
-  G4std::vector<ParticleType*> L = getList();
+  std::vector<double> P;
+  std::vector<ParticleType*> L = getList();
   int i = int(rand_gen::Random()*L.size());
   return *L[i];
 }
@@ -272,7 +272,7 @@ RGB QuantumNumbers::getColor(RGB col) const
   return RGB(c);
 }
 
-void ParticleType::writeOut(G4std::ostream& o) const
+void ParticleType::writeOut(std::ostream& o) const
 {
   o << Name() << ": " << PeakMass() << "  ";
   QuantumNumbers::writeOut(o);

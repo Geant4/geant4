@@ -138,7 +138,7 @@ int main()
              {
                G4double xhmf = help7[i];
                G4int ixhmf = (G4int)(xhmf/0.1) + 1;
-               ixhmf = G4std::min(10,ixhmf);
+               ixhmf = std::min(10,ixhmf);
                G4double pthmf = help8[i];
                if(pthmf < 0.05) pthmf = 0.025;
                G4double wgthmf = pv[i].getEnergy()/(pana[1].getMomentum().z()*pthmf);

@@ -10,7 +10,7 @@
 //
 
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
@@ -237,7 +237,7 @@ int main(int argc,char* argv[]) {
 
       double t1 = box.Time()+dt;
       if ( Time>0 ) 
-        t1 = G4std::min(t1,(double)Time);
+        t1 = std::min(t1,(double)Time);
 
       if ( box.Nquark ) {
         while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {

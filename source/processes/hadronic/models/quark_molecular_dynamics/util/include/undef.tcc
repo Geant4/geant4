@@ -1,7 +1,7 @@
 #include "String.hh"
 
 template<class t>
-G4std::istream& operator>>(G4std::istream& in,undef<t>& x)
+std::istream& operator>>(std::istream& in,undef<t>& x)
 {
   char c;
   in >> c;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.18 2003-06-11 07:20:06 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.19 2003-06-19 14:38:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -296,7 +296,7 @@ void G4ParticleDefinition::SetRangeCut(G4double aCut, const G4Material*)
   defaultCuts->SetProductionCut(aCut,this);
 }
 
-void G4ParticleDefinition::SetRangeCutVector(G4std::vector<G4double>& vec)
+void G4ParticleDefinition::SetRangeCutVector(std::vector<G4double>& vec)
 {
   G4cerr << "Warning : you invoked G4ParticleDefinition::SetRangeCutVector." << G4endl;
   G4cerr << " This method is obsolete and will be removed soon." << G4endl;

@@ -2,7 +2,7 @@
 #define MyAnalysis_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 
 namespace AIDA {

@@ -22,7 +22,7 @@
 //
 #include "G4StableIsotopes.hh"
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 int main()
 {

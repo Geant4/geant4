@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 
-#include "g4std/iostream"
+#include <iostream>
 
 #include "InputItem.hh"
 #include "Fallible.hh"
@@ -22,14 +22,14 @@ class InputVariable
       : theKey(key),Fallible<T>(Default) {}
     
     virtual const String& getKey() const { return theKey; }
-    virtual void read(G4std::istream& is) {
+    virtual void read(std::istream& is) {
       T value;
       is >> value;
       if( is.good() ) {
 	validate(value);
       } 
     }
-    virtual void write(G4std::ostream& os) { 
+    virtual void write(std::ostream& os) { 
       if( isValid() ) {
 	os << T(*this);
       }

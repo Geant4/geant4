@@ -28,8 +28,8 @@ G4double eTot = 0.0;
 G4double sumBaryon = 0.0;
 G4double sumEnergy = 0.0;
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
@@ -141,9 +141,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     //};
 
     // Set target
-    G4std::vector<G4double> targetMomentum(4, 0.0);
+    std::vector<G4double> targetMomentum(4, 0.0);
 
-    G4std::vector<G4double>  bulletMomentum(4, 0.0);
+    std::vector<G4double>  bulletMomentum(4, 0.0);
     G4double mass = 0.93827;
     bulletMomentum[3] = momZ;
     bulletMomentum[3] = sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
@@ -165,9 +165,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
 
-      G4std::vector<G4double>  bmom = bull->getMomentum();
+      std::vector<G4double>  bmom = bull->getMomentum();
       eInit = sqrt(bmom[0] * bmom[0]);
-      G4std::vector<G4double> tmom = targ->getMomentum();
+      std::vector<G4double> tmom = targ->getMomentum();
       eInit += sqrt(tmom[0] * tmom[0]);
 
       if (verboseLevel > 2) {
@@ -193,9 +193,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	G4int is = 0;
 	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-	G4std::vector<G4double>  bmom = bull->getMomentum();
+	std::vector<G4double>  bmom = bull->getMomentum();
 	eInit = sqrt(bmom[0] * bmom[0]);
-	G4std::vector<G4double> tmom = targIsH->getMomentum();
+	std::vector<G4double> tmom = targIsH->getMomentum();
 	eInit += sqrt(tmom[0] * tmom[0]);
 
 	do {
@@ -264,7 +264,7 @@ G4int printData(G4int i) {
   } 
 
   // Convert Bertini data to Geant4 format
-  G4std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
+  std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
 
   G4double eKinTot = 0.0;
   G4double ekin = 0.0;
@@ -274,7 +274,7 @@ G4int printData(G4int i) {
     eTot = 0;
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
     
-      G4std::vector<G4double> m = ifrag->getMomentum();
+      std::vector<G4double> m = ifrag->getMomentum();
 
       eTot  += sqrt(m[0] * m[0]);
 
@@ -325,15 +325,15 @@ G4int printData(G4int i) {
     }
   }
 
-  G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+  std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
   if(!particles.empty()) { 
     particleIterator ipart;
 
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-      G4std::vector<G4double> mom = ipart->getMomentum();
+      std::vector<G4double> mom = ipart->getMomentum();
       eTot   += sqrt(mom[0] * mom[0]);
 
-      // G4std::vector<G4double>  mom(3, 0.0);
+      // std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
       G4int type = ipart->type();
 
@@ -400,19 +400,19 @@ G4int printCross(G4int i) {
 
 
   // Convert Bertini data to Geant4 format
-  G4std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
+  std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
         
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
     
-      G4std::vector<G4double> m = ifrag->getMomentum();
+      std::vector<G4double> m = ifrag->getMomentum();
 
     }
   }
 
-  G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+  std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
   if(!particles.empty()) { 
     particleIterator ipart;
     G4int type;
@@ -468,7 +468,7 @@ G4int test() {
   }
 
   if (verboseLevel > 2) {
-    G4std::vector<G4double>  m(4, 0.0);
+    std::vector<G4double>  m(4, 0.0);
 
     G4double mZ = 0.585;
     G4double mY = 0.0;

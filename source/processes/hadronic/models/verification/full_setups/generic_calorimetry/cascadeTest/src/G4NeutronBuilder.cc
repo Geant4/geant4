@@ -12,7 +12,7 @@ G4NeutronBuilder::
 void G4NeutronBuilder::
 Build()
 {
-  G4std::vector<G4VNeutronBuilder *>::iterator i;
+  std::vector<G4VNeutronBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
     (*i)->Build(theNeutronElasticProcess);

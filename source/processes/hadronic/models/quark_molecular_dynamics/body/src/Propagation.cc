@@ -1,5 +1,5 @@
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
@@ -81,7 +81,7 @@ ParticleBase* makeParticle(const ParticleType& h,const QuantumProjections& q,con
   }
 }
 
-void PotentialBase::print(G4std::ostream& o,double min,double max,int n)
+void PotentialBase::print(std::ostream& o,double min,double max,int n)
 {
   double dx=(max-min)/n;
   for (int i=0; i<n; i++) {
@@ -117,7 +117,7 @@ ColorString::ColorString(const double& E,
                          const Vektor3& rtot, 
                          int n,
                          const QuantumState pparray[],
-                         const G4std::vector<ParticleBase*>& types,
+                         const std::vector<ParticleBase*>& types,
                          int nhadronever) :
                          N(n),
                          Mass0(E),
@@ -288,7 +288,7 @@ double Colour::decompDist = 0.8; // fm
 double* Colour::FlavorFission = 0;
 PotentialBase* Colour::Pot = 0;
 
-G4std::vector<ParticleType*> Colour::Quarks;
+std::vector<ParticleType*> Colour::Quarks;
 
 Colour::Colour(double h) 
   : Nbody(h),InverseFunctionWithNewton(0.3)
@@ -309,10 +309,10 @@ Colour::Colour(double h)
 
 	TheNewHadrons = new G4KineticTrackVector();
 
-  //  G4std::vector<ParticleType*> Q=Knot<ParticleType>::Find("SQ");
-  //  G4std::vector<ParticleType*> D=Knot<ParticleType>::Find("DQ");
-  //  G4std::vector<ParticleType*> Q=TypeContainer::ParticleTypes->findType(AnyQuark());
-  //  G4std::vector<ParticleType*> D=TypeContainer::ParticleTypes->findType(AnyDiquark());
+  //  std::vector<ParticleType*> Q=Knot<ParticleType>::Find("SQ");
+  //  std::vector<ParticleType*> D=Knot<ParticleType>::Find("DQ");
+  //  std::vector<ParticleType*> Q=TypeContainer::ParticleTypes->findType(AnyQuark());
+  //  std::vector<ParticleType*> D=TypeContainer::ParticleTypes->findType(AnyDiquark());
   
   InverseFunction::reducePrecision = false;
   G4cout << "first try"<<G4endl;
@@ -335,7 +335,7 @@ Colour::~Colour()
   delete [] FlavorFission;
 }
 
-void Colour::setQuarks(G4std::vector<ParticleType*>& L)
+void Colour::setQuarks(std::vector<ParticleType*>& L)
 {
   Quarks.insert(Quarks.begin(),L.begin(),L.end());
 }
@@ -346,7 +346,7 @@ double Colour::Schwinger(double kap)
   double y = 0.0;
   double factor = A*sqr(kap)/4.0/pow(mathConstants::Pi,3)/sqr(mathConstants::hc);
   int f = 0;
-  for (G4std::vector<ParticleType*>::iterator X=Quarks.begin(); X != Quarks.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=Quarks.begin(); X != Quarks.end(); X++) {
     for (int n=1; n<=nn; n++) 
       y += factor*exp(-mathConstants::Pi*sqr((*X)->getMass())*double(n)/(mathConstants::hc*kap))/double(n*n);
     FlavorFission[f++] = y;
@@ -363,7 +363,7 @@ ParticleType& Colour::TunnelRate(double kap)
   double* arr = new double[Quarks.size()];
   double factor = A*sqr(kap)/4.0/pow(mathConstants::Pi,3)/sqr(mathConstants::hc);
   int f = 0;
-  for (G4std::vector<ParticleType*>::iterator X=Quarks.begin(); X != Quarks.end(); X++) {
+  for (std::vector<ParticleType*>::iterator X=Quarks.begin(); X != Quarks.end(); X++) {
     for (int n=1; n<=nn; n++) 
       y += factor*exp(-mathConstants::Pi*sqr((*X)->getMass())*double(n)/(mathConstants::hc*kap))/double(n*n);
     arr[f++] = y;
@@ -736,7 +736,7 @@ void Colour::one_step()
       	    eps += E_int(eraseList[l1],eraseList[l2]);
       	QuantumState p;
       	QuantumState* quarkList = NEW QuantumState[eraseList.size()];
-      	G4std::vector<ParticleBase*> Types;
+      	std::vector<ParticleBase*> Types;
       	for (int l=0; l<eraseList.size(); l++) {
 //
 // insert produces error - type cast does not work? ******
@@ -818,8 +818,8 @@ void Colour::one_step()
       	    G4cerr << "Removing!!\n";
       	  }
       	  catch ( ...  ) { throw; }
-      	  G4std::sort(eraseList.begin(),eraseList.end());
-      	  G4std::reverse(eraseList.begin(),eraseList.end());
+      	  std::sort(eraseList.begin(),eraseList.end());
+      	  std::reverse(eraseList.begin(),eraseList.end());
       	  for (int X=0; X<eraseList.size(); X++){
       	    --Nquark;
       	    delete List[eraseList[X]];
@@ -841,7 +841,7 @@ void Colour::clusters(int i)
   Quark* q = (Quark*)List[i];
   int old_ptr[Nnext];
   double old_max[Nnext];
-  int Nn = G4std::min(Nnext,Nquark);
+  int Nn = std::min(Nnext,Nquark);
   for (int l=0; l<Nn; l++) {
     q->next[l].pointer = -1;
   }
@@ -953,7 +953,7 @@ id Colour::clusters(int i)
   }
 }
 */
-void Colour::print(G4std::ostream& o) 
+void Colour::print(std::ostream& o) 
 { 
   o << "#  time=" << Time() << ", Npart=" << Npart <<
     ",  Nquark=" << Nquark << G4endl;
@@ -980,7 +980,7 @@ double Colour::field(const Vektor3& r)
   
 }
 
-void Colour::writeField(G4std::ostream& o,double x0,double x1,double dx,double y0,double y1,double dy)
+void Colour::writeField(std::ostream& o,double x0,double x1,double dx,double y0,double y1,double dy)
 {
   for (int i=0; i<Nquark; i++) {
     o << List[i]->Color() << "  " << List[i]->Coordinates() << "  " 
@@ -1092,9 +1092,9 @@ void Radiation::one_step()
 void Radiation::checkRange()
 {
   /*
-  for (G4std::vector<Particle*>::iterator X=List.begin(); X!=List.end(); X++) {
+  for (std::vector<Particle*>::iterator X=List.begin(); X!=List.end(); X++) {
     if ( (*X)->Color() && (*X)->Coordinates(3)<0 ) {
-      G4std::vector<Particle*>::iterator Y = X--;
+      std::vector<Particle*>::iterator Y = X--;
       delete *Y;
       --Nquark;
     }
@@ -1104,12 +1104,12 @@ void Radiation::checkRange()
 
 void Radiation::init(double dt)
 {
-  G4std::vector<Particle*>::iterator X=List.begin(); 
+  std::vector<Particle*>::iterator X=List.begin(); 
   do {
     Vektor4 x((*X)->Coordinates(),0);
     Vektor4 p((*X)->Momentum(),(*X)->E());
     if ( !G.moveToSurface(x,p) || x[0]>=dt ) {
-      G4std::vector<Particle*>::iterator Y = X--;
+      std::vector<Particle*>::iterator Y = X--;
       delete *Y;
       --Nquark;
     }
@@ -1122,10 +1122,10 @@ void Radiation::init(double dt)
 
 void Radiation::FindCorrelations() 
 {
-  G4std::vector<int> erase;
+  std::vector<int> erase;
   const int N = 2;
   for (int i=0; i<Nquark; i++) 
-    if ( G4std::find(erase.begin(),erase.end(),i) == erase.end() ) {
+    if ( std::find(erase.begin(),erase.end(),i) == erase.end() ) {
       int* ind = new int[N];
       double* dist = new double[N];
       for (int k=0; k<N; k++) {
@@ -1133,7 +1133,7 @@ void Radiation::FindCorrelations()
 	ind[k] = 0;
       }
       for (int j=0; j<Nquark; j++) {
-        if ( i!=j && G4std::find(erase.begin(),erase.end(),j) == erase.end() ) {
+        if ( i!=j && std::find(erase.begin(),erase.end(),j) == erase.end() ) {
           //       G4cerr << List[j]->Momentum() << "  " << List[j]->E() << G4endl;
           Vektor3 d = dr(List[i]->Coordinates(),List[j]->Coordinates()-List[j]->Momentum()/List[j]->E()*List[j]->Time());
           double ld = length(d);
@@ -1186,7 +1186,7 @@ void Radiation::FindCorrelations()
       delete [] dist;
     }
   if ( erase.size() ) {
-    G4std::sort(erase.begin(),erase.end(),G4std::greater<int>());
+    std::sort(erase.begin(),erase.end(),std::greater<int>());
     G4cerr << "#  direct " << erase.size() << G4endl;
     for (int j=0; j<erase.size(); j++) {
       delete List[erase[j]];

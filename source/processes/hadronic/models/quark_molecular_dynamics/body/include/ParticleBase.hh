@@ -3,7 +3,7 @@
 
 #include "newvector.hh"
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class String;
 class QuantumState;
@@ -13,7 +13,7 @@ class RGB;
 
 class ParticleBase
 {
-  friend G4std::ostream& operator<<(G4std::ostream&,const ParticleBase&);
+  friend std::ostream& operator<<(std::ostream&,const ParticleBase&);
 public:
   virtual ~ParticleBase() {}
   virtual int PDGCode() const = 0;

@@ -29,10 +29,10 @@
 #include "CLHEP/Hist/Tuple.h"
 #include "Randomize.hh"
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include <assert.h>
-#include "g4std/iostream"
+#include <iostream>
 #include <G4KineticTrack.hh>
 
 #include "G4PionMinus.hh"

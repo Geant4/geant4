@@ -35,7 +35,7 @@ void G4UppTrackVector::add(const G4KineticTrackVector& v)
 
     
 
-void G4UppTrackVector::add(const G4std::vector<G4Nucleon *> & v, const G4int g)
+void G4UppTrackVector::add(const std::vector<G4Nucleon *> & v, const G4int g)
 {
   for (unsigned int i=0; i<v.size(); i++) {
     G4UppTrack* newTrack = new G4UppTrack(*v[i],g);

@@ -10,7 +10,7 @@
 #include "DistributionFunction.hh"
 #include "undef.hh"
 #include "Pattern.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class decayMode;
 class ParticleDecayModes;
@@ -69,7 +69,7 @@ public:
   bool isDiquark() const { return fabs(fabs(B())-0.5)<0.5 && fabs(B())>0.5; }
   bool isGluon() const { return (maxColor() == 8); }
 
-  void writeOut(G4std::ostream& o) const;
+  void writeOut(std::ostream& o) const;
 };
 
 class ParticleType : public QuantumNumbers,public Knot<ParticleType>
@@ -86,27 +86,27 @@ class ParticleType : public QuantumNumbers,public Knot<ParticleType>
   };
   friend class MassDist;
   friend class ParticleDecayModes;
-  friend G4std::ostream& operator<<(G4std::ostream& o,const ParticleType& x) { x.writeOut(o); return o; }
+  friend std::ostream& operator<<(std::ostream& o,const ParticleType& x) { x.writeOut(o); return o; }
   friend bool operator==(const ParticleType& x,const ParticleType& y);
   int id,g;
   double minmass,width,BWnorm;
   
-  void getProbab(double,G4std::vector<double>&,G4std::vector<ParticleType*>&,bool = false) const;
+  void getProbab(double,std::vector<double>&,std::vector<ParticleType*>&,bool = false) const;
   ParticleType();
 public:
-  ParticleType(G4std::istream&);
+  ParticleType(std::istream&);
   ParticleType& selectType(double mass) const;
-  ParticleType& selectType(int,const G4std::vector<ParticleBase*>& P,double m) const;
+  ParticleType& selectType(int,const std::vector<ParticleBase*>& P,double m) const;
   ParticleType& selectType() const;
   double selectMass(double Mmax) const;
-  virtual void ClassInfo(G4std::ostream& o) const { o << " ("<<id << ") "; }
+  virtual void ClassInfo(std::ostream& o) const { o << " ("<<id << ") "; }
   virtual double getMass(double Emax = 0.0) const;
   double getLifetime() const;
   double getWidth() const { return width; }
   int degeneracy() const { return int(g*(2*Spin()+1)*(2*Isospin()+1)); }
   virtual double isEqualTo(const ParticleType& x) const;
 
-  void writeOut(G4std::ostream& o) const;
+  void writeOut(std::ostream& o) const;
   class undefinedParticle {};
 private:
 };

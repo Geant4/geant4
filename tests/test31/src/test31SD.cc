@@ -114,7 +114,7 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int trIDnow  = track->GetTrackID();
   G4double tkin  = track->GetKineticEnergy(); 
   /*
-  G4cout << G4std::setw(14)
+  G4cout << std::setw(14)
          <<  "Next step: id= " << trIDnow 
          << " e= " << tkin << " r= " << track->GetPosition() << G4endl;
   */

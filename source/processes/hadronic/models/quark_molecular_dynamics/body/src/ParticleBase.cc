@@ -2,7 +2,7 @@
 #include "String.hh"
 #include "ParticleType.hh"
 
-G4std::ostream& operator<<(G4std::ostream& o,const ParticleBase& p)
+std::ostream& operator<<(std::ostream& o,const ParticleBase& p)
 {
   o << p.Name()        << " (" 
     << p.PDGCode()     << "): " 

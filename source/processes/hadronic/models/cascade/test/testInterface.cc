@@ -16,8 +16,8 @@
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 int main(int argc, char **argv ) {
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv ) {
 
   G4int bulletType = 0;
 
-  G4std::vector<G4double>  momentumBullet(4, 0.0);
+  std::vector<G4double>  momentumBullet(4, 0.0);
   momentumBullet[0] = 1.37126;
   momentumBullet[3] = 1.5;
 
@@ -38,7 +38,7 @@ int main(int argc, char **argv ) {
   G4NucleiModel*   model = NULL;
 
   G4double theNucleusA = 1;
-  G4std::vector<G4double> targetMomentum(4, 0.0);
+  std::vector<G4double> targetMomentum(4, 0.0);
 
   G4CollisionOutput output;
 
@@ -79,8 +79,8 @@ int main(int argc, char **argv ) {
   
     // Convert cascade data to use hadronics interface
 
-    G4std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-    G4std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+    std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
+    std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
     G4int numSecondaries = nucleiFragments.size()+particles.size();
     cout << "num secondaries: " << numSecondaries << G4endl;
@@ -90,7 +90,7 @@ int main(int argc, char **argv ) {
 
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 	outgoingParticle = ipart->type();
-	G4std::vector<G4double> mom = ipart->getMomentum();
+	std::vector<G4double> mom = ipart->getMomentum();
 	G4double ekin = ipart->getKineticEnergy() * GeV;
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	aMom = aMom.unit();
@@ -103,7 +103,7 @@ int main(int argc, char **argv ) {
       for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
 	{
 	  G4double eKin = ifrag->getKineticEnergy() * GeV;
-	  G4std::vector<G4double> mom = ifrag->getMomentum();
+	  std::vector<G4double> mom = ifrag->getMomentum();
 	  G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	  aMom = aMom.unit();
 

@@ -1,4 +1,4 @@
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
@@ -31,7 +31,7 @@
 #include "globals.hh"
 
 
-G4std::ostream* Output::fileout = 0;
+std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -242,7 +242,7 @@ int main(int argc,char* argv[]) {
 
   Blob->whatAmI(G4cerr);
 
-  Output::fileout = new G4std::ofstream(Dir+"/output.out");
+  Output::fileout = new std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
 
@@ -300,7 +300,7 @@ int main(int argc,char* argv[]) {
       while ( ((Time < 0) && (box.Nquark > 0)) || (box.Time() < Time) ) {
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = G4std::min(t1,(double)Time);
+          t1 = std::min(t1,(double)Time);
 
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {

@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////
 //
-// $Id: EnergyAngleCrossSection.cc,v 1.1 2003-05-27 13:44:48 hpw Exp $
+// $Id: EnergyAngleCrossSection.cc,v 1.2 2003-06-19 14:44:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "EnergyAngleCrossSection.hh"
@@ -16,7 +16,7 @@ EnergyAngleCrossSection::EnergyAngleCrossSection()
 {}
 
 
-EnergyAngleCrossSection::EnergyAngleCrossSection(G4std::ifstream datafile)
+EnergyAngleCrossSection::EnergyAngleCrossSection(std::ifstream datafile)
 {
   if (!datafile.good()) G4Exception(" Cannot find file ");
 
@@ -26,7 +26,7 @@ EnergyAngleCrossSection::EnergyAngleCrossSection(G4std::ifstream datafile)
   char fline[128];
   while ((tag == -1) && !datafile.eof()) {
     datafile.getline(fline,128);
-    G4std::string sline(fline);
+    std::string sline(fline);
     tag = sline.find("startdata");
   }
   if (tag == -1) G4Exception(" Failed to find startdata tag ");
@@ -48,7 +48,7 @@ EnergyAngleCrossSection::~EnergyAngleCrossSection()
 {}
 
 
-G4std::vector<G4double>&
+std::vector<G4double>&
 EnergyAngleCrossSection::GetEnergies()
 {
   Energies.clear();
@@ -60,7 +60,7 @@ EnergyAngleCrossSection::GetEnergies()
 }
 
  
-G4std::vector<G4double>&
+std::vector<G4double>&
 EnergyAngleCrossSection::GetAngles()
 {
   Angles.clear();
@@ -83,13 +83,13 @@ EnergyAngleCrossSection::GetAngles()
  
 // GetEnergySpectrum without argument
 
-G4std::vector<G4std::pair<G4double, G4double> >& 
+std::vector<std::pair<G4double, G4double> >& 
 EnergyAngleCrossSection::GetEnergySpectrum()
 {
   EnergySpectrum.clear();
   G4int i;
   for (i=0; i < nDataPts; i++){
-    G4std::pair<G4double, G4double> epair;
+    std::pair<G4double, G4double> epair;
     epair.first = ddcs[i][0];
     epair.second = ddcs[i][2];
     EnergySpectrum.push_back(epair);
@@ -99,14 +99,14 @@ EnergyAngleCrossSection::GetEnergySpectrum()
  
 // GetEnergySpectrum with angle argument
 
-G4std::vector<G4std::pair<G4double, G4double> >& 
+std::vector<std::pair<G4double, G4double> >& 
 EnergyAngleCrossSection::GetEnergySpectrum(const G4double& angle)
 {
   EnergySpectrum.clear();
   G4int i;
   for (i=0; i < nDataPts; i++){
     if (ddcs[i][1] == angle) {
-      G4std::pair<G4double, G4double> epair;
+      std::pair<G4double, G4double> epair;
       epair.first = ddcs[i][0];
       epair.second = ddcs[i][2];
       EnergySpectrum.push_back(epair);
@@ -116,14 +116,14 @@ EnergyAngleCrossSection::GetEnergySpectrum(const G4double& angle)
 }
 
 
-G4std::vector<G4std::pair<G4double, G4double> >&
+std::vector<std::pair<G4double, G4double> >&
 EnergyAngleCrossSection::GetAngularDistribution(const G4double& energy)
 {
   AngleSpectrum.clear();
   G4int i;
   for (i=0; i < nDataPts; i++){
     if (ddcs[i][0] == energy) {
-      G4std::pair<G4double, G4double> apair;
+      std::pair<G4double, G4double> apair;
       apair.first = ddcs[i][1];
       apair.second = ddcs[i][2];
       AngleSpectrum.push_back(apair);

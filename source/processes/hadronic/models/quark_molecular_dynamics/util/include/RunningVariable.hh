@@ -20,7 +20,7 @@ public:
   t advance() { if (!isRange) ++leftRange; return cur += dValue; }
   t& operator=(const t& y) { return cur = y; }
   t& operator=(const LoopVariable<t>& y) { return cur = y.cur; }
-  G4std::ostream& Print(G4std::ostream& o) { return o << minValue << " .. " << maxValue << ", " << dValue<< " "; }
+  std::ostream& Print(std::ostream& o) { return o << minValue << " .. " << maxValue << ", " << dValue<< " "; }
 private:
   int leftRange,isRange;
   t minValue;

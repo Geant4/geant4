@@ -1,11 +1,11 @@
 #ifndef __NBODY__
 #define __NBODY__
 
-#include "g4std/vector"
+#include <vector>
 #include <string.h>
 #include "Random.hh"
 #include "newvector.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include <math.h>
 #include "String.hh"
 #include "ParticleBase.hh"
@@ -35,14 +35,14 @@ protected:
   virtual inline Vektor3 dHdx(int i) { return Vektor3(); }
 public:
   int N,Npart;
-  G4std::vector<Particle*> List;
+  std::vector<Particle*> List;
   Nbody(double = 1e-6);
   virtual ~Nbody();
   virtual void checkRange() {}
   inline virtual Vektor3 dr(const Vektor3& x1,const Vektor3& x2) const;
   inline virtual double distance(int i,int j) const;
   virtual void one_step();
-  virtual void print(G4std::ostream& o);
+  virtual void print(std::ostream& o);
 
   void setTime(double t) { time = t; }
   double Time() const { return time; }

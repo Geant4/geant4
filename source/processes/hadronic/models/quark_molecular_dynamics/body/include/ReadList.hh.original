@@ -6,8 +6,8 @@
 #endif
 
 #include "globals.hh"
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <iostream>
+#include <vector>
 
 //
 //  Reads members of a class t from file.

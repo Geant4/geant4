@@ -27,7 +27,7 @@
 
 #include "G4UppTrackVector.hh"
 #include "G4UppTrackChange.hh"
-#include "g4std/vector"
+#include <vector>
 
 
 class G4UppInteraction
@@ -46,7 +46,7 @@ public:
 
 private:
 
-  G4std::vector<G4int> IncomingParticleIndex;
+  std::vector<G4int> IncomingParticleIndex;
   G4UppTrackVector OutgoingParticles;
   G4double InteractionTime;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: LowEHadronNuclear.cc,v 1.1 2001-09-21 17:38:47 hpw Exp $
+// $Id: LowEHadronNuclear.cc,v 1.2 2003-06-19 14:39:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -29,8 +29,8 @@
 #include "HadronNuclear/batch_monitor/ParticleInfo.h"
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Timer.hh"
  
@@ -487,9 +487,9 @@
     do {
       G4cout << " 0) Lead      1)  Zirconium"<< G4endl;
       G4cout << "Please enter the material code" << G4endl;
-      G4cout << "\tFrom: " << G4std::flush;
+      G4cout << "\tFrom: " << std::flush;
       G4cin >> kl;
-      G4cout << "\tTo: " << G4std::flush;
+      G4cout << "\tTo: " << std::flush;
       G4cin >> kr;
     } while( kl < 0 || kr >= numberOfMaterials || kl > kr );
     
@@ -503,19 +503,19 @@
       G4cout << "20) anti_xi-     21) xi0           22) anti_xi0     23) omega-" << G4endl;
       G4cout << "24) anti_omega-" << G4endl;
       G4cout << "Please enter the particle type code"<< G4endl;
-      G4cout << "\tFrom: " << G4std::flush;
+      G4cout << "\tFrom: " << std::flush;
       G4cin >> il;
-      G4cout << "\tTo: " << G4std::flush;
+      G4cout << "\tTo: " << std::flush;
       G4cin >> ir;
     } while( il < 0 || ir > 24 || il > ir );
 
-    G4cout << "Please enter the initial kinetic energy (GeV): "<< G4std::flush;
+    G4cout << "Please enter the initial kinetic energy (GeV): "<< std::flush;
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV;
 
     
     G4int nEvents;
-    G4cout << "Please enter the number of events: "<< G4std::flush;
+    G4cout << "Please enter the number of events: "<< std::flush;
     G4cin >> nEvents;
     
     if( kl == kr && il == ir ) {
@@ -589,7 +589,7 @@
 	  aStepPoint.SetMaterial(theMaterials[k]);
           aStep.SetPreStepPoint(&aStepPoint);
 	  aStep.SetPostStepPoint(&aStepPoint);
-	  G4cout << "Event:" << G4std::setw(4) << l+1 << 
+	  G4cout << "Event:" << std::setw(4) << l+1 << 
 	            " Material:" << theMaterials[k]->GetName() <<
 	            " Particle:" << theParticles[i]->GetParticleName() << '\t' << G4endl;
 

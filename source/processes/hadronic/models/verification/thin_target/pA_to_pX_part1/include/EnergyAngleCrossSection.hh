@@ -9,34 +9,34 @@
 /////////////////////////////////////////////////////////////////////
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/fstream"
+#include <vector>
+#include <fstream>
 
 class EnergyAngleCrossSection
 {
   public:
     EnergyAngleCrossSection();
-    EnergyAngleCrossSection(G4std::ifstream datafile);
+    EnergyAngleCrossSection(std::ifstream datafile);
     ~EnergyAngleCrossSection();
 
-    G4std::vector<G4double>& GetEnergies();
-    G4std::vector<G4double>& GetAngles();
+    std::vector<G4double>& GetEnergies();
+    std::vector<G4double>& GetAngles();
 
-    G4std::vector<G4std::pair<G4double, G4double> >& 
+    std::vector<std::pair<G4double, G4double> >& 
           GetEnergySpectrum();
  
-    G4std::vector<G4std::pair<G4double, G4double> >& 
+    std::vector<std::pair<G4double, G4double> >& 
           GetEnergySpectrum(const G4double& angle);
  
-    G4std::vector<G4std::pair<G4double, G4double> >& 
+    std::vector<std::pair<G4double, G4double> >& 
           GetAngularDistribution(const G4double& energy);
 
   private:
 
-    G4std::vector<G4double> Angles; 
-    G4std::vector<G4double> Energies; 
-    G4std::vector<G4std::pair<G4double, G4double> > EnergySpectrum; 
-    G4std::vector<G4std::pair<G4double, G4double> > AngleSpectrum;
+    std::vector<G4double> Angles; 
+    std::vector<G4double> Energies; 
+    std::vector<std::pair<G4double, G4double> > EnergySpectrum; 
+    std::vector<std::pair<G4double, G4double> > AngleSpectrum;
 
     G4int nDataPts; 
     G4double ddcs[200][4];

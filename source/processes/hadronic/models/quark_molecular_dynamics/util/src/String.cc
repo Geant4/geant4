@@ -1,17 +1,17 @@
 #include "String.hh"
 #include <stdlib.h>
 #include <string.h>
-#include "g4std/iostream"
+#include <iostream>
 #include <ctype.h>
 
 typedef Array<String> AString;
 
-G4std::ostream& operator<<(G4std::ostream& o,const String& s)
+std::ostream& operator<<(std::ostream& o,const String& s)
 {
   return (o << s.data);
 }
 
-G4std::istream& operator>>(G4std::istream& in,String& s)
+std::istream& operator>>(std::istream& in,String& s)
 {
   char p[8000];
   in >> p;
@@ -180,7 +180,7 @@ String& String::erase(const String& s)
   return *this;
 }
 
-void String::putToStream(G4std::istream& in) const
+void String::putToStream(std::istream& in) const
 {
   in.putback(' ');
   for (int i=len; i; i--) 

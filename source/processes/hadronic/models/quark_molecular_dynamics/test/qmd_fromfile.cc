@@ -1,4 +1,4 @@
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
@@ -31,7 +31,7 @@
 #include "globals.hh"
 
 
-G4std::ostream* Output::fileout = 0;
+std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -142,14 +142,14 @@ bool prof_tube::homogeneous(Vektor4& x)
   return true;
 }
 
-void skipline(G4std::istream& in,int n=1) {
+void skipline(std::istream& in,int n=1) {
   char c;
   for (int i=0; i<n; i++) {
      while ( in.get(c) && c != '\n' ) ;
   }
 }
 
-double readEvent(G4std::istream& in,bool final = true) 
+double readEvent(std::istream& in,bool final = true) 
 {
   int S,C,col;
   double B,m,i,i3,s,s3,lt,time,flag;
@@ -305,11 +305,11 @@ int main(int argc,char* argv[]) {
            >> deconf >> kapp >> len >> Thermalize >> M >> PtoN >> file
            >> ForceDecay >> transprof >> skip;
     inputStream >> ReadIn;
-    G4std::istream* in;
+    std::istream* in;
     if ( input == "-" ) 
       in = &cin;
     else
-      in = new G4std::ifstream((char*)String(input));
+      in = new std::ifstream((char*)String(input));
     *in >> ReadIn;
   }
 
@@ -352,12 +352,12 @@ int main(int argc,char* argv[]) {
   double tau = 1.0;   // fm, formation time of QGP
   double tau_c = 0.1; // fm, formation tiem of c-cbar
 
-  G4std::istream* readIn = 0;
+  std::istream* readIn = 0;
   if ( file.isValid() ) 
     if ( file == "-" ) 
       readIn = &cin;
     else	
-      readIn = new G4std::ifstream((char*)(String)file);
+      readIn = new std::ifstream((char*)(String)file);
 
 
 
@@ -376,7 +376,7 @@ int main(int argc,char* argv[]) {
   Blob->whatAmI(G4cerr);
 
 
-  Output::fileout = new G4std::ofstream(Dir+"/output.out");
+  Output::fileout = new std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
 
@@ -441,7 +441,7 @@ int main(int argc,char* argv[]) {
 
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = G4std::min(t1,(double)Time);
+          t1 = std::min(t1,(double)Time);
 
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {

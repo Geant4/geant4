@@ -30,7 +30,7 @@
 #define G4HEPREPSCENEHANDLER_HH 1
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include <stack>
 #include <map>
 
@@ -117,13 +117,13 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         std::stack<G4String> eventParentTypeFullNameS;
         std::stack<HEPREP::HepRepInstance *> eventParentInstanceS;
 
-        G4std::ostream* out;
+        std::ostream* out;
         HEPREP::HepRepFactory* factory;
         XMLHepRepStreamer* writer;
         HEPREP::HepRep* heprep;
 
-        G4std::ostream* geomTypeOut;
-        G4std::ostream* geomInstanceOut;
+        std::ostream* geomTypeOut;
+        std::ostream* geomInstanceOut;
         HEPREP::HepRepFactory* geomTypeHepRepFactory;
         HEPREP::HepRepFactory* geomInstanceHepRepFactory;
         HEPREP::HepRepWriter* geomTypeWriter;
@@ -132,8 +132,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRep* geomInstanceHeprep;
         HEPREP::HepRepInstanceTree* geomInstanceTree;
 
-        G4std::ostream* eventTypeOut;
-        G4std::ostream* eventInstanceOut;
+        std::ostream* eventTypeOut;
+        std::ostream* eventInstanceOut;
         HEPREP::HepRepFactory* eventTypeHepRepFactory;
         HEPREP::HepRepFactory* eventInstanceHepRepFactory;
         HEPREP::HepRepWriter* eventTypeWriter;
@@ -154,8 +154,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         HEPREP::HepRepInstance* CreateGeomInstance(G4String typeName, G4int depth);
         HEPREP::HepRepInstance* CreateEventInstance(G4String typeName, G4int depth,
-					    const G4std::map<G4String,G4AttDef>* attDefs = NULL,
-					    G4std::vector<G4AttValue>* attValues = NULL);
+					    const std::map<G4String,G4AttDef>* attDefs = NULL,
+					    std::vector<G4AttValue>* attValues = NULL);
 
         bool IsEventData ();
 

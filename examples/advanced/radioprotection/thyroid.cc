@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: thyroid.cc,v 1.4 2003-05-23 11:55:57 francy Exp $
+// $Id: thyroid.cc,v 1.5 2003-06-19 14:38:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -130,7 +130,7 @@ if (argc==1)   // Define UI session for interactive mode.
  UI->ApplyCommand("/event/verbose 0");
  UI->ApplyCommand("/tracking/verbose 0");
 
- G4std::ofstream ofs;
+ std::ofstream ofs;
  pRunManager->BeamOn(NumberOfEvents);
 
  // Job termination

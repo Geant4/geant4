@@ -68,7 +68,7 @@ public: // Without description
       G4int evno;
       G4int evnOld;
       G4int trIDold;
-      G4std::vector<G4double> energy;
+      std::vector<G4double> energy;
       G4int numAbs;
       G4double backEnergy;
       G4double leakEnergy;
