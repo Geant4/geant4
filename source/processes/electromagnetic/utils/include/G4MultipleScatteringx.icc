@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.9 2001-08-27 11:08:32 urban Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.10 2001-08-28 14:05:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ------- G4MultipleScatteringx physics process ------
@@ -30,12 +30,21 @@
 // Modified:
 //
 // 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
-// 23-08-01, new angle and z distribution,energy dependence reduced,
-//           Store,Retrieve methods commented out temporarily, L.Urban
-// 27-08-01, bugfix in AlongStepDoIt, L.Urban
+// 23-08-01 new angle and z distribution,energy dependence reduced,
+//          Store,Retrieve methods commented out temporarily, L.Urban
+// 27-08-01 bugfix in AlongStepDoIt, L.Urban
+// 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved to .cc file (mma)
 //
 //---------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4bool G4MultipleScatteringx::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return(particle.GetPDGCharge() != 0.);
+}
+  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MultipleScatteringx::AlongStepGetPhysicalInteractionLength(
@@ -55,117 +64,6 @@ inline G4double G4MultipleScatteringx::AlongStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MultipleScatteringx::GetContinuousStepLimit(
-                                     const G4Track& track,                  
-                                     G4double,
-                                     G4double currentMinimumStep,
-                                     G4double&)
-{
-  G4double zPathLength,tPathLength ;
-  const G4DynamicParticle* aParticle ;
-  G4Material* aMaterial ;
-  G4double KineticEnergy,tau,z0,kz ;
-  G4bool isOut ;
-
-  static const G4double tlimmin = 1.e-6*mm;
-  G4double tlimit;
-
-  // this process is not a candidate for selection by default !!!!!!!!
-  valueGPILSelectionMSC = NotCandidateForSelection;
-
-  tPathLength = currentMinimumStep;
-
-  aMaterial = track.GetMaterial();
-  materialIndex = aMaterial->GetIndex();
-
-  aParticle = track.GetDynamicParticle();
-  KineticEnergy = aParticle->GetKineticEnergy();
-
-  if ((lastMaterial != aMaterial) || (lastKineticEnergy != KineticEnergy))
-    {
-      lastKineticEnergy = KineticEnergy ;
-      materialIndex = aMaterial->GetIndex() ;
-
-      fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                               (materialIndex)->GetValue(KineticEnergy,isOut);
-
-      lastMaterial = aMaterial;
-    }
-
-  // special treatment near boundaries ?
-  if (boundary)  
-  {
-    // step limitation at boundary ?
-    if(track.GetCurrentStepNumber() > 1)
-    {
-      tlimit = G4std::max(fTransportMeanFreePath,tlimmin) ;
-
-      if((track.GetStep()->GetPreStepPoint()->GetSafety() < tlimit)
-              && (tPathLength > tlimit))
-      {
-        tPathLength = factlim*fTransportMeanFreePath ;
-        valueGPILSelectionMSC = CandidateForSelection;
-      }
-    }   
-  }
-
-  //  do the true -> geom transformation
-  lambda1 = -1. ;
-  z1 = 1.e10 ;
-
-  if(fTransportMeanFreePath > biglambda) 
-  {
-    zPathLength = tPathLength ;
-  }
-  else
-  {
-    range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
-                                         KineticEnergy,aMaterial);
-    tau = tPathLength/fTransportMeanFreePath ;
-
-    if(tPathLength/range < dtrl)
-    {
-      zmean       = fTransportMeanFreePath*(1.-exp(-tau)) ;
-    }
-    else
-    {  
-      T1 = G4EnergyLossTables::GetPreciseEnergyFromRange(aParticle->GetDefinition(),
-                                  range-0.5*tPathLength,aMaterial);
-      lambda1 = (*theTransportMeanFreePathTable)
-                        (materialIndex)->GetValue(T1,isOut);
-      z1          = fTransportMeanFreePath*(1.-exp(-0.5*tau)) ;
-      cth1 = exp(-0.5*tau) ;
-      zmean       = z1 +      
-                    lambda1*(1.-exp(-0.5*tPathLength/lambda1))*cth1 ;
-    }
-    
-    //  sample z
-    if((pcz > 0.) && (tau < 1.5))
-    {
-      z0 = zmean+pcz*(tPathLength-zmean) ;
-      kz = (2.*zmean-tPathLength)/(z0-zmean) ;
-   
-      if(G4UniformRand() < z0/tPathLength)
-      {
-         zPathLength = z0*exp(log(G4UniformRand())/(kz+1.)) ;
-      }
-      else
-      {
-         zPathLength = tPathLength-(tPathLength-z0)*exp(log(1.-G4UniformRand())/(kz+1.)) ;
-      }
-    }
-    else
-     zPathLength = zmean ;
-  }
-
-  tLast = tPathLength;
-  zLast = zPathLength; 
-
-  return zPathLength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline G4double G4MultipleScatteringx::GetMeanFreePath(
                                             const G4Track& track,
                                             G4double,
@@ -178,67 +76,7 @@ inline G4double G4MultipleScatteringx::GetMeanFreePath(
   *condition = Forced;
   return DBL_MAX;
 }
-  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
-                                       const G4Track& track,const G4Step& Step)
-{				                 
-  // only a geom path->true path transformation is performed
-
-  G4double geomPathLength, truePathLength ;
-
-  fParticleChange.Initialize(track);
-
-  geomPathLength = track.GetStepLength() ;
-  
-  if(fTransportMeanFreePath > biglambda) 
-  {                                              
-    truePathLength = geomPathLength ;  
-  }                                             
-  else if(geomPathLength == zLast)
-  {     
-    truePathLength = tLast ;
-  }   
-  else 
-  { 
-     if(geomPathLength <= z1)
-     {
-       if(geomPathLength < fTransportMeanFreePath)
-         truePathLength = -fTransportMeanFreePath*log(1.-geomPathLength/fTransportMeanFreePath) ;
-       else
-         truePathLength = range ;
-
-       lambda1 = -1. ;
-     }
-     else
-     {
-       if((geomPathLength-z1)/(cth1*lambda1) < 1.) 
-       {
-         truePathLength = 0.5*tLast-lambda1*log(1.-(geomPathLength-z1)/(cth1*lambda1)) ;
-       }
-       else 
-       {
-         truePathLength = range ;
-       }
-     }
-  } 
-
-  fParticleChange.SetTrueStepLength(truePathLength);
-
-  return &fParticleChange;
-  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline 
-G4bool G4MultipleScatteringx::IsApplicable(const G4ParticleDefinition& particle)
-{
-  return(particle.GetPDGCharge() != 0.);
-}
-  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 

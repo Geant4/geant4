@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001-08-23 08:35:05 urban Exp $
+$Id: History,v 1.23 2001-08-28 14:05:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+ 28 aug 01: mma
+- G4MultipleScatteringx: small modifs in BuildPhysicsTable,
+  ComputeTransportCrossSection, PostStepDoIt. 
+  GetContinuousStepLimit and AlongStepDoIt moved to .cc file
 
  23 aug 01: L. Urban
 - new angle and z(geom. pathlength) distributions,

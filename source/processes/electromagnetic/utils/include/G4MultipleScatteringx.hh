@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.hh,v 1.5 2001-08-23 08:31:04 urban Exp $
+// $Id: G4MultipleScatteringx.hh,v 1.6 2001-08-28 14:05:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //    --------- G4MultipleScatteringx physics process --------
@@ -86,40 +86,40 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
  //		               const G4String& directory, G4bool);
        // retrieve TransportMeanFreePath tables from an external file
        // specified by 'directory' 
-
-   G4double GetContinuousStepLimit(const G4Track& aTrack,
-                                   G4double previousStepSize,
-                                   G4double currentMinimumStep,
-                                   G4double& currentSafety) ; 
-
-   G4double GetMeanFreePath(const G4Track& aTrack,
-                            G4double previousStepSize,
-                            G4ForceCondition* condition) ;
-
-   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
-
-   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep) ;
-
-
-   G4double GetLambda(G4double KineticEnergy,G4Material* material);
-
-   void Setpalfa(G4double value) { palfa = value ; } ;
-   void Setpbeta(G4double value) { pbeta = value ; } ;
-   void Setpgamma(G4double value) { pgamma = value ; } ;
-   void Setpq0(G4double value) { pq0 = value ; } ;
-   void Setpq1(G4double value) { pq1 = value ; } ;
-   void Setpc0(G4double value) { pc0 = value ; } ;
-   void Setpcz(G4double value) { pcz = value ; } ;
-   void Setdtrl(G4double value) { dtrl = value ; } ;
-
-   void SetBoundary(G4bool value) { boundary = value ;} ;
-   void SetFactlim(G4double val) { factlim=val;};
+       
 
    G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
                                                   G4double  previousStepSize,
                                                   G4double  currentMinimumStep,
                                                   G4double& currentSafety,
                                                   G4GPILSelection* selection);
+						  
+   G4double GetContinuousStepLimit(const G4Track& aTrack,
+                                   G4double previousStepSize,
+                                   G4double currentMinimumStep,
+                                   G4double& currentSafety); 
+
+   G4double GetMeanFreePath(const G4Track& aTrack,
+                            G4double previousStepSize,
+                            G4ForceCondition* condition);
+			    
+   G4double GetLambda(G4double KineticEnergy,G4Material* material);
+   
+   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
+
+   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep);
+
+   void Setpalfa(G4double value)                {palfa = value;};
+   void Setpbeta(G4double value)                {pbeta = value;};
+   void Setpgamma(G4double value)               {pgamma = value;};
+   void Setpq0(G4double value)                  {pq0 = value;};
+   void Setpq1(G4double value)                  {pq1 = value;};
+   void Setpc0(G4double value)                  {pc0 = value;};
+   void Setpcz(G4double value)                  {pcz = value;};
+   void Setdtrl(G4double value)                 {dtrl = value;};
+
+   void SetBoundary(G4bool value)               {boundary = value;};
+   void SetFactlim(G4double val)                {factlim=val;};
 
    void SetTuning(G4double value)               {tuning = value;};
    void SetCparm (G4double value)               {cparm  = value;};
@@ -151,35 +151,31 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
 
    G4double fTransportMeanFreePath;
 
-   G4double biglambda,taubig,tausmall,taulim ;
+   G4double biglambda,taubig,tausmall,taulim;
 
    G4double LowestKineticEnergy;
    G4double HighestKineticEnergy;
-   G4int TotBin;
+   G4int    TotBin;
 
    const G4Electron* theElectron;
    const G4Positron* thePositron;
 
    G4Material* lastMaterial;
-   G4double lastKineticEnergy;
-   G4int materialIndex ;
+   G4double    lastKineticEnergy;
+   G4int       materialIndex;
   
    G4double tLast;
    G4double zLast;
 
    // model parameters
-   G4bool boundary ;               // spec. handling near boundaries
-   G4double factlim ;
-   G4GPILSelection  valueGPILSelectionMSC ;
-
-   G4double pcz,zmean ;                  // z distribution 
-
-   G4double palfa,pbeta,pgamma,pq0,pq1,pc0 ; // theta distr.
-
-   G4double range,T1,lambda1,cth1,z1,t1,dtrl ;
-
-   G4double tuning;        //  param. for lambda tuning
-   G4double cparm;         //          "
+   G4bool   boundary;                          // spec. handling near boundaries
+   G4double factlim;
+   G4GPILSelection  valueGPILSelectionMSC;
+   G4double pcz,zmean;                         // z distribution 
+   G4double palfa,pbeta,pgamma,pq0,pq1,pc0;    // theta distr.
+   G4double range,T1,lambda1,cth1,z1,t1,dtrl;
+   G4double tuning;                            //  param. for lambda tuning
+   G4double cparm;                             //          "
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
@@ -188,8 +184,7 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4double NuclCorrPar;
    G4double FactPar;
 
-   G4ParticleChangeForMSC fParticleChange;
-   
+   G4ParticleChangeForMSC fParticleChange; 
 };
 
 #include "G4MultipleScatteringx.icc"
