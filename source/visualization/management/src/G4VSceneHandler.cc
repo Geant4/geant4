@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.10 2000-05-02 09:49:36 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.11 2000-05-22 08:27:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -470,12 +470,10 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
-  G4VisManager* pVMan = G4VisManager::GetInstance ();
-
   os << "Scene " << s.fName << " has "
      << s.fViewerList.entries () << " viewers:";
   for (int i = 0; i < s.fViewerList.entries (); i++) {
-    os << "\n  " << s.fViewerList [i];
+    os << "\n  " << *(s.fViewerList [i]);
   }
 
   os << "\n  " << *s.fpScene;
