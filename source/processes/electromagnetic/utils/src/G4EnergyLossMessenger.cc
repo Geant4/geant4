@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.1 2000-06-22 13:29:46 maire Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.2 2000-10-30 06:50:49 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "g4std/strstream"
 
@@ -44,6 +45,11 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   SubSecCmd->SetParameterName("choice",true);
   SubSecCmd->SetDefaultValue(true);
   SubSecCmd->AvailableForStates(Idle);
+
+  MinDeltaCutInRangeCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/mindeltacutinrange",this);
+  MinDeltaCutInRangeCmd->SetGuidance("Set the min. cut for subcutoff delta in range .");
+  MinDeltaCutInRangeCmd->SetParameterName("rcmin",true);
+  MinDeltaCutInRangeCmd->AvailableForStates(Idle);
 
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters.");
@@ -73,6 +79,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete RndmStepCmd;
   delete EnlossFlucCmd;
   delete SubSecCmd;
+  delete MinDeltaCutInRangeCmd;
   delete StepFuncCmd;
 }
 
@@ -90,6 +97,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if (command == SubSecCmd)
    { G4VEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
+   }
+
+  if (command == MinDeltaCutInRangeCmd)
+   { G4VEnergyLoss::SetMinDeltaCutInRange(MinDeltaCutInRangeCmd->GetNewDoubleValue(newValue));
    }
 
   if (command == StepFuncCmd)

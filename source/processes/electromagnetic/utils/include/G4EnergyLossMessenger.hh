@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.1 2000-06-22 13:29:46 maire Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.2 2000-10-30 06:49:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 
 class G4UIcommand;
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -38,6 +39,7 @@ class G4EnergyLossMessenger: public G4UImessenger
     G4UIcmdWithABool*          RndmStepCmd;
     G4UIcmdWithABool*          EnlossFlucCmd;
     G4UIcmdWithABool*          SubSecCmd;
+    G4UIcmdWithADoubleAndUnit* MinDeltaCutInRangeCmd;
     G4UIcommand*               StepFuncCmd;
 };
 

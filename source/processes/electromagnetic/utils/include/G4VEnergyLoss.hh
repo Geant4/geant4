@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.8 2000-08-15 09:39:29 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.9 2000-10-30 06:49:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,6 +115,14 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // switch on/off the generation of the subcutoff secondaries
     // ( default = subcutoff secondary generation )
 
+    static void SetMinDeltaCutInRange(G4double value)
+                                    {MinDeltaCutInRange = value;
+                                     setMinDeltaCutInRange = true ;}
+    // sets minimal cut value for the subcutoff secondaries
+    // (i.e. the kinetic energy of these secondaries can not be
+    //	smaller than the energy corresponds to MinDeltaCutInRange).
+
+
     static void SetStepFunction (G4double c1, G4double c2)
                                {dRoverRange = c1; finalRange = c2;
                                 c1lim=dRoverRange ;
@@ -217,6 +225,12 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
    static G4bool   rndmStepFlag;    // control the randomization of the step
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
    static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
+
+   static G4double MinDeltaCutInRange; // minimum cut for delta rays
+   static G4double* MinDeltaEnergy ;
+   static G4bool* LowerLimitForced ;
+
+   static G4bool setMinDeltaCutInRange ;
 
    static G4EnergyLossMessenger* ELossMessenger;
 };
