@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.25 2001-11-09 23:17:58 japost Exp $
+// $Id: G4Transportation.cc,v 1.26 2001-11-28 18:32:07 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -91,7 +91,9 @@ G4VProcess(G4String("Transportation") )
 
   fPreviousSafety    = 0.0 ; 
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
-
+  
+  fEndGlobalTimeComputed= false;
+  fCandidateEndGlobalTime= 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -163,6 +165,7 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 
   G4bool   fieldExertsForce = false ;
   fGeometryLimitedStep = false ;
+  // fEndGlobalTimeComputed     = false ;
 
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
@@ -235,6 +238,7 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fTransportEndSpin          = track.GetPolarization();
      fParticleIsLooping         = false ;
      fMomentumChanged           = false ; 
+     fEndGlobalTimeComputed     = false ;
   }
   else
   {
@@ -252,12 +256,12 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
                     G4FieldTrack( startPosition, 
                                   track.GetMomentumDirection(),
                                   0.0, 
-				                          track.GetKineticEnergy(),
-				                          restMass,
-				                          track.GetVelocity(),
-				                          track.GetGlobalTime(),   // Laboratory fr.
-				                          track.GetProperTime(),   // Particle rest fr.
-				                          &spin                   ) ;
+				  track.GetKineticEnergy(),
+				  restMass,
+				  track.GetVelocity(),
+				  track.GetGlobalTime(),   // Laboratory fr.
+				  track.GetProperTime(),   // Particle rest fr.
+				  &spin                   ) ;
 
      if( currentMinimumStep > 0 ) 
      {
@@ -297,24 +301,25 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fMomentumChanged         = true ; 
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
-     // If the time was integrated, this will have been updated
-     fCandidateEndGlobalTime   = aFieldTrack.GetLabTimeOfFlight();
-
-#if VELOCITY_RETURNED
-     G4ThreeVector endVelocity   = aFieldTrack.GetVelocity() ;
-     G4double  veloc_sq          = endVelocity.mag2() ;
-     G4double inverse_gamma      = sqrt( 1 - veloc_sq/c_squared ) ;
-     G4double  gamma             = 1.0 / inverse_gamma;
-     G4double  kineticEnergy     = restMass*( gamma - 1.0 ) ; // Lorentz correction
-     // The equation below is more stable for small velocities.
-     G4double  kineticEnergy_agn = restMass* veloc_sq  /
-                                    (inverse_gamma * (1.0 + inverse_gamma) ) ; 
-#endif
-
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
 
-     //   fTransportEndKineticEnergy = track.GetKineticEnergy() ;
-     
+     // if( (track.GetKineticEnergy() - fTransportEndKineticEnergy) 
+     //      > perMillion * fTransportEndKineticEnergy             ){
+
+     if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() ){
+
+        // If the field can changed energy, then the time must be integrated
+        //    - so this should have been updated
+        fCandidateEndGlobalTime   = aFieldTrack.GetLabTimeOfFlight();
+	fEndGlobalTimeComputed    = true;
+	  // was ( fCandidateEndGlobalTime != track.GetGlobalTime() );
+     // a cleaner way is to have FieldTrack knowing whether time is updated.
+     }else{
+        //  The energy is unchanged by field transport,
+        //    so the time changed will be calculated elsewhere
+        fEndGlobalTimeComputed    = false;
+     }
+
      fTransportEndSpin = aFieldTrack.GetSpin();
 
      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
@@ -384,12 +389,12 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   G4double deltaTime = 0.0 ;
 
   // Calculate  Lab Time of Flight (ONLY if field Equations used it!)
-  G4double endTime   = fCandidateEndGlobalTime;
+     // G4double endTime   = fCandidateEndGlobalTime;
+     // G4double delta_time = endTime - startTime;
   G4double startTime = track.GetGlobalTime();
-  G4double delta_time = endTime - startTime;
   
-  if (delta_time == 0.0){
-     //  The time was not integrated .. make the best estimate possible
+  if (!fEndGlobalTimeComputed){
+  //  The time was not integrated .. make the best estimate possible
      G4double finalVelocity   = track.GetVelocity() ;
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity();
      G4double stepLength = track.GetStepLength();
@@ -399,11 +404,14 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
         // deltaTime = stepLength/finalVelocity ;  
         meanInverseVelocity= 0.5 * ( 1.0 / initialVelocity + 1.0 / finalVelocity );
         deltaTime = stepLength * meanInverseVelocity ; 
-     }else
-        deltaTime = stepLength/initialVelocity;
-  }
+     }else{
+        deltaTime = stepLength/initialVelocity;     
+     }
+     fCandidateEndGlobalTime   = startTime + deltaTime; 
+  }else
+     deltaTime = fCandidateEndGlobalTime - startTime;
 
-  fParticleChange. SetTimeChange( startTime + deltaTime ) ;
+  fParticleChange. SetTimeChange( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   
