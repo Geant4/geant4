@@ -1,4 +1,4 @@
-$Id: History,v 1.181 2002-03-09 03:13:05 johna Exp $
+$Id: History,v 1.182 2002-03-11 08:04:06 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -20,6 +20,7 @@ committal in the CVS repository !
 
 9th March 2002  John Allison (config-V04-00-02)
 - Fixed bug in G4VIS_USE.gmk for G4VIS_USE_OPENGLWIN32.
+- Corrected perl script g4sort_step_file.pl to specify correct path for perl.
 
 07th February 2002 Gabriele Cosmo (config-V04-00-01)
 - liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
