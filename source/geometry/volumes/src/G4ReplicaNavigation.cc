@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.11 2002-08-06 10:35:57 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.12 2003-03-31 14:39:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -826,7 +826,7 @@ G4double
 G4ReplicaNavigation::ComputeSafety(const G4ThreeVector &globalPoint,
                                    const G4ThreeVector &localPoint,
                                          G4NavigationHistory &history,
-                                   const G4double pProposedMaxLength )
+                                   const G4double )
 {
   G4VPhysicalVolume *repPhysical, *motherPhysical;
   G4VPhysicalVolume *samplePhysical, *blockedExitedVol=0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.12 2003-03-17 13:43:58 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.13 2003-03-31 14:39:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -502,7 +502,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 G4double
 G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
                                  const G4NavigationHistory& history,
-                                 const G4double pMaxLength )
+                                 const G4double )
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
   G4LogicalVolume *motherLogical;
