@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-06-21 09:11:14 allison Exp $
+$Id: History,v 1.16 1999-08-24 11:59:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 24th J.Allison (global-V00-01-00)
+- Initialised pointer in first constructor of G4DataInterpolation.
+- Included STLInterface-V00-01-00.
 
 June 21st J.Allison (global-01-00-05)
 - Changed G4Exception to abort, i.e., produce core dump.
