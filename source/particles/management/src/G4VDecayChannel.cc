@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.3 1999-04-14 10:28:32 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.4 1999-06-16 11:42:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -312,13 +312,15 @@ void G4VDecayChannel::FillDaughters()
       G4cout << "    Energy/Momentum conserevation breaks " <<endl;
       G4cout << "    parent:" << *parent_name;
       G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<endl;
-      for (index=0; index < 3; index++){
+      for (index=0; index < numberOfDaughters; index++){
         G4cout << "     daughter " << index << ":" << *daughters_name[index];
         G4cout << " mass:" << daughters[index]->GetPDGMass()/GeV << "[GeV/c/c]" <<endl;
       }
     }
 #endif
-    G4Exception("G4VDecayChannel::FillDaughters");
+    if ( sumofdaughtermass > parentmass+parent->GetPDGWidth() ) {
+      G4Exception("G4VDecayChannel::FillDaughters");
+    }
   }
 }
 
