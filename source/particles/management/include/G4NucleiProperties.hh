@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.3 1999-05-26 14:05:15 larazb Exp $
+// $Id: G4NucleiProperties.hh,v 1.4 1999-05-26 16:22:10 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ private:
 	static G4double BindingEnergy(G4double A, G4double Z);
 
 	static G4double MassExcess(G4double A, G4double Z)
-	{return GetNuclearMass(Z,A) - A*amu_c2;}
+	{return GetNuclearMass(A,Z) - A*amu_c2;}
 	
 	
 
