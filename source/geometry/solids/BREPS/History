@@ -1,5 +1,15 @@
 History file for geometry/solids/BREPS
 
+----------------------------
+28/05/1999 : J. Apostolakis       breps-01-00-03a
+
+ - Tagged.
+
+28/05/1999 : S. Giani 
+
+G4BREPSolidPolyhedra.cc  
+   DistanceToOut: Introduced treatment for ray leaving from a boundary. 
+
 27/05/1999 : J. Apostolakis       breps-01-00-03
 
  - Tagged.
