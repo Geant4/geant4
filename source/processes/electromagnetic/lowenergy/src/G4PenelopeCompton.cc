@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.18 2004-03-17 09:32:01 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.19 2004-03-23 12:44:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -112,15 +112,16 @@ G4PenelopeCompton::~G4PenelopeCompton()
   delete meanFreePathTable;
   delete rangeTest;
 
-  for (size_t i=0;i<matCrossSections->size();i++){
-    delete (*matCrossSections)[i];
-  }
+  for (size_t i1=0;i1<matCrossSections->size();i1++)
+    {
+      delete (*matCrossSections)[i1];
+    }
 
   delete matCrossSections;
 
-   for (size_t i=0; i<ionizationEnergy->size(); i++)
+   for (size_t i2=0; i2<ionizationEnergy->size(); i2++)
     {
-      delete (*ionizationEnergy)[i];
+      delete (*ionizationEnergy)[i2];
     }
   delete ionizationEnergy;
 
