@@ -88,11 +88,21 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
-#include "G4UnitsTable.hh"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+// New Histogramming (from AIDA and Anaphe):
+#include <memory> // for the auto_ptr(T>
+
+#include "AIDA/IAnalysisFactory.h"
+
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
 
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
@@ -101,7 +111,7 @@
 
 int main(int argc,char** argv)
 {
-  HepTupleManager* hbookManager;
+  //  HepTupleManager* hbookManager;
 
   // -------------------------------------------------------------------
   // Setup
@@ -110,10 +120,13 @@ int main(int argc,char** argv)
   G4String  nameMat  = "Si";
   G4int  nProcess    = 3;
   G4bool usepaw      = false;
+  G4bool fluct       = false;
   G4bool lowE        = true;
   G4int verbose      = 0;
   G4double emin      = 0.01*MeV;
   G4double emax      = 100.0*MeV;
+  G4int nstatf       = 10;
+  G4double xstatf    = 1.0/(G4double)nstatf;
   G4int nbin         = 1000;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
@@ -148,7 +161,7 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[14];
+  G4Material* ma[15];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[1]->SetChemicalFormula("Graphite");
@@ -170,6 +183,7 @@ int main(int argc,char** argv)
 
   ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
   ma[10]->SetChemicalFormula("O_2");
+
   ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
   ma[11]->AddElement(H,2);
   ma[11]->AddElement(O,1);
@@ -184,6 +198,9 @@ int main(int argc,char** argv)
   ma[13]->AddElement(Cs,1);
   ma[13]->AddElement(I,1);
   ma[13]->SetChemicalFormula("CsI");
+
+  ma[14] = new G4Material("H2", 1., 1.00794*g/mole, 1.*g/cm3);
+  ma[14]->SetChemicalFormula("H_2");
   
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
@@ -307,6 +324,8 @@ int main(int argc,char** argv)
         break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
+      } else if(line == "#fluct") {
+        fluct = true;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -370,27 +389,55 @@ int main(int argc,char** argv)
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
-    hbookManager = new HBookFile(hFile, 58);
-    assert (hbookManager != 0);
-  
-    // ---- Book a histogram and ntuples
-    G4cout << "Hbook file name: <" 
-           << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
     G4double emin10 = log10(emin/MeV);
     G4double emax10 = log10(emax/MeV);
     G4double bin = (emax10 - emin10) / (G4double)nbin;
 
-    HepHistogram* hist[4];
-    hist[0] = hbookManager->histogram("Stopping power (MeV*cm**2/g)", 
+    // Creating the analysis factory
+    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+
+    // Creating the tree factory
+    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+ 
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
+    IHistogram1D* hist[4];
+    ITuple* ntuple1 = 0;
+
+    if(usepaw) {
+
+      // ---- primary ntuple ------
+      // If using Anaphe HBOOK implementation, there is a limitation on the length of the
+      // variable names in a ntuple
+      ntuple1 = tpf->create( "100", "tuple", "float ekin, dedx" );
+
+
+      // Creating a histogram factory, whose histograms will be handled by the tree
+      G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+      // Creating an 1-dimensional histogram in the root directory of the tree
+
+      hist[0] = hf->create1D("11","Stopping power (MeV*cm**2/g)", 
                                      nbin,emin10,emax10);
-    hist[1] = hbookManager->histogram("Stopping power (MeV/mm)", 
+      hist[1] = hf->create1D("12","Stopping power (MeV/mm)", 
                                      nbin,emin10,emax10);
-    hist[2] = hbookManager->histogram("Step limit (mm)", 
+      hist[2] = hf->create1D("13","Step limit (mm)", 
                                      nbin,emin10,emax10);
-    hist[3] = hbookManager->histogram("Number of secondaries", 
-                                      nbin,emin10,emax10);
-    //    assert (hDebug != 0);  
-    G4cout<< "Histograms is initialised" << G4endl;
+      hist[3] = hf->create1D("14","Number of secondaries", 
+                                     nbin,emin10,emax10);
+      /*
+      IHistogram2D* hi2 = hf->create2D("10", 
+       "log10(Stopping power (MeV*cm**2/g)) versus log10Ekin(MeV)",nbin,emin10,emax10,
+       100,0.,3.);
+      */
+
+      G4cout<< "Histograms is initialised" << G4endl;
+    }
 
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
@@ -409,9 +456,9 @@ int main(int argc,char** argv)
       elecManager = new G4ProcessManager(electron);
       electron->SetProcessManager(elecManager);
       eionle = new G4LowEnergyIonisation();
-      eionle->SetEnlossFluc(false);
+      if(!fluct) eionle->SetEnlossFluc(false);
       ebrle = new G4LowEnergyBremsstrahlung();
-      ebrle->SetEnlossFluc(false);
+      if(!fluct) ebrle->SetEnlossFluc(false);
       elecManager->AddProcess(eionle);
       elecManager->AddProcess(ebrle);
       eionle->BuildPhysicsTable(*electron);
@@ -425,7 +472,7 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
+        if(!fluct) hionle->SetEnlossFluc(false);
         protManager->AddProcess(hionle);
         if(setNuclearOff)  hionle->SetNuclearStoppingOff();
         if(!setNuclearOff) hionle->SetNuclearStoppingOn();
@@ -439,7 +486,7 @@ int main(int argc,char** argv)
         aprotManager = new G4ProcessManager(antiproton);
         antiproton->SetProcessManager(aprotManager);
         hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
+        if(!fluct) hionle->SetEnlossFluc(false);
         aprotManager->AddProcess(hionle);
         if(setNuclearOff)  hionle->SetNuclearStoppingOff();
         if(!setNuclearOff) hionle->SetNuclearStoppingOn();
@@ -453,7 +500,7 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
+        if(!fluct) hionle->SetEnlossFluc(false);
         protManager->AddProcess(hionle);
         if(setNuclearOff)  hionle->SetNuclearStoppingOff();
         if(!setNuclearOff) hionle->SetNuclearStoppingOn();
@@ -464,7 +511,7 @@ int main(int argc,char** argv)
         ionManager = new G4ProcessManager(part);
         part->SetProcessManager(ionManager);
         ionle = new G4hLowEnergyIonisation();
-        ionle->SetEnlossFluc(false);
+        if(!fluct) ionle->SetEnlossFluc(false);
         if(setNuclearOff)  ionle->SetNuclearStoppingOff();
         if(!setNuclearOff) ionle->SetNuclearStoppingOn();
         if(setBarkasOff)   ionle->SetBarkasOff();
@@ -477,14 +524,14 @@ int main(int argc,char** argv)
 
     } else {
 
-        elecManager = new G4ProcessManager(electron);
-        electron->SetProcessManager(elecManager);
-        eionst = new G4eIonisation();
-        eionst->SetEnlossFluc(false);
-        elecManager->AddProcess(eionst);
-        ebrst = new G4eBremsstrahlung();
-        ebrst->SetEnlossFluc(false);
-        elecManager->AddProcess(ebrst);
+      elecManager = new G4ProcessManager(electron);
+      electron->SetProcessManager(elecManager);
+      eionst = new G4eIonisation();
+      if(!fluct) eionst->SetEnlossFluc(false);
+      elecManager->AddProcess(eionst);
+      ebrst = new G4eBremsstrahlung();
+      if(!fluct) ebrst->SetEnlossFluc(false);
+      elecManager->AddProcess(ebrst);
       eionst->BuildPhysicsTable(*electron);
       ebrst->BuildPhysicsTable(*electron);
       if(nPart == 1) {
@@ -496,21 +543,21 @@ int main(int argc,char** argv)
         positron->SetProcessManager(positManager);
         if(nProcess == 0) {
           eionst = new G4eIonisation();
-          eionst->SetEnlossFluc(false);
+          if(!fluct) eionst->SetEnlossFluc(false);
           positManager->AddProcess(eionst);
           eionst->BuildPhysicsTable(*positron);
           success = true;
         } else if(nProcess == 1) {
           ebrst = new G4eBremsstrahlung();
-          ebrst->SetEnlossFluc(false);
+          if(!fluct) ebrst->SetEnlossFluc(false);
           positManager->AddProcess(ebrst);
           ebrst->BuildPhysicsTable(*positron);
           success = true;
         } else if(nProcess == 2) {
           eionst = new G4eIonisation();
           ebrst = new G4eBremsstrahlung();
-          eionst->SetEnlossFluc(false);
-          ebrst->SetEnlossFluc(false);
+          if(!fluct) eionst->SetEnlossFluc(false);
+          if(!fluct) ebrst->SetEnlossFluc(false);
           positManager->AddProcess(eionst);
           positManager->AddProcess(ebrst);
           eionst->BuildPhysicsTable(*positron);
@@ -522,7 +569,7 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
+        if(!fluct) hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
 	//        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*proton);
@@ -532,7 +579,7 @@ int main(int argc,char** argv)
         aprotManager = new G4ProcessManager(antiproton);
         antiproton->SetProcessManager(aprotManager);
         hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
+        if(!fluct) hionst->SetEnlossFluc(false);
         aprotManager->AddProcess(hionst);
         hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*antiproton);
@@ -542,14 +589,14 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
+        if(!fluct) hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
 	//        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*proton);
         ionManager = new G4ProcessManager(part);
         part->SetProcessManager(ionManager);
         ionst = new G4hIonisation();
-        ionst->SetEnlossFluc(false);
+        if(!fluct) ionst->SetEnlossFluc(false);
         ionManager->AddProcess(ionst);
         ionst->SetVerboseLevel(verbose);
         ionst->BuildPhysicsTable(*part);
@@ -594,6 +641,11 @@ int main(int argc,char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
+    if(!fluct) {
+      nstatf = 1;
+      xstatf = 1.0;
+    }
+
     G4Timer* timer = new G4Timer();
     timer->Start();
 
@@ -602,126 +654,150 @@ int main(int argc,char** argv)
       G4double le = emin10 + ((G4double)iter + 0.5)*bin;
       G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
-      gTrack->SetKineticEnergy(e); 
-      G4double x = 0.0;
-      G4VParticleChange* aChange = 0;
+      gTrack->SetKineticEnergy(e);
 
-      if(lowE) {
+      for (G4int jj=0; jj<nstatf; jj++) {
+ 
+        G4double x = 0.0;
+        G4VParticleChange* aChange = 0;
 
-        if(nPart == 1) {
-          if(nProcess == 0) {
-            x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionle->AlongStepDoIt(*gTrack,*step);
+        if(lowE) {
 
-          } else if(nProcess == 1) {
-            x = ebrle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrle->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionle->AlongStepDoIt(*gTrack,*step);
- 	  }
+          if(nPart == 1) {
+            if(nProcess == 0) {
+              x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionle->AlongStepDoIt(*gTrack,*step);
 
-        } else if (nPart == 3 ) {
-          x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionle->AlongStepDoIt(*gTrack,*step);
+            } else if(nProcess == 1) {
+              x = ebrle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = ebrle->AlongStepDoIt(*gTrack,*step);
+            } else if(nProcess == 2) {
+              x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionle->AlongStepDoIt(*gTrack,*step);
+ 	    }
 
-        } else if (nPart == 4) {
-          x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionle->AlongStepDoIt(*gTrack,*step);
+          } else if (nPart == 3 ) {
+            x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = hionle->AlongStepDoIt(*gTrack,*step);
 
-        } else if (nPart == 5 || nPart == 6) {
-          x = ionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = ionle->AlongStepDoIt(*gTrack,*step);
+          } else if (nPart == 4) {
+            x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = hionle->AlongStepDoIt(*gTrack,*step);
 
-	}
+          } else if (nPart == 5 || nPart == 6) {
+            x = ionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = ionle->AlongStepDoIt(*gTrack,*step);
 
-      } else {
-
-
-        if(nPart == 1) {
-          if(nProcess == 0) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
-
-          } else if(nProcess == 1) {
-            x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrst->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
- 	  }
-
-        } else if(nPart == 2) {
-          if(nProcess == 0) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
-
-          } else if(nProcess == 1) {
-            x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrst->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
- 	  }
-
-        } else if (nPart == 3) {
-          x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionst->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 4) {
-          x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionst->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 5 || nPart == 6) {
-          x = ionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = ionst->AlongStepDoIt(*gTrack,*step);
-	}
-      }
-
-
-      G4double de = aChange->GetLocalEnergyDeposit();
-      G4int n = aChange->GetNumberOfSecondaries();
-
-      //G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
-
-      if(n > 0) {
-        for(G4int i=0; i<n; i++) {
-          de += (aChange->GetSecondary(i))->GetKineticEnergy();
-          if(verbose) {
-            G4cout << "add " 
-                   << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
-                   << " eV" << G4endl;
 	  }
-	}
-      }
-      G4double st = de/(theStep*(material->GetDensity()));
-      st *= gram/(cm*cm*MeV); 
-      G4double s = de*mm/(theStep*MeV); 
 
-      if(verbose) {
+        } else {
+
+
+          if(nPart == 1) {
+            if(nProcess == 0) {
+              x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionst->AlongStepDoIt(*gTrack,*step);
+
+            } else if(nProcess == 1) {
+              x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = ebrst->AlongStepDoIt(*gTrack,*step);
+            } else if(nProcess == 2) {
+              x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionst->AlongStepDoIt(*gTrack,*step);
+ 	    }
+
+          } else if(nPart == 2) {
+            if(nProcess == 0) {
+              x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionst->AlongStepDoIt(*gTrack,*step);
+
+            } else if(nProcess == 1) {
+              x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = ebrst->AlongStepDoIt(*gTrack,*step);
+            } else if(nProcess == 2) {
+              x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+              aChange = eionst->AlongStepDoIt(*gTrack,*step);
+ 	    }
+
+          } else if (nPart == 3) {
+            x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = hionst->AlongStepDoIt(*gTrack,*step);
+
+          } else if (nPart == 4) {
+            x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = hionst->AlongStepDoIt(*gTrack,*step);
+
+          } else if (nPart == 5 || nPart == 6) {
+            x = ionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+            aChange = ionst->AlongStepDoIt(*gTrack,*step);
+	  }
+        }
+
+        G4double delx = theStep;
+        G4double de = aChange->GetLocalEnergyDeposit();
+        G4int n = aChange->GetNumberOfSecondaries();
+
+
+        //G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
+
+        if(n > 0) {
+          for(G4int i=0; i<n; i++) {
+            de += (aChange->GetSecondary(i))->GetKineticEnergy();
+            if(verbose) {
+              G4cout << "add " 
+                     << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
+                     << " eV" << G4endl;
+	    }
+	  }
+        }
+        G4double st = de/(delx*(material->GetDensity()));
+        st *= gram/(cm*cm*MeV); 
+        G4double s = de*mm/(delx*MeV); 
+
+        if(verbose) {
           G4cout  <<  "Iteration = "  <<  iter 
 	          << "  E = " << e/MeV << " MeV; StepLimit= "
 	          << x/mm << " mm; de= " 
                   << de/eV << " eV; dE/dx= "
                   << st << " MeV*cm^2/g" <<  G4endl;
+        }
+
+        if(x > 1000.0*meter) x = 1000.0*meter;      
+
+        if (usepaw) {
+          float st10 = -5.0;
+          if(st > 1.e-5) st10 = (float)log10(st);
+          if(verbose>1) {
+            G4cout << " de(MeV) = " << de/MeV 
+                   << G4endl;
+            G4cout << " n1= " << ntuple1->findColumn("ekin") 
+                   << " n2= " << ntuple1->findColumn("dedx") 
+                   << G4endl;
+	  }
+          ntuple1->fill( ntuple1->findColumn("ekin"), (float)le);
+          ntuple1->fill( ntuple1->findColumn("dedx"), st10);
+          ntuple1->addRow();
+          // G4cout << "ntuple is filled " << G4endl; 
+
+          hist[0]->fill(le,st*xstatf);
+          hist[1]->fill(le,s*xstatf);
+          hist[2]->fill(le,x*xstatf/mm);
+          hist[3]->fill(le,xstatf*(G4double)n);
+	}
       }
-
-      if(x > 1000.0*meter) x = 1000.0*meter;      
-
-      hist[0]->accumulate(le,st);
-      hist[1]->accumulate(le,s);
-      hist[2]->accumulate(le,x/mm);
-      hist[3]->accumulate(le,(G4double)n);
     }
 
     timer->Stop();
     G4cout << "  "  << *timer << G4endl;
     delete timer;
 
-    if(usepaw)hbookManager->write();
-    G4cout << "# hbook is writed" << G4endl;
-    delete hbookManager;    
-    G4cout << "# hbook is deleted" << G4endl;
+    // Committing the transaction with the tree
+    if(usepaw) {
+      G4std::cout << "Committing..." << G4std::endl;
+      tree->commit();
+      G4std::cout << "Closing the tree..." << G4std::endl;
+      tree->close();
+    }
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     
 
