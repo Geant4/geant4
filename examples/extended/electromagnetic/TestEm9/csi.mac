@@ -1,4 +1,4 @@
-# $Id: csi.mac,v 1.1 2003-10-31 12:13:10 vnivanch Exp $
+# $Id: csi.mac,v 1.2 2003-11-07 11:52:58 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
@@ -15,7 +15,7 @@
 /testem/phys/addPhysics  standard
 #
 /testem/det/CalMat      CsI
-/testem/phys/setCuts    1.   mm
+/testem/phys/setCuts    5.   mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts   10.0 mm
 /testem/stepMax         100  mm
@@ -24,12 +24,13 @@
 /process/eLoss/integral      true
 /run/initialize
 #
-/testem/histo/fileName  csi.hbook
+/testem/histo/fileName  csi_ma2.paw
+#/testem/histo/fileName  csi_st2.paw
 #/testem/histo/fileName  csi.xml
 #/testem/histo/fileType  XML
 #
 /gun/particle e-
 /gun/energy   1 GeV
-/run/beamOn   100
+/run/beamOn   10000
 #
 

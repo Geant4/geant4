@@ -136,7 +136,7 @@ void HistoManager::BeginOfRun()
 void HistoManager::EndOfRun()
 {
 
-  G4cout << "Histo: End of run actions are started" << G4endl;
+  G4cout << "HistoManager: End of run actions are started" << G4endl;
 
   // average
 

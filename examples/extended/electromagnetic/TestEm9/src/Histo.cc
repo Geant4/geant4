@@ -50,7 +50,7 @@ Histo::Histo()
 {
   verbose    = 0;
   histName   = "histo.paw";
-  histName   = "hbook";
+  histType   = "hbook";
   nHisto     = 0;
   defaultAct = 1;
   tupleName  = "tuple.paw";
