@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2003-04-09 09:41:09 dressel Exp $
+# $Id: GNUmakefile,v 1.9 2004-03-21 12:25:25 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -14,10 +14,5 @@ endif
 .PHONY: all
 
 all: lib bin
-
-include $(G4INSTALL)/config/architecture.gmk
-
-
-#LDFLAGS += -lG4hepgeometry
 
 include $(G4INSTALL)/config/binmake.gmk
