@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000-05-12 14:55:50 gcosmo Exp $
+$Id: README,v 1.3 2003-05-28 08:16:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,4 +13,4 @@ from the CMS detector project. The model can be changed by invoking
 the UI command "/mydet/SelectDetector <model-name>", where
 <model-name> is the name of the STEP file <model-name>.stp which
 describes the detector geometry.
-
+To be run only on Linux-egcs and non-ISO compilers.
