@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08EventAction.cc,v 1.1 1999-01-08 16:35:20 gunter Exp $
+// $Id: T08EventAction.cc,v 1.2 1999-04-17 07:24:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,13 +27,11 @@ T08EventAction::T08EventAction()
 T08EventAction::~T08EventAction()
 {}
 
-void T08EventAction::BeginOfEventAction()
+void T08EventAction::BeginOfEventAction(const G4Event*)
 {}
 
-void T08EventAction::EndOfEventAction()
+void T08EventAction::EndOfEventAction(const G4Event* evt)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
   G4cout << ">>> Event " << evt->GetEventID() << endl;
   
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();

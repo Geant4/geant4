@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08SteppingAction.cc,v 1.1 1999-01-08 16:35:21 gunter Exp $
+// $Id: T08SteppingAction.cc,v 1.2 1999-04-17 07:24:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,10 +19,8 @@ T08SteppingAction::T08SteppingAction(T08DetectorConstruction* myDC, T08EventActi
 :myDetector(myDC), eventAction(myEA)
 { }
 
-void T08SteppingAction::UserSteppingAction()
+void T08SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4Step* aStep = GetSteppingManager()->GetStep();
-  
   // collect the energy deposited in the absorber
   
   const G4VPhysicalVolume* currentVolume = aStep->GetPreStepPoint()-> GetPhysicalVolume();

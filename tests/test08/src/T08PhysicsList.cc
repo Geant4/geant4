@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08PhysicsList.cc,v 1.1 1999-01-08 16:35:20 gunter Exp $
+// $Id: T08PhysicsList.cc,v 1.2 1999-04-17 07:24:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -269,30 +269,19 @@ void T08PhysicsList::ConstructGeneral()
   }
 }
 
-void T08PhysicsList::SetCuts(G4double cut)
+void T08PhysicsList::SetCuts()
 {
+  G4double cut = defaultCutValue;
   if (verboseLevel >0){
     G4cout << "T08PhysicsList::SetCuts:";
     G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }  
 
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  
-  SetCutValueForOthers(cut);
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+ //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }
+ 
 
 
 void T08PhysicsList::SetStatusEmProcess()

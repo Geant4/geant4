@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08EventAction.hh,v 1.1 1999-01-08 16:35:17 gunter Exp $
+// $Id: T08EventAction.hh,v 1.2 1999-04-17 07:23:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,11 +21,11 @@ class T08EventAction : public G4UserEventAction
 {
   public:
     T08EventAction();
-    ~T08EventAction();
+    virtual ~T08EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
     
   private:
 
