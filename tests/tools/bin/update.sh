@@ -1,7 +1,7 @@
 #! /bin/sh
-# $Id: update.sh,v 1.3 1999-07-20 09:55:25 stesting Exp $
+# $Id: update.sh,v 1.4 1999-07-28 10:37:21 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
-# Usage: update.sh [-n]
+# Usage: update.sh [-n] [-d]
 
 # Some checks :
 if [ -z "${G4INSTALL}" ] ; then
@@ -36,6 +36,30 @@ else
 fi
 #
 
+for i in $*
+do
+case $i in
+  -n) NOTHING=-n; export NOTHING;;
+  -d) DIRECTORIES=-d; export DIRECTORIES;;
+esac
+done
+
+echo
+
+if [ X$NOTHING = X ]
+then
+  echo ACTUALLY UPDATING
+else
+  echo "DOING NOTHING (cvs -n)"
+fi
+
+if [ X$DIRECTORIES = X ]
+then
+  echo NOT GETTING NEW DIRECTORIES
+else
+  echo GETTING NEW DIRECTORIES
+fi
+
 cd $G4INSTALL/..
-geant4/tests/tools/bin/updt.sh $1 < geant4/tests/stt-$REF.sdb \
+geant4/tests/tools/bin/updt.sh  < geant4/tests/stt-$REF.sdb \
   > $dir/update.log 2>&1
