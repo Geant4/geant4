@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-07-31 08:21:10 gracia Exp $
+$Id: History,v 1.7 2000-08-01 08:29:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,20 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31 Jul 00 Gonzalo Gracia
-- G4IhIonisation.cc Initialisisation to NULL of several  G4PhysicsTable*
+31 Jul 00 Gonzalo Gracia (stand-V02-00-00NT)
+- G4IhIonisation.cc: initialisisation to zero of several  G4PhysicsTable*
   is included in constructor. Some tests were crashing 
   on NT because of the missing initialisation
 
-18 jul 00: V.Ivanchenko (stand-V01-??)
-- fix in G4VhEnergyLoss and G4ionIonisation in AlongStepDoIt 
-  for particles with Charge^2 > 1; Reorganisation in
-  GetConstrain for G4ionIonisation
-     
-22 jun 00: mma (stand-V01-01-05)
-- stop very low energy photons in photo electric effect
-- ElossMessenger moved --> G4VEnergyLoss
-       
 13 jun 00: mma (stand-V01-01-04)
 - static pointer MinDeltaEnergy removed from destructor of
   G4VeEnergyLoss and G4VhEnergyLoss
