@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.2 2001-10-24 18:10:38 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.3 2002-04-03 11:51:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -48,9 +48,10 @@ class G4UIcommand;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWith3Vector;
 class G4UIcmdWithoutParameter;
-class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4TransportationManager;
+class G4GeomTestStreamLogger;
+class G4GeomTestVolume;
 
 class G4GeometryMessenger : public G4UImessenger
 {
@@ -65,26 +66,31 @@ class G4GeometryMessenger : public G4UImessenger
   
   protected:
 
+    void Init();
     void ResetNavigator();
-    void RunTest();
+    void LineTest();
+    void GridTest();
+    void RecursiveGridTest();
+    void CylinderTest();
 
     G4UIdirectory             *geodir, *navdir, *testdir;
     G4UIcmdWith3VectorAndUnit *posCmd, *dirCmd;
-    G4UIcmdWithoutParameter   *runCmd, *resCmd;
-    G4UIcmdWithABool          *addCmd;
+    G4UIcmdWithoutParameter   *linCmd, *grdCmd, *recCmd,
+                              *cylCmd, *runCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
   
   private:
 
     G4bool geometryOpened;
     G4ThreeVector x, p;
-    G4bool        extra, newtol;
+    G4bool        newtol;
     G4double      tol;
 
   private:
   
     G4TransportationManager* tmanager;
-
+    G4GeomTestStreamLogger* tlogger;
+    G4GeomTestVolume* tvolume;
 };
 
 #endif

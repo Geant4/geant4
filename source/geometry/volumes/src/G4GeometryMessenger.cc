@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.5 2002-02-20 22:16:46 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.6 2002-04-03 11:51:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -44,7 +44,6 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "G4GeomTestStreamLogger.hh"
@@ -55,8 +54,8 @@
 //
 G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   : geometryOpened(true), x(0,0,0), p(0,0,1),
-    extra(false), newtol(false), tol(1E-4*mm),
-    tmanager(tman)
+    newtol(false), tol(1E-4*mm), tmanager(tman),
+    tlogger(0), tvolume(0)
 {
   geodir = new G4UIdirectory( "/geometry/" );
   geodir->SetGuidance( "Geometry control commands." );
@@ -77,12 +76,6 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   testdir->SetGuidance( "Geometry verification control setup." );
   testdir->SetGuidance( "Helps in detecting possible overlapping regions." );
 
-  addCmd = new G4UIcmdWithABool( "/geometry/test/line_test",this );
-  addCmd->SetGuidance( "Test along a single specified direction/position?" );
-  addCmd->SetGuidance( "Use position and direction commands to change default." );
-  addCmd->SetGuidance( "Default: position(0,0,0), direction(0,0,1)." );
-  addCmd->SetParameterName( "Extra", true, true );
-
   tolCmd = new G4UIcmdWithADoubleAndUnit( "/geometry/test/tolerance",this );
   tolCmd->SetGuidance( "Set error tolerance value." );
   tolCmd->SetGuidance( "Default: 1E-4*mm." );
@@ -101,8 +94,30 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   dirCmd->SetParameterName( "Px", "Py", "Pz", true, true );
   dirCmd->SetRange( "Px != 0 || Py != 0 || Pz != 0" );
 
+  linCmd = new G4UIcmdWithoutParameter( "/geometry/test/line_test", this );
+  linCmd->SetGuidance( "Performs test along a single specified direction/position." );
+  linCmd->SetGuidance( "Use position and direction commands to change default." );
+  linCmd->SetGuidance( "Default: position(0,0,0), direction(0,0,1)." );
+
+  grdCmd = new G4UIcmdWithoutParameter( "/geometry/test/grid_test", this );
+  grdCmd->SetGuidance( "Start running the default grid test." );
+  grdCmd->SetGuidance( "A grid of lines parallel to a cartesian axis is used;" );
+  grdCmd->SetGuidance( "Only direct daughters of the mother volumes are checked." );
+
+  recCmd = new G4UIcmdWithoutParameter( "/geometry/test/recursive_test", this );
+  recCmd->SetGuidance( "Start running the recursive grid test." );
+  recCmd->SetGuidance( "A grid of lines along a cartesian axis is recursively" );
+  recCmd->SetGuidance( "to all daughters and daughters of daughters, etc." );
+  recCmd->SetGuidance( "WARNING: it may take a very long time, depending on geometry complexity !");
+
+  cylCmd = new G4UIcmdWithoutParameter( "/geometry/test/cylinder_test", this );
+  cylCmd->SetGuidance( "Start running the cylinder test." );
+  cylCmd->SetGuidance( "A set of lines in a cylindrical pattern of gradually" );
+  cylCmd->SetGuidance( "increasing mesh size." );
+
   runCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
-  runCmd->SetGuidance( "Start running the test." );
+  runCmd->SetGuidance( "Start running the default grid test." );
+  runCmd->SetGuidance( "Same as the grid_test command." );
 }
 
 
@@ -111,17 +126,47 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 //
 G4GeometryMessenger::~G4GeometryMessenger()
 {
-  delete addCmd;
+  delete linCmd;
   delete posCmd;
   delete dirCmd;
+  delete grdCmd;
+  delete recCmd;
+  delete cylCmd;
   delete runCmd;
   delete resCmd;
   delete tolCmd;
   delete geodir;
   delete navdir;
   delete testdir;
+  delete tvolume;
+  delete tlogger;
 }
 
+
+//
+// Init
+//
+void
+G4GeometryMessenger::Init()
+{
+  // Clean old allocated loggers...
+  //
+  if (tlogger) delete tlogger;
+  if (tvolume) delete tvolume;
+
+  // Create a logger to send errors/output to cout
+  //
+  tlogger = new G4GeomTestStreamLogger(G4std::cout);
+
+  // Get the world volume
+  //
+  G4VPhysicalVolume* world =
+    tmanager->GetNavigatorForTracking()->GetWorldVolume();
+
+  // Test the actual detector...
+  //
+  tvolume = new G4GeomTestVolume(world, tlogger);
+}
 
 //
 // SetNewValue
@@ -131,9 +176,6 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
 {
   if (command == resCmd) {
     ResetNavigator();
-  }
-  else if (command == addCmd) {
-    extra = addCmd->GetNewBoolValue( newValues );
   }
   else if (command == posCmd) {
     x = posCmd->GetNew3VectorValue( newValues );
@@ -149,8 +191,21 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
     tol = tolCmd->GetNewDoubleValue( newValues );
     newtol = true;
   }
-  else if (command == runCmd) {
-    RunTest();
+  else if (command == linCmd) {
+    Init();
+    LineTest();
+  }
+  else if ((command == grdCmd) || (command == runCmd)){
+    Init();
+    GridTest();
+  }
+  else if (command == recCmd) {
+    Init();
+    RecursiveGridTest();
+  }
+  else if (command == cylCmd) {
+    Init();
+    CylinderTest();
   }
 }
 
@@ -162,10 +217,7 @@ G4String
 G4GeometryMessenger::GetCurrentValue(G4UIcommand* command )
 {
   G4String cv = "";
-  if (command == addCmd) {
-    cv = addCmd->ConvertToString( extra );
-  }
-  else if (command == posCmd) {
+  if (command == posCmd) {
     cv = posCmd->ConvertToString( x, "cm" );
   }
   else if (command == tolCmd) {
@@ -199,15 +251,11 @@ G4GeometryMessenger::ResetNavigator()
 }
 
 //
-// RunTest
+// LineTest
 //
 void
-G4GeometryMessenger::RunTest()
+G4GeometryMessenger::LineTest()
 {
-  // Create a logger to send errors/output to cout
-  //
-  G4GeomTestStreamLogger logger(G4std::cout);
-
   // Close geometry if necessary
   //
   if (geometryOpened) {
@@ -217,28 +265,101 @@ G4GeometryMessenger::RunTest()
     geometryOpened = false;
   }	
 
-  // Get the world volume
+  // Verify if error tolerance has changed
   //
-  G4VPhysicalVolume* world =
-    tmanager->GetNavigatorForTracking()->GetWorldVolume();
+  if (newtol) tvolume->SetTolerance(tol);
 
-  // Test the actual detector...
+  // Make test on single line supplied by user
   //
-  G4GeomTestVolume geomTest(world, &logger);
+  tvolume->TestOneLine( x, p );
+
+  // Print out any errors, if found
+  //
+  tvolume->ReportErrors();
+}
+
+//
+// GridTest
+//
+void
+G4GeometryMessenger::GridTest()
+{
+  // Close geometry if necessary
+  //
+  if (geometryOpened) {
+    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+    geomManager->OpenGeometry();
+    geomManager->CloseGeometry(true);
+    geometryOpened = false;
+  }	
 
   // Verify if error tolerance has changed
   //
-  if (newtol) geomTest.SetTolerance(tol);
+  if (newtol) tvolume->SetTolerance(tol);
 
-  // Run the test
+  // Apply default set of trajectories in a 3D grid pattern
   //
-  if (extra)  // Make test on single line supplied by user
-    geomTest.TestOneLine( x, p );
-  else        // Apply default set of trajectories in a 3D grid pattern
-    geomTest.TestCartGridXYZ();
+  tvolume->TestCartGridXYZ();
   
   // Print out any errors, if found
   //
-  geomTest.ReportErrors();
-
+  tvolume->ReportErrors();
 }
+
+//
+// RecursiveGridTest
+//
+void
+G4GeometryMessenger::RecursiveGridTest()
+{
+  // Close geometry if necessary
+  //
+  if (geometryOpened) {
+    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+    geomManager->OpenGeometry();
+    geomManager->CloseGeometry(true);
+    geometryOpened = false;
+  }	
+
+  // Verify if error tolerance has changed
+  //
+  if (newtol) tvolume->SetTolerance(tol);
+
+  // Apply default set of trajectories in a 3D grid pattern recursively
+  //
+  tvolume->TestRecursiveCartGrid();
+  
+  // Print out any errors, if found
+  //
+  tvolume->ReportErrors();
+}
+
+//
+// CylinderTest
+//
+void
+G4GeometryMessenger::CylinderTest()
+{
+  // Close geometry if necessary
+  //
+  if (geometryOpened) {
+    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+    geomManager->OpenGeometry();
+    geomManager->CloseGeometry(true);
+    geometryOpened = false;
+  }	
+
+  // Verify if error tolerance has changed
+  //
+  if (newtol) tvolume->SetTolerance(tol);
+
+  // Apply default set of lines in a cylindrical pattern of gradually
+  // increasing mesh size of trajectories in a 3D grid pattern recursively
+  //
+  tvolume->TestCylinder();
+  
+  // Print out any errors, if found
+  //
+  tvolume->ReportErrors();
+}
+
