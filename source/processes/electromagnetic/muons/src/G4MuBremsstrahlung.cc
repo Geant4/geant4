@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.1 1999-01-07 16:11:07 gunter Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.2 1999-03-04 16:24:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -580,7 +580,7 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
 void G4MuBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "cross sections from R. Kokoulin \n ";
+  G4String comments = "theoritical differential cross sections\n ";
            comments += "         Good description up to 1000 TeV.";
 
   G4cout << endl << GetProcessName() << ":  " << comments
