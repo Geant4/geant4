@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh,v 1.9 2001-07-11 10:01:58 gunter Exp $
+// $Id: G4VDecayChannel.hh,v 1.10 2002-11-20 15:05:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -156,6 +156,9 @@ class G4VDecayChannel
     G4int GetVerboseLevel()  const;
     void  DumpInfo();
 
+  private:
+    const G4String& GetNoName() const;
+
   private:  
     // controle flag for output message
     G4int verboseLevel;
@@ -198,7 +201,7 @@ inline
       G4cout << "G4VDecayChannel::GetDaughterName ";
       G4cout << "index out of range " << anIndex << G4endl;
     }
-    return noName;
+    return GetNoName();
   }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.14 2002-11-20 00:32:19 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.15 2002-11-20 15:05:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -454,3 +454,7 @@ void G4VDecayChannel::DumpInfo()
   G4cout << G4endl;
 }
 
+const G4String& G4VDecayChannel::GetNoName() const
+{
+  return noName;
+}
