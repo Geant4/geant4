@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-11-04 08:24:05 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004-06-01 15:37:03 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for interfaces.  John Allison, 5/7/98.
 # -----------------------------------------------------------------------
@@ -10,6 +10,8 @@ name := G4interfaces
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+GLOBLIBS = libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk

@@ -18,6 +18,11 @@ ifndef G4INSTALL
   G4INSTALL := ../..
 endif
 
+GLOBLIBS  = libG4tracking.lib libG4processes.lib libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4intercoms.lib
+GLOBLIBS += libG4graphics_reps.lib libG4global.lib
+
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS  += \
@@ -31,7 +36,6 @@ CPPFLAGS  += \
              -I$(G4BASE)/geometry/solids/specific/include \
              -I$(G4BASE)/geometry/solids/Boolean/include \
              -I$(G4BASE)/geometry/solids/BREPS/include \
-             -I$(G4BASE)/geometry/solids/STEP/include \
              -I$(G4BASE)/graphics_reps/include \
              -I$(G4BASE)/materials/include \
              -I$(G4BASE)/particles/management/include \

@@ -1,10 +1,9 @@
-# $Id: GNUmakefile,v 1.29 2004-06-01 08:08:44 gcosmo Exp $
+# $Id: GNUmakefile,v 1.30 2004-06-01 15:39:17 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
 
 name := G4processes
-
 
 SUBDIRS  = management 
 SUBDIRS += cuts 
@@ -29,6 +28,10 @@ SUBLIBS += G4emstandard
 SUBLIBS += G4emutils 
 SUBLIBS += G4xrays 
 SUBLIBS += G4emlowenergy
+
+GLOBLIBS  = libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/management 

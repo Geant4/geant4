@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2003-10-03 14:46:30 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2004-06-01 15:40:10 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -8,6 +8,12 @@ name := G4run
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+GLOBLIBS  = libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
