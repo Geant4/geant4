@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.39 2003-06-25 09:03:27 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.40 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -568,7 +568,8 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 			    //    G4double&    dyerr_ener_sq // Future
  )  
 {
-      G4Exception("Not implemented in this version"); 
+      G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+                  FatalException, "Not yet implemented."); 
 
       // Use the parameters of this method, to please compiler
       dchord_step = dyerr_pos_sq = hstep * hstep * dydx[0]; 
@@ -652,7 +653,8 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 			          G4double&    dchord_step,
 			          G4double&    dyerr )      // in length
 {
-   G4Exception("Not implemented in current version");
+   G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+                FatalException, "Not yet implemented.");
 
    dyerr = dchord_step = hstep * yarrin[0] * dydx[0];
    yarrout[0]= yarrin[0];

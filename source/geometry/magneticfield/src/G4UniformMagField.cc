@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.6 2003-04-02 08:50:39 gcosmo Exp $
+// $Id: G4UniformMagField.cc,v 1.7 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,13 +63,13 @@ G4UniformMagField::G4UniformMagField(G4double vField,
    }
    else
    {
-      G4Exception("Invalid parameters in G4UniformMagField::G4UniformMagField") ;
+      G4Exception("G4UniformMagField::G4UniformMagField()",
+                  "WrongArgumentValue", FatalException, "Invalid parameters.") ;
    }
 }
 
 G4UniformMagField::~G4UniformMagField()
 {
-   ;
 }
 
 G4UniformMagField::G4UniformMagField (const G4UniformMagField &p)

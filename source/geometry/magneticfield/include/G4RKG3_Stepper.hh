@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.8 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4RKG3_Stepper.hh,v 1.9 2003-10-24 13:34:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,11 +45,11 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
 {
   public:  // with description
 
-    G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
-      : G4MagIntegratorStepper(EqRhs,6){ G4Exception(" G4RKG3_Stepper:  is not available in the current version.");}
+    G4RKG3_Stepper(G4Mag_EqRhs *EqRhs);
       // Integrate over 6 variables only:  position & velocity.
+      // Not implemented yet !
 
-    ~G4RKG3_Stepper(){;}
+    ~G4RKG3_Stepper();
 
     void Stepper( const G4double yIn[],
 	          const G4double dydx[],

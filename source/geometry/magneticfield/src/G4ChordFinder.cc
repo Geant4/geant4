@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.36 2003-06-25 09:04:23 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.37 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -362,7 +362,8 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
     if( curve_length < ABdist * (1. - 10*eps_step) ) {
       G4cerr << " ERROR: the size of the above difference"
              << " exceeds allowed limits.  Aborting." << G4endl;
-      G4Exception("G4ChordFinder::ApproxCurvePoint > Unphysical curve length.");
+      G4Exception("G4ChordFinder::ApproxCurvePointV()", "PrecisionError",
+                  FatalException, "Unphysical curve length.");
     }
 #endif
     // Take default corrective action: 

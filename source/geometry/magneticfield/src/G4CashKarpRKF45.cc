@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.11 2003-04-02 08:52:17 gcosmo Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.12 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -207,7 +207,8 @@ G4CashKarpRKF45::StepWithEst( const G4double*,
                               const G4double*,
                                     G4double*  )    
 {
-  G4Exception("ERROR - G4CashKarpRKF45::StepWithEst(): Method no longer used.");
+  G4Exception("G4CashKarpRKF45::StepWithEst()", "ObsoleteMethod",
+              FatalException, "Method no longer used.");
   return ;
 }
 

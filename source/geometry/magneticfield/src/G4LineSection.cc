@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.6 2001-12-04 15:10:01 grichine Exp $
+// $Id: G4LineSection.cc,v 1.7 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // typedef double    G4double;  
@@ -38,7 +38,8 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   G4double distABsquared = VecAtoB.mag2() ;  
   if ( distABsquared == 0.0)
   {
-    G4Exception("Equal points in G4LineSection::G4LineSection: line->point ?") ;
+    G4Exception("G4LineSection::G4LineSection()", "WrongArgumentValue",
+                FatalException, "Equal points in input (line->point) ?") ;
   }
   else
   {

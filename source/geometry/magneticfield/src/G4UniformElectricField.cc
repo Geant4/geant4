@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.7 2003-04-02 08:50:38 gcosmo Exp $
+// $Id: G4UniformElectricField.cc,v 1.8 2003-10-24 13:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,8 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    }
    else
    {
-      G4Exception("Invalid parameters in G4UniformElectricField::G4UniformElectricField") ;
+      G4Exception("G4UniformElectricField::G4UniformElectricField()",
+                  "WrongArgumentValue", FatalException, "Invalid parameters.");
    }
 }
 
