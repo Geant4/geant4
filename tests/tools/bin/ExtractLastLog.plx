@@ -3,7 +3,6 @@
 # /afs/cern.ch/sw/geant4/stt/dev1/testtools/geant4/tests/tools/bin
 # ExtractLastLog.plx
 #
-# 20-Nov-2000 stthosts.data table changed to configure for machines
 
 $ActiveExamination="doit";
 $ShowStt=1;
@@ -172,14 +171,13 @@ sub ReadConfigurationFiles {
         next if ($line =~ m/^#/);
         next if ($line =~ m/^%/);
         if ( $line =~ m/^$_[0]\s+(\S+)\s+(\S+)\s+(\S+)\s+/ ) { 
-            print "$1 $2 $3 $4\n";
+    #       print "$1 $2 $3\n";
             push(@platforms,"$2.$3");
             $HostName{"$2.$3"}=$1;
         }
     }
     close(HOSTS);
 }
-
 foreach $platform (sort(@platforms)) { print "$platform\n";}
 
 sub SetInitialTable{
