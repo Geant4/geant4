@@ -1,4 +1,4 @@
-$Id: History,v 1.236 2004-02-09 16:50:08 gcosmo Exp $
+$Id: History,v 1.237 2004-02-11 11:30:33 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10th February 2004  Gabriele Cosmo (config-V06-00-02)
+11th February 2004  Gabriele Cosmo (config-V06-00-02)
 - Added configuration file Linux-icc.gmk for Intel/icc compiler
   on Linux systems.
 
