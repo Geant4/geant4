@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.2 1999-12-15 14:51:52 gunter Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.3 2000-11-12 13:11:13 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -18,6 +18,9 @@
 //      ---------- G4PolarizedComptonScattering physics process --------
 //                   by Vicente Lara, March 1998
 // **************************************************************
+// Corrections by Rui Curado da Silva (Nov. 2000)
+//    - Sampling of Phi
+//    - Depolarization probability 
 //
 // --------------------------------------------------------------
 
@@ -50,6 +53,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(const G4Track& aTr
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle(); 
    
    G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();  
+ 
    if (abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
    G4ComptonScattering::PostStepDoIt(aTrack,aStep);
        
@@ -81,13 +85,48 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(const G4Track& aTr
        greject = 1. - epsilon*sint2/(1.+ epsilonsq);
    } while (greject < G4UniformRand());
  
+
+
+// ****************************************************
+//		Phi determination
+// ****************************************************
+
+
+G4double middle;
+G4double maximum, minimum;
+G4double resolution;
+
+G4double Rand = G4UniformRand();
+
+minimum = 0.;
+middle = 0.;
+maximum = twopi;
+resolution = 0.001;
+
+
+int j = 0;
+while ((j < 100) && (abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
+	{
+        middle = (maximum + minimum)/2;
+        if (SetPhi(epsilon,sint2,middle,Rand)*SetPhi(epsilon,sint2,minimum,Rand)<0) {
+                maximum = middle;
+        } else {
+                minimum = middle;
+        }
+        j++;
+}
+
+
    //
    // scattered gamma angles. ( Z - axis along the parent gamma)
    //
 
    G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
-   G4double Phi     = twopi * G4UniformRand() ;
+   G4double Phi     = middle;
    G4double dirx = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
+
+
+
 
    //
    // update G4VParticleChange for the scattered gamma 
@@ -102,6 +141,8 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(const G4Track& aTr
 
    // Set new direction 
    G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
+
+
 
    // Change reference frame.
    SystemOfRefChange(GammaDirection0,GammaDirection1,
@@ -151,7 +192,23 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(const G4Track& aTr
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+G4double G4PolarizedComptonScattering::SetPhi(G4double EnergyRate,
+                                              G4double sinsqrth,
+                                              G4double phi,
+					      G4double rand)
+{
+G4double cosphi = cos(phi), sinphi = sin(phi);
+
+G4double PhiDetermination = ((twopi*rand - phi)*(EnergyRate + 1./EnergyRate - sinsqrth)) + (sinsqrth*sinphi*cosphi);
+
+return PhiDetermination;
+}
+
+
+
  
 G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(G4double EnergyRate, 
 							       G4double sinsqrth,
@@ -160,19 +217,21 @@ G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(G4double EnergyRa
 							       G4ThreeVector& GammaPolarization0) 
 {
   G4double cosphi = cos(phi), sinphi = sin(phi);
-  G4double ParallelIntensityPolar = EnergyRate + 1./EnergyRate + 2. - 4.*sinsqrth*cosphi*cosphi;
+//  G4double ParallelIntensityPolar = EnergyRate + 1./EnergyRate + 2. - 4.*sinsqrth*cosphi*cosphi;
+  G4double ParallelIntensityPolar = EnergyRate + 1./EnergyRate - 2.*sinsqrth*cosphi*cosphi; 
   G4double PerpendiIntensityPolar = EnergyRate + 1./EnergyRate - 2.;
   G4double PolarizationDegree = sqrt(sinsqrth*sinphi*sinphi + costheta*costheta);
   G4double sintheta = sqrt(sinsqrth);
   
   G4ThreeVector GammaPolarization1;
   // depolarization probability (1-P)
-  if ( G4UniformRand() > 0.5*(PerpendiIntensityPolar/ParallelIntensityPolar) )
+  if ( G4UniformRand() > (PerpendiIntensityPolar/ParallelIntensityPolar) )
     {
      // Parallel to initial polarization
      GammaPolarization1.setX(PolarizationDegree);
      GammaPolarization1.setY(-sinsqrth*sinphi*cosphi/PolarizationDegree);
      GammaPolarization1.setZ(-sintheta*costheta*cosphi/PolarizationDegree);
+
     }
   else 
     {
@@ -180,10 +239,16 @@ G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(G4double EnergyRa
      GammaPolarization1.setX(0.);
      GammaPolarization1.setY(costheta/PolarizationDegree);
      GammaPolarization1.setZ(-sintheta*sinphi/PolarizationDegree);
+
     };
   
   return GammaPolarization1;
 }
+
+
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -195,6 +260,8 @@ void G4PolarizedComptonScattering::SystemOfRefChange(G4ThreeVector& Direction0,
   // Angles for go back to the original RS
   G4double cosTeta0 = Direction0.cosTheta(), sinTeta0 = sin(Direction0.theta());
   G4double cosPhi0  = cos(Direction0.phi()), sinPhi0  = sin(Direction0.phi());
+
+
 
   G4double cosPsi, sinPsi;
 
@@ -217,7 +284,6 @@ void G4PolarizedComptonScattering::SystemOfRefChange(G4ThreeVector& Direction0,
   // 
   Direction1.rotateUz(Direction0);
   aParticleChange.SetMomentumChange( Direction1 ) ;  
-
 
   // 3 Euler angles rotation for scattered photon polarization
   Polarization1.rotateZ(Psi);

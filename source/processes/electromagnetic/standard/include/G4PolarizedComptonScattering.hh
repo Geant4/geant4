@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.hh,v 1.2 1999-12-15 14:51:48 gunter Exp $
+// $Id: G4PolarizedComptonScattering.hh,v 1.3 2000-11-12 13:11:11 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -40,6 +40,9 @@ private:
   G4ThreeVector SetNewPolarization(G4double, G4double,
   				   G4double, G4double,
   				   G4ThreeVector& );
+
+  G4double SetPhi(G4double, G4double, G4double, G4double);
+
 
   void SystemOfRefChange(G4ThreeVector&, G4ThreeVector&, G4ThreeVector&, 
                          G4ThreeVector&);
