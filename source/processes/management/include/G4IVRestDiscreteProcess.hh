@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.hh,v 1.3 1999-04-13 09:44:51 kurasige Exp $
+// $Id: G4IVRestDiscreteProcess.hh,v 1.4 1999-04-30 08:01:55 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -108,7 +108,6 @@ class G4IVRestDiscreteProcess : public G4VProcess
 #include "G4Track.hh"
 #include "G4MaterialTable.hh"
 #include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
 
 inline 
  void     G4IVRestDiscreteProcess::SubtractNumberOfInteractionLengthLeft(

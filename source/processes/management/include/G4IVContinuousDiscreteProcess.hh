@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.3 1999-04-17 06:24:57 kurasige Exp $
+// $Id: G4IVContinuousDiscreteProcess.hh,v 1.4 1999-04-30 08:01:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -116,7 +116,6 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
 // -----------------------------------------
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4MaterialTable.hh"
 
 
