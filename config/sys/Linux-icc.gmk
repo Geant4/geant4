@@ -1,0 +1,61 @@
+#
+# ------ GNU/LINUX ------ gcc 2.95.2 / gcc 3.2
+#
+ifeq ($(G4SYSTEM),Linux-icc)
+  CXX       := icc
+  CXXFLAGS  := -ansi
+#  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+#  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O
+    FCFLAGS   := -O
+    CCFLAGS   := -O
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  ifdef G4PROFILE
+    CXXFLAGS  += -pg
+    FCFLAGS   += -pg
+    CCFLAGS   += -pg
+  endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
+  endif
+  G4RUNPATHOPTION := -Wl,-rpath 
+  CC := gcc
+  FC := g77
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  FCLIBS := -lg2c -lnsl
+  ECHO    := /bin/echo -e
+  SHEXT   := so
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  XMFLAGS   := -I/usr/X11R6/include
+  XMLIBS    := -lXm -lXpm
+  DLDLIBS   := -ldl
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  OIVFLAGS  += -I$(OIHOME)/include 
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
+                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
+endif
