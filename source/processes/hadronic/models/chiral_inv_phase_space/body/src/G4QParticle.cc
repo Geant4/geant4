@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.cc,v 1.13 2001-10-31 17:34:04 mkossov Exp $
+// $Id: G4QParticle.cc,v 1.14 2001-11-02 07:28:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -659,7 +659,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 	//Update the limit
     limit=nQ+1;
 #ifdef debug
-	cout<<"G4QParticle::InitDecayVector: limit is set to "<<limit<<endl;
+	G4cout<<"G4QParticle::InitDecayVector: limit is set to "<<limit<<G4endl;
 #endif
   }
   return DecayDB[abs(nQ)];

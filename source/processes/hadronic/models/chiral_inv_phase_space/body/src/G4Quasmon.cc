@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.33 2001-10-31 17:34:04 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.34 2001-11-02 07:28:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -4110,9 +4110,9 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
 #endif
             if      (totNMa>resLastM+hadrMa)             // "Just exclude the Last" case
 		    {
-              theQHadrons.pop_back();                  // the LastH is excluded from OUTPUT HV
-              theQHadrons.pop_back();                  // the PrevH is excluded from OUTPUT HV
-              theQHadrons.push_back(theLast);               // LastH substitute Prev H in OUTPUT HV
+              theQHadrons.pop_back();                    // the LastH is excluded from OUTPUT HV
+              theQHadrons.pop_back();                    // the PrevH is excluded from OUTPUT HV
+              theQHadrons.push_back(theLast);            // LastH substitute Prev H in OUTPUT HV
               G4QHadron* destrP=thePrev;                 // destruction Pointer for the QHadron
               delete     destrP;                         // the Last QHadron is destructed
               thePrev=theLast;
@@ -4271,7 +4271,11 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
           FillHadronVector(sHadr);                       // Fill 2nd Hadron (delete equivalent)
         }
 	  }
-      else theQHadrons.push_back(qHadron);                  // Fill hadron as it is (delete equivalent)
+      else
+      {
+        if(thePDG==89999003||thePDG==90002999) G4cerr<<"***(1)***G4Q::DOH:8999003/90002999"<<G4endl;
+        theQHadrons.push_back(qHadron);               // Fill hadron as it is (delete equivalent)
+	  }
     }
     else if(nPart==3)
 	{
@@ -4371,6 +4375,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
 #ifdef pdebug
     G4cout<<"G4Quasmon::DecayOutHadron: Fill PDG= "<<thePDG<<t<<m<<" as it is ***0***>>>>"<<G4endl;
 #endif
+    if(thePDG==89999003||thePDG==90002999) G4cerr<<"***(1)***G4Q::DOH:8999003/90002999"<<G4endl;
     theQHadrons.push_back(qHadron);                       // Fill as it is (delete equivalent)
   }
   return true;                                         // FAKE (impossible to reach)

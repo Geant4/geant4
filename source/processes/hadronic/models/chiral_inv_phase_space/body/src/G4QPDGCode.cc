@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.19 2001-10-31 17:34:03 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.20 2001-11-02 07:28:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -870,7 +870,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
 	  }
 	}
   }
-  else
+  else                    
   {
     G4int szn=ab-90000000;
     G4int ds=0;
