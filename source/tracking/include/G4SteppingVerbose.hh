@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.hh,v 1.2 1999-02-17 12:39:42 tsasaki Exp $
+// $Id: G4SteppingVerbose.hh,v 1.3 1999-03-24 04:42:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -34,28 +34,25 @@ class G4SteppingVerbose;
 #include <iomanip.h>               
 
 #include "globals.hh"                 // Include from 'global'
-#include "G4Navigator.hh"             // Include from 'geometry'
-#include "G4LogicalVolume.hh"         // Include from 'geometry'
-#include "G4VPhysicalVolume.hh"       // Include from 'geometry'
+class G4Navigator;
+class G4VPhysicalVolume;
 #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4ProcessManager.hh"        // Include from 'piim'
 class G4SteppingManager;              // Include from 'tracking'
 #include "G4Track.hh"                 // Include from 'tracking'
 #include "G4TrackVector.hh"           // Include from 'tracking'
-#include "G4TrackStatus.hh"           // Include from 'tracking'
+class G4Track;
 #include "G4StepStatus.hh"            // Include from 'tracking'
-#include "G4UserSteppingAction.hh"    // Include from 'tracking'
-#include "G4Step.hh"                  // Include from 'tracking'
-#include "G4StepPoint.hh"             // Include from 'tracking'
-#include "G4VTouchable.hh"            // Include from 'geometry'
-#include "G4TouchableHistory.hh"      // Include from 'geometry'
+class G4UserSteppingAction;
+class G4StepPoint;
+class G4VTouchable;
+#include "G4VSteppingVerbose.hh"
 
-
-class G4SteppingVerbose{
+class G4SteppingVerbose : public G4VSteppingVerbose {
 public:   
 // Constructor/Destructor
-  G4SteppingVerbose();
-  G4SteppingVerbose(G4SteppingManager*);
+//  G4SteppingVerbose();
+  G4SteppingVerbose(G4SteppingManager* const );
  ~G4SteppingVerbose();
 //
   void NewStep();
@@ -71,8 +68,8 @@ public:
   void DPSLUserLimit();
   void DPSLPostStep();
   void DPSLAlongStep();
-  void DPSLAlongStepDoItOneByOne();
-  void DPSLPostStepDoItOneByOne();
+//  void DPSLAlongStepDoItOneByOne();
+//  void DPSLPostStepDoItOneByOne();
   void VerboseTrack();
   void VerboseParticleChange();
   void ShowStep() const;

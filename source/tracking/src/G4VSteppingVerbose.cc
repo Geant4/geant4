@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackVector.hh,v 1.2 1999-03-24 04:43:04 tsasaki Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.1 1999-03-24 04:49:16 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+//  
 //---------------------------------------------------------------
 //
-//  G4TrackVector.hh
+// G4VSteppingVerbose.cc
 //
-//  Description:
-//    This class keeps a List of G4Track objects. It is implemented 
-//    as a RougeWave pointer ordered vector.
+// Description:
+//   This class manages the vervose outputs in G4SteppingManager. 
+//   
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -24,16 +24,8 @@
 //
 //---------------------------------------------------------------
 
-#ifndef G4TrackVector_h
-#define G4TrackVector_h 1
+#include "G4VSteppingVerbose.hh"
 
-#include <rw/tpordvec.h>           // Include from 'RogueWave'
-#include "G4Track.hh"              // Include form 'tracking'
-
-///////////////////////////////////////////////////
-typedef RWTPtrOrderedVector<G4Track> G4TrackVector;
-///////////////////////////////////////////////////
-
-#endif
-
+G4VSteppingVerbose::G4VSteppingVerbose(){;}
+G4VSteppingVerbose::~G4VSteppingVerbose(){;}
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.cc,v 1.2 1999-02-17 12:39:53 tsasaki Exp $
+// $Id: G4SteppingVerbose.cc,v 1.3 1999-03-24 04:46:27 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,12 +34,12 @@
 #endif
 
 //////////////////////////////////////////////////
-G4SteppingVerbose::G4SteppingVerbose()
+//G4SteppingVerbose::G4SteppingVerbose()
 //////////////////////////////////////////////////
-{
-}
+//{
+//}
 //////////////////////////////////////////////////
-G4SteppingVerbose::G4SteppingVerbose(G4SteppingManager* fMan)
+G4SteppingVerbose::G4SteppingVerbose(G4SteppingManager* const fMan)
 :fManager(fMan)
 //////////////////////////////////////////////////
 {
@@ -411,57 +411,6 @@ void G4SteppingVerbose::StepInfo()
   G4cout.precision(prec);
 }
 
-////////////////////////////////////////////////
-void G4SteppingVerbose::TrackingStarted()
-////////////////////////////////////////////////
-{
-
-  CopyState();
-G4int prec = G4cout.precision(3);
-  if( verboseLevel > 0 ){
-
-#ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
-    G4cout << setw( 5) << "Step#"  << " "
-           << setw( 8) << "X"      << "     "
-	   << setw( 8) << "Y"      << "     "  
-	   << setw( 8) << "Z"      << "     "
-	   << setw( 9) << "KineE"  << "     "
-	   << setw( 8) << "dE"     << "     "  
-	   << setw(12) << "StepLeng"   << " "  
-	   << setw(12) << "TrackLeng"  << " "
-	   << setw(12) << "NextVolume" << " "
-	   << setw( 8) << "ProcName"   << endl;	     
-#else
-    G4cout << setw( 5) << "Step#"      << " "
-	   << setw( 8) << "X(mm)"      << " "
-	   << setw( 8) << "Y(mm)"      << " "  
-	   << setw( 8) << "Z(mm)"      << " "
-	   << setw( 9) << "KinE(MeV)"  << " "
-	   << setw( 8) << "dE(MeV)"    << " "  
-	   << setw( 8) << "StepLeng"   << " "  
-	   << setw( 9) << "TrackLeng"  << " "
-	   << setw(11) << "NextVolume" << " "
-	   << setw( 8) << "ProcName"   << endl;	     
-#endif
-
-    G4cout << setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
-	   << setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
-	   << setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
-	   << setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
-	   << setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
-	   << setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
-	   << setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
-
-    if(fTrack->GetNextVolume()){
-      G4cout << setw(11) << fTrack->GetNextVolume()->GetName() << " ";
-    } else {
-      G4cout << setw(11) << "OutOfWorld" << " ";
-    }
-    G4cout << "initStep" << endl;
-  }
-  G4cout.precision(prec);
-}
 ////////////////////////////////////////////
 void G4SteppingVerbose::DPSLStarted()
 ////////////////////////////////////////////
@@ -536,6 +485,59 @@ void G4SteppingVerbose::DPSLAlongStep()
       G4cout << "???)" << endl;
     }
   }
+}
+
+
+////////////////////////////////////////////////
+void G4SteppingVerbose::TrackingStarted()
+////////////////////////////////////////////////
+{
+
+  CopyState();
+G4int prec = G4cout.precision(3);
+  if( verboseLevel > 0 ){
+
+#ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
+    G4cout << setw( 5) << "Step#"  << " "
+           << setw( 8) << "X"      << "     "
+	   << setw( 8) << "Y"      << "     "  
+	   << setw( 8) << "Z"      << "     "
+	   << setw( 9) << "KineE"  << "     "
+	   << setw( 8) << "dE"     << "     "  
+	   << setw(12) << "StepLeng"   << " "  
+	   << setw(12) << "TrackLeng"  << " "
+	   << setw(12) << "NextVolume" << " "
+	   << setw( 8) << "ProcName"   << endl;	     
+#else
+    G4cout << setw( 5) << "Step#"      << " "
+	   << setw( 8) << "X(mm)"      << " "
+	   << setw( 8) << "Y(mm)"      << " "  
+	   << setw( 8) << "Z(mm)"      << " "
+	   << setw( 9) << "KinE(MeV)"  << " "
+	   << setw( 8) << "dE(MeV)"    << " "  
+	   << setw( 8) << "StepLeng"   << " "  
+	   << setw( 9) << "TrackLeng"  << " "
+	   << setw(11) << "NextVolume" << " "
+	   << setw( 8) << "ProcName"   << endl;	     
+#endif
+
+    G4cout << setw( 5) << fTrack->GetCurrentStepNumber() << " "
+	   << setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
+	   << setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
+	   << setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
+	   << setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
+	   << setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
+	   << setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
+	   << setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
+
+    if(fTrack->GetNextVolume()){
+      G4cout << setw(11) << fTrack->GetNextVolume()->GetName() << " ";
+    } else {
+      G4cout << setw(11) << "OutOfWorld" << " ";
+    }
+    G4cout << "initStep" << endl;
+  }
+  G4cout.precision(prec);
 }
 //////////////////////////////////////////////////////
 void G4SteppingVerbose::AlongStepDoItOneByOne()

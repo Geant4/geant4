@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.1 1999-01-07 16:14:31 gunter Exp $
+// $Id: G4SteppingManager.cc,v 1.2 1999-03-24 04:46:08 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@ G4SteppingManager::G4SteppingManager()
    fPreStepPoint  = fStep->GetPreStepPoint();
    fPostStepPoint = fStep->GetPostStepPoint();
 #ifdef G4VERBOSE
-   fVerbose = new G4SteppingVerbose(this);
+   if(fVerbose == NULL ) fVerbose = new G4SteppingVerbose(this);
 #endif
    fSelectedAtRestDoItVector 
       = new G4SelectedAtRestDoItVector(SIZEofSelectedDoIt);
@@ -141,6 +141,7 @@ G4StepStatus G4SteppingManager::Stepping()
      // Store the Step length (geometrical length) to G4Step and G4Track
      fStep->SetStepLength( PhysicalStep );
      fTrack->SetStepLength( PhysicalStep );
+     G4double GeomStepLength = PhysicalStep;
 
      // Store StepStatus to PostStepPoint
      fStep->GetPostStepPoint()->SetStepStatus( fStepStatus );
@@ -153,11 +154,7 @@ G4StepStatus G4SteppingManager::Stepping()
 
      // Update safety after invocation of all AlongStepDoIts
      endpointSafOrigin= fPostStepPoint->GetPosition();
-     endpointSafety=  max( proposedSafety -
-			   (fPostStepPoint->GetPosition() -
-			    fPreStepPoint->GetPosition()
-			    ).mag(),
-			   0.);
+     endpointSafety=  max( proposedSafety - GeomStepLength, 0.);
 
      fStep->GetPostStepPoint()->SetSafety( endpointSafety );
 

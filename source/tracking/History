@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-02-18 08:55:32 tsasaki Exp $
+$Id: History,v 1.3 1999-03-24 04:41:36 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 23, 99 T.Sasaki    (tracking-01-00-02)
+- Fix for precision problem of safety in SteppingManager by John Apostolakis
+- G4VSteppingVerbose is introduced  
 Feb 18, 99 T.Sasaki (tracking-01-00-01)
 - ShowStep() method was moved from G4Step to G4SteppingVerbose
 Nov 25, 98 T.Sasaki    (tracking-00-04-03)
