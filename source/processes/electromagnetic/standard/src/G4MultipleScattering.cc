@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.14 1999-10-15 12:56:34 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.15 1999-10-18 11:29:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -52,7 +52,7 @@
        scatteringparameter(0.9),
        tuning (1.00),
        cpar (1.5),
-       NuclCorrPar (0.010),FactPar(0.40),
+       NuclCorrPar (20.0),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
 
