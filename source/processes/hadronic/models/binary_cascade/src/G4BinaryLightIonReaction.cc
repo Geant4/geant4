@@ -4,6 +4,9 @@
 #include <algorithm>
 
 
+  G4BinaryLightIonReaction::G4BinaryLightIonReaction()
+  : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
+  
   G4VParticleChange *G4BinaryLightIonReaction::
   ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
   {    
