@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.hh,v 1.4 2001-07-11 09:58:18 gunter Exp $
+// $Id: ExN02TrackerHit.hh,v 1.5 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02TrackerHit_h
 #define ExN02TrackerHit_h 1
@@ -35,7 +35,7 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02TrackerHit : public G4VHit
 {
@@ -73,13 +73,13 @@ class ExN02TrackerHit : public G4VHit
       G4ThreeVector pos;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<ExN02TrackerHit> ExN02TrackerHitsCollection;
 
 extern G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* ExN02TrackerHit::operator new(size_t)
 {
@@ -88,14 +88,14 @@ inline void* ExN02TrackerHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void ExN02TrackerHit::operator delete(void *aHit)
 {
   ExN02TrackerHitAllocator.FreeSingle((ExN02TrackerHit*) aHit);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

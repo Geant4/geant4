@@ -21,28 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingVerbose.cc,v 1.7 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02SteppingVerbose.cc,v 1.8 2001-10-11 12:32:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02SteppingVerbose.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02SteppingVerbose::ExN02SteppingVerbose()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02SteppingVerbose::~ExN02SteppingVerbose()
 {}
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02SteppingVerbose::StepInfo()
 {
@@ -66,14 +66,14 @@ void ExN02SteppingVerbose::StepInfo()
 	     << G4std::setw(10) << "Process"   << G4endl;	          
     }
 
-    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << G4std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
-	   << G4std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    G4cout << G4std::setw(5) << fTrack->GetCurrentStepNumber() << " "
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
+	<< G4std::setw(6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	<< G4std::setw(6) << G4BestUnit(fStep->GetStepLength(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
     // if( fStepStatus != fWorldBoundary){ 
     if( fTrack->GetNextVolume() != 0 ) { 
@@ -84,7 +84,7 @@ void ExN02SteppingVerbose::StepInfo()
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
       G4cout << "  " 
-             << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
+        << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	                                ->GetProcessName();
     } else {
       G4cout << "   UserLimit";
@@ -107,7 +107,7 @@ void ExN02SteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
@@ -134,7 +134,7 @@ void ExN02SteppingVerbose::StepInfo()
   G4cout.precision(prec);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02SteppingVerbose::TrackingStarted()
 {
@@ -154,14 +154,14 @@ G4int prec = G4cout.precision(3);
 	   << G4std::setw(10) << "Volume"     << "  "
 	   << G4std::setw(10) << "Process"    << G4endl;	     
 
-    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << G4std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
-	   << G4std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
-	   << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    G4cout << G4std::setw(5) << fTrack->GetCurrentStepNumber() << " "
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
+	<< G4std::setw(6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	<< G4std::setw(6) << G4BestUnit(fStep->GetStepLength(),"Length")
+	<< G4std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
     if(fTrack->GetNextVolume()){
       G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName();
@@ -173,4 +173,4 @@ G4int prec = G4cout.precision(3);
   G4cout.precision(prec);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.hh,v 1.4 2001-07-11 09:58:17 gunter Exp $
+// $Id: ExN02ChamberParameterisation.hh,v 1.5 2001-10-11 12:32:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,8 +29,8 @@
 //    The boxes have equal width, & their lengths are a linear equation.
 //    They are spaced an equal distance apart, starting from given location.
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02ChamberParameterisation_H
 #define ExN02ChamberParameterisation_H 1
@@ -41,7 +41,7 @@
 class G4VPhysicalVolume;
 class G4Box;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02ChamberParameterisation : public G4VPVParameterisation
 { 
@@ -53,7 +53,8 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
                                  G4double widthChamber, 
                                  G4double lengthInitial,
                                  G4double lengthFinal );
-				 
+
+    virtual				 
    ~ExN02ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,
@@ -72,6 +73,8 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
     G4double fHalfLengthFirst;  //  The first half-length 
     G4double fHalfLengthIncr;   //  The Increment for the half-length 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingAction.cc,v 1.5 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02SteppingAction.cc,v 1.6 2001-10-11 12:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02SteppingAction.hh"
 #include "G4SteppingManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02SteppingAction::ExN02SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
@@ -43,5 +43,5 @@ void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
                            aStep->GetPreStepPoint()->GetPhysicalVolume();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.5 2001-07-12 17:05:00 maire Exp $
+// $Id: ExN02DetectorMessenger.cc,v 1.6 2001-10-11 12:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02DetectorMessenger.hh"
 
@@ -35,9 +35,9 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction * myDet)
+ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
 :myDetector(myDet)
 { 
 
@@ -63,7 +63,7 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction * myDet
   FieldCmd->AvailableForStates(PreInit,Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02DetectorMessenger::~ExN02DetectorMessenger()
 {
@@ -73,18 +73,18 @@ ExN02DetectorMessenger::~ExN02DetectorMessenger()
   delete mydetDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN02DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void ExN02DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == TargMatCmd )
-   { myDetector->setTargetMaterial(newValues);}
+   { myDetector->setTargetMaterial(newValue);}
    
   if( command == ChamMatCmd )
-   { myDetector->setChamberMaterial(newValues);}  
+   { myDetector->setChamberMaterial(newValue);}  
   
   if( command == FieldCmd )
-   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValues));}
+   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

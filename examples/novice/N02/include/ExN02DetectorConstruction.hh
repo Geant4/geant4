@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.hh,v 1.4 2001-07-11 09:58:17 gunter Exp $
+// $Id: ExN02DetectorConstruction.hh,v 1.5 2001-10-11 12:32:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02DetectorConstruction_h
 #define ExN02DetectorConstruction_h 1
@@ -40,7 +40,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class ExN02DetectorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -94,6 +94,8 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      G4double ChamberWidth;            // width of the chambers
      G4double ChamberSpacing;	       // distance between chambers
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.5 2001-07-11 09:58:17 gunter Exp $
+// $Id: exampleN02.cc,v 1.6 2001-10-11 12:32:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02DetectorConstruction.hh"
 #include "ExN02PhysicsList.hh"
@@ -45,7 +45,7 @@
 #include "ExN02VisManager.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -109,5 +109,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

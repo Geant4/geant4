@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02VisManager.cc,v 1.5 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02VisManager.cc,v 1.6 2001-10-11 12:32:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 24th January 1998.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4VIS_USE
 
@@ -90,11 +90,11 @@
 #include "G4VRML2File.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02VisManager::ExN02VisManager () {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02VisManager::RegisterGraphicsSystems () {
 
@@ -162,4 +162,4 @@ void ExN02VisManager::RegisterGraphicsSystems () {
 
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02RunAction.hh,v 1.5 2001-07-11 09:58:18 gunter Exp $
+// $Id: ExN02RunAction.hh,v 1.6 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02RunAction_h
 #define ExN02RunAction_h 1
@@ -33,7 +33,7 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 
@@ -47,6 +47,8 @@ class ExN02RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

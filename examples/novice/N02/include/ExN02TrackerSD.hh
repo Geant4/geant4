@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerSD.hh,v 1.4 2001-07-11 09:58:18 gunter Exp $
+// $Id: ExN02TrackerSD.hh,v 1.5 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02TrackerSD_h
 #define ExN02TrackerSD_h 1
@@ -36,11 +36,10 @@
 class G4Step;
 class G4HCofThisEvent;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02TrackerSD : public G4VSensitiveDetector
 {
-
   public:
       ExN02TrackerSD(G4String);
      ~ExN02TrackerSD();
@@ -53,6 +52,8 @@ class ExN02TrackerSD : public G4VSensitiveDetector
       ExN02TrackerHitsCollection* trackerCollection;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

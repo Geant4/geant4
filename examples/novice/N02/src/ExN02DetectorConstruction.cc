@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.8 2001-07-11 09:58:19 gunter Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.9 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "ExN02DetectorConstruction.hh"
 #include "ExN02DetectorMessenger.hh"
@@ -47,7 +47,7 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExN02DetectorConstruction::ExN02DetectorConstruction()
 :solidWorld(NULL),  logicWorld(NULL),  physiWorld(NULL),
@@ -62,7 +62,7 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
   detectorMessenger = new ExN02DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExN02DetectorConstruction::~ExN02DetectorConstruction()
 { 
@@ -70,7 +70,7 @@ ExN02DetectorConstruction::~ExN02DetectorConstruction()
   delete detectorMessenger;             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 {
@@ -90,11 +90,11 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
     G4Material* Air = new G4Material(name="Air", density, nel=2);
     Air->AddElement(elN, .7);
     Air->AddElement(elO, .3);
-
+    
   //Al
     a = 26.98*g/mole;
     density = 2.7*g/cm3;
-    G4Material* Aluminium = new G4Material(name="Al", z=13., a, density);
+    G4Material* Al = new G4Material(name="Al", z=13., a, density);
 
   //Pb
     a = 207.19*g/mole;
@@ -119,8 +119,8 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   ChamberWidth = 20*cm;
   ChamberSpacing = 80*cm;
   
-  fTrackerLength = (NbOfChambers+1)*ChamberSpacing; // Full length of the Tracker
-  fTargetLength  = 5.0 * cm;                        // Full length of the Target
+  fTrackerLength = (NbOfChambers+1)*ChamberSpacing; // Full length of Tracker
+  fTargetLength  = 5.0 * cm;                        // Full length of Target
   
   TargetMater  = Pb;
   ChamberMater = Xenon;
@@ -138,8 +138,8 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
   G4double HalfWorldLength = 0.5*fWorldLength;
   
-  solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
-  logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
+ solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+ logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
@@ -258,7 +258,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   return physiWorld;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void ExN02DetectorConstruction::setTargetMaterial(G4String materialName)
 {
@@ -272,7 +272,7 @@ void ExN02DetectorConstruction::setTargetMaterial(G4String materialName)
      }             
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
 {
@@ -286,11 +286,11 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
      }             
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
   fpMagField->SetFieldValue(fieldValue);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

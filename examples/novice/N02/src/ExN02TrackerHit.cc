@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.cc,v 1.5 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02TrackerHit.cc,v 1.6 2001-10-11 12:32:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02TrackerHit.hh"
 #include "G4UnitsTable.hh"
@@ -36,15 +36,15 @@
 
 G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerHit::ExN02TrackerHit() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerHit::~ExN02TrackerHit() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerHit::ExN02TrackerHit(const ExN02TrackerHit& right)
 {
@@ -54,7 +54,7 @@ ExN02TrackerHit::ExN02TrackerHit(const ExN02TrackerHit& right)
   pos       = right.pos;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const ExN02TrackerHit& ExN02TrackerHit::operator=(const ExN02TrackerHit& right)
 {
@@ -65,14 +65,14 @@ const ExN02TrackerHit& ExN02TrackerHit::operator=(const ExN02TrackerHit& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int ExN02TrackerHit::operator==(const ExN02TrackerHit& right) const
 {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02TrackerHit::Draw()
 {
@@ -89,7 +89,7 @@ void ExN02TrackerHit::Draw()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02TrackerHit::Print()
 {
@@ -98,5 +98,5 @@ void ExN02TrackerHit::Print()
 	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

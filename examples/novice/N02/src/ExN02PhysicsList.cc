@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.11 2001-07-11 09:58:19 gunter Exp $
+// $Id: ExN02PhysicsList.cc,v 1.12 2001-10-11 12:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
 #include "ExN02PhysicsList.hh"
@@ -40,7 +40,7 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"                
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02PhysicsList::ExN02PhysicsList():  G4VUserPhysicsList()
 {
@@ -48,12 +48,12 @@ ExN02PhysicsList::ExN02PhysicsList():  G4VUserPhysicsList()
    SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02PhysicsList::~ExN02PhysicsList()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructParticle()
 {
@@ -69,7 +69,7 @@ void ExN02PhysicsList::ConstructParticle()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructBosons()
 {
@@ -81,7 +81,7 @@ void ExN02PhysicsList::ConstructBosons()
   G4Gamma::GammaDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructLeptons()
 {
@@ -100,7 +100,7 @@ void ExN02PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructMesons()
 {
@@ -119,7 +119,7 @@ void ExN02PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructBaryons()
 {
@@ -131,7 +131,7 @@ void ExN02PhysicsList::ConstructBaryons()
   G4AntiNeutron::AntiNeutronDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructProcess()
 {
@@ -140,7 +140,7 @@ void ExN02PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -160,7 +160,7 @@ void ExN02PhysicsList::ConstructProcess()
 
 #include "G4UserSpecialCuts.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::ConstructEM()
 {
@@ -274,7 +274,7 @@ void ExN02PhysicsList::ConstructEM()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 void ExN02PhysicsList::ConstructGeneral()
@@ -294,7 +294,7 @@ void ExN02PhysicsList::ConstructGeneral()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PhysicsList::SetCuts()
 {
@@ -306,5 +306,5 @@ void ExN02PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PrimaryGeneratorAction.hh,v 1.4 2001-07-11 09:58:17 gunter Exp $
+// $Id: ExN02PrimaryGeneratorAction.hh,v 1.5 2001-10-11 12:32:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef ExN02PrimaryGeneratorAction_h
 #define ExN02PrimaryGeneratorAction_h 1
@@ -36,7 +36,7 @@ class ExN02DetectorConstruction;
 class G4ParticleGun;
 class G4Event;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class ExN02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -51,6 +51,8 @@ class ExN02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* particleGun;
     ExN02DetectorConstruction* myDetector;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

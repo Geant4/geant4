@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.5 2001-07-11 09:58:19 gunter Exp $
+// $Id: ExN02ChamberParameterisation.cc,v 1.6 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02ChamberParameterisation.hh"
 
@@ -33,7 +33,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02ChamberParameterisation::ExN02ChamberParameterisation(  
         G4int    NoChambers, 
@@ -51,20 +51,19 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
    // fHalfLengthLast = lengthFinal;
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
-
-      if( spacingZ < widthChamber ) {
-         G4Exception( "ExN02ChamberParameterisation construction: Width > Spacing" );
+      if (spacingZ < widthChamber) {
+       G4Exception("ExN02ChamberParameterisation construction: Width>Spacing");
       }
    }
    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02ChamberParameterisation::~ExN02ChamberParameterisation()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02ChamberParameterisation::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const
@@ -75,7 +74,7 @@ void ExN02ChamberParameterisation::ComputeTransformation
   physVol->SetRotation(0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02ChamberParameterisation::ComputeDimensions
 (G4Box& trackerChamber, const G4int copyNo,
@@ -87,4 +86,4 @@ void ExN02ChamberParameterisation::ComputeDimensions
   trackerChamber.SetZHalfLength(fHalfWidth);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

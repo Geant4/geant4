@@ -21,18 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingAction.hh,v 1.5 2001-07-11 09:58:18 gunter Exp $
+// $Id: ExN02SteppingAction.hh,v 1.6 2001-10-11 12:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02SteppingAction_h
 #define ExN02SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02SteppingAction : public G4UserSteppingAction
 {
@@ -42,5 +42,7 @@ class ExN02SteppingAction : public G4UserSteppingAction
 
     void UserSteppingAction(const G4Step*);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PrimaryGeneratorAction.cc,v 1.4 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02PrimaryGeneratorAction.cc,v 1.5 2001-10-11 12:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02PrimaryGeneratorAction.hh"
 #include "ExN02DetectorConstruction.hh"
@@ -36,9 +36,10 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN02PrimaryGeneratorAction::ExN02PrimaryGeneratorAction(ExN02DetectorConstruction* myDC)
+ExN02PrimaryGeneratorAction::ExN02PrimaryGeneratorAction(
+                                               ExN02DetectorConstruction* myDC)
 :myDetector(myDC)
 {
   G4int n_particle = 1;
@@ -54,14 +55,14 @@ ExN02PrimaryGeneratorAction::ExN02PrimaryGeneratorAction(ExN02DetectorConstructi
   particleGun->SetParticleEnergy(3.0*GeV);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02PrimaryGeneratorAction::~ExN02PrimaryGeneratorAction()
 {
   delete particleGun;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
@@ -71,5 +72,5 @@ void ExN02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

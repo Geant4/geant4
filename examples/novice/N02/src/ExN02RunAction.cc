@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02RunAction.cc,v 1.5 2001-07-11 09:58:20 gunter Exp $
+// $Id: ExN02RunAction.cc,v 1.6 2001-10-11 12:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02RunAction.hh"
 
@@ -34,17 +34,17 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02RunAction::ExN02RunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02RunAction::~ExN02RunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -57,19 +57,17 @@ void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
     } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02RunAction::EndOfRunAction(const G4Run*)
 {
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  
-  if(G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 
