@@ -20,95 +20,178 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// -------------------------------------------------------------------
+//      GEANT 4 class file --- Copyright CERN 1998
+//      CERN Geneva Switzerland
+//
+//
+//      File name:     G4ExcitationHandlerTest.cc 
+//
+//      Author:        Maria Grazia Pia (pia@genova.infn.it), 
+// 
+//      Creation date: 27 October 1998
+//
+//      Modifications: 
+//
+// -------------------------------------------------------------------
+
+#include "globals.hh"
+
+#include "G4ios.hh"
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+#include "CLHEP/Hist/TupleManager.h"
+#include "CLHEP/Hist/HBookFile.h"
+#include "CLHEP/Hist/Histogram.h"
+#include "CLHEP/Hist/Tuple.h"
+#include "CLHEP/String/Strings.h"
+#include "G4VEvaporationChannel.hh"
+#include "G4CompetitiveFission.hh"
+
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
+#include "G4DynamicParticleVector.hh"
+#include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
 
 #include "G4ExcitationHandler.hh"
-
+#include "G4EvaporationChannel.hh"
+#include "G4PhotonEvaporation.hh"
+#include "G4DataVector.hh"
+#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
+#include "G4Fragment.hh"
+#include "Randomize.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4FragmentVector.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4IonTable.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
+#include "G4ParticleTypes.hh"
+#include "G4IonTable.hh"
+#include "G4GenericIon.hh"
+#include "G4NucleiPropertiesTable.hh"
+
+#include "g4rw/tvvector.h"
 
 int main()
 {
+  // MGP ---- HBOOK initialization
+  HepTupleManager* hbookManager;
+  hbookManager = new HBookFile("handler.hbook", 58);
+  assert (hbookManager != 0);
+
+  // MGP ---- Book histograms
+
+  HepHistogram* hGammaE;
+  hGammaE = hbookManager->histogram("Gamma energy", 200,0.,20.);
+  assert (hGammaE != 0);  
+
+  HepHistogram* hNProducts;
+  hNProducts = hbookManager->histogram("Number of products", 100,0.,100.);
+  assert (hNProducts != 0);  
+
+  HepHistogram* hProb;
+  hProb = hbookManager->histogram("Probability * 1.e25", 100,0.,10.);
+  assert (hProb != 0);  
+
+  // MGP ---- Book a ntuple
+  HepTuple* ntuple;
+  ntuple = hbookManager->ntuple("G4ExcitationHandler");
+  assert (ntuple != 0);
+
   G4int Z;
   G4int A;
-  
-  std::cout << "Please enter Z : ";
-  std::cin >> Z;
-  std::cout << "Please enter A : ";
-  std::cin >> A;
-  
-  G4double energy;
-  
-  std::cout << "Please enter excitation energy (MeV) : ";
-  std::cin >> energy;
-  
 
-  energy *= MeV;
-  
-  G4int iterations;
-  std::cout << "Please enter number of interations : ";
-  std::cin >> iterations;
-  
-  G4double NuclearMass = G4NucleiProperties::GetNuclearMass(A,Z) + energy;
+  G4cout << "Enter Z and A" << G4endl;
+  G4cin >> Z >> A;
 
+  assert (Z > 0);
+  assert (A > 0);
+  assert (A > Z);
   
-  G4LorentzVector p4(0.0,0.0,0.0,NuclearMass);
-  G4Fragment aFragment(A,Z,p4);
-  
-  G4ExcitationHandler handler;
+  G4int iter;
+  G4cout << "Enter number of iterations " << G4endl;
+  G4cin >> iter;
+  if (iter <1) iter = 1;
 
-  std::cout << "Excited Nucleus\n";
-  std::cout << aFragment << "\n\n";
-  
-  G4LorentzVector p4null(0.0,0.0,0.0,0.0);
+  G4double excMin;
+  G4double excMax;    
+  G4cout << "Enter initial min an max excitation energy" << G4endl;
+  G4cin >> excMin >> excMax;
+  assert (excMin >= 0.);
+  assert (excMax > 0.);
+  assert (excMax >= excMin);
 
-  
-  for (G4int i = 0; i < iterations; ++i)
+  G4ParticleDefinition *theElectron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* ion  = G4GenericIon::GenericIonDefinition();
+  G4ParticleTable* theTableOfParticles;
+  theTableOfParticles = G4ParticleTable::GetParticleTable();
+  G4IonTable* theTable = new G4IonTable();
+
+  // G4ExcitationHandler for this (Z,A) material
+  // Excitation energy levels for each channel
+
+  G4int i;
+  for (i=0; i<iter; i++)
     {
-      G4LorentzVector p4cons;
-      p4cons = p4null;
-      std::cout << "############ event " << i+1 << "###########################\n";
-      G4ReactionProductVector * theResult = handler.BreakItUp(aFragment);
-      std::cout << "Number of fragments: " << theResult->size() << '\n';
-      std::cout << "-------------------------------------------\n";
-      for (G4ReactionProductVector::iterator i = theResult->begin(); i != theResult->end(); ++i)
-        {
-          G4LorentzVector p4tmp;
-          p4tmp.setVect((*i)->GetMomentum());
-          p4tmp.setE((*i)->GetTotalEnergy());
-          G4int tmpA = (*i)->GetDefinition()->GetBaryonNumber();
-          G4int tmpZ = static_cast<G4int>((*i)->GetDefinition()->GetPDGCharge());
+      G4double excitation = excMin + G4UniformRand() * (excMax - excMin);
 
+      G4cout << G4endl << "TEST >>>>>>>>> Iteration " << i 
+	     << " <<<<<<<<< Initial excitation " << excitation << G4endl;
 
-          G4double U = p4tmp.mag() - G4NucleiProperties::GetNuclearMass( tmpA, tmpZ );
-          if( U < 0.0 )
-            {
-              if ( U > -10.0 * eV || 0==tmpA )
-                { 
-                  U = 0.0;
-                }
-            }
+      G4double px = 0.;
+      G4double py = 0.;
+      G4double pz = 0.;
 
-          std::cout << "Fragment: A = " << std::setprecision(3) << tmpA
-                    << ", Z = " << std::setprecision(3) << tmpZ
-                    << ", U = " << U
-                    << " MeV\n" 
-                    << "          P = ("
-                    << p4tmp.x()/MeV << ","
-                    << p4tmp.y()/MeV << ","
-                    << p4tmp.z()/MeV
-                    << ") MeV   E = "
-                    << p4tmp.e()/MeV << " MeV\n";
+      G4ThreeVector p(px,py,pz);
+      G4double nuclearMass = G4NucleiProperties::GetNuclearMass(A,Z);
+      G4LorentzVector p4(p,sqrt((nuclearMass+excitation)*(nuclearMass+excitation)));
 
-          std::cout << "\n-------------------------------------------\n";
-          p4cons += p4tmp;
-          delete (*i);
-        }
-      delete theResult;
-      std::cout << "        Initial momentum : " << p4 << '\n';
-      std::cout << "Fragments total momentum : " << p4cons << '\n';
-      std::cout << "            Conservation : " << p4-p4cons << '\n';
+      G4Fragment nucleus(A,Z,p4);
+
+      G4ExcitationHandler* handler = new G4ExcitationHandler;
+      //      G4DynamicParticleVector* products = handler->BreakItUp(nucleus);
+      G4ReactionProductVector* products = handler->BreakItUp(nucleus);
+
+      // Fill histograms 
+
+      G4int nProducts = 0;
+      if (products !=0) nProducts = products->entries();
+
+      G4cout << nProducts << " products: gammaE ";
+      
+      G4int ig = 0;
+      for (ig=0; ig<nProducts; ig++)
+	{
+	  if (products->at(ig)->GetDefinition() == G4Gamma::GammaDefinition())
+	    {
+	      //	      G4double productE = products->at(ig)->Get4Momentum().e();
+	      G4double productE = products->at(ig)->GetTotalEnergy();
+	      G4cout << productE << " ";
+	      hGammaE->accumulate(productE);
+              ntuple->column("egamma",productE);
+	      ntuple->dumpData();
+	    }
+	}
+      G4cout << G4endl;
+      
+      delete handler;
+      products->clearAndDestroy();
+      delete products;
     }
+
+  hbookManager->write();
+
   
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 
