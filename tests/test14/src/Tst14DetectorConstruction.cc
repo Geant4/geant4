@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.4 1999-12-15 14:54:50 gunter Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.5 2000-01-21 17:52:47 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,8 +255,10 @@ void Tst14DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
         {AbsorberMaterial = pttoMaterial;
          logicAbsorber->SetMaterial(pttoMaterial); 
         // PrintCalorParameters();
+	 return;
         }             
    }
+   G4cout<<"Unvalid material"<<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -274,8 +276,10 @@ void Tst14DetectorConstruction::SetWorldMaterial(G4String materialChoice)
         {WorldMaterial = pttoMaterial;
          logicWorld->SetMaterial(pttoMaterial); 
        //  PrintCalorParameters();
+         return;
         }             
    }
+   G4cout<<"Unvalid material"<<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
