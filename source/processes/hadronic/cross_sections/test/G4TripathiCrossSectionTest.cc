@@ -2,12 +2,12 @@
 #include "G4TripathiCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonConstructor.hh"
-#include "../src/G4TripathiCrossSection.cc"
-
+#include "G4IonProtonCrossSection.hh"
 
 main()
 {
    G4IonConstructor theIons;
+   G4IonProtonCrossSection aCrossSection;
    theIons.ConstructParticle();
    G4TripathiCrossSection theIonDataSet;
    cout << "Please select the target"<<endl;
