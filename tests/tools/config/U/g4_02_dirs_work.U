@@ -26,7 +26,7 @@ esac
 #	;;
 #esac
 
-while test 1 = 1  ; do
+while test 1 = 0  ; do
 
 g4message=`cat << EOM
 
