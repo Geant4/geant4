@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.12 2001-01-16 18:31:40 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.13 2001-01-18 12:22:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -275,6 +275,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance
     ("/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth-of-descending>]");
   fpCommand -> SetGuidance ("Adds a physical volume to the current scene.");
+  fpCommand -> SetGuidance ("Note: adds first occurence only.");
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
   //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
@@ -352,14 +353,13 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     // OK, what have we got...?
     foundVolume = searchScene.GetFoundVolume ();
     foundDepth = searchScene.GetFoundDepth ();
-    //const G4Transform3D&
-    //  transformation = searchScene.GetFoundTransformation ();
-    // Note: a physical volume carries its own transformation and
-    // does not need an additional model transformation.
+    const G4Transform3D&
+      transformation = searchScene.GetFoundTransformation ();
 
     if (foundVolume) {
       model = new G4PhysicalVolumeModel (foundVolume,
-					 requestedDepthOfDescent);
+					 requestedDepthOfDescent,
+					 transformation);
     }
     else {
       G4cout << "Volume \"" << name << "\", copy no. " << copyNo
