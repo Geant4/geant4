@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.37 1999-05-19 08:36:11 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.38 1999-05-19 13:50:56 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -7,7 +7,7 @@ geant4/config           HEAD
 geant4/data             geant4-00-ref-08
 # geant4/documents - not currently part of reference versions
 geant4/environments     geant4-00-ref-08
-geant4/examples         geant4-00-ref-08
+geant4/examples         examples-01-00-05
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
