@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.11 2003-01-31 08:18:30 vnivanch Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.12 2003-01-31 10:42:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -281,7 +281,6 @@ void Tst14DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
       {AbsorberMaterial = pttoMaterial;
       logicAbsorber->SetMaterial(pttoMaterial); 
       PrintCalorParameters();
-			(G4RunManager::GetRunManager())->CutOffHasBeenModified();
       return;
       }             
     }
@@ -378,10 +377,10 @@ void Tst14DetectorConstruction::SetMagField(G4double fieldValue)
   
 void Tst14DetectorConstruction::UpdateGeometry()
 {
-	G4VPhysicalVolume* v = ConstructCalorimeter();
+  G4VPhysicalVolume* v = ConstructCalorimeter();
   G4RunManager* rm = G4RunManager::GetRunManager();
-	rm->GeometryHasBeenModified();
-	rm->DefineWorldVolume(v);
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(v);
   rm->ResetNavigator();
 }
 
@@ -398,7 +397,6 @@ void Tst14DetectorConstruction::ComputeCalorParameters()
      
      zstartAbs = zAbsorber-0.5*AbsorberThickness; 
      zendAbs   = zAbsorber+0.5*AbsorberThickness; 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
