@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-11-14 16:14:18 gcosmo Exp $
+$Id: History,v 1.12 2001-04-03 15:26:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr  3, 2001 J. Apostolakis - param-V03-00-00
+- Modified G4FastSimulationManagerProcess call to PropagatorInField ComputeStep
+   to use new interface with G4FieldTrack (in place of now obsolete interface.)
 
 Nov 14, 2000 G. Cosmo - param-V02-00-01
 - Moved specific parameterisation models to the new top category
