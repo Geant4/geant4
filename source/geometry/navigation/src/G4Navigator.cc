@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.11 2004-06-11 10:10:08 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.12 2004-06-15 16:44:00 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -818,11 +818,11 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       //
       G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
              << "        Track stuck, not moving for " 
-             << fNumberZeroSteps << " steps" << G4endl
+             << fNumberZeroSteps-1 << " steps" << G4endl
              << "        in volume: " << motherPhysical->GetName() << G4endl
              << "        at point: " << pGlobalpoint << " ." << G4endl;
       G4Exception("G4Navigator::ComputeStep()",
-                  "NavigationProblem", FatalException, 
+                  "StuckTrack", EventMustBeAborted, 
                   "Stuck Track: potential geometry or navigation problem.");
     }
   }
