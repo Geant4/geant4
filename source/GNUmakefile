@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.41 2003-12-05 07:44:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.42 2004-01-30 09:56:00 gbarrand Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -28,7 +28,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global libmap win32def includes clean_libs clean clean_lists clean_all
 
 all:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
@@ -38,6 +38,7 @@ ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
+	$(MAKE) win32def
 
 glob global:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
@@ -90,6 +91,14 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
+
+win32def : $(G4INSTALL)/config/win32def.c
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+	@echo "Building win32def program that helps building WIN32 DLLs"
+	CL /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
+else
+	@echo ""
+endif
 
 includes:
 	@echo Installing includes files in $(G4INCLUDE) ...
