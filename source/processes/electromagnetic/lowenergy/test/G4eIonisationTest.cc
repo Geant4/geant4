@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationTest.cc,v 1.10 2001-10-12 13:10:56 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.11 2001-10-24 18:08:22 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,7 +47,7 @@
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
-#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyIonisationVI.hh"
 #include "G4eIonisation.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4VParticleChange.hh"
@@ -66,12 +66,15 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
 
-HepTupleManager* hbookManager;
+// New Histogramming (from AIDA and Anaphe):
+#include "Interfaces/IHistoManager.h"
+#include "Interfaces/IHistogram1D.h"
+#include "Interfaces/IHistogram2D.h"
+
+// For NtupleTag from Anaphe
+#include "NtupleTag/LizardNTupleFactory.h"
+using namespace Lizard;
 
 int main()
 {
@@ -88,38 +91,103 @@ int main()
 
   // ---- HBOOK initialization
 
-
-  hbookManager = new HBookFile("ionitest.hbook", 58);
+  IHistoManager *hbookManager = createIHistoManager();
   assert (hbookManager != 0);
-  
-  // ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
-  
+   hbookManager->selectStore("comptonhisto.hbook");
+
+   // Create a nTuple factory:
+  NTupleFactory* factory = createNTupleFactory();
+
   // ---- primary ntuple ------
-  HepTuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
-  assert (ntuple1 != 0);
+ 
+ // ntuple-name is composition of <fileName>:<dirName>:<ntupleID>
+  NTuple* ntuple1 = factory->createC( "comptonhisto1.hbook::1" );
+  // Check if successful
+ assert (ntuple1 != 0);
   
   // ---- secondary ntuple ------
-  HepTuple* ntuple2 = hbookManager->ntuple("Secondary Ntuple");
+  
+ NTuple* ntuple2 = factory->createC( "comptonhisto2.hbook::2" );
   assert (ntuple2 != 0);
    
   // ---- secondaries histos ----
-  HepHistogram* hEKin;
-  hEKin = hbookManager->histogram("Kinetic Energy", 100,0.,200.);
-  assert (hEKin != 0);  
+  IHistogram* hEKin;
+  hEKin = hbookManager->create1D("10","Kinetic Energy", 100,0.,10.);
+ 
+  IHistogram* hP;
+  hP = hbookManager->create1D("20","Momentum", 100,0.,10.);
+ 
+  IHistogram* hNSec;
+  hNSec = hbookManager->create1D("30","Number of secondaries", 10,0.,10.);
   
-  HepHistogram* hP;
-  hP = hbookManager->histogram("Momentum", 100,0.,1000.);
-  assert (hP != 0);  
+  IHistogram* hDebug;
+  hDebug = hbookManager->create1D("40","Debug", 100,0.,200.);
   
-  HepHistogram* hNSec;
-  hNSec = hbookManager->histogram("Number of secondaries", 40,0.,40.);
-  assert (hNSec != 0);  
+  //  declare and bind "Quantities" to the Ntuple:
+
+  // First tuple ("Primary"):
+
+  Quantity<float> initialEnergy;
+  Quantity<float> energyChange;
+  Quantity<float> dedx;
+  Quantity<float> dedxNow;
+  Quantity<float> pxChange;
+  Quantity<float> pyChange;
+  Quantity<float> pzChange;
+  Quantity<float> pChange;
+  Quantity<float> nElectrons;
+  Quantity<float> nPositrons;
+  Quantity<float> nPhotons;
+  //  Add and bind the attributes to the first nTuple
   
-  HepHistogram* hDebug;
-  hDebug = hbookManager->histogram("Debug", 100,0.,200.);
-  assert (hDebug != 0);  
+  if( !( ntuple1->addAndBind( "eprimary"  , initialEnergy) &&
+	 ntuple1->addAndBind( "energyf"   , energyChange ) &&
+	 ntuple1->addAndBind( "de"        , dedx         ) &&
+	 ntuple1->addAndBind( "dedx"      , dedxNow      ) &&
+	 ntuple1->addAndBind( "pxch"      , pxChange     ) &&
+	 ntuple1->addAndBind( "pych"      , pyChange     ) &&
+	 ntuple1->addAndBind( "pzch"      , pzChange     ) &&
+	 ntuple1->addAndBind( "pch"       , pChange      ) &&
+	 ntuple1->addAndBind( "eminus"    , nElectrons   ) &&
+	 ntuple1->addAndBind( "eplus"     , nPositrons   ) &&
+	 ntuple1->addAndBind( "nphotons"  , nPhotons     ) ) ) 
+    {
+      G4cerr << "Error: unable to add attribute to nTuple1." << G4endl;
+      // Must be cleaned up properly before any exit.
+      delete ntuple1;
+      exit(-1);
+    }
   
+ // Second nTuple ("Secondary"):
+  
+  Quantity<float> px;
+  Quantity<float> py;
+  Quantity<float> pz;
+  Quantity<float> p;
+  Quantity<float> e;
+  Quantity<float> eKin;
+  Quantity<float> theta;
+  Quantity<float> phi;
+  Quantity<float> partType;
+  
+//  Add and bind the attributes to the second nTuple
+  //  if( !( ntuple2->addAndBind( "eprimary",initEnergy ) &&
+  if( !( ntuple2->addAndBind( "px"	, px        ) &&
+	 ntuple2->addAndBind( "py"	, py        ) &&
+	 ntuple2->addAndBind( "pz"	, pz        ) &&
+	 ntuple2->addAndBind( "p" 	, p         ) &&
+	 ntuple2->addAndBind( "e" 	, e         ) &&
+	 ntuple2->addAndBind( "ekin"    , eKin      ) &&
+	 ntuple2->addAndBind( "theta"   , theta     ) &&
+	 ntuple2->addAndBind( "phi"     , phi       ) &&
+	 ntuple2->addAndBind( "type"    , partType  )  ) )
+    {
+      G4cerr << "Error: unable to add attribute to nTuple2" << G4endl;
+      // Must be cleaned up properly before any exit.
+      delete ntuple2;
+      exit(-1);
+    }
+
 
   //--------- Materials definition ---------
 
@@ -177,6 +245,7 @@ int main()
 
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
+  // Dump the material table
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
@@ -239,7 +308,7 @@ int main()
 
   if (processType == 1)
     {
-      ionisationProcess = new G4LowEnergyIonisation;
+      ionisationProcess = new G4LowEnergyIonisationVI;
     }
   else
     {
@@ -311,7 +380,7 @@ int main()
       //     G4cout << eTrack.GetStep()->GetStepLength()/mm 
       //	     << G4endl;
  
-      G4VParticleChange* dummy;
+      G4VParticleChange* dummy= 0;
       if (test == 1) dummy = ionisationProcess->AlongStepDoIt(*eTrack, *step);
       if (test == 2) dummy = ionisationProcess->PostStepDoIt(*eTrack, *step);
 
@@ -319,18 +388,18 @@ int main()
       
       // Primary physical quantities 
 
-      G4double energyChange = particleChange->GetEnergyChange();
-      G4double dedx = initEnergy - energyChange ;
-      G4double dedxNow = dedx / (step->GetStepLength());
+      energyChange = particleChange->GetEnergyChange();
+      dedx = initEnergy - energyChange ;
+      dedxNow = dedx / (step->GetStepLength());
       
       G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
 							   (*particleChange->GetMomentumChange()),
 							   particleChange->GetMassChange());
 
-      G4double pxChange  = eChange.x();
-      G4double pyChange  = eChange.y();
-      G4double pzChange  = eChange.z();
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      pxChange  = eChange.x();
+      pyChange  = eChange.y();
+      pzChange  = eChange.z();
+      pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
 
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -352,27 +421,19 @@ int main()
 	     << G4endl;
 
       G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
-      //      G4cout << "Stopping power (dE/dx)=" << dedxnow << G4endl;
       
-      // Secondaries 
-
-      ntuple1->column("eprimary", initEnergy);
-      ntuple1->column("energyf", energyChange);
-      ntuple1->column("de", dedx);
-      ntuple1->column("dedx", dedxNow);
-      ntuple1->column("pxch", xChange);
-      ntuple1->column("pych", pyChange);
-      ntuple1->column("pzch", pzChange);
-      ntuple1->column("pch", zChange);  
+      // Primary
 
       // Secondaries physical quantities 
       
-      hNSec->accumulate(particleChange->GetNumberOfSecondaries());
-      hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
+      //hNSec->fill(particleChange->GetNumberOfSecondaries());
+      //hDebug->fill(particleChange->GetLocalEnergyDeposit());
 
-      G4int nElectrons = 0;
-      G4int nPositrons = 0;
-      G4int nPhotons = 0;
+      nElectrons = 0;
+      nPositrons = 0;
+      nPhotons = 0;
+
+ // Secondaries
 
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{
@@ -382,13 +443,14 @@ int main()
 	  
 	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
 	  
-	  G4double e    = finalParticle->GetTotalEnergy();
-	  G4double eKin = finalParticle->GetKineticEnergy();
-	  G4double px   = (finalParticle->GetMomentum()).x();
-	  G4double py   = (finalParticle->GetMomentum()).y();
-	  G4double pz   = (finalParticle->GetMomentum()).z();
-	  G4double p   = sqrt(px*px+py*py+pz*pz);
-          G4double theta = (finalParticle->GetMomentum()).theta();
+	  e    = finalParticle->GetTotalEnergy();
+	  eKin = finalParticle->GetKineticEnergy();
+	  px   = (finalParticle->GetMomentum()).x();
+	  py   = (finalParticle->GetMomentum()).y();
+	  pz   = (finalParticle->GetMomentum()).z();
+	  p   = sqrt(px*px+py*py+pz*pz);
+          theta = (finalParticle->GetMomentum()).theta();
+	  phi = (finalParticle->GetMomentum()).phi();
 
 	  if (eKin > initEnergy)
 	    {	    
@@ -406,10 +468,12 @@ int main()
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
 	  
-	  hEKin->accumulate(eKin);
-	  hP->accumulate(p);
-	  
-	  G4int partType = 0;
+	  //hEKin->fill(eKin);
+	  //hP->fill(p);
+	  //hTheta->fill(theta);
+	  //hPhi->fill(phi);
+
+	  partType = 0;
 	  if (particleName == "e-") 
 	    {
 	      partType = 1;
@@ -425,56 +489,37 @@ int main()
 	      partType = 3;
 	      nPhotons++;
 	    }
-	  // Fill the secondaries ntuple
-          ntuple2->column("eprimary",initEnergy);
-	  ntuple2->column("px", px);
-	  ntuple2->column("py", py);
-	  ntuple2->column("pz", pz);
-	  ntuple2->column("p", p);
-	  ntuple2->column("e", e);
-	  ntuple2->column("ekin", eKin);
-          ntuple2->column("theta",theta);
-	  ntuple2->column("type", partType);
-	  
-	  ntuple2->dumpData(); 
-	  
+	  // NEW: Values of attributes are prepared; store them to the nTuple:
+          ntuple2->addRow(); // check for returning true ...
+  
 	  delete particleChange->GetSecondary(i);
 	}
-      ntuple1->column("nelectrons",nElectrons);
-      ntuple1->column("npositrons",nPositrons);
-      ntuple1->column("nphotons",nPhotons);
-      ntuple1->dumpData(); 
-	    
+      //NEW: Values of attributes are prepared; store them to the nTuple:
+      ntuple1->addRow();
       particleChange->Clear();
       
     } 
-  
-  cout  << "Iteration number: "  <<  G4endl;
-  hbookManager->write();
+
+ G4cout  << "-----------------------------------------------------"  
+	  <<  G4endl;
+
+  //-old  hbookManager->write();
+
+  // Tell the manager which histos to store 
+  hbookManager->store("10");
+  hbookManager->store("20");
+  hbookManager->store("30");
+  hbookManager->store("40");
+ 
+// the destructor closes the corresponding file
+  delete ntuple1;
+  delete ntuple2;
+
   delete hbookManager;
-  
-  // delete materials and elements
-  //  delete Be;
-  //  delete Graphite;
-  //  delete Al;
-  //  delete Si;
-  //  delete LAr;
-  //  delete Fe;
-  //  delete Cu;
-  //  delete W;
-  //  delete Pb;
-  //  delete U;
-  //  delete H;
-  //  delete maO;
-  //  delete C;
-  //  delete Cs;
-  //  delete I;
-  //  delete O;
-  //  delete water;
-  //  delete ethane;
-  //  delete csi;
+  delete eTrack;
   delete step;
   delete touche;
+  delete aPoint;
 
   cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
