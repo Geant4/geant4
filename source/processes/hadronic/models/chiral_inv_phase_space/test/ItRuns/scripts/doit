@@ -23,7 +23,6 @@ echo ">>>>>>> Stripping out the info <<<<<<<"
 echo ">>>>>>>"
 cd ../logs
 ./doit $1.$2.log
-../../../../../../../../bin/Linux-g++/analyse
 echo ">>>>>>>"
 echo ">>>>>>> TEST $1 $2 TERMINATED <<<<<<<"
 echo ">>>>>>>"
