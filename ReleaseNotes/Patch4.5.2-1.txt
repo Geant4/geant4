@@ -22,6 +22,9 @@ List of fixes included in this public patch to release 5.2:
 
   o Hadronic processes:
     ------------------
+    + models/chiral_inv_phase_space
+      o Added protection against a rounding problem in the CHIPS
+        evaporation. Fixes a problem observed in gamma-nuclear reactions.
     + models/generator/de_excitation
       o Fixed usage of arguments to pow() function (porting on
         .NET 7.1 compiler).
