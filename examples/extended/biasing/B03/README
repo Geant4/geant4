@@ -1,2 +1,0 @@
-swig -python -c++ -shadow -no_default B03App.i
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$G4WORKDIR/lib/${G4SYSTEM}/
