@@ -47,6 +47,7 @@
 //of the box.
 
 //default source Ir-192
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -73,25 +74,19 @@
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 
-//Interactive mode//
 
 int main(int argc ,char ** argv)
 
 {
-  // fix the seed 
-  // HepRandom::setTheSeed(16520);
-
   HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed=time(0);
-  HepRandom ::setTheSeed(seed);
+  G4int seed = time(0);
+  HepRandom :: setTheSeed(seed);
 
-  // Construct the default run manager
   G4RunManager* pRunManager = new G4RunManager;
 
-  // Set mandatory initialization classes
-  G4String SDName = "Phantom";
+  G4String sensitiveDetectorName = "Phantom";
 
-  BrachyDetectorConstruction  *pDetectorConstruction=new  BrachyDetectorConstruction(SDName);
+  BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
 
   pRunManager->SetUserInitialization(pDetectorConstruction);
   pRunManager->SetUserInitialization(new BrachyPhysicsList);
@@ -102,35 +97,35 @@ int main(int argc ,char ** argv)
   visManager->Initialize();
 #endif
   
-// output environment variables:
+  // output environment variables:
 #ifdef G4ANALYSIS_USE
-   G4cout << G4endl << G4endl << G4endl 
-	  << " User Environment " << G4endl
-	  << " Using AIDA 3.0 analysis " << G4endl;
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " Using AIDA 3.0 analysis " << G4endl;
 # else
-   G4cout << G4endl << G4endl << G4endl 
-	  << " User Environment " << G4endl
-	  << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
-	  << G4endl;
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+	 << G4endl;
 #endif
   
   G4UIsession* session=0;
 
 
   if (argc==1)   // Define UI session for interactive mode.
-  {
-    // G4UIterminal is a (dumb) terminal.
+    {
+      // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);      
+      session = new G4UIterminal(new G4UItcsh);      
 #else
-    session = new G4UIterminal();
+      session = new G4UIterminal();
 #endif
-  }
+    }
 
-  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
+  BrachyEventAction *pEventAction=new BrachyEventAction(sensitiveDetectorName);
   pRunManager->SetUserAction(pEventAction );
 
-  BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
+  BrachyRunAction *pRunAction=new BrachyRunAction(sensitiveDetectorName);
   pRunManager->SetUserAction(pRunAction);
 
   //Initialize G4 kernel
@@ -141,22 +136,22 @@ int main(int argc ,char ** argv)
 
 
   if (session)   // Define UI session for interactive mode.
-  {
-    // G4UIterminal is a (dumb) terminal.
-    UI->ApplyCommand("/control/execute initInter.mac");    
+    {
+      // G4UIterminal is a (dumb) terminal.
+      UI->ApplyCommand("/control/execute initInter.mac");    
 #ifdef G4UI_USE_XM
-    // Customize the G4UIXm menubar with a macro file :
-    UI->ApplyCommand("/control/execute gui.mac");
+      // Customize the G4UIXm menubar with a macro file :
+      UI->ApplyCommand("/control/execute gui.mac");
 #endif
-    session->SessionStart();
-    delete session;
-  }
+      session->SessionStart();
+      delete session;
+    }
   else           // Batch mode
-  { 
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
-  }  
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }  
 
   // Job termination
 

@@ -29,10 +29,9 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.14 2003-05-09 16:52:07 gcosmo Exp $
+// $Id: BrachyEventAction.cc,v 1.15 2003-05-22 17:20:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "BrachyPrimaryGeneratorActionI.hh"
 #include "BrachyEventAction.hh"
 #include "BrachyPhantomHit.hh"
 #include "BrachyPhantomSD.hh"
@@ -53,116 +52,95 @@
 #include"BrachyAnalysisManager.hh"
 #endif
 
-#include "BrachyPrimaryGeneratorActionIr.hh"
-//....
+// Retrieve information about the energy deposit in the phantom ...
 
 BrachyEventAction::BrachyEventAction(G4String &SDName) :
-  drawFlag("all" ),printModulo(1)      
+  drawFlag("all" )
 {
- 
-  m_HitsCollectionID = -1;
+  hitsCollectionID = -1;
 
- SDname=SDName;
-
-
- pDetector=new BrachyDetectorConstruction(SDname);
-
- 
- m_NumVoxelX=pDetector-> GetNumVoxelX();
- m_NumVoxelZ=pDetector->GetNumVoxelZ();
- VoxelWidth_Z= 0.1*cm  ;
- VoxelWidth_X=0.1*cm;
- 
+  G4String sensitiveDetectorName = SDName;
+  
+  detector=new BrachyDetectorConstruction(sensitiveDetectorName);
 }
-
-//....
 
 BrachyEventAction::~BrachyEventAction()
 {
-  delete pDetector;
+  delete detector;
 }
-
-//....
 
 void BrachyEventAction::BeginOfEventAction(const G4Event*)
 {
-  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
-  if(m_HitsCollectionID == -1)
-    m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
+  G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
+  if(hitsCollectionID == -1)
+     hitsCollectionID = 
+           sensitiveDetectorManager->GetCollectionID("PhantomHitsCollection");
 }
-
-//....
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
- 
-if(m_HitsCollectionID < 0)
-	return;
+  G4int numberOfVoxelX = detector->GetNumVoxelX();
+  G4int numberOfVoxelZ = detector->GetNumVoxelZ();
+  G4double voxelWidthZ = 0.1*cm;
+  G4double voxelWidthX = 0.1*cm;
+  
+  if(hitsCollectionID < 0) return; 
 
- G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
- BrachyPhantomHitsCollection* CHC = NULL; 
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  BrachyPhantomHitsCollection* CHC = NULL; 
  
- if(HCE)
-	CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
+  if(HCE)
+     CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(hitsCollectionID));
 
- if(CHC)
+  if(CHC)
+    {
+      G4int hitCount = CHC->entries();
+      for (G4int h = 0; h < hitCount; h++)
 	{
-
-	
-	       G4int HitCount = CHC->entries();
-		
-   for (G4int h=0; h<HitCount; h++)
-                {
-	      
+	  //Store information about energy deposit in a 2DHistogram and in
+	  // a ntuple ...
+          
 #ifdef G4ANALYSIS_USE			  
-                  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
+	 BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
 #endif             
-                     i=((*CHC)[h])->GetZID();
-                     k=((*CHC)[h])->GetXID();
-                     j=((*CHC)[h])->GetYID();  
+	  G4int i=((*CHC)[h])->GetZID();
+	  G4int k=((*CHC)[h])->GetXID();
+	  G4int j=((*CHC)[h])->GetYID();  
                      
 
-                      EnergyDep=((*CHC)[h]->GetEdep())/keV;
+	  G4double EnergyDep=((*CHC)[h]->GetEdep());
                       
-                        x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
-                        z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
-                        y=(- m_NumVoxelZ+1+2*j)*VoxelWidth_Z/2;
+	  G4double x = (-numberOfVoxelZ+1+2*k)*voxelWidthX/2; 
+	  G4double z = (- numberOfVoxelZ+1+2*i)*voxelWidthZ/2;
+	  G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
 #ifdef G4ANALYSIS_USE
-			if(EnergyDep!=0)
-                         
-			  { 
-                            
-			    if (y<1.*mm){if (y> -1.*mm) 
-                                  {analysis->hist(x,z,EnergyDep);}}
-			  
-			    
-			  }
+	  if(EnergyDep != 0)                       
+	    { 
+             if (y<1.*mm){if (y> -1.*mm) 
+	      {analysis->FillHistogramWithEnergy(x,z,EnergyDep/MeV);}}
+	     }
 			 
-			if(EnergyDep!=0)analysis->fill_Tuple(x,y,z,EnergyDep);
-#endif 
-		       
-		}
+	  if(EnergyDep != 0)analysis->FillNtupleWithEnergy(x,y,z,EnergyDep/MeV);
+#endif 	       
 	}
-// extract the trajectories and draw them
+    }
+  // extract the trajectories and draw them ...
 
   if (G4VVisManager::GetConcreteInstance())
     {
-     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-     G4int n_trajectories = 0;
-     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+      G4int n_trajectories = 0;
+      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)((*(evt->
-						 GetTrajectoryContainer()))[i]);
-
- 
- if (drawFlag == "all") trj->DrawTrajectory(50);
-          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50);
-          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);	     	     
+      for (G4int i=0; i<n_trajectories; i++) 
+        {
+          G4Trajectory* trj = (G4Trajectory*)
+                                ((*(evt->GetTrajectoryContainer()))[i]);
+	  if(drawFlag == "all") trj->DrawTrajectory(50);
+	  else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+	    trj->DrawTrajectory(50);
+	  else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+	    trj->DrawTrajectory(50);	     	     
 	}
     }
- 
-
 }

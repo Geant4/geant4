@@ -31,13 +31,10 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.6 2003-05-09 07:19:08 gcosmo Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.7 2003-05-22 17:20:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyFactoryIr.hh"
@@ -49,74 +46,45 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det):
- Detector(Det)
+BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det): detector(Det)
 { 
-  detDir = new G4UIdirectory("/detector/");
-  detDir->SetGuidance(" detector control.");
+  detectorDir = new G4UIdirectory("/phantom/");
+  detectorDir->SetGuidance(" phantom control.");
       
-  AbsMaterCmd = new G4UIcmdWithAString("/detector/setMaterial",this);
-  AbsMaterCmd->SetGuidance("Select Material of the detector.");
-  AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(G4State_Idle);
-  selDetCmd = new G4UIcmdWithAString("/geom/select",this);
+  phantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
+  phantomMaterialCmd->SetGuidance("Select Material of the detector.");
+  phantomMaterialCmd->SetParameterName("choice",false);
+  phantomMaterialCmd->AvailableForStates(G4State_Idle);
   
-  mydetDir = new G4UIdirectory("/geom/");
-  mydetDir->SetGuidance("Geometry setup commands.");
- 
-  selDetCmd->SetGuidance("Select the way detector geometry is built.");
-  selDetCmd->SetGuidance(" Iodium:  Iodium Source ");
-  selDetCmd->SetGuidance("  Iridium: Iridium  Source  "  );
-  selDetCmd->SetGuidance("  Leipzig: Leipzig Source  "  );
-  selDetCmd->SetParameterName("choice",true);
-  selDetCmd->SetDefaultValue("Iridium");
-  selDetCmd->SetCandidates("Iridium / Iodium / Leipzig");
-  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  switchCmd = new G4UIcmdWithAString("/geom/switch",this);
-  switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
-  switchCmd->SetGuidance("In case the choice is present to this command,");
-  switchCmd->SetGuidance("\"/geom/select\" will be invoked and then switched.");
-  switchCmd->SetParameterName("choice",true);
-  switchCmd->SetDefaultValue(" ");
-  switchCmd->SetCandidates("Iridium Iodium Leipzig ");
-  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
- 
+  sourceCmd = new G4UIcmdWithAString("/source/switch",this);
+  sourceCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
+  sourceCmd->SetGuidance("In case the choice is present to this command,");
+  sourceCmd->SetGuidance("\"/geom/select\" will be invoked and then switched.");
+  sourceCmd->SetParameterName("choice",true);
+  sourceCmd->SetDefaultValue(" ");
+  sourceCmd->SetCandidates("Iridium Iodium Leipzig ");
+  sourceCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 BrachyDetectorMessenger::~BrachyDetectorMessenger()
 {
-  delete switchCmd;
-  delete mydetDir;
-  delete selDetCmd;
-  delete AbsMaterCmd; 
-  delete detDir;
+  delete sourceCmd;
+  delete phantomMaterialCmd; 
+  delete detectorDir;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { Detector->SetAbsorberMaterial(newValue);}
+  if( command == phantomMaterialCmd )
+   { detector->SetPhantomMaterial(newValue);}
 
- if( command == selDetCmd )
-  {
-    Detector->SelectDetector(newValue);
-  }
-  if( command == switchCmd )
-  {
+  if( command == sourceCmd )
+   {
     if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
-      { 
-      Detector->SelectDetector(newValue); 
-      Detector->SwitchDetector();
-       }
-  }  
+     { 
+       detector->SelectBrachytherapicSeed(newValue); 
+       detector->SwitchBrachytherapicSeed();
+      }
+   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorAction.hh,v 1.9 2003-05-09 16:52:06 gcosmo Exp $
+// $Id: BrachyPrimaryGeneratorAction.hh,v 1.10 2003-05-22 17:20:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ********************************************
@@ -30,6 +30,7 @@
 //    *                                          *
 //    ********************************************
 
+// This class must be implemented because it is mandatory
 
 #ifndef BrachyPrimaryGeneratorAction_h
 #define BrachyPrimaryGeneratorAction_h 1
@@ -47,7 +48,7 @@ class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~BrachyPrimaryGeneratorAction();
 
  public:
-   virtual  void GeneratePrimaries(G4Event* anEvent)=0; 
+   virtual  void GeneratePrimaries(G4Event* anEvent) = 0; 
 };
 
 #endif

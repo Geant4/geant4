@@ -20,7 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: BrachyFactoryI.hh,v 1.4 2003-05-09 16:52:06 gcosmo Exp $
+//    *******************************
+//    *                             *
+//    *    BrachyFactoryI.cc        *
+//    *                             *
+//    *******************************
+//
+//
+// Code developed by:
+//  S.Guatelli
+//
+// 
+// $Id: BrachyFactoryI.hh,v 1.5 2003-05-22 17:20:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +52,8 @@ class BrachyFactory;
 class BrachyPrimaryGeneratorActionI;
 class BrachyDetectorConstructionI;
 
+// This class manages the creation of Bebig Isoseed I-125 source 
+// used in interstitial brachytherapy ...
 class BrachyFactoryI:public BrachyFactory
 {
 public:
@@ -52,6 +65,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionI* pIodio;
+  BrachyDetectorConstructionI* iodiumSource;
 };
 #endif

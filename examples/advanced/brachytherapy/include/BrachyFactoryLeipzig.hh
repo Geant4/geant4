@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryLeipzig.hh,v 1.3 2003-05-09 16:52:06 gcosmo Exp $
+// $Id: BrachyFactoryLeipzig.hh,v 1.4 2003-05-22 17:20:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -29,8 +29,10 @@
 //    *      BrachyFactoryLeipzig.hh   *
 //    *                                *
 //    **********************************
+//code developed by: Susanna Guatelli
 //
-//
+// This class manages the creation of iridum source used in superficial
+// brachytherapy ...
 #ifndef BrachyFactoryLeipzig_h
 #define BrachyFactoryLeipzig_h 1
 
@@ -57,6 +59,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionLeipzig* pLeipzig;
+  BrachyDetectorConstructionLeipzig* leipzigSource;
 };
 #endif

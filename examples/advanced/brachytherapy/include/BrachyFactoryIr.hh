@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryIr.hh,v 1.3 2003-05-09 16:52:06 gcosmo Exp $
+// $Id: BrachyFactoryIr.hh,v 1.4 2003-05-22 17:20:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -47,6 +47,8 @@ class BrachyFactory;
 class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionIr;
 
+// This class manages the creation of iridum source used in endocavitary
+// brachytherapy ...
 class BrachyFactoryIr : public BrachyFactory
 {
 public:
@@ -58,6 +60,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionIr* pIridio;
+  BrachyDetectorConstructionIr* iridiumSource;
 };
 #endif

@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryLeipzig.cc,v 1.3 2003-05-09 16:52:08 gcosmo Exp $
+// $Id: BrachyFactoryLeipzig.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,23 +48,24 @@
 
 BrachyFactoryLeipzig:: BrachyFactoryLeipzig()
 {
-  pLeipzig=new  BrachyDetectorConstructionLeipzig();
+  leipzigSource=new  BrachyDetectorConstructionLeipzig();
 }
 
 BrachyFactoryLeipzig:: ~BrachyFactoryLeipzig()
 {
-  delete pLeipzig;
+  delete leipzigSource;
 }
 
 G4VUserPrimaryGeneratorAction*  BrachyFactoryLeipzig::CreatePrimaryGeneratorAction()
 {
-  G4VUserPrimaryGeneratorAction* pIridium =new BrachyPrimaryGeneratorActionIr();
-  return pIridium;
+  G4VUserPrimaryGeneratorAction* iridiumPrimaryParticle = 
+                                        new BrachyPrimaryGeneratorActionIr();
+  return iridiumPrimaryParticle;
 }
 
 void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
 {
-  pLeipzig -> ConstructLeipzig(mother);
+  leipzigSource -> ConstructLeipzig(mother);
 }
 
 void BrachyFactoryLeipzig::CleanSource()

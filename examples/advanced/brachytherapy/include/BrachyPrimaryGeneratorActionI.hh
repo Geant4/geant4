@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.3 2003-05-09 16:52:06 gcosmo Exp $
+// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.4 2003-05-22 17:20:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,9 +60,9 @@ class BrachyPrimaryGeneratorActionI : public  G4VUserPrimaryGeneratorAction
       G4double GetEnergy();
 
  private:
-      G4ParticleGun* m_pParticleGun;
-      G4double Energy;
-      G4std::vector<G4double> vettore;
+      G4ParticleGun* particleGun;
+      G4double primaryParticleEnergy;
+      G4std::vector<G4double> energySpectrum;
 };
 
 #endif

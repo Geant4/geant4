@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyVisManager.hh,v 1.4 2002-11-18 15:18:37 guatelli Exp $
+// $Id: BrachyVisManager.hh,v 1.5 2003-05-22 17:20:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,10 +41,8 @@
 
 #include "G4VisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class BrachyVisManager: public G4VisManager {
-
+class BrachyVisManager: public G4VisManager 
+{
 public:
 
   BrachyVisManager ();
@@ -52,11 +50,8 @@ public:
 private:
 
   void RegisterGraphicsSystems ();
-
 };
-
 #endif
-
 #endif
 
 

@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.9 2003-05-09 08:37:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2003-05-22 17:20:39 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,6 +12,8 @@ G4EXLIB := true
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+G4ANALYSIS_USE=1
 
 ifdef G4ANALYSIS_USE  
   CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/3.0/cpp -g

@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.4 2003-05-09 13:21:20 gcosmo Exp $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.5 2003-05-22 17:20:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -68,85 +68,121 @@
 #include "G4Colour.hh"
 
 BrachyDetectorConstructionIr::BrachyDetectorConstructionIr()
- : Capsule(0),CapsuleLog(0),CapsulePhys(0),
-   CapsuleTip(0),CapsuleTipLog(0),CapsuleTipPhys(0),
-   IridiumCore(0),IridiumCoreLog(0),IridiumCorePhys(0)
+ : capsule(0),capsuleLog(0),capsulePhys(0),
+   capsuleTip(0),capsuleTipLog(0),capsuleTipPhys(0),
+   iridiumCore(0),iridiumCoreLog(0),iridiumCorePhys(0),
+   simpleCapsuleVisAtt(0),simpleCapsuleTipVisAtt(0),simpleIridiumVisAtt(0)
 {
-  pMat= new BrachyMaterial();
+  pMat = new BrachyMaterial();
 }
 
-//....
 BrachyDetectorConstructionIr::~BrachyDetectorConstructionIr()
 { 
   delete pMat; 
 }
 
-//....
 void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
 {
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
-  G4Material* CapsuleMat=pMat->GetMat("Stainless steel");
-  G4Material*IridiumMat=pMat->GetMat("Iridium");
+  G4Material* capsuleMat = pMat->GetMat("Stainless steel");
+  G4Material* iridiumMat = pMat->GetMat("Iridium");
 
   // Capsule main body
-
-  Capsule =
-     new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
-  CapsuleLog =
-     new G4LogicalVolume(Capsule,CapsuleMat,"CapsuleLog");
-  CapsulePhys =
-     new G4PVPlacement(0,G4ThreeVector(0,0,-1.975),"CapsulePhys",CapsuleLog,mother,false,0);
+  capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
+  capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
+  capsulePhys= new G4PVPlacement(0,
+                                 G4ThreeVector(0,0,-1.975),
+                                 "CapsulePhys",
+                                 capsuleLog,
+                                 mother,
+                                 false,
+                                 0);
 
   // Capsule tip
-
-  CapsuleTip =
-     new G4Sphere("CapsuleTipIridium",0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg); 
-  CapsuleTipLog =
-     new G4LogicalVolume(CapsuleTip,CapsuleMat,"CapsuleTipIridumLog");
-  CapsuleTipPhys =
-     new G4PVPlacement(0,G4ThreeVector(0.,0.,1.75*mm),"CapsuleTipIridiumPhys",CapsuleTipLog,mother,false,0);
+  capsuleTip = new G4Sphere("CapsuleTipIridium",
+                            0.*mm,
+                            0.55*mm,
+                            0.*deg,
+                            360.*deg,
+                            0.*deg,
+                            90.*deg); 
+  capsuleTipLog = new G4LogicalVolume(capsuleTip,
+                                      capsuleMat,
+                                      "CapsuleTipIridumLog");
+  capsuleTipPhys = new G4PVPlacement(0,
+                                     G4ThreeVector(0.,0.,1.75*mm),
+                                     "CapsuleTipIridiumPhys",
+                                     capsuleTipLog,
+                                     mother,
+                                     false,
+                                     0);
 
   // Iridium core
 
-  IridiumCore =
-     new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
-  IridiumCoreLog =
-     new G4LogicalVolume(IridiumCore,IridiumMat,"IridiumCoreLog");
-  IridiumCorePhys =
-     new G4PVPlacement(0,G4ThreeVector(),"IridiumCorePhys",IridiumCoreLog,CapsulePhys,false,0);
+  iridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
+  iridiumCoreLog = new G4LogicalVolume(iridiumCore,
+                                       iridiumMat,
+                                       "IridiumCoreLog");
+  iridiumCorePhys = new G4PVPlacement(0,
+                                      G4ThreeVector(),
+                                      "IridiumCorePhys",
+                                      iridiumCoreLog,
+                                      capsulePhys,
+                                      false,
+                                      0);
 
-  simpleCapsuleVisAtt= new G4VisAttributes(red);
+  simpleCapsuleVisAtt = new G4VisAttributes(red);
   simpleCapsuleVisAtt->SetVisibility(true);  
   simpleCapsuleVisAtt->SetForceWireframe(true);
-  CapsuleLog->SetVisAttributes(simpleCapsuleVisAtt);
+  capsuleLog->SetVisAttributes(simpleCapsuleVisAtt);
 
-  simpleCapsuleTipVisAtt= new G4VisAttributes(red);
+  simpleCapsuleTipVisAtt = new G4VisAttributes(red);
   simpleCapsuleTipVisAtt->SetVisibility(true);  
   simpleCapsuleTipVisAtt->SetForceSolid(true);
-  CapsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
+  capsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
 
-  simpleIridiumVisAtt= new G4VisAttributes(magenta);
+  simpleIridiumVisAtt = new G4VisAttributes(magenta);
   simpleIridiumVisAtt->SetVisibility(true);
   simpleIridiumVisAtt->SetForceWireframe(true);
-  IridiumCoreLog->SetVisAttributes(simpleIridiumVisAtt);
+  iridiumCoreLog->SetVisAttributes(simpleIridiumVisAtt);
 }
 
 void BrachyDetectorConstructionIr::CleanIridium()
 { 
-  delete simpleIridiumVisAtt; simpleIridiumVisAtt=0;
-  delete IridiumCorePhys; IridiumCorePhys=0;
-  delete IridiumCore; IridiumCore=0;
-  delete IridiumCoreLog; IridiumCoreLog=0 ;
+  delete simpleIridiumVisAtt; 
+  simpleIridiumVisAtt = 0;
+  
+  delete iridiumCorePhys; 
+  iridiumCorePhys = 0;
+  
+  delete iridiumCore; 
+  iridiumCore = 0;
+  
+  delete iridiumCoreLog; 
+  iridiumCoreLog = 0 ;
 
-  delete simpleCapsuleTipVisAtt; simpleCapsuleTipVisAtt=0;
-  delete CapsuleTipPhys; CapsuleTipPhys=0;
-  delete CapsuleTip; CapsuleTip=0;
-  delete CapsuleTipLog; CapsuleTipLog=0;
+  delete simpleCapsuleTipVisAtt; 
+  simpleCapsuleTipVisAtt = 0;
+  
+  delete capsuleTipPhys; 
+  capsuleTipPhys = 0;
+  
+  delete capsuleTip;
+  capsuleTip = 0;
+  delete capsuleTipLog; 
+  capsuleTipLog = 0;
 
-  delete simpleCapsuleVisAtt; simpleCapsuleVisAtt=0;
-  delete CapsulePhys; CapsulePhys=0;
-  delete Capsule; Capsule=0;
-  delete CapsuleLog; CapsuleLog=0;
+  delete simpleCapsuleVisAtt; 
+  simpleCapsuleVisAtt = 0;
+  
+  delete capsulePhys; 
+  capsulePhys = 0;
+  
+  delete capsule; 
+  capsule = 0;
+  
+  delete capsuleLog; 
+  capsuleLog = 0;
 }

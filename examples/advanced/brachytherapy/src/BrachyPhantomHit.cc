@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomHit.cc,v 1.3 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyPhantomHit.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomHit.hh"
@@ -42,61 +42,47 @@
 
 G4Allocator<BrachyPhantomHit> BrachyPhantomHitAllocator;
 
-//....
-
 BrachyPhantomHit::BrachyPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int YID,G4int ZID)
-:m_pLogV(logVol),m_XID(XID),m_ZID(ZID),m_YID(YID)
+  :logicalVolume(logVol),xHitPosition(XID),zHitPosition(ZID),yHitPosition(YID)
 {
- m_Edep=0;
+ energyDeposit = 0;
 }
-
-//....
 
 BrachyPhantomHit::~BrachyPhantomHit()
 {
 }
 
-//....
-
 BrachyPhantomHit::BrachyPhantomHit(const BrachyPhantomHit &right)
 {
- m_XID = right.m_XID;
- m_ZID = right.m_ZID;
- m_YID = right.m_YID;
- m_Edep = right.m_Edep;
- m_Pos = right.m_Pos;
- m_Rot = right.m_Rot;
- m_pLogV = right.m_pLogV;
+ xHitPosition = right.xHitPosition;
+ zHitPosition = right.zHitPosition;
+ yHitPosition = right.yHitPosition;
+ energyDeposit = right.energyDeposit;
+ hitPosition = right.hitPosition;
+ rotation = right.rotation;
+ logicalVolume = right.logicalVolume;
 }
-
-//....
 
 const BrachyPhantomHit& BrachyPhantomHit::operator=(const BrachyPhantomHit &right)
 {
- m_XID = right.m_XID;
- m_ZID = right.m_ZID;
- m_YID = right.m_YID;
- m_Edep = right.m_Edep;
- m_Pos = right.m_Pos;
- m_Rot = right.m_Rot;
- m_pLogV = right.m_pLogV;
+ xHitPosition = right.xHitPosition;
+ zHitPosition = right.zHitPosition;
+ yHitPosition = right.yHitPosition;
+ energyDeposit = right.energyDeposit;
+ hitPosition = right.hitPosition;
+ rotation = right.rotation;
+ logicalVolume = right.logicalVolume;
  return *this;
 }
 
-//....
-
 int BrachyPhantomHit::operator==(const BrachyPhantomHit &right) const
 {
- return((m_XID==right.m_XID)&&(m_ZID==right.m_ZID)&&(m_YID==right.m_YID));
+ return((xHitPosition==right.xHitPosition)&&(zHitPosition==right.zHitPosition)&&(yHitPosition==right.yHitPosition));
 }
-
-//....
 
 void BrachyPhantomHit::Draw()
 {
 }
-
-//....
 
 void BrachyPhantomHit::Print()
 {
