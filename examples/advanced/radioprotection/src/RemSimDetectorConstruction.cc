@@ -27,7 +27,7 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.12 2004-05-22 12:57:06 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.13 2004-05-27 08:36:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -148,7 +148,7 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
 	      decorator -> ConstructComponent(experimentalHall_phys); 
 	      G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	    }
-	  else  G4cout<<" The Shielding alread exists!"<<G4endl;
+	  else  G4cout<<" The shielding alread exists!"<<G4endl;
 	}
 
       if (decoratorValue == "Off")
@@ -160,10 +160,10 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
           decorator = 0;
 	   }
          
-          else  G4cout<<" The Shielding does not exist!"<<G4endl;
+          else  G4cout<<" The shielding does not exist!"<<G4endl;
 	}
     }
-  else G4cout << " The shielding is not available in Moon habitat configuration"<<G4endl;
+  else G4cout << " The shielding is not available in moon habitat configuration"<<G4endl;
 }
 
 void RemSimDetectorConstruction::AddShelterSPE(G4String value)
@@ -208,7 +208,7 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
 	    decoratorRoof -> ConstructComponent(experimentalHall_phys); 
 	    G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	  }
-	else  G4cout<<" The Roof alread exists!"<<G4endl;
+	else  G4cout<<" The roof alread exists!"<<G4endl;
 	}
 
   if (value == "Off")
@@ -220,10 +220,10 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
           decoratorRoof = 0;
 	}
          
-      else  G4cout<<" The Roof does not exist!"<<G4endl;
+      else  G4cout<<" The roof does not exist!"<<G4endl;
     }
     }
-  else  G4cout<< " It is not possible to select the Roof in the vehicle configuration" << G4endl;
+  else  G4cout<< " It is not possible to select the roof in the vehicle configuration" << G4endl;
 }
 
 void RemSimDetectorConstruction::ChangeShieldingThickness(G4double thick)
@@ -251,7 +251,7 @@ void RemSimDetectorConstruction::ChangeRoofThickness(G4double thick)
       else G4cout<<" Define the roof before!"<< G4endl;
     }
 
-  else G4cout<<"The Roof can be selected in Moon Habitat Comfiguration"<<G4endl;
+  else G4cout<<"The roof can be selected in moon habitat configuration"<<G4endl;
 }
 
 void RemSimDetectorConstruction:: ChooseConfiguration(G4String value)
@@ -268,5 +268,7 @@ void RemSimDetectorConstruction:: ChooseConfiguration(G4String value)
       G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
       flag = true;
     }
-  else G4cout<< "The configuration has been selected!" << G4endl;
+  else 
+   G4cout<< "The configurations vehicle/moon can not be switched" << G4endl;
 }
+

@@ -38,13 +38,16 @@
 #include <fstream>
 #include <strstream>
 
+
 RemSimInterplanetarySpaceConfiguration::RemSimInterplanetarySpaceConfiguration()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
 
   run = new RemSimRunAction();
-  
+
+  moon = false;
+
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName = "proton";
   particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
@@ -84,11 +87,52 @@ void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent)
  analysis -> primaryParticleEnergyDistribution(energy/MeV);
 #endif
  
+ if (moon == true) MoonConfiguration();
+ else
+   {
+     particleGun -> SetParticlePosition(G4ThreeVector(0., 0., -25.*m));  
+     G4ThreeVector v(0.0,0.0,1.0); 
+     particleGun -> SetParticleMomentumDirection(v);
+
+   }
+ 
  particleGun -> GeneratePrimaryVertex(anEvent);
+}
+
+void RemSimInterplanetarySpaceConfiguration:: MoonConfiguration() 
+{
+ //Generate the primary particles on a hemisphere with random direction
+ //position
+  G4double radius = 25.* m;
+  G4double angle = pi * G4UniformRand()*rad;
+  G4double y0 = radius*cos(angle);
+  G4double x0 = 0.*m;
+  G4double z0 = -radius*sin(angle);
+
+  if ( z0 < 0. *m)
+    {
+   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+    }
+
+ //direction 
+      G4double angledir = pi * G4UniformRand()*rad;
+      if ((angledir> (pi/2.-angle)) && angledir<(3*pi/2.-angle))
+	{
+      G4double a,b,c;
+      b=cos(angledir);
+      a=0.;
+      c=sin(angledir);
+      G4ThreeVector direction(a,b,c);
+      particleGun -> SetParticleMomentumDirection(direction);
+	}
 }
 
 G4double RemSimInterplanetarySpaceConfiguration:: GetInitialEnergy()
 {
  G4double primaryParticleEnergy = particleGun -> GetParticleEnergy();
  return primaryParticleEnergy;
+}
+void  RemSimInterplanetarySpaceConfiguration:: GetMoon(G4bool value) 
+{
+  moon = value;
 }

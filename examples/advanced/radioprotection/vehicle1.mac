@@ -14,30 +14,32 @@
 /control/verbose 1
 /run/verbose 1
 /event/verbose 0
+/run/initialize
 ################
 ## Visualisation
 #/vis/scene/create
 # --- Choose one the following visualisation tools
-/vis/open OGLIX
+#/vis/open OGLIX
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
 # --------
-/vis/drawVolume
+#/vis/drawVolume
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
 #/vis/viewer/zoom 2
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
-######################
-/run/initialize
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
-/gun/particle proton
+#/tracking/storeTrajectory 1
+################
 /gun/generator Interplanetary
+/gun/generator Basic
+/gun/particle proton
 /run/data gcrZ=1.txt
-/configuration/choose moon
+/run/initialize
 /configuration/choose vehicle
 /configuration/AddShielding On
-/configuration/AddSPE On
-#/run/beamOn 100
+#/configuration/AddShielding Off
+#/configuration/AddSPE On
+#/configuration/AddSPE Off
 
+#/run/beamOn 1000
 
 
 

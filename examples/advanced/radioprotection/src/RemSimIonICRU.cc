@@ -45,30 +45,27 @@ void RemSimIonICRU::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
 
-      if (charge != 0.0)
-	{
-	  if (particleName == "proton" || particleName == "alpha") 
+      if (particleName == "proton" || particleName == "alpha"
+          || particleName == "GenericIon")
 	    {
+             G4hIonisation* ionisation = new G4hIonisation();
+	     G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+             manager -> AddProcess(multipleScattering, -1,1,1);   
+	     manager -> AddProcess(ionisation, -1,2,2);
+	    }
+      else if (charge != 0.0)
+	{
+	  if (particleName != "e+" && particleName != "e-"  && 
+		   (particleName != "mu+") && (particleName != "mu-")) 
+	    {
+             if((!particle -> IsShortLived()) &&
+		 (particle -> GetParticleName() != "chargedgeantino"))
+	       { 
 	      G4hIonisation* ionisation = new G4hIonisation();
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+              manager -> AddProcess(multipleScattering, -1,1,1);  
 	      manager -> AddProcess(ionisation, -1,2,2);
-	      manager -> AddProcess(multipleScattering, -1,1,1);  	
-	    }
-	  else if( (particleName != "e+") &&  (particleName != "e-") && 
-		   (particleName != "mu+") && (particleName != "mu-"))
-	    { 
-	      if(  (!particle -> IsShortLived()) &&
-		   (particle -> GetParticleName() != "chargedgeantino"))
-		{
-		  G4MultipleScattering* aMultipleScattering = 
-		    new G4MultipleScattering();
-
-		  G4hIonisation* ahadronLowEIon = 
-                         new G4hIonisation();
-
-		  manager->AddProcess(aMultipleScattering, -1,1,1);
-		  manager->AddProcess(ahadronLowEIon,     -1,2,2);   
-		}
+	       }
 	    }
 	}
     }

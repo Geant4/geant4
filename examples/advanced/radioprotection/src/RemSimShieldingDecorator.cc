@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimShieldingDecorator.cc,v 1.4 2004-05-22 12:57:07 guatelli Exp $
+// $Id: RemSimShieldingDecorator.cc,v 1.5 2004-05-27 08:36:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -48,7 +48,7 @@ RemSimShieldingDecorator::RemSimShieldingDecorator(RemSimVGeometryComponent* com
  shieldingX = 5.*m;
  shieldingY = 5.*m;
  shieldingZ = 10.*cm;  
- translation = -4.6* m;
+ translation = -4.4* m;
  pMaterial = new RemSimMaterial();
 
  shieldingVisAtt = 0;

@@ -29,7 +29,7 @@
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
-// $Id: RemSimRunAction.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $
+// $Id: RemSimRunAction.cc,v 1.6 2004-05-27 08:36:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,8 +83,6 @@ void RemSimRunAction::ReadData(G4double unitE, G4String fileName)
   ost << fileName;
   
   G4String name(nameChar);
-  
-  //char* path = getenv("G4INSTALL");
   
   std::ifstream file(fileName);
   std::filebuf* lsdp = file.rdbuf();

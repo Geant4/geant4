@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.5 2004-05-22 12:57:04 guatelli Exp $
+// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.6 2004-05-27 08:36:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -47,13 +47,16 @@ public:
 
 public:
   void GeneratePrimaries(G4Event* anEvent);
+  void MoonConfiguration();
   G4double  GetInitialEnergy();
+  void GetMoon(G4bool); 
 
 private:
   G4ParticleGun* particleGun;
   G4String spectrum;
   G4double energy;
   RemSimRunAction* run;
+  G4bool moon;
 };
 #endif
 

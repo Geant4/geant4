@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.6 2004-05-22 12:57:03 guatelli Exp $
+// $Id: remsim.cc,v 1.7 2004-05-27 08:36:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"
@@ -45,6 +45,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
 
+  //  HepRandom :: setTheSeed(0);
   // Set mandatory initialization classes
   
   // Geometry

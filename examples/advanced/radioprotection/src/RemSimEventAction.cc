@@ -27,7 +27,7 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.5 2004-05-22 13:16:17 guatelli Exp $
+// $Id: RemSimEventAction.cc,v 1.6 2004-05-27 08:36:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -39,7 +39,8 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-
+#include "Randomize.hh"
+#include "CLHEP/Random/RandEngine.h"
 RemSimEventAction::RemSimEventAction():evtNo(-1)
 {}
  
@@ -48,7 +49,7 @@ RemSimEventAction::~RemSimEventAction()
  
 void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
 { 
-  evtNo = evt -> GetEventID();
+  evtNo = evt -> GetEventID(); 
 }
 
 void RemSimEventAction::EndOfEventAction(const G4Event* evt)

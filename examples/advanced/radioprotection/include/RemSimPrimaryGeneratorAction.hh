@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.6 2004-05-27 08:36:51 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 //
@@ -50,7 +50,6 @@ private:
   G4String value;
   RemSimVPrimaryGeneratorFactory* primaryFactory1;
   RemSimVPrimaryGeneratorFactory* primaryFactory2;
-  RemSimVPrimaryGeneratorFactory* primaryFactory3;
   RemSimPrimaryGeneratorMessenger* messenger;
 };
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimVehicle1.cc,v 1.7 2004-05-22 13:16:17 guatelli Exp $
+// $Id: RemSimVehicle1.cc,v 1.8 2004-05-27 08:36:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -428,7 +428,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                                      motherVolume,
 						    false,0);
   translation = translation + thick;  
-  G4cout<< "translation:"<<translation/m<< G4endl;
+
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  green    (0.0,1.0,0.0);
  

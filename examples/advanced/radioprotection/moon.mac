@@ -29,10 +29,10 @@
 #
 # draw scene
 #
+/run/initialize
 /gun/particle proton
 /gun/generator Moon
 /run/data gcrZ=1.txt
-/run/initialize
 /configuration/choose moon
 #/configuration/AddRoof On
 #/configuration/AddRoof Off
