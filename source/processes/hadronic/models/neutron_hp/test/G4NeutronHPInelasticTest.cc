@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.11 2003-02-12 17:57:22 jwellisc Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.12 2003-04-07 10:03:31 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -118,26 +118,32 @@
   // G4InterpolationManager: unknown interpolation scheme (might already be debugged on axcnsi)
 //  combined bug in G4LegendreTable and G4PhotonDist fixed
      // Init runs
-      G4Material *thePS = new G4Material(name="PolyStyrene", density=1.032*g/cm3, nEl=1);
+//      G4Material *thePS = new G4Material(name="PolyStyrene", density=1.032*g/cm3, nEl=1);
 //      G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
-      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
+//      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
 //      thePS->AddElement( elC, 8 );
-      thePS->AddElement( elH, 8 );
-      theMaterials[1] = thePS;
+//      thePS->AddElement( elH, 8 );
+//      theMaterials[1] = thePS;
 // 
 //      // Init runs
-      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
-      G4Element *elLi = new G4Element(name="Lithium", symbol="Li", 1);
-      G4Isotope * isoLi6 = new G4Isotope(name="Li6", 3, 6, a=3.*g/mole);
-      elLi->AddIsotope(isoLi6, 1);
-      theLi->AddElement( elLi, 1);
-      theMaterials[2] =theLi ;
+//      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
+//      G4Element *elLi = new G4Element(name="Lithium", symbol="Li", 1);
+//      G4Isotope * isoLi6 = new G4Isotope(name="Li6", 3, 6, a=3.*g/mole);
+//      elLi->AddIsotope(isoLi6, 1);
+//      theLi->AddElement( elLi, 1);
+//      theMaterials[2] =theLi ;
 //      
 //      // Init runs
-//      G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
+      G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
 //      G4Element *elB = new G4Element(name="Boron", symbol="B", iz=5, a=10.811*g/mole);
 //      theB->AddElement( elB, 1);
-//      theMaterials[3] = theB;
+
+      G4Element *elB = new G4Element(name="Boron", symbol="B", 1);
+      G4Isotope * isoB10 = new G4Isotope(name="B10", 5, 10, a=10.*g/mole);
+      elB->AddIsotope(isoB10, 1);
+      theB->AddElement( elB, 1);
+
+      theMaterials[3] = theB;
 // 
 //      // probem in: src/G4NeutronHPPhotonDist.cc line 82,
 //      // Init erwartet einen Manager in den daten, der nicht
@@ -150,10 +156,10 @@
 //      theMaterials[4] = theN;
 // 
 //      // Init runs
-      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
-      G4Element *elO = new G4Element(name="Oxygen", symbol="O", iz=8., a=15.9994*g/mole);
-      theO->AddElement( elO,  1 );
-      theMaterials[5] = theO;
+//      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
+//      G4Element *elO = new G4Element(name="Oxygen", symbol="O", iz=8., a=15.9994*g/mole);
+//      theO->AddElement( elO,  1 );
+//      theMaterials[5] = theO;
 //      
 //      // G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.
 //      // *** G4Exception: Aborting execution ***
@@ -183,10 +189,10 @@
 // // natural silicon only; swiches to aluminium
 // // copied to 14_28_Silicon
 //   //Init runs 
-      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
-      G4Element *elSi  = new G4Element(name="Silicon", symbol="Si", iz=14., a=28.0855*g/mole);
-      theSi->AddElement( elSi, 1 );
-      theMaterials[9] = theSi;
+//      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
+//      G4Element *elSi  = new G4Element(name="Silicon", symbol="Si", iz=14., a=28.0855*g/mole);
+//      theSi->AddElement( elSi, 1 );
+//      theMaterials[9] = theSi;
       
 //      // Init runs
 //      G4Material *theCl = new G4Material(name="Chloron", density=3*g/cm3, nEl=1);
@@ -362,7 +368,7 @@
    
    // ----------- needed to Build a Step, and a track -------------------
    
-   G4ParticleMomentum theDirection(0.,0.,1.);
+   G4ParticleMomentum theDirection(1.,0.,0.);
    G4ThreeVector aPosition(0.,0.,0.);
    G4double aTime = 0.0;
    
@@ -416,11 +422,12 @@ int j = 0;
 	   aTrack->SetStep(&aStep);
            ++hpw;
 	   if(hpw == 100*(hpw/100)) clog << "Event counter = "<<hpw<<G4endl;
-           if(hpw == 1000*(hpw/1000))
+           if(!hpw == 1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
-                << " in material " << theMaterials[k]->GetName() << G4endl;
+                << " in material " << theMaterials[k]->GetName()
+		<< ", A="<<theMaterials[k]->GetA()<<", Z="<<theMaterials[k]->GetZ()<< G4endl;
 	   if(hpw == errorOne)
 	   {
 	      hpw --;
