@@ -1,4 +1,4 @@
-$Id: History,v 1.217 2003-06-18 09:46:38 gcosmo Exp $
+$Id: History,v 1.218 2003-06-26 07:54:59 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th June 2003  Gabriele Cosmo (config-V05-01-05)
+- Added UI32LIBS to interactivity.gmk to handle UI libraries on WIN32
+  platforms.
+- Added libraries for OpenGL and UI to default setup of WIN32-VC and
+  WIN32-VC7. Removed some obsolete compilation options.
 
 18th June 2003  Gabriele Cosmo (config-V05-01-04)
 - Removed flag G4USE_STD_NAMESPACE from specific setups in sys.
