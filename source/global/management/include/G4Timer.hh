@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.5 1999-05-24 18:23:08 gcosmo Exp $
+// $Id: G4Timer.hh,v 1.6 1999-05-24 20:39:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,19 +126,8 @@ inline G4bool G4Timer::IsValid() const
 }
 
 #ifdef G4USE_STL
-#define times ostimes
+  #define times ostimes
 #endif
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
 

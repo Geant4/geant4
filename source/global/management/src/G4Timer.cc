@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.2 1999-05-24 10:42:28 stesting Exp $
+// $Id: G4Timer.cc,v 1.3 1999-05-24 20:39:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,9 +17,11 @@
 
 #include "G4Timer.hh"
 #include "G4ios.hh"
+
 #ifdef G4USE_STL
-#undef times
+  #undef times
 #endif
+
 // Global error function
 void G4Exception(const char* s=0);
 
@@ -103,8 +105,4 @@ G4double G4Timer::GetUserElapsed() const
     G4double diff=fEndTimes.tms_utime-fStartTimes.tms_utime;
     return diff/sysconf(_SC_CLK_TCK);
 }
-
-
-
-
 
