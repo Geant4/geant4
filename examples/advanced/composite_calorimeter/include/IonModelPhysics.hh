@@ -43,9 +43,9 @@
 #include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
 
-#include "G4hIonisationSTD.hh"
+#include "G4hIonisation52.hh"
 #include "G4ionIonisation.hh"
-#include "G4MultipleScatteringSTD.hh"
+#include "G4MultipleScattering52.hh"
 
 class IonModelPhysics : public G4VPhysicsConstructor
 {
@@ -68,35 +68,35 @@ class IonModelPhysics : public G4VPhysicsConstructor
    G4LElastic*            theElasticModel;
 
    // Generic Ion physics
-   G4HadronElasticProcess    theIonElasticProcess;
-   G4MultipleScatteringSTD   fIonMultipleScattering;
-   G4ionIonisation           fIonIonisation;
+   G4HadronElasticProcess     theIonElasticProcess;
+   G4MultipleScattering52     fIonMultipleScattering;
+   G4hIonisation52            fIonIonisation;
 
    // Deuteron physics
-   G4HadronElasticProcess      theDElasticProcess;
-   G4MultipleScatteringSTD     fDeuteronMultipleScattering;
-   G4hIonisationSTD            fDeuteronIonisation;
-   G4DeuteronInelasticProcess  fDeuteronProcess;
-   G4LEDeuteronInelastic*      fDeuteronModel;
+   G4HadronElasticProcess     theDElasticProcess;
+   G4MultipleScattering52     fDeuteronMultipleScattering;
+   G4hIonisation52            fDeuteronIonisation;
+   G4DeuteronInelasticProcess fDeuteronProcess;
+   G4LEDeuteronInelastic*     fDeuteronModel;
 
    // Triton physics
-   G4HadronElasticProcess      theTElasticProcess;
-   G4MultipleScatteringSTD     fTritonMultipleScattering;
-   G4hIonisationSTD            fTritonIonisation;
-   G4TritonInelasticProcess    fTritonProcess;
-   G4LETritonInelastic*        fTritonModel;
+   G4HadronElasticProcess     theTElasticProcess;
+   G4MultipleScattering52     fTritonMultipleScattering;
+   G4hIonisation52            fTritonIonisation;
+   G4TritonInelasticProcess   fTritonProcess;
+   G4LETritonInelastic*       fTritonModel;
   
    // Alpha physics
-   G4HadronElasticProcess      theAElasticProcess;
-   G4MultipleScatteringSTD     fAlphaMultipleScattering;
-   G4hIonisationSTD            fAlphaIonisation;
-   G4AlphaInelasticProcess     fAlphaProcess;
-   G4LEAlphaInelastic*         fAlphaModel;
+   G4HadronElasticProcess     theAElasticProcess;
+   G4MultipleScattering52     fAlphaMultipleScattering;
+   G4hIonisation52            fAlphaIonisation;
+   G4AlphaInelasticProcess    fAlphaProcess;
+   G4LEAlphaInelastic*        fAlphaModel;
 
    // He3 physics
-   G4HadronElasticProcess      theHe3ElasticProcess;
-   G4MultipleScatteringSTD     fHe3MultipleScattering;
-   G4hIonisationSTD            fHe3Ionisation;
+   G4HadronElasticProcess     theHe3ElasticProcess;
+   G4MultipleScattering52     fHe3MultipleScattering;
+   G4hIonisation52            fHe3Ionisation;
 
 };
 

@@ -50,7 +50,7 @@ G4HadronModelQEDBuilder::G4HadronModelQEDBuilder() {}
 G4HadronModelQEDBuilder::~G4HadronModelQEDBuilder(){}
 
 void G4HadronModelQEDBuilder::
-RegisterOne(G4ProcessManager* aP, G4MultipleScatteringSTD * aM, G4hIonisationSTD * aI)
+RegisterOne(G4ProcessManager* aP, G4MultipleScattering52 * aM, G4hIonisation52 * aI)
 {
   aP->AddProcess(aI, ordInActive,2, 2);
   aP->AddProcess(aM);
