@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.3 2003-07-01 13:59:42 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.4 2003-07-10 08:43:12 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -34,15 +34,15 @@
 // 
 // 25.03.03 L.Pandola First implementation 
 // 03.06.03 L.Pandola Added continuous part
-// 30.06.03 L.Pandola Adding positrons in PostStep and AlongStep 
-// 01.07.03 L.Pandola Changed cross section tables for e- and e+    
+// 30.06.03 L.Pandola Added positrons  
+// 01.07.03 L.Pandola Changed cross section files for e- and e+    
+//                    Interface with PenelopeCrossSectionHandler
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
-#include "G4eIonisationCrossSectionHandler.hh"
+#include "G4PenelopeCrossSectionHandler.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
-#include "G4VEnergySpectrum.hh"
 #include "G4eIonisationSpectrum.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4SemiLogInterpolation.hh"
@@ -61,7 +61,6 @@ G4PenelopeIonisation::G4PenelopeIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
     crossSectionHandler(0),
     theMeanFreePath(0),
-    energySpectrum(0),
     kineticEnergy1(0.0),
     cosThetaPrimary(1.0),
     energySecondary(0.0),
@@ -83,7 +82,6 @@ G4PenelopeIonisation::G4PenelopeIonisation(const G4String& nam)
 G4PenelopeIonisation::~G4PenelopeIonisation()
 {
   delete crossSectionHandler;
-  delete energySpectrum;
   delete theMeanFreePath;
   for (G4int Z=1;Z<100;Z++)
     {
@@ -107,26 +105,17 @@ void G4PenelopeIonisation::BuildPhysicsTable(const G4ParticleDefinition& aPartic
 
   cutForDelta.clear();
 
-  // Create and fill IonisationParameters once
-  if( energySpectrum != 0 ) delete energySpectrum;
-  energySpectrum = new G4eIonisationSpectrum();
-
-  if(verboseLevel > 0) {
-    G4cout << "G4VEnergySpectrum is initialized"
-           << G4endl;
-      }
-
   // Create and fill G4CrossSectionHandler once
   if ( crossSectionHandler != 0 ) delete crossSectionHandler;
   G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   G4int    totBin = GetNbinEloss();
-  crossSectionHandler = new G4eIonisationCrossSectionHandler(energySpectrum,
-							     interpolation,
-							     lowKineticEnergy,
-							     highKineticEnergy,
-							     totBin);
+  crossSectionHandler = new G4PenelopeCrossSectionHandler(this,aParticleType,
+							  interpolation,
+							  lowKineticEnergy,
+							  highKineticEnergy,
+							  totBin);
 
   if (&aParticleType == G4Electron::Electron()) 
     {
@@ -141,7 +130,7 @@ void G4PenelopeIonisation::BuildPhysicsTable(const G4ParticleDefinition& aPartic
     G4cout << GetProcessName() << " is created." << G4endl;
   }
 
-  // Build loss table for IonisationIV
+  // Build loss table for Ionisation
 
   BuildLossTable(aParticleType);
 
@@ -265,11 +254,6 @@ void G4PenelopeIonisation::BuildLossTable(
 		 << G4endl;
 	}
       }
-
-      //G4std::ofstream filel("stopping.out",G4std::ios::app);
-      //if (material->GetName() == "Aluminum") filel << lowEdgeEnergy/eV << " " << ionloss/(eV/cm) << G4endl;
-      //filel.close();
-
       aVector->PutValue(i,ionloss);
     }
     theLossTable->insert(aVector);
@@ -307,14 +291,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   else if (aParticleType==G4Positron::Positron()){
     CalculateDiscreteForPositrons(kineticEnergy0,tCut,Z,electronVolumeDensity);
   }
-
-  //G4std::ofstream file("test.out",G4std::ios::app);
-  //file << kineticEnergy0/eV << " " << kineticEnergy1/eV << " " << cosThetaPrimary <<
-  //  " " << energySecondary/eV << " " << cosThetaSecondary << G4endl;
-  //file.close();
-
-
-  //the method CalculateDiscrete() set the private variables:
+  // the method CalculateDiscrete() sets the private variables:
   // kineticEnergy1 = energy of the primary electron after the interaction
   // cosThetaPrimary = cos(theta) of the primary after the interaction
   // energySecondary = energy of the secondary electron
@@ -354,8 +331,6 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
     iosc2 = (ionizationEnergy->find(Z)->second->size()) - iOsc; //they are in reversed order
   }
 
-  // Check the choice of the level to ionize (fluorescence generation!)
-
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   G4double bindingEnergy = 0.0;
   G4int shellId = 0;
@@ -364,8 +339,6 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
     bindingEnergy = shell->BindingEnergy();
     shellId = shell->ShellId();
   }
-  G4cout << "Oscillatore: " << iOsc << G4endl;
-  G4cout << "Energie " << ionEnergy/keV << " " << bindingEnergy/keV << G4endl;
   ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
   G4double eKineticEnergy = energySecondary;
 
@@ -571,7 +544,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
 	}
 	else
 	  {
-	    qm->push_back(pow(wi,2)/(beta2+2.0*electron_mass_c2));
+	    qm->push_back(pow(wi,2)/(beta2*2.0*electron_mass_c2));
 	  }
 	//verificare che quando arriva qui il vettore ha SEMPRE l'i-esimo elemento
 	if ((*qm)[i] < wi)
@@ -653,7 +626,6 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
   
   if (sampledInteraction == 1.0)  //Hard distant longitudinal collisions
     {
-      G4cout << "Hard distant longitudinal collision" << G4endl;
       dde= (*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       G4double qs=(*qm)[iOsc]/(1.0+((*qm)[iOsc]/(2.0*electron_mass_c2)));
@@ -678,7 +650,6 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
 
   else if (sampledInteraction == 2.0)  //Hard distant transverse collisions
     {
-      G4cout << "Hard distant transverse collision" << G4endl;
       dde=(*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       cosThetaPrimary=1.0;
@@ -820,8 +791,7 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
 
   //Density effect
   G4double TST = ((G4double) Z)/(gam2*plasmaEnergySquared); 
-  //C'e' una piccola differenza rispetto a Penelope, che viene da plasmaEnergySquared
-  //(probabilmente le densita' elettroniche sono leggermente diverse!)
+ 
   G4double wl2 = 0.0;
   G4double fdel=0.0;
   G4double wr=0;
@@ -837,9 +807,9 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
   do{
     wl2=wl2*2.0;
     fdel = 0.0;
-    for (i=0;i<nbOsc;i++){
-      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
-      wr = (*(resonanceEnergy->find(Z)->second))[i];
+    for (size_t ii=0;ii<nbOsc;ii++){
+      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[ii];
+      wr = (*(resonanceEnergy->find(Z)->second))[ii];
       fdel += occupNb/(wr*wr+wl2);
     }
   }while (fdel > TST);
@@ -849,9 +819,9 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
   do{
     wl2=0.5*(wl2l+wl2u);
     fdel = 0.0;
-    for (i=0;i<nbOsc;i++){
-      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
-      wr = (*(resonanceEnergy->find(Z)->second))[i];
+    for (size_t jj=0;jj<nbOsc;jj++){
+      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[jj];
+      wr = (*(resonanceEnergy->find(Z)->second))[jj];
       fdel += occupNb/(wr*wr+wl2);
     }
     if (fdel > TST)
@@ -866,9 +836,9 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
   }while(control>0);
 
   //Density correction effect
-   for (i=0;i<nbOsc;i++){
-      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
-      wr = (*(resonanceEnergy->find(Z)->second))[i];
+   for (size_t kk=0;kk<nbOsc;kk++){
+      G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[kk];
+      wr = (*(resonanceEnergy->find(Z)->second))[kk];
       delta += occupNb*log(1.0+wl2/(wr*wr));
     }
    delta = (delta/((G4double) Z))-wl2/(gam2*plasmaEnergySquared); 
@@ -900,7 +870,6 @@ G4double G4PenelopeIonisation::CalculateContinuous(G4double ene,G4double cutoff,
       {
 	S1 = CalculateStoppingPowerForPositrons(ene,resEnergy,delta,cutoff);
       }
-    //in the version of Penelope I run, cutoff=1 keV: if so, the results are identical
     G4double occupNb = (*(occupationNumber->find(Z)->second))[i];
     stoppingPower += occupNb*constant*S1;
   }
@@ -935,7 +904,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
     }
   else
     {
-      qm = resEne*resEne/(beta2+2.0*electron_mass_c2);
+      qm = resEne*resEne/(beta2*2.0*electron_mass_c2);
       qm = qm*(1.0-0.5*qm/electron_mass_c2);
     }
 
@@ -1001,7 +970,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
     }
   else
     {
-      qm = resEne*resEne/(beta2+2.0*electron_mass_c2);
+      qm = resEne*resEne/(beta2*2.0*electron_mass_c2);
       qm = qm*(1.0-0.5*qm/electron_mass_c2);
     }
 
@@ -1205,7 +1174,6 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   
   if (sampledInteraction == 1.0)  //Hard distant longitudinal collisions
     {
-      G4cout << "Hard distant longitudinal collision" << G4endl;
       dde= (*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       G4double qs=(*qm)[iOsc]/(1.0+((*qm)[iOsc]/(2.0*electron_mass_c2)));
@@ -1230,7 +1198,6 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
 
   else if (sampledInteraction == 2.0)  //Hard distant transverse collisions
     {
-      G4cout << "Hard distant transverse collision" << G4endl;
       dde=(*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       cosThetaPrimary=1.0;
@@ -1291,4 +1258,208 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   delete nbOfLevel;
 
   return;
+}
+
+// This stuff in needed in order to interface with the Cross Section Handler
+
+G4double G4PenelopeIonisation::CalculateCrossSectionsRatio(G4double ene,G4double cutoff,
+							   G4int Z,G4double electronVolumeDensity,
+							   const G4ParticleDefinition& particle)
+{
+ //Constants
+  G4double gamma = 1.0+ene/electron_mass_c2;
+  G4double gamma2 = gamma*gamma;
+  G4double beta2 = (gamma2-1.0)/gamma2;
+  G4double constant = pi*pow(classic_electr_radius,2)*2.0*electron_mass_c2/beta2;
+  G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
+  G4int nbOsc = (G4int) resonanceEnergy->find(Z)->second->size();
+  G4double S0 = 0.0, H0=0.0;
+  G4double softCS = 0.0;
+  G4double hardCS = 0.0;
+  for (G4int i=0;i<nbOsc;i++){
+    G4double resEnergy = (*(resonanceEnergy->find(Z)->second))[i];
+    if (&particle == G4Electron::Electron())
+      {
+	S0 = CrossSectionsRatioForElectrons(ene,resEnergy,delta,cutoff,1);
+	H0 = CrossSectionsRatioForElectrons(ene,resEnergy,delta,cutoff,2);
+      }
+    else if (&particle == G4Positron::Positron())
+      {
+	S0 = CrossSectionsRatioForPositrons(ene,resEnergy,delta,cutoff,1);
+	H0 = CrossSectionsRatioForPositrons(ene,resEnergy,delta,cutoff,2);
+      }
+    G4double occupNb = (*(occupationNumber->find(Z)->second))[i];
+    softCS += occupNb*constant*S0;
+    hardCS += occupNb*constant*H0;
+  }
+  G4double ratio = 0.0;
+  if (softCS+hardCS) ratio = (hardCS)/(softCS+hardCS);
+  return ratio;
+}
+
+
+G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4double resEne,
+						     G4double delta,G4double cutoff,
+						     G4int index)
+{
+  //Calculate constants
+  G4double gamma = 1.0+ene/electron_mass_c2;
+  G4double gamma2 = gamma*gamma;
+  G4double beta2 = (gamma2-1.0)/gamma2;
+  G4double cps = ene*(ene+2.0*electron_mass_c2);
+  G4double amol = pow(ene/(ene+electron_mass_c2),2);
+  G4double hardCont = 0.0;
+  G4double softCont = 0.0;
+  if (ene < resEne) return 0.0;
+  
+  //Distant interactions
+  G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
+  G4double cp1 = sqrt(cp1s);
+  G4double cp = sqrt(cps);
+  G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
+
+  //Distant longitudinal interactions
+  G4double qm = 0.0;
+
+  if (resEne > ene*(1e-6))
+    {
+      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+    }
+  else
+    {
+      qm = resEne*resEne/(beta2*2.0*electron_mass_c2);
+      qm = qm*(1.0-0.5*qm/electron_mass_c2);
+    }
+
+  if (qm < resEne)
+    {
+      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+    }
+  else
+    {
+      sdLong = 0.0;
+    }
+  
+  if (sdLong > 0) {
+    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
+    sdDist = sdTrans + sdLong;
+    if (cutoff > resEne) 
+      {
+	softCont = sdDist/resEne;
+      }
+    else
+      {
+	hardCont = sdDist/resEne;
+      }
+  }
+
+
+  // Close collisions (Moeller's cross section)
+  G4double wl = std::max(cutoff,resEne);
+  G4double wu = 0.5*ene;
+ 
+  if (wl < (wu-1*eV)) 
+    { 
+      hardCont += (1.0/(ene-wu))-(1.0/(ene-wl))
+	- (1.0/wu)+(1.0/wl)
+	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
+	+ amol*(wu-wl)/pow(ene,2);
+      wu=wl;
+    }
+
+  wl = resEne;
+  if (wl > (wu-1*eV)) {
+    if (index == 1) return softCont;
+    if (index == 2) return hardCont;
+  }
+  softCont += (1.0/(ene-wu))-(1.0/(ene-wl))
+	- (1.0/wu)+(1.0/wl)
+	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
+	+ amol*(wu-wl)/pow(ene,2);
+  if (index == 1) return softCont;
+  return hardCont;
+}
+
+G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4double resEne,
+					     G4double delta,G4double cutoff,G4int index)
+{
+  //Calculate constants
+  G4double gamma = 1.0+ene/electron_mass_c2;
+  G4double gamma2 = gamma*gamma;
+  G4double beta2 = (gamma2-1.0)/gamma2;
+  G4double cps = ene*(ene+2.0*electron_mass_c2);
+  G4double amol = pow(ene/(ene+electron_mass_c2),2);
+  G4double bha1 = amol*(2.0*pow(gamma+1.0,2)-1.0)/(gamma2-1.0);
+  G4double bha2 = amol*(3.0+1.0/pow(gamma+1.0,2));
+  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/pow(gamma+1.0,2);
+  G4double bha4 = amol*pow(gamma-1.0,2)/pow(gamma+1.0,2);
+  G4double hardCont = 0.0;
+  G4double softCont = 0.0;
+  if (ene < resEne) return 0.0;
+
+
+  //Distant interactions
+  G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
+  G4double cp1 = sqrt(cp1s);
+  G4double cp = sqrt(cps);
+  G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
+
+  //Distant longitudinal interactions
+  G4double qm = 0.0;
+
+  if (resEne > ene*(1e-6))
+    {
+      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+    }
+  else
+    {
+      qm = resEne*resEne/(beta2*2.0*electron_mass_c2);
+      qm = qm*(1.0-0.5*qm/electron_mass_c2);
+    }
+
+  if (qm < resEne)
+    {
+      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+    }
+  else
+    {
+      sdLong = 0.0;
+    }
+  
+  if (sdLong > 0) {
+    sdTrans = G4std::max(log(gamma2)-beta2-delta,0.0);
+    sdDist = sdTrans + sdLong;
+    if (cutoff > resEne) 
+      {
+	softCont = sdDist/resEne;
+      }
+    else
+      {
+	hardCont = sdDist/resEne;
+      }
+  }
+
+
+  // Close collisions (Bhabha's cross section)
+  G4double wl = G4std::max(cutoff,resEne);
+  G4double wu = ene;
+ 
+  if (wl < (wu-1*eV)) {
+    hardCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
+      + bha2*(wu-wl)/pow(ene,2) -bha3*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,3))
+      + bha4*(pow(wu,3)-pow(wl,3))/(3.0*pow(ene,4));
+    wu=wl;
+  }
+  wl = resEne;
+  if (wl > (wu-1*eV)) 
+    {  
+      if (index == 1) return softCont;
+      if (index == 2) return hardCont;
+    }
+  softCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
+    + bha2*(wu-wl)/pow(ene,2) -bha3*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,3))
+    + bha4*(pow(wu,3)-pow(wl,3))/(3.0*pow(ene,4));
+  
+  if (index == 1) return softCont;
+  return hardCont;
 }
