@@ -223,13 +223,15 @@ setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
 # Else :
 setenv CPPVERBOSE 1
+set prompt='g4-aleph> ' 
 endif
 #---------------------------------------------------
 if ( `uname -n` == asc ) then
-# In CLHEP-default.h : //#define HEP_USE_STD 1
-  if ( $?G4USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+# In CLHEP-default.h : //GB #define HEP_USE_STD 1
+#                      //GB #define HEP_HAVE_BOOL 1
+#if ( $?G4USE_STL ) then
+#???  setenv G4USE_OSPACE 1
+#endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
 setenv G4LIB     /geant4/dev/lib
@@ -242,22 +244,23 @@ setenv G4UI_BUILD_XM_SESSION       1
 setenv G4UI_BUILD_XAW_SESSION      1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-setenv G4VIS_BUILD_RAYX_DRIVER     1
+#setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+#setenv G4VIS_BUILD_DAWN_DRIVER     1
+#setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+#setenv G4VIS_BUILD_VRML_DRIVER     1
+#setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4UI_USE_XAW                1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
-setenv G4VIS_USE_RAYX              1
+#setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
+#setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/OSF1-cxx
 setenv OGLHOME        /lal/Mesa/3.0/OSF1
 setenv OIVHOME        /lal/OpenInventor/2.5
 setenv HEPVISHOME     /projects/HEPVis
@@ -273,6 +276,7 @@ source /lal/OPACS/v3/setup.csh
 set prompt=${G4INSTALL}-${G4SYSTEM}'> '
 # Else :
 setenv CPPVERBOSE 1
+set prompt='g4-asc> ' 
 endif
 #---------------------------------------------------
 if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
@@ -320,6 +324,7 @@ source /lal/OPACS/v3/setup.csh
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-egcs:/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF"
 # Else :
 setenv CPPVERBOSE 1
+set prompt='g4-lx1> ' 
 endif
 # Comments :
 # --------
@@ -371,8 +376,15 @@ source /lal/OPACS/v3/setup.csh
 setenv LD_LIBRARY_PATH "$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
 # Else :
 setenv CPPVERBOSE 1
+set prompt='g4-papou1> ' 
 endif
 # Comments :
 # --------
 ####################################################
 ####################################################
+
+
+
+
+
+
