@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.hh,v 1.3 2001-10-29 09:28:53 pia Exp $
+// $Id: G4RayleighTest.cc,v 1.1 2001-10-29 09:30:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,58 +32,76 @@
 //
 // -------------------------------------------------------------------
 // Class description:
-// Test of electromagnetic physics processes
+// Test DoIt method of physics processes
 // Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
 // -------------------------------------------------------------------
 
-#ifndef G4PROCESSTEST_HH
-#define G4PROCESSTEST_HH 1
-
 #include "globals.hh"
+#include "G4RayleighTest.hh"
+#include "G4VProcess.hh"
 
-class G4VProcess;
-class G4ProcessManager;
-class G4ParticleDefinition;
-class G4Track;
-class G4Step;
+#include "G4LowEnergyRayleigh.hh"
+//#include "G4LowEnergyPolarizedRayleigh.hh"
 
-class G4ProcessTest {
- 
-public:
+#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4eBremsstrahlung.hh"
 
-  G4ProcessTest();
+#include "G4LowEnergyIonisation.hh"
+#include "G4eIonisation.hh"
 
-  virtual ~G4ProcessTest();
- 
-  void buildTables(const G4String& type, G4bool isPolarised = false);
+G4RayleighTest::G4RayleighTest(const G4String& category, G4bool isPolarised)
+  :type(category), polarised(isPolarised)
+{ }
 
-  void postStepTest(const G4Track& track,const G4Step& step) const;
+G4RayleighTest:: ~G4RayleighTest()
+{ }
 
-  void alongStepTest(const G4Track& track, const G4Step& step) const;
-  
-  G4ParticleDefinition* getIncidentParticleType() { return def; }
+G4VProcess* G4RayleighTest::createElectronIonisation()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyIonisation;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eIonisation;
+    }
+  return process;
+}
 
-  protected:
+G4VProcess* G4RayleighTest::createBremsstrahlung()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyBremsstrahlung;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eBremsstrahlung;
+    }
+  return process;  
+}
 
-  virtual G4VProcess* createProcess() = 0;
-  virtual G4VProcess* createBremsstrahlung() = 0;
-  virtual G4VProcess* createElectronIonisation() = 0;
-  virtual G4ParticleDefinition* createIncidentParticle();
+G4VProcess* G4RayleighTest::createProcess()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE" && (!polarised))
+    {
+      process = new G4LowEnergyRayleigh;
+    }
+  else if (type == "lowE" && polarised)
+    {
+      G4Exception("Polarised LowE process not available yet");
+      // process = new G4LowEnergyPolarizedRayleigh;
+    }  
+  else if (type == "standard")
+    {
+      G4Exception("Standard process not available");
+    }
+  return process;  
+}
 
-private:
-  
-  // Hide copy constructor and assignment operator
-  G4ProcessTest(const G4ProcessTest&);
-  G4ProcessTest & operator=(const G4ProcessTest &right);
-
-  G4VProcess* process;
-  G4VProcess* ioni;
-  G4VProcess* brem;
-  G4ProcessManager* eProcessManager;
-  G4ProcessManager* gProcessManager;
-  G4ParticleDefinition* def;      // not owned pointer
-};
- 
-#endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.hh,v 1.3 2001-10-29 09:28:53 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.1 2001-10-29 09:30:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,58 +32,83 @@
 //
 // -------------------------------------------------------------------
 // Class description:
-// Test of electromagnetic physics processes
+// Test DoIt method of physics processes
 // Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
 // -------------------------------------------------------------------
 
-#ifndef G4PROCESSTEST_HH
-#define G4PROCESSTEST_HH 1
-
 #include "globals.hh"
+#include "G4ComptonTest.hh"
+#include "G4VProcess.hh"
 
-class G4VProcess;
-class G4ProcessManager;
-class G4ParticleDefinition;
-class G4Track;
-class G4Step;
+#include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyPolarizedCompton.hh"
 
-class G4ProcessTest {
- 
-public:
+#include "G4ComptonScattering.hh"
+#include "G4PolarizedComptonScattering.hh"
 
-  G4ProcessTest();
+#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4eBremsstrahlung.hh"
 
-  virtual ~G4ProcessTest();
- 
-  void buildTables(const G4String& type, G4bool isPolarised = false);
+#include "G4LowEnergyIonisation.hh"
+#include "G4eIonisation.hh"
 
-  void postStepTest(const G4Track& track,const G4Step& step) const;
+G4ComptonTest::G4ComptonTest(const G4String& category, G4bool isPolarised)
+  :type(category), polarised(isPolarised)
+{ }
 
-  void alongStepTest(const G4Track& track, const G4Step& step) const;
-  
-  G4ParticleDefinition* getIncidentParticleType() { return def; }
+G4ComptonTest:: ~G4ComptonTest()
+{ }
 
-  protected:
+G4VProcess* G4ComptonTest::createElectronIonisation()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyIonisation;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eIonisation;
+    }
 
-  virtual G4VProcess* createProcess() = 0;
-  virtual G4VProcess* createBremsstrahlung() = 0;
-  virtual G4VProcess* createElectronIonisation() = 0;
-  virtual G4ParticleDefinition* createIncidentParticle();
+  return process;
+}
 
-private:
-  
-  // Hide copy constructor and assignment operator
-  G4ProcessTest(const G4ProcessTest&);
-  G4ProcessTest & operator=(const G4ProcessTest &right);
+G4VProcess* G4ComptonTest::createBremsstrahlung()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyBremsstrahlung;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eBremsstrahlung;
+    }
+  return process;  
+}
 
-  G4VProcess* process;
-  G4VProcess* ioni;
-  G4VProcess* brem;
-  G4ProcessManager* eProcessManager;
-  G4ProcessManager* gProcessManager;
-  G4ParticleDefinition* def;      // not owned pointer
-};
- 
-#endif
+G4VProcess* G4ComptonTest::createProcess()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE" && (!polarised))
+    {
+      process = new G4LowEnergyCompton;
+    }
+  else if (type == "lowE" && polarised)
+    {
+      process = new G4LowEnergyPolarizedCompton;
+    }  
+  else if (type == "standard" && (!polarised))
+    {
+      process = new G4ComptonScattering;
+    }
+  else if (type == "standard" && polarised)
+    {
+      process = new G4PolarizedComptonScattering;
+    }
+  return process;  
+}
+
 

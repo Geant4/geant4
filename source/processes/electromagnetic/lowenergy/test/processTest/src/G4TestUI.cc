@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.cc,v 1.1 2001-10-28 18:00:34 pia Exp $
+// $Id: G4TestUI.cc,v 1.2 2001-10-29 09:30:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,17 +32,21 @@
 //
 // -------------------------------------------------------------------
 
+#include "globals.hh"
 #include "G4TestUI.hh"
 #include "G4ProcessTest.hh"
 #include "G4Material.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
 
-G4TestUI::G4TestUI(): processTest(0), polarised(false)
+G4TestUI::G4TestUI(): nIterations(0), polarised(false)
 {
   types.push_back("compton");
   types.push_back("conversion");
-  types.push_back("photoel");
+  types.push_back("photoelectric");
   types.push_back("rayleigh");
-  types.push_back("brem");
+  types.push_back("bremsstrahlung");
   types.push_back("ionisation");
 
   topics.push_back("along");
@@ -53,15 +57,22 @@ G4TestUI::G4TestUI(): processTest(0), polarised(false)
 }
 
 G4TestUI::~G4TestUI()
+{ }
+
+void G4TestUI::configure()
 {
-  delete processTest;
+  selectNumberOfIterations();
+  selectProcess();
+  selectMaterial();
+  selectEnergyRange();
+  selectTestTopic(); 
 }
 
-void G4TestUI::SelectMaterial()
+void G4TestUI::selectMaterial()
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
- G4int nMaterials = G4Material::GetNumberOfMaterials();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   G4cout << "Select the material among the available ones: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
@@ -78,15 +89,16 @@ void G4TestUI::SelectMaterial()
   G4cout << "The selected material is: " << material->GetName() << G4endl;
 }
 
-void G4TestUI::SelectProcess()
+void G4TestUI::selectProcess()
 {
-  selectType();
-  selectCategory();
+  selectProcessType();
+  selectProcessCategory();
   isPolarised();
 }
 
-void G4TestUI::SelectProcessType()
+void G4TestUI::selectProcessType()
 {
+  G4int processType;
   G4cout << "Process to be tested: " << G4endl
 	 << "Compton [1], GammaConversion [2], Photoelectric [3], Rayleigh [4]" 
 	 << G4endl
@@ -97,22 +109,23 @@ void G4TestUI::SelectProcessType()
   type = processType - 1;
 }
 
-void G4TestUI::SelectProcessCategory()
+void G4TestUI::selectProcessCategory()
 {
   G4int selection;
   G4cout << "LowEnergy [1] or Standard [2]" << G4endl;
-  G4cin >> processSelection;
-  if (processSelection < 1 || processSelection > 2) G4Exception("Wrong input");
+  G4cin >> selection;
+  if (selection < 1 || selection > 2) G4Exception("Wrong input");
 
   category = selection - 1;
 }
 
-void G4TestUI::IsPolarised()
+void G4TestUI::isPolarised()
 {
   if (type < 5)
     {
       G4int isPolarised;
       G4cout << "Polarised processes are available for: Compton" 
+	     << G4endl
 	     << "Not Polarised [0] or Polarised [1] Process?"	       
 	     << G4endl;
       G4cin >> isPolarised;
@@ -120,7 +133,7 @@ void G4TestUI::IsPolarised()
     }
 }
 
-void G4TestUI::SelectTestTopic()
+void G4TestUI::selectTestTopic()
 {
   G4int iStep;
   G4cout << "PostStep [1] or AlongStep [2] test?" << G4endl;
@@ -128,58 +141,67 @@ void G4TestUI::SelectTestTopic()
   topic = iStep - 1;
 }
 
-void G4TestUI::SelectNumberOfIterations()
+void G4TestUI::selectNumberOfIterations()
 {
   G4cout << "How many iterations? " << G4endl;
   G4cin >> nIterations;
   if (nIterations <= 0) G4Exception("Wrong input");
 }
 
-const G4Material* G4TestUI::GetSelectedMaterial()
+void G4TestUI::selectEnergyRange()
 {
-  G4Material* material = (*theMaterialTable)[materialId] ;
+  G4cout << "Select min and max energy (MeV)" << G4endl;
+  G4cin >> eMin >> eMax;
+  if (eMin <= 0. || eMax < eMin) G4Exception("Wrong input");
+  eMin = eMin * MeV;
+  eMax = eMax * MeV;
+}
+
+const G4Material* G4TestUI::getSelectedMaterial() const
+{
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* material = (*theMaterialTable)[materialId] ;
+
   return material;
 }
 
-G4ProcessTest* G4TestUI::GetSelectedTest()
-{
-  G4ProcessTest* test = new G4ProcessTest;
-  G4String  = categories[category];
-  
-  if (type == 0)
-    {
-      test = new G4ComptonTest(cat,isPolarised);
-    }
-  else if (type == 1)
-    {
-      test = new G4GammaConversionTest(cat,isPolarised);
-    }
-  else if (type == 2)
-    {
-      test = new G4PhotoelectricTest(cat,isPolarised);
-    }
-  else if (type == 3)
-    {
-      test = new G4RayleighTest(cat,isPolarised);
-    }
-  else if (type == 4)
-    {
-      test = new G4BremsstralungTest(cat);
-    }
-  else if (type == 5)
-    {
-      test = new G4eIonisationTest(cat);
-    }
-
-  return test;
-}
-
-G4int G4TestUI::GetNIterations()
+G4int G4TestUI::getNumberOfIterations() const
 {
   return nIterations;
 }
 
-const G4String& G4TestUI::GetTestTopic()
+const G4String& G4TestUI::getTestTopic() const 
 {
   return topics[topic];
 }
+
+const G4String& G4TestUI::getProcessType() const 
+{
+  return types[type];
+}
+
+const G4String& G4TestUI::getProcessCategory() const
+{
+  return categories[category];
+}
+
+G4bool G4TestUI::getPolarisationSelection() const
+{
+  return polarised;
+}
+
+G4ParticleDefinition* G4TestUI::getParticleDefinition() const 
+{
+  G4ParticleDefinition* def = 0;
+  if (type <= 4)
+    {
+      def = G4Gamma::GammaDefinition();
+    }
+  else
+    {
+      def = G4Electron::ElectronDefinition();
+    }
+  return def;
+}
+
+

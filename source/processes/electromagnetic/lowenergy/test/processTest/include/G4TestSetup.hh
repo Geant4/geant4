@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.hh,v 1.2 2001-10-15 15:27:17 pia Exp $
+// $Id: G4TestSetup.hh,v 1.3 2001-10-29 09:28:54 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -55,19 +55,15 @@ class G4TestSetup {
  
 public:
 
-  G4TestSetup();
+  G4TestSetup(G4Material* aMaterial,
+	      G4ParticleDefinition* def,
+	      G4double minEnergy, G4double  maxEnergy);
 
   virtual ~G4TestSetup();
  
-  void init();
-
+  void makeGeometry();
   const G4Track* makeTrack();
-
   const G4Step* makeStep();
-
-  G4VProcess* createTestProcess();
-
-  G4String setupName();
 
 private:
   
@@ -75,32 +71,15 @@ private:
   G4TestSetup(const G4TestSetup&);
   G4TestSetup& operator=(const G4TestSetup& right);
 
-  void makeElectronProcesses();
-  void makeGeometry();
-  void makeMaterials();
-
-  G4int selection;
-  G4int processType;
-  G4String selName;
-  G4String pName;
-
   G4ParticleDefinition* part;
   G4Material* material;
+  G4double eMin;
+  G4double eMax;
   G4Track* track;
   G4Step* step;
   G4PVPlacement* physicalFrame;
 
-  G4VContinuousDiscreteProcess* ioniProcess;
-  G4VContinuousDiscreteProcess* bremProcess;
-  G4ProcessManager* eProcessManager;
-  G4ProcessManager* positronProcessManager;
-  G4ProcessManager* processManager;
 
-  G4bool ioniSel;
-  G4bool bremSel;
-
-  G4double eMin;
-  G4double eMax;
 };
  
 #endif

@@ -21,75 +21,76 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.hh,v 1.2 2001-10-29 09:28:54 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.1 2001-10-29 09:30:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-// File name:     G4TestUI
-//
-// Author:        Maria Grazia Pia
-// 
-// Creation date: 1 October 2001
-//
-// Modifications: 
+// History:
+// -----------
+// 07 Oct 2001   MGP        Created
 //
 // -------------------------------------------------------------------
+// Class description:
+// Test DoIt method of physics processes
+// Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
-#ifndef G4TESTUI_HH
-#define G4TESTUI_HH
+// -------------------------------------------------------------------
 
 #include "globals.hh"
-#include "g4std/vector"
+#include "G4BremsstrahlungTest.hh"
+#include "G4VProcess.hh"
 
-class G4ProcessTest;
-class G4Material;
-class G4ParticleDefinition;
+#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4eBremsstrahlung.hh"
 
-class G4TestUI
+#include "G4LowEnergyIonisation.hh"
+#include "G4eIonisation.hh"
+
+#include "G4Electron.hh"
+
+G4BremsstrahlungTest::G4BremsstrahlungTest(const G4String& category)
+  :type(category)
+{ }
+
+G4BremsstrahlungTest:: ~G4BremsstrahlungTest()
+{ }
+
+G4VProcess* G4BremsstrahlungTest::createElectronIonisation()
 {
-  public:
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyIonisation;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eIonisation;
+    }
+  return process;
+}
 
-  G4TestUI();
-  virtual ~G4TestUI();
-  
-  void configure();
-  void selectNumberOfIterations();
-  void selectMaterial(); 
-  void selectProcess();
-  void selectTestTopic();  
-  void selectEnergyRange();
+G4VProcess* G4BremsstrahlungTest::createBremsstrahlung()
+{
+  return 0;  
+}
 
-  G4int getNumberOfIterations() const;
-  const G4Material* getSelectedMaterial() const;
-  const G4String& getProcessType() const;
-  const G4String& getProcessCategory() const;
-  const G4String& getTestTopic() const ;
-  G4bool getPolarisationSelection() const;
-  G4ParticleDefinition* getParticleDefinition() const;
-  G4double getMinEnergy() const { return eMin; }
-  G4double getMaxEnergy() const { return eMax; }
-  
- private:
+G4VProcess* G4BremsstrahlungTest::createProcess()
+{
+  G4VProcess* process = 0;
+  if (type == "lowE")
+    {
+      process = new G4LowEnergyBremsstrahlung;
+    }
+  else if (type == "standard")
+    {
+      process = new G4eBremsstrahlung;
+    }
+  return process;  
+}
 
-  void operator=(const G4TestUI& right);
+G4ParticleDefinition* G4BremsstrahlungTest::createIncidentParticle()
+{
+  return G4Electron::ElectronDefinition();
+}
 
-  void selectProcessType();
-  void selectProcessCategory();
-  void isPolarised();
-
-  G4int nIterations;
-  G4int materialId;            
-  G4int type;
-  G4int category;
-  G4int topic;
-  G4bool polarised;
-  G4double eMin;
-  G4double eMax;
-  G4std::vector<G4String> types;
-  G4std::vector<G4String> topics;
-  G4std::vector<G4String> categories;
-
-};
-
-#endif 

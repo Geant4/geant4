@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.hh,v 1.2 2001-10-29 09:28:54 pia Exp $
+// $Id: G4MaterialSetup.hh,v 1.1 2001-10-29 09:28:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-// File name:     G4TestUI
+// File name:     G4MaterialSetup
 //
 // Author:        Maria Grazia Pia
 // 
@@ -36,59 +36,24 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4TESTUI_HH
-#define G4TESTUI_HH
+#ifndef G4MATERIALSETUP_HH
+#define G4MATERIALSETUP_HH
 
 #include "globals.hh"
-#include "g4std/vector"
 
 class G4ProcessTest;
 class G4Material;
-class G4ParticleDefinition;
 
-class G4TestUI
+class G4MaterialSetup
 {
   public:
 
-  G4TestUI();
-  virtual ~G4TestUI();
+  G4MaterialSetup() { }
+  virtual ~G4MaterialSetup() { }
   
-  void configure();
-  void selectNumberOfIterations();
-  void selectMaterial(); 
-  void selectProcess();
-  void selectTestTopic();  
-  void selectEnergyRange();
+  void makeMaterials();
 
-  G4int getNumberOfIterations() const;
-  const G4Material* getSelectedMaterial() const;
-  const G4String& getProcessType() const;
-  const G4String& getProcessCategory() const;
-  const G4String& getTestTopic() const ;
-  G4bool getPolarisationSelection() const;
-  G4ParticleDefinition* getParticleDefinition() const;
-  G4double getMinEnergy() const { return eMin; }
-  G4double getMaxEnergy() const { return eMax; }
-  
  private:
-
-  void operator=(const G4TestUI& right);
-
-  void selectProcessType();
-  void selectProcessCategory();
-  void isPolarised();
-
-  G4int nIterations;
-  G4int materialId;            
-  G4int type;
-  G4int category;
-  G4int topic;
-  G4bool polarised;
-  G4double eMin;
-  G4double eMax;
-  G4std::vector<G4String> types;
-  G4std::vector<G4String> topics;
-  G4std::vector<G4String> categories;
 
 };
 

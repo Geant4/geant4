@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.2 2001-10-28 18:00:34 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.3 2001-10-29 09:30:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,13 +40,18 @@
 #include "globals.hh"
 #include "G4ProcessTest.hh"
 #include "G4VProcess.hh"
+#include "G4ProcessManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
 #include "SystemOfUnits.h"
 
-G4ProcessTest::G4ProcessTest() : process(0), ioni(0), brem(0)
+G4ProcessTest::G4ProcessTest() : 
+  process(0), ioni(0), brem(0), eProcessManager(0), gProcessManager(0), def(0)
 { }
 
 G4ProcessTest:: ~G4ProcessTest()
@@ -57,21 +62,68 @@ G4ProcessTest:: ~G4ProcessTest()
   ioni = 0;
   delete brem;
   brem = 0;
+  delete eProcessManager;
+  eProcessManager = 0;
+  delete gProcessManager;
+  gProcessManager = 0;
  }
 
-void G4ProcessTest::init(const G4String& type, G4bool isPolarised = false)
+void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised)
 { 
-  process = createProcess(const G4String& type, G4bool isPolarised = false);
-  G4cout << process->GetName() << " created" << G4endl;
-  ioni = createElectronIonisation(const G4String& type);
-  if (ioni != 0)  G4cout << ioni->GetName() << " created" << G4endl;
-  brem = createBremsstrahlung(const G4String& type);
-  if (brem != 0)  G4cout << brem->GetName() << " created" << G4endl;
+  process = createProcess();
+  G4cout << process->GetProcessName() << " created" << G4endl;
+
+  def = createIncidentParticle();
+
+  brem = createBremsstrahlung();
+  if (brem != 0)  
+    {
+      G4cout << brem->GetProcessName() << " created" << G4endl;
+    }
+
+  ioni = createElectronIonisation();
+  if (ioni != 0)  
+    {
+      G4cout << ioni->GetProcessName() << " created" << G4endl;
+    }
+
+  if (def == G4Gamma::GammaDefinition())
+    {
+      def->SetCuts(1e-3*mm);
+      gProcessManager = new G4ProcessManager(def);
+      def->SetProcessManager(gProcessManager);
+      gProcessManager->AddProcess(process);
+      process->BuildPhysicsTable(*def);
+    }
+
+  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
+  electron->SetCuts(1e-3*mm);
+  eProcessManager = new G4ProcessManager(electron);
+  electron->SetProcessManager(eProcessManager);
+
+  if (def == G4Electron::ElectronDefinition())
+    {
+      eProcessManager->AddProcess(process);
+      process->BuildPhysicsTable(*def); 
+    }
+  if (ioni != 0)  
+    {
+      eProcessManager->AddProcess(ioni);
+      ioni->BuildPhysicsTable(*electron);
+    }
+  if (brem != 0)  
+    {
+      eProcessManager->AddProcess(ioni);
+      brem->BuildPhysicsTable(*electron);
+    }
 }
  
 void G4ProcessTest::postStepTest(const G4Track& track,
 				 const G4Step& step) const
 {
+  G4Material* mat = track.GetMaterial();
+  if (mat == 0) G4cout << "Material = 0 in track" << G4endl;  
+
   G4ParticleChange* particleChange = (G4ParticleChange*) process->PostStepDoIt(track, step);
   
   // Primary physical quantities 
@@ -180,4 +232,9 @@ void G4ProcessTest::alongStepTest(const G4Track& track,
 				  const G4Step& step) const 
 {
   // To be implemented
+}
+
+G4ParticleDefinition* G4ProcessTest::createIncidentParticle()
+{
+  return G4Gamma::GammaDefinition();
 }

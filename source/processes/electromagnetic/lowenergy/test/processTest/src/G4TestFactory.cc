@@ -21,75 +21,65 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.hh,v 1.2 2001-10-29 09:28:54 pia Exp $
+// $Id: G4TestFactory.cc,v 1.1 2001-10-29 09:30:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-// File name:     G4TestUI
-//
-// Author:        Maria Grazia Pia
-// 
-// Creation date: 1 October 2001
-//
-// Modifications: 
+// History:
+// -----------
+// 07 Oct 2001   MGP        Created
 //
 // -------------------------------------------------------------------
-
-#ifndef G4TESTUI_HH
-#define G4TESTUI_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include "G4TestFactory.hh"
+#include "G4ProcessTest.hh"
+#include "G4ComptonTest.hh"
+#include "G4GammaConversionTest.hh"
+#include "G4PhotoelectricTest.hh"
+#include "G4RayleighTest.hh"
+#include "G4BremsstrahlungTest.hh"
+#include "G4eIonisationTest.hh"
 
-class G4ProcessTest;
-class G4Material;
-class G4ParticleDefinition;
-
-class G4TestUI
+const G4ProcessTest* G4TestFactory::createTestProcess(const G4String& type, 
+						      const G4String& category, 
+						      G4bool isPolarised)
 {
-  public:
-
-  G4TestUI();
-  virtual ~G4TestUI();
+  G4ProcessTest* test = 0;
   
-  void configure();
-  void selectNumberOfIterations();
-  void selectMaterial(); 
-  void selectProcess();
-  void selectTestTopic();  
-  void selectEnergyRange();
+  if (type == "compton")
+    {
+      test = new G4ComptonTest(category,isPolarised);
+      G4cout << "Testing Compton scattering" << G4endl;
+    }
+  if (type == "conversion")
+    {
+      test = new G4GammaConversionTest(category,isPolarised);
+      G4cout << "Testing gamma conversion" << G4endl;
+    }
+  if (type == "photoelectric")
+    {
+      test = new G4PhotoelectricTest(category);
+      G4cout << "Testing photoelectric effect" << G4endl;
+    }
+  if (type == "rayleigh")
+    {
+      test = new G4RayleighTest(category,isPolarised);
+      G4cout << "Testing Rayleigh scattering" << G4endl;
+    }
+  if (type == "bremsstrahlung")
+    {
+      test = new G4BremsstrahlungTest(category);
+      G4cout << "Testing Bremsstrahlung" << G4endl;
+    }
+  if (type == "ionisation")
+    {
+      test = new G4eIonisationTest(category);
+      G4cout << "Testing electron ionisation" << G4endl;
+    }
+  return test;
+}
 
-  G4int getNumberOfIterations() const;
-  const G4Material* getSelectedMaterial() const;
-  const G4String& getProcessType() const;
-  const G4String& getProcessCategory() const;
-  const G4String& getTestTopic() const ;
-  G4bool getPolarisationSelection() const;
-  G4ParticleDefinition* getParticleDefinition() const;
-  G4double getMinEnergy() const { return eMin; }
-  G4double getMaxEnergy() const { return eMax; }
-  
- private:
 
-  void operator=(const G4TestUI& right);
 
-  void selectProcessType();
-  void selectProcessCategory();
-  void isPolarised();
-
-  G4int nIterations;
-  G4int materialId;            
-  G4int type;
-  G4int category;
-  G4int topic;
-  G4bool polarised;
-  G4double eMin;
-  G4double eMax;
-  G4std::vector<G4String> types;
-  G4std::vector<G4String> topics;
-  G4std::vector<G4String> categories;
-
-};
-
-#endif 
