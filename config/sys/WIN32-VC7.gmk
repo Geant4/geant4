@@ -10,8 +10,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
       CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
     endif
   endif
-  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
-  CXXFLAGS += -D_WIN32 -DOS
+  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32
   CPPFLAGS += -DWIN32 -DXPNET
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
 
@@ -23,7 +22,10 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -lGLU  -lGL
+    OGLLIBS   := '-libpath:'-lglu32 '-libpath:'-lopengl32
+  endif
+  ifndef UI32LIBS
+    UI32LIBS  := '-libpath:'-lgdi32 '-libpath:'-luser32
   endif
 
   define build-granular-shared-lib
