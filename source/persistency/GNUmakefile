@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2002-11-24 13:45:22 morita Exp $
+# $Id: GNUmakefile,v 1.22 2002-12-04 13:00:03 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -24,3 +24,8 @@ CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk
+
+.PHONY: global
+ 
+global: lib
+
