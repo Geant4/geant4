@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2002-07-11 16:18:35 dressel Exp $
+$Id: History,v 1.57 2002-07-11 16:28:53 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 11, 2002 M.Dressel 
+July 11, 2002 M.Dressel (internal-1-run-V04-01-01)
 - add:
  include/G4MapPtkStandardCellScorer.hh 
  include/G4ParallelSamplerMessenger.hh  
@@ -34,6 +34,8 @@ July 11, 2002 M.Dressel
 - the G4StandardScorer.cc needs the G4EventManager
   G4ParallelSamplerMessenger.hh needs G4StandardScorer.
   The other classes are needed in turn. 
+- coworks with  internal-2-transport-V04-01-01 
+                internal-2-geombias-V04-01-01
 
 Jun 25, 2002 G.Cosmo (run-V04-00-04)
 - Changed date to G4RunManager.cc for release 4.1.
