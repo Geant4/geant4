@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.6 2001-11-19 15:09:23 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.7 2001-11-21 16:47:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,12 +87,13 @@ public:
   void AddPrimitive(const G4NURBS&);
 
   ////////////////////////////////////////////////////////////////
-  // Explicitly invoke base class methods to avoid warnings about
+  // Further optional AddPrimtive methods.  Explicitly invoke base
+  // class methods if not otherwise defined to avoid warnings about
   // hiding of base class methods.
   void AddPrimitive(const G4Polymarker& polymarker) {
     G4VSceneHandler::AddPrimitive (polymarker);
   }
-  void AddPrimitive (const G4Scale& scale) {
+  void AddPrimitive(const G4Scale& scale) {
     G4VSceneHandler::AddPrimitive (scale);
   }
 
