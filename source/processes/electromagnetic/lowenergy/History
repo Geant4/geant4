@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2001-08-29 18:44:05 pia Exp $
+$Id: History,v 1.92 2001-09-10 15:27:15 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.09.2001 - MGP, tag emlowen-after-chep2001
+             Junk found in the repository 
+             Tagged as an aid in the procedure of restoring a reasonable
+             situation in the cvs head for future developments
 
 29.08.2001 - MGP, tag emlowen-V03-02-10
              Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
