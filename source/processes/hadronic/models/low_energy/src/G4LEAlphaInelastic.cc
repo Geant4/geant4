@@ -9,7 +9,9 @@
  // Hadronic Process: Alpha Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 27-Mar-1997
-
+ // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+ //                          from NuclearReaction
+ //
 #include "G4LEAlphaInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -47,21 +49,20 @@
     massVec[6] = targetNucleus.AtomicMass( A+2.0, Z+2.0 )-(Z+2.0)*G4Electron::Electron()->GetPDGMass();
     massVec[7] = massVec[3];
     massVec[8] = targetNucleus.AtomicMass( A+2.0, Z     )-(Z)*G4Electron::Electron()->GetPDGMass();
-    
+    //
     G4FastVector<G4ReactionProduct,3> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
-    
+    //
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
-    
-    G4double p = originalIncident->GetTotalMomentum();
-    theParticleChange.SetMomentumChange( originalIncident->GetMomentum() * (1.0/p) );
-    theParticleChange.SetEnergyChange( originalIncident->GetKineticEnergy() );
-    
-    theParticleChange.SetNumberOfSecondaries( vecLen );
+    //
+    theParticleChange.SetMomentumChange( vec[0]->GetMomentum() );
+    theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
+    //
+    theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
-    for( G4int i=0; i<vecLen; ++i )
+    for( G4int i=1; i<vecLen; ++i )
     {
       pd = new G4DynamicParticle();
       pd->SetDefinition( vec[i]->GetDefinition() );
@@ -69,7 +70,7 @@
       theParticleChange.AddSecondary( pd );
       delete vec[i];
     }
-    
+    //
     return &theParticleChange;
   }
  

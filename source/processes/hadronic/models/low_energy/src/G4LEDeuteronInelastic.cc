@@ -9,7 +9,9 @@
  // Hadronic Process: Deuteron Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 27-Mar-1997
-
+ // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+ //                          from NuclearReaction
+ //
 #include "G4LEDeuteronInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -31,8 +33,8 @@
     }
     
     // Work-around for lack of model above 100 MeV
-    if (originalIncident->GetKineticEnergy()/MeV > 100. ||
-        originalIncident->GetKineticEnergy() <= 0.1*MeV) return &theParticleChange;
+    if( originalIncident->GetKineticEnergy()/MeV > 100. ||
+        originalIncident->GetKineticEnergy() <= 0.1*MeV )return &theParticleChange;
 
     G4double N = targetNucleus.GetN();
     G4double Z = targetNucleus.GetZ();
@@ -54,14 +56,13 @@
     
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
-    
-    G4double p = originalIncident->GetTotalMomentum();
-    theParticleChange.SetMomentumChange( originalIncident->GetMomentum() * (1.0/p) );
-    theParticleChange.SetEnergyChange( originalIncident->GetKineticEnergy() );
-    
-    theParticleChange.SetNumberOfSecondaries( vecLen );
+    //
+    theParticleChange.SetMomentumChange( vec[0]->GetMomentum() );
+    theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
+    //
+    theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
-    for( G4int i=0; i<vecLen; ++i )
+    for( G4int i=1; i<vecLen; ++i )
     {
       pd = new G4DynamicParticle();
       pd->SetDefinition( vec[i]->GetDefinition() );
