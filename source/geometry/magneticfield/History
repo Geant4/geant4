@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2002-04-12 14:55:28 japost Exp $
+$Id: History,v 1.56 2002-04-19 17:46:09 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 19th, 2002  J. Apostolakis
+--------------------------------
+- G4MagIntegratorDriver.hh,cc
+  * Bug fix:  last step can now only be triggerred if x+h > x2.
+  * Debugging methods improved.
+
 Mar 28th, 2002  J. Apostolakis - field-V04-00-01
 -----------------------
-- Fixed LinearStep in G4MagHelicalStepper, 
-    which assumed that components 3-5 of vector were normalised 
-    and had not been updated for new scheme (momentum).
+- Fixed LinearStep in G4MagHelicalStepper (expected unit direction), 
+    that had not been updated for new integration variable (momentum).
+    --> found in testing helical steppers in BaBar setup, 
+         in region of negligible field.
 
 - Changed maximum number of steps in driver, 
     halving from 500/order to 250/order.
