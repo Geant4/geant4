@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.21 2002-05-06 15:37:55 maire Exp $
+// $Id: G4Material.cc,v 1.22 2002-08-06 15:14:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +55,7 @@
 // 26-02-02, fIndexInTable renewed
 // 16-04-02, G4Exception put in constructor with chemical formula
 // 06-05-02, remove the check of the ideal gas state equation
+// 06-08-02, remove constructors with chemical formula (mma)
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,38 +154,6 @@ G4Material::G4Material(const G4String& name, G4double density,
      if (fDensity > kGasThreshold) fState = kStateSolid;
      else                          fState = kStateGas;
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Constructor to create a material with chemical formula from scratch
-
-G4Material::G4Material(const G4String& name, const G4String& chFormula, 
-                       G4double z, G4double a, G4double density, 
-                       G4State state, G4double temp, G4double pressure)
-:fName(name),fChemicalFormula(chFormula)
-{  
-  G4Exception 
-     ("---> from G4Material constructor with chemical formula."
-      " This constructor is depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Constructor to create a material with chemical formula from a List 
-// of constituents (elements and/or materials)  added with AddElement 
-// or AddMaterial
-
-G4Material::G4Material(const G4String& name, const G4String& chFormula, 
-                       G4double density, G4int nComponents,
-                       G4State state, G4double temp, G4double pressure)
-:fName(name),fChemicalFormula(chFormula)
-{
-  G4Exception 
-     ("---> from G4Material constructor with chemical formula."
-      " This constructor is depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -371,31 +340,6 @@ void G4Material::ComputeDerivedQuantities()
      TotNbOfAtomsPerVolume += VecNbOfAtomsPerVolume[i];
      TotNbOfElectPerVolume += VecNbOfAtomsPerVolume[i]*Zi;
   }
-
-///  //for gas, check coherence of the state conditions
-///  if (fState == kStateGas) {
-///     G4int nbAtomsPerMolecule = 1;
-///     if (fAtomsVector) {
-///       nbAtomsPerMolecule = 0;
-///       for (size_t j=0;j<fNumberOfElements;j++) 
-///             nbAtomsPerMolecule += fAtomsVector[j];
-///     }
-///    G4double NbOfMoleculesPerVolume = TotNbOfAtomsPerVolume/nbAtomsPerMolecule;	
-///	     
-///     G4double ratio = NbOfMoleculesPerVolume*k_Boltzmann*fTemp/fPressure;
-///     if ((ratio<0.1)||(ratio>10.)) {
-///       G4cerr << "--warning from G4Material-- The state conditions of the gas: "
-///              << fName << " are not consistent."
-///              << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
-///              << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
-///              << "\t temperature = " << fTemp/kelvin          << " kelvin"
-///              << "\n rho*(T/P) would be of the order of: "
-///              << (fDensity/(NbOfMoleculesPerVolume*k_Boltzmann))
-///	         /((mg/cm3)*(kelvin/atmosphere))
-///              << " (mg/cm3)*(kelvin/atmosphere)."
-///	         " The energy loss calculation maybe be affected \n";
-///       }
-///    }
         
   ComputeRadiationLength();
   ComputeNuclearInterLength();

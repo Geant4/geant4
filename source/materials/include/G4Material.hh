@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.20 2002-02-26 17:34:34 maire Exp $
+// $Id: G4Material.hh,v 1.21 2002-08-06 15:14:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,6 +75,7 @@
 // 14-09-01, Suppression of the data member fIndexInTable
 // 31-10-01, new function SetChemicalFormula() (mma)
 // 26-02-02, fIndexInTable renewed
+// 06-08-02, remove constructors with ChemicalFormula (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,31 +116,6 @@ public:  // with description
   // and/or materials subsequently added via AddElement and/or AddMaterial
   //
   G4Material(const G4String& name,				//its name
-                   G4double  density, 				//density
-                   G4int     nComponents,			//nbOfComponents
-                   G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
-
-  //
-  // Constructor to create a material with chemical formula from scratch.
-  //
-  G4Material(const G4String& name,				//its name
-	     const G4String& chFormula,                      	//chemicalFormul
-                   G4double  z, 				//atomic number
-                   G4double  a,					//mass of mole
-                   G4double  density, 				//density
-                   G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
-
-  //
-  // Constructor to create a material with chemical formula from a 
-  // combination of elements and/or materials subsequently added via 
-  // AddElement and/or AddMaterial
-  //
-  G4Material(const G4String& name,				//its name
-	     const G4String& chFormula,                       	//chemicalFormul
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
                    G4State   state    = kStateUndefined,	//solid,gas

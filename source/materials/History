@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2002-05-06 15:37:54 maire Exp $
+$Id: History,v 1.37 2002-08-06 15:14:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06.08.02 M.Maire - materials-V04-01-00
+         Remove constructors with chemical formula 
+	      
 06.05.02 M.Maire - materials-V04-00-03
          Remove the check of the ideal gas state equation
 	     
