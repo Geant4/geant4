@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.7 2001-07-22 00:40:59 johna Exp $
+// $Id: G4VGraphicsScene.hh,v 1.8 2001-08-14 18:19:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -92,7 +92,8 @@ public: // With description
   ///////////////////////////////////////////////////////////////////
   // Functions for adding graphics primitives to the scene handler.
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) = 0;
+  virtual void BeginPrimitives
+  (const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
