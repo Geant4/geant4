@@ -285,7 +285,7 @@ if ( `uname -n` == aleph ) then
   setenv SOFREEUSER     $OIVHOME/user/
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
-  setenv XENVIRONMENT   g4.xrm
+  #setenv XENVIRONMENT   g4.xrm
   setenv PATH "${PATH}:/lal/DAWN/3.72b/HP-UX-aCC"
   setenv CPPVERBOSE 1
   set prompt='g4-aleph> ' 
@@ -333,11 +333,10 @@ if ( `uname -n` == asc ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/OSF1-cxx-TGS -lHEPVis -L$OIVHOME/lib -lInventorXt -lInventor -limage"
   #setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
-  setenv XENVIRONMENT   g4.xrm
+  #setenv XENVIRONMENT   g4.xrm
   # Else :
   setenv LD_LIBRARY_PATH "$OIVHOME/lib:$HEPVISHOME/OSF1-cxx-TGS:${OGLHOME}/lib"
   setenv PATH "${PATH}:/lal/DAWN/3.72b/OSF1-cxx"
-  setenv XENVIRONMENT   g4Xt.xrm
   setenv CPPVERBOSE 1
   set prompt='g4-asc> ' 
   # To be able to link :
@@ -539,7 +538,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4DEBUG 1
   setenv CPPVERBOSE 1
   # Shareable library
-  setenv G4LIB_BUILD_SHARED 1
+  #FIXME setenv G4LIB_BUILD_SHARED 1
   setenv DYLD_LIBRARY_PATH $G4LIB/$G4SYSTEM
   setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.1.0
   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
@@ -566,7 +565,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   #setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include"
   #setenv OIVLIBS "-L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
   #setenv DYLD_LIBRARY_PATH "$OIVHOME/lib:$OIXHOME/Darwin"
-  setenv XENVIRONMENT visTutor/g4Xt.xrm
+  #setenv XENVIRONMENT visTutor/g4Xt.xrm
 #  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
 #  setenv G4ANALYSIS_USE 1
