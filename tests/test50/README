@@ -39,8 +39,10 @@ test_input_files
 $G4WORKDIR/bin/Linux-g++/test50
 
 ---------------------------------------------------------------------*
-default macro file is initialised ---> default.mac                   
+default macro file is initialised ---> default.mac                   *
+in interactive mode         
                                                                      *
+experimental set-up fixed by default.mac                                                                                                             *
 Standard processes for gamma, e-, e+
 a beam of gamma (1.MeV) energy impinges on a target of liquid argon  *
 whose dimensions are:

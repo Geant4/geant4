@@ -6,4 +6,3 @@
 /physics/addPhysics electron-standard
 /physics/addPhysics positron-standard
 /run/initialize
-/process/list

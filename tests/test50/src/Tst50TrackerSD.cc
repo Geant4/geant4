@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerSD.cc,v 1.4 2003-05-17 18:11:54 guatelli Exp $
+// $Id: Tst50TrackerSD.cc,v 1.5 2003-05-28 09:42:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,7 @@ Tst50TrackerSD::~Tst50TrackerSD()
   delete [] hitID;
 }
 
-void Tst50TrackerSD::Initialize(G4HCofThisEvent* HCE)
+void Tst50TrackerSD::Initialize(G4HCofThisEvent*)
 {
   trackerCollection = new Tst50TrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]); 
@@ -64,7 +64,7 @@ void Tst50TrackerSD::Initialize(G4HCofThisEvent* HCE)
     {hitID [j]= -1;}; 
 }
 
-G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false;
@@ -72,7 +72,6 @@ G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
   theTouchable->MoveUpHistory();     
     
   if ( hitID[0]==-1)
