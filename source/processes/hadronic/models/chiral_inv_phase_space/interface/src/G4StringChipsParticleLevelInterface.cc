@@ -50,7 +50,7 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   //G4double clusteringCoefficient = 5.;
   G4cout << "Please enter the temperature"<<G4endl;
   G4cin >> temperature;
-  G4double temperature = 180.;
+  //G4double temperature = 180.;
   G4cout << "Please enter halfTheStrangenessOfSee"<<G4endl;
   G4cin >> halfTheStrangenessOfSee;
   //G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
@@ -151,7 +151,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   
-  G4LorentzVector proj4Mom = (0,0,0,0);
+  G4LorentzVector proj4Mom(0.,0.,0.,0.);
   G4int nD  = 0;
   G4int nU  = 0;
   G4int nS  = 0;

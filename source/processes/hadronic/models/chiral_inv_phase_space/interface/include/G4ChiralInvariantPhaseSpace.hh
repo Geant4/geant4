@@ -23,6 +23,8 @@
 #ifndef G4ChiralInvariantPhaseSpace_h
 #define G4ChiralInvariantPhaseSpace_h
 
+//#define CHIPSdebug
+
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleTable.hh"
@@ -103,7 +105,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   theResult.SetStatusChange(fStopAndKill);
   theResult.SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
-  G4cout << "NEW EVENT"<<endl;
+#ifdef CHIPSdebug
+  G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="<<output->size()<<endl;
+#endif
   unsigned int particle;
   for( particle = 0; particle < output->size(); particle++)
   {
@@ -114,6 +118,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     }
     theSec = new G4DynamicParticle;  
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
+#ifdef CHIPSdebug
+    G4cout << "G4ChiralInvariantPhaseSpace: h#"<<particle<<", PDG="<<pdgCode<<endl;
+#endif
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -131,7 +138,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     {
       theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->operator[](particle)->GetPDGCode());
     }
-    G4cout << "Particle code produced = "<< pdgCode <<endl;
     theSec->SetDefinition(theDefinition);
     theSec->SetMomentum(output->operator[](particle)->Get4Momentum().vect());
     theResult.AddSecondary(theSec); 

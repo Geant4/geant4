@@ -91,7 +91,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   
-  G4LorentzVector proj4Mom = (0,0,0,0);
+  G4LorentzVector proj4Mom(0.,0.,0.,0.);
+  // @@ Use the G4QContent class, which is exactly (nD,nU,nS,nAD,nAU,nAS) !
+  // The G4QContent class is a basic clas in CHIPS (not PDG Code as in GEANT4),
+  // so in CHIPS on can has a hadronic obgect (Quasmon) with any Quark Content.
+  // As a simple extantion for the hadron (which is a special case for Hadron)
+  // there is a clas G4QChipolino, which is a Quasmon, which can decay in two
+  // hadrons. In future the three-hadron class can be added...
   G4int nD  = 0;
   G4int nU  = 0;
   G4int nS  = 0;
@@ -158,7 +164,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     proj4Mom += current->second->Get4Momentum(); 
     G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;
     
-     // projectile quark contects needed for G4QContent construction
+     // projectile quark contents needed for G4QContent construction (@@ ? -> G4QContent class)
     nD += current->second->GetDefinition()->GetQuarkContent(1);
     nU += current->second->GetDefinition()->GetQuarkContent(2);
     nS += current->second->GetDefinition()->GetQuarkContent(3);
@@ -355,6 +361,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   delete output;
   G4cout << "Number of particles"<<theResult->size()<<G4endl;
   G4cout << G4endl;
+  // @@ G4QContent has even the out option!
   G4cout << "QUASMON preparation info "
          << 1./MeV*proj4Mom<<" "
 	 << 1./MeV*targ4Mom<<" "
