@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-05-31 08:14:43 asaim Exp $
+$Id: README,v 1.3 2001-10-23 15:24:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,16 +14,18 @@ in a correct way those user-classes which the user is supposed to
 customize in order to define his/her own simulation setup.
 One set of examples is oriented to "novice" users and covering all
 possible general use-cases typical of an "application"-oriented kind of
-development. An "Extended" set of examples require some additional
-libraries besides of Geant4. This set covers some realistic use cases
-for actual detector simulation for HEP. An "advanced" set of examples 
-(not yet available at the current time), will cover the use-cases typical 
-of a "toolkit"-oriented kind of development.
+development. An "extended" set of examples require some additional
+libraries besides of Geant4. This set covers some specific use cases
+for actual detector simulation. An "advanced" set of examples covers
+the use-cases typical of a "toolkit"-oriented kind of development,
+where real complete applications for different simulation studies are
+provided; may require additional third party products to be built.
 Most of the examples can be run both in interactive and batch mode, and 
 input macro files (*.in) and reference output files (*.out) are provided.
-These examples are considered part of the validation procedure for the
-official releases of the GEANT4 toolkit, as "acceptance"-testing phase
-of the validation process.
+Novice and most of the extended examples are considered part of the
+system testing suite for validation of the official releases of the
+GEANT4 toolkit. Novice examples are used as "acceptance"-tests for the
+release process.
 
 Novice level examples
  ExampleN01
@@ -48,10 +50,21 @@ Novice level examples
    - Optical photon processes
 
 Extended level examples
- ExampleE01
-   - CLHEP histogramming
- ExampleE02
-   - Persistency by HepODBMS (CERN RD45)
- ExampleE03
-   - STEP geometry interface
+ analysis
+   - Histogramming through the AIDA interface
+ electromagnetic
+   - Specific EM physics simulation with histogramming
+ field
+   - Specific simulation setups in magnetic field
+ g3tog3
+   - Examples of usage of the g3tog4 converter tool
+ persistency
+   - Persistency through the HepODBMS interface
 
+Advanced level examples
+ brachytherapy
+   - Setup for brachytherapy Ir-192 HDR source
+ gammaray_telescope
+   - Simulation of a typical telescope for gamma ray analysis
+ xray_telescope
+   - Realistic simulation of an X-ray Telescope
