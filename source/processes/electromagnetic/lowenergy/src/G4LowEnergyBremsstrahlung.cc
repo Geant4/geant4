@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.20 2000-02-18 10:26:15 lefebure Exp $
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.20 2000-02-18 10:26:15 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000-02-18 12:34:30 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000-02-18 12:34:30 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -871,7 +871,8 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database";
-           comments += "Good description from 1 eV to 100 GeV.\n";
+           comments += "\n At present it can be used for electrons only ";
+           comments += "Good description from 250 eV to 100 GeV.\n";
            comments += "Gamma energy sampled from a parametrised formula.";
                      
 	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
