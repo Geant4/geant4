@@ -109,7 +109,7 @@ G4bool G4EMDissociationCrossSection::IsApplicable
 //
 G4double G4EMDissociationCrossSection::GetCrossSection
   (const G4DynamicParticle *theDynamicParticle, const G4Element* theElement,
-  G4double temperature)
+  G4double )
 {
 //
 //

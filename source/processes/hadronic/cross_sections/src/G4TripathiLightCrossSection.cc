@@ -115,7 +115,7 @@ G4bool G4TripathiLightCrossSection::IsApplicable
 //
 G4double G4TripathiLightCrossSection::GetCrossSection
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
-  G4double theTemperature)
+  G4double /* theTemperature*/)
 {
 //
 //

@@ -52,7 +52,7 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 
    virtual
    G4double GetCrossSection(const G4DynamicParticle* aPart, 
-                            const G4Element*anEle, G4double aTemperature)
+                            const G4Element*, G4double )
    {
      G4ProtonInelasticCrossSection theForward;
      G4double result = theForward.GetCrossSection(aPart->GetKineticEnergy(),

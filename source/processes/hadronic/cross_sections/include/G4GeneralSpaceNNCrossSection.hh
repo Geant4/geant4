@@ -22,6 +22,9 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 4 June 2004, J.P. Wellisch, CERN
+// trivial porting issue to windows.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // ********************************************************************
@@ -66,7 +69,7 @@
 //
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ProtonInelasticCrossSection.hh"
-#include <iostream.h>
+#include <iostream>
 #include "G4IonProtonCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
