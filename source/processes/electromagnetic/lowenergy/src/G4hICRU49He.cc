@@ -37,6 +37,7 @@
 // 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 // 03/10/2000  V.Ivanchenko clean up accoding to CodeWizard
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 26/08/2004  V.Ivanchenko Fix a problem of effective charge
 //
 // Class Description: 
 //
@@ -182,7 +183,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     G4double z = (material->GetTotNbOfElectPerVolume()) / 
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, T*keV) ; 
+    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy/keV) ; 
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -320,7 +321,7 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
   // He effective charge
-  ionloss /= HeEffChargeSquare(z, T*MeV) ; 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy/keV) ; 
   
   return ionloss;
 }

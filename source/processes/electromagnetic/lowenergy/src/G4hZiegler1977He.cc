@@ -35,6 +35,7 @@
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 26/08/2004  V.Ivanchenko Fix a problem of effective charge
 //
 // Class Description: 
 //
@@ -225,7 +226,7 @@ G4double G4hZiegler1977He::ElectronicStoppingPower(G4double z,
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
-  ionloss /= HeEffChargeSquare(z, energy*keV) ; 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy/keV); 
   
   return ionloss;
 }
