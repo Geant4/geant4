@@ -57,8 +57,14 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			   etaToEtaPrime);
+//  G4cout << "Input info "<< projectilePDGCode << " " 
+//         << targetPDGCode <<" "
+//	 << 1./MeV*proj4Mom<<" "
+//	 << 1./MeV*targ4Mom << " "
+//	 << nop << G4endl;
   G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
   G4QHadronVector output = pan->HadronizeQuasmon();
+  delete pan;
   
   // Fill the particle change.
   theResult.Initialize(aTrack);

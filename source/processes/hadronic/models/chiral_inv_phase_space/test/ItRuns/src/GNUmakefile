@@ -45,8 +45,13 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/quark_gluon_string/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
             -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/util/include \

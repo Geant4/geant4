@@ -5,8 +5,11 @@
 name := G4hadronic_chips
 
 SUBDIRS  =  body
+SUBDIRS  =  interface
 
 SUBLIBS  = G4hadronic_body_ci
+SUBLIBS  = G4hadronic_interface_ci
+
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
