@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.1 1999-01-07 16:07:25 gunter Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.2 1999-01-27 16:15:08 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
+// The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 
+// and outer polygonal surface and two planes perpendicular to the Z axis. 
+// Each polygonal surface is created by linking a series of polygons created 
+// at different planes perpendicular to the Z-axis. All these polygons all 
+// have the same number of sides (sides) and are defined at the same Z planes 
+// for both inner and outer polygonal surfaces. 
+//
+
+
 #ifndef __G4BREPPOLYHEDRA
 #define __G4BREPPOLYHEDRA
 #include "G4BREPSolid.hh"
