@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.cc,v 1.3 2000-04-07 11:09:08 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.4 2000-04-07 13:23:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -627,7 +627,7 @@ G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 		return new G4PolyhedronTubs( 0.0, dx, dz, 0, 2*M_PI );
 	}
 	
-	G4cerr << "G4EllipticalTube: visualization of this type of solid is not supported at this time" << endl;
+	G4cerr << "G4EllipticalTube: visualization of this type of solid is not supported at this time" << G4endl;
 	return 0;
 }
 
