@@ -48,9 +48,14 @@
 
 #include <vector>
 #include "G4VEmModel.hh"
-#include "G4Region.hh"
 #include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
+
+class G4PhysicsLogVector;
+class G4PhysicsTable;
+class G4Region;
+class G4MaterialCutsCouple;
+
 
 class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
 {
@@ -62,6 +67,7 @@ public:
   ~G4PAIModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
   
   void InitialiseMe(const G4ParticleDefinition*) {};
 
@@ -114,7 +120,14 @@ public:
  				G4double&,
                                 G4double&);
 
-  void DefineForRegion(const G4Region* r) ;
+  void     DefineForRegion(const G4Region* r) ;
+  void     ComputeSandiaPhotoAbsCof();
+  void     BuildPAIonisationTable(); 
+  void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
+  G4double GetdNdxCut( G4int iPlace, G4double transferCut);
+
+
+
 
 protected:
 
@@ -129,9 +142,34 @@ private:
   G4PAIModel & operator=(const  G4PAIModel &right);
   G4PAIModel(const  G4PAIModel&);
 
+  // The vector over proton kinetic energies: the range of gammas
 
-  std::vector<const G4Region*> fPAIRegionVector;
-  const G4ParticleDefinition* fParticle;
+  static const G4double      fLowestKineticEnergy;
+  static const G4double      fHighestKineticEnergy;
+  static G4int               fTotBin;
+  static G4PhysicsLogVector* fProtonEnergyVector ;
+
+  // vectors 
+  G4PhysicsTable*                    fPAItransferBank;
+  std::vector<G4PhysicsTable*>       fPAIxscBank;
+  std::vector<G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
+  std::vector<const G4Region*>       fPAIRegionVector;
+  size_t                             fMatIndex ;  
+  G4double**                         fSandiaPhotoAbsCof ;
+  G4int                              fSandiaIntervalNumber ;
+
+  G4PhysicsLogVector*              fdEdxVector ;
+  std::vector<G4PhysicsLogVector*> fdEdxTable ;
+  G4PhysicsLogVector*              fLambdaVector ;
+  std::vector<G4PhysicsLogVector*> fLambdaTable ;
+  G4PhysicsLogVector*              fdNdxCutVector ;
+  std::vector<G4PhysicsLogVector*> fdNdxCutTable ;
+
+
+
+
+  const G4ParticleDefinition*  fParticle;
+
   G4double fMass;
   G4double fSpin;
   G4double fChargeSquare;
