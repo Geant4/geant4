@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.8 2001-02-17 08:12:54 kurasige Exp $
+// $Id: G4Track.cc,v 1.9 2001-02-17 08:15:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,7 +23,6 @@
 //   Fix GetVelocity                 Hisaya Feb. 17 01
 //
 #include "G4Track.hh"
-#include "G4OpticalPhoton.hh"
 
 G4Allocator<G4Track> aTrackAllocator;
 
@@ -144,7 +143,7 @@ G4double G4Track::GetVelocity() const
     velocity = c_light ; 
 
     // special case for photons
-    if(fpDynamicParticle->GetDefinition()==G4OpticalPhoton::OpticalPhoton()){
+    if(fpDynamicParticle->GetDefinition()->GetParticleName()=="photon"){
       G4Material*
 	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
  
