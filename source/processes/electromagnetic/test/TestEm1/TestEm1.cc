@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm1.cc,v 1.2 1999-03-03 09:46:09 maire Exp $
+// $Id: TestEm1.cc,v 1.3 1999-08-09 14:25:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ int main(int argc,char** argv) {
   Em1EventAction* EvtAct;
   
   runManager->SetUserAction(RunAct = new Em1RunAction); 
-  runManager->SetUserAction(EvtAct = new Em1EventAction);
+  runManager->SetUserAction(EvtAct = new Em1EventAction(RunAct));
   runManager->SetUserAction(new Em1TrackingAction(RunAct));
   runManager->SetUserAction(new Em1SteppingAction(RunAct,EvtAct));
 #endif
