@@ -72,6 +72,7 @@
 // 15 Feb   2002 V.Ivanchenko Fix problem of Generic Ions
 // 25 Mar   2002 V.Ivanchenko Fix problem of fluorescence below threshold  
 // 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
+// 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -225,7 +226,39 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 {
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
-           << aParticleType.GetParticleName() << G4endl;
+           << aParticleType.GetParticleName()
+           << " mass(MeV)= " << aParticleType.GetPDGMass()/MeV
+           << " charge= " << aParticleType.GetPDGCharge()/eplus
+           << " type= " << aParticleType.GetParticleType()
+           << G4endl;
+
+    if(verboseLevel > 1) {
+      G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
+      G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
+             << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
+             << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
+             << G4endl;
+      G4cout << "ionModel= " << theIonEffChargeModel
+             << " MFPtable= " << theMeanFreePathTable
+             << " iniMass= " << initialMass
+             << G4endl;
+    }
+  }
+
+  if(aParticleType.GetParticleType() == "nucleus" && 
+     aParticleType.GetParticleName() != "GenericIon") {
+
+     G4EnergyLossTables::Register(&aParticleType,  
+              theDEDXpTable,
+              theRangepTable,
+              theInverseRangepTable,
+              theLabTimepTable,
+              theProperTimepTable,
+              LowestKineticEnergy, HighestKineticEnergy,
+              proton_mass_c2/aParticleType.GetPDGMass(),
+              TotBin);
+
+     return;
   }
   
   InitializeParametrisation() ;
