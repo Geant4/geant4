@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoDetectorMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03  
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 29 Nov 2002 change material command added(Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   sampleCmd->SetGuidance("The command /apparate/update command MUST be applied after this one");
   sampleCmd->SetParameterName("choice",true);
   sampleCmd->SetDefaultValue("dolorite");
-  sampleCmd->SetCandidates("dolorite iron silicon aluminium titanium tin neodimium magnesium germanium copper");
+  sampleCmd->SetCandidates("dolorite iron silicon aluminium titanium tin neodimium magnesium germanium copper mars1");
   sampleCmd->AvailableForStates(Idle);
   
 }

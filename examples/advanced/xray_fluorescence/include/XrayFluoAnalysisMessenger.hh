@@ -22,9 +22,10 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// 29 Nov 2002 minor updates (Alfonso.mantero@ge.infn.it)
 //
 // History:
 // -----------

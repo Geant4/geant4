@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 29 Nov 2002 New materials added (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -519,7 +520,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   sampleMaterial = mars1;
   Dia1Material = Pb;
   Dia3Material = Pb;
-  pixelMaterial = Si;
+  pixelMaterial = HPGe;
   OhmicPosMaterial = Cu;
   OhmicNegMaterial = Pb;
   defaultMaterial = Vacuum;

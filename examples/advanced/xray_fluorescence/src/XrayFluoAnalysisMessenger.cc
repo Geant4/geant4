@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 29 Nov 2002 minor upgrade (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoAnalysisManager.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -31,7 +31,8 @@
 // 06 Dec 2001 A.Pfeiffer updated for singleton
 // 30 Nov 2001 Guy Barrand : migrate to AIDA-2.2.
 // 28 Nov 2001 Elena Guardincerri     Created
-//
+// 29 Nov 2002 Muigration to AIDA 3.0 (Alfonso.mantero@ge.infn.it)
+
 // -------------------------------------------------------------------
 #include <stdlib.h>
 #include "G4VProcess.hh"
