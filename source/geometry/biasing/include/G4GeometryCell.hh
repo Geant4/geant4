@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.hh,v 1.4 2002-10-14 12:36:00 dressel Exp $
+// $Id: G4GeometryCell.hh,v 1.5 2002-10-22 13:18:43 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // It serves to address a "cell". A "cell" is somewhat
 // related to a touchable in Geant4. It is identified by a reference
 // to a G4VPhysicalVolume and a number (replica number).
+// Only simple replicas are supported.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -45,18 +46,21 @@ class G4VPhysicalVolume;
 
 class G4GeometryCell
 {
-public:
+public:  // with description
+
   G4GeometryCell(const G4VPhysicalVolume &aVolume, G4int RepNum);
+
   G4GeometryCell(const G4GeometryCell &rhs);
     // initialise volume and replica number
 
   ~G4GeometryCell();
     // simple destruction
   
-
   const G4VPhysicalVolume &GetPhysicalVolume() const;
+    // return the physical volume of the cell
 
   G4int GetReplicaNumber() const;
+    // returns the replica number of the cell
 
   G4GeometryCell &operator=(const G4GeometryCell &rhs);
   
@@ -64,23 +68,10 @@ private:
   const G4VPhysicalVolume *fVPhysiclaVolume;
     // pinter to the G4VPhysicalVolume of the "cell" 
     // it is treated as identifyer 
+
   G4int fRepNum;
     // replica number of the "cell"
 };
-
-// -----------------------------------------------------------------------
-
-class G4GeometryCellComp
-{
-
-public:  // without description
-  G4GeometryCellComp();
-
-  G4bool operator() (const G4GeometryCell &k1,
-                     const G4GeometryCell &k2) const;
-};
-
-// -----------------------------------------------------------------------
 
 G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2);
 G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2);

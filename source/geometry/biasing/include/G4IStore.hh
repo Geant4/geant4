@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.8 2002-10-14 12:36:00 dressel Exp $
+// $Id: G4IStore.hh,v 1.9 2002-10-22 13:18:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ class G4IStore : public G4VIStore
 
 public:  // with description
 
-  G4IStore(const G4VPhysicalVolume &worldvolume);
+  explicit G4IStore(const G4VPhysicalVolume &worldvolume);
     // initialise the importance store for the given geometry
 
   virtual ~G4IStore();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.cc,v 1.2 2002-09-02 15:22:33 dressel Exp $
+// $Id: G4GeometryCellImportance.cc,v 1.3 2002-10-22 13:18:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCellImportance.hh"
-#include "G4PStepStream.hh"
+#include "G4GeometryCellStepStream.hh"
 
 G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli)
 {

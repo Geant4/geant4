@@ -21,31 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStepStream.cc,v 1.5 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4GeometryCellStep.cc,v 1.1 2002-10-22 13:18:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4PStepStream.cc
+// G4GeometryCellStep.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4PStepStream.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PStep.hh"
+#include "G4GeometryCellStep.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk)
-{
-  out << "Volume name = " << tk.GetPhysicalVolume().GetName() << ", ";
-  out << "Replica number = " << tk.GetReplicaNumber();
-  return out;
-}
+G4GeometryCellStep::G4GeometryCellStep(const G4GeometryCell &preCell, 
+		 const G4GeometryCell &postCell)
+  : 
+  fPreGeometryCell(preCell), 
+  fPostGeometryCell(postCell), 
+  fCrossBoundary(false) 
+{}
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4PStep &ps)
-{
-  out << "PreGeometryCell : " <<  ps.GetPreGeometryCell() << " ";
-  out << "PostGeometryCell: " <<  ps.GetPostGeometryCell() << " ";
-  out << "CrossBoundary   : " <<  ps.GetCrossBoundary() << "\n";
-  return out;
-}
+G4GeometryCellStep::~G4GeometryCellStep()
+{}

@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002-10-16 14:29:06 dressel Exp $
+$Id: History,v 1.24 2002-10-22 13:18:43 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct, 22th 2002 M.Dressel internal_7_geombias-V04-01-01
+     - renaming G4VPScorer to G4VScorer and  
+                G4PStep to G4GeometryCellStep 
+     - moving interfaces G4VCellScorer and G4VCellScorerStore to intercoms
+     - adding comments 
 
 Oct. 16th 2002 M.Dressel internal_6_geombias-V04-01-01
      - changes recomanded by codewizard

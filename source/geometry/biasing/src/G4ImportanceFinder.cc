@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.7 2002-10-14 12:36:03 dressel Exp $
+// $Id: G4ImportanceFinder.cc,v 1.8 2002-10-22 13:18:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4VParallelStepper.hh"
 #include "G4ImportanceFinder.hh"
 #include "G4VIStore.hh"
-#include "G4PStepStream.hh"
+#include "G4GeometryCellStepStream.hh"
 
 G4ImportanceFinder::G4ImportanceFinder(const G4VIStore &aIStore)
   : fIStore(aIStore)

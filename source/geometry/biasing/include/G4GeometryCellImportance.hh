@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.hh,v 1.1 2002-08-29 15:31:38 dressel Exp $
+// $Id: G4GeometryCellImportance.hh,v 1.2 2002-10-22 13:18:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include "g4std/map"
 #include "globals.hh"
 #include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
 
 typedef G4std::map<G4GeometryCell, G4double, G4GeometryCellComp> G4GeometryCellImportance;
   // implement container G4GeometryCellImportance as map

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.hh,v 1.5 2002-10-14 12:36:00 dressel Exp $
+// $Id: G4ParallelStepper.hh,v 1.6 2002-10-22 13:18:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #define G4ParallelStepper_hh G4ParallelStepper_hh
 
 #include "G4VParallelStepper.hh"
-#include "G4PStep.hh"
+#include "G4GeometryCellStep.hh"
 
 class G4ParallelStepper : public G4VParallelStepper
 {
@@ -49,28 +49,28 @@ public:  // with description
     // imitilisation
 
   G4ParallelStepper(const G4ParallelStepper &);
-    // create new G4PStep
+    // create new G4GeometryCellStep
 
   virtual ~G4ParallelStepper();
     // delete G4Pstep if created
 
-  virtual G4PStep GetPStep() const;
-    // get the current G4PStep
+  virtual G4GeometryCellStep GetPStep() const;
+    // get the current G4GeometryCellStep
   
   virtual void Init(const G4GeometryCell &agCell);
-    // initialise the parallel stepper and the G4PStep
+    // initialise the parallel stepper and the G4GeometryCellStep
     // pre and post G4GeometryCell of the step are set equal
 
   virtual void Update(const G4GeometryCell &agCell);
     // to be called when crossing a boundary of the 
-    // "parallel" geometry to update the G4PStep
+    // "parallel" geometry to update the G4GeometryCellStep
 
   virtual void UnSetCrossBoundary();
-    // to be called to unset the fCrossBoundary member of the G4PStep
+    // to be called to unset the fCrossBoundary member of the G4GeometryCellStep
 
 
   G4ParallelStepper &operator=(const G4ParallelStepper &);
-    // create new G4PStep
+    // create new G4GeometryCellStep
 
 private:
 
@@ -78,7 +78,7 @@ private:
 
 private:
 
-  G4PStep *fPStep;
+  G4GeometryCellStep *fPStep;
 };
 
 

@@ -21,25 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStep.cc,v 1.1 2002-10-14 12:36:49 dressel Exp $
+// $Id: G4GeometryCellStepStream.hh,v 1.1 2002-10-22 13:18:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Declarations
 //
-// G4PStep.cc
+// Declaration description:
 //
+// declarations of streams for G4GeometryCell and G4GeometryCellStep
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4GeometryCellStepStream_hh
+#define G4GeometryCellStepStream_hh G4GeometryCellStepStream_hh
 
-#include "G4PStep.hh"
+#include "G4GeometryCell.hh"
+#include "G4GeometryCellStep.hh"
 
-G4PStep::G4PStep(const G4GeometryCell &preCell, 
-		 const G4GeometryCell &postCell)
-  : 
-  fPreGeometryCell(preCell), 
-  fPostGeometryCell(postCell), 
-  fCrossBoundary(false) 
-{}
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk);
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellStep &ps);
 
-G4PStep::~G4PStep()
-{}
+#endif

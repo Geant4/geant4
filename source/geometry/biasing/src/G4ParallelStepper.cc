@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.6 2002-10-14 12:36:03 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.7 2002-10-22 13:18:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,26 +47,26 @@ G4ParallelStepper::~G4ParallelStepper()
 
 G4ParallelStepper::G4ParallelStepper(const G4ParallelStepper &rhs)
   :
-  fPStep(new G4PStep(rhs.GetPStep()))
+  fPStep(new G4GeometryCellStep(rhs.GetPStep()))
 {
   if (!fPStep) {
-    Error("G4ParallelStepper:: new failed to create a G4PStep!");
+    Error("G4ParallelStepper:: new failed to create a G4GeometryCellStep!");
   }
 }
 
 G4ParallelStepper &G4ParallelStepper::operator=(const G4ParallelStepper &rhs)
 {
   if (this != &rhs) {
-    fPStep = new G4PStep(rhs.GetPStep());
+    fPStep = new G4GeometryCellStep(rhs.GetPStep());
     if (!fPStep) {
-      Error("operator=: new failed to create a G4PStep!");
+      Error("operator=: new failed to create a G4GeometryCellStep!");
     }
   }
   return *this;
 }
 
-G4PStep G4ParallelStepper::GetPStep() const {
-  G4PStep p = *fPStep;
+G4GeometryCellStep G4ParallelStepper::GetPStep() const {
+  G4GeometryCellStep p = *fPStep;
   return p;
 }
 
@@ -74,9 +74,9 @@ G4PStep G4ParallelStepper::GetPStep() const {
 void G4ParallelStepper::Init(const G4GeometryCell &agCell)
 {
   if (!fPStep) {
-    fPStep = new G4PStep(agCell, agCell);
+    fPStep = new G4GeometryCellStep(agCell, agCell);
       if (!fPStep) {
-	Error("Init new failed to create a G4PStep!");
+	Error("Init new failed to create a G4GeometryCellStep!");
       }
 
   }

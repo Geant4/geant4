@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.cc,v 1.4 2002-10-14 12:36:03 dressel Exp $
+// $Id: G4GeometryCell.cc,v 1.5 2002-10-22 13:18:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCell.hh"
-#include "G4VPhysicalVolume.hh"
+//#include "G4VPhysicalVolume.hh"
 
 G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
                                  G4int RepNum)
@@ -68,22 +68,6 @@ G4GeometryCell &G4GeometryCell::operator=(const G4GeometryCell &rhs){
   return *this;
 }
 
-
-G4GeometryCellComp::G4GeometryCellComp()
-{}
-
-
-G4bool G4GeometryCellComp::operator() (const G4GeometryCell &k1,
-                              const G4GeometryCell &k2) const
-{
-  G4bool smaler=false;
-  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) {
-    smaler = &(k1.GetPhysicalVolume()) < &(k2.GetPhysicalVolume());
-  } else {
-    smaler =  k1.GetReplicaNumber() < k2.GetReplicaNumber();
-  }
-  return smaler;
-}
 
 G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.8 2002-10-14 12:36:03 dressel Exp $
+// $Id: G4IStore.cc,v 1.9 2002-10-22 13:18:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,7 @@
 #include "G4IStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCell.hh"
-#include "G4PStepStream.hh"
+#include "G4GeometryCellStepStream.hh"
 
 
 G4IStore::G4IStore(const G4VPhysicalVolume &worldvolume) :
