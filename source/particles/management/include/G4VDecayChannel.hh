@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.4 1999-10-28 23:24:13 kurasige Exp $
+// $Id: G4VDecayChannel.hh,v 1.5 1999-11-07 15:46:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,7 +100,7 @@ class G4VDecayChannel
      void SetDaughter(G4int anIndex, 
 		      const G4String &particle_name);
 
-  protected:
+  protected: 
     // kinematics name
     G4String   kinematics_name;
     // branching ratio  [0.0 - 1.0]
@@ -112,7 +112,7 @@ class G4VDecayChannel
     //daughter particles
     G4String** daughters_name;
 
-  protected:
+  protected: // With Description
     // celar daughters array
     void ClearDaughtersName();
 
