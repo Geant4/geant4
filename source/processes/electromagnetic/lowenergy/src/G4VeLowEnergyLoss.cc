@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.5 2000-09-20 16:49:41 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.6 2000-11-22 16:06:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 //
 // Modifications:
 // 20/09/00 update fluctuations V.Ivanchenko
+// 22/11/00 minor fix in fluctuations V.Ivanchenko
 //
 // --------------------------------------------------------------
 
@@ -910,7 +911,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if(MeanLoss >= kappa*Tm)
   {
     G4double electronDensity = aMaterial->GetElectronDensity() ;
-    siga = sqrt(Tm*(0.5-0.25*beta2)*step*
+    siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity/beta2) ;
     loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
