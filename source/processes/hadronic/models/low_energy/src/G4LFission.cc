@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LFission.cc,v 1.4 2000-08-03 08:49:30 gcosmo Exp $
+// $Id: G4LFission.cc,v 1.5 2001-06-06 13:43:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,10 +131,10 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
 
    G4double ran = G4RandGauss::shoot();
 // Number of neutrons
-   G4int nn = avern + ran*1.23 + 0.5;
+   G4int nn = static_cast<G4int>(avern + ran*1.23 + 0.5);
    ran = G4RandGauss::shoot();
 // Number of gammas
-   G4int ng = averg + ran*3. + 0.5;
+   G4int ng = static_cast<G4int>(averg + ran*3. + 0.5);
    if (nn < 1) nn = 1;
    if (ng < 1) ng = 1;
    G4double exn = 0.;
@@ -227,9 +227,9 @@ G4LFission::Atomas(const G4double A, const G4double Z)
    G4double rmd  = G4Deuteron::DeuteronDefinition()->GetPDGMass()/MeV;
    G4double rma  = G4Alpha::AlphaDefinition()->GetPDGMass()/MeV;
 
-   G4int ia = A + 0.5;
+   G4int ia = static_cast<G4int>(A + 0.5);
    if (ia < 1) return 0;
-   G4int iz = Z + 0.5;
+   G4int iz = static_cast<G4int>(Z + 0.5);
    if (iz < 0) return 0;
    if (iz > ia) return 0;
 

@@ -343,7 +343,7 @@
     const G4double expxl = -expxu;        // lower bound for arg. of exp
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4int ieab = availableEnergy*5.0/GeV;
+    G4int ieab = static_cast<G4int>(availableEnergy*5.0/GeV);
     const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
     G4double test, w0, wp, wt, wm;
     if( (availableEnergy < 2.0*GeV) && (G4UniformRand() >= supp[ieab]) )

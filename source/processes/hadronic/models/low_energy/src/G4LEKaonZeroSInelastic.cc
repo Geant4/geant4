@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEKaonZeroSInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
+// $Id: G4LEKaonZeroSInelastic.cc,v 1.3 2001-06-06 13:43:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
@@ -204,7 +204,7 @@
     G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4int ieab = 5.0*availableEnergy*MeV/GeV;
+    G4int ieab = static_cast<G4int>(5.0*availableEnergy*MeV/GeV);
     const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
     G4double test, w0, wp, wt, wm;
     if( (availableEnergy*MeV/GeV < 2.0) && (G4UniformRand() >= supp[ieab]) )
