@@ -1,5 +1,5 @@
 
-      PARAMETER (MaxAbs = 9)                 
+      PARAMETER (MaxAbs = 10)                 
       COMMON/CALOR/materAbs(MaxAbs),thickAbs(MaxAbs),NbAbsor,NbLayer,
      &             calorYZ,Field,thLayer,calorX,worldX,worldYZ
  

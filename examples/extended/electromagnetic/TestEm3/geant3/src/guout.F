@@ -20,11 +20,9 @@
       do k=1,NbAbsor
         sumEdep(k) = sumEdep(k) + EdepAbs(k)
         sumTrck(k) = sumTrck(k) + TrckAbs(k)
-	sumElea(k) = sumElea(k) + EleaAbs(k)/NbLayer 
 *
         su2Edep(k) = su2Edep(k) + EdepAbs(k)**2
         su2Trck(k) = su2Trck(k) + TrckAbs(k)**2
-	su2Elea(k) = su2Elea(k) + (EleaAbs(k)/NbLayer)**2 
       enddo      
 *
 * *** print

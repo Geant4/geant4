@@ -21,10 +21,17 @@
  CUTPR  imed2  bcute/m   dcute/m  ppcutm
  ...etc............
  
- testem3 can produces histograms : 
+ testem3 can produce histograms : 
   histo 1 : energy deposit in absorber 1
   histo 2 : energy deposit in absorber 2
   ...etc...........
+  
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
+  ...etc...........  
+  
+  histo 21 : forward energy flow of primary particle (MeV)
+  histo 22 : forward energy flow of all secondary particles (MeV)  
   
  One can control the binning of the histograms with the data card:
   *HISTO  id1  nbBins  valMin  valMax  valUnit 
