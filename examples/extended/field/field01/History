@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2004-09-15 18:00:24 vnivanch Exp $
+$Id: History,v 1.16 2004-12-02 11:42:09 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2nd, 2004 John Apostolakis (fieldex01-V06-02-01)
+-------------------------------------------------
+- Took out un-needed inclusion of G4PAIclusterModel in Detector-Construction
 
 Sep 15rd, 2004 V.Ivanchenko (fieldex01-V06-02-00)
 -------------------------------------------------
