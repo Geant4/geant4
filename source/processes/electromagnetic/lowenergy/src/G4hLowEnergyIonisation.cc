@@ -171,7 +171,7 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       // get material parameters needed for the energy loss calculation
       
       const G4Material* material= (*theMaterialTable)[J];
-      
+        
       // get  electron cut in kin. energy for the material
       
       DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
@@ -230,7 +230,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 	  // now put the loss into the vector
 	  aVector->PutValue(i,ionloss) ;
 	}
-      
       // insert vector for this material into the table
       theLossTable->insert(aVector) ;
     }
@@ -450,7 +449,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
   aParticle = trackData.GetDynamicParticle() ;
   
   ParticleMass=aParticle->GetDefinition()->GetPDGMass();
-  KineticEnergy=aParticle->GetKineticEnergy();
+              KineticEnergy=aParticle->GetKineticEnergy();
   TotalEnergy=KineticEnergy + ParticleMass ;
   Psquare=KineticEnergy*(TotalEnergy+ParticleMass) ;
   Esquare=TotalEnergy*TotalEnergy ;
@@ -585,7 +584,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   // First of all check tables for specific materials for ICRU_49 parametrisation
 
   // Ziegler parametrisation in ICRU49
-  if ( DEDXtable == "ICRU_R49p" ) {
+  if ( DEDXtable == "ICRU_R49p" && PartCharge > 0) {
 
     molecIndex = (MolecIsInICRU_R49p(material))+1; 
 
@@ -597,7 +596,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   }
 
   // Powers parametrisation in ICRU49
-  if ( DEDXtable == "ICRU_R49PowersHe" ) {
+  if ( DEDXtable == "ICRU_R49PowersHe"&& PartCharge > 0 ) {
 
     molecIndex = (MolecIsInICRU_R49PowersHe(material))+1;  
     if ( molecIndex > 0 ) {
@@ -739,7 +738,6 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     ionloss    -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
   }
   
-    //NEW-----------------------------------------------------start
     // Correction term for the Barkas effect
     
     G4double BarkasTerm=0;
@@ -749,87 +747,72 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     //if(PartCharge <= -2) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
 	//		            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
     
-    G4cout<<"  "<<BarkasTerm;
     ionloss += BarkasTerm;   
-    //---------------------------------------------------------end
    
   if ( ionloss <= 0.) ionloss = 0. ;
   
   return ionloss;
 }
 
-//NEW***-------------------------------------------------start
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //Function to compute the Barkas term from:
 //
-//Ref.
+//Ref. Z_1^3 effevt in the stopping power of matter for charged particles
+//     J.C Ashley and R.H.Ritchie
+//     Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397 
 //
-
 G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   				                   const G4double KinEnergy,
 						   const G4double PartMass )
 {
-  static double FTable[37][2]={   0.02,21.5,   0.03,20.0,   0.04,18.0,   0.05,15.6,
+  static double FTable[47][2]={ 0.02,21.5,   0.03,20.0,   0.04,18.0,   0.05,15.6,
                                 0.06,15.0,   0.07,14.0,   0.08,13.5,   0.09,13,
-                     0.1,12.2,  0.2,  9.25,  0.3,  7, 	  0.4,  6,     0.5,  4.5,
-                                0.6,  3.5,   0.7,  3, 	  0.8,  2.5,   0.9,  2, 
+                     0.1,12.2,  0.2,  9.25,  0.3,  7,     0.4,  6,     0.5,  4.5,
+                                0.6,  3.5,   0.7,  3,     0.8,  2.5,   0.9,  2, 
                      1,   1.7,  1.2,  1.2,   1.3,  1,     1.4,  0.86,  1.5,  0.7,
-		                1.6,  0.61,  1.7,  0.52,  1.8,  0.5,   1.9,  0.43,
-		                2,    0.42,  2.1,  0.3,   2.4,  0.2,   
-				3,    0.13,  4,    0.052, 5,    0.024,
-                                6,    0.0013,7,    0.009, 8,    0.006, 9,    0.0032, 
-	            10,   0.0025};
+		                    1.6,  0.61,  1.7,  0.52,  1.8,  0.5,   1.9,  0.43,
+		                    2,    0.42,  2.1,  0.3,   2.4,  0.2,   
+				        3,    0.13,  3.08, 0.1,   3.1,  0.09, 3.3, 0.08,
+				        3.5,  0.07,  3.8,  0.06,				
+				        4,    0.051, 4.1,  0.04,  4.8,  0.03, 
+				        5,    0.024, 5.1,  0.02,
+                                6,    0.013, 6.5,  0.01,
+				        7,    0.009, 7.1,  0.008,
+				        8,    0.006, 9,    0.0032, 
+	              10,   0.0025};
 
   // Information on particle and material
   
-  G4double AMaterial;
-  G4double ZMaterial;
-  G4double random = G4UniformRand();
+  G4double BarkasTerm=0;
+  G4double AMaterial=0;
+  G4double ZMaterial=0;
+  G4double RoMaterial = material->GetDensity()/6.2415063631e18;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int i;
-  G4double sum = 0;
-  G4double totalsum=0;
-   for(i=0; i<material->GetNumberOfElements(); ++i)
-    {
-      if((*theElementVector)(i)->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
-    }
+  G4int i=0;
   for (i = 0; i<material->GetNumberOfElements(); ++i)
     {
-      if((*theElementVector)(i)->GetZ()!=1) sum +=material->GetFractionVector()[i];
-      if ( sum/totalsum > random )
-        {
-          AMaterial = (*theElementVector)(i)->GetA()*mole/g;
-          ZMaterial = (*theElementVector)(i)->GetZ();
-          break;
-        }
-    }
-
-  //G4double ZMaterial  = material-> GetTotNbOfElectPerVolume();
-   ZMaterial  = 14;
-  //G4double AMaterial  = material-> GetTotNbOfAtomsPerVolume();
-   AMaterial  = 28.055*g/mole;
-  //G4double RoMaterial = material->GetDensity();
-  G4double RoMaterial = 2.33*g/cm3;
-  G4double Beta = sqrt( (2*KinEnergy) / PartMass );
-  G4double X = ( (137*Beta) * (137*Beta) ) / ZMaterial;
+    AMaterial = (*theElementVector)(i)->GetA()*mole/g;
+    ZMaterial = (*theElementVector)(i)->GetZ();
+    
+    G4double Beta = sqrt( (2*KinEnergy) / PartMass );
+    G4double X = ( (137*Beta) * (137*Beta) ) / ZMaterial;
   
-  // Variables to compute L_1
-  G4double Eta0Chi = 0.8;
-  G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
-  G4double W = ( EtaChi * pow( ZMaterial,1./6 ) ) / sqrt(X); 
-  G4double FunctionOfW = 0;
-    for(int IndexOfFTable=0;IndexOfFTable<37;IndexOfFTable++){
+    // Variables to compute L_1
+    G4double Eta0Chi = 0.8;
+    G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
+    G4double W = ( EtaChi * pow( ZMaterial,1./6 ) ) / sqrt(X); 
+    G4double FunctionOfW = 0;
+    for(int IndexOfFTable=0;IndexOfFTable<47;IndexOfFTable++){
      if(W<FTable[IndexOfFTable][0]){
      		FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2;
 		break;}
-    }
-  G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,3./2) );
-  G4double BarkasTerm = 2 * BarkasCoeffLbyARB * ( 0.30708 * ZMaterial * RoMaterial )
+       }
+    G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,3./2) );
+    BarkasTerm += 2 * BarkasCoeffLbyARB * ( 0.030708 * ZMaterial * RoMaterial )
                	          / ( AMaterial*Beta*Beta );
-  G4cout<<"I'm here"<<BarkasTerm;
+     }
   return -BarkasTerm;
 }
-//NEW***---------------------------------------------------------end
         
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
