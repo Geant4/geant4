@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2004-07-26 08:25:33 kurasige Exp $
+$Id: History,v 1.108 2004-08-31 19:10:48 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Aug 31, 2004  M.Asai (particles-V06-02-02)
+- G4Exception is added to G4ParticleTable to prohibit its use before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
 
 - Jul 26, 2004  H.Kurashige (particles-V06-02-01)
 - Remove obsolete dependency to G4Material from G4ParticleDefinition and related class 
