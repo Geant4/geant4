@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.9 2001-07-11 10:02:27 gunter Exp $
+// $Id: G4Decay.cc,v 1.10 2001-08-16 07:28:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,12 +55,11 @@
 // constructor
 G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
+				LowestBinValue(1.0e-3),
                                 HighestBinValue(10.0),
-                                LowestBinValue(1.0e-3),
                                 TotBin(200),
-				verboseLevel(1),
-				pExtDecayer(0),
-				aPhysicsTable(0)
+                                aPhysicsTable(0),
+                                pExtDecayer(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -297,12 +296,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       // decay channel not found
       G4Exception("G4Decay::DoIt  : can not determine decay channel ");
     } else {
-      G4int temp;
+      G4int temp = decaychannel->GetVerboseLevel();
       // execute DecayIt() 
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1) {
 	G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
-	temp = decaychannel->GetVerboseLevel();
 	decaychannel->SetVerboseLevel(GetVerboseLevel());
       }
 #endif
