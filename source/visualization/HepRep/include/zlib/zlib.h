@@ -34,7 +34,8 @@
 #include "zconf.h"
 
 #ifdef __cplusplus
-extern "C" {
+// MD: make all functions C++ mangled
+/*extern "C" {*/
 #endif
 
 #define ZLIB_VERSION "1.1.3"
@@ -887,7 +888,8 @@ ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp z));
 ZEXTERN const uLongf * ZEXPORT get_crc_table    OF((void));
 
 #ifdef __cplusplus
-}
+// MD: make all functions C++ mangled
+/* } */
 #endif
 
 #endif /* _ZLIB_H */
