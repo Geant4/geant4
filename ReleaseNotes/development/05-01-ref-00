@@ -149,6 +149,12 @@ processes/hadronic/models/generator/scattering         ghad-scatt-V05-00-01
 - Fixed critical bug affecting binary-cascade model. Modified files:
   G4CollisionManager.cc, G4Scatterer.cc, G4VScatteringCollision.cc.
 
+processes/hadronic/stopping                            stopp-V05-00-01
+---------------------------
+- Restored static variables in G4MuonMinusCaptureAtRest.cc to resolve
+  infinite loop observed in previous reference tag for some erroneus
+  changes introduced.
+
 processes/management                                   procman-V05-00-01
 --------------------
 - Fixed PostStepGetPhysicalInteractionLength() for discrete processes
