@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.98 2004-09-08 09:44:55 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.99 2004-11-12 16:32:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -277,16 +277,6 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
-    /*
-    // Parameterisation of density coorection
-    G4double twoln10 = 2.0*log(10.0);
-    G4double cden  = material->GetIonisation()->GetCdensity();
-    G4double mden  = material->GetIonisation()->GetMdensity();
-    G4double aden  = material->GetIonisation()->GetAdensity();
-    G4double x0den = material->GetIonisation()->GetX0density();
-    G4double x1den = material->GetIonisation()->GetX1density();
-    G4double eDensity = material->GetElectronDensity();
-    */
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector =
@@ -332,21 +322,6 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
         ionloss   += esp * theAtomicNumDensityVector[iel];
 
       }
-      /*
-      // density correction
-      G4double dedx = 0.0;
-      G4double tau  = lowEdgeEnergy/electron_mass_c2;
-      G4double gam  = tau + 1.0;
-      G4double bg2  = tau * (tau+2.0);
-      G4double beta2= bg2/(gam*gam);
-
-      G4double x = log(bg2)/twoln10;
-      if ( x >= x0den ) {
-	dedx -= twoln10*x - cden ;
-	if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-      }
-      ionloss += dedx*twopi_mc2_rcl2*eDensity/beta2;
-      */
       if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
             G4cout << "Sum: "
                    << " E(keV)= " << lowEdgeEnergy/keV
