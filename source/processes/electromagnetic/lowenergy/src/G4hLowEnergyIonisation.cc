@@ -86,6 +86,7 @@
 // 10 Dec   2002 V.Ivanchenko antiProtonLowEnergy -> 25 keV, QEG model below
 // 21 Jan   2003 V.Ivanchenko Cut per region
 // 10 Mar   2003 V.Ivanchenko Use SubTypes for ions
+// 12 Apr   2003 V.Ivanchenko Cut per region for fluo AlongStep
 
 // -----------------------------------------------------------------------
 
@@ -148,7 +149,7 @@ void G4hLowEnergyIonisation::InitializeMe()
   HighestKineticEnergy = 100.0*GeV ;
   MinKineticEnergy     = 10.0*eV ; 
   TotBin               = 360 ;
-  protonLowEnergy      = 1.*keV ; 
+  protonLowEnergy      = 1.*keV ;
   protonHighEnergy     = 2.*MeV ;
   antiProtonLowEnergy  = 25.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
@@ -1388,7 +1389,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   // sample secondaries
 
   G4double etot = 0.0;
-  G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
+  G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(couple,
                                          incidentEnergy, eLoss);
 
   for (size_t i=0; i<nElements; i++) {
@@ -1399,39 +1400,39 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 
     if (nVacancies && Z  > 5 && maxE < tcut && (maxE > minGammaEnergy || maxE > minElectronEnergy)) {
       for(size_t j=0; j<nVacancies; j++) {
-     
-        // sampling follows       
+
+        // sampling follows
         do {
 	  tkin = tcut/(1.0 + (tcut/maxE - 1.0)*G4UniformRand());
           grej = 1.0 - beta2 * tkin/tmax;
-  
+
         } while( G4UniformRand() > grej );
 
         shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,tkin);
 
         shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
- 
+
         if (maxE>minGammaEnergy || maxE>minElectronEnergy ) {
           secVector = deexcitationManager.GenerateParticles(Z, shellId);
 	} else {
           secVector = 0;
 	}
 
-        if (secVector) {	
+        if (secVector) {
 
           for (size_t l = 0; l<secVector->size(); l++) {
 
             aSecondary = (*secVector)[l];
             if(aSecondary) {
-	  
+
               e = aSecondary->GetKineticEnergy();
               type = aSecondary->GetDefinition();
               if ( etot + e <= eLoss &&
-                   (type == G4Gamma::Gamma() && e > minGammaEnergy ) || 
+                   (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
                    (type == G4Electron::Electron() && e > minElectronEnergy)) {
-                   
-                     etot += e;  
+
+                     etot += e;
                      partVector->push_back(aSecondary);
 
 	      } else {

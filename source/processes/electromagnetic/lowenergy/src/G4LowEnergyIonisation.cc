@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.92 2003-02-12 10:03:56 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.93 2003-04-12 16:40:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -77,7 +77,7 @@
 // 10.10.01 MGP             Revision to improve code quality and 
 //                          consistency with design
 // 18.10.01 V.Ivanchenko    Add fluorescence AlongStepDoIt
-// 18.10.01 MGP             Revision to improve code quality and 
+// 18.10.01 MGP             Revision to improve code quality and
 //                          consistency with design
 // 19.10.01 V.Ivanchenko    update according to new design, V.Ivanchenko
 // 26.10.01 V.Ivanchenko    clean up deexcitation
@@ -94,6 +94,7 @@
 // 20.09.02 VI              Remove ActivateFlurescence from SetCut...
 // 21.01.03 VI              Cut per region
 // 12.02.03 VI              Change signature for Deexcitation
+// 12.04.03 V.Ivanchenko    Cut per region for fluo AlongStep
 //
 // --------------------------------------------------------------
 
@@ -625,7 +626,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 
     G4double eTot = 0.0;
     G4std::vector<G4int> n =
-           shellVacancy->GenerateNumberOfIonisations(material,
+           shellVacancy->GenerateNumberOfIonisations(couple,
                                                      incidentEnergy,eLoss);
     for (size_t i=0; i<nElements; i++) {
 
