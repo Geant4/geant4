@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.hh,v 1.3 1999-12-17 15:48:41 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.4 1999-12-17 16:20:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ------------ G4ComptonScattering physics process ------
@@ -24,6 +24,7 @@
 //
 // inherit from G4VDiscreteProcess
 //
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,7 +87,6 @@ class G4ComptonScattering : public G4VDiscreteProcess
        // It returns the total CrossSectionPerAtom of the process, 
        // for the current DynamicGamma (energy), in anElement.					 
 					  
-
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                     const G4Step& aStep);
        // It computes the final state of the process (at end of step),
