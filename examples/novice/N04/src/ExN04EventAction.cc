@@ -58,11 +58,6 @@ void ExN04EventAction::BeginOfEventAction(const G4Event*)
     calorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
     muonCollID = SDman->GetCollectionID(colNam="muonCollection");
   }
-///  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-///   if(pVVisManager)
-///   {
-///     G4UImanager::GetUIpointer()->ApplyCommand("/vis/draw/current");
-///   }
 }
 
 void ExN04EventAction::EndOfEventAction(const G4Event* evt)
@@ -123,16 +118,5 @@ void ExN04EventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "     " << n_hit
          << " hits are stored in ExN04MuonHitsCollection." << G4endl;
   }
-
-///  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-///  if(pVVisManager)
-///  {
-///    if(THC) THC->DrawAllHits();
-///    if(CHC) CHC->DrawAllHits();
-///    if(MHC) MHC->DrawAllHits();
-///    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
-///  }
 }
-
-
 
