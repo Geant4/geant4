@@ -1,0 +1,100 @@
+?RCS:
+?MAKE:g4install g4include g4base g4workdir g4conf: \
+	Myread Getfile cat rm g4system
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+echo " "
+
+#echo "SSS"
+#echo `pwd`
+#echo "SSS"
+
+if [ X$src = X. ] ; then
+	cd ../..
+	abssrc=`pwd`
+	cd .config/UU
+else
+	abssrc=$src
+fi
+
+case "$g4conf" in
+'')
+	g4conf=$abssrc/.config/bin/$g4system
+	;;
+esac
+
+#echo "g4conf=$g4conf"
+
+case "$g4install" in
+'')
+	g4install=$HOME/geant4
+	;;
+esac
+
+case "$g4workdir" in
+'')
+	g4workdir=$g4install
+	;;
+esac
+
+case "$g4includes_flag" in
+'')
+	g4includes_flag=n
+	;;
+esac
+
+case "$g4include" in
+'')
+	g4include=$g4install/include
+	;;
+esac
+
+g4message=`cat << EOM
+
+Where is Geant4 installed?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4install=$ans
+g4workdir=$g4install
+
+g4message=`cat << EOM
+
+Do you want to copy all Geant4 headers 
+in one directory?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4includes_flag
+#fn='d~'
+rp=$g4message
+. ./myread
+g4includes_flag=$ans
+
+if [ X$g4includes_flag = Xy ] ; then
+
+g4message=`cat << EOM
+
+Where will be directory to copy all Geant4 headers?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4include
+fn='d~+'
+rp=$g4message
+. ./getfile
+g4include=$ans
+
+fi
+
+#if test "X$g4include" = "X[NOT DEFINED]" ; then
+#g4include=""
+#fi
+

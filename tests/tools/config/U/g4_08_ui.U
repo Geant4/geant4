@@ -1,0 +1,327 @@
+?RCS:
+?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh g4_build_wo_session g4ui_use_wo:\
+	g4lib_build_shared Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+
+case "$g4ui_none" in
+'')
+	g4ui_none=n
+	;;
+esac
+
+# Set by default!
+case "$g4ui_build_terminal_session" in
+'')
+	g4ui_build_terminal_session=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_terminal" in
+'')
+	g4ui_use_terminal=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_build_gag_session" in
+'')
+	g4ui_build_gag_session=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_gag" in
+'')
+	g4ui_use_gag=y
+	;;
+esac
+
+case "$g4ui_build_xm_session" in
+'')
+	g4ui_build_xm_session=n
+	;;
+esac
+
+case "$g4ui_use_xm" in
+'')
+	g4ui_use_xm=n
+	;;
+esac
+
+case "$g4ui_build_xaw_session" in
+'')
+	g4ui_build_xaw_session=n
+	;;
+esac
+
+case "$g4ui_use_xaw" in
+'')
+	g4ui_use_xaw=n
+	;;
+esac
+
+case "$g4ui_build_wo_session" in
+'')
+	g4ui_build_wo_session=n
+	;;
+esac
+
+case "$g4ui_use_wo" in
+'')
+	g4ui_use_wo=n
+	;;
+esac
+
+case "$g4ui_build_win32_session" in
+'')
+	g4ui_build_win32_session=n
+	;;
+esac
+
+case "$g4ui_use_win32" in
+'')
+	g4ui_use_win32=n
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_tcsh" in
+'')
+	g4ui_use_tcsh=y
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4UI_NONE
+
+If set, no UI sessions nor any UI libraries are built. This can be useful
+when running a pure batch job or in a user framework having its own UI system.
+
+EOM`
+
+dflt=$g4ui_none
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_none=n
+		;;
+	y*|Y*) 
+		g4ui_none=y
+		;;
+	esac
+
+case $g4ui_none in
+
+n)
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_TERMINAL_SESSION
+  Specifies to include in kernel library a basic dumb terminal
+  user interface (default).
+
+  G4UI_USE_TERMINAL
+  Specifies to use dumb terminal interface in the application to be
+  built (default).
+EOM`
+
+dflt=$g4ui_use_terminal
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_terminal_session=n
+		g4ui_use_terminal=n
+		;;
+	y*|Y*) 
+		g4ui_build_terminal_session=y
+		g4ui_use_terminal=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_GAG_SESSION
+  Specifies to include in kernel library the GAG based
+  user interface.
+
+  G4UI_USE_GAG
+  Specifies to use the GAG interface in the application to be
+  built.
+EOM`
+
+dflt=$g4ui_use_gag
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_gag_session=n
+		g4ui_use_gag=n
+		;;
+	y*|Y*) 
+		g4ui_build_gag_session=y
+		g4ui_use_gag=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_XAW_SESSION
+  G4UI_USE_XAW
+
+  Specifies to include and use the XAW interfaces in the
+  application to be built.
+  The XAW (X11 Athena Widget set) are required to activate these driver.
+EOM`
+
+dflt=$g4ui_use_xaw
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_xaw_session=n
+		g4ui_use_xaw=n
+		;;
+	y*|Y*) 
+		g4ui_build_xaw_session=y
+		g4ui_use_xaw=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_XM_SESSION
+  Specifies to include in kernel library the XM
+  Motif-based user interfaces.
+
+  G4UI_USE_XM
+  Specifies to use the XM interfaces in the
+  application to be built.
+EOM`
+
+dflt=$g4ui_use_xm
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_xm_session=n
+		g4ui_use_xm=n
+		;;
+	y*|Y*) 
+		g4ui_build_xm_session=y
+		g4ui_use_xm=y
+		;;
+	esac
+
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_WIN32_SESSION
+  Specifies to include in kernel library the WIN32 terminal interface
+  for Windows systems.
+
+  G4UI_USE_WIN32
+  Specifies to use the WIN32 interfaces in the application to be built
+  on Windows systems.
+EOM`
+
+dflt=$g4ui_use_win32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_win32_session=n
+		g4ui_use_win32=n
+		;;
+	y*|Y*) 
+		g4ui_build_win32_session=y
+		g4ui_use_win32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_WO_SESSION
+
+  G4UI_USE_WO
+
+  Specifies to include in kernel library and use the OPACS WO terminal
+  interface for the OPACS system. The OPACS tool must be installed
+  to activate this driver !
+
+EOM`
+
+dflt=$g4ui_use_wo
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_wo_session=n
+		g4ui_use_wo=n
+		;;
+	y*|Y*) 
+		g4ui_build_wo_session=y
+		g4ui_use_wo=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_USE_TCSH
+  Specifies to use the tcsh-style terminal in the application
+  to be built.
+EOM`
+
+dflt=$g4ui_use_tcsh
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_use_tcsh=n
+		;;
+	y*|Y*) 
+		g4ui_use_tcsh=y
+		;;
+	esac
+
+;;
+esac
+

@@ -1,0 +1,155 @@
+?RCS:
+?MAKE:g4global g4granular g4lib_use_granular: \
+	g4clhep_base_dir Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4global" in
+'')
+	g4global=n
+	;;
+esac
+
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=n
+	;;
+esac
+
+#
+# Ask about g4global - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to build 'global' compound libraries?
+EOM`
+
+dflt=$g4global
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4global=n
+		g4granular=y
+		g4lib_use_granular=n
+		break
+		;;
+	y*|Y*) 
+		g4global=y
+		g4granular=n
+		g4lib_use_granular=n
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4global = Xy ] ; then
+#
+# Ask about g4granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Granular libraries are used by defaults, you asked to build global
+compound libraries. Do you want to build 'granular' libraries too?
+EOM`
+
+dflt=$g4granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4granular=n
+		break
+		;;
+	y*|Y*) 
+		g4granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4granular = Xy ] ; then
+#
+# Ask about g4lib_use_granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Global libraries are used by defaults, you asked to build global
+compound libraries and granular libraries. 
+Do you want to use 'granular' libraries instead?
+EOM`
+
+dflt=$g4lib_use_granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4lib_use_granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+fi
+fi
+
+### End file - without will be problem! Check in others...
+

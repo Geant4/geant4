@@ -1,0 +1,46 @@
+?RCS:
+?MAKE:g4wanalysis_build g4wanalysis_use g4wanalysis_build_lab g4wanalysis_use_lab g4wanalysis_build_jas g4wanalysis_use_jas g4wanalysis_build_lizard g4wanalysis_use_lizard:\
+	g4use_hepodbms Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+
+case "$g4wanalysis_use" in
+'')
+	g4wanalysis_use=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_USE
+
+Activates the configuration setup for allowing plugins to
+analysis tools based on AIDA (Astract Interfaces for Data
+Analysis). In order to use AIDA features and compliant analysis
+tools, the proper environment for these tools will have to be
+set (see documentation for the specific analysis tools).
+EOM`
+
+dflt=$g4wanalysis_use
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wanalysis_use=n
+		;;
+	y*|Y*) 
+		g4wanalysis_use=y
+		;;
+	esac
+
+

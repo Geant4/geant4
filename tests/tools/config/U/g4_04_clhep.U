@@ -1,0 +1,151 @@
+?RCS:
+?MAKE:g4clhep_base_dir g4clhep_include_dir g4clhep_lib_dir g4clhep_lib: \
+	g4data Myread Getfile cat rm
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+echo " "
+case "$g4clhep_base_dir" in
+'')
+	g4clhep_base_dir=/usr/local
+	;;
+esac
+
+case "$g4clhep_include_dir" in
+'')
+	g4clhep_include_dir=$g4clhep_base_dir/include
+	;;
+esac
+
+case "$g4clhep_lib_dir" in
+'')
+	g4clhep_lib_dir=$g4clhep_base_dir/lib
+	;;
+esac
+
+case "$g4clhep_lib" in
+'')
+	g4clhep_lib=CLHEP
+	;;
+esac
+
+#while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			$g4clhep_base_dir
+
+According to it will be set:
+
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
+
+You will be asked about customizing these next.
+EOM`
+
+
+#dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+#. ./myread
+#gans=$ans
+
+#	case $gans in
+
+#	1) 
+		dflt=$g4clhep_base_dir
+		fn='d~'
+#		rp="Where is CLHEP installed?"
+		. ./getfile
+		g4clhep_base_dir=$ans
+		g4clhep_include_dir=$ans/include
+		g4clhep_lib_dir=$ans/lib
+#		;;
+#	2) 
+#		dflt=$g4clhep_include_dir
+#		fn='d~'
+#		rp="Where is CLHEP include directory?"
+#		. ./getfile
+#		g4clhep_include_dir=$ans
+#		;;
+#	3) 
+#		dflt=$g4clhep_lib_dir
+#		fn='d~'
+#		rp="Where is CLHEP lib directory?"
+#		. ./getfile
+#		g4clhep_lib_dir=$ans
+#		;;
+#	4) 
+#		dflt=$g4clhep_lib
+#		rp="What is CLHEP lib title?"
+#		. ./myread
+#		g4clhep_lib=$ans
+#		;;
+##	[eE]) 
+##		break
+##		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+#	esac
+#done
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+You can customize paths of you CLHEP installation:
+
+1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
+2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
+3) CLHEP_LIB:			$g4clhep_lib
+
+Select from list above (e.g. 2) 
+EOM`
+
+
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		dflt=$g4clhep_include_dir
+		fn='d~'
+		rp="Where is CLHEP include directory?"
+		. ./getfile
+		g4clhep_include_dir=$ans
+		;;
+	2) 
+		dflt=$g4clhep_lib_dir
+		fn='d~'
+		rp="Where is CLHEP lib directory?"
+		. ./getfile
+		g4clhep_lib_dir=$ans
+		;;
+	3) 
+		dflt=$g4clhep_lib
+		rp="What is CLHEP lib title?"
+		. ./myread
+		g4clhep_lib=$ans
+		;;
+#	[eE]) 
+##		break
+##		;;
+	*) 
+#		echo " "
+		break
+		;;
+	esac
+done
+
+
