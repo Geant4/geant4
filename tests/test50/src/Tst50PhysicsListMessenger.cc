@@ -64,7 +64,7 @@ Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(G4State_Idle);
+  cutECmd->AvailableForStates(G4State_PreInit);
   
 
 

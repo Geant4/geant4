@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronEEDLrange.cc,v 1.3 2003-07-28 15:05:52 guatelli Exp $
+// $Id: Tst50ElectronEEDLrange.cc,v 1.4 2003-07-29 09:45:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -62,10 +62,14 @@ void Tst50ElectronEEDLrange::ConstructProcess()
       if (particleName == "e-") 
 	{
 	  
-	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
-	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
-          G4VeLowEnergyLoss::SetEnlossFluc(false); 
-	  G4cout<<" range conditions set: no msc, no energy fluct"<<G4endl;	
+	  G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+          G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+    
+          manager->AddProcess(loweIon,     -1, 2,2);
+          manager->AddProcess(loweBrem,    -1,-1,3); 
+          loweIon->SetEnlossFluc(false); 
+          loweBrem->SetEnlossFluc(false);
+          G4cout<<" range conditions set: no msc, no energy fluct"<<G4endl;	
 	}   
     }
 }
