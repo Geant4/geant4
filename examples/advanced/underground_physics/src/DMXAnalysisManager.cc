@@ -57,7 +57,7 @@ DMXAnalysisManager::~DMXAnalysisManager()
   delete pf;
   pf=0;
 
-  delete tpf;
+ delete tpf;
   tpf=0;
 
   delete hf;
@@ -96,9 +96,9 @@ void DMXAnalysisManager::book(G4String histogramfile)
   G4bool fileExists = false;
   G4bool readOnly   = false;
 
-  ITreeFactory     * tf = af->createTreeFactory();
+  AIDA::ITreeFactory     * tf = af->createTreeFactory();
 
-  tree = tf->create(histogramfile, readOnly, fileExists, "hbook");
+  tree = tf->create(histogramfile, "hbook", readOnly, fileExists);
 
   G4cout << "Tree store : " << tree->storeName() << G4endl;
 
@@ -110,27 +110,27 @@ void DMXAnalysisManager::book(G4String histogramfile)
 
  // ---- primary ntuple ------
 
-  ITuple* ntuple1 = tpf->create( "1 Energy", "Particle Source Energy", 
-			     "float energy" );
+  AIDA::ITuple* ntuple1 = tpf->create( "1", "Particle Source Energy", 
+			     "double energy" );
 
   assert(ntuple1);
 
   // ---- secondary ntuple ------   
 
-  ITuple* ntuple2 = tpf->create( "2 Hits Info", "Scintillation Hits Info", 
+  AIDA::ITuple* ntuple2 = tpf->create( "2", "Scintillation Hits Info", 
 				 "float Event,e_prim,tot_e,s_hits,xe_time,num_ph,avphtime,1stpart,1stparte,gamma,neutron,posi,elec,other,seed1,seed2" );
 
   assert(ntuple2);
 
   // ---- tertiary ntuple ------   
 
- ITuple* ntuple3 = tpf->create( "3 Pmt Info", "PMT Hits Info", 
+ AIDA::ITuple* ntuple3 = tpf->create( "3", "PMT Hits Info", 
 				"float event, hits, xpos, ypos, zpos" );
 
  assert(ntuple3);
 
   // ---- extra ntuple ------   
-  ITuple* ntuple4 = tpf->create( "4 Particle Info", "Particles energy type", 
+  AIDA::ITuple* ntuple4 = tpf->create( "4", "Particles energy type", 
 			     "float energy, NameIdx" );
 
   assert(ntuple4);
@@ -138,43 +138,43 @@ void DMXAnalysisManager::book(G4String histogramfile)
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
-  IHistogram1D* hEsourcep;
-  hEsourcep    = hf->create1D("10","Source Energy /keV",  1000,0.,10000.);
+  AIDA::IHistogram1D* hEsourcep;
+  hEsourcep    = hf->createHistogram1D("10","Source Energy /keV",  1000,0.,10000.);
 
-  IHistogram1D* hEdepp;
-  hEdepp       = hf->create1D("20","Energy Deposit /keV", 1000,0.,1000.);
+  AIDA::IHistogram1D* hEdepp;
+  hEdepp       = hf->createHistogram1D("20","Energy Deposit /keV", 1000,0.,1000.);
   
-  IHistogram1D* hEdepRecoil;
-  hEdepRecoil  = hf->create1D("30","Nuclear Recoil Edep /keV", 100,0.,100.);
+  AIDA::IHistogram1D* hEdepRecoil;
+  hEdepRecoil  = hf->createHistogram1D("30","Nuclear Recoil Edep /keV", 100,0.,100.);
   
-  IHistogram1D* hNumPhLow;
-  hNumPhLow    = hf->create1D("40","Number of Photons - LowE", 200,0.,200.);
+  AIDA::IHistogram1D* hNumPhLow;
+  hNumPhLow    = hf->createHistogram1D("40","Number of Photons - LowE", 200,0.,200.);
   
-  IHistogram1D* hNumPhHigh;
-  hNumPhHigh   = hf->create1D("50","Number of Photons - HighE", 100,0.,10000.);
+  AIDA::IHistogram1D* hNumPhHigh;
+  hNumPhHigh   = hf->createHistogram1D("50","Number of Photons - HighE", 100,0.,10000.);
   
-  IHistogram1D* hAvPhArrival;
-  hAvPhArrival  = hf->create1D("60","Average Photon Arrival/ns", 200,0.,200.);
-  IHistogram1D* h1stPhArrival;
-  h1stPhArrival = hf->create1D("61","1st event Photon Arrival", 200,0.,200.);
+  AIDA::IHistogram1D* hAvPhArrival;
+  hAvPhArrival  = hf->createHistogram1D("60","Average Photon Arrival/ns", 200,0.,200.);
+  AIDA::IHistogram1D* h1stPhArrival;
+  h1stPhArrival = hf->createHistogram1D("61","1st event Photon Arrival", 200,0.,200.);
   
-  IHistogram2D* hPMTHits;
-  hPMTHits    = hf->create2D("70","PMT Hit Pattern", 
+  AIDA::IHistogram2D* hPMTHits;
+  hPMTHits    = hf->createHistogram2D("70","PMT Hit Pattern", 
 			  300 ,-30.,30.,300,-30.,30.);
-  IHistogram2D* h1stPMTHit;
-  h1stPMTHit  = hf->create2D("71","1st event PMT Hit Pattern", 
+  AIDA::IHistogram2D* h1stPMTHit;
+  h1stPMTHit  = hf->createHistogram2D("71","1st event PMT Hit Pattern", 
 			     300 ,-30.,30.,300,-30.,30.);
 
-  IHistogram1D* hGammaEdep;
-  hGammaEdep    = hf->create1D("91","Gamma Energy Deposit/keV", 1000,0.,1000.);
-  IHistogram1D* hNeutronEdep;
-  hNeutronEdep  = hf->create1D("92","Neutron Ener Deposit/keV", 1000,0.,1000.);
-  IHistogram1D* hElectronEdep;
-  hElectronEdep = hf->create1D("93","Electron Ener Deposit/keV",1000,0.,1000.);
-  IHistogram1D* hPositronEdep;
-  hPositronEdep = hf->create1D("94","Positron Ener Deposit/keV",1000,0.,1000.);
-  IHistogram1D* hOtherEdep;
-  hOtherEdep    = hf->create1D("95","Other Ener Deposit/keV", 1000,0.,1000.);
+  AIDA::IHistogram1D* hGammaEdep;
+  hGammaEdep    = hf->createHistogram1D("91","Gamma Energy Deposit/keV", 1000,0.,1000.);
+  AIDA::IHistogram1D* hNeutronEdep;
+  hNeutronEdep  = hf->createHistogram1D("92","Neutron Ener Deposit/keV", 1000,0.,1000.);
+  AIDA::IHistogram1D* hElectronEdep;
+  hElectronEdep = hf->createHistogram1D("93","Electron Ener Deposit/keV",1000,0.,1000.);
+  AIDA::IHistogram1D* hPositronEdep;
+  hPositronEdep = hf->createHistogram1D("94","Positron Ener Deposit/keV",1000,0.,1000.);
+  AIDA::IHistogram1D* hOtherEdep;
+  hOtherEdep    = hf->createHistogram1D("95","Other Ener Deposit/keV", 1000,0.,1000.);
   
   delete tf;
 
@@ -218,27 +218,27 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
   if(firstparticleName == "positron") firstparticleIndex = 4;
   if(firstparticleName == "other") {
     firstparticleIndex = 5;
-    IHistogram1D* h4 = dynamic_cast<IHistogram1D *> ( tree->find("30") );
+    AIDA::IHistogram1D* h4 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("30") );
     h4->fill(totEnergy);  // fill(x,y,weight)     
   }
 
-  IHistogram1D* h2 = dynamic_cast<IHistogram1D *> ( tree->find("40") );
+  AIDA::IHistogram1D* h2 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("40") );
   h2->fill(P_hits,10.);  // fill(x,weight) 
 
-  IHistogram1D* h3 = dynamic_cast<IHistogram1D *> ( tree->find("50") );
+  AIDA::IHistogram1D* h3 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("50") );
   h3->fill(P_hits);  // fill(x,y,weight) 
 
 
-  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
+  AIDA::IHistogram1D* h1 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("10") );
   h1->fill( energy_pri/keV );  // fill(x,weight)     
 
-  IHistogram1D* h5 = dynamic_cast<IHistogram1D *> ( tree->find("20") );
+  AIDA::IHistogram1D* h5 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("20") );
   h5->fill( totEnergy/keV );
   
-  IHistogram1D* h6 = dynamic_cast<IHistogram1D *> ( tree->find("60") );
+  AIDA::IHistogram1D* h6 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("60") );
   h6->fill(aveTimePmtHits/ns);  // fill(x,y,weight)     
 
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("2 Hits Info") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("2") );
 
  // Fill the ntuple
   ntuple->fill( ntuple->findColumn( "Event"   ), (G4float) event_id          );
@@ -270,15 +270,15 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
 void DMXAnalysisManager::analysePMTHits(G4int event, G4int i, G4double x, G4double y, G4double z)
 {
 
-  IHistogram2D* h7 = dynamic_cast<IHistogram2D *> ( tree->find("70") );
+  AIDA::IHistogram2D* h7 = dynamic_cast<AIDA::IHistogram2D *> ( tree->find("70") );
   h7->fill(x/mm, y/mm);  // fill(x,y,weight)     
 
   if (event == 0 ) {
-    IHistogram2D* h9 = dynamic_cast<IHistogram2D *> ( tree->find("71") );
+    AIDA::IHistogram2D* h9 = dynamic_cast<AIDA::IHistogram2D *> ( tree->find("71") );
     h9->fill(x,y); // fill(x,y,weight)
   }
 
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("3 Pmt Info") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("3") );
   // Fill the secondaries ntuple
   ntuple->fill( ntuple->findColumn( "event" ), (G4float) event );
   ntuple->fill( ntuple->findColumn( "hits"  ), (G4float) i     );
@@ -303,9 +303,9 @@ void DMXAnalysisManager::analysePrimaryGenerator(G4double energy)
   //  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
   //  h1->fill(static_cast<double>(energy/keV));  // fill(x,weight) 
 
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("1 Energy") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   // Fill energy ntple:
-  ntuple->fill( ntuple->findColumn( "energy" ), (G4float) energy );
+  ntuple->fill( ntuple->findColumn( "energy" ), energy );
 
   // NEW: Values of attributes are prepared; store them to the nTuple:
   ntuple->addRow(); // check for returning true ...
@@ -322,23 +322,23 @@ void DMXAnalysisManager::analyseParticleSource(G4double energy, G4String name)
 {
 
   if(name == "gamma") {
-    IHistogram1D* h11 = dynamic_cast<IHistogram1D *> ( tree->find("91") );
+    AIDA::IHistogram1D* h11 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("91") );
     h11->fill(energy/keV);  // fill(x,weight)     
   }
   if(name == "neutron") {
-    IHistogram1D* h12 = dynamic_cast<IHistogram1D *> ( tree->find("92") );
+    AIDA::IHistogram1D* h12 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("92") );
     h12->fill(energy/keV);  // fill(x,weight)     
   }    
     if(name == "electron") {
-    IHistogram1D* h13 = dynamic_cast<IHistogram1D *> ( tree->find("93") );
+    AIDA::IHistogram1D* h13 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("93") );
     h13->fill(energy/keV);  // fill(x,weight)     
   }    
       if(name == "positron") {
-    IHistogram1D* h14 = dynamic_cast<IHistogram1D *> ( tree->find("94") );
+    AIDA::IHistogram1D* h14 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("94") );
     h14->fill(energy/keV);  // fill(x,weight)     
   }    
 	if(name == "other") {
-    IHistogram1D* h15 = dynamic_cast<IHistogram1D *> ( tree->find("95") );
+    AIDA::IHistogram1D* h15 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("95") );
     h15->fill(energy/keV);  // fill(x,weight)     
   }    
 
@@ -348,7 +348,7 @@ void DMXAnalysisManager::analyseParticleSource(G4double energy, G4String name)
 
 void DMXAnalysisManager::HistFirstTime(G4double time)
 {   
-  IHistogram1D* h8 = dynamic_cast<IHistogram1D *> ( tree->find("61") );
+  AIDA::IHistogram1D* h8 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("61") );
   h8->fill(time/ns);  // fill(x,y,weight)
 }
 
@@ -356,87 +356,104 @@ void DMXAnalysisManager::HistFirstTime(G4double time)
 void DMXAnalysisManager::PlotHistos(G4bool interactive)
 {   
 
-  IHistogram1D* h1p = dynamic_cast<IHistogram1D *> ( tree->find("10") );
-  IHistogram1D& h1  = *h1p;  
-  IHistogram1D* h2p = dynamic_cast<IHistogram1D *> ( tree->find("20") );
-  IHistogram1D& h2  = *h2p;  
-  IHistogram1D* h3p = dynamic_cast<IHistogram1D *> ( tree->find("40") );
-  IHistogram1D& h3  = *h3p;  
-  IHistogram1D* h4p = dynamic_cast<IHistogram1D *> ( tree->find("50") );
-  IHistogram1D& h4  = *h4p;  
-  IHistogram1D* h5p = dynamic_cast<IHistogram1D *> ( tree->find("60") );
-  IHistogram1D& h5  = *h5p;  
-  IHistogram1D* h6p = dynamic_cast<IHistogram1D *> ( tree->find("61") );
-  IHistogram1D& h6  = *h6p;  
-  IHistogram2D* h7p = dynamic_cast<IHistogram2D *> ( tree->find("70") );
-  IHistogram2D& h7  = *h7p;  
-  IHistogram1D* h8p = dynamic_cast<IHistogram1D *> ( tree->find("91") );
-  IHistogram1D& h8  = *h8p;  
+  AIDA::IHistogram1D* h1p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("10") );
+  AIDA::IHistogram1D& h1  = *h1p;  
+  AIDA::IHistogram1D* h2p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("20") );
+  AIDA::IHistogram1D& h2  = *h2p;  
+  AIDA::IHistogram1D* h3p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("40") );
+  AIDA::IHistogram1D& h3  = *h3p;  
+  AIDA::IHistogram1D* h4p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("50") );
+  AIDA::IHistogram1D& h4  = *h4p;  
+  AIDA::IHistogram1D* h5p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("60") );
+  AIDA::IHistogram1D& h5  = *h5p;  
+  AIDA::IHistogram1D* h6p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("61") );
+  AIDA::IHistogram1D& h6  = *h6p;  
+  AIDA::IHistogram2D* h7p = dynamic_cast<AIDA::IHistogram2D *> ( tree->find("70") );
+  AIDA::IHistogram2D& h7  = *h7p;  
+  AIDA::IHistogram1D* h8p = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("91") );
+  AIDA::IHistogram1D& h8  = *h8p;  
 
-  // Creating the plotter factory
-  pf = af->createPlotterFactory();
-  // Creating a plotter
-  IPlotter* plotter = pf->create();
-  //  plotter = pf->create();
+//   // Creating the plotter factory
+//   pf = af->createPlotterFactory();
+//   // Creating a plotter
+//   AIDA::IPlotter* plotter = pf->create();
+//   //  plotter = pf->create();
 
-  // Creating two regions
-  plotter->clearPage();
-  plotter->createRegions(2, 2, 0); // set the current working region to the first one
-  plotter->show();
+//   // Creating two regions
+//   plotter->clearRegions();
+//   //  plotter->createRegions(2, 2, 0); // set the current working region to the first one
+//   plotter->show();
 
-  // Plotting the second histogram in the first region
-  plotter->plot( h1 );
+//   // Plotting the second histogram in the first region
+//   plotter->plot( h1 );
+//   plotter->refresh();
+//   plotter->write("summary1.ps", "ps");
 
-  // Plotting the first histogram in the next available region
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h2 );
+//   // Plotting the first histogram in the next available region
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h2 );
+//   plotter->refresh();
+//   plotter->write("summary2.ps", "ps");
 
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h3 );
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h3 );
+//   plotter->refresh();
+//   plotter->write("summary3.ps", "ps");
 
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h4 );
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h4 );
+//   plotter->refresh();
+//   plotter->write("summary4.ps", "ps");
 
-  // Update the canvas on the screen
-  plotter->refresh();
+//   // Update the canvas on the screen
+//   //  plotter->refresh();
 
-  plotter->write("summary1.ps", "ps");
+//   //plotter->write("summary1.ps", "ps");
 
 
-  if (interactive) {
-    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-    G4cout << "Press <ENTER> to exit" << G4endl;
-    G4cin.get();
-  }
+//   if (interactive) {
+//     // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+//     G4cout << "Press <ENTER> to exit" << G4endl;
+//     G4cin.get();
+//   }
 
-  plotter = pf->create();
-  plotter->clearPage();
-  plotter->createRegions(2, 2, 0); // set the current working region to the first one
-  plotter->show();
-  //  plotter->setCurrentRegion( 0 );
+//   plotter = pf->create();
+//   //  plotter->clearPage();
+//   plotter->clearRegions();
+//   //  plotter->createRegions(2, 2, 0); // set the current working region to the first one
+//   plotter->show();
+//   //  plotter->setCurrentRegion( 0 );
 
-  plotter->plot( h5 );
+//   plotter->plot( h5 );
+//   plotter->refresh();
+//   plotter->write("summary5.ps", "ps");
 
-  // Plotting the first histogram in the next available region
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h6 );
+//   // Plotting the first histogram in the next available region
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h6 );
+//   plotter->refresh();
+//   plotter->write("summary6.ps", "ps");
 
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h7 );
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h7 );
+//   plotter->refresh();
+//   plotter->write("summary7.ps", "ps");
 
-  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
-  plotter->plot( h8 );
+//   //  plotter->next();    // or explicitly :  plotter->setCurrentRegion( 1 );
+//   plotter->plot( h8 );
+//   plotter->refresh();
+//   plotter->write("summary8.ps", "ps");
 
-  // Update the canvas on the screen
-  plotter->refresh();
+//   // Update the canvas on the screen
+//   //  plotter->refresh();
 
-  plotter->write("summary2.ps", "ps");
+//   //  plotter->write("summary2.ps", "ps");
 
-  if (interactive) {
-    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-    G4cout << "Press <ENTER> to exit" << G4endl;
-    G4cin.get();
-  }
+//   if (interactive) {
+//     // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+//     G4cout << "Press <ENTER> to exit" << G4endl;
+//     G4cin.get();
+//   }
 
 }
 

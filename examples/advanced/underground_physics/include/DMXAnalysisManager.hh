@@ -42,6 +42,7 @@
 
 // Histogramming from AIDA 
 
+
 #include "AIDA/IAnalysisFactory.h"
 
 #include "AIDA/ITreeFactory.h"
@@ -128,12 +129,12 @@ private:
 
   G4bool interactive;
 
-  IAnalysisFactory  *af;
-  ITree             *tree;
-  IHistogramFactory *hf;
-  ITupleFactory     *tpf;
-  IPlotterFactory   *pf;
-  IPlotter          *plotter;
+  AIDA::IAnalysisFactory  *af;
+  AIDA::ITree             *tree;
+  AIDA::IHistogramFactory *hf;
+  AIDA::ITupleFactory     *tpf;
+  AIDA::IPlotterFactory   *pf;
+  AIDA::IPlotter          *plotter;
 
 };
 #endif
