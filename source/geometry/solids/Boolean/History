@@ -1,5 +1,5 @@
 
-$Id: History,v 1.9 2000-05-26 13:27:24 gcosmo Exp $
+$Id: History,v 1.10 2000-06-06 11:00:54 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ June 6   2000  John Allison         geom-solid-bool-V01-01-01
+
+  - Re-enabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
+    and G4SubtractionSolid.  Coworks with greps-V01-01-04.
 
  May 26   2000  John Allison         geom-solid-bool-V01-01-00
 
