@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.hh,v 1.3 2000-06-21 15:25:22 vnivanch Exp $
+// $Id: G4IonAr40.hh,v 1.4 2000-06-21 16:44:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@ public: // Without description
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+
    virtual ~G4IonAr40();
   
    static G4IonAr40*    IonAr40Definition();

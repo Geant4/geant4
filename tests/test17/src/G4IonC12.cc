@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonC12.cc,v 1.2 2000-06-21 15:08:34 vnivanch Exp $
+// $Id: G4IonC12.cc,v 1.3 2000-06-21 16:44:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4IonC12 G4IonC12::theIonC12(
               "IonC12",    11.14945*GeV,       0.0*MeV,  +6.0*eplus, 
 		    0,              +1,             0,          
 		    0,               0,             0,             
-	    "usernuc",               0,            +12,           0,
+	    "static_nucleus",        0,            +12,           0,
 		 true,            -1.0,          NULL
 );
 
