@@ -350,9 +350,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   delete theSecondaries;
     
   // now add the quasmon output
+  G4int maxParticle=output->size();
   G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
-  G4cout << "Number of particles from chips"<<output->size()<<G4endl;
-  for(unsigned int particle = 0; particle < output->size(); particle++)
+  G4cout << "Number of particles from chips"<<maxParticle<<G4endl;
+  for(G4int particle = 0; particle < maxParticle; particle++)
   {
     if(output->operator[](particle)->GetNFragments() != 0) 
     {
@@ -361,6 +362,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
     theSec = new G4ReactionProduct;  
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
+
+
+    G4cerr << "PDG code of chips particle = "<<pdgCode<<G4endl;
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -384,10 +388,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       else if(aZ == 0 && anN == 1) theDefinition = G4Neutron::Neutron();
       else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
     }    
-    else
-    {
-      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->operator[](particle)->GetPDGCode());
-    }
+    else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(pdgCode);
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
     theSec = new G4ReactionProduct(theDefinition);
     G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
