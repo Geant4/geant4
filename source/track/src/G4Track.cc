@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.13 2001-10-22 04:19:42 kurasige Exp $
+// $Id: G4Track.cc,v 1.14 2001-11-10 07:51:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,30 +92,37 @@ G4Track & G4Track::operator=(const G4Track &right)
 //////////////////
 {
   if (this != &right) {
-   fCurrentStepNumber = right.fCurrentStepNumber;
+   fPosition = right.fPosition;
    fGlobalTime = right.fGlobalTime;
    fLocalTime = right.fLocalTime;
    fTrackLength = right.fTrackLength;
-   fParentID = right.fParentID;
+   fWeight = right.fWeight;
 
-   // Track ID is not copied and set to zero for new track
+   // Track ID (and Parent ID) is not copied and set to zero for new track
    fTrackID = 0;
+   fParentID =0;
 
-   // pointers to Step are not copied
-   fpStep=0;
-
+   // dynamic particle information 
    fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
-
-   fVtxKineticEnergy = right.fVtxKineticEnergy;
-   fVtxPosition = right.fVtxPosition;
-   fpLVAtVertex = right.fpLVAtVertex;
-   fpCreatorProcess = right.fpCreatorProcess;
-
+ 
+   // track status and flags for tracking  
    fTrackStatus = right.fTrackStatus;
    fBelowThreshold = right.fBelowThreshold;
    fGoodForTracking = right.fGoodForTracking;
-   fWeight = right.fWeight;
+   
+   // Step information (Step Length, Step Number, pointer to the Step,) 
+   // are not copied
+   fpStep=0;
 
+   // vertex information
+   fVtxPosition = right.fVtxPosition;
+   fpLVAtVertex = right.fpLVAtVertex;
+   fVtxKineticEnergy = right.fVtxKineticEnergy;
+   fVtxMomentumDirection = right.fVtxMomentumDirection;
+
+   // CreatorProcess is not copied 
+   fpCreatorProcess = 0;
+    
    fpUserInformation = right.fpUserInformation;
   }
   return *this;
