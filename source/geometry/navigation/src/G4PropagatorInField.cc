@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.16 2003-12-11 01:11:35 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.17 2003-12-11 01:30:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -589,31 +589,6 @@ G4PropagatorInField::LocateIntersectionPoint(
 	     CurrentA_PointVelocity= CurrentB_PointVelocity;  // We have got to B
 	     CurrentB_PointVelocity= CurveEndPointVelocity;
 	     restoredFullEndpoint = true;
- 	     if( recalculatedEndPoint ) {
-	        // Since we have moved the endpoint, what must we do about this ???
-	        //  Two scenarios:
-	        //   - we leave it as it was, since the move is likely small (CHOSEN)
-	        recalculatedEndPoint= false;
-		//   - we recalculate the final endpoint again (leaving it true)
-
-	        // If we did nothing, the midpoint would be used as an endpoint
-#ifdef G4VERBOSE
-	        if( fVerboseLevel > 0 ){
-		  G4cout << "G4PiF::LI> Restoring full end point"
-			 << "  Yet previous endpoint was recalculated "
-			 << "  Reseting recalculatedEndPoint to false " << G4endl;
-		}
-#endif
-	     }
-
-#ifdef G4VERBOSE
-	     if( fVerboseLevel > 1 ){
-	       G4cout << "G4PiF::LI> Restoring full end point"
-		      << " at s=" << CurrentA_PointVelocity.GetCurveLength()
-		      << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
-		      << G4endl;
-	     }
-#endif
 	   }
 
          } // Endif (Intersects_FB)
@@ -643,11 +618,6 @@ G4PropagatorInField::LocateIntersectionPoint(
 	     recalculatedEndPoint= true;
 	     IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
 	                                           //  if it is the endpoint!
-#ifdef G4VERBOSE
-	     if( fVerboseLevel > 2 ){
-	       G4cout <<"G4PiF::LIP> Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
-	     }
-#endif
 	  }
        }
        if( curveDist < 0.0 )
@@ -671,12 +641,6 @@ G4PropagatorInField::LocateIntersectionPoint(
      } // EndIf ( E is close enough to the curve, ie point F. )
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
-#ifdef G4VERBOSE
-     if( fVerboseLevel > 3 )
-        printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
-                     -1.0, NewSafety,  substep_no, 0);
-#endif
-
   } while (  ( ! found_approximate_intersection )
 	     && ( ! there_is_no_intersection )     
 	     && ( substep_no++ < max_substeps) ); // UNTIL found or failed
@@ -694,7 +658,7 @@ G4PropagatorInField::LocateIntersectionPoint(
   }
 #endif
 
-   return  !there_is_no_intersection; //  Success or failure
+  return  !there_is_no_intersection; //  Success or failure
 }
 
 ///////////////////////////////////////////////////////////////////////////
