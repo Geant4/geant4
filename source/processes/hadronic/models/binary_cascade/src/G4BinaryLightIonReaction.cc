@@ -16,23 +16,20 @@
   
   G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
-  {    
+  { 
   static G4int eventcounter=0;
-  if(getenv("KCDEBUG") ) G4cerr << " ######### Reaction number starts ######### "<<eventcounter<<G4endl;
   eventcounter++;
+  if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
     G4ping debug("debug_G4BinaryLightIonReaction");
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
-    G4double m1=aTrack.GetDefinition()->GetPDGMass();
     G4double a2=targetNucleus.GetN();
     G4double z2=targetNucleus.GetZ();
-    G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z2),G4lrint(a2));
     debug.push_back(a1);
     debug.push_back(z1);
-    debug.push_back(m1);
     debug.push_back(a2);
     debug.push_back(z2);
-    debug.push_back(m2);
+//    debug.push_back(m2);
     G4LorentzVector mom(aTrack.Get4Momentum());
     debug.push_back(mom);
     debug.dump();
@@ -46,7 +43,7 @@
       G4double tmp(0);
       tmp = a2; a2=a1; a1=tmp;
       tmp = z2; z2=z1; z1=tmp;
-      tmp = m2; m2=m1; m1=tmp;
+      G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z1),G4lrint(a1));
       G4LorentzVector it(m1, G4ThreeVector(0,0,0));
       mom = toBreit*it;
     }
@@ -61,13 +58,24 @@
     G4ReactionProductVector * result = 0;
     G4V3DNucleus * fancyNucleus(0);
     G4V3DNucleus * projectile(0);
+    G4double m1 ,m2;    
+    G4double m_nucl;      // to check energy balance 
+    G4LorentzVector it;
+    
     while(!result)
     {
       projectile = new G4Fancy3DNucleus;
       projectile->Init(a1, z1);
+      m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
+			projectile->GetCharge(),projectile->GetMassNumber());
+      it=toBreit * G4LorentzVector(m1,G4ThreeVector(0,0,0));
       fancyNucleus = new G4Fancy3DNucleus;  
       fancyNucleus->Init(a2, z2);
-
+      m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
+      			fancyNucleus->GetCharge(),fancyNucleus->GetMassNumber());
+      m_nucl = ( swapped ) ? m1 : m2;
+//G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
+//       <<" "<<m2-fancyNucleus->GetMass() << G4endl;
       G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
       G4double aX=(2.*G4UniformRand()-1.)*impactMax;
       G4double aY=(2.*G4UniformRand()-1.)*impactMax;
@@ -86,6 +94,9 @@
       nucleonMom.setZ(nucleonMom.vect().mag());
       nucleonMom.setX(0);
       nucleonMom.setY(0);
+      debug.push_back(" projectile nucleon momentum");
+      debug.push_back(nucleonMom);
+      debug.dump();
       G4FermiMomentum theFermi;
       theFermi.Init(a1,z1);
       while( (aNuc=projectile->GetNextNucleon()) )
@@ -100,8 +111,6 @@
 	G4double pfermi= theFermi.GetFermiMomentum(density);
 	G4double mass = aNuc->GetDefinition()->GetPDGMass();
 	G4double Efermi= sqrt( sqr(mass) + sqr(pfermi)) - mass;
-// 	G4cout << "position, dens., Efermi " << nucleonPosition/fermi << " " 
-// 	       << density << " " << Efermi/MeV << G4endl;
         it->SetProjectilePotential(-Efermi);
 	initalState->push_back(it);
       }
@@ -109,7 +118,6 @@
       debug.dump();
 
       result=theModel.Propagate(initalState, fancyNucleus);
-
       debug.push_back("################# Result size");
       debug.push_back(result->size());
       debug.dump();
@@ -133,6 +141,7 @@
     projectile->StartLoop();  
     G4int resA(0), resZ(0); 
     G4Nucleon * aNuc;
+    G4ReactionProductVector * spectators= new G4ReactionProductVector;
     debug.push_back("getting at the hits"); debug.dump();
     while( (aNuc=projectile->GetNextNucleon()) )
     {
@@ -159,6 +168,7 @@
     iState.setT(iState.getT()+m2);
 
     G4LorentzVector fState(0,0,0,0);
+    G4LorentzVector pspectators(0,0,0,0);
     unsigned int i(0);
     for(i=0; i<result->size(); i++)
     {
@@ -168,34 +178,46 @@
 //        G4cout <<" secondary ... ";
       }
       else {
-//        G4cout <<" spectator ... "; 
+//        G4cout <<" spectator ... ";
+        pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+	spectators->push_back((*result)[i]);
       }
 	
-//        G4cout << (*result)[i]<< " "
-// 		<< (*result)[i]->GetDefinition()->GetParticleName() << " " 
-// 		<< (*result)[i]->GetMomentum()<< " " 
-// 		<< (*result)[i]->GetTotalEnergy() << G4endl;
+// 	G4cout << (*result)[i]<< " "
+// 	      << (*result)[i]->GetDefinition()->GetParticleName() << " " 
+// 	      << (*result)[i]->GetMomentum()<< " " 
+// 	      << (*result)[i]->GetTotalEnergy() << G4endl;
     }
     G4LorentzVector momentum(iState-fState);
     debug.push_back("the momentum balance");
     debug.push_back(iState);
     debug.push_back(fState);
+    debug.push_back(momentum-pspectators);
     debug.push_back(momentum);
     debug.dump();
 
     
+
+    
     // call precompound model
     G4ReactionProductVector * proFrag(0);
+    G4LorentzVector pFragment;
+    G4LorentzRotation boost_fragments;
     if(resZ>0 && resA>1) 
     {
       //  Make the fragment
+//      G4double m_fragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
       G4Fragment aProRes;
       aProRes.SetA(resA);
       aProRes.SetZ(resZ);
       aProRes.SetNumberOfParticles(0);
       aProRes.SetNumberOfCharged(0);
       aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
-      aProRes.SetMomentum(momentum);
+//      aProRes.SetMomentum(momentum);
+//      G4LorentzVector pFragment(G4ThreeVector(0),pspectators.mag());
+      pFragment = G4LorentzVector(G4ThreeVector(0),pspectators.mag());
+      boost_fragments=G4LorentzRotation(pspectators.boostVector());
+      aProRes.SetMomentum(pFragment);
       G4ParticleDefinition * resDef(0);
 //       G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
 //           << resA << " " << resZ << G4endl;
@@ -205,26 +227,40 @@
     }
     else if(resA!=0)
     {
-      proFrag=new G4ReactionProductVector;
-      G4ReactionProduct * it(0);
-      while ( resA > 0 ) 
-      {
-	 if(1==resZ) 
+//       proFrag=new G4ReactionProductVector;
+//       G4ReactionProduct * it(0);
+//       while ( resA > 0 ) 
+//       {
+// 	 if(1==resZ) 
+// 	 {
+//             it = new G4ReactionProduct(G4Proton::ProtonDefinition());
+// 	    resZ--;resA--;
+// 	 } else
+// 	 {
+// 	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
+// 	    resA--;
+// 	 }
+// // @@GF  fix.... momentum is wrong if more than one neutron @@
+//          G4cout << "LIBIC: single "<<it->GetDefinition()->GetParticleName()
+// 	        << ", momentum " <<  momentum << " mass " << momentum.mag()
+// 		<< G4endl;
+// 	 it->SetTotalEnergy(momentum.t());
+// 	 it->SetMomentum(momentum.vect());
+// 	 it->SetNewlyAdded(true);
+// //	 proFrag->push_back(it);
+//       }
+         G4ReactionProductVector::iterator ispectator;
+	 for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
 	 {
-            it = new G4ReactionProduct(G4Proton::ProtonDefinition());
-	    resZ--;resA--;
-	 } else
-	 {
-	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
-	    resA--;
+	     (*ispectator)->SetNewlyAdded(true);
+// 	     G4cout << "from spectator "  
+//  	      << (*ispectator)->GetDefinition()->GetParticleName() << " " 
+//  	      << (*ispectator)->GetMomentum()<< " " 
+//  	      << (*ispectator)->GetTotalEnergy() << G4endl;
 	 }
-// @@GF  fix.... momentum is wrong if more than one neutron @@
-	 it->SetTotalEnergy(momentum.t());
-	 it->SetMomentum(momentum.vect());
-	 it->SetNewlyAdded(true);
-	 proFrag->push_back(it);
-      }
     }
+    if (spectators) delete spectators;
+    
     // collect the evaporation part
     debug.push_back("the nucleon count balance");
     debug.push_back(resA);
@@ -234,6 +270,11 @@
     G4ReactionProductVector::iterator ii;
     if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
     {
+      (*ii)->SetNewlyAdded(true);
+      G4LorentzVector tmp((*ii)->GetMomentum(),(*ii)->GetTotalEnergy());
+      tmp *= boost_fragments;
+      (*ii)->SetMomentum(tmp.vect());
+      (*ii)->SetTotalEnergy(tmp.e());
       result->push_back(*ii);
     }
 
@@ -248,6 +289,7 @@
     // theResult.Clear();
     theResult.Clear();
     theResult.SetStatusChange(stopAndKill);
+    G4double Etot(0);
     for(i=0; i<result->size(); i++)
     {
       if((*result)[i]->GetNewlyAdded())
@@ -264,10 +306,24 @@
 	tmp *= toLab;
 	aNew->Set4Momentum(tmp);
 	theResult.AddSecondary(aNew);
+	Etot += tmp.e();
+//        G4cout << "LIBIC: Secondary " << aNew->GetDefinition()->GetParticleName()
+//               <<" "<<  aNew->GetMomentum()
+// 	      <<" "<<  aNew->GetTotalEnergy()
+// 	      << G4endl;
       }
     }
-    debug.push_back("Result analysis");
-    debug.push_back(theResult.GetNumberOfSecondaries());
-    debug.dump();
+    G4ping debug1("debug_G4BinaryLightIonReactionResults");
+    debug1.push_back("Result analysis, secondaries");
+    debug1.push_back(theResult.GetNumberOfSecondaries());
+    debug1.dump();
+    debug1.push_back(" Energy conservation initial/final/delta(init-final) ");
+    debug1.push_back(aTrack.GetTotalEnergy() + m_nucl);
+    debug1.push_back(Etot);
+    debug1.push_back(aTrack.GetTotalEnergy() + m_nucl - Etot);
+    debug1.dump();
+
+    if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### "<<eventcounter<<G4endl;
+
     return &theResult;
   }
