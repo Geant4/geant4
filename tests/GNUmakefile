@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.50 2003-02-27 18:42:50 gcosmo Exp $
+# $Id: GNUmakefile,v 1.51 2003-05-30 14:10:49 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -63,7 +63,7 @@ SUBDIRS += test18
 SUBDIRS += test20
 SUBDIRS += test21
 SUBDIRS += test22
-SUBDIRS += test23
+# SUBDIRS += test23 ## Old test on 'cuts per material', now obsolete 
 SUBDIRS += test24
 SUBDIRS += test25
 SUBDIRS += test26
