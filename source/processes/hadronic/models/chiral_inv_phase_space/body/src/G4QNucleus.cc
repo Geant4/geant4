@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.26 2001-11-26 14:11:46 hpw Exp $
+// $Id: G4QNucleus.cc,v 1.27 2002-12-09 08:48:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -555,14 +555,14 @@ G4bool G4QNucleus::SplitBaryon()
   if(baryn<2) return false;
   //G4double   totM=GetGSMass();                    // GS Mass value of the Nucleus
   G4double   totM=Get4Momentum().m();             // Real Mass value of the Nucleus
-  G4QContent valQ=GetQCZNS();                     // Quark Content of the Nucleus
+  G4QContent valQC=GetQCZNS();                    // Quark Content of the Nucleus
 #ifdef pdebug
-  G4cout<<"G4QNucleus::SplitBaryon: B="<<baryn<<", M="<<totM<<valQ<<G4endl;
+  G4cout<<"G4QNucleus::SplitBaryon: B="<<baryn<<", M="<<totM<<valQC<<G4endl;
 #endif
-  G4int NQ=valQ.GetN();
+  G4int NQ=valQC.GetN();
   if(NQ)                                          // ===> "Can try to split a neutron" case
   {
-    G4QContent resQC=valQ-neutQC;                 // QC of Residual for the Neutron
+    G4QContent resQC=valQC-neutQC;                // QC of Residual for the Neutron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Neutron
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual
     G4double sM=resMas+mNeut;
@@ -571,10 +571,10 @@ G4bool G4QNucleus::SplitBaryon()
 #endif
     if(sM<totM) return true;
   }
-  G4int PQ=valQ.GetP();
+  G4int PQ=valQC.GetP();
   if(PQ)                                          // ===> "Can try to split a proton" case
   {
-    G4QContent resQC=valQ-protQC;                 // QC of Residual for the Proton
+    G4QContent resQC=valQC-protQC;                // QC of Residual for the Proton
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Proton
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual
     G4double CB=CoulombBarrier(1,1);              // Coulomb Barrier for the proton
@@ -585,10 +585,10 @@ G4bool G4QNucleus::SplitBaryon()
 #endif
     if(sM<totM) return true;
   }
-  G4int LQ=valQ.GetL();
+  G4int LQ=valQC.GetL();
   if(LQ)                                          // ===> "Can try to split a lambda" case
   {
-    G4QContent resQC=valQ-lambQC;                 // QC of Residual for the Lambda
+    G4QContent resQC=valQC-lambQC;                // QC of Residual for the Lambda
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Lambda
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual
     G4double sM=resMas+mLamb;
@@ -600,7 +600,7 @@ G4bool G4QNucleus::SplitBaryon()
   G4int AQ=NQ+PQ+LQ;
   if(NQ>0&&PQ>0&&AQ>2)                            // ===> "Can try to split an deuteron" case
   {
-    G4QContent resQC=valQ-deutQC;                 // QC of Residual for the Deuteron
+    G4QContent resQC=valQC-deutQC;                // QC of Residual for the Deuteron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Deuteron
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual
     G4double CB=CoulombBarrier(1,2);              // Coulomb Barrier for the Deuteron
@@ -613,7 +613,7 @@ G4bool G4QNucleus::SplitBaryon()
   }
   if(NQ>1&&PQ>1&&AQ>4)                            // ===> "Can try to split an alpha" case
   {
-    G4QContent resQC=valQ-alphQC;                 // QC of Residual for the Alpha
+    G4QContent resQC=valQC-alphQC;                // QC of Residual for the Alpha
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Alpha
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual
     G4double CB=CoulombBarrier(2,4);              // Coulomb Barrier for the Alpha
@@ -639,14 +639,14 @@ G4bool G4QNucleus::Split2Baryons()
   G4int     baryn=GetA();                         // Baryon Number of the Nucleus
   if(baryn<3) return false;
   G4double   totM=Get4Momentum().m();             // Real Mass value of the Nucleus
-  G4QContent valQ=GetQCZNS();                     // Quark Content of the Nucleus
+  G4QContent valQC=GetQCZNS();                    // Quark Content of the Nucleus
 #ifdef pdebug
-  G4cout<<"G4QNucleus::Split2Baryons: B="<<baryn<<", M="<<totM<<valQ<<G4endl;
+  G4cout<<"G4QNucleus::Split2Baryons: B="<<baryn<<", M="<<totM<<valQC<<G4endl;
 #endif
-  G4int NQ=valQ.GetN();
+  G4int NQ=valQC.GetN();
   if(NQ>1)                                        // ===> "Can try to split two neutrons" case
   {
-    G4QContent resQC=valQ-neutQC-neutQC;          // QC of Residual Nucleus for the Two Neutrons
+    G4QContent resQC=valQC-neutQC-neutQC;         // QC of Residual Nucleus for the Two Neutrons
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Neutrons
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mNeut+mNeut;
@@ -655,10 +655,10 @@ G4bool G4QNucleus::Split2Baryons()
 #endif
     if(sM<totM) return true;
   }
-  G4int PQ=valQ.GetP();
+  G4int PQ=valQC.GetP();
   if(PQ>1)                                        // ===> "Can try to split two protons" case
   {
-    G4QContent resQC=valQ-protQC-protQC;          // QC of Residual Nucleus for the Two Protons
+    G4QContent resQC=valQC-protQC-protQC;         // QC of Residual Nucleus for the Two Protons
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Proton
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mProt;
@@ -669,7 +669,7 @@ G4bool G4QNucleus::Split2Baryons()
   }
   if(PQ&&NQ)                                      // ===> "Can try to split proton+neutron" case
   {
-    G4QContent resQC=valQ-protQC-neutQC;          // QC of Residual Nucleus for the Proton+Neutron
+    G4QContent resQC=valQC-protQC-neutQC;         // QC of Residual Nucleus for the Proton+Neutron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Proton+Neutron
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mNeut;
@@ -678,10 +678,10 @@ G4bool G4QNucleus::Split2Baryons()
 #endif
     if(sM<totM) return true;
   }
-  G4int LQ=valQ.GetL();
+  G4int LQ=valQC.GetL();
   if(LQ&&NQ)                                      // ===> "Can try to split lambda+neutron" case
   {
-    G4QContent resQC=valQ-lambQC-neutQC;          // QC of Residual Nucleus for the Lambda+Neutron
+    G4QContent resQC=valQC-lambQC-neutQC;         // QC of Residual Nucleus for the Lambda+Neutron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Lambda+Neutron
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mLamb+mNeut;
@@ -692,7 +692,7 @@ G4bool G4QNucleus::Split2Baryons()
   }
   if(LQ&&PQ)                                      // ===> "Can try to split lambda+proton" case
   {
-    G4QContent resQC=valQ-protQC-lambQC;          // QC of Residual Nucleus for the Proton+Lambda
+    G4QContent resQC=valQC-protQC-lambQC;         // QC of Residual Nucleus for the Proton+Lambda
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Proton+Lambda
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mLamb;
@@ -703,7 +703,7 @@ G4bool G4QNucleus::Split2Baryons()
   }
   if(LQ>1)                                        // ===> "Can try to split two lambdas" case
   {
-    G4QContent resQC=valQ-lambQC-lambQC;          // QC of Residual Nucleus for the Two Lambdas
+    G4QContent resQC=valQC-lambQC-lambQC;         // QC of Residual Nucleus for the Two Lambdas
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Lambdas
     G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
     G4double sM=resMas+mLamb+mLamb;
