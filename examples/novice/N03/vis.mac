@@ -15,12 +15,12 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-# Use this open statement to get a .prim file
+# Use this open statement to get an .eps and .prim files
 # suitable for viewing in DAWN.
 /vis/open DAWNFILE
 #
 # Use this open statement instead for OpenGL in immediate mode.
-#/vis/open OGLIX
+/vis/open OGLIX
 #
 # Use this open statement instead to get a HepRep version 1 file
 # suitable for viewing in WIRED.
@@ -40,7 +40,7 @@
 /vis/scene/endOfEventAction accumulate
 #
 # At end of each run, an automatic flush causes graphical output.
-/run/beamOn 1
+#/run/beamOn 1
 # When you exit Geant4, you will find a file called scene-0.heprep.zip.
 # Unzipping this will give you three separate HepRep files suitable for
 # viewing in WIRED.
