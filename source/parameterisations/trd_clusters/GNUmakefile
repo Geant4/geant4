@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.3 2004-12-13 18:25:14 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2004-12-15 08:44:55 gcosmo Exp $
 # ---------------------------------------------------------------
-# GNUmakefile for parameterisations library.  G.Cosmo, 14/11/2000
+# GNUmakefile for trd_models library.  G.Cosmo, 14/11/2000
 # ---------------------------------------------------------------
 
-name := G4parmodels
+name := G4trdmodels
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

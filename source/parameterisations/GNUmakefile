@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.8 2004-12-15 08:44:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2004-12-15 08:49:47 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for parameterisations library.  HPW 09-Nov-04.
 # ----------------------------------------------------------------
 
-name := G4parmodels 
+name := G4parmodels
 
 SUBDIRS := gflash trd_clusters  
 SUBLIBS = G4gflash G4trdmodels
