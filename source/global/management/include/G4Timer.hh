@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.1 1999-01-07 16:09:02 gunter Exp $
+// $Id: G4Timer.hh,v 1.2 1999-05-17 14:39:16 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,7 @@
 #endif  /* WIN32 */
 
 #include "globals.hh"
+#undef os_times
 
 class ostream;
 
