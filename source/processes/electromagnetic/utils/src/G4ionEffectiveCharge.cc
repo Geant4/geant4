@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.7 2005-01-25 19:10:23 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.8 2005-01-25 19:20:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,7 +204,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (zi13 * (6.0 + q)) ;
-    chargeCorrection = sq * (1 + 0.5*(1.0/q - 1.0)*std::log(1.0 + lambda*lambda)/(vF*vF) );
+    chargeCorrection = sq * (1.0 + (0.5/q - 0.5)*std::log(1.0 + lambda*lambda)/(vF*vF) );
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 
