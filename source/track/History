@@ -1,4 +1,4 @@
-$Id: History,v 1.12 1999-10-06 06:56:42 kurasige Exp $
+$Id: History,v 1.13 1999-11-07 16:31:24 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 7, 1999 H.Kurashige (track-V00-01-01)
+-  Added comments for "Software Reference Manual" 
+
 Oct 5, 1999 H,Kurashige (track-V00-01-00)
 -  Added mass/charge change in G4ParticleChange
 -  Modified G4ParticleChange::CheckIt
