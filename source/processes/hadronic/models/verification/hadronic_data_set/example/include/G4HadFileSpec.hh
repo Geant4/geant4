@@ -51,10 +51,11 @@ private:
   
   G4String&  fprimary;
   G4Isotope* fisotope;
+  G4Element*  felement;
+  G4Material* fmaterial;
   G4String&  fsecondary;
   G4String&  fprocess;
-  G4Material* fmaterial;
-  G4Element*  felement;
+ 
   
 };
 #endif
