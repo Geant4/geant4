@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 1999-12-14 13:58:46 stesting Exp $
+# $Id: GNUmakefile,v 1.13 1999-12-15 15:39:05 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -9,7 +9,13 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-#Genuine tests...
+# Symbolic links to novice examples...
+EXAMPLES = 01 02 03 04 05 06
+
+# Symbolic links to persistency examples...
+PERSISTENCY += 01 02
+
+# System Tests...
 SUBDIRS  = test01 ## Geometry - CSG solids and navigator.
                   ## (Action? Augment, plus Booleans.)
 SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
@@ -46,47 +52,41 @@ SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions).  (Derived
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16
 
-# Symbolic links to novice examples...
-EXAMPLES = 01 02 03 04 05 06
-
-# Symbolic links to persistency examples...
-PERSISTENCY += 01 02
-
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
 all:
-	@$(ECHO) Making libG4TestTool.a...
-	@cd tools/lib; $(MAKE)
-	@$(ECHO) Making hadronic exercisers...
-	@for dir in $(HADEXERDIRS); \
-	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done
-	@$(ECHO) Making tests...
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
 	@$(ECHO) Making links to examples...
 	@$(MAKE) examples_links
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE)); \
-	done
+	done;:
 ifdef G4USE_HEPODBMS
 	@for nn in $(PERSISTENCY); do \
 	  (cd test4$$nn; $(MAKE)); \
-	done
+	done;:
 endif
+	@$(ECHO) Making libG4TestTool.a for System Tests...
+	@cd tools/lib; $(MAKE)
+	@$(ECHO) Making hadronic exercisers for System Tests...
+	@for dir in $(HADEXERDIRS); \
+	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
+	@$(ECHO) Making System Tests...
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done;:
 
 clean:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nndir; $(MAKE) clean); \
-	done
+	done;:
 	@$(MAKE) clean_examples_links
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done;:
 
 clean_libs:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE) clean_libs); \
-	done
+	done;:
 	@$(MAKE) clean_examples_links
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done;:
 
 examples_links:
 	@$(MAKE) clean_examples_links
@@ -102,7 +102,7 @@ examples_links:
 	  ln -s $$exdir/$$exout $$testdir/$$testout; \
 	  ln -s $(G4WORKDIR)/bin/$(G4SYSTEM)/exampleN$$nn \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
-	done
+	done;:
 	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.in \
           test104/test104.EMtest.in
 	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
@@ -119,7 +119,7 @@ examples_links:
 	  ln -s $$exdir/$$exout $$testdir/$$testout; \
 	  ln -s $$exdir/PersistentEx$${nn}run \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
-	done
+	done;:
 
 clean_examples_links:
 	@rm -f test104/test104.EMtest.in
@@ -133,7 +133,7 @@ clean_examples_links:
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
-	done
+	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
 	  testin=test4$$nn.in; \
@@ -143,4 +143,4 @@ clean_examples_links:
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
-	done
+	done;:
