@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.12 2001-08-05 02:29:00 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.13 2001-09-10 10:49:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -56,6 +56,7 @@ public:
   static void          GetNewDoublePairValue(const G4String& paramString,
 					     G4double& xval,
 					     G4double& yval);
+  void UpdateVisManagerScene (const G4String& sceneName = "");
 
 protected:
   static G4VisManager* fpVisManager;

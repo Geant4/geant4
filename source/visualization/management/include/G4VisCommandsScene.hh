@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.11 2001-08-11 21:39:55 johna Exp $
+// $Id: G4VisCommandsScene.hh,v 1.12 2001-09-10 10:49:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -42,7 +42,6 @@ public:
 protected:
   G4String CurrentSceneName ();
   void UpdateCandidateLists ();
-  void UpdateVisManagerScene (const G4String& sceneName = "");
 private:
   G4VVisCommandScene (const G4VVisCommandScene&);
   G4VVisCommandScene& operator = (const G4VVisCommandScene&);
