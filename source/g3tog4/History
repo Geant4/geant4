@@ -1,12 +1,12 @@
-$Id: History,v 1.8 1999-05-06 18:01:34 lockman Exp $
+$Id: History,v 1.9 1999-05-11 11:14:53 japost Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
-g3tog4-01-00-03 24-Apr-1999 Lockman
+g3tog4-01-00-03  6-May-1999 Lockman
 - G3MatTable, G3RotTable, G3MedTable: updated to use RWTPtrOrderedVector 
   instead of RWTPtrHashDictionary
 
-g3tog4-01-00-02 24-Apr-1999 Lockman
+g3tog4-01-00-02  5-May-1999 Lockman
 - temporarily comment out G4gsdv* code
 - G4gstmed: now just store a link between tracking medium number and assoicated
   G4Material pointer
@@ -16,7 +16,7 @@ g3tog4-01-00-02 24-Apr-1999 Lockman
 - tog4.F, g3routines.F: generate gsmixt instructions in call list
 - clGeometry.cc: cleaned up and added some default commands
 - added G3toG4EventAction and EventActionMessenger classes to draw tracks
-- GNUmakefile: clean now cleans g3tog4 and all subdirectories
+- GNUmakefile: clean now cleans g3tog4 and all subdirectories      / 24-Apr-1999 Lockman
 - GNUmakefile: cleanf: $(RM) now runs quietly
 - GNUmakefile: re-enabled libF target
 - README: updated instructions on how to configure environment and make
