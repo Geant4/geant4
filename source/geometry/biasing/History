@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2002-08-13 14:18:25 dressel Exp $
+$Id: History,v 1.16 2002-08-29 15:40:39 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug,  29th 2002 M.Dressel internal-1-geombias-V04-01-01
+     renaming of G4PTouchableKey to G4GeometryCell 
+     changing  G4VIStore and G4IStore 
+     and dependants
 
 Aug,  13th, 2002 M.Dressel
   removed G4VPrintableScorer.hh G4VPrintableScorerFactory.hh

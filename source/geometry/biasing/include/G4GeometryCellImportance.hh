@@ -21,69 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4GeometryCellImportance.hh,v 1.1 2002-08-29 15:31:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ProcessPlacer
+// Class G4GeometryCellImportance
 //
 // Class description:
 //
-// Used internally by importance sampling and scoring. 
-// See G4VProcessPlacer.hh.
+// Used internally by importance sampling. 
+// It is acontainer for "cell" importance value pairs.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ProcessPlacer_hh
-#define G4ProcessPlacer_hh G4ProcessPlacer_hh 
+#ifndef G4GeometryCellImportance_hh
+#define G4GeometryCellImportance_hh G4GeometryCellImportance_hh 
 
+#include "g4std/map"
 #include "globals.hh"
-#include "G4VProcessPlacer.hh"
+#include "G4GeometryCell.hh"
 
-class G4ProcessManager;
-class G4ProcessVector;
+typedef G4std::map<G4GeometryCell, G4double, G4GeometryCellComp> G4GeometryCellImportance;
+  // implement container G4GeometryCellImportance as map
 
-class G4ProcessPlacer : public G4VProcessPlacer
-{
-
-public:  // with description
-
-  G4ProcessPlacer(const G4String &particlename);
-    // create a process placer for a particle type
-
-  void AddProcessAsLastDoIt(G4VProcess *process);
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called last
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
-
-  void AddProcessAsSecondDoIt(G4VProcess *process);
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called second
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
-
-  void RemoveProcess(G4VProcess *process);
-    // removes a given process 
-
-private:
-
-  G4ProcessManager &GetProcessManager();
-
-  enum SecondOrLast
-  {
-    eSecond = 1,            
-    eLast = 0
-  };
-
-  void AddProcessAs(G4VProcess *process, SecondOrLast);
-
-  void PrintProcVec(G4ProcessVector* processVec);
-  void PrintPostStepGPILVec();  
-  void PrintPostStepDoItVec();  
-
-private:
-
-  G4String fParticleName;
-
-};
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli);
 
 #endif

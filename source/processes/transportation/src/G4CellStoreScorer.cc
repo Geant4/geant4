@@ -21,60 +21,64 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTouchableKey.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
+// $Id: G4CellStoreScorer.cc,v 1.1 2002-08-29 15:32:37 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4PTouchableKey
+// GEANT 4 class source file
 //
-// Class description:
+// G4CellStoreScorer
 //
-// This class is usde by scoring and importance sampling.
-// It serves to address a "cell". A "cell" is somewhat
-// related to a touchable in Geant4. It is identified by a reference
-// to a G4VPhysicalVolume and a number (replica number).
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4PTouchableKey_hh
-#define G4PTouchableKey_hh G4PTouchableKey_hh 
 
-#include "globals.hh"
+#include "G4CellStoreScorer.hh"
 
-class G4VPhysicalVolume;
+#include "G4VCellScorer.hh"
 
-class G4PTouchableKey
-{
+#include "G4Track.hh"
+#include "G4GeometryCell.hh"
+#include "G4Step.hh"
+#include "G4PStep.hh"
+#include "G4VCellScorerStore.hh"
 
-public:  // with description
+G4CellStoreScorer::G4CellStoreScorer(G4VCellScorerStore &csc) :
+  fCellScorerStore(csc)
+{}
 
-  G4PTouchableKey(const G4VPhysicalVolume &aVolume, G4int RepNum);
-    // initialise volume and replica number
+G4CellStoreScorer::~G4CellStoreScorer()
+{}
 
-  ~G4PTouchableKey();
-    // simple destruction
 
-  const G4VPhysicalVolume *fVPhysiclaVolume;
-    // pinter to the G4VPhysicalVolume of the "cell" 
+void G4CellStoreScorer::
+Score(const G4Step &aStep, const G4PStep &aPstep){
+  G4Track *track = aStep.GetTrack();
+  
+  if (track->GetTrackStatus()==fStopAndKill) {
+    G4cout << "G4CellStoreScorer::Score:   track status is StopAndKill -> do nothing" << G4endl;
+  }
+  else { 
+    // chose the cells to be scored
+    G4GeometryCell pre_gCell(aPstep.fPreGeometryCell); 
+    G4GeometryCell post_gCell(aPstep.fPostGeometryCell); 
+    G4VCellScorer *post_cs = fCellScorerStore.GetCellScore(post_gCell);
+    if (aPstep.fCrossBoundary) { 
+      // entering post_gCell
+      if (post_cs) {
+	post_cs->ScoreAnEnteringStep(aStep, post_gCell);
+      }
+      // exiting pre_gCell
+      G4VCellScorer *pre_cs = fCellScorerStore.GetCellScore(pre_gCell);
+      if (pre_cs) {
+	pre_cs->ScoreAnExitingStep(aStep, pre_gCell);
+      }
+    } 
+    else {
+      // step in post_gCell
+      if (post_cs) {
+	post_cs->ScoreAnInVolumeStep(aStep, post_gCell);
+      }
+    }
+  }
+  
+}
 
-  G4int fRepNum;
-    // replica number of the "cell"
-};
-
-// -----------------------------------------------------------------------
-
-class G4PTkComp
-{
-
-public:  // without description
-
-  G4bool operator() (const G4PTouchableKey &k1,
-                     const G4PTouchableKey &k2) const;
-};
-
-// -----------------------------------------------------------------------
-
-G4bool operator==(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
-G4bool operator!=(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
-
-#endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceGeometryConstructor.cc,v 1.3 2002-08-28 15:16:22 dressel Exp $
+// $Id: G4ImportanceGeometryConstructor.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ ConstructWorldVolume(G4VSolid *worldsolid){
   
 
   fIStore = new G4IStore(*fWorldVolume);
-  fIStore->AddImportanceRegion(1, *fWorldVolume, -1); 
+  fIStore->AddImportanceGeometryCell(1, *fWorldVolume, -1); 
 
   fWorldImpMess = new G4WorldImpMess(this);
   

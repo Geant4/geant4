@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.10 2002-07-11 08:12:22 dressel Exp $
+// $Id: exampleB02.cc,v 1.11 2002-08-29 15:37:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,12 +46,12 @@
 
 #include "B02ScoringDetectorConstruction.hh"
 
-// Files specific for scoring 
-#include "G4StandardScorer.hh"
+// Files specific for scoring
+#include "G4Scorer.hh"
 #include "G4ParallelScoreSampler.hh"
 
 // table for scores
-#include "G4StandardScoreTable.hh"
+#include "G4ScoreTable.hh"
 
 
 int main(int argc, char **argv)
@@ -78,24 +78,21 @@ int main(int argc, char **argv)
   B02ScoringDetectorConstruction scoringdetector;
   
   // create scorer and sampler to score neutrons in the "scoring" detector
-  G4StandardScorer pScorer;
+
+  G4Scorer scorer; // a scorer   
+
   G4ParallelScoreSampler pmgr(*(scoringdetector.Construct()), 
-			      "neutron", pScorer);
-  pmgr.Initialize();
+			      "neutron", scorer); // sample w. scoting
+  pmgr.Initialize();      // set up the necessary processes
 
   runManager->BeamOn(numberOfEvent);
 
   // ======= after running ============================
 
-  // print all the numbers calculated from the scorer
-  *myout << "output pScorer, scoring detector, neutron" << G4endl;
-  *myout << pScorer << G4endl;
-  *myout << "----------------------------------------------"  << G4endl;
-
   // print a table
+  G4ScoreTable sp;
+  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
 
-  G4StandardScoreTable stable;
-  stable.Print(pScorer.GetMapPtkStandardCellScorer(), myout);
  
 
   return 0;

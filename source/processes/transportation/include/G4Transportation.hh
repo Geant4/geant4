@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.6 2001-11-28 18:27:50 japost Exp $
+// $Id: G4Transportation.hh,v 1.7 2002-08-29 15:32:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
+// $Id: G4PImportanceWWindowScoreSampler.hh,v 1.2 2002-08-29 15:32:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

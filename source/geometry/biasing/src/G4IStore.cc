@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.5 2002-08-28 15:16:22 dressel Exp $
+// $Id: G4IStore.cc,v 1.6 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,7 +33,7 @@
 
 #include "G4IStore.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4PTouchableKey.hh"
+#include "G4GeometryCell.hh"
 #include "G4PStepStream.hh"
 
 
@@ -50,79 +50,79 @@ G4VPhysicalVolume &G4IStore::GetWorldVolume()
   return fWorldVolume;
 }
 
-void G4IStore::SetInternalIterator(const G4PTouchableKey &ptk) const
+void G4IStore::SetInternalIterator(const G4GeometryCell &gCell) const
 {
   //  if (!IsInWorld(aVolume)) {
   //    Error("SetInternalIterator: physical volume not in this World");
   //  }
-  fCurrentIterator = fPtki.find(ptk);
+  fCurrentIterator = fGeometryCelli.find(gCell);
 }
 
-void G4IStore::AddImportanceRegion(G4double importance,
-			 const G4PTouchableKey &ptk){
+void G4IStore::AddImportanceGeometryCell(G4double importance,
+			 const G4GeometryCell &gCell){
   if (importance < 0 ) {
-    Error("AddImportanceRegion: invalid importance value given");
+    Error("AddImportanceGeometryCell: invalid importance value given");
   }  
-  SetInternalIterator(ptk);
-  if (fCurrentIterator!=fPtki.end()) {
-    Error("AddImportanceRegion: Region allready exists");
+  SetInternalIterator(gCell);
+  if (fCurrentIterator!=fGeometryCelli.end()) {
+    Error("AddImportanceGeometryCell: Region allready exists");
   }
-  fPtki[ptk] = importance;
+  fGeometryCelli[gCell] = importance;
 }
 
-void G4IStore::AddImportanceRegion(G4double importance,
+void G4IStore::AddImportanceGeometryCell(G4double importance,
 				   const G4VPhysicalVolume &aVolume,
 				   G4int aRepNum)
 {
-  AddImportanceRegion(importance,
-		      G4PTouchableKey(aVolume, aRepNum));
+  AddImportanceGeometryCell(importance,
+		      G4GeometryCell(aVolume, aRepNum));
 }
 
 void G4IStore::ChangeImportance(G4double importance,
-				const G4PTouchableKey &ptk){
+				const G4GeometryCell &gCell){
   if (importance < 0 ) {
     Error("ChangeImportance: Invalid importance value given");
   }
-  SetInternalIterator(ptk);
-  if (fCurrentIterator==fPtki.end()) {
+  SetInternalIterator(gCell);
+  if (fCurrentIterator==fGeometryCelli.end()) {
     Error("ChangeImportance: Region does not exist");
   }
-  fPtki[ptk] = importance;
+  fGeometryCelli[gCell] = importance;
 
 }
 void G4IStore::ChangeImportance(G4double importance,
 				const G4VPhysicalVolume &aVolume,
 				G4int aRepNum)
 {
-  ChangeImportance(importance, G4PTouchableKey(aVolume, aRepNum));
+  ChangeImportance(importance, G4GeometryCell(aVolume, aRepNum));
 }
 
 G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
 				 G4int aRepNum) const
 {  
-  SetInternalIterator(G4PTouchableKey(aVolume, aRepNum));
-  if (fCurrentIterator==fPtki.end()) {
+  SetInternalIterator(G4GeometryCell(aVolume, aRepNum));
+  if (fCurrentIterator==fGeometryCelli.end()) {
     Error("GetImportance: Region does not exist");
   }
   return (*fCurrentIterator).second;
 }
 
 
-G4double G4IStore::GetImportance(const G4PTouchableKey &ptk) const
+G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
 {
-  SetInternalIterator(ptk);
-  if (fCurrentIterator==fPtki.end()) {
-    G4cout << "PTouchableKey ptk: " << ptk << G4endl;
+  SetInternalIterator(gCell);
+  if (fCurrentIterator==fGeometryCelli.end()) {
+    G4cout << "PGeometryCell gCell: " << gCell << G4endl;
     G4cout << "Not found in: " << G4endl;
-    G4cout << fPtki << G4endl;
-    Error("GetImportance(ptk): Region does not exist");
+    G4cout << fGeometryCelli << G4endl;
+    Error("GetImportance(gCell): Region does not exist");
   }
   return (*fCurrentIterator).second;
 }
 
-G4bool G4IStore::IsKnown(const G4PTouchableKey &ptk) const {
-  SetInternalIterator(ptk);
-  return (fCurrentIterator!=fPtki.end());
+G4bool G4IStore::IsKnown(const G4GeometryCell &gCell) const {
+  SetInternalIterator(gCell);
+  return (fCurrentIterator!=fGeometryCelli.end());
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStepStream.hh,v 1.5 2002-04-10 13:13:06 dressel Exp $
+// $Id: G4PStepStream.hh,v 1.6 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,17 +29,17 @@
 //
 // Declaration description:
 //
-// declarations of streams for G4PTouchableKey and G4PStep
+// declarations of streams for G4GeometryCell and G4PStep
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4PStepStream_hh
 #define G4PStepStream_hh G4PStepStream_hh
 
-#include "G4PTouchableKey.hh"
+#include "G4GeometryCell.hh"
 #include "G4PStep.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4PTouchableKey &tk);
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk);
 G4std::ostream& operator<<(G4std::ostream &out, const G4PStep &ps);
 
 #endif

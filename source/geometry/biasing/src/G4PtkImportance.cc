@@ -21,23 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4PtkImportance.cc,v 1.4 2002-04-09 16:23:50 gcosmo Exp $
+// $Id: G4PtkImportance.cc,v 1.5 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4PtkImportance.cc
+// G4GeometryCellImportance.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4PtkImportance.hh"
+#include "G4GeometryCellImportance.hh"
 #include "G4PStepStream.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4PtkImportance &ptki)
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli)
 {
-  for (G4PtkImportance::const_iterator it = ptki.begin();
-       it != ptki.end(); it++) {
+  for (G4GeometryCellImportance::const_iterator it = gCelli.begin();
+       it != gCelli.end(); it++) {
     out << (*it).first << ", importance = ";
     out << (*it).second << "\n";
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.3 2002-04-10 13:13:07 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,25 +56,25 @@ G4ParallelStepper &G4ParallelStepper::operator=(const G4ParallelStepper &rhs)
   return *this;
 }
 
-void G4ParallelStepper::Init(const G4PTouchableKey &aptk)
+void G4ParallelStepper::Init(const G4GeometryCell &agCell)
 {
   if (!fPStep) {
-    fPStep = new G4PStep(aptk, aptk);
+    fPStep = new G4PStep(agCell, agCell);
   }
   else {
-    fPStep->fPreTouchableKey = aptk;
-    fPStep->fPostTouchableKey = aptk;
+    fPStep->fPreGeometryCell = agCell;
+    fPStep->fPostGeometryCell = agCell;
   }
   UnSetCrossBoundary();
 }
 
-void G4ParallelStepper::Update(const G4PTouchableKey &aptk)
+void G4ParallelStepper::Update(const G4GeometryCell &agCell)
 {
   if (!fPStep) {
     Error("fPStep == 0, Init not called?");
   }
-  fPStep->fPreTouchableKey = fPStep->fPostTouchableKey;
-  fPStep->fPostTouchableKey = aptk;
+  fPStep->fPreGeometryCell = fPStep->fPostGeometryCell;
+  fPStep->fPostGeometryCell = agCell;
   fPStep->fCrossBoundary = true;
 }
 

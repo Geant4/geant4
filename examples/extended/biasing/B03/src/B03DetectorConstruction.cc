@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B03DetectorConstruction.cc,v 1.7 2002-04-19 10:54:28 gcosmo Exp $
+// $Id: B03DetectorConstruction.cc,v 1.8 2002-08-29 15:37:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,7 +49,7 @@ B03DetectorConstruction::B03DetectorConstruction()
 B03DetectorConstruction::~B03DetectorConstruction()
 {;}
 
-G4VIStore* B03DetectorConstruction::GetIStore()
+G4IStore* B03DetectorConstruction::GetIStore()
 {
   if (!fIStore) G4Exception("B03DetectorConstruction::fIStore empty!");
   return fIStore;
@@ -231,9 +231,9 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 	   << (*it)->GetName() << G4endl;
     if (*it == worldCylinder_phys) {
       // repnum -1 
-      fIStore->AddImportanceRegion(i, **it, -1); 
+      fIStore->AddImportanceGeometryCell(i, **it, -1); 
     }
-    fIStore->AddImportanceRegion(i, **it);
+    fIStore->AddImportanceGeometryCell(i, **it);
   }
   
   return worldCylinder_phys;

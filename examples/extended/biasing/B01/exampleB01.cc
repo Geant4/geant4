@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.11 2002-07-11 08:12:22 dressel Exp $
+// $Id: exampleB01.cc,v 1.12 2002-08-29 15:37:24 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,11 +45,11 @@
 #include "B01PrimaryGeneratorAction.hh"
 
 // Files specific for scoring 
-#include "G4StandardScorer.hh"
+#include "G4Scorer.hh"
 #include "G4MassScoreSampler.hh"
 
 // table for scores
-#include "G4StandardScoreTable.hh"
+#include "G4ScoreTable.hh"
 
 int main(int argc, char **argv)
 {  
@@ -72,23 +72,18 @@ int main(int argc, char **argv)
   runManager->Initialize();
 
   // create scorer and sampler to score neutrons in the detector
-  G4StandardScorer mScorer;
-  G4MassScoreSampler msm(mScorer, "neutron"); // to be don after 
+
+  G4Scorer scorer; // a scorer 
+
+  G4MassScoreSampler msm(scorer, "neutron"); // to be done after 
   msm.Initialize();                           // runManager->Initialize()
 
   runManager->BeamOn(numberOfEvent);
 
   // ======= after running ============================
 
-  // print all the numbers calculated from the scorer
-  *myout << "output mScorer, mass geometry, neutron" << G4endl;
-  *myout << mScorer << G4endl;
-  *myout << "----------------------------------------------"  << G4endl;
-
-  // print some exclusive numbers
-
-  G4StandardScoreTable stable;
-  stable.Print(mScorer.GetMapPtkStandardCellScorer(), myout);
+  G4ScoreTable sp;
+  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
 
   return 0;
 }

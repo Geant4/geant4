@@ -20,48 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4PTouchableKey.cc,v 1.2 2002-04-09 16:23:50 gcosmo Exp $
+// $Id: G4CellStoreScorer.hh,v 1.1 2002-08-29 15:32:37 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4CellStoreScorer
 //
-// G4PTouchableKey.cc
+// Class description:
+// 
+// This class invokes a G4VCellScorer according to the current
+// step:
+//  - pre and post step are in  a volume -> chose post gCell (cell)
+//      and call ScoreInVolume
+//  - cross boundary between gCells (cells)
+//      call ScoreAnExtingStep on the pre cell
+//      and ScoreAnEnteringStep on the post cell.
 //
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+//
 
-#include "G4PTouchableKey.hh"
+#ifndef G4CellStoreScorer_hh
+#define G4CellStoreScorer_hh G4CellStoreScorer_hh
 
-G4PTouchableKey::G4PTouchableKey(const G4VPhysicalVolume &aVolume,
-                                 G4int RepNum)
- : fVPhysiclaVolume(&aVolume),
-   fRepNum(RepNum)
-{}
 
-G4PTouchableKey::~G4PTouchableKey()
-{}
+#include "G4VPScorer.hh"
 
-G4bool G4PTkComp::operator() (const G4PTouchableKey &k1,
-                              const G4PTouchableKey &k2) const
+class G4VCellScorerStore;
+class G4Step;
+class G4PStep;
+class G4GeometryCell;
+
+class G4CellStoreScorer : public G4VPScorer
 {
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) {
-    return  k1.fVPhysiclaVolume < k2.fVPhysiclaVolume;
-  } else {
-    return k1.fRepNum < k2.fRepNum;
-  }
-}
+public:
+  G4CellStoreScorer(G4VCellScorerStore &csc);
+    // take a  G4VCellScorerStore created by the user to score
+    // the cells contained in it. 
+  ~G4CellStoreScorer();
+  void Score(const G4Step &aStep, const G4PStep &aPStep);
+    // called to score a track for every step
+ 
+private:
+  G4VCellScorerStore &fCellScorerStore;
+};
 
-G4bool operator==(const G4PTouchableKey &k1, const G4PTouchableKey &k2)
-{
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return false;
-  if (k1.fRepNum != k2.fRepNum) return false;
-  return true;
-}
 
-G4bool operator!=(const G4PTouchableKey &k1, const G4PTouchableKey &k2)
-{
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return true;
-  if (k1.fRepNum != k2.fRepNum) return true;
-  return false;  
-}
+
+#endif
+

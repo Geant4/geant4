@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
+// $Id: G4ParallelStepper.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -60,11 +60,11 @@ public:  // with description
   G4PStep GetPStep() const {return *fPStep;}
     // get the current G4PStep
   
-  void Init(const G4PTouchableKey &aptk);
+  void Init(const G4GeometryCell &agCell);
     // initialise the parallel stepper and the G4PStep
-    // pre and post G4PTouchableKey of the step are set equal
+    // pre and post G4GeometryCell of the step are set equal
 
-  void Update(const G4PTouchableKey &aptk);
+  void Update(const G4GeometryCell &agCell);
     // to be called when crossing a boundary of the 
     // "parallel" geometry to update the G4PStep
 

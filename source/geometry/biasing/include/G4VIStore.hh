@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.5 2002-08-28 15:16:21 dressel Exp $
+// $Id: G4VIStore.hh,v 1.6 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@
 
 #include "globals.hh"
 
-class G4PTouchableKey;
+class G4GeometryCell;
 class G4VPhysicalVolume;
 
 class  G4VIStore
@@ -54,12 +54,12 @@ public:  // with description
   G4VIStore(G4VPhysicalVolume &worldVolume){}
   virtual  ~G4VIStore(){}
 
-  virtual G4double GetImportance(const G4PTouchableKey &ptk) const = 0;
-    // derive a importance value of a "cell" addresed by a G4PTouchableKey
+  virtual G4double GetImportance(const G4GeometryCell &gCell) const = 0;
+    // derive a importance value of a "cell" addresed by a G4GeometryCell
     // from the store.
 
-  virtual G4bool IsKnown(const G4PTouchableKey &ptk) const = 0;
-    // returns true if the ptk is in the store, else false 
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const = 0;
+    // returns true if the gCell is in the store, else false 
 
   virtual G4VPhysicalVolume &GetWorldVolume() = 0;
 };

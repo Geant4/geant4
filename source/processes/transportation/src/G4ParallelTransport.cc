@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.5 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4ParallelTransport.cc,v 1.6 2002-08-29 15:32:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -77,7 +77,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
     stepLength = fPgeodriver.
       ComputeStepLengthInit(aTrack.GetPosition(),
 			    aTrack.GetMomentumDirection());
-    fPStepper.Init(fPgeodriver.GetCurrentTouchableKey());
+    fPStepper.Init(fPgeodriver.GetCurrentGeometryCell());
     fCrossBoundary = false;
   }
   else if (fCrossBoundary) {
@@ -113,7 +113,7 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
   fCrossBoundary = true;
   fPgeodriver.LocateOnBoundary(aTrack.GetPosition(), 
 			       aTrack.GetMomentumDirection());
-  fPStepper.Update(fPgeodriver.GetCurrentTouchableKey());
+  fPStepper.Update(fPgeodriver.GetCurrentGeometryCell());
 
   return fParticleChange;
 }

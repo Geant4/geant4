@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCellScorer.hh,v 1.1 2002-08-13 10:03:29 dressel Exp $
+// $Id: G4VCellScorer.hh,v 1.2 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,17 +41,17 @@
 #define G4VCellScorer_hh G4VCellScorer_hh
 
 class G4Step;
-class G4PTouchableKey;
+class G4GeometryCell;
 
 class G4VCellScorer {
 public:  
   virtual  ~G4VCellScorer(){}
   virtual void ScoreAnExitingStep(const G4Step &aStep, 
-				  G4PTouchableKey ptk) = 0;
+				  G4GeometryCell gCell) = 0;
   virtual void ScoreAnEnteringStep(const G4Step &aStep, 
-				   G4PTouchableKey ptk) = 0;
+				   G4GeometryCell gCell) = 0;
   virtual void ScoreAnInVolumeStep(const G4Step &aStep, 
-				   G4PTouchableKey ptk) = 0;
+				   G4GeometryCell gCell) = 0;
 };
 
 #endif

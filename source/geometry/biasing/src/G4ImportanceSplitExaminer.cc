@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.cc,v 1.1 2002-05-31 08:07:47 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.cc,v 1.2 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4Nsplit_Weight G4ImportanceSplitExaminer::Examine(G4double w) const
 {
   G4PStep pstep = fPStepper.GetPStep();
   return fIalgorithm.
-    Calculate(fIfinder.GetIPre_over_IPost(pstep.fPreTouchableKey,
-					  pstep.fPostTouchableKey), 
+    Calculate(fIfinder.GetIPre_over_IPost(pstep.fPreGeometryCell,
+					  pstep.fPostGeometryCell), 
 	      w);
 }

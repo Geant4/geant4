@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.6 2002-08-13 10:03:29 dressel Exp $
+// $Id: G4ParallelNavigator.hh,v 1.7 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,7 +44,7 @@
 
 #include "G4TouchableHandle.hh"
 class G4Navigator;
-class G4PTouchableKey ;
+class G4GeometryCell ;
 class G4VPhysicalVolume;
 
 class G4ParallelNavigator : public G4VPGeoDriver
@@ -58,7 +58,7 @@ public:  // with description
   ~G4ParallelNavigator();
     // delete Touchable and Navigator
 
-  G4PTouchableKey LocateOnBoundary(const G4ThreeVector &aPosition, 
+  G4GeometryCell LocateOnBoundary(const G4ThreeVector &aPosition, 
 		                   const G4ThreeVector &aDirection);
     // The location of a track according to it's position
     // and direction in case the track crosses a boundary
@@ -67,8 +67,8 @@ public:  // with description
     // (The track crosses the boundary if PostDOIT gets called.)
   
 
-  G4PTouchableKey GetCurrentTouchableKey() const;
-    // get the current G4PTouchableKey of the "parallel" geometry
+  G4GeometryCell GetCurrentGeometryCell() const;
+    // get the current G4GeometryCell of the "parallel" geometry
 
   G4double ComputeStepLengthInit(const G4ThreeVector &aPosition, 
 				 const G4ThreeVector &aDirection);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ITubeFactory.cc,v 1.3 2002-08-28 15:16:22 dressel Exp $
+// $Id: G4ITubeFactory.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ void G4ITubeFactory::AddCell(const G4String &cellname,
 		      fMapNameLogic[cellname],
 		      cellname, fWorldLogic, false, 0);
   
-  fIStore->AddImportanceRegion(1., *(fMapNamePhysical[cellname]));
+  fIStore->AddImportanceGeometryCell(1., *(fMapNamePhysical[cellname]));
 }
 
 void G4ITubeFactory::SetImportance(const G4String &cellname, 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStepStream.cc,v 1.3 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4PStepStream.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PStep.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4PTouchableKey &tk)
+G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk)
 {
   out << "Volume name = " << tk.fVPhysiclaVolume->GetName() << ", ";
   out << "Replica number = " << tk.fRepNum;
@@ -44,8 +44,8 @@ G4std::ostream& operator<<(G4std::ostream &out, const G4PTouchableKey &tk)
 
 G4std::ostream& operator<<(G4std::ostream &out, const G4PStep &ps)
 {
-  out << "PreTouchableKey : " <<  ps.fPreTouchableKey << " ";
-  out << "PostTouchableKey: " <<  ps.fPostTouchableKey << " ";
+  out << "PreGeometryCell : " <<  ps.fPreGeometryCell << " ";
+  out << "PostGeometryCell: " <<  ps.fPostGeometryCell << " ";
   out << "CrossBoundary   : " <<  ps.fCrossBoundary << "\n";
   return out;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.2 2002-05-31 09:56:09 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.3 2002-08-29 15:30:49 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

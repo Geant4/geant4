@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.hh,v 1.2 2002-05-30 16:00:55 dressel Exp $
+// $Id: G4WeightWindowAlgorithm.hh,v 1.3 2002-08-29 15:30:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

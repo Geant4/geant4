@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.8 2002-08-13 10:03:30 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.9 2002-08-29 15:30:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4ParallelNavigator.hh"
 
 #include "G4Navigator.hh"
-#include "G4PTouchableKey.hh"
+#include "G4GeometryCell.hh"
 #include "G4VParallelStepper.hh"
 #include "G4Pstring.hh"
 
@@ -58,7 +58,7 @@ G4ParallelNavigator::~G4ParallelNavigator()
 
 // public functions
 
-G4PTouchableKey G4ParallelNavigator::
+G4GeometryCell G4ParallelNavigator::
 LocateOnBoundary(const G4ThreeVector &aPosition, 
 		 const G4ThreeVector &aDirection)
 {/*
@@ -77,7 +77,7 @@ LocateOnBoundary(const G4ThreeVector &aPosition,
   fNavigator.SetGeometricallyLimitedStep();
   Locate(aPosition, aDirection, true, false);
   //  since the track crosses a boundary ipdate stepper 
-  return GetCurrentTouchableKey();
+  return GetCurrentGeometryCell();
 }
 
 G4double G4ParallelNavigator::
@@ -241,9 +241,9 @@ ComputeStepLengthShifted(const G4String &m,
   return stepLength;
 }
 
-G4PTouchableKey G4ParallelNavigator::GetCurrentTouchableKey() const
+G4GeometryCell G4ParallelNavigator::GetCurrentGeometryCell() const
 {
-  return G4PTouchableKey(*fCurrentTouchableH->GetVolume(),
+  return G4GeometryCell(*fCurrentTouchableH->GetVolume(),
 			 fCurrentTouchableH->GetReplicaNumber());
 }
 

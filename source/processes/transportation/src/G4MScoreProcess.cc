@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.4 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4MScoreProcess.cc,v 1.5 2002-08-29 15:32:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,9 +70,9 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
     G4StepPoint *postpoint = aStep.GetPostStepPoint();
   
 
-    G4PTouchableKey prekey(*(prepoint->GetPhysicalVolume()), 
+    G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
 			   prepoint->GetTouchable()->GetReplicaNumber());
-    G4PTouchableKey postkey(*(postpoint->GetPhysicalVolume()), 
+    G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
 			    postpoint->GetTouchable()->GetReplicaNumber());
 
     G4PStep pstep(prekey, postkey);

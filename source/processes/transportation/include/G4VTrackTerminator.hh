@@ -21,34 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4PMapPtkTallys.hh,v 1.8 2002-04-10 13:13:06 dressel Exp $
+// $Id: G4VTrackTerminator.hh,v 1.1 2002-08-29 15:32:37 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4PMapNameTally and G4PMapPtkTallys
+// Class G4VTrackTerminator
 //
 // Class description:
 //
-// Used by G4PScorer and G4PIScorer as containers for tallies.
-
+// This is an interface for an object which maybe told to kill a track.
+// The type it provides is needed in case importance biasing and
+// scoring is done at the same time. 
+// For navigation in the parallel geometry which is done 
+// by the importance biasing process (it derives from G4ParallelTransport)
+// importance biasing has to be done before scoring (to score the correct
+// volume). But since scoring would not be called if the importance
+// biasing kills a track it only tells a G4VTrackTerminator to kill the 
+// track. The scoring process implements the interface G4VTrackTerminator
+// and is now able to kill the track after it has done the scoring.
+// 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4PMapPtkTallys_hh 
-#define G4PMapPtkTallys_hh G4PMapPtkTallys_hh 
 
-#include "g4std/map"
-#include "globals.hh"
-#include "g4std/iostream"
-#include "G4PTouchableKey.hh"
-#include "G4Sigma.hh"
+#ifndef G4VTrackTerminator_hh
+#define G4VTrackTerminator_hh G4VTrackTerminator_hh
 
-typedef G4std::map<const char *, G4Sigma> G4PMapNameTally;
-  // container for a G4Sigma to each tally 
-typedef G4std::map<G4PTouchableKey, G4PMapNameTally, G4PTkComp> G4PMapPtkTallys; 
-  // container for a G4PMapNameTally to each "cell" addressed by a 
-  // G4PTouchableKey
-
-G4std::ostream& operator<<(G4std::ostream &out, const G4PMapNameTally &tally);
-G4std::ostream& operator<<(G4std::ostream &out, const G4PMapPtkTallys &ptktally);
+class G4VTrackTerminator {
+public:
+  virtual ~G4VTrackTerminator(){}
+  virtual void KillTrack() = 0;
+};
 
 #endif

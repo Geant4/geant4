@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-07-11 16:30:35 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2002-08-29 15:37:25 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,6 +13,8 @@ endif
 
 .PHONY: all
 all: lib bin
+
+include /afs/cern.ch/user/d/dressel/G4scoring/scoring.gmk
 
 CPPFLAGS += 
 

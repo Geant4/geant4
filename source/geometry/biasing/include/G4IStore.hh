@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.5 2002-08-28 15:16:21 dressel Exp $
+// $Id: G4IStore.hh,v 1.6 2002-08-29 15:30:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // An implementation of a "importance store" with the interface
 // G4VIStore. See description in G4VIStore.
-// This implementation uses G4PtkImportance as the container
+// This implementation uses G4GeometryCellImportance as the container
 // to store the "cells" together with the importance values.
 // Giving a cell the importance 0 is allowed as
 // a flagging that no biasing should happen between this
@@ -45,7 +45,7 @@
 #define G4IStore_hh G4IStore_hh 
 
 #include "G4VIStore.hh"
-#include "G4PtkImportance.hh"
+#include "G4GeometryCellImportance.hh"
 
 class G4IStore : public G4VIStore
 {
@@ -58,15 +58,15 @@ public:  // with description
   ~G4IStore();
     // destruct
 
-  void AddImportanceRegion(G4double importance,
-			   const G4PTouchableKey &ptk);
-  void AddImportanceRegion(G4double importance,
+  void AddImportanceGeometryCell(G4double importance,
+			   const G4GeometryCell &gCell);
+  void AddImportanceGeometryCell(G4double importance,
 			   const G4VPhysicalVolume &,
 			   G4int aRepNum = 0);
     // Add a "cell" together with a importance value to the store.
 
   void ChangeImportance(G4double importance,
-			const G4PTouchableKey &ptk);
+			const G4GeometryCell &gCell);
   void ChangeImportance(G4double importance,
 			const G4VPhysicalVolume &,
 			G4int aRepNum = 0);
@@ -74,12 +74,12 @@ public:  // with description
 
   G4double GetImportance(const G4VPhysicalVolume &,
 			 G4int aRepNum = 0) const ;
-  G4double GetImportance(const G4PTouchableKey &ptk) const;
-    // derive a importance value of a "cell" addresed by a G4PTouchableKey
+  G4double GetImportance(const G4GeometryCell &gCell) const;
+    // derive a importance value of a "cell" addresed by a G4GeometryCell
     // from the store.
 
-  G4bool IsKnown(const G4PTouchableKey &ptk) const;
-    // returns true if the ptk is in the store, else false 
+  G4bool IsKnown(const G4GeometryCell &gCell) const;
+    // returns true if the gCell is in the store, else false 
 
 
   G4VPhysicalVolume &GetWorldVolume();
@@ -89,15 +89,15 @@ public:  // with description
 private:
 
   G4bool IsInWorld(const G4VPhysicalVolume &) const;
-  void SetInternalIterator(const G4PTouchableKey &ptk) const;
+  void SetInternalIterator(const G4GeometryCell &gCell) const;
   void Error(const G4String &m) const;
   
 private:
  
   G4VPhysicalVolume &fWorldVolume;
-  G4PtkImportance fPtki;
+  G4GeometryCellImportance fGeometryCelli;
 
-  mutable G4PtkImportance::const_iterator fCurrentIterator;
+  mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
 };
 
 #endif

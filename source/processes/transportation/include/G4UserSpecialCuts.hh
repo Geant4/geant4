@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.hh,v 1.4 2001-07-11 10:08:30 gunter Exp $
+// $Id: G4UserSpecialCuts.hh,v 1.5 2002-08-29 15:32:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //                  15 April 1998  M.Maire

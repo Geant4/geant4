@@ -21,29 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4PtkImportance.hh,v 1.5 2002-04-10 13:13:07 dressel Exp $
+// $Id: G4GeometryCell.cc,v 1.1 2002-08-29 15:31:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4PtkImportance
+// GEANT 4 class source file
 //
-// Class description:
+// G4GeometryCell.cc
 //
-// Used internally by importance sampling. 
-// It is acontainer for "cell" importance value pairs.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4PtkImportance_hh
-#define G4PtkImportance_hh G4PtkImportance_hh 
 
-#include "g4std/map"
-#include "globals.hh"
-#include "G4PTouchableKey.hh"
+#include "G4GeometryCell.hh"
 
-typedef G4std::map<G4PTouchableKey, G4double, G4PTkComp> G4PtkImportance;
-  // implement container G4PtkImportance as map
+G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
+                                 G4int RepNum)
+ : fVPhysiclaVolume(&aVolume),
+   fRepNum(RepNum)
+{}
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4PtkImportance &ptki);
+G4GeometryCell::~G4GeometryCell()
+{}
 
-#endif
+G4bool G4GeometryCellComp::operator() (const G4GeometryCell &k1,
+                              const G4GeometryCell &k2) const
+{
+  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) {
+    return  k1.fVPhysiclaVolume < k2.fVPhysiclaVolume;
+  } else {
+    return k1.fRepNum < k2.fRepNum;
+  }
+}
+
+G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2)
+{
+  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return false;
+  if (k1.fRepNum != k2.fRepNum) return false;
+  return true;
+}
+
+G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2)
+{
+  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return true;
+  if (k1.fRepNum != k2.fRepNum) return true;
+  return false;  
+}

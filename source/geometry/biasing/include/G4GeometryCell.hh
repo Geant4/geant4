@@ -21,37 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4PMapPtkTallys.cc,v 1.4 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4GeometryCell.hh,v 1.1 2002-08-29 15:31:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4GeometryCell
 //
-// G4PMapPtkTallys.cc
+// Class description:
 //
+// This class is usde by scoring and importance sampling.
+// It serves to address a "cell". A "cell" is somewhat
+// related to a touchable in Geant4. It is identified by a reference
+// to a G4VPhysicalVolume and a number (replica number).
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4GeometryCell_hh
+#define G4GeometryCell_hh G4GeometryCell_hh 
 
-#include "G4PMapPtkTallys.hh"
-#include "G4PStepStream.hh"
-#include "G4Sigma.hh"
+#include "globals.hh"
 
-G4std::ostream& operator << (G4std::ostream &out, const G4PMapNameTally &tallys)
+class G4VPhysicalVolume;
+
+class G4GeometryCell
 {
-  for (G4PMapNameTally::const_iterator it = tallys.begin();
-       it != tallys.end(); it++) {
-    out << (*it).first << "\n";
-    out << (*it).second;
-  }
-  return out;
-}
 
-G4std::ostream& operator << (G4std::ostream &out,
-                             const G4PMapPtkTallys &tallystore)
+public:  // with description
+
+  G4GeometryCell(const G4VPhysicalVolume &aVolume, G4int RepNum);
+    // initialise volume and replica number
+
+  ~G4GeometryCell();
+    // simple destruction
+
+  const G4VPhysicalVolume *fVPhysiclaVolume;
+    // pinter to the G4VPhysicalVolume of the "cell" 
+
+  G4int fRepNum;
+    // replica number of the "cell"
+};
+
+// -----------------------------------------------------------------------
+
+class G4GeometryCellComp
 {
-  for (G4PMapPtkTallys::const_iterator it = tallystore.begin();
-       it != tallystore.end(); it++) {
-    out << (*it).first << "\n";
-    out << (*it).second;
-  }
-  return out;
-}
+
+public:  // without description
+
+  G4bool operator() (const G4GeometryCell &k1,
+                     const G4GeometryCell &k2) const;
+};
+
+// -----------------------------------------------------------------------
+
+G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2);
+G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2);
+
+#endif
