@@ -105,6 +105,43 @@ foreach $Platform (@Platforms) {
                  if ( $line =~ m#^cd \.\./tools/lib\; gmake#) {
                      next;
                  }
+# C++ Warning from SUN-CC
+                 if ( $line =~ m#^\"\w+\/(\w+\.cc)\"\,\s+line\s+(\d+)\:\s+(\w+)\:(.*\.)# ) {
+#                    print "SUN C++ file $1 line $2 severity $3 text $4\n";
+                     next;
+                 }
+                 if ( $line =~ m#^\"\w+\/(\w+\.hh)\"\,\s+line\s+(\d+)\:\s+(\w+)\:(.*\.)# ) {
+#                    print "SUN Header file $1 line $2 severity $3 text $4\n";
+                     next;
+                 }
+
+# We should read these lines from a file.
+
+                 if ( $line =~ m#^WARNING: Making a library map of granular libraries.# ) { next; }
+                 if ( $line =~ m#^         This is a list of libraries in order of use, and for# ) { next; }
+                 if ( $line =~ m#^         each library a list of other libraries used.# ) { next; }
+                 if ( $line =~ m#^         To do this it needs a complete set of dependency# ) { next; }
+                 if ( $line =~ m#^         files, e.g., after gmake in the source/ directory.# ) { next; }
+                 if ( $line =~ m#^Searching /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/source# ) { next; }
+                 if ( $line =~ m#^  for GNUmakefiles containing "name" and sorting...# ) { next; }
+                 if ( $line =~ m#^Weeding out global level GNUmakefiles and non-libraries...# ) { next; }
+                 if ( $line =~ m#^Making libname.map starter file...# ) { next; }
+                 if ( $line =~ m#^Making libname.map...# ) { next; }
+                 if ( $line =~ m#^  Reading library name map file...# ) { next; }
+                 if ( $line =~ m#^  Reading dependency files...# ) { next; }
+                 if ( $line =~ m#^  Checking for circular dependencies...# ) { next; }
+                 if ( $line =~ m#^  Reordering according to dependencies...# ) { next; }
+                 if ( $line =~ m#^  Writing new library map file...# ) { next; }
+
+                 if ( $line =~ m#^real\s+\d+\.\d+# ) { next; }
+                 if ( $line =~ m#^user\s+\d+\.\d+# ) { next; }
+                 if ( $line =~ m#^sys\s+\d+\.\d+# ) { next; }
+                 if ( $line =~ m#^real\s+\d+\:\d+# ) { next; }
+                 if ( $line =~ m#^user\s+\d+\:\d+# ) { next; }
+                 if ( $line =~ m#^sys\s+\d+\:\d+# ) { next; }
+
+
+
                  if ( $line =~ m#^gmake all#) {
                      next;
                  }
@@ -116,7 +153,7 @@ foreach $Platform (@Platforms) {
                  if ( $line =~ m#^Using granular#) {next}
                  if ( $line =~ m#^Linking#) {next}
 
-                 if ( "$Action" eq "C++ warning" ) {next}
+#                if ( "$Action" eq "C++ warning" ) {next}
                  if ( $line =~ m#^ild:# ) { $ild++; next}
                  if ( $line =~ m#^\"src/SdaiCONFIG_CONTROL_DESIGN.cc\", line (\d+): (\w+): (.*)$# ) {
                      $LineNum=$1; $Severity=$2; $Whinge=$3;
@@ -229,8 +266,8 @@ foreach $Platform (@Platforms) {
                      }
                      next;
                  }
-                 if ( $line =~ m#^Preprocessing.*\.dll\s# ) {
-                    $line = &AnalyseSundll($line,$filehandlemaybe);
+                 if ( $line =~ m#^Preprocessing.*\.ddl\s+\.\.\.# ) {
+                    $line = &AnalyseSunddl($line,$filehandlemaybe);
                  }
                  print "$line\n";
 #  Perhaps I can structure this code rather than just adding blocks.
@@ -244,8 +281,12 @@ foreach $Platform (@Platforms) {
       }
    }
 }
-sub AnalyseSundll {
-    while ( $line = <GMAKE> ) { if ( $line =~ /^gmake/ ) {return $line}; print "ADLL: $line" }
+sub AnalyseSunddl {
+    print "Text from Preprocessing  dll skipped\n";
+    while ( $line = <GMAKE> ) { 
+        if ( $line =~ /^gmake/ || $line =~ /Making dependency for file/ ) {return $line};
+    #   print "ADDL: $line" 
+    }
     print " AnalyseSundll read to EndOfFile\n";
 }
                       
