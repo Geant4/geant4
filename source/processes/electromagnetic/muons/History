@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2002-05-29 16:30:32 maire Exp $
+$Id: History,v 1.31 2002-10-16 16:52:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16 oct 02: V.Ivant (muons-V04-01-00)
+-redesign for a Model approach: files processNameSTD and processNameModel
      
 29 may 02: mma (muons-V04-00-02)
 - V.Ivanchenko G4VMuEnergyLoss - bug fixed in N of subcutoff delta
