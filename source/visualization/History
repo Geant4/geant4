@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2000-07-03 10:36:31 johna Exp $
+$Id: History,v 1.90 2000-08-19 18:38:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19th August 2000  John Allison  (vis-V02-00-00)
+- Fixed bug in /vis/lights/direction - now does not refresh view.
+- Corrected "scene" where it should read "scene handler" in some
+  comments and output statements.
 
 3rd July 2000  John Allison
 - Explicitly initialised all data members of G4ViewParameters in constructor.
