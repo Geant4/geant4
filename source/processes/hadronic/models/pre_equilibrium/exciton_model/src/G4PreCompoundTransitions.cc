@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.1 2003-08-26 18:54:57 lara Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.2 2003-09-14 11:50:23 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -135,7 +135,7 @@ CalculateProbability(const G4Fragment & aFragment)
   // F(p+1,h+1)
   G4double Fph1 = Fph + N/2.0;
   // (n+1)/n ((g*E - F(p,h))/(g*E - F(p+1,h+1)))^(n+1)
-  G4double ProbFactor = ((N+1.0)/N) * pow((GE-Fph)/(GE-Fph1),N+1.0);
+  G4double ProbFactor = pow((GE-Fph)/(GE-Fph1),N+1.0);
 
 
   if (NeverGoBack)
@@ -154,7 +154,7 @@ CalculateProbability(const G4Fragment & aFragment)
       
       // Transition probability for \Delta n = 0 (at F(p,h) = 0)
       //  TransitionProb3 = TransitionProb1*(P+H+1.0)*(P*(P-1.0)+4.0*P*H+H*(H-1.0))/((P+H)*GE);
-      TransitionProb3 = TransitionProb1 * ProbFactor * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
+      TransitionProb3 = TransitionProb1 * ProbFactor * ((N+1.0)/N) * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
       if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
     }
   
