@@ -9,20 +9,24 @@
 #events
 100000
 //--------Proton_processes
-
+#exclusive
 #particle
 proton
 //--------
 #material
-Zr
+Al
 #energy(MeV)
-256.
+90.
+#emax(MeV)
+100.
+#nbinse
+50
 #elim(MeV)
-20.
+2.
 #nangle
-5
+8
 #angles
-7.5 30. 60. 120. 150.
+20. 30. 45. 60. 90. 105. 120. 135.
 #dangle
 10.
 //--------

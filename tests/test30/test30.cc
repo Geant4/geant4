@@ -107,6 +107,7 @@ int main(int argc, char** argv)
   G4String  nameMat  = "Si";
   G4String  nameGen  = "stringCHIPS";
   G4bool    usepaw   = false;
+  G4bool    inclusive= true;
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
   G4double  elim     = 30.*MeV;
@@ -212,6 +213,8 @@ int main(int argc, char** argv)
   // ---- Read input file
   G4cout << "Available commands are: " << G4endl;
   G4cout << "#events" << G4endl;
+  G4cout << "#exclusive" << G4endl;
+  G4cout << "#inclusive" << G4endl;
   G4cout << "#nbins" << G4endl;
   G4cout << "#nbinsa" << G4endl;
   G4cout << "#nbinse" << G4endl;
@@ -264,6 +267,10 @@ int main(int argc, char** argv)
         elim *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
+      } else if(line == "#exclusive") {
+        inclusive = false;
+      } else if(line == "#inclusive") {
+        inclusive = true;
       } else if(line == "#nbins") {
         (*fin) >> nbins;
       } else if(line == "#nbinse") {
@@ -625,6 +632,10 @@ int main(int argc, char** argv)
 	if (e < 0.0) {
            e = 0.0;
 	}
+
+	// for exclusive reaction 2 particles in final state
+        if(!inclusive && nn != 2) break;
+
         m = pd->GetPDGMass();
 	p = sqrt(e*(e + 2.0*m));
 	mom *= p;
