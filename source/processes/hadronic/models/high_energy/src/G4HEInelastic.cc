@@ -5,9 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEInelastic.cc,v 1.7 2001-05-30 10:37:26 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 
 #include "globals.hh"
