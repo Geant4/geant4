@@ -2,3 +2,6 @@
   cvs update -d -A geometry/volumes/include/G4NavigationLevel.hh
   cvs update -d -A geometry/volumes/include/G4NavigationLevel.icc
   cvs update -d -A geometry/volumes/src/G4Navigator.cc
+  cvs update -d -A geant4/source/geometry/management/src/G4SolidStore.cc
+  cvs update -d -A geant4/source/particlesmanagement/include/G4NucleiPropertiesTable.hh
+  cvs update -d -A geant4/source/particlesmanagement/src/G4ParticleTable.cc
