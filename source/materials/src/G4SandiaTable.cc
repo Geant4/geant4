@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.2 1999-04-15 14:01:11 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.3 1999-04-20 13:32:05 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -25,7 +25,10 @@ G4double G4SandiaTable::fSandiaCofPerAtom[4];
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4SandiaTable::G4SandiaTable(G4int matIndex){ ; }
+G4SandiaTable::G4SandiaTable(G4int matIndex)
+{ 
+   fMatSandiaMatrix = NULL ; 
+}
 
 G4SandiaTable::G4SandiaTable(G4Material* material)
 :fMaterial(material)
@@ -42,7 +45,10 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4SandiaTable::~G4SandiaTable()
-{ delete fMatSandiaMatrix;}
+{ 
+  if(fMatSandiaMatrix) delete fMatSandiaMatrix ;
+  if(fPhotoAbsorptionCof) delete fPhotoAbsorptionCof ;
+}
 						 	
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -138,7 +144,7 @@ G4double* G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
 //
 
 void
-G4SandiaTable::SandiaSort(G4double da[][5],
+G4SandiaTable::SandiaSort(G4double** da ,
  			  G4int sz )
 {
    for(G4int i = 1 ;i < sz ; i++ ) 
@@ -162,8 +168,29 @@ G4int
 G4SandiaTable::SandiaIntervals(G4int Z[],
 			       G4int el )
 {
-  G4int c,i;
-  for(c = 0 ; c < fIntervalLimit ; c++)   // just in case
+  G4int c,i ;
+
+  fMaxInterval = 0 ;
+
+  for(i=0;i<el;i++)
+  {
+    fMaxInterval += fNbOfIntervals[Z[i]] ; 
+  }
+  fMaxInterval += 2 ;
+
+  G4cout<<"fMaxInterval = "<<fMaxInterval<<endl ;
+
+  fPhotoAbsorptionCof = new G4double* [fMaxInterval] ;
+
+  for(i = 0 ; i < fMaxInterval ; i++)  
+  {
+     fPhotoAbsorptionCof[i] = new G4double[5] ;
+  }
+
+
+  //  for(c = 0 ; c < fIntervalLimit ; c++)   // just in case
+
+  for(c = 0 ; c < fMaxInterval ; c++)   // just in case
   {
      fPhotoAbsorptionCof[c][0] = 0. ;
   }
