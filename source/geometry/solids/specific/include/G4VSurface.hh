@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.7 2004-05-28 16:52:44 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.8 2004-05-28 18:19:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -300,13 +300,13 @@ class G4VSurface
    G4RotationMatrix    fRot;
    G4ThreeVector       fTrans;
    G4int               fHandedness;
-   struct
+   class G4SurfCurNormal
    {
      public:
        G4ThreeVector p;
        G4ThreeVector normal;
-   } fCurrentNormal;
-
+   };
+   G4SurfCurNormal     fCurrentNormal;
    G4bool              fIsValidNorm;
                         
  private:
@@ -317,14 +317,15 @@ class G4VSurface
    Boundary      fBoundaries[4];  // boundaries of the surface.
    G4String      fName;
    
-   struct
+   class G4SurfSideQuery
    {
      public:
        G4ThreeVector me;
        G4ThreeVector vec;
        G4bool        withTol;
        G4int         amIOnLeftSide;
-   } fAmIOnLeftSide ;
+   };
+   G4SurfSideQuery fAmIOnLeftSide;
 };
 
 //========================================================
