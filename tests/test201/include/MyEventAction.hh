@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyEventAction.hh,v 1.1 1999-01-08 16:35:53 gunter Exp $
+// $Id: MyEventAction.hh,v 1.2 1999-05-07 10:22:14 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,8 +23,8 @@ class MyEventAction : public G4UserEventAction
     ~MyEventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 #endif

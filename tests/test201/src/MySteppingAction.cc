@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.2 1999-05-06 13:27:42 barrand Exp $
+// $Id: MySteppingAction.cc,v 1.3 1999-05-07 10:22:31 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
 
-void MySteppingAction::UserSteppingAction() {
+void MySteppingAction::UserSteppingAction(const G4Step*) {
 #ifdef G4VIS_USE_OPACS
   OHistogram h1 = MyRunAction::get_1d();
   OHistogram h2 = MyRunAction::Get2d();

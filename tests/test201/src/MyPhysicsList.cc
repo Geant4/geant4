@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyPhysicsList.cc,v 1.1 1999-01-08 16:35:57 gunter Exp $
+// $Id: MyPhysicsList.cc,v 1.2 1999-05-07 10:22:30 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,13 +256,14 @@ void MyPhysicsList::ConstructGeneral()
   }
 }
 
-void MyPhysicsList::SetCuts(G4double cut)
+void MyPhysicsList::SetCuts()
 {
+  SetCutsWithDefault();   
+  /*GB
   if (verboseLevel >0){
     G4cout << "MyPhysicsList::SetCuts:";
     G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }  
-
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
   SetCutValue(cut, "gamma");
@@ -279,6 +280,7 @@ void MyPhysicsList::SetCuts(G4double cut)
   if (verboseLevel>1) {
     DumpCutValuesTable();
   }
+  */
 }
 
 
