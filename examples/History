@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2000-05-14 09:33:39 allison Exp $
+$Id: History,v 1.49 2000-05-26 15:53:14 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th May 2000  John Allison  (examples-V01-01-04)
+- Updated N02 and N06.out relative to examples-V01-01-00.  Note:
+  examples-V01-01-02 should be abandoned since em-V01-01-01 was rejected.
 
 14th May 2000  John Allison  (examples-V01-01-03)
 - TestEm6 compatible with em-V01-01-01 (testem6-V01-01-00).
