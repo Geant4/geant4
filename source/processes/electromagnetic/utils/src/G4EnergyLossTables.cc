@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.20 2003-03-13 16:19:02 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.21 2003-03-17 09:42:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -943,7 +943,7 @@ void G4EnergyLossTables::CPRWarning()
 
   } else if (let_counter == let_max_num_warnings) {
 
-    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
+//    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
     let_counter++;
   }
 }
