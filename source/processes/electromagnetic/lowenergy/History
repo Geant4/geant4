@@ -1,4 +1,4 @@
-$Id: History,v 1.213 2004-11-24 00:12:46 duns Exp $
+$Id: History,v 1.214 2004-11-26 08:53:41 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.11.2004   MGP, tag emlowen-V06-02-08
+             Cleaned up code in G4hShellCrossSection* 
+             (further code review urgently needed!) 
 
 23.11.2004   Mark Donszelmann, tag emlowen-V06-02-07
              Fix for compilation error of G4hShellCrossSectionDoubleExp.cc
