@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.51 2003-05-30 14:10:49 gcosmo Exp $
+# $Id: GNUmakefile,v 1.52 2003-06-06 14:58:58 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -69,6 +69,7 @@ SUBDIRS += test25
 SUBDIRS += test26
 SUBDIRS += test32
 SUBDIRS += test33
+SUBDIRS += test50
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 

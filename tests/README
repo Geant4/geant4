@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2003-05-30 14:10:49 gcosmo Exp $
+$Id: README,v 1.4 2003-06-06 14:58:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -52,3 +52,11 @@ test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modelling.
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
+test50 ## Statistical test suite for EM processes:
+       ## 1) CSDA range and Stopping Power test for e-,p;
+       ## 2) gamma attenuation coefficient;
+       ## 3) gamma process' cross section;
+       ## 4) e-  backscattering;
+       ## 5) e-,e+ transmission.
+
+

@@ -82,16 +82,20 @@ examples/novice/N03          Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/novice/N04          asai@slac.stanford.edu          Makoto Asai 
 examples/novice/N05          Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06          gum@triumf.ca                   Peter Gumplinger
+examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
 examples/advanced            asai@slac.stanford.edu          Makoto Asai
-  brachytherapy              chauvie@to.infn.it              Stephane Chauvie
+  brachytherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
+  lAr_calorimeter            Patricia.Mendez@cern.ch         Patricia Mendez Lorenzo
+  Rich                       Patricia.Mendez@cern.ch         Patricia Mendez Lorenzo
   underground_physics        a.s.howard@ic.ac.uk             Alex Howard
   xray_fluorescence          MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
-  xray_telescope             rnartallo@space.qinetiq.com     Ramon Nartallo
-examples/extended/analysis   barrand@lal.in2p3.fr            Guy Barrand
+  xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
+examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
 examples/extended/biasing    Michael.Dressel@cern.ch         Michael Dressel
 examples/extended/electromagnetic:
-  TestEm1,2,3,4,5,6          Michel.Maire@lapp.in2p3.fr      Michel Maire
+  TestEm1,2,3,4,5,6,7        Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
 examples/extended/eventgenerator:
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
@@ -101,42 +105,41 @@ examples/extended/gdml       Radovan.Chytracek@cern.ch       Radovan Chytracek
 examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   cad                        Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   olap                       Martin.Liendl@cern.ch           Martin Liendl
+examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+  DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
 examples/extended/parallel   gene@ccs.neu.edu                Gene Cooperman
 examples/extended/persistency  Youhei.Morita@cern.ch         Youhei Morita
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
-tests                        fwj@triumf.ca                   Fred Jones
-tests                        asai@slac.stanford.edu          Makoto Asai
-tests                        Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-tests/test01                 John.Apostolakis@cern.ch        John Apostolakis
-tests/test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
-tests/test02.hadron          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test03                 (not currently used - see tests/GNUmakefile)
-tests/test04                 (not currently used - see tests/GNUmakefile)
-tests/test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-tests/test06                 Michel.Maire@lapp.in2p3.fr      Michel Maire
-tests/test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
-tests/test08                 (not currently used - see tests/GNUmakefile)
-tests/test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
-tests/test10                 gum@triumf.ca                   Peter Gumplinger
-tests/test11                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test12                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test13                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-tests/test15                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test16                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-tests/test18                 flei@space.qinetiq.com          Fan Lei
-tests/test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
-tests/test21                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test22                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test23                 kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-tests/test24                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test25                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-tests/test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-tests/test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-tests/test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test33                 Michael.Dressel@cern.ch         Michael Dressel
-tests/test50                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-tests/test201                barrand@lal.in2p3.fr            Guy Barrand
+      test01                 John.Apostolakis@cern.ch        John Apostolakis
+      test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test02.hadron          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test03                 (not currently used - see tests/GNUmakefile)
+      test04                 (not currently used - see tests/GNUmakefile)
+      test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+      test06                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
+      test08                 (not currently used - see tests/GNUmakefile)
+      test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test10                 gum@triumf.ca                   Peter Gumplinger
+      test11                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test12                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test13                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+      test15                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test16                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test18                 flei@space.qinetiq.com          Fan Lei
+      test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+      test21                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test22                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test23                 kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
+      test24                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test25                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test33                 Michael.Dressel@cern.ch         Michael Dressel
+      test50                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+      test201                barrand@lal.in2p3.fr            Guy Barrand
 
