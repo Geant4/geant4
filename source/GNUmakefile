@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.26 2001-02-12 08:17:31 gcosmo Exp $
+# $Id: GNUmakefile,v 1.27 2001-06-25 11:26:48 morita Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -35,7 +35,7 @@ all:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making granular libraries with HepODBMS option ...
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
-	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
+	@if [ ! -f $(G4LIBDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
@@ -51,7 +51,7 @@ glob global:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making global libraries with HepODBMS option ...
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
-	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
+	@if [ ! -f $(G4LIBDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
