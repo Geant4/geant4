@@ -1,6 +1,6 @@
 #
 # ------ WIN32/VC ------    Visual-C++ 7 .NET
-#                           experimental setup
+#
 ifeq ($(G4SYSTEM),WIN32-VC7)
   CXX       := CL
   ifdef G4OPTIMISE
@@ -55,22 +55,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
 #  symbols as output of the link command.
 #
   define build-granular-shared-lib
-    @libdir=`(cd $(@D);/bin/pwd)`;\
-    cd $(G4TMP)/$(G4SYSTEM);\
-    echo "Building $(name).dumpbin file ...";\
-    $(RM) $(name).dumpbin;\
-    dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
-    echo "Building $(name).def file ...";\
-    $(RM) $(name).def;\
-    $(G4LIBDIR)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
-    $(RM) $(name).dumpbin;\
-    echo "Building lib$(name).exp and lib$(name).lib file ...";\
-    $(RM) $(G4LIBDIR)/lib$(name).exp;\
-    $(RM) $(G4LIBDIR)/lib$(name).lib;\
-    lib.exe /nologo /machine:ix86 /def:$(name).def /out:$(G4LIBDIR)/lib$(name).lib;\
-    $(RM) $(G4LIBDIR)/$(name).dll;\
-    echo "Building $(name).dll file ...";\
-    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a /libpath:$(G4LIBDIR) $(GLOBLIBS) $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB)
+    @echo "Sorry, DLLs are supported only for global libraries on $(G4SYSTEM)
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
