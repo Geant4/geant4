@@ -1,0 +1,4 @@
+G4TransportationManager: Fixed definition of the singleton to conform
+    to the canonical implementation. Moved default constructor from
+    private to protected and added call to G4Exception in case of
+    multiple instances through derived classes.

@@ -1,0 +1,16 @@
+persistency-V00-01-10
+=====================
+December 2, 99   Y.Morita (persistency-V00-01-10)
+- bug fix in G4PHCofThisEvent, G4PHCofThisEvent, G4PersistentEventMan
+
+PersistentEx01-V00-01-04
+========================
+3rd December 1999   Y.Morita (PersistentEx01-V00-01-04)
+- Added short example of using HepODBMS tag database (createTag, readTag)
+- Bug fixes
+
+PersistentEx02-V00-01-02
+========================
+3rd December 1999   Y.Morita (PersistentEx02-V00-01-02)
+- added readDB example
+- more bug fixes (TrackerSD)
