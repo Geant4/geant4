@@ -73,7 +73,7 @@ endif
 
 if ( `uname -n | grep pcgeant` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-  setenv G4SYSTEM Linx-g++
+  setenv G4SYSTEM Linux-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
