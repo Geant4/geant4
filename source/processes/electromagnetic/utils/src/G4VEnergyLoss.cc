@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.38 2003-02-05 14:25:49 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.39 2003-03-25 13:36:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,6 +43,7 @@
 //           potential then only Gaussian fluctuations are sampled.
 //  15.01.03 Migrade to cut per region (V.Ivanchenko)
 //  05.02.03 Minor fix for several region case (V.Ivanchenko)
+//  25.03.03 add finalRangeRequested (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -64,6 +65,7 @@ G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false;
 
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
 G4double     G4VEnergyLoss::finalRange     = 1*mm;
+G4double     G4VEnergyLoss::finalRangeRequested = -1*mm;
 G4double     G4VEnergyLoss::c1lim = dRoverRange;
 G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
@@ -128,10 +130,10 @@ void G4VEnergyLoss::SetMinDeltaCutInRange(G4double value)
 
 void G4VEnergyLoss::SetStepFunction(G4double c1, G4double c2)
 {
- dRoverRange = c1; finalRange = c2;
+ dRoverRange = c1; finalRangeRequested = c2;
  c1lim=dRoverRange;
- c2lim=2.*(1-dRoverRange)*finalRange;
- c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+ c2lim=2.*(1-dRoverRange)*finalRangeRequested;
+ c3lim=-(1.-dRoverRange)*finalRangeRequested*finalRangeRequested;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

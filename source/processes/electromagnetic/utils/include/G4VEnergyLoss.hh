@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.16 2003-01-22 14:04:11 vnivanch Exp $
+// $Id: G4VEnergyLoss.hh,v 1.17 2003-03-25 13:36:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -231,6 +231,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
    static G4double dRoverRange;     // dRoverRange is the maximum allowed
                                      // deltarange/range in one Step
    static G4double finalRange;      // final step before stopping
+   static G4double finalRangeRequested; //from UI command
    static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 
    static G4bool   rndmStepFlag;    // control the randomization of the step
