@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.40 2004-08-03 15:57:53 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.41 2004-09-13 20:21:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -856,8 +856,8 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     // Create search scene, model and modeling parameters with
     // long-enough life...
     G4PhysicalVolumeSearchScene searchScene (name, copyNo);
-    G4PhysicalVolumeModel searchModel (world);
-    G4ModelingParameters mp;
+    G4PhysicalVolumeModel searchModel (world);  // Default - unlimited depth.
+    G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
 
     // Initiate search...
