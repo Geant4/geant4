@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh,v 1.5 2003-06-16 17:12:50 gunter Exp $
+// $Id: G4VModularPhysicsList.hh,v 1.6 2004-11-29 06:13:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,6 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     //   in the particle table
     virtual void SetCuts() = 0; 
 
-  protected: // with description
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
     virtual void ConstructParticle();
