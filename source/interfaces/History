@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2000-06-23 08:46:48 stesting Exp $
+$Id: History,v 1.32 2000-06-25 14:15:25 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 June 2000 John Allison (interfaces-V01-01-06-old-G4UIterminal)
+- As interfaces-V01-01-06 but old revisions of G4UIterminal.cc/hh.
 
 23 June 2000 John Allison (interfaces-V01-01-06)
 - Protected G4UIterminal, G4Ui[t]csh against access by index to null strings.
