@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.3 2001-09-16 09:42:47 elena Exp $
+// $Id: G4ShellData.cc,v 1.4 2001-09-26 21:19:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -50,12 +50,12 @@ G4ShellData::~G4ShellData()
 
   for (pos = idMap.begin(); pos != idMap.end(); pos++)
     {
-      G4DataVector* dataSet = pos->second;
+      G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
   for (pos = bindingMap.begin(); pos != bindingMap.end(); pos++)
     {
-      G4DataVector* dataSet = pos->second;
+      G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
 }
@@ -80,7 +80,7 @@ const G4DataVector& G4ShellData::ShellIdVector(G4int Z) const
   if (Z < zMin || Z > zMax)
     G4Exception("G4ShellData::ShellIdVector - Z outside boundaries");
   pos = idMap.find(Z);
-  G4DataVector* dataSet = pos->second;
+  G4DataVector* dataSet = (*pos).second;
   return *dataSet;
 }
 
@@ -94,7 +94,7 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
       pos = idMap.find(Z);
       if (pos!= idMap.end())
 	{
-	  G4DataVector dataSet = *(pos->second);
+	  G4DataVector dataSet = *((*pos).second);
 	  G4int nData = dataSet.size();
 	  if (shellIndex >= 0 && shellIndex < nData)
 	    {
@@ -116,7 +116,7 @@ G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
       pos = bindingMap.find(Z);
       if (pos!= bindingMap.end())
 	{
-	  G4DataVector dataSet = *(pos->second);
+	  G4DataVector dataSet = *((*pos).second);
 	  G4int nData = dataSet.size();
 	  if (shellIndex >= 0 && shellIndex < nData)
 	    {
@@ -138,10 +138,10 @@ void G4ShellData::PrintData() const
       G4int nSh = nShells[Z-1];
       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posId;
       posId = idMap.find(Z);
-      G4DataVector* ids = posId->second;
+      G4DataVector* ids = (*posId).second;
       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posE;
       posE = bindingMap.find(Z);
-      G4DataVector* energies = posE->second;
+      G4DataVector* energies = (*posE).second;
       for (G4int i=0; i<nSh; i++)
 	{
 	  G4int id = (G4int) (*ids)[i];

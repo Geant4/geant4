@@ -48,17 +48,17 @@ G4FluoData::~G4FluoData()
 
   for (pos = idMap.begin(); pos != idMap.end(); pos++)
     {
-      G4DataVector* dataSet = pos->second;
+      G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
   for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
     {
-      G4DataVector* dataSet = pos->second;
+      G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
  for (pos = probabilityMap.begin(); pos != probabilityMap.end(); pos++)
     {
-      G4DataVector* dataSet = pos->second;
+      G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
 }
@@ -78,7 +78,7 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
       pos = idMap.find(vacancyIndex);
       if (pos!= idMap.end())
-	{ G4DataVector dataSet = *(pos->second);
+	{ G4DataVector dataSet = (*(*pos).second);
 	n = (G4int) dataSet[0];
 	
 	}
@@ -112,7 +112,7 @@ G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex)
     
      pos = idMap.find(vacancyIndex);
      
-     G4DataVector dataSet = *(pos->second);
+     G4DataVector dataSet = *((*pos).second);
    
      G4int nData = dataSet.size();
  if (initIndex >= 0 && initIndex < nData)
@@ -136,7 +136,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex)
      
      pos = energyMap.find(vacancyIndex);
      
-     G4DataVector dataSet = *(pos->second);
+     G4DataVector dataSet = *((*pos).second);
      
      G4int nData = dataSet.size();
      if (initIndex >= 0 && initIndex < nData)
@@ -160,7 +160,7 @@ G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex)
      
      pos = probabilityMap.find(vacancyIndex);
      
-     G4DataVector dataSet = *(pos->second);
+     G4DataVector dataSet = *((*pos).second);
      
      G4int nData = dataSet.size();
      if (initIndex >= 0 && initIndex < nData)

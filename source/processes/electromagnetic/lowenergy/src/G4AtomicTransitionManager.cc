@@ -113,7 +113,7 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
  
  for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
    
-   G4std::vector< G4AtomicShell*>vec = pos->second;
+   G4std::vector< G4AtomicShell*>vec = (*pos).second;
    
    G4int vecSize=vec.size();
    
@@ -128,7 +128,7 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
  
  for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ppos++){
    
-   G4std::vector< G4AtomicTransition*>vec = ppos->second;
+   G4std::vector< G4AtomicTransition*>vec = (*ppos).second;
    
    G4int vecSize=vec.size();
    
@@ -162,7 +162,7 @@ const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex
   
   if (pos!= shellTable.end()){
     
-    G4std::vector<G4AtomicShell*> v = pos->second;
+    G4std::vector<G4AtomicShell*> v = (*pos).second;
     
     if (shellIndex<v.size()){
       
@@ -188,7 +188,7 @@ const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,siz
 
   if (pos!= transitionTable.end()){
 
-    G4std::vector<G4AtomicTransition*> v = pos->second;
+    G4std::vector<G4AtomicTransition*> v = (*pos).second;
 
     if (shellIndex<v.size()){
       
@@ -215,7 +215,7 @@ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator po
 
   if (pos!= shellTable.end()){
 
-    G4std::vector<G4AtomicShell*> v = pos->second;
+    G4std::vector<G4AtomicShell*> v = (*pos).second;
 
     return v.size();
   }
@@ -234,7 +234,7 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterat
 
   if (pos!= transitionTable.end()){
 
-    G4std::vector<G4AtomicTransition*> v = pos->second;
+    G4std::vector<G4AtomicTransition*> v = (*pos).second;
 
     return v.size();
   }
@@ -254,7 +254,7 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterat
 
   if (pos!= transitionTable.end()){
 
-    G4std::vector<G4AtomicTransition*> v = pos->second;
+    G4std::vector<G4AtomicTransition*> v = (*pos).second;
   
     if (shellIndex<v.size()){
 
@@ -295,7 +295,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
   
   if (pos!= transitionTable.end()){
     
-    G4std::vector<G4AtomicTransition*> v = pos->second;
+    G4std::vector<G4AtomicTransition*> v = (*pos).second;
   
     
     if (shellIndex<v.size()){
