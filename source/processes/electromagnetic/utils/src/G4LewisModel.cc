@@ -626,7 +626,8 @@ G4double G4LewisModel::SampleDisplacement()
     }
     if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
     else          rmean = 0.;
-  }
+         G4cout << "rmean= " << rmean << G4endl;
+ }
   return rmean;
 }
 

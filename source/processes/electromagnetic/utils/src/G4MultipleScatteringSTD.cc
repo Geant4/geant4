@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.11 2003-04-14 09:30:30 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.12 2003-04-17 17:40:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -534,8 +534,8 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
 
   tau   = tPathLength/lambda0 ;
 
-  //G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
-  //       << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
+  G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
+         << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
 
   if(tau < tausmall) zPathLength = tPathLength;
   else
@@ -652,8 +652,8 @@ G4VParticleChange* G4MultipleScatteringSTD::AlongStepDoIt(
   }
   //VI truePath length cannot be smaller than geomPathLength
   if (truePathLength < geomPathLength) truePathLength = geomPathLength;
-  //G4cout << "AlongStep: trueLength= " << truePathLength << " geomLength= "
-  //       << geomPathLength << " zlast= " << zLast << G4endl;
+  G4cout << "AlongStep: trueLength= " << truePathLength << " geomLength= "
+         << geomPathLength << " zlast= " << zLast << G4endl;
   fParticleChange.SetTrueStepLength(truePathLength);
   return &fParticleChange;
 
@@ -780,7 +780,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
 
-  //G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << tLast << G4endl;
+  G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << tLast << G4endl;
 
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
@@ -810,14 +810,14 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
 
         if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
         else          rmean = 0.;
-
+        G4cout << "rmean= " << rmean << G4endl;
 
         // for rmean > 0) only
         if (rmean > 0.)
         {
           if (rmean>safetyminustolerance) rmean = safetyminustolerance;
 
-          //G4cout << "r= " << rmean << " safety= " << safetyminustolerance << G4endl;
+          G4cout << "r= " << rmean << " safety= " << safetyminustolerance << G4endl;
           // sample direction of lateral displacement
           phi  = twopi*G4UniformRand();
           dirx = cos(phi); diry = sin(phi); dirz = 0.;

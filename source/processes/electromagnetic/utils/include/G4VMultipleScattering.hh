@@ -274,9 +274,9 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   lambda0 = GetLambda(p, e);
   currentRange = G4LossTableManager::Instance()->GetRange(p,e,currentCouple);
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
-//  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
-//         << lambda0 << " range= " << currentRange
-//	 << " currentMinStep= " << currentMinimalStep << G4endl;
+  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
+         << lambda0 << " range= " << currentRange
+	 << " currentMinStep= " << currentMinimalStep << G4endl;
   if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
            p,e,lambda0,currentRange,truePathLength);
@@ -323,7 +323,7 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
   if (geomStepLength == geomPathLength) trueStepLength = truePathLength;
   else    trueStepLength = currentModel->TrueStepLength(geomStepLength);
   fParticleChange.SetTrueStepLength(trueStepLength);
-//  G4cout << "AlongStep: trueLength= " << trueStepLength << " geomLength= "<< geomStepLength << " zlast= " << geomPathLength << G4endl;
+  G4cout << "AlongStep: trueLength= " << trueStepLength << " geomLength= "<< geomStepLength << " zlast= " << geomPathLength << G4endl;
   return &fParticleChange;
 }
 
