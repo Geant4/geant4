@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2003-10-15 17:42:56 duns Exp $
+$Id: History,v 1.18 2003-10-15 17:58:11 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,8 @@ $Id: History,v 1.17 2003-10-15 17:42:56 duns Exp $
 15th October 2003 Mark Donszelmann
 - Updated README.JAIDA to refer to the proper versions of JAIDA and AIDAJNI.
   Also changed compilation instructions to use aida-config.
+- Made sure G4HadronPhysics is compiled without optmization on Darwin-g++,
+  Darwin-g++2 and Darwin-g++3 (MacOS X).
 
 14th October 2003 Mark Donszelmann
 - Added clear statement to GNUmakefile that G4HadronPhysics is compiled
