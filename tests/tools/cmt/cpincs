@@ -20,5 +20,5 @@ find $G4INSTALL/source -name "*.icc" -exec sh ./cpcheck {} \;
 
 find $G4INSTALL/include -name "CVS" -exec /bin/rm -R -f {} \;
 
-cp -R $G4INSTALL/source/visualization/HepRep/include/zioios++ $G4INSTALL/include
+cp -R $G4INSTALL/source/visualization/HepRep/include/zipios++ $G4INSTALL/include
 cp -R $G4INSTALL/source/visualization/HepRep/include/HEPREP $G4INSTALL/include
