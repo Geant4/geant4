@@ -1,0 +1,29 @@
+$Id: History,v 1.2 2003-07-08 17:12:18 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm7 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+05-06-03 mma (testem7-V05-01-02)
+ - StepMax in tallies too.
+ - TestEm7.in updated
+ 
+03-06-03 V.Ivant (testem7-V05-01-01)
+ - Clean up compilation warnings
+
+15-05-03 V.Ivant (testem7-V05-01-00)
+ - Add hadron interactions
+
+22-04-03 mma (testem7-V05-00-00)
+ - Creation. Derived from TestEm6
