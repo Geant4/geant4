@@ -353,7 +353,7 @@ void XrayFluoPhysicsList::SetCutsByEnergy(G4double val)
 {
   G4ParticleTable* theXrayFluoParticleTable =  G4ParticleTable::GetParticleTable();
 
-  G4Material* currMat;
+  G4Material* currMat=0;
     
   if(pDet){
     currMat = pDet->XrayFluoDetectorConstruction::GetSampleMaterial();
