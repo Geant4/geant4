@@ -1,5 +1,19 @@
 History file for geometry/solids/BREPS
 
+27/01/199 : L. Broglia ( new tag : breps-01-00-01 )
+
+ - functions Inside, DistanceToIn and DistanceToOut
+   are re-written to satisfy requirements
+
+ - these functions are identical into G4BREPSolid
+   and into G4BREPSolidPCone & Polyhedra because
+   there are general (see ToDo.txt)
+
+ - corrections of G4BREPSolid::CalculExtent by
+   Stefano Magni 
+
+
+
 14/01/1999 : L. Broglia
  - modification of the IntersectRay2D function
 
