@@ -14,116 +14,116 @@ Current available graphics systems are:
 
 ***** Table : Nb of materials = 28 *****
 
- Material: Aluminium            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
-   --->  Element: Aluminium    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: TRT_CH2            density: 935.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  27.414 cm
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
+ Material:  TRT_CH2     density: 935.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  27.414 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
 
- Material: Radiator            density: 59.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   4.344 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
+ Material: Radiator     density: 59.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   4.344 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
 
- Material: CarbonFiber            density: 145.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.473 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: CarbonFiber     density: 145.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.473 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Li            density: 534.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.550 m
-   --->  Element: LithiumLi   Z =  3.0   N =   6.9   A =   6.94 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       Li     density: 534.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.550 m  
+   --->  Element:  Lithium Li   Z =  3.0   N =   6.9   A =   6.94 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Be            density:  1.848 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm
-   --->  Element: BerilliumBe   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       Be     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
+   --->  Element: Berillium Be   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Mylar            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
+ Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
 
- Material: Kapton            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
+ Material:   Kapton     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
 
- Material: Polypropelene            density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
+ Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
 
- Material: He            density:  0.178 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.299 km
-   --->  Element: He    Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       He     density:  0.178 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.299 km 
+   --->  Element:       He      Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Ne            density:  0.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 321.456 m
-   --->  Element: Ne    Z = 10.0   N =  20.2   A =  20.18 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       Ne     density:  0.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 321.456 m  
+   --->  Element:       Ne      Z = 10.0   N =  20.2   A =  20.18 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Argon            density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m
-   --->  Element: ArgonAr   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Kr            density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m
-   --->  Element: Kr    Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
+   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Xenon            density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: CH4            density:  0.717 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 405.758 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  59.80 %  Abundance  20.00 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  40.20 %  Abundance  80.00 %
+ Material:      CH4     density:  0.717 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 405.758 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  59.80 %  Abundance  20.00 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  40.20 %  Abundance  80.00 %
 
- Material: C3H8            density:  2.005 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 134.002 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  69.05 %  Abundance  27.27 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  30.95 %  Abundance  72.73 %
+ Material:     C3H8     density:  2.005 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 134.002 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  69.05 %  Abundance  27.27 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  30.95 %  Abundance  72.73 %
 
- Material: isoC4H10            density:  2.670 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  99.499 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  70.42 %  Abundance  28.57 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  29.58 %  Abundance  71.43 %
+ Material: isoC4H10     density:  2.670 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  99.499 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  70.42 %  Abundance  28.57 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  29.58 %  Abundance  71.43 %
 
- Material: CO2            density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
+ Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
 
- Material: CO2            density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
+ Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
 
- Material: N2            density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m
-   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: O2            density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Air            density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m
-   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
-   --->  Element: ArgonAr   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+ Material:      Air     density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
- Material: Xe20CO2            density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.695 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  53.29 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.23 %  Abundance  15.57 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   6.57 %  Abundance  31.14 %
+ Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.695 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  53.29 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.23 %  Abundance  15.57 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   6.57 %  Abundance  31.14 %
 
- Material: Kr20CO2            density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  33.957 m
-   --->  Element: Kr    Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  55.02 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.74 %  Abundance  14.99 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.26 %  Abundance  29.99 %
+ Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  33.957 m  
+   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  55.02 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.74 %  Abundance  14.99 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.26 %  Abundance  29.99 %
 
- Material: Xe55He15CH4            density:  1.963 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.193 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  14.61 %
-   --->  Element: He    Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  26.77 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   3.29 %  Abundance  11.73 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   2.21 %  Abundance  46.90 %
+ Material: Xe55He15CH4     density:  1.963 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.193 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  14.61 %
+   --->  Element:       He      Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  26.77 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   3.29 %  Abundance  11.73 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   2.21 %  Abundance  46.90 %
 
- Material: Xe10CH4            density:  5.344 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.018 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  98.70 %  Abundance  53.75 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.78 %  Abundance   9.25 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.52 %  Abundance  37.00 %
+ Material:  Xe10CH4     density:  5.344 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.018 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  98.70 %  Abundance  53.75 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.78 %  Abundance   9.25 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.52 %  Abundance  37.00 %
 
- Material: Xe5CH4            density:  5.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  15.207 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  99.40 %  Abundance  71.72 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.36 %  Abundance   5.66 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.24 %  Abundance  22.62 %
+ Material:   Xe5CH4     density:  5.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  15.207 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  99.40 %  Abundance  71.72 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.36 %  Abundance   5.66 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.24 %  Abundance  22.62 %
 
- Material: Xe20CH4            density:  4.830 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.941 m
-   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.00 %  Abundance  33.11 %
-   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.79 %  Abundance  13.38 %
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.21 %  Abundance  53.51 %
+ Material:  Xe20CH4     density:  4.830 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.941 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.00 %  Abundance  33.11 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.79 %  Abundance  13.38 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.21 %  Abundance  53.51 %
 
 
 
@@ -141,7 +141,7 @@ zModule = 50.04 mm
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 0
 Warning: No parametrisation model was defined?
-Em10PhysicsList::SetCuts:CutLength : 1 mm
+Em10PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -170,67 +170,67 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=13.01 s 
+total time(SetCuts)=15.05 s 
 ============= The cut Energy ==============================
-                      gamma            e-           
+                            gamma              e-    
 Cut in range       
- Aluminium                            1 mm             1 mm
-   TRT_CH2                            1 mm             1 mm
-   Radiator                            1 mm             1 mm
-   CarbonFiber                            1 mm             1 mm
-   Li                            1 mm             1 mm
-   Be                            1 mm             1 mm
-   Mylar                            1 mm             1 mm
-   Kapton                            1 mm             1 mm
-   Polypropelene                            1 mm             1 mm
-   He                            1 mm             1 mm
-   Ne                            1 mm             1 mm
-   Argon                            1 mm             1 mm
-   Kr                            1 mm             1 mm
-   Xenon                            1 mm             1 mm
-   CH4                            1 mm             1 mm
-   C3H8                            1 mm             1 mm
-   isoC4H10                            1 mm             1 mm
-   CO2                            1 mm             1 mm
-   CO2                            1 mm             1 mm
-   N2                            1 mm             1 mm
-   O2                            1 mm             1 mm
-   Air                            1 mm             1 mm
-   Xe20CO2                            1 mm             1 mm
-   Kr20CO2                            1 mm             1 mm
-   Xe55He15CH4                            1 mm             1 mm
-   Xe10CH4                            1 mm             1 mm
-   Xe5CH4                            1 mm             1 mm
-   Xe20CH4                            1 mm             1 mm
+          Aluminium           1 mm            1 mm 
+            TRT_CH2           1 mm            1 mm 
+           Radiator           1 mm            1 mm 
+        CarbonFiber           1 mm            1 mm 
+                 Li           1 mm            1 mm 
+                 Be           1 mm            1 mm 
+              Mylar           1 mm            1 mm 
+             Kapton           1 mm            1 mm 
+      Polypropelene           1 mm            1 mm 
+                 He           1 mm            1 mm 
+                 Ne           1 mm            1 mm 
+              Argon           1 mm            1 mm 
+                 Kr           1 mm            1 mm 
+              Xenon           1 mm            1 mm 
+                CH4           1 mm            1 mm 
+               C3H8           1 mm            1 mm 
+           isoC4H10           1 mm            1 mm 
+                CO2           1 mm            1 mm 
+                CO2           1 mm            1 mm 
+                 N2           1 mm            1 mm 
+                 O2           1 mm            1 mm 
+                Air           1 mm            1 mm 
+            Xe20CO2           1 mm            1 mm 
+            Kr20CO2           1 mm            1 mm 
+        Xe55He15CH4           1 mm            1 mm 
+            Xe10CH4           1 mm            1 mm 
+             Xe5CH4           1 mm            1 mm 
+            Xe20CH4           1 mm            1 mm 
 Cut in energy
- Aluminium                         6.89 keV           597 keV
-   TRT_CH2                         2.78 keV           515 keV
-   Radiator                          990 eV          89.6 keV
-   CarbonFiber                         1.52 keV           147 keV
-   Li                         1.16 keV           207 keV
-   Be                         1.99 keV           466 keV
-   Mylar                         3.48 keV           541 keV
-   Kapton                         3.48 keV           541 keV
-   Polypropelene                         2.75 keV           502 keV
-   He                          990 eV           990 eV
-   Ne                          990 eV           990 eV
-   Argon                          990 eV           990 eV
-   Kr                          990 eV          1.07 keV
-   Xenon                          990 eV          1.95 keV
-   CH4                          990 eV           990 eV
-   C3H8                          990 eV           990 eV
-   isoC4H10                          990 eV          1.45 keV
-   CO2                          990 eV           990 eV
-   CO2                          990 eV           990 eV
-   N2                          990 eV           990 eV
-   O2                          990 eV           990 eV
-   Air                          990 eV           990 eV
-   Xe20CO2                          990 eV          1.67 keV
-   Kr20CO2                          990 eV          1.09 keV
-   Xe55He15CH4                          990 eV           990 eV
-   Xe10CH4                          990 eV          1.74 keV
-   Xe5CH4                          990 eV          1.83 keV
-   Xe20CH4                          990 eV          1.54 keV
+          Aluminium        6.89 keV         597 keV
+            TRT_CH2        2.78 keV         515 keV
+           Radiator         990 eV         89.6 keV
+        CarbonFiber        1.52 keV         147 keV
+                 Li        1.16 keV         207 keV
+                 Be        1.99 keV         466 keV
+              Mylar        3.48 keV         541 keV
+             Kapton        3.48 keV         541 keV
+      Polypropelene        2.75 keV         502 keV
+                 He         990 eV          990 eV 
+                 Ne         990 eV          990 eV 
+              Argon         990 eV          990 eV 
+                 Kr         990 eV         1.07 keV
+              Xenon         990 eV         1.95 keV
+                CH4         990 eV          990 eV 
+               C3H8         990 eV          990 eV 
+           isoC4H10         990 eV         1.45 keV
+                CO2         990 eV          990 eV 
+                CO2         990 eV          990 eV 
+                 N2         990 eV          990 eV 
+                 O2         990 eV          990 eV 
+                Air         990 eV          990 eV 
+            Xe20CO2         990 eV         1.67 keV
+            Kr20CO2         990 eV         1.09 keV
+        Xe55He15CH4         990 eV          990 eV 
+            Xe10CH4         990 eV         1.74 keV
+             Xe5CH4         990 eV         1.83 keV
+            Xe20CH4         990 eV         1.54 keV
 ===================================================
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 1
@@ -291,7 +291,7 @@ Foam X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.493
 49	fGamma = 9.283e+04	sumE = 1.495
 
-total time for build X-ray TR tables = 17.6 s
+total time for build X-ray TR tables = 28.23 s
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -302,25 +302,25 @@ total time for build X-ray TR tables = 17.6 s
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=52.0113 +- 0.778531  mm  
+    mean charged track length   in absorber=51.9092 +- 0.731215  mm  
 
-            mean energy deposit in absorber=0.0359449 +- 0.000581355  MeV 
+            mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =1.982 +- 0.0323987      
- mean number of steps in absorber (neutral) =1.454 +- 0.0388057      
+ mean number of steps in absorber (charged) =1.984 +- 0.0309151      
+ mean number of steps in absorber (neutral) =1.47 +- 0.0368388      
 
-   mean number of charged secondaries = 0.982 +- 0.0323987
+   mean number of charged secondaries = 0.984 +- 0.0309151
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.982  and e+s =0
+   mean number of e-s =0.984  and e+s =0
 
-(number) transmission coeff=0.592  reflection coeff=0
+(number) transmission coeff=0.599  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 845049818, 1399553993
+ Current couple of seeds = 712582010, 1589490255
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 2
@@ -381,36 +381,36 @@ Foam XTR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 1.897
 49	fGamma = 9.283e+04	sumE = 1.899
 
-total time for build X-ray TR dE/dx tables = 33.35 s
+total time for build X-ray TR dE/dx tables = 50.57 s
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 845049818, 1399553993
+ Current couple of seeds = 712582010, 1589490255
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=41.6579 +- 4.26238  mm  
+    mean charged track length   in absorber=47.5326 +- 5.26716  mm  
 
-            mean energy deposit in absorber=0.0330799 +- 0.00523448  MeV 
+            mean energy deposit in absorber=0.0354806 +- 0.00520881  MeV 
 
- mean number of steps in absorber (charged) =1.6 +- 0.209762      
- mean number of steps in absorber (neutral) =1.2 +- 0.275681      
+ mean number of steps in absorber (charged) =1.8 +- 0.236643      
+ mean number of steps in absorber (neutral) =1 +- 0.282843      
 
-   mean number of charged secondaries = 0.6 +- 0.209762
+   mean number of charged secondaries = 0.8 +- 0.236643
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.6  and e+s =0
+   mean number of e-s =0.8  and e+s =0
 
 (number) transmission coeff=0.5  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1631078208, 1080923585
+ Current couple of seeds = 344503834, 1899385303
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 3
@@ -472,36 +472,36 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.293
 49	fGamma = 9.283e+04	sumE = 1.294
 
-total time for build X-ray TR tables = 26.29 s
+total time for build X-ray TR tables = 45.08 s
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1631078208, 1080923585
+ Current couple of seeds = 344503834, 1899385303
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=64.635 +- 10.4154  mm  
+    mean charged track length   in absorber=51.9096 +- 7.27858  mm  
 
-            mean energy deposit in absorber=0.0420819 +- 0.00793843  MeV 
+            mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =2.5 +- 0.494975      
- mean number of steps in absorber (neutral) =1.6 +- 0.513809      
+ mean number of steps in absorber (charged) =1.9 +- 0.298329      
+ mean number of steps in absorber (neutral) =1.4 +- 0.379473      
 
-   mean number of charged secondaries = 1.5 +- 0.494975
+   mean number of charged secondaries = 0.9 +- 0.298329
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1.5  and e+s =0
+   mean number of e-s =0.9  and e+s =0
 
-(number) transmission coeff=0.6  reflection coeff=0
+(number) transmission coeff=0.5  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1571497135, 961266240
+ Current couple of seeds = 1994106489, 1096155261
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 4
@@ -563,36 +563,36 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.746
 49	fGamma = 9.283e+04	sumE = 1.748
 
-total time for build X-ray TR dE/dx tables = 43.86 s
+total time for build X-ray TR dE/dx tables = 80.24 s
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1571497135, 961266240
+ Current couple of seeds = 1994106489, 1096155261
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=45.5065 +- 6.81433  mm  
+    mean charged track length   in absorber=54.7655 +- 6.76825  mm  
 
-            mean energy deposit in absorber=0.0345058 +- 0.00688386  MeV 
+            mean energy deposit in absorber=0.032355 +- 0.00423709  MeV 
 
- mean number of steps in absorber (charged) =1.7 +- 0.317805      
- mean number of steps in absorber (neutral) =1.5 +- 0.474342      
+ mean number of steps in absorber (charged) =2.2 +- 0.309839      
+ mean number of steps in absorber (neutral) =1.8 +- 0.419524      
 
-   mean number of charged secondaries = 0.7 +- 0.317805
+   mean number of charged secondaries = 1.2 +- 0.309839
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.7  and e+s =0
+   mean number of e-s =1.2  and e+s =0
 
-(number) transmission coeff=0.4  reflection coeff=0
+(number) transmission coeff=0.7  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 428978025, 1928721503
+ Current couple of seeds = 715810537, 1109152493
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 5
@@ -653,36 +653,36 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 19.9
 49	fGamma = 9.283e+04	sumE = 20.41
 
-total time for build X-ray TR tables = 5.87 s
+total time for build X-ray TR tables = 5.73 s
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 428978025, 1928721503
+ Current couple of seeds = 715810537, 1109152493
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=246.87 +- 17.8616  mm  
+    mean charged track length   in absorber=232.081 +- 19.9207  mm  
 
-            mean energy deposit in absorber=0.122643 +- 0.0143542  MeV 
+            mean energy deposit in absorber=0.120768 +- 0.00499845  MeV 
 
- mean number of steps in absorber (charged) =10.4 +- 0.750999      
- mean number of steps in absorber (neutral) =12.2 +- 0.977753      
+ mean number of steps in absorber (charged) =10.3 +- 0.693542      
+ mean number of steps in absorber (neutral) =12.5 +- 0.777817      
 
-   mean number of charged secondaries = 9.4 +- 0.750999
+   mean number of charged secondaries = 9.3 +- 0.693542
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =9.4  and e+s =0
+   mean number of e-s =9.3  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 625659616, 2088674755
+ Current couple of seeds = 966555299, 1938175780
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 6
@@ -743,36 +743,36 @@ Irregular X-ray TR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 26.03
 49	fGamma = 9.283e+04	sumE = 26.55
 
-total time for build X-ray TR dE/dx tables = 11.94 s
+total time for build X-ray TR dE/dx tables = 11.29 s
 ### Run 5 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 625659616, 2088674755
+ Current couple of seeds = 966555299, 1938175780
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=196.523 +- 17.3264  mm  
+    mean charged track length   in absorber=238.114 +- 14.6129  mm  
 
-            mean energy deposit in absorber=0.104165 +- 0.00961887  MeV 
+            mean energy deposit in absorber=0.100042 +- 0.00437514  MeV 
 
- mean number of steps in absorber (charged) =8.9 +- 0.670075      
- mean number of steps in absorber (neutral) =11.6 +- 0.907744      
+ mean number of steps in absorber (charged) =10 +- 0.489898      
+ mean number of steps in absorber (neutral) =12 +- 0.678233      
 
-   mean number of charged secondaries = 7.7 +- 0.583952
+   mean number of charged secondaries = 8.9 +- 0.518652
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =7.7  and e+s =0
+   mean number of e-s =8.9  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 462692652, 758197523
+ Current couple of seeds = 1691384143, 2106578107
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 7
@@ -833,36 +833,36 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 15.86
 49	fGamma = 9.283e+04	sumE = 16
 
-total time for build X-ray TR tables = 10.36 s
+total time for build X-ray TR tables = 9.65 s
 ### Run 6 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 462692652, 758197523
+ Current couple of seeds = 1691384143, 2106578107
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=220.299 +- 30.1448  mm  
+    mean charged track length   in absorber=228.557 +- 31.4659  mm  
 
-            mean energy deposit in absorber=0.0887305 +- 0.00749755  MeV 
+            mean energy deposit in absorber=0.0970477 +- 0.0133131  MeV 
 
- mean number of steps in absorber (charged) =9 +- 1.0198      
- mean number of steps in absorber (neutral) =9.8 +- 1.06583      
+ mean number of steps in absorber (charged) =9.6 +- 1.39427      
+ mean number of steps in absorber (neutral) =9.8 +- 1.55435      
 
-   mean number of charged secondaries = 8 +- 1.0198
+   mean number of charged secondaries = 8.6 +- 1.39427
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =8  and e+s =0
+   mean number of e-s =8.6  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 872040894, 987361513
+ Current couple of seeds = 142463008, 191113378
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 8
@@ -923,36 +923,36 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 21.91
 49	fGamma = 9.283e+04	sumE = 22.07
 
-total time for build X-ray TR dE/dx tables = 23.08 s
+total time for build X-ray TR dE/dx tables = 23.97 s
 ### Run 7 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 872040894, 987361513
+ Current couple of seeds = 142463008, 191113378
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=264.323 +- 29.4088  mm  
+    mean charged track length   in absorber=260.23 +- 16.2057  mm  
 
-            mean energy deposit in absorber=0.088038 +- 0.00765656  MeV 
+            mean energy deposit in absorber=0.105572 +- 0.00698784  MeV 
 
- mean number of steps in absorber (charged) =10.7 +- 1.114      
- mean number of steps in absorber (neutral) =12.3 +- 1.21696      
+ mean number of steps in absorber (charged) =11 +- 0.52915      
+ mean number of steps in absorber (neutral) =11.5 +- 0.533854      
 
-   mean number of charged secondaries = 9.6 +- 1.11535
+   mean number of charged secondaries = 9.9 +- 0.537587
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =9.6  and e+s =0
+   mean number of e-s =9.9  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1513321607, 1567785206
+ Current couple of seeds = 12667249, 1974478987
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 9
@@ -1013,36 +1013,36 @@ Regular X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.231
 49	fGamma = 9.283e+04	sumE = 1.235
 
-total time for build X-ray TR tables = 30.62 s
+total time for build X-ray TR tables = 44.41 s
 ### Run 8 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1513321607, 1567785206
+ Current couple of seeds = 12667249, 1974478987
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=44.3978 +- 6.09858  mm  
+    mean charged track length   in absorber=34.9092 +- 3.18744  mm  
 
-            mean energy deposit in absorber=0.029338 +- 0.00316184  MeV 
+            mean energy deposit in absorber=0.0271514 +- 0.00185117  MeV 
 
- mean number of steps in absorber (charged) =1.6 +- 0.252982      
- mean number of steps in absorber (neutral) =1 +- 0.316228      
+ mean number of steps in absorber (charged) =1.2 +- 0.126491      
+ mean number of steps in absorber (neutral) =0.6 +- 0.289828      
 
-   mean number of charged secondaries = 0.6 +- 0.252982
+   mean number of charged secondaries = 0.2 +- 0.126491
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.6  and e+s =0
+   mean number of e-s =0.2  and e+s =0
 
-(number) transmission coeff=0.3  reflection coeff=0
+(number) transmission coeff=0.1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1572492194, 835362862
+ Current couple of seeds = 86814914, 408516781
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 10
@@ -1103,36 +1103,36 @@ Regular X-ray TR dE/dx radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.633
 49	fGamma = 9.283e+04	sumE = 1.634
 
-total time for build X-ray TR dE/dx tables = 45.45 s
+total time for build X-ray TR dE/dx tables = 63.24 s
 ### Run 9 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1572492194, 835362862
+ Current couple of seeds = 86814914, 408516781
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=50.161 +- 7.55408  mm  
+    mean charged track length   in absorber=41.5843 +- 4.8033  mm  
 
-            mean energy deposit in absorber=0.032251 +- 0.00377183  MeV 
+            mean energy deposit in absorber=0.02822 +- 0.00346325  MeV 
 
- mean number of steps in absorber (charged) =1.9 +- 0.298329      
- mean number of steps in absorber (neutral) =1.4 +- 0.352136      
+ mean number of steps in absorber (charged) =1.5 +- 0.212132      
+ mean number of steps in absorber (neutral) =1.2 +- 0.309839      
 
-   mean number of charged secondaries = 0.9 +- 0.298329
+   mean number of charged secondaries = 0.5 +- 0.212132
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.9  and e+s =0
+   mean number of e-s =0.5  and e+s =0
 
-(number) transmission coeff=0.6  reflection coeff=0
+(number) transmission coeff=0.4  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 743318298, 1891628039
+ Current couple of seeds = 40409853, 915755564
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
