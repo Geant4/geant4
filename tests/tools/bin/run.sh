@@ -64,6 +64,17 @@ fi
 
 if [ $1 = "all" ] ; then 
 
+  nice $G4INSTALL/tests/tools/bin/run.sh test101
+  nice $G4INSTALL/tests/tools/bin/run.sh test102
+  nice $G4INSTALL/tests/tools/bin/run.sh test103
+  nice $G4INSTALL/tests/tools/bin/run.sh test104
+  nice $G4INSTALL/tests/tools/bin/run.sh test104.EMtest
+  nice $G4INSTALL/tests/tools/bin/run.sh test105
+  nice $G4INSTALL/tests/tools/bin/run.sh test106
+  if [ -n $G4USE_HEPODBMS ] ; then
+    nice $G4INSTALL/tests/tools/bin/run.sh test401
+    nice $G4INSTALL/tests/tools/bin/run.sh test402
+  fi
   nice $G4INSTALL/tests/tools/bin/run.sh test01
   nice $G4INSTALL/tests/tools/bin/run.sh test02
   nice $G4INSTALL/tests/tools/bin/run.sh test02.hadron
@@ -75,13 +86,6 @@ if [ $1 = "all" ] ; then
 #'  nice $G4INSTALL/tests/tools/bin/run.sh test08
   nice $G4INSTALL/tests/tools/bin/run.sh test09
   nice $G4INSTALL/tests/tools/bin/run.sh test10
-  nice $G4INSTALL/tests/tools/bin/run.sh test101
-  nice $G4INSTALL/tests/tools/bin/run.sh test102
-  nice $G4INSTALL/tests/tools/bin/run.sh test103
-  nice $G4INSTALL/tests/tools/bin/run.sh test104
-  nice $G4INSTALL/tests/tools/bin/run.sh test104.EMtest
-  nice $G4INSTALL/tests/tools/bin/run.sh test105
-  nice $G4INSTALL/tests/tools/bin/run.sh test106
   nice $G4INSTALL/tests/tools/bin/run.sh test11
   nice $G4INSTALL/tests/tools/bin/run.sh test12
   nice $G4INSTALL/tests/tools/bin/run.sh test13
