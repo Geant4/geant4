@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.30 2004-03-10 16:48:46 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.31 2004-08-13 14:21:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,6 +83,14 @@ G4PhotoElectricEffect::~G4PhotoElectricEffect()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition&
+                                                        particle)
+{
+   return ( &particle == G4Gamma::Gamma() ); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom(G4double GammaEnergy,
                                                           G4double AtomicNumber)
 
@@ -117,6 +125,29 @@ G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
                   SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
           
  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
+                                                       G4double,
+                                                       G4ForceCondition*)
+
+// returns the gamma mean free path in GEANT4 internal units
+{
+ G4double  GammaEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+ G4double* SandiaCof   = aTrack.GetMaterial()->GetSandiaTable()
+                                   ->GetSandiaCofForMaterial(GammaEnergy);
+				    
+ G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+          energy4 = energy2*energy2;
+
+ 
+ G4double SIGMA = SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+                  SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+          
+ MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+ return MeanFreePath;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4PhotoElectricEffect.hh,v 1.16 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.17 2004-08-13 14:21:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +44,8 @@
 // 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
 //           Simplify public interface (mma)
 // 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
-//           distribution (mma)       
+//           distribution (mma)
+// 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom()  (mma)
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -140,8 +140,6 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-#include "G4PhotoElectricEffect.icc"
   
 #endif
  
