@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 11:23:50 gunter Exp $
+$Id: History,v 1.3 1999-02-03 16:26:41 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Feb 4, 99  H.Kurashige (particles-01-00-01)
+- Re-fixed bugs in destrction of ions  (Hisaya)
+
 - Dec. 15, 98 H.Kurashige(particles-00-04-08)
 - Fixed bugs in destrction of ions  (Hisaya)
 
