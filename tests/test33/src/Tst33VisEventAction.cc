@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.4 2002-11-20 13:09:18 dressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.5 2002-11-29 09:35:50 mdressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,10 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+#include "G4Polyline.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,13 +99,13 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
 	G4bool charged(false);
 	charged = G4std::fabs(trj->GetCharge()) > 0;
 	if (drawFlag == "all") {
-	  trj->DrawTrajectory(50);
+	  DrawTrajectory(*trj);
 	}
 	else if ((drawFlag == "charged")&&(charged)) {
-	  trj->DrawTrajectory(50);
+	  DrawTrajectory(*trj);
 	}
 	else if ((drawFlag == "neutral")&&(!charged)) {
-	  trj->DrawTrajectory(50);
+	  DrawTrajectory(*trj);
 	}
       }
       else {
@@ -112,3 +116,65 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+///////////////////////////////////////////////
+void Tst33VisEventAction::DrawTrajectory(G4Trajectory &trj) const
+///////////////////////////////////////////////
+{
+
+   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+   G4ThreeVector pos;
+
+   G4ParticleDefinition* pdf = trj.GetParticleDefinition();
+   G4String ParticleName(pdf->GetParticleName());
+   G4double PDGCharge(pdf->GetPDGCharge());
+
+
+   G4Polyline pPolyline;
+   for (int i = 0; i < trj.GetPointEntries() ; i++) {
+     G4VTrajectoryPoint* trjPoint = trj.GetPoint(i);
+       pos = trjPoint->GetPosition();
+     pPolyline.push_back( pos );
+   }
+   
+   G4Colour colour;
+   if (ParticleName == "proton") {
+     colour = G4Colour(1,0,1); // magenta
+     }
+   else if (ParticleName == "neutron") {
+     colour = G4Colour(0,1,1); // cyan
+   }
+   else if (ParticleName == "gamma") {
+     colour = G4Colour(1,1,0); // yellow
+   }
+   else {
+     if(PDGCharge<0.) 
+       colour = G4Colour(1.,0.,0.); // red
+     else if(PDGCharge>0.) 
+       colour = G4Colour(0.,0.,1.); // blue
+     else 
+       colour = G4Colour(0.,1.,0.); // green
+   }
+   G4VisAttributes attribs(colour);
+   pPolyline.SetVisAttributes(attribs);
+   if(pVVisManager) pVVisManager->Draw(pPolyline);
+
+
+   /*
+   if(i_mode!=0)
+   {
+     for(size_t j=0; j<positionRecord->size(); j++) {
+       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
+       pos = aTrajectoryPoint->GetPosition();
+       G4Circle circle( pos );
+       circle.SetScreenSize(0.001*i_mode);
+       circle.SetFillStyle(G4Circle::filled);
+       G4Colour colSpot(0.,0.,0.);
+       G4VisAttributes attSpot(colSpot);
+       circle.SetVisAttributes(attSpot);
+       if(pVVisManager) pVVisManager->Draw(circle);
+     }
+   }
+   */
+}

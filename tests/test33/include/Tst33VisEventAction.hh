@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
+// $Id: Tst33VisEventAction.hh,v 1.4 2002-11-29 09:35:50 mdressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "globals.hh"
 
 class Tst33VisEventActionMessenger;
-
+class G4Trajectory;
 
 class Tst33VisEventAction : public Tst33VEventAction
 {
@@ -54,6 +54,7 @@ public:
   virtual void   EndOfEventAction(const G4Event*);
   virtual void SpecialCellScorer(const G4CellScorer *scorer);
   virtual void Clear();
+  void DrawTrajectory(G4Trajectory &trj) const;
   
   inline void SetDrawFlag   (const G4String &val);
   inline void SetPrintModulo(G4int    val);  
