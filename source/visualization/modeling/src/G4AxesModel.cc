@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AxesModel.cc,v 1.1 2001-04-11 13:39:33 johna Exp $
+// $Id: G4AxesModel.cc,v 1.2 2001-05-03 11:16:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,19 +43,19 @@ void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
 
   //----- Draw x-axis
   x_axis.SetVisAttributes(&ax);
-  x_axis.append(G4Point3D(fX0,fY0,fZ0));
-  x_axis.append(G4Point3D((fX0 + fLength),fY0,fZ0));
+  x_axis.push_back(G4Point3D(fX0,fY0,fZ0));
+  x_axis.push_back(G4Point3D((fX0 + fLength),fY0,fZ0));
   scene.AddPrimitive(x_axis);
 
   //----- Draw y-axis
   y_axis.SetVisAttributes(&ay);
-  y_axis.append(G4Point3D(fX0,fY0,fZ0));
-  y_axis.append(G4Point3D(fX0,(fY0 + fLength),fZ0));
+  y_axis.push_back(G4Point3D(fX0,fY0,fZ0));
+  y_axis.push_back(G4Point3D(fX0,(fY0 + fLength),fZ0));
   scene.AddPrimitive(y_axis);
 
   //----- Draw z-axis
   z_axis.SetVisAttributes(&az);
-  z_axis.append(G4Point3D(fX0,fY0,fZ0));
-  z_axis.append(G4Point3D(fX0,fY0,(fZ0 + fLength)));
+  z_axis.push_back(G4Point3D(fX0,fY0,fZ0));
+  z_axis.push_back(G4Point3D(fX0,fY0,(fZ0 + fLength)));
   scene.AddPrimitive(z_axis);
 }

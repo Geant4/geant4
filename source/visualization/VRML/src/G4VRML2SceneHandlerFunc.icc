@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.6 2001-01-25 15:28:13 johna Exp $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.7 2001-05-03 11:16:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandlerFunc.icc
@@ -118,9 +118,9 @@ void G4VRML2SCENE::AddPrimitive(const G4Polyline& polyline)
 	fDest << "\t\t"   << "coord Coordinate {" << "\n";
 	fDest << "\t\t\t" <<      "point [" << "\n";
 	G4int e, i;
-	for (i = 0, e = polyline.entries(); e; i++, e--) {
+	for (i = 0, e = polyline.size(); e; i++, e--) {
 
-		G4Point3D point = polyline(i);
+		G4Point3D point = polyline[i];
 		point.transform( *fpObjectTransformation );
 
 		fDest << "\t\t\t\t";
@@ -134,7 +134,7 @@ void G4VRML2SCENE::AddPrimitive(const G4Polyline& polyline)
 	fDest << "\t\t"   << "}"      << "\n"; // coord
 
 	fDest << "\t\t" << "coordIndex [";
-	for (i = 0, e = polyline.entries(); e; i++, e--) {
+	for (i = 0, e = polyline.size(); e; i++, e--) {
 		if (i % 10 == 0)
 			fDest << "\n" << "\t\t\t";
 		fDest << i << ", ";

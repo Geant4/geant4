@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.4 1999-12-15 14:54:32 gunter Exp $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.5 2001-05-03 11:16:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,16 +50,9 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
 	 << "\", copy no. " << fpCurrentPV -> GetCopyNo () << G4endl;
   *******************************************/
 
-  if (fRequiredPhysicalVolumeName == "list") {
-    for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
-    G4cout << "\"" << fpCurrentPV -> GetName ()
-	   << "\", copy no. " << fpCurrentPV -> GetCopyNo ()
-	   << G4endl;
-    return;
-  }
-
   if (fRequiredPhysicalVolumeName == fpCurrentPV -> GetName () &&
-      fRequiredCopyNo             == fpCurrentPV -> GetCopyNo ()) {
+      (fRequiredCopyNo             < 0 ||  // I.e., ignore negative request.
+       fRequiredCopyNo             == fpCurrentPV -> GetCopyNo ())) {
     // Current policy - take first one found!!
     if (!fpFoundPV) {  // i.e., if not already found.
       fFoundDepth                = fCurrentDepth;
@@ -71,9 +64,13 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
       if (!fMultipleOccurrence) {
 	fMultipleOccurrence = true;
 	G4cout << "G4PhysicalVolumeSearchScene::FindVolume:"
-	       << "\n  Required volume: \"" << fRequiredPhysicalVolumeName
-	       << "\", copy no. " << fRequiredCopyNo
-	       << " found more than once."
+	       << "\n  Required volume: \""
+	       << fRequiredPhysicalVolumeName
+	       << "\"";
+	if (fRequiredCopyNo >= 0) {
+	  G4cout << ", copy no. " << fRequiredCopyNo << ",";
+	}
+	G4cout << " found more than once."
 	  "\n  This function is not smart enough to distinguish identical"
 	  "\n  physical volumes which have different parentage.  Besides,"
 	  "\n  it's tricky to specify in general; we plan a GUI to do this."

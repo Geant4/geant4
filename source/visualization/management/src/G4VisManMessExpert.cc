@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessExpert.cc,v 1.6 2001-02-23 15:43:30 johna Exp $
+// $Id: G4VisManMessExpert.cc,v 1.7 2001-05-03 11:14:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -227,8 +227,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
       G4Colour c(1.0, 0.0, 0.0);
       G4VisAttributes a(c);
       line.SetVisAttributes(&a);
-      line.append (G4Point3D (x0,y0,z0));
-      line.append (G4Point3D (x1,y1,z1));
+      line.push_back (G4Point3D (x0,y0,z0));
+      line.push_back (G4Point3D (x1,y1,z1));
       fpVMan -> Draw (line);
       line.clear ();
     }
@@ -364,7 +364,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 	G4int nPoints = G4int (100 * G4UniformRand());
 	G4double tStart = twopi * G4UniformRand();
 	for (i = 0, t = tStart; i < nPoints; t += dt, a *= fa, z += dz, i++) {
-	  polymarker.append (G4Point3D (x0 + a * cos (t),
+	  polymarker.push_back (G4Point3D (x0 + a * cos (t),
 					y0 + a * sin (t), z0 + z));
 	}
 	G4double red   = G4UniformRand();
@@ -389,7 +389,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
       G4double a = 2000., fa = 0.999;
       G4double z = -500., dz = 1.;
       for (int i = 0; i < 1000; t += dt, a *= fa, z += dz, i++) {
-        line.append (G4Point3D (a * cos (t), a * sin (t), z));
+        line.push_back (G4Point3D (a * cos (t), a * sin (t), z));
       }
       fpVMan -> Draw (line);
     }
@@ -417,7 +417,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 	G4int nPoints = G4int (1000 * G4UniformRand());
 	G4double tStart = twopi * G4UniformRand();
 	for (i = 0, t = tStart; i < nPoints; t += dt, a *= fa, z += dz, i++) {
-	  line.append (G4Point3D (x0 + a * cos (t), y0 + a * sin (t), z0 + z));
+	  line.push_back (G4Point3D (x0 + a * cos (t), y0 + a * sin (t), z0 + z));
 	}
 	G4Colour c (G4UniformRand(), G4UniformRand(), G4UniformRand());
 	G4VisAttributes a(c);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.6 2001-01-25 15:28:11 johna Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.7 2001-05-03 11:16:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -223,18 +223,18 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyline& polyline)
 	fDest << "\t" << "Coordinate3 {" << "\n";
 	fDest << "\t\t" << "point [" << "\n";
 	G4int e, i;
-	for (i = 0, e = polyline.entries(); e; i++, e--) {
+	for (i = 0, e = polyline.size(); e; i++, e--) {
 		fDest << "\t\t\t";
-		fDest << polyline(i).x() << " ";
-		fDest << polyline(i).y() << " ";
-		fDest << polyline(i).z() << "," << "\n";
+		fDest << polyline[i].x() << " ";
+		fDest << polyline[i].y() << " ";
+		fDest << polyline[i].z() << "," << "\n";
 	}
 	fDest << "\t\t" << "]" << "\n";
 	fDest << "\t" << "}" << "\n"; // Coordinate3
 
 	fDest << "\t" << "IndexedLineSet {" << "\n";
 	fDest << "\t\t" << "coordIndex [";
-	for (i = 0, e = polyline.entries(); e; i++, e--) {
+	for (i = 0, e = polyline.size(); e; i++, e--) {
 		if (i % 10 == 0)
 			fDest << "\n" << "\t\t\t";
 		fDest << i << ", ";

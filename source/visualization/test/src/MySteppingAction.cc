@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.8 2001-01-16 18:19:20 johna Exp $
+// $Id: MySteppingAction.cc,v 1.9 2001-05-03 11:16:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,8 +56,8 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     else           c = G4Colour (0., 1., 0.);
     G4VisAttributes va (c);
     pl.SetVisAttributes (&va);
-    pl.append (pStep -> GetPreStepPoint () -> GetPosition ());
-    pl.append (pStep -> GetPostStepPoint () -> GetPosition ());
+    pl.push_back (pStep -> GetPreStepPoint () -> GetPosition ());
+    pl.push_back (pStep -> GetPostStepPoint () -> GetPosition ());
     static int coutCount = 0;
     if (coutCount < 10) {
       coutCount++;

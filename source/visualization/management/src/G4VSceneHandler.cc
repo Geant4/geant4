@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.12 2001-02-23 15:43:24 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.13 2001-05-03 11:14:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,15 +184,15 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   case G4Polymarker::line:
     {
       G4Polyline polyline (polymarker);
-      for (int iPoint = 0; iPoint < polymarker.entries (); iPoint++) {
-	polyline.append (polymarker[iPoint]);
+      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+	polyline.push_back (polymarker[iPoint]);
       }
       AddPrimitive (polyline);
     }
     break;
   case G4Polymarker::dots:
     {
-      for (int iPoint = 0; iPoint < polymarker.entries (); iPoint++) {
+      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Circle dot (polymarker);
         dot.SetPosition (polymarker[iPoint]);
 	dot.SetWorldSize  (0.);
@@ -203,7 +203,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   case G4Polymarker::circles:
     {
-      for (int iPoint = 0; iPoint < polymarker.entries (); iPoint++) {
+      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Circle circle (polymarker);
 	circle.SetPosition (polymarker[iPoint]);
 	AddPrimitive (circle);
@@ -212,7 +212,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   case G4Polymarker::squares:
     {
-      for (int iPoint = 0; iPoint < polymarker.entries (); iPoint++) {
+      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Square Square (polymarker);
 	Square.SetPosition (polymarker[iPoint]);
 	AddPrimitive (Square);

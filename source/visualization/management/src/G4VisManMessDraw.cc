@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.8 2001-04-10 14:56:44 johna Exp $
+// $Id: G4VisManMessDraw.cc,v 1.9 2001-05-03 11:14:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,22 +167,22 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
 		//----- Draw x-axis
       x_axis.SetVisAttributes(&ax);
-      x_axis.append (G4Point3D (x0*unit,y0,z0));
-      x_axis.append ( G4Point3D ( (x0 +length) , y0, z0 ) );
+      x_axis.push_back (G4Point3D (x0*unit,y0,z0));
+      x_axis.push_back ( G4Point3D ( (x0 +length) , y0, z0 ) );
       fpVMan -> Draw (x_axis);
       x_axis.clear ();
 
 		//----- Draw y-axis
       y_axis.SetVisAttributes(&ay);
-      y_axis.append (G4Point3D (x0,y0,z0));
-      y_axis.append ( G4Point3D ( x0 , (y0 +length ) , z0 ) );
+      y_axis.push_back (G4Point3D (x0,y0,z0));
+      y_axis.push_back ( G4Point3D ( x0 , (y0 +length ) , z0 ) );
       fpVMan -> Draw (y_axis);
       y_axis.clear ();
 
 		//----- Draw z-axis
       z_axis.SetVisAttributes(&az);
-      z_axis.append (G4Point3D (x0,y0,z0));
-      z_axis.append ( G4Point3D ( x0 , y0 , ( z0 +length ) ) );
+      z_axis.push_back (G4Point3D (x0,y0,z0));
+      z_axis.push_back ( G4Point3D ( x0 , y0 , ( z0 +length ) ) );
       fpVMan -> Draw (z_axis);
       z_axis.clear ();
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.hh,v 1.5 2001-02-05 02:33:50 johna Exp $
+// $Id: G4VisCommandsCompound.hh,v 1.6 2001-05-03 11:14:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -14,6 +14,17 @@
 #define G4VISCOMMANDSCOMPOUND_HH
 
 #include "G4VVisCommand.hh"
+
+class G4VisCommandDrawTree: public G4VVisCommand {
+public:
+  G4VisCommandDrawTree ();
+  virtual ~G4VisCommandDrawTree ();
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandDrawTree (const G4VisCommandDrawTree&);
+  G4VisCommandDrawTree& operator = (const G4VisCommandDrawTree&);
+  G4UIcommand* fpCommand;
+};
 
 class G4VisCommandDrawView: public G4VVisCommand {
 public:

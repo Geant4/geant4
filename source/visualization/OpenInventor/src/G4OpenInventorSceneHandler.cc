@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.9 2001-01-25 15:28:10 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.10 2001-05-03 11:16:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,7 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   if(currentSeparator==NULL) return;
   
-  G4int nPoints = line.entries();
+  G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
   SoCoordinate3 *polyCoords = new SoCoordinate3;
@@ -121,9 +121,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   SoLineSet *pLine = new SoLineSet;
 
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
-    pCoords[iPoint].setValue(line(iPoint).x(),
-			     line(iPoint).y(),
-			     line(iPoint).z());
+    pCoords[iPoint].setValue(line[iPoint].x(),
+			     line[iPoint].y(),
+			     line[iPoint].z());
   }
 
   //

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.8 2001-01-25 15:28:09 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.9 2001-05-03 11:16:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,12 +88,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glDisable (GL_LIGHTING);
   glBegin (GL_LINE_STRIP);
 
-  G4int nPoints = line.entries ();
+  G4int nPoints = line.size ();
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
-    x = line(iPoint).x(); 
-    y = line(iPoint).y();
-    z = line(iPoint).z();
+    x = line[iPoint].x(); 
+    y = line[iPoint].y();
+    z = line[iPoint].z();
     glVertex3d (x, y, z);
   }
   glEnd ();
