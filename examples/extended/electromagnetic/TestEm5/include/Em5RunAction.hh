@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.9 2002-06-05 15:43:42 urban Exp $
+// $Id: Em5RunAction.hh,v 1.10 2002-06-06 17:23:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,8 @@ class Em5RunMessenger;
 class G4Run;
 
 #ifndef G4NOHIST
- class HepTupleManager;
- class HepHistogram;
+ class ITree;
+ class IHistogram1D;
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,7 +113,7 @@ class Em5RunAction : public G4UserRunAction
     G4double GetdTh() { return dTh;};
     G4double GetdThback() { return dThback;};
 #ifndef G4NOHIST
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
+    IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
 
   private:
@@ -122,22 +122,22 @@ class Em5RunAction : public G4UserRunAction
 
   private:
 
-    G4String histName ;
+    G4String histName;
     
 #ifndef G4NOHIST    
-    HepTupleManager* hbookManager;
-    HepHistogram* histo[10] ;    
+    ITree* tree;
+    IHistogram1D* histo[10];    
 #endif
     
     G4double EnergySumAbs,EnergySquareSumAbs;
     G4double tlSumAbs,tlsquareSumAbs;
-    G4double nStepSumCharged,nStepSum2Charged ;
-    G4double nStepSumNeutral,nStepSum2Neutral ;
+    G4double nStepSumCharged,nStepSum2Charged;
+    G4double nStepSumNeutral,nStepSum2Neutral;
     G4double TotNbofEvents;
     G4double SumCharged,Sum2Charged,SumNeutral,Sum2Neutral;
     G4double Selectron,Spositron;
 
-    G4double Transmitted,Reflected ;
+    G4double Transmitted,Reflected;
 
     G4double Steplow,Stephigh;
     G4int    nbinStep;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.8 2002-06-05 15:43:43 urban Exp $
+// $Id: Em5EventAction.cc,v 1.9 2002-06-06 17:23:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 #include "G4UnitsTable.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,23 +126,23 @@ void Em5EventAction::EndOfEventAction(const G4Event* evt)
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
-    runaction->AddnStepsCharged(nstepCharged) ;
-    runaction->AddnStepsNeutral(nstepNeutral) ;
+    runaction->AddnStepsCharged(nstepCharged);
+    runaction->AddnStepsNeutral(nstepNeutral);
     if(verboselevel==2)
       G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
-    runaction->AddTrRef(Transmitted,Reflected) ;
-    runaction->AddEdeps(totEAbs) ;
+    runaction->AddTrRef(Transmitted,Reflected);
+    runaction->AddEdeps(totEAbs);
 #ifndef G4NOHIST
     if(runaction->GetHisto(1) != 0)
-       runaction->GetHisto(1)->accumulate(totEAbs) ;
+       runaction->GetHisto(1)->fill(totEAbs);
 #endif
 
     nstep=nstepCharged+nstepNeutral ;
 #ifndef G4NOHIST
     if(runaction->GetHisto(0) != 0)
-       runaction->GetHisto(0)->accumulate(nstep) ;
+       runaction->GetHisto(0)->fill(nstep);
 #endif
   }
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.12 2002-06-05 15:43:43 urban Exp $
+// $Id: Em5RunAction.cc,v 1.13 2002-06-06 17:23:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,15 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
-#include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IAnalysisFactory.h"
+ #include "AIDA/ITreeFactory.h"
+ #include "AIDA/ITree.h"
+ #include "AIDA/IHistogramFactory.h"
+ #include "AIDA/IHistogram1D.h"
+ #include "AIDA/IAxis.h"
+ #include "AIDA/IAnnotation.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,10 +59,6 @@ Em5RunAction::Em5RunAction()
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),nbinvertexz(0)
 {
   runMessenger = new Em5RunMessenger(this);
-  
-#ifndef G4NOHIST
-  for (G4int k=0; k<10; k++) histo[k] = NULL;
-#endif      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,12 +67,10 @@ Em5RunAction::~Em5RunAction()
 {
   delete runMessenger;
 #ifndef G4NOHIST   
-   // Write histogram file
-   hbookManager->write();
-  
-  for (G4int k=0; k<10; k++) 
-       if(histo[k]) delete histo[k] ;
-  delete hbookManager;
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+ 
+  delete tree;
 #endif  
 }
 
@@ -77,68 +79,78 @@ Em5RunAction::~Em5RunAction()
 void Em5RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  // init hbook
-  hbookManager = new HBookFile(histName, 68);
-  assert (hbookManager != 0);
+ // Creating the analysis factory
+ IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ 
+ // Creating the tree factory
+ ITreeFactory* tf = af->createTreeFactory();
+ 
+ // Creating a tree mapped to an hbook file.
+ tree = tf->create(histName, false, false, "hbook");
 
-  // book histograms
+ // Creating a histogram factory, whose histograms will be handled by the tree
+ IHistogramFactory* hf = af->createHistogramFactory(*tree);
+
+ // creating histograms
+ //
   if(nbinStep>0)
   {
-    histo[0] = hbookManager->histogram("number of steps/event"
-                                   ,nbinStep,Steplow,Stephigh) ;
+    histo[0] = hf->create1D("1","number of steps/event"
+                               ,nbinStep,Steplow,Stephigh);
   }
   if(nbinEn>0)
   {
-    histo[1] = hbookManager->histogram("energy deposit in absorber(in MeV)"
-                                     ,nbinEn,Enlow,Enhigh) ;
+    histo[1] = hf->create1D("2","energy deposit in absorber(in MeV)"
+                               ,nbinEn,Enlow,Enhigh);
   }
   if(nbinTh>0)
   {
-    histo[2] = hbookManager->histogram("angle distribution at exit(deg)"
-                                     ,nbinTh,Thlow/deg,Thhigh/deg) ;
+    histo[2] = hf->create1D("3","angle distribution at exit(deg)"
+                               ,nbinTh,Thlow/deg,Thhigh/deg);
   }
   if(nbinR>0)
   {
-    histo[3] = hbookManager->histogram("lateral distribution at exit(mm)"
-                                     ,nbinR ,Rlow,Rhigh)  ;
+    histo[3] = hf->create1D("4","lateral distribution at exit(mm)"
+                               ,nbinR ,Rlow,Rhigh);
   }
   if(nbinTt>0)
   {
-    histo[4] = hbookManager->histogram(
-                           "kinetic energy of the primary at exit(MeV)"
-                           ,nbinTt,Ttlow,Tthigh);
+    histo[4] = hf->create1D("5","kinetic energy of the primary at exit(MeV)"
+                               ,nbinTt,Ttlow,Tthigh);
   }
   if(nbinThback>0)
   {
-    histo[5] = hbookManager->histogram(
+    histo[5] = hf->create1D("6",
                            "angle distribution of backscattered primaries(deg)"
                            ,nbinThback,Thlowback/deg,Thhighback/deg);
   }
   if(nbinTb>0)
   {
-    histo[6] = hbookManager->histogram(
+    histo[6] = hf->create1D("7",
                            "kinetic energy of the backscattered primaries (MeV)"
                            ,nbinTb,Tblow,Tbhigh);
   }
   if(nbinTsec>0)
   {
-    histo[7] = hbookManager->histogram(
-                           "kinetic energy of the charged secondaries (MeV)"
-                           ,nbinTsec,Tseclow,Tsechigh);
+    histo[7] = hf->create1D("8","kinetic energy of the charged secondaries(MeV)"
+                               ,nbinTsec,Tseclow,Tsechigh);
   }
   if(nbinvertexz>0)
   {
-    histo[8] = hbookManager->histogram(
-                           "x of secondary charged vertices(mm)"
-                           ,nbinvertexz ,zlow,zhigh);
+    histo[8] = hf->create1D("9","x of secondary charged vertices(mm)"
+                               ,nbinvertexz ,zlow,zhigh);
   }
   if(nbinGamma>0)
   {
-    histo[9]= hbookManager->histogram(
-                          "kinetic energy of gammas escaping the absorber (MeV)"
+    histo[9]= hf->create1D("10",
+                      "kinetic energy of gammas escaping the absorber(MeV)"
                                 //     ,nbinGamma,ElowGamma,EhighGamma);
                           ,nbinGamma,log10(ElowGamma),log10(EhighGamma));
   }
+  
+ delete hf;
+ delete tf;
+ delete af;  
 #endif  
 }
 
