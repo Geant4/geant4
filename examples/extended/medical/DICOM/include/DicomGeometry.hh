@@ -44,23 +44,18 @@ class DicomPatientConstructor;
 class DicomGeometry : public G4VUserDetectorConstruction
 {
 public:
-  DicomGeometry();
 
+  DicomGeometry();
   ~DicomGeometry();
 
 private:
+
   void InitialisationOfMaterials();
 
 public:
+
   void PatientConstruction();
-  G4VPhysicalVolume* Construct();// Construction of the geometry
-
-  G4ThreeVector getWorldDim() { return theWorldDim; }
-
-private:
-  G4Box* solidWorld;
-  G4LogicalVolume* logicWorld;
-  G4VPhysicalVolume* physiWorld;
+  G4VPhysicalVolume* Construct();
 
 private:  
    
@@ -77,27 +72,13 @@ private:
   G4Material* adiposeTissue; 
   G4Material* lungexhale; 
   G4Material* lunginhale;
-  G4Material* air;
- 
-  // Logical Box to place Parameteristion inside it
- 
-  G4double alpha,red,green,blue;
+  G4Material* air; 
 
-  G4String theFileName;	
- 
+  // World ...
 
-  G4ThreeVector theWorldDim;
-
-  G4String PatientArrayName[30];
-  G4String LogicPatientArrayName[30];
-  G4String PhysiPatientArrayName[30];
-
-  G4double PatientX;
-  G4double PatientY;
-  G4double PatientZ;
-
-  G4String aFileName[300];
-  G4int Probe2compression;
+  G4Box* solidWorld;
+  G4LogicalVolume* logicWorld;
+  G4VPhysicalVolume* physiWorld;
 };
 
 #endif

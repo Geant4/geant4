@@ -267,9 +267,9 @@ void DicomGeometry::PatientConstruction()
   G4int totalRows = ReadConfiguration->GetTotalRows(); 
   G4int totalColumns = ReadConfiguration->GetTotalColumns();
 
-  PatientX = (compressionUsed*(xPixelSpacing)/2.0) *mm;
-  PatientY = (compressionUsed*(yPixelSpacing)/2.0) *mm;
-  PatientZ = ((sliceThickness/2.0) *mm);
+  G4double patientX = (compressionUsed*(xPixelSpacing)/2.0) *mm;
+  G4double patientY = (compressionUsed*(yPixelSpacing)/2.0) *mm;
+  G4double patientZ = ((sliceThickness/2.0) *mm);
 
   G4VisAttributes* visualisationAttribute = new G4VisAttributes();
   visualisationAttribute->SetForceSolid(false);
@@ -299,11 +299,13 @@ void DicomGeometry::PatientConstruction()
     
   G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
   G4VPhysicalVolume* parameterisedPhysVolume =  
-                        new G4PVPlacement(0,origin,
-                                          parameterisedLogicalvolume,
-                                         "Parameterisation Mother (placement)",                                          logicWorld,false,0);
+                        new G4PVPlacement( 0,origin,
+                                           parameterisedLogicalvolume,
+                                           "Parameterisation Mother (placement)",                                                    logicWorld,
+                                           false,
+                                           0);
 
-  G4Box* LungINhale = new G4Box( "LungINhale", PatientX, PatientY, PatientZ);
+  G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
 
   G4LogicalVolume* logicLungInHale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
   G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
@@ -326,6 +328,7 @@ void DicomGeometry::PatientConstruction()
                                            parameterisedLogicalvolume,
                                            kZAxis, numberOfVoxels, 
                                            paramLungINhale );
+  delete ReadConfiguration;
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()
@@ -336,11 +339,10 @@ G4VPhysicalVolume* DicomGeometry::Construct()
   G4double worldYDimension = 1.*m;
   G4double worldZDimension = 1.*m;
 
-  theWorldDim = G4ThreeVector(worldXDimension,worldYDimension,worldZDimension);
-  solidWorld = new G4Box("WorldSolid",
+  solidWorld = new G4Box( "WorldSolid",
                           worldXDimension,
                           worldYDimension,
-                          worldZDimension);
+                          worldZDimension );
 
   logicWorld = new G4LogicalVolume( solidWorld, 
                                     air, 
