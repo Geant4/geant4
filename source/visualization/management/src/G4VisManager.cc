@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.35 2001-08-11 21:40:02 johna Exp $
+// $Id: G4VisManager.cc,v 1.36 2001-08-14 18:28:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -254,32 +254,26 @@ const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
 }
 
 G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
-  if (pSystem -> GetFunctionality () == G4VGraphicsSystem::noFunctionality) {
-    if (fVerbosity >= warnings) {
-      G4cout << "G4VisManager::RegisterGraphicsSystem: WARNING: attempt to"
-	"\n  register a \"no functionality\" graphics system, probably an"
-	"\n  unbuilt system, i.e., a system not available locally.  Please"
-	"\n  consult your computer manager.  System was "
-	     << pSystem -> GetName ();
-      if (pSystem -> GetNickname () != "") {
-	G4cout << " (" << pSystem -> GetNickname () << ")";
-      }
-      G4cout << G4endl;
-    }
-    return false;
-  }
-  else {
+  G4bool happy(true);
+  if (pSystem) {
     fAvailableGraphicsSystems.push_back (pSystem);
     if (fVerbosity >= confirmations) {
       G4cout << "G4VisManager::RegisterGraphicsSystem: "
-	   << pSystem -> GetName ();
+	     << pSystem -> GetName ();
       if (pSystem -> GetNickname () != "") {
 	G4cout << " (" << pSystem -> GetNickname () << ")";
       }
       G4cout << " registered." << G4endl;
     }
-    return true;
   }
+  else {
+    if (fVerbosity >= errors) {
+      G4cout << "G4VisManager::RegisterGraphicsSystem: null pointer!"
+	     <<G4endl;
+    }
+    happy=false;
+  }
+  return happy;
 }
 
 void G4VisManager::Draw (const G4Polyline& line,
@@ -721,6 +715,13 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
 	G4cout << "  Scene Handler now "
 	       << fpSceneHandler -> GetName () << G4endl;
       }
+      if (fpScene != fpSceneHandler -> GetScene ()) {
+	fpScene = fpSceneHandler -> GetScene ();
+	if (fVerbosity >= confirmations) {
+	  G4cout << "  Scene now \""
+		 << fpScene -> GetName () << "\"" << G4endl;
+	}
+      }
       const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
       if (viewerList.size ()) {
 	fpViewer = viewerList [0];
@@ -749,10 +750,17 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
     G4cout << "G4VisManager::SetCurrentSceneHandler: scene handler now \""
 	   << pSceneHandler -> GetName () << "\"" << G4endl;
   }
+  if (fpScene != fpSceneHandler -> GetScene ()) {
+    fpScene = fpSceneHandler -> GetScene ();
+    if (fVerbosity >= confirmations) {
+      G4cout << "  Scene now \""
+	     << fpScene -> GetName () << "\"" << G4endl;
+    }
+  }
   if (fpGraphicsSystem != pSceneHandler -> GetGraphicsSystem ()) {
     fpGraphicsSystem = pSceneHandler -> GetGraphicsSystem ();
     if (fVerbosity >= confirmations) {
-      G4cout << "  graphics system now \""
+      G4cout << "  Graphics system now \""
 	     << fpGraphicsSystem -> GetName () << "\"" << G4endl;
     }
   }
@@ -793,6 +801,7 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   }
   fpSceneHandler = fpViewer -> GetSceneHandler ();
   fpSceneHandler -> SetCurrentViewer (pViewer);
+  fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
   IsValidView ();  // Checks.
 }
@@ -1115,132 +1124,3 @@ void G4VisManager::ClearTransientStoreIfMarked(){
     fpSceneHandler->ClearTransientStore();
   }
 }
-
-///////////////////////////////////////////////////////////////////////
-// "No functionality" graphics systems to trap accidental attempt to
-// use unbuilt systems.
-
-#ifndef G4VIS_BUILD_DAWN_DRIVER
-
-class G4FukuiRenderer: public G4VGraphicsSystem {
-public:
-  G4FukuiRenderer ();
-};
-G4FukuiRenderer::G4FukuiRenderer ():
-  G4VGraphicsSystem ("FukuiRenderer",
-                     "DAWN",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_OPACS_DRIVER
-
-class G4Wo: public G4VGraphicsSystem {
-public:
-  G4Wo ();
-};
-G4Wo::G4Wo ():
-  G4VGraphicsSystem ("Wo",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-class G4Xo: public G4VGraphicsSystem {
-public:
-  G4Xo ();
-};
-G4Xo::G4Xo ():
-  G4VGraphicsSystem ("Xo",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_OPENGLX_DRIVER
-
-class G4OpenGLImmediateX: public G4VGraphicsSystem {
-public:
-  G4OpenGLImmediateX ();
-};
-G4OpenGLImmediateX::G4OpenGLImmediateX ():
-  G4VGraphicsSystem ("OpenGLImmediateX",
-                     "OGLIX",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-class G4OpenGLStoredX: public G4VGraphicsSystem {
-public:
-  G4OpenGLStoredX ();
-};
-G4OpenGLStoredX::G4OpenGLStoredX ():
-  G4VGraphicsSystem ("OpenGLStoredX",
-                     "OGLSX",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_OPENGLXM_DRIVER
-
-class G4OpenGLImmediateXm: public G4VGraphicsSystem {
-public:
-  G4OpenGLImmediateXm ();
-};
-G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
-  G4VGraphicsSystem ("OpenGLImmediateXm",
-                     "OGLIXm",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-class G4OpenGLStoredXm: public G4VGraphicsSystem {
-public:
-  G4OpenGLStoredXm ();
-};
-G4OpenGLStoredXm::G4OpenGLStoredXm ():
-  G4VGraphicsSystem ("OpenGLStoredXm",
-                     "OGLSXm",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_OIX_DRIVER
-
-class G4OpenInventorX: public G4VGraphicsSystem {
-public:
-  G4OpenInventorX ();
-};
-G4OpenInventorX::G4OpenInventorX ():
-  G4VGraphicsSystem ("OpenInventorX",
-		     "OIX",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_OIWIN32_DRIVER
-
-class G4OpenInventorWin32: public G4VGraphicsSystem {
-public:
-  G4OpenInventorWin32 ();
-};
-G4OpenInventorWin32::G4OpenInventorWin32 ():
-  G4VGraphicsSystem ("OpenInventorWin32",
-		     "OIWIN32",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_VRML_DRIVER
-
-class G4VRML1: public G4VGraphicsSystem {
-public:
-  G4VRML1 ();
-};
-G4VRML1::G4VRML1 ():
-  G4VGraphicsSystem ("VRML1.0",
-		     "VRML1",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-class G4VRML2: public G4VGraphicsSystem {
-public:
-  G4VRML2 ();
-};
-G4VRML2::G4VRML2 ():
-  G4VGraphicsSystem ("VRML2.0",
-		     "VRML2",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
