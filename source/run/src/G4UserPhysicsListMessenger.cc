@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.9 2001-08-03 05:59:05 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.10 2001-10-11 13:44:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
-#include "g4rw/ctoken.h"           
-#include "g4rw/rstream.h"               
+#include "G4Tokenizer.hh"           
 
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
