@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.13 2003-10-21 13:30:05 maire Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.14 2004-01-12 18:58:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 06-06-03 Fix in cross section calculation for high energy (V.Ivanchenko)
 // 20-10-03 2*xi in ComputeDDMicroscopicCrossSection   (R.Kokoulin)
 //          8 integration points in ComputeDMicroscopicCrossSection 
+// 12-01-04 Take min cut of e- and e+ not its sum (V.Ivanchenko)
 
 //
 // Class Description:
@@ -126,14 +127,8 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
 
   G4double eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
   G4double pCut = (*(theCoupleTable->GetEnergyCutsVector(2)))[index];
-  G4double x = 2*electron_mass_c2 + eCut + pCut;
+  G4double x = 2.*(electron_mass_c2 + std::min(eCut,pCut));
   if(x < minPairEnergy) x = minPairEnergy;
-
- //// if (eCut < highKinEnergy && pCut < highKinEnergy) {
- ////   x +=  eCut + pCut;
- //// } else {
- ////   x = 0.5*highKinEnergy;
- //// }
 
   return x;
 }
