@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.2 1999-04-18 11:28:59 hpw Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.3 1999-05-06 14:37:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -161,7 +161,6 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   {
     G4DynamicParticle * aNew = 
        new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
-                             fragmentationProducts->at(i)->GetTotalEnergy(),
                              fragmentationProducts->at(i)->GetMomentum());
     G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
     aParticleChange.AddSecondary(aNew, newTime);
