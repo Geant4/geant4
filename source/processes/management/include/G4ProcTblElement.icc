@@ -1,13 +1,5 @@
 //////////////////////////
 inline 
- const G4ProcTblElement::G4ProcMgrVector*  G4ProcTblElement::GetProcMgrVector() const
-{
-  return pProcMgrVector;
-}
-
-
-//////////////////////////
-inline 
  G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
 {
   return pProcMgrVector->contains(pManager);

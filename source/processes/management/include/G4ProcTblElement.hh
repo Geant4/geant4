@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.2 1999-04-13 09:44:54 kurasige Exp $
+// $Id: G4ProcTblElement.hh,v 1.3 1999-06-01 14:52:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,18 +54,18 @@ class G4ProcTblElement
   protected:
     typedef RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
 
-    G4int Length() const ;
-    void  Insert(G4ProcessManager* aProcMgr);
-    void  Remove(G4ProcessManager* aProcMgr);
+    inline G4int Length() const ;
+    inline void  Insert(G4ProcessManager* aProcMgr);
+    inline void  Remove(G4ProcessManager* aProcMgr);
 
-    G4VProcess*       GetProcess() const;
-    const G4String&   GetProcessName() const;
+    inline G4VProcess*       GetProcess() const;
+    inline const G4String&   GetProcessName() const;
  
-    G4ProcessManager* GetProcessManager(G4int index) const;
-    const G4ProcMgrVector*  GetProcMgrVector() const;
+    inline G4ProcessManager* GetProcessManager(G4int index) const;
+    const G4ProcMgrVector*   GetProcMgrVector() const { return pProcMgrVector; }
   
-    G4int             GetIndex(const G4ProcessManager* pManager) const ;
-    G4bool            Contains(const G4ProcessManager* pManager) const ;
+    inline G4int      GetIndex(const G4ProcessManager* pManager) const ;
+    inline G4bool     Contains(const G4ProcessManager* pManager) const ;
 
   private:
     G4VProcess*       pProcess;
