@@ -190,6 +190,7 @@ void ExN06PhysicsList::ConstructEM()
 }
 
 #include "G4Cerenkov.hh"
+#include "G4Scintillation.hh"
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
 #include "G4OpBoundaryProcess.hh"
@@ -197,15 +198,18 @@ void ExN06PhysicsList::ConstructEM()
 void ExN06PhysicsList::ConstructOp()
 {
   G4Cerenkov*   theCerenkovProcess = new G4Cerenkov("Cerenkov");
+  G4Scintillation* theScintillationProcess = new G4Scintillation("Scintilltion");
   G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
   G4OpRayleigh*   theRayleighScatteringProcess = new G4OpRayleigh();
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
 
 //  theCerenkovProcess->DumpPhysicsTable();
+//  theScintillationProcess->DumpPhysicsTable();
 //  theAbsorptionProcess->DumpPhysicsTable();
 //  theRayleighScatteringProcess->DumpPhysicsTable();
 
   theCerenkovProcess->SetVerboseLevel(1);
+  theScintillationProcess->SetVerboseLevel(1);
   theAbsorptionProcess->SetVerboseLevel(1);
   theRayleighScatteringProcess->SetVerboseLevel(1);
   theBoundaryProcess->SetVerboseLevel(1);
@@ -214,6 +218,10 @@ void ExN06PhysicsList::ConstructOp()
 
   theCerenkovProcess->SetTrackSecondariesFirst(true);
   theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
+
+  theScintillationProcess->SetTrackSecondariesFirst(true);
+  theScintillationProcess->SetScintillationYield(100./MeV);
+  theScintillationProcess->SetResolutionScale(1.0);
 
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
@@ -226,6 +234,11 @@ void ExN06PhysicsList::ConstructOp()
     if (theCerenkovProcess->IsApplicable(*particle)) {
       pmanager->AddContinuousProcess(theCerenkovProcess);
     }
+    if (theScintillationProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(theScintillationProcess);
+      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
+      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
+    }
     if (particleName == "opticalphoton") {
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
       pmanager->AddDiscreteProcess(theAbsorptionProcess);
@@ -233,6 +246,7 @@ void ExN06PhysicsList::ConstructOp()
       pmanager->AddDiscreteProcess(theBoundaryProcess);
     }
   }
+// set ordering for AtRestDoIt
 }
 
 void ExN06PhysicsList::SetCuts()
