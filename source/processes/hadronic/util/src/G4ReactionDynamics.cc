@@ -1331,6 +1331,9 @@
       currentParticle = *vec[0];
       targetParticle = *vec[1];
       for( i=0; i<(vecLen-2); ++i )*vec[i] = *vec[i+2];
+      if(vecLen<2) G4Exception("G4ReactionDynamics::TwoCluster: Negative number of particles");
+      delete vec[vecLen-1];
+      delete vec[vecLen-2];
       vecLen -= 2;
       currentMass = currentParticle.GetMass()/GeV;
       targetMass = targetParticle.GetMass()/GeV;
@@ -1465,7 +1468,10 @@
       }
       else
       {
-        if( vecLen == 0 )return false;  // all secondaries have been eliminated
+        if( vecLen == 0 )
+	{
+	  return false;  // all secondaries have been eliminated
+	}
         if( targetParticle.GetSide() == -1 )
         {
           pMass = targetParticle.GetMass()/GeV;
@@ -3578,45 +3584,49 @@
     G4int nt = 2;
     if( (index>=6) || (G4UniformRand()<G4std::min(0.5,ke*10.0)) )nt = 3;
     
-    G4ReactionProduct *v = new G4ReactionProduct [3];
-    v[0].SetMass( mass[index]*MeV );
+    G4ReactionProduct **v = new G4ReactionProduct * [3];
+    v[0] =  new G4ReactionProduct;
+    v[1] =  new G4ReactionProduct;
+    v[2] =  new G4ReactionProduct;
+    
+    v[0]->SetMass( mass[index]*MeV );
     switch( index )
     {
      case 0:
-       v[1].SetDefinition( aGamma );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( aGamma );
+       v[2]->SetDefinition( aGamma );
        break;
      case 1:
-       v[1].SetDefinition( aNeutron );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( aNeutron );
+       v[2]->SetDefinition( aGamma );
        break;
      case 2:
-       v[1].SetDefinition( aProton );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( aProton );
+       v[2]->SetDefinition( aGamma );
        break;
      case 3:
-       v[1].SetDefinition( aDeuteron );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( aDeuteron );
+       v[2]->SetDefinition( aGamma );
        break;
      case 4:
-       v[1].SetDefinition( aTriton );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( aTriton );
+       v[2]->SetDefinition( aGamma );
        break;
      case 5:
-       v[1].SetDefinition( anAlpha );
-       v[2].SetDefinition( aGamma );
+       v[1]->SetDefinition( anAlpha );
+       v[2]->SetDefinition( aGamma );
        break;
      case 6:
-       v[1].SetDefinition( aNeutron );
-       v[2].SetDefinition( aNeutron );
+       v[1]->SetDefinition( aNeutron );
+       v[2]->SetDefinition( aNeutron );
        break;
      case 7:
-       v[1].SetDefinition( aNeutron );
-       v[2].SetDefinition( aProton );
+       v[1]->SetDefinition( aNeutron );
+       v[2]->SetDefinition( aProton );
        break;
      case 8:
-       v[1].SetDefinition( aProton );
-       v[2].SetDefinition( aProton );
+       v[1]->SetDefinition( aProton );
+       v[2]->SetDefinition( aProton );
        break;
     }
     //
@@ -3633,40 +3643,40 @@
     G4FastVector<G4ReactionProduct,128> tempV;
     tempV.Initialize( nt );
     G4int tempLen = 0;
-    tempV.SetElement( tempLen++, &v[0] );
-    tempV.SetElement( tempLen++, &v[1] );
-    if( nt == 3 )tempV.SetElement( tempLen++, &v[2] );
+    tempV.SetElement( tempLen++, v[0] );
+    tempV.SetElement( tempLen++, v[1] );
+    if( nt == 3 )tempV.SetElement( tempLen++, v[2] );
     G4bool constantCrossSection = true;
     G4double wgt =
       GenerateNBodyEvent( pseudo2.GetMass()/MeV, constantCrossSection, tempV, tempLen );
-    v[0].Lorentz( v[0], pseudo2 );
-    v[1].Lorentz( v[1], pseudo2 );
-    if( nt == 3 )v[2].Lorentz( v[2], pseudo2 );
+    v[0]->Lorentz( *v[0], pseudo2 );
+    v[1]->Lorentz( *v[1], pseudo2 );
+    if( nt == 3 )v[2]->Lorentz( *v[2], pseudo2 );
     
     G4bool particleIsDefined = false;
-    if( v[0].GetMass()/MeV - aProtonMass < 0.1 )
+    if( v[0]->GetMass()/MeV - aProtonMass < 0.1 )
     {
-      v[0].SetDefinition( aProton );
+      v[0]->SetDefinition( aProton );
       particleIsDefined = true;
     }
-    else if( v[0].GetMass()/MeV - aNeutronMass < 0.1 )
+    else if( v[0]->GetMass()/MeV - aNeutronMass < 0.1 )
     {
-      v[0].SetDefinition( aNeutron );
+      v[0]->SetDefinition( aNeutron );
       particleIsDefined = true;
     }
-    else if( v[0].GetMass()/MeV - aDeuteronMass < 0.1 )
+    else if( v[0]->GetMass()/MeV - aDeuteronMass < 0.1 )
     {
-      v[0].SetDefinition( aDeuteron );
+      v[0]->SetDefinition( aDeuteron );
       particleIsDefined = true;
     }
-    else if( v[0].GetMass()/MeV - aTritonMass < 0.1 )
+    else if( v[0]->GetMass()/MeV - aTritonMass < 0.1 )
     {
-      v[0].SetDefinition( aTriton );
+      v[0]->SetDefinition( aTriton );
       particleIsDefined = true;
     }
-    else if( v[0].GetMass()/MeV - anAlphaMass < 0.1 )
+    else if( v[0]->GetMass()/MeV - anAlphaMass < 0.1 )
     {
-      v[0].SetDefinition( anAlpha );
+      v[0]->SetDefinition( anAlpha );
       particleIsDefined = true;
     }
     currentParticle.SetKineticEnergy(
@@ -3686,69 +3696,84 @@
     
     if( particleIsDefined )
     {
-      v[0].SetKineticEnergy(
-       G4std::max( 0.001, 0.5*G4UniformRand()*v[0].GetKineticEnergy()/MeV ) );
-      p = v[0].GetTotalMomentum();
-      pp = v[0].GetMomentum().mag();
+      v[0]->SetKineticEnergy(
+       G4std::max( 0.001, 0.5*G4UniformRand()*v[0]->GetKineticEnergy()/MeV ) );
+      p = v[0]->GetTotalMomentum();
+      pp = v[0]->GetMomentum().mag();
       if( pp <= 0.001*MeV )
       {
         G4double phinve = twopi*G4UniformRand();
-        G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
-        v[0].SetMomentum( p*sin(rthnve)*cos(phinve),
+        G4double rthnve = acos( max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
+        v[0]->SetMomentum( p*sin(rthnve)*cos(phinve),
                           p*sin(rthnve)*sin(phinve),
                           p*cos(rthnve) );
       }
       else
-        v[0].SetMomentum( v[0].GetMomentum() * (p/pp) );
+        v[0]->SetMomentum( v[0]->GetMomentum() * (p/pp) );
     }
-    if( (v[1].GetDefinition() == aDeuteron) ||
-        (v[1].GetDefinition() == aTriton)   ||
-        (v[1].GetDefinition() == anAlpha) ) 
-      v[1].SetKineticEnergy(
-       G4std::max( 0.001, 0.5*G4UniformRand()*v[1].GetKineticEnergy()/MeV ) );
+    if( (v[1]->GetDefinition() == aDeuteron) ||
+        (v[1]->GetDefinition() == aTriton)   ||
+        (v[1]->GetDefinition() == anAlpha) ) 
+      v[1]->SetKineticEnergy(
+       G4std::max( 0.001, 0.5*G4UniformRand()*v[1]->GetKineticEnergy()/MeV ) );
     else
-      v[1].SetKineticEnergy( G4std::max( 0.001, v[1].GetKineticEnergy()/MeV ) );
+      v[1]->SetKineticEnergy( G4std::max( 0.001, v[1]->GetKineticEnergy()/MeV ) );
     
-    p = v[1].GetTotalMomentum();
-    pp = v[1].GetMomentum().mag();
+    p = v[1]->GetTotalMomentum();
+    pp = v[1]->GetMomentum().mag();
     if( pp <= 0.001*MeV )
     {
       G4double phinve = twopi*G4UniformRand();
-      G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
-      v[1].SetMomentum( p*sin(rthnve)*cos(phinve),
+      G4double rthnve = acos( G4std::max(-1.0,min(1.0,-1.0+2.0*G4UniformRand())) );
+      v[1]->SetMomentum( p*sin(rthnve)*cos(phinve),
                         p*sin(rthnve)*sin(phinve),
                         p*cos(rthnve) );
     }
     else
-      v[1].SetMomentum( v[1].GetMomentum() * (p/pp) );
+      v[1]->SetMomentum( v[1]->GetMomentum() * (p/pp) );
     
     if( nt == 3 )
     {
-      if( (v[2].GetDefinition() == aDeuteron) ||
-          (v[2].GetDefinition() == aTriton)   ||
-          (v[2].GetDefinition() == anAlpha) ) 
-        v[2].SetKineticEnergy(
-         G4std::max( 0.001, 0.5*G4UniformRand()*v[2].GetKineticEnergy()/MeV ) );
+      if( (v[2]->GetDefinition() == aDeuteron) ||
+          (v[2]->GetDefinition() == aTriton)   ||
+          (v[2]->GetDefinition() == anAlpha) ) 
+        v[2]->SetKineticEnergy(
+         G4std::max( 0.001, 0.5*G4UniformRand()*v[2]->GetKineticEnergy()/MeV ) );
       else
-        v[2].SetKineticEnergy( G4std::max( 0.001, v[2].GetKineticEnergy()/MeV ) );
+        v[2]->SetKineticEnergy( G4std::max( 0.001, v[2]->GetKineticEnergy()/MeV ) );
       
-      p = v[2].GetTotalMomentum();
-      pp = v[2].GetMomentum().mag();
+      p = v[2]->GetTotalMomentum();
+      pp = v[2]->GetMomentum().mag();
       if( pp <= 0.001*MeV )
       {
         G4double phinve = twopi*G4UniformRand();
-        G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
-        v[2].SetMomentum( p*sin(rthnve)*cos(phinve),
+        G4double rthnve = acos( G4std::max(-1.0,min(1.0,-1.0+2.0*G4UniformRand())) );
+        v[2]->SetMomentum( p*sin(rthnve)*cos(phinve),
                           p*sin(rthnve)*sin(phinve),
                           p*cos(rthnve) );
       }
       else
-        v[2].SetMomentum( v[2].GetMomentum() * (p/pp) );
+        v[2]->SetMomentum( v[2]->GetMomentum() * (p/pp) );
     }
     vecLen = 0;
-    if( particleIsDefined )vec.SetElement( vecLen++, &v[0] );
-    vec.SetElement( vecLen++, &v[1] );
-    if( nt == 3 )vec.SetElement( vecLen++, &v[2] );
+    if( particleIsDefined )
+    {
+      vec.SetElement( vecLen++, v[0] );
+    }
+    else
+    {
+      delete v[0];
+    }
+    vec.SetElement( vecLen++, v[1] );
+    if( nt == 3 )
+    {
+      vec.SetElement( vecLen++, v[2] );
+    }
+    else
+    {
+      delete v[2];
+    }
+    delete [] v;
     return;
   }
  
