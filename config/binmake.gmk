@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.18 1999-06-01 13:52:44 stesting Exp $
+# $Id: binmake.gmk,v 1.19 1999-06-01 14:56:39 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -149,11 +149,13 @@ ifdef GLOBALLIBS
              -lG4intercoms \
              -lG4global
 else
-  LDLIBS2 := $(shell \
+# The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
+#   that it is not expanded until the directory G4TMPDIR is created.
+  LDLIBS2 = $(shell \
 	if [ \( -f $(G4BINDIR)/liblist \
 	  -a -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map \) ]; then \
 	$(G4BINDIR)/liblist \
-	  -d $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET) \
+	  -d $(G4TMPDIR) \
 	  < $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map; fi)
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2 += 
