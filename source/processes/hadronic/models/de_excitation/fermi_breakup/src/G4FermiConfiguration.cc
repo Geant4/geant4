@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.5 2003-11-10 12:10:23 lara Exp $
+// $Id: G4FermiConfiguration.cc,v 1.6 2003-11-24 13:11:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -145,8 +145,8 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   G4double M = theNucleus.GetMomentum().m();
   std::vector<G4double> m;
   m.reserve(Configuration.size());
-  for (std::vector<const G4VFermiFragment*>::iterator i = Configuration.begin(); 
-       i != Configuration.end(); ++i)
+  std::vector<const G4VFermiFragment*>::iterator i;
+  for (i = Configuration.begin(); i != Configuration.end(); ++i)
     {
       m.push_back( (*i)->GetTotalEnergy() );
     }
@@ -159,8 +159,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
 
 
   // Go back to the Lab Frame
-  for (std::vector<const G4VFermiFragment*>::iterator i = Configuration.begin(); 
-       i != Configuration.end(); ++i) 
+  for (i = Configuration.begin(); i != Configuration.end(); ++i)
     {
 #ifdef G4NO_ISO_VECDIST
       std::vector<const G4VFermiFragment*>::difference_type n = 0;
