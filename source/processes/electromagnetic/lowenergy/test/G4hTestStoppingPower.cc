@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.13 2002-08-08 16:58:50 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.14 2002-08-09 09:16:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -101,7 +101,7 @@
 
 #include "G4Timer.hh"
 
-main()
+int main()
 {
   // ---- HBOOK initialization
 
@@ -159,22 +159,25 @@ main()
 
   G4double dimx = 1*mm, dimy = 1*mm, dimz = 1*mm;
   G4int imat = 0;
+  G4cout << "Available materials are: " << G4endl;
+  for (imat = 0; imat < numOfMaterials; imat++) {
+    G4cout << imat << ") " << (*theMaterialTable)[imat]->GetName() << G4endl;
+  }
 
-  G4cout<<"The material is: "<<(*theMaterialTable)(imat)->GetName()<<endl;
 
   // Geometry definitions
   G4Box* theFrame = new G4Box ("Frame",dimx, dimy, dimz);
   
   G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
-				      (*theMaterialTable)(imat),
+				      (*theMaterialTable)[0],
 						      "LFrame", 0, 0, 0);
   
   G4PVPlacement* PhysicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 				       "PFrame",LogicalFrame,0,false,0);
 
+  G4cout << PhysicalFrame << G4endl;
 
   //--------- Particle definition ---------
-  G4Electron* theElectron = G4Electron::Electron();
   
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
@@ -269,21 +272,24 @@ main()
 
   G4cout << "Fill Hbook!" << G4endl;
 
-    // Creating the analysis factory
-    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  // Creating the analysis factory
+  G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
-    // Creating the tree factory
-    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+  // Creating the tree factory
+  G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
-    // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
-    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+  // Creating a tree mapped to a new hbook file.
+  G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
+  G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
 
-  G4Material* material ;
+  // Creating a histogram factory, whose histograms will be handled by the tree
+  G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+  //  G4Material* material ;
  
   G4double minE = 1.0*eV, maxE = 10000.0*MeV, s;
   const G4int num = 200;
-  G4double tkin;
+  G4double tkin = 0.0;
   s = (log10(maxE)-log10(minE))/num;
 
   IHistogram1D* h[71] ;
@@ -802,13 +808,17 @@ main()
   delete C;
   delete Cs;
   delete I;
+  delete Ti;
   delete O;
   delete water;
   delete ethane;
   delete csi;
   G4cout << "Materials are deleted" << G4endl;
   delete theIonEffChargeModel;
-  delete Z77p, Z77He, I49p, I49He;
+  delete Z77p;
+  delete Z77He; 
+  delete I49p;
+  delete I49He;
 
   cout<<"END OF THE MAIN PROGRAM"<<G4endl;
 }  
