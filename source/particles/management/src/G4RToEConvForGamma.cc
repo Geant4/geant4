@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.2 2002-12-16 11:15:45 gcosmo Exp $
+// $Id: G4RToEConvForGamma.cc,v 1.3 2003-01-07 00:25:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@ G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
     }
 #endif
   } 
+  TotBin = 100;
 }
 
 G4RToEConvForGamma::~G4RToEConvForGamma()
