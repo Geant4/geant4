@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.2 2001-07-11 10:09:18 gunter Exp $
+// $Id: G4VisCommands.cc,v 1.3 2001-08-05 02:29:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -30,7 +30,7 @@
 
 #include "G4VisManager.hh"
 #include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
 ////////////// /vis/enable ///////////////////////////////////////
@@ -64,6 +64,7 @@ void G4VisCommandEnable::SetNewValue (G4UIcommand* command,
     if (enable) fpVisManager->Enable();  // Printing is in vis manager.
     else fpVisManager->Disable();        // Printing is in vis manager.
   } else fpVisManager->Disable();        // Printing is in vis manager.
+  // Note: Printing is in vis manager.
 }
 
 ////////////// /vis/verbose ///////////////////////////////////////
@@ -71,11 +72,23 @@ void G4VisCommandEnable::SetNewValue (G4UIcommand* command,
 G4VisCommandVerbose::G4VisCommandVerbose () {
   G4bool omitable;
 
-  fpCommand = new G4UIcmdWithAnInteger("/vis/verbose", this);
+  fpCommand = new G4UIcmdWithAString("/vis/verbose", this);
   fpCommand -> SetGuidance("/vis/verbose [<verbosity>]");
-  fpCommand -> SetGuidance("0 = minimum, 10 = maximum verbosity.");
+  fpCommand -> SetGuidance
+    ("Simple graded message scheme - give first letter or a digit:"
+     "\n  From G4VisManager.hh:"
+     "\n  enum Verbosity {"
+     "\n    quiet,         // Nothing is printed."
+     "\n    startup,       // Startup and endup messages are printed..."
+     "\n    errors,        // ...and errors..."
+     "\n    warnings,      // ...and warnings..."
+     "\n    confirmations, // ...and confirming messages..."
+     "\n    parameters,    // ...and parameters of scenes and views..."
+     "\n    all            // ...and everything available."
+     "\n  };"
+     );
   fpCommand -> SetParameterName("verbosity", omitable=true);
-  fpCommand -> SetDefaultValue(0);
+  fpCommand -> SetDefaultValue("warnings");
 }
 
 G4VisCommandVerbose::~G4VisCommandVerbose () {
@@ -88,7 +101,9 @@ G4String G4VisCommandVerbose::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandVerbose::SetNewValue (G4UIcommand* command,
 				       G4String newValue) {
-  G4int verbosity (GetNewIntValue(newValue));
+  G4VisManager::Verbosity verbosity =
+    fpVisManager->GetVerbosityValue(newValue);
   fpVisManager->SetVerboseLevel(verbosity);
+  // Always prints whatever the verbosity...
   G4cout << "Visualization verbosity changed to " << verbosity << G4endl;
 }

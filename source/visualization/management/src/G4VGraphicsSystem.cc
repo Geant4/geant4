@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc,v 1.8 2001-07-11 10:09:18 gunter Exp $
+// $Id: G4VGraphicsSystem.cc,v 1.9 2001-08-05 02:29:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
     os << "\n  Description: " << gs.GetDescription ();
   }
   os << "\n  Functionality: " << G4int(gs.GetFunctionality());
-  if (pVMan -> GetVerboseLevel () > 1) {
+  if (pVMan -> GetVerbosity() >= G4VisManager::parameters) {
     size_t nScenes = scenes.size ();
     if (nScenes) {
       G4int nScenesOfThisSystem = 0;

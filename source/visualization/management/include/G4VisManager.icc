@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.7 2001-07-30 23:34:25 johna Exp $
+// $Id: G4VisManager.icc,v 1.8 2001-08-05 02:29:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,8 +57,8 @@ G4VisManager::GetCurrentGraphicsSystem () const {
   return fpGraphicsSystem;
 }
 
-inline G4int G4VisManager::GetVerboseLevel () const {
-  return fVerbose;
+inline G4VisManager::Verbosity G4VisManager::GetVerbosity () const {
+  return fVerbosity;
 }
 
 inline void G4VisManager::GetWindowSizeHint
@@ -78,8 +78,8 @@ inline G4SceneHandlerList& G4VisManager::SetAvailableSceneHandlers () {
   return fAvailableSceneHandlers;
 }
 
-inline void G4VisManager::SetVerboseLevel (G4int vLevel) {
-  fVerbose = vLevel;
+inline void G4VisManager::SetVerboseLevel (G4VisManager::Verbosity verbosity) {
+  fVerbosity = verbosity;
 }
 
 inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {

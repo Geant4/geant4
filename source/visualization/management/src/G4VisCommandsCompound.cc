@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.13 2001-07-11 10:09:18 gunter Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.14 2001-08-05 02:29:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -115,10 +115,15 @@ G4VisCommandDrawView::~G4VisCommandDrawView() {
 void G4VisCommandDrawView::SetNewValue
 (G4UIcommand* command, G4String newValue) {
 
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
-    G4cout << "G4VisCommandsDrawView::SetNewValue: no current viewer."
-           << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: G4VisCommandsDrawView::SetNewValue: no current viewer."
+	     << G4endl;
+    }
     return;
   }
 

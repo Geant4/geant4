@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.22 2001-07-30 23:43:43 johna Exp $
+// $Id: G4VisManager.hh,v 1.23 2001-08-05 02:29:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,6 +127,19 @@ class G4VisManager: public G4VVisManager {
   (G4std::ostream &, const G4VSceneHandler &);
 
   friend class G4VisStateDependent;
+
+public: // With description
+
+  enum Verbosity {
+    quiet,         // Nothing is printed.
+    startup,       // Startup and endup messages are printed...
+    errors,        // ...and errors...
+    warnings,      // ...and warnings...
+    confirmations, // ...and confirming messages...
+    parameters,    // ...and parameters of scenes and views...
+    all            // ...and everything available.
+  };
+  // Simple graded message scheme.
 
 protected: // With description
 
@@ -246,7 +259,7 @@ public: // With description
   // already registered.
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
-  G4int                        GetVerboseLevel             () const;
+  Verbosity                    GetVerbosity                () const;
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
   void              SetCurrentGraphicsSystemAndCreateViewer
@@ -257,7 +270,9 @@ public: // With description
   void              SetCurrentViewer            (G4VViewer* pView);
   G4SceneHandlerList& SetAvailableSceneHandlers ();  // Returns lvalue.
   G4SceneList&      SetSceneList                ();  // Returns lvalue.
-  void              SetVerboseLevel             (G4int vLevel);
+  void              SetVerboseLevel             (G4int);
+  void              SetVerboseLevel             (const G4String&);
+  void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
 
 
@@ -271,6 +286,9 @@ public: // With description
   G4VViewer* GetViewer (const G4String& viewerName) const;
   // Returns zero if not found.  Can use long or short name, but find
   // is done on short name.
+
+  static Verbosity GetVerbosityValue(const G4String&);
+  static Verbosity GetVerbosityValue(G4int);
 
 protected:
 
@@ -292,7 +310,12 @@ protected:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  G4int                 fVerbose;           // Verbosity level 0-10.
+  Verbosity             fVerbosity;
+  const G4int           fVerbose;
+  // fVerbose is kept for backwards compatibility for some user
+  // examples.  (It is used in the derived user vis managers to print
+  // available graphics systems.)  It is initialised to 1 in the
+  // constructor and cannot be changed.
   G4std::vector<G4UImessenger*> fMessengerList;
   G4std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.

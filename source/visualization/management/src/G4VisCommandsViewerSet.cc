@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.13 2001-07-11 10:09:19 gunter Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.14 2001-08-05 02:29:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -201,10 +201,15 @@ G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
 void G4VisCommandsViewerSet::SetNewValue
 (G4UIcommand* command,G4String newValue) {
 
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
-    G4cout << "G4VisCommandsViewerSet::SetNewValue: no current viewer."
-	   << G4endl;
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+	"ERROR: G4VisCommandsViewerSet::SetNewValue: no current viewer."
+	     << G4endl;
+    }
     return;
   }
 
@@ -213,32 +218,41 @@ void G4VisCommandsViewerSet::SetNewValue
   if (command == fpCommandAll) {
     G4VViewer* fromViewer = fpVisManager->GetViewer(newValue);
     if (!fromViewer) {
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: all: unrecognised from-viewer."
-	     << G4endl;
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: G4VisCommandsViewerSet::SetNewValue: all:"
+	  "\n  unrecognised from-viewer."
+	       << G4endl;
+      }
       return;
     }
     if (fromViewer == currentViewer) {
+      if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: all:"
+	"WARNING: G4VisCommandsViewerSet::SetNewValue: all:"
 	"\n  from-viewer and current viewer are identical."
 	     << G4endl;
+      }
       return;
     }
     vp = fromViewer->GetViewParameters();
-    G4cout << "View parameters of viewer \"" << currentViewer->GetName()
-	   << "\"\n  set to those of viewer \"" << fromViewer->GetName()
-	   << "\"."
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "View parameters of viewer \"" << currentViewer->GetName()
+	     << "\"\n  set to those of viewer \"" << fromViewer->GetName()
+	     << "\"."
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandAutoRefresh) {
     G4bool autoRefresh = GetNewBoolValue(newValue);
     vp.SetAutoRefresh(autoRefresh);
-    G4cout << "Views will ";
-    if (!vp.IsAutoRefresh()) G4cout << "not ";
-    G4cout << "be automatically refreshed after a change of view parameters."
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Views will ";
+      if (!vp.IsAutoRefresh()) G4cout << "not ";
+      G4cout << "be automatically refreshed after a change of view parameters."
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandCulling) {
@@ -250,34 +264,40 @@ void G4VisCommandsViewerSet::SetNewValue
     boolFlag = GetNewBoolValue(stringFlag);
     if (cullingOption == "global") {
       vp.SetCulling(boolFlag);
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: culling: global culling flag"
-	" set to " << ConvertToString(boolFlag) <<
-	".\n  Does not change specific culling flags."
-	     << G4endl;
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout <<
+	  "G4VisCommandsViewerSet::SetNewValue: culling: global culling flag"
+	  " set to " << ConvertToString(boolFlag) <<
+	  ".\n  Does not change specific culling flags."
+	       << G4endl;
+      }
     }
     else if (cullingOption == "coveredDaughters") {
       vp.SetCullingCovered(boolFlag);
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: culling: culling covered"
-	"\n  daughters flag set to "
-	     << ConvertToString(boolFlag) <<
-	".  Daughters covered by opaque mothers"
-	"\n  will be culled, i.e., not drawn, if this flag is true."
-	"\n  Note: this is only effective in surface drawing style,"
-	"\n  and then only if the volumes are visible and opaque, and then"
-	"\n  only if no sections or cutways are in operation."
-	     << G4endl;
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout <<
+	  "G4VisCommandsViewerSet::SetNewValue: culling: culling covered"
+	  "\n  daughters flag set to "
+	       << ConvertToString(boolFlag) <<
+	  ".  Daughters covered by opaque mothers"
+	  "\n  will be culled, i.e., not drawn, if this flag is true."
+	  "\n  Note: this is only effective in surface drawing style,"
+	  "\n  and then only if the volumes are visible and opaque, and then"
+	  "\n  only if no sections or cutways are in operation."
+	       << G4endl;
+      }
     }
     else if (cullingOption == "invisible") {
       vp.SetCullingInvisible(boolFlag);
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: culling: culling invisible"
-	"\n  flag set to "
-	     << boolFlag << ConvertToString(boolFlag) <<
-	".  Volumes marked invisible will be culled,"
-	"\n  i.e., not drawn, if this flag is true."
-	     << G4endl;
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout <<
+	  "G4VisCommandsViewerSet::SetNewValue: culling: culling invisible"
+	  "\n  flag set to "
+	       << boolFlag << ConvertToString(boolFlag) <<
+	  ".  Volumes marked invisible will be culled,"
+	  "\n  i.e., not drawn, if this flag is true."
+	       << G4endl;
+      }
     }
     else if (cullingOption == "density") {
       vp.SetDensityCulling(boolFlag);
@@ -288,18 +308,23 @@ void G4VisCommandsViewerSet::SetNewValue
       else {
 	density = vp.GetVisibleDensity();
       }
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: culling: culling by density"
-	"\n  flag set to " << ConvertToString(boolFlag) <<
-	".  Volumes with density less than " <<
-	G4BestUnit(density,"Volumic Mass") <<
-	"\n  will be culled, i.e., not drawn, if this flag is true."
-	     << G4endl;
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout <<
+	  "G4VisCommandsViewerSet::SetNewValue: culling: culling by density"
+	  "\n  flag set to " << ConvertToString(boolFlag) <<
+	  ".  Volumes with density less than " <<
+	  G4BestUnit(density,"Volumic Mass") <<
+	  "\n  will be culled, i.e., not drawn, if this flag is true."
+	       << G4endl;
+      }
     }
     else {
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: culling: option not recognised."
-	     << G4endl;
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: G4VisCommandsViewerSet::SetNewValue: culling:"
+	  "\n  option not recognised."
+	       << G4endl;
+      }
     }
   }
 
@@ -331,9 +356,11 @@ void G4VisCommandsViewerSet::SetNewValue
 	break;
       }
     }
-    G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
-	   << "\" set to " << vp.GetDrawingStyle()
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
+	     << "\" set to " << vp.GetDrawingStyle()
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandHiddenEdge) {
@@ -366,18 +393,22 @@ void G4VisCommandsViewerSet::SetNewValue
 	break;
       }
     }
-    G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
-	   << "\" set to " << vp.GetDrawingStyle()
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
+	     << "\" set to " << vp.GetDrawingStyle()
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandHiddenMarker) {
     G4bool hidden = GetNewBoolValue(newValue);
     if (hidden) vp.SetMarkerHidden();
     else vp.SetMarkerNotHidden();
-    G4cout << "Markers will ";
-    if (vp.IsMarkerNotHidden()) G4cout << "not ";
-    G4cout << "be hidden under solid objects." << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Markers will ";
+      if (vp.IsMarkerNotHidden()) G4cout << "not ";
+      G4cout << "be hidden under solid objects." << G4endl;
+    }
   }
 
   else if (command == fpCommandLightsMove) {
@@ -385,22 +416,28 @@ void G4VisCommandsViewerSet::SetNewValue
     if (s.find("cam") != G4String::npos) vp.SetLightsMoveWithCamera(true);
     else if(s.find("obj") != G4String::npos) vp.SetLightsMoveWithCamera(false);
     else {
-      G4cout << "\"" << newValue << "\" not recognised."
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: \"" << newValue << "\" not recognised."
 	"  Looking for \"cam\" or \"obj\" in string." << G4endl;
+      }
     }
-    G4cout << "Lights move with ";
-    if (vp.GetLightsMoveWithCamera())
-      G4cout << "camera (object appears to rotate).";
-    else G4cout << "object (the viewer appears to be moving).";
-    G4cout << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Lights move with ";
+      if (vp.GetLightsMoveWithCamera())
+	G4cout << "camera (object appears to rotate).";
+      else G4cout << "object (the viewer appears to be moving).";
+      G4cout << G4endl;
+    }
   }
 
   else if (command == fpCommandLineSegments) {
     G4int nSides = GetNewIntValue(newValue);
-    G4cout <<
-      "Number of line segements per circle in polygon approximation is "
-	   << nSides << G4endl;
     vp.SetNoOfSides(nSides);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout <<
+	"Number of line segements per circle in polygon approximation is "
+	     << nSides << G4endl;
+    }
   }
 
   else if (command == fpCommandProjection) {
@@ -416,27 +453,34 @@ void G4VisCommandsViewerSet::SetNewValue
       is >> dummy >> fieldHalfAngle >> unit;
       fieldHalfAngle *= ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
-	G4cout << "Field half angle should be 0 < angle <= 89.5 degrees.";
-	G4cout << G4endl;
+	if (verbosity >= G4VisManager::errors) {
+	  G4cout <<
+	    "ERROR: Field half angle should be 0 < angle <= 89.5 degrees.";
+	  G4cout << G4endl;
+	}
 	return;
       }
     }
     else {
-      G4cout << "\"" << newValue << "\" not recognised."
-	"  Looking for 'o' or 'p' first character." << G4endl;
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: \"" << newValue << "\" not recognised."
+	  "  Looking for 'o' or 'p' first character." << G4endl;
+      }
       return;
     }
     vp.SetFieldHalfAngle(fieldHalfAngle);
-    G4cout << "Projection style of viewer \"" << currentViewer->GetName()
-	   << "\" set to ";
-    if (fieldHalfAngle == 0.) {
-      G4cout << "orthogonal.";
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Projection style of viewer \"" << currentViewer->GetName()
+	     << "\" set to ";
+      if (fieldHalfAngle == 0.) {
+	G4cout << "orthogonal.";
+      }
+      else {
+	G4cout << "perspective\n  with half angle " << fieldHalfAngle / deg
+	       << " degrees.";
+      }
+      G4cout << G4endl;
     }
-    else {
-      G4cout << "perspective\n  with half angle " << fieldHalfAngle / deg
-	     << " degrees.";
-    }
-    G4cout << G4endl;
   }
 
   else if (command == fpCommandSectionPlane) {
@@ -450,13 +494,15 @@ void G4VisCommandsViewerSet::SetNewValue
     if (choice.compareTo("off",G4String::ignoreCase) == 0) iSelector = 0;
     if (choice.compareTo("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
-      G4cout << "Choice not recognised (on/off)." << G4endl;
-      G4cout << "Section drawing is currently: ";
-      if (vp.IsSection ()) G4cout << "on";
-      else                    G4cout << "off";
-      G4cout << ".\nSection plane is currently: "
-           << vp.GetSectionPlane ();
-      G4cout << G4endl;
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "Choice not recognised (on/off)." << G4endl;
+	G4cout << "Section drawing is currently: ";
+	if (vp.IsSection ()) G4cout << "on";
+	else                    G4cout << "off";
+	G4cout << ".\nSection plane is currently: "
+	       << vp.GetSectionPlane ();
+	G4cout << G4endl;
+      }
       return;
     }
 
@@ -472,15 +518,22 @@ void G4VisCommandsViewerSet::SetNewValue
 				   G4Point3D(x,y,z)));
       vp.SetViewpointDirection(G4Normal3D(nx,ny,nz));
       break;
-    default: G4cout << "Choice not recognised (on/off).\n"; break;
+    default:
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: Choice not recognised (on/off)."
+	       << G4endl;
+      }
+      break;
     }
 
-    G4cout << "Section drawing is now: ";
-    if (vp.IsSection ()) G4cout << "on";
-    else                    G4cout << "off";
-    G4cout << ".\nSection plane is now: "
-           << vp.GetSectionPlane ();
-    G4cout << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Section drawing is now: ";
+      if (vp.IsSection ()) G4cout << "on";
+      else                    G4cout << "off";
+      G4cout << ".\nSection plane is now: "
+	     << vp.GetSectionPlane ();
+      G4cout << G4endl;
+    }
   }
 
   else if (command == fpCommandStyle) {
@@ -515,18 +568,25 @@ void G4VisCommandsViewerSet::SetNewValue
       }
     }
     else {
-      G4cout << "\"" << newValue << "\" not recognised."
-	"  Looking for 'w' or 's' first character." << G4endl;
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: \"" << newValue << "\" not recognised."
+	  "  Looking for 'w' or 's' first character." << G4endl;
+      }
       return;
     }
-    G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
-	   << "\" set to " << vp.GetDrawingStyle()
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
+	     << "\" set to " << vp.GetDrawingStyle()
+	     << G4endl;
+    }
   }
 
   else {
-    G4cout << "G4VisCommandsViewerSet::SetNewValue: unrecognised command."
-	   << G4endl;
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VisCommandsViewerSet::SetNewValue: unrecognised command."
+	     << G4endl;
+    }
     return;
   }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2001-08-03 23:30:14 johna Exp $
+$Id: History,v 1.145 2001-08-05 02:28:53 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,28 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+4th August 2001  John Allison  (vis-V03-02-10)
+- Re-implemented verbosity control.  Output statements whereever possible
+  are controlled by the verbosity in a simple graded message scheme:
+    enum Verbosity {
+      quiet,         // Nothing is printed.
+      startup,       // Startup and endup messages are printed...
+      errors,        // ...and errors...
+      warnings,      // ...and warnings...
+      confirmations, // ...and confirming messages...
+      parameters,    // ...and parameters of scenes and views...
+      all            // ...and everything available.
+    };
+  Note that the G4VisManager member object name and type have changed:
+    Verbosity             fVerbosity;  // New.
+    const G4int           fVerbose;
+    // fVerbose is kept for backwards compatibility for some user
+    // examples.  (It is used in the derived user vis managers to print
+    // available graphics systems.)  It is initialised to 1 in the
+    // constructor and cannot be changed.
+
 3rd August 2001  John Allison
-- Added README.quick.
+- Added README.quick, a quick installation guide.
 
 30th July 2001  John Allison  (vis-V03-02-09)
 - Eliminated view parameters from G4VisManager.  Now, each view maintains its

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.19 2001-07-27 22:33:25 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.20 2001-08-05 02:29:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -366,8 +366,15 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       break;
     }
     else {
-      G4cerr << "NURBS not available for " << solid.GetName () << G4endl;
-      G4cerr << "Trying polyhedron." << G4endl;
+      G4VisManager::Verbosity verbosity =
+	G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: G4VSceneHandler::RequestPrimitives"
+	  "\n  NURBS not available for "
+	       << solid.GetName () << G4endl;
+	G4cout << "Trying polyhedron." << G4endl;
+      }
     }
     // Dropping through to polyhedron...
   case G4ModelingParameters::polyhedron:
@@ -383,17 +390,30 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       delete pPolyhedron;
     }
     else {
-      G4cerr << "Polyhedron not available for " << solid.GetName ()
-	   <<".\nThis means it cannot be visualized on most systems."
+      G4VisManager::Verbosity verbosity =
+	G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VSceneHandler::RequestPrimitives"
+	"\n  Polyhedron not available for " << solid.GetName () <<
+	".\nThis means it cannot be visualized on most systems."
 	"\nContact the Visualization Coordinator." << G4endl;
+      }
     }
     break;
   case G4ModelingParameters::hierarchy:
-    G4cout << "Geometry hierarchy requested: tag " 
-	 << GetModel () -> GetCurrentTag ()
-	 << ", depth "
-	 << fCurrentDepth
-	 << G4endl;
+      G4VisManager::Verbosity verbosity =
+	G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: G4VSceneHandler::RequestPrimitives"
+	  "\n  G4ModelingParameters::hierarchy no longer used."
+	  //"Geometry hierarchy requested: tag " 
+	  //<< GetModel () -> GetCurrentTag ()
+	  //<< ", depth "
+	  //<< fCurrentDepth
+	       << G4endl;
+      }
     break;
   }
   EndPrimitives ();
@@ -412,7 +432,11 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
-    G4cout << "Traversing scene data..." << G4endl;
+    G4VisManager::Verbosity verbosity =
+      G4VisManager::GetInstance()->GetVerbosity();
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Traversing scene data..." << G4endl;
+    }
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
@@ -439,7 +463,13 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     SetModel (0);  // Flags invalid model.
   }
   else {
-    G4cerr << "No run-duration models in scene data." << G4endl;
+    G4VisManager::Verbosity verbosity =
+      G4VisManager::GetInstance()->GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VSceneHandler::ProcessScene:"
+	"\n  No run-duration models in scene data." << G4endl;
+    }
   }
 
   fReadyForTransients = true;
@@ -590,13 +620,18 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
-  os << "Scene " << s.fName << " has "
-     << s.fViewerList.size () << " viewers:";
+  os << "Scene handler " << s.fName << " has "
+     << s.fViewerList.size () << " viewer(s):";
   for (size_t i = 0; i < s.fViewerList.size (); i++) {
     os << "\n  " << *(s.fViewerList [i]);
   }
 
-  os << "\n  " << *s.fpScene;
+  if (s.fpScene) {
+    os << "\n  " << *s.fpScene;
+  }
+  else {
+    os << "\n  This scene handler currently has no scene.";
+  }
 
   return os;
 }

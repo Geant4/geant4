@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.11 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VVisCommand.hh,v 1.12 2001-08-05 02:29:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -30,11 +30,11 @@
 #ifndef G4VVISCOMMAND_HH
 #define G4VVISCOMMAND_HH
 
+#include "G4VisManager.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
 #include "g4std/vector"
 
-class G4VisManager;
 class G4UIcommand;
 class G4UIcmdWithAString;
 
@@ -56,6 +56,7 @@ public:
   static void          GetNewDoublePairValue(const G4String& paramString,
 					     G4double& xval,
 					     G4double& yval);
+
 protected:
   static G4VisManager* fpVisManager;
   static  G4std::vector<G4UIcommand*> sceneNameCommands;

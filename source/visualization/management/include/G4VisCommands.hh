@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.2 2001-07-11 10:09:15 gunter Exp $
+// $Id: G4VisCommands.hh,v 1.3 2001-08-05 02:29:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -32,7 +32,7 @@
 #include "G4VVisCommand.hh"
 
 class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
 
 class G4VisCommandEnable: public G4VVisCommand {
@@ -57,7 +57,7 @@ public:
 private:
   G4VisCommandVerbose (const G4VisCommandVerbose&);
   G4VisCommandVerbose& operator = (const G4VisCommandVerbose&);
-  G4UIcmdWithAnInteger* fpCommand;
+  G4UIcmdWithAString* fpCommand;
 };
 
 #endif
