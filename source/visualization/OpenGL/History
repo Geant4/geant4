@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003-06-23 13:09:21 gbarrand Exp $
+$Id: History,v 1.27 2003-06-25 09:01:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
-23th June 2003  Guy Barrand :
+23rd June 2003  Guy Barrand  (opengl-V05-01-02)
 - Commit a first implementation of G4OpenGLWin32Viewer.
 
 10th June 2003  Gabriele Cosmo  (opengl-V05-01-01)
