@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2003-06-03 09:33:21 vnivanch Exp $
+// $Id: RunAction.cc,v 1.3 2003-10-10 16:21:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -66,7 +66,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -101,7 +101,7 @@ void RunAction::bookHisto()
 
 void RunAction::cleanHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   

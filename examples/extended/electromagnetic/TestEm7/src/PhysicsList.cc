@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.7 2003-06-14 16:01:19 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.8 2003-10-10 16:21:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,16 +34,12 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
+#include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-#include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,11 +113,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmG4v52(name);
 
   } else if (name == "elastic") {
 
@@ -167,6 +163,10 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {

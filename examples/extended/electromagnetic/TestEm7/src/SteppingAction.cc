@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2003-04-22 16:25:07 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2003-10-10 16:21:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -55,7 +55,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  	   
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
  G4double binLength = runAction->GetBinLength();
  runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));

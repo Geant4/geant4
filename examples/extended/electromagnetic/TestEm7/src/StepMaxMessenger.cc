@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.1 2003-04-22 16:25:07 maire Exp $
+// $Id: StepMaxMessenger.cc,v 1.2 2003-10-10 16:21:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,7 +30,6 @@
 
 #include "StepMax.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
