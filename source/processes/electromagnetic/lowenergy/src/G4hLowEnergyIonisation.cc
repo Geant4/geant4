@@ -1016,7 +1016,11 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   }
 
   aParticleChange.SetLocalEnergyDeposit(edep);
-  
+  /*
+  G4cout << "AlongStep: track= " << trackData.GetMomentumDirection()
+         << " change= " << *(aParticleChange.GetMomentumChange())
+         << G4endl;  
+	 */
   return &aParticleChange ;
 }
 
@@ -1332,6 +1336,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);
 
+  /*
+  G4cout << "PostStep: track= " << trackData.GetMomentumDirection()
+         << " change= " << *(aParticleChange.GetMomentumChange())
+         << G4endl;  
+	 */
   // Save Fluorescence and Auger
   
   if (secondaryVector) {
