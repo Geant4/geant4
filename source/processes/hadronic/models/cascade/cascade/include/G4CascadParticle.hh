@@ -96,7 +96,7 @@ public:
   void print() const {
     theParticle.printParticle();
     G4cout << " zone " << current_zone << " current_path " << current_path
-	   << " reflectionCounter " << reflectionCounter << endl
+	   << " reflectionCounter " << reflectionCounter << G4endl
 	   << " x " << position[0] << " y " << position[1]
 	   << " z " << position[2] << G4endl;
   };

@@ -5,7 +5,7 @@
 #include "globals.hh"
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "g4std/vector"
 
 class G4InuclParticle {

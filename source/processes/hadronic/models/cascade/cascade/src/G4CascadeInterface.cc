@@ -216,7 +216,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       case proton: 
 #ifdef debug_G4CascadeInterface
-	G4cerr << "proton "<< counter<<" "<<aMom<<" "<< ekin<<G4endl;
+	G4cerr << "proton " << counter << " " << aMom << " " << ekin << G4endl;
 #endif
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
@@ -262,7 +262,9 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 #endif
 	break;
 
-      default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
+      default:
+        G4cout << " ERROR: G4CascadeInterface::Propagate undefined particle type"
+	       << G4endl;
       }
 
       cascadeParticle->Set4Momentum(cascadeParticle->Get4Momentum()*=toLabFrame);
@@ -311,20 +313,24 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   if (verboseLevel > 2) {
 
     if (sumBaryon != 0) {
-      cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
+      G4cout << "ERROR: no baryon number conservation, sum of baryons = "
+             << sumBaryon << G4endl;
     }
 
     if (verboseLevel > 2) {
       if (sumEnergy > 0.01 ) {
-	cout << "Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+	G4cout << "Kinetic energy conservation violated by "
+	       << sumEnergy << " GeV" << G4endl;
       }
      
-	cout << "Total energy conservation at level ~" << (eInit - eTot) * GeV << " MeV" << G4endl;
+	G4cout << "Total energy conservation at level ~"
+	       << (eInit - eTot) * GeV << " MeV" << G4endl;
      
     }
 
     if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
-      cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
+      G4cout << "FATAL ERROR: energy created  "
+             << sumEnergy * GeV << " MeV" << G4endl;
     }
   }
   return &theResult;

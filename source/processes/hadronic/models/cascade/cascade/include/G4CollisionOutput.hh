@@ -1,7 +1,7 @@
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -69,7 +69,7 @@ public:
   };
 
   void printCollisionOutput() const {
-    G4cout << " Output: " << endl  
+    G4cout << " Output: " << G4endl  
 	   << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
     G4int i(0);
     for(i = 0; i < G4int(outgoingParticles.size()); i++) {

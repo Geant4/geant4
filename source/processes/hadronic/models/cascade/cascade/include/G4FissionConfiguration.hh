@@ -2,7 +2,7 @@
 #define G4FISSION_CONFIGURATION_HH
 
 #include "globals.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 class G4FissionConfiguration {
 

@@ -1,5 +1,3 @@
-///#define CHC_CHECK
-
 #include "G4BertiniNucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
@@ -826,8 +824,9 @@ void G4BertiniNucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
     G4double p1r;
 
     if (verboseLevel > 2){
-      cout << " type " << type << " zone " << zone << " next " << next_zone <<
-	" qv " << qv << " dv " << dv << endl;
+      G4cout << " type " << type << " zone " << zone
+             << " next " << next_zone << " qv " << qv
+             << " dv " << dv << G4endl;
     }
 
     if (qv <= 0.0) { /// reflection 
@@ -995,13 +994,14 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  if (itry == itry_max)
 	    
 	    if (verboseLevel > 2){ 
-	      cout << " deutron bullet generation-> itry = " << itry_max << endl;	
+	      G4cout << " deutron bullet generation-> itry = "
+	             << itry_max << G4endl;	
 	    }
 
 	  p = 0.0005 * p;
 
 	  if (verboseLevel > 2){ 
-	    cout << " p nuc " << p << endl;
+	    G4cout << " p nuc " << p << G4endl;
 	  }
 
 	  G4std::vector<G4double> mom(4);

@@ -61,7 +61,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
     G4double EEXS = nuclei_target->getExitationEnergy();
 
     if (verboseLevel > 3) {
-      if (EEXS < 0.0) cout << " after noeq: eexs " << EEXS << endl;
+      if (EEXS < 0.0) G4cout << " after noeq: eexs " << EEXS << G4endl;
     }
 
     G4InuclElementaryParticle dummy(small_ekin, 1);
@@ -221,8 +221,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 	    // again time to decide what next
 
 	    if (verboseLevel > 2){
-	      G4cout << " wn " << W[0] << " wp " << W[1] << " wd " << W[2] << endl
-		     << " wh3 " << W[3] << " wt " << W[4] << " whe4 " << W[5] << endl
+	      G4cout << " wn " << W[0] << " wp " << W[1] << " wd " << W[2] << G4endl
+		     << " wh3 " << W[3] << " wt " << W[4] << " whe4 " << W[5] << G4endl
 		     << " wfi " << W[6] << G4endl;
 	    }
 

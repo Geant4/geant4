@@ -47,7 +47,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
   if(verboseLevel > 2){
     printCollisionOutput();
-    G4cout << " momentum non conservation: " << endl << " e " << mon_non_cons[0]
+    G4cout << " momentum non conservation: " << G4endl
+           << " e " << mon_non_cons[0]
 	   << " p " << pnc << G4endl;
     G4cout << " remaining exitation " << eex_rest << G4endl;
   }

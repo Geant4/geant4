@@ -1,6 +1,6 @@
 #include "G4InuclSpecialFunctions.hh"
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A, 
 						     G4double Z) {

@@ -53,7 +53,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	  for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
 	  G4cout << " total input: px " << momb[1] << " py " << momb[2] 
-		 << " pz " << momb[3] << " e " << momb[0] << endl;
+		 << " pz " << momb[3] << " e " << momb[0] << G4endl;
 
 	}
 
@@ -99,11 +99,12 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	    if(verboseLevel > 2){
 	      G4std::vector<G4double> mom_scm = ipart->getMomentum();
-	      cout << mom_scm[0] << " " <<  mom_scm[1] << " " <<  mom_scm[2] << " " <<  mom_scm[3] << endl;
+	      G4cout << mom_scm[0] << " " <<  mom_scm[1] << " "
+	             << mom_scm[2] << " " <<  mom_scm[3] << G4endl;
 
 	      for(G4int i = 0; i < 4; i++) {
 		totscm[i] += mom_scm[i];
-		cout << "8" << "/" << i << endl;
+		G4cout << "8" << "/" << i << G4endl;
 	      }
 
 	    }
