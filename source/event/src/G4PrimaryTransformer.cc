@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.5 2000-10-19 15:19:37 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.6 2001-02-07 08:20:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,6 +105,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
     DP->SetPolarization(primaryParticle->GetPolX(),
                         primaryParticle->GetPolY(),
                         primaryParticle->GetPolZ());
+    if(primaryParticle->GetProperTime()>0.0)
+    { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
     // Set Charge
     if (abs(primaryParticle->GetCharge()-DP->GetCharge())>eplus) {
       DP->SetCharge(primaryParticle->GetCharge());
