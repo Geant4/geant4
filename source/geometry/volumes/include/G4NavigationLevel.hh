@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.1 1999-01-07 16:08:42 gunter Exp $
+// $Id: G4NavigationLevel.hh,v 1.2 1999-05-03 17:21:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -52,7 +52,7 @@ class G4NavigationLevel
 		     G4int                    newRepNo= -1);
 
    G4NavigationLevel();
-   G4NavigationLevel( G4NavigationLevel& );
+   G4NavigationLevel( const G4NavigationLevel& );
 
    ~G4NavigationLevel();
 
@@ -68,10 +68,10 @@ class G4NavigationLevel
    //  To try to resolve the possible problem with returning a reference.
    const G4AffineTransform* GetPtrTransform() const;
 
+   // Override "new" and "delete" to use "G4Allocator".
    inline void *operator new(size_t);
-      // Override "new"    to use "G4Allocator".
+   inline void *operator new(size_t,G4NavigationLevel *&);
    inline void operator delete(void *aTrack);
-      // Override "delete" to use "G4Allocator".
 
  //  Data members: 
  // 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.icc,v 1.1 1999-01-07 16:08:43 gunter Exp $
+// $Id: G4NavigationLevel.icc,v 1.2 1999-05-03 17:21:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
@@ -41,7 +41,7 @@ inline G4NavigationLevel::G4NavigationLevel()
       fLevelRep= new G4NavigationLevelRep();
 }
 
-inline G4NavigationLevel::G4NavigationLevel(G4NavigationLevel& right)
+inline G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
    :  fLevelRep( right.fLevelRep )
 {
       fLevelRep->AddAReference(); 
@@ -106,6 +106,13 @@ inline void* G4NavigationLevel::operator new(size_t)
   // aNavigationLevel= (void *) aNavigationLevelAllocator.MallocSingle();
   // return aNavigationLevel;
   return (void *) aNavigationLevelAllocator.MallocSingle();
+}
+
+// Added for use by STL.  F.Behner  (used for pre-allocation)
+//
+inline void* G4NavigationLevel::operator new(size_t,G4NavigationLevel *&a)
+{
+  return (void *) a;
 }
 
 inline void G4NavigationLevel::operator delete(void *aLevel)
