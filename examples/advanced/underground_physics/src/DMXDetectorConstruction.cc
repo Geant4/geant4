@@ -435,8 +435,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4double fullDetectorRadius = vesselRadius - vesselMetalThick;
   G4double fullDetectorHeight = vesselHeight - vesselMetalThick;
-  G4double detectorRadius     = 4.0*cm;
-  G4double detectorHeight     = 21.3*cm;
 
   G4Tubs* detector_tube=new G4Tubs("detector_tube",
      0.*cm, fullDetectorRadius, 0.5*fullDetectorHeight, 0.*deg, 360.*deg);
@@ -452,6 +450,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // liquid phase *******************************************************
 
+  G4double detectorRadius     = 4.0*cm;
+  G4double detectorHeight     = 21.3*cm;
   G4double liqPhaseHeight    = 20.40*cm;
   G4double liqPhaseRadius    = fullDetectorRadius;
   G4double liqPhaseVPosition = -0.5*(detectorHeight-liqPhaseHeight);
@@ -512,7 +512,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double ringVOffset     =  0.5*ringHeight;
   G4double ringVPosition   =  0.5*detectorHeight-ringVOffset;
 
-  G4Tubs* ring_tube=new G4Tubs("ring_tube", CuShieldOuterRadius,
+  G4Tubs* ring_tube=new G4Tubs("ring_tube", ringInnerRadius,
      ringOuterRadius, 0.5*ringHeight, 0.*deg, 360.*deg);
   ring_log = new G4LogicalVolume(ring_tube, ring_mat, "ring_log");
 
@@ -524,7 +524,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface* OpRingSurface = new G4OpticalSurface("RingSurface", 
      unified, polished, dielectric_metal);
-  // last argument is surface roughness if it's non-polished.
+  // omitted last argument which is surface roughness if it's non-polished 
+  // - i.e. ground
   OpRingSurface->SetMaterialPropertiesTable(ring_mt);
 
   // rings

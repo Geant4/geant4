@@ -53,7 +53,7 @@ public:
 
 
 public:
-  void SetCuts();
+  virtual void SetCuts();
 
 
 protected:

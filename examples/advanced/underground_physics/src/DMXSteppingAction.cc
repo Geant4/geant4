@@ -85,9 +85,12 @@ DMXSteppingAction::~DMXSteppingAction()
 void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
 {
 
+  // removed 28/11/01 - unnecessary unless program "hangs"
   // kill track if too many steps
-  G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
-  if(StepNo >= 10000) fStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  // NB: This is set to DBL_MAX - therefore may cause program to "hang"
+  //  G4int MaxNoSteps = DBL_MAX;
+  //  G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
+  //  if(StepNo >= MaxNoSteps) fStep->GetTrack()->SetTrackStatus(fStopAndKill);
 
   // check what is to be drawn from EventAction/EventActionMessenger
   G4String drawColsFlag = evtAction->GetDrawColsFlag();

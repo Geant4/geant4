@@ -80,7 +80,7 @@ G4bool DMXPmtSD::ProcessHits
   // make known hit position
   DMXPmtHit* aPmtHit = new DMXPmtHit();
   aPmtHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
-  aPmtHit->SetTime(aStep->GetPostStepPoint()->GetGlobalTime());
+  aPmtHit->SetTime(aStep->GetPostStepPoint()->GetLocalTime());
   HitID = pmtCollection->insert(aPmtHit);
 
   return true;

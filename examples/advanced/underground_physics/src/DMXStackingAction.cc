@@ -91,7 +91,7 @@ G4ClassificationOfNewTrack DMXStackingAction::ClassifyNewTrack
       theVolume = gNavigator->LocateGlobalPointAndSetup(pos,ptr,false);
       if(theVolume->GetName() == "world_phys") {
 	classification = fKill;
-	G4cout << "     Gammas killed in concrete wall: "
+	G4cout << " Total for session Gammas killed in concrete wall (world_phys): "
 	       << ++gammasKilled << G4endl;
       }
     }

@@ -73,7 +73,9 @@ G4double DMXMaxTimeCuts::PostStepGetPhysicalInteractionLength(
    // get the pointer to UserLimits
    G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
+
+   // can apply cuts for specific particles - use if(particleDef):
+   //   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
   
    if (pUserLimits) {
      G4double temp = DBL_MAX;

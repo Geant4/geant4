@@ -62,8 +62,8 @@ DMXParticleSource::DMXParticleSource() {
 
   NumberOfParticlesToBeGenerated = 1;
   particle_definition = NULL;
-  G4ThreeVector zero = (0,0,0);
-  particle_momentum_direction = G4ParticleMomentum(1,0,0);
+  G4ThreeVector zero(0., 0., 0.);
+  particle_momentum_direction = G4ParticleMomentum(1., 0., 0.);
   particle_energy = 1.0*MeV;
   particle_position = zero;
   particle_time = 0.0;
@@ -138,15 +138,17 @@ void DMXParticleSource::ConfineSourceToVolume(G4String Vname)
   G4bool found = false;
   if(verbosityLevel == 2) G4cout << PVStore->size() << G4endl;
 
-  while (!found && i<PVStore->size()) {
-    tempPV = (*PVStore)[i];
-    found  = tempPV->GetName() == theRequiredVolumeName;
-    if(verbosityLevel == 2)
-      G4cout << i << " " << " " << tempPV->GetName() 
-	     << " " << theRequiredVolumeName << " " << found << G4endl;
-    if (!found)
-      {i++;}
-  }
+  // recasting required since PVStore->size() is actually a signed int...
+  while (!found && i<(G4int)PVStore->size())
+    {
+      tempPV = (*PVStore)[i];
+      found  = tempPV->GetName() == theRequiredVolumeName;
+      if(verbosityLevel == 2)
+	G4cout << i << " " << " " << tempPV->GetName() 
+	       << " " << theRequiredVolumeName << " " << found << G4endl;
+      if (!found)
+	{i++;}
+    }
 
   // found = true then the volume exists else it doesnt.
   if(found == true) {
@@ -265,7 +267,7 @@ void DMXParticleSource::GenerateIsotropicFlux()
 {
 
   G4double rndm, rndm2;
-  G4double px, py, pz, pmag;
+  G4double px, py, pz;
 
   G4double sintheta, sinphi, costheta, cosphi;
   rndm = G4UniformRand();
