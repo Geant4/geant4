@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.14 2004-03-31 11:18:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.15 2004-04-05 08:00:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -622,24 +622,18 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Long step
   } else {
-    G4double x = (GetRangeForLoss(preStepKinEnergy) - length)/reduceFactor;
-    G4double postStepScaledEnergy = GetKineticEnergyForLoss(x);
-
-    if (preStepScaledEnergy > postStepScaledEnergy)
-      eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
-    else
-      eloss = GetDEDXForLoss(preStepKinEnergy)*length;
+    G4double r = GetRangeForLoss(preStepKinEnergy)/reduceFactor;
+    G4double x = r - length/reduceFactor;
+    eloss =  (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
     /*
     if(-1 < verboseLevel) {
       G4bool b;
-      G4cout << "fRange(mm)= " << fRange/mm
-             << " xPost(mm)= " << x/mm
+      G4cout << "rPre(mm)= " << r/mm
+             << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
-             << " ePost(MeV)= " << postStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
-             << " eloss0(MeV)= " << (((*theDEDXTable)[currentMaterialIndex])->
-               GetValue(preStepScaledEnergy, b))*length*chargeSqRatio
+             << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length/MeV
              << G4endl;
     }
     */
@@ -656,17 +650,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4bool b;
     //G4cout << *theDEDXTable << G4endl;
     G4cout << "eloss(MeV)= " << eloss/MeV
-           << " eloss0(MeV)= " << (((*theDEDXTable)[currentMaterialIndex])->
-               GetValue(preStepScaledEnergy, b))*length*chargeSqRatio
-           << " r0(mm)= " << (((*theRangeTableForLoss)[currentMaterialIndex])->
-               GetValue(preStepScaledEnergy, b))
+           << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length
+           << " r0(mm)= " << GetRangeForLoss(preStepKinEnergy)
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
-      //   << " mat= " << currentMaterial
-      //   << " matIdx= " << currentMaterialIndex
       //   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
       //   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
-      //   << " rangeTable= " << theRangeTableForLoss
            << G4endl;
   }
   */

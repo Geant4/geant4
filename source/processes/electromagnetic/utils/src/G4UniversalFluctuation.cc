@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.15 2004-02-06 11:59:21 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.16 2004-04-05 08:00:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,22 +110,26 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
 
   G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
-  G4double gam2  = gam*gam; 
+  G4double gam2  = gam*gam;
   G4double beta2 = 1.0 - 1.0/gam2;
- 
+
   // Validity range for delta electron cross section
   G4double loss, siga;
   // G4cout << "### tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
-  // Gaussian fluctuation 
+  // Gaussian fluctuation
   if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
   {
     electronDensity = material->GetElectronDensity();
-    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
+    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                               * electronDensity * chargeSquare ;
     siga = sqrt(siga);
     G4double twomeanLoss = meanLoss + meanLoss;
     if(twomeanLoss < siga) {
-      loss = twomeanLoss*G4UniformRand(); 
+      G4double x;
+      do {
+        loss = twomeanLoss*G4UniformRand();
+	x = (loss - meanLoss)/siga;
+      } while (1.0 - 0.5*x*x < G4UniformRand());
     } else {
       do {
        loss = G4RandGauss::shoot(meanLoss,siga);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.7 2003-10-24 14:00:25 vnivanch Exp $
+// $Id: G4BohrFluctuations.cc,v 1.8 2004-04-05 08:00:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,7 +100,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
 
   if(gauss) {
     // Increase fluctuations for big fractional energy loss
-  
+
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
       G4double b2  = 1.0 - 1.0/(gam*gam);
@@ -111,11 +111,19 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     }
     siga = sqrt(siga);
 
-    G4double lossmax = meanLoss+meanLoss;
+    G4double twomeanLoss = meanLoss + meanLoss;
 
-    do {
-      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (0.0 > loss || loss > lossmax);
+    if(twomeanLoss < siga) {
+      G4double x;
+      do {
+        loss = twomeanLoss*G4UniformRand();
+	x = (loss - meanLoss)/siga;
+      } while (1.0 - 0.5*x*x < G4UniformRand());
+    } else {
+      do {
+        loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (0.0 > loss || loss > twomeanLoss);
+    }
 
   // Poisson fluctuations
   } else {
