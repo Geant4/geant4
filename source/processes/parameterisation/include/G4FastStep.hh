@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.hh,v 1.2 1999-04-14 14:25:26 mora Exp $
+// $Id: G4FastStep.hh,v 1.3 1999-04-19 14:27:44 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -302,7 +302,7 @@ private:
 public:
   // for Debug 
   void DumpInfo() const;
-  void CheckIt(const G4Track&);
+  G4bool CheckIt(const G4Track&);
 };
 
 //*******************************************************************

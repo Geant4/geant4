@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 1.2 1999-04-14 14:25:35 mora Exp $
+// $Id: G4FastStep.cc,v 1.3 1999-04-19 14:27:51 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -327,10 +327,8 @@ G4Step* G4FastStep::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
-  //#define FAST_STEP_DEBUG 1
-#ifdef FAST_STEP_DEBUG
-  CheckIt(*aTrack);
-#endif
+  if (debugFlag) CheckIt(*aTrack);
+
   
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -343,7 +341,7 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumChange);
@@ -362,9 +360,7 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
-#ifdef FAST_STEP_DEBUG
-  CheckIt(*aTrack);
-#endif
+  if (debugFlag) CheckIt(*aTrack);
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -418,10 +414,11 @@ void G4FastStep::DumpInfo() const
        << endl;
 }
 
-#ifdef FAST_STEP_DEBUG
-void G4FastStep::CheckIt(const G4Track& aTrack)
+G4bool G4FastStep::CheckIt(const G4Track& aTrack)
 {
   G4bool    itsOK = true;
+
+  itsOK = G4VParticleChange::CheckIt(aTrack);
   if (theEnergyChange > aTrack.GetKineticEnergy()) {
     G4cout << " !!! the energy becomes larger than the initial energy !!!"
 	   << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
@@ -443,7 +440,7 @@ void G4FastStep::CheckIt(const G4Track& aTrack)
     itsOK = false;
   }
   if (theProperTimeChange < aTrack.GetProperTime()) {
-    G4cout << " !!! the poper time goes back  !!!"
+    G4cout << " !!! the proper time goes back  !!!"
 	   << " :  " << aTrack.GetProperTime()/ns
 	   << " -> " << theProperTimeChange/ns
 	   << "[ns] " <<endl;
@@ -454,8 +451,6 @@ void G4FastStep::CheckIt(const G4Track& aTrack)
     G4cout << " G4FastStep::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
-    G4Exception("\nG4FastStep was compiled with FAST_STEP_DEBUG option.\nG4FastStep::CheckIt detected a fatal error. \nPlease report the problem via the Geant4 Web site,\naddress http://wwwinfo.cern.ch/asd/geant4.");
   }
+  return itsOK;
 }
-
-#endif
