@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.48 2002-08-13 18:34:14 asaim Exp $
+// $Id: G4RunManager.cc,v 1.49 2002-08-19 18:33:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,15 +51,29 @@
 #include "G4ProcessTable.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
-
+#include "G4ExceptionHandler.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
-
 
 G4RunManager* G4RunManager::fRunManager = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
+
+//G4int G4RunManager::RegisterInteruption(int interuptionSignal)
+//{ 
+//  if(signal(interuptionSignal,ReceiveInteruption)==SIG_ERR) return -1;
+//  return 0;
+//}
+
+//void G4RunManager::ReceiveInteruption(int sig)
+//{
+//  if(!fRunManager) return;
+//  G4ApplicationState state 
+//   = G4StateManager::GetStateManager()->GetCurrentState();
+//  if(state==GeomClosed || state==EventProc)
+//  { fRunManager->AbortRun(true); }
+//}
 
 G4RunManager::G4RunManager()
 :userDetector(0),physicsList(0),
@@ -71,6 +85,7 @@ G4RunManager::G4RunManager()
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  storeRandomNumberStatus(false)
 {
+  new G4ExceptionHandler();
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
   //G4UnitDefinition::BuildUnitsTable();

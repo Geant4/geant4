@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.23 2002-08-08 17:29:26 asaim Exp $
+// $Id: G4RunManager.hh,v 1.24 2002-08-19 18:33:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,7 @@ class G4Run;
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include "g4std/vector"
+////////#include <signal.h>
 
 class G4RunManager
 {
@@ -92,6 +93,11 @@ class G4RunManager
     static G4RunManager* GetRunManager();
     //  Static method which returns the singleton pointer of G4RunManager or
     // its derived class.
+  public:
+////////    static G4int RegisterInteruption(int interuptionSignal = SIGQUIT);
+    //  Static method to define the interuption key
+////////    static void ReceiveInteruption(int sig);
+    //  Static method to accept interuption signal
 
   private:
     static G4RunManager* fRunManager;
