@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.cc,v 1.5 2002-10-29 19:10:40 vnivanch Exp $
+// $Id: Em2PhysicsListMessenger.cc,v 1.6 2002-12-06 16:51:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,33 +45,33 @@ Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
   gammaCutCmd->SetParameterName("Gcut",false);
   gammaCutCmd->SetUnitCategory("Length");
   gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(PreInit,Idle);
+  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
   electCutCmd->SetGuidance("Set electron cut.");
   electCutCmd->SetParameterName("Ecut",false);
   electCutCmd->SetUnitCategory("Length");
   electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(PreInit,Idle);
+  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
   protoCutCmd->SetGuidance("Set positron cut.");
   protoCutCmd->SetParameterName("Pcut",false);
   protoCutCmd->SetUnitCategory("Length");
   protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(PreInit,Idle);  
+  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   allCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCuts",this);  
   allCutCmd->SetGuidance("Set cut for all.");
   allCutCmd->SetParameterName("cut",false);
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(PreInit,Idle);  
+  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(PreInit);  
+  pListCmd->AvailableForStates(G4State_PreInit);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.7 2002-10-29 19:10:40 vnivanch Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.8 2002-12-06 16:51:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,34 +49,34 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
-  MaterCmd->AvailableForStates(Idle);
+  MaterCmd->AvailableForStates(G4State_Idle);
   
   LBinCmd = new G4UIcmdWith3Vector("/testem/det/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
   LBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   LBinCmd->SetParameterName("nLtot","dLradl"," ",true);
   LBinCmd->SetRange("nLtot>=1 && dLradl>0");
-  LBinCmd->AvailableForStates(PreInit,Idle);
+  LBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   RBinCmd = new G4UIcmdWith3Vector("/testem/det/setRbin",this);
   RBinCmd->SetGuidance("set radial bining");
   RBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   RBinCmd->SetParameterName("nRtot","dRradl"," ",true);
   RBinCmd->SetRange("nRtot>=1 && dRradl>0");
-  RBinCmd->AvailableForStates(PreInit,Idle);
+  RBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   FieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   FieldCmd->SetParameterName("Bz",false);
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(Idle);
+  FieldCmd->AvailableForStates(G4State_Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);          
+  UpdateCmd->AvailableForStates(G4State_Idle);          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
