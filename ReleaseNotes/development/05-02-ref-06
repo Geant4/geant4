@@ -338,7 +338,7 @@ visualization                           vis-V05-02-05
 - G4XXXViewer: improved comments.
 - Rationalised GNUmakefiles.
 
-examples                                              examples-V05-02-05
+examples                                              examples-V05-02-07
 --------
 - Updated reference outputs.
 - advanced:
