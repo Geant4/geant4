@@ -461,9 +461,10 @@ if ( `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26"
   # AIDA : 
   setenv G4ANALYSIS_AIDA /lal/AIDA/1.0/AIDA
   # Lab :
-  source /projects/Lab/v4r1/cmt/setup.csh
+  setenv CMTPATH /archos/OSC/v6r1
+  source /archos/OSC/v6r1/Lab/v4r1/cmt/setup.csh
   # CLHEP :
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.6.0.0/Linux-gxx
   # Things needed by the Geant4/vis/drivers :
   #setenv OGLHOME        /usr/X11R6
   setenv OGLHOME        /lal/Mesa/3.2/Linux
