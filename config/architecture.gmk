@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.78 2002-06-27 14:24:28 gcosmo Exp $
+# $Id: architecture.gmk,v 1.79 2002-10-30 14:58:59 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,13 +13,11 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++   Linux (Red Hat 6.1 or 7.2), gcc-2.95.2 (default)
+#          Linux-g++   Linux (Red Hat 7.2), gcc-2.95.2 (default)
 #
-#          Linux-egcs  Linux (Red Hat 6.1), egcs-1.1.2
+#          SUN-CC      SunOS 5.7 or 5.8, CC 5.2 or 5.3
 #
-#          SUN-CC      SunOS 5.7, CC 5.2 
-#
-#          WIN32-VC    Windows/2000 and Microsoft Visual C++ 6.0 - SP5
+#          WIN32-VC    Windows/2000/XP and Microsoft Visual C++ 6.0 - SP5
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
@@ -34,12 +32,6 @@ ifdef G4ODBMS
 endif
 
 MAKEFLAGS= --no-print-directory
-
-# If not specified, the default platform for G4SYSTEM is Linux-g++ ...
-#
-ifndef G4SYSTEM
-  G4SYSTEM := Linux-g++
-endif
 
 # If not specified, the default path for G4 installation G4INSTALL is
 # set to $HOME/geant4 ...
@@ -87,19 +79,27 @@ ifndef G4INCLUDE
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
 
-# backwards compatiblity
+# Backwards compatibility
+#
 ifneq ($(G4MAKESHLIB),)
   G4LIB_BUILD_SHARED = 1
 endif
 
-# defaults for library BUILD. No default for USE, ie. take what is found.
+# Defaults for library BUILD. No default for USE, ie. take what is found.
+# Default is building static libraries.
+#
 ifeq ($(G4LIB_BUILD_SHARED),)
   ifeq ($(G4LIB_BUILD_STATIC),)
-#    default is building static libs
     G4LIB_BUILD_STATIC = 1
   endif  
 endif
 
+# Specify if to build the G3TOG4 module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_G3TOG4),)
+  G4LIB_BUILD_G3TOG4 = 1
+  G4USE_G3TOG4 = 1
+endif
 
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
@@ -341,7 +341,7 @@ GREP := grep
 
 # Include architecture dependent setups...
 #
-include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
+-include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
 
 # If compiler recognises implicit C++ type bool...
 #
@@ -395,3 +395,9 @@ ifdef CFRONT
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP)/exec ] &&mkdir -p $(G4TREP)/exec )
 endif
 
+# If G4SYSTEM is not specified or not valid, issue an ERROR !
+#
+$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
+	@echo "ERROR - G4SYSTEM is not defined in the environment"
+	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
+	exit 1
