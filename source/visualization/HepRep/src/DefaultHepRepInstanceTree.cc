@@ -13,12 +13,6 @@ DefaultHepRepInstanceTree::~DefaultHepRepInstanceTree() {
         delete (*i1);
     }
     instances.clear();
-
-// NOTE: will be deleted elsewhere
-//    for (vector<HepRepTreeID*>::iterator i2 = instanceTrees.begin(); i2 != instanceTrees.end(); i2++) {
-//        delete (*i2);
-//    }
-    instanceTrees.clear();
 }
 
 void DefaultHepRepInstanceTree::overlay(HepRepInstanceTree *) {
