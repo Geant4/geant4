@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2004-10-25 09:32:52 vnivanch Exp $
+$Id: History,v 1.168 2004-11-03 15:10:07 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02 November 04: L.Urban
+- Precision problem for very high energy ions in gases(or with
+  small stepsize) has been solved in src/G4MscModel.cc
 
 25 October 04: V.Ivanchenko (utils-V06-02-11)
 - Migrate to new interfaces for ParticleChange
