@@ -73,7 +73,7 @@ G4VParticleChange* Test29HadronProduction::PostStepDoIt(const G4Track& track,con
   G4int nb = ns;
   if(result->GetStatusChange() == isAlive) nb++;
   
-  theChange.SetStatusChange(fStopAndKill);
+  theChange.ProposeTrackStatus(fStopAndKill);
   theChange.SetNumberOfSecondaries(nb);
 
   for(G4int i=0; i<ns; i++)

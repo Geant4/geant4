@@ -55,6 +55,11 @@
 #include <fstream>
 #include <iomanip>
 
+// Fake classes for this test
+#include "G4RunManager.hh"
+#include "G4VUserPhysicsList.hh"
+//#include "G4VUserDetectorConstruction.hh"
+
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -62,7 +67,7 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4QCaptureAtRest.hh"
-#include "G4QString.hh"
+#include "G4QuasmonString.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4ParticleTable.hh"
@@ -91,6 +96,9 @@
 #include "G4PVPlacement.hh"
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
+
+#include "Test29Physics.hh"
+#include "Test29PhysicsList.hh"
 
 //#include "G4HadronCrossSections.hh"
 //#include "G4VCrossSectionDataSet.hh"
@@ -404,13 +412,20 @@ int main()
   //cmaterial->AddElement(N, 0.7);
   //cmaterial->AddElement(O, 0.3);
 
+  // Make the G4ParticleTable ready to use
+  //G4ParticleTable::GetParticleTable()->SetReadiness();
+  // Construct a fake run manager
+  //G4RunManager* runManager = new G4RunManager;
+  //runManager->SetUserInitialization(new G4VUserDetectorConstruction); // Make real class
+  //runManager->SetUserInitialization(new Test29PhysicsList);
+
   // ----------- Hadronic Physics definition ---------------------
-  //Test29Physics*   phys = new Test29Physics(); // ?
+  //Test29Physics*   phys = new Test29Physics(); //
   // ---------- Define material for the simulation ------------------
   //G4double tgA     = 26.98; // @@ Important? Can it be just tgZ+tgN?
   G4double tgA     = tgZ+tgN; // @@ Temporary, not good
   G4double tgR     = 2.7;   // @@ Not important for the thin target example. Can be any
-  G4String nameMat = "Tg";  // @@ Not important can be an arbitrary name
+  G4String nameMat = "Al";  // @@ Not important can be an arbitrary name
   // The material can be copied from the commented cMaterial Factory above
   G4Material* material = new G4Material(nameMat, tgZ*1., tgA*g/mole, tgR*g/cm3);
   // For the Material Factory case
@@ -419,7 +434,7 @@ int main()
   if(!material)
   {
     G4cout<<"Test29:Material "<<nameMat<<" is not defined in the Test29Material"<<G4endl;
-	exit(1);
+	   exit(1);
   }
   // ----------- Geometry definition (simple BOX) ----------------
   G4double dimX = 100.*cm;
@@ -454,9 +469,9 @@ int main()
   //G4ParticleDefinition* part=G4MuonMinus::MuonMinus(); // Definition of the projectile
   G4ParticleDefinition* part=G4AntiProton::AntiProton(); // Definition of the projectile
   G4double pMass = part->GetPDGMass();                 // Mass of the projectile
-  // @@ G4double totCN  = tgZ+part->GetPDGCharge();
-  // @@ G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
 #ifdef pdebug
+  G4double totCN  = tgZ+part->GetPDGCharge();
+  G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
   G4cout<<"Test29:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
 #endif
   G4double theStep   = 0.01*micrometer;
@@ -470,16 +485,17 @@ int main()
   G4cout<<"Test29: The time:     "<<aTime/ns<<" ns"<<G4endl;
 
   // Different Process Managers are used for the atRest and onFlight processes
-  G4ProcessManager* man = new G4ProcessManager(part);
-  //G4VDiscreteProcess* proc = new G4QMuonNuclearOnFlight;
-  G4VRestProcess* proc = new G4QCaptureAtRest;
+		//G4ProcessManager* man = new G4ProcessManager(part);
+  //G4VDiscreteProcess* proc = new G4QCollision;
+  //G4VRestProcess* proc = new G4QCaptureAtRest;
+  G4QCaptureAtRest* proc = new G4QCaptureAtRest;
   if(!proc)
   {
-    G4cout<<"Tst29:For"<<part->GetParticleName()<<" no G4QMuonNuclearOnFlight"<<G4endl;
-	exit(1);
+    G4cout<<"Tst29:For"<<part->GetParticleName()<<" no G4QCaptureAtRest"<<G4endl;
+	   exit(1);
   }
   //man->AddDiscreteProcess(proc);
-  man->AddRestProcess(proc);
+		// man->AddRestProcess(proc);
 
   // Create a DynamicParticle
   //G4double  energy   = 1000.*MeV;                            // 1 GeV particle energy
@@ -516,8 +532,11 @@ int main()
 
   G4Timer* timer = new G4Timer();
   timer->Start();
+
+  G4cout<<"Test29: timer is started, kinEnergy="<<energy<<G4endl;
+
   const G4DynamicParticle* sec = 0;
-  G4ParticleDefinition* pd;
+  G4ParticleDefinition* pd = 0;
   G4ThreeVector  mom;
   G4LorentzVector totSum, lorV;
   G4double e, p, m;
@@ -530,31 +549,42 @@ int main()
   // Randomization loop: cycle random generator, using 2 lower digits in nEvt
   G4int    iRandCount = nEvt%100;
   G4double vRandCount = 0.;
-  while (iRandCount>0)
+  while (iRandCount>0)                // Shift of the RNDN values 
   {
-    vRandCount = G4UniformRand();
+    vRandCount = G4UniformRand();     // Fake calls
     iRandCount--;
   }
+  G4cout<<"Test29: Before the event loop, nEents= "<<nEvt<<G4endl;
   for (G4int iter=0; iter<nEvt; iter++)
   {
 #ifdef debug
     G4cout<<"Test29: ### "<<iter<< "-th event starts.###"<<G4endl;
 #endif
-    if(!(iter%1000) && iter) G4cout<<"TEST29: "<<iter<<" events are simulated"<<G4endl;
+    if(!(iter%100) && iter) G4cout<<"**>>TEST29: "<<iter<<" events are simulated"<<G4endl;
     dParticle.SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
 
     gTrack->SetStep(step);            // Now step is included in the Track (see above)
     gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
 
-    totSum = G4LorentzVector(0., 0., pmax, et);
+    //aChange = proc->PostStepDoIt(*gTrack,*step); // For onFlight
+    aChange = proc->AtRestDoIt(*gTrack,*step);  // For At Rest
 
-    G4double        totCharge = totC;
-    G4int           totBaryN = totBN;
+    G4double totCharge = totC;
+    G4int    curN=proc->GetNumberOfNeutronsInTarget();
+    G4int    dBN = curN-tgN;
+    G4int    totBaryN = totBN+dBN;
+    G4int    curPDG=tPDG+dBN;
+    G4double curM=G4QPDGCode(curPDG).GetMass(); // Update #of neutrons in the TargetNucleus
 
-    aChange = proc->PostStepDoIt(*gTrack,*step);
+    totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
 
+    G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
     //G4double de = aChange->GetLocalEnergyDeposit(); // Init Total Energy by EnergyDeposit
     G4int nSec = aChange->GetNumberOfSecondaries();
+
+#ifdef debug
+    G4cout<<"Test29: "<<nSec<<" secondary particles are generated"<<G4endl;
+#endif
 
     //G4int nbar = 0;
 
@@ -577,7 +607,7 @@ int main()
     // @@ G4int dirN=0;
     G4int    c=0;    // PDG Code of the particle
 #ifdef pdebug
-    G4cout<<"Test29:----DONE^^^^^^^************^^^^^^^^:ir="<<iter<<": #ofH="<<tNH<<G4endl;
+    G4cout<<"Test29:----DONE^^^^^^^***********^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
     if(!(iter%100)) G4cerr<<"#"<<iter<<G4endl;
 #endif
     G4bool alarm=false;
@@ -593,28 +623,28 @@ int main()
       m   = pd->GetPDGMass();
       mom = sec->GetMomentumDirection();
       e   = sec->GetKineticEnergy();
-	  if (e < 0.0)
+	     if (e < 0.0)
       {
-	    G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
+	       G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
         e = 0.0;
       }
 
-	  // for exclusive reaction 2 particles in final state
-	  p = sqrt(e*(e + m + m));
-	  mom *= p;
+	     // for exclusive reaction 2 particles in final state
+	     p = sqrt(e*(e + m + m));
+	     mom *= p;
       lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
       totSum -= lorV;
-      if(abs(m-lorV.m())>.005)
-	  {
-		G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
+      if(fabs(m-lorV.m())>.005)
+	     {
+		      G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
         alarm=true;
-	  }
+	     }
       if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
          !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
-	  {
-		G4cerr<<"***Test29: NAN in LorentzVector="<<lorV<<G4endl;
+	     {
+		      G4cerr<<"***Test29: NAN in LorentzVector="<<lorV<<G4endl;
         alarm=true;
-	  }
+	     }
       if(c==90000002||c==90002000||c==92000000)
       {
         G4cout<<"***Test29:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
@@ -632,8 +662,8 @@ int main()
       //if(c==90002002) nAlphas++;                     // Alphas
       if(c==2212) nProtons++;                        // Protons
       if(c==2112) nNeutrons++;                       // Neutrons
-      if(c==2112 && abs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
-      //if(c==90002002 && e-m<7.) nSpAlph++;     // Special Alphas
+      if(c==2112 && fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
+      //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
       if(c==111) nP0++;                              // Neutral  pions
       if(c==-211) nPN++;                             // Negative pions
       if(c==211) nPP++;                              // Positive pions
@@ -642,21 +672,34 @@ int main()
       totCharge-=pd->GetPDGCharge();
       totBaryN-=pd->GetBaryonNumber();
 #ifdef pdebug
-      G4cout<<"Test29:#"<<i<<"PDG="<<c<<",4M="<<lorV<<m<<",T="<<lorV.e()-m<<G4endl;
+      G4cout<<"Test29:# "<<i<<", PDG="<<c<<",4M="<<lorV<<m<<",T="<<lorV.e()-m<<G4endl;
 #endif
       delete aChange->GetSecondary(i);
-	} // End of the LOOP over secondaries
-	//	delete secondaries in the end of the event       	 
+	   } // End of the LOOP over secondaries
+	   //	delete secondaries in the end of the event       	 
+    G4double ss=fabs(totSum.t())+fabs(totSum.x())+fabs(totSum.y())+fabs(totSum.z());    
 #ifdef pdebug
-    G4cout<<"TEST29: 4M="<<totSum<<", Charge="<<totCharge<<", BaryN="<<totBaryN<<G4endl;
+    G4cout<<">TEST29:r4M="<<totSum<<ss<<",rChrg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-    G4double ss=abs(totSum.t())+abs(totSum.x())+abs(totSum.y())+abs(totSum.z());    
-	if (totCharge ||totBaryN || !(ss<.01) || alarm || nGamma&&!EGamma)
+	   if (totCharge ||totBaryN || ss>1. || alarm || nGamma&&!EGamma)
     {
-      G4cerr<<"***Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
-            <<",BaryN="<<totBaryN<<G4endl;
-      if(nGamma&&!EGamma)G4cerr<<"***Test29: Egamma=0"<<G4endl;
+#ifdef pdebug
+      G4int tZ=81;
+      G4int tN=91;
+      G4int tA=tZ+tN;
+      G4bool inLib=G4NucleiPropertiesTable::IsInTable(tZ,tA);
+						if(inLib) G4cerr<<"*Test29: m="<<G4NucleiProperties::GetNuclearMass(tA,tZ)<<G4endl;
+      else
+      {
+        G4double fM=G4ParticleTable::GetParticleTable()->FindIon(tZ,tA,0,tZ)->GetPDGMass();
+        G4double cM=G4QPDGCode(2112).GetNuclMass(tZ,tN,0);
+        G4cerr<<"**Test29:Z="<<tZ<<",N="<<tN<<" NotInMassTable,GM="<<fM<<",M="<<cM<<G4endl;
+						}
+#endif
       totSum = G4LorentzVector(0., 0., pmax, et);
+      G4cerr<<"**Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
+            <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
+      if(nGamma&&!EGamma)G4cerr<<"***Test29: Egamma=0"<<G4endl;
       for (G4int indx=0; indx<nSec; indx++)
       {
         sec = aChange->GetSecondary(indx)->GetDynamicParticle();
@@ -665,8 +708,8 @@ int main()
         m   = pd->GetPDGMass();
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
-	    p = sqrt(e*(e + m + m));
-	    mom *= p;
+	       p = sqrt(e*(e + m + m));
+	       mom *= p;
         lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
         totSum -= lorV;
         G4cerr<<"Test29:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
