@@ -39,8 +39,8 @@ private:
   G4std::vector<G4double> protonPotentialEnergy;
   G4std::vector<G4double> neutronPotentialEnergy;
 
-  static const G4double radius0=1.0E-15; 
-  static const G4double BE = 7;
+  static const G4double radius0; 
+  static const G4double BE;
   //static const G4double pi = 3.141592;
 
   G4double GetFermiMomentum(G4double density, G4double mass);

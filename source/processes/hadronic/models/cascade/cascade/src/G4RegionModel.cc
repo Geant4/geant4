@@ -1,6 +1,10 @@
 #include "../include/G4RegionModel.hh"
 
-G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4int Z){
+const G4double G4RegionModel::radius0 = 1.0E-15; 
+const G4double G4RegionModel::BE = 7;
+
+G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)
+{
   //count the radiuses, densities and fermi momenta with A and Z
   G4double r = radius0*pow(A, 1/3);
 
@@ -125,24 +129,25 @@ G4double G4RegionModel::GetMaximumNucleonMomentum(G4double r,
      j++;
      }
   }
+  G4Exception("G4RegionModel::GetMaximumNucleonMomentum - return value undefined");
 
 
 }
 
 
-G4double G4RegionModel::GetFermiMomentum(G4double density,
-					 G4double mass){
+G4double G4RegionModel::GetFermiMomentum(G4double aDensity,
+					 G4double aMass){
   
-  return sqrt(2*mass*GetFermiEnergy(density, mass));
+  return sqrt(2*aMass*GetFermiEnergy(aDensity, aMass));
   
  
 }
 
-G4double G4RegionModel::GetFermiEnergy(G4double density,
-					 G4double mass){
+G4double G4RegionModel::GetFermiEnergy(G4double aDensity,
+					 G4double aMass){
   
   //G4double hbar = 1.0E-6;
-    return (pow(hbar_Planck,2)/(2*mass)*pow((3*pi2*density),2/3)); 
+    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity),2/3)); 
  
  
 }

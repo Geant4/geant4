@@ -207,7 +207,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
 	      ipart->setMomentum(mom); 
 	    };
-	    sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	    G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  };
            
 	  G4std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();

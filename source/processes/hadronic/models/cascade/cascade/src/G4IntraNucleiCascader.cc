@@ -83,7 +83,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       afin += ab;
       zfin += zb;
 
-      pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > 
+      G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > 
 	all_particles = model.initializeCascad(bnuclei, tnuclei);
 
       cascad_particles = all_particles.first;
@@ -94,7 +94,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4int ia = int(ab + 0.5);
 	G4int iz = int(zb + 0.5);
 
-	for(G4int i = 0; i < ia; i++) {
+	G4int i;
+	for(i = 0; i < ia; i++) {
 
 	  G4int knd = i < iz ? 1 : 2;
 
@@ -169,7 +170,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	for(G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
 
-	pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
+	G4std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
 
 	theExitonConfiguration.incrementHoles(holes.first);
 	if(holes.second > 0) theExitonConfiguration.incrementHoles(holes.second);
@@ -224,7 +225,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	}
 
 	if(goodCase(afin, zfin, Eex, ekin_in)) { // ok, exitation energy > cut
-	  sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+	  G4std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(output_particles);
 	  outgoing_nuclei.setMomentum(momentum_out);
 	  outgoing_nuclei.setEnergy();
@@ -250,7 +251,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	last_particle.setMomentum(momentum_out);
 	output_particles.push_back(last_particle);
       }; 
-      sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+      G4std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(output_particles);
 
       return output;

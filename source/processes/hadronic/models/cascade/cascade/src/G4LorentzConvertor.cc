@@ -23,7 +23,8 @@ void G4LorentzConvertor::toTheCenterOfMass() {
    G4double e_sum = target_mom[0] + bullet_mom[0];
 
   velocity.resize(4);
-  for(G4int i = 1; i < 4; i++) {
+  G4int i(0);
+  for(i = 1; i < 4; i++) {
     velocity[i] = (target_mom[i] + bullet_mom[i]) / e_sum;
     v2 += velocity[i] * velocity[i];
     pv += target_mom[i] * velocity[i];
@@ -174,7 +175,8 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   //  G4double e_sum = target_mom[0] + bullet_mom[0];
 
   velocity.resize(4);
-  for(G4int i = 1; i < 4; i++) {
+  G4int i(0);
+  for(i = 1; i < 4; i++) {
     velocity[i] = target_mom[i] / target_mom[0];
     v2 += velocity[i] * velocity[i];
     pv += bullet_mom[i] * velocity[i];
@@ -234,7 +236,8 @@ G4std::vector<G4double> G4LorentzConvertor::backToTheLab(const G4std::vector<G4d
   } else { 
     G4double pv = 0.0;
 
-    for(G4int i = 1; i < 4; i++) pv += mom[i] * velocity[i];
+    G4int i(0);
+    for(i = 1; i < 4; i++) pv += mom[i] * velocity[i];
 
     G4double xx = pv * (gamma - 1.0) / v2 + mom[0] * gamma;
 
@@ -260,6 +263,11 @@ G4bool G4LorentzConvertor::reflectionNeeded() const {
     return false;
   }  else {   
     if(degenerated) return (scm_momentum[3] < 0.0);
+    else 
+    {
+      G4Exception("G4LorentzConvertor::reflectionNeeded - return value undefined");
+      return false;
+    }
   };
 }
 

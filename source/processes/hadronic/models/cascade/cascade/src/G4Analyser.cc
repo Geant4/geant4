@@ -267,18 +267,18 @@ void G4Analyser::handleWatcherStatistics() {
     ana_watchers[iw].print();
 
     if(ana_watchers[iw].to_check()) {
-      pair<G4double, G4double> rat_err = ana_watchers[iw].getAverageRatio();
+      G4std::pair<G4double, G4double> rat_err = ana_watchers[iw].getAverageRatio();
 
       averat += rat_err.first;
       ave_err += rat_err.second;
       gl_chsq += ana_watchers[iw].getChsq();   
 
-      pair<G4double, G4double> cs_err = ana_watchers[iw].getExpCs();
+      G4std::pair<G4double, G4double> cs_err = ana_watchers[iw].getExpCs();
 
       tot_exper += cs_err.first;
       tot_exper_err += cs_err.second;
 
-      pair<G4double, G4double> inucl_cs_err = ana_watchers[iw].getInuclCs();
+      G4std::pair<G4double, G4double> inucl_cs_err = ana_watchers[iw].getInuclCs();
 
       tot_inucl += inucl_cs_err.first;
       tot_inucl_err += inucl_cs_err.second;

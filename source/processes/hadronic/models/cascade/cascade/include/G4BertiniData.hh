@@ -16,7 +16,7 @@ class G4BertiniData //: public G4VIntraNuclearTransportModel
    static G4BertiniData* Instance()
    {
       if (!theInstance) theInstance = new G4BertiniData();
-      else G4cout << "singleton instance already created" << endl;
+      else G4cout << "singleton instance already created" << G4endl;
       return theInstance;
    }
 

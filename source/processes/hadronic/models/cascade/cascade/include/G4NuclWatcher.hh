@@ -6,7 +6,7 @@
 #include "globals.hh"
 #endif
 
-#include "pair.h"
+#include "g4std/algorithm"
 #include "g4std/vector"
 #include <math.h>
 
@@ -69,12 +69,12 @@ public:
     return izotop_chsq; 
   };
 
-  pair<G4double, G4double> getAverageRatio() const { 
+  G4std::pair<G4double, G4double> getAverageRatio() const { 
 
-    return pair<G4double, G4double>(average_ratio, aver_rat_err); 
+    return G4std::pair<G4double, G4double>(average_ratio, aver_rat_err); 
   };
 
-  pair<G4double, G4double> getExpCs() const {
+  G4std::pair<G4double, G4double> getExpCs() const {
 
     G4double cs = 0.0;
     G4double err = 0.0;
@@ -85,7 +85,7 @@ public:
       err += exper_err[iz];
     };
 
-    return pair<G4double, G4double>(cs, err);
+    return G4std::pair<G4double, G4double>(cs, err);
   };
 
   G4bool to_check() const { 
@@ -98,7 +98,7 @@ public:
     return nucleable; 
   };
 
-  pair<G4double, G4double> getInuclCs() const {
+  G4std::pair<G4double, G4double> getInuclCs() const {
 
     G4double cs = 0.0;
     G4double err = 0.0;
@@ -108,7 +108,7 @@ public:
       err += simulated_errors[iz];
     };
 
-    return pair<G4double, G4double>(cs, err);
+    return G4std::pair<G4double, G4double>(cs, err);
   };
 
   void print() {

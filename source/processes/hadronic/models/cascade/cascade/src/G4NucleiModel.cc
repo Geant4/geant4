@@ -111,7 +111,8 @@ void G4NucleiModel::generateModel(G4double a,
 
     G4std::vector<G4double> v1;
 
-    for(G4int i = 0; i < number_of_zones; i++) {
+    G4int i(0);
+    for(i = 0; i < number_of_zones; i++) {
 
       G4double v0;
 
@@ -184,7 +185,8 @@ void G4NucleiModel::generateModel(G4double a,
 
     G4std::vector<G4double> vz;
 
-    for(G4int i = 0; i < number_of_zones; i++) {
+    G4int i(0);
+    for(i = 0; i < number_of_zones; i++) {
 
       G4double rd = vol;
 
@@ -372,7 +374,7 @@ G4InuclElementaryParticle G4NucleiModel::generateNucleon(G4int type,
 
   G4std::vector<G4double> mom(4);
 
-  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
   G4double FI = randomPHI();
 
@@ -856,7 +858,8 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
     G4double r = 0.0;
 
-    for(G4int i = 0; i < 3; i++) {
+    G4int i(0);
+    for(i = 0; i < 3; i++) {
       pr += pos[i] * mom[i + 1];
       r += pos[i] * pos[i];
     };
@@ -971,7 +974,7 @@ G4CascadParticle G4NucleiModel::initializeCascad(G4InuclElementaryParticle* part
   return cpart;
 }
 
-pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
+G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
 G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, 
 				G4InuclNuclei* target) {
 
@@ -1052,7 +1055,8 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  coord1[1] = r1 * sin(phi);
 	  coord1[2] = r * s;   
 	  coordinates.push_back(coord1);
-	  for(int i = 0; i < 3; i++) coord1[i] *= -1;
+	  G4int i(0);
+	  for(i = 0; i < 3; i++) coord1[i] *= -1;
 	  coordinates.push_back(coord1);
         
 	  G4double p = 0.0;
@@ -1080,7 +1084,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	  G4std::vector<G4double> mom(4);
 
-	  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+	  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
 	  G4double FI = randomPHI();
 
@@ -1105,8 +1109,9 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  if(ab < 4.0) { // a == 3
 	    while(badco && itry < itry_max) {
 	      if(itry > 0) coordinates.resize(0);
-	      itry++;	    
-	      for(G4int i = 0; i < 2; i++) {
+	      itry++;	
+	      G4int i(0);    
+	      for(i = 0; i < 2; i++) {
 
 		G4int itry1 = 0;
 
@@ -1126,7 +1131,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		  if(sqrt(s) * exp(-s) > u && s < s3max) {
 		    s = r0forAeq3 * sqrt(s);
 
-		    pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+		    G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
 		    u = s * COS_SIN.second;  
 
@@ -1201,8 +1206,9 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  
 	    while(badco && itry < itry_max) {
 	      if(itry > 0) coordinates.resize(0);
-	      itry++;	    
-	      for(int i = 0; i < ia-1; i++) {
+	      itry++;
+	      G4int i(0);	    
+	      for(i = 0; i < ia-1; i++) {
 
 		G4int itry1 = 0;
 
@@ -1217,7 +1223,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		  if(sqrt(s) * exp(-s) * (1.0 + b * s) > u && s < s4max) {
 		    s = r0forAeq4 * sqrt(s);
 
-		    pair<double, double> COS_SIN = randomCOS_SIN();
+		    G4std::pair<double, double> COS_SIN = randomCOS_SIN();
 
 		    u = s * COS_SIN.second;  
 		 
@@ -1286,7 +1292,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4cout << " can not generate the nucleons coordinates for a " << ab <<
 	      G4endl;	
 
-	    return pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
+	    return G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
 	      (casparticles, particles);
 
 	  } else { // momentums
@@ -1301,7 +1307,8 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	    //	    G4bool badp = True;
 
-	    for(G4int i = 0; i < ia - 1; i++) {
+	    G4int i(0);
+	    for(i = 0; i < ia - 1; i++) {
 
 	      G4int itry = 0;
 
@@ -1312,7 +1319,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		if(x > inuclRndm()) {
 		  p = sqrt(0.01953 * u);
 
-		  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+		  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
 		  G4double pt = p * COS_SIN.second;  
 
@@ -1330,7 +1337,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		G4cout << " can not generate proper momentum for a " << ab << G4endl;
 
-		return pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
+		return G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
 		  (casparticles, particles);
 	      }; 
 	    };
@@ -1347,7 +1354,8 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	G4double rb = 0.0;
 
-	for(G4int i = 0; i < G4int(coordinates.size()); i++) {
+	G4int i(0);
+	for(i = 0; i < G4int(coordinates.size()); i++) {
       
 	  G4double rp = sqrt(coordinates[i][0] * coordinates[i][0] +
 			     coordinates[i][1] * coordinates[i][1] +
@@ -1466,13 +1474,14 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
   if(verboseLevel > 2){
     G4cout << " cascad particles: " << casparticles.size() << G4endl;
-    for(G4int ip = 0; ip < G4int(casparticles.size()); ip++)
+    G4int ip(0);
+    for(ip = 0; ip < G4int(casparticles.size()); ip++)
       casparticles[ip].print();
     G4cout << " outgoing particles: " << particles.size() << G4endl;
     for(ip = 0; ip < G4int(particles.size()); ip++)
       particles[ip].printParticle();
   }
 
-  return pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
+  return G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> >
     (casparticles, particles);
 }

@@ -80,7 +80,8 @@ if (verboseLevel > 3) {
   G4double ANE = 0.0;
   G4double HNE = 0.0;
 
-  for(G4int i = 1; i < 6; i++) {
+  G4int i(0);
+  for(i = 1; i < 6; i++) {
     if(AN <= ASH[i]) {
       ANE = AN - ASH[i - 1];
       HNE = ASH[i] - AN;

@@ -67,7 +67,7 @@ private:
   G4int getIL(G4int is, 
 	      G4int mult) const; 
 
-  pair<G4double, G4double> adjustIntervalForElastic(G4double ekin, 
+  G4std::pair<G4double, G4double> adjustIntervalForElastic(G4double ekin, 
 						    G4double ak, 
 						    G4double ae,
 						    G4int k, 

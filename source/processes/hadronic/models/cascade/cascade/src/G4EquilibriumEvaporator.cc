@@ -133,12 +133,13 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 	    G4double E0 = getE0(A);
 	    G4double parlev = getPARLEVDEN(A, Z);
 	    G4double u1 = parlev * A;
-	    pair<G4std::vector<G4double>, G4std::vector<G4double> > parms = paraMaker(Z);
+	    G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > parms = paraMaker(Z);
 	    G4std::vector<G4double> AK = parms.first;
 	    G4std::vector<G4double> CPA = parms.second;
 	    G4double DM0 = bindingEnergy(A, Z);   
 
-	    for(G4int i = 0; i < 6; i++) {
+	    G4int i(0);
+	    for(i = 0; i < 6; i++) {
 	      A1[i] = A - AN[i];
 	      Z1[i] = Z - Q[i];
 	      u[i] = parlev * A1[i];
@@ -267,7 +268,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		  G4InuclElementaryParticle particle(10);
 		  G4double pmod = 0.001 * S;
 		  G4std::vector<G4double> mom(4);
-		  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+		  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		  G4double FI = randomPHI();
 		  G4double P1 = pmod * COS_SIN.second;
 
@@ -365,7 +366,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		      //                       generate particle momentum
 		      G4double pmod = sqrt((2.0 * mass + S) * S);
 		      G4std::vector<G4double> mom(4);
-		      pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+		      G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
 
@@ -423,7 +424,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		      //                       generate particle momentum
 		      G4double pmod = sqrt((2.0 * mass + S) * S);
 		      G4std::vector<G4double> mom(4);
-		      pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+		      G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
 

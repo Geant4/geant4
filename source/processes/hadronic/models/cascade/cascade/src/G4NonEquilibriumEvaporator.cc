@@ -1,6 +1,6 @@
 #define RUN
 
-#include <math.h>
+#include <cmath>
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -130,7 +130,7 @@ if (verboseLevel > 3) {
 
 	if(QEX < sqrt(2.0 * EG)) { // ok
 
-	  pair<G4double, G4double> parms = paraMakerTruncated(Z);
+	  G4std::pair<G4double, G4double> parms = paraMakerTruncated(Z);
 
 	  G4double AK1 = parms.first;
 
@@ -316,7 +316,7 @@ if (verboseLevel > 3) {
 		    
 			  G4std::vector<G4double> mom(4);
 
-			  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+			  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
 			  G4double FI = randomPHI();
 

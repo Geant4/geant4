@@ -6,14 +6,14 @@
 #include "G4InuclParticle.hh"
 //#endif
 
-#include "pair.h"
+#include "g4std/algorithm"
 
 class G4InteractionCase {
 
 public:
 
   G4InteractionCase() { 
-    bultag = pair<G4InuclParticle*, G4InuclParticle*>(0, 0);
+    bultag = G4std::pair<G4InuclParticle*, G4InuclParticle*>(0, 0);
     inter_case = 0;
   };
 
@@ -26,7 +26,7 @@ public:
 
   void setBulletTarget(G4InuclParticle* part1, 
 		       G4InuclParticle* part2) {
-    bultag = pair<G4InuclParticle*, G4InuclParticle*>(part1, part2);
+    bultag = G4std::pair<G4InuclParticle*, G4InuclParticle*>(part1, part2);
   };
 
   void setInterCase(G4int ic) { 
@@ -47,7 +47,7 @@ public:
 
 private:
 
-  pair<G4InuclParticle*, G4InuclParticle*> bultag;
+  G4std::pair<G4InuclParticle*, G4InuclParticle*> bultag;
 
   G4int inter_case;
 

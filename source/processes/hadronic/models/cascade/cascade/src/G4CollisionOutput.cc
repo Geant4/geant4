@@ -26,7 +26,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   G4std::vector<G4double> ini_mom = bullet->getMomentum();
   G4std::vector<G4double> momt = target->getMomentum();
 
-  for(G4int i = 0; i < 4; i++) ini_mom[i] += momt[i];
+  G4int i;
+  for(i = 0; i < 4; i++) ini_mom[i] += momt[i];
   
   G4std::vector<G4double> out_mom = getTotalOutputMomentum();
   G4std::vector<G4double> mon_non_cons(4);
@@ -101,8 +102,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     
     if(need_hard_tuning) {
      
-      pair<pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mon_non_cons[0]);
-      pair<G4int, G4int> tune_particles = tune_par.first;
+      G4std::pair<G4std::pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mon_non_cons[0]);
+      G4std::pair<G4int, G4int> tune_particles = tune_par.first;
       G4int mom_ind = tune_par.second;
 
       if(verboseLevel > 2) {
@@ -164,9 +165,9 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
             outgoingParticles[tune_particles.first ].setMomentum(mom1);
             outgoingParticles[tune_particles.second].setMomentum(mom2);
             out_mom = getTotalOutputMomentum();
-	    sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
+	    G4std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
             for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
-            pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
+            pnc = G4std::sqrt(mon_non_cons[1] * mon_non_cons[1] + 
 		       mon_non_cons[2] * mon_non_cons[2] + 
 		       mon_non_cons[3] * mon_non_cons[3]);
 	    if(verboseLevel > 2){
@@ -203,15 +204,15 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   
 }
 
-pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de) const {
+G4std::pair<G4std::pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4CollisionOutput::selectPairToTune" << G4endl;
   }
 
-  pair<G4int, G4int> tup(-1, -1);
+  G4std::pair<G4int, G4int> tup(-1, -1);
   G4int i3 = -1; 
-  pair<pair<G4int, G4int>, G4int> badp(tup, i3);
+  G4std::pair<G4std::pair<G4int, G4int>, G4int> badp(tup, i3);
 
   if(outgoingParticles.size() < 2) {
 
@@ -275,7 +276,7 @@ pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de)
 	};		 
       }; 
 
-      return pair<pair<G4int, G4int>, G4int>(tup, i3);
+      return G4std::pair<G4std::pair<G4int, G4int>, G4int>(tup, i3);
     };
   };  
 

@@ -19,7 +19,7 @@ class G4InuclNuclei;
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
 
-typedef pair<G4InuclElementaryParticle, G4double> partner;
+typedef G4std::pair<G4InuclElementaryParticle, G4double> partner;
 typedef G4std::vector<partner> partners;
 
 class G4NucleiModel {
@@ -105,10 +105,10 @@ public:
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
-  pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+  G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
 
-  pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
-    return pair<G4int, G4int>(current_nucl1, current_nucl2);
+  G4std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
+    return G4std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   };
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     

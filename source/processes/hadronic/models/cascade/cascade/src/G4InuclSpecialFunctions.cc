@@ -115,7 +115,7 @@ G4double G4InuclSpecialFunctions::randomPHI() {
   return twopi * inuclRndm();
 } 
 
-pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
+G4std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
   G4int verboseLevel = 2;
   if (verboseLevel > 3) {
@@ -124,7 +124,7 @@ pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
   G4double CT = 1.0 - 2.0 * inuclRndm();
 
-  return pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
+  return G4std::pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
 }
 
 G4std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,

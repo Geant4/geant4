@@ -6,7 +6,7 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 
-#include "pair.h"
+#include "g4std/algorithm"
 #include "g4std/vector"
 
 class G4CollisionOutput {
@@ -54,7 +54,8 @@ public:
   G4std::vector<G4double> getTotalOutputMomentum() const {
     G4std::vector<G4double> tot_mom(4, 0.0);
     double eex_r = 0.0;
-    for(G4int i = 0; i < G4int(outgoingParticles.size()); i++) {
+    G4int i(0);
+    for(i = 0; i < G4int(outgoingParticles.size()); i++) {
       G4std::vector<G4double> mom = outgoingParticles[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
     };
@@ -70,7 +71,8 @@ public:
   void printCollisionOutput() const {
     G4cout << " Output: " << endl  
 	   << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
-    for(G4int i = 0; i < G4int(outgoingParticles.size()); i++) {
+    G4int i(0);
+    for(i = 0; i < G4int(outgoingParticles.size()); i++) {
       outgoingParticles[i].printParticle(); 
     };
     G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
@@ -125,7 +127,7 @@ G4int verboseLevel;
 
   G4double eex_rest;
 
-  pair<pair<G4int, G4int>, G4int> selectPairToTune(G4double de) const; 
+  G4std::pair<G4std::pair<G4int, G4int>, G4int> selectPairToTune(G4double de) const; 
 
   G4bool on_shell;
 

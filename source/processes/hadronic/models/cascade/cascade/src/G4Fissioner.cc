@@ -124,7 +124,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
       G4double mass2 = nuclei2.getMass();
       G4double EK = config.ekin;
       G4double pmod = sqrt(0.001 * EK * mass1 * mass2 / mass_in);
-      pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+      G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       G4double Fi = randomPHI();
       G4double P1 = pmod * COS_SIN.second;
       G4std::vector<G4double> mom1(4);
@@ -250,7 +250,8 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   G4double Y1;
   G4double Y2;
 
-  for(G4int i = 0; i < 2; i++) {
+  G4int i;
+  for(i = 0; i < 2; i++) {
     R[i] = pow(A1[i], one_third);
     Y1 = R[i] * R[i];
     Y2 = Z1[i] * Z1[i] / R[i];

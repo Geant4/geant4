@@ -1,6 +1,6 @@
 #include "G4InuclSpecialFunctions.hh"
 
-pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
+G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
 
   G4int verboseLevel = 1;
 if (verboseLevel > 3) {
@@ -75,10 +75,10 @@ if (verboseLevel > 3) {
   AK[4] = AK6 - 0.06;
   CPA[4] = 4.0 * CP6 / 3.0;
 
-  return pair<G4std::vector<G4double>, G4std::vector<G4double> >(AK, CPA);
+  return G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> >(AK, CPA);
 }
 
-pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
+G4std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
 
   G4int verboseLevel = 1;
 if (verboseLevel > 3) {
@@ -119,7 +119,7 @@ if (verboseLevel > 3) {
     };
 
 
-  return pair<G4double, G4double>(AK2, CP2);
+  return G4std::pair<G4double, G4double>(AK2, CP2);
 }
 
 
