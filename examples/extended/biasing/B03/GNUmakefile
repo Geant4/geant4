@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2002-11-18 13:22:48 dressel Exp $
+# $Id: GNUmakefile,v 1.8 2002-11-18 13:24:31 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 # you have to set PYTHON_DIR to the directory where python2.2 is installed
-PYTHON_DIR:=/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0
+PYTHON_DIR:=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0
 
 
 ifndef G4INSTALL

@@ -20,12 +20,17 @@ technically. They don't intend to produce physical correct results.
 
 General remark to scoring
 -------------------------
-A interface G4VPScorer is provided for the user. The user may create his 
+A interface G4VScorer is provided for the user. The user may create his 
 own class to perform the desired scoring. The user defined class 
-therefore should inherit from the interface G4VPScorer. 
-An example of an implementation of a scorer is G4StandardScorer
-which may be found in source/run. 
-The scoring in these examples is done with a G4StandardScorer.
+therefore should inherit from the interface G4VScorer. 
+An example of an implementation of a scorer is G4Scorer
+which may be found in source/event. 
+The scoring in these examples is done with a G4Scorer.
+Importance sampling and scoring does not support all options of the 
+Geant4 geometry. It only supports physical volumes and simple replicas.
+To identify a physical volume (or replica) objects of the class
+G4GeometryCell are used. Scoring is done according to these
+cells and importance values may be assigned to them.
 When scoring is done in a "scoring" or in a "importance" geometry
 special action has to be taken to prevent counting of
 "collisions" with boundaries of the tracking geometry as interactions.
@@ -46,12 +51,88 @@ importance of the current volumes.
 
 Further information:
 --------------------
-Short description of biasing and scoring:
-http://dressel.home.cern.ch/dressel/Biasing.html
+Short description of importance sampling and scoring:
+http://dressel.home.cern.ch/dressel/biasscore/Sampling.html
 
-Descrtiption of the standard scoring:
-http://dressel.home.cern.ch/dressel/StandardScoring.html
+Example B01
+===========
 
-Instructions for the usage of a messenger for simple problems:
-http://dressel.home.cern.ch/dressel/Mess.html
+The example uses importance sampling and scoring. Importance values are
+defined according to the mass geometry. Scoring is also done in according
+to the mass geometry.
 
+
+Example B02
+===========
+
+This example uses a parallel geometry to define G4GeometryCell objects
+for scoring and importance sampling. In addition it customizes
+the scoring. In this example one scorer creates a histogram.
+
+Compiling and running
+---------------------
+To compile this example you need AIDA 3.0 installed. To link 
+and run it you need a AIDA compliant analysis package. The
+GNUmakefile of this example shows how to use Anaphe as analysis
+package.
+The following list shows what to do if you are at CERN using rehat61
+and gcc-2.95.2:
+1) Set the variable "ANAPHEPATH" in the GNUmakefile to the
+directory where the script "aida-config" can be found.
+2) Source the script:
+/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe.csh
+3) and add to lirary path the following directories:
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
+
+The example stores the plot in the file b02.hbook.
+To look at the histogram using lizard you also may use Anaphe 5.0.1
+http://anaphe.web.cern.ch/anaphe/index2.html.
+
+Files in B02:
+B02plot.py: a simple script that may be executed from a lizzard session
+   to show the plot created by running the exampleB02.
+
+
+Example B03
+===========
+
+This example uses Geant4 and in particular importance sampling and
+scoring through python. It also creates a histogram.
+
+Compiling and running
+---------------------
+  To compile and run this example you need a python2.2 installation
+see http://www.python.org.
+  Please set the variable "PYTHON_DIR" in the GNUmakefile
+to your python2.2 installation.
+  Please add to your environment variables
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB03
+  and setenv PYTHONPATH $LD_LIBRARY_PATH.
+
+?????????
+ Now you need to build a shared library from the example:
+ Set the environment variable G4LIB_BUILD_SHARED 1
+before compiling the example.
+-----
+
+ You should be able to execute the file B03RunApplication.py from your 
+shell now.
+
+If you have Anaphe 5.0.1 installed you may also execute the file
+B03RunApplication.py from a lizard session. This will create a 
+histogram.
+See http://anaphe.web.cern.ch/anaphe/index2.html.
+
+Files in B03;
+env.csh: Is an example script to set the environment. It should work 
+   if you are at CERN and if you are on a redhat6.1 system.
+buildit.sh: You don't need to use this file. Only if you want to
+   make changes to the python interface defined in B03App.i you may need 
+   to use it. 
+B03Application.py: Is a example class utilizing importance sampling
+   and scoring using python.
+B03RunApplication.py: Is a python script running the example. 
+   It may be executed from the shell or in a python or lizard
+   session. In case it is executed from lizard it creates a plot
+   with a histogram.
+B03App.py: Is created by swig using the buildit.sh script.

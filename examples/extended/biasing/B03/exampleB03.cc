@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.9 2002-11-13 08:59:22 mdressel Exp $
+// $Id: exampleB03.cc,v 1.10 2002-11-18 13:22:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,55 +30,20 @@
 //
 // --------------------------------------------------------------
 // Comments
+// This main may not be used at all. Instead you may use python or 
+// lizard an execute the script B03RunApplication in them.
 //
+// This main function may used to test B03AppBase::GetB03AppBase().
 // 
 // --------------------------------------------------------------
 
-#include "G4RunManager.hh"
-
-#include "G4CellScorerStore.hh"
-
-// class for special output
-#include "G4ScoreTable.hh"
-
 #include "B03App.hh"
+#include "globals.hh"
 
-
-#include "Python.h"
-
-extern "C" {
-  void init_B03App();
-}
 int main(int argc, char **argv)
 {  
 
-  // output
-  //  B03AppStruct *app = 0;
-  if (argc==2 && G4String(argv[1]) == G4String("-python")) {
-    /* Pass argv[0] to the Python interpreter */
-    Py_SetProgramName(argv[0]);
-    
-    /* Initialize the Python interpreter.  Required. */
-    Py_Initialize();
-
-    init_B03App();
-    FILE *pyrc = fopen("python.rc","r");
-    if (pyrc) {
-      PyRun_SimpleFile(pyrc,"python.rc");
-    }
-    else {
-      G4cout  << "exampleB03: python.rc not found" << G4endl;
-    }
-    PyRun_InteractiveLoop(stdin, "/dev/stdin");
-  } 
-  else {
-    B03AppBase &base = B03AppBase::GetB03AppBase();
-  }
-
-  //  app = GetB03AppStruct();
-
-  //  G4ScoreTable sp(app->fIStore);
-  //  sp.Print(app->fCS_store->GetMapGeometryCellCellScorer(), &G4cout);
+  B03AppBase &base = B03AppBase::GetB03AppBase();
 
   return 0;
 }

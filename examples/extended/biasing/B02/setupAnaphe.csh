@@ -1,4 +1,4 @@
-#!/usr/bin/tcsh -x
+#!/bin/tcsh -x
 
 #set verbose = 0
 

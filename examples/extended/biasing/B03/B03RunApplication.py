@@ -1,4 +1,4 @@
-#!/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
+#!/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
 # #!/usr/bin/env python2
 
 
