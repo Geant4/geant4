@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.cc,v 1.1 2003-11-25 18:06:26 japost Exp $
+// $Id: F01FieldSetup.cc,v 1.2 2003-12-01 15:48:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   User Field setup class implementation.
@@ -191,26 +191,24 @@ void F01FieldSetup::SetFieldValue(G4double fieldValue)
 
 void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
-  // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
+  if(fMagneticField) delete fMagneticField;
     
   if(fieldVector != G4ThreeVector(0.,0.,0.))
   { 
-    if(fMagneticField) delete fMagneticField;
     fMagneticField = new  G4UniformMagField(fieldVector);
-
     // CreateStepperAndChordFinder();
-   
-    fieldMgr->SetDetectorField(this);
   }
   else 
   {
-    // If the new field's value is Zero, then it is best to
-    //  insure that it is not used for propagation.
-
-    G4MagneticField* fMagneticField = 0;
-    fieldMgr->SetDetectorField(fMagneticField);
+    // If the new field's value is Zero, signal it as below
+    //   so that it is not used for propagation.
+    fMagneticField = 0;
   }
+
+  //  Set this as the field of the global Field Manager
+  G4FieldManager* fieldMgr= GetGlobalFieldManager();
+
+  fieldMgr->SetDetectorField(fMagneticField);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
