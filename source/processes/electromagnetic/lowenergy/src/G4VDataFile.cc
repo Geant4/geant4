@@ -58,13 +58,13 @@ void G4VDataFile::OpenFile(){
   G4String path_string(path);
   G4String dir_file = path_string + "/" + _filename;
   _istr.open(dir_file.data(), ios::in | ios::nocreate);
-  
-  //  if(!_istr.is_open()){
-    
-  //  cout<<"G4VDataFile::OpenFile() Error: file "
-  // 	<<_filename<<" not found."<<endl;
-  //  exit(0);
-  // }
+  filebuf* lsdp = _istr.rdbuf();
+
+  if(!lsdp->is_open()){
+
+    G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
+    G4Exception(excep);
+  }
 }
 
 void G4VDataFile::CloseFile(){
