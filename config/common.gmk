@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.13 1999-12-03 16:23:51 morita Exp $
+# $Id: common.gmk,v 1.14 1999-12-05 22:41:38 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -103,14 +103,12 @@ endif
 ifdef CPPVERBOSE
 	ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
 	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	  -DTEMPLATEP_HIDES_FNCD \
-	  $(CPPFLAGS) $< $(G4OODDLX_BOOT)
+	  $(G4OODDLX_FLAGS) $(CPPFLAGS) $< $(G4OODDLX_BOOT)
 else
 	@echo Preprocessing $< ...
 	@ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
 	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	  -DTEMPLATEP_HIDES_FNCD \
-	  $(CPPFLAGS) $< $(G4OODDLX_BOOT)
+	  $(G4OODDLX_FLAGS) $(CPPFLAGS) $< $(G4OODDLX_BOOT)
 endif
 	@mv -f $*.hh $(G4SCHEMA_HEADER_DIR)/
 	@mv -f $*_ref.hh $(G4SCHEMA_HEADER_DIR)/
