@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testDataInterpolation.cc,v 1.4 2001-07-11 10:00:42 gunter Exp $
+// $Id: testDataInterpolation.cc,v 1.5 2004-11-12 17:38:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -30,8 +30,8 @@
 
 G4double TestFunction(G4double x)
 {
-   return 10.0*exp(-0.1*x)*cos(x) ;
-   //return 10.0*exp(-5*(x-pi)*(x-pi)) ;
+   return 10.0*std::exp(-0.1*x)*std::cos(x) ;
+   //return 10.0*std::exp(-5*(x-pi)*(x-pi)) ;
 }
 
 int main()

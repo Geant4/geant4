@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.7 2004-11-12 16:25:34 gcosmo Exp $
+// $Id: templates.hh,v 1.8 2004-11-12 17:38:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,7 +138,7 @@ inline T sqr(const T& x)
     #undef abs
   #endif
 template <class T>
-inline T abs(const T& a)
+inline T std::abs(const T& a)
 {
   return a < 0 ? -a : a;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussHermiteQ.hh,v 1.4 2001-07-11 10:00:39 gunter Exp $
+// $Id: G4GaussHermiteQ.hh,v 1.5 2004-11-12 17:38:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -41,7 +41,7 @@
 //
 // ----------------------------------------------------------------------------
 //
-// Gauss-Hermite method for integration of exp(-x*x)*nFunction(x) from minus infinity
+// Gauss-Hermite method for integration of std::exp(-x*x)*nFunction(x) from minus infinity
 // to plus infinity .
 //
 // G4double Integral() const 

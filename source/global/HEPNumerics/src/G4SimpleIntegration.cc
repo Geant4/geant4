@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.cc,v 1.4 2004-11-12 16:25:34 gcosmo Exp $
+// $Id: G4SimpleIntegration.cc,v 1.5 2004-11-12 17:38:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation file for simple integration methods
@@ -95,7 +95,7 @@ G4SimpleIntegration::Gauss(G4double xInitial,
 {
    G4int i ;
    G4double x ;
-   static G4double root = 1.0/sqrt(3.0) ;
+   static G4double root = 1.0/std::sqrt(3.0) ;
    G4double Step = (xFinal - xInitial)/(2.0*iterationNumber) ;
    G4double delta = Step*root ;
    G4double mean = 0.0 ;
@@ -148,7 +148,7 @@ G4double
 G4SimpleIntegration::Gauss( G4double xInitial,
                             G4double xFinal   ) 
 {
-   static G4double root = 1.0/sqrt(3.0) ;
+   static G4double root = 1.0/std::sqrt(3.0) ;
    
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step = (xFinal - xInitial)/2.0 ;
@@ -173,7 +173,7 @@ G4SimpleIntegration::AdaptGauss( G4double xInitial,
    G4double leftHalf = Gauss(xInitial,xMean) ;
    G4double rightHalf = Gauss(xMean,xFinal) ;
    G4double full = Gauss(xInitial,xFinal) ;
-   if(fabs(leftHalf+rightHalf-full) < fTolerance)
+   if(std::fabs(leftHalf+rightHalf-full) < fTolerance)
    {
       sum += full ;
    }

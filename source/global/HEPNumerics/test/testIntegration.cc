@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: testIntegration.cc,v 1.4 2001-07-11 10:00:43 gunter Exp $
+// $Id: testIntegration.cc,v 1.5 2004-11-12 17:38:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Test program for G4SimpleIntegration class. The function exp(-x)*cos(x) is
+// Test program for G4SimpleIntegration class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The true result is 0.499066278634
 //
 
@@ -34,7 +34,7 @@
 
 G4double TestFunction(G4double x)
 {
-  return exp(-x)*cos(x) ;
+  return std::exp(-x)*std::cos(x) ;
 }
 
 int main()
@@ -59,7 +59,7 @@ int main()
    G4cout<<G4endl ;
    for(i=0;i<13;i++)
    {
-      pTolerance = pow(10.0,-i) ;
+      pTolerance = std::pow(10.0,-i) ;
       G4SimpleIntegration adaptIntegrand(TestFunction,pTolerance) ;
       G4cout<<adaptIntegrand.AdaptGaussIntegration(a,b)<<G4endl;
    }

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: testChebyshev.cc,v 1.4 2001-07-11 10:00:42 gunter Exp $
+// $Id: testChebyshev.cc,v 1.5 2004-11-12 17:38:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Test program for G4ChebyshevApproximation class. The function exp(-x)*cos(x) is
+// Test program for G4ChebyshevApproximation class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The true result is 0.499066278634
 //
 
@@ -34,27 +34,27 @@
 
 G4double TestChebyshev(G4double x)
 {
-  return sqrt(1-x*x)*cos(x) ;
+  return std::sqrt(1-x*x)*std::cos(x) ;
 }
 
 G4double TestFunction(G4double x)
 {
-  return exp(-x)*cos(x) ;
+  return std::exp(-x)*std::cos(x) ;
 }
 
 G4double TestHermite(G4double x)
 {
-  return x*x*cos(x) ;
+  return x*x*std::cos(x) ;
 }
 
 G4double ExpFunction(G4double x)
 {
-  return exp(x) ;
+  return std::exp(x) ;
 }
 
 G4double SinFunction(G4double x)
 {
-  return sin(x) ;
+  return std::sin(x) ;
 }
 
 main()

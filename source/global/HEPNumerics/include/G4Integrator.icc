@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.10 2004-11-12 16:25:33 gcosmo Exp $
+// $Id: G4Integrator.icc,v 1.11 2004-11-12 17:38:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4Integrator methods. 
@@ -817,7 +817,7 @@ G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
 //
 //////////////////////////////////////////////////////////////////////
 //
-// Integral from zero to infinity of pow(x,alpha)*exp(-x)*f(x). 
+// Integral from zero to infinity of std::pow(x,alpha)*std::exp(-x)*f(x). 
 // The value of nLaguerre sets the accuracy.
 // The function creates arrays fAbscissa[0,..,nLaguerre-1] and 
 // fWeight[0,..,nLaguerre-1] . 
@@ -985,7 +985,7 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
 
 ///////////////////////////////////////////////////////////////////////
 //
-// Auxiliary function which returns the value of log(gamma-function(x))
+// Auxiliary function which returns the value of std::log(gamma-function(x))
 // Returns the value ln(Gamma(xx) for xx > 0.  Full accuracy is obtained for 
 // xx > 1. For 0 < xx < 1. the reflection formula (6.1.4) can be used first.
 // (Adapted from Numerical Recipes in C)
@@ -1000,7 +1000,7 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
   register G4int j;
   G4double x = xx - 1.0 ;
   G4double tmp = x + 5.5 ;
-  tmp -= (x + 0.5) * log(tmp) ;
+  tmp -= (x + 0.5) * std::log(tmp) ;
   G4double ser = 1.000000000190015 ;
 
   for ( j = 0; j <= 5; j++ )
@@ -1008,7 +1008,7 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
     x += 1.0 ;
     ser += cof[j]/x ;
   }
-  return -tmp + log(2.5066282746310005*ser) ;
+  return -tmp + std::log(2.5066282746310005*ser) ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1018,7 +1018,7 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
 ///////////////////////////////////////////////////////////////////////
 //
 //
-// Gauss-Hermite method for integration of exp(-x*x)*f(x) 
+// Gauss-Hermite method for integration of std::exp(-x*x)*f(x) 
 // from minus infinity to plus infinity . 
 //
 
@@ -1032,7 +1032,7 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
    G4double integral = 0.0 ;
    G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1127,7 +1127,7 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    G4double integral = 0.0 ;
    G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegratorTest.cc,v 1.7 2004-11-12 16:25:34 gcosmo Exp $
+// $Id: G4IntegratorTest.cc,v 1.8 2004-11-12 17:38:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Test program for G4Integrator class. The function exp(-x)*cos(x) is
+// Test program for G4Integrator class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The exact result is 0.499066278634
 //
 // History:
@@ -108,7 +108,7 @@ void B::Integrand()
 
      for(i=0;i<8;i++)
      {
-       pTolerance = pow(10.0,-i) ;
+       pTolerance = std::pow(10.0,-i) ;
        adaptg1 = integral.AdaptiveGauss(bbb,&B::TestFunction,a,b,pTolerance) ; 
        adaptg2 = integral.AdaptiveGauss(this,&B::TestFunction,a,b,pTolerance) ; 
        G4cout<<pTolerance<<"\t"<<adaptg1<<"\t"<<adaptg2<<G4endl;
@@ -127,7 +127,7 @@ void B::Integrand()
    {
       n = 1*i ;
       G4double hermite1=0., hermite2=0;
-      G4double exactH = 2*0.125*sqrt(pi)*exp(-0.25) ;
+      G4double exactH = 2*0.125*std::sqrt(pi)*std::exp(-0.25) ;
       hermite1 = integral.Hermite(bbb,&B::TestHermite,n) ;
       hermite2 = integral.Hermite(this,&B::TestHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
@@ -179,7 +179,7 @@ int main()
 
    for(i=0;i<8;i++)
    {
-     G4double  pTolerance = pow(10.0,-i) ;
+     G4double  pTolerance = std::pow(10.0,-i) ;
      G4double  adaptg = iii.AdaptiveGauss(GlobalFunction,a,b,pTolerance) ;
      G4cout<<pTolerance<<"\t"<<adaptg<<G4endl;
    }

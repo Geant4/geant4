@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsTableTest.cc,v 1.4 2004-11-12 16:25:35 gcosmo Exp $
+// $Id: PhysicsTableTest.cc,v 1.5 2004-11-12 17:38:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,7 +108,7 @@ int main()
     pVector->PutComment("PhysicsLogVector");
 
     // put values in PhysicsVector 
-    //   value = log10(factor*energy)
+    //   value = std::log10(factor*energy)
     G4double factor = 0.1*G4double(j+1);
     for (size_t k=0; k<n_bin; k++){
       G4double eVal = pVector->GetLowEdgeEnergy(k);

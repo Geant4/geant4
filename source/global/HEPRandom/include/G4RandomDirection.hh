@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirection.hh,v 1.1 2004-10-29 08:40:23 gcosmo Exp $
+// $Id: G4RandomDirection.hh,v 1.2 2004-11-12 17:38:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ inline G4ThreeVector G4RandomDirection()
     x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
     r2=x*x+y*y+z*z;
   }
-  G4double r=sqrt(r2), quad=G4UniformRand();
+  G4double r=std::sqrt(r2), quad=G4UniformRand();
 
   if(quad>0.5)
   {

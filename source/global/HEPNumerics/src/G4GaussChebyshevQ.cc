@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussChebyshevQ.cc,v 1.3 2001-07-11 10:00:41 gunter Exp $
+// $Id: G4GaussChebyshevQ.cc,v 1.4 2004-11-12 17:38:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4GaussChebyshevQ.hh"
@@ -41,8 +41,8 @@ G4GaussChebyshevQ::G4GaussChebyshevQ( function pFunction ,
    fWeight = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
    {
-      fAbscissa[i] = cos(cof*(i + 0.5)) ;
-      fWeight[i] = cof*sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
+      fAbscissa[i] = std::cos(cof*(i + 0.5)) ;
+      fWeight[i] = cof*std::sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
    }
 }
 

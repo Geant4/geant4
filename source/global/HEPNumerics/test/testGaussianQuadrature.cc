@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: testGaussianQuadrature.cc,v 1.4 2001-07-11 10:00:43 gunter Exp $
+// $Id: testGaussianQuadrature.cc,v 1.5 2004-11-12 17:38:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Test program for G4GaussianQuadrature class. The function exp(-x)*cos(x) is
+// Test program for G4GaussianQuadrature class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The true result is 0.499066278634
 //
 
@@ -39,22 +39,22 @@
 
 G4double TestChebyshev(G4double x)
 {
-  return sqrt(1-x*x)*cos(x) ;
+  return std::sqrt(1-x*x)*std::cos(x) ;
 }
 
 G4double TestFunction(G4double x)
 {
-  return exp(-x)*cos(x) ;
+  return std::exp(-x)*std::cos(x) ;
 }
 
 G4double TestHermite(G4double x)
 {
-  return x*x*cos(x) ;
+  return x*x*std::cos(x) ;
 }
 
 G4double CosFunction(G4double x)
 {
-  return cos(x) ;
+  return std::cos(x) ;
 }
 
 int main()
@@ -79,7 +79,7 @@ int main()
       G4cout<<"n = "<<n<<"\t"<<"true = "<<true<<"  and n-point Gauss-Jacobi =  "
 	  <<myJacobi.Integral()<<G4endl ;
    }
-   G4double true = 2*0.125*sqrt(pi)*exp(-0.25) ;
+   G4double true = 2*0.125*std::sqrt(pi)*std::exp(-0.25) ;
    for(i=1;i<20;i++)
    {
       n = 1*i ;
