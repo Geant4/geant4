@@ -1,4 +1,4 @@
-# $Id: GNUmakefile.hadronic.exerciser,v 1.2 1999-05-03 15:58:41 stesting Exp $
+# $Id: GNUmakefile.hadronic.exerciser,v 1.3 1999-05-29 02:54:01 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -9,6 +9,8 @@ G4TARGET := $(name)
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+include $(G4INSTALL)/config/architecture.gmk
 
 GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
 
