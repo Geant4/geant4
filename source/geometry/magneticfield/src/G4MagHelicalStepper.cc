@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.11 2002-01-17 08:12:03 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.12 2003-04-02 08:53:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -156,7 +156,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
 void
 G4MagHelicalStepper::Stepper( const G4double yInput[],
-		              const G4double dydx[],
+		              const G4double*,
 		                    G4double hstep,
 		                    G4double yOut[],
 		                    G4double yErr[]      )
