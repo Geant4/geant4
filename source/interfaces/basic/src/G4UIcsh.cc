@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcsh.cc,v 1.5 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4UIcsh.cc,v 1.6 2002-02-26 02:09:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@ G4String G4UIcsh::GetCommandLine(const char* msg)
     newCommand= "exit";
     return newCommand;
   }
+  newCommand = newCommand.strip(1,'\r'); // fix for odd behavior on Windows
 
   // multi-line
   while( (newCommand.length() > 0) &&
