@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.7 2003-11-04 01:58:29 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.8 2003-11-04 10:38:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -340,6 +340,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   }
   else
   {
+    G4cout << G4endl;
     G4cout << "Region " << region->GetName() << G4endl;
     G4cout << " Materials : ";
     std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
