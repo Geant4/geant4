@@ -651,9 +651,6 @@ please refer to the related History files provided in most packages):
 <LI>Introduced <TT>G4MuonDecayChannelWithSpin</TT> class.</LI>
 <LI>Removed obsolete dependency to G4Material from <TT>G4ParticleDefinition</TT> and
     related class.</LI>
-<LI>Issue <TT>G4Exception</TT> from <TT>G4ParticleTable</TT> to prohibit its use
-    before <TT>G4VUserPhysicsList</TT> is instantiated and set to
-    <TT>G4RunManager</TT>.</LI>
 <LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
     functions.</LI>
 </UL>
@@ -672,16 +669,16 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Temporarily allow the use of <TT>G4ParticleTable</TT> before the
         construction of physics table.</LI>
-    <LI>Modified <TT>BuildPhysicsTable()</TT> for new scheme of
-        <TT>Store/RetrievePhysicsTable()</TT> methods.</LI>
-    <LI>Added <TT>PreparePhysicsTable()</TT> for nucleus process
-        initialization.</LI>
     <LI>Fixed wrong behaviour of <TT>G4RunManager</TT> when the user modifies the
         geometry without replacing the world.</LI>
-    <LI>Added <TT>PreparePhysicsTable()</TT> for nucleus process initialization.</LI>
     <LI>Moved ConstructParticle() and ConstructProcess() methods to 'public'.</LI>
-    <LI>Modified <TT>BuildPhysicsTable()</TT> for new scheme of
-        <TT>Store/RetrievePhysicsTable()</TT>.</LI>
+    <LI><TT>G4VUserPhysicsList</TT>:
+        <UL>
+        <LI>Modified <TT>BuildPhysicsTable()</TT> and <TT>PreparePhysicsTable()</TT>
+            for new scheme of <TT>Store/RetrievePhysicsTable()</TT> methods.</LI>
+        <LI><TT>ConstructParticle()</TT> and <TT>ConstructProcess()</TT> methods are
+            moved to 'public'.</LI>
+        </UL></LI>
     </UL></LI>
 </UL>
 
