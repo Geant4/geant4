@@ -171,7 +171,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     currentN = 0;
     const G4int numberOfElements = aMaterial->GetNumberOfElements();
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    
+    G4int i;
     if( numberOfElements == 1 ) 
     {
       currentZ = G4double( ((*theElementVector)[0])->GetZ());
@@ -183,17 +183,17 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       else
       {
         G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-	for (G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+	for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
         {
           G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
           G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	  running[i]=fracInPercent*std::pow(runningA, 2./3.);
+	  running[i]=fracInPercent*pow(runningA, 2./3.);
 	  // rough approximation; to get it better, redesign getMSC to not use G4Element, see also below
 	  if(i!=0) running[i] += running[i-1];
         }
 	G4double trial = G4UniformRand();
 	G4double sum = running[theIso.GetNumberOfIsotopes(localZ)-1];
-	for(G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+	for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
 	{
 	  currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
 	  if(running[i]/sum>trial) break;
@@ -207,7 +207,6 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
     G4double aTemp = aMaterial->GetTemperature();
     G4double crossSectionTotal = 0;
-    G4int i;
     std::vector<G4double> runningSum;
     for( i=0; i < numberOfElements; ++i )
     {
@@ -231,15 +230,15 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 	else
 	{
           G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-	  for (G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+	  for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
           {
             G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
             G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	    running[i]=fracInPercent*std::pow(runningA, 2./3.);
+	    running[i]=fracInPercent*pow(runningA, 2./3.);
 	    if(i!=0) running[i] += running[i-1];
           }
 	  G4double trial = G4UniformRand();
-	  for(G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+	  for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
 	  {
 	    currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
 	    if(running[i]/running[theIso.GetNumberOfIsotopes(localZ)-1]>trial) break;
@@ -259,16 +258,16 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     else
     {
       G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-      for (G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+      for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
       {
         G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
         G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	running[i]=fracInPercent*std::pow(runningA, 2./3.);
+	running[i]=fracInPercent*pow(runningA, 2./3.);
 	// rough approximation; to get it better, redesign getMSC to not use G4Element
 	if(i!=0) running[i] += running[i-1];
       }
       G4double trial = G4UniformRand();
-      for(G4int i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
+      for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
       {
 	currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
 	if(running[i]/running[theIso.GetNumberOfIsotopes(localZ)-1]>trial) break;
