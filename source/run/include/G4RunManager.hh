@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.38 2004-08-10 23:57:16 asaim Exp $
+// $Id: G4RunManager.hh,v 1.39 2004-11-25 19:01:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,7 +225,6 @@ class G4RunManager
   protected:
     G4bool geometryInitialized;
     G4bool physicsInitialized;
-    G4bool geometryNeedsToBeClosed;
     G4bool runAborted;
     G4bool initializedAtLeastOnce;
     G4bool geometryToBeOptimized;
@@ -328,7 +327,7 @@ class G4RunManager
 
   public: // with description
     inline void GeometryHasBeenModified()
-    { geometryNeedsToBeClosed = true; }
+    { kernel->GeometryHasBeenModified(); }
     //  This method must be invoked (or equivalent UI command can be used)
     // in case the user changes his/her detector geometry after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
@@ -360,7 +359,7 @@ class G4RunManager
       if(geometryToBeOptimized != vl)
       {
         geometryToBeOptimized = vl;
-        geometryNeedsToBeClosed = true;
+        kernel->GeometryHasBeenModified();
         kernel->SetGeometryToBeOptimized(vl);
       }
     }
