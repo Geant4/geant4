@@ -51,10 +51,12 @@
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
     }
+/* not true, for example for Fe56, etc..
     if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
       G4Exception("G4LENeutronInelastic: should be capture process!");
     if( originalIncident->GetMomentum().mag()/MeV < 0.000001 )
       G4Exception("G4LENeutronInelastic: should be capture process!");
+*/
     
     G4ReactionProduct modifiedOriginal;
     modifiedOriginal = *originalIncident;
