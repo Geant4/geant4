@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.16 2004-08-03 15:55:30 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.17 2004-11-11 16:04:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,10 +63,7 @@ G4int G4XXXSceneHandler::fSceneCount = 0;
 
 G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
-  G4VSceneHandler(system, fSceneIdCount++, name),
-  fCurrentDepth                 (0),
-  fpCurrentPV                   (0),
-  fpCurrentLV                   (0)
+  G4VSceneHandler(system, fSceneIdCount++, name)
 {
   fSceneCount++;
 }
@@ -414,13 +411,6 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (nurbs.GetVisAttributes ());
-}
-
-void G4XXXSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace(&fCurrentDepth,
-				       &fpCurrentPV,
-				       &fpCurrentLV);
 }
 
 void G4XXXSceneHandler::ClearTransientStore () {

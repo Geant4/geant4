@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.11 2004-09-13 20:59:53 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.12 2004-11-11 16:03:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,10 +48,6 @@ public:
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
   void PostAddThis ();
-  void EstablishSpecials (G4PhysicalVolumeModel&);
-  G4int                GetFoundDepth          () const;
-  G4VPhysicalVolume*   GetFoundVolume         () const;
-  const G4Transform3D& GetFoundTransformation () const;
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
@@ -77,9 +73,6 @@ protected:
   // to implement dump of the geometry hierarchy.
   static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
   static G4int         fSceneCount;    // No. of extanct scene handlers.
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
   const G4Transform3D* fpCurrentObjectTransformation;
 };
 

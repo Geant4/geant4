@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.10 2003-11-12 13:16:52 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.11 2004-11-11 16:04:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,9 +60,6 @@ public:
   // void PreAddThis(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddThis();
-
-  // Allows G4PhysicalVolumeModel to provide extra information...
-  void EstablishSpecials(G4PhysicalVolumeModel&);
 
   ////////////////////////////////////////////////////////////////
   // Required implementation of pure virtual functions...
@@ -114,9 +111,6 @@ public:
 protected:
   static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
   static G4int         fSceneCount;    // No. of extanct scene handlers.
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
 #ifdef G4XXXDEBUG

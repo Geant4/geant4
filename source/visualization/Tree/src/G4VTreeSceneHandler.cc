@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.7 2002-12-11 16:08:55 johna Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.8 2004-11-11 16:03:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,22 +46,12 @@ G4int G4VTreeSceneHandler::fSceneCount = 0;
 G4VTreeSceneHandler::G4VTreeSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name),
-  fCurrentDepth                 (0),
-  fpCurrentPV                   (0),
-  fpCurrentLV                   (0),
   fpCurrentObjectTransformation (0)
 {
   fSceneCount++;
 }
 
 G4VTreeSceneHandler::~G4VTreeSceneHandler () {}
-
-void G4VTreeSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-					&fpCurrentPV,
-					&fpCurrentLV);
-}
 
 void G4VTreeSceneHandler::BeginModeling() {
   G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.76 2004-05-28 04:59:54 perl Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.77 2004-11-11 16:02:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -100,9 +100,6 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           eventNumberWidth      (-1),
           extension             (""),
           writeMultipleFiles    (false),
-          currentDepth          (0),
-          currentPV             (0),
-          currentLV             (0),
           _heprep               (NULL),
           _heprepGeometry       (NULL)
 {
@@ -415,14 +412,6 @@ void G4HepRepSceneHandler::writeLayers(HepRep* heprep) {
     heprep->addLayer(hitLayer);
 }  
 
-void G4HepRepSceneHandler::EstablishSpecials(G4PhysicalVolumeModel& model) {
-#ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::EstablishSpecials(G4PhysicalVolumeModel&) " << endl;
-#endif
-    model.DefinePointersToWorkingSpace(&currentDepth, &currentPV, &currentLV);
-}
-
-
 void G4HepRepSceneHandler::BeginModeling() {
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::BeginModeling() " << endl;
@@ -529,7 +518,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if (isEventData()) {
         instance = factory->createHepRepInstance(getEventInstance(), getCalHitType());
     } else {
-        instance = getGeometryInstance(currentLV, currentDepth);
+        instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
     }
         
     setVisibility(instance, polyhedron);
@@ -540,7 +529,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         if (isEventData()) {
             face = factory->createHepRepInstance(instance, getCalHitFaceType());
         } else {
-            face = getGeometryInstance("*Face", currentDepth+1);
+            face = getGeometryInstance("*Face", fCurrentDepth+1);
             setAttribute(face, "PickParent", true);
         }
         
@@ -976,7 +965,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
 
 
 bool G4HepRepSceneHandler::isEventData () {
-    return !currentPV || fReadyForTransients;
+    return !fpCurrentPV || fReadyForTransients;
 }
 
 void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
