@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2001-10-22 07:11:44 yhajime Exp $
+$Id: History,v 1.43 2001-10-22 11:18:11 yhajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+22 October 2001 Hajime Yoshida
+-G4UIGAG.cc no more compiler warning due to G4String
+
 22 October 2001 Hajime Yoshida
 - G4UIGAG ; no compilation warning with g++-2.95
 

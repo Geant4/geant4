@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.11 2001-10-22 07:11:44 yhajime Exp $
+// $Id: G4UIGAG.cc,v 1.12 2001-10-22 11:18:11 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -433,6 +433,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
+    int i;
     G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4std::flush;
     G4cin >> i;
     if(!G4cin.good()){
@@ -445,7 +446,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
       floor[iFloor]->ListCurrentWithNum(); continue;}
     else if(i == 0) { break;}
     else if( i > 0 ) {
-      /*int*/ unsigned n_tree = floor[iFloor]->GetTreeEntry();
+      int  n_tree = floor[iFloor]->GetTreeEntry();
       if( i > n_tree )
       {
         if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
