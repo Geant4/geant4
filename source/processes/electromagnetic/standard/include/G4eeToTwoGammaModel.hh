@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.1 2004-11-19 18:44:04 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.hh,v 1.4 2004-11-22 03:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
