@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.cc,v 1.6 2000-02-22 10:39:06 urban Exp $
+// $Id: G4hIonisationPlus.cc,v 1.7 2000-03-01 09:06:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -562,9 +562,9 @@ void G4hIonisationPlus::PrintInfoDefinition()
            comments += "         delta ray energy sampled from  differential Xsection.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,
                                                   "Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
-         << " in " << TotBin << " bins. \n";
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy")
+         << " in " << NbinLambda << " bins. \n";
 }
 

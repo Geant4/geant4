@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.9 2000-02-22 10:39:06 urban Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.10 2000-03-01 09:06:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -940,9 +940,9 @@ void G4eBremsstrahlungPlus::PrintInfoDefinition()
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,"Energy")
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
+         << " in " << NbinLambda << " bins. \n";
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
