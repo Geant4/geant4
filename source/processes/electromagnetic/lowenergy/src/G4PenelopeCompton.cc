@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.22 2004-09-27 14:00:17 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.23 2004-11-17 18:21:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -40,6 +40,7 @@
 // 09 Mar 2004 L.Pandola      Bug fixed in the generation of final state 
 //                            (bug report # 585)
 // 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
+// 18 Mar 2004 L.Pandola      Use of std::map (code review)
 //
 // -------------------------------------------------------------------
 
@@ -90,9 +91,10 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     }
 
   meanFreePathTable = 0;
-  ionizationEnergy = new std::vector<G4DataVector*>;
-  hartreeFunction  = new std::vector<G4DataVector*>;
-  occupationNumber = new std::vector<G4DataVector*>;
+  ionizationEnergy = new std::map<G4int,G4DataVector*>;
+  hartreeFunction  = new std::map<G4int,G4DataVector*>;
+  occupationNumber = new std::map<G4int,G4DataVector*>;
+
   rangeTest = new G4RangeTest;
 
   ReadData(); //Read data from file
@@ -119,23 +121,15 @@ G4PenelopeCompton::~G4PenelopeCompton()
 
   delete matCrossSections;
 
-   for (size_t i2=0; i2<ionizationEnergy->size(); i2++)
+  for (G4int Z=1;Z<100;Z++)
     {
-      delete (*ionizationEnergy)[i2];
+      if (ionizationEnergy->count(Z)) delete (ionizationEnergy->find(Z)->second);
+      if (hartreeFunction->count(Z)) delete (hartreeFunction->find(Z)->second);
+      if (occupationNumber->count(Z)) delete (occupationNumber->find(Z)->second);
     }
   delete ionizationEnergy;
-
-  for (size_t j=0; j<hartreeFunction->size(); j++)
-    {
-      delete (*hartreeFunction)[j];
-    }
   delete hartreeFunction;
-
-  for (size_t k=0; k<occupationNumber->size(); k++)
-    {
-      delete (*occupationNumber)[k];
-    }
-   delete occupationNumber;
+  delete occupationNumber;
 }
 
 void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
@@ -267,7 +261,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   G4double harFunc = 0.0;
   G4int occupNb= 0;
   G4double ionEnergy=0.0;
-  G4int nosc = ((*occupationNumber)[Z-1])->size();
+  G4int nosc = occupationNumber->find(Z)->second->size();
   G4int iosc = nosc;
   ki = photonEnergy0/electron_mass_c2;
   ki2 = 2*ki+1.0;
@@ -299,12 +293,12 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	S=0.0;
 	for (G4int j=0;j<nosc;j++)
 	  {
-	    occupNb = (G4int) (*((*occupationNumber)[Z-1]))[j];
+	    occupNb = (G4int) (*(occupationNumber->find(Z)->second))[j];
 	    S = S + occupNb;
 	    if (S > TST) iosc = j;
 	    if (S > TST) break; 
 	  }
-	ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
+	ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
       }while((epsilon*photonEnergy0-photonEnergy0+ionEnergy) >0);
     }
 
@@ -315,12 +309,12 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double pzomc=0.0,rni=0.0;
       G4double aux=0.0;
       for (G4int i=0;i<nosc;i++){
-	ionEnergy = (*((*ionizationEnergy)[Z-1]))[i];
+	ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
 	if (photonEnergy0 > ionEnergy)
 	  {
 	    G4double aux = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
-	    harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
-	    occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
+	    harFunc = (*(hartreeFunction->find(Z)->second))[i]/fine_structure_const;
+	    occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
 	    pzomc = harFunc*(aux-electron_mass_c2*ionEnergy)/
 	       (electron_mass_c2*sqrt(2.0*aux+ionEnergy*ionEnergy));
 	    if (pzomc > 0) 
@@ -351,12 +345,12 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	  S=0.0;
 	  //Incoherent scattering function
 	  for (G4int i=0;i<nosc;i++){
-	    ionEnergy = (*((*ionizationEnergy)[Z-1]))[i];
+	    ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
 	    if (photonEnergy0 > ionEnergy) //sum only on excitable levels
 	      {
 		aux = photonEnergy0*(photonEnergy0-ionEnergy)*cdt1;
-		harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
-		occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
+		harFunc = (*(hartreeFunction->find(Z)->second))[i]/fine_structure_const;
+		occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
 		pzomc = harFunc*(aux-electron_mass_c2*ionEnergy)/
 		  (electron_mass_c2*sqrt(2.0*aux+ionEnergy*ionEnergy));
 		if (pzomc > 0) 
@@ -394,8 +388,8 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 		if (pac[i]>TST) break; 
 	      }
 	      A = G4UniformRand()*rn[iosc];
-	      harFunc = (*((*hartreeFunction)[Z-1]))[iosc]/fine_structure_const;
-	      occupNb = (G4int) (*((*occupationNumber)[Z-1]))[iosc];
+	      harFunc = (*(hartreeFunction->find(Z)->second))[iosc]/fine_structure_const;
+	      occupNb = (G4int) (*(occupationNumber->find(Z)->second))[iosc];
 	      if (A < 0.5) {
 		pzomc = (sqrt(0.5)-sqrt(0.5-log(2.0*A)))/
 		  (sqrt(2.0)*harFunc);
@@ -462,7 +456,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   
   G4double diffEnergy = photonEnergy0*(1-epsilon);
-  ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
+  ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
   //G4double eKineticEnergy = diffEnergy - ionEnergy;
   G4double Q2 = photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
@@ -629,18 +623,15 @@ void G4PenelopeCompton::ReadData()
       u->push_back(a1);
       j->push_back(a2);
     }
-    ionizationEnergy->push_back(u);
-    hartreeFunction->push_back(j);
-    occupationNumber->push_back(f);
+    ionizationEnergy->insert(std::make_pair(Z,u));
+    hartreeFunction->insert(std::make_pair(Z,j));
+    occupationNumber->insert(std::make_pair(Z,f));
     file >> test >> test1; //-1 -1 close the data for each Z
     if (test > 0) {
       G4String excep = "G4PenelopeCompton - data file corrupted!";
       G4Exception(excep);
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
-
-  //(*((*ionizationEnergy)[Z-1]))[i] contains the ionization energy of the i-th level of
-  //the element Z
 }
 
 G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
@@ -661,15 +652,15 @@ G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
       G4double ki1=ki3-ki2-1.0;
       G4double t0=1.0/(ki2);
       G4double csl = 0.5*ki3*t0*t0+ki2*t0+ki1*log(t0)-(1.0/t0);
-      G4int nosc = ((*occupationNumber)[Z-1])->size();
+      G4int nosc = occupationNumber->find(Z)->second->size();
       for (G4int i=0;i<nosc;i++)
 	{
-	  G4double ionEnergy = (*((*ionizationEnergy)[Z-1]))[i];
+	  G4double ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
 	  G4double tau=(energy-ionEnergy)/energy;
 	  if (tau > t0)
 	    {
 	      G4double csu = 0.5*ki3*tau*tau+ki2*tau+ki1*log(tau)-(1.0/tau);
-	      G4int f = (G4int) (*((*occupationNumber)[Z-1]))[i];
+	      G4int f = (G4int) (*(occupationNumber->find(Z)->second))[i];
 	      cs = cs + f*(csu-csl);
 	    }
 	}
@@ -697,16 +688,16 @@ G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
   G4double ECOE = 1.0/EOEC;
   //Incoherent scattering function (analytical profile)
   G4double sia = 0.0;
-  G4int nosc = ((*occupationNumber)[Z-1])->size();
+  G4int nosc = occupationNumber->find(Z)->second->size();
   for (G4int i=0;i<nosc;i++){
-    ionEnergy = (*((*ionizationEnergy)[Z-1]))[i];
+    ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
     //Sum only of those shells for which E>Eion
     if (energy > ionEnergy)
       {
 	G4double aux = energy * (energy-ionEnergy)*cdt1;
 	Pzimax = (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*sqrt(2*aux+ionEnergy*ionEnergy));
-	harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
-	occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
+	harFunc = (*(hartreeFunction->find(Z)->second))[i]/fine_structure_const;
+	occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
 	x = harFunc*Pzimax;
 	if (x > 0) 
 	  {
