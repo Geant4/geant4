@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.5 2001-10-22 16:08:05 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.6 2001-10-26 12:56:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -193,31 +193,42 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
  
   for( i=0;i<nStat;++i ) totalMemory += stats[i].GetMemoryUse();
  
-  G4cout << "    Total memory:   " << totalMemory/1024 << " kByte" << G4endl;
-  G4cout << "    Total CPU time: " 
+  G4cout << "    Total memory consumed for geometry optimisation:   "
+         << totalMemory/1024 << " kByte" << G4endl;
+  G4cout << "    Total CPU time elapsed for geometry optimisation: " 
          << G4std::setprecision(2) << totalCpuTime << " seconds" << G4endl;
  
   //
   // First list: sort by total CPU time
   //
   G4std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByCpu() );
- 
-  G4cout << "\n    Top CPU users:" << G4endl;
-  G4cout << "    Percent   Total CPU    System CPU       Memory  Volume\n"
-         << "    -------   ----------   ----------     --------  ----------"
-         << G4endl;
-  //         12345678901.234567890123.234567890123.234567890123k .
-        
+         
   G4int nPrint = nStat > 10 ? 10 : nStat;
- 
+
+  if (nPrint)
+  {
+    G4cout << "\n    Voxelisation: top CPU users:" << G4endl;
+    G4cout << "    Percent   Total CPU    System CPU       Memory  Volume\n"
+           << "    -------   ----------   ----------     --------  ----------"
+           << G4endl;
+    //         12345678901.234567890123.234567890123.234567890123k .
+  }
+
   for(i=0;i<nPrint;++i)
   {
     G4double total = stats[i].GetTotalTime();
     G4double system = stats[i].GetSysTime();
-  
+    G4double perc = 0.0;
+
+    if (system < 0) system = 0.0;
+    if ((total < 0) || (totalCpuTime < perMillion))
+      total = 0;
+    else
+      perc = total*100/totalCpuTime;
+
     G4cout << G4std::setprecision(2) 
            << G4std::setiosflags(G4std::ios::fixed|G4std::ios::right)
-           << G4std::setw(11) << total*100/totalCpuTime
+           << G4std::setw(11) << perc
            << G4std::setw(13) << total
            << G4std::setw(13) << system
            << G4std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
@@ -232,16 +243,21 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
   //
   G4std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByMemory() );
  
-  G4cout << "\n    Top memory users:" << G4endl;
-  G4cout << "    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume\n"
-         << "    -------   --------     ------   ------   --------   ----------    ----------"
-         << G4endl;
-  //         12345678901.2345678901k .23456789.23456789.2345678901.234567890123.   .
-        
+  if (nPrint)
+  {
+    G4cout << "\n    Voxelisation: top memory users:" << G4endl;
+    G4cout << "    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume\n"
+           << "    -------   --------     ------   ------   --------   ----------    ----------"
+           << G4endl;
+    //         12345678901.2345678901k .23456789.23456789.2345678901.234567890123.   .
+  }
+
   for(i=0;i<nPrint;++i)
   {
     G4long memory = stats[i].GetMemoryUse();
-  
+    G4double totTime = stats[i].GetTotalTime();
+    if (totTime < 0) totTime = 0.0;
+
     G4cout << G4std::setprecision(2) 
            << G4std::setiosflags(G4std::ios::fixed|G4std::ios::right)
            << G4std::setw(11) << G4double(memory*100)/G4double(totalMemory)
@@ -249,7 +265,7 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
            << G4std::setw( 9) << stats[i].GetNumberHeads()
            << G4std::setw( 9) << stats[i].GetNumberNodes()
            << G4std::setw(11) << stats[i].GetNumberPointers()
-           << G4std::setw(13) << stats[i].GetTotalTime() << "    "
+           << G4std::setw(13) << totTime << "    "
            << G4std::setiosflags(G4std::ios::left)
            << stats[i].GetVolume()->GetName()
            << G4std::resetiosflags(G4std::ios::left)
