@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.11 2003-11-06 17:18:36 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.12 2003-11-07 15:55:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,11 +40,7 @@
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
-//
-// Class Description: 
-//
-// -------------------------------------------------------------------
-//
+// 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2003-11-07 11:59:35 vnivanch Exp $
+$Id: History,v 1.121 2003-11-07 15:55:30 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+07 Nov 03: mma (utils-V05-02-12)
 - Fix problem of rounding of double in G4UniversalFluctuations
-- Fix problem of MSC for 10 PeV muons
-
+- Fix precision problems for high energy (PeV) particles
+- change in the tail of the angular distribution
+- highKinEnergy is set to 100 PeV
+ 
 03 Nov 03: V.Ivant (utils-V05-02-11)
 - Remove STD processes
 - Fix problem of RetrievePhysicsTable 
