@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.3 2002-12-12 09:55:33 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.4 2002-12-16 11:34:46 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -148,6 +148,8 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);
 	    cross = density * CrossSection(e,Z); //sezione d'urto
+	    //G4cout << "Cross: " << cross << G4endl;
+	    //G4cout << "Energy: " << e/MeV << " Material: " << material->GetName() << G4endl;
 	    data->push_back(cross);
 	  }
 
@@ -165,14 +167,15 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
  
  for (m=0; m<nMaterials; m++)
    { 
-      energies = new G4DataVector;
-      data = new G4DataVector;
-      material= (*materialTable)[m];
-      for (bin=0; bin<nOfBins; bin++)
+     energies = new G4DataVector;
+     data = new G4DataVector;
+     material= (*materialTable)[m];
+     for (bin=0; bin<nOfBins; bin++)
 	{
 	  G4double energy = energyVector[bin];
 	  energies->push_back(energy);
 	  matCrossSet = (*matCrossSections)[m]; //E'un composite!
+	  matCS = 0.0;
           G4int nElm = matCrossSet->NumberOfComponents();//una per ogni elemento
           for(G4int j=0; j<nElm; j++) {
             matCS += matCrossSet->GetComponent(j)->FindValue(energy);
@@ -186,11 +189,10 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	      data->push_back(DBL_MAX);
 	    }
 	}
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
+      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);   
       materialSet->AddComponent(dataSet);
     }
-  meanFreePathTable = materialSet; 
-
+ meanFreePathTable = materialSet; 
 }
 
 G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack, 
@@ -242,7 +244,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	do{
 	  if ((a2*G4UniformRand()) < a1)
 	    {
-	      tau = taumin*G4UniformRand();
+	      tau = pow(taumin,G4UniformRand());
 	    }
 	  else
 	    {
@@ -532,8 +534,10 @@ void G4PenelopeCompton::ReadData()
 
 G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
 {
-  G4double cs=0;
-  if (energy<(5*MeV))
+  G4double cs=0.0;
+  energyForIntegration=energy; 
+  ZForIntegration = Z;
+  if (energy< 5*MeV)
     {
       G4PenelopeIntegrator<G4PenelopeCompton,G4double (G4PenelopeCompton::*)(G4double)> theIntegrator;
       cs = theIntegrator.Calculate(this,&G4PenelopeCompton::DifferentialCrossSection,-1.0,1.0,1e-05);
@@ -547,18 +551,11 @@ G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
       G4double t0=1.0/(ki2);
       G4double csl = 0.5*ki3*t0*t0+ki2*t0+ki1*log(t0)-(1.0/t0);
       G4int nosc = ((*OccupationNumber)[Z-1])->size();
-      energyForIntegration=energy; 
-      ZForIntegration = Z;
       for (G4int i=0;i<nosc;i++)
 	{
 	  G4double IonEnergy = (*((*IonizationEnergy)[Z-1]))[i];
 	  G4double tau=(energy-IonEnergy)/energy;
-	  if (tau < t0)
-	    {
-	      cs=pi*classic_electr_radius*classic_electr_radius*cs/(ki*ki3);
-	      return cs;
-		}
-	  else
+	  if (tau > t0)
 	    {
 	      G4double csu = 0.5*ki3*tau*tau+ki2*tau+ki1*log(tau)-(1.0/tau);
 	      G4int f = (G4int) (*((*OccupationNumber)[Z-1]))[i];
@@ -574,12 +571,13 @@ G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
 G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
 {
   const G4double k2 = sqrt(2.0);
-  const G4double k1 = 1.0/k1;
+  const G4double k1 = sqrt(0.5);
   const G4double k12 = 0.5;
   G4double cdt1 = 1.0-cosTheta;
   G4double energy = energyForIntegration;
   G4int Z = ZForIntegration;
-  G4double IonEnergy=0.0,Pzimax=0.0,XKN=0.0,DiffCS=0.0;
+  G4double IonEnergy=0.0,Pzimax=0.0,XKN=0.0;
+  G4double DiffCS=0.0;
   G4double x=0.0,siap=0.0;
   G4double HarFunc=0.0;
   G4int OccupNb;
@@ -591,12 +589,8 @@ G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
   G4int nosc = ((*OccupationNumber)[Z-1])->size();
   for (G4int i=0;i<nosc;i++){
     IonEnergy = (*((*IonizationEnergy)[Z-1]))[i];
-    if (energy < IonEnergy) {
-      XKN = EOEC+ECOE-1+cosTheta*cosTheta;
-      DiffCS = pi*pow(classic_electr_radius,2)*pow(ECOE,2)*XKN*sia;
-      return DiffCS;
-    }
-    else
+    //Sum only of those shells for which E>Eion
+    if (energy > IonEnergy)
       {
 	G4double aux = energy * (energy-IonEnergy)*cdt1;
 	Pzimax = (aux - electron_mass_c2*IonEnergy)/(electron_mass_c2*sqrt(2*aux+pow(IonEnergy,2)));
