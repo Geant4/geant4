@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08DetectorConstruction.cc,v 1.1 1999-01-08 16:35:19 gunter Exp $
+// $Id: T08DetectorConstruction.cc,v 1.2 1999-12-03 17:08:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,7 @@ G4VPhysicalVolume* T08DetectorConstruction::Construct()
 
   G4double a, iz, z, density;
   G4String name, symbol;
+  G4double temperature, pressure;
   G4int nel;
 
   //Air
@@ -81,9 +82,11 @@ G4VPhysicalVolume* T08DetectorConstruction::Construct()
     G4Material* Pb = new G4Material(name="Pb", z=82., a, density);
     
   //Vacuum
-    a = 1.*g/mole;
-    density = 1.e-20*g/cm3;
-    G4Material* Vacuum = new G4Material(name="Vacuum",z=1.,a,density);  
+    density     = universe_mean_density;    //from PhysicalConstants.h
+    pressure    = 3.e-18*pascal;
+    temperature = 2.73*kelvin;
+    G4Material* Vacuum = new G4Material(name="Vacuum", z=1., a=1.01*g/mole,
+                   density, kStateGas,temperature,pressure);
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
