@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.8 2002-11-20 17:51:57 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.9 2002-11-29 23:18:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -273,6 +273,10 @@ G4PropagatorInField*  SetupPropagator( G4int type)
       G4TransportationManager::GetTransportationManager()->
        GetPropagatorInField ();
 
+    // Let us test the new Minimum Epsilon Step functionality
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-7 ) ; 
+    thePropagator -> SetMaximumEpsilonStep( 1.0e-7 ) ; 
+
     return thePropagator;
 }
 
@@ -336,7 +340,10 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 // Test location & Step computation
 //  
     /* assert(located->GetName()=="World"); */
-    if( fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
+
+    const G4double threshold= 1.e-6; 
+
+    if( fabs(UnitMomentum.mag() - 1.0) > threshold ) 
     {
       G4cout << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -374,7 +381,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4cout << "Test PropagateMagField: ***********************" << G4endl
             << " Starting New Particle with Position " << Position << G4endl 
 	    << " and UnitVelocity " << UnitMomentum << G4endl;
-       G4cout << " Momentum in MeV/c is "<< (0.5+iparticle*1.0)*0.1*GeV;
+       G4cout << " Momentum in MeV/c is "<< (0.5+iparticle*1.0)*0.1*GeV/MeV;
        G4cout << G4endl;
 
        G4ThreeVector initialSpin = UnitMomentum; 
@@ -421,7 +428,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 //          G4cout << " initialSpin " << initialSpin.mag() << G4endl;
 //          G4cout << " EndSpin     " << EndSpin.mag()     << G4endl;
 
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
+	  if( fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
 	    G4cout << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 

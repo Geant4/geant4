@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.9 2002-11-09 00:29:39 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.10 2002-11-29 23:18:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -274,8 +274,8 @@ G4PropagatorInField*  SetupPropagator( G4int type)
        GetPropagatorInField ();
 
     // Let us test the new Minimum Epsilon Step functionality
-    thePropagator -> SetMinimumEpsilonStep( 1.0e-7 ) ; 
-    thePropagator -> SetMaximumEpsilonStep( 1.0e-7 ) ; 
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-8 ) ; 
+    thePropagator -> SetMaximumEpsilonStep( 1.0e-8 ) ; 
 
     return thePropagator;
 }
@@ -340,7 +340,10 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 // Test location & Step computation
 //  
     /* assert(located->GetName()=="World"); */
-    if( fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
+
+    const G4double threshold= 1.e-6; 
+
+    if( fabs(UnitMomentum.mag() - 1.0) > threshold ) 
     {
       G4cout << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -425,15 +428,16 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 //          G4cout << " initialSpin " << initialSpin.mag() << G4endl;
 //          G4cout << " EndSpin     " << EndSpin.mag()     << G4endl;
 
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
+	  if( fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
 	    G4cout << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 
           // In this case spin should be parallel (equal) to momentum
           G4double endDot= EndSpin.dot(EndUnitMomentum) ;
           G4cout << " dot product of spin and momentum = " << endDot << G4endl;
-	  if( fabs(endDot) > 1.e-8 ){
-	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 "<< G4endl ;
+	  if( fabs(endDot) > threshold ){
+	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of "
+		    << threshold << G4endl ;
 	     G4cout << " Spin dot UnitMomentum= " << endDot << " ";
 	     G4cout << " Spin magnitude= " << EndSpin.mag() << " "
 		    << "(-1=" << (EndSpin.mag()-1.0) << ") ";
