@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.23 2004-09-22 07:18:50 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.24 2004-09-22 08:16:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -439,6 +439,8 @@ G4double G4VSolid::GetCubicVolume()
 // Calculate cubic volume based on Inside() method.
 // Accuracy is limited by the second argument or the statistics
 // expressed by the first argument.
+// Implementation is courtesy of Vasiliki Despoina Mitsou,
+// University of Athens.
 
 G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 {
