@@ -1,9 +1,8 @@
                 Visualization Built In Commands
                 ===============================
 
-The old /vis~/ commands are no longer available.  Here is some
-guidance on the new commands available from Geant4 4.0.  Note
-particularly the new compound commands:
+Here is some guidance on the vis commands available from Geant4 6.2.
+Note particularly the compound commands:
 
 /vis/drawTree
 /vis/drawVolume
@@ -72,6 +71,26 @@ change.
 See below for a more extended description.
 
 NI means "not implemented".
+
+
+General Commands
+================
+
+/vis/enable [true|false]
+  default:       true
+/vis/disable
+  Enables/disables visualization system.
+
+/vis/verbose [<verbosity>]
+  default:     warnings
+  Simple graded message scheme - give first letter or a digit:
+    0) quiet,         // Nothing is printed.
+    1) startup,       // Startup and endup messages are printed...
+    2) errors,        // ...and errors...
+    3) warnings,      // ...and warnings...
+    4) confirmations, // ...and confirming messages...
+    5) parameters,    // ...and parameters of scenes and views...
+    6) all            // ...and everything available.
 
 
 Scenes
@@ -435,30 +454,8 @@ NI /vis/scene/set/attributes <logical-volume-name>
   (Move to scene when implemented.)
 
 
-General Commands
-================
-
-/vis/enable [true|false]
-  default:       true
-/vis/disable
-  Enables/disables visualization system.
-
-/vis/verbose [<verbosity>]
-  default:     warnings
-  Simple graded message scheme - give first letter or a digit:
-    0) quiet,         // Nothing is printed.
-    1) startup,       // Startup and endup messages are printed...
-    2) errors,        // ...and errors...
-    3) warnings,      // ...and warnings...
-    4) confirmations, // ...and confirming messages...
-    5) parameters,    // ...and parameters of scenes and views...
-    6) all            // ...and everything available.
-
-
 Compound Commands
 =================
-
-NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
 
 /vis/drawTree [<physical-volume-name>] [<system>]
 default:           world                ATree
