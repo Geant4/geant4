@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.16 2002-06-01 01:21:49 japost Exp $
+// $Id: G4Navigator.hh,v 1.17 2002-06-01 01:26:37 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -350,7 +350,7 @@ class G4Navigator
   G4ThreeVector fExitNormal;	// Leaving volume normal, in the
 				// volume containing the exited
 				// volume's coordinate system
-  G4ThreeVector fMotherExitNormal;  // Leaving volume normal, in its 
+  G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
                                     // own coordinate system
   G4NavigationHistory fHistory;
 				// Transformation & `path' history
