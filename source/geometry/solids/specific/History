@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-04-27 10:37:31 gcosmo Exp $
+$Id: History,v 1.6 2000-04-27 10:44:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +29,7 @@ committal in the CVS repository !
   from G4VSolid (before was G4CSGSolid).
 - Reintroduced GetExtent() in G4EllipticalTube, G4Hype and G4VCSGfaceted
   (in principle, not needed).
+- Modified assertations in unit test testG4Hype.cc.
 
 11-Apr-2000, J.Allison
 ----------------------
