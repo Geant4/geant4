@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.2 2004-09-16 14:28:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,31 +64,31 @@ public:
 
   ~G4eeToHadrons();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+
+  virtual void BuildPhysicsTable(const G4ParticleDefinition& part);
 
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*);
 
-  G4double MicroscopicCrossSection(G4double kineticEnergy,
-                             const G4MaterialCutsCouple* couple);
+  G4double CrossSection(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
-  void PrintInfoDefinition();
+  virtual G4double RecalculateLambda(G4double kinEnergy, 
+                               const G4MaterialCutsCouple* couple);
+
+  virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
-  G4PhysicsTable* BuildLambdaTable();
-
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
 protected:
 
   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*);
 
   virtual void ResetNumberOfInteractionLengthLeft();
-
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
@@ -118,6 +118,7 @@ private:
   G4double                         maxKineticEnergy;
   G4double                         mfpKineticEnergy;
   G4double                         preStepMFP;
+  G4double                         preStepCS;
   G4double                         lambdaFactor;
 
   const G4MaterialCutsCouple*      currentCouple;
@@ -173,9 +174,8 @@ inline G4double G4eeToHadrons::GetMeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToHadrons::MicroscopicCrossSection(
-                                        G4double kineticEnergy,
-                                  const G4MaterialCutsCouple* couple)
+inline G4double G4eeToHadrons::CrossSection(G4double kineticEnergy,
+                                      const G4MaterialCutsCouple* couple)
 {
   G4double cross = 0.0;
   if (kineticEnergy > thKineticEnergy) {
@@ -190,10 +190,19 @@ inline G4double G4eeToHadrons::MicroscopicCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4eeToHadrons::RecalculateLambda(G4double kinEnergy, 
+                                           const G4MaterialCutsCouple* couple)
+{
+  return CrossSection(kinEnergy, couple);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline void G4eeToHadrons::ResetNumberOfInteractionLengthLeft()
 {
   currentCouple = 0;
   abovePeak     = false;
+  preStepCS     = 0.0;
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
 

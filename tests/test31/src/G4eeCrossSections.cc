@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeCrossSections.cc,v 1.2 2004-09-16 14:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -312,5 +312,3 @@ std::complex<G4double> G4eeCrossSections::DpPhi(G4double e)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

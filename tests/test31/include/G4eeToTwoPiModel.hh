@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeToTwoPiModel.hh,v 1.2 2004-09-16 14:28:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,7 +108,8 @@ inline G4double G4eeToTwoPiModel::PeakEnergy() const
 
 inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
 {
-  return cross->CrossSection2pi(e);
+  G4double ee = std::min(GeV,e);
+  return cross->CrossSection2pi(ee);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

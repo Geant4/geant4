@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeToTwoPiModel.cc,v 1.2 2004-09-16 14:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4eeCrossSections.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,6 +73,7 @@ void G4eeToTwoPiModel::Initialise()
   massPi = G4PionPlus::PionPlus()->GetPDGMass();
   massRho = 770.*MeV;
   highEnergy = 1.*GeV;
+  cross = new G4eeCrossSections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -109,7 +109,6 @@ void Histo::clear()
 
 void Histo::book()
 {
-  if(m_verbose > 1) G4cout << "[Histo::book]" << G4endl;
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << m_Histo << " histograms " << G4endl;
   // Creating the analysis factory
@@ -182,7 +181,7 @@ G4int Histo::add1D(const G4String& id, const G4String& name, G4int nb,
   if(m_verbose > 0) {
     G4cout << "New histogram will be booked: id= " << ID 
            << "  " << hid << "  <" << name 
-           << ">  " << nb << "  " << x1/uu << "  " << x2/uu << "  " << uu 
+           << ">  " << nb << "  " << x1 << "  " << x2 << "  " << uu 
            << G4endl;
   }
   m_active.push_back(m_defaultAct);
@@ -205,7 +204,7 @@ void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
     if(u > 0.0) uu = u;
     if(m_verbose > 0) {
       G4cout << "Histo:Update histogram ID= " << i  
-             << "  " << nb << "  " << x1/uu << "  " << x2/uu << "  " << uu 
+             << "  " << nb << "  " << x1 << "  " << x2 << "  " << uu 
              << G4endl;
     }
     m_bins[i] = nb;
@@ -235,7 +234,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
 {
   if(m_verbose > 1) {
     G4cout << "Histo:fill histogram ID= " << i << " at x= " << x 
-           << "  weight= " << w << " " << m_histo[i] 
+           << "  weight= " << w 
            << G4endl;   
   }
 #ifdef G4ANALYSIS_USE  
@@ -370,7 +369,7 @@ G4int Histo::NumberOfBins(G4int id)
 G4double Histo::MinBin(G4int id)
 {
   G4double x = 1.0e-9;
-  if(id>=0 && id<m_Histo) x = m_xmin[id];
+  if(id>=0 && id<m_Histo) x = m_xmin[id]*m_unit[id];
   return x;
 }
 
@@ -379,7 +378,7 @@ G4double Histo::MinBin(G4int id)
 G4double Histo::MaxBin(G4int id)
 {
   G4double x = 1.0e-9;
-  if(id>=0 && id<m_Histo) x = m_xmax[id];
+  if(id>=0 && id<m_Histo) x = m_xmax[id]*m_unit[id];
   return x;
 }
 

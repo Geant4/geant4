@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeToHadronsModel.hh,v 1.2 2004-09-16 14:28:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,8 @@ class G4eeToHadronsModel : public G4VEmModel
 
 public:
 
-  G4eeToHadronsModel(const G4Vee2hadrons*, const G4String& nam = "eeToHadrons");
+  G4eeToHadronsModel(const G4Vee2hadrons*, G4int ver=0,
+                     const G4String& nam = "eeToHadrons");
 
   ~G4eeToHadronsModel();
 
@@ -119,19 +120,21 @@ private:
   G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right);
   G4eeToHadronsModel(const  G4eeToHadronsModel&);
 
-  const G4Vee2hadrons* model;
-  G4PhysicsVector*     crossPerElectron;
-  G4PhysicsVector*     crossBornPerElectron;
-  G4bool               isInitialised;
-  G4int                nbins;
+  const G4Vee2hadrons*  model;
+  G4ParticleDefinition* theGamma;
+  G4PhysicsVector*      crossPerElectron;
+  G4PhysicsVector*      crossBornPerElectron;
+  G4bool                isInitialised;
+  G4int                 nbins;
+  G4int                 verbose;
 
-  G4double             lowKinEnergy;
-  G4double             peakKinEnergy;
-  G4double             highKinEnergy;
+  G4double              lowKinEnergy;
+  G4double              peakKinEnergy;
+  G4double              highKinEnergy;
 
-  G4double             emin;
-  G4double             epeak;
-  G4double             emax;
+  G4double              emin;
+  G4double              epeak;
+  G4double              emax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.2 2004-09-13 14:05:04 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.3 2004-09-16 14:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -76,41 +76,42 @@ G4eeToHadrons::~G4eeToHadrons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToHadrons::InitialiseProcess()
+void G4eeToHadrons::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(isInitialised) return;
-  isInitialised = true;
-  SetSecondaryParticle(G4Gamma::Gamma());
-  SetParticle(G4Positron::Positron());
+  if(!isInitialised) {
+    isInitialised = true;
 
-  currentCouple = 0;
-  preStepMFP = DBL_MAX;
-  thKineticEnergy = DBL_MAX;
-  maxKineticEnergy = MaxKinEnergy();
-  const G4DataVector v;
+    G4int ver = 0;
 
-  cross = new G4eeCrossSections();
+    SetBuildTableFlag(false);
 
-  G4eeToHadronsModel* model = 
-     new G4eeToHadronsModel(new G4eeToTwoPiModel(cross));
-  models.push_back(model);
-  model->SetHighEnergyLimit(maxKineticEnergy);
-  model->Initialise(0, v);
-  G4double emin = model->LowEnergyLimit();
-  if(emin < thKineticEnergy) thKineticEnergy = emin;
-  ekinMin.push_back(emin);
-  ekinMax.push_back(model->HighEnergyLimit());
-  ekinPeak.push_back(model->PeakEnergy());
-  cumSum.push_back(0.0);  
-  AddEmModel(1, model);
-}
+    SetSecondaryParticle(G4Gamma::Gamma());
+    SetParticle(G4Positron::Positron());
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    currentCouple = 0;
+    preStepMFP = DBL_MAX;
+    thKineticEnergy = DBL_MAX;
+    maxKineticEnergy = MaxKinEnergy();
+    //maxKineticEnergy = 10.*TeV;
+    const G4DataVector v;
 
-const G4ParticleDefinition* G4eeToHadrons::DefineBaseParticle(
-                      const G4ParticleDefinition*)
-{
-  return 0;
+    cross = new G4eeCrossSections();
+
+    G4eeToHadronsModel* model = 
+      new G4eeToHadronsModel(new G4eeToTwoPiModel(cross), ver);
+    models.push_back(model);
+    model->SetHighEnergyLimit(maxKineticEnergy);
+    model->Initialise(0, v);
+    G4double emin = model->LowEnergyLimit();
+    if(emin < thKineticEnergy) thKineticEnergy = emin;
+    ekinMin.push_back(emin);
+    ekinMax.push_back(model->HighEnergyLimit());
+    ekinPeak.push_back(model->PeakEnergy());
+    cumSum.push_back(0.0);  
+    AddEmModel(1, model);
+    nModels = 1;
+  }
+  G4VEmProcess::BuildPhysicsTable(part);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,14 +123,6 @@ void G4eeToHadrons::PrintInfoDefinition()
   G4cout << "      e+ annihilation into hadrons active above " 
          << thKineticEnergy/GeV << " GeV"
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsTable* G4eeToHadrons::BuildLambdaTable()
-{
-  InitialiseProcess();
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,7 +149,7 @@ G4double G4eeToHadrons::ComputeMeanFreePath(G4double kineticEnergy,
         mfpKineticEnergy = peak;
     }  
     
-    G4double cross = MicroscopicCrossSection(kineticEnergy, couple);
+    G4double cross = CrossSection(kineticEnergy, couple);
     if(mfpKineticEnergy == 0.0) {
        mfpKineticEnergy = kineticEnergy;
        abovePeak = false; 
@@ -164,12 +157,15 @@ G4double G4eeToHadrons::ComputeMeanFreePath(G4double kineticEnergy,
       G4double e = kineticEnergy*lambdaFactor;
       if(e > mfpKineticEnergy) mfpKineticEnergy = e;
       abovePeak = true; 
-      G4double cross1 = MicroscopicCrossSection(mfpKineticEnergy, couple);
+      G4double cross1 = CrossSection(mfpKineticEnergy, couple);
       if(cross1 > cross) cross = cross1;
     }
+    preStepCS  = cross;
     preStepMFP = DBL_MAX;
     if(cross > 0.0) preStepMFP = 1.0/cross;
   }
+  //  G4cout << "MFP: e= " << kineticEnergy << " mfpE= " << mfpKineticEnergy
+  //       << " abovePeak= " << abovePeak << G4endl;
   return preStepMFP;
 }
 
@@ -180,12 +176,11 @@ std::vector<G4DynamicParticle*>* G4eeToHadrons::GenerateSecondaries(
 {
   std::vector<G4DynamicParticle*>* newp = 0;
   G4double e = dp->GetKineticEnergy();
-  G4double cross = MicroscopicCrossSection(e, currentCouple);
-  G4double q = G4UniformRand();
-  if(q > cross*preStepMFP) {
+  G4double cross = CrossSection(e, currentCouple);
+  G4double q = preStepCS*G4UniformRand();
+  if(q > cross) {
     ResetNumberOfInteractionLengthLeft();
   } else {
-    q /= preStepMFP; 
     for(G4int i=0; i<nModels; i++) {
       if(q < cumSum[i]) {
         newp = (models[i])->SampleSecondaries(currentCouple,dp,0.0,0.0);

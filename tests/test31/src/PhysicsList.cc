@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.8 2004-09-13 14:05:04 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.9 2004-09-16 14:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -102,9 +102,10 @@ void PhysicsList::ConstructProcess()
   // Define energy interval for loss processes
   G4EmProcessOptions emOptions;
   emOptions.SetMinEnergy(0.1*keV);
-  emOptions.SetMaxEnergy(100.*GeV);
-  emOptions.SetDEDXBinning(90);
-  emOptions.SetLambdaBinning(90);
+  //  emOptions.SetMaxEnergy(100.*GeV);
+  emOptions.SetMaxEnergy(1.*TeV);
+  emOptions.SetDEDXBinning(100);
+  emOptions.SetLambdaBinning(100);
   emOptions.SetBuildPreciseRange(false);
   emOptions.SetVerbose(0);
 }

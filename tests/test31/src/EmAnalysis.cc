@@ -37,7 +37,7 @@
 #include "EmAnalysisMessenger.hh"
 #include "Histo.hh"
 #include "G4EmCalculator.hh"
-//#include <iomanip>
+#include "G4MuonPlus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -114,12 +114,11 @@ G4int EmAnalysis::AddHistOnCrossSection(const G4String& part_name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EmAnalysis::setHisto1D(G4int id, G4int nbins, G4double emin, G4double emax, 
-		  G4double unit)
+void EmAnalysis::setHisto1D(G4int id, G4int nbins, G4double emin, G4double emax)
 {
   for(G4int i=0; i<nHisto; i++) {
     if(id == histid[i]) {
-      histo->setHisto1D(id,nbins,log10(emin),log10(emax),unit);
+      histo->setHisto1D(id,nbins,log10(emin),log10(emax),1.0);
       break;
     }
   }
@@ -128,11 +127,11 @@ void EmAnalysis::setHisto1D(G4int id, G4int nbins, G4double emin, G4double emax,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EmAnalysis::setHisto1D(const G4String& h_id, G4int nbins, 
-                                  G4double emin, G4double emax, G4double unit)
+                                  G4double emin, G4double emax)
 {
   for(G4int i=0; i<nHisto; i++) {
     if(h_id == idstr[i]) {
-      setHisto1D(histid[i],nbins,emin,emax,unit);
+      setHisto1D(histid[i],nbins,emin,emax);
       break;
     }
   }
@@ -167,7 +166,6 @@ void EmAnalysis::activate1D(const G4String& h_id, G4bool val)
 void EmAnalysis::setVerbose(G4int val)
 {
   verbose = val;
-  histo->setVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -183,24 +181,46 @@ void EmAnalysis::saveToFile()
 {
   G4EmCalculator  calc;
   histo->book();
+
+  G4double mu_mass = G4MuonPlus::MuonPlus()->GetPDGMass();
+  G4double eth     = 2.0*mu_mass*mu_mass/electron_mass_c2 - electron_mass_c2;
+
+  G4double r_muon  = elm_coupling/mu_mass;  //classical particle radius
+  G4double mufac   = pi*r_muon*r_muon/3.;   //constant in crossSection
+
+
   for(G4int ii=0; ii<nHisto; ii++) {
     G4int i = histid[ii];
     if(histo->IsActive(i)) {
+      const G4Material* mat = calc.FindMaterial(material[ii]);
       G4int nb = histo->NumberOfBins(i);
       G4double x0    = histo->MinBin(i);
       G4double step0 = (histo->MaxBin(i) - x0)/((G4double)nb);
       G4double x     = pow(10.0, x0 + step0*0.5);
       G4double step  = pow(10.0, step0);
       G4bool isdedx = false;
+      G4bool iscspe = false;
+      G4bool ismumu = false;
+      G4double unit = microbarn;
+
       if(atype[ii] == "dedx") isdedx = true;
+      else if(atype[ii] == "cs_per_e") iscspe = true;
+      else if(atype[ii] == "mumu") ismumu = true;
+
       for(G4int j=0; j<nb; j++) {
-        G4double s;
+        G4double s = 0.0;
         if(isdedx) {
           s = calc.ComputeDEDX(particle[ii],material[ii],process[ii],x,cut);
           s *= mm/MeV;
+        } else if(iscspe) { 
+          s = calc.ComputeCrossSection(particle[ii],material[ii],process[ii],x,cut);
+  	  s /= (unit*mat->GetElectronDensity());
+        } else if(ismumu) {
+          G4double y = eth/x;
+          if(y < 1.0) s = mufac*y*(1.0 + 0.5*y)*sqrt(1.0 - y)/unit; 
         } else { 
           s = calc.ComputeCrossSection(particle[ii],material[ii],process[ii],x,cut);
-  	  s *= mm;
+  	  s /= (unit*mat->GetTotNbOfAtomsPerVolume());
         }
 	histo->fill(i,log10(x),s); 
 	x *= step;

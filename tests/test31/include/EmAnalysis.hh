@@ -64,10 +64,10 @@ public:
 			      const G4String& h_id="");
   
   void setHisto1D(G4int id, G4int nbins=90, G4double emin=0.001*MeV, 
-                  G4double emax=1.0*TeV, G4double unit=1.0);
+                  G4double emax=1.0*TeV);
 
   void setHisto1D(const G4String& h_id, G4int nbins=90, G4double emin=0.001*MeV, 
-                  G4double emax=1.0*TeV, G4double unit=1.0);
+                  G4double emax=1.0*TeV);
 
   void activate1D(G4int id, G4bool val=true);
 

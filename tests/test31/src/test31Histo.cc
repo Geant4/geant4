@@ -98,7 +98,6 @@ void test31Histo::BeginOfHisto(G4int num)
   n_charged_back = 0;
   n_gam_back = 0;
 
-  histo->setVerbose(verbose);
   if(0 < nHisto) {
     bookHisto();
     histo->book();

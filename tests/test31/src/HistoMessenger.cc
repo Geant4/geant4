@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2004-08-26 15:07:50 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.2 2004-09-16 14:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,8 +58,8 @@ HistoMessenger::HistoMessenger(Histo* manager)
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
-  ih->SetGuidance("histo number : from 1 to MaxHisto");
-  ih->SetParameterRange("ih>0");
+  ih->SetGuidance("histo number : from 0 to MaxHisto");
+  ih->SetParameterRange("ih>-1");
   histoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
