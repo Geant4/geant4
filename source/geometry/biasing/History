@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2002-11-04 13:47:44 gcosmo Exp $
+$Id: History,v 1.29 2002-11-20 13:19:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov, 20th 2002 G.Cosmo geombias-V04-01-04
+     - changed definition of G4NSplit_Weight from struct to class
+       to allow porting on Windows DLLs.
 
 Nov, 4th 2002 M.Dressel geombias-V04-01-03
      - remove G4std:: where it does not belong to, 
