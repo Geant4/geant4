@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.3 2005-03-28 10:35:32 allison Exp $
+// $Id: G4AttCheck.cc,v 1.4 2005-03-28 19:13:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -32,9 +32,6 @@
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
-
-#include <algorithm>
-#include <cctype>
 
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
@@ -50,9 +47,15 @@ G4AttCheck::G4AttCheck
   fStandardUnits["Length"] = "m";
   fStandardUnits["Energy"] = "MeV";
 
-  // Legal Value Types...
-  fValueTypes.insert("G4String");
-  fValueTypes.insert("G4BestUnit");
+  // Legal Categories...
+  fCategories.insert("Bookkeeping");
+  fCategories.insert("Draw");
+  fCategories.insert("Physics");
+  fCategories.insert("PickAction");
+  fCategories.insert("Association");
+
+  // Legal units...
+  fUnits.insert("G4BestUnit");
   // ...plus any legal unit symbol ("MeV", "km", etc.)...
   G4UnitsTable& units = G4UnitDefinition::GetUnitsTable();
   for (size_t i = 0; i < units.size(); ++i) {
@@ -63,10 +66,16 @@ G4AttCheck::G4AttCheck
       for (size_t j = 0; j < container.size(); ++j) {
 	//G4cout << container[j]->GetName() << ' '
 	//       << container[j]->GetSymbol() << G4endl;
-	fValueTypes.insert(container[j]->GetSymbol());
+	fUnits.insert(container[j]->GetSymbol());
       }
    }
   }
+
+  // Legal Value Types...
+  fValueTypes.insert("G4String");
+  fValueTypes.insert("G4int");
+  fValueTypes.insert("G4double");
+  fValueTypes.insert("G4ThreeVector");
 }
 
 G4AttCheck::~G4AttCheck() {}
@@ -75,6 +84,10 @@ std::set<G4String> G4AttCheck::fUnitCategories;
 
 std::map<G4String,G4String> G4AttCheck::fStandardUnits;
 
+std::set<G4String> G4AttCheck::fCategories;
+
+std::set<G4String> G4AttCheck::fUnits;
+
 std::set<G4String> G4AttCheck::fValueTypes;
 
 void G4AttCheck::Check() const {
@@ -82,52 +95,62 @@ void G4AttCheck::Check() const {
   using namespace std;
   vector<G4AttValue>::const_iterator iValue;
   for (iValue = fpValues->begin(); iValue != fpValues->end(); ++iValue) {
+    const G4String& valueName = iValue->GetName();
+    const G4String& value = iValue->GetValue();
     map<G4String,G4AttDef>::const_iterator iDef =
-      fpDefinitions->find(iValue->GetName());
+      fpDefinitions->find(valueName);
     if (iDef == fpDefinitions->end()) {
       G4cerr <<
 	"\n*******************************************************"
 	"\nERROR: No G4AttDef for G4AttValue \""
-	     <<  iValue->GetName()
-	     << "\": "
-	     << iValue->GetValue() <<
+	     <<  valueName << "\": " << value <<
 	"\n*******************************************************"
 	     << G4endl;
     } else {
-      if (fValueTypes.find(iDef->second.GetValueType()) == fValueTypes.end()) {
+      const G4String& category = iDef->second.GetCategory();
+      const G4String& extra = iDef->second.GetExtra();
+      const G4String& valueType = iDef->second.GetValueType();
+      if (fCategories.find(category) == fCategories.end()) {
 	G4cerr <<
 	  "\n*******************************************************"
-	  "\nERROR: Illegal value type \""
-	       << iDef->second.GetValueType()
-	       << "\" for G4AttValue \""
-	       <<  iValue->GetName()
-	       << "\": "
-	       << iValue->GetValue() <<
-	  "\n  Possible value types:";
-	std::set<G4String>::iterator i;
-	for (i = fValueTypes.begin(); i != fValueTypes.end(); ++i) {
+	  "\nERROR: Illegal Category Field \"" << category
+	       << "\" for G4AttValue \"" << valueName << "\": " << value <<
+	  "\n  Possible Categories:";
+	set<G4String>::iterator i;
+	for (i = fCategories.begin(); i != fCategories.end(); ++i) {
 	  G4cerr << ' ' << *i;
 	}
 	G4cerr <<
 	  "\n*******************************************************"
 	       << G4endl;
       }
-      G4String extra = iDef->second.GetExtra();
-      if (extra != "") {
-	transform(extra.begin(),extra.end(),extra.begin(),::tolower);
-	if (extra.find("vector") == string::npos) {
-	  G4cerr <<
-	    "\n*******************************************************"
-	    "\nERROR: Unrecognised extra field \""
-		 << iDef->second.GetExtra()
-		 << "\" for G4AttValue \""
-		 <<  iValue->GetName()
-		 << "\": "
-		 << iValue->GetValue() <<
-	    "\n  Extra must contain \"vector\" (upper or lower case)."
-	    "\n*******************************************************"
-		 << G4endl;
+      if(category == "Physics" && fUnits.find(extra) == fUnits.end()) {
+	G4cerr <<
+	  "\n*******************************************************"
+	  "\nERROR: Illegal Extra field \"" << extra << "\" for G4AttValue \""
+	       << valueName << "\": " << value <<
+	  "\n  Possible Extra fields if Category==\"Physics\":\n    ";
+	set<G4String>::iterator i;
+	for (i = fUnits.begin(); i != fUnits.end(); ++i) {
+	  G4cerr << ' ' << *i;
 	}
+	G4cerr <<
+	  "\n*******************************************************"
+	       << G4endl;
+      }
+      if (fValueTypes.find(valueType) == fValueTypes.end()) {
+	G4cerr <<
+	  "\n*******************************************************"
+	  "\nERROR: Illegal Value Type field \"" << valueType
+	       << "\" for G4AttValue \"" << valueName << "\": " << value <<
+	  "\n  Possible Value Types:";
+	set<G4String>::iterator i;
+	for (i = fValueTypes.begin(); i != fValueTypes.end(); ++i) {
+	  G4cerr << ' ' << *i;
+	}
+	G4cerr <<
+	  "\n*******************************************************"
+	       << G4endl;
       }
     }
   }
@@ -137,51 +160,64 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
   using namespace std;
   vector<G4AttValue>::const_iterator iValue;
   for (iValue = ac.fpValues->begin(); iValue != ac.fpValues->end(); ++iValue) {
+    const G4String& valueName = iValue->GetName();
+    const G4String& value = iValue->GetValue();
     map<G4String,G4AttDef>::const_iterator iDef =
-      ac.fpDefinitions->find(iValue->GetName());
+      ac.fpDefinitions->find(valueName);
     G4bool error = false;
     if (iDef == ac.fpDefinitions->end()) {
       error = true;
       os << "ERROR: No G4AttDef for G4AttValue \""
-	 <<  iValue->GetName() << "\": " << iValue->GetValue() << endl;
+	 << valueName << "\": " << value << endl;
     } else {
-      if (ac.fValueTypes.find(iDef->second.GetValueType()) ==
-	  ac.fValueTypes.end()) {
+      const G4String& category = iDef->second.GetCategory();
+      const G4String& extra = iDef->second.GetExtra();
+      const G4String& valueType = iDef->second.GetValueType();
+      if (ac.fCategories.find(category) == ac.fCategories.end()) {
 	error = true;
-	os << "ERROR: Illegal value type \""
-	   << iDef->second.GetValueType()
-	   << "\" for G4AttValue \""
-	   <<  iValue->GetName()
-	   << "\": "
-	   << iValue->GetValue() <<
-	  "\n  Possible value types:";
-	std::set<G4String>::iterator i;
+	os <<
+	  "ERROR: Illegal Category Field \"" << category
+	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
+	  "\n  Possible Categories:";
+	set<G4String>::iterator i;
+	for (i = ac.fCategories.begin(); i != ac.fCategories.end(); ++i) {
+	  os << ' ' << *i;
+	}
+	os << endl;
+      }
+      if(category == "Physics" && ac.fUnits.find(extra) == ac.fUnits.end()) {
+	error = true;
+	os <<
+	  "ERROR: Illegal Extra field \""<< extra << "\" for G4AttValue \""
+	   << valueName << "\": " << value <<
+	  "\n  Possible Extra fields if Category==\"Physics\":\n    ";
+	set<G4String>::iterator i;
+	for (i = ac.fUnits.begin(); i != ac.fUnits.end(); ++i) {
+	  os << ' ' << *i;
+	}
+	os << endl;
+      }
+      if (ac.fValueTypes.find(valueType) == ac.fValueTypes.end()) {
+	error = true;
+	os <<
+	  "ERROR: Illegal Value Type field \"" << valueType
+	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
+	  "\n  Possible Value Types:";
+	set<G4String>::iterator i;
 	for (i = ac.fValueTypes.begin(); i != ac.fValueTypes.end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
-	G4String extra = iDef->second.GetExtra();
-	if (extra != "") {
-	  transform(extra.begin(),extra.end(),extra.begin(),::tolower);
-	  if (extra.find("vector") == string::npos) {
-	    error = true;
-	    os << "ERROR: Unrecognised extra field \""
-	       << iDef->second.GetExtra()
-	       << "\" for G4AttValue \""
-	       <<  iValue->GetName()
-	       << "\": "
-	       << iValue->GetValue() <<
-	      "\n  Extra must contain \"vector\" (upper or lower case)."
-	       << endl;
-	  }
-	}
       }
     }
     if (!error) {
       os << iDef->second.GetDesc() << ": "
-	 << iValue->GetValue() << " ("
-	 << iDef->second.GetValueType() << ")"
-	 << endl;
+	 << iValue->GetValue();
+      if (iDef->second.GetCategory() == "Physics") {
+	os << " ("
+	   << iDef->second.GetExtra() << ")";
+      }
+      os << endl;
     }
   }
   return os;
@@ -193,7 +229,7 @@ void G4AttCheck::AddValuesAndDefs
  const G4String& oldName,
  const G4String& name,
  const G4String& value,
- const G4String& valueType,
+ const G4String& extra,
  const G4String& description) const {
   // Add new G4AttDeff...
   pValues->push_back(G4AttValue(name,value,""));
@@ -201,93 +237,93 @@ void G4AttCheck::AddValuesAndDefs
   (*pDefinitions)[name] = fpDefinitions->find(oldName)->second;
   // ...and make appropriate changes...
   (*pDefinitions)[name].SetName(name);
-  (*pDefinitions)[name].SetValueType(valueType);
+  (*pDefinitions)[name].SetExtra(extra);
   if (description != "") (*pDefinitions)[name].SetDesc(description);
 }
 
-G4AttCheck G4AttCheck::Standard() const {
-  // Returns standard versions on the heap.
+void G4AttCheck::Standard
+(std::vector<G4AttValue>* newValues,
+ std::map<G4String,G4AttDef>* newDefinitions) const {
+  // Returns standard versions in provided vector and map.
   using namespace std;
-
-  vector<G4AttValue>* pValues = new vector<G4AttValue>;
-  map<G4String,G4AttDef>* pDefinitions = new map<G4String,G4AttDef>;
-
   vector<G4AttValue>::const_iterator iValue;
   for (iValue = fpValues->begin(); iValue != fpValues->end(); ++iValue) {
     const G4String& valueName = iValue->GetName();
-    //G4cout << "G4AttValue \"" << valueName << "\" found..." << G4endl;
+    const G4String& value = iValue->GetValue();
     map<G4String,G4AttDef>::const_iterator iDef =
       fpDefinitions->find(valueName);
     if (iDef != fpDefinitions->end()) {
+      const G4String& category = iDef->second.GetCategory();
+      const G4String& extra = iDef->second.GetExtra();
       const G4String& valueType = iDef->second.GetValueType();
-      const G4String& value = iValue->GetValue();
-      if (fValueTypes.find(valueType) != fValueTypes.end()) {
-	if (valueType == "G4String") {  // Simply copy...
-	  pValues->push_back(*iValue);
-	  (*pDefinitions)[valueName] =
+      if (!(
+	    fCategories.find(category) == fCategories.end() ||
+	    (category == "Physics" && fUnits.find(extra) == fUnits.end()) ||
+	    fValueTypes.find(valueType) == fValueTypes.end()
+	    )) {
+	if (category != "Physics") {  // Simply copy...
+	  newValues->push_back(*iValue);
+	  (*newDefinitions)[valueName] =
 	    fpDefinitions->find(valueName)->second;
-	}
-	else {
+	} else {
 	  G4String valueAndUnit;
 	  G4String unit;
-	  if (valueType == "G4BestUnit") {
+	  if (extra == "G4BestUnit") {
 	    valueAndUnit = value;
 	    valueAndUnit = valueAndUnit.strip();
 	    unit = valueAndUnit.substr(valueAndUnit.rfind(' ')+1);
 	  } else {
-	    valueAndUnit = value + ' ' + valueType;
-	    unit = valueType;
+	    valueAndUnit = value + ' ' + extra;
+	    unit = extra;
 	  }
-	  G4String category = G4UnitDefinition::GetCategory(unit);
-	  if (fUnitCategories.find(category) != fUnitCategories.end()) {
-	    G4String standardUnit = fStandardUnits[category];
-	    G4String standardValueType = standardUnit;
+	  G4String unitCategory = G4UnitDefinition::GetCategory(unit);
+	  if (fUnitCategories.find(unitCategory) != fUnitCategories.end()) {
+	    G4String standardUnit = fStandardUnits[unitCategory];
 	    G4double valueOfUnit = G4UnitDefinition::GetValueOf(standardUnit);
 	    G4String newValue;
 	    G4String extra = iDef->second.GetExtra();
-	    /*
+	    //
 	    G4cout << "valueName = \"" << valueName
 		   << "\", valueAndUnit = \"" << valueAndUnit
 		   << "\", unit = \"" << unit
 		   << "\", extra = \"" << extra
-		   << "\", category \"" << G4UnitDefinition::GetCategory(unit)
+		   << "\", unitCategory \""
+		   << unitCategory
 		   << G4endl;
-	    */
-	    transform(extra.begin(),extra.end(),extra.begin(),::tolower);
-	    if (extra.find("vector") == string::npos) {
-	      G4double internalValue =
-		G4UIcommand::ConvertToDimensionedDouble(valueAndUnit);
-	      AddValuesAndDefs
-		(pValues,pDefinitions,
-		 valueName,valueName,
-		 G4UIcommand::ConvertToString(internalValue/valueOfUnit),
-		 standardValueType);
-	    } else {
+	    //
+	    if (valueType == "G4ThreeVector") {
 	      G4ThreeVector internalValue =
 		G4UIcommand::ConvertToDimensioned3Vector(valueAndUnit);
 	      AddValuesAndDefs
-		(pValues,pDefinitions,
+		(newValues,newDefinitions,
 		 valueName,valueName+"-X",
 		 G4UIcommand::ConvertToString(internalValue.x()/valueOfUnit),
-		 standardValueType,
+		 standardUnit,
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-X");
 	      AddValuesAndDefs
-		(pValues,pDefinitions,
+		(newValues,newDefinitions,
 		 valueName,valueName+"-Y",
 		 G4UIcommand::ConvertToString(internalValue.y()/valueOfUnit),
-		 standardValueType,
+		 standardUnit,
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-Y");
 	      AddValuesAndDefs
-		(pValues,pDefinitions,
+		(newValues,newDefinitions,
 		 valueName,valueName+"-Z",
 		 G4UIcommand::ConvertToString(internalValue.z()/valueOfUnit),
-		 standardValueType,
+		 standardUnit,
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-Z");
+	    } else {
+	      G4double internalValue =
+		G4UIcommand::ConvertToDimensionedDouble(valueAndUnit);
+	      AddValuesAndDefs
+		(newValues,newDefinitions,
+		 valueName,valueName,
+		 G4UIcommand::ConvertToString(internalValue/valueOfUnit),
+		 standardUnit);
 	    }
 	  }
 	}
       }
     }
   }
-  return G4AttCheck(pValues,pDefinitions);
 }
