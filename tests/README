@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2004-04-27 09:16:02 gcosmo Exp $
+$Id: README,v 1.9 2004-06-23 16:06:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -49,6 +49,7 @@ test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modelling.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
+test28 ## Hadronic abrasion/ablation and em-dissociation.
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
 test40 ## Benchmark test for EM shower development from single primary

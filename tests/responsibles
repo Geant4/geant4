@@ -6,7 +6,7 @@ digits_hits/hits             asai@slac.stanford.edu          Makoto Asai
 event                        asai@slac.stanford.edu          Makoto Asai
 g3tog4                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-geometry/biasing             Michael.Dressel@cern.ch         Michael Dressel
+geometry/biasing             Giuseppe.Daquino@cern.ch        Giuseppe Daquino
 geometry/magneticfield       John.Apostolakis@cern.ch        John Apostolakis
 geometry/management          Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/solids              Gabriele Cosmo@cern.ch          Gabriele Cosmo
@@ -36,23 +36,13 @@ processes                    John Apostolakis                John Apostolakis
 "/"/stopping                 felawka@triumf.ca               Larry Felawka
 "/"/util                     chuma@triumf.ca                 Joe Chuma
 "/"/processes                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
 "/"/models/cascade           aatos.heikkinen@cern.ch         Mika Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
 "/"/"/coherent_elastic       fwj@triumf.ca                   Fred Jones
-"/"/"/high_energy            harm@physik.rwth-aachen.de      Harm Fesefeldt
-"/"/"/im_r_matrix            Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/isotope_production     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/leading_particle       Naoko.Kanaya@cern.ch            Naoko Kanaya
-"/"/"/low_energy             chuma@triumf.ca                 Joe Chuma
-"/"/"/management             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/neutron_hp             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/photolepton_hadron     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/pre_equilibrium        Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
-"/"/"/theo_high_energy       Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/util                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/de_excitation          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/"/ablation             flei@space.qinetiq.com          Fan Lei
 "/"/"/"/evaporation          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/fermi_breakup        Vicente.Lara@cern.ch            Vincente Lara
 "/"/"/"/fission              Vicente.Lara@cern.ch            Vincente Lara
@@ -62,10 +52,23 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/"/multifragmentation   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/photon_evaporation   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/util                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/em_dissociation        flei@space.qinetiq.com          Fan Lei
+"/"/"/high_energy            harm@physik.rwth-aachen.de      Harm Fesefeldt
+"/"/"/im_r_matrix            Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/isotope_production     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/leading_particle       Naoko.Kanaya@cern.ch            Naoko Kanaya
+"/"/"/low_energy             chuma@triumf.ca                 Joe Chuma
+"/"/"/management             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/neutron_hp             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/parton_string/diffraction    Gunter.Folger@cern.ch     Gunter Folger
 "/"/"/"/hadronization        Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/"/management           Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/qgsm                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/photolepton_hadron     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/pre_equilibrium        Vicente.Lara@cern.ch            Vincente Lara
+"/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
+"/"/"/theo_high_energy       Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/util                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/optical                    gum@triumf.ca                   Peter Gumplinger
 "/parameterisation           Marc.Verderi@in2p3.fr           Marc Verderi
 "/transportation             John.Apostolakis@cern.ch        John Apostolakis
@@ -73,15 +76,17 @@ readout                      asai@slac.stanford.edu          Makoto Asai
 run                          asai@slac.stanford.edu          Makoto Asai
 track                        kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 tracking                     Takashi.Sasaki@kek.jp           Takashi Sasaki
-visualization                stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization                perl@slac.stanford.edu          Joseph Perl
 visualization/management     John.Allison@man.ac.uk          John Allison
-visualization/G4Ray          John.Allison@man.ac.uk          John Allison
+visualization/modeling       John.Allison@man.ac.uk          John Allison
+visualization/HepRep         perl@slac.stanford.edu          Joseph Perl
 visualization/FukuiRenderer  stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
-visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
-visualization/OPACS          barrand@lal.in2p3.fr            Guy Barrand
 visualization/OpenGL         John.Allison@man.ac.uk          John Allison
-visualization/OpenInventor   joe@cactus.phyast.pitt.edu      Joe Boudreau
+visualization/OpenInventor   barrand@lal.in2p3.fr            Guy Barrand
 visualization/RayTracer      asai@slac.stanford.edu          Makoto Asai
+visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization/XXX            John.Allison@man.ac.uk          John Allison
 environments                 John.Allison@man.ac.uk          John Allison
 environments/Momo            yoshidah@naruto-u.ac.jp         Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
@@ -95,14 +100,20 @@ examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
 examples/advanced            asai@slac.stanford.edu          Makoto Asai
   brachytherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
+  cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
-  lAr_calorimeter            Patricia.Mendez@cern.ch         Patricia Mendez Lorenzo
-  Rich                       Patricia.Mendez@cern.ch         Patricia Mendez Lorenzo
+  hadrontherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
+  medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
+  purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
+  radioprotection            Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
+  Tiara                      Giuseppe.Daquino@cern.ch        Giuseppe Daquino
   underground_physics        a.s.howard@ic.ac.uk             Alex Howard
-  xray_fluorescence          MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+  xray_fluorescence          Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
 examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
-examples/extended/biasing    Michael.Dressel@cern.ch         Michael Dressel
+examples/extended/biasing    Giuseppe.Daquino@cern.ch        Giuseppe Daquino
 examples/extended/electromagnetic:
   TestEm1,2,3,4,5,6,7        Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
@@ -118,7 +129,7 @@ examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
 examples/extended/parallel   gene@ccs.neu.edu                Gene Cooperman
 examples/extended/persistency  Youhei.Morita@cern.ch         Youhei Morita
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
-      test01                 John.Apostolakis@cern.ch        John Apostolakis
+      test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
       test02.hadron          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test03                 (not currently used - see tests/GNUmakefile)
@@ -145,6 +156,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test25                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test27                 Gunter.Folger@cern.ch           Gunter Folger
+      test28                 flei@space.qinetiq.com          Fan Lei
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
