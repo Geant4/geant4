@@ -29,81 +29,95 @@ class G4UIcmdWithPargs;
 class G4UIcmdParg;
 
 class G4InteractiveSolid : public G4UImessenger, public G4SolidQuery {
-	public:
-	G4InteractiveSolid( const G4String &commandPrefix );
-	virtual ~G4InteractiveSolid();
+public:
+  G4InteractiveSolid( const G4String &commandPrefix );
+  virtual ~G4InteractiveSolid();
 	
-	inline G4VSolid *GetSolid() const { return solid; }
+  inline G4VSolid *GetSolid() const { return solid; }
 	
-	void SetNewValue( G4UIcommand *command, G4String newValues );
-	G4String GetCurrentValue( G4UIcommand *command );
+  void SetNewValue( G4UIcommand *command, G4String newValues );
+  G4String GetCurrentValue( G4UIcommand *command );
 	
-	protected:
-	void DeleteArgArray( G4UIcmdParg **array, const G4int nItem );
-	G4String ConvertArgsToString( G4UIcmdParg **array, const G4int nItem );
+protected:
+  void DeleteArgArray( G4UIcmdParg **array, const G4int nItem );
+  G4String ConvertArgsToString( G4UIcmdParg **array, const G4int nItem );
 	
-	G4VSolid	*solid;
+  G4VSolid	*solid;
 	
-	G4UIdirectory	*volumeDirectory;
+  G4UIdirectory	*volumeDirectory;
 	
-	G4UIcmdParg		*boxArgs[3];
-	G4UIcmdWithPargs	*boxCmd;
-	void MakeMeABox( G4String values );
+  G4UIcmdParg		*boxArgs[3];
+  G4UIcmdWithPargs	*boxCmd;
+  void MakeMeABox( G4String values );
 	
-	G4UIcmdParg		*paraArgs[6];
-	G4UIcmdWithPargs	*paraCmd;
-	void MakeMeAPara( G4String values );
+  G4UIcmdParg		*paraArgs[6];
+  G4UIcmdWithPargs	*paraCmd;
+  void MakeMeAPara( G4String values );
 	
-	G4UIcmdParg		*trapArgs[11];
-	G4UIcmdWithPargs	*trapCmd;
-	void MakeMeATrap( G4String values );
+  G4UIcmdParg		*trapArgs[11];
+  G4UIcmdWithPargs	*trapCmd;
+  void MakeMeATrap( G4String values );
 	
-	G4UIcmdParg		*trdArgs[5];
-	G4UIcmdWithPargs	*trdCmd;
-	void MakeMeATrd( G4String values );
+  G4UIcmdParg		*trdArgs[5];
+  G4UIcmdWithPargs	*trdCmd;
+  void MakeMeATrd( G4String values );
 	
-	G4UIcmdParg		*sphereArgs[6];
-	G4UIcmdWithPargs	*sphereCmd;
-	void MakeMeASphere( G4String values );
+  G4UIcmdParg		*sphereArgs[6];
+  G4UIcmdWithPargs	*sphereCmd;
+  void MakeMeASphere( G4String values );
 	
-	G4UIcmdParg		*torusArgs[5];
-	G4UIcmdWithPargs	*torusCmd;
-	void MakeMeATorus( G4String values );
+  G4UIcmdParg		*torusArgs[5];
+  G4UIcmdWithPargs	*torusCmd;
+  void MakeMeATorus( G4String values );
 	
-	G4UIcmdParg		*tubsArgs[5];
-	G4UIcmdWithPargs	*tubsCmd;
-	void MakeMeATubs( G4String values );
+  G4UIcmdParg		*tubsArgs[5];
+  G4UIcmdWithPargs	*tubsCmd;
+  void MakeMeATubs( G4String values );
 	
-	G4UIcmdParg		*consArgs[7];
-	G4UIcmdWithPargs	*consCmd;
-	void MakeMeACons( G4String values );
+  G4UIcmdParg		*consArgs[7];
+  G4UIcmdWithPargs	*consCmd;
+  void MakeMeACons( G4String values );
 	
-	G4UIcmdParg		*hypeArgs[5];
-	G4UIcmdWithPargs	*hypeCmd;
-	void MakeMeAHype( G4String values );
+  G4UIcmdParg		*hypeArgs[5];
+  G4UIcmdWithPargs	*hypeCmd;
+  void MakeMeAHype( G4String values );
 	
-	G4UIcmdParg		*polyconeArgs[5];
-	G4UIcmdWithPargs	*polyconeCmd;
-	void MakeMeAPolycone( G4String values );
+  G4UIcmdParg		*polyconeArgs[5];
+  G4UIcmdWithPargs	*polyconeCmd;
+  void MakeMeAPolycone( G4String values );
 	
-	G4UIcmdParg		*polycone2Args[6];
-	G4UIcmdWithPargs	*polycone2Cmd;
-	void MakeMeAPolycone2( G4String values );
+  G4UIcmdParg		*polycone2Args[6];
+  G4UIcmdWithPargs	*polycone2Cmd;
+  void MakeMeAPolycone2( G4String values );
 	
-	G4UIcmdParg		*polyhedraArgs[6];
-	G4UIcmdWithPargs	*polyhedraCmd;
-	void MakeMeAPolyhedra( G4String values );
+  G4UIcmdParg		*polyhedraArgs[6];
+  G4UIcmdWithPargs	*polyhedraCmd;
+  void MakeMeAPolyhedra( G4String values );
 	
-	G4UIcmdParg		*polyhedra2Args[7];
-	G4UIcmdWithPargs	*polyhedra2Cmd;
-	void MakeMeAPolyhedra2( G4String values );
+  G4UIcmdParg		*polyhedra2Args[7];
+  G4UIcmdWithPargs	*polyhedra2Cmd;
+  void MakeMeAPolyhedra2( G4String values );
 	
-	G4UIcmdParg		*ellipticalTubeArgs[6];
-	G4UIcmdWithPargs	*ellipticalTubeCmd;
-	void MakeMeAnEllipticalTube( G4String values );
+  G4UIcmdParg		*ellipticalTubeArgs[6];
+  G4UIcmdWithPargs	*ellipticalTubeCmd;
+  void MakeMeAnEllipticalTube( G4String values );
 	
-	G4UIcmdWithPargs	*dircTestCmd;
-	void MakeMeDircTest();
+  G4UIcmdWithPargs	*dircTestCmd;
+  void MakeMeDircTest();
+
+
+  
+  typedef enum BooleanOp {
+    INTERSECTION,
+    SUBTRACTION,
+    UNION
+  } BooleanOp;
+
+  G4UIcmdWithPargs	*BooleanSolid1Cmd;
+  void MakeMeBooleanSolid1(G4String values);
+
+  /* Here add new commands and functions to create solids */
+
 };
 
 

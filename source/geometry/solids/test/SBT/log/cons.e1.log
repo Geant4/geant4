@@ -1,31 +1,32 @@
 % SBT logged output ´
+% /solid/G4Cons 0 1 0 1 1 20 181
 % target =    (0,0,0)
 % widths =    (1000,1000,1000)
 % grids  =    (0,0,0)
 % maxPoints = 10000
 % maxErrors = 100
-% T02: DistanceToOut(p) should be zero
+% T02: DistanceToOut(p) should be zero DistanceToIn = 1282.6499659959
 1 246.85925640509 89.849421384541 -760.54783950513 -0.059669629057189 0.39715786031902 0.91580847853413
-% T02: DistanceToIn(p) should be zero
+% T02: DistanceToIn(p) should be zero DistanceToIn = 813.78784364538
 2 124.50814868715 45.317260045714 -615.50621152666 0.56858787910743 0.72949509484895 0.38019038694243
-% T02: DistanceToOut(p) should be zero
+% T02: DistanceToOut(p) should be zero DistanceToIn = 1827.1993027554
 3 -273.79732764577 323.58306796648 1000 0.3107058692342 -0.085552200500158 -0.94664813094042
-% T02: DistanceToIn(p) should be zero
+% T02: DistanceToOut(p) should be zero DistanceToIn = 1360.9161201557
 4 335.37729815841 122.06735377828 -404.91985169276 -0.56095800463695 0.33900575025139 -0.75524911011548
-% T02: DistanceToOut(p) should be zero
+% T02: DistanceToOut(p) should be zero DistanceToIn = 0
 5 -493.22646508782 636.48142572777 -1000 0.6671809366636 -0.30657201776884 0.67888378657457
-% T02: DistanceToOut(p) should be zero
+% T02: DistanceToOut(p) should be zero (any further such errors suppressed) DistanceToIn = 221.88521677375
 6 76.713099180877 27.92128468015 -595.27655765047 0.68771184902904 0.68867035735351 0.22975106443201
-% T02: DistanceToIn(p) should be zero
+% T02: DistanceToIn(p) should be zero DistanceToIn = 221.88521677375
 7 221.21193592232 80.514560140126 -251.36545431707 0.63441701645655 0.52439967738411 0.56790846761588
-% T02: DistanceToOut(p) should be zero (any further such errors suppressed)
+% T02: DistanceToIn(p) should be zero DistanceToIn = 1519.6315172393
 8 -534.2748916898 845.31079498008 249.96505132663 0.59627828901626 -0.51403919641866 -0.6166164988006
-% T02: DistanceToIn(p) should be zero
-9 283.54570143556 103.20219537667 395.22426851562 0.22209933103374 0.23942208920767 -0.9451713867621
-% T02: DistanceToIn(p) should be zero (any further such errors suppressed)
-10 6.1192443052508 2.2272227833143 47.548689161337 0.82862717822039 0.47465991077919 -0.2967742721558
+% T02: DistanceToIn(p) should be zero DistanceToIn = 1519.6315172393
+9 -870.57941638323 492.02792580282 -277.38516656271 0.35350379013342 -0.57713949099555 -0.73616919135122
+% T02: DistanceToIn(p) should be zero (any further such errors suppressed) DistanceToIn = 76.041521006587
+10 198.24928288576 72.156837935038 240.06499499985 0.043496103421215 0.14137950012059 -0.98899945699319
 % End of test (maximum number points) ´
-% Statistics: points=10000 errors=644962 errors reported=10
+% Statistics: points=10000 errors=660228 errors reported=10
 %             inside=1314 outside=8686 surface=0
-%             cpu time=115
+%             cpu time=237
 %(End of file)

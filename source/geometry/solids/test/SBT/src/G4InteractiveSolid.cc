@@ -25,7 +25,9 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4EllipticalTube.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4UnionSolid.hh"
 
 //
 // Constructor
@@ -227,6 +229,14 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	G4String dircTestPath = prefix+"DircTest";
 	dircTestCmd = new G4UIcmdWithPargs( dircTestPath, this, 0, 0 );
 	dircTestCmd->SetGuidance( "Declare a DircTest solid" );
+	//
+	// Declare BooleanSolid1
+	//
+	G4String BooleanSolid1Path = prefix+"BooleanSolid";
+	BooleanSolid1Cmd = new G4UIcmdWithPargs( BooleanSolid1Path, this, 0, 0 );
+	BooleanSolid1Cmd->SetGuidance( "Declare a Boolean solid #1" );
+	
+	/* Here to add new solids command */
 }
 
 
@@ -695,8 +705,111 @@ void G4InteractiveSolid::MakeMeDircTest()
 	solid = new G4SubtractionSolid( "drcExample", outside, cutout, tran );
 }
 
+//
+// BooleanSolid1Test
+//
+void G4InteractiveSolid::MakeMeBooleanSolid1(G4String values)
+{
+  /*
+    G4IntersectionSolid.hh  G4SubtractionSolid.hh  G4UnionSolid.hh
+    all CSGs : Box Tubs Sphere Cons Torus
+    So: Boolean type operation and 2 CSG Objects with parameters for each (..)
+    plus a transformation to apply to the second solid
+   */
+	delete solid;
+	BooleanOp OperationType;
+
+	//OperationType = INTERSECTION;
+	OperationType = SUBTRACTION;
+		
+	/*
+	G4Tubs *outside = new G4Tubs( "OuterFrame",	// name (arbitrary) 
+				      1.0*m, 		// inner radius
+				      1.1*m, 		// outer radius
+				      0.50*m, 		// half-thickness in z
+				      0*deg, 		// start angle
+				      180*deg );		// total angle
+	*/
+	/*
+	G4Torus *outside = new G4Torus( "interactiveTorus",
+					0.2*m,
+				        0.8*m,
+				        1.4*m,
+				        0*deg,
+				        360*deg );
+	*/
+	
+	G4Cons *outside = new G4Cons( "OuterFrame",
+				      0.6*m, // pRmin1
+				      1.0*m, // pRmax1
+				      0.2*m, // pRmin2
+				      0.8*m, // pRmax2
+				      0.2*m,
+				      0*deg,
+				      180*deg );
+		
+	/* Dirctest Box cutout
+	G4Box *cutout = new G4Box( "Cutout", 	// name (arbitrary)
+				   0.02*m,	// half-width (x)
+				   0.25*m,	// half-height (y)
+				   0.01001*m );	// half-thickness (z)
+	*/
+	
+	/*
+	G4Tubs *cutout = new G4Tubs("AnotherTubs",
+				    1.0*m,
+				    1.1*m,
+				    0.50*m,
+				    0*deg,
+				    180*deg
+				    );
+	*/
+
+	
+	 G4Cons *cutout = new G4Cons( "OuterFrame",
+				      0.6*m, // pRmin1
+				      1.0*m, // pRmax1
+				      0.2*m, // pRmin2
+				      0.8*m, // pRmax2
+				      0.2*m,
+				      0*deg,
+				      180*deg );
+	
+	/*
+	G4Torus *cutout = new G4Torus( "interactiveTorus",
+					0.2*m,
+				        0.8*m,
+				        1.4*m,
+				        0*deg,
+				        360*deg );
+
+	*/
+	
+	
+	G4RotationMatrix rm;
+	rm.rotateY(M_PI/4.0);
+
+	G4Transform3D tran = G4Transform3D(rm,G4ThreeVector(0.0,0.0,0.0));
+	
+	/* G4Transform3D tran = G4Translate3D( 1.03*m, 0.0, 0.0 ); */
+
+	switch (OperationType) {
+	case INTERSECTION:
+	  solid = new G4IntersectionSolid( "drcExample", outside, cutout, tran );
+	  break;	
+	case SUBTRACTION:
+	  solid = new G4SubtractionSolid( "drcExample", outside, cutout, tran );
+	  break;	
+	case UNION:
+	  solid = new G4UnionSolid( "drcExample", outside, cutout, tran );
+	  break;	
+	}
+	
+}
 
 
+// G4VPhysicalVolume* ExN03DetectorConstruction::MakeMeDircTest()
+  
 //
 // SetNewValue
 //
@@ -705,9 +818,6 @@ void G4InteractiveSolid::MakeMeDircTest()
 void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 {
   /*
-    MEDERNACH Emmanuel
-    Aug 2000
-
     We want to retrieve the current solid
     So we keep the current solid command
    */
@@ -749,6 +859,11 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeAnEllipticalTube( newValues );
 	else if (command == dircTestCmd) 
 		MakeMeDircTest();
+	else if (command == BooleanSolid1Cmd) 
+		MakeMeBooleanSolid1(newValues);
+
+	/* Here to add new boolean solids */
+
 	else
 		G4Exception( "Unrecognized command" );
 }
