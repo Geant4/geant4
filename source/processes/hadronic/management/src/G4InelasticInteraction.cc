@@ -239,6 +239,15 @@
     const G4double twsup[] = { 1.0, 0.7, 0.5, 0.3, 0.2, 0.1 };
     G4double rand1 = G4UniformRand();
     G4double rand2 = G4UniformRand();
+    G4ReactionProduct currentBuff = currentParticle;
+    G4ReactionProduct targetBuff = targetParticle;
+    G4bool cFlag = incidentHasChanged;
+    G4bool tFlag = targetHasChanged;
+    G4std::vector<G4ReactionProduct> vecBuff;
+    for(G4int cBuff=0;cBuff<vecLen; cBuff++)
+    {
+      vecBuff.push_back( *vec[cBuff] );
+    }
     if( annihilation || (vecLen >= 6) ||
         (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
         (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
@@ -259,6 +268,21 @@
       return;
     }
     G4bool finishedTwoClu = false;
+    currentParticle = currentBuff;
+    targetParticle = targetBuff;
+    incidentHasChanged = cFlag;
+    targetHasChanged = tFlag;
+    G4int vold = vecLen;
+    vecLen = vecBuff.size();
+    for(G4int vBuff=0;vBuff<vecLen; vBuff++)
+    {
+      if(vBuff<vold-1) (*vec[vBuff])=vecBuff[vBuff];
+      else
+      {
+        G4ReactionProduct * stuff = new G4ReactionProduct(vecBuff[vBuff]);
+	vec.SetElement(vBuff, stuff);
+      }
+    }
     if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
     {
       for(G4int i=0; i<vecLen; i++) delete vec[i];
