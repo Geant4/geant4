@@ -1,4 +1,4 @@
-$Id: History,v 1.10 1999-06-05 12:41:36 stesting Exp $
+$Id: History,v 1.11 1999-06-05 13:36:11 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 5th June 1999  John Allison
 - exampleN04/GNUmakefile: Force non-optimised compliation of some
   files on HP with aCC: HP ANSI C++ B3910B A.01.15.
+- For NT (Gunter): G4UIsession* session=0 instead of session(NULL).
 
 28th May 1999  John Allison  (examples-01-00-08)
 - Reordered #include "G4Timer.hh" (must be first) in exampleN05 and 6.
