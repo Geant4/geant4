@@ -98,26 +98,20 @@ void test31ModelEM::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlungSTD,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);
 
+    } else if( particleName == "GenericIon" ) {
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
+      G4VEnergyLossSTD* ion = new G4ionIonisation();
+      pmanager->AddProcess(ion,      -1,2,2);
+
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) &&
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      /*
-      G4cout << "Add processes for " << particle->GetParticleName()
-             << "  mass= " << particle->GetPDGMass()
-	     << G4endl;
-	     */
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
-      if(particle->GetPDGMass() < 1.0*GeV && particleName != "GenericIon" ) {
-        G4VEnergyLossSTD* hIon = new G4hIonisationSTD();
-        pmanager->AddProcess(hIon,   -1,2,2);
-	//  hIon->SetLossFluctuations(false);
-        hIon->SetDEDXBinning(240);
-
-      } else {
-        G4VEnergyLossSTD* ion = new G4ionIonisation();
-        pmanager->AddProcess(ion,      -1,2,2);
-      }
+      G4VEnergyLossSTD* hIon = new G4hIonisationSTD();
+      pmanager->AddProcess(hIon,   -1,2,2);
+      //  hIon->SetLossFluctuations(false);
+      hIon->SetDEDXBinning(240);
     }
   }
 }
