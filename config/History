@@ -1,4 +1,4 @@
-$Id: History,v 1.188 2002-05-03 13:01:35 gcosmo Exp $
+$Id: History,v 1.189 2002-06-14 09:06:48 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th June 2002  Gabriele Cosmo (config-V04-00-07)
+- binmake.gmk: added include path to "leading_particle" hadronic module.
+  Retagged with correct numbering...
 
 3rd May 2002  Gabriele Cosmo (config-V04-00-06)
 - liblist.c: added patch to port code on MacOS-X.
