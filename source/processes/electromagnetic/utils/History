@@ -1,4 +1,4 @@
-$Id: History,v 1.160 2004-08-11 14:16:58 vnivanch Exp $
+$Id: History,v 1.161 2004-08-17 14:57:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+17 August 04: L.Urban (utils-V06-02-06)
+- Name of data member facxsi changed to factail together with the corresponding 
+  set function.
+- Changes in the angle distribution (slightly modified Highland formula for the
+  width of the central part, changes in the numerical values of some other 
+  parameters) ---> approximately step independent distribution.
+    
 06 Augest 04: V.Ivanchenko (utils-V06-02-05)
 - Change names of private member functions to make they be more clear
 - Optimise MFP and step limit calculation
