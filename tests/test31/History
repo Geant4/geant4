@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004-12-03 16:39:37 vnivanch Exp $
+$Id: History,v 1.2 2004-12-03 16:41:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02 Dec 04: V.Ivant (test31-V06-02-00)
+02 Dec 04: V.Ivant (test31-V06-02-01)
 - Migration to cmath
+
+26 Aug 04: V.Ivant (gtherapy-V06-02-00)
+- Created
      
      
