@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.4 1999-03-19 10:23:09 japost Exp $
+// $Id: G4Navigator.cc,v 1.5 1999-05-07 15:00:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -396,6 +396,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     }
 #endif
 
+  static G4double fAccuracyForWarning=   kCarTolerance,
+                  fAccuracyForException= 1000*kCarTolerance;
+
   G4ThreeVector newLocalPoint =ComputeLocalPoint(pGlobalpoint);
   if( newLocalPoint != fLastLocatedPointLocal )
     {
@@ -435,17 +438,62 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 	G4double safetyPlus = safety + kCarTolerance;
 	assert( moveLenSq <= sqr(safetyPlus) );
 #endif 	
+	//  Check that the starting point of this step is 
+	//   within the isotropic safety sphere of the last point
+	//   to a accuracy/precision  given by 
+	//       fAccuracyForWarning
+	//   If so give warning.  If it fails by more than
+	//       fAccuracyForException
+        //   exit with error.
+  
 	if(  shiftOriginSafSq >= sqr(fPreviousSafety) ){
 	   G4double shiftOrigin=sqrt(shiftOriginSafSq);
-	   if( shiftOrigin > fPreviousSafety + kCarTolerance ){
-	      G4cerr << " ERROR in G4Navigator::ComputeStep: " << endl
-		   << "The Step's starting point has moved " << sqrt(moveLenSq)
-		   << " since the last call to one of the Locate methods " << endl
-		   << " This has resulted in moving " << shiftOrigin
-		   << " from the last point at which the safety was calculated "
-		   << endl 
-		   << " which is more than the computed safety= " 
-		   << fPreviousSafety << "at that point." << endl;
+	   G4double diffShiftSaf=  shiftOrigin - fPreviousSafety;
+	   G4bool isError; 
+
+	   if( diffShiftSaf > fAccuracyForWarning ){
+              isError = ( diffShiftSaf >= fAccuracyForException );
+	      G4cerr.precision(10);
+              if ( isError )
+		G4cerr << "Accuracy ERROR found in G4Navigator::ComputeStep: " << endl;
+              else
+		G4cerr << "Warning G4Navigator::ComputeStep found slightly inaccurate position:" << endl;
+
+	      G4cerr << "     The Step's starting point has moved " 
+		     << sqrt(moveLenSq)/mm << " mm " << endl
+		     << "     since the last call to a Locate method." << endl;
+	      G4cerr << "     This has resulted in moving " 
+		     << shiftOrigin/mm << " mm " 
+		     << " from the last point at which the safety " 
+		     << "     was calculated " << endl;
+	      G4cerr << "     which is more than the computed safety= " 
+		     << fPreviousSafety/mm << " mm  at that point." << endl;
+	      G4cerr << "     This difference is " 
+		     << diffShiftSaf /mm << " mm." << endl;
+
+#ifdef G4VERBOSE
+              static G4int warnNow= 0;
+	      if( ((++warnNow % 100) == 1) ) {   //  || (warnNow < 4) ){ 
+	          G4cerr << "  This problem can be due to either " << endl;
+		  G4cerr << "    - a process that has proposed a displacement"
+			 <<     " larger than the current safety , or" << endl;
+		  G4cerr << "    - inaccuracy in the computation of the safety" << endl;
+		  G4cerr << "    - if you are using a magnetic field, a known conflict about the safety exists in this case."
+			 << endl;
+		  G4cerr << "  We suggest that you " << endl
+                     <<  "   - find i) what particle is being tracked, and "
+			 << " ii) through what part of your geometry " << endl
+		     <<  "      for example by reruning this event with " << endl
+		     <<  "         /tracking/verbose 1 "  << endl
+                     << "    - check which processes you declare for this particle"
+			 << " (and look at non-standard ones) "  << endl
+                     <<  "   - if possible create a detailed logfile "
+		         << " of this event using:" << endl
+                     <<  "         /tracking/verbose 6 "
+                     << endl;
+	      }
+              // G4cerr << "    -  ." << endl;
+#endif 
 	   }
 #ifdef DEBUG
 	   else
@@ -457,7 +505,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 	   }
 #endif
 	}
-	G4double safetyPlus = fPreviousSafety+ kCarTolerance;
+	G4double safetyPlus = fPreviousSafety+ fAccuracyForException;
 	assert( shiftOriginSafSq <= sqr(safetyPlus) );
 
 	// Relocate the point within the same volume
@@ -718,13 +766,13 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "*** G4Navigator::ComputeSafety: ***" << endl; 
-      cout.precision(8);
-      cout << " I was called with the following arguments: " << endl
+      G4cout << "*** G4Navigator::ComputeSafety: ***" << endl; 
+      G4cout.precision(8);
+      G4cout << " I was called with the following arguments: " << endl
 	   << " Globalpoint = " << pGlobalpoint << endl;
       //       cout << "  pMaxLength  = " << pMaxLength  << endl;
 
-      cout << " Upon entering my state is: " << endl;
+      G4cout << " Upon entering my state is: " << endl;
       PrintState();
     }
 #endif
