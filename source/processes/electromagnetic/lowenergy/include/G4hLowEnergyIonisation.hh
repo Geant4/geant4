@@ -262,6 +262,13 @@ protected:
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
     
+   G4double LowerBoundLambda ; // bining for lambda table
+   G4double UpperBoundLambda ;
+   G4int    NbinLambda ;
+
+   G4double LowestKineticEnergy,HighestKineticEnergy ;
+   G4int    TotBin ;
+
 };
 
 #include "G4hLowEnergyIonisation.icc"

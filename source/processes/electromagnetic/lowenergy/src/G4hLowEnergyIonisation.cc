@@ -56,9 +56,18 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HeMassAMU(4.0026),
     ZieglerFactor(eV*cm2*1.0e-15) 
 { 
+   // set bining for energy loss table
     LowestKineticEnergy = 10.*eV ;
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
+    SetLowerBoundEloss( LowestKineticEnergy) ;
+    SetUpperBoundEloss(HighestKineticEnergy) ;
+    SetNbinEloss(TotBin) ;
+
+    // bining for the lambda table
+    LowerBoundLambda  = 10.*eV ;
+    UpperBoundLambda  = 100.*TeV ;
+    NbinLambda = 200 ;
     MassRatio = 1.0 ;
     DeltaCutInKineticEnergy = 0; 
 }
