@@ -267,11 +267,11 @@ int main(int argc, char** argv)
       h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
       h[16]=hbookManager->histogram("delta Pz (GeV)",20,-1.,1.);
       h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
-      /*
+      
       h[18]=hbookManager->histogram("E (MeV) for pi0",100,0.,energy);
       h[19]=hbookManager->histogram("Pz (MeV) for pi0",100,-pmax,pmax);
       h[20]=hbookManager->histogram("Pt (MeV) for pi0",100,0.,pmax);
-      */
+      
       h[21]=hbookManager->histogram("E(MeV) protons",nbins,0.,energy);
       h[22]=hbookManager->histogram("E(MeV) neutrons",nbins,0.,energy);
       	
@@ -379,7 +379,7 @@ int main(int argc, char** argv)
 	if(usepaw && e > 0.0 && pt > 0.0) h[2]->accumulate(mom.phi()/degree,1.0);
 					
 	de += e;
-        if(verbose) {
+        if(verbose || abs(mom.phi()/degree - 90.) < 0.01) {
           G4cout << i << "-th secondary  " 
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
@@ -419,10 +419,10 @@ int main(int argc, char** argv)
 
 	  } else if(pd == pi0) {
     
-	    h[1]->accumulate(4.0, 1.0);	
-	    //  h[18]->accumulate(e/MeV, 1.0);		
-	    // h[19]->accumulate(pz/MeV, 1.0); 
-	    // h[20]->accumulate(pt/MeV, 1.0);
+	    h[1]->accumulate(5.0, 1.0);	
+	    h[18]->accumulate(e/MeV, 1.0);		
+	    h[19]->accumulate(pz/MeV, 1.0); 
+	    h[20]->accumulate(pt/MeV, 1.0);
 
 	  } else if(pd == neutron) {
     

@@ -219,7 +219,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   }
   
   G4cout <<  "Secondary generator <" 
-         << gen_name << "> is initilized" 
+         << gen_name << "> is initialized" 
          << G4endl;
   return theProcess;
 

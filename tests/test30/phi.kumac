@@ -13,23 +13,23 @@ set NDVY 010205
  
  hi/file 1 p_fe_100_par.paw
  hi/pl 3
- itx 100 1200 'proton 100 MeV on Fe'
- itx -20 150 'GHEISHA++'
+ itx 100 500 'proton 100 MeV on Fe'
+ itx -20 150 'GHEISHA'
  close 1
  
  hi/file 1 p_fe_100_prec.paw
  hi/pl 3
- itx -20 150 'Precompaund'
+ itx -20 350 'PREC'
  close 1
  
  hi/file 1 p_fe_100_schip.paw
  hi/pl 3
- itx -20 150 'CHIPS'
+ itx -20 350 'CHIPS'
  close 1
  
  hi/file 1 p_fe_100_kin.paw
  hi/pl 3
- itx 20 1500 'Kinetic'
+ itx 20 100 'KIN'
  close 1
 
 
