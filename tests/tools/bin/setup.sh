@@ -6,10 +6,14 @@
 ####################################################
 #
 
-set -x
+#########set -x
 
 # Execute stt members specifc setup first :
+if [ `pwd | grep ref+` ]; then
 . /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/specific.sh
+else
+. /afs/cern.ch/sw/geant4/stt/ref/src/geant4/tests/tools/bin/specific.sh
+fi
 
 if [ -n "$G4SYSTEM" ]; then
     echo "You are working on a $G4SYSTEM system"

@@ -3,8 +3,10 @@
 # g4sbr.sh (SetupBuildRun)
 ##########################
 
-TREE=$1
-DEBOPT=$2
+#############set -x
+
+TREE=`echo $1|cut -c 1`
+DEBOPT=`echo $2|cut -c 1`
 REFTAG=$3
 ACTION=$4
 ACTARG1=$5
@@ -18,40 +20,42 @@ PREVTAG=`echo $REFTAG|cut -d + -f1`
 
 if [ X$TREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
-echo
-echo "Usage: g4sbr.sh [dev|prod] [debug|opt] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
-echo
-exit
+  echo
+  echo "Usage: g4sbr.sh [dev|prod] [debug|opt] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
+  echo
+  exit
 fi
 #
 
-if [ X$TREE = Xdev ]
+if [ X$TREE = Xd -o X$TREE = XD ]
 then
-REFTREE=ref+
-elif [ X$TREE = Xprod ]
-REFTREE=ref
+  REFTREE=ref+
+elif [ X$TREE = Xp -o X$TREE = XP ]
+then
+  REFTREE=ref
 else
-echo
-echo Usage: First argument is dev (uses ref+/) or prod (uses ref/).
-exit
+  echo
+  echo "Usage: First argument is dev (uses ref+/) or prod (uses ref/)."
+  exit
 fi
 
-if [ X$DEBOPT = Xdebug ]
+if [ X$DEBOPT = Xd -o X$DEBOPT = XD ]
 then
-export G4DEBUG=1
-elif [ X$DEBOPT = Xopt ]
-unset G4DEBUG
+  export G4DEBUG=1
+elif [ X$DEBOPT = Xo -o X$DEBOPT = XO ]
+then
+  unset G4DEBUG
 else
-echo
-echo Usage: 2nd argument is debug or opt.
-exit
+  echo
+  echo "Usage: 2nd argument is debug or opt."
+  exit
 fi
 
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
 cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/src/geant4/tests/tools/bin
-. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/setup.sh
+. /afs/cern.ch/sw/geant4/stt/${REFTREE}/src/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
 ulimit -a
@@ -79,11 +83,11 @@ EOF
 ######################################################################
 if [ X$NONINCREMENTAL = X ]
 then
-cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}/stt/${G4SYSTEM}
+cd ${G4WORKDIR}/stt/${G4SYSTEM}
 NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
 mv gmake.log gmake.log.${NEXT_NUMBER}
 else
-cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}
+cd ${G4WORKDIR}
 echo REMOVE
 mv stt stt.${PREVTAG}
 rm -r bin lib tmp
@@ -93,8 +97,8 @@ fi
 ################################
 # Build&run all in ref[+]
 ################################
-cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}
-. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/limit.sh
+cd ${G4WORKDIR}
+. ${G4INSTALL}/tests/tools/bin/limit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
@@ -106,7 +110,7 @@ then
 ################
 #${G4INSTALL}/tests/tools/bin/build_specific.sh &
 #${G4INSTALL}/tests/tools/bin/build.sh
-. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/tmpenv.sh
+. ${G4INSTALL}/tests/tools/bin/tmpenv.sh
 ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
 #unset $TMPDIR
 #${G4INSTALL}/tests/tools/bin/build.sh test all
@@ -117,7 +121,7 @@ fi
 #
 if [ X$G4SYSTEM = XDEC-cxx  ]
 then
-chmod +x /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}/bin/${G4SYSTEM}/*
+chmod +x ${G4WORKDIR}/bin/${G4SYSTEM}/*
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]

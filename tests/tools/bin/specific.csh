@@ -18,7 +18,7 @@ else
   setenv REF ref
 endif
 
-if ( $G4DEBUG != "" ) then
+if ( $?G4DEBUG ) then
   setenv DEBOPT debug
 else
   setenv DEBOPT optim

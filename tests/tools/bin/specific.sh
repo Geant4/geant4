@@ -14,7 +14,7 @@ else
   REF=ref
 fi
 
-if [ $DEBUG ]; then
+if [ $G4DEBUG ]; then
   DEBOPT=debug
 else
   DEBOPT=optim
