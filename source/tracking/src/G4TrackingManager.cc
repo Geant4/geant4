@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.10 2001-11-07 12:39:11 radoone Exp $
+// $Id: G4TrackingManager.cc,v 1.11 2002-04-25 20:21:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,6 +149,7 @@ void G4TrackingManager::SetTrajectory(G4VTrajectory* aTrajectory)
 void G4TrackingManager::EventAborted()
 //////////////////////////////////////
 {
+  fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
 }
 
 //************************************************************************
