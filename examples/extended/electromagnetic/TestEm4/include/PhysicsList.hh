@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventActionMessenger.cc,v 1.6 2002-12-10 17:20:30 maire Exp $
+// $Id: PhysicsList.hh,v 1.1 2003-06-23 16:16:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,56 +29,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em4EventActionMessenger.hh"
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
-#include "Em4EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4EventActionMessenger::Em4EventActionMessenger(Em4EventAction* EvAct)
-:eventAction(EvAct)
+class PhysicsList: public G4VUserPhysicsList
 {
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("commands specific to this example");
-   
-  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-  
-  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);    
-}
+  public:
+    PhysicsList();
+   ~PhysicsList();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Em4EventActionMessenger::~Em4EventActionMessenger()
-{
-  delete DrawCmd;
-  delete PrintCmd;
-  delete testemDir;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em4EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
     
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
-}
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4SteppingAction.cc,v 1.4 2001-10-17 14:04:16 maire Exp $
+// $Id: VisManager.hh,v 1.1 2003-06-23 16:16:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,29 +29,40 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em4SteppingAction.hh"
-#include "Em4EventAction.hh"
-#include "G4SteppingManager.hh"
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
+
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
+
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4SteppingAction::Em4SteppingAction(Em4EventAction* EvAct)
-:eventAction(EvAct),myVerbose(NULL)
-{ }
+#ifndef VisManager_h
+#define VisManager_h 1
+
+#include "G4VisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4SteppingAction::~Em4SteppingAction()
-{ }
+class VisManager: public G4VisManager {
+
+public:
+
+  VisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4SteppingAction::UserSteppingAction(const G4Step* aStep)
-{
- G4double EdepStep = aStep->GetTotalEnergyDeposit();
- if (EdepStep > 0.) eventAction->addEdep(EdepStep);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
+#endif

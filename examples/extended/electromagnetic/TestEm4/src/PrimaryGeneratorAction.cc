@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PrimaryGeneratorAction.cc,v 1.5 2001-12-10 16:05:16 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em4PrimaryGeneratorAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -39,7 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4PrimaryGeneratorAction::Em4PrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
@@ -57,14 +57,14 @@ Em4PrimaryGeneratorAction::Em4PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4PrimaryGeneratorAction::~Em4PrimaryGeneratorAction()
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete particleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   //

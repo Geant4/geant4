@@ -21,35 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: Em4SteppingAction.hh,v 1.3 2001-07-11 09:57:44 gunter Exp $
+// $Id: SteppingAction.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4SteppingAction_h
-#define Em4SteppingAction_h 1
+#include "SteppingAction.hh"
+#include "EventAction.hh"
+#include "G4SteppingManager.hh"
 
-#include "G4UserSteppingAction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em4EventAction;
-class G4SteppingVerbose2;
+SteppingAction::SteppingAction(EventAction* EvAct)
+:eventAction(EvAct),myVerbose(NULL)
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em4SteppingAction : public G4UserSteppingAction
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  public:
-    Em4SteppingAction(Em4EventAction*);
-   ~Em4SteppingAction();
+ G4double EdepStep = aStep->GetTotalEnergyDeposit();
+ if (EdepStep > 0.) eventAction->addEdep(EdepStep);
+}
 
-    void UserSteppingAction(const G4Step*);
-    
-  private:
-    Em4EventAction* eventAction;
-    G4SteppingVerbose2* myVerbose;    
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+

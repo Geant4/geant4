@@ -21,40 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventActionMessenger.hh,v 1.5 2002-12-10 17:20:30 maire Exp $
+// $Id: SteppingVerbose.hh,v 1.1 2003-06-23 16:16:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4EventActionMessenger_h
-#define Em4EventActionMessenger_h 1
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class Em4EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em4EventActionMessenger: public G4UImessenger
-{
-  public:
-    Em4EventActionMessenger(Em4EventAction*);
-   ~Em4EventActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    Em4EventAction* eventAction;
-    G4UIdirectory*        testemDir;   
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+class SteppingVerbose : public G4SteppingVerbose {
+
+public:   
+
+  SteppingVerbose();
+ ~SteppingVerbose();
+
+  void StepInfo();
+  void TrackingStarted();
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

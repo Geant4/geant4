@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventAction.hh,v 1.4 2001-10-17 14:04:14 maire Exp $
+// $Id: EventActionMessenger.hh,v 1.1 2003-06-23 16:16:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,42 +29,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4EventAction_h
-#define Em4EventAction_h 1
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class Em4RunAction;
-class Em4EventActionMessenger;
+class EventAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em4EventAction : public G4UserEventAction
+class EventActionMessenger: public G4UImessenger
 {
   public:
-    Em4EventAction(Em4RunAction*);
-   ~Em4EventAction();
-
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    EventActionMessenger(EventAction*);
+   ~EventActionMessenger();
     
-    void addEdep(G4double Edep)     {TotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()     {return TotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
+    void SetNewValue(G4UIcommand*, G4String);
+    
   private:
-    Em4RunAction* Em4Run;            
-    G4double TotalEnergyDeposit;   // Energy deposited in c6f6
-    G4String drawFlag;             // control the drawing of event
-    G4int                     printModulo;          
-    Em4EventActionMessenger*  eventMessenger;
+    EventAction* eventAction;
+    G4UIdirectory*        testemDir;   
+    G4UIcmdWithAString*   DrawCmd;
+    G4UIcmdWithAnInteger* PrintCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

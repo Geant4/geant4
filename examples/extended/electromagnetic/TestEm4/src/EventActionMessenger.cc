@@ -21,35 +21,64 @@
 // ********************************************************************
 //
 //
-// $Id: Em4SteppingVerbose.hh,v 1.7 2001-10-17 14:04:14 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose.
-//   It shows how to extract informations during the tracking of a particle.
-//
+// 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4SteppingVerbose_h
-#define Em4SteppingVerbose_h 1
+#include "EventActionMessenger.hh"
 
-#include "G4SteppingVerbose.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Em4SteppingVerbose : public G4SteppingVerbose {
-
-public:   
-
-  Em4SteppingVerbose();
- ~Em4SteppingVerbose();
-
-  void StepInfo();
-  void TrackingStarted();
-
-};
+#include "EventAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+EventActionMessenger::EventActionMessenger(EventAction* EvAct)
+:eventAction(EvAct)
+{
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("commands specific to this example");
+   
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
+  DrawCmd->SetGuidance("Draw the tracks in the event");
+  DrawCmd->SetGuidance("  Choice : none,charged, all");
+  DrawCmd->SetParameterName("choice",true);
+  DrawCmd->SetDefaultValue("all");
+  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->AvailableForStates(G4State_Idle);
+  
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
+  PrintCmd->SetGuidance("Print events modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+  PrintCmd->AvailableForStates(G4State_Idle);    
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventActionMessenger::~EventActionMessenger()
+{
+  delete DrawCmd;
+  delete PrintCmd;
+  delete testemDir;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{ 
+  if(command == DrawCmd)
+    {eventAction->SetDrawFlag(newValue);}
+    
+  if(command == PrintCmd)
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

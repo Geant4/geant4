@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.10 2002-12-10 17:20:30 maire Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.1 2003-06-23 16:16:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,48 +29,32 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4RunAction_h
-#define Em4RunAction_h 1
+#ifndef PrimaryGeneratorAction_h
+#define PrimaryGeneratorAction_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+
+class G4ParticleGun;
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
-
-#ifndef G4NOHIST
-namespace AIDA {
-  class ITree;
-  class IHistogram1D;
-}  
-#endif
-
-class Em4RunAction : public G4UserRunAction
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Em4RunAction();
-   ~Em4RunAction();
+    PrimaryGeneratorAction();    
+   ~PrimaryGeneratorAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    void GeneratePrimaries(G4Event*);
 
-#ifndef G4NOHIST    
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-#endif
-        
   private:
-    void bookHisto();
-    
-  private:      
-#ifndef G4NOHIST         
-    AIDA::ITree* tree;             //the tree should only be deleted at the end
-    AIDA::IHistogram1D* histo[1];  // (after writing the histos to file)
-#endif         
+    G4ParticleGun*  particleGun;	//pointer a to G4 service class
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PhysicsList.cc,v 1.6 2003-04-11 14:30:53 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em4PhysicsList.hh"
+#include "PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -40,7 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4PhysicsList::Em4PhysicsList()
+PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*mm;
@@ -49,12 +49,12 @@ Em4PhysicsList::Em4PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4PhysicsList::~Em4PhysicsList()
+PhysicsList::~PhysicsList()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::ConstructParticle()
+void PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -67,7 +67,7 @@ void Em4PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::ConstructBosons()
+void PhysicsList::ConstructBosons()
 {
   // gamma
   G4Gamma::GammaDefinition();
@@ -76,7 +76,7 @@ void Em4PhysicsList::ConstructBosons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::ConstructLeptons()
+void PhysicsList::ConstructLeptons()
 {
   // leptons
   G4Electron::ElectronDefinition();
@@ -85,7 +85,7 @@ void Em4PhysicsList::ConstructLeptons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::ConstructProcess()
+void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
@@ -106,7 +106,7 @@ void Em4PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::ConstructEM()
+void PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -141,10 +141,10 @@ void Em4PhysicsList::ConstructEM()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4PhysicsList::SetCuts()
+void PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
-    G4cout << "Em4PhysicsList::SetCuts:";
+    G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }
   

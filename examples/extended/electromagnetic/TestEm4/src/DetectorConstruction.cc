@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4DetectorConstruction.cc,v 1.5 2003-04-01 16:36:37 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.1 2003-06-23 16:16:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em4DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -43,17 +43,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4DetectorConstruction::Em4DetectorConstruction()
+DetectorConstruction::DetectorConstruction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4DetectorConstruction::~Em4DetectorConstruction()
+DetectorConstruction::~DetectorConstruction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* Em4DetectorConstruction::Construct()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   //
   // define a material from elements.   case 1: chemical molecule

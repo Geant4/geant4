@@ -21,33 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: Em4DetectorConstruction.hh,v 1.4 2001-10-17 14:04:13 maire Exp $
+// $Id: SteppingAction.hh,v 1.1 2003-06-23 16:16:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef Em4DetectorConstruction_h
-#define Em4DetectorConstruction_h 1
+#ifndef SteppingAction_h
+#define SteppingAction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+#include "G4UserSteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class EventAction;
+class G4SteppingVerbose2;
 
-class Em4DetectorConstruction : public G4VUserDetectorConstruction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class SteppingAction : public G4UserSteppingAction
 {
   public:
-  
-    Em4DetectorConstruction();
-   ~Em4DetectorConstruction();
-     
-    G4VPhysicalVolume* Construct();
+    SteppingAction(EventAction*);
+   ~SteppingAction();
+
+    void UserSteppingAction(const G4Step*);
+    
+  private:
+    EventAction* eventAction;
+    G4SteppingVerbose2* myVerbose;    
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

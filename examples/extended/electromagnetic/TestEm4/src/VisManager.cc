@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4VisManager.cc,v 1.7 2002-11-13 21:39:56 duns Exp $
+// $Id: VisManager.cc,v 1.1 2003-06-23 16:16:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,7 @@
 
 #ifdef G4VIS_USE
 
-#include "Em4VisManager.hh"
+#include "VisManager.hh"
 
 // Supported drivers...
 
@@ -87,11 +87,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em4VisManager::Em4VisManager () {}
+VisManager::VisManager () {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4VisManager::RegisterGraphicsSystems () {
+void VisManager::RegisterGraphicsSystems () {
 
   // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4VisManager.hh,v 1.4 2001-10-17 14:04:15 maire Exp $
+// $Id: EventAction.hh,v 1.1 2003-06-23 16:16:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,40 +29,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Example Visualization Manager implementing virtual function
-//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
-//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
-//   environment variables of the same name are set.
+#ifndef EventAction_h
+#define EventAction_h 1
 
-// So all you have to do is set environment variables and compile and
-//   instantiate this in your main().
+#include "G4UserEventAction.hh"
+#include "globals.hh"
 
-// Alternatively, you can implement an empty function here and just
-//   register the systems you want in your main(), e.g.:
-//   G4VisManager* myVisManager = new MyVisManager;
-//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
+class RunAction;
+class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em4VisManager_h
-#define Em4VisManager_h 1
+class EventAction : public G4UserEventAction
+{
+  public:
+    EventAction(RunAction*);
+   ~EventAction();
 
-#include "G4VisManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Em4VisManager: public G4VisManager {
-
-public:
-
-  Em4VisManager ();
-
-private:
-
-  void RegisterGraphicsSystems ();
-
+  public:
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
+    
+    void addEdep(G4double Edep)     {TotalEnergyDeposit += Edep;};      
+    G4double GetEnergyDeposit()     {return TotalEnergyDeposit;};    
+    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void SetPrintModulo(G4int val)  {printModulo = val;};
+        
+  private:
+    RunAction* Run;            
+    G4double TotalEnergyDeposit;   // Energy deposited in c6f6
+    G4String drawFlag;             // control the drawing of event
+    G4int                     printModulo;          
+    EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+    
