@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.21 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UImanager.cc,v 1.22 2002-05-03 14:35:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -332,6 +332,11 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
     ia = aCommand.index("{");
   }
   return aCommand;
+}
+
+G4int G4UImanager::ApplyCommand(G4String aCmd)
+{
+  return ApplyCommand(aCmd);
 }
 
 G4int G4UImanager::ApplyCommand(const char * aCmd)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.17 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UImanager.hh,v 1.18 2002-05-03 14:35:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,6 +86,7 @@ class G4UImanager : public G4VStateDependent
       // Execute a macro file more than once with an aliased variable which takes
       // a value in the candidate list.
       G4int ApplyCommand(const char * aCommand);
+      G4int ApplyCommand(G4String aCommand);
       //  A command (and parameter(s)) given
       // by the method's argument will be applied. Zero will be returned in 
       // case the command is successfully executed. Positive non-zero value
