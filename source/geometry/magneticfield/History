@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2001-03-27 16:26:32 japost Exp $
+$Id: History,v 1.32 2001-03-27 16:35:05 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 Mar 23rd, 2001  J. Apostolakis - field-V03-00-04
 ------------------------------
+- Electric Field unit test now works: test runs until completion.
+   Test outputs saved (on Linux).
+
 - Fixed src/G4UniformElectricField.cc to set correct field components
                                       (compatible with Equation of Motion
                                        G4EqMagElectricField )
