@@ -78,6 +78,8 @@ Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
 Ionic processes for deuteron
+
+phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
 MuonMinusCaptureAtRest is created 
@@ -89,13 +91,9 @@ Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
 G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -161,20 +159,20 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
-G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon
+G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
 Set cuts for GenericIon
 Set cuts for He3
-G4hLowEnergyIonisation::BuildPhysicsTable for IonC12
+G4hLowEnergyIonisation::BuildPhysicsTable for IonC12 mass(MeV)= 11149.5 charge= 6 type= static_nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 Set cuts for IonC12
-G4hLowEnergyIonisation::BuildPhysicsTable for alpha
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
@@ -183,7 +181,7 @@ Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
 Set cuts for chargedgeantino
-G4hLowEnergyIonisation::BuildPhysicsTable for deuteron
+G4hLowEnergyIonisation::BuildPhysicsTable for deuteron mass(MeV)= 1875.61 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
@@ -244,13 +242,9 @@ Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
 G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -316,33 +310,25 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
-G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon
+G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
 Set cuts for GenericIon
 Set cuts for He3
-G4hLowEnergyIonisation::BuildPhysicsTable for IonC12
+G4hLowEnergyIonisation::BuildPhysicsTable for IonC12 mass(MeV)= 11149.5 charge= 6 type= static_nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 Set cuts for IonC12
-G4hLowEnergyIonisation::BuildPhysicsTable for alpha
-Cuts are defined 
-G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
-G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
-G4hLowEnergyIonisation::BuildPhysicsTable: end for alpha
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
 Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
 Set cuts for chargedgeantino
-G4hLowEnergyIonisation::BuildPhysicsTable for deuteron
-Cuts are defined 
-G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
-G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
-G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
+G4hLowEnergyIonisation::BuildPhysicsTable for deuteron mass(MeV)= 1875.61 charge= 1 type= nucleus
 Set cuts for deuteron
 Set cuts for geantino
 Set cuts for kaon+
@@ -399,18 +385,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.57s Real=9.53s Sys=1.78s
+  User=3.53s Real=5.86s Sys=1.6s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.21469 +- 0.0067762  microns 
-    CSDA  Range  in absorber = 9.00677 +- 0.00713821  microns 
+    Track Length in absorber = 9.20717 +- 0.00690887  microns 
+    CSDA  Range  in absorber = 9.08054 +- 0.00632747  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.155693 +- 0.0067762 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.137768 +- 0.00713821 microns 
+    Track Length (G4 - ICRU49) = 0.148171 +- 0.00690887 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.211543 +- 0.00632747 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -420,16 +406,15 @@ Average Number photons per event   = 0
 /run/beamOn 1000
 ### Run 1 start.
 Start Run processing.
-EvtNo= 212  length= 0.0100815  xend= 0.000831034
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.35s Real=10.79s Sys=2.06s
+  User=3.9s Real=6.85s Sys=1.97s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.59041 +- 0.0067708  microns 
-    CSDA  Range  in absorber = 9.2736 +- 0.00846982  microns 
+ end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.58976 +- 0.00675116  microns 
+    CSDA  Range  in absorber = 9.4316 +- 0.00672693  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -445,12 +430,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.16s Real=11.08s Sys=1.8s
+  User=4.27s Real=6.34s Sys=1.92s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.56513 +- 0.0046503  microns 
-    CSDA  Range  in absorber = 7.72847 +- 0.0196611  microns 
+    Track Length in absorber = 8.63871 +- 0.00446065  microns 
+    CSDA  Range  in absorber = 7.90146 +- 0.0217797  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -471,21 +456,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=604.16s Real=666.54s Sys=36.36s
+  User=190.26s Real=249.34s Sys=38.18s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.2154 +- 0.00662701  microns 
-    CSDA  Range  in absorber = 9.0123 +- 0.00595908  microns 
+    Track Length in absorber = 9.21723 +- 0.00682233  microns 
+    CSDA  Range  in absorber = 9.08769 +- 0.00612836  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.156401 +- 0.00662701 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.143303 +- 0.00595908 microns 
+    Track Length (G4 - ICRU49) = 0.158227 +- 0.00682233 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.218685 +- 0.00612836 microns 
 
-Average Number electrons per event = 71.282
-Average Number photons per event   = 22.366
+Average Number electrons per event = 70.766
+Average Number photons per event   = 22.467
 
 #
 G4 kernel has come to Quit state.
