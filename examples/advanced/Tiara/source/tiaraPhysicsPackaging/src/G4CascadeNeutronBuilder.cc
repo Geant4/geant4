@@ -59,9 +59,7 @@ Build(G4NeutronInelasticProcess & aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP.RegisterMe(theModel);
-  G4CrossSectionDataStore * theNStore;
-  theNStore = aP.GetCrossSectionDataStore();
-  theNStore->AddDataSet(&theXSec);  
+  aP.AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

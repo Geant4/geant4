@@ -47,9 +47,7 @@ Build(G4ProtonInelasticProcess & aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP.RegisterMe(theModel);
-  G4CrossSectionDataStore * thePStore;
-  thePStore = aP.GetCrossSectionDataStore();
-  thePStore->AddDataSet(&theXSec);  
+  aP.AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch
