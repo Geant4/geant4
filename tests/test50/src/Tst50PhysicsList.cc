@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.11 2003-03-04 18:09:06 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.12 2003-03-11 10:48:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,12 +181,12 @@ void Tst50PhysicsList::ConstructProcess()
 #include "G4LowEnergyCompton.hh"  
 #include "G4LowEnergyGammaConversion.hh" 
 //gamma penelope
-/*
+
 #include "G4PenelopeCompton.hh"
 #include "G4PenelopeGammaConversion.hh"
 #include "G4PenelopePhotoElectric.hh"
 #include "G4PenelopeRayleigh.hh"
-*/
+
 // e-
 #include "G4LowEnergyIonisation.hh" 
 #include "G4LowEnergyBremsstrahlung.hh" 
@@ -208,26 +208,26 @@ void Tst50PhysicsList::ConstructEM()
       if ( Low==true)
 	{
  lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(lowePhot);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+ pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+ pmanager->AddDiscreteProcess(lowePhot);
+       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
       pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-      G4cout<<"Low Energy processes for gamma ray"<<G4endl;}
+     G4cout<<"Low Energy processes for gamma ray"<<G4endl;}
       else if (Penelope== true)
 	{
-	  /*
+	  
 
-          pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
-	  pmanager->AddDiscreteProcess(new G4PenelopeCompton);
-	  pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);
-	  pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
-	  */
+	          pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
+	     pmanager->AddDiscreteProcess(new G4PenelopeCompton);
+	    pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);
+	       pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
+	 
  G4cout<<" Penelope  processes for gamma ray"<<G4endl;
 	}
 else{
-         pmanager->AddDiscreteProcess(new G4GammaConversion());
-         pmanager->AddDiscreteProcess(new G4ComptonScattering());      
-         pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+    pmanager->AddDiscreteProcess(new G4GammaConversion());
+      pmanager->AddDiscreteProcess(new G4ComptonScattering());      
+    	     pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
            G4cout<<"Standard  processes for gamma ray"<<G4endl;
 }
      
@@ -255,8 +255,9 @@ else{
  multipleScattering->SetFacrange(0.00005);      
  G4cout<<"SetFacrange(0.00005) fixed for e- in low "<<G4endl;}
 
+ 
  if(RangeOn==true || Stopping==true || RadiationY==true){
-   pmanager->RemoveProcess(multipleScattering);
+    pmanager->RemoveProcess(multipleScattering);
    G4VeLowEnergyLoss::SetEnlossFluc(false);
   
  }}
