@@ -1,0 +1,7 @@
+#
+/mydet/generator PYTHIA
+#
+/run/beamOn 1
+#
+exit
+
