@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.28 2004-07-26 16:04:20 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.29 2004-10-15 17:40:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,10 +124,7 @@ private:
   const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
 
-  G4double                    chargeCorrection;
-  G4double                    chargeLowLimit;
-  G4double                    energyLowLimit;
-
+  G4bool                      isInitialised;
   G4bool                      subCutoff;
 };
 
@@ -136,8 +133,7 @@ private:
 
 inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
-         (p.GetParticleType() == "nucleus" || p.GetParticleType() == "static_nucleus"));
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() && p.GetPDGMass() > 100.*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

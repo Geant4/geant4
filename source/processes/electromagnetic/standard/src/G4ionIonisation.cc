@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.26 2004-10-14 12:13:44 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.27 2004-10-15 17:40:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,9 +66,15 @@
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
+    theBaseParticle(0),
+    isInitialised(false),
     subCutoff(false)
 {
-  InitialiseProcess();
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
+  SetVerboseLevel(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,11 +87,6 @@ G4ionIonisation::~G4ionIonisation()
 void G4ionIonisation::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
 
   flucModel = new G4IonFluctuations();
   //flucModel = new G4UniversalFluctuation();
@@ -100,10 +101,10 @@ void G4ionIonisation::InitialiseProcess()
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
-  chargeLowLimit = 0.1;
-  energyLowLimit = 25.*MeV;
   SetLinearLossLimit(0.15);
   SetStepLimits(0.1, 0.1*mm);
+
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -111,8 +112,10 @@ void G4ionIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4ionIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(p) theParticle = p;
-  theBaseParticle = G4Proton::Proton();
+  if(!theParticle) theParticle = p;
+  if(theParticle != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
+  if(!isInitialised) InitialiseProcess();
+
   return theBaseParticle;
 }
 
