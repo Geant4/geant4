@@ -185,13 +185,10 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
  G4double
   G4Nucleus::GetThermalPz( const G4double mass, const G4double temp ) const
   {
-    G4double result = 0.0;
-    for( int i=0; i<12 ; ++i )
-      result += G4UniformRand() - 0.5;
+    G4double result = G4RandGauss::shoot();
     result *= sqrt(k_Boltzmann*temp*mass); // Das ist impuls (Pz),
                                            // nichtrelativistische rechnung
                                            // Maxwell verteilung angenommen
-    if ( G4UniformRand()<0.5 ) result =-result;
     return result;
   }
  
