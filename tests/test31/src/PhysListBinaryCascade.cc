@@ -20,19 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
 #include "PhysListBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
 
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
+
+#include "G4ProtonInelasticProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
 
 #include "G4BinaryCascade.hh"
 
@@ -53,36 +54,48 @@ void PhysListBinaryCascade::ConstructProcess()
 {
 
   // Binary Cascade
-  G4ParticleDefinition* particle = 0;
-  G4ProcessManager* pmanager = 0;
+  G4BinaryCascade * theBC = new G4BinaryCascade();
 
-  G4BinaryCascade* theBC = 0;
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String particleName = particle->GetParticleName();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    if (particleName == "proton") {
 
-  // proton
-  particle = G4Proton::Proton();
-  pmanager = particle->GetProcessManager();
-  theBC = new G4BinaryCascade();
-  theIPproton.RegisterMe(theBC);
-  theIPproton.AddDataSet(&thePXSec);
-  pmanager->AddDiscreteProcess(&theIPproton);
+      G4ProtonInelasticProcess* theInelasticProcess =
+                                    new G4ProtonInelasticProcess("inelastic");
+      theInelasticProcess->RegisterMe(theBC);
+      pmanager->AddDiscreteProcess(theInelasticProcess);
 
-  // neutron
-  particle = G4Neutron::Neutron();
-  pmanager = particle->GetProcessManager();
-  theBC = new G4BinaryCascade();
-  theIPneutron.RegisterMe(theBC);
-  theIPneutron.AddDataSet(&theNXSec);
-  pmanager->AddDiscreteProcess(&theIPneutron);
-  // fission
-  G4HadronFissionProcess* theFissionProcess = new G4HadronFissionProcess;
-  G4LFission* theFissionModel = new G4LFission;
-  theFissionProcess->RegisterMe(theFissionModel);
-  pmanager->AddDiscreteProcess(theFissionProcess);
-  // capture
-  G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
-  G4LCapture* theCaptureModel = new G4LCapture;
-  theCaptureProcess->RegisterMe(theCaptureModel);
-  pmanager->AddDiscreteProcess(theCaptureProcess);
+    } else if (particleName == "neutron") {
+
+      G4NeutronInelasticProcess* theInelasticProcess =
+                                    new G4NeutronInelasticProcess("inelastic");
+      theInelasticProcess->RegisterMe(theBC);
+      pmanager->AddDiscreteProcess(theInelasticProcess);
+          // fission
+      G4HadronFissionProcess* theFissionProcess =
+                                    new G4HadronFissionProcess;
+      G4LFission* theFissionModel = new G4LFission;
+      theFissionProcess->RegisterMe(theFissionModel);
+      pmanager->AddDiscreteProcess(theFissionProcess);
+         // capture
+      G4HadronCaptureProcess* theCaptureProcess =
+                                    new G4HadronCaptureProcess;
+      G4LCapture* theCaptureModel = new G4LCapture;
+      theCaptureProcess->RegisterMe(theCaptureModel);
+      pmanager->AddDiscreteProcess(theCaptureProcess);
+      /*
+    if (particle == G4IonC12::IonC12()) {
+      pManager->AddDiscreteProcess(&theIonProcess);
+      G4cout << "### IonSpecial process are registered for "
+             << particle->GetParticleName()
+             << G4endl;
+    }
+      */
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

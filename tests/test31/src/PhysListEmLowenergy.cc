@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLowenergy.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
+// $Id: PhysListEmLowenergy.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

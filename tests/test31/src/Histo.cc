@@ -171,7 +171,7 @@ void Histo::EndOfHisto()
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
   G4cout<<G4endl;
-
+ 
 #ifdef G4ANALYSIS_USE
   // normalise histograms
   for(G4int i=0; i<nHisto1; i++) {

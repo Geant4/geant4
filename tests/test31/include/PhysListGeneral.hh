@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListGeneral.hh,v 1.1 2004-01-07 11:30:00 vnivanch Exp $
+// $Id: PhysListGeneral.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,18 +38,18 @@
 
 class PhysListGeneral : public G4VPhysicsConstructor
 {
-public: 
-  PhysListGeneral(const G4String& name = "general");
-  virtual ~PhysListGeneral();
+  public: 
+    PhysListGeneral(const G4String& name = "general");
+    virtual ~PhysListGeneral();
 
-public: 
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
+  public: 
+    // This method is dummy for physics
+    virtual void ConstructParticle() {};
  
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.hh,v 1.1 2004-01-07 11:30:00 vnivanch Exp $
+// $Id: PhysListParticles.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,17 +38,17 @@
 
 class PhysListParticles : public G4VPhysicsConstructor
 {
-public: 
-  PhysListParticles(const G4String& name = "particles");
-  virtual ~PhysListParticles();
+  public: 
+    PhysListParticles(const G4String& name = "particles");
+    virtual ~PhysListParticles();
 
-public: 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
  
-  // This method is dummy.
-  virtual void ConstructProcess() {};
+    // This method is dummy.
+    virtual void ConstructProcess() {};
 
 };
 

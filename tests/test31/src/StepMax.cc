@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
+// $Id: StepMax.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -28,15 +28,19 @@
 
 #include "StepMax.hh"
 #include "StepMaxMessenger.hh"
+#include "Histo.hh"
 #include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
  : G4VDiscreteProcess(processName),
-   MaxChargedStep(DBL_MAX)
+   MaxChargedStep(DBL_MAX),
+   thDensity(0.1*gram/cm3),
+   first(true)
 {
   pMess = new StepMaxMessenger(this);
+  histo = Histo::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,13 +61,29 @@ void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track&,
+                                              const G4Track& aTrack,
                                                     G4double,
                                                     G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-  return MaxChargedStep;
+  ProposedStep = DBL_MAX;
+
+  if(first) {
+    checkVolume = histo->CheckVolume();
+    gasVolume   = histo->GasVolume();
+    first = false;
+  }
+
+  G4VPhysicalVolume* pv = aTrack.GetVolume();
+
+  if(pv == gasVolume || pv == checkVolume)
+     ProposedStep = 0.0;
+
+  else if((aTrack.GetMaterial())->GetDensity() > thDensity && aTrack.GetPosition().z()<0.0)
+     ProposedStep = MaxChargedStep;
+
+  return ProposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,6 +91,15 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
+  if (ProposedStep == 0.0) {
+    aParticleChange.SetStatusChange(fStopAndKill);
+    if(1 < (Histo::GetPointer())->GetVerbose()) {
+      G4cout << "StepMax: " << aTrack.GetDefinition()->GetParticleName()
+             << " with energy = " << aTrack.GetKineticEnergy()/MeV
+             << " MeV is killed in Check volume at " << aTrack.GetPosition()
+             << G4endl;
+    }
+  }
   return &aParticleChange;
 }
 

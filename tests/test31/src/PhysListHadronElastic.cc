@@ -21,20 +21,18 @@
 // ********************************************************************
 //
 //
-//
+// 
 
 #include "PhysListHadronElastic.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4LElastic.hh"
+#include "G4LElastic.hh"   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListHadronElastic::PhysListHadronElastic(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{
-  verbose = 0;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,7 +43,7 @@ PhysListHadronElastic::~PhysListHadronElastic()
 
 void PhysListHadronElastic::ConstructProcess()
 {
-
+  
   // Hadron elastic process
 
   theElasticProcess.RegisterMe( new G4LElastic() );
@@ -54,14 +52,11 @@ void PhysListHadronElastic::ConstructProcess()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pManager = particle->GetProcessManager();
-    if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)
-        && !particle->IsShortLived()) {
+    if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)) { 
       pManager->AddDiscreteProcess(&theElasticProcess);
-      if(verbose>1) {
-        G4cout << "### Elastic model are registered for "
-               << particle->GetParticleName()
-               << G4endl;
-      }
+      G4cout << "### Elastic model are registered for " 
+             << particle->GetParticleName()
+             << G4endl;
     }
   }
 

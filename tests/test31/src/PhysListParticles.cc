@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
+// $Id: PhysListParticles.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,8 +72,6 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
-
-#include "IonC12.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -137,7 +135,6 @@ void PhysListParticles::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

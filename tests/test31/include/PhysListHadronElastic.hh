@@ -45,24 +45,23 @@
 
 class PhysListHadronElastic : public G4VPhysicsConstructor
 {
-public: 
-  PhysListHadronElastic(const G4String& name = "elastic");
-  virtual ~PhysListHadronElastic();
+  public: 
+    PhysListHadronElastic(const G4String& name = "elastic");
+    virtual ~PhysListHadronElastic();
 
-public: 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  void ConstructParticle() {};
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    void ConstructParticle() {};
  
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructProcess();
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 
-private:
-  // Elastic Process
-  G4HadronElasticProcess theElasticProcess;
-  G4int verbose;
+  private:
+    // Elastic Process
+    G4HadronElasticProcess theElasticProcess;
 };
 
 

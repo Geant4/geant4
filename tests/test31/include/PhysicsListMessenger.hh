@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2004-01-07 11:30:00 vnivanch Exp $
+// $Id: PhysicsListMessenger.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,22 +43,22 @@ class G4UIcmdWithAString;
 
 class PhysicsListMessenger: public G4UImessenger
 {
-public:
+  public:
   
-  PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
+    PhysicsListMessenger(PhysicsList* );
+   ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String);
     
-private:
+  private:
   
-  PhysicsList* pPhysicsList;
+    PhysicsList* pPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;
-  G4UIcmdWithADoubleAndUnit* allCutCmd;
-  G4UIcmdWithAString*        pListCmd;
+    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+    G4UIcmdWithADoubleAndUnit* electCutCmd;
+    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;    
+    G4UIcmdWithAString*        pListCmd;
     
 };
 

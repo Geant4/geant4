@@ -20,15 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.hh,v 1.1 2004-01-07 11:29:59 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // ------------------------------------------------------------
-//	GEANT 4 class header file
+//	GEANT 4 class header file 
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
-//      It is provide PhysicsList for Binary Cascade for
-//      protons and neutrons with the energy E<3 GeV
+//      It is provide PhysicsList for hadron eleastic process
 //
 // ------------------------------------------------------------
 //	History
@@ -43,10 +41,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
+
 
 class PhysListBinaryCascade : public G4VPhysicsConstructor
 {
@@ -66,11 +61,15 @@ class PhysListBinaryCascade : public G4VPhysicsConstructor
 
   private:
 
-    G4ProtonInelasticProcess       theIPproton;
-    G4NeutronInelasticProcess      theIPneutron;
-    G4ProtonInelasticCrossSection  thePXSec;
-    G4NeutronInelasticCrossSection theNXSec;
-
 };
 
+
 #endif
+
+
+
+
+
+
+
+

@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2004-07-27 08:29:06 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,16 +31,18 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmG4v52.hh"
+#include "PhysListEm52.hh"
+#include "PhysListEmPenelope.hh"
 #include "PhysListEmLowenergy.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
-#include "PhysListIonBinaryCascade.hh"
-#include "PhysListGN.hh"
-#include "G4EmProcessOptions.hh"
 
-#include "G4LossTableManager.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
 #include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +58,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   pMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(0);
+  SetVerboseLevel(1);
 
    // Particles
   particleList = new PhysListParticles("particles");
@@ -103,12 +102,6 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
-  G4EmProcessOptions emOptions;
-  emOptions.SetMinEnergy(0.1*keV);
-  emOptions.SetMaxEnergy(100.*GeV);
-  emOptions.SetDEDXBinning(180);
-  emOptions.SetLambdaBinning(180);
-  // emOptions.SetVerbose(2,"hIoni");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,7 +124,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
+    emPhysicsList = new PhysListEm52(name);
+
+  } else if (name == "penelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
 
   } else if (name == "lowenergy") {
 
@@ -146,14 +145,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "binary") {
 
     hadronPhys.push_back( new PhysListBinaryCascade(name));
-
-  } else if (name == "binary_ion") {
-
-    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
-
-  } else if (name == "gamma_nuc") {
-
-    hadronPhys.push_back( new PhysListGN(name));
 
   } else {
 
@@ -185,16 +176,12 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {
