@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2004-09-15 13:17:19 maire Exp $
+// $Id: HistoManager.cc,v 1.3 2004-09-20 15:13:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,11 @@
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif 
+ 
   fileName = "testem1.aida";
   fileType = "hbook";
   // histograms
@@ -58,6 +63,10 @@ HistoManager::HistoManager()
 HistoManager::~HistoManager()
 {
   delete histoMessenger;
+  
+#ifdef G4ANALYSIS_USE  
+  delete af;
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,9 +74,6 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
-
   // Creating the tree factory
   std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
 
@@ -104,7 +110,6 @@ void HistoManager::save()
 
     delete hf;
     delete tree;
-    delete af;
     factoryOn = false;
   }
 #endif
