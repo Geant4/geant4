@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.16 2003-08-12 02:21:59 asaim Exp $
+// $Id: G4DynamicParticle.cc,v 1.17 2003-08-22 00:03:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -262,6 +262,7 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
   if (this != &right) {
     theDynamicalMass = right.theDynamicalMass;
     theDynamicalCharge = right.theDynamicalCharge;
+    if (theElectronOccupancy != 0) delete theElectronOccupancy;
     if (right.theElectronOccupancy != 0){
       theElectronOccupancy =
              new G4ElectronOccupancy(*right.theElectronOccupancy);
