@@ -6,7 +6,10 @@
 #############set -x
 
 TREE=`echo $1|cut -c 1`
-export G4_STT_USE_STL=`echo $1 | ggrep -q -i stl && echo 1`
+if [ X`echo $1 | ggrep -q -i stl && echo 1` = X1 ]
+then
+  export G4_STT_USE_STL=1
+fi
 DEBOPT=`echo $2|cut -c 1`
 REFTAG=$3
 ACTION=$4
