@@ -1,4 +1,4 @@
-#include "G4FissionStore.h"
+#include "G4FissionStore.hh"
 #include <math.h>
 
 G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
