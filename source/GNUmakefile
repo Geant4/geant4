@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.34 2001-12-12 16:21:00 gcosmo Exp $
+# $Id: GNUmakefile,v 1.35 2001-12-13 11:38:48 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -59,7 +59,7 @@ endif
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) && $(MAKE) global); done;:
 endif
 
 
@@ -131,6 +131,9 @@ clean:
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
+ifdef G4USE_HEPODBMS
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@ cleandb); done
+endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
@@ -147,5 +150,9 @@ clean_all:
 	@rm -rf $(G4BIN)
 	@echo Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
+ifdef G4USE_HEPODBMS
+	@echo Removing ODBMS federations and directories ...
+	@rm -rf $(G4INSTALL)/exampleSchema $(G4INSTALL)/exampleFD
+endif
 	@echo Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config
