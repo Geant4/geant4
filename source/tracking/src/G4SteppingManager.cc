@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.29 2002-11-06 02:24:34 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.30 2002-12-04 23:00:50 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,6 +87,7 @@ G4SteppingManager::G4SteppingManager()
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());
 
+   physIntLength = DBL_MAX; 
 //   fTouchableHandle = new G4TouchableHistory();
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.13 2001-11-07 13:04:50 radoone Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.14 2002-12-04 23:00:50 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -76,14 +76,8 @@ public:
   //
 public:   // with description
 // static methods to set/get the object's pointer 
-  static void SetInstance(G4VSteppingVerbose* Instance)
-    {
-      fInstance = Instance;
-    }
-  static G4VSteppingVerbose* GetInstance()
-    {
-      return fInstance;
-    }
+  static void SetInstance(G4VSteppingVerbose* Instance);
+  static G4VSteppingVerbose* GetInstance();
 // these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();

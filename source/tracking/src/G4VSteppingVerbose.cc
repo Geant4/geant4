@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.8 2002-11-06 02:24:35 tsasaki Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.9 2002-12-04 23:00:51 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -46,6 +46,15 @@
 G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
 G4VSteppingVerbose::G4VSteppingVerbose() :verboseLevel(0){;}
 G4VSteppingVerbose::~G4VSteppingVerbose(){;}
+void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
+    {
+      fInstance = Instance;
+    }
+G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
+    {
+      return fInstance;
+    }
+
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 //////////////////////////////////////////////////////////////////
