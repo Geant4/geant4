@@ -1,0 +1,342 @@
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0x699e20
+    which is 8 bytes into a heap block of size 40 bytes at 0x699e18
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] RWTValVector<double>::RWTValVector<double>() at line 145 in "tvvector.h"
+	[3] RWTValOrderedVector<double>::RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
+	[4] G4ValVector::G4ValVector() at line 33 in "G4OrderedTable.hh"
+	[5] G4SandiaTable::ComputeMatSandiaMatrix() at line 67 in "G4SandiaTable.cc"
+	[6] G4SandiaTable::G4SandiaTable() at line 37 in "G4SandiaTable.cc"
+	[7] G4Material::ComputeDerivedQuantities() at line 323 in "G4Material.cc"
+	[8] G4Material::AddElement() at line 164 in "G4Material.cc"
+Location of error:
+=>[1] G4SandiaTable::ComputeMatSandiaMatrix(this = 0x698248), line 101 in "G4SandiaTable.cc"
+  [2] G4SandiaTable::G4SandiaTable(this = 0x698248, material = 0x699978), line 37 in "G4SandiaTable.cc"
+  [3] G4Material::ComputeDerivedQuantities(this = 0x699978), line 323 in "G4Material.cc"
+  [4] G4Material::AddElement(this = 0x699978, element = 0x699a38, nAtoms = 1), line 164 in "G4Material.cc"
+  [5] main(), line 87 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0xefffe580
+    which is 29640 bytes above the current stack pointer
+=>[1] G4VParticleChange::GetTrueStepLength(this = 0xefffe560), line 103 in "G4VParticleChange.icc"
+  [2] G4IsoParticleChange::Copy(this = 0xefffe900, aResult = 0xefffe560), line 6 in "G4IsoParticleChange.cc"
+  [3] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 97 in "G4HadronicProcess.cc"
+  [4] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [5] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [6] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x6b7ba8
+    which is 52 bytes past end of heap block of size 28 bytes at 0x6b7b58
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] RWCStringRef::getRep() at 0x2ca730 
+	[3] RWCString::clobber() at 0x2cbc78 
+	[4] RWCString::readToken() at 0x2ccf50 
+	[5] G4NeutronIsoIsoCrossSections::Init() at line 113 in "G4NeutronIsoIsoCrossSections.cc"
+	[6] G4NeutronElementIsoCrossSections::Init() at line 39 in "G4NeutronElementIsoCrossSections.cc"
+	[7] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[8] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetX(this = 0x6b7ba8), line 42 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::GetXsec(this = 0x6ad4d8, e = 1.0), line 40 in "G4NeutronHPVector.cc"
+  [3] G4NeutronHPVector::GetY(this = 0x6ad4d8, x = 1.0), line 103 in "G4NeutronHPVector.hh"
+  [4] G4NeutronIsoIsoCrossSections::GetCrossSection(this = 0x6ad4d0, anEnergy = 1.0), line 129 in "G4NeutronIsoIsoCrossSections.cc"
+  [5] G4NeutronElementIsoCrossSections::GetCrossSection(this = 0x6acad8, anEnergy = 1.0), line 61 in "G4NeutronElementIsoCrossSections.cc"
+  [6] G4NeutronIsotopeProduction::GetIsotope(this = 0x698658, aTrack = CLASS, aNucleus = CLASS), line 44 in "G4NeutronIsotopeProduction.cc"
+  [7] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 102 in "G4HadronicProcess.cc"
+  [8] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [9] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [10] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x6b7c00
+    which is 140 bytes past end of heap block of size 28 bytes at 0x6b7b58
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] RWCStringRef::getRep() at 0x2ca730 
+	[3] RWCString::clobber() at 0x2cbc78 
+	[4] RWCString::readToken() at 0x2ccf50 
+	[5] G4NeutronIsoIsoCrossSections::Init() at line 113 in "G4NeutronIsoIsoCrossSections.cc"
+	[6] G4NeutronElementIsoCrossSections::Init() at line 39 in "G4NeutronElementIsoCrossSections.cc"
+	[7] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[8] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetY(this = 0x6b7bf8), line 43 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::GetXsec(this = 0x6ad4d8, e = 1.0), line 99 in "G4NeutronHPVector.cc"
+  [3] G4NeutronHPVector::GetY(this = 0x6ad4d8, x = 1.0), line 103 in "G4NeutronHPVector.hh"
+  [4] G4NeutronIsoIsoCrossSections::GetCrossSection(this = 0x6ad4d0, anEnergy = 1.0), line 129 in "G4NeutronIsoIsoCrossSections.cc"
+  [5] G4NeutronElementIsoCrossSections::GetCrossSection(this = 0x6acad8, anEnergy = 1.0), line 61 in "G4NeutronElementIsoCrossSections.cc"
+  [6] G4NeutronIsotopeProduction::GetIsotope(this = 0x698658, aTrack = CLASS, aNucleus = CLASS), line 44 in "G4NeutronIsotopeProduction.cc"
+  [7] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 102 in "G4HadronicProcess.cc"
+  [8] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [9] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [10] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe6fc
+=>[1] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [2] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [3] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [4] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Write to unallocated (wua):
+Attempting to write 4 bytes at address 0xefffe6fc
+=>[1] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [2] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [3] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [4] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [5] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe6f0
+=>[1] RWCString::~RWCString(0xefffe6f0, 0x2, 0x1, 0xefffebb8, 0x2, 0x18), at 0x2cac50
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Write to unallocated (wua):
+Attempting to write 4 bytes at address 0xefffe668
+=>[1] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 65 in "G4ParticleChange.cc"
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe650
+=>[1] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 65 in "G4ParticleChange.cc"
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe62c
+=>[1] G4VParticleChange::~G4VParticleChange(this = 0xefffe628, delete = 0), line 59 in "G4VParticleChange.cc"
+  [2] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 66 in "G4ParticleChange.cc"
+  [3] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [4] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [5] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [6] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [7] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe654
+=>[1] G4VParticleChange::~G4VParticleChange(this = 0xefffe628, delete = 0), line 70 in "G4VParticleChange.cc"
+  [2] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 66 in "G4ParticleChange.cc"
+  [3] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [4] G4ProcessTable::~G4ProcessTable(this = 0x3ca6ec, delete = 2), line 59 in "G4ProcessTable.cc"
+  [5] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1ca828
+  [6] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ba4
+  [7] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0x69a640
+    which is 8 bytes into a heap block of size 40 bytes at 0x69a638
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] RWTValVector<double>::RWTValVector<double>() at line 145 in "tvvector.h"
+	[3] RWTValOrderedVector<double>::RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
+	[4] G4ValVector::G4ValVector() at line 33 in "G4OrderedTable.hh"
+	[5] G4SandiaTable::ComputeMatSandiaMatrix() at line 67 in "G4SandiaTable.cc"
+	[6] G4SandiaTable::G4SandiaTable() at line 37 in "G4SandiaTable.cc"
+	[7] G4Material::ComputeDerivedQuantities() at line 323 in "G4Material.cc"
+	[8] G4Material::AddElement() at line 164 in "G4Material.cc"
+Location of error:
+=>[1] G4SandiaTable::ComputeMatSandiaMatrix(this = 0x698a50), line 101 in "G4SandiaTable.cc"
+  [2] G4SandiaTable::G4SandiaTable(this = 0x698a50, material = 0x69a180), line 37 in "G4SandiaTable.cc"
+  [3] G4Material::ComputeDerivedQuantities(this = 0x69a180), line 323 in "G4Material.cc"
+  [4] G4Material::AddElement(this = 0x69a180, element = 0x69a240, nAtoms = 1), line 164 in "G4Material.cc"
+  [5] main(), line 87 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0xefff72e0
+    which is 1432 bytes above the current stack pointer
+=>[1] G4NeutronHPVector::operator =(this = 0x6add10, right = CLASS), line 43 in "G4NeutronHPVector.cc"
+  [2] G4NeutronIsoIsoCrossSections::Init(this = 0x6add08, A = 206, Z = 82, frac = 1.0), line 79 in "G4NeutronIsoIsoCrossSections.cc"
+  [3] G4NeutronElementIsoCrossSections::Init(this = 0x6ad310, anElement = 0x69a240), line 39 in "G4NeutronElementIsoCrossSections.cc"
+  [4] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction(this = 0x698e60), line 11 in "G4NeutronIsotopeProduction.cc"
+  [5] main(), line 136 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x6aeda0
+    which is 8 bytes past end of heap block of size 1600 bytes at 0x6ae758
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] G4NeutronHPVector::G4NeutronHPVector() at line 8 in "G4NeutronHPVector.cc"
+	[3] G4NeutronIsoIsoCrossSections::G4NeutronIsoIsoCrossSections() at line 8 in "G4NeutronIsoIsoCrossSections.cc"
+	[4] G4NeutronElementIsoCrossSections::Init() at line 38 in "G4NeutronElementIsoCrossSections.cc"
+	[5] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[6] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+	[7] _start() at 0x196c64 
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetY(this = 0x6aed98), line 43 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::Times(this = 0x6add10, factor = 1.0), line 46 in "G4NeutronHPVector.hh"
+  [3] G4NeutronIsoIsoCrossSections::Init(this = 0x6add08, A = 206, Z = 82, frac = 1.0), line 81 in "G4NeutronIsoIsoCrossSections.cc"
+  [4] G4NeutronElementIsoCrossSections::Init(this = 0x6ad310, anElement = 0x69a240), line 39 in "G4NeutronElementIsoCrossSections.cc"
+  [5] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction(this = 0x698e60), line 11 in "G4NeutronIsotopeProduction.cc"
+  [6] main(), line 136 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Write to unallocated (wua):
+Attempting to write 4 bytes at address 0x6aeda0
+    which is 8 bytes past end of heap block of size 1600 bytes at 0x6ae758
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] G4NeutronHPVector::G4NeutronHPVector() at line 8 in "G4NeutronHPVector.cc"
+	[3] G4NeutronIsoIsoCrossSections::G4NeutronIsoIsoCrossSections() at line 8 in "G4NeutronIsoIsoCrossSections.cc"
+	[4] G4NeutronElementIsoCrossSections::Init() at line 38 in "G4NeutronElementIsoCrossSections.cc"
+	[5] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[6] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+	[7] _start() at 0x196c64 
+Location of error:
+=>[1] G4NeutronHPDataPoint::SetY(this = 0x6aed98, x = 3.4312671939908e-311), line 46 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::Times(this = 0x6add10, factor = 1.0), line 46 in "G4NeutronHPVector.hh"
+  [3] G4NeutronIsoIsoCrossSections::Init(this = 0x6add08, A = 206, Z = 82, frac = 1.0), line 81 in "G4NeutronIsoIsoCrossSections.cc"
+  [4] G4NeutronElementIsoCrossSections::Init(this = 0x6ad310, anElement = 0x69a240), line 39 in "G4NeutronElementIsoCrossSections.cc"
+  [5] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction(this = 0x698e60), line 11 in "G4NeutronIsotopeProduction.cc"
+  [6] main(), line 136 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0xefffe580
+    which is 29640 bytes above the current stack pointer
+=>[1] G4VParticleChange::GetTrueStepLength(this = 0xefffe560), line 103 in "G4VParticleChange.icc"
+  [2] G4IsoParticleChange::Copy(this = 0xefffe900, aResult = 0xefffe560), line 6 in "G4IsoParticleChange.cc"
+  [3] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 97 in "G4HadronicProcess.cc"
+  [4] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [5] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [6] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x6aed98
+    which is just past heap block of size 1600 bytes at 0x6ae758
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] G4NeutronHPVector::G4NeutronHPVector() at line 8 in "G4NeutronHPVector.cc"
+	[3] G4NeutronIsoIsoCrossSections::G4NeutronIsoIsoCrossSections() at line 8 in "G4NeutronIsoIsoCrossSections.cc"
+	[4] G4NeutronElementIsoCrossSections::Init() at line 38 in "G4NeutronElementIsoCrossSections.cc"
+	[5] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[6] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+	[7] _start() at 0x196c64 
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetX(this = 0x6aed98), line 42 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::GetXsec(this = 0x6add10, e = 1.0), line 66 in "G4NeutronHPVector.cc"
+  [3] G4NeutronHPVector::GetY(this = 0x6add10, x = 1.0), line 105 in "G4NeutronHPVector.hh"
+  [4] G4NeutronIsoIsoCrossSections::GetCrossSection(this = 0x6add08, anEnergy = 1.0), line 129 in "G4NeutronIsoIsoCrossSections.cc"
+  [5] G4NeutronElementIsoCrossSections::GetCrossSection(this = 0x6ad310, anEnergy = 1.0), line 61 in "G4NeutronElementIsoCrossSections.cc"
+  [6] G4NeutronIsotopeProduction::GetIsotope(this = 0x698e60, aTrack = CLASS, aNucleus = CLASS), line 44 in "G4NeutronIsotopeProduction.cc"
+  [7] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 102 in "G4HadronicProcess.cc"
+  [8] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [9] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [10] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from uninitialized (rui):
+Attempting to read 4 bytes at address 0x6af478
+    which is 64 bytes into a heap block of size 80 bytes at 0x6af438
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] G4NeutronIsoIsoCrossSections::Init() at line 115 in "G4NeutronIsoIsoCrossSections.cc"
+	[3] G4NeutronElementIsoCrossSections::Init() at line 39 in "G4NeutronElementIsoCrossSections.cc"
+	[4] G4NeutronIsotopeProduction::G4NeutronIsotopeProduction() at line 11 in "G4NeutronIsotopeProduction.cc"
+	[5] main() at line 136 in "G4BasicIsotopeProductionTest.cc"
+	[6] _start() at 0x196c64 
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetX(this = 0x6af478), line 42 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::GetXsec(this = 0x6add10, e = 1.0), line 66 in "G4NeutronHPVector.cc"
+  [3] G4NeutronHPVector::GetY(this = 0x6add10, x = 1.0), line 105 in "G4NeutronHPVector.hh"
+  [4] G4NeutronIsoIsoCrossSections::GetCrossSection(this = 0x6add08, anEnergy = 1.0), line 129 in "G4NeutronIsoIsoCrossSections.cc"
+  [5] G4NeutronElementIsoCrossSections::GetCrossSection(this = 0x6ad310, anEnergy = 1.0), line 61 in "G4NeutronElementIsoCrossSections.cc"
+  [6] G4NeutronIsotopeProduction::GetIsotope(this = 0x698e60, aTrack = CLASS, aNucleus = CLASS), line 44 in "G4NeutronIsotopeProduction.cc"
+  [7] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 102 in "G4HadronicProcess.cc"
+  [8] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [9] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [10] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x6af640
+    which is 96 bytes before heap block of size 144 bytes at 0x6af6a0
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] G4Step::G4Step() at line 39 in "G4Step.cc"
+	[3] main() at line 160 in "G4BasicIsotopeProductionTest.cc"
+	[4] _start() at 0x196c64 
+Location of error:
+=>[1] G4NeutronHPDataPoint::GetY(this = 0x6af638), line 43 in "G4NeutronHPDataPoint.hh"
+  [2] G4NeutronHPVector::GetXsec(this = 0x6add10, e = 1.0), line 120 in "G4NeutronHPVector.cc"
+  [3] G4NeutronHPVector::GetY(this = 0x6add10, x = 1.0), line 105 in "G4NeutronHPVector.hh"
+  [4] G4NeutronIsoIsoCrossSections::GetCrossSection(this = 0x6add08, anEnergy = 1.0), line 129 in "G4NeutronIsoIsoCrossSections.cc"
+  [5] G4NeutronElementIsoCrossSections::GetCrossSection(this = 0x6ad310, anEnergy = 1.0), line 61 in "G4NeutronElementIsoCrossSections.cc"
+  [6] G4NeutronIsotopeProduction::GetIsotope(this = 0x698e60, aTrack = CLASS, aNucleus = CLASS), line 44 in "G4NeutronIsotopeProduction.cc"
+  [7] G4HadronicProcess::DoIsotopeCounting(this = 0xefffe620, aResult = 0xefffe560, aTrack = CLASS, aNucleus = CLASS), line 102 in "G4HadronicProcess.cc"
+  [8] G4HadronicProcess::GeneralPostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 85 in "G4HadronicProcess.cc"
+  [9] G4HadronInelasticProcess::PostStepDoIt(this = 0xefffe620, aTrack = CLASS, aStep = CLASS), line 67 in "G4HadronInelasticProcess.hh"
+  [10] main(), line 211 in "G4BasicIsotopeProductionTest.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe6fc
+=>[1] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [2] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [3] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [4] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Write to unallocated (wua):
+Attempting to write 4 bytes at address 0xefffe6fc
+=>[1] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [2] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [3] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [4] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [5] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe6f0
+=>[1] RWCString::~RWCString(0xefffe6f0, 0x2, 0x1, 0xefffebb8, 0x2, 0x18), at 0x2cae90
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Write to unallocated (wua):
+Attempting to write 4 bytes at address 0xefffe668
+=>[1] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 65 in "G4ParticleChange.cc"
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe650
+=>[1] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 65 in "G4ParticleChange.cc"
+  [2] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [3] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [4] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [5] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [6] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe62c
+=>[1] G4VParticleChange::~G4VParticleChange(this = 0xefffe628, delete = 0), line 59 in "G4VParticleChange.cc"
+  [2] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 66 in "G4ParticleChange.cc"
+  [3] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [4] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [5] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [6] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [7] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xefffe654
+=>[1] G4VParticleChange::~G4VParticleChange(this = 0xefffe628, delete = 0), line 70 in "G4VParticleChange.cc"
+  [2] G4ParticleChange::~G4ParticleChange(this = 0xefffe628, delete = 2), line 66 in "G4ParticleChange.cc"
+  [3] G4VProcess::~G4VProcess(this = 0xefffe620, delete = 3), line 49 in "G4VProcess.cc"
+  [4] G4ProcessTable::~G4ProcessTable(this = 0x3caa1c, delete = 2), line 59 in "G4ProcessTable.cc"
+  [5] __STATIC_DESTRUCTOR(0x0, 0x0, 0x0, 0x0, 0x0, 0x0), at 0x1caa68
+  [6] _fini(0x0, 0x2, 0x1, 0xefffed48, 0x2, 0x0), at 0x372ed4
+  [7] _exithandle(0x0, 0x4, 0xefffedb4, 0x3b5000, 0xef694f10, 0x1), at 0xef617918
+

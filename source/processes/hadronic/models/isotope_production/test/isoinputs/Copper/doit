@@ -1,0 +1,48 @@
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_01  |grep ISOTOPE >isoinput63_29_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_10  |grep ISOTOPE >isoinput63_29_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_20  |grep ISOTOPE >isoinput63_29_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_30  |grep ISOTOPE >isoinput63_29_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_40  |grep ISOTOPE >isoinput63_29_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_50  |grep ISOTOPE >isoinput63_29_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_60  |grep ISOTOPE >isoinput63_29_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_70  |grep ISOTOPE >isoinput63_29_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_80  |grep ISOTOPE >isoinput63_29_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_90  |grep ISOTOPE >isoinput63_29_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput63_29_99  |grep ISOTOPE >isoinput63_29_99.out
+rm core
+../../../../../../../../bin/SUN-CC/countIsotopesOnCopper63 > copper63.kumac
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_01  |grep ISOTOPE >isoinput65_29_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_10  |grep ISOTOPE >isoinput65_29_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_20  |grep ISOTOPE >isoinput65_29_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_30  |grep ISOTOPE >isoinput65_29_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_40  |grep ISOTOPE >isoinput65_29_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_50  |grep ISOTOPE >isoinput65_29_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_60  |grep ISOTOPE >isoinput65_29_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_70  |grep ISOTOPE >isoinput65_29_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_80  |grep ISOTOPE >isoinput65_29_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_90  |grep ISOTOPE >isoinput65_29_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput65_29_99  |grep ISOTOPE >isoinput65_29_99.out
+rm core
+../../../../../../../../bin/SUN-CC/countIsotopesOnCopper65 > copper65.kumac
+gzip *.out 

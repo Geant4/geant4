@@ -1,0 +1,145 @@
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_01  |grep ISOTOPE >isoinput64_30_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_10  |grep ISOTOPE >isoinput64_30_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_20  |grep ISOTOPE >isoinput64_30_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_30  |grep ISOTOPE >isoinput64_30_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_40  |grep ISOTOPE >isoinput64_30_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_50  |grep ISOTOPE >isoinput64_30_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_60  |grep ISOTOPE >isoinput64_30_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_70  |grep ISOTOPE >isoinput64_30_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_80  |grep ISOTOPE >isoinput64_30_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_90  |grep ISOTOPE >isoinput64_30_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput64_30_99  |grep ISOTOPE >isoinput64_30_99.out
+rm core
+cd ../..
+rm zinc64.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnZinc64 > zinc64.kumac
+paw -b zinc64.kumac
+xprint -P40-3b-cor zinc64.ps
+cd isoinputs/Zinc
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_01  |grep ISOTOPE >isoinput66_30_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_10  |grep ISOTOPE >isoinput66_30_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_20  |grep ISOTOPE >isoinput66_30_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_30  |grep ISOTOPE >isoinput66_30_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_40  |grep ISOTOPE >isoinput66_30_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_50  |grep ISOTOPE >isoinput66_30_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_60  |grep ISOTOPE >isoinput66_30_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_70  |grep ISOTOPE >isoinput66_30_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_80  |grep ISOTOPE >isoinput66_30_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_90  |grep ISOTOPE >isoinput66_30_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput66_30_99  |grep ISOTOPE >isoinput66_30_99.out
+rm core
+cd ../..
+rm zinc66.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnZinc66 > zinc66.kumac
+paw -b zinc66.kumac
+xprint -P40-3b-cor zinc66.ps
+cd isoinputs/Zinc
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_01  |grep ISOTOPE >isoinput67_30_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_10  |grep ISOTOPE >isoinput67_30_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_20  |grep ISOTOPE >isoinput67_30_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_30  |grep ISOTOPE >isoinput67_30_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_40  |grep ISOTOPE >isoinput67_30_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_50  |grep ISOTOPE >isoinput67_30_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_60  |grep ISOTOPE >isoinput67_30_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_70  |grep ISOTOPE >isoinput67_30_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_80  |grep ISOTOPE >isoinput67_30_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_90  |grep ISOTOPE >isoinput67_30_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput67_30_99  |grep ISOTOPE >isoinput67_30_99.out
+rm core
+cd ../..
+rm zinc67.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnZinc67 > zinc67.kumac
+paw -b zinc67.kumac
+xprint -P40-3b-cor zinc67.ps
+cd isoinputs/Zinc
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_01  |grep ISOTOPE >isoinput68_30_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_10  |grep ISOTOPE >isoinput68_30_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_20  |grep ISOTOPE >isoinput68_30_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_30  |grep ISOTOPE >isoinput68_30_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_40  |grep ISOTOPE >isoinput68_30_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_50  |grep ISOTOPE >isoinput68_30_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_60  |grep ISOTOPE >isoinput68_30_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_70  |grep ISOTOPE >isoinput68_30_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_80  |grep ISOTOPE >isoinput68_30_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_90  |grep ISOTOPE >isoinput68_30_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput68_30_99  |grep ISOTOPE >isoinput68_30_99.out
+rm core
+cd ../..
+rm zinc68.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnZinc68 > zinc68.kumac
+paw -b zinc68.kumac
+xprint -P40-3b-cor zinc68.ps
+cd isoinputs/Zinc
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_01  |grep ISOTOPE >isoinput70_30_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_10  |grep ISOTOPE >isoinput70_30_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_20  |grep ISOTOPE >isoinput70_30_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_30  |grep ISOTOPE >isoinput70_30_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_40  |grep ISOTOPE >isoinput70_30_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_50  |grep ISOTOPE >isoinput70_30_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_60  |grep ISOTOPE >isoinput70_30_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_70  |grep ISOTOPE >isoinput70_30_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_80  |grep ISOTOPE >isoinput70_30_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_90  |grep ISOTOPE >isoinput70_30_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput70_30_99  |grep ISOTOPE >isoinput70_30_99.out
+rm core
+cd ../..
+rm zinc70.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnZinc70 > zinc70.kumac
+paw -b zinc70.kumac
+xprint -P40-3b-cor zinc70.ps
+cd isoinputs/Zinc
+gzip *.out 

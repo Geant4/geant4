@@ -1,0 +1,22 @@
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_01  |grep ISOTOPE >isoinput208_82_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_10  |grep ISOTOPE >isoinput208_82_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_20  |grep ISOTOPE >isoinput208_82_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_30  |grep ISOTOPE >isoinput208_82_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_40  |grep ISOTOPE >isoinput208_82_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_50  |grep ISOTOPE >isoinput208_82_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_60  |grep ISOTOPE >isoinput208_82_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_70  |grep ISOTOPE >isoinput208_82_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_80  |grep ISOTOPE >isoinput208_82_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_90  |grep ISOTOPE >isoinput208_82_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput208_82_99  |grep ISOTOPE >isoinput208_82_99.out
+rm core

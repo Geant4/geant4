@@ -1,0 +1,1 @@
+../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest < isoinput$1 | grep ISOTOPE > isooutput$1

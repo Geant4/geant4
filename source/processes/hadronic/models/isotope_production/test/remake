@@ -1,0 +1,8 @@
+cd ..
+gmake 
+cd test
+echo "Now sleeping"
+sleep 3
+echo "On we go"
+gmake clean
+gmake

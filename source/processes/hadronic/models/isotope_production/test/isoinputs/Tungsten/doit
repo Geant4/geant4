@@ -1,0 +1,145 @@
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_01 |grep ISOTOPE |grep ISOTOPE >isoinput180_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_10 |grep ISOTOPE >isoinput180_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_20 |grep ISOTOPE >isoinput180_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_30 |grep ISOTOPE >isoinput180_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_40 |grep ISOTOPE >isoinput180_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_50 |grep ISOTOPE >isoinput180_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_60 |grep ISOTOPE >isoinput180_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_70 |grep ISOTOPE >isoinput180_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_80 |grep ISOTOPE >isoinput180_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_90 |grep ISOTOPE >isoinput180_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_99 |grep ISOTOPE >isoinput180_74_99.out
+rm core
+cd ../..
+rm tungsten180.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnTungsten180 > tungsten180.kumac
+paw -b tungsten180.kumac
+xprint -P40-3b-cor tungsten180.ps
+cd isoinputs/Tungsten
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_01 |grep ISOTOPE >isoinput182_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_10 |grep ISOTOPE >isoinput182_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_20 |grep ISOTOPE >isoinput182_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_30 |grep ISOTOPE >isoinput182_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_40 |grep ISOTOPE >isoinput182_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_50 |grep ISOTOPE >isoinput182_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_60 |grep ISOTOPE >isoinput182_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_70 |grep ISOTOPE >isoinput182_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_80 |grep ISOTOPE >isoinput182_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_90 |grep ISOTOPE >isoinput182_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput182_74_99 |grep ISOTOPE >isoinput182_74_99.out
+rm core
+cd ../..
+rm tungsten182.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnTungsten182 > tungsten182.kumac
+paw -b tungsten182.kumac
+xprint -P40-3b-cor tungsten182.ps
+cd isoinputs/Tungsten
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_01 |grep ISOTOPE >isoinput183_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_10 |grep ISOTOPE >isoinput183_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_20 |grep ISOTOPE >isoinput183_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_30 |grep ISOTOPE >isoinput183_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_40 |grep ISOTOPE >isoinput183_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_50 |grep ISOTOPE >isoinput183_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_60 |grep ISOTOPE >isoinput183_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_70 |grep ISOTOPE >isoinput183_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_80 |grep ISOTOPE >isoinput183_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_90 |grep ISOTOPE >isoinput183_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput183_74_99 |grep ISOTOPE >isoinput183_74_99.out
+rm core
+cd ../..
+rm tungsten183.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnTungsten183 > tungsten183.kumac
+paw -b tungsten183.kumac
+xprint -P40-3b-cor tungsten183.ps
+cd isoinputs/Tungsten
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_01 |grep ISOTOPE >isoinput184_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_10 |grep ISOTOPE >isoinput184_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_20 |grep ISOTOPE >isoinput184_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_30 |grep ISOTOPE >isoinput184_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_40 |grep ISOTOPE >isoinput184_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_50 |grep ISOTOPE >isoinput184_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_60 |grep ISOTOPE >isoinput184_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_70 |grep ISOTOPE >isoinput184_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_80 |grep ISOTOPE >isoinput184_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_90 |grep ISOTOPE >isoinput184_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput184_74_99 |grep ISOTOPE >isoinput184_74_99.out
+rm core
+cd ../..
+rm tungsten184.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnTungsten184 > tungsten184.kumac
+paw -b tungsten184.kumac
+xprint -P40-3b-cor tungsten184.ps
+cd isoinputs/Tungsten
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_01 |grep ISOTOPE >isoinput186_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_10 |grep ISOTOPE >isoinput186_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_20 |grep ISOTOPE >isoinput186_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_30 |grep ISOTOPE >isoinput186_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_40 |grep ISOTOPE >isoinput186_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_50 |grep ISOTOPE >isoinput186_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_60 |grep ISOTOPE >isoinput186_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_70 |grep ISOTOPE >isoinput186_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_80 |grep ISOTOPE >isoinput186_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_90 |grep ISOTOPE >isoinput186_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput186_74_99 |grep ISOTOPE >isoinput186_74_99.out
+rm core
+cd ../..
+rm tungsten186.kumac
+../../../../../../bin/SUN-CC/countIsotopesOnTungsten186 > tungsten186.kumac
+paw -b tungsten186.kumac
+xprint -P40-3b-cor tungsten186.ps
+cd isoinputs/Tungsten
+gzip *.out 

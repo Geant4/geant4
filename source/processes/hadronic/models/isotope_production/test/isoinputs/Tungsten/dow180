@@ -1,0 +1,23 @@
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_01 |grep ISOTOPE >isoinput180_74_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_10 |grep ISOTOPE >isoinput180_74_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_20 |grep ISOTOPE >isoinput180_74_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_30 |grep ISOTOPE >isoinput180_74_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_40 |grep ISOTOPE >isoinput180_74_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_50 |grep ISOTOPE >isoinput180_74_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_60 |grep ISOTOPE >isoinput180_74_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_70 |grep ISOTOPE >isoinput180_74_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_80 |grep ISOTOPE >isoinput180_74_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_90 |grep ISOTOPE >isoinput180_74_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput180_74_99 |grep ISOTOPE >isoinput180_74_99.out
+rm core
+../../../../../../../../bin/SUN-CC/countIsotopesOnTungsten180 > tungsten180.kumac

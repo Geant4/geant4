@@ -1,5 +1,6 @@
 #include "G4NeutronIsoIsoCrossSections.hh"
 #include "G4NeutronHPDataUsed.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 G4NeutronIsoIsoCrossSections::
 G4NeutronIsoIsoCrossSections()
@@ -128,7 +129,7 @@ Init(G4int A, G4int Z, G4double frac)
     }
     theCrossSection.Times(frac);
   }
-  theCrossSection.Dump();
+//  theCrossSection.Dump();
   
   // now isotope-production cross-sections
   theNames.SetMaxOffSet(1);
@@ -154,6 +155,19 @@ Init(G4int A, G4int Z, G4double frac)
   else
   {
     hasData = false;
+  }
+  G4NeutronInelasticCrossSection theParametrization;
+  G4double lastEnergy = theCrossSection.GetX(theCrossSection.GetVectorLength()-1);
+  G4double lastValue = theCrossSection.GetY(theCrossSection.GetVectorLength()-1);
+  G4double norm = theParametrization.GetCrossSection(lastEnergy, A, Z);
+  G4double increment = 1*MeV;
+  while(lastEnergy+increment<101*MeV) 
+  {
+    G4double currentEnergy = lastEnergy+increment;
+    G4double value = theParametrization.GetCrossSection(currentEnergy, A, Z)*(lastValue/norm);
+    G4int position = theCrossSection.GetVectorLength();
+    theCrossSection.SetData(position, currentEnergy, value);
+    increment+=1*MeV;
   }
 }
 

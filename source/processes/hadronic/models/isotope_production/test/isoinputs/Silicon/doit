@@ -1,0 +1,85 @@
+rm *.gz
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_01  |grep ISOTOPE >isoinput28_14_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_10  |grep ISOTOPE >isoinput28_14_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_20  |grep ISOTOPE >isoinput28_14_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_30  |grep ISOTOPE >isoinput28_14_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_40  |grep ISOTOPE >isoinput28_14_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_50  |grep ISOTOPE >isoinput28_14_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_60  |grep ISOTOPE >isoinput28_14_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_70  |grep ISOTOPE >isoinput28_14_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_80  |grep ISOTOPE >isoinput28_14_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_90  |grep ISOTOPE >isoinput28_14_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput28_14_99  |grep ISOTOPE >isoinput28_14_99.out
+rm core
+cd ../..
+../../../../../../bin/SUN-CC/countIsotopesOnSilicon28 > silicon28.kumac
+paw -b silicon28.kumac
+xprint -P40-3b-cor silicon28.ps
+cd isoinputs/Silicon
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_01  |grep ISOTOPE >isoinput29_14_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_10  |grep ISOTOPE >isoinput29_14_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_20  |grep ISOTOPE >isoinput29_14_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_30  |grep ISOTOPE >isoinput29_14_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_40  |grep ISOTOPE >isoinput29_14_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_50  |grep ISOTOPE >isoinput29_14_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_60  |grep ISOTOPE >isoinput29_14_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_70  |grep ISOTOPE >isoinput29_14_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_80  |grep ISOTOPE >isoinput29_14_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_90  |grep ISOTOPE >isoinput29_14_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput29_14_99  |grep ISOTOPE >isoinput29_14_99.out
+rm core
+cd ../..
+../../../../../../../../bin/SUN-CC/countIsotopesOnSilicon29 > silicon29.kumac
+paw -b silicon29.kumac
+xprint -P40-3b-cor silicon29.ps
+cd isoinputs/Silicon
+gzip *.out 
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_01  |grep ISOTOPE >isoinput30_14_01.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_10  |grep ISOTOPE >isoinput30_14_10.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_20  |grep ISOTOPE >isoinput30_14_20.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_30  |grep ISOTOPE >isoinput30_14_30.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_40  |grep ISOTOPE >isoinput30_14_40.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_50  |grep ISOTOPE >isoinput30_14_50.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_60  |grep ISOTOPE >isoinput30_14_60.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_70  |grep ISOTOPE >isoinput30_14_70.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_80  |grep ISOTOPE >isoinput30_14_80.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_90  |grep ISOTOPE >isoinput30_14_90.out
+rm core
+../../../../../../../../bin/SUN-CC/G4BasicIsotopeProductionTest <isoinput30_14_99  |grep ISOTOPE >isoinput30_14_99.out
+rm core
+../../../../../../../../bin/SUN-CC/countIsotopesOnSilicon30 > silicon30.kumac
+cd ../..
+paw -b silicon30.kumac
+xprint -P40-3b-cor silicon30.ps
+cd isoinputs/Silicon
+gzip *.out 

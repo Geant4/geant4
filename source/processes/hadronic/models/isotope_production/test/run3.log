@@ -1,0 +1,17 @@
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0x4b37c
+    which is just past heap block of size 500 bytes at 0x4b188
+This block was allocated from:
+	[1] operator new() at 0xef6da7a4 
+	[2] _vector_new_() at 0xef6dafd0 
+	[3] main() at line 78 in "countIsotopes.cc"
+	[4] _start() at 0x181ac 
+Location of error:
+=>[1] operator <<(0x37f38, 0x4b37c, 0x5f06f694, 0x1b978, 0x5b240, 0x4b188), at 0x1df4c
+  [2] main(), line 108 in "countIsotopes.cc"
+
+<rtc> Read from unallocated (rua):
+Attempting to read 4 bytes at address 0xfffffffc
+=>[1] operator <<(0x37f38, 0x4b37c, 0x5f06f694, 0x1b978, 0x5b240, 0x4b188), at 0x1df54
+  [2] main(), line 108 in "countIsotopes.cc"
+

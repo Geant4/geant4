@@ -1,0 +1,7 @@
+*** Begin of history file: Thu Aug 26 08:35:42 1999
+shell nedit testsi30.kumac
+exec testsi30.kumac
+opt pto
+exec testsi30.kumac
+exit
+*** End   of history file: Thu Aug 26 08:37:44 1999
