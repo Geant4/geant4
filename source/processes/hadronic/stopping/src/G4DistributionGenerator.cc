@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DistributionGenerator.cc,v 1.1 1999-01-07 16:13:42 gunter Exp $
+// $Id: G4DistributionGenerator.cc,v 1.2 1999-05-25 00:24:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //      Modifications: 
 // -------------------------------------------------------------------
 
-
+#include "globals.hh"
 #include "G4DistributionGenerator.hh"
 #include "G4ios.hh"
 #include <assert.h>
