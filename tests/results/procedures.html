@@ -21,58 +21,76 @@
 </blockquote>
 </blockquote>
 <b><font size=+4>Please note: Sytem Test Procedures are being updated.</font></b>
-<br><b><font size=+4>John, Serguei and Steve, 5th April 2000.</font></b>
+<br><b><font size=+4>John, Serguei and Steve, 28th June 2000.</font></b>
 <h1>
 The System Testing Area at CERN</h1>
-All source, binaries and output are kept under <b><tt><font size=+1>/afs/cern.ch/sw/geant4/stt/</font></tt></b>.&nbsp;
+All source, binaries and output are kept under <b><tt>/afs/cern.ch/sw/geant4/stt/</tt></b>.&nbsp;
 This area is read accessible to all Geant4 Collaborators (zb:collaborators
 rl) and write-accessible to the STT group (zb:sttmembers rlidwka).
 <p>Note that sometimes this area contains symbolic links to local discs
 of specific machines to improve performance.&nbsp; E.g.:
-<blockquote><b><tt><font size=+1>/afs/cern.ch/user/s/stesting/stt/prod/SUN-CC/debug_NONISO
--> /home3/stesting/prod/SUN-CC/debug_NONISO</font></tt></b></blockquote>
+<blockquote><b><tt>/afs/cern.ch/user/s/stesting/stt/prod/SUN-CC/debug_NONISO
+-> /home3/stesting/prod/SUN-CC/debug_NONISO</tt></b></blockquote>
 so you need to be logged into the appropriate machine to see files under
 these links.
 <h1>
 Production and Development Areas</h1>
-Under <b><tt><font size=+1>/afs/cern.ch/sw/geant4/stt/</font></tt></b>
-there are 3 areas, <b><tt><font size=+1>prod/</font></tt></b>, <b><tt><font size=+1>dev1/</font></tt></b>
-and <b><tt><font size=+1>dev2/</font></tt></b>.&nbsp; In each area there
-is <b><tt><font size=+1>src/</font></tt></b> and one subdirectory per system,
-e.g., <b><tt><font size=+1>DEC-cxx/</font></tt></b>, <b><tt><font size=+1>HP-aCC/</font></tt></b>,
-<b><tt><font size=+1>Linux-g++/</font></tt></b>,
-<b><tt><font size=+1>SUN-CC/</font></tt></b>,
-<b><tt><font size=+1>SUN-CC5/</font></tt></b>.
+Under <b><tt>/afs/cern.ch/sw/geant4/stt/</tt></b> there are 3 areas, <b><tt>prod/</tt></b>,
+<b><tt>dev1/</tt></b>
+and <b><tt>dev2/</tt></b>.&nbsp; In each area there is <b><tt>src/</tt></b>,
+<b><tt>testtools/</tt></b>
+and one subdirectory per system, e.g., <b><tt>DEC-cxx/</tt></b>,
+<b><tt>HP-aCC/</tt></b>,
+<b><tt>Linux-g++/</tt></b>,
+<b><tt>SUN-CC/</tt></b>,
+<b><tt>SUN-CC5/</tt></b>.
 <blockquote>
 <li>
-<b><tt><font size=+1>src/</font></tt></b>: this contains <b><tt><font size=+1>G4EMLOW0.3/</font></tt></b>,
-<b><tt><font size=+1>G4NDL0.2/</font></tt></b>
-and <b><tt><font size=+1>geant4/</font></tt></b>.&nbsp; The first two are
-data directories as obtained from the <b>Source</b> web page, the last
-is checked out/updated from the <b><tt><font size=+1>geant4</font></tt></b>
-CVS repository as defined by the <b><tt><font size=+1>*.sdb</font></tt></b>
+<b><tt>src/</tt></b>: this contains <b><tt>G4EMLOW0.3/</tt></b>,
+<b><tt>G4NDL0.2/</tt></b>
+and <b><tt>geant4/</tt></b>.&nbsp; The first two are data directories as
+obtained from the <b>Source</b> web page, the last is checked out/updated
+from the <b><tt>geant4</tt></b> CVS repository as defined by the <b><tt>*.sdb</tt></b>
 files (see Defining the Geant4 Source Tree).</li>
 
 <li>
+<b><tt>testtools/:</tt></b> this contains a separately checked out version
+of <b><tt>geant4/tests/GNUmakefile</tt></b>, <b><tt>History</tt></b>, <b><tt>README</tt></b>,
+<b><tt>mailing_list</tt></b>,
+<b><tt>responsibles</tt></b>,
+<b><tt>results/
+</tt></b>and <b><tt>tools/</tt></b>.&nbsp; This is so that
+the scripts (see below) in <b><tt>testtools/geant4/tools/bin/</tt></b>
+are decoupled from the versions under <b><tt>src/geant4/tests/tools/bin</tt></b>.&nbsp;
+The former are the ones which are effective at run time.&nbsp; This means
+one can change and develop them without affecting <b><tt>src/</tt></b>.&nbsp;
+To avoid ambiguities with tag names, each of above files or directories
+under <b><tt>testtools/geant4/tests/</tt></b>, if changed, must be committed
+and tagged with distinctive tag names and proposed for testing in the normal
+way so that they get included in reference tags.</li>
+
+<li>
 The rest contain binaries and output for each system, debug option and
-ISO option, e.g., <b><tt><font size=+1>SUN-CC/debug_NONISO/</font></tt></b>,&nbsp;
-which themselves contain the directories for binaries - <b><tt><font size=+1>bin/</font></tt></b>,
-<b><tt><font size=+1>lib/</font></tt></b>
-and <b><tt><font size=+1>tmp/</font></tt></b> - for the current tests and
-<b><tt><font size=+1>stt/</font></tt></b>,
-a symbolic link to the current test output, e.g., <b><tt><font size=+1>stt
--> stt.geant4-01-01-cand-00</font></tt></b>.&nbsp; The latter are kept,
-the directories for binaries are re-used.</li>
+ISO option, e.g., <b><tt>SUN-CC/debug_NONISO/</tt></b>,&nbsp; which themselves
+contain the directories for binaries - <b><tt>bin/</tt></b>,
+<b><tt>lib/</tt></b>
+and <b><tt>tmp/</tt></b> - for the current tests and
+<b><tt>stt/</tt></b>,
+a symbolic link to the current test output, e.g., <b><tt>stt -> stt.geant4-01-01-cand-00</tt></b>.&nbsp;
+The latter are kept, the directories for binaries are re-used.</li>
 </blockquote>
 
 <h1>
 Scripts for System Testing</h1>
-These are kept in <b><tt><font size=+1>geant4/tests/tools/bin/</font></tt></b>.&nbsp;
-Be aware that there are 3 checked out versions, namely in <b><tt><font size=+1>prod/src/</font></tt></b>,
-<b><tt><font size=+1>dev1/src/</font></tt></b>
-and <b><tt><font size=+1>dev2/src/</font></tt></b>, so please maintain
-them with CVS, checking in when you change something, updating in the other
-areas if necessary.&nbsp; The current used scripts are in summary:
+These are kept in <b><tt>geant4/tests/tools/bin/</tt></b>.&nbsp; Be aware
+that there are 6 checked out versions, namely in <b><tt>prod/src/</tt></b>,
+<b><tt>dev1/src/</tt></b>,
+<b><tt>dev2/src/</tt></b>,
+<b><tt>/prod/testtools/</tt></b>,
+<b><tt>dev1/testtools/</tt></b>
+and <b><tt>dev2/testtools/</tt></b> so please maintain them with CVS, checking
+in when you change something, updating in the other areas if necessary.&nbsp;
+The current used scripts are in summary:
 <br>&nbsp;
 <center><table BORDER NOSAVE >
 <tr>
@@ -161,122 +179,65 @@ directory.&nbsp; Sources...</td>
 
 <h1>
 HTML files for Recording Activities</h1>
-The Tags Database and these Procedures are currently an HTML files in <b><tt><font size=+1>geant4/tests/results/</font></tt></b>.&nbsp;
+The Tags Database and these Procedures are currently an HTML files in <b><tt>geant4/tests/results/</tt></b>.&nbsp;
 Maintain them through CVS.&nbsp; When you commit this directory they are
 posted on the web automatically.
 <h1>
-Data files for Driving Updates and Job Submission</h1>
-These are kept in <b><tt><font size=+1>geant4/tests/</font></tt></b>. Be
-aware that there are 3 checked out versions, namely in <b><tt><font size=+1>prod/src/</font></tt></b>,
-<b><tt><font size=+1>dev1/src/</font></tt></b>
-and <b><tt><font size=+1>dev2/src/</font></tt></b>, so please maintain
-them with CVS, checking in when you change something, updating in the other
-areas if necessary.
-<br>&nbsp;
-<center><table BORDER NOSAVE >
-<tr>
-<td>stt-dev1.sdb, stt-dev2.sdb, stt-prod.sbd</td>
-
-<td>Specify, one line per category or subcategory, the CVS tag for dev1,
-dev2 or prod respectively.</td>
-</tr>
-
-<tr>
-<td>stt-hosts.dev1.data, stt-hosts.dev2.data, stt-hosts.prod.data</td>
-
-<td>Specify, one line per platform, test area, the debug/optim and ISO
-option, results sub-directory name, build options, run options and a flag
-to remove all binaries in the case of a non-incremental build.</td>
-</tr>
-</table></center>
-
-<h1>
 Notifying Tags for Testing</h1>
 When he/she wishes to have code tested, a category coordinators should
-notify the System Test Team (STT) using <b><tt><font size=+1>geant4-stt@listbox.cern.ch</font></tt></b>
+notify the System Test Team (STT) using <b><tt>geant4-stt@listbox.cern.ch</tt></b>
 giving the tag name, its domain (sub-directory) of application and a short
 description of the salient features.&nbsp; Co-working tags should also
 be specified.
 <h1>
 Recording a Notified Tag</h1>
 When a tag is notified to the STT, the on-standby STT member should update
-to the head of <b><tt><font size=+1>geant4/tests/results</font></tt></b>
-(<b><tt><font size=+1>cvs update -d -P -A geant4/tests/results</font></tt></b>),
-edit <b><tt><font size=+1>tags_database.html</font></tt></b>, inserting
-the tag name and its features and committing back to the head.
+the Bonsai database, marking the tag "Proposed".
 <h1>
 Preparing a Tag for Testing</h1>
-Update to the head of <b><tt><font size=+1>geant4/tests/results</font></tt></b>,
-edit <b><tt><font size=+1>tags_database.html</font></tt></b>, assigning
-a Tags Set Number to one or more tags, marking as "testing in dev1" (for
-example) and committing back to the head.
+Update the Bonsai database, marking the tag "Selected.".
 <h1>
 Submitting a Tags Set to Tests</h1>
-In the appropriate System Test Area, e.g., <b><tt><font size=+1>dev1</font></tt></b>:
+In the appropriate System Test Area:
 <blockquote>
 <li>
-Change to <b><tt><font size=+1>geant4/tests/tools/bin</font></tt></b>,
-set <b><tt><font size=+1>G4DEBUG</font></tt></b> and/or <b><tt><font size=+1>G4STTNONISO</font></tt></b>
-if required, and <b><tt><font size=+1>source setup.csh</font></tt></b>.</li>
+Change to <b><tt>testtools/geant4/tests/tools/bin</tt></b>, set <b><tt>G4DEBUG</tt></b>
+and/or <b><tt>G4STTNONISO</tt></b> if required, and <b><tt>source setup.csh</tt></b>.</li>
 
 <li>
-Change to <b><tt><font size=+1>geant4/tests</font></tt></b>.&nbsp; Update
-the <b><tt><font size=+1>stt-dev1.sdb</font></tt></b> and <b><tt><font size=+1>stt-hosts.dev1.data</font></tt></b>
-files to the head.</li>
+Prepare an update driver file, say <b><tt>bonsaiXXX.sdb</tt></b>, from
+the Bonsai database.</li>
 
 <li>
-Check that <b><tt><font size=+1>stt-dev1.sdb</font></tt></b> corresponds
-to the current source using <b><tt><font size=+1>tools/bin/update.sh -n
-&amp;</font></tt></b>.&nbsp; You may monitor progress by using <b><tt><font size=+1>tail
--f $G4WORKDIR/stt/$G4SYSTEM/update.log.</font></tt></b></li>
+Update the code, e.g., <b><tt>update.sh [-n] &lt;bonsaiXXX.sdb >&amp;bonsaiXXX.log
+&amp;</tt></b>.(csh) or <b><tt>update.sh [-n] &lt;bonsaiXXX.sdb >bonsaiXXX.log
+2>&amp;1 &amp;</tt></b> (sh).</li>
 
 <li>
-If a global, i.e., geant4-wide, tag has recently been made, edit <b><tt><font size=+1>stt-dev1.sdb</font></tt></b>
-appropriately, i.e., replacing previous specific tags by the equivalent
-global one, and commit to the head (don;t forget an appropriate CVS log
-message).&nbsp; Check using <b><tt><font size=+1>tools/bin/update.sh -n
-&amp;</font></tt></b>.</li>
+Check the log file for unexpected CVS flags <b><tt>C</tt></b>, <b><tt>M</tt></b>,
+or <b><tt>?</tt></b>.</li>
 
 <li>
-Edit <b><tt><font size=+1>stt-dev1.sdb</font></tt></b>, add the new tags
-and commit to the head.&nbsp; Update the code with <b><tt><font size=+1>tools/bin/update.sh
-&amp;</font></tt></b>.</li>
+Prepare a file, say <b><tt>hostsXXX.data</tt></b>, for piping into <b><tt>g4allsys.sh</tt></b>
+and run it, e.g., <b><tt>g4allsys.sh &lt;hostsXXX.data</tt></b>.</li>
 
 <li>
-Edit <b><tt><font size=+1>stt-hosts.dev1.data</font></tt></b>, change the
-results sub-directory name to something which easily identifies the version,
-e.g., global-tag-name-tags-set-number and commit to the head.</li>
-
-<li>
-Change to <b><tt><font size=+1>tools/bin/</font></tt></b> sub-directory
-and prepare to submit the tests.&nbsp; Renew the AFS token.&nbsp; Double
-check the job submission driver file&nbsp; <b><tt><font size=+1>../../stt-hosts.dev1.data</font></tt></b>.&nbsp;
-Double check the update log <b><tt><font size=+1>$G4WORKDIR/stt/$G4SYSTEM/update.log</font></tt></b>.</li>
-
-<li>
-Submit the tests with <b><tt><font size=+1>g4allsys.sh &lt;../../stt-hosts.dev1.data</font></tt></b>.&nbsp;
-Check with <b><tt><font size=+1>g4status.sh</font></tt></b>.&nbsp; Check
-log files, e.g., <b><tt><font size=+1>sungeant.dev1.deb_NONISO.log</font></tt></b>
+Check with <b><tt>g4status.sh</tt></b>.&nbsp; Check log files, e.g., <b><tt>sungeant.&lt;area>.deb_NONISO.log</tt></b>
 for errors.</li>
 </blockquote>
 
 <h1>
 Inspecting the Output</h1>
-The output is in <b><tt><font size=+1>/afs/cern.ch/sw/geant4/stt/&lt;area>/$G4SYSTEM/&lt;debug-ISO-option>/stt/$G4SYSTEM</font></tt></b>
-as appropriate (the last <b><tt><font size=+1>stt</font></tt></b> is a
-symbolic link to the current results sub-directory name).&nbsp; (<b><tt><font size=+1>area</font></tt></b>
-is <b><tt><font size=+1>dev1</font></tt></b>, <b><tt><font size=+1>dev2</font></tt></b>
-or <b><tt><font size=+1>prod</font></tt></b>.)&nbsp; Currently the output
-is inspected by eye.&nbsp; <b><tt><font size=+1>.diff</font></tt></b> files
-compare the <b><tt><font size=+1>.out</font></tt></b> files with the "reference"
-<b><tt><font size=+1>.out</font></tt></b>
+The output is in <b><tt>/afs/cern.ch/sw/geant4/stt/&lt;area>/$G4SYSTEM/&lt;debug-ISO-option>/stt/$G4SYSTEM</tt></b>
+as appropriate (the last <b><tt>stt</tt></b> is a symbolic link to the
+current results sub-directory name).&nbsp; <b><tt>.diff</tt></b> files
+compare the <b><tt>.out</tt></b> files with the "reference"
+<b><tt>.out</tt></b>
 files in the source tree, e.g.,
-<b><tt><font size=+1>test01.diff</font></tt></b>
-is <b><tt><font size=+1>diff -w test01.out $G4INSTALL/tests/test01/test01.out</font></tt></b>.
-<p>If all's well, accept the tag (update <b><tt><font size=+1>tags_database.html</font></tt></b>
-to the head, mark it "accepted" and commit as above) and remember to include
-it in the next series of tests.&nbsp; If not, makr it "rejected" and do
-not include in the next series of tests.&nbsp; Notify the category coordinator.
+<b><tt>test01.diff</tt></b> is <b><tt>diff
+-w test01.out $G4INSTALL/tests/test01/test01.out</tt></b>.
+<p>If all's well, update the Bonsai database and mark the tag(s) "Accepted"
+or "Rejected".&nbsp; <i>Notify the category coordinator.</i>
 <p>After a few tags have built up, or for the monthly reference tag, consider
 placing a global (geant4-wide) reference tag on the geant4 source tree
 - see below.
@@ -284,36 +245,34 @@ placing a global (geant4-wide) reference tag on the geant4 source tree
 Large N Tests</h1>
 Periodically, say every other weekend, submit "large N" tests.&nbsp; This
 is done by setting the "action" parameter on each line of the job submission
-driver file <b><tt><font size=+1>stt-hosts.dev1.data</font></tt></b>. to
-<b><tt><font size=+1>large_N</font></tt></b>.&nbsp;
+driver file <b><tt>bonsaiXXX.large_N.data</tt></b>. to
+<b><tt>large_N</tt></b>.&nbsp;
 Note that the binaries must already be in place from an earlier normal
 build.
 <p>This option runs jobs in the following cases: (a) if a test or example
-has a file ending in <b><tt><font size=+1>large_N.in</font></tt></b>, in
-which case this file is taken instead of the normal <b><tt><font size=+1>.in</font></tt></b>
-file, or (b) if a job's input is generated by an "hadronic exerciser",
-in which case the exerciser is run with the large N option.
+has a file ending in <b><tt>large_N.in</tt></b>, in which case this file
+is taken instead of the normal <b><tt>.in</tt></b> file, or (b) if a job's
+input is generated by an "hadronic exerciser", in which case the exerciser
+is run with the large N option.
 <h1>
 Making a Global (geant4-wide) Reference Tag</h1>
-Make sure geant/tests is up to date.&nbsp; In <b><tt><font size=+1>geant4/</font></tt></b>
-of the relevant test area, <b><tt><font size=+1>cvs tag &lt;tag-name> >&amp;
-cvs_log_&lt;tag-name>.log &amp;</font></tt></b>, where <b><tt><font size=+1>&lt;tag-name></font></tt></b>
-is <b><tt><font size=+1>geant4-xx-yy-ref-zz</font></tt></b>, where <b><tt><font size=+1>xx-yy</font></tt></b>
-refer to the most recent past Geant4 release and <b><tt><font size=+1>zz</font></tt></b>
-is a serial number.
+Make sure <b><tt>src/geant/tests</tt></b> is up to date.&nbsp; In <b><tt>src/geant4/</tt></b>
+of the relevant test area, <b><tt>cvs tag &lt;tag-name> >&amp; cvs_log_&lt;tag-name>.log
+&amp;</tt></b>, where <b><tt>&lt;tag-name></tt></b> is <b><tt>geant4-xx-yy-ref-zz</tt></b>,
+where <b><tt>xx-yy</tt></b> refer to the most recent past Geant4 release
+and <b><tt>zz</tt></b> is a serial number.
 <p>Announce on the Tags Blackboard and invite category coordinators to
 add further information.
 <h1>
 Candidate Tags</h1>
 These are simply global tags used internally by the STT to define a version
-of geant4 which has not yet been tested.&nbsp; The format is <b><tt><font size=+1>geant4-xx-yy-cand-zz</font></tt></b>,
-where <b><tt><font size=+1>zz</font></tt></b> refers to the next global
-reference tag.
+of geant4 which has not yet been tested.&nbsp; The format is <b><tt>geant4-xx-yy-cand-zz</tt></b>,
+where <b><tt>zz</tt></b> refers to the next global reference tag.
 <br>
 <hr WIDTH="100%">
 <br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> ,
 <a href="mailto:Serguei.Sadilov@cern.ch">Serguei
 Sadilov</a>&nbsp; and <a href="mailto:Steve.O'Neale@cern.ch">Steve O'Neale</a>&nbsp;
-5th April 2000</i>
+28th June 2000</i>
 </body>
 </html>
