@@ -137,32 +137,33 @@ int main(int argc, char **argv)
 
     string file = pc->CurrentReadFile(obj);
     if ( pm->TransactionManager()->SelectReadFile(obj, file) ) {
+
       ev = 0;
       while ( ioman->Retrieve(ahc) ) {
         hc = (Pers01CalorHitsCollection*) ahc;
+        assert(ahc);
+
         if (verbose || ev%printev == 0) printf("event:%d\n",ev);
         if ( ev++ > nevent ) break;
+    
+        // analyze transient Pers01CalorHit
+        hc = (Pers01CalorHitsCollection*) ahc;
+        int n = hc->entries();
+        for ( int i = 0; i < n; i++ ) {
+    
+          Pers01CalorHit* h = (*hc)[i];
+          if ( h != 0 ) {
+            h1->Fill(h->GetEdepAbs());
+            h2->Fill(h->GetTrakAbs());
+            h3->Fill(h->GetEdepGap());
+            h4->Fill(h->GetTrakGap());
+          }
+        }
+        delete ahc;
       }
     }
-    assert(ahc);
 
     pm->TransactionManager()->Commit();
-
-    // analyze transient Pers01CalorHit
-    hc = (Pers01CalorHitsCollection*) ahc;
-    int n = hc->entries();
-    for ( int i = 0; i < n; i++ ) {
-
-      Pers01CalorHit* h = (*hc)[i];
-      if ( h != 0 ) {
-        h1->Fill(h->GetEdepAbs());
-        h2->Fill(h->GetTrakAbs());
-        h3->Fill(h->GetEdepGap());
-        h4->Fill(h->GetTrakGap());
-      }
-    }
-    delete ahc;
-
     hf->Write();
 
   } else {
