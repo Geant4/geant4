@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.1 2000-04-25 14:33:10 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.2 2000-05-23 14:42:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -27,15 +27,20 @@
 // 22/10/98 : cleanup , L.Urban
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
 // 02/02/99 : several bugs fixed, L.Urban
+// 01/03/99 : creation of sub-cutoff delta rays, L.Urban
+// 28/04/99 : bug fixed in DoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
 
 #include "G4VhEnergyLoss.hh"
+#include "G4EnergyLossMessenger.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
 // Initialisation of static members ******************************************
-G4int            G4VhEnergyLoss::NbOfProcesses  = 1 ;
+G4int            G4VhEnergyLoss::NbOfProcesses    = 1 ;
 
 G4int            G4VhEnergyLoss::CounterOfProcess = 0 ;
 G4PhysicsTable** G4VhEnergyLoss::RecorderOfProcess =
@@ -75,18 +80,24 @@ const G4AntiProton* G4VhEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 G4double G4VhEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
 G4double G4VhEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
 
+G4double         G4VhEnergyLoss::MinDeltaCutInRange = 0.1*mm ;
+G4double*        G4VhEnergyLoss::MinDeltaEnergy     = NULL   ;
+G4bool		 G4VhEnergyLoss::setMinDeltaCutInRange = false ;
+
 G4double         G4VhEnergyLoss::Charge ;   
 
 G4double G4VhEnergyLoss::LowerBoundEloss = 1.*keV ;
-G4double G4VhEnergyLoss::UpperBoundEloss = 100.*TeV ;	
-G4int    G4VhEnergyLoss::NbinEloss = 100 ; 
+G4double G4VhEnergyLoss::UpperBoundEloss = 100.*TeV;
+G4int G4VhEnergyLoss::NbinEloss = 100 ;
 G4double G4VhEnergyLoss::RTable,G4VhEnergyLoss::LOGRTable;
-// just to keep hLowEnergyIonisation working
-// ****************************************
-G4double G4VhEnergyLoss::LowestKineticEnergy ;
-G4double G4VhEnergyLoss::HighestKineticEnergy ;
-G4int    G4VhEnergyLoss::TotBin ; 
-// ****************************************
+
+G4double G4VhEnergyLoss::c0N       = 9.0e-21*MeV*MeV*mm*mm ;
+G4double G4VhEnergyLoss::c1N       = 25.0e-21*keV*mm*mm    ;
+G4double G4VhEnergyLoss::c2N       = 13.25e-21*keV*mm*mm   ;
+G4double G4VhEnergyLoss::c3N       = 0.500e-21*mm*mm       ;
+G4int    G4VhEnergyLoss::Ndeltamax = 100                   ;
+
+G4EnergyLossMessenger* G4VhEnergyLoss::hLossMessenger  = NULL;
 
 // constructor and destructor
  
@@ -95,27 +106,23 @@ G4VhEnergyLoss::G4VhEnergyLoss(const G4String& processName)
      theLossTable (NULL),
      MinKineticEnergy(1.*eV), 
      linLossLimit(0.05)
-{
-  // just to keep hLowEnergyIonisation working
-  // ****************************************
-  LowestKineticEnergy  = LowerBoundEloss ;
-  HighestKineticEnergy = UpperBoundEloss ;
-  TotBin               = NbinEloss       ;
-  // ****************************************
-}
+{ 
+ //create (only once) EnergyLoss messenger
+ if(!hLossMessenger) hLossMessenger = new G4EnergyLossMessenger();
 
+}
 G4VhEnergyLoss::~G4VhEnergyLoss() 
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
         delete theLossTable;
      }
+     if(MinDeltaEnergy) delete MinDeltaEnergy ;
 }
  
 void G4VhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
-
   //  calculate data members LOGRTable,RTable first
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
@@ -220,9 +227,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
         CounterOfpProcess=0 ;
       else
         CounterOfpbarProcess=0 ;
-
-     // ParticleMass = aParticleType.GetPDGMass() ;
-      ParticleMass = proton_mass_c2 ;
+      ParticleMass = aParticleType.GetPDGMass() ;
 
       if(Charge > 0.)
       {
@@ -258,11 +263,11 @@ void G4VhEnergyLoss::BuildDEDXTable(
                               thepRangeCoeffCTable,
                               theInverseRangepTable,
                               LowerBoundEloss,UpperBoundEloss,NbinEloss);
-  
+ 
       }
       else
       {
-       // Build range table
+        // Build range table
        theRangepbarTable = BuildRangeTable(theDEDXpbarTable,
                         theRangepbarTable,
                         LowerBoundEloss,UpperBoundEloss,NbinEloss);
@@ -294,10 +299,11 @@ void G4VhEnergyLoss::BuildDEDXTable(
                               thepbarRangeCoeffCTable,
                               theInverseRangepbarTable,
                               LowerBoundEloss,UpperBoundEloss,NbinEloss);
-  
+ 
       }
 
     }
+
   }
   // make the energy loss and the range table available
 
@@ -315,6 +321,38 @@ void G4VhEnergyLoss::BuildDEDXTable(
     LowerBoundEloss, UpperBoundEloss,
     proton_mass_c2/aParticleType.GetPDGMass(),NbinEloss);
 
+   // create array for the min. delta cuts in kinetic energy
+   if(!setMinDeltaCutInRange)
+     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
+
+  if(aParticleType.GetParticleName()=="proton")
+  {
+    G4cout << G4endl;
+    G4cout.precision(5) ;
+    G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+           << "  mm." << G4endl;
+    G4cout << G4endl;
+    G4cout << "           material        min.delta energy(keV) " << G4endl;
+    G4cout << G4endl;
+  }
+
+    if(MinDeltaEnergy) delete MinDeltaEnergy ;
+    MinDeltaEnergy = new G4double [numOfMaterials] ;
+    G4double Tlowerlimit = 1.*keV ;
+    for(G4int mat=0; mat<numOfMaterials; mat++)
+    {
+      MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                            G4Electron::Electron(),MinDeltaCutInRange,
+                                       (*theMaterialTable)(mat)) ;
+      if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit ;
+
+      if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
+        MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
+
+     if(aParticleType.GetParticleName()=="proton")
+       G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+              << G4std::setw(15) << MinDeltaEnergy[mat]/keV << G4endl;
+    }
 }
       
 
@@ -367,7 +405,6 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   }
   else StepLimit = fRangeNow ;
 
-
   return StepLimit ;
 }
 
@@ -397,7 +434,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
     if(Step >= fRangeNow ) MeanLoss = E ;
 
     else if(( E > UpperBoundEloss)||( E <= LowerBoundEloss))
-              MeanLoss = Step*fdEdx ; 
+              MeanLoss = Step*fdEdx ;
      
     else
     {
@@ -434,6 +471,207 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   } 
   finalT = E - MeanLoss ;
 
+  //   subcutoff delta ray production start                          
+ if(subSecFlag)
+ {
+  G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
+  G4double rcut,T0,presafety,postsafety,safety,
+           delta,fragment,Tmax,mass ;
+  G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+  G4double epsil = MinKineticEnergy/2. ;
+
+  MinDeltaEnergyNow = MinDeltaEnergy[index] ;
+  Tc=G4Electron::Electron()->GetCutsInEnergy()[index];
+  const G4ParticleDefinition* aParticleType=aParticle->GetDefinition() ;
+  mass=aParticleType->GetPDGMass() ;
+  w=mass+electron_mass_c2 ;
+  ww=2.*mass-MinDeltaEnergyNow ;
+  TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
+                       electron_mass_c2)-ww) ;
+
+  if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
+                                   && (finalT > MinKineticEnergy))
+  {
+    // max. possible delta energy 
+    Tmax = 2.*electron_mass_c2*E*(E+2.*mass)/
+           (mass*mass+2.*electron_mass_c2*(E+mass)+
+            electron_mass_c2*electron_mass_c2) ;
+
+    rcut=G4Electron::Electron()->GetCuts();
+
+    if(Tc > Tmax) Tc=Tmax ;
+    // generate subcutoff delta rays only if Tc>MinDeltaEnergyNow!
+    if((Tc > MinDeltaEnergyNow) && (Tmax > MinDeltaEnergyNow))
+    {
+      presafety  = stepData.GetPreStepPoint()->GetSafety() ;
+     // postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+
+      G4Navigator *navigator=
+         G4TransportationManager::GetTransportationManager()
+                                   ->GetNavigatorForTracking();
+      postsafety =
+          navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
+
+      safety = G4std::min(presafety,postsafety) ;
+
+      if(safety < rcut)
+     {
+
+        x1=stepData.GetPreStepPoint()->GetPosition().x();
+        y1=stepData.GetPreStepPoint()->GetPosition().y();
+        z1=stepData.GetPreStepPoint()->GetPosition().z();
+        dx=stepData.GetPostStepPoint()->GetPosition().x()-x1 ;
+        dy=stepData.GetPostStepPoint()->GetPosition().y()-y1 ;
+        dz=stepData.GetPostStepPoint()->GetPosition().z()-z1 ;
+        time0=stepData.GetPreStepPoint()->GetGlobalTime();
+        dTime=stepData.GetPostStepPoint()->GetGlobalTime()-time0;
+
+        if((presafety<rcut)&&(postsafety<rcut))
+        {
+          fragment = Step ;
+          frperstep=1. ;
+        }
+        else if(presafety<rcut)
+        {
+          delta=presafety*Step/(postsafety-presafety) ;
+          fragment=rcut*(Step+delta)/postsafety-delta ;
+          frperstep=fragment/Step;
+        }
+        else if(postsafety<rcut)
+        {
+          delta=postsafety*Step/(presafety-postsafety) ;
+          fragment=rcut*(Step+delta)/presafety-delta ;
+          x1 += dx;
+          y1 += dy;
+          z1 += dz;  
+          time0 += dTime ;
+
+          frperstep=-fragment/Step;
+        }
+
+      if(fragment>0.)
+      {
+        T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                             G4Electron::Electron(),
+                                             G4std::min(presafety,postsafety),
+                                             aMaterial) ;
+
+        // absolute lower limit for T0
+        if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+
+        // compute nb of delta rays to be generated
+        G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
+                (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
+
+        G4double Px,Py,Pz ;
+        G4ThreeVector ParticleDirection ;
+        ParticleDirection=stepData.GetPostStepPoint()->
+                                   GetMomentumDirection() ;
+        Px =ParticleDirection.x() ;
+        Py =ParticleDirection.y() ;
+        Pz =ParticleDirection.z() ;
+     
+        G4int subdelta = 0;
+
+        if(N > 0)
+        {
+          G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
+                   Pnew,delToverTc,
+                   delTkin,delLoss,rate,
+                   urandom ;
+          G4StepPoint *point ;
+  
+          Tkin = E ;
+          Etot = Tkin+mass ;
+          P    = sqrt(Tkin*(Etot+mass)) ;
+
+          aParticleChange.SetNumberOfSecondaries(N);
+          do {
+               subdelta += 1 ;
+
+               Tmax = 2.*electron_mass_c2*Tkin*(Tkin+2.*mass)/
+                      (mass*mass+2.*electron_mass_c2*(Tkin+mass)+
+                        electron_mass_c2*electron_mass_c2) ;
+
+               if(Tc>Tmax) Tc = Tmax ;
+
+               //check if there is enough energy ....
+               if((Tkin>TmintoProduceDelta)&&(Tc > T0)&&(MeanLoss>0.))
+               {
+                 delToverTc=1.-T0/Tc ;
+                 T=T0/(1.-delToverTc*G4UniformRand()) ;
+                 if(T > MeanLoss) T=MeanLoss ;
+                 MeanLoss -= T ;
+                 p=sqrt(T*(T+2.*electron_mass_c2)) ;
+
+                 costheta = T*(Etot+electron_mass_c2)/(P*p) ;
+                 if(costheta<-1.) costheta=-1.;
+                 if(costheta> 1.) costheta= 1.;
+
+                 phi=twopi*G4UniformRand() ;
+                 sintheta=sqrt(1.-costheta*costheta);
+                 dirx=sintheta*cos(phi);
+                 diry=sintheta*sin(phi);
+                 dirz=costheta;
+                
+               urandom = G4UniformRand() ;
+               // distribute x,y,z along Pre-Post !
+               G4double xd,yd,zd ;
+               xd=x1+frperstep*dx*urandom ;
+               yd=y1+frperstep*dy*urandom ;
+               zd=z1+frperstep*dz*urandom ;
+               G4ThreeVector DeltaPosition(xd,yd,zd) ;
+               DeltaTime=time0+frperstep*dTime*urandom ;
+
+               G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
+               DeltaDirection.rotateUz(ParticleDirection);
+
+               G4DynamicParticle* theDelta = new G4DynamicParticle ;
+               theDelta->SetDefinition(G4Electron::Electron());
+               theDelta->SetKineticEnergy(T);
+
+               theDelta->SetMomentumDirection(DeltaDirection.x(),
+                              DeltaDirection.y(),DeltaDirection.z());
+
+               // update initial particle,fill ParticleChange
+               Tkin -= T ;
+               Px =(P*ParticleDirection.x()-p*DeltaDirection.x()) ;
+               Py =(P*ParticleDirection.y()-p*DeltaDirection.y()) ;
+               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z()) ;
+               Pnew = sqrt(Px*Px+Py*Py+Pz*Pz) ;
+               Px /= Pnew ;
+               Py /= Pnew ;
+               Pz /= Pnew ;
+               P  = Pnew ;
+               G4ThreeVector ParticleDirectionnew(Px,Py,Pz) ;
+               ParticleDirection = ParticleDirectionnew;
+
+               G4Track* deltaTrack =
+                        new G4Track(theDelta,DeltaTime,DeltaPosition);
+               deltaTrack->
+                SetTouchable(stepData.GetPostStepPoint()->GetTouchable()) ;
+
+               deltaTrack->SetParentID(trackData.GetTrackID()) ;
+
+               aParticleChange.AddSecondary(deltaTrack) ;
+
+               }
+
+             } while (subdelta<N) ;
+
+             // update the particle direction and kinetic energy
+             if(subdelta > 0)
+               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+             E = Tkin ;
+           }
+          }
+         }
+       }
+     }
+  }
+  //   end of subcutoff business 
+
+  finalT = E - MeanLoss ;
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
   //  now the loss with fluctuation
@@ -454,6 +692,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
       aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
+  // aParticleChange.SetNumberOfSecondaries(0);
   aParticleChange.SetEnergyChange( finalT ) ;
   aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
 

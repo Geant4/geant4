@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.9 2000-04-27 14:06:04 maire Exp $
+// $Id: G4eIonisation.cc,v 1.10 2000-05-23 14:42:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,6 +98,8 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
     const G4double twoln10 = 2.*log(10.);
     const G4double Factor = twopi_mc2_rcl2;
 
+    static const G4double Tl = 0.2*keV ;
+
     G4double LowEdgeEnergy, ionloss;
     
     // material properties
@@ -140,20 +142,26 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
       X0den  = material->GetIonisation()->GetX0density();
       X1den  = material->GetIonisation()->GetX1density();
 
+      // for the lowenergy extrapolation
+      G4double Zeff = material->GetTotNbOfElectPerVolume()/
+	              material->GetTotNbOfAtomsPerVolume() ;
+      G4double Th = 0.25*sqrt(Zeff)*keV ;
+
+      G4double Tsav ;
+
       // now comes the loop for the kinetic energy values
 
-  //G4double Tmin = 1.*keV ;
-  //G4double Tsav ;
       for (G4int i = 0 ; i < TotBin ; i++)
          {
-          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
-    //    if(LowEdgeEnergy < Tmin)
-    //    {
-    //      Tsav = LowEdgeEnergy ;
-    //      LowEdgeEnergy = Tmin ;
-    //    }
-    //    else
-    //      Tsav = 0. ;
+          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ; 
+          //  low energy ?     
+          if(LowEdgeEnergy < Th)
+          {
+            Tsav = LowEdgeEnergy ;
+            LowEdgeEnergy = Th ;
+          }
+          else
+            Tsav = 0. ;
 
           tau = LowEdgeEnergy/ParticleMass ;
 
@@ -193,8 +201,14 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
           ionloss *= Factor*ElectronDensity/beta2 ;
           if (ionloss <= 0.) ionloss = 0.;
    
-        // if(Tsav > 0.)
-        //   ionloss *= sqrt(Tsav/LowEdgeEnergy) ; 
+          // low energy ?
+          if(Tsav > 0.)
+          {
+            if(Tsav >= Tl)
+              ionloss *= sqrt(LowEdgeEnergy/Tsav) ;
+            else
+              ionloss *= sqrt(LowEdgeEnergy*Tsav)/Tl ;
+          }
 
           aVector->PutValue(i,ionloss) ;
          }          

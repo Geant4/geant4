@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.10 2000-04-25 14:33:13 maire Exp $
+// $Id: G4hIonisation.cc,v 1.11 2000-05-23 14:42:22 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -37,6 +37,8 @@
 G4double G4hIonisation::LowerBoundLambda = 1.*keV ;
 G4double G4hIonisation::UpperBoundLambda = 100.*TeV ;
 G4int	 G4hIonisation::NbinLambda = 100 ;
+
+G4double G4hIonisation::Tmincut = 1.*keV  ;
 
 // constructor and destructor
  
@@ -173,7 +175,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
  
     // get  electron cut in kin. energy for the material
 
-    DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
+    DeltaCutInKineticEnergyNow = G4std::max(DeltaCutInKineticEnergy[J],Tmincut) ;
 
     // some local variables -------------------
     G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
@@ -332,7 +334,8 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   // ( it is the SAME for ALL the ELEMENTS in THIS MATERIAL )
   //   ------------------------------------------------------
 
-        DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
+        DeltaCutInKineticEnergyNow =G4std::max(DeltaCutInKineticEnergy[J],Tmincut) ;
+
 
         for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
@@ -447,7 +450,8 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection() ;
 
   //  get kinetic energy cut for the electron....
-  DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
+  DeltaCutInKineticEnergyNow =
+	G4std::max(DeltaCutInKineticEnergy[aMaterial->GetIndex()],Tmincut);
 
   // some kinematics......................
 
