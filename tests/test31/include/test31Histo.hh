@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 //
 // ClassName:   test31Histo
-//  
+//
 // Description: Singleton class to hold Emc geometry parameters.
 //              User cannot access to the constructor. 
 //              The pointer of the only existing object can be got via 
@@ -112,6 +112,8 @@ public: // Without description
     void AddStep() {n_step++;};     
 
 private:
+
+    void TableControl();
 
     test31Histo(const test31Histo&);
     const test31Histo& operator=(const test31Histo& right);

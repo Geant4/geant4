@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------
 //
 // ClassName:   test31Histo
-//  
+//
 //
 // Author:      V.Ivanchenko 30/01/01
 //
@@ -35,6 +35,11 @@
 
 #include "test31Histo.hh"
 #include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4Alpha.hh"
+#include "G4LossTableManager.hh"
+#include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,7 +58,7 @@ test31Histo* test31Histo::GetPointer()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31Histo::test31Histo() 
+test31Histo::test31Histo()
 {
   verbose = 1;
   histName = G4String("histo.hbook");
@@ -65,16 +70,16 @@ test31Histo::test31Histo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31Histo::~test31Histo() 
+test31Histo::~test31Histo()
 {
-  histo.clear(); 
+  histo.clear();
   G4cout << "test31Histo: Histograms are deleted for " << theName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void test31Histo::BeginOfHisto(G4int num)
-{  
+{
   if(0 < verbose) G4cout << "test31Histo # " << num << " started " << G4endl;
   zend     = 0.0;
   zend2    = 0.0;
@@ -91,11 +96,11 @@ void test31Histo::BeginOfHisto(G4int num)
   n_gam_leak = 0;
   n_charged_back = 0;
   n_gam_back = 0;
-  
+
   if(0 < nHisto) bookHisto();
 
   if(verbose > 0) {
-    G4cout << "test31Histo: Histograms are booked and run has been started" 
+    G4cout << "test31Histo: Histograms are booked and run has been started"
            << G4endl;
   }
 }
@@ -117,11 +122,11 @@ void test31Histo::EndOfHisto()
     G4double sig = 0.0;
     if(zend2 > 0.) sig = sqrt(zend2);
     zend2 = sig / sqrt(zEvt);
-    G4cout << std::setprecision(5) << "Range(mm)= " << zend/mm 
-           << "; Stragling(mm)= " << sig/mm 
-           << std::setprecision(2) << " +- " << zend2/mm 
+    G4cout << std::setprecision(5) << "Range(mm)= " << zend/mm
+           << "; Stragling(mm)= " << sig/mm
+           << std::setprecision(2) << " +- " << zend2/mm
            << "    " << zEvt << " events for range" << G4endl;
-  }  
+  }
   G4double x = (G4double)n_evt;
   if(n_evt > 0) x = 1.0/x;
   etot *= x;
@@ -133,18 +138,19 @@ void test31Histo::EndOfHisto()
   G4double xgl = x*(G4double)n_gam_leak;
   G4double xcb = x*(G4double)n_charged_back;
   G4double xgb = x*(G4double)n_gam_back;
-  G4cout                    << "Number of events               " << n_evt <<G4endl; 
-  G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of gamma        " << xg << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of e+           " << xp << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of steps        " << xs << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of leak changed " << xcl << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of leak gamma   " << xgl << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of back changed " << xcb << G4endl; 
-  G4cout << std::setprecision(4) << "Average number of back gamma   " << xgb << G4endl; 
+  G4cout                    << "Number of events               " << n_evt <<G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma        " << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+           " << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps        " << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of leak changed " << xcl << G4endl;
+  G4cout << std::setprecision(4) << "Average number of leak gamma   " << xgl << G4endl;
+  G4cout << std::setprecision(4) << "Average number of back changed " << xcb << G4endl;
+  G4cout << std::setprecision(4) << "Average number of back gamma   " << xgb << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
+  TableControl();
 
    // Write histogram file
   if(0 < nHisto) {
@@ -290,6 +296,48 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
   } else if (dp->GetCharge() != 0.0) {
     n_charged_back++;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31Histo::TableControl()
+{
+// parameters
+  G4double tmin = 0.001*keV;
+  G4double tmax = 1000.*GeV;
+  G4int    nbin = 1200;
+  G4int   index = 1;
+//  G4ParticleDefinition* part = G4Proton::Proton();
+  G4ParticleDefinition* part = G4Electron::Electron();
+//  G4ParticleDefinition* part = G4Alpha::Alpha();
+
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  G4LossTableManager* theManager = G4LossTableManager::Instance();
+  const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(index);
+
+  G4double xmin = log10(tmin);
+  G4double xmax = log10(tmax);
+  G4double step = (xmax - xmin)/(G4double)nbin;
+  G4double x    = xmin;
+  G4cout << "====================================================================" << G4endl;
+  G4cout << "   Tables control for  " << part->GetParticleName() << G4endl;
+  G4cout << "   Material            " << couple->GetMaterial()->GetName() << G4endl;
+  G4cout << "====================================================================" << G4endl;
+
+  for(G4int i=0; i<=nbin; i++) {
+    G4double e  = pow(10.,x);
+    G4double dedx = theManager->GetDEDX(part,e,couple);
+    G4double r = theManager->GetRange(part,e,couple);
+    G4double de = (theManager->GetEnergy(part,r,couple)/e - 1.)*100.;
+    G4cout << i << ".   e(MeV)= " << e/MeV << ";    dedx(MeV/mm)= " << dedx*mm/MeV
+           << ";  r(mm)= " << r/mm << ";  deltaE(%)= " << de << G4endl;
+    x += step;
+  }
+
+  G4cout << "====================================================================" << G4endl;
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

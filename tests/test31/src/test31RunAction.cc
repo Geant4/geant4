@@ -55,14 +55,14 @@ test31RunAction::~test31RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void test31RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
   (test31Histo::GetPointer())->BeginOfHisto(id);
 
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
-   
+
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)
