@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:09:20 gunter Exp $
+$Id: History,v 1.2 1999-04-28 14:19:29 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 28, 99 J.Allison (tag intercoms-01-00-02)
+- Moved G4VVisManager and G4VGraphicsScene from graphics_reps.
+
+Paulo Mora de Freitas (tag intercoms-01-00-01)
+- Added abstract interface G4VFlavoredParallelWorld and
+  G4VGlobalFastSimulationManager so we can decouple vis from parametrisation.
 
 Dec 03, 98 J.Allison (tag intercoms-00-04-04)
 - Protected G4UImanager::SetCoutDestination with #ifdef G4STREAM.
