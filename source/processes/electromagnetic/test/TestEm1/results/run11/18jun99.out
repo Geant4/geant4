@@ -1,0 +1,274 @@
+1*****  GEANT Version  3.21/12 Released on 270199
+0*****  Correction Cradle Version  0.1200
+ G3 > gives the filename of the data cards to be read:
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C       Eloss only + muls; e- 1 Gev                                             
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR   5 (Imat) 2000. (size) 0. (field)                                        
+ ***** DATA CARD CONTENT     TRIG    1000                                                                    
+ ***** DATA CARD CONTENT     KINE    3 (Itype)   1.000 (Ekine)                                               
+ ***** DATA CARD CONTENT     DEBUG   10  5 1000                                                              
+ ***** DATA CARD CONTENT     SWIT    0 (draw) 1 (save)                                                       
+ ***** DATA CARD CONTENT     CUTS    10.E-6 (cutgam)     10.E-6 (cutele)  3*10.E-3 (cutneu/had/muo)          
+ ***** DATA CARD CONTENT           2*10.E+3 (bcute/m) 2*100.E-3 (dcute/m)   10.E-3 (ppcutm)                  
+ ***** DATA CARD CONTENT     ABAN    0                                                                       
+ ***** DATA CARD CONTENT     LOSS    1                                                                       
+ ***** DATA CARD CONTENT     TIME    2=1.                                                                    
+ ***** DATA CARD CONTENT     END                                                                             
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2112      DATE/TIME 990617/1357  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990617  1357    3.2112     3.77     *
+ *                                                          *
+ *           KINE       990617  1357    3.2112     3.77     *
+ *                                                          *
+ *           HITS       990617  1357    3.2112     3.77     *
+ *                                                          *
+ *           DIGI       990617  1357    3.2112     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 TeV  BCUTM = 10.00 TeV                    *
+ *  DCUTE =100.00 MeV  DCUTM =100.00 MeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        1.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300     0.001 0.284E+05 0.808E+05   2     A      Z     W
+                                                                                        14.01   7.00  0.700
+                                                                                        16.00   8.00  0.300
+        2 H2 Liquid                1.010     1.000     0.071 0.865E+03 0.790E+03   1
+        3 Water                   14.320     7.215     1.000 0.358E+02 0.949E+02   2     A      Z     W
+                                                                                         1.01   1.00  0.112
+                                                                                        16.00   8.00  0.888
+        4 Liquid Ar               39.950    18.000     1.390 0.140E+02 0.840E+02   1
+        5 Aluminium               26.980    13.000     2.700 0.890E+01 0.372E+02   1
+        6 Iron                    55.850    26.000     7.870 0.176E+01 0.171E+02   1
+        7 Lead                   207.190    82.000    11.350 0.560E+00 0.185E+02   1
+        8 Uranium                238.030    92.000    18.950 0.320E+00 0.120E+02   1
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 Container                  5       0     0      0.00   10.00 0.100E+11   0.183   0.001   0.015
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 aBox    1   BOX     3   0.100E+04 0.100E+04 0.100E+04
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     1.0005     0.0000     0.0000     1.0005     1.0000
+     
+ **** GTRIGI: IEVENT=   1000 IDEVT=   1000 Random Seeds = 1593404588   264325920
+
+
+ nb tracks/event neutral:      0.00  charged:      1.02
+ nb steps/event  neutral:      0.00  charged:     42.99
+
+
+ nb of process calls per event: 
+        NEXT     MULS     LOSS     FIEL     DCAY     PAIR     COMP     PHOT     BREM     DRAY     ANNI     MUNU
+        0.00    40.95    41.97     0.00     0.00     0.00     0.00     0.00     0.00     0.02     0.00     0.00
+
+
+1         **** NUMBER OF EVENTS PROCESSED =      1000
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    507453432  2033667507
+          **** TIME TO PROCESS ONE EVENT IS =    0.0009 SECONDS
+
+
+
+***** Table : Nb of materials = 8 *****
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: H2liquid  density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: liquidArgon  density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium  density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron  density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Uranium  density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861 mm 
+   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+
+ The Box is 20 m   of Aluminium
+
+# $Id: 18jun99.out,v 1.1 1999-06-22 09:38:04 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Eloss only + muls; e- 1 GeV
+#
+#
+/calor/cutG  95 cm
+/calor/cutE  17 cm
+/run/initialize
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 8.6e+02 mm.
+All the gammawill be killed !
+in the material Aluminium.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.8e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 2.1e+02 mm.
+All the gammawill be killed !
+in the material Iron.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.8e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 1.1e+02 mm.
+All the gammawill be killed !
+in the material Lead.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.8e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 74 mm.
+All the gammawill be killed !
+in the material Uranium.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.8e+305GeV 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
+        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins.
+     
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                 95 cm           17 cm            1 mm            1 mm            1 mm 
+Cut in energy
+                Air        3.07 keV         123 keV        48.4 keV        83.2 keV         990 eV 
+           H2liquid         990 eV         5.08 MeV        1.23 MeV        3.18 MeV         990 eV 
+              Water         769 keV        41.2 MeV        3.39 MeV        8.95 MeV         990 eV 
+        liquidArgon         1.4 MeV        44.4 MeV        3.24 MeV        8.32 MeV         990 eV 
+          Aluminium   2.88e+295 J           105 MeV        5.02 MeV        13.1 MeV         990 eV 
+               Iron   2.88e+295 J           460 MeV        8.52 MeV          22 MeV         990 eV 
+               Lead   2.88e+295 J          1.74 GeV        8.52 MeV        20.9 MeV         990 eV 
+            Uranium   2.88e+295 J          7.62 GeV        10.5 MeV        26.1 MeV         990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 1000
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1.9s Real=2.5s Sys=0.53s
+
+ nb tracks/event   neutral:    0.00   charged:    1.02
+ nb  steps/event   neutral:    0.00   charged:   25.22
+
+ nb of process calls per event: 
+       eIoni
+       25.22

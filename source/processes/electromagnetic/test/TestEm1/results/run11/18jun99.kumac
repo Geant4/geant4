@@ -1,0 +1,68 @@
+macro g4g3.kumac
+*
+set * ; opt * 
+*
+filecase keep
+h/file 1 18jun99.paw
+hrin 0 ! 100
+h/file 2 ../../geant3/run11.16jun99.paw
+hrin 0 ! 200
+
+close 1; close 2
+cd //pawc
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'e- 1 GeV in Aluminium.  Energy loss only'
+
+zone 2 2
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl 101
+key 150 140 1  'G4' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl 201 s
+key 150 120 2  'G3 ' ! l
+exec Redraw-Axis
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl 102
+key 80 200 1 'G4' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl 202 s
+key 80 175 2 'G3' ! l
+exec Redraw-Axis
+
+zone 1 2 2 s
+
+opt logy
+set dmod 1 ; set hcol 4 ; set plci 4
+max 103 10000 
+h/pl 103 
+key 8 1000 1  'G4' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl 203 s 
+key 8  600 2  'G3' ! l
+exec Redraw-Axis
+
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return

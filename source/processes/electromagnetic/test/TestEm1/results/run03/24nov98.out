@@ -1,0 +1,387 @@
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT      LIST                                                                            
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      C       Eloss+muls only; no fluctuation; e- 10 Mev                              
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      CALOR   5 (Imat) 2000. (size) 0. (field)                                        
+ ***** DATA CARD CONTENT      TRIG    100                                                                     
+ ***** DATA CARD CONTENT      KINE    3 (Itype)   0.010 (Ekine)                                               
+ ***** DATA CARD CONTENT      DEBUG   10  5 1000                                                              
+ ***** DATA CARD CONTENT      SWIT    0 (draw) 0 (save)                                                       
+ ***** DATA CARD CONTENT      CUTS    10.E-6 (cutgam)    10.E-6 (cutele)  3*10.E-3 (cutneu/had/muo)           
+ ***** DATA CARD CONTENT            2*10.E+3 (bcute/m) 2*10.E+3 (dcute/m)   10.E-3 (ppcutm)                   
+ ***** DATA CARD CONTENT      ABAN    0                                                                       
+ ***** DATA CARD CONTENT      PHOT    0                                                                       
+ ***** DATA CARD CONTENT      COMP    0                                                                       
+ ***** DATA CARD CONTENT      PAIR    0                                                                       
+ ***** DATA CARD CONTENT      MULS    1                                                                       
+ ***** DATA CARD CONTENT      LOSS    4                                                                       
+ ***** DATA CARD CONTENT      TIME    2=1.                                                                    
+ ***** DATA CARD CONTENT      END                                                                             
+ ***** DATA CARD CONTENT     END                                                                             
+
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2111      DATE/TIME 981124/1719  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       981124  1719    3.2111     3.77     *
+ *                                                          *
+ *           KINE       981124  1719    3.2111     3.77     *
+ *                                                          *
+ *           HITS       981124  1719    3.2111     3.77     *
+ *                                                          *
+ *           DIGI       981124  1719    3.2111     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 TeV  BCUTM = 10.00 TeV                    *
+ *  DCUTE = 10.00 TeV  DCUTM = 10.00 TeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        0.  ICOMP =        0.  IPHOT =        0. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        1.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        4.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300      .001  .284E+05  .808E+05   2     A      Z     W
+                                                                                        14.01   7.00   .700
+                                                                                        16.00   8.00   .300
+        2 H2 Liquid                1.010     1.000      .071  .865E+03  .790E+03   1
+        3 Water                   14.320     7.215     1.000  .358E+02  .949E+02   2     A      Z     W
+                                                                                         1.01   1.00   .112
+                                                                                        16.00   8.00   .888
+        4 Liquid Ar               39.950    18.000     1.390  .140E+02  .840E+02   1
+        5 Aluminium               26.980    13.000     2.700  .890E+01  .372E+02   1
+        6 Iron                    55.850    26.000     7.870  .176E+01  .171E+02   1
+        7 Lead                   207.190    82.000    11.350  .560E+00  .185E+02   1
+        8 Uranium                238.030    92.000    18.950  .320E+00  .120E+02   1
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 Container                  5       0     0       .00   10.00  .100E+11    .183    .001    .015
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 aBox    1   BOX     3    .100E+04  .100E+04  .100E+04
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3      .0105      .0000      .0000      .0105     1.0000
+
+
+ nb tracks/event neutral:     .00  charged:    1.00
+ nb steps/event  neutral:     .00  charged:   20.00
+
+
+ nb of process calls per event: 
+        NEXT     MULS     LOSS     FIEL     DCAY     PAIR     COMP     PHOT     BREM     DRAY     ANNI     MUNU
+         .00    18.00    19.00      .00      .00      .00      .00      .00      .00      .00      .00      .00
+
+
+1         **** NUMBER OF EVENTS PROCESSED =       100
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    147754859  2013207389
+          **** TIME TO PROCESS ONE EVENT IS =     .0011 SECONDS
+
+
+
+
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+***** Table : Nb of materials = 8 *****
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: H2liquid  density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923   m
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron  density:  7.870  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759  cm
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Uranium  density: 18.950  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861  mm
+   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+
+ The Box is 20   m of Aluminium
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Eloss+Muls only; no fluctuation; e- 10 MeV
+#
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  95 cm
+/run/cutoffModified
+/calor/cutE  95 cm
+/run/cutoffModified
+/run/initialize
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 8.6e+02 mm.
+All the gammawill be killed !
+in the material Aluminium.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 2.1e+02 mm.
+All the gammawill be killed !
+in the material Iron.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 1.1e+02 mm.
+All the gammawill be killed !
+in the material Lead.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 74 mm.
+All the gammawill be killed !
+in the material Uranium.
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                          gamma          e-         mu-      proton     neutron
+Cut in range [mm]       9.5e+02     9.5e+02           1           1           1
+Cut in energy [KeV]
+                Air         3.1     3.6e+02          48          83        0.99
+           H2liquid        0.99     3.1e+04     1.2e+03     3.2e+03        0.99
+              Water     7.7e+02       3e+05     3.4e+03       9e+03        0.99
+        liquidArgon     1.4e+03     3.9e+05     3.2e+03     8.3e+03        0.99
+          Aluminium    infinity     1.1e+06       5e+03     1.3e+04        0.99
+               Iron    infinity     1.1e+08     8.5e+03     2.2e+04        0.99
+               Lead    infinity    infinity     8.5e+03     2.1e+04        0.99
+            Uranium    infinity    infinity     1.1e+04     2.6e+04        0.99
+===================================================
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/eLoss/fluct 0
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 10 MeV
+/run/beamOn 100
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.3s Real=0.68s Sys=0.14s
+
+ nb tracks/event   neutral:    0.00   charged:    1.00
+ nb  steps/event   neutral:    0.00   charged:   15.00
+
+ nb of process calls per event: 
+       eIoni
+       15.00
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3      .0105      .0000      .0000      .0105     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     ELECTRON                 TOFG =      .000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+       .0000      .0000      .0000      .0000 aBox    1      .0000     .0000     .0  eV   10.000 MeV NULL
+       .3639      .0000      .0000      .3639 aBox    1      .3774     .3774    1.9 MeV    8.099 MeV LOSS MULS
+       .4578     -.1180      .2680      .4728 aBox    1      .6993     .3219    1.6 MeV    6.546 MeV LOSS MULS
+       .5926     -.1927      .4750      .6232 aBox    1      .9726     .2733    1.3 MeV    5.278 MeV LOSS MULS
+       .6879     -.1637      .6659      .7071 aBox    1     1.2038     .2311    1.0 MeV    4.241 MeV LOSS MULS
+       .7733     -.0945      .8064      .7791 aBox    1     1.3983     .1946  845.9 keV    3.396 MeV LOSS MULS
+       .8430     -.0740      .9338      .8463 aBox    1     1.5614     .1630  690.1 keV    2.705 MeV LOSS MULS
+       .9026     -.0161     1.0197      .9027 aBox    1     1.6972     .1358  562.0 keV    2.143 MeV LOSS MULS
+       .9961     -.0239      .9978      .9964 aBox    1     1.8096     .1123  456.7 keV    1.687 MeV LOSS MULS
+      1.0189      .0056      .9307     1.0189 aBox    1     1.9016     .0920  369.9 keV    1.317 MeV LOSS MULS
+      1.0414      .0551      .9179     1.0429 aBox    1     1.9697     .0682  273.5 keV    1.043 MeV LOSS MULS
+      1.0483      .0789      .8886     1.0513 aBox    1     2.0167     .0470  189.8 keV  853.551 keV LOSS MULS
+      1.0222      .0865      .8933     1.0259 aBox    1     2.0504     .0337  138.3 keV  715.300 keV LOSS MULS
+      1.0126      .0793      .9099     1.0157 aBox    1     2.0756     .0252  105.3 keV  610.006 keV LOSS MULS
+      1.0216      .0760      .8967     1.0244 aBox    1     2.0958     .0202   86.5 keV  523.545 keV LOSS MULS
+      1.0348      .0677      .8957     1.0371 aBox    1     2.1153     .0195   86.6 keV  436.906 keV LOSS MULS
+      1.0475      .0735      .9024     1.0501 aBox    1     2.1346     .0193   90.0 keV  346.923 keV LOSS MULS
+      1.0609      .0793      .9074     1.0638 aBox    1     2.1539     .0193   97.8 keV  249.160 keV LOSS MULS
+      1.0582      .0736      .8934     1.0607 aBox    1     2.1732     .0193  113.4 keV  135.785 keV LOSS MULS
+      1.0600      .0844      .8965     1.0633 aBox    1     2.1874     .0113  135.8 keV     .000  eV LOSS STOP
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3      .0105      .0000      .0000      .0105     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     ELECTRON                 TOFG =      .000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+       .0000      .0000      .0000      .0000 aBox    1      .0000     .0000     .0  eV   10.000 MeV NULL
+       .3639      .0000      .0000      .3639 aBox    1      .3774     .3774    1.9 MeV    8.099 MeV LOSS MULS
+       .6264     -.1412     -.0754      .6421 aBox    1      .6993     .3219    1.6 MeV    6.546 MeV LOSS MULS
+       .8308     -.2428     -.1959      .8656 aBox    1      .9726     .2733    1.3 MeV    5.278 MeV LOSS MULS
+       .9600     -.3919     -.2822     1.0369 aBox    1     1.2038     .2311    1.0 MeV    4.241 MeV LOSS MULS
+      1.0696     -.4868     -.3862     1.1752 aBox    1     1.3983     .1946  845.9 keV    3.396 MeV LOSS MULS
+      1.1595     -.5534     -.4810     1.2848 aBox    1     1.5614     .1630  690.1 keV    2.705 MeV LOSS MULS
+      1.2300     -.6479     -.5004     1.3902 aBox    1     1.6972     .1358  562.0 keV    2.143 MeV LOSS MULS
+      1.2268     -.6568     -.5963     1.3916 aBox    1     1.8096     .1123  456.7 keV    1.687 MeV LOSS MULS
+      1.2095     -.5982     -.6426     1.3493 aBox    1     1.9016     .0920  369.9 keV    1.317 MeV LOSS MULS
+      1.1590     -.5891     -.6646     1.3002 aBox    1     1.9697     .0682  273.5 keV    1.043 MeV LOSS MULS
+      1.1217     -.5893     -.6734     1.2670 aBox    1     2.0167     .0470  189.8 keV  853.551 keV LOSS MULS
+      1.1078     -.6129     -.6761     1.2660 aBox    1     2.0504     .0337  138.3 keV  715.300 keV LOSS MULS
+      1.0978     -.6308     -.6769     1.2661 aBox    1     2.0756     .0252  105.3 keV  610.006 keV LOSS MULS
+      1.0896     -.6393     -.6883     1.2633 aBox    1     2.0958     .0202   86.5 keV  523.545 keV LOSS MULS
+      1.0986     -.6519     -.6864     1.2775 aBox    1     2.1153     .0195   86.6 keV  436.906 keV LOSS MULS
+      1.1090     -.6570     -.6762     1.2890 aBox    1     2.1346     .0193   90.0 keV  346.923 keV LOSS MULS
+      1.1049     -.6657     -.6642     1.2899 aBox    1     2.1539     .0193   97.8 keV  249.160 keV LOSS MULS
+      1.0969     -.6756     -.6729     1.2883 aBox    1     2.1732     .0193  113.4 keV  135.785 keV LOSS MULS
+      1.0876     -.6762     -.6795     1.2807 aBox    1     2.1874     .0113  135.8 keV     .000  eV LOSS STOP
+
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm        10 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     4.05  mm     -167 mum      900 mum      7.86 MeV     2.14 MeV     4.17  mm      4.17  mm   Container eIoni
+    2     7.23  mm    -1.07  mm      179 mum      6.18 MeV     1.67 MeV     3.41  mm      7.58  mm   Container eIoni
+    3     9.69  mm     -146 mum     -640 mum      4.87 MeV     1.31 MeV     2.79  mm      1.04  cm   Container eIoni
+    4     1.19  cm      429 mum     -393 mum      3.84 MeV     1.04 MeV     2.28  mm      1.26  cm   Container eIoni
+    5     1.34  cm     1.23  mm    -1.06  mm      3.01 MeV      821 keV     1.86  mm      1.45  cm   Container eIoni
+    6     1.47  cm     1.18  mm     -1.6  mm      2.36 MeV      654 keV     1.52  mm       1.6  cm   Container eIoni
+    7     1.59  cm     1.01  mm    -1.26  mm      1.84 MeV      522 keV     1.24  mm      1.73  cm   Container eIoni
+    8     1.65  cm     1.44  mm     -622 mum      1.42 MeV      420 keV     1.01  mm      1.83  cm   Container eIoni
+    9     1.64  cm     1.43  mm      157 mum      1.08 MeV      339 keV      825 mum      1.91  cm   Container eIoni
+   10     1.59  cm     1.62  mm      562 mum       802 keV      277 keV      671 mum      1.98  cm   Container eIoni
+   11     1.55  cm     1.64  mm      848 mum       573 keV      229 keV      543 mum      2.03  cm   Container eIoni
+   12     1.51  cm     1.58  mm     1.03  mm       378 keV      195 keV      436 mum      2.08  cm   Container eIoni
+   13     1.49  cm      1.4  mm      994 mum       203 keV      175 keV      337 mum      2.11  cm   Container eIoni
+   14     1.49  cm     1.38  mm     1.09  mm      24.2 keV      179 keV      210 mum      2.13  cm   Container eIoni
+   15     1.49  cm     1.38  mm     1.09  mm         0  eV     24.2 keV     9.02 mum      2.13  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm        10 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     4.05  mm     -460 mum     -792 mum      7.86 MeV     2.14 MeV     4.17  mm      4.17  mm   Container eIoni
+    2      6.9  mm     1.08  mm      186 mum      6.18 MeV     1.67 MeV     3.41  mm      7.58  mm   Container eIoni
+    3     7.71  mm     3.18  mm     -1.4  mm      4.87 MeV     1.31 MeV     2.79  mm      1.04  cm   Container eIoni
+    4     8.63  mm        4  mm    -3.28  mm      3.84 MeV     1.04 MeV     2.28  mm      1.26  cm   Container eIoni
+    5     6.85  mm     3.59  mm    -3.35  mm      3.01 MeV      821 keV     1.86  mm      1.45  cm   Container eIoni
+    6     5.58  mm     3.66  mm    -2.57  mm      2.36 MeV      654 keV     1.52  mm       1.6  cm   Container eIoni
+    7      4.7  mm     3.24  mm    -1.86  mm      1.84 MeV      522 keV     1.24  mm      1.73  cm   Container eIoni
+    8     3.89  mm      3.4  mm    -1.34  mm      1.42 MeV      420 keV     1.01  mm      1.83  cm   Container eIoni
+    9     3.49  mm     2.76  mm    -1.08  mm      1.08 MeV      339 keV      825 mum      1.91  cm   Container eIoni
+   10      3.6  mm     2.16  mm     -921 mum       802 keV      277 keV      671 mum      1.98  cm   Container eIoni
+   11     3.92  mm     1.95  mm     -584 mum       573 keV      229 keV      543 mum      2.03  cm   Container eIoni
+   12      4.1  mm     1.77  mm     -284 mum       378 keV      195 keV      436 mum      2.08  cm   Container eIoni
+   13     4.32  mm     1.81  mm     -449 mum       203 keV      175 keV      337 mum      2.11  cm   Container eIoni
+   14     4.39  mm     1.77  mm     -532 mum      24.2 keV      179 keV      210 mum      2.13  cm   Container eIoni
+   15     4.38  mm     1.78  mm     -533 mum         0  eV     24.2 keV     9.02 mum      2.13  cm   Container eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 2
+  User=0.033s Real=0.083s Sys=0s
+
+ nb tracks/event   neutral:    0.00   charged:    1.00
+ nb  steps/event   neutral:    0.00   charged:   15.00
+
+ nb of process calls per event: 
+       eIoni
+       15.00

@@ -27,7 +27,8 @@
 *  Field   = magnetic field (tesla)                     (data card CALOR)
 *                                                                               
 +KEEP,CELOSS.                                                                                                                      
-      COMMON/CELOSS/ ETOT,NTRAK0,NTRAK1,NSTEP0,NSTEP1,NBCALL(12)                                                       
+      COMMON/CELOSS/ ETOT,NTRAK0,NTRAK1,NSTEP0,NSTEP1,NBCALL(12),
+     +                    NSTRK0,NSTRK1                                                        
 
 +DECK,main,if=batch.
       PROGRAM main
@@ -215,7 +216,13 @@
       SUBROUTINE UHINIT                                                         
 *                                                                               
 *     To book the user's histograms                                             
-*                                                                                                                                                                                 
+*
+      CALL HBOOK1(1,'track length (mm) of a charged particle',
+     +              100,0.,500.,0.)
+      CALL HBOOK1(2,'Nb of steps per track (charged particle)',
+     +              100,0.,100.,0.)
+      CALL HBOOK1(3,'step length (mm)  charged particle',
+     +              100,0.,10. ,0.)                                                                                                                                                                                           
 *                                                                               
       END                                                                       
 +DECK,GUKINE                                                                    
@@ -265,15 +272,22 @@
 *     User routine to control tracking of one track                 
 *     Called by GTREVE                                                            
 *
-+SEQ,GCKINE.                                                                     
++SEQ,GCKINE.
++SEQ,GCTRAK.                                                                     
 +SEQ,CELOSS.                                                                     
 *                                                                                                                                         
-*                                                                               
+*
+* *** initialisation track per track
+      NSTRK0 = 0
+      NSTRK1 = 0
+*                                                                                     
       CALL GTRACK
 *
 * *** count nb of tracks
       IF (CHARGE.NE.0.) THEN
            NTRAK1 = NTRAK1 + 1
+	   CALL HFILL (1,SLENG*10,0.,1.)
+	   CALL HFILL (2,REAL(NSTRK1),0.,1.)
       ELSE 
            NTRAK0 = NTRAK0 + 1
       ENDIF                                                                     
@@ -303,8 +317,11 @@
 * *** count number of steps
       IF (CHARGE.NE.0.) THEN
            NSTEP1 = NSTEP1 + 1
+	   NSTRK1 = NSTRK1 + 1
+	   CALL HFILL (3,STEP*10,0.,1.)
       ELSE 
            NSTEP0 = NSTEP0 + 1
+	   NSTRK0 = NSTRK0 + 1
       ENDIF                                                          
 *
 * *** count nb of invoked processes

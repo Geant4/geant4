@@ -1,0 +1,843 @@
+
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT      LIST                                                                            
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      C       Gamma conversion and e+ annihilation; gamma 100 MeV                     
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      CALOR   5 (Imat) 2000. (size) 0. (field)                                        
+ ***** DATA CARD CONTENT      TRIG    1000                                                                    
+ ***** DATA CARD CONTENT      KINE    1 (Itype)   0.100 (Ekine)                                               
+ ***** DATA CARD CONTENT      DEBUG   10  5 1000                                                              
+ ***** DATA CARD CONTENT      SWIT    0 (draw) 0 (save)                                                       
+ ***** DATA CARD CONTENT      CUTS    10.E-6 (cutgam)    10.E-6 (cutele)  3*10.E-3 (cutneu/had/muo)           
+ ***** DATA CARD CONTENT            2*10.E+3 (bcute/m) 2*15.E-3 (dcute/m)   10.E-3 (ppcutm)                   
+ ***** DATA CARD CONTENT      ABAN    0                                                                       
+ ***** DATA CARD CONTENT      PHOT    0                                                                       
+ ***** DATA CARD CONTENT      COMP    0                                                                       
+ ***** DATA CARD CONTENT      PAIR    1                                                                       
+ ***** DATA CARD CONTENT      ANNI    2                                                                       
+ ***** DATA CARD CONTENT      MULS    0                                                                       
+ ***** DATA CARD CONTENT      LOSS    1                                                                       
+ ***** DATA CARD CONTENT      TIME    2=1.                                                                    
+ ***** DATA CARD CONTENT      END                                                                             
+ ***** DATA CARD CONTENT     END                                                                             
+
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2111      DATE/TIME 981126/1442  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       981126  1442    3.2111     3.77     *
+ *                                                          *
+ *           KINE       981126  1442    3.2111     3.77     *
+ *                                                          *
+ *           HITS       981126  1442    3.2111     3.77     *
+ *                                                          *
+ *           DIGI       981126  1442    3.2111     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 TeV  BCUTM = 10.00 TeV                    *
+ *  DCUTE = 15.00 MeV  DCUTM = 15.00 MeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        0.  IPHOT =        0. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        2. *
+ *  IBREM =        1.  IHADR =        1.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        0. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300      .001  .284E+05  .808E+05   2     A      Z     W
+                                                                                        14.01   7.00   .700
+                                                                                        16.00   8.00   .300
+        2 H2 Liquid                1.010     1.000      .071  .865E+03  .790E+03   1
+        3 Water                   14.320     7.215     1.000  .358E+02  .949E+02   2     A      Z     W
+                                                                                         1.01   1.00   .112
+                                                                                        16.00   8.00   .888
+        4 Liquid Ar               39.950    18.000     1.390  .140E+02  .840E+02   1
+        5 Aluminium               26.980    13.000     2.700  .890E+01  .372E+02   1
+        6 Iron                    55.850    26.000     7.870  .176E+01  .171E+02   1
+        7 Lead                   207.190    82.000    11.350  .560E+00  .185E+02   1
+        8 Uranium                238.030    92.000    18.950  .320E+00  .120E+02   1
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 Container                  5       0     0       .00   10.00  .100E+11    .183    .001    .015
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 aBox    1   BOX     3    .100E+04  .100E+04  .100E+04
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1      .1000      .0000      .0000      .1000     1.0000
+ **** GTRIGI: IEVENT=   1000 IDEVT=   1000 Random Seeds =  501020554  1549685870
+
+
+ nb tracks/event neutral:    1.00  charged:    2.03
+ nb steps/event  neutral:    2.00  charged:   53.42
+
+
+ nb of process calls per event: 
+        NEXT     MULS     LOSS     FIEL     DCAY     PAIR     COMP     PHOT     BREM     DRAY     ANNI     MUNU
+         .00      .00    51.38      .00      .00     1.00      .00      .00      .00      .03     1.00      .00
+
+
+1         **** NUMBER OF EVENTS PROCESSED =      1000
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1650968734   763216281
+          **** TIME TO PROCESS ONE EVENT IS =     .0047 SECONDS
+
+
+
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+***** Table : Nb of materials = 8 *****
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: H2liquid  density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923   m
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron  density:  7.870  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759  cm
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Uranium  density: 18.950  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861  mm
+   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+
+ The Box is 20   m of Aluminium
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+
+
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Gamma conversion and e+ annihilation; gamma 100 MeV
+#
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  95 cm
+/run/cutoffModified
+/calor/cutE  30 mm
+/run/cutoffModified
+/run/initialize
+
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                          gamma          e-         mu-      proton     neutron
+Cut in range [mm]       9.5e+02          30           1           1           1
+Cut in energy [KeV]
+                Air         3.1          45          48          83        0.99
+           H2liquid        0.99     1.1e+03     1.2e+03     3.2e+03        0.99
+              Water     7.7e+02     6.3e+03     3.4e+03       9e+03        0.99
+        liquidArgon     1.4e+03     6.5e+03     3.2e+03     8.3e+03        0.99
+          Aluminium    infinity     1.5e+04       5e+03     1.3e+04        0.99
+               Iron    infinity     4.5e+04     8.5e+03     2.2e+04        0.99
+               Lead    infinity       6e+04     8.5e+03     2.1e+04        0.99
+            Uranium    infinity       1e+05     1.1e+04     2.6e+04        0.99
+===================================================
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate msc
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle gamma
+/gun/energy 100 MeV
+/run/beamOn 1000
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=9.2s Real=13s Sys=1.4s
+
+ nb tracks/event   neutral:    1.00   charged:    1.94
+ nb  steps/event   neutral:    1.00   charged:   36.83
+
+ nb of process calls per event: 
+        conv    eIoni  annihil
+        1.00    35.83     1.00
+
+
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1     0.1000     0.0000     0.0000     0.1000     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     GAMMA                    TOFG =     0.000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+      0.0000     0.0000     0.0000     0.0000 aBox    1     0.0000    0.0000    0.0  eV  100.000 MeV NULL
+     30.6577     0.0000     0.0000    30.6577 aBox    1    30.6577   30.6577    0.0  eV  100.000 MeV PAIR
+ =====> TRACK    1 STACK NR   2 NTMULT=    2     ELECTRON                 TOFG =     1.023 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     30.6577     0.0000     0.0000    30.6577 aBox    1     0.0000    0.0000    0.0  eV   89.498 MeV NULL
+     31.9561    -0.0092    -0.0075    31.9561 aBox    1     1.2984    1.2984   15.0 MeV   74.451 MeV LOSS
+     33.1744    -0.0179    -0.0146    33.1744 aBox    1     2.5168    1.2184   15.2 MeV   59.266 MeV LOSS
+     34.2861    -0.0257    -0.0210    34.2861 aBox    1     3.6285    1.1117   11.8 MeV   47.505 MeV LOSS
+     35.2891    -0.0329    -0.0268    35.2892 aBox    1     4.6316    1.0031    8.2 MeV   39.285 MeV LOSS
+     36.1984    -0.0393    -0.0321    36.1984 aBox    1     5.5409    0.9093   14.6 MeV   24.713 MeV LOSS
+     36.8902    -0.0442    -0.0361    36.8902 aBox    1     6.2327    0.6918    4.1 MeV   20.659 MeV LOSS
+     37.5061    -0.0486    -0.0397    37.5061 aBox    1     6.8486    0.6159    3.1 MeV   17.512 MeV LOSS
+     38.0559    -0.0525    -0.0429    38.0560 aBox    1     7.3985    0.5499    3.9 MeV   13.566 MeV LOSS
+     38.5140    -0.0557    -0.0455    38.5140 aBox    1     7.8566    0.4581    2.2 MeV   11.326 MeV LOSS
+     38.9138    -0.0586    -0.0478    38.9139 aBox    1     8.2564    0.3999    1.7 MeV    9.584 MeV LOSS
+     39.2653    -0.0611    -0.0499    39.2654 aBox    1     8.6079    0.3515    1.4 MeV    8.233 MeV LOSS
+     39.5768    -0.0633    -0.0517    39.5768 aBox    1     8.9194    0.3114    1.4 MeV    6.856 MeV LOSS
+     39.8448    -0.0652    -0.0532    39.8449 aBox    1     9.1875    0.2681    1.0 MeV    5.808 MeV LOSS
+     40.0782    -0.0668    -0.0546    40.0783 aBox    1     9.4209    0.2334  947.2 keV    4.861 MeV LOSS
+     40.2790    -0.0683    -0.0558    40.2791 aBox    1     9.6217    0.2008    1.1 MeV    3.787 MeV LOSS
+     40.4406    -0.0694    -0.0567    40.4406 aBox    1     9.7832    0.1615  634.2 keV    3.152 MeV LOSS
+     40.5779    -0.0704    -0.0575    40.5780 aBox    1     9.9206    0.1374  607.3 keV    2.545 MeV LOSS
+     40.6910    -0.0712    -0.0581    40.6911 aBox    1    10.0337    0.1131  395.9 keV    2.149 MeV LOSS
+     40.7876    -0.0719    -0.0587    40.7877 aBox    1    10.1303    0.0966  293.2 keV    1.856 MeV LOSS
+     40.8717    -0.0725    -0.0592    40.8718 aBox    1    10.2144    0.0841  284.2 keV    1.572 MeV LOSS
+     40.9434    -0.0730    -0.0596    40.9435 aBox    1    10.2861    0.0717  312.2 keV    1.260 MeV LOSS
+     41.0008    -0.0734    -0.0599    41.0009 aBox    1    10.3435    0.0575  202.3 keV    1.057 MeV LOSS
+     41.0487    -0.0737    -0.0602    41.0488 aBox    1    10.3914    0.0479  145.9 keV  911.296 keV LOSS
+     41.0896    -0.0740    -0.0605    41.0897 aBox    1    10.4323    0.0409  119.7 keV  791.600 keV LOSS
+     41.1246    -0.0743    -0.0607    41.1247 aBox    1    10.4673    0.0350  113.0 keV  678.598 keV LOSS
+     41.1540    -0.0745    -0.0608    41.1540 aBox    1    10.4967    0.0294  108.5 keV  570.072 keV LOSS
+     41.1779    -0.0747    -0.0610    41.1779 aBox    1    10.5206    0.0239   91.9 keV  478.159 keV LOSS
+     41.1972    -0.0748    -0.0611    41.1972 aBox    1    10.5399    0.0193   72.0 keV  406.138 keV LOSS
+     41.2130    -0.0749    -0.0612    41.2131 aBox    1    10.5557    0.0158   52.9 keV  353.278 keV LOSS
+     41.2284    -0.0750    -0.0613    41.2285 aBox    1    10.5711    0.0154   72.5 keV  280.747 keV LOSS
+     41.2438    -0.0751    -0.0613    41.2439 aBox    1    10.5865    0.0154  148.1 keV  132.660 keV LOSS
+     41.2548    -0.0752    -0.0614    41.2549 aBox    1    10.5975    0.0109  132.7 keV    0.000  eV LOSS STOP
+ =====> TRACK    1 STACK NR   1 NTMULT=    3     POSITRON                 TOFG =     1.023 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     30.6577     0.0000     0.0000    30.6577 aBox    1     0.0000    0.0000    0.0  eV    9.480 MeV NULL
+     31.0050     0.0223     0.0182    31.0050 aBox    1     0.3484    0.3484    1.7 MeV    7.819 MeV LOSS
+     31.3029     0.0414     0.0338    31.3029 aBox    1     0.6473    0.2989    1.1 MeV    6.678 MeV LOSS
+     31.5643     0.0582     0.0476    31.5644 aBox    1     0.9097    0.2624    1.2 MeV    5.430 MeV LOSS
+     31.7841     0.0723     0.0591    31.7842 aBox    1     1.1302    0.2205  787.3 keV    4.642 MeV LOSS
+     31.9763     0.0847     0.0692    31.9764 aBox    1     1.3231    0.1929  943.6 keV    3.699 MeV LOSS
+     32.1340     0.0948     0.0774    32.1341 aBox    1     1.4813    0.1582  608.0 keV    3.091 MeV LOSS
+     32.2684     0.1035     0.0845    32.2686 aBox    1     1.6162    0.1349  403.5 keV    2.687 MeV LOSS
+     32.3868     0.1111     0.0907    32.3870 aBox    1     1.7350    0.1188  591.4 keV    2.096 MeV LOSS
+     32.4809     0.1171     0.0956    32.4811 aBox    1     1.8294    0.0944  403.2 keV    1.693 MeV LOSS
+     32.5576     0.1220     0.0997    32.5578 aBox    1     1.9064    0.0770  212.8 keV    1.480 MeV LOSS
+     32.6249     0.1263     0.1032    32.6251 aBox    1     1.9739    0.0675  250.1 keV    1.230 MeV LOSS
+     32.6807     0.1299     0.1061    32.6810 aBox    1     2.0299    0.0561  210.4 keV    1.019 MeV LOSS
+     32.7267     0.1329     0.1085    32.7269 aBox    1     2.0760    0.0461  129.1 keV  890.329 keV LOSS
+     32.7664     0.1354     0.1106    32.7666 aBox    1     2.1159    0.0398  193.6 keV  696.748 keV LOSS
+     32.7965     0.1374     0.1122    32.7968 aBox    1     2.1461    0.0303   87.6 keV  609.150 keV LOSS
+     32.8223     0.1390     0.1135    32.8226 aBox    1     2.1720    0.0259   67.2 keV  541.920 keV LOSS
+     32.8447     0.1405     0.1147    32.8450 aBox    1     2.1945    0.0225  125.6 keV  416.361 keV LOSS
+     32.8610     0.1415     0.1156    32.8613 aBox    1     2.2108    0.0163   53.4 keV  363.000 keV LOSS
+     32.8764     0.1425     0.1164    32.8767 aBox    1     2.2262    0.0154   63.0 keV  300.010 keV LOSS
+     32.8917     0.1435     0.1172    32.8920 aBox    1     2.2417    0.0154  116.6 keV  183.398 keV LOSS
+     32.9068     0.1445     0.1180    32.9071 aBox    1     2.2568    0.0151   98.8 keV   84.569 keV LOSS
+     32.9119     0.1448     0.1182    32.9122 aBox    1     2.2619    0.0047    1.1 MeV    0.000  eV LOSS STOP ANNI
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1     0.1000     0.0000     0.0000     0.1000     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     GAMMA                    TOFG =     0.000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+      0.0000     0.0000     0.0000     0.0000 aBox    1     0.0000    0.0000    0.0  eV  100.000 MeV NULL
+     49.5394     0.0000     0.0000    49.5394 aBox    1    49.5394   49.5394    0.0  eV  100.000 MeV PAIR
+ =====> TRACK    1 STACK NR   2 NTMULT=    2     POSITRON                 TOFG =     1.652 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     49.5394     0.0000     0.0000    49.5394 aBox    1     0.0000    0.0000    0.0  eV   85.087 MeV NULL
+     50.8169     0.0105     0.0052    50.8169 aBox    1     1.2775    1.2775   16.6 MeV   68.447 MeV LOSS
+     51.9963     0.0202     0.0099    51.9963 aBox    1     2.4570    1.1795   15.5 MeV   52.952 MeV LOSS
+     53.0533     0.0289     0.0142    53.0533 aBox    1     3.5140    1.0570    8.9 MeV   44.009 MeV LOSS
+     54.0170     0.0369     0.0181    54.0171 aBox    1     4.4778    0.9638    7.8 MeV   36.222 MeV LOSS
+     54.8838     0.0440     0.0216    54.8838 aBox    1     5.3446    0.8667    6.3 MeV   29.937 MeV LOSS
+     55.6598     0.0504     0.0247    55.6598 aBox    1     6.1206    0.7760    5.6 MeV   24.371 MeV LOSS
+     56.3452     0.0561     0.0275    56.3452 aBox    1     6.8060    0.6854    3.8 MeV   20.616 MeV LOSS
+     56.9602     0.0611     0.0300    56.9602 aBox    1     7.4211    0.6151    3.0 MeV   17.610 MeV LOSS
+     57.5122     0.0657     0.0322    57.5122 aBox    1     7.9731    0.5520    3.6 MeV   13.981 MeV LOSS
+     57.9804     0.0695     0.0341    57.9804 aBox    1     8.4413    0.4682    2.1 MeV   11.858 MeV LOSS
+     58.3947     0.0729     0.0358    58.3947 aBox    1     8.8556    0.4143    2.1 MeV    9.734 MeV LOSS
+     58.7506     0.0759     0.0372    58.7507 aBox    1     9.2116    0.3560    1.3 MeV    8.386 MeV LOSS
+     59.0666     0.0785     0.0385    59.0667 aBox    1     9.5276    0.3160    1.5 MeV    6.871 MeV LOSS
+     59.3352     0.0807     0.0395    59.3352 aBox    1     9.7961    0.2686    1.1 MeV    5.779 MeV LOSS
+     59.5676     0.0826     0.0405    59.5677 aBox    1    10.0286    0.2325    1.3 MeV    4.522 MeV LOSS
+     59.7561     0.0842     0.0412    59.7562 aBox    1    10.2171    0.1885  633.1 keV    3.889 MeV LOSS
+     59.9216     0.0855     0.0419    59.9216 aBox    1    10.3826    0.1654  575.1 keV    3.314 MeV LOSS
+     60.0276     0.0864     0.0423    60.0277 aBox    1    10.4886    0.1061    4.3 MeV    0.000  eV LOSS ANNI
+ =====> TRACK    1 STACK NR   1 NTMULT=    3     ELECTRON                 TOFG =     1.652 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     49.5394     0.0000     0.0000    49.5394 aBox    1     0.0000    0.0000    0.0  eV   13.891 MeV NULL
+     50.0047    -0.0228    -0.0112    50.0048 aBox    1     0.4660    0.4660    2.5 MeV   11.420 MeV LOSS
+     50.4066    -0.0425    -0.0209    50.4066 aBox    1     0.8685    0.4024    1.9 MeV    9.556 MeV LOSS
+     50.7568    -0.0597    -0.0293    50.7568 aBox    1     1.2192    0.3507    1.5 MeV    8.037 MeV LOSS
+     51.0620    -0.0747    -0.0366    51.0620 aBox    1     1.5248    0.3056    1.3 MeV    6.772 MeV LOSS
+     51.3270    -0.0877    -0.0430    51.3270 aBox    1     1.7902    0.2654    1.1 MeV    5.721 MeV LOSS
+     51.5571    -0.0990    -0.0485    51.5572 aBox    1     2.0207    0.2305    1.1 MeV    4.605 MeV LOSS
+     51.7483    -0.1084    -0.0531    51.7484 aBox    1     2.2122    0.1915    1.3 MeV    3.345 MeV LOSS
+     51.8928    -0.1154    -0.0566    51.8930 aBox    1     2.3569    0.1447  506.9 keV    2.838 MeV LOSS
+     52.0175    -0.1216    -0.0596    52.0176 aBox    1     2.4817    0.1248  725.4 keV    2.113 MeV LOSS
+     52.1124    -0.1262    -0.0619    52.1126 aBox    1     2.5768    0.0951  684.8 keV    1.428 MeV LOSS
+     52.1774    -0.1294    -0.0634    52.1776 aBox    1     2.6419    0.0651  209.9 keV    1.218 MeV LOSS
+     52.2328    -0.1321    -0.0648    52.2330 aBox    1     2.6974    0.0555  191.4 keV    1.027 MeV LOSS
+     52.2792    -0.1344    -0.0659    52.2794 aBox    1     2.7439    0.0465  172.6 keV  854.176 keV LOSS
+     52.3172    -0.1363    -0.0668    52.3174 aBox    1     2.7820    0.0381  132.2 keV  721.952 keV LOSS
+     52.3487    -0.1378    -0.0675    52.3489 aBox    1     2.8135    0.0315  106.5 keV  615.429 keV LOSS
+     52.3749    -0.1391    -0.0682    52.3751 aBox    1     2.8397    0.0262  229.9 keV  385.519 keV LOSS
+     52.3903    -0.1398    -0.0685    52.3905 aBox    1     2.8551    0.0154   63.9 keV  321.618 keV LOSS
+     52.4057    -0.1406    -0.0689    52.4059 aBox    1     2.8705    0.0154   75.1 keV  246.472 keV LOSS
+     52.4211    -0.1414    -0.0693    52.4213 aBox    1     2.8860    0.0154   74.1 keV  172.339 keV LOSS
+     52.4360    -0.1421    -0.0696    52.4361 aBox    1     2.9009    0.0149  121.5 keV   50.828 keV LOSS
+     52.4380    -0.1422    -0.0697    52.4382 aBox    1     2.9029    0.0020   50.8 keV    0.000  eV LOSS STOP
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1     0.1000     0.0000     0.0000     0.1000     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     GAMMA                    TOFG =     0.000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+      0.0000     0.0000     0.0000     0.0000 aBox    1     0.0000    0.0000    0.0  eV  100.000 MeV NULL
+     28.6919     0.0000     0.0000    28.6919 aBox    1    28.6919   28.6919    0.0  eV  100.000 MeV PAIR
+ =====> TRACK    1 STACK NR   2 NTMULT=    2     POSITRON                 TOFG =     0.957 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     28.6919     0.0000     0.0000    28.6919 aBox    1     0.0000    0.0000    0.0  eV   82.337 MeV NULL
+     29.9563    -0.0002     0.0021    29.9563 aBox    1     1.2645    1.2645   16.2 MeV   66.137 MeV LOSS
+     31.1209    -0.0004     0.0040    31.1209 aBox    1     2.4290    1.1645   11.6 MeV   54.537 MeV LOSS
+     32.1916    -0.0006     0.0057    32.1916 aBox    1     3.4998    1.0707    9.8 MeV   44.766 MeV LOSS
+     33.1639    -0.0007     0.0073    33.1639 aBox    1     4.4721    0.9723    7.3 MeV   37.449 MeV LOSS
+     34.0477    -0.0008     0.0087    34.0477 aBox    1     5.3559    0.8838    5.4 MeV   32.057 MeV LOSS
+     34.8566    -0.0010     0.0100    34.8566 aBox    1     6.1647    0.8089    4.8 MeV   27.219 MeV LOSS
+     35.5894    -0.0011     0.0112    35.5894 aBox    1     6.8976    0.7328    3.9 MeV   23.273 MeV LOSS
+     36.2543    -0.0012     0.0123    36.2543 aBox    1     7.5624    0.6649    4.1 MeV   19.147 MeV LOSS
+     36.8395    -0.0013     0.0133    36.8395 aBox    1     8.1477    0.5852    3.1 MeV   16.064 MeV LOSS
+     37.3581    -0.0014     0.0141    37.3581 aBox    1     8.6662    0.5186    2.5 MeV   13.577 MeV LOSS
+     37.8164    -0.0014     0.0149    37.8164 aBox    1     9.1246    0.4583    2.0 MeV   11.614 MeV LOSS
+     38.2241    -0.0015     0.0155    38.2241 aBox    1     9.5322    0.4077    2.2 MeV    9.427 MeV LOSS
+     38.5710    -0.0016     0.0161    38.5710 aBox    1     9.8791    0.3469    1.8 MeV    7.669 MeV LOSS
+     38.8650    -0.0016     0.0166    38.8650 aBox    1    10.1732    0.2941    1.3 MeV    6.418 MeV LOSS
+     39.1191    -0.0016     0.0170    39.1191 aBox    1    10.4272    0.2540  861.0 keV    5.557 MeV LOSS
+     39.3439    -0.0017     0.0173    39.3439 aBox    1    10.6521    0.2249  845.5 keV    4.712 MeV LOSS
+     39.5393    -0.0017     0.0177    39.5393 aBox    1    10.8475    0.1954  740.8 keV    3.971 MeV LOSS
+     39.7079    -0.0017     0.0179    39.7079 aBox    1    11.0160    0.1686  589.5 keV    3.381 MeV LOSS
+     39.8540    -0.0018     0.0182    39.8540 aBox    1    11.1621    0.1461  465.7 keV    2.916 MeV LOSS
+     39.9819    -0.0018     0.0184    39.9819 aBox    1    11.2901    0.1279  407.7 keV    2.508 MeV LOSS
+     40.0935    -0.0018     0.0186    40.0935 aBox    1    11.4017    0.1116  426.7 keV    2.081 MeV LOSS
+     40.1873    -0.0018     0.0187    40.1873 aBox    1    11.4954    0.0938  314.5 keV    1.766 MeV LOSS
+     40.2675    -0.0018     0.0188    40.2675 aBox    1    11.5756    0.0802  283.1 keV    1.483 MeV LOSS
+     40.3351    -0.0018     0.0189    40.3351 aBox    1    11.6433    0.0676  232.4 keV    1.251 MeV LOSS
+     40.3922    -0.0018     0.0190    40.3922 aBox    1    11.7003    0.0571  209.5 keV    1.041 MeV LOSS
+     40.4393    -0.0019     0.0191    40.4393 aBox    1    11.7475    0.0472  154.2 keV  887.274 keV LOSS
+     40.4790    -0.0019     0.0192    40.4790 aBox    1    11.7871    0.0397  144.4 keV  742.909 keV LOSS
+     40.5116    -0.0019     0.0192    40.5116 aBox    1    11.8197    0.0326  109.0 keV  633.941 keV LOSS
+     40.5387    -0.0019     0.0193    40.5387 aBox    1    11.8468    0.0271  101.2 keV  532.779 keV LOSS
+     40.5607    -0.0019     0.0193    40.5607 aBox    1    11.8689    0.0220   72.4 keV  460.422 keV LOSS
+     40.5792    -0.0019     0.0193    40.5792 aBox    1    11.8873    0.0184   68.1 keV  392.303 keV LOSS
+     40.5946    -0.0019     0.0194    40.5946 aBox    1    11.9027    0.0154  127.7 keV  264.567 keV LOSS
+     40.6100    -0.0019     0.0194    40.6100 aBox    1    11.9182    0.0154   67.7 keV  196.884 keV LOSS
+     40.6254    -0.0019     0.0194    40.6254 aBox    1    11.9335    0.0154  134.3 keV   62.563 keV LOSS
+     40.6284    -0.0019     0.0194    40.6284 aBox    1    11.9365    0.0028    1.1 MeV    0.000  eV LOSS STOP ANNI
+ =====> TRACK    1 STACK NR   1 NTMULT=    3     ELECTRON                 TOFG =     0.957 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     28.6919     0.0000     0.0000    28.6919 aBox    1     0.0000    0.0000    0.0  eV   16.641 MeV NULL
+     29.2229     0.0004    -0.0042    29.2229 aBox    1     0.5310    0.5310    2.9 MeV   13.718 MeV LOSS
+     29.6847     0.0008    -0.0078    29.6847 aBox    1     0.9928    0.4618    2.2 MeV   11.477 MeV LOSS
+     30.0886     0.0011    -0.0110    30.0886 aBox    1     1.3968    0.4040    6.7 MeV    4.745 MeV LOSS
+     30.2852     0.0012    -0.0125    30.2852 aBox    1     1.5934    0.1966  798.5 keV    3.947 MeV LOSS
+     30.4529     0.0013    -0.0138    30.4529 aBox    1     1.7611    0.1677  578.4 keV    3.368 MeV LOSS
+     30.5985     0.0015    -0.0150    30.5985 aBox    1     1.9067    0.1456  536.0 keV    2.832 MeV LOSS
+     30.7231     0.0015    -0.0160    30.7231 aBox    1     2.0313    0.1246  397.3 keV    2.435 MeV LOSS
+     30.8316     0.0016    -0.0168    30.8316 aBox    1     2.1398    0.1086  455.6 keV    1.979 MeV LOSS
+     30.9211     0.0017    -0.0175    30.9211 aBox    1     2.2293    0.0895  394.8 keV    1.585 MeV LOSS
+     30.9934     0.0018    -0.0181    30.9934 aBox    1     2.3016    0.0722  244.1 keV    1.341 MeV LOSS
+     31.0545     0.0018    -0.0186    31.0545 aBox    1     2.3627    0.0611  201.8 keV    1.139 MeV LOSS
+     31.1062     0.0018    -0.0190    31.1062 aBox    1     2.4144    0.0517  244.6 keV  894.127 keV LOSS
+     31.1463     0.0019    -0.0193    31.1463 aBox    1     2.4545    0.0400  129.4 keV  764.711 keV LOSS
+     31.1799     0.0019    -0.0196    31.1799 aBox    1     2.4881    0.0337  144.0 keV  620.691 keV LOSS
+     31.2064     0.0019    -0.0198    31.2064 aBox    1     2.5146    0.0265   92.8 keV  527.876 keV LOSS
+     31.2282     0.0019    -0.0199    31.2282 aBox    1     2.5364    0.0218   77.9 keV  449.948 keV LOSS
+     31.2461     0.0019    -0.0201    31.2461 aBox    1     2.5543    0.0179   80.1 keV  369.872 keV LOSS
+     31.2615     0.0020    -0.0202    31.2615 aBox    1     2.5697    0.0154   64.4 keV  305.474 keV LOSS
+     31.2769     0.0020    -0.0203    31.2769 aBox    1     2.5852    0.0154   80.8 keV  224.672 keV LOSS
+     31.2924     0.0020    -0.0205    31.2924 aBox    1     2.6006    0.0154   88.7 keV  136.021 keV LOSS
+     31.3038     0.0020    -0.0205    31.3038 aBox    1     2.6120    0.0113  136.0 keV    0.000  eV LOSS STOP
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1     0.1000     0.0000     0.0000     0.1000     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     GAMMA                    TOFG =     0.000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+      0.0000     0.0000     0.0000     0.0000 aBox    1     0.0000    0.0000    0.0  eV  100.000 MeV NULL
+     50.5761     0.0000     0.0000    50.5761 aBox    1    50.5761   50.5761    0.0  eV  100.000 MeV PAIR
+ =====> TRACK    1 STACK NR   2 NTMULT=    2     ELECTRON                 TOFG =     1.687 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     50.5761     0.0000     0.0000    50.5761 aBox    1     0.0000    0.0000    0.0  eV   65.676 MeV NULL
+     51.7376     0.0000     0.0048    51.7376 aBox    1     1.1615    1.1615   20.2 MeV   45.468 MeV LOSS
+     52.7178     0.0000     0.0089    52.7178 aBox    1     2.1418    0.9802    9.4 MeV   36.086 MeV LOSS
+     53.5826     0.0000     0.0124    53.5826 aBox    1     3.0066    0.8649    6.5 MeV   29.565 MeV LOSS
+     54.3528    -0.0001     0.0156    54.3528 aBox    1     3.7768    0.7701    4.8 MeV   24.742 MeV LOSS
+     55.0451    -0.0001     0.0185    55.0451 aBox    1     4.4691    0.6924    3.6 MeV   21.122 MeV LOSS
+     55.6697    -0.0001     0.0211    55.6697 aBox    1     5.0937    0.6246    3.4 MeV   17.710 MeV LOSS
+     56.2239    -0.0001     0.0234    56.2239 aBox    1     5.6478    0.5542    2.6 MeV   15.153 MeV LOSS
+     56.7207    -0.0001     0.0254    56.7207 aBox    1     6.1447    0.4969    2.4 MeV   12.724 MeV LOSS
+     57.1582    -0.0001     0.0272    57.1582 aBox    1     6.5822    0.4375    2.0 MeV   10.693 MeV LOSS
+     57.5409    -0.0001     0.0288    57.5409 aBox    1     6.9649    0.3827    1.9 MeV    8.755 MeV LOSS
+     57.8678    -0.0001     0.0302    57.8678 aBox    1     7.2918    0.3269    1.4 MeV    7.395 MeV LOSS
+     58.1531    -0.0001     0.0314    58.1531 aBox    1     7.5771    0.2853    1.3 MeV    6.082 MeV LOSS
+     58.3959    -0.0001     0.0324    58.3959 aBox    1     7.8199    0.2428    1.0 MeV    5.074 MeV LOSS
+     58.6043    -0.0001     0.0332    58.6043 aBox    1     8.0283    0.2084  711.9 keV    4.362 MeV LOSS
+     58.7870    -0.0001     0.0340    58.7870 aBox    1     8.2110    0.1827  772.6 keV    3.589 MeV LOSS
+     58.9410    -0.0001     0.0346    58.9410 aBox    1     8.3650    0.1540  545.2 keV    3.044 MeV LOSS
+     59.0741    -0.0001     0.0352    59.0741 aBox    1     8.4981    0.1330  574.6 keV    2.469 MeV LOSS
+     59.1841    -0.0001     0.0356    59.1841 aBox    1     8.6081    0.1100    1.0 MeV    1.427 MeV LOSS
+     59.2491    -0.0001     0.0359    59.2491 aBox    1     8.6731    0.0651  203.5 keV    1.223 MeV LOSS
+     59.3049    -0.0001     0.0361    59.3049 aBox    1     8.7289    0.0557  176.6 keV    1.047 MeV LOSS
+     59.3522    -0.0001     0.0363    59.3522 aBox    1     8.7763    0.0474  187.8 keV  858.775 keV LOSS
+     59.3905    -0.0001     0.0365    59.3905 aBox    1     8.8146    0.0383  191.5 keV  667.239 keV LOSS
+     59.4193    -0.0001     0.0366    59.4193 aBox    1     8.8433    0.0288  107.7 keV  559.547 keV LOSS
+     59.4427    -0.0001     0.0367    59.4427 aBox    1     8.8667    0.0234   97.7 keV  461.819 keV LOSS
+     59.4612    -0.0001     0.0368    59.4612 aBox    1     8.8852    0.0185  103.8 keV  358.004 keV LOSS
+     59.4766    -0.0001     0.0368    59.4766 aBox    1     8.9007    0.0154   69.3 keV  288.654 keV LOSS
+     59.4921    -0.0001     0.0369    59.4921 aBox    1     8.9161    0.0154   75.8 keV  212.859 keV LOSS
+     59.5075    -0.0001     0.0370    59.5075 aBox    1     8.9315    0.0154   83.8 keV  129.070 keV LOSS
+     59.5179    -0.0001     0.0370    59.5179 aBox    1     8.9419    0.0104  129.1 keV    0.000  eV LOSS STOP
+ =====> TRACK    1 STACK NR   1 NTMULT=    3     POSITRON                 TOFG =     1.687 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     50.5761     0.0000     0.0000    50.5761 aBox    1     0.0000    0.0000    0.0  eV   33.302 MeV NULL
+     51.4022     0.0000    -0.0067    51.4022 aBox    1     0.8262    0.8262    5.4 MeV   27.882 MeV LOSS
+     52.1456     0.0000    -0.0127    52.1456 aBox    1     1.5696    0.7434    4.5 MeV   23.408 MeV LOSS
+     52.8129     0.0001    -0.0181    52.8129 aBox    1     2.2369    0.6674    3.8 MeV   19.654 MeV LOSS
+     53.4091     0.0001    -0.0230    53.4091 aBox    1     2.8331    0.5962    3.1 MeV   16.528 MeV LOSS
+     53.9377     0.0001    -0.0272    53.9377 aBox    1     3.3617    0.5286    2.4 MeV   14.134 MeV LOSS
+     54.4096     0.0001    -0.0311    54.4096 aBox    1     3.8337    0.4719    1.9 MeV   12.263 MeV LOSS
+     54.8349     0.0001    -0.0345    54.8349 aBox    1     4.2590    0.4253    1.8 MeV   10.484 MeV LOSS
+     55.2119     0.0001    -0.0376    55.2119 aBox    1     4.6360    0.3770    1.5 MeV    8.989 MeV LOSS
+     55.5458     0.0001    -0.0403    55.5458 aBox    1     4.9699    0.3339    2.4 MeV    6.636 MeV LOSS
+     55.8068     0.0002    -0.0424    55.8068 aBox    1     5.2309    0.2610  971.1 keV    5.665 MeV LOSS
+     56.0354     0.0002    -0.0442    56.0354 aBox    1     5.4595    0.2286  835.1 keV    4.830 MeV LOSS
+     56.2350     0.0002    -0.0459    56.2350 aBox    1     5.6591    0.1997  656.8 keV    4.173 MeV LOSS
+     56.4109     0.0002    -0.0473    56.4109 aBox    1     5.8350    0.1759  631.2 keV    3.542 MeV LOSS
+     56.5631     0.0002    -0.0485    56.5631 aBox    1     5.9873    0.1522  880.9 keV    2.661 MeV LOSS
+     56.6809     0.0002    -0.0495    56.6809 aBox    1     6.1050    0.1177  396.4 keV    2.265 MeV LOSS
+     56.7823     0.0002    -0.0503    56.7823 aBox    1     6.2064    0.1014  329.0 keV    1.935 MeV LOSS
+     56.8699     0.0002    -0.0510    56.8699 aBox    1     6.2940    0.0876  344.0 keV    1.591 MeV LOSS
+     56.9424     0.0002    -0.0516    56.9424 aBox    1     6.3665    0.0725  201.6 keV    1.390 MeV LOSS
+     57.0058     0.0002    -0.0521    57.0058 aBox    1     6.4299    0.0634  362.8 keV    1.027 MeV LOSS
+     57.0522     0.0002    -0.0525    57.0522 aBox    1     6.4764    0.0465  145.5 keV  881.528 keV LOSS
+     57.0917     0.0002    -0.0528    57.0917 aBox    1     6.5158    0.0394  133.5 keV  748.010 keV LOSS
+     57.1245     0.0002    -0.0531    57.1245 aBox    1     6.5486    0.0328  103.0 keV  645.024 keV LOSS
+     57.1522     0.0002    -0.0533    57.1522 aBox    1     6.5763    0.0277   94.9 keV  550.139 keV LOSS
+     57.1751     0.0002    -0.0535    57.1751 aBox    1     6.5992    0.0229   70.8 keV  479.324 keV LOSS
+     57.1944     0.0002    -0.0536    57.1944 aBox    1     6.6186    0.0194   95.8 keV  383.533 keV LOSS
+     57.2099     0.0002    -0.0537    57.2099 aBox    1     6.6340    0.0154   67.3 keV  316.196 keV LOSS
+     57.2253     0.0002    -0.0539    57.2253 aBox    1     6.6494    0.0154   88.3 keV  227.860 keV LOSS
+     57.2407     0.0002    -0.0540    57.2407 aBox    1     6.6648    0.0154   97.0 keV  130.906 keV LOSS
+     57.2514     0.0002    -0.0541    57.2514 aBox    1     6.6755    0.0101    1.2 MeV    0.000  eV LOSS STOP ANNI
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      GAMMA           1     0.1000     0.0000     0.0000     0.1000     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     GAMMA                    TOFG =     0.000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+      0.0000     0.0000     0.0000     0.0000 aBox    1     0.0000    0.0000    0.0  eV  100.000 MeV NULL
+     31.3453     0.0000     0.0000    31.3453 aBox    1    31.3453   31.3453    0.0  eV  100.000 MeV PAIR
+ =====> TRACK    1 STACK NR   2 NTMULT=    2     ELECTRON                 TOFG =     1.046 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     31.3453     0.0000     0.0000    31.3453 aBox    1     0.0000    0.0000    0.0  eV   74.657 MeV NULL
+     32.5649     0.0059     0.0178    32.5649 aBox    1     1.2198    1.2198   13.9 MeV   60.764 MeV LOSS
+     33.6894     0.0114     0.0341    33.6894 aBox    1     2.3444    1.1246   10.1 MeV   50.685 MeV LOSS
+     34.7267     0.0164     0.0493    34.7267 aBox    1     3.3818    1.0374    8.6 MeV   42.090 MeV LOSS
+     35.6688     0.0210     0.0630    35.6688 aBox    1     4.3240    0.9422    6.6 MeV   35.456 MeV LOSS
+     36.5248     0.0251     0.0754    36.5248 aBox    1     5.1801    0.8561    5.4 MeV   30.073 MeV LOSS
+     37.3030     0.0289     0.0868    37.3030 aBox    1     5.9584    0.7782    4.4 MeV   25.711 MeV LOSS
+     38.0117     0.0323     0.0971    38.0117 aBox    1     6.6672    0.7089    4.1 MeV   21.571 MeV LOSS
+     38.6446     0.0354     0.1063    38.6446 aBox    1     7.3002    0.6330    3.4 MeV   18.220 MeV LOSS
+     39.2097     0.0381     0.1146    39.2098 aBox    1     7.8654    0.5652    2.9 MeV   15.360 MeV LOSS
+     39.7116     0.0406     0.1219    39.7117 aBox    1     8.3673    0.5020    2.5 MeV   12.905 MeV LOSS
+     40.1535     0.0427     0.1283    40.1535 aBox    1     8.8092    0.4419    2.2 MeV   10.725 MeV LOSS
+     40.5370     0.0446     0.1339    40.5370 aBox    1     9.1928    0.3835    1.9 MeV    8.842 MeV LOSS
+     40.8665     0.0462     0.1387    40.8665 aBox    1     9.5223    0.3295    2.3 MeV    6.571 MeV LOSS
+     41.1254     0.0474     0.1425    41.1254 aBox    1     9.7812    0.2590    1.6 MeV    4.966 MeV LOSS
+     41.3300     0.0484     0.1454    41.3300 aBox    1     9.9858    0.2046  963.0 keV    4.003 MeV LOSS
+     41.4997     0.0492     0.1479    41.4997 aBox    1    10.1556    0.1698  685.4 keV    3.318 MeV LOSS
+     41.6434     0.0499     0.1500    41.6434 aBox    1    10.2993    0.1437  556.2 keV    2.761 MeV LOSS
+     41.7651     0.0505     0.1518    41.7651 aBox    1    10.4210    0.1218  419.2 keV    2.342 MeV LOSS
+     41.8698     0.0510     0.1533    41.8698 aBox    1    10.5257    0.1047  350.4 keV    1.992 MeV LOSS
+     41.9598     0.0515     0.1546    41.9598 aBox    1    10.6157    0.0900  366.0 keV    1.626 MeV LOSS
+     42.0338     0.0518     0.1557    42.0339 aBox    1    10.6898    0.0740  227.4 keV    1.398 MeV LOSS
+     42.0976     0.0521     0.1566    42.0976 aBox    1    10.7536    0.0638  685.5 keV  713.022 keV LOSS
+     42.1287     0.0523     0.1571    42.1287 aBox    1    10.7847    0.0311  103.0 keV  610.007 keV LOSS
+     42.1546     0.0524     0.1574    42.1546 aBox    1    10.8106    0.0259   88.5 keV  521.521 keV LOSS
+     42.1761     0.0525     0.1578    42.1761 aBox    1    10.8320    0.0214   68.7 keV  452.860 keV LOSS
+     42.1941     0.0526     0.1580    42.1942 aBox    1    10.8501    0.0181   70.2 keV  382.639 keV LOSS
+     42.2096     0.0527     0.1583    42.2096 aBox    1    10.8655    0.0154  120.6 keV  261.989 keV LOSS
+     42.2250     0.0527     0.1585    42.2250 aBox    1    10.8810    0.0154  129.6 keV  132.408 keV LOSS
+     42.2359     0.0528     0.1586    42.2359 aBox    1    10.8919    0.0108  132.4 keV    0.000  eV LOSS STOP
+ =====> TRACK    1 STACK NR   1 NTMULT=    3     POSITRON                 TOFG =     1.046 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+     31.3453     0.0000     0.0000    31.3453 aBox    1     0.0000    0.0000    0.0  eV   24.321 MeV NULL
+     32.0291    -0.0100    -0.0302    32.0291 aBox    1     0.6845    0.6845    4.0 MeV   20.307 MeV LOSS
+     32.6377    -0.0190    -0.0570    32.6377 aBox    1     1.2938    0.6093    3.3 MeV   16.991 MeV LOSS
+     33.1757    -0.0269    -0.0808    33.1757 aBox    1     1.8324    0.5386    2.6 MeV   14.352 MeV LOSS
+     33.6525    -0.0339    -0.1018    33.6525 aBox    1     2.3097    0.4773    2.7 MeV   11.638 MeV LOSS
+     34.0604    -0.0399    -0.1199    34.0604 aBox    1     2.7181    0.4084    1.8 MeV    9.792 MeV LOSS
+     34.4177    -0.0451    -0.1356    34.4178 aBox    1     3.0758    0.3577    1.7 MeV    8.115 MeV LOSS
+     34.7253    -0.0497    -0.1492    34.7254 aBox    1     3.3837    0.3079    1.2 MeV    6.901 MeV LOSS
+     34.9946    -0.0536    -0.1611    34.9946 aBox    1     3.6532    0.2695    1.1 MeV    5.807 MeV LOSS
+     35.2277    -0.0570    -0.1714    35.2278 aBox    1     3.8866    0.2334  950.7 keV    4.856 MeV LOSS
+     35.4281    -0.0600    -0.1802    35.4282 aBox    1     4.0872    0.2006  803.7 keV    4.052 MeV LOSS
+     35.5995    -0.0625    -0.1878    35.5995 aBox    1     4.2588    0.1715  966.1 keV    3.086 MeV LOSS
+     35.7340    -0.0645    -0.1937    35.7341 aBox    1     4.3935    0.1347  520.0 keV    2.566 MeV LOSS
+     35.8479    -0.0661    -0.1988    35.8479 aBox    1     4.5074    0.1140  435.6 keV    2.131 MeV LOSS
+     35.9436    -0.0675    -0.2030    35.9437 aBox    1     4.6033    0.0958  292.8 keV    1.838 MeV LOSS
+     36.0268    -0.0688    -0.2067    36.0269 aBox    1     4.6866    0.0833  254.3 keV    1.584 MeV LOSS
+     36.0989    -0.0698    -0.2098    36.0990 aBox    1     4.7588    0.0722  299.1 keV    1.285 MeV LOSS
+     36.1575    -0.0707    -0.2124    36.1575 aBox    1     4.8174    0.0586  181.6 keV    1.103 MeV LOSS
+     36.2075    -0.0714    -0.2146    36.2075 aBox    1     4.8674    0.0501  151.5 keV  951.453 keV LOSS
+     36.2502    -0.0721    -0.2165    36.2503 aBox    1     4.9102    0.0428  147.0 keV  804.443 keV LOSS
+     36.2858    -0.0726    -0.2181    36.2859 aBox    1     4.9459    0.0356  113.5 keV  690.923 keV LOSS
+     36.3158    -0.0730    -0.2194    36.3159 aBox    1     4.9759    0.0300  268.2 keV  422.717 keV LOSS
+     36.3324    -0.0733    -0.2201    36.3325 aBox    1     4.9925    0.0166   91.1 keV  331.574 keV LOSS
+     36.3478    -0.0735    -0.2208    36.3479 aBox    1     5.0079    0.0154   74.5 keV  257.111 keV LOSS
+     36.3632    -0.0737    -0.2215    36.3633 aBox    1     5.0233    0.0154   75.9 keV  181.178 keV LOSS
+     36.3783    -0.0739    -0.2222    36.3783 aBox    1     5.0384    0.0151   97.2 keV   84.008 keV LOSS
+     36.3833    -0.0740    -0.2224    36.3834 aBox    1     5.0434    0.0047    1.1 MeV    0.000  eV LOSS STOP ANNI
+
+
+ 
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm       100 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     3.74  cm        0  fm        0  fm         0  eV        0  eV     3.74  cm      3.74  cm   Container conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     3.74  cm        0  fm        0  fm        71 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     5.59  cm    -33.5 mum     -259 mum      51.6 MeV     19.4 MeV     1.85  cm      1.85  cm   Container eIoni
+    2      7.1  cm    -60.8 mum     -470 mum      40.2 MeV     11.5 MeV     1.51  cm      3.36  cm   Container eIoni
+    3     8.37  cm    -83.8 mum     -648 mum      30.9 MeV     9.28 MeV     1.27  cm      4.64  cm   Container eIoni
+    4     9.43  cm     -103 mum     -795 mum      24.9 MeV     5.94 MeV     1.05  cm      5.69  cm   Container eIoni
+    5     10.3  cm     -119 mum     -920 mum      19.7 MeV     5.25 MeV     8.96  mm      6.59  cm   Container eIoni
+    6     11.1  cm     -133 mum    -1.02  mm      15.5 MeV      4.2 MeV     7.45  mm      7.33  cm   Container eIoni
+    7     11.7  cm     -144 mum    -1.11  mm      12.4 MeV     3.11 MeV     6.15  mm      7.95  cm   Container eIoni
+    8     12.2  cm     -153 mum    -1.18  mm      10.2 MeV     2.19 MeV     5.12  mm      8.46  cm   Container eIoni
+    9     12.6  cm     -161 mum    -1.24  mm      8.28 MeV     1.91 MeV     4.35  mm      8.89  cm   Container eIoni
+   10       13  cm     -167 mum    -1.29  mm      6.92 MeV     1.36 MeV     3.66  mm      9.26  cm   Container eIoni
+   11     13.3  cm     -173 mum    -1.34  mm      5.78 MeV     1.14 MeV     3.14  mm      9.57  cm   Container eIoni
+   12     13.6  cm     -178 mum    -1.38  mm      4.66 MeV     1.12 MeV     2.69  mm      9.84  cm   Container eIoni
+   13     13.8  cm     -182 mum    -1.41  mm      3.67 MeV      987 keV     2.24  mm      10.1  cm   Container eIoni
+   14       14  cm     -185 mum    -1.43  mm      2.96 MeV      710 keV     1.83  mm      10.3  cm   Container eIoni
+   15     14.1  cm     -188 mum    -1.45  mm      2.46 MeV      507 keV     1.53  mm      10.4  cm   Container eIoni
+   16     14.3  cm     -190 mum    -1.47  mm         2 MeV      456 keV      1.3  mm      10.5  cm   Container eIoni
+   17     14.4  cm     -192 mum    -1.49  mm       1.5 MeV      503 keV      1.1  mm      10.6  cm   Container eIoni
+   18     14.5  cm     -194 mum     -1.5  mm      1.23 MeV      266 keV      869 mum      10.7  cm   Container eIoni
+   19     14.5  cm     -195 mum    -1.51  mm       902 keV      329 keV      746 mum      10.8  cm   Container eIoni
+   20     14.6  cm     -196 mum    -1.52  mm       688 keV      213 keV      591 mum      10.9  cm   Container eIoni
+   21     14.6  cm     -197 mum    -1.52  mm       200 keV      488 keV      490 mum      10.9  cm   Container eIoni
+   22     14.7  cm     -198 mum    -1.53  mm      6.47 keV      194 keV      201 mum      10.9  cm   Container eIoni
+   23     14.7  cm     -198 mum    -1.53  mm         0  eV     6.47 keV     3.18 mum      10.9  cm   Container eIoni
+   24     14.7  cm     -198 mum    -1.53  mm         0  eV     1.02 MeV        0  fm      10.9  cm   Container annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     3.74  cm        0  fm        0  fm      27.9 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     4.68  cm     17.1 mum      132 mum      22.6 MeV     5.31 MeV     9.47  mm      9.47  mm   Container eIoni
+    2     5.49  cm     31.7 mum      245 mum      18.2 MeV     4.41 MeV     8.06  mm      1.75  cm   Container eIoni
+    3     6.17  cm       44 mum      340 mum      12.9 MeV     5.29 MeV      6.8  mm      2.43  cm   Container eIoni
+    4     6.69  cm     53.3 mum      412 mum      10.4 MeV     2.49 MeV     5.16  mm      2.95  cm   Container eIoni
+    5     7.12  cm     61.1 mum      472 mum      7.47 MeV     2.96 MeV     4.32  mm      3.38  cm   Container eIoni
+    6     7.45  cm       67 mum      518 mum      6.15 MeV     1.32 MeV     3.27  mm      3.71  cm   Container eIoni
+    7     7.72  cm       72 mum      557 mum      5.09 MeV     1.06 MeV     2.77  mm      3.99  cm   Container eIoni
+    8     7.96  cm     76.3 mum      590 mum      4.24 MeV      847 keV     2.36  mm      4.22  cm   Container eIoni
+    9     8.16  cm       80 mum      618 mum       3.3 MeV      943 keV     2.03  mm      4.42  cm   Container eIoni
+   10     8.33  cm     82.9 mum      641 mum      2.69 MeV      608 keV     1.64  mm      4.59  cm   Container eIoni
+   11     8.46  cm     85.4 mum      660 mum      1.76 MeV      936 keV     1.38  mm      4.73  cm   Container eIoni
+   12     8.56  cm     87.2 mum      674 mum      1.41 MeV      344 keV      976 mum      4.82  cm   Container eIoni
+   13     8.64  cm     88.7 mum      686 mum      1.05 MeV      359 keV      823 mum      4.91  cm   Container eIoni
+   14     8.71  cm     89.9 mum      695 mum       830 keV      224 keV      659 mum      4.97  cm   Container eIoni
+   15     8.77  cm     90.9 mum      703 mum       646 keV      185 keV      556 mum      5.03  cm   Container eIoni
+   16     8.81  cm     91.7 mum      709 mum       481 keV      164 keV      470 mum      5.08  cm   Container eIoni
+   17     8.85  cm     92.4 mum      715 mum       337 keV      144 keV      391 mum      5.11  cm   Container eIoni
+   18     8.88  cm       93 mum      719 mum       119 keV      218 keV      314 mum      5.15  cm   Container eIoni
+   19     8.89  cm     93.2 mum      720 mum         0  eV      119 keV     94.1 mum      5.16  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm       100 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     3.61  mm        0  fm        0  fm         0  eV        0  eV     3.61  mm      3.61  mm   Container conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     3.61  mm        0  fm        0  fm      29.2 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     1.37  cm    -1.17 mum       70 mum      23.2 MeV     6.02 MeV     1.01  cm      1.01  cm   Container eIoni
+    2     2.22  cm    -2.16 mum      129 mum        18 MeV     5.18 MeV     8.48  mm      1.86  cm   Container eIoni
+    3     2.91  cm    -2.97 mum      177 mum      14.6 MeV     3.49 MeV     6.95  mm      2.55  cm   Container eIoni
+    4      3.5  cm    -3.64 mum      217 mum      11.4 MeV     3.16 MeV     5.85  mm      3.14  cm   Container eIoni
+    5     3.98  cm     -4.2 mum      250 mum      9.24 MeV     2.15 MeV     4.78  mm      3.62  cm   Container eIoni
+    6     4.38  cm    -4.67 mum      278 mum      7.47 MeV     1.77 MeV     4.01  mm      4.02  cm   Container eIoni
+    7     4.71  cm    -5.05 mum      301 mum      6.18 MeV     1.29 MeV     3.35  mm      4.35  cm   Container eIoni
+    8        5  cm    -5.39 mum      321 mum      4.09 MeV      2.1 MeV     2.86  mm      4.64  cm   Container eIoni
+    9      5.2  cm    -5.62 mum      335 mum      3.36 MeV      731 keV        2  mm      4.84  cm   Container eIoni
+   10     5.37  cm    -5.82 mum      347 mum      2.75 MeV      606 keV      1.7  mm      5.01  cm   Container eIoni
+   11     5.51  cm    -5.98 mum      357 mum      2.07 MeV      676 keV     1.43  mm      5.15  cm   Container eIoni
+   12     5.63  cm    -6.11 mum      365 mum      1.65 MeV      426 keV     1.13  mm      5.26  cm   Container eIoni
+   13     5.72  cm    -6.22 mum      371 mum      1.29 MeV      360 keV      939 mum      5.36  cm   Container eIoni
+   14      5.8  cm    -6.31 mum      376 mum      1.05 MeV      242 keV      773 mum      5.44  cm   Container eIoni
+   15     5.86  cm    -6.39 mum      381 mum       790 keV      257 keV      660 mum       5.5  cm   Container eIoni
+   16     5.92  cm    -6.45 mum      385 mum       619 keV      170 keV      538 mum      5.56  cm   Container eIoni
+   17     5.96  cm     -6.5 mum      388 mum       441 keV      178 keV      457 mum       5.6  cm   Container eIoni
+   18        6  cm    -6.55 mum      390 mum       272 keV      169 keV      368 mum      5.64  cm   Container eIoni
+   19     6.03  cm    -6.58 mum      392 mum      68.6 keV      203 keV      268 mum      5.67  cm   Container eIoni
+   20     6.03  cm    -6.58 mum      392 mum         0  eV     68.6 keV     36.3 mum      5.67  cm   Container eIoni
+   21     6.03  cm    -6.58 mum      392 mum         0  eV     1.02 MeV        0  fm      5.67  cm   Container annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     3.61  mm        0  fm        0  fm      69.7 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     2.14  cm     2.07 mum     -123 mum        53 MeV     16.7 MeV     1.78  cm      1.78  cm   Container eIoni
+    2     3.63  cm      3.8 mum     -227 mum      39.5 MeV     13.5 MeV     1.49  cm      3.27  cm   Container eIoni
+    3     4.85  cm     5.22 mum     -311 mum      30.9 MeV     8.56 MeV     1.22  cm      4.49  cm   Container eIoni
+    4     5.87  cm      6.4 mum     -382 mum      24.5 MeV     6.39 MeV     1.02  cm      5.51  cm   Container eIoni
+    5     6.73  cm      7.4 mum     -441 mum      18.5 MeV        6 MeV     8.58  mm      6.37  cm   Container eIoni
+    6     7.42  cm      8.2 mum     -489 mum      14.7 MeV     3.85 MeV      6.9  mm      7.06  cm   Container eIoni
+    7     7.99  cm     8.86 mum     -528 mum      11.8 MeV     2.92 MeV     5.72  mm      7.63  cm   Container eIoni
+    8     8.47  cm     9.42 mum     -561 mum      9.32 MeV     2.44 MeV     4.77  mm      8.11  cm   Container eIoni
+    9     8.86  cm     9.87 mum     -589 mum      7.62 MeV     1.69 MeV     3.93  mm       8.5  cm   Container eIoni
+   10      9.2  cm     10.3 mum     -612 mum      6.31 MeV     1.31 MeV     3.32  mm      8.83  cm   Container eIoni
+   11     9.48  cm     10.6 mum     -631 mum      5.17 MeV     1.14 MeV     2.84  mm      9.12  cm   Container eIoni
+   12     9.72  cm     10.9 mum     -648 mum      4.14 MeV     1.03 MeV     2.39  mm      9.36  cm   Container eIoni
+   13     9.92  cm     11.1 mum     -662 mum      3.08 MeV     1.06 MeV     1.98  mm      9.56  cm   Container eIoni
+   14     10.1  cm     11.3 mum     -672 mum      2.56 MeV      518 keV     1.55  mm      9.71  cm   Container eIoni
+   15     10.2  cm     11.4 mum     -682 mum      1.56 MeV     1.01 MeV     1.33  mm      9.84  cm   Container eIoni
+   16     10.3  cm     11.5 mum     -688 mum      1.27 MeV      286 keV      886 mum      9.93  cm   Container eIoni
+   17     10.4  cm     11.6 mum     -693 mum      1.04 MeV      231 keV      757 mum        10  cm   Container eIoni
+   18     10.4  cm     11.7 mum     -697 mum       845 keV      193 keV      652 mum      10.1  cm   Container eIoni
+   19     10.5  cm     11.8 mum     -701 mum       533 keV      312 keV      563 mum      10.1  cm   Container eIoni
+   20     10.5  cm     11.8 mum     -704 mum       356 keV      177 keV      416 mum      10.2  cm   Container eIoni
+   21     10.6  cm     11.8 mum     -706 mum       192 keV      164 keV      325 mum      10.2  cm   Container eIoni
+   22     10.6  cm     11.9 mum     -708 mum      8.13 keV      184 keV      197 mum      10.2  cm   Container eIoni
+   23     10.6  cm     11.9 mum     -708 mum         0  eV     8.13 keV     3.99 mum      10.2  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm       100 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     7.13  cm        0  fm        0  fm         0  eV        0  eV     7.13  cm      7.13  cm   Container conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     7.13  cm        0  fm        0  fm      43.5 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     8.47  cm      -13 mum      107 mum        34 MeV     9.49 MeV     1.35  cm      1.35  cm   Container eIoni
+    2      9.6  cm      -24 mum      197 mum      26.5 MeV     7.49 MeV     1.13  cm      2.47  cm   Container eIoni
+    3     10.5  cm    -33.1 mum      272 mum      20.4 MeV     6.11 MeV     9.38  mm      3.41  cm   Container eIoni
+    4     11.3  cm    -40.5 mum      333 mum      16.7 MeV     3.68 MeV     7.66  mm      4.18  cm   Container eIoni
+    5       12  cm    -46.8 mum      385 mum      13.8 MeV     2.88 MeV     6.54  mm      4.83  cm   Container eIoni
+    6     12.5  cm    -52.3 mum      430 mum      6.75 MeV     7.08 MeV     5.61  mm      5.39  cm   Container eIoni
+    7     12.8  cm    -55.2 mum      455 mum      5.52 MeV     1.24 MeV     3.08  mm       5.7  cm   Container eIoni
+    8     13.1  cm    -57.8 mum      475 mum      4.59 MeV      932 keV     2.59  mm      5.96  cm   Container eIoni
+    9     13.3  cm    -59.9 mum      493 mum      3.81 MeV      775 keV     2.21  mm      6.18  cm   Container eIoni
+   10     13.5  cm    -61.7 mum      508 mum      3.14 MeV      669 keV     1.89  mm      6.37  cm   Container eIoni
+   11     13.7  cm    -63.3 mum      521 mum      2.54 MeV      606 keV      1.6  mm      6.53  cm   Container eIoni
+   12     13.8  cm    -64.6 mum      532 mum      1.96 MeV      579 keV     1.34  mm      6.66  cm   Container eIoni
+   13     13.9  cm    -65.6 mum      540 mum      1.63 MeV      324 keV     1.08  mm      6.77  cm   Container eIoni
+   14       14  cm    -66.5 mum      548 mum       1.3 MeV      330 keV      931 mum      6.87  cm   Container eIoni
+   15     14.1  cm    -67.3 mum      554 mum       883 keV      420 keV      779 mum      6.94  cm   Container eIoni
+   16     14.1  cm    -67.9 mum      558 mum       643 keV      239 keV      582 mum         7  cm   Container eIoni
+   17     14.2  cm    -68.3 mum      562 mum       372 keV      272 keV      468 mum      7.05  cm   Container eIoni
+   18     14.2  cm    -68.6 mum      565 mum       236 keV      136 keV      331 mum      7.08  cm   Container eIoni
+   19     14.2  cm    -68.9 mum      567 mum      56.9 keV      179 keV      238 mum      7.11  cm   Container eIoni
+   20     14.2  cm    -68.9 mum      567 mum         0  eV     56.9 keV     26.9 mum      7.11  cm   Container eIoni
+   21     14.2  cm    -68.9 mum      567 mum         0  eV     1.02 MeV        0  fm      7.11  cm   Container annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     7.13  cm        0  fm        0  fm      55.5 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     8.67  cm     14.9 mum     -123 mum      43.1 MeV     12.4 MeV     1.54  cm      1.54  cm   Container eIoni
+    2     9.96  cm     27.5 mum     -226 mum      32.2 MeV     10.9 MeV      1.3  cm      2.83  cm   Container eIoni
+    3       11  cm     37.6 mum     -310 mum        24 MeV     8.19 MeV     1.05  cm      3.88  cm   Container eIoni
+    4     11.9  cm     45.8 mum     -377 mum      19.2 MeV      4.8 MeV     8.43  mm      4.73  cm   Container eIoni
+    5     12.6  cm     52.7 mum     -434 mum      14.5 MeV      4.7 MeV     7.09  mm      5.44  cm   Container eIoni
+    6     13.1  cm     58.2 mum     -479 mum      11.5 MeV     2.93 MeV     5.66  mm         6  cm   Container eIoni
+    7     13.6  cm     62.7 mum     -516 mum      9.24 MeV      2.3 MeV      4.7  mm      6.47  cm   Container eIoni
+    8       14  cm     66.5 mum     -547 mum      7.56 MeV     1.68 MeV     3.91  mm      6.86  cm   Container eIoni
+    9     14.3  cm     69.7 mum     -574 mum      6.25 MeV     1.31 MeV      3.3  mm      7.19  cm   Container eIoni
+   10     14.6  cm     72.4 mum     -596 mum      3.01 MeV     3.24 MeV     2.81  mm      7.47  cm   Container eIoni
+   11     14.8  cm     73.9 mum     -608 mum      2.48 MeV      531 keV     1.52  mm      7.62  cm   Container eIoni
+   12     14.9  cm     75.1 mum     -618 mum       820 keV     1.66 MeV     1.29  mm      7.75  cm   Container eIoni
+   13     14.9  cm     75.7 mum     -623 mum       650 keV      170 keV      551 mum      7.81  cm   Container eIoni
+   14       15  cm     76.1 mum     -627 mum       285 keV      365 keV      472 mum      7.86  cm   Container eIoni
+   15       15  cm     76.4 mum     -629 mum       130 keV      155 keV      281 mum      7.88  cm   Container eIoni
+   16       15  cm     76.5 mum     -630 mum         0  eV      130 keV      108 mum      7.89  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm       100 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     35.8  cm        0  fm        0  fm         0  eV     3.88 MeV     35.8  cm      35.8  cm   Container conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     35.8  cm        0  fm        0  fm         0  eV        0  eV        0  fm         0  fm   Container initStep
+    1     35.8  cm        0  fm        0  fm         0  eV     1.02 MeV        0  fm         0  fm   Container annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     35.8  cm        0  fm        0  fm      95.1 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     37.9  cm    -36.7 mum    -58.2 mum      71.2 MeV     23.9 MeV     2.14  cm      2.14  cm   Container eIoni
+    2     39.7  cm    -67.5 mum     -107 mum      48.6 MeV     22.6 MeV      1.8  cm      3.95  cm   Container eIoni
+    3     41.1  cm    -91.6 mum     -145 mum        37 MeV     11.7 MeV     1.41  cm      5.36  cm   Container eIoni
+    4     42.3  cm     -111 mum     -177 mum      29.7 MeV     7.28 MeV     1.16  cm      6.52  cm   Container eIoni
+    5     43.3  cm     -128 mum     -204 mum      21.9 MeV     7.81 MeV      9.9  mm      7.51  cm   Container eIoni
+    6       44  cm     -142 mum     -225 mum      17.9 MeV     3.94 MeV     7.85  mm      8.29  cm   Container eIoni
+    7     44.7  cm     -153 mum     -243 mum      14.5 MeV     3.45 MeV     6.72  mm      8.97  cm   Container eIoni
+    8     45.3  cm     -163 mum     -259 mum      11.6 MeV     2.84 MeV     5.66  mm      9.53  cm   Container eIoni
+    9     45.8  cm     -171 mum     -271 mum      9.22 MeV     2.41 MeV     4.73  mm        10  cm   Container eIoni
+   10     46.1  cm     -178 mum     -282 mum       7.7 MeV     1.52 MeV      3.9  mm      10.4  cm   Container eIoni
+   11     46.5  cm     -184 mum     -291 mum      6.26 MeV     1.44 MeV     3.35  mm      10.7  cm   Container eIoni
+   12     46.8  cm     -188 mum     -299 mum      5.19 MeV     1.07 MeV     2.82  mm        11  cm   Container eIoni
+   13       47  cm     -192 mum     -305 mum      4.27 MeV      916 keV      2.4  mm      11.3  cm   Container eIoni
+   14     47.2  cm     -196 mum     -311 mum      3.54 MeV      730 keV     2.04  mm      11.5  cm   Container eIoni
+   15     47.4  cm     -199 mum     -315 mum      2.98 MeV      558 keV     1.74  mm      11.6  cm   Container eIoni
+   16     47.5  cm     -201 mum     -320 mum      2.42 MeV      562 keV     1.51  mm      11.8  cm   Container eIoni
+   17     47.7  cm     -204 mum     -323 mum      1.95 MeV      472 keV     1.27  mm      11.9  cm   Container eIoni
+   18     47.8  cm     -205 mum     -326 mum      1.15 MeV      804 keV     1.06  mm        12  cm   Container eIoni
+   19     47.8  cm     -207 mum     -328 mum       856 keV      291 keV      702 mum      12.1  cm   Container eIoni
+   20     47.9  cm     -208 mum     -329 mum       663 keV      193 keV      568 mum      12.1  cm   Container eIoni
+   21     47.9  cm     -208 mum     -331 mum       500 keV      163 keV      478 mum      12.2  cm   Container eIoni
+   22       48  cm     -209 mum     -332 mum       363 keV      137 keV      400 mum      12.2  cm   Container eIoni
+   23       48  cm     -210 mum     -333 mum       210 keV      153 keV      329 mum      12.3  cm   Container eIoni
+   24       48  cm     -210 mum     -333 mum      14.6 keV      195 keV      218 mum      12.3  cm   Container eIoni
+   25       48  cm     -210 mum     -333 mum         0  eV     14.6 keV      5.6 mum      12.3  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm       100 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     15.8  cm        0  fm        0  fm         0  eV        0  eV     15.8  cm      15.8  cm   Container conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     15.8  cm        0  fm        0  fm      41.8 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     17.1  cm    -30.1 mum    -73.4 mum      24.8 MeV       17 MeV     1.31  cm      1.31  cm   Container eIoni
+    2       18  cm    -50.7 mum     -123 mum      20.1 MeV     4.66 MeV     8.91  mm       2.2  cm   Container eIoni
+    3     18.7  cm    -68.1 mum     -166 mum      15.7 MeV     4.37 MeV     7.57  mm      2.96  cm   Container eIoni
+    4     19.4  cm    -82.4 mum     -201 mum      13.1 MeV     2.59 MeV     6.23  mm      3.58  cm   Container eIoni
+    5     19.9  cm    -94.8 mum     -231 mum      10.7 MeV      2.4 MeV     5.37  mm      4.12  cm   Container eIoni
+    6     20.4  cm     -105 mum     -256 mum      8.41 MeV     2.32 MeV     4.55  mm      4.57  cm   Container eIoni
+    7     20.7  cm     -114 mum     -277 mum      6.82 MeV     1.59 MeV     3.71  mm      4.94  cm   Container eIoni
+    8       21  cm     -121 mum     -295 mum      5.11 MeV     1.72 MeV      3.1  mm      5.25  cm   Container eIoni
+    9     21.3  cm     -127 mum     -308 mum       4.3 MeV      812 keV     2.43  mm       5.5  cm   Container eIoni
+   10     21.5  cm     -131 mum     -320 mum      3.52 MeV      775 keV     2.09  mm       5.7  cm   Container eIoni
+   11     21.7  cm     -135 mum     -330 mum       2.9 MeV      622 keV     1.77  mm      5.88  cm   Container eIoni
+   12     21.8  cm     -139 mum     -338 mum      2.41 MeV      495 keV      1.5  mm      6.03  cm   Container eIoni
+   13     21.9  cm     -142 mum     -345 mum         2 MeV      405 keV     1.28  mm      6.16  cm   Container eIoni
+   14       22  cm     -144 mum     -352 mum      1.11 MeV      893 keV      1.1  mm      6.27  cm   Container eIoni
+   15     22.1  cm     -146 mum     -356 mum       847 keV      260 keV      688 mum      6.34  cm   Container eIoni
+   16     22.2  cm     -147 mum     -359 mum       661 keV      187 keV      566 mum      6.39  cm   Container eIoni
+   17     22.2  cm     -148 mum     -361 mum       314 keV      347 keV      477 mum      6.44  cm   Container eIoni
+   18     22.3  cm     -149 mum     -363 mum       108 keV      206 keV      296 mum      6.47  cm   Container eIoni
+   19     22.3  cm     -149 mum     -363 mum         0  eV      108 keV     75.8 mum      6.48  cm   Container eIoni
+   20     22.3  cm     -149 mum     -363 mum         0  eV     1.02 MeV        0  fm      6.48  cm   Container annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0     15.8  cm        0  fm        0  fm      57.2 MeV        0  eV        0  fm         0  fm   Container initStep
+    1     17.3  cm     36.1 mum       88 mum        45 MeV     12.1 MeV     1.57  cm      1.57  cm   Container eIoni
+    2     18.7  cm     66.9 mum      163 mum      35.4 MeV     9.66 MeV     1.34  cm       2.9  cm   Container eIoni
+    3     19.8  cm     92.8 mum      226 mum      25.6 MeV     9.79 MeV     1.13  cm      4.03  cm   Container eIoni
+    4     20.7  cm      113 mum      276 mum      20.5 MeV     5.09 MeV     8.86  mm      4.92  cm   Container eIoni
+    5     21.4  cm      130 mum      318 mum      16.3 MeV     4.24 MeV     7.47  mm      5.66  cm   Container eIoni
+    6     22.1  cm      145 mum      353 mum       9.3 MeV     6.97 MeV     6.22  mm      6.29  cm   Container eIoni
+    7     22.5  cm      154 mum      375 mum      7.69 MeV     1.61 MeV     3.93  mm      6.68  cm   Container eIoni
+    8     22.8  cm      162 mum      393 mum      5.97 MeV     1.72 MeV     3.35  mm      7.01  cm   Container eIoni
+    9     23.1  cm      168 mum      409 mum      4.98 MeV      988 keV      2.7  mm      7.28  cm   Container eIoni
+   10     23.3  cm      173 mum      422 mum      4.13 MeV      857 keV     2.32  mm      7.52  cm   Container eIoni
+   11     23.5  cm      178 mum      433 mum      3.43 MeV      698 keV     1.98  mm      7.71  cm   Container eIoni
+   12     23.7  cm      182 mum      442 mum      2.15 MeV     1.28 MeV     1.69  mm      7.88  cm   Container eIoni
+   13     23.8  cm      184 mum      449 mum      1.72 MeV      433 keV     1.15  mm         8  cm   Container eIoni
+   14     23.9  cm      186 mum      454 mum      1.38 MeV      334 keV      958 mum      8.09  cm   Container eIoni
+   15       24  cm      188 mum      459 mum      1.13 MeV      254 keV      809 mum      8.18  cm   Container eIoni
+   16       24  cm      190 mum      462 mum       906 keV      222 keV      693 mum      8.24  cm   Container eIoni
+   17     24.1  cm      191 mum      466 mum       726 keV      180 keV      592 mum       8.3  cm   Container eIoni
+   18     24.1  cm      192 mum      469 mum       527 keV      199 keV      508 mum      8.35  cm   Container eIoni
+   19     24.2  cm      193 mum      471 mum       374 keV      153 keV      413 mum       8.4  cm   Container eIoni
+   20     24.2  cm      194 mum      473 mum       181 keV      194 keV      335 mum      8.43  cm   Container eIoni
+   21     24.2  cm      195 mum      474 mum       1.5 keV      179 keV      182 mum      8.45  cm   Container eIoni
+   22     24.2  cm      195 mum      474 mum         0  eV      1.5 keV     1.71 mum      8.45  cm   Container eIoni
+
