@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003-10-24 11:10:02 gcosmo Exp $
+$Id: History,v 1.7 2003-10-31 08:23:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31st, 2003          G.Cosmo  (geomdiv-V05-02-03a)
+- Fixed compilation errors on Windows.
 
 Oct 24th, 2003          G.Cosmo  (geomdiv-V05-02-03)
 - Completed implementation for Para, Trd. (by P.Arce)
