@@ -1,4 +1,4 @@
-$Id: History,v 1.55 1999-12-16 17:36:34 johna Exp $
+$Id: History,v 1.56 1999-12-27 07:55:27 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+vis-V01-00-01  27th December 1999  Satoshi Tanaka
+- VRML-V01-00-00 27th December 1999  Satoshi Tanaka
+- G4endl ==> "\n" for fDest objects ... for ISO standard C++ compiler
 
 vis-V01-00-00  16th December 1999  John Allison
 - (Note: NOT FOR SYSTEM TESTING - this tag still has problems with
