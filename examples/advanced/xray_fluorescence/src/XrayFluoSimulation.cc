@@ -79,7 +79,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   // set mandatory initialization 
 
-  XrayFluoPhysicsList* xrayList;
+  XrayFluoPhysicsList* xrayList = 0;
 
   // chosing Geometry setup
 
@@ -125,7 +125,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv[1]);
+      session = new G4UIXm(argc,argv);
 #else           
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);
@@ -144,8 +144,9 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 #endif
 
   // set analysis to have the messenger running...
-  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-  XrayFluoEventAction* eventAction;
+  // XrayFluoAnalysisManager* analysis =
+  XrayFluoAnalysisManager::getInstance();
+  XrayFluoEventAction* eventAction = 0;
   XrayFluoRunAction* runAction = new XrayFluoRunAction();
   XrayFluoSteppingAction* stepAction = new XrayFluoSteppingAction();
 

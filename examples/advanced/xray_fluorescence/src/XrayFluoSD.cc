@@ -111,7 +111,7 @@ void XrayFluoSD::Initialize(G4HCofThisEvent*)
   HPGeCollection = new XrayFluoSensorHitsCollection
     (SensitiveDetectorName,collectionName[0]); 
   
-  G4int nPixel;
+  G4int nPixel = 0;
   
   if (Detector) {nPixel = Detector->GetNbOfPixels();}
   else if (planeDetector) {nPixel = planeDetector->GetNbOfPixels();}

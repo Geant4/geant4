@@ -435,9 +435,9 @@ void XrayFluoMaterials::CreateMaterials()
 
 
   //define Uranium 
-  density = 19050*kg/m3;
-  a =  238.02891*g/mole;
-  G4Material* U  = new G4Material(name="Uranium",z=92.,a,density);
+  // density = 19050*kg/m3;
+  // a =  238.02891*g/mole;
+  // G4Material* U  = new G4Material(name="Uranium",z=92.,a,density);
 
   //define Tin
   density = 7310*kg/m3;

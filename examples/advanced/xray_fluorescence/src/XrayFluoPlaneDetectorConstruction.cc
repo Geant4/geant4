@@ -407,8 +407,8 @@ G4VPhysicalVolume* XrayFluoPlaneDetectorConstruction::ConstructApparate()
 				       planeMaterial,	//its material
 				       "Grain");	        //its name
       G4ThreeVector grainPosition; 
-      G4double grainInitPositionX;
-      G4double grainInitPositionY;
+      G4double grainInitPositionX = 0.;
+      G4double grainInitPositionY = 0.;
       G4double grainInitPositionZ = (-1.*planeThickness/2.+grainDia/2.);
       G4double grainStepX = grainDia;
       G4double grainStepY = grainDia*(1.-(0.5-(std::sqrt(3.)/4.)));
