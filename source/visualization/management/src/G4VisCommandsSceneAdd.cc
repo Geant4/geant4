@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.49 2005-03-10 19:33:03 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.50 2005-03-15 12:57:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1394,7 +1394,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     // Created on the heap and left there.
     clippingPolyhedron->Transform(G4Translate3D(x0,y0,z0));
     model->SetClippingPolyhedron(clippingPolyhedron);
-  }
+  }  // If any other shape consider NumberOfRotationSides!!!!!!!!!!!
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
