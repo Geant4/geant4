@@ -40,7 +40,7 @@
 
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   : G4VRestProcess (processName), nCascade(0), targetCharge(0),
-    targetAtomicMass(0), tDelay(0)
+    targetAtomicMass(0)
 {
   Cascade     = new G4GHEKinematicsVector [17];
   pSelector = new G4StopElementSelector();
@@ -60,7 +60,7 @@ IsApplicable(const G4ParticleDefinition& particle)
   return ( &particle == G4MuonMinus::MuonMinus() );
 
 }
-
+/*
 G4double G4MuonMinusCaptureAtRest::
 GetMeanLifeTime(const G4Track& track, G4ForceCondition* )
 {
@@ -87,27 +87,27 @@ GetCaptureIsotope(const G4Track& track)
 
   // ===  Throw for capture  time.
 
-  tDelay = -(G4double)log(G4UniformRand()) / lambdac;
+  G4double tDelay = -(G4double)log(G4UniformRand()) / lambdac;
 
   return;
 
 } 
-
+*/
 
 G4double G4MuonMinusCaptureAtRest::
-AtRestGetPhysicalInteractionLength(const G4Track& track, G4ForceCondition* condition)
+AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition* condition)
 {
   // beggining of tracking
-  ResetNumberOfInteractionLengthLeft();
+  //ResetNumberOfInteractionLengthLeft();
 
   // condition is set to "Not Forced"
-  //  *condition = NotForced;
+  *condition = NotForced;
   // condition is set to "ExclusivelyForced" by V.Ivanchenko
-       *condition = ExclusivelyForced;
+  //     *condition = ExclusivelyForced;
 
   // get mean life time
-  currentInteractionLength = GetMeanLifeTime(track, condition);
-
+  //  currentInteractionLength = GetMeanLifeTime(track, condition);
+  /*
   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4MuonMinusCaptureAtRestProcess::AtRestGetPhysicalInteractionLength ";
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
@@ -118,7 +118,7 @@ AtRestGetPhysicalInteractionLength(const G4Track& track, G4ForceCondition* condi
 
   // Return 0 interaction length to get for this process
   // the 100% probability
-
+  */
   return 0.0;
   //  return theNumberOfInteractionLengthLeft * currentInteractionLength;
 
@@ -155,11 +155,19 @@ AtRestDoIt(const G4Track& track,const G4Step&)
   // Decide on Decay or Capture, and doit.
   G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
   G4double lambdad  = pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
+  G4double lambda   = lambdac + lambdad;
+
+  // ===  Throw for capture  time.
+
+  G4double tDelay = -log(G4UniformRand()) / lambda;
   
   G4ReactionProductVector * captureResult=0;
-  if( G4UniformRand()*(lambdac + lambdad) > lambdac) 
+  G4int nEmSecondaries = nCascade;
+  G4int nSecondaries = nCascade;
+
+  if( G4UniformRand()*lambda > lambdac) 
   {
-    pEMCascade->DoBoundMuonMinusDecay(targetCharge, mass, &nCascade, Cascade);
+    pEMCascade->DoBoundMuonMinusDecay(targetCharge, mass, &nEmSecondaries, Cascade);
   } 
   else 
   {
@@ -167,9 +175,8 @@ AtRestDoIt(const G4Track& track,const G4Step&)
   }
 
   // fill the final state
-  G4int nSec = nCascade;
-  if(captureResult) nSec+=captureResult->size();
-  aParticleChange.SetNumberOfSecondaries( nSec );
+  if(captureResult) nSecondaries += captureResult->size();
+  aParticleChange.SetNumberOfSecondaries( nSecondaries );
 
   G4double globalTime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
@@ -191,11 +198,12 @@ AtRestDoIt(const G4Track& track,const G4Step&)
 
   // Store electromagnetic cascade
 
-  if(nCascade > 0) {
-    G4double localtime = globalTime + tDelay;
+  if(nEmSecondaries > 0) {
 
-    for ( G4int isec = 0; isec < nCascade; isec++ ) {
+    for ( G4int isec = 0; isec < nEmSecondaries; isec++ ) {
       G4ParticleDefinition* pd = Cascade[isec].GetParticleDef();
+      G4double localtime = globalTime;
+      if(isec > nCascade) localtime += tDelay;
       if(pd) {
         G4DynamicParticle* aNewParticle = new G4DynamicParticle;
         aNewParticle->SetDefinition( pd );

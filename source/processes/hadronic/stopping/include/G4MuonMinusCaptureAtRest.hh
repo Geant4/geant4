@@ -75,13 +75,13 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4double AtRestGetPhysicalInteractionLength(const G4Track&,
 						 G4ForceCondition*);
 
-     G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*);
+  //    G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*);
 
      G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
   private:
 
-     void GetCaptureIsotope(const G4Track& track);
+  //   void GetCaptureIsotope(const G4Track& track);
      G4double GetTargetMass(G4double, G4double);
      G4ReactionProductVector * DoMuCapture(G4double aEkin);
 
@@ -90,7 +90,7 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4int nCascade;
      G4double targetCharge;
      G4double targetAtomicMass;
-     G4double tDelay;
+  //     G4double tDelay;
      G4StopElementSelector*   pSelector;
      G4MuMinusCaptureCascade* pEMCascade;
      G4GHEKinematicsVector* Cascade;
