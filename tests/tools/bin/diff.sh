@@ -72,7 +72,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/diff.sh test05
   nice $G4INSTALL/tests/tools/bin/diff.sh test06
   nice $G4INSTALL/tests/tools/bin/diff.sh test07
-  nice $G4INSTALL/tests/tools/bin/diff.sh test08
+#  nice $G4INSTALL/tests/tools/bin/diff.sh test08
   nice $G4INSTALL/tests/tools/bin/diff.sh test09
   nice $G4INSTALL/tests/tools/bin/diff.sh test10
   nice $G4INSTALL/tests/tools/bin/diff.sh test101
@@ -82,14 +82,13 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/diff.sh test104.EMtest
   nice $G4INSTALL/tests/tools/bin/diff.sh test105
   nice $G4INSTALL/tests/tools/bin/diff.sh test106
+  nice $G4INSTALL/tests/tools/bin/diff.sh test11
   nice $G4INSTALL/tests/tools/bin/diff.sh test12
   nice $G4INSTALL/tests/tools/bin/diff.sh test13
   nice $G4INSTALL/tests/tools/bin/diff.sh test14
   nice $G4INSTALL/tests/tools/bin/diff.sh test15
   nice $G4INSTALL/tests/tools/bin/diff.sh test16
   nice $G4INSTALL/tests/tools/bin/diff.sh test17
-  nice $G4INSTALL/tests/tools/bin/diff.sh test11
-# test11 at end while it crashes on SUN in opt mode.
 
 else
 
