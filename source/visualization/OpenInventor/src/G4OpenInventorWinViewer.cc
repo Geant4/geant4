@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.2 2004-04-08 10:49:57 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.3 2004-11-08 17:33:37 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -46,6 +46,16 @@
 #include "G4VInteractorManager.hh"
 
 #include <windowsx.h>
+
+// To have sizeChanged public :
+class Geant4_SoWinExaminerViewer : public SoWinExaminerViewer {
+public:
+  Geant4_SoWinExaminerViewer(HWND parent,const char* name,SbBool embed)
+  :SoWinExaminerViewer(parent,name,embed){}
+  virtual void sizeChanged(const SbVec2s & size){
+    SoWinExaminerViewer::sizeChanged(size);
+  }
+};
 
 //
 // Global variables 
@@ -152,6 +162,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     shellName += "_shell"; 
     static SbBool done = FALSE;
     if(done==FALSE) {
+      HBRUSH brush = (HBRUSH) GetSysColorBrush(COLOR_BTNFACE);
       WNDCLASS wc;
       wc.style = CS_HREDRAW | CS_VREDRAW;
       wc.lpfnWndProc = (WNDPROC)WindowProc;
@@ -160,7 +171,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
       wc.hInstance = ::GetModuleHandle(0);
       wc.hIcon = ::LoadIcon(0, IDI_APPLICATION);
       wc.hCursor = ::LoadCursor(0, IDC_ARROW);
-      wc.hbrBackground = 0;
+      wc.hbrBackground = brush;
       wc.lpszMenuName = className;
       wc.lpszClassName = className;
       ::RegisterClass(&wc);
@@ -169,9 +180,10 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     //  Compell window to be created at 0,0 to bypass 
     // the 'black border' problem. 
     fShell = ::CreateWindow(className, shellName.c_str(), 
-                            WS_OVERLAPPEDWINDOW,
+                            WS_OVERLAPPEDWINDOW |
+                            WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                             //CW_USEDEFAULT, CW_USEDEFAULT, 
-                            0,0,400,400,0, 0,::GetModuleHandle(0),0);
+                            0,0,SIZE,SIZE,0, 0,::GetModuleHandle(0),0);
     // Retreive window and client sizez :
     RECT wrect,crect;
     GetWindowRect((HWND)fShell,&wrect);
@@ -180,8 +192,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     int wh = wrect.bottom-wrect.top;
     int cw = crect.right-crect.left;
     int ch = crect.bottom-crect.top;
-    // Compell client rect to be 400 400 :
-    MoveWindow((HWND)fShell,wrect.left,wrect.top,400+ww-cw,400+wh-ch,TRUE);
+    // Compell client rect to be SIZE SIZE :
+    MoveWindow((HWND)fShell,wrect.left,wrect.top,SIZE+ww-cw,SIZE+wh-ch,TRUE);
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(this));
     ::SetWindowText((HWND)fShell,shellName.c_str());
     parent = fShell;
@@ -190,7 +202,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
   }
-  fViewer = new SoWinExaminerViewer(parent,wName.c_str(),TRUE);
+  fViewer = new Geant4_SoWinExaminerViewer(parent,wName.c_str(),TRUE);
   fViewer->setSize(SbVec2s(SIZE,SIZE));
   fViewer->setSceneGraph(fSelection);
   fViewer->viewAll();
@@ -212,6 +224,11 @@ G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
     ::DestroyWindow((HWND)fShell);
   }
   if(fSelection) fSelection->unref();
+}
+
+Geant4_SoWinExaminerViewer* G4OpenInventorWinViewer::GetInventorViewer(
+) const {
+  return fViewer;
 }
 
 void G4OpenInventorWinViewer::ClearView () {
@@ -249,10 +266,10 @@ LRESULT CALLBACK WindowProc (
     int width = LOWORD(aLParam);
     int height = HIWORD(aLParam);
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
-    HWND hwnd = ::GetFirstChild(aWindow);
-    if(hwnd!=0) {
-      ::MoveWindow(hwnd,0,0,width,height,TRUE);
-    }
+    G4OpenInventorWinViewer* This = 
+      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This && This->GetInventorViewer()) 
+      This->GetInventorViewer()->sizeChanged(SbVec2s(width,height));
   }return 0;
   case WM_SETFOCUS:{ // Assume one child window !
     HWND hwnd = ::GetFirstChild(aWindow);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.2 2004-04-08 10:49:10 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.hh,v 1.3 2004-11-08 17:32:52 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 
 #include <windows.h>
 
-class SoWinExaminerViewer;
+class Geant4_SoWinExaminerViewer;
 class SoSelection;
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
@@ -50,16 +50,18 @@ public:
   virtual ~G4OpenInventorWinViewer();
   void DrawView();
   void ShowView();
+  Geant4_SoWinExaminerViewer* GetInventorViewer() const;
 private:
   void ClearView();
   void FinishView();
   void SetView();
   void KernelVisitDecision();
   G4bool CompareForKernelVisit(G4ViewParameters&);
+private:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   HWND fShell;
-  SoWinExaminerViewer* fViewer;
+  Geant4_SoWinExaminerViewer* fViewer;
   SoSelection* fSelection;
   G4VInteractorManager* fInteractorManager;
 };
