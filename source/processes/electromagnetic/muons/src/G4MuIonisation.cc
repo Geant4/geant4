@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.25 2002-12-04 14:51:54 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.26 2002-12-04 15:45:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -478,7 +478,7 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4double x,twoep,a1,grej;
  const G4double alphaprime = fine_structure_const/twopi; 
  G4double a0=log(2.*TotalEnergy/particleMass); 
- G4double grejc=(1.-xc*(betasquare-xc*te2))*(1.+ alphaprime*a0*a0);
+ G4double grejc=(1.-xc*betasquare+te2)*(1.+ alphaprime*a0*a0);
  do { x=xc/(1.-(1.-xc)*G4UniformRand());
       twoep = 2.*x*MaxKineticEnergyTransfer;
       a1    = log(1.+twoep/electron_mass_c2);
