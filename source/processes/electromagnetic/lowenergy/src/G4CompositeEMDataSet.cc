@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.4 2001-10-08 15:29:38 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.5 2001-10-25 02:32:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -114,7 +114,7 @@ void G4CompositeEMDataSet::LoadData(const G4String& fileName)
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
-	  G4String excep = "G4DataHandler - G4LEDATA environment variable not set";
+	  G4String excep = "G4CompositeEMDataSet - G4LEDATA environment variable not set";
 	  G4Exception(excep);
 	}
       
@@ -125,7 +125,7 @@ void G4CompositeEMDataSet::LoadData(const G4String& fileName)
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4DataHandler - data file: " + dirFile + " not found";
+	  G4String excep = "G4CompositeEMDataSet - data file: " + dirFile + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;
