@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.8 2001-10-26 13:42:44 grichine Exp $
+// $Id: F01DetectorConstruction.cc,v 1.9 2003-04-17 07:28:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ void F01DetectorConstruction::DefineMaterials()
   a = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
-  a = 6.01*g/mole;
+  a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
 
   a = 14.01*g/mole;
