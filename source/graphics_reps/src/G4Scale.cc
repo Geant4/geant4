@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.1 2001-07-22 00:49:40 johna Exp $
+// $Id: G4Scale.cc,v 1.2 2001-07-23 18:22:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,6 @@ G4Scale::G4Scale(const G4Scale& from) {
   fX0 = from.fX0;
   fY0 = from.fY0;
   fZ0 = from.fZ0;
-  G4Cout << "G4Scale::G4Scale(const G4Scale&) called." << G4endl;
 }
 
 G4Scale::~G4Scale () {}
