@@ -1,8 +1,8 @@
-#include "G4Axis2Placement3D.hh"
 #include "G4Timer.hh"
-#include "G4Assembly.hh"
+
 #include "G4AssemblyCreator.hh"
-#include "G4STEPEntity.hh"
+#include "G4Assembly.hh"
+#include "instmgr.h"
 #include "globals.hh"
 
 
@@ -14,16 +14,16 @@ int main()
 
   // Define the STEP file, 
   // and the STEP file reader used is G4NISTStepReader 
-  cout<<" Choose the step file to be used : \n";
-  cout<<"    (1) G4cyl_v.stp      (volume)  \n";
-  cout<<"    (2) G4sphere_v.stp   (volume)  \n";
-  cout<<"    (3) G4cone_v.stp     (volume)  \n";
-  cout<<"    (4) G4boite_v.stp    (volume)  \n";
-  cout<<"    (5) G4assembly_v.stp (volume)  \n";
-  cout<<"    (6) G4rod_solid.stp  (ProE)    \n";
-  cout<<"    (7) G4rod_solid2.stp (SldWrks) \n";
-  cout<<"    (8) G4rod_place_asm.stp        \n";
-  cout<<"    (9) G4spline1.stp                :";
+  G4cout<<" Choose the step file to be used : \n";
+  G4cout<<"    (1) G4cyl_v.stp      (volume)  \n";
+  G4cout<<"    (2) G4sphere_v.stp   (volume)  \n";
+  G4cout<<"    (3) G4cone_v.stp     (volume)  \n";
+  G4cout<<"    (4) G4boite_v.stp    (volume)  \n";
+  G4cout<<"    (5) G4assembly_v.stp (volume)  \n";
+  G4cout<<"    (6) G4rod_solid.stp  (ProE)    \n";
+  G4cout<<"    (7) G4rod_solid2.stp (SldWrks) \n";
+  G4cout<<"    (8) G4rod_place_asm.stp        \n";
+  G4cout<<"    (9) G4spline1.stp                :";
 
   G4String stepfile;
   int stepf;
@@ -164,47 +164,31 @@ int main()
 	G4cout <<" is inside"<<G4endl;
 	
 	dist[a][1] = sol->DistanceToOut(Pt[a]);
-	cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
+	G4cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
 	
-	cout << "\nDir   : x=" << Dir[a].x() 
+	G4cout << "\nDir   : x=" << Dir[a].x() 
 	     << " y=" << Dir[a].y() 
 	     << " z=" << Dir[a].z()<<G4endl;
 	dist[a][2] = sol->DistanceToOut(Pt[a], Dir[a]);
-	cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
+	G4cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
       }
       else
       {
 	G4cout <<" is outside"<<G4endl;
 
 	dist[a][1] = sol->DistanceToIn(Pt[a]);
-	cout<<"\nDistance to in is :"<<dist[a][1];
+	G4cout<<"\nDistance to in is :"<<dist[a][1];
 	
-	cout << "\nDir   : x=" << Dir[a].x() 
+	G4cout << "\nDir   : x=" << Dir[a].x() 
 	     << " y=" << Dir[a].y() 
 	     << " z=" << Dir[a].z()<<G4endl;
 	dist[a][2] = sol->DistanceToIn(Pt[a], Dir[a]);
-	cout<<"Distance to in is :"<<dist[a][2];
+	G4cout<<"Distance to in is :"<<dist[a][2];
       }
       
-      cout<<G4endl;
+      G4cout<<G4endl;
     }  
   }
 
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-10-28 09:14:01 japost Exp $
+# $Id: GNUmakefile,v 1.4 2000-02-28 15:11:24 gcosmo Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -43,3 +43,13 @@ LDLIBS   := \
             -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
+
+.PHONY: clean_all
+
+clean_all:
+	@for i in CurveTest.cc G4*.cc; do \
+	(target=`basename $$i .cc`; \
+	echo  "Removing $$target ... "; \
+	$(MAKE) clean G4SKIP_DEPEND=1 G4TARGET=$$target); done
+	@echo  "Wiping output files ... "
+	@$(RM) -rf *.newout*

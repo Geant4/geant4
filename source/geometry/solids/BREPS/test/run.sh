@@ -1,43 +1,41 @@
-#!/usr/local/bin/bash
+#!/bin/sh
 #
 # A simple script to run all the tests in this directory and check
-#  their results against the expected (previous) results
+# their results against the expected (previous) results
 #
-# $ Id: $
-# $ Name : $
+# $Id: run.sh,v 1.4 2000-02-28 15:11:24 gcosmo Exp $
+# $Name: not supported by cvs2svn $
 #
-# Created:  12 May 99 J. Apostolakis: starting from P.Kent's test.sh
-#                                     changed output to STDout only        
-# Modified: 21 May 99 J. Apostolakis: check the results
+# Created:
+#   12 May 99 - J. Apostolakis: starting from P.Kent's test.sh
+#                               changed output to STDout only        
+# Modified:
+#   21 May 99 - J. Apostolakis: check the results
+#   28 Feb 00 - G. Cosmo: changed script to use /bin/sh shell.
+#                         Fixed $G4TARGET and invocation of gmake.
 
 echo "Running on `hostname`, which is a `uname -a` machine" 
 host=`hostname`
-k=$TESTTARGET
-# if ( ! -f bin ) ln -fs ../../../../bin . 
+
 for i in CurveTest.cc G4*.cc
 do
   target=`basename $i .cc`
-  TESTTARGET=$target
-  export TESTTARGET
-  # echo  "Compiling $target ... "
-  gmake
+  echo  "Compiling $target ... "
+  gmake G4TARGET=$target
   echo -n "Executing $target .."
-  ./bin/$G4SYSTEM/$target > $target.newout-$host
+  $G4WORKDIR/bin/$G4SYSTEM/$target > $target.newout-$host
   echo  ".. difference from expected output: "
   diff $target.out $target.newout-$host
   echo  " "
 done
 
-exit
+# exit
 
 # Now test STEPtest
-export TESTTARGET=STEPTest
-gmake
-echo Test outputs for $TESTTARGET... 
+target=STEPTest
+gmake G4TARGET=STEPTest
+echo Test outputs for $target... 
 for j in 1 2 3 4 5 6 7 8 9 
 do
-  echo $j | ./bin/$G4SYSTEM/$TESTTARGET
+  echo $j | $G4WORKDIR/bin/$G4SYSTEM/$target
 done
-
-TESTTARGET=$k
-export TESTTARGET

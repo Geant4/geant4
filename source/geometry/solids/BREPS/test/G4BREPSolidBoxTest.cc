@@ -10,10 +10,10 @@
 //
 
 
+#include "G4Timer.hh"
 #include "globals.hh"
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidBox.hh"
-#include "G4Timer.hh"
 
 
 int main()
