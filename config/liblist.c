@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.13 2002-03-26 14:43:55 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.14 2002-05-03 12:59:08 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -115,7 +115,7 @@ char** parsedir(char *directory,int *argc)
  
 int main (int argc, char** argv) {
 
-  char buffer[BUFSIZE],*bufferPtr,workbuf[256];
+  char static buffer[BUFSIZE],*bufferPtr,workbuf[256];
   char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
   char **rargv;
   int i,optl=0,swapping,c,rargc;
