@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.18 2003-08-06 15:22:19 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.19 2003-08-29 07:33:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,7 +77,6 @@ G4ionIonisation::~G4ionIonisation()
 void G4ionIonisation::InitialiseProcess()
 {
   SetVerboseLevel(0);
-  theBaseParticle = G4Proton::Proton();
 
   SetSecondaryParticle(G4Electron::Electron());
 
@@ -108,13 +107,14 @@ void G4ionIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4ionIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(!theParticle) theParticle = p;
+  if(p) theParticle = p;
+  theBaseParticle = G4Proton::Proton();
   return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::PrintInfoDefinition() 
+void G4ionIonisation::PrintInfoDefinition()
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.19 2003-08-08 08:21:45 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.20 2003-08-29 07:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,12 +143,11 @@ inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MinPrimaryEnergy(
-          const G4ParticleDefinition* p, const G4Material*, G4double cut)
+          const G4ParticleDefinition*, const G4Material*, G4double cut)
 {
-  G4double mass = p->GetPDGMass();
   G4double x = 0.5*cut/electron_mass_c2;
   G4double g = sqrt(1. + x);
-  return mass*(g - 1.0);
+  return proton_mass_c2*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

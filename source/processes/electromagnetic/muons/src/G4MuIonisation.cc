@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.34 2003-08-08 11:28:41 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.35 2003-08-29 07:33:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,23 +100,26 @@ G4MuIonisation::~G4MuIonisation()
 
 void G4MuIonisation::InitialiseProcess()
 {
+  if(isInitialised) return;
+  mass = theParticle->GetPDGMass();
   SetSecondaryParticle(G4Electron::Electron());
 
   if(IsIntegral()) {
     flucModel = new G4BohrFluctuations();
-    SetStepLimits(1.0, 1.0*mm);
+    SetStepFunction(1.0, 1.0*mm);
 
   } else {
     flucModel = new G4UniversalFluctuation();
-    SetStepLimits(0.2, 1.0*mm);
+    SetStepFunction(0.2, 1.0*mm);
   }
 
+  G4double massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.*MeV);
+  em->SetHighEnergyLimit(2.*MeV*massFactor);
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.*MeV);
+  em1->SetLowEnergyLimit(2.*MeV*massFactor);
   em1->SetHighEnergyLimit(10.0*GeV);
   AddEmModel(2, em1, flucModel);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
@@ -124,7 +127,6 @@ void G4MuIonisation::InitialiseProcess()
   em2->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(3, em2, flucModel);
 
-  mass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   ratio = electron_mass_c2/mass;
   SetVerboseLevel(0);
   isInitialised = true;
@@ -135,8 +137,9 @@ void G4MuIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4MuIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(!theParticle) theParticle = p;
-  if(!isInitialised) InitialiseProcess();
+  if(p) theParticle = p;
+  theBaseParticle = BaseParticle();
+  if(theParticle && !isInitialised) InitialiseProcess();
   return theBaseParticle;
 }
 

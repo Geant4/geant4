@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.32 2003-08-08 11:30:02 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.33 2003-08-29 07:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,11 +97,11 @@ void G4eIonisation::InitialiseProcess()
 
   if(IsIntegral()) {
     flucModel = new G4BohrFluctuations();
-    SetStepLimits(1.0, 1.0*mm);
+    SetStepFunction(1.0, 1.0*mm);
 
   } else {
     flucModel = new G4UniversalFluctuation();
-    SetStepLimits(0.2, 1.0*mm);
+    SetStepFunction(0.2, 1.0*mm);
   }
 
   G4VEmModel* em = new G4MollerBhabhaModel();
