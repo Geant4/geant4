@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.20 2002-01-10 15:42:25 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.21 2002-06-26 12:49:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 26.06.02 V. Grichine bugs fixed in   Distance ToIn(p,v)
 // 05.10.00 V. Grichine bugs fixed in   Distance ToIn(p,v)
 // 17.08.00 V.Grichine, if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
 // 08.08.00 V.Grichine, more stable roots of 2-equation in DistanceToOut(p,v,...) 
@@ -657,11 +658,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   G4double tanRMin,secRMin,rMinAv,rMinIAv,rMinOAv ;
   G4double rout,rin ;
 
-  G4double tolORMin,tolORMin2 ;	// `generous' radii squared
-  G4double tolORMax2 ;
+  G4double tolORMin,tolORMin2,tolIRMin,tolIRMin2 ; // `generous' radii squared
+  G4double tolORMax2,tolIRMax,tolIRMax2 ;
   G4double tolODz,tolIDz ;
 
-  G4double Dist,s,xi,yi,zi,ri=0.,rho2,cosPsi ; // Intersection point variables
+  G4double Dist,s,xi,yi,zi,ri=0.,rhoi2,cosPsi ; // Intersection point variables
 
   G4double t1,t2,t3,b,c,d ;		// Quadratic solver variables 
   G4double nt1,nt2,nt3 ;
@@ -707,7 +708,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   rMaxAv  = (fRmax1 + fRmax2)*0.5 ;
   rMaxOAv = rMaxAv + kRadTolerance*0.5 ;
    
-// Intersection with Z surfaces
+// Intersection with z-surfaces
 
   tolIDz = fDz - kCarTolerance*0.5 ;
   tolODz = fDz + kCarTolerance*0.5 ;
@@ -722,7 +723,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       xi   = p.x() + s*v.x() ;	// Intersection coords
       yi   = p.y() + s*v.y() ;
-      rho2 = xi*xi + yi*yi   ;
+      rhoi2 = xi*xi + yi*yi   ;
 
 // Check validity of intersection
 // Calculate (outer) tolerant radi^2 at intersecion
@@ -730,28 +731,58 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
       if (v.z() > 0)
       {
 	tolORMin  = fRmin1 - 0.5*kRadTolerance*secRMin ;
-	tolORMax2 = (fRmax1 + 0.5*kRadTolerance*secRMax)*(fRmax1 + 0.5*kRadTolerance*secRMax) ;
+	tolIRMin  = fRmin1 + 0.5*kRadTolerance*secRMin ;
+	tolIRMax  = fRmax1 - 0.5*kRadTolerance*secRMin ;
+	tolORMax2 = (fRmax1 + 0.5*kRadTolerance*secRMax)*
+                    (fRmax1 + 0.5*kRadTolerance*secRMax) ;
       }
       else
       {
 	tolORMin  = fRmin2 - 0.5*kRadTolerance*secRMin ;
-	tolORMax2 = (fRmax2 + 0.5*kRadTolerance*secRMax)*(fRmax2 + 0.5*kRadTolerance*secRMax) ;
+	tolIRMin  = fRmin2 + 0.5*kRadTolerance*secRMin ;
+	tolIRMax  = fRmax2 - 0.5*kRadTolerance*secRMin ;
+        tolORMax2 = (fRmax2 + 0.5*kRadTolerance*secRMax)*
+                    (fRmax2 + 0.5*kRadTolerance*secRMax) ;
       }
-      if ( tolORMin > 0 ) tolORMin2 = tolORMin*tolORMin ;
-      else                tolORMin2 = 0.0 ;
-
-      if (tolORMin2 <= rho2 && rho2 <= tolORMax2)
+      if ( tolORMin > 0 ) 
       {
-	if ( seg && rho2 )
+        tolORMin2 = tolORMin*tolORMin ;
+        tolIRMin2 = tolIRMin*tolIRMin ;
+      }
+      else                
+      {
+        tolORMin2 = 0.0 ;
+        tolIRMin2 = 0.0 ;
+      }
+      if ( tolIRMax > 0 )   tolIRMax2 = tolIRMax*tolIRMax ;      
+      else                  tolIRMax2 = 0.0 ;
+      
+      if (tolIRMin2 <= rhoi2 && rhoi2 <= tolIRMax2)
+      {
+	if ( seg && rhoi2 )
 	{
 // Psi = angle made with central (average) phi of shape
 
-	  cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rho2) ;
+	  cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
 
 	  if (cosPsi >= cosHDPhiOT) return s ;
 	}
 	else return s ;
       }
+      /*
+      else if (tolORMin2 <= rhoi2 && rhoi2 <= tolORMax2)
+      {
+	if ( seg && rhoi2 )
+	{
+// Psi = angle made with central (average) phi of shape
+
+	  cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
+
+	  if (cosPsi >= cosHDPhiOT) return s ;
+	}
+	else return s ;
+      }
+      */
     }
     else  // On/outside extent, and heading away  -> cannot intersect
     {
@@ -1129,11 +1160,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 	  {
 	    xi        = p.x() + s*v.x() ;
 	    yi        = p.y() + s*v.y() ;
- 	    rho2      = xi*xi + yi*yi ;
+ 	    rhoi2      = xi*xi + yi*yi ;
 	    tolORMin2 = (rMinOAv + zi*tanRMin)*(rMinOAv + zi*tanRMin) ;
 	    tolORMax2 = (rMaxOAv + zi*tanRMax)*(rMaxOAv + zi*tanRMax) ;
 
- 	    if ( rho2 >= tolORMin2 && rho2 <= tolORMax2 )
+ 	    if ( rhoi2 >= tolORMin2 && rhoi2 <= tolORMax2 )
  	    {
 // z and r intersections good - check intersecting with correct half-plane
 
@@ -1167,11 +1198,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 	  {
 	    xi        = p.x() + s*v.x() ;
 	    yi        = p.y() + s*v.y() ;
- 	    rho2      = xi*xi + yi*yi ;
+ 	    rhoi2      = xi*xi + yi*yi ;
 	    tolORMin2 = (rMinOAv + zi*tanRMin)*(rMinOAv + zi*tanRMin) ;
 	    tolORMax2 = (rMaxOAv + zi*tanRMax)*(rMaxOAv + zi*tanRMax) ;
 
- 	    if ( rho2 >= tolORMin2 && rho2 <= tolORMax2 )
+ 	    if ( rhoi2 >= tolORMin2 && rhoi2 <= tolORMax2 )
  	    {
 // z and r intersections good - check intersecting with correct half-plane
 
