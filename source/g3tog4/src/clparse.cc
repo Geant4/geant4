@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.15 2003-06-16 16:50:58 gunter Exp $
+// $Id: clparse.cc,v 1.16 2004-03-26 14:59:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
@@ -56,6 +56,7 @@ G3PartTable G3Part; // particle ID <-> ParticleDefinition pointer
 G3DetTable G3Det; // sensitive detector name <-> pointer
 G3EleTable G3Ele; // element names table
 G3SensVolVector G3SensVol; // vector of sensitive logical volumes
+char gSeparator('_');
 
 G4int narray;
 
