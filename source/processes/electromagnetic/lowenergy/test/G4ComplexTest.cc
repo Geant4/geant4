@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.6 2001-09-25 17:20:44 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.7 2001-10-08 16:36:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,8 +52,7 @@
 #include "G4ProcessManager.hh"
 
 #include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlungIV.hh"
-//#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
@@ -68,8 +67,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eplusAnnihilation.hh"
-
-//#include "G4VeLowEnergyLoss.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -101,15 +98,20 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
-
-HepTupleManager* hbookManager;
+//typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
+//typedef G4eLowEnergyIonisationIV G4LowEnergyIonisation;
 
 int main(int argc,char** argv)
 {
 
   // -------------------------------------------------------------------
   // Setup
+
+  HepTupleManager* hbookManager;
+  HepTuple* ntuple1 = 0; 
+  HepTuple* ntuple2 = 0; 
+  HepHistogram* h[4] = {0,0,0,0};
+
 
   G4int  nEvt        = 100;
   G4int  nPart       =-1;
@@ -182,14 +184,14 @@ int main(int argc,char** argv)
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
 
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  G4int nMaterials = theMaterialTable->length();
 
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
-    G4cout << mat << ") " << (*theMaterialTable)[mat]->GetName() << G4endl;
+    G4cout << mat << ") " << (*theMaterialTable)(mat)->GetName() << G4endl;
   }
 
   G4cout << "Available processes are: " << G4endl;
@@ -216,8 +218,9 @@ int main(int argc,char** argv)
   G4double dimZ = 100.0*cm;  
 
   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
-  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box", 0, 0, 0);
-  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",lFrame,0,false,0);
+  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
+                                            lFrame,0,false,0);
 
   // -------------------------------------------------------------------
   // ---- Read input file
@@ -238,7 +241,8 @@ int main(int argc,char** argv)
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
 
-  G4ProcessManager *elecManager, *positManager, *gammaManager, *protManager, *aprotManager;
+  G4ProcessManager *elecManager, *positManager, *gammaManager, 
+                   *protManager, *aprotManager;
 
   elecManager = new G4ProcessManager(electron);
   electron->SetProcessManager(elecManager);
@@ -337,7 +341,7 @@ int main(int argc,char** argv)
     }
 
     for (mat = 0; mat < nMaterials; mat++) {
-      material = (*theMaterialTable)[mat];
+      material = (*theMaterialTable)(mat);
       if(nameMat == material->GetName()) break;
     }
 
@@ -348,13 +352,17 @@ int main(int argc,char** argv)
     G4cout << "The cut on g: " << cutG/mm << " mm" << G4endl;
     G4cout << "The step:     " << theStep/mm << " mm" << G4endl;
     if(postDo && lowE) {
-      G4cout << "Test of PostStepDoIt  for " << name[nProcess] << " for lowenergy" << G4endl;
+      G4cout << "Test of PostStepDoIt  for " << name[nProcess] 
+             << " for lowenergy" << G4endl;
     } else if(postDo && !lowE) {
-      G4cout << "Test of PostStepDoIt  for " << name[nProcess] << " for standard" << G4endl;
+      G4cout << "Test of PostStepDoIt  for " << name[nProcess] 
+             << " for standard" << G4endl;
     } else if(!postDo && !lowE) {
-      G4cout << "Test of AlongStepDoIt  for " << name[nProcess] << " for standard" << G4endl;
+      G4cout << "Test of AlongStepDoIt  for " << name[nProcess] 
+             << " for standard" << G4endl;
     } else if(!postDo && lowE) {
-      G4cout << "Test of AlongStepDoIt  for " << name[nProcess] << " for lowenergy" << G4endl;
+      G4cout << "Test of AlongStepDoIt  for " << name[nProcess] 
+             << " for lowenergy" << G4endl;
     }
 
     // -------------------------------------------------------------------
@@ -364,34 +372,25 @@ int main(int argc,char** argv)
     //  assert (hbookManager != 0);
   
     // ---- Book a histogram and ntuples
-    G4cout<< "Hbook file name: <" << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
+    G4cout<< "Hbook file name: <" << ((HBookFile*) hbookManager)->filename() 
+          << ">" << G4endl;
 
+    /*
     // ---- primary ntuple ------
-    HepTuple* ntuple1; 
     ntuple1 = hbookManager->ntuple("Primary Ntuple");
-    assert (ntuple1 != 0);
   
     // ---- secondary ntuple ------
-    HepTuple* ntuple2; 
     ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-    assert (ntuple2 != 0);
-
-      // ---- secondaries histos ----
-    HepHistogram* hEKin;
-    hEKin = hbookManager->histogram("Kinetic Energy (MeV)", 50,0.,gEnergy/MeV);
-    assert (hEKin != 0);  
+    */
+    // ---- secondaries histos ----
+    h[0] = hbookManager->histogram("Kinetic Energy (MeV)", 50,0.,gEnergy/MeV);
   
-    HepHistogram* hP;
-    hP = hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy/MeV);
-    assert (hP != 0);  
+    h[1] = hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
   
-    HepHistogram* hNSec;
-    hNSec = hbookManager->histogram("Number of secondaries", 20,0.,20.);
-    assert (hNSec != 0);  
+    h[2] = hbookManager->histogram("Number of secondaries", 20,-0.5,19.5);
   
-    HepHistogram* hDebug;
-    hDebug = hbookManager->histogram("Energy deposition (MeV)", 50,0.,gEnergy);
-    assert (hDebug != 0);  
+    h[3] = hbookManager->histogram("Energy deposition (MeV)", 50,0.,
+                                     gEnergy*0.1/MeV);
     G4cout<< "Histograms is initialised" << G4endl;
 
     gamma->SetCuts(cutG);
@@ -446,7 +445,7 @@ int main(int argc,char** argv)
     } else {
       if(ionis) {
         elecSTion = new G4eIonisation();
-        elecSTbr = new G4eBremsstrahlung();
+        elecSTbr  = new G4eBremsstrahlung();
         elecManager->AddProcess(elecSTion);
         elecManager->AddProcess(elecSTbr);
         elecSTbr->BuildPhysicsTable(*electron);
@@ -462,13 +461,13 @@ int main(int argc,char** argv)
           dProcess->BuildPhysicsTable(*gamma);
 	}
       } else if(nPart == 1) {
-        if(nProcess == 0) cdProcess =  elecLEion;
-        if(nProcess == 1) cdProcess =  elecLEbr;
+        if(nProcess == 0) cdProcess =  elecSTion;
+        if(nProcess == 1) cdProcess =  elecSTbr;
       } else if(nPart == 2) {
-        G4eIonisation* pLEion = new G4eIonisation();
-        G4eBremsstrahlung* pLEbr = new G4eBremsstrahlung();
-        if(nProcess == 0) cdProcess =  pLEion;
-        if(nProcess == 1) cdProcess =  pLEbr;
+        G4eIonisation* pSTion = new G4eIonisation();
+        G4eBremsstrahlung* pSTbr = new G4eBremsstrahlung();
+        if(nProcess == 0) cdProcess =  pSTion;
+        if(nProcess == 1) cdProcess =  pSTbr;
       } else if(nPart == 3) {
         if(nProcess == 0) {
           cdProcess = new G4hIonisation();
@@ -483,12 +482,6 @@ int main(int argc,char** argv)
 	}
       }
     }
-    G4eIonisation* posiLEion = new G4eIonisation();
-    G4eBremsstrahlung* posiLEbr = new G4eBremsstrahlung();
-    positManager->AddProcess(posiLEion);
-    positManager->AddProcess(posiLEbr);
-    posiLEbr->BuildPhysicsTable(*positron);
-    posiLEion->BuildPhysicsTable(*positron);
 
     G4cout  <<  "Physics tables are built"  <<  G4endl;; 
   
@@ -514,9 +507,6 @@ int main(int argc,char** argv)
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
-    //  G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, aPosition);   
-    //  gTrack->SetTouchable(touche);
- 
     // Step 
 
     G4Step* step;
@@ -573,13 +563,14 @@ int main(int argc,char** argv)
       G4double dedx = deltaE / (step->GetStepLength());
       
       G4ThreeVector change = particleChange->CalcMomentum(energyChange,
-		           (*particleChange->GetMomentumChange()),
+		            *(particleChange->GetMomentumChange()),
 			     part->GetPDGMass());
 
       G4double pxChange  = change.x();
       G4double pyChange  = change.y();
       G4double pzChange  = change.z();
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange 
+                                                  + pzChange*pzChange);
       
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -600,29 +591,27 @@ int main(int argc,char** argv)
       }
 
       // Primary
+ 
+      G4int nsec = particleChange->GetNumberOfSecondaries();
 
-      ntuple1->column("eprimary", gEnergy/MeV);
-      ntuple1->column("energyf", energyChange/MeV);
-      //ntuple1->column("de", deltaE/MeV);
-      ntuple1->column("dedx", dedx*mm/MeV);
-      ntuple1->column("pxch", xChange*c_light/MeV);
-      ntuple1->column("pych", pyChange*c_light/MeV);
-      ntuple1->column("pzch", pzChange*c_light/MeV);
-      //ntuple1->column("pch", zChange);  
-      ntuple1->column("thetach", thetaChange/deg);  
-      ntuple1->column("nelectrons",nElectrons);
-      ntuple1->column("npositrons",nPositrons);
-      ntuple1->column("nphotons",nPhotons);
-      ntuple1->dumpData(); 
-      de += deltaE;
+      if(ntuple1) {
+        ntuple1->column("epri", gEnergy/MeV);
+        ntuple1->column("efin", energyChange/MeV);
+        ntuple1->column("dedx", dedx*mm/MeV);
+        ntuple1->column("nsec", nsec);
+        ntuple1->column("nele", nElectrons);
+        ntuple1->column("npho", nPhotons);
+        ntuple1->dumpData(); 
+      }
+      de  += deltaE;
       de2 += deltaE*deltaE; 
       
       // Secondaries physical quantities 
       
-      hNSec->accumulate(particleChange->GetNumberOfSecondaries());
-      hDebug->accumulate(particleChange->GetLocalEnergyDeposit()/MeV);
+      h[2]->accumulate((float)nsec, 1.0);
+      h[3]->accumulate(particleChange->GetLocalEnergyDeposit()/MeV, 1.0);
       
-      for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) {
+      for (G4int i = 0; i<nsec; i++) {
 	  // The following two items should be filled per event, not
 	  // per secondary; filled here just for convenience, to avoid
 	  // complicated logic to dump ntuple when there are no secondaries
@@ -635,53 +624,56 @@ int main(int argc,char** argv)
         G4double py   = (finalParticle->GetMomentum()).y();
         G4double pz   = (finalParticle->GetMomentum()).z();
         G4double theta= (finalParticle->GetMomentum()).theta();
-        G4double p    = sqrt(px*px+py*py+pz*pz);
+        G4double p    = sqrt(px*px + py*py + pz*pz);
 
         if (eKin > gEnergy) {
 	    G4cout << "WARNING: eFinal > eInit in event #" << iter << G4endl;
         }
 
-        G4String particleName = finalParticle->GetDefinition()->GetParticleName();
+        G4String partName = finalParticle->GetDefinition()->GetParticleName();
         if(verbose) {
 	  G4cout  << "==== Final " 
-		  <<  particleName  <<  " "  
-		  << "energy: " <<  e/MeV  <<  " MeV,  " 
+		  <<  partName  <<  " "  
+		  << "E= " <<  e/MeV  <<  " MeV,  " 
 		  << "eKin: " <<  eKin/MeV  <<  " MeV, " 
 		  << "(px,py,pz): ("
 		  <<  px/MeV  <<  "," 
 		  <<  py/MeV  <<  ","
-		  <<  pz/MeV  << ") MeV;" 
+		  <<  pz/MeV  << ") MeV," 
+                  << " p= " << p << " MeV" 
 		  <<  G4endl;   
 	}
 	  
-	hEKin->accumulate(eKin/MeV);
-        hP->accumulate(p*c_light/MeV);
+	h[0]->accumulate(eKin/MeV, 1.0);
+        h[1]->accumulate(p/MeV, 1.0);
 	  
         G4int partType = 0;
-        if (particleName == "e-") {
+        if (partName == "e-") {
 	  partType = 1;
           nElectrons++;
 	   
-	} else if (particleName == "e+") { 
+	} else if (partName == "e+") { 
 	  partType = 2;
           nPositrons++;
 	   
-	} else if (particleName == "gamma") { 
+	} else if (partName == "gamma") { 
 	  partType = 0;
           nPhotons++;
         }
+	
 	// Fill the secondaries ntuple
-        ntuple2->column("eprimary",gEnergy);
-        ntuple2->column("px", px);
-        ntuple2->column("py", py);
-        ntuple2->column("pz", pz);
-        ntuple2->column("p", p);
-        ntuple2->column("e", e);
-        ntuple2->column("theta", theta);
-        ntuple2->column("ekin", eKin);
-        ntuple2->column("type", partType);  
-	ntuple2->dumpData(); 
-	  
+        if(ntuple2) {
+          ntuple2->column("eprimary",gEnergy);
+          ntuple2->column("px", px);
+          ntuple2->column("py", py);
+          ntuple2->column("pz", pz);
+          ntuple2->column("p", p);
+          ntuple2->column("e", e);
+          ntuple2->column("theta", theta);
+          ntuple2->column("ekin", eKin);
+          ntuple2->column("type", partType);  
+	  ntuple2->dumpData(); 
+	}
 	delete particleChange->GetSecondary(i);
       }
 	          

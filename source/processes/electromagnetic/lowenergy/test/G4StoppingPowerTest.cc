@@ -50,7 +50,7 @@
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
 
-#include "G4LowEnergyIonisation.hh"
+#include "G4eLowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
@@ -94,14 +94,15 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-
-HepTupleManager* hbookManager;
-
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
 
+//typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
+//typedef G4eLowEnergyIonisationIV G4LowEnergyIonisation;
+
 int main(int argc,char** argv)
 {
+  HepTupleManager* hbookManager;
 
   // -------------------------------------------------------------------
   // Setup
@@ -183,7 +184,7 @@ int main(int argc,char** argv)
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
