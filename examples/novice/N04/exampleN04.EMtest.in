@@ -4,5 +4,5 @@
 /run/beamOn 1
 /gun/particle mu-
 /gun/energy 10 TeV
-/run/beamOn 10
+/run/beamOn 2
 exit
