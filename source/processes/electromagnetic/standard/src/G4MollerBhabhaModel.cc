@@ -32,7 +32,8 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
+//
 //
 // Class Description: 
 //
@@ -257,7 +258,7 @@ G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondary(
   G4double beta2  = 1.0 - 1.0/gamma2;
   G4double x, z, q, grej;
 
-  G4ThreeVector momentum = dp->GetMomentum();
+  G4ThreeVector momentum = dp->GetMomentumDirection();
 
   //Moller (e-e-) scattering
   if (isElectron) {
@@ -332,7 +333,7 @@ G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondary(
   G4double phi = twopi * G4UniformRand() ; 
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(momentum.unit());
+  deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,

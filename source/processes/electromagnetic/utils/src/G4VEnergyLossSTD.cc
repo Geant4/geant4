@@ -32,7 +32,7 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
 //
 // Class Description: 
 //
@@ -665,7 +665,8 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
           finalP -= t->GetMomentum();
           aParticleChange.AddSecondary(t);
         }
-        aParticleChange.SetMomentumChange(finalP.unit());
+        finalP = finalP.unit();
+        aParticleChange.SetMomentumChange(finalP);
       }
       delete newp;
     }
@@ -767,7 +768,8 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
     }
 
     aParticleChange.SetEnergyChange(finalT);
-    aParticleChange.SetMomentumChange(finalP.unit());
+    finalP = finalP.unit();
+    aParticleChange.SetMomentumChange(finalP);
 
     delete newp;
   }
