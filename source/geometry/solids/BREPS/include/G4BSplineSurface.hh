@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.5 2000-02-16 12:02:51 gcosmo Exp $
+// $Id: G4BSplineSurface.hh,v 1.6 2000-02-25 15:58:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINESURFACE_H
@@ -15,6 +15,7 @@
 #include "G4PointRat.hh"
 #include "G4Surface.hh"
 #include "G4ProjectedSurface.hh"
+#include "G4UVHit.hh"
 
 class G4BSplineSurface : public G4Surface
 {
