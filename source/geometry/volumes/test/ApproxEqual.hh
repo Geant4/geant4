@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ApproxEqual.hh,v 1.1 1999-01-08 16:31:55 gunter Exp $
+// $Id: ApproxEqual.hh,v 1.2 1999-05-12 20:12:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,7 @@
 #include "G4ThreeVector.hh"
 #include "G4AffineTransform.hh"
 
-const G4double kApproxEqualTolerance = 1E-6;
+const G4double kApproxEqualTolerance = 1E-9;
 
 // Return true if the double check is approximately equal to target
 //
