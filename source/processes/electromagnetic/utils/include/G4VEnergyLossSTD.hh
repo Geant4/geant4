@@ -26,7 +26,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4BetheBlochModel
+// File name:     G4VEnergyLossSTD
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
 //
