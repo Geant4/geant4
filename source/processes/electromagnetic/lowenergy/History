@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2001-06-18 09:55:53 pia Exp $
+$Id: History,v 1.79 2001-06-18 10:42:43 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18.06.2001 - MGP, tag emlowen-V03-01-19
+             Same as emlowen-V03-01-18, with corrections by S. Chauvie
+             to recover from modifications listed below
+	     Quantum oscillator model is applied to all materials, as it
+             has been since Geant4 3.0 release
+             
 18.06.2001 - MGP, tag emlowen-V03-01-18
              Same as emlowen-V03-01-17, with a bug fix to 
+             G4LowEnergyPolarizedCompton by F. Longo and G. Depaola
 
 07.06.2001 - Add printout to G4hLowEnergyIonisation + clean up (V.I.)
              Oscillator model is applied only for 6 materials (V.I.)
@@ -77,7 +84,6 @@ committal in the CVS repository !
              - modifications to hTest
              - test macros renamed to be more easily identifiable
 
->>>>>>> 1.68
 11.05.2001 - MGP, tag emlowen-V03-01-07
              Removed more compilation warnings in ANSI strict mode
 
