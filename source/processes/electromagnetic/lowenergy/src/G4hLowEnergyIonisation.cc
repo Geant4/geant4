@@ -613,6 +613,10 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
       ionloss += GetUrbanModel(element, KinEnergy) * theAtomicNumDensityVector[iel] ;
       }
 
+    // Correction due to delta-electrons energy loss 
+    // Bethe-Bloch formulae is used
+    ionloss -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
+
   } else {
     // Standard Bethe-Bloch formulae
 
@@ -705,7 +709,7 @@ G4double G4hLowEnergyIonisation::GetDeltaRaysEnergy(const G4Material* material,
 
     if ( DeltaRayCutNow < Tmax) {
       x = DeltaRayCutNow / Tmax ;
-      ionloss = (x - log(x) - 1.0 ) * Factor * ElectronDensity / beta2 ;
+      ionloss = ( beta2 * (x - 1.0) - log(x) ) * Factor * ElectronDensity / beta2 ;
     }
     return ionloss ;
 }
