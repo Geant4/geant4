@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.7 2000-02-21 16:02:54 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.8 2000-05-22 08:06:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,8 @@ protected:
 
   XWindowAttributes                 xwa;
   Display                           *dpy;
+  static XVisualInfo                *vi_single_buffer;
+  static XVisualInfo                *vi_double_buffer;
   XVisualInfo                       *vi_immediate,
                                     *vi_stored,
                                     *vi;
