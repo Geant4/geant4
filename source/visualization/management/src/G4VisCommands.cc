@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.5 2001-08-17 23:02:17 johna Exp $
+// $Id: G4VisCommands.cc,v 1.6 2001-09-10 10:54:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -73,6 +73,7 @@ G4VisCommandVerbose::G4VisCommandVerbose () {
   G4bool omitable;
 
   fpCommand = new G4UIcmdWithAString("/vis/verbose", this);
+  fpCommand -> SetGuidance("/vis/verbose [<verbosity>]");
   fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceString);
   fpCommand -> SetParameterName("verbosity", omitable=true);
   fpCommand -> SetDefaultValue("warnings");
