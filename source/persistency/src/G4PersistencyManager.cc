@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4PersistencyManager.cc,v 1.2 2002-11-29 09:10:55 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -119,10 +119,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   HepMC::GenEvent* hepevt = 0;
   if ( f_pc->CurrentStoreMode(obj) == kOn ) {
 
-    //  Note: current pointer of HepMC::GenEvent* shold be given by
-    //  G4RunManager.  This part of code will be dummy until the
-    //  signature of G4VPersistencyManager::Store() changes,
-    //  since hepevt is always zero.
+    //  Note: This part of code will not be activated until a method
+    //  to obtain the current pointer of HepMC::GenEvent* become available.
 
     // if ( (hepevt = f_GenCenter->GetGenEvent()) !=0 ) {
     if ( hepevt !=0 ) {
@@ -148,10 +146,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   G4MCTEvent* mctevt = 0;
   if ( f_pc->CurrentStoreMode(obj) == kOn ) {
 
-    //  Note: current pointer of G4MCTEvent* shold be given by
-    //  G4RunManager.  This part of code will be dummy until the
-    //  signature of G4VPersistencyManager::Store() changes,
-    //  since mctevt is always zero.
+    //  Note: This part of code will not be activated until a method
+    //  to obtain the current pointer of G4MCTEvent* become available.
 
     // if ( (mctevt = f_MCTman->GetCurrentEvent()) != 0 ) {
     if ( mctevt != 0 ) {
