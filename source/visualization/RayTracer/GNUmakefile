@@ -1,10 +1,17 @@
-# $Id: GNUmakefile,v 1.7 2003-11-12 22:46:00 duns Exp $
+# $Id: GNUmakefile,v 1.8 2004-06-03 11:40:13 gcosmo Exp $
 
 name := G4RayTracer
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
+GLOBLIBS += libG4run.lib libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
