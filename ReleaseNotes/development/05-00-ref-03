@@ -1,0 +1,177 @@
+
+                       geant4-05-00-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New algorithms in multiple-scattering for reducing the step
+    dependence and for path-lengths sampling.
+  o Fix in G4Region for setting of region to root logical volumes.
+  o Fixed initialisation of navigation levels for world volume.
+  o Fix of sqrt precision problem in G4DynamicParticle (bug report #360).
+  o Introduced particle "sub-type" for ions.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry/biasing                        geombias-V05-00-01
+----------------
+- G4ParallelNavigator.cc: modified shift mechanism in method
+  ComputeStepLengthShifted().
+
+geometry/management                     geommng-V05-00-07
+-------------------
+- G4Region.cc:
+  o fixed setting/resetting of regions in ScanVolumeTree().
+  o fix for scanning of parameterised materials.
+- G4LogicalVolume.icc: added check for invalid geometry constructions.
+  Issue an exception if a placement is attempted in a volume already
+  containing a replicated daughter.
+- Cosmetic formatting changes in G4PVPlacement.cc and G4VPhysicalVolume.cc.
+
+geometry/solids/Boolean                 geom-bool-V05-00-01
+-----------------------
+- Fixed trivial strict pedantic warnings in G4ReflectedSolid.cc and
+  G4ReflectionFactory.cc.
+- Minor fixes to unit tests.
+
+geometry/volumes                        geomvol-V05-00-02
+----------------
+- G4NavigationHistory.icc: fix in  methods Clear() and SetFirstEntry().
+  Correctly initialise navigation levels. Resolves discrepancy in the
+  copy number assigned to the world volume, if retrieved through the
+  touchable or explicitely through the physical volume.
+- G4GeometryMessenger[.hh.cc]: added UI command for setting navigator
+  verbosity at run-time (/geometry/navigator/verbose [n], n in [0..4]).
+- G4ReplicaNavigation.icc: fixed debug statement in VoxelLocate().
+- G4VoxelNavigation.cc: fixed debug statement in destructor.
+- G4Navigator[.hh.cc]: added 'inline' specifier in declaration of
+  method LocateGlobalPointAndUpdateTouchableHandle().
+  Removed redundant calculation of localPoint in method
+  LocateGlobalPointWithinVolume()
+
+global                                  global-V05-00-02
+------
+- Fixed trivial strict pedantic warnings in copy constructor for
+  G4PhysicsTable and G4strstreambuf. Also for unused parameters in
+  a couple of methods in G4String.
+- Removed unnecessary usage of GNU_GCC preprocessor flag in G4Allocator
+  and G4strstreambuf.
+
+particles                               particles-V05-00-05
+---------
+- Added particle SubType for nuclei to distinguish static or
+  dynamic objects.
+- G4DynamicParticle.cc: fixed case of negative sqrt in Set4Momentum(), 
+  occasionally resulting in computation of negative interaction length. 
+  Fixes problem report #360. 
+
+processes/electromagnetic/lowenergy     emlowen-V05-00-10
+-----------------------------------
+- Minor design iteration in view of the Penelope model for Bremsstrahlung
+  process to accomodate variable name of file with parameters. 
+- Use particle SubType for ions.
+- Removed "cuts per material warning" utility class. 
+
+processes/electromagnetic/standard      stand-V05-00-06
+----------------------------------
+- Use particle SubType for ions in G4hIonisation.
+- Migrated G4PAIonisation to be region-aware.
+
+processes/electromagnetic/utils         utils-V05-00-06
+-------------------------------
+- Important modifications in Multiple Scattering
+  (both in default classes and STD version):
+  o new algorithm to reduce the step dependence
+  o new sampling for the geometrical path-lengths.
+- Added warning and G4Exception in G4EnergyLossTable in case of using
+  the old interface when more than one region is defined. 
+- Fixes in initialisation for STD processes.
+- Made energy-loss messanger active at PreInit state.
+- Use particle SubType for GenericIons.
+- Fix in energy range of models for STD processes.
+
+processes/electromagnetic/xrays         xrays-V05-00-04
+-------------------------------
+- Fix for cut-by-region in G4ForwardXrayTR process.
+- G4VXTRenergyLoss.cc: fix for porting on Windows .NET compiler.
+
+processes/hadronic/stopping             stopp-V05-00-00
+---------------------------
+- Fixed bug in stopping muons (G4MuonMinusCaptureAtRest).
+  Cleared usage of static local variables. Fixes bug-report #457.
+
+processes/optical                       op-V05-00-01
+-----------------
+- Modified logic for the assignment of the index of refraction 
+  of the 2nd material. Most applications should not notice a change.
+  Fixes bug-report #444. 
+
+run                                     run-V05-00-05
+---
+- Added GenerateRun() method in G4UserRunAction.
+- Cleared inline virtual method in G4Run.
+
+track                                   track-V05-00-02
+-----
+- Fix in G4Step::InitializeStep(): added initialization of fCharge
+  in StepPoint.
+
+tracking                                tracking-V05-00-01
+--------
+- G4SteppingVerbose.cc: fixed retrieval of phys-volume name, adding
+  check for NULL pointer for post-step physical volume returned.
+
+examples				examples-V05-00-01
+--------
+o Updated reference outputs.
+- extended:
+  o biasing (exbiasing-V05-00-01)
+    + Changed the replica number of the world volume from -1 to 0.
+    + Initialize() of the G4RunManager is now called after all Materials
+      and volumes (also in the parallel geometry) are built.
+  o electromagnetic
+    + TestEm1 (testem1-V05-00-04)
+      - Fixed verbose problem.
+      - Removed old interfaces to cuts.
+      - Added definition of mean excitation energy for water.
+    + TestEm2 (testem2-V05-00-03)
+      - Use logical mother for G4PVPlacement and G4PVReplica.
+      - Completed migration to cuts by region.
+      - Update modular structure of PhysicsList.
+    + TestEm3 (testem3-V05-00-03)
+      - Change in all macros: /run/particle/setCut -> /testem/phys/setCuts.
+      - Material CsI and example of SetMeanExcitationEnergy().
+      - Added example of static ion: IonC12 class and ionC12.mac.
+    + TestEm5 (testem5-V05-00-04)
+      - PhysicsList: removed cutForProton (old interface).
+- novice
+  o N01 (exampleN01-V05-00-00)
+    + Use logical mother for placements.
+  o N02 (exampleN02-V05-00-02)
+    + Use logical mother for G4PVPlacement and G4PVParameterised.
+  o N03 (exampleN03-V05-00-05)
+    + Use logical mother for G4PVPlacement and G4PVReplica.
+    + Migrated to new interface for cut by region.
+    + Improved tutorial for saving random-number seeds.
+  o N04 (exampleN04-V05-00-01)
+    + Added capture and fission in HadronPhysicsList.
+    + Use logical mother for G4PVPlacement and G4PVParameterised.
+  o N06 (exampleN06-V05-00-02)
+    + Use logical mother for placements.
+
+tests                                     tests-V05-00-01
+-----
+o Updated reference outputs.
+  + test05 (test05-V05-00-00)
+    Added HepRep to visualization manager.
+  + test07 (test07-V05-00-00)
+    Added HepRep to visualization manager. 
+  + test10 (test10-V05-00-01)
+    Added HepRep to visualization manager.
+  + test18 (test18-V05-00-01)
+    Added HepRep to visualization manager.
+  + test33 (test33-V05-00-02)
+    Changed the replica-number of the world volume from -1 to 0
+    Added HepRep to visualization manager.
