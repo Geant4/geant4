@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.13 2004-10-20 14:32:28 maire Exp $
+# $Id: run01.mac,v 1.14 2004-12-02 16:13:46 vnivanch Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -24,4 +24,4 @@
 #
 /testem/event/printModulo 50
 #
-/run/beamOn 200
+/run/beamOn 1000

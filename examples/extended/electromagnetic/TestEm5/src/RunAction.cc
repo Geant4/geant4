@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.17 2004-11-22 15:43:41 maire Exp $
+// $Id: RunAction.cc,v 1.18 2004-12-02 16:19:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,27 +87,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
   G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
-  if (rmsEdep>0.) rmsEdep = sqrt(rmsEdep/TotNbofEvents);
+  if (rmsEdep>0.) rmsEdep = std::sqrt(rmsEdep/TotNbofEvents);
   else            rmsEdep = 0.;
 
   TrakLenCharged /= TotNbofEvents; TrakLenCharged2 /= TotNbofEvents;
   G4double rmsTLCh = TrakLenCharged2 - TrakLenCharged*TrakLenCharged;
-  if (rmsTLCh>0.) rmsTLCh = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsTLCh>0.) rmsTLCh = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsTLCh = 0.;
 
   TrakLenNeutral /= TotNbofEvents; TrakLenNeutral2 /= TotNbofEvents;
   G4double rmsTLNe = TrakLenNeutral2 - TrakLenNeutral*TrakLenNeutral;
-  if (rmsTLNe>0.) rmsTLNe = sqrt(rmsTLNe/TotNbofEvents);
+  if (rmsTLNe>0.) rmsTLNe = std::sqrt(rmsTLNe/TotNbofEvents);
   else            rmsTLNe = 0.;
 
   nbStepsCharged /= TotNbofEvents; nbStepsCharged2 /= TotNbofEvents;
   G4double rmsStCh = nbStepsCharged2 - nbStepsCharged*nbStepsCharged;
-  if (rmsStCh>0.) rmsStCh = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStCh = 0.;
 
   nbStepsNeutral /= TotNbofEvents; nbStepsNeutral2 /= TotNbofEvents;
   G4double rmsStNe = nbStepsNeutral2 - nbStepsNeutral*nbStepsNeutral;
-  if (rmsStNe>0.) rmsStNe = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStNe = 0.;
 
   G4double Gamma = (double)nbGamma/TotNbofEvents;
@@ -126,7 +126,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (Transmit[1] > 0) {
     MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
-    if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
+    if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
   }
   
   //Stopping Power from input Table.
@@ -243,10 +243,10 @@ G4double RunAction::ComputeMscHighland()
   G4ParticleGun* particle = primary->GetParticleGun();
   G4double T = particle->GetParticleEnergy();
   G4double M = particle->GetParticleDefinition()->GetPDGMass();
-  G4double z = abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);
+  G4double z = std::abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);
 
   G4double bpc = T*(T+2*M)/(T+M);
-  G4double teta0 = 13.6*MeV*z*sqrt(t)*(1.+0.038*log(t))/bpc;
+  G4double teta0 = 13.6*MeV*z*std::sqrt(t)*(1.+0.038*std::log(t))/bpc;
   return teta0;
 }
 

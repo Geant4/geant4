@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.22 2004-10-22 15:53:46 maire Exp $
+// $Id: RunAction.cc,v 1.23 2004-12-02 16:13:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,9 +105,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   G4double  norm = 1.0/NbOfEvents;
-  G4double qnorm = sqrt(norm);
+  G4double qnorm = std::sqrt(norm);
   G4double beamEnergy = Primary->GetParticleGun()->GetParticleEnergy();
-  G4double sqbeam = sqrt(beamEnergy/GeV);
+  G4double sqbeam = std::sqrt(beamEnergy/GeV);
 
   G4double MeanEAbs,MeanEAbs2,rmsEAbs,resolution,rmsres;
   G4double MeanLAbs,MeanLAbs2,rmsLAbs;
@@ -124,13 +124,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     {
      MeanEAbs  = sumEAbs[k]*norm;
      MeanEAbs2 = sum2EAbs[k]*norm;
-      rmsEAbs  = sqrt(abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+      rmsEAbs  = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
      resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
      rmsres    = resolution*qnorm;
 
      MeanLAbs  = sumLAbs[k]*norm;
      MeanLAbs2 = sum2LAbs[k]*norm;
-      rmsLAbs  = sqrt(abs(MeanLAbs2 - MeanLAbs*MeanLAbs));
+      rmsLAbs  = std::sqrt(std::fabs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
      //print
      //
@@ -163,7 +163,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       }
       MeanEAbs  = sumEAbs[j]*norm;
       MeanEAbs2 = sum2EAbs[j]*norm;
-      rmsEAbs   = sqrt(abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+      rmsEAbs   = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       G4String mat = Detector->GetAbsorMaterial(j)->GetName();
       acc.EmAcceptanceGauss("Edep"+mat, NbOfEvents, MeanEAbs,
                              edeptrue[j], rmstrue[j], limittrue[j]);
@@ -211,8 +211,8 @@ void RunAction::PrintDedxTables()
 
   //compute the kinetic energies
   //
-  const G4double dp = log10(tkmax/tkmin)/nbin;
-  const G4double dt = pow(10.,dp);
+  const G4double dp = std::log10(tkmax/tkmin)/nbin;
+  const G4double dt = std::pow(10.,dp);
   tk[0] = tkmin;
   for (G4int i=1; i<nbin; ++i) tk[i] = tk[i-1]*dt;
 

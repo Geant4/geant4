@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.12 2004-09-24 09:58:07 maire Exp $
+// $Id: HistoManager.cc,v 1.13 2004-12-02 16:19:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,7 +147,7 @@ void HistoManager::SetHisto(G4int ih,
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
-                  "energy of gammas at creation (log10(ekin/MeV))",	//3
+                  "energy of gammas at creation (std::log10(ekin/MeV))",	//3
 		  "(transmit, charged) : kinetic energy at exit",	//4
 		  "(transmit, charged) : space angle at exit",		//5
 		  "(transmit, charged) : projected angle at exit",	//6
@@ -167,7 +167,7 @@ void HistoManager::SetHisto(G4int ih,
   G4double vmin = valmin, vmax = valmax;
   Unit[ih] = 1.;
 
-  if (ih == 3) { vmin = log10(valmin/MeV); vmax = log10(valmax/MeV);}
+  if (ih == 3) { vmin = std::log10(valmin/MeV); vmax = std::log10(valmax/MeV);}
   else if (unit != "none") {
     titl = title[ih] + " (" + unit + ")";
     Unit[ih] = G4UnitDefinition::GetValueOf(unit);

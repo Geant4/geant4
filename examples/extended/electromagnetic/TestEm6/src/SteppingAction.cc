@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2004-09-27 09:35:38 maire Exp $
+// $Id: SteppingAction.cc,v 1.7 2004-12-02 16:22:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,11 +80,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double GammaMinus=EGamma*xMinus/muonMass;
    	   
 #ifdef G4ANALYSIS_USE
- runAction->GetHisto(0)->fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->fill(log10(thetaPlus*GammaPlus));
+ runAction->GetHisto(0)->fill(1./(1.+std::pow(thetaPlus*GammaPlus,2)));
+ runAction->GetHisto(1)->fill(std::log10(thetaPlus*GammaPlus));
 
- runAction->GetHisto(2)->fill(log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->fill(log10(fabs(thetaPlus *GammaPlus
+ runAction->GetHisto(2)->fill(std::log10(thetaMinus*GammaMinus));
+ runAction->GetHisto(3)->fill(std::log10(std::fabs(thetaPlus *GammaPlus
                                               -thetaMinus*GammaMinus)));
  
  runAction->GetHisto(4)->fill(xPlus);

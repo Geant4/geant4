@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2004-10-22 15:53:46 maire Exp $
+// $Id: HistoManager.cc,v 1.6 2004-12-02 16:13:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,6 +121,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
   if (ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
+           << "; xbin= " << xbin << ";  weight= " << weight
            << G4endl;
     return;
   }
@@ -192,6 +193,7 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 {
   if (ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
+           << "; fac= " << fac
            << G4endl;
     return;
   }

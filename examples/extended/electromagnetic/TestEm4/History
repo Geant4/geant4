@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2004-09-24 14:41:19 maire Exp $
+$Id: History,v 1.34 2004-12-02 16:16:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 04: V.Ivant (testem4-V06-02-01)
+- Migration to cmath
      
 24-09-04 mma (testem4-V06-02-00)
 - RunAction: modif in histo management for Jaida
