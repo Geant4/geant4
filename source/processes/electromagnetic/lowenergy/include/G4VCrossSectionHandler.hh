@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.5 2001-10-05 18:25:19 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.6 2001-10-08 07:45:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,13 +29,13 @@
 // History:
 // -----------
 // 16 Sep 2001   MGP           Created
-// 26 Sep 2001   V.Ivanchenko  Add hide operator   
+// 26 Sep 2001   V.Ivanchenko  Hide copy constructor and assignement operator
 //
 // -------------------------------------------------------------------
 
 // Class description:
 // Low Energy Electromagnetic Physics
-// Cross section manager for an electromagnetic physics process
+// Base class for cross section manager for an electromagnetic physics process
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
@@ -106,7 +106,7 @@ protected:
   // Factory method
   virtual G4VDataSetAlgorithm* CreateInterpolation(); 
 
-  const G4VDataSetAlgorithm* GetInterpolation() const { return interpolation; }
+  G4VDataSetAlgorithm* GetInterpolation() const { return interpolation; }
 
 
 private:

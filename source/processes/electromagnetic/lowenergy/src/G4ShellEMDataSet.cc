@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.4 2001-09-10 18:07:35 pia Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.5 2001-10-08 07:49:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -50,8 +50,8 @@ G4ShellEMDataSet::G4ShellEMDataSet(G4int Z,
 }
 
 G4ShellEMDataSet::G4ShellEMDataSet(G4int Z, const G4String& dataFile,
-					   const G4VDataSetAlgorithm* interpolation,
-					   G4double unitE, G4double unitData)
+				   const G4VDataSetAlgorithm* interpolation,
+				   G4double unitE, G4double unitData)
   :z(Z), algorithm(interpolation)
 {
   nComponents = 0;
@@ -66,6 +66,7 @@ G4ShellEMDataSet::~G4ShellEMDataSet()
     {
       delete components[i];
     }
+  delete algorithm;
 }
 
 G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
@@ -140,7 +141,8 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
 	if (s == 0)
 	  {
 	    // End of a shell data set
-	    G4VEMDataSet* dataSet = new G4EMDataSet(shellIndex,energies,data,algorithm);
+	    G4VDataSetAlgorithm* algo = algorithm->Clone();
+	    G4VEMDataSet* dataSet = new G4EMDataSet(shellIndex,energies,data,algo);
 	    AddComponent(dataSet);
 	    // Start of new shell data set
 	    energies = new G4DataVector;

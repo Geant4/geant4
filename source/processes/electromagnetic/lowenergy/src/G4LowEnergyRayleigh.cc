@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.25 2001-10-05 18:24:20 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.26 2001-10-08 07:49:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -37,6 +37,7 @@
 // Added map of the elements  A.Forti
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 11.08.2001 MGP - Major revision according to a design iteration
+// 06.10.2001 MGP - Added strategy to test range for secondary generation
 //
 // --------------------------------------------------------------------
 
@@ -50,15 +51,14 @@
 #include "G4Electron.hh"
 #include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
-#include "G4ParticleMomentum.hh"
 #include "G4ThreeVector.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4VCrossSectionHandler.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
-
 
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
@@ -75,8 +75,7 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   
   crossSectionHandler = new G4CrossSectionHandler();
 
-  // The following pointer is owned by the process
-  ffInterpolation = new G4LogLogInterpolation;
+  G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
   G4String formFactorFile = "rayl/re-ff-";
   formFactorData = new G4CompositeEMDataSet(formFactorFile,ffInterpolation,1.,1.);
 
@@ -97,7 +96,6 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
   delete meanFreePathTable;
   delete crossSectionHandler;
   delete formFactorData;
-  delete ffInterpolation;
 }
 
 void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
@@ -181,10 +179,6 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.SetMomentumChange(photonDirection1);
   
   aParticleChange.SetNumberOfSecondaries(0);
-
-#ifdef G4VERBOSE
-  if(verboseLevel > 15) G4cout << "LE Rayleigh PostStepDoIt" << G4endl;
-#endif
 
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }

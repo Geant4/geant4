@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.11 2001-10-05 18:24:19 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.12 2001-10-08 07:48:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -47,14 +47,17 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
+#include "G4LogLogInterpolation.hh"
+
 G4CrossSectionHandler::G4CrossSectionHandler()
 { }
 
 G4CrossSectionHandler::~G4CrossSectionHandler()
 { }
 
-G4std::vector<G4VEMDataSet*>* G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
-										    const G4DataVector* energyCuts)
+G4std::vector<G4VEMDataSet*>* 
+G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
+						      const G4DataVector* energyCuts)
 {
   G4DataVector* energies;
   G4DataVector* data;
@@ -62,9 +65,6 @@ G4std::vector<G4VEMDataSet*>* G4CrossSectionHandler::BuildCrossSectionsForMateri
   G4std::vector<G4VEMDataSet*>* matCrossSections = new G4std::vector<G4VEMDataSet*>;
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  if (materialTable == 0)
-    G4Exception("G4CrossSectionHandler::G4CrossSectionHandler - no MaterialTable found)");
-
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   size_t nOfBins = energyVector.size();
@@ -74,21 +74,14 @@ G4std::vector<G4VEMDataSet*>* G4CrossSectionHandler::BuildCrossSectionsForMateri
       const G4Material* material= (*materialTable)[m];
       energies = new G4DataVector;
       data = new G4DataVector;
+      G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
       for (size_t bin=0; bin<nOfBins; bin++)
 	{
 	  G4double e = energyVector[bin];
 	  energies->push_back(e);
 	  G4double materialCrossSection = ValueForMaterial(material,e);
-	  if (materialCrossSection > 0.)
-	    {
-	      data->push_back(materialCrossSection);
-	    }
-	  else
-	    {
-	      data->push_back(DBL_MAX);
-	    }
+	  data->push_back(materialCrossSection);
 	}
-      const G4VDataSetAlgorithm* interpolationAlgo = GetInterpolation();
       G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,interpolationAlgo,1.,1.); 
       matCrossSections->push_back(dataSet);
     }

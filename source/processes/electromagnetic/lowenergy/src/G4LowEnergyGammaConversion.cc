@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.23 2001-10-05 18:24:19 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.24 2001-10-08 07:48:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,17 +54,18 @@
 #include "G4Electron.hh"
 #include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
-#include "G4ParticleMomentum.hh"
 #include "G4ThreeVector.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Positron.hh"
 #include "G4IonisParamElm.hh"
-
+#include "G4Material.hh"
+#include "G4VCrossSectionHandler.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
-
+#include "G4VRangeTest.hh"
+#include "G4RangeTest.hh"
 
 G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processName)
   : G4VDiscreteProcess(processName),   
@@ -86,6 +87,7 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
   crossSectionHandler = new G4CrossSectionHandler();
   crossSectionHandler->Initialise(0,1.0220*MeV,100.*GeV,400);
   meanFreePathTable = 0;
+  rangeTest = new G4RangeTest;
 
    if (verboseLevel > 0) 
      {
@@ -101,6 +103,7 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
 {
   delete meanFreePathTable;
   delete crossSectionHandler;
+  delete rangeTest;
 }
 
 void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
@@ -247,20 +250,18 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetNumberOfSecondaries(2.) ; 
   G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ;
 
-  //  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, material)
-  //      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
-  if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-        electronKineEnergy,material)>aStep.GetPostStepPoint()->GetSafety())
-         ||
-        (electronKineEnergy >
-        (G4Electron::Electron()->GetCutsInEnergy())[material->GetIndex()]))
+  // Generate the electron only if with large enough range w.r.t. cuts and safety
+
+  G4double safety = aStep.GetPostStepPoint()->GetSafety();
+
+  if (rangeTest->Escape(G4Electron::Electron(),material,electronKineEnergy,safety))
     {
       G4ThreeVector electronDirection ( dirX, dirY, dirZ );
       electronDirection.rotateUz(photonDirection);   
-    
-      // create G4DynamicParticle object for the particle1  
-      G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Electron::Electron(),electronDirection, electronKineEnergy);
-      aParticleChange.AddSecondary( aParticle1 ) ; 
+      G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
+							    electronDirection, 
+							    electronKineEnergy);
+      aParticleChange.AddSecondary(particle1) ; 
     }
   else
     { 
@@ -268,37 +269,28 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
     }
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
-
   G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ;
 
   // Is the local energy deposit correct, if the positron is always created?
-  if (G4EnergyLossTables::GetRange(G4Positron::Positron(),positronKineEnergy,material)
-        < G4std::min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) )
+  if (! (rangeTest->Escape(G4Positron::Positron(),material,positronKineEnergy,safety)))
     {
       localEnergyDeposit += positronKineEnergy ;
       positronKineEnergy = 0. ;
     }
-
   G4ThreeVector positronDirection(-dirX,-dirY,dirZ);
   positronDirection.rotateUz(photonDirection);   
  
   // Create G4DynamicParticle object for the particle2 
-  G4DynamicParticle* aParticle2 = new G4DynamicParticle(G4Positron::Positron(),
-							positronDirection, positronKineEnergy);
-  aParticleChange.AddSecondary( aParticle2 ) ; 
-  aParticleChange.SetLocalEnergyDeposit( localEnergyDeposit ) ;
+  G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
+						       positronDirection, positronKineEnergy);
+  aParticleChange.AddSecondary(particle2) ; 
+
+  aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit) ;
   
   // Kill the incident photon 
   aParticleChange.SetMomentumChange(0.,0.,0.) ;
   aParticleChange.SetEnergyChange(0.) ; 
   aParticleChange.SetStatusChange(fStopAndKill) ;
-
-#ifdef G4VERBOSE
-  if(verboseLevel > 15)
-    {
-      G4cout << "LE Gamma Conversion PostStepDoIt" << G4endl;
-    }
-#endif
 
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);

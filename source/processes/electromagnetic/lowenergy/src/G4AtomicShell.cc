@@ -29,23 +29,17 @@
 //
 // History:
 // -----------
-//  16 Sept 2001 Modofied according to a design iteration in the 
-//              LowEnergy category
+//  16 Sept 2001 EG  Modified according to a design iteration in the 
+//                   LowEnergy category
 //
 // -------------------------------------------------------------------
 
 #include "G4AtomicShell.hh"
 
-// this is the constructor: U have to give some information the shell 
-// wich the subshell belongs to
-// the bindingenergy of the subshell u r creating, and the table of the 
-// transition datas
-
 G4AtomicShell::G4AtomicShell(G4int id, G4double energy)
 {
   identifier = id;
   bindingEnergy = energy;
- 
 } 
 
 G4AtomicShell::~G4AtomicShell()

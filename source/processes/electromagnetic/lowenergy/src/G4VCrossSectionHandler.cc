@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.4 2001-10-05 18:24:18 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.5 2001-10-08 07:49:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -53,8 +53,7 @@ G4VCrossSectionHandler::G4VCrossSectionHandler()
 {
   crossSections = 0;
   interpolation = 0;
-  interpolation = CreateInterpolation();
-  Initialise(interpolation);
+  Initialise();
   ActiveElements();
 }
 
@@ -77,6 +76,7 @@ G4VCrossSectionHandler::G4VCrossSectionHandler(G4VDataSetAlgorithm* algorithm,
 G4VCrossSectionHandler::~G4VCrossSectionHandler()
 {
   delete interpolation;
+  interpolation = 0;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
@@ -88,10 +88,16 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
       G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
     }
-  size_t n = crossSections->size();
-  for (size_t i=0; i<n; i++)
+
+  if (crossSections != 0)
     {
-      delete (*crossSections)[i];
+      size_t n = crossSections->size();
+      for (size_t i=0; i<n; i++)
+	{
+	  delete (*crossSections)[i];
+	}
+      delete crossSections;
+      crossSections = 0;
     }
 }
 
@@ -120,8 +126,6 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
   zMax = maxZ;
 }
 
-
-
 void G4VCrossSectionHandler::PrintData() const
 {
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
@@ -132,8 +136,8 @@ void G4VCrossSectionHandler::PrintData() const
       // which does not support the standard and does not accept 
       // the syntax pos->first or pos->second
       // G4int z = pos->first;
-      G4int z = (*pos).first;
       // G4VEMDataSet* dataSet = pos->second;
+      G4int z = (*pos).first;
       G4VEMDataSet* dataSet = (*pos).second;     
       G4cout << "---- Data set for Z = "
 	     << z
@@ -210,8 +214,8 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 	} while (a != -2); // end of file
       
       file.close();
-      
-      G4VEMDataSet* dataSet = new G4EMDataSet(Z,energies,data,interpolation);
+      G4VDataSetAlgorithm* algo = interpolation->Clone();
+      G4VEMDataSet* dataSet = new G4EMDataSet(Z,energies,data,algo);
       dataMap[Z] = dataSet;
     }
 }
@@ -283,8 +287,8 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 	} while (a != -2); // end of file
       
       file.close();
-      
-      G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z,fileName,interpolation);
+      G4VDataSetAlgorithm* algo = interpolation->Clone();
+      G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z,fileName,algo);
       dataMap[Z] = dataSet;
     }
 }
@@ -296,24 +300,26 @@ void G4VCrossSectionHandler::Clear()
 
   if(! dataMap.empty())
     {
-        for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+        for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
 	{
 	  // The following is a workaround for STL ObjectSpace implementation, 
 	  // which does not support the standard and does not accept 
 	  // the syntax pos->first or pos->second
-	  //	  G4VEMDataSet* dataSet = pos->second;
+	  // G4VEMDataSet* dataSet = pos->second;
 	  G4VEMDataSet* dataSet = (*pos).second;
 	  delete dataSet;
 	  dataSet = 0;
+	  G4int i = (*pos).first;
+	  dataMap[i] = 0;
 	}
-      dataMap.clear();
+	dataMap.clear();
     }
 
   activeZ.clear();
   ActiveElements();
 }
 
-G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double e) const
+G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy) const
 {
   G4double value = 0.;
   
@@ -326,7 +332,7 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double e) const
       // the syntax pos->first or pos->second
       // G4VEMDataSet* dataSet = pos->second;
       G4VEMDataSet* dataSet = (*pos).second;
-      value = dataSet->FindValue(e);
+      value = dataSet->FindValue(energy);
     }
   else
     {
@@ -337,7 +343,7 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double e) const
 }
 
 G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material, 
-						 G4double e) const
+						  G4double energy) const
 {
   G4double value = 0.;
 
@@ -348,7 +354,7 @@ G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
   for (G4int i=0 ; i<nElements ; i++)
     { 
       G4int Z = (G4int) (*elementVector)[i]->GetZ();
-      G4double elementValue = FindValue(Z,e);
+      G4double elementValue = FindValue(Z,energy);
       G4double nAtomsVol = nAtomsPerVolume[i];
       value += nAtomsVol * elementValue;
     }
@@ -378,12 +384,13 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
       G4std::vector<G4VEMDataSet*>::iterator mat;
       if (! crossSections->empty())
 	{
-	  for (mat = crossSections->begin(); mat!= crossSections->end(); mat++)
+	  for (mat = crossSections->begin(); mat!= crossSections->end(); ++mat)
 	    {
 	      G4VEMDataSet* set = *mat;
 	      delete set;
 	      set = 0;
 	    }
+	  crossSections->clear();
 	  delete crossSections;
 	  crossSections = 0;
 	}
@@ -391,26 +398,14 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   crossSections = BuildCrossSectionsForMaterials(energyVector);
 
+  if (crossSections == 0) 
+    G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
 
-  //if (energyThreshold > 0.0)
-  //{
-      // For ContinuousDiscrete processes
-      //   BuildCrossSectionsWithCut(energyCuts,energyVector);
-  //}
-  //else
-  // {
-      // For Discrete Processes
-      //  BuildCrossSectionsForMaterials(energyVector);
-  //}
-
-  G4VEMDataSet* materialSet = new G4CompositeEMDataSet(interpolation);
+  G4VDataSetAlgorithm* algo = CreateInterpolation();
+  G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo);
 
   G4DataVector* energies;
   G4DataVector* data;
-
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  if (materialTable == 0)
-    G4Exception("G4VCrossSectionHandler::G4VCrossSectionHandler - no MaterialTable found)");
 
   size_t nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -420,15 +415,15 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
       data = new G4DataVector;
       for (G4int bin=0; bin<nBins; bin++)
 	{
-	  G4double e = energyVector[bin];
-	  energies->push_back(e);
-	  G4VEMDataSet* materialSet = (*crossSections)[m];
-	  G4double materialCrossSection = materialSet->FindValue(e);
+	  G4double energy = energyVector[bin];
+	  energies->push_back(energy);
+	  G4VEMDataSet* matCrossSet = (*crossSections)[m];
+	  G4double materialCrossSection = matCrossSet->FindValue(energy);
   
 	  // MGP DEBUG
 	  //	  const G4Material* material= (*materialTable)[m];
 	  // 	  G4double materialCrossSection0 = ValueForMaterial(material,e);
-	  //          G4cout << materialCrossSection0 << " " << materialCrossSection << G4endl;
+	  //      G4cout << materialCrossSection0 << " " << materialCrossSection << G4endl;
 	  // End debug
 
 	  if (materialCrossSection > 0.)
@@ -440,14 +435,13 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	      data->push_back(DBL_MAX);
 	    }
 	}
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,interpolation,1.,1.);
+      G4VDataSetAlgorithm* algo = CreateInterpolation();
+      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
       materialSet->AddComponent(dataSet);
      }
 
   return materialSet;
 }
-
-
 
 G4int G4VCrossSectionHandler::SelectRandomAtom(const G4Material* material, G4double e) const
 {
@@ -488,7 +482,7 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4Material* material, G4dou
 }
 
 const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4Material* material, 
-							    G4double e) const
+							     G4double e) const
 {
   // Select randomly an element within the material, according to the weight determined
   // by the cross sections in the data set
@@ -598,3 +592,6 @@ G4VDataSetAlgorithm* G4VCrossSectionHandler::CreateInterpolation()
   G4VDataSetAlgorithm* algorithm = new G4LogLogInterpolation;
   return algorithm;
 }
+
+
+

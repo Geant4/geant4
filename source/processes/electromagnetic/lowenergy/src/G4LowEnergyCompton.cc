@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.31 2001-10-05 18:24:19 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.32 2001-10-08 07:48:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -48,14 +48,16 @@
 #include "G4Electron.hh"
 #include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
-#include "G4ParticleMomentum.hh"
 #include "G4ThreeVector.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4VCrossSectionHandler.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4VRangeTest.hh"
+#include "G4RangeTest.hh"
 
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
@@ -67,17 +69,18 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   if (lowEnergyLimit < intrinsicLowEnergyLimit || 
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy limit outside intrinsic process validity range");
+      G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy outside intrinsic process validity range");
     }
 
-  crossSectionHandler = new G4CrossSectionHandler();
+  crossSectionHandler = new G4CrossSectionHandler;
 
-  // The following pointer is owned by the process
-  scatterInterpolation = new G4LogLogInterpolation;
+  G4VDataSetAlgorithm* scatterInterpolation = new G4LogLogInterpolation;
   G4String scatterFile = "comp/ce-sf-";
   scatterFunctionData = new G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
 
   meanFreePathTable = 0;
+
+  rangeTest = new G4RangeTest;
 
    if (verboseLevel > 0) 
      {
@@ -94,7 +97,7 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
   delete meanFreePathTable;
   delete crossSectionHandler;
   delete scatterFunctionData;
-  delete scatterInterpolation;
+  delete rangeTest;
 }
 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
@@ -207,12 +210,10 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4double eKineticEnergy = photonEnergy0 - photonEnergy1;
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety
-  G4double range = G4EnergyLossTables::GetRange(G4Electron::Electron(),
-						eKineticEnergy, material);
-  G4double eCut = G4Electron::GetCuts();
+
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-  G4double rMin = G4std::min(eCut, safety);
-  if (range >= rMin)
+
+  if (rangeTest->Escape(G4Electron::Electron(),material,eKineticEnergy,safety))
     {
       G4double eMomentum = sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
       G4ThreeVector eDirection((photonEnergy0 * photonDirection0 - 
@@ -228,11 +229,6 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.SetNumberOfSecondaries(0);
       aParticleChange.SetLocalEnergyDeposit(eKineticEnergy);
     }
-
-#ifdef G4VERBOSE
-  if(verboseLevel > 0)
-      G4cout << "LE Compton Effect PostStepDoIt" << G4endl;
-#endif  
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }

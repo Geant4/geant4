@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4LogLogInterpolation.hh,v 1.2 2001-10-08 07:45:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -56,6 +56,8 @@ public:
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
 		     const G4DataVector& data) const;
+
+  virtual G4VDataSetAlgorithm* Clone() const { return new G4LogLogInterpolation; }
 
 private:
 

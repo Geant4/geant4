@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4EMDataSet.hh,v 1.2 2001-10-08 07:45:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -56,12 +56,12 @@ public:
   G4EMDataSet(G4int Z, 
 	      G4DataVector* points, 
 	      G4DataVector* values,
-	      const G4VDataSetAlgorithm* interpolation,
+	      G4VDataSetAlgorithm* interpolation,
 	      G4double unitE = MeV, G4double unitData = barn);
 
   G4EMDataSet(G4int Z, 
 	      const G4String& dataFile,
-	      const G4VDataSetAlgorithm* interpolation,
+	      G4VDataSetAlgorithm* interpolation,
 	      G4double unitE = MeV, G4double unitData = barn);
 
   ~G4EMDataSet();
@@ -84,7 +84,7 @@ private:
   G4DataVector* energies; // Owned pointer
   G4DataVector* data;     // Owned pointer
 
-  const G4VDataSetAlgorithm* algorithm; // Not owned pointer 
+  G4VDataSetAlgorithm* algorithm; // Owned pointer 
   
   G4double unit1;
   G4double unit2;

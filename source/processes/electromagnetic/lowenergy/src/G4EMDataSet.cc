@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.4 2001-09-20 09:14:57 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.5 2001-10-08 07:48:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,20 +42,22 @@
 G4EMDataSet::G4EMDataSet(G4int Z,
 			 G4DataVector* points, 
 			 G4DataVector* values,
-			 const G4VDataSetAlgorithm* interpolation,
+			 G4VDataSetAlgorithm* interpolation,
 			 G4double unitE, G4double unitData)
   :z(Z), energies(points), data(values), algorithm(interpolation)
 {
   numberOfBins = energies->size();
   unit1 = unitE;
   unit2 = unitData;
+  if (interpolation == 0) 
+    G4Exception("G4EMDataSet::G4EMDataSet - interpolation algorithm = 0");
 }
 
 G4EMDataSet:: G4EMDataSet(G4int Z, 
 			  const G4String& dataFile,
-			  const G4VDataSetAlgorithm* interpolation,
+			  G4VDataSetAlgorithm* interpolation,
 			  G4double unitE, G4double unitData)
-  :z(Z), algorithm(interpolation)
+      :z(Z), algorithm(interpolation)
 {
   energies = new G4DataVector;
   data = new G4DataVector;
@@ -63,12 +65,16 @@ G4EMDataSet:: G4EMDataSet(G4int Z,
   unit2 = unitData;  
   LoadData(dataFile);
   numberOfBins = energies->size();
+  if (interpolation == 0) 
+    G4Exception("G4EMDataSet::G4EMDataSet - interpolation algorithm = 0");
+
 }
 
 // Destructor
 
 G4EMDataSet::~G4EMDataSet()
 { 
+  delete algorithm;
   delete energies;
   delete data;
 }
@@ -94,6 +100,8 @@ G4double G4EMDataSet::FindValue(G4double e, G4int id) const
     }
   else
     {
+      if (algorithm == 0) 
+	G4Exception("G4EMDataSet::FindValue - interpolation algorithm = 0");
       value = algorithm->Calculate(e,bin,*energies,*data);
     }
   

@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4LowEnergyCompton.hh,v 1.17 2001-09-10 18:05:16 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.18 2001-10-08 07:45:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -49,8 +49,8 @@ class G4Step;
 class G4ParticleDefinition;
 class G4VParticleChange;
 class G4VEMDataSet;
-class G4CrossSectionHandler;
-class G4VDataSetAlgorithm;
+class G4VCrossSectionHandler;
+class G4VRangeTest;
 
 class G4LowEnergyCompton : public G4VDiscreteProcess {
 
@@ -87,12 +87,12 @@ private:
   G4double lowEnergyLimit;  // low energy limit  applied to the process
   G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4VDataSetAlgorithm* scatterInterpolation;
-
   G4VEMDataSet* meanFreePathTable;
   G4VEMDataSet* scatterFunctionData;
 
-  G4CrossSectionHandler* crossSectionHandler;
+  G4VCrossSectionHandler* crossSectionHandler;
+
+  G4VRangeTest* rangeTest;
 
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.1 2001-08-20 16:36:00 pia Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.2 2001-10-08 07:45:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -83,7 +83,7 @@ private:
 
   void LoadData(const G4String& fileName);
 
-  const G4VDataSetAlgorithm* algorithm; // Not owned pointer 
+  const G4VDataSetAlgorithm* algorithm; 
 
   G4std::vector<G4VEMDataSet*> components;
   size_t nComponents;

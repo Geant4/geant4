@@ -30,14 +30,14 @@
 // History:
 // -----------
 //  
-//  16 Sept 2001 Modofied according to a design iteration in the 
-//              LowEnergy category
+//  16 Sept 2001 EG  Modified according to a design iteration in the 
+//                   LowEnergy category
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, fills and manages G4Shell 
-// and G4Transition objects
+// Low Energy Electromagnetic Physics, fills and manages G4AtomicShell 
+// and G4AtomicTransition objects
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------

@@ -21,55 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4VDataSetAlgorithm.hh,v 1.2 2001-10-08 07:45:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 07 Oct 2001   MGP        Created
 //
 // -------------------------------------------------------------------
 // Class description:
-// Base class for a strategy pattern to encapsulate algorithms for interpolation of a data set
+// Base class for the generation of final state in electromagnetic processes
 // Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
 // -------------------------------------------------------------------
 
-#ifndef G4VDATASETALGORITHM_HH
-#define G4VDATASETALGORITHM_HH 1
+#ifndef G4VFINALSTATE_HH
+#define G4VFINALSTATE_HH 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
 
-class G4VDataSetAlgorithm {
+class G4VFinalState {
  
 public:
 
-  G4VDataSetAlgorithm() { }
+  G4VFinalState() { }
 
-  virtual ~G4VDataSetAlgorithm() { }
+  virtual ~G4VFinalState() { }
  
-  virtual G4double Calculate(G4double point, G4int bin, 
-			     const G4DataVector& energies, 
-			     const G4DataVector& data) const = 0;
+  virtual G4std::vector<G4DynamicParticle*>* Generate(const G4Track& aTrack,
+						      const G4Step& aStep) const = 0;
 
 private:
   
   // Hide copy constructor and assignment operator
+  G4VFinalState(const G4VFinalState&);
+  G4VFinalState & operator=(const G4VFinalState &right);
 
 };
  
 #endif
- 
-
-
-
-
-
-
-
-
-
-

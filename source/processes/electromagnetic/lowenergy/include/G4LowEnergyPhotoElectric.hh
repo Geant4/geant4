@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.22 2001-09-21 08:43:32 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.23 2001-10-08 07:45:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -46,7 +46,6 @@
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4ShellData.hh"
 #include "G4AtomicDeexcitation.hh"
 
 class G4Track;
@@ -54,8 +53,8 @@ class G4Step;
 class G4ParticleDefinition;
 class G4VParticleChange;
 class G4VEMDataSet;
-class G4CrossSectionHandler;
-class G4VDataSetAlgorithm;
+class G4VCrossSectionHandler;
+class G4VRangeTest;
 
 class G4LowEnergyPhotoElectric : public G4VDiscreteProcess {
   
@@ -94,19 +93,18 @@ private:
   G4double lowEnergyLimit;  // low energy limit  applied to the process
   G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4VDataSetAlgorithm* scatterInterpolation;
-
   G4VEMDataSet* meanFreePathTable;
 
-  G4CrossSectionHandler* crossSectionHandler;
-  G4CrossSectionHandler* shellCrossSectionHandler;
+  G4VCrossSectionHandler* crossSectionHandler;
+  G4VCrossSectionHandler* shellCrossSectionHandler;
+
+  G4VRangeTest* rangeTest;
 
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;
 
   G4double cutForLowEnergySecondaryPhotons;
 
-  G4ShellData shellData;
   G4AtomicDeexcitation deexcitationManager;
 };
 
