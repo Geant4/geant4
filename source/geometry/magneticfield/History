@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2001-05-23 18:51:29 japost Exp $
+$Id: History,v 1.38 2001-08-16 23:57:08 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,12 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 16th, 2001  J. Apostolakis
+------------------------------
+G4ChordFinder:
+ Added method to erase/reset the state of the StepEstimate.
+ This is unwanted internal state that was carried between tracks and
+     events as a side effect.
+
+ Calling this at the start of each track, it is now possible to
+ eliminate a non-repeatability that was possible due to this.
+    ( It has been observed in particular in vaccuum. )
+
+May 23rd, 2001  J. Apostolakis - field-V03-01-02
+------------------------------
+- Added Exception to G4RKG3Stepper constructor: the class does not work
+
 May 23rd, 2001  J. Apostolakis - field-V03-01-01
 ------------------------------
 - Fixed G4FieldManager constructors to give default values to delta
   parameters.
-
-- Added Exception to G4RKG3Stepper constructor: the class does not work
 
 - Updated testPropagateSpin (it now compiles), 
    and some outputs of testPropagateMagField (1 to 5)
