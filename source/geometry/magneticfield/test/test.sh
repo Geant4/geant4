@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: test.sh,v 1.3 2002-03-28 13:56:20 japost Exp $
+# $Id: test.sh,v 1.4 2002-06-06 17:30:34 japost Exp $
 # $Name: not supported by cvs2svn $
 #
 
@@ -48,7 +48,7 @@ done
 
 #exit
 
-for i in *Spin.cc testProElectroMagField.cc
+for i in *Spin.cc
 do
   target=`basename $i .cc`
   echo  "Compiling $target ... "
