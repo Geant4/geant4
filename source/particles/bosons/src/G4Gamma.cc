@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gamma.cc,v 1.2 1999-12-15 14:50:53 gunter Exp $
+// $Id: G4Gamma.cc,v 1.3 2000-02-27 06:27:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ G4Gamma::G4Gamma(
              lepton,baryon,encoding,stable,lifetime,decaytable )
    //-- members initialisation for SetCuts ------------------------------
 {
+   SetParticleSubType("photon");
    const G4double DefaultLowestEnergy  = 1.0*keV;
    const G4double DefaultHighestEnergy = 1.0*GeV;
    const G4int DefaultTotBin = 100;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalPhoton.cc,v 1.2 1999-12-15 14:50:53 gunter Exp $
+// $Id: G4OpticalPhoton.cc,v 1.3 2000-02-27 06:27:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@ G4OpticalPhoton::G4OpticalPhoton(
              iConjugation,iIsospin,iIsospin3,gParity,pType,
              lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+   SetParticleSubType("photon");
    // Anti-particle of OpticalPhoton is OpticalPhoton itself
    SetAntiPDGEncoding(encoding);
 }
