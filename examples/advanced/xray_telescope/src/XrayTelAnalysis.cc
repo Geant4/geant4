@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.5 2002-11-13 15:56:52 santin Exp $
+// $Id: XrayTelAnalysis.cc,v 1.6 2002-11-14 12:03:11 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -154,8 +154,11 @@ void XrayTelAnalysis::finish()
 
   // extra delete as objects are created in book() method rather than during
   // initialisation of class
-  //   delete plotterFactory;
-   
+
+#ifdef G4ANALYSIS_USE_PLOTTER
+  if (plotterFactory)  delete plotterFactory;
+#endif
+
   if (tupleFactory)    delete tupleFactory;
   if (histoFactory)    delete histoFactory;
   if (tree)            delete tree;
@@ -229,9 +232,6 @@ void XrayTelAnalysis::plotAll()
 	// Map the plotter on screen :
 	G4cout << "Showing the Plotter on screen" << G4endl;
 	plotter->show();
-	// Set the page title :
-	G4cout << "Setting the Plotter title" << G4endl;
-	plotter->setParameter("pageTitle","XrayTel");
 	// Have multiple plotting regions (two columns, two rows).
 	// G4cout << "Dividing the Plotter in multiple regions" << G4endl;
 	// plotter->createRegions(2,2); 
@@ -245,21 +245,22 @@ void XrayTelAnalysis::plotAll()
   }
 
   if (plotter) {
-    AIDA::IHistogram1D* hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("1") );
+    AIDA::IHistogram1D* hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
     AIDA::IHistogram1D& h  = *hp;  
     (plotter->currentRegion()).plot(h);
-    // plotter->next();
-    hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("2") );
-    h  = *hp;
-    (plotter->currentRegion()).plot(h);
-    // plotter->next();
-    hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
-    h  = *hp;
-    (plotter->currentRegion()).plot(h);
-    // plotter->next();
-    hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("4") );
-    h  = *hp;
-    (plotter->currentRegion()).plot(h);
+    plotter->refresh();
+//     plotter->next();
+//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("2") );
+//     h  = *hp;
+//     (plotter->currentRegion()).plot(h);
+//     plotter->next();
+//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
+//     h  = *hp;
+//     (plotter->currentRegion()).plot(h);
+//     plotter->next();
+//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("4") );
+//     h  = *hp;
+//     (plotter->currentRegion()).plot(h);
   }
 }
 #endif
