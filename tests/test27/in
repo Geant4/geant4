@@ -149,10 +149,10 @@
 #  .....end C(12,6)++............
 #
 # beyond what we really can do.... we think.
-# Fe(56,26) charge 5 at 2 GeV in U
+# Fe(56,26) charge 5 at 2 GeV in Lead
 #
 /gun/particle ion
 /gun/ion 26 56 5
 /gun/energy 1.0 GeV
-/mydet/SelectMaterial U
+/mydet/SelectMaterial Pb
 /run/beamOn 1
