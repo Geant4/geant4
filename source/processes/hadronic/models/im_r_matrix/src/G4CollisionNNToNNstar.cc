@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNNstar.cc,v 1.3 2003-12-12 15:38:22 hpw Exp $ //
+// $Id: G4CollisionNNToNNstar.cc,v 1.4 2003-12-15 10:12:48 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNNstar.hh"
@@ -43,6 +43,7 @@ G4CollisionNNToNNstar::G4CollisionNNToNNstar()
   MakeNNToNNStar<N1710pPC, N1710nPC, channelType>(this);
   MakeNNToNNStar<N1720pPC, N1720nPC, channelType>(this);
   MakeNNToNNStar<N1900pPC, N1900nPC, channelType>(this);
+  MakeNNToNNStar<N1990pPC, N1990nPC, channelType>(this);
   MakeNNToNNStar<N2090pPC, N2090nPC, channelType>(this);
   MakeNNToNNStar<N2190pPC, N2190nPC, channelType>(this);
   MakeNNToNNStar<N2220pPC, N2220nPC, channelType>(this);
