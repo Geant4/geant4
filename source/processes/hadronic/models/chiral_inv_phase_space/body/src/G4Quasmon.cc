@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.28 2001-09-18 13:42:54 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.29 2001-09-18 15:28:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -881,21 +881,28 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 		else if(envPDG==NUCPDG && quasM>iniQM)       // Emergency decay in Gamma & GSQuasmon
 		{
 #ifdef debug
-          G4cerr<<"***G4Q::HQ: Emergency Decay in Gamma + Residual GSQuasmon"<<G4endl;
+          G4cout<<"***G4Q::HQ: Emergency Decay in Gamma/Pi0 + Residual GSQuasmon"<<G4endl;
 		  //G4Exception("***G4Q::HadrQ: Emergency Decay in Gamma + Residual GSQuasmon");
 #endif
-          G4LorentzVector r4Mom(0.,0.,0.,0.);        // mass of the photon
+          G4int gamPDG=22;
+          G4double gamM=0.;
+          if(quasM>mPi0+iniQM)
+		  {
+            gamPDG=111;
+            gamM=mPi0;
+		  }
+          G4LorentzVector r4Mom(0.,0.,0.,gamM);      // mass of the photon/Pi0
           G4LorentzVector s4Mom(0.,0.,0.,iniQM);     // mass of the GSQuasmon
           if(!G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
           {
-            G4cerr<<"**G4Q::HQ:Q="<<q4Mom<<quasM<<"->gamma+GSQ="<<iniPDG<<"(M="<<iniQM<<")"<<G4endl;
-    	    G4Exception("G4Quasmon::HadronizeQuasmon: Photon + GSQuasmon decay did not succeed");
+            G4cerr<<"**G4Q::HQ:Q="<<q4Mom<<quasM<<"->g/pi0+GSQ="<<iniPDG<<"(M="<<iniQM<<")"<<G4endl;
+    	    G4Exception("G4Quasmon::HadronizeQuasmon:Photon/Pi0 + GSQuasmon decay did not succeed");
           }
 #ifdef debug
-	      G4cout<<"G4Q::HQ:=== 0 ===> HadrVec, Q="<<q4Mom<<quasM<<"->gamma="<<r4Mom<<"+GSQ="<<iniPDG
-                <<r4Mom<<iniQM<<G4endl;
+	      G4cout<<"G4Q::HQ:=== 0 ===> HadrVec, Q="<<q4Mom<<quasM<<"->g/pi0("<<gamPDG<<")="<<r4Mom
+                <<gamM<<"+GSQ="<<iniPDG<<r4Mom<<iniQM<<G4endl;
 #endif
-          G4QHadron* curHadr2 = new G4QHadron(22,r4Mom); // Creation Hadron for Gamma
+          G4QHadron* curHadr2 = new G4QHadron(gamPDG,r4Mom); // Creation Hadron for Gamma
           FillHadronVector(curHadr2);                // Fill "new curHadr2" (delete equivalent)
           G4QHadron* curHadr1 = new G4QHadron(iniPDG,s4Mom);// Create Hadron for Residual GSQ
           FillHadronVector(curHadr1);                // Fill "new curHadr1" (delete equivalent)
@@ -1606,9 +1613,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
             G4QHadron* curHadr1 = new G4QHadron(repPDG,r4Mom,curQ);// Create Hadron for Residual
             FillHadronVector(curHadr1);              // Fill "new curHadr1" (delete equivalent)
             // @@@ Renaming correction to distinguish from the evaporation (for BF/FSI purposes)
-            if(sPDG==2112) sPDG=90001000;            // rename PDG of the neutron
-            if(sPDG==2212) sPDG=90001000;            // rename PDG of the proton
-            if(sPDG==3122) sPDG=90001000;            // rename PDG of the lambda
+            if     (sPDG==2112) sPDG=90000001;       // rename PDG of the neutron
+            else if(sPDG==2212) sPDG=90001000;       // rename PDG of the proton
+            else if(sPDG==3122) sPDG=91000000;       // rename PDG of the lambda
             // @@@ ^^^^^^^^^^^^^^^^^^^^
             G4QHadron* curHadr2 = new G4QHadron(sPDG,s4Mom); // Creation Hadron for a Candidate
             FillHadronVector(curHadr2);              // Fill "new curHadr2" (delete equivalent)
@@ -2504,6 +2511,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mLamb= G4QPDGCode(3122).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
+  static const G4double mPi0 = G4QPDGCode(111).GetMass();
   static const G4double mK   = G4QPDGCode(321).GetMass();
   static const G4double mK0  = G4QPDGCode(311).GetMass();
 
@@ -2751,7 +2759,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         if(!qH->DecayIn2(a4Mom,b4Mom))
         {
           theQHadrons.insert(qH);              // No decay (delete equivalent)
-          G4cerr<<"***G4Q::FillHadronVector: Be8 decay did not succeeded"<<G4endl;
+          G4cerr<<"***G4Q::FillHadronVector: Be8 decay did not succeed"<<G4endl;
 	    }
         else
         {
@@ -2779,6 +2787,30 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       G4cerr<<"***G4Quasm::FillHV: tM="<<fragMas<<" > GSM="<<GSMass<<", d="<<fragMas-GSMass<<G4endl;
       G4Exception("***G4Quasmon::FillHadronVector: Out Mass is below the Ground State value");
 	}
+    else if (bA==1&&fragMas>GSMass)
+	{
+      G4int gamPDG=22;
+      G4double gamM=0.;
+      if(fragMas>mPi0+GSMass)
+	  {
+        gamPDG=111;
+        gamM=mPi0;
+	  }
+      G4LorentzVector a4Mom(0.,0.,0.,gamM);
+      G4LorentzVector b4Mom(0.,0.,0.,GSMass);
+      if(!qH->DecayIn2(a4Mom,b4Mom))
+      {
+        theQHadrons.insert(qH);              // No decay (delete equivalent)
+        G4cerr<<"***G4Q::FillHadronVector: N*->gamma/pi0+N decay did not succeed"<<G4endl;
+	  }
+      else
+      {
+        G4QHadron* HadrB = new G4QHadron(gamPDG,a4Mom);
+        FillHadronVector(HadrB);             // Fill gamma/Pi0 Hadron (delete equivalent)
+        qH->Set4Momentum(b4Mom);
+        theQHadrons.insert(qH);                // Fill corrected baryon in the HadronVector
+      }
+    }
     else                                       // ===> Evaporation of excited system
 	{
 #ifdef pdebug

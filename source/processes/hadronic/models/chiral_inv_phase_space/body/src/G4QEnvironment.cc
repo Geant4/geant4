@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.28 2001-09-18 13:42:52 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.29 2001-09-18 15:28:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2755,7 +2755,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
     G4cout<<"G4QE::Fr:After nH="<<nHadr<<G4endl;
 #endif
   }
-  if(nHadr)for(G4int ipo=0; ipo<nHadr; ipo++)    // Find all nuclear fragments and try to decay/evap
+  if(nHadr)for(G4int ipo=0; ipo<theQHadrons.entries(); ipo++)// Find NuclFragm and try to decay/evap
   {
     G4int hBN  = theQHadrons[ipo]->GetBaryonNumber();
     G4int hPDG = theQHadrons[ipo]->GetPDGCode();
