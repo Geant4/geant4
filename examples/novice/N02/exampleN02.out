@@ -63,7 +63,7 @@ Idle> /run/initialize
 Idle> /gun/position 0 0 -100
 Idle> /gun/direction 0 0 1
 Idle> /gun/energy    200 MeV
-Idle> /tracking/verbose 1
+Idle> Idle> /tracking/verbose 1
 Idle> /gun/particle e+
 Idle> /run/beamOn 1
 ### Run 0 start.
@@ -2476,7 +2476,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     9      -22     2.47     7.61         0    0.175    0.175      8.68    TargetPV eIoni
 >>> Event 0
     201 trajectories stored in this event.
-Idle> /tracking/verbose 0
+Idle> Idle> /tracking/verbose 0
 Idle> /run/beamOn 100
 ### Run 1 start.
 /tracking/storeTrajectory 1
@@ -2680,4 +2680,4 @@ Idle> /run/beamOn 100
     115 trajectories stored in this event.
 >>> Event 99
     180 trajectories stored in this event.
-Idle> 
+Idle> Idle> 
