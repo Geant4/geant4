@@ -6,3 +6,67 @@ This directory includes example applications to demonstrate the usage of
 different biasing techniques supported in Geant4, or possible from the user
 applications.
 
+
+General remark to biasing
+-------------------------
+The tools provided for importance sampling (or geometrical splitting and
+Russiann roulett) require the user to have a good understanding of the physics
+in the problem. This is because the user has to decide which particle types 
+have to be biased, define the regions (physical volumes, replicas) and 
+assign importances to that regions. If this is not done properly the rsults
+can not expected to describe a real experiment. 
+The examples given here only demonstrate how to use the tools tecnically. They
+don't intend to produce physical correcxt results.
+
+Known problems
+--------------
+In the following scenario it can happen that a particle is not
+biased and it's weight is therefore not changed even if it crosses
+a boundary where biasing should happen.
+The importance sampling creates particles on boundaries 
+between volumes. If the GPIL method of a physical process returns 
+0 as step length for a particle on a boundary and if the PostStepDoIt of
+that process changes the direction of the particle to go back in the 
+former volume the biasing won't be invoked. 
+This will produce particles with weights that do not coresspondend to the
+importance of the current volumes.
+
+
+I. Examples for scoring without biasing
+=======================================
+
+I. 1. Example B01
+-----------------
+This example shows the use of scoring in the "tracking" geometry.
+It scores several values for neutrons for evry physical volume
+in the tracking geometry. 
+All scored values are printed after the running. In addition a more
+exclusive output of selected values is printed. The way how the
+last ouput is produced shows how to extract certain values from all
+scored values.
+
+
+I. 2. Example B02
+-----------------
+This example shows the use of scoring in a "parallel" or "scoring" geometry.
+In this example a tracking and a scoring geometry is constructed. 
+Gammas are scored in the scoring geometry. The scored values are dumped
+to the screen after the run. How to access the score values more exclusively
+is shown in example B01.
+
+
+II. Examples for biasing without scoring
+========================================
+
+II. 1. Example B03
+------------------
+This example shows the use of biasing in the "tracking" geometry. 
+It does not do scoring. 
+
+II. 2. Example B04
+------------------
+This example shows the use of biasing according to a "parallel" or "importance"
+geometry.
+
+III. Examples for biasing and scoring
+=====================================
