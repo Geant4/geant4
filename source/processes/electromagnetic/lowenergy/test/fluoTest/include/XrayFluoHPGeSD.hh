@@ -21,13 +21,15 @@ class XrayFluoHPGeSD : public G4VSensitiveDetector
      ~XrayFluoHPGeSD();
 
       void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
       void EndOfEvent(G4HCofThisEvent*);
       void clear();
       void DrawAll();
       void PrintAll();
 
-  private:
+protected:
+
+ G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+private:
   
       XrayFluoSensorHitsCollection*  HPGeCollection;   
       XrayFluoDetectorConstruction* Detector;

@@ -57,10 +57,9 @@ protected:
   void ConstructEM();
   void ConstructGeneral();
 
-  void SetCuts();
-
 public:
-
+ 
+  void SetCuts();
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
 
