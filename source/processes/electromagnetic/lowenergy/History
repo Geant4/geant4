@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2001-05-11 15:08:41 pia Exp $
+$Id: History,v 1.67 2001-05-22 17:36:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22.05.2001 - MGP, tag emlowen-V03-01-08
+  	     Same as emlowen-V03-01-07, with in addition:
+             - new unit tests (G4hTestLossTableProduction, G4MeanFreePathTest)
+             - modifications to hTest
+             - test macros renamed to be more easily identifiable
 
 11.05.2001 - MGP, tag emlowen-V03-01-07
              Removed more compilation warnings in ANSI strict mode
