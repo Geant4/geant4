@@ -421,9 +421,9 @@ endif
 # Comments :
 # --------
 #
-if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
+if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv G4INSTALL /geant4/geant4-02-00-ref-02
+  setenv G4INSTALL /geant4/geant4-03-00-ref-03
   setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
@@ -461,7 +461,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   # AIDA : 
   setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
   # Lab :
-  source /projects/Lab/v4r0/cmt/setup.csh
+  source /projects/Lab/v4r1/cmt/setup.csh
   # CLHEP :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
   # Things needed by the Geant4/vis/drivers :
