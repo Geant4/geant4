@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.12 2000-05-11 14:43:33 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.13 2000-05-11 15:01:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,7 +116,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
   return stepPossible;
 }
 
-#define  TEST_CHORD_PRINT  1
+// #define  TEST_CHORD_PRINT  1
 
 // ..............................................................................
 
