@@ -30,11 +30,8 @@
 #ifndef DicomConfiguration_h
 #define DicomConfiguration_h 1
 
-// Standard library
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
 #include <stdio.h>
 #include "globals.hh"
 #include "g4std/vector"
@@ -43,7 +40,9 @@ using namespace std;
 class DicomConfiguration
 {
 public:
-
+  DicomConfiguration(){;}
+  ~DicomConfiguration(){;}
+public:
   // This function reads <Data.dat>, return 0/1 if successfull or not
   G4int ReadDataFile();
   G4int ReadG4File(string g4File);
@@ -70,15 +69,10 @@ private:
   G4double SliceTickness;
   G4double SliceLocation; 
   G4int CompressionUsed;
-
+  G4String NameOfFileBuffer;
+	
 public:
-  G4std::vector<G4double> DensityValue;
-	
-private:
-
-	// Private variables used in Read_DataFile()
-	string NameOfFileBuffer;
-	
+  G4std::vector<G4double> DensityValue;	
 };
 
 #endif

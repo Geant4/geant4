@@ -40,12 +40,13 @@
 #include "G4VPhysicalVolume.hh"
 
 using namespace std;
-
+class DicomConfiguration;
 class DicomGeometry : public G4VUserDetectorConstruction
 {
 public:
   DicomGeometry();
   ~DicomGeometry();
+  void PatientConstruction();
   static inline DicomGeometry* GetInstance()
   {
     return theDetector;
@@ -53,10 +54,14 @@ public:
 
   // Construction of the geometry
   G4VPhysicalVolume* Construct();
+
+private:
   G4Box *solidWorld;
   G4LogicalVolume *logicWorld;
   G4VPhysicalVolume *physiWorld;
-  void patientConstruction();
+  
+public:
+  
   int FindingNbOfVoxels(double MaxDensity , double MinDensity);
 
   // Functions to use ROI (region of interest), contour usually drawn by the
@@ -70,21 +75,11 @@ public:
   int MaxCurve;
 
   // Materials
+private:
 
   void InitialisationOfMaterials();
-  G4Element * elC;
-  G4Element * elH;
-  G4Element * elN;
-  G4Element * elO;
-  G4Element * elNa;
-  G4Element * elS;
-  G4Element * elCl;
-  G4Element * elK;
-  G4Element * elP;
-  G4Element * elFe;
-  G4Element * elMg;
-  G4Element * elCa;
 
+public:
   // Air
   G4Material* air;
   G4Box *AirBox;

@@ -74,6 +74,3 @@ G4int DicomConfiguration::ReadG4File( string g4File )
 	Reading_g4FileHeader.close();
 	return 0;
 }
-
-
-//   $tigre.2@sympatico.ca
