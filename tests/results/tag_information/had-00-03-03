@@ -1,3 +1,0 @@
-It includes both neutrons and generator (complete), a few fixes of bugs
-we had found in geisha, and a fix for a (possible) dependence on
-optimization levels. It is consistant with the new version of particles.
