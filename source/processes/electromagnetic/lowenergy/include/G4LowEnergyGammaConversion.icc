@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.icc,v 1.4 1999-06-04 12:56:09 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.icc,v 1.5 1999-06-21 14:00:51 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,12 +88,14 @@ G4LowEnergyGammaConversion::GetMeanFreePath(const G4Track& aTrack, G4double, G4F
 
   G4bool isOutRange ;
   
-  if(GammaEnergy > HighestEnergyLimit){
+  if (GammaEnergy < LowestEnergyLimit){
     MeanFreePath = DBL_MAX;
+
   }
   else {
-    if (GammaEnergy < LowestEnergyLimit) GammaEnergy = LowestEnergyLimit;   
+    if(GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit;   
     MeanFreePath = DataLogInterpolation(GammaEnergy, aMaterial->GetIndex(), theMeanFreePathTable);	
+
   }                                     
   
   return MeanFreePath;

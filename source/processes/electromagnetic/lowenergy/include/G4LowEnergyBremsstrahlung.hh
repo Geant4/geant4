@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.4 1999-06-01 22:34:01 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.5 1999-06-21 14:00:49 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,9 @@ public:
   ~G4LowEnergyBremsstrahlung();
   
   G4bool IsApplicable(const G4ParticleDefinition&);
-  
+
+  void SetCutForLowEnSecPhotons(G4double);
+
   void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
   
   void PrintInfoDefinition();
@@ -140,6 +142,7 @@ private:
   
   G4double lowEnergyCut;    // lower limit of the energy sampling formula
   G4int    TotBin;                   // number of bins in the tables 
+  G4double CutForLowEnergySecondaryPhotons;
 };
 
 #include "G4LowEnergyBremsstrahlung.icc"

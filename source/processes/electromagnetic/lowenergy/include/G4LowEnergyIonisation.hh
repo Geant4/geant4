@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.4 1999-06-11 15:45:54 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.5 1999-06-21 14:00:51 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,10 @@ public:
   
   G4bool IsApplicable(const G4ParticleDefinition&); 
   
+  void SetCutForLowEnSecPhotons(G4double);
+
+  void SetCutForLowEnSecElectrons(G4double);
+
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
   
   G4double GetMeanFreePath(const G4Track& track,
@@ -114,7 +118,7 @@ private:
   G4int FindBinLocation(const G4double BinValue, const G4Data& arg);
 
   G4double EnergySampling(const G4int, const G4int,const G4double);
-  
+
   allAtomTable* allAtomShellCrossSec;
   allAtomTable* theFluorTransitionTable;
   allAtomTable* theSamplingCoeffTable;
@@ -125,6 +129,8 @@ private:
   G4double LowestKineticEnergy;
   G4double HighestKineticEnergy;
   G4int TotBin;
+  G4double CutForLowEnergySecondaryPhotons;
+  G4double CutForLowEnergySecondaryElectrons;
 };
  
 #include "G4LowEnergyIonisation.icc"

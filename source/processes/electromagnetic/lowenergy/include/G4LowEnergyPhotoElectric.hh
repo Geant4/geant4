@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.7 1999-06-11 15:45:32 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.8 1999-06-21 14:00:51 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,10 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   
+  void SetCutForLowEnSecPhotons(G4double);
+
+  //  void SetCutForLowEnSecElectrons(G4double);
+
   void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
   
   G4double GetMeanFreePath(const G4Track& aTrack, 
@@ -124,7 +128,7 @@ private:
   G4double LowestEnergyLimit;      
   G4double HighestEnergyLimit;     
   G4int NumbBinTable;              
-  
+  G4double CutForLowEnergySecondaryPhotons;
   G4double MeanFreePath;           
 };
 

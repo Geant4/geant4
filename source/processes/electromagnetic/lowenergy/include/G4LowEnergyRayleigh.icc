@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.icc,v 1.4 1999-06-04 12:56:10 aforti Exp $
+// $Id: G4LowEnergyRayleigh.icc,v 1.5 1999-06-21 14:00:52 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@ inline G4int G4LowEnergyRayleigh::FindBinLocation(G4double arg, G4PhysicsVector*
     G4int midBin = (lowerBound + upperBound)/2;
 
     if( arg < vec->GetLowEdgeEnergy(midBin) )
+
        upperBound = midBin-1;
     else
 
@@ -63,13 +64,16 @@ inline G4int G4LowEnergyRayleigh::InvFindBinLocation(G4double arg, G4PhysicsVect
   G4int upperBound = numberOfBin-1;
 
   do {
+
     G4int midBin = (lowerBound + upperBound)/2;
+
     if( arg > (*vec)(midBin))
 
        upperBound = midBin-1;
     else
 
        lowerBound = midBin+1;
+
   } while (lowerBound <= upperBound); 
 
   return upperBound;
@@ -123,12 +127,10 @@ inline G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& aTrack, G4do
 
    G4bool isOutRange ;
 
-   if (GammaEnergy > HighestEnergyLimit){
+   if (GammaEnergy > HighestEnergyLimit || GammaEnergy < LowestEnergyLimit){
      MeanFreePath = DBL_MAX;
 }	
    else {
-
-     if(GammaEnergy < LowestEnergyLimit) GammaEnergy = LowestEnergyLimit;   
 
        MeanFreePath = DataLogInterpolation(GammaEnergy, 
 	                                   aMaterial->GetIndex(), 
