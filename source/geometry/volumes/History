@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2002-04-12 14:59:22 japost Exp $
+$Id: History,v 1.74 2002-04-19 08:21:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 19th, 2002      G. Cosmo - geomvol-V04-00-06
+- Moved inline constructors and destructors to no inline.
+  Affected files: G4BlockingList[.icc,cc], G4NavigationHistory[.icc,.cc],
+                  G4PropagatorInField[.hh.icc.cc].
 
 Apr 3rd, 2002       G. Cosmo - geomvol-V04-00-05
 - G4GeometryMessenger[.hh.cc]: added new commands to exploit more features of the
