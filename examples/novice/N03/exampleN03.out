@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -168,10 +168,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 274.419 MeV       total track length: 19.3578 cm 
-        Gap: total energy: 8.46705 MeV       total track length: 4.11413 cm 
+   Absorber: total energy: 245.648 MeV       total track length: 16.9701 cm 
+        Gap: total energy:  16.641 MeV       total track length: 8.19589 cm 
 
-     8 hits are stored in ExN03CalorHitsCollection.
+     10 hits are stored in ExN03CalorHitsCollection.
      Transportation,              hIoni,                msc,              eIoni
               eBrem,            annihil,               conv,              compt
                phot,             MuIoni,            MuBrems,         MuPairProd
@@ -182,13 +182,13 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 144717580, 40196518
+ Current couple of seeds = 1082355994, 1488603275
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 274.124 MeV       total track length: 18.8789 cm 
-        Gap: total energy: 14.3096 MeV       total track length: 6.68164 cm 
+   Absorber: total energy: 289.062 MeV       total track length:  19.499 cm 
+        Gap: total energy: 11.4486 MeV       total track length: 5.58057 cm 
 
-     9 hits are stored in ExN03CalorHitsCollection.
+     10 hits are stored in ExN03CalorHitsCollection.
 
 ------------------------------------------------------------
 ---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
@@ -207,12 +207,12 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 915041044, 609269339
+ Current couple of seeds = 1188599885, 738400153
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 388.462 MeV       total track length: 92.4563 cm 
-        Gap: total energy: 70.6296 MeV       total track length: 1.95829 m  
+   Absorber: total energy: 401.863 MeV       total track length: 95.9539 cm 
+        Gap: total energy: 82.1407 MeV       total track length: 2.30339 m  
 
-     29 hits are stored in ExN03CalorHitsCollection.
+     26 hits are stored in ExN03CalorHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -265,7 +265,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.4e+02s Real=1.9e+03s Sys=1.7e+02s
+  User=1.4e+02s Real=2.3e+03s Sys=1.6e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
     mean charged track length   in absorber=0.0209601 +- 1.47921e-05  mm  

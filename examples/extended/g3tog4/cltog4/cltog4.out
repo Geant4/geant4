@@ -1,15 +1,15 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -145,7 +145,7 @@ Cut in energy
                 AIR         990 eV          990 eV 
  VACUUM                       990 eV          990 eV 
 ===================================================
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test602/test602.in
+/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test602/test602.in
 /control/verbose 1
 /tracking/verbose 1
 /run/initialize
@@ -249,5 +249,5 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.03s Sys=0.02s
+  User=0.01s Real=0.02s Sys=0.01s
 G4 kernel has come to Quit state.

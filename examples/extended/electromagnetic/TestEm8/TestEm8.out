@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -133,7 +133,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 10.96 s
+total time for build X-ray TR tables = 11.03 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -163,7 +163,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=14.61 s 
+total time(SetCuts)=11.97 s 
 #
 #control/saveHistory
 #
@@ -244,13 +244,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   11 kByte
-    Total CPU time elapsed for geometry optimisation: 0.03 seconds
+    Total CPU time elapsed for geometry optimisation: 0.02 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         1.11           11k Radiator
-       0.00         0.00         1.11            0k World
+       0.00         0.00         0.93           11k Radiator
+       0.00         0.00         0.93            0k World
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
@@ -263,28 +263,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=546.75s Real=578.00s Sys=1.72s
+  User=468.9s Real=477.82s Sys=1.64s
  ================== run summary =====================
- end of Run TotNbofEvents = 1000.000000
-    mean charged track length   in absorber=76.030837 +- 1.028249  mm  
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=74.8793 +- 1.10279  mm  
 
-            mean energy deposit in absorber=0.102371 +- 0.001129  MeV 
+            mean energy deposit in absorber=0.102131 +- 0.00107835  MeV 
 
- mean number of steps in absorber (charged) =431.649000 +- 1.938750      
- mean number of steps in absorber (neutral) =5.071000 +- 0.070256      
+ mean number of steps in absorber (charged) =434.008 +- 2.14015      
+ mean number of steps in absorber (neutral) =5.027 +- 0.0688351      
 
-   mean number of charged secondaries = 1.518000 +- 0.039921
+   mean number of charged secondaries = 1.473 +- 0.0392845
 
-   mean number of neutral secondaries = 0.020000 +- 0.004648
+   mean number of neutral secondaries = 0.026 +- 0.0050323
 
-   mean number of e-s =1.518000  and e+s =0.000000
+   mean number of e-s =1.473  and e+s =0
 
-(number) transmission coeff=0.759000  reflection coeff=0.002000
+(number) transmission coeff=0.767  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 966783258, 99037842
+ Current couple of seeds = 930601971, 182477908
 ----------------------------------------
 #
 #

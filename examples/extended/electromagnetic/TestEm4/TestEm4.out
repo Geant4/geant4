@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -88,11 +88,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=59s Real=1.2e+03s Sys=72s
+  User=41s Real=5.4e+02s Sys=39s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 396267069, 1477813938
+ Current couple of seeds = 1628778153, 150608943
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

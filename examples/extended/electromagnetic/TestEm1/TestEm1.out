@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -22,7 +22,7 @@ Current available graphics systems are:
 # 
 /run/initialize
 
-***** Table : Nb of materials = 9 *****
+***** Table : Nb of materials = 10 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -43,6 +43,9 @@ Current available graphics systems are:
 
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
    --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+   --->  Element: Germanium      Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -125,6 +128,7 @@ Cut in range
         liquidArgon         2.2 mm         6.05 mum
           Aluminium         2.2 mm         6.05 mum
             Silicon         2.2 mm         6.05 mum
+          Germanium         2.2 mm         6.05 mum
                Iron         2.2 mm         6.05 mum
                Lead         2.2 mm         6.05 mum
             Uranium         2.2 mm         6.05 mum
@@ -135,6 +139,7 @@ Cut in energy
         liquidArgon        9.08 keV        3.98 keV
           Aluminium        9.99 keV        9.97 keV
             Silicon          10 keV        8.45 keV
+          Germanium        31.6 keV        32.7 keV
                Iron        31.1 keV        43.3 keV
                Lead         124 keV        42.8 keV
             Uranium         143 keV        53.4 keV
@@ -164,14 +169,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=32s Real=62s Sys=2.3s
+  User=34s Real=37s Sys=2.3s
 
- nb tracks/event   neutral:   27.29   charged:  692.97
- nb  steps/event   neutral:  145.49   charged: 1331.63
+ nb tracks/event   neutral:    27.2900   charged:   692.9700
+ nb  steps/event   neutral:   145.4900   charged:  1331.6300
 
  nb of process calls per event: 
-       eIoni    eBrem    compt     phot     conv  annihil
-     1305.51    24.92   118.20    26.09     1.20     1.20
+          eIoni       eBrem       compt        phot        conv     annihil
+      1305.5100     24.9200    118.2000     26.0900      1.2000      1.2000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
