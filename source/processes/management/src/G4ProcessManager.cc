@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.13 2000-03-02 01:45:10 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.14 2000-03-02 02:05:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,10 +121,14 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
       G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
       G4Exception((const char*)(aErrorMessage));
     }
+
+    G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
     G4ProcessVector* src = right.theProcVector[i];
     for (G4int j=0; j< src->entries() ; j++){
       // copy j-th process in i-th ProcessVector 
       theProcVector[i]->insert((*src)[j]);
+      //add aProcess and this ProcessManager into ProcesssTable
+      theProcessTable->Insert((*src)[j], this);
     }
   }
 
