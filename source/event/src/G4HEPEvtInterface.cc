@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.cc,v 1.1 1999-01-07 16:06:37 gunter Exp $
+// $Id: G4HEPEvtInterface.cc,v 1.2 1999-06-07 16:53:57 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,12 @@
 G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
 {
   inputFile.open(evfile);
-  fileName = evfile;
+  if (inputFile) {
+    fileName = evfile;
+  }
+  else {
+    G4Exception("G4HEPEvtInterface:: cannot open file.");
+  }
 }
 
 G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
