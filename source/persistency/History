@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 6, 99   Y.Morita (persistency-V00-01-12)
+- Bug fix in G4PGeometryObjectMap.cc
+
 December 5, 99   Y.Morita (persistency-V00-01-11)
 - added G4PPrimaryParticle
 
