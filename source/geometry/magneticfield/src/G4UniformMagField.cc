@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.9 2004-02-09 14:43:10 gcosmo Exp $
+// $Id: G4UniformMagField.cc,v 1.10 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,9 +56,9 @@ G4UniformMagField::G4UniformMagField(G4double vField,
       vTheta >= 0 && vTheta <= pi && 
       vPhi >= 0 && vPhi <= twopi)
    {
-      fFieldComponents[0] = vField*sin(vTheta)*cos(vPhi) ;
-      fFieldComponents[1] = vField*sin(vTheta)*sin(vPhi) ;
-      fFieldComponents[2] = vField*cos(vTheta) ;
+      fFieldComponents[0] = vField*std::sin(vTheta)*std::cos(vPhi) ;
+      fFieldComponents[1] = vField*std::sin(vTheta)*std::sin(vPhi) ;
+      fFieldComponents[2] = vField*std::cos(vTheta) ;
    }
    else
    {

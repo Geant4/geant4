@@ -92,7 +92,7 @@ G4double NTSTLooperDeath::PostStepGetPhysicalInteractionLength(
   
   if (dot < 0) return 0;		// Already done so
   
-  G4double phi = pi - acos(dot);
+  G4double phi = pi - std::acos(dot);
   
   if (phi < 0) return 0;
 
@@ -121,7 +121,7 @@ G4double NTSTLooperDeath::PostStepGetPhysicalInteractionLength(
   //
   // No field? Forget it!
   //
-  if (fabs(b[2]) < 0.00001) return DBL_MAX;
+  if (std::fabs(b[2]) < 0.00001) return DBL_MAX;
   
   //
   // Calculate radius of curvature, the usual way. 
@@ -130,7 +130,7 @@ G4double NTSTLooperDeath::PostStepGetPhysicalInteractionLength(
   // G4 suggestion: the constant below should be added to
   // the geant4 list.
   //
-  G4double radius = fabs(track.GetMomentum().perp()/299.79251/b[2]);
+  G4double radius = std::fabs(track.GetMomentum().perp()/299.79251/b[2]);
   
   //
   // Convert this to a distance

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.10 2004-10-20 23:28:16 gum Exp $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.11 2004-12-02 09:55:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // This is the standard right-hand side for equation of motion.
@@ -58,7 +58,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
 
    ParticleCharge = particleCharge;
 
-   E = sqrt(sqr(MomentumXc)+sqr(mass));
+   E = std::sqrt(sqr(MomentumXc)+sqr(mass));
    beta  = MomentumXc/E;
    gamma = E/mass;
 
@@ -70,7 +70,7 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 				    G4double dydx[] ) const
 {
    G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
-   G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
+   G4double inv_momentum_magnitude = 1.0 / std::sqrt( momentum_mag_square );
    G4double cof = FCof()*inv_momentum_magnitude;
 
    dydx[0] = y[3] * inv_momentum_magnitude;       //  (d/ds)x = Vx/V

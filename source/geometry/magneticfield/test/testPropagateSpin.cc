@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.15 2003-11-17 17:26:45 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.16 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -374,7 +374,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 
     const G4double threshold= 1.e-6; 
 
-    if( fabs(UnitMomentum.mag() - 1.0) > threshold ) 
+    if( std::fabs(UnitMomentum.mag() - 1.0) > threshold ) 
     {
       G4cout << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -394,7 +394,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
  
        G4double momentum_sq = momentum_val * momentum_val;                                            
        G4double kineticEnergy =  momentum_sq /
-                  ( sqrt( momentum_sq + rest_mass * rest_mass ) 
+                  ( std::sqrt( momentum_sq + rest_mass * rest_mass ) 
 		    + rest_mass );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
        pMagFieldPropagator->SetChargeMomentumMass(
@@ -404,7 +404,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 
        UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
 		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
-       G4double  beta = momentum_val / sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
+       G4double  beta = momentum_val / std::sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
        G4double      VelocityMag = beta * c_light;
        G4ThreeVector Velocity = VelocityMag * UnitMomentum ;
 
@@ -455,7 +455,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 //          G4cout << " initialSpin " << initialSpin.mag() << G4endl;
 //          G4cout << " EndSpin     " << EndSpin.mag()     << G4endl;
 
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
+	  if( std::fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
 	    G4cout << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 

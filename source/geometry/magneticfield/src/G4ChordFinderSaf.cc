@@ -95,7 +95,7 @@ CalculatePointSafety(G4ThreeVector safetyOrigin,
   G4ThreeVector OriginShift = point - safetyOrigin ;
   G4double      MagSqShift  = OriginShift.mag2() ;
   if( MagSqShift < sqr(safetyRadius) ){ 
-    pointSafety = safetyRadius - sqrt(MagSqShift) ;  
+    pointSafety = safetyRadius - std::sqrt(MagSqShift) ;  
   }
 
   return pointSafety;

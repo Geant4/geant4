@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTEventAction.cc,v 1.3 2003-12-09 15:35:32 gunter Exp $
+// $Id: NTSTEventAction.cc,v 1.4 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,10 +71,10 @@ NTSTEventAction::~NTSTEventAction()
     RmsUserEventTime = RmsUserEventTime / NumberOfEvents;
     RmsRealEventTime = RmsRealEventTime / NumberOfEvents;
     G4double ErrUserEventTime = 
-      sqrt((RmsUserEventTime - MeanUserEventTime*MeanUserEventTime)
+      std::sqrt((RmsUserEventTime - MeanUserEventTime*MeanUserEventTime)
 	   /NumberOfEvents);
     G4double ErrRealEventTime = 
-      sqrt((RmsRealEventTime - MeanRealEventTime*MeanRealEventTime)
+      std::sqrt((RmsRealEventTime - MeanRealEventTime*MeanRealEventTime)
 	   /NumberOfEvents);
     G4cout << setprecision(3) 
 	   << "### Event user time = " << setw(6) << MeanUserEventTime
@@ -90,9 +90,9 @@ NTSTEventAction::~NTSTEventAction()
     MeanTracks = MeanTracks / NumberOfEvents;
     RmsTracks = RmsTracks / NumberOfEvents;
     G4double ErrVertices = 
-      sqrt((RmsVertices - MeanVertices*MeanVertices)/NumberOfEvents);
+      std::sqrt((RmsVertices - MeanVertices*MeanVertices)/NumberOfEvents);
     G4double ErrTracks =
-      sqrt((RmsTracks - MeanTracks*MeanTracks)/NumberOfEvents);
+      std::sqrt((RmsTracks - MeanTracks*MeanTracks)/NumberOfEvents);
 
     G4cout << setprecision(3)
 	   << "### Number of Vertices = " << setw(6) << MeanVertices << " +- "

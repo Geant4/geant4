@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02SteppingAction.cc,v 1.4 2003-06-16 16:51:38 gunter Exp $
+// $Id: F02SteppingAction.cc,v 1.5 2004-12-02 09:55:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,7 +156,7 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction ->SetTr();
-       Theta       = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
+       Theta       = std::acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
        runaction   ->FillTh(Theta) ;
 
        Ttrans      = aStep->GetTrack()->GetKineticEnergy() ;
@@ -164,7 +164,7 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
 
        yend        = aStep->GetTrack()->GetPosition().y() ;
        xend        = aStep->GetTrack()->GetPosition().x() ;
-       rend        = sqrt(yend*yend+xend*xend) ;
+       rend        = std::sqrt(yend*yend+xend*xend) ;
        runaction   ->FillR(rend);
 
        timeGlob    = aStep->GetTrack()->GetGlobalTime() ;
@@ -193,7 +193,7 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction->SetRef();
-       Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+       Thetaback = std::acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
        Thetaback -= 0.5*pi ;
        runaction->FillThBack(Thetaback) ;
        Tback  = aStep->GetTrack()->GetKineticEnergy() ;

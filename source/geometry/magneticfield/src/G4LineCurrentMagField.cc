@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LineCurrentMagField.cc,v 1.4 2003-10-31 14:35:54 gcosmo Exp $
+// $Id: G4LineCurrentMagField.cc,v 1.5 2004-12-02 09:55:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
    G4double a = 1.00*mm ;   // mm -> m 
    G4double x = a*yTrack[0], y = a*yTrack[1] ;
    G4double x2 = x*x, y2 = y*y, r2 = x2 + y2 ;
-   G4double r = sqrt(r2+a*a) ;
+   G4double r = std::sqrt(r2+a*a) ;
    G4double Br = fFieldConstant/r;
    B[0] = -Br*y/r ;
    B[1] = Br*x/r ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.28 2004-02-09 12:10:39 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.29 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -353,7 +353,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 // Test location & Step computation
 //  
     /* assert(located->GetName()=="World"); */
-    if( fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
+    if( std::fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
     {
       G4cerr << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -372,7 +372,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
        G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
        G4double kineticEnergy =  momentum*momentum /
-                  ( sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
+                  ( std::sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
 		    + proton_mass_c2 );
        G4double velocity = momentum / ( proton_mass_c2 + kineticEnergy );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
@@ -417,7 +417,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 	  EndUnitMomentum= pMagFieldPropagator->EndMomentumDir();
 	  //       --------
 	  
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
+	  if( std::fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
 	    G4cerr << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 

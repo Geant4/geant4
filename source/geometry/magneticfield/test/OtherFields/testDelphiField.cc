@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testDelphiField.cc,v 1.5 2003-06-16 16:51:26 gunter Exp $
+// $Id: testDelphiField.cc,v 1.6 2004-12-02 09:55:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -346,7 +346,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 // Test location & Step computation
 //  
     /* assert(located->GetName()=="World"); */
-    if( fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
+    if( std::fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
     {
       G4cerr << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -365,7 +365,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
        G4double kineticEnergy =  momentum*momentum /
-                  ( sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
+                  ( std::sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
 		    + proton_mass_c2 );
        G4double velocity = momentum / ( proton_mass_c2 + kineticEnergy );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
@@ -415,7 +415,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  EndUnitMomentum= pMagFieldPropagator->EndMomentumDir();
 	  //       --------
 	  
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
+	  if( std::fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
 	    G4cerr << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 
@@ -576,7 +576,7 @@ int readin_particle( )
  h *=  10.; // G4 units are in millimeters.
 
  double betaGamma = pMomentum/pMass ;
- double pSpeed = betaGamma*cSpeed/sqrt(1 + betaGamma*betaGamma) ;
+ double pSpeed = betaGamma*cSpeed/std::sqrt(1 + betaGamma*betaGamma) ;
  double pEnergy = pMomentum*cSpeed/pSpeed ;
         pEnergy *= 1.60217733e-10  ; // energy in J (SI units)
  pTeta *= pi/180 ;
@@ -584,9 +584,9 @@ int readin_particle( )
 
 #if 0
  for(i=0;i<3;i++) ystart[i] = 0 ;            // initial coordinates
- ystart[3] = pSpeed*sin(pTeta)*cos(pPhi) ;   // and speeds
- ystart[4] = pSpeed*sin(pTeta)*sin(pPhi) ;
- ystart[5] = pSpeed*cos(pTeta) ;
+ ystart[3] = pSpeed*std::sin(pTeta)*std::cos(pPhi) ;   // and speeds
+ ystart[4] = pSpeed*std::sin(pTeta)*std::sin(pPhi) ;
+ ystart[5] = pSpeed*std::cos(pTeta) ;
 #endif
 
  return 1;

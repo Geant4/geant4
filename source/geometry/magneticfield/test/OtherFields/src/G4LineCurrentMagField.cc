@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineCurrentMagField.cc,v 1.2 2002-03-28 13:37:58 japost Exp $
+// $Id: G4LineCurrentMagField.cc,v 1.3 2004-12-02 09:55:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ void
    G4double a = 1.00 ;   // mm -> m 
    G4double x = a*yTrack[0], y = a*yTrack[1], z = a*yTrack[2] ;
    G4double x2 = x*x, y2 = y*y, r2 = x2 + y2 ;
-   G4double r = sqrt(r2+a*a) ;
+   G4double r = std::sqrt(r2+a*a) ;
    G4double Br = fFieldConstant/r;
    B[0] = -Br*y/r ;
    B[1] = Br*x/r ;

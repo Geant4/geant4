@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTGunGenerator.cc,v 1.3 2003-12-09 15:35:35 gunter Exp $
+// $Id: NTSTGunGenerator.cc,v 1.4 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,10 +84,10 @@ NTSTGunGenerator::GeneratePrimaryVertex(G4Event* anEvent)
     //
     // generate random direction (modifiy later to select an angular range)
     G4double cth = 2.*(G4UniformRand()-0.5);
-    G4double sth = sqrt(1.-cth*cth);
+    G4double sth = std::sqrt(1.-cth*cth);
     G4double phi   = 2*pi*G4UniformRand();
-    G4double cfi = cos(phi);
-    G4double sfi = sin(phi);
+    G4double cfi = std::cos(phi);
+    G4double sfi = std::sin(phi);
     G4double p   = (Plow + G4UniformRand()*(Phigh - Plow))*GeV;  
     //
     G4PrimaryParticle* part = new G4PrimaryParticle(GetParticleDefinition(),

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.15 2003-11-02 16:17:21 gcosmo Exp $
+// $Id: testProPerpSpin.cc,v 1.16 2004-12-02 09:55:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -355,7 +355,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
 
     const G4double threshold= 1.e-6; 
 
-    if( fabs(UnitMomentum.mag() - 1.0) > threshold ) 
+    if( std::fabs(UnitMomentum.mag() - 1.0) > threshold ) 
     {
       G4cout << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
 	G4endl;
@@ -375,7 +375,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
        G4double rest_mass   = 0.105658387*GeV;                // A muon
                                              
        G4double kineticEnergy =  momentum_val*momentum_val /
-                  ( sqrt( momentum_val*momentum_val + rest_mass * rest_mass ) 
+                  ( std::sqrt( momentum_val*momentum_val + rest_mass * rest_mass ) 
 		    + rest_mass );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
        pMagFieldPropagator->SetChargeMomentumMass(
@@ -383,7 +383,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
                       momentum_val, 
                       rest_mass);
 
-       G4double  beta = momentum_val / sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
+       G4double  beta = momentum_val / std::sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
        G4double       velocity_magnitude = beta * c_light;
        // G4ThreeVector  Velocity = UnitMomentum * velocity_magnitude;
 
@@ -440,14 +440,14 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
 //          G4cout << " initialSpin " << initialSpin.mag() << G4endl;
 //          G4cout << " EndSpin     " << EndSpin.mag()     << G4endl;
 
-	  if( fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
+	  if( std::fabs(EndUnitMomentum.mag2() - 1.0) > threshold )
 	    G4cout << "EndUnitMomentum.mag2() - 1.0 = " <<
 	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 
           // In this case spin should be parallel (equal) to momentum
           G4double endDot= EndSpin.dot(EndUnitMomentum) ;
           G4cout << " dot product of spin and momentum = " << endDot << G4endl;
-	  if( fabs(endDot) > threshold ){
+	  if( std::fabs(endDot) > threshold ){
 	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of "
 		    << threshold << G4endl ;
 	     G4cout << " Spin dot UnitMomentum= " << endDot << " ";
@@ -637,7 +637,7 @@ int readin_particle( )
  h *=  10.; // G4 units are in millimeters.
 
  double betaGamma = pMomentum/pMass ;
- double pSpeed = betaGamma*cSpeed/sqrt(1 + betaGamma*betaGamma) ;
+ double pSpeed = betaGamma*cSpeed/std::sqrt(1 + betaGamma*betaGamma) ;
  double pEnergy = pMomentum*cSpeed/pSpeed ;
         pEnergy *= 1.60217733e-10  ; // energy in J (SI units)
  pTeta *= pi/180 ;
@@ -645,9 +645,9 @@ int readin_particle( )
 
 #if 0
  for(i=0;i<3;i++) ystart[i] = 0 ;            // initial coordinates
- ystart[3] = pSpeed*sin(pTeta)*cos(pPhi) ;   // and speeds
- ystart[4] = pSpeed*sin(pTeta)*sin(pPhi) ;
- ystart[5] = pSpeed*cos(pTeta) ;
+ ystart[3] = pSpeed*std::sin(pTeta)*std::cos(pPhi) ;   // and speeds
+ ystart[4] = pSpeed*std::sin(pTeta)*std::sin(pPhi) ;
+ ystart[5] = pSpeed*std::cos(pTeta) ;
 #endif
 
  return 1;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.cc,v 1.4 2003-10-31 14:35:53 gcosmo Exp $
+// $Id: G4DELPHIMagField.cc,v 1.5 2004-12-02 09:55:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ void G4DELPHIMagField::GetFieldValue( const G4double yTrack[7],
    G4double x2 = x*x, y2 = y*y, z2 = z*z, r2 = x2 + y2 ;
    G4double r4 = r2*r2, z4 = z2*z2, r6 = r4*r2, z6 = z4*z2 ;
    G4double r8 = r4*r4, z8 = z4*z4, r10 = r8*r2, z10 = z8*z2 ;
-   G4double rz = z*sqrt(r2), r = sqrt(r2+a*a) ;
+   G4double rz = z*std::sqrt(r2), r = std::sqrt(r2+a*a) ;
    G4double Br ;
    G4double P[8], Q[8] ; 
    static G4double c[8] = {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.cc,v 1.2 2002-03-28 13:49:14 japost Exp $
+// $Id: G4DELPHIMagField.cc,v 1.3 2004-12-02 09:55:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ void
    G4double r4 = r2*r2, z4 = z2*z2, r6 = r4*r2, z6 = z4*z2 ;
    G4double r8 = r4*r4, z8 = z4*z4, r10 = r8*r2, z10 = z8*z2 ;
    G4double r12 = r6*r6, z12 = z6*z6, r14 = r8*r6, z14 = z8*z6 ;
-   G4double rz = z*sqrt(r2), r = sqrt(r2+a*a) ;
+   G4double rz = z*std::sqrt(r2), r = std::sqrt(r2+a*a) ;
    G4double Br ;
    G4double P[8], Q[8] ; 
    static G4double c[8] = {
