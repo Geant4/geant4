@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.12 2001-09-14 10:36:17 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.13 2001-09-17 17:18:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -38,6 +38,7 @@
 //          store/retrieve physics table reactivated (mma)
 // 13-09-01 corr. in ComputeTransportCrossSection, L.Urban
 // 14-09-01 protection in GetContinuousStepLimit, L.Urban
+// 17-09-01 migration of Materials to pure STL (mma)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,7 +122,7 @@ void G4MultipleScattering::BuildPhysicsTable(
                           LowestKineticEnergy,HighestKineticEnergy,TotBin);
 
       // get elements in the material
-      const G4Material* material = (*theMaterialTable)(J);
+      const G4Material* material = (*theMaterialTable)[J];
       const G4ElementVector* theElementVector = material->GetElementVector();
       const G4double* NbOfAtomsPerVolume =
                                      material->GetVecNbOfAtomsPerVolume();
@@ -137,8 +138,8 @@ void G4MultipleScattering::BuildPhysicsTable(
           // loop for element in the material
           for (G4int iel=0; iel<NumberOfElements; iel++)
           {
-            AtomicNumber = (*theElementVector)(iel)->GetZ();
-            AtomicWeight = (*theElementVector)(iel)->GetA();
+            AtomicNumber = (*theElementVector)[iel]->GetZ();
+            AtomicWeight = (*theElementVector)[iel]->GetA();
             sigma += NbOfAtomsPerVolume[iel]*
                      ComputeTransportCrossSection(aParticleType,KineticEnergy,
                                                    AtomicNumber,AtomicWeight);

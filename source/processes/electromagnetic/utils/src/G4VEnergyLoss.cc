@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.22 2001-07-11 10:03:41 gunter Exp $
+// $Id: G4VEnergyLoss.cc,v 1.23 2001-09-17 17:18:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,7 @@
 //  bugfix in fluct.
 //  (some variables are doubles instead of ints now),L.Urban 23/03/01
 //  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
+//  17-09-01 migration of Materials to pure STL (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,9 +110,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeTable(
         G4double LowestKineticEnergy,G4double HighestKineticEnergy,G4int TotBin)
 // Build range table from the energy loss table
 {
-   const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-   G4int numOfMaterials = theMaterialTable->length();
+   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
@@ -348,9 +347,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4double HighestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theLabTimeTable)
   { theLabTimeTable->clearAndDestroy();
@@ -382,9 +379,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXTable
                                      G4double HighestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theProperTimeTable)
   { theProperTimeTable->clearAndDestroy();
@@ -608,9 +603,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRangeTa
 {
   G4double SmallestRange,BiggestRange ;
   G4bool isOut ;
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
     if(theInverseRangeTable)
     { theInverseRangeTable->clearAndDestroy();
@@ -704,9 +697,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffATable)
   { theRangeCoeffATable->clearAndDestroy();
@@ -767,9 +758,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
@@ -829,9 +818,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();
