@@ -31,7 +31,7 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
 		GetNavigatorForTracking()->GetWorldVolume() );
 		fpNavigator->
 		LocateGlobalPointAndUpdateTouchable(aSpot->GetPosition(), fTouchableHandle(), false);
-		fNaviSetup = true;
+		 fNaviSetup = true;
 	}
 	else
 	{
@@ -44,7 +44,8 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
 	// by our sensitive detector:
 	//-------------------------------------
 	// set spot information:
-	G4GFlashSpot theSpot(aSpot, aT, fTouchableHandle());
+	G4GFlashSpot theSpot(aSpot, aT, fTouchableHandle);
+	///Navigator
 	//--------------------------------------
 	// Produce Hits
 	// call sensitive part: taken/adapted from the stepping:
@@ -62,9 +63,10 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
 		{
 			gflashSensitive->Hit(&theSpot);
 		}
-		else // below for conservative programming
-		{  
-		  std::cout<<std::endl;
+		else if ( (!gflashSensitive) && ( pCurrentVolume->GetLogicalVolume()->GetFastSimulationManager() )  ) // Using gflash without implementing the 
+							     // gflashSensitive detector interface -> not allowed!
+		
+		{  	
 			std::cout<<"When using GFlash in geant4, please implement the "<<std::endl;
 			std::cout<<"G4VGFlashSensitiveDetector interface in addition to the"<<std::endl;
 			std::cout<<"G4VSensitiveDetector interface in the relevant sensitive detector."<<std::endl;
