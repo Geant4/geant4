@@ -1,3 +1,19 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEPlot.cc,v 1.2 1999-06-16 04:40:31 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+
+#include "globals.hh"
+#include "G4ios.hh"
+
+//
 // G4 Gheisha friend class G4GHEPlot
 // last modified: H. Fesefeldt 02-July--1998
 
@@ -32,12 +48,12 @@ G4HEPlot::Add( G4double s1, G4double s2,
    {
      if(p1.Nbin != p2.Nbin)
        {
-         cout << "G4HEPlot::Add: Plots must have same number of bins !" << endl;
+         G4cout << "G4HEPlot::Add: Plots must have same number of bins !" << endl;
          return;
        }
      if(Nbin != p1.Nbin)
        {
-         cout << "G4HEPlot::Add: Plot must be initialized  before using it !" << endl;
+         G4cout << "G4HEPlot::Add: Plot must be initialized  before using it !" << endl;
          return;
        }  
 
@@ -60,12 +76,12 @@ G4HEPlot::Multiply( G4double s1, G4double s2,
    {
      if(p1.Nbin != p2.Nbin)
        {
-         cout << "G4HEPlot::Multiply: Plots must have same number of bins !" << endl;
+         G4cout << "G4HEPlot::Multiply: Plots must have same number of bins !" << endl;
          return;
        }
      if(Nbin != p1.Nbin)
        {
-         cout << "G4HEPlot::Multiply: Plot must be initialized  before using it !" << endl;
+         G4cout << "G4HEPlot::Multiply: Plot must be initialized  before using it !" << endl;
          return;
        }  
 
@@ -88,12 +104,12 @@ G4HEPlot::Divide( G4double s1, G4double s2,
    {
      if(p1.Nbin != p2.Nbin)
        {
-         cout << "G4HEPlot::Divide: Plots must have same number of bins !" << endl;
+         G4cout << "G4HEPlot::Divide: Plots must have same number of bins !" << endl;
          return;
        }
      if(Nbin != p1.Nbin)
        {
-         cout << "G4HEPlot::Divide: Plot must be defined before using it !" << endl;
+         G4cout << "G4HEPlot::Divide: Plot must be defined before using it !" << endl;
          return;
        }  
 
@@ -128,7 +144,7 @@ G4HEPlot::Scale( G4double s, const G4HEPlot & p)
    {
      if(Nbin != p.Nbin)
        {
-         cout << "G4HEPlot::Add: Plot must be defined before using it !" << endl;
+         G4cout << "G4HEPlot::Add: Plot must be defined before using it !" << endl;
          return;
        }  
 
@@ -180,7 +196,7 @@ G4HEPlot::Log( G4double s, const G4HEPlot & p)
    {
      if(Nbin != p.Nbin)
        {
-         cout << "G4HEPlot::Log: Plot must be defined before using it !" << endl;
+         G4cout << "G4HEPlot::Log: Plot must be defined before using it !" << endl;
          return;
        }  
 
@@ -207,7 +223,7 @@ G4HEPlot::Sqrt(G4double s, const G4HEPlot & p)
    {
      if(Nbin != p.Nbin)
        {
-         cout << " G4HEPlot::Sqrt: Plot must be defined before using it !" << endl;
+         G4cout << " G4HEPlot::Sqrt: Plot must be defined before using it !" << endl;
          return;
        }
      for (G4int i=0; i<Nbin; i++)
@@ -266,23 +282,23 @@ G4HEPlot::Fill(G4double x, G4double weight)
 void 
 G4HEPlot::Print( G4String  name, G4int iplot)
    {
-     cout << name << iplot << " = new TH1F(" << '"' << iplot 
+     G4cout << name << iplot << " = new TH1F(" << '"' << iplot 
           << '"' << "," << '"' <<  '"' << "," << Nbin << "," 
           << Xstart << "," << Xstart+Nbin*Xbin << ");" << endl; 
-     cout << "for(I=1; I<=" << Nbin <<"; I++) {" << endl;
-     cout << "Y[I] = 0.;" << endl;
-     cout << "}" << endl;
+     G4cout << "for(I=1; I<=" << Nbin <<"; I++) {" << endl;
+     G4cout << "Y[I] = 0.;" << endl;
+     G4cout << "}" << endl;
      for (G4int i=0; i<Nbin; i++)
        {
-         cout << "Y[" << i+1 << "] = " << Yvalue[i] << ";" << endl;
+         G4cout << "Y[" << i+1 << "] = " << Yvalue[i] << ";" << endl;
        } 
-     cout << "XA = " << Xstart << ";" << endl;
-     cout << "STEP2 = " << Xbin/2. << ";" << endl;
-     cout << "for(I=1; I<=" << Nbin << "; I++) {" << endl;
-     cout << "XA = XA + STEP2;" << endl;
-     cout << name << iplot << "->Fill(XA,Y[I]);" << endl;
-     cout << "XA = XA + STEP2;" << endl;
-     cout << "}" << endl;
+     G4cout << "XA = " << Xstart << ";" << endl;
+     G4cout << "STEP2 = " << Xbin/2. << ";" << endl;
+     G4cout << "for(I=1; I<=" << Nbin << "; I++) {" << endl;
+     G4cout << "XA = XA + STEP2;" << endl;
+     G4cout << name << iplot << "->Fill(XA,Y[I]);" << endl;
+     G4cout << "XA = XA + STEP2;" << endl;
+     G4cout << "}" << endl;
      return;                         
    }
 
@@ -327,7 +343,7 @@ G4HEPlot::GetFromFile(G4int aPlot, G4String aName)
        }
      else
        {
-         cout << " File " << aName << " not found " << endl;
+         G4cout << " File " << aName << " not found " << endl;
        }
      return;
    }

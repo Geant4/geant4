@@ -1,3 +1,19 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEInelastic.cc,v 1.2 1999-06-16 04:35:57 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+
+#include "globals.hh"
+#include "G4ios.hh"
+
+//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included are the low energy stuff like
@@ -6,6 +22,7 @@
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
 // Last modified: 29-July-1998 
 // HPW, fixed bug in getting pdgencoding for nuclei
+// Hisaya, fixed HighEnergyCascading
  
 #include "G4HEInelastic.hh"
 #include "G4HEVector.hh"
@@ -105,7 +122,7 @@ G4HEInelastic::NuclearInelasticity(G4double incidentKineticEnergy,
     else if (dum3 > 1.e-10) cinema = dum1*dum3;    
     cinema = - max(-incidentKineticEnergy, cinema);
     if(verboseLevel > 1)
-      { cout << " NuclearInelasticity: " << ala << " " <<  ale << " "  << em << " " << corr
+      { G4cout << " NuclearInelasticity: " << ala << " " <<  ale << " "  << em << " " << corr
              << " " <<  dum1 << " "  << dum2 << " " <<  dum3 << " " <<  cinema << endl;
       }                 
     return cinema;
@@ -150,7 +167,7 @@ G4HEInelastic::NuclearExcitation(G4double  incidentKineticEnergy,
          exnu = excitationEnergyGPN + excitationEnergyDTA;
          if(verboseLevel > 1)
            {
-             cout << " NuclearExcitation: " << magic << " " <<  ekin << " " << cfa
+             G4cout << " NuclearExcitation: " << magic << " " <<  ekin << " " << cfa
                   << " " <<  atno << " " << fpdiv << " " <<  gfa << " " << excitationEnergyGPN
                   << " " <<  excitationEnergyDTA << endl;
            } 
@@ -514,19 +531,19 @@ G4HEInelastic::StrangeParticlePairProduction(
    targetMass   = targetParticle.getMass();
 
    G4double energyCheck = centerOfMassEnergy-(incidentMass+targetMass);
-   if (verboseLevel > 1) cout << "Particles produced: " ;
+   if (verboseLevel > 1) G4cout << "Particles produced: " ;
   
    for ( i=0; i < vecLen; i++ ) 
        {
          energyCheck -= pv[i].getMass(); 
-         if (verboseLevel > 1) cout << pv[i].getCode() << " " ;
+         if (verboseLevel > 1) G4cout << pv[i].getCode() << " " ;
          if( energyCheck < 0.0 ) 
            {
              if( i > 0 ) vecLen = --i;      // chop off the secondary list
              return;
            }
        }
-   if (verboseLevel > 1) cout << endl;
+   if (verboseLevel > 1) G4cout << endl;
    return;
  }
 
@@ -590,7 +607,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
 
    G4int i, j, k, l;
 
-   if (verboseLevel > 1) cout << " G4HEInelastic::HighEnergyCascading " << endl;
+   if (verboseLevel > 1) G4cout << " G4HEInelastic::HighEnergyCascading " << endl;
    successful = false; 
    if(incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
  
@@ -734,7 +751,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        tb = (2. * ntb + vecLen)/2.;     
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after Randomization " << vecLen << endl;
+      { G4cout << " pv Vector after Randomization " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -764,7 +781,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4double rpnhmf = 0.81*xpnhmf;
    G4double xhmf;
    if(verboseLevel > 1)
-     { cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << endl;
+     { G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << endl;
      }
    G4int nshhmf, npnhmf;
    if (rshhmf > 1.1)
@@ -778,7 +795,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      }
    nshhmf = Poisson( xshhmf );   
    if(verboseLevel > 1)
-     { cout << "xshhmf = " << xshhmf << " xhmf = " << xhmf << " rshhmf = " << rshhmf << endl;
+     { G4cout << "xshhmf = " << xshhmf << " xhmf = " << xhmf << " rshhmf = " << rshhmf << endl;
      }
 
    if (rpnhmf > 1.1)
@@ -792,7 +809,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      }
    npnhmf = Poisson( xpnhmf );
    if(verboseLevel > 1)
-     { cout << "nshhmf = " << nshhmf << " npnhmf = " <<  npnhmf << " nstran = " << nstran << endl;
+     { G4cout << "nshhmf = " << nshhmf << " npnhmf = " <<  npnhmf << " nstran = " << nstran << endl;
      } 
    G4int ntarg = nshhmf + npnhmf + nstran;          
 
@@ -946,7 +963,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         }
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after Energy checks "
+      { G4cout << " pv Vector after Energy checks "
              << vecLen << " " << tavai1 << " " << iavai1 << " " << tavai2
              << " " <<  iavai2 << " " << ntarg << endl;
         pvI.Print(-1);
@@ -975,7 +992,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    pvmx[1].Lor( pvmx[1], pvmx[2] );
 
    if (verboseLevel > 1)
-     { cout << " General Vectors after Definition " << endl;
+     { G4cout << " General Vectors after Definition " << endl;
        for (i=0; i<10; i++) pvmx[i].Print(i);
      }
                                                  //  main loop for 4-momentum generation
@@ -1181,7 +1198,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                     {
                       if (verboseLevel > 1) 
                          {
-                           cout << " Reset energies for index " << i << " " << ekin1 
+                           G4cout << " Reset energies for index " << i << " " << ekin1 
                                 << " " << tavai1 << endl;
                            pv[i].Print(i);
                          }
@@ -1215,7 +1232,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
           {                                                              // eliminate this particle
             if (verboseLevel > 1)
                {
-                  cout << " Eliminate particle index " << i << endl;
+                  G4cout << " Eliminate particle index " << i << endl;
                   pv[i].Print(i);
                }
             if(i != vecLen-1)
@@ -1238,7 +1255,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
           }
       }                                                                  // closes main for loop
    if (verboseLevel > 1)
-      { cout << " pv Vector after lambda fragmentation " << vecLen << endl;
+      { G4cout << " pv Vector after lambda fragmentation " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -1257,7 +1274,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        G4double rmg = rmg0;
        if (npg > 1)
           {
-            G4int npg1 = min(4, npg-1);
+            G4int npg1 = npg-1;
+            if (npg1 >4) npg1 = 4;
             rmg += pow( -log(1.-G4UniformRand()), cpar[npg1])/gpar[npg1];
           }
        G4double ga = 1.2;
@@ -1382,7 +1400,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        teta = pvmx[7].Ang( pvmx[3] );
        if (verboseLevel > 1) 
          { 
-           cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << endl;
+           G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << endl;
          }
      }
 
@@ -1402,7 +1420,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        teta = pvmx[6].Ang( pvmx[3] );
        if (verboseLevel > 1) 
 	 {
-            cout << " ekin1 != 0 " << teta << " " <<  ekin0 << " " <<  ekin1 << endl;
+            G4cout << " ekin1 != 0 " << teta << " " <<  ekin0 << " " <<  ekin1 << endl;
             incidentParticle.Print(0);
             targetParticle.Print(1);
             for(i=0;i<vecLen;i++) pv[i].Print(i);
@@ -1437,7 +1455,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         pvmx[6].Add( pvmx[6], pv[i] );  
       }
    teta = pvmx[6].Ang( pvmx[3] );   
-   if (verboseLevel > 1) cout << " After smearing " << teta << endl;
+   if (verboseLevel > 1) G4cout << " After smearing " << teta << endl;
 
                                //  Rotate in direction of primary particle, subtract binding energies
                                //   and make some further corrections if required
@@ -1503,7 +1521,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
           }
       }
    if (verboseLevel > 1)
-      { cout << " Lab-System " <<  ek1 << " " << npions << endl;
+      { G4cout << " Lab-System " <<  ek1 << " " << npions << endl;
         incidentParticle.Print(0);
         targetParticle.Print(1);
         for (i=0; i<vecLen; i++) pv[i].Print(i);
@@ -1514,7 +1532,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                        //  this may have influence on very high energies
 
    if (verboseLevel > 1) 
-      cout << " Evaporation : " <<  atomicWeight << " " << excitationEnergyGNP << " " 
+      G4cout << " Evaporation : " <<  atomicWeight << " " << excitationEnergyGNP << " " 
            <<  excitationEnergyDTA << endl;
 
    G4double sprob = 0.;
@@ -1537,7 +1555,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = atomicWeight - targ;
            if (verboseLevel > 1) 
-              cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
+              G4cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -1547,7 +1565,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                   {
                     if( G4UniformRand() < sprob ) 
                       {
-                        if(verboseLevel > 1) cout << " Particle skipped " << endl;
+                        if(verboseLevel > 1) G4cout << " Particle skipped " << endl;
                         continue;
                       }
                     if( ekin2 > excitationEnergyGNP) break;
@@ -1614,7 +1632,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                       //    nbl is the number of deutrons, tritons, and alphas produced
 
          if (verboseLevel > 1) 
-            cout << " evaporation " << targ << " " << nbl << " " << sprob << endl;        
+            G4cout << " evaporation " << targ << " " << nbl << " " << sprob << endl;        
          if( nbl > 0 ) 
            {
              ekin = excitationEnergyDTA/nbl;
@@ -1623,7 +1641,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                 {
                   if( G4UniformRand() < sprob ) 
                     {
-                      if(verboseLevel > 1) cout << " Particle skipped " << endl;
+                      if(verboseLevel > 1) G4cout << " Particle skipped " << endl;
                       continue;
                     } 
                   if( ekin2 > excitationEnergyDTA) break;
@@ -1671,7 +1689,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      }
 
    if(verboseLevel > 1)
-     { cout << "Call TuningOfHighEnergyCacsading vecLen = " << vecLen << endl;
+     { G4cout << "Call TuningOfHighEnergyCacsading vecLen = " << vecLen << endl;
        incidentParticle.Print(0);
        targetParticle.Print(1);
        for (i=0; i<vecLen; i++) pv[i].Print(i);
@@ -1682,7 +1700,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                 atomicWeight, atomicNumber);
 
    if(verboseLevel > 1)
-     { cout << " After Tuning: " << endl;
+     { G4cout << " After Tuning: " << endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
                                                      //  calculate time delay for nuclear reactions
@@ -1760,10 +1778,10 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
          }
        if(verboseLevel > 1)
          {
-           cout << "ipmax, pmax   " << ipmax  << " " << pmax   << endl;
-           cout << "maxpip,pmapip " << maxpip << " " << pmapip << endl;
-           cout << "maxpi0,pmapi0 " << maxpi0 << " " << pmapi0 << endl;
-           cout << "maxpim,pmapim " << maxpim << " " << pmapim << endl; 
+           G4cout << "ipmax, pmax   " << ipmax  << " " << pmax   << endl;
+           G4cout << "maxpip,pmapip " << maxpip << " " << pmapip << endl;
+           G4cout << "maxpi0,pmapi0 " << maxpi0 << " " << pmapi0 << endl;
+           G4cout << "maxpim,pmapim " << maxpim << " " << pmapim << endl; 
          }
 
        if ( vecLen > 2)
@@ -1778,7 +1796,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                     pv[i].setMomentumAndUpdate( 0., 0., 0.);
                     if(verboseLevel > 1)
                       {
-                        cout << "zero Momentum for particle " << endl;
+                        G4cout << "zero Momentum for particle " << endl;
                         pv[i].Print(i);
                       }                                  
                   } 
@@ -1795,7 +1813,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                   pv[maxpip].setMomentumAndUpdate( mompi0);
                   if(verboseLevel > 1)
                     {
-                      cout << " exchange Momentum for " << maxpi0 << " and " << maxpip << endl;
+                      G4cout << " exchange Momentum for " << maxpi0 << " and " << maxpip << endl;
                     } 
                 }
               else if ((incidentCharge < 0.) && (maxpim != 0))
@@ -1805,7 +1823,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                   pv[maxpim].setMomentumAndUpdate( mompi0);
                   if(verboseLevel > 1)
                     {
-                      cout << " exchange Momentum for " << maxpi0 << " and " << maxpip << endl;
+                      G4cout << " exchange Momentum for " << maxpi0 << " and " << maxpip << endl;
                     }   
                 }
             }
@@ -1816,7 +1834,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                0. : 1.+bntot/atomicWeight;
        if(verboseLevel > 1) 
          {
-           cout << " Calculated Baryon- Number " << bntot << endl;
+           G4cout << " Calculated Baryon- Number " << bntot << endl;
          }
 
        j = 0;
@@ -1833,7 +1851,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                  { 
                    if(verboseLevel > 1)
                      {
-                       cout << " skip Baryon: " << endl;
+                       G4cout << " skip Baryon: " << endl;
                        pv[i].Print(i);
                      }
                    continue; 
@@ -1876,7 +1894,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
 
    if(verboseLevel > 1)
      {
-       cout << " incidentS, incidentB " << incidentS << " " << incidentB << endl;
+       G4cout << " incidentS, incidentB " << incidentS << " " << incidentB << endl;
      }
 
    for (i=0; i<vecLen; i++)
@@ -1934,7 +1952,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                pv[i].Lor( pvmx[5], pvmx[4] );
                if(verboseLevel > 1) 
                  {
-                   cout << " Particle Momentum changed to: " << endl;
+                   G4cout << " Particle Momentum changed to: " << endl;
                    pv[i].Print(i); 
 		 }
              }    
@@ -1960,7 +1978,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
      { 
       if(verboseLevel > 1)
         {
-          cout << " Leading Particle found : " << ledpar << endl;
+          G4cout << " Leading Particle found : " << ledpar << endl;
           pv[ledpar].Print(ledpar);
         }
        pvmx[4].Sub3(pvmx[8], pvmx[9] );
@@ -2035,7 +2053,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
 
    G4int i, j, k, l;
    
-   if(verboseLevel > 1) cout << " G4HEInelastic::HighEnergyClusterProduction " << endl;
+   if(verboseLevel > 1) G4cout << " G4HEInelastic::HighEnergyClusterProduction " << endl;
 
    successful = false; 
    if(incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
@@ -2205,7 +2223,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
          }
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after initialization " << vecLen << endl;
+      { G4cout << " pv Vector after initialization " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -2313,7 +2331,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
             rmd = 0.1*rmd0 + 0.9*rmd;
           }   
       }             
-   if(verboseLevel > 1) cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd
+   if(verboseLevel > 1) G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd
                              << " " << rmd << " " << nte << " " << rme << endl;
  
    
@@ -2382,7 +2400,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    pvmx[6].SmulAndUpdate( pvmx[4], -1.);
 
    if (verboseLevel > 1)
-      { cout << " General vectors before Phase space Generation " << endl;
+      { G4cout << " General vectors before Phase space Generation " << endl;
         for (i=0; i<7; i++) pvmx[i].Print(i);
       }  
 
@@ -2462,7 +2480,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
 
    if(verboseLevel > 1)
      {
-       cout << " Vectors after PhaseSpace generation " << endl;
+       G4cout << " Vectors after PhaseSpace generation " << endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
                                                    //  Lorentz transformation in lab system
@@ -2476,7 +2494,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
 
    if(verboseLevel > 1)
      {
-       cout << " Transformation in Lab- System " << endl;
+       G4cout << " Transformation in Lab- System " << endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
 
@@ -2561,7 +2579,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
           }
        teta = pvmx[8].Ang( pvmx[4] );
        if (verboseLevel > 1) 
-           cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << endl;
+           G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << endl;
      }
 
    if( ekin1 != 0.0 ) 
@@ -2578,12 +2596,12 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
             pvmx[7].Add( pvmx[7], pv[i] );
           }
        teta = pvmx[7].Ang( pvmx[4] );
-       if (verboseLevel > 1) cout << " ekin1 != 0 " << teta << " " << ekin0 << " " << ekin1 << endl;
+       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " << ekin1 << endl;
      }
 
    if(verboseLevel > 1)
      {
-       cout << " After energy- correction " << endl;
+       G4cout << " After energy- correction " << endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }      
 
@@ -2615,7 +2633,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
         pvmx[7].Add( pvmx[7], pv[i] );  
       }
    teta = pvmx[7].Ang( pvmx[4] );   
-   if (verboseLevel > 1) cout << " After smearing " << teta << endl;
+   if (verboseLevel > 1) G4cout << " After smearing " << teta << endl;
 
                                //  Rotate in direction of primary particle, subtract binding energies
                                //   and make some further corrections if required
@@ -2682,7 +2700,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
           }
       }
    if (verboseLevel > 1)
-      { cout << " Lab-System " << ek1 << " " << npions << endl;
+      { G4cout << " Lab-System " << ek1 << " " << npions << endl;
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
@@ -2691,7 +2709,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                                        //  this may have influence on very high energies
 
    if (verboseLevel > 1) 
-       cout << " Evaporation " << atomicWeight << " " << excitationEnergyGNP
+       G4cout << " Evaporation " << atomicWeight << " " << excitationEnergyGNP
             << " " << excitationEnergyDTA << endl;
 
    G4double sprob = 0.;
@@ -2713,7 +2731,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = atomicWeight - targ;
-           if (verboseLevel > 1) cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
+           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -2915,7 +2933,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
    G4int i, j, k, l;
 
-   if(verboseLevel > 1) cout << " G4HEInelastic::MediumEnergyCascading " << endl;
+   if(verboseLevel > 1) G4cout << " G4HEInelastic::MediumEnergyCascading " << endl;
 
                               // define annihilation channels.
                                  
@@ -3054,7 +3072,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
        tb = (2. * ntb + vecLen)/2.;     
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after Randomization " << vecLen << endl;
+      { G4cout << " pv Vector after Randomization " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -3197,7 +3215,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         }
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after Energy checks " << vecLen << " " << tavai1 << " " 
+      { G4cout << " pv Vector after Energy checks " << vecLen << " " << tavai1 << " " 
              << iavai1 << " " << tavai2 << " " << iavai2 << " " << ntarg << endl;
         pvI.Print(-1);
         pvT.Print(-1);
@@ -3225,7 +3243,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    pvmx[1].Lor( pvmx[1], pvmx[2] );
 
    if (verboseLevel > 1)
-     { cout << " General Vectors after Definition " << endl;
+     { G4cout << " General Vectors after Definition " << endl;
        for (i=0; i<10; i++) pvmx[i].Print(i);
      }
                                                  //  main loop for 4-momentum generation
@@ -3394,7 +3412,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       ekin2 = 0.0;
                       pvmx[4].setZero();
                       pvmx[5].setZero();
-                      if (verboseLevel > 1) cout << " Reset energies for index " << i << endl;
+                      if (verboseLevel > 1) G4cout << " Reset energies for index " << i << endl;
                       for( l=i+1; l < vecLen; l++ ) 
                          {
                            if( (pv[l].getMass() < protonMass) || (pv[l].getSide() > 0) ) 
@@ -3421,7 +3439,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
           {                                                              // eliminate this particle
             if (verboseLevel > 1)
                {
-                  cout << " Eliminate particle with index " << i << endl;
+                  G4cout << " Eliminate particle with index " << i << endl;
                   pv[i].Print(i);
                }
             for( j=i; j < vecLen; j++ ) 
@@ -3441,7 +3459,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
           }
       }                                                                  // closes main for loop
    if (verboseLevel > 1)
-      { cout << " pv Vector after lambda fragmentation " << vecLen << endl;
+      { G4cout << " pv Vector after lambda fragmentation " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -3492,7 +3510,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
        pvmx[6].setEnergyAndUpdate( pvEnergy );
        pvmx[6].Smul( pvmx[6], -1. );
        if (verboseLevel > 1)
-          { cout << " General Vectors before input to NBodyPhaseSpace "
+          { G4cout << " General Vectors before input to NBodyPhaseSpace "
                  << targ1 << " " << tempCount << " " << rmb0 << " " << rmb << " " 
                  << pvEnergy << endl;
             for (i=0; i<10; i++) pvmx[i].Print(i);
@@ -3614,7 +3632,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
             ekin += pvmx[6].getKineticEnergy();
           }
        teta = pvmx[7].Ang( pvmx[3] );
-       if (verboseLevel > 1) cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0
+       if (verboseLevel > 1) G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0
                                   << " " << ekin1 << " " << ekin << endl;
      }
 
@@ -3632,7 +3650,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
             pvmx[6].Add( pvmx[6], pv[i] );
           }
        teta = pvmx[6].Ang( pvmx[3] );
-       if (verboseLevel > 1) cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
+       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
                                   << ekin1 << endl;
      }
 
@@ -3664,7 +3682,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         pvmx[6].Add( pvmx[6], pv[i] );  
       }
    teta = pvmx[6].Ang( pvmx[3] );   
-   if (verboseLevel > 1) cout << " After smearing " << teta << endl;
+   if (verboseLevel > 1) G4cout << " After smearing " << teta << endl;
 
                                //  Rotate in direction of primary particle, subtract binding energies
                                //   and make some further corrections if required
@@ -3730,7 +3748,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
           }
       }
    if (verboseLevel > 1)
-      { cout << " Lab-System " << ek1 << " " << npions << endl;
+      { G4cout << " Lab-System " << ek1 << " " << npions << endl;
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
@@ -3738,7 +3756,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                                        //  the total number of particles produced is restricted to 198
                                        //  this may have influence on very high energies
 
-   if (verboseLevel > 1) cout << " Evaporation " << atomicWeight << " " <<
+   if (verboseLevel > 1) G4cout << " Evaporation " << atomicWeight << " " <<
                      excitationEnergyGNP << " " << excitationEnergyDTA << endl;
 
    if( atomicWeight > 1.5 ) 
@@ -3763,7 +3781,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = atomicWeight - targ;
-           if (verboseLevel > 1) cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
+           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " << sprob << endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -3956,7 +3974,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
 
    G4int i, j, k, l;
    
-   if(verboseLevel > 1) cout << " G4HEInelastic::MediumEnergyClusterProduction " << endl;
+   if(verboseLevel > 1) G4cout << " G4HEInelastic::MediumEnergyClusterProduction " << endl;
 
    if (incidentTotalMomentum < 0.01)
       {
@@ -4097,7 +4115,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
          }
 
    if (verboseLevel > 1)
-      { cout << " pv Vector after initialization " << vecLen << endl;
+      { G4cout << " pv Vector after initialization " << vecLen << endl;
         pvI.Print(-1);
         pvT.Print(-1);
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
@@ -4205,7 +4223,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             rmd = 0.1*rmd0 + 0.9*rmd;
           }   
       }             
-   if(verboseLevel > 1) cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd << " "
+   if(verboseLevel > 1) G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd << " "
                              << rmd << " " << nte << " " << rme << endl;
  
    
@@ -4274,7 +4292,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    pvmx[6].SmulAndUpdate( pvmx[4], -1.);
 
    if (verboseLevel > 1)
-      { cout << " General vectors before Phase space Generation " << endl;
+      { G4cout << " General vectors before Phase space Generation " << endl;
         for (i=0; i<7; i++) pvmx[i].Print(i);
       }  
 
@@ -4360,7 +4378,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
 
    if(verboseLevel > 1)
      {
-       cout << " Vectors after PhaseSpace generation " << endl;
+       G4cout << " Vectors after PhaseSpace generation " << endl;
        for(i=0;i<vecLen; i++) pv[i].Print(i);
      } 
 
@@ -4376,7 +4394,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
 
    if(verboseLevel > 1)
      {
-       cout << " Transformation in Lab- System " << endl;
+       G4cout << " Transformation in Lab- System " << endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
 
@@ -4458,7 +4476,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             ekin += pvmx[7].getKineticEnergy();
           }
        teta = pvmx[8].Ang( pvmx[4] );
-       if (verboseLevel > 1) cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 
+       if (verboseLevel > 1) G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 
                                   << " " << ekin1 << " " << ekin << endl;
      }
 
@@ -4476,7 +4494,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             pvmx[7].Add( pvmx[7], pv[i] );
           }
        teta = pvmx[7].Ang( pvmx[4] );
-       if (verboseLevel > 1) cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
+       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
                                   << ekin1 << endl;
      }
 
@@ -4508,7 +4526,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
         pvmx[7].Add( pvmx[7], pv[i] );  
       }
    teta = pvmx[7].Ang( pvmx[4] );   
-   if (verboseLevel > 1) cout << " After smearing " << teta << endl;
+   if (verboseLevel > 1) G4cout << " After smearing " << teta << endl;
 
                                //  Rotate in direction of primary particle, subtract binding energies
                                //   and make some further corrections if required
@@ -4575,7 +4593,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
           }
       }
    if (verboseLevel > 1)
-      { cout << " Lab-System " << ek1 << " " << npions << endl;
+      { G4cout << " Lab-System " << ek1 << " " << npions << endl;
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
@@ -4583,7 +4601,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                                        //  the total number of particles produced is restricted to 198
                                        //  this may have influence on very high energies
 
-   if (verboseLevel > 1) cout << " Evaporation " <<  atomicWeight << " " <<
+   if (verboseLevel > 1) G4cout << " Evaporation " <<  atomicWeight << " " <<
                      excitationEnergyGNP << " " << excitationEnergyDTA << endl;
 
    if( atomicWeight > 1.5 ) 
@@ -4608,7 +4626,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = atomicWeight - targ;
-           if (verboseLevel > 1) cout << " evaporation " << targ << " " << nbl << " " 
+           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " 
                                       << sprob << endl; 
            spall = targ;
            if( nbl > 0) 
@@ -4800,7 +4818,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
 
    G4int i;
    
-   if(verboseLevel > 1) cout << " G4HEInelastic::QuasiElasticScattering " << endl;
+   if(verboseLevel > 1) G4cout << " G4HEInelastic::QuasiElasticScattering " << endl;
 
    if (incidentTotalMomentum < 0.01 || vecLen < 2 )
       {
@@ -4894,7 +4912,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                                        //  the total number of particles produced is restricted to 198
                                        //  this may have influence on very high energies
 
-   if (verboseLevel > 1) cout << " Evaporation " << atomicWeight << " " << 
+   if (verboseLevel > 1) G4cout << " Evaporation " << atomicWeight << " " << 
                      excitationEnergyGNP << " " <<  excitationEnergyDTA << endl;
 
    if( atomicWeight > 1.5 ) 
@@ -4916,7 +4934,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
        
            nbl = Poisson( excitationEnergyGNP/0.02);
            if( nbl > atomicWeight ) nbl = atomicWeight;
-           if (verboseLevel > 1) cout << " evaporation " << nbl << " " << sprob << endl; 
+           if (verboseLevel > 1) G4cout << " evaporation " << nbl << " " << sprob << endl; 
            spall = 0;
            if( nbl > 0) 
              {
@@ -5051,11 +5069,11 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
                                  G4double atomicWeight,
                                  G4double atomicNumber)
  {
-   if(verboseLevel > 1) cout << " G4HEInelastic::ElasticScattering " << endl;
+   if(verboseLevel > 1) G4cout << " G4HEInelastic::ElasticScattering " << endl;
 
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
    if (verboseLevel > 1)
-      cout << "DoIt: Incident particle momentum=" << incidentTotalMomentum << " GeV" << endl;
+      G4cout << "DoIt: Incident particle momentum=" << incidentTotalMomentum << " GeV" << endl;
    if (incidentTotalMomentum < 0.01) 
       { 
         successful = false;
@@ -5090,16 +5108,16 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
    rr = (aa + cc)*ran;
    if (verboseLevel > 1) 
      {
-       cout << "ElasticScattering: aa,bb,cc,dd,rr" << endl;
-       cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << endl;
+       G4cout << "ElasticScattering: aa,bb,cc,dd,rr" << endl;
+       G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << endl;
      }
    G4double t1 = -log(ran)/bb;
    G4double t2 = -log(ran)/dd;
    if (verboseLevel > 1) 
      {
-       cout << "t1,fctcos " << t1 << " " << fctcos(t1, aa, bb, cc, dd, rr) << 
+       G4cout << "t1,fctcos " << t1 << " " << fctcos(t1, aa, bb, cc, dd, rr) << 
                endl;
-       cout << "t2,fctcos " << t2 << " " << fctcos(t2, aa, bb, cc, dd, rr) << 
+       G4cout << "t2,fctcos " << t2 << " " << fctcos(t2, aa, bb, cc, dd, rr) << 
                endl;
      }
    G4double eps = 0.001;
@@ -5109,25 +5127,25 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
    ier1 = rtmi(&t, t1, t2, eps, ind1, aa, bb, cc, dd, rr);
    if (verboseLevel > 1) 
      {
-       cout << "From rtmi, ier1=" << ier1 << endl;
-       cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
+       G4cout << "From rtmi, ier1=" << ier1 << endl;
+       G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
                endl;
      }
    if (ier1 != 0) t = 0.25*(3.*t1 + t2);
    if (verboseLevel > 1) 
      {
-       cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
+       G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
                endl;
      }
    G4double phi = G4UniformRand()*2.*M_PI;
    rr = 0.5*t/sqr(incidentTotalMomentum);
    if (rr > 1.) rr = 0.;
    if (verboseLevel > 1)
-      cout << "rr=" << rr << endl;
+      G4cout << "rr=" << rr << endl;
    G4double cost = 1. - rr;
    G4double sint = sqrt(max(rr*(2. - rr), 0.));
    if (verboseLevel > 1)
-      cout << "cos(t)=" << cost << "  sin(t)=" << sint << endl;
+      G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << endl;
                                          // Scattered particle referred to axis of incident particle
    G4HEVector pv0;
    G4HEVector pvI;
@@ -5297,9 +5315,9 @@ G4HEInelastic::fctcos(G4double t,
     const G4double expxl = -expxu;         // lower bound for arg. of exp
     
     if( vecLen < 2 ) {
-      cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << endl;
-      cerr << "    number of particles < 2" << endl;
-      cerr << "totalEnergy = " << totalEnergy << ", vecLen = " << vecLen << endl;
+      G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << endl;
+      G4cerr << "    number of particles < 2" << endl;
+      G4cerr << "totalEnergy = " << totalEnergy << ", vecLen = " << vecLen << endl;
       return -1.0;
     }
     
@@ -5323,8 +5341,8 @@ G4HEInelastic::fctcos(G4double t,
       sm[i] = totalMass;
     }
     if( totalMass >= totalEnergy ) {
-      cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << endl;
-      cerr << "    total mass (" << totalMass << ") >= total energy ("
+      G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << endl;
+      G4cerr << "    total mass (" << totalMass << ") >= total energy ("
            << totalEnergy << ")" << endl;
       delete [] mass;
       delete [] energy;
@@ -5550,7 +5568,7 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
        G4double wt = wps * wfcn;
        if (wt > wmax)
          { wmax = wt;
-           cout << "maximum weight changed to " << wmax << endl;
+           G4cout << "maximum weight changed to " << wmax << endl;
          }
        wt = wt/wmax;
        if (G4UniformRand() < wt) break; 

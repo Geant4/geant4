@@ -1,9 +1,45 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEVector.cc,v 1.2 1999-06-16 04:41:51 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+
+#include "globals.hh"
+#include "G4ios.hh"
+
+//
 // G4 Gheisha friend class G4GHEVector
 // J.L. Chuma, TRIUMF, 22-Feb-1996
 // last modified: H. Fesefeldt 02-July--1998
 
 #include "G4HEVector.hh"
+
+G4HEVector::G4HEVector(const G4DynamicParticle * aParticle)
+  {
+     G4ThreeVector aMom = 1./GeV*aParticle->GetMomentum();
+     px               = aMom.x();
+     py               = aMom.y();
+     pz               = aMom.z();
+     energy           = aParticle->GetTotalEnergy()/GeV;
+     kineticEnergy    = aParticle->GetKineticEnergy()/GeV;
+     mass             = aParticle->GetMass()/GeV;
+     charge           = aParticle->GetDefinition()->GetPDGCharge()/eplus;
+     timeOfFlight     = 0.0;
+     side             = 0;
+     flag             = false;
+     code             = aParticle->GetDefinition()->GetPDGEncoding();
+     baryon           = aParticle->GetDefinition()->GetBaryonNumber();
+     particleName     = getParticleName(code, baryon);
+     particleType     = aParticle->GetDefinition()->GetParticleType();
+  }
   
+
 G4String G4HEVector::getParticleName(G4int aCode, G4int aBaryon)
    {
         G4String name;
@@ -43,7 +79,7 @@ G4String G4HEVector::getParticleName(G4int aCode, G4int aBaryon)
         else if(aCode == 22) name = "Gamma";
         else
           {
-               cout << "particle " << aCode << "  "  <<aBaryon<< " not known in this generator!!" << endl;
+               G4cout << "particle " << aCode << "  "  <<aBaryon<< " not known in this generator!!" << endl;
           }
         return name;
    } 
@@ -492,7 +528,7 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      code          = p1.code;
      particleName  = p1.particleName;
      particleType  = p1.particleType; 
-     baryon        = 0;
+     baryon        = p1.baryon;
    }
 
 G4double 
@@ -1002,7 +1038,7 @@ G4HEVector::setDefinition(G4String name)
           }
         else
           {
-               cout << "particle " << name << " not known in this generator!!" << endl;
+               G4cout << "particle " << name << " not known in this generator!!" << endl;
                return;
           }
         px = 0.;
@@ -1161,15 +1197,15 @@ G4int G4HEVector::FillQuarkContent()
 void 
 G4HEVector::Print( G4int L)
    {
-     cout << "HEV: " 
+     G4cout << "HEV: " 
           << L << " " << px << " " <<  py << " " <<  pz << " "
           << energy << " " << mass << " " << charge << " " 
-          << timeOfFlight << " " << side << " " << flag << " " << code << " "  
-          << particleName << endl;
+          << timeOfFlight << " " << side << " " << flag << " " 
+	  << code << " " << baryon << " " << particleName << endl;
      /*
      printf("HEV: %3d %6f.2 %6f.2 %6f.2 %6f.2 %6f.2 %3f.0 %4f.1 %3d
-             %3d %6d %s \n", L, px, py, pz, energy, mass, charge,
-             timeOfFlight, side, flag, code, particleName);
+             %3d %6d %6d %s \n", L, px, py, pz, energy, mass, charge,
+             timeOfFlight, side, flag, code, baryon, particleName);
 	     */
      return;                         
    }

@@ -1,3 +1,19 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEAntiNeutronInelastic.cc,v 1.2 1999-06-16 04:32:48 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+
+#include "globals.hh"
+#include "G4ios.hh"
+
+//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included are the low energy stuff like
@@ -28,23 +44,23 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if(incidentKineticEnergy < 1.)
       { 
-        cout << "GHEAntiNeutronInelastic: incident energy < 1 GeV" << endl;;
+        G4cout << "GHEAntiNeutronInelastic: incident energy < 1 GeV" << endl;;
       }
     if(verboseLevel > 1)
       {
-        cout << "G4HEAntiNeutronInelastic::ApplyYourself" << endl;
-        cout << "incident particle " << incidentParticle.getName()
+        G4cout << "G4HEAntiNeutronInelastic::ApplyYourself" << endl;
+        G4cout << "incident particle " << incidentParticle.getName()
              << "mass "              << incidentMass
              << "kinetic energy "    << incidentKineticEnergy
              << endl;
-        cout << "target material with (A,Z) = (" 
+        G4cout << "target material with (A,Z) = (" 
              << atomicWeight << "," << atomicNumber << ")" << endl;
       }
 
     G4double inelasticity  = NuclearInelasticity(incidentKineticEnergy, 
                                                  atomicWeight, atomicNumber);
     if(verboseLevel > 1)
-        cout << "nuclear inelasticity = " << inelasticity << endl;
+        G4cout << "nuclear inelasticity = " << inelasticity << endl;
     
     incidentKineticEnergy -= inelasticity;
     
@@ -56,7 +72,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                                                excitationEnergyGNP,
                                                excitationEnergyDTA);
     if(verboseLevel > 1)
-      cout << "nuclear excitation = " << excitation << excitationEnergyGNP 
+      G4cout << "nuclear excitation = " << excitation << excitationEnergyGNP 
            << excitationEnergyDTA << endl;             
 
 
@@ -93,7 +109,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     vecLength = 0;           
         
     if(verboseLevel > 1)
-      cout << "ApplyYourself: CallFirstIntInCascade for particle "
+      G4cout << "ApplyYourself: CallFirstIntInCascade for particle "
            << incidentCode << endl;
 
     G4bool successful = false; 
@@ -104,7 +120,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                                  incidentParticle, targetParticle, atomicWeight);
 
         if(verboseLevel > 1)
-	   cout << "ApplyYourself::StrangeParticlePairProduction" << endl;  
+	   G4cout << "ApplyYourself::StrangeParticlePairProduction" << endl;  
 
 
         if ((vecLength > 0) && (availableEnergy > 1.)) 
@@ -146,7 +162,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if (!successful)
       { 
-        cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << endl;
+        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << endl;
       }
       FillParticleChange(pv,  vecLength);
       delete [] pv;
@@ -623,14 +639,14 @@ void
        } 
    if (verboseLevel > 1)
       {
-        cout << "Particles produced: " ;
-        cout << pv[0].getName() << " " ;
-        cout << pv[1].getName() << " " ;
+        G4cout << "Particles produced: " ;
+        G4cout << pv[0].getName() << " " ;
+        G4cout << pv[1].getName() << " " ;
         for (i=2; i < vecLen; i++)   
             { 
-              cout << pv[i].getName() << " " ;
+              G4cout << pv[i].getName() << " " ;
             }
-         cout << endl;
+         G4cout << endl;
       }
    return;
  }
