@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.23 2004-07-05 13:36:32 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.24 2004-07-21 13:22:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,6 +72,7 @@
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
 // 19-03-04 Fix a problem energy below lowestKinEnergy (V.Ivanchenko)
 // 31-03-04 Fix a problem of retrieve tables (V.Ivanchenko)
+// 21-07-04 Check weather AtRest are active or not (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -140,7 +141,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
-  hasRestProcess(true),
+  hasRestProcess(false),
   tablesAreBuilt(false),
   integral(true),
   meanFreePath(true)
@@ -239,9 +240,15 @@ void G4VEnergyLossProcess::Initialise()
   massRatio = 1.0;
   reduceFactor = 1.0;
 
-  if(particle->GetProcessManager()->GetAtRestProcessVector()->size())
-               hasRestProcess = true;
-  else         hasRestProcess = false;
+  hasRestProcess = false;
+  G4ProcessManager* pm = particle->GetProcessManager();
+  G4int np = pm->GetAtRestProcessVector()->size();
+  for(G4int j=0; j<np; j++) {
+    if(pm->GetProcessActivtion(j)) {
+      hasRestProcess = true;
+      break;
+    }
+  }   
 
   if (baseParticle) {
     massRatio = (baseParticle->GetPDGMass())/initialMass;
