@@ -1,0 +1,29 @@
+# $Id: TestEm2.in,v 1.1 2000-01-21 14:40:57 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# H2O L = 9.97 radl  R = 0.665 radl; electron 1 GeV
+#
+#  Experimental results: Electron-induced cascade showers
+#                        J&H Crannel - Phys. Rev. 184-2 - August69
+#
+/control/verbose 2
+#
+/calor/setMat Water
+/calor/setLbin 9 1.11
+/calor/setRbin 6 0.111
+/calor/update
+#
+/run/particle/setCut 5.0 mm
+/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 20
+#
+/gun/particle electron
+/gun/energy 1 GeV
+/run/beamOn 100
+
+
