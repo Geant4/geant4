@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.cc,v 1.5 2001-11-07 10:32:15 radoone Exp $
+// $Id: G4VClusterModel.cc,v 1.6 2001-11-08 13:53:51 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,13 +119,11 @@ void G4VClusterModel::FillFakeStep(const G4ThreeVector& position,
   if (!fNavigatorSetup)
   {
     fNavigator->SetWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()) ;
-    fNavigator->LocateGlobalPointAndUpdateTouchableHandle(position,dummyDirection,fTouchable,false);
     fNavigatorSetup = true;
   }
-  else
-  {
-    fNavigator->LocateGlobalPointAndUpdateTouchableHandle(position,dummyDirection,fTouchable, false);
-  }
+
+  fNavigator->LocateGlobalPointAndUpdateTouchableHandle(position,dummyDirection,fTouchable, false);
+
   // Fills attribute of the G4Step needed
   // by our sensitive detector:
   //
