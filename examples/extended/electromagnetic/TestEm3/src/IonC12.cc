@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.cc,v 1.2 2003-06-16 16:47:47 gunter Exp $
+// $Id: IonC12.cc,v 1.3 2003-08-08 07:53:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,7 @@
 
 IonC12::IonC12(
        const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
+       G4double            width,        G4double            charge,
        G4int               iSpin,        G4int               iParity,    
        G4int               iConjugation, G4int               iIsospin,   
        G4int               iIsospin3,    G4int               gParity,
@@ -47,28 +47,30 @@ IonC12::IonC12(
  : G4VIon( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
-{ }
+{ 
+  SetParticleSubType("static");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 IonC12::~IonC12() { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-// 
-// static member definition                      
-//     
+//
+// static member definition
+//
 //    Arguments for constructor are as follows
 //               name             mass          width         charge
 //             2*spin           parity  C-conjugation
 //          2*Isospin       2*Isospin3       G-parity
 //               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+//             stable         lifetime    decay table
 
 IonC12 IonC12::theIon(
-             "ionC12",    11.17793*GeV,       0.0*MeV,  +6.0*eplus, 
-		    0,              +1,             0,          
-		    0,               0,             0,             
-     "static_nucleus",               0,           +12,           0,
+             "ionC12",    11.17793*GeV,       0.0*MeV,  +6.0*eplus,
+		    0,              +1,             0,
+		    0,               0,             0,
+            "nucleus",               0,           +12,           0,
 		 true,            -1.0,             0
 );
 
