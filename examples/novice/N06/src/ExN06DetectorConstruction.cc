@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.9 2003-01-23 15:34:31 maire Exp $
+// $Id: ExN06DetectorConstruction.cc,v 1.10 2003-03-26 12:09:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,7 +170,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
     = new G4LogicalVolume(expHall_box,Air,"World",0,0,0);
 
   G4VPhysicalVolume* expHall_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"World",expHall_log,0,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,0);
 
 // The Water Tank
 //	
@@ -180,8 +180,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
     = new G4LogicalVolume(waterTank_box,Water,"Tank",0,0,0);
 
   G4VPhysicalVolume* waterTank_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"Tank",
-                        waterTank_log,expHall_phys,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),waterTank_log,"Tank",
+                        expHall_log,false,0);
 
 // The Air Bubble
 //   
@@ -191,8 +191,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
     = new G4LogicalVolume(bubbleAir_box,Air,"Bubble",0,0,0);
 
 //G4VPhysicalVolume* bubbleAir_phys =
-      new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),"Bubble",
-                        bubbleAir_log,waterTank_phys,false,0);
+      new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),bubbleAir_log,"Bubble",
+                        waterTank_log,false,0);
 
 //	------------- Surfaces --------------
 //
