@@ -6,17 +6,21 @@
                              lArCal 
                             --------
 
+This example is intended to simulate the Forward Liquid Argon Calorimeter
+(FCAL) of the ATLAS Detector at LHC. The goal of the FCAL is to provide
+a good missing energy determination in the region of very small angles 
+from the beam direction. 
 
-This example is intended to simulate the Liquid Argon Calorimeter
-of the ATLAS Detector at LHC. 
 
 1. GEOMETRY DEFINITION
 ------------------------
 
-The liquid Argon calorimeter consists of two modules; an electromagnetic 
-and a hadronic one whose geometry parameters are defined in 
+The liquid Argon calorimeter consists of three modules with the same
+nominal outer dimensions: an electromagnetic module (made
+of copper) followed by two hadronic ones (made of tungsten alloy). 
+the corresponding paremeters of these modules are defined inside the
 FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
-It contains a FCALTestbemSetup class whose geometry is given by 
+The package contains as well a FCALTestbemSetup class whose geometry is given by 
 FCALTestbeamSetupParameters.input. See these files for details concerning to
 radius, lenght and angles of the different components. 
 
@@ -26,7 +30,7 @@ radius, lenght and angles of the different components.
     
  The primary kinematic consists of a single particle which hits the
  geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
- class  gives the particle and its energy (by default it is an electron of
+ class gives the particle and its energy (by default it is an electron of
  80 GeV). Theses parameters can be changed in commands of ParticleGun class
  inside the macros given in this example. 
  
@@ -115,7 +119,7 @@ radius, lenght and angles of the different components.
  # This example has been developed and tested with the gcc-2.95.2 compiler:
                                                        ----------
 
- o Set up the environment variable: G4ANALYSIS_USE 
+ o Set up the environment variable: G4ANALYSIS_USE    1
  o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.2/bin
                                                          |
                                                          |

@@ -21,7 +21,7 @@
 /vis/open OGLIX
 #
 # Draw scene
-/vis/viewer/zoom 1.4
+/vis/viewer/zoom 10.5
 /vis/viewer/flush
 #
 # for drawing the tracks

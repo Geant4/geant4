@@ -9,6 +9,7 @@
 #include "G4VProcess.hh"
 #include "g4std/fstream"
 #include "G4ios.hh"
+#include "G4UnitsTable.hh"
 #ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"
 #include "FCALAnalysisManager.hh"
@@ -22,8 +23,8 @@ FCALAnalysisManager* FCALAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALAnalysisManager::FCALAnalysisManager()
-  :outputFileName("fcal.his"),analysisFactory(0), tree(0),histogramFactory(0), 
-   OutOfWorld(0), Secondary(0), EmEdep(0), HadEdep(0)  
+  :outputFileName("fcal.his"),analysisFactory(0), tree(0),histogramFactory(0) 
+   //  OutOfWorld(0), Secondary(0), EmEdep(0), HadEdep(0)  
 {
 
   analisysMessenger = new FCALAnalysisMessenger(this);
@@ -86,7 +87,7 @@ void FCALAnalysisManager::book()
   histo_1 = histogramFactory->createHistogram1D("1","Number of Out Of World", 100,0.,10.); 
   histo_2 = histogramFactory->createHistogram1D("2","Number of Secondaries", 100,0.,100.);
   histo_3 = histogramFactory->createHistogram1D("3","Electromagnetic Energy/MeV", 100,0.,100.);
-  histo_4 = histogramFactory->createHistogram1D("4","hadronic Energy/MeV", 100,0.,100.);
+  histo_4 = histogramFactory->createHistogram1D("4","hadronic Energy/MeV", 100,10.,60.);
  
   // Create a tuple 
 
@@ -113,38 +114,39 @@ void FCALAnalysisManager::finish()
 
 ////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //
-void FCALAnalysisManager::analyseEnergyDep(G4double Edep)
-{
-  //histo_1 =dynamic_cast<IHistogram1D *> ( tree->find("1") );
-
-  //  G4double OutOfWorld, Secondary, EmEdep, HadEdep; 
-
-
-  histo_1->fill(OutOfWorld);
-  histo_2->fill(Secondary);
-  histo_3->fill(EmEdep);
-  histo_4->fill(HadEdep);
-  
-  if(ntuple_1) {
-    ntuple_1->fill(0,OutOfWorld);
-    ntuple_1->fill(1,1);
-    ntuple_1->addRow();
-  }
-
-  if(ntuple_2) {
-    ntuple_2->fill(0,Secondary);
-    ntuple_2->fill(1,1);
-    ntuple_2->addRow();
-  }
-
-  if(ntuple_3) {
-    ntuple_3->fill(0,EmEdep);
-    ntuple_3->fill(1,1);
-    ntuple_3->addRow();
-  }
-
-  
-}
+//void FCALAnalysisManager::analyseEnergyDep(G4double Edep)
+//void FCALAnalysisManager::analyseEnergyDep(G4double HadEdep)
+//{
+//
+//
+//  histo_1->fill(OutOfWorld);
+//  histo_2->fill(Secondary);
+//  histo_3->fill(EmEdep);
+//  histo_4->fill(HadEdep);
+//
+// 
+//
+//  
+//  if(ntuple_1) {
+//    ntuple_1->fill(0,OutOfWorld);
+//    ntuple_1->fill(1,1);
+//    ntuple_1->addRow();
+//  }
+//
+//  if(ntuple_2) {
+//    ntuple_2->fill(0,Secondary);
+//    ntuple_2->fill(1,1);
+//    ntuple_2->addRow();
+//  }
+//
+//  if(ntuple_3) {
+//    ntuple_3->fill(0,EmEdep);
+//    ntuple_3->fill(1,1);
+//    ntuple_3->addRow();
+//  }
+//
+//  
+//}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

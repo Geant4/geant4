@@ -11,18 +11,22 @@
 # Create empty scene ("world" is default)
 /vis/scene/create
 #
+/vis/viewer/zoom 10.
+
 # Add volume to scene
 /vis/scene/add/volume
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
+
+
 /vis/sceneHandler/create DAWNFILE
 /vis/sceneHandler/create OGLIX
 #/vis/sceneHandler/create RAYX
 
+#/vis/viewer/zoom 10.
 
-/vis/viewer/zoom 10.
 # Create a viewer
 /vis/viewer/create
 #
@@ -47,5 +51,5 @@
 /tracking/verbose 1
 /gun/particle mu+
 /gun/energy 300 MeV
-/run/beamOn 2
+/run/beamOn 3
 #/gun/particle geantino
