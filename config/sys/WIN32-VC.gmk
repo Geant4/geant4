@@ -19,6 +19,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   #
   ifdef G4USE_OSPACE
     CXXFLAGS += $(OSPACEINC)
+    CPPFLAGS += -DG4USE_OSPACE
   else 
     ifdef G4USE_STLPORT
       CXXFLAGS += $(OSPACEINC)
