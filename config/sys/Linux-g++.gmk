@@ -29,6 +29,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   XMFLAGS   := -I/usr/X11R6/include
   XMLIBS    := -lXm -lXpm
+  DLDLIBS   := -ldl
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
