@@ -33,7 +33,7 @@ GetIsotope(const G4Track& aTrack,
 
   // get the isotope
   G4Material * theMaterial = aTrack.GetMaterial();
-  G4double nEleInMat = theMaterial->GetNumberOfElements();
+  G4int nEleInMat = theMaterial->GetNumberOfElements();
   G4int index;
   G4double * xSec = new G4double[nEleInMat];
   G4double sum = 0;
