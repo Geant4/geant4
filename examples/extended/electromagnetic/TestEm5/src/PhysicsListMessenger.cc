@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.2 2004-04-19 18:30:54 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.3 2004-04-29 13:55:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,14 +32,19 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
-{   
+{ 
+  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
+  pListCmd->SetGuidance("Add modula physics list.");
+  pListCmd->SetParameterName("PList",false);
+  pListCmd->AvailableForStates(G4State_PreInit);
+      
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
@@ -67,29 +72,26 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
+  delete pListCmd;
   delete gammaCutCmd;
   delete electCutCmd;
   delete protoCutCmd;
   delete allCutCmd;
-  delete pListCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{       
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if( command == pListCmd )
+   { pPhysicsList->AddPhysicsList(newValue);}
+         
   if( command == gammaCutCmd )
    { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
      
@@ -106,9 +108,6 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
     } 
-
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

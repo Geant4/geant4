@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.2 2004-04-19 18:30:52 vnivanch Exp $
+# $Id: mumsc.mac,v 1.3 2004-04-29 13:55:08 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,7 +13,7 @@
 /testem/det/setWorldX   1 m
 /testem/det/setWorldYZ  1 m
 #
-#/testem/phys/addPhysics g4v52
+#### /testem/phys/addPhysics g4v52
 #
 /testem/phys/setCuts 0.1 mm
 #
@@ -23,7 +23,7 @@
 /gun/particle mu+
 /gun/energy 50 GeV
 #
-/testem/histo/setFileName 50mu.st.paw
+/testem/histo/setFileName 50mu.std.paw
 /testem/histo/setHisto 6  200  -20.0  +20.0 mrad	#projected angle
 /testem/histo/setHisto 7  200  -10.0  +10.0 mm		#projected deviation  
 #

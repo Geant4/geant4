@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.4 2004-04-19 18:37:57 vnivanch Exp $
+// $Id: TrackingAction.cc,v 1.5 2004-04-29 13:55:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
-
+ 
 #ifdef G4ANALYSIS_USE
  #include "AIDA/IHistogram1D.h"
 #endif
@@ -53,9 +53,9 @@ TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
-{
+{ 
   // few initialisations
-  //
+  //     
   if (aTrack->GetTrackID() == 1) {
     worldLimit = 0.5*(detector->GetWorldSizeX());
     primaryCharge = aTrack->GetDefinition()->GetPDGCharge();
@@ -79,11 +79,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (aTrack->GetTrackID() == 1) flag = 2;
   if (transmit) eventaction->SetTransmitFlag(flag);
   if (reflect)  eventaction->SetReflectFlag(flag);
-
+  
 #ifdef G4ANALYSIS_USE
-  //
+  // 
   //histograms
-  //
+  // 
   G4int id = 0;
   G4bool charged  = (charge != 0.);
   G4bool neutral = !charged;
@@ -99,9 +99,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     G4double unit   = histoManager->GetHistoUnit(id);
     histoManager->GetHisto(id)->fill(energy/unit);
   }
-
-  if(flag != 2) return;
-
+  
   //space angle distribution at exit
   //
        if (transmit && charged) id =  5;
@@ -112,11 +110,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     G4ThreeVector direction = aTrack->GetMomentumDirection();
     G4double theta  = acos(abs(direction.x()));
     G4double dteta  = histoManager->GetBinWidth(id);
-    G4double weight = 1./(2*pi*sin(theta)*dteta);
+    G4double weight = 1./(2*pi*sin(theta)*dteta);  
     G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(theta/unit,weight*unit*unit);
+    histoManager->GetHisto(id)->fill(theta/unit,weight*unit*unit); 
   }
-
+    
   //projected angle distribution at exit
   //
        if (transmit && charged) id =  6;
@@ -124,21 +122,21 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && charged) id = 13;
   else if (reflect  && neutral) id = 16;
   if (histoManager->GetHisto(id)) {
-    G4ThreeVector momentum = aTrack->GetMomentum();
+    G4ThreeVector momentum = aTrack->GetMomentum();  
     G4double unit = histoManager->GetHistoUnit(id);
     histoManager->GetHisto(id)->fill(atan(momentum.y()/abs(momentum.x()))/unit);
     histoManager->GetHisto(id)->fill(atan(momentum.z()/abs(momentum.x()))/unit);
   }
-
+            
   //projected position at exit
   //
   if (transmit && charged) id =  7;
   if (histoManager->GetHisto(id)) {
     G4double unit   = histoManager->GetHistoUnit(id);
     histoManager->GetHisto(id)->fill(position.y()/unit);
-    histoManager->GetHisto(id)->fill(position.z()/unit);
-  }
-#endif
+    histoManager->GetHisto(id)->fill(position.z()/unit);    
+  }  
+#endif    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

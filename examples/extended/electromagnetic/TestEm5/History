@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2004-03-31 17:37:44 maire Exp $
+$Id: History,v 1.42 2004-04-29 13:55:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+29-04-04 mma (testem5-V06-01-01)
+- add physicsLists: HadronElastic, BinaryCascade, IonBinaryCascade (Ivanch.)
+- rm  physicsLists: Particles, General
      
 31-03-04 mma  (testem5-V06-01-00)
 - identical to V06-00-01

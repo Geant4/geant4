@@ -20,24 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.hh,v 1.1 2004-04-19 18:38:50 vnivanch Exp $
+// $Id: PhysListBinaryCascade.hh,v 1.2 2004-04-29 13:55:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
 //      It is provide PhysicsList for Binary Cascade for
 //      protons and neutrons with the energy E<3 GeV
 //
-// ------------------------------------------------------------
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-//
-// ------------------------------------------------------------
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef PhysListBinaryCascade_h
 #define PhysListBinaryCascade_h 1
 
@@ -48,11 +41,13 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class PhysListBinaryCascade : public G4VPhysicsConstructor
 {
   public:
     PhysListBinaryCascade(const G4String& name = "binary");
-    virtual ~PhysListBinaryCascade();
+   ~PhysListBinaryCascade();
 
   public:
     // This method will be invoked in the Construct() method.
@@ -72,5 +67,7 @@ class PhysListBinaryCascade : public G4VPhysicsConstructor
     G4NeutronInelasticCrossSection theNXSec;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

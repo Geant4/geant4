@@ -19,9 +19,13 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
 // 
+//
+// $Id: PhysListHadronElastic.cc,v 1.2 2004-04-29 13:55:11 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListHadronElastic.hh"
 #include "G4ParticleDefinition.hh"

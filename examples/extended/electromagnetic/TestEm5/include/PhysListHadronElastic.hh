@@ -20,28 +20,25 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysListHadronElastic.hh,v 1.2 2004-04-29 13:55:10 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
 //      It is provide PhysicsList for hadron eleastic process
 //
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
 //
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef PhysListHadronElastic_h
 #define PhysListHadronElastic_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4HadronElasticProcess.hh"
 #include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysListHadronElastic : public G4VPhysicsConstructor
 {
@@ -64,6 +61,7 @@ class PhysListHadronElastic : public G4VPhysicsConstructor
     G4HadronElasticProcess theElasticProcess;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
