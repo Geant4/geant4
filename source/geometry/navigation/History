@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003-11-08 04:12:37 japost Exp $
+$Id: History,v 1.9 2003-11-10 08:58:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,13 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov 6th, 2003 - J.Apostolakis  (geomnav-V05-02-05)
------------------------
-- G4PropagatorInField
-  o Implements move of EpsilonMin / Max to G4FieldManager.
 
-Important Note:
-   Requires and coworks with field-V05-02-04 or later tag.
+Nov 10th, 2003 - G.Cosmo  (geomnav-V05-02-06)
+------------------------
+- G4Navigator[.hh.icc.cc] - methods review:
+  o Removed obsolete methods: IsExitNormalValid(), GetLocalExitNormal().
+  o Renamed method LocateGlobalPointAndSetup(p,v,history) to
+    ResetHistoryAndLocate(p,v,history).
+  o Moved to protected the following methods: GetCurrentLocalCoordinate(),
+    ComputeLocalPoint(), ComputeLocalAxis(), NetTranslation(),
+    NetRotation(), EnteredDaughterVolume().
+  o Fixed consistency of inline/not-inline implementations of methods.
+- Coworks with tag "tracking-V05-02-03".
+
+Nov 6th, 2003 - J.Apostolakis  (geomnav-V05-02-05)
+-----------------------------
+- G4PropagatorInField[.hh.icc.cc]:
+  o Implements move of EpsilonMin / Max to G4FieldManager.
+- Requires and coworks with "field-V05-02-04" or later tag.
 
 Nov 6th, 2003 - G.Cosmo  (geomnav-V05-02-04)
 -----------------------
