@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.7 2000-04-25 14:33:09 maire Exp $
+// $Id: G4IhIonisation.cc,v 1.8 2000-07-31 08:17:49 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -36,6 +36,11 @@
 G4IhIonisation::G4IhIonisation(const G4String& processName)
    : G4VIhEnergyLoss(processName),
      theMeanFreePathTable(NULL),
+     theNlambdaTable(NULL),
+     theInverseNlambdaTable(NULL),
+     theCoeffATable(NULL),
+     theCoeffBTable(NULL),
+     theCoeffCTable(NULL),
      NumberOfBuildPhysicsTableCalls(0),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),

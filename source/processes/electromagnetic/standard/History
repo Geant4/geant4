@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-07-18 10:45:32 vnivanch Exp $
+$Id: History,v 1.6 2000-07-31 08:21:10 gracia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 Jul 00 Gonzalo Gracia
+- G4IhIonisation.cc Initialisisation to NULL of several  G4PhysicsTable*
+  is included in constructor. Some tests were crashing 
+  on NT because of the missing initialisation
 
 18 jul 00: V.Ivanchenko (stand-V01-??)
 - fix in G4VhEnergyLoss and G4ionIonisation in AlongStepDoIt 
