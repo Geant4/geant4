@@ -15,7 +15,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   G4_HAVE_BOOL  := yes
   CXXFLAGS	+= -ieee -timplicit_local
   SHEXT         := so
-  G4RUNPATHOPTION := -rpath
+#future  G4RUNPATHOPTION := -rpath
   FC		:= f77
   FCLIBS	:= -lUfor -lfor -lFutil -lots
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
@@ -46,6 +46,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
      cd $(G4TMPDIR); \
      $(CXX) -shared -o $$libdir/$(@F) *.o
   endef
+#  transform-RPath = 1
   define build-global-shared-lib
     @echo "Global shared Libraries not yet supported on $(G4SYSTEM)
   endef
