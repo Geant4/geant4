@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.17 2001-07-11 09:59:41 gunter Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.18 2001-07-20 11:52:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -193,7 +193,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     
     // Create the lateral planars
     TmpAxis = XAxis;
-    G4ThreeVector TmpAxis2 = XAxis;
+    G4Vector3D TmpAxis2 = XAxis;
     TmpAxis.rotateZ(phi1);
     TmpAxis2.rotateZ(phi1);
     TmpAxis2.rotateZ(dphi);	
@@ -209,8 +209,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       GapPointList[Count] = LocalOrigin + (RMAX[d]*TmpAxis);
       GapPointList[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis);	    
       
-      GapPointList2[Count] = LocalOrigin + (RMAX[d]*G4Vector3D(TmpAxis2));
-      GapPointList2[points-1-Count] = LocalOrigin + (RMIN[d]*G4Vector3D(TmpAxis2));	 
+      GapPointList2[Count] = LocalOrigin + (RMAX[d]*TmpAxis2);
+      GapPointList2[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
    	         
       Count++;
 
@@ -403,7 +403,6 @@ G4BREPSolidPolyhedra::SurfaceNormal(const G4ThreeVector& Pt) const
   // at a point on the surface
   // Note : the sense of the normal depends on the sense of the surface 
 
-  G4Vector3D   n(0,0,0);
   G4int        iplane;
     
   G4Vector3D norm;
@@ -420,7 +419,7 @@ G4BREPSolidPolyhedra::SurfaceNormal(const G4ThreeVector& Pt) const
   // calcul of the normal at this point
   norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
 
-  n = G4ThreeVector ( norm.x(), norm.y(), norm.z() );
+  G4ThreeVector n( norm.x(), norm.y(), norm.z() );
   n = n.unit();
 
   return n;

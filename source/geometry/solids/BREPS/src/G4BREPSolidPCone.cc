@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.20 2001-07-11 09:59:41 gunter Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.21 2001-07-20 11:52:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -458,9 +458,9 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   // Find the point of intersection on the surface and the normal
   // !!!! be carefull the distance is sqrt(dist) !!!!
 
-  G4ThreeVector IntersectionPoint = Pttmp + sqrt(dist)*Vtmp;
-  G4ThreeVector Normal = SurfaceVec[WhichSurface]->SurfaceNormal(IntersectionPoint);
-  if ( G4Vector3D(Normal)*Vtmp > 0 ) return kInside;
+  G4Vector3D IntersectionPoint = Pttmp + sqrt(dist)*Vtmp;
+  G4Vector3D Normal = SurfaceVec[WhichSurface]->SurfaceNormal(IntersectionPoint);
+  if ( Normal*Vtmp > 0 ) return kInside;
   return kOutside;
 
 }
@@ -471,7 +471,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
   // at a point on the surface
   // Note : the sense of the normal depends on the sense of the surface 
 
-  G4Vector3D   n(0,0,0);
+  G4ThreeVector   n(0,0,0);
   G4int        iplane;
   G4int        normflag = 0;
     
