@@ -414,7 +414,6 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4ANALYSIS_USE_JAS            1
   setenv G4ANALYSIS_SYSTEM OpenScientist
   setenv G4ANALYSIS_USE_LIZARD         1
-  # Specific :
   # Lab :
   source /projects/Lab/v4r0/cmt/setup.csh
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
@@ -445,6 +444,50 @@ set jars=/lal/jas/2.0alpha4/release/lib
   alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
   setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
   set prompt='g4-pc-gbp> ' 
+endif
+#
+if ( `uname -n | grep lxplus` != "" ) then
+if ( `whoami` == "gbarrand" ) then
+  setenv CVSROOT   /afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /afs/cern.ch/sw/contrib/geant4/dev
+  setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
+  setenv G4LIB     $G4WORKDIR/lib
+  setenv G4SYSTEM  Linux-g++
+  setenv G4DEBUG   1
+  setenv CPPVERBOSE 1
+  #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+  # G4 build flags :
+  setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
+  setenv G4ANALYSIS_BUILD_JAS            1
+  setenv G4ANALYSIS_BUILD_LIZARD         1
+  # G4 use flags :
+  setenv G4UI_USE_XM                   1
+  setenv G4UI_USE_XAW                  1
+  setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
+  setenv G4ANALYSIS_USE_JAS            1
+  setenv G4ANALYSIS_USE_LIZARD         1
+  # AIDA : 
+  setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
+  # Lab :
+  setenv CMTSITE CERN
+  source /afs/cern.ch/sw/contrib/Lab/v4r0/cmt/setup.csh
+  # CLHEP :
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/lhcxx/specific/@sys/CLHEP/1.5.0.0
+  #
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+  # java :
+  #setenv JDKHOME /asis.local/i386_redhat61/usr.local/libexec/jdk/1.2.2
+  #setenv JDKHOME /usr/local/libexec/jdk/1.2.2
+  setenv JDKHOME /afs/cern.ch/sw/java/i386_redhat61/jdk/blackdown-1.2.2
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${JDKHOME}/jre/lib/i386:${JDKHOME}/jre/lib/i386/classic:${JDKHOME}/jre/lib/i386/native_threads
+  set jars=/afs/cern.ch/sw/contrib/jas/2.0alpha4/release/lib
+  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
+  # Else :
+  alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
+  alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+  set prompt='g4-lxplus> ' 
+endif
 endif
 #
 ####################################################
