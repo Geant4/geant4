@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.14 2001-12-04 16:55:07 radoone Exp $
+// $Id: G4Navigator.hh,v 1.15 2001-12-06 09:35:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,16 +140,14 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-//  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
-//  			                          const G4TouchableHistory &h);
   inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
                                                       const G4ThreeVector &direction,
-  			                          const G4TouchableHistory &h);
+                                                      const G4TouchableHistory &h);
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-					       const G4ThreeVector* direction=0,
-					       const G4bool pRelativeSearch=true,
-                 const G4bool ignoreDirection=true);
+                                               const G4ThreeVector* direction=0,
+                                               const G4bool pRelativeSearch=true,
+                                               const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
     // containing the point in the global coordinate space. Two main cases are:
     //  i) If pRelativeSearch=false it makes use of no previous/state
@@ -243,8 +241,6 @@ class G4Navigator
   inline G4TouchableHistory* CreateTouchableHistory() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
-  // G4GRSVolume* CreateGRSVolume() const;
-  // G4GRSSolid*  CreateGRSSolid() const; 
   G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
@@ -281,8 +277,6 @@ class G4Navigator
     // - False in cases 2), 3) and 4), i.e. in all other cases.
     // This function is not guaranteed to work if SetGeometricallyLimitedStep()
     // was not called when it should have been called.
-
-  // inline G4bool ExitedMotherVolume();
 
   inline G4int GetVerboseLevel();
   inline void  SetVerboseLevel(G4int level);
