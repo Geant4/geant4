@@ -5,10 +5,10 @@
 /physics/addPhysics photon-epdl
 /physics/addPhysics  electron-standard
 /physics/addPhysics positron-standard
+/physics/cutE 7. micrometer
 /run/initialize
 /target/setTargetMat Silicon
 /target/update
-/physics/cutE 7. micrometer
 /gun/particle e-
 /target/setTargetThick 0.53 mm
 /target/update

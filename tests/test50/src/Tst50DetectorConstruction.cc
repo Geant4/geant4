@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.26 2003-07-30 12:23:31 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.27 2003-07-31 08:15:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -54,7 +54,10 @@
 Tst50DetectorConstruction::Tst50DetectorConstruction()
   :isRegisteredUserLimits(false), hydrogen(0),beryllium(0),graphite(0), 
    magnesium(0), aluminium(0),silicon(0),liquidArgon(0),titanium(0),iron(0),
-   gallium(0),germanium(0), molybdenium(0), silver(0), cesium(0),tantalum(0),
+   cobalt(0),nickel(0),copper(0),zinc(0),
+   gallium(0),germanium(0), zirconium(0),
+   molybdenium(0), silver(0),cadmium(0),indium(0), tin(0),
+   cesium(0),samarium(0), ytterbium(0),tantalum(0),tungsten(0),
    gold(0),
    lead(0),uranium(0), water(0), quartz(0), air(0),vacuum(0),
    targetMaterial(0),defaultMaterial(0),
@@ -85,12 +88,23 @@ Tst50DetectorConstruction::~Tst50DetectorConstruction()
   delete uranium; 
   delete lead;
   delete gold;
+  delete tungsten;
   delete tantalum;
+  delete ytterbium;
+  delete samarium;
   delete cesium;
+  delete tin;
+  delete indium;
+  delete cadmium;
   delete silver;
-  delete  molybdenium;
+  delete molybdenium;
+  delete zirconium;
   delete germanium;
   delete gallium;
+  delete zinc;
+  delete copper;
+  delete nickel;
+  delete cobalt;
   delete iron; 
   delete titanium;
   delete liquidArgon;
@@ -188,6 +202,22 @@ void Tst50DetectorConstruction::DefineMaterials()
   density = 7.874*g/cm3;
   iron = new G4Material(name="Iron", z=26., a, density);
 
+  a = 58.933*g/mole;
+  density = 8.9 *g/cm3;
+  cobalt = new G4Material(name="Cobalt", z=27., a, density);
+
+  a = 58.69*g/mole;
+  density = 8.902 *g/cm3;
+  nickel = new G4Material(name="Nickel", z=28., a, density);
+
+  a = 63.546*g/mole;
+  density = 8.96 *g/cm3;
+  copper = new G4Material(name="Copper", z=29., a, density);
+
+  a = 65.409*g/mole;
+  density = 7.133 *g/cm3;
+  zinc = new G4Material(name="Zinc", z=30., a, density);
+ 
   density = 5.904*g/cm3;
   a = 69.723*g/mole;
   gallium = new G4Material(name="Gallium", z=31., a, density);
@@ -195,6 +225,10 @@ void Tst50DetectorConstruction::DefineMaterials()
   density = 5.323*g/cm3;
   a = 72.64*g/mole;
   germanium = new G4Material(name="Germanium", z=32., a, density);
+
+  density = 6.506*g/cm3;
+  a = 91.224 *g/mole;
+  zirconium = new G4Material(name="Zirconium", z=40., a, density);
 
   density = 10.22 *g/cm3;
   a = 95.94 *g/mole;
@@ -204,14 +238,38 @@ void Tst50DetectorConstruction::DefineMaterials()
   a = 107.8682*g/mole;
   silver = new G4Material(name="Silver", z=47., a, density);
 
+  density = 8.65*g/cm3;
+  a = 112.411*g/mole;
+  cadmium = new G4Material(name="Cadmium", z=48., a, density);
+ 
+  density = 7.310 *g/cm3;
+  a = 114.818*g/mole;
+  indium = new G4Material(name="Indium", z=49., a, density);
+
+  density = 7.310 *g/cm3;
+  a = 118.71*g/mole;
+  tin = new G4Material(name="Tin", z=50., a, density);
+
   density = 1.873*g/cm3;
   a = 132.90545*g/mole;
   cesium = new G4Material(name="Cesium", z=55., a, density);
+
+  density = 7.46*g/cm3;
+  a = 150.36*g/mole;
+  samarium = new G4Material(name="Samarium", z=62., a, density);
+
+  density = 6.73*g/cm3;
+  a = 173.04*g/mole;
+  ytterbium = new G4Material(name="Ytterbium", z=70., a, density);
   
   density = 16.65 *g/cm3;
   a = 180.9947*g/mole;
   tantalum = new G4Material(name="Tantalum", z=73., a, density);
-  
+
+  density = 19.3 *g/cm3;
+  a = 183.85*g/mole;
+  tungsten = new G4Material(name="Tungsten", z=74., a, density);
+
   density = 19.32*g/cm3;
   a = 196.966*g/mole;
   gold = new G4Material(name="Gold", z=79., a, density);
@@ -313,7 +371,7 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
     }
   
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  //  G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   /*  
   if (targetSD == 0)

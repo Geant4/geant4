@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.17 2003-07-29 09:45:38 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.18 2003-07-31 08:15:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -45,6 +45,7 @@
 #include "Tst50ElectronEEDLback.hh"
 #include "Tst50ElectronPenelope.hh"
 #include "Tst50PositronStandard.hh"
+#include "Tst50PositronStandardBack.hh"
 #include "Tst50ProtonStandard.hh"
 #include "Tst50ProtonEEDL.hh"
 #include "Tst50ProtonEEDLziegler.hh"
@@ -249,18 +250,32 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
-
- if (name == "proton-standard") 
+ if (name == "positron-standard") 
     {
-      if (protonIsRegistered) 
+      if (positronIsRegistered) 
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+		 << " cannot be registered ---- positron List already existing" << G4endl;
 	} 
       else 
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new Tst50ProtonStandard(name) );
+	  RegisterPhysics( new Tst50PositronStandard(name) );
+	  positronIsRegistered = true;
+	}
+    }
+
+ if (name == "positron-standard-back") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- positron e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PositronStandardBack(name) );
 	  protonIsRegistered = true;
 	}
     }

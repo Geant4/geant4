@@ -7,6 +7,7 @@
 /physics/addPhysics positron-standard
 /physics/addPhysics proton-standard
 /target/setUserLimits true
+/physics/cutE 1. m
 /run/initialize
 /target/setTargetMat Aluminium
 /target/setTargetThick 15000000. cm
@@ -17,7 +18,6 @@
 /process/inactivate msc
 /process/eLoss/fluct false
 /process/list
-/physics/cutE 1. m
 /gun/particle proton
 /gun/position 0. 0. 0.
 /gun/randomDirection on 

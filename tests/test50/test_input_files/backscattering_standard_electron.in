@@ -5,10 +5,10 @@
 /physics/addPhysics photon-standard
 /physics/addPhysics electron-standard-back
 /physics/addPhysics positron-standard
+/physics/cutE 0.000001 mm
 /run/initialize
 /target/setTargetMat Aluminium
 /target/update
-/physics/cutE 0.000001 mm
 /gun/particle e-
 /target/setTargetThick 0.005 mm
 /target/update

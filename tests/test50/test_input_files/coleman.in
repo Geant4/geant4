@@ -1,22 +1,16 @@
-/control/verbose 1
+/control/verbose 2
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-/physics/cutE 0.000001 mm
+/physics/cutE 0.0001 mm
 /run/initialize
+/target/setTargetThick 0.5 mm
+/target/update
 /target/setTargetMat Aluminium
 /target/update
-/gun/particle e+
-/target/setTargetThick 0.005 mm
-/target/update
 /run/test/trans on
-/gun/energy 1. keV
-/run/beamOn 1000
-/gun/energy 100. keV
-/run/beamOn 1000
 /gun/energy 1. MeV
-/run/beamOn 1000
-
+/gun/particle e+

@@ -5,10 +5,10 @@
 /physics/addPhysics photon-penelope
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
+/physics/cutE 1. micrometer
 /run/initialize
 /target/setTargetMat Aluminium
 /target/update
-/physics/cutE 1. micrometer
 /gun/particle gamma
 /target/setTargetThick 0.0005 mm
 /target/update
