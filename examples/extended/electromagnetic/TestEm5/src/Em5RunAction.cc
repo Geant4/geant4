@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.13 2002-06-06 17:23:22 maire Exp $
+// $Id: Em5RunAction.cc,v 1.14 2002-08-08 13:52:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,7 +192,7 @@ void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
   if(nbinThback>0)
     dThback = (Thhighback-Thlowback)/nbinThback ;
 
-  bookHisto();
+  if (aRun->GetRunID() == 0) bookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
