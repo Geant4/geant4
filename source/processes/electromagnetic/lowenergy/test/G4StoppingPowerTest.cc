@@ -464,6 +464,7 @@ int main(int argc,char** argv)
       if(!fluct) eionle->SetEnlossFluc(false);
       ebrle = new G4LowEnergyBremsstrahlung();
       if(!fluct) ebrle->SetEnlossFluc(false);
+      ebrle->SetVerboseLevel(verbose);
       elecManager->AddProcess(eionle);
       elecManager->AddProcess(ebrle);
       eionle->BuildPhysicsTable(*electron);
@@ -503,7 +504,7 @@ int main(int argc,char** argv)
         if(!setBarkasOff)  hionle->SetBarkasOn();
         hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*antiproton);
-        success = true;
+        success = true; 
 
       } else if (nPart == 5 || nPart == 6) {
         protManager = new G4ProcessManager(proton);
