@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.6 2004-05-08 15:28:11 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.7 2004-05-09 15:03:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -175,6 +175,20 @@ inline
  void G4ParticleChangeForLoss::ProposeMomentumDirection(const G4ThreeVector& dir)
 {
   proposedMomentumDirection = dir;
+}
+
+inline
+ void G4ParticleChangeForLoss::SetProposedMomentumDirection(const G4ThreeVector& dir)
+{
+  proposedMomentumDirection = dir;
+}
+
+inline
+ void G4ParticleChangeForLoss::ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz)
+{
+  proposedMomentumDirection.setX(Px);
+  proposedMomentumDirection.setY(Py);
+  proposedMomentumDirection.setZ(Pz);
 }
 
 inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track)
