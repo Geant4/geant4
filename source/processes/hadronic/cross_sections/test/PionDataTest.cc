@@ -35,13 +35,13 @@ main()
    G4int z;
    G4double a;
    G4cin >> z >> a;
-   G4cout << "Thank you !"<<G4endl<<G4endl;
+   G4cout << "Thank you !"<<G4endl;
    G4Element* theElement = new G4Element("El    ", "any",  z,  a*g/mole);
    
    G4cout << "Please choose the particle type: 1=Pi+, 2=Pi-"<<G4endl;
    G4int ptype;
    G4cin >> ptype;
-   G4cout << "Thank you !"<<G4endl<<G4endl;
+   G4cout << "Thank you !"<<G4endl;
    
    G4ParticleDefinition* theParticleDefinition = G4PionPlus::PionPlusDefinition();
    if(2==ptype) theParticleDefinition = G4PionMinus::PionMinusDefinition();
@@ -51,9 +51,15 @@ main()
    G4int count = 0;
    while(ekin<10*GeV)
    {
-     ekin *= 1.2;
+     ekin *= 1.02;
      theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                                  G4ParticleMomentum(1.,0.,0.), ekin);
+if( ! aSpecialDataSet.IsApplicable(theDynamicParticle, theElement))
+{
+  std::cout << "No way we use this here "<<std::endl;
+  abort();
+}
+
 //     if(aDataSet.IsApplicable(theDynamicParticle, theElement))
 //     {
        G4cout << ekin/GeV  << " " 
