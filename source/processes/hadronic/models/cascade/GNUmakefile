@@ -2,7 +2,7 @@
 # GNUmakefile for chips library. HPW 20-Nov-99
 # --------------------------------------------------------------
 
-name := G4hadronic_hetcpp
+name := G4had_hetcpp
 
 SUBDIRS  =  evaporation
 SUBDIRS  +=  utils

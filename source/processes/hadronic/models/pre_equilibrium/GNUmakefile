@@ -12,7 +12,7 @@ endif
 
 SUBDIRS  =  exciton_model
 
-SUBLIBS  = G4hadronic_preequ_exciton
+SUBLIBS  = G4had_preequ_exciton
 
 
 include $(G4INSTALL)/config/globlib.gmk
