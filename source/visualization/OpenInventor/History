@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2004-11-19 07:59:49 gbarrand Exp $
+$Id: History,v 1.41 2004-11-21 11:28:58 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+21th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler::PreAddThis : comment the "ERROR leaf protocal"
+  message. Misleading to users.
 
 19th November 2004  Guy Barrand
 - G4OpenInventorSceneHandler::ClearStore: clear the fSeparatorMap.

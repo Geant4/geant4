@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.28 2004-11-19 07:59:50 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.29 2004-11-21 11:28:59 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -579,16 +579,12 @@ void G4OpenInventorSceneHandler::PreAddThis
   // fpCurrentLV,
   // fpCurrentLV->GetName().c_str(),
   // red,green,blue);
-  //
-  // This block of code is executed for non-leaf parts:
-  //
+
   if (fpCurrentLV->GetNoDaughters()!=0 ||
       fpCurrentPV->IsReplicated()) {
-    //printf("debug : PreAddThis : container\n");
+    // This block of code is executed for non-leaf parts:
 
-    //
     // Make the detector tree kit:
-    //
     SoDetectorTreeKit* g4DetectorTreeKit = new SoDetectorTreeKit();  
 
     SoSeparator* previewSeparator   =  
@@ -611,7 +607,6 @@ void G4OpenInventorSceneHandler::PreAddThis
                        fStyleCache->getLightModelBaseColor();
     g4DetectorTreeKit->setPart("appearance.lightModel",lightModel);
 
-    //
     // Add the full separator to the dictionary; it is indexed by the 
     // address of the logical volume!
     // NOTE: the map is no longer built iteratively from the whole hierarchy
@@ -620,10 +615,8 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
 
-    //
     // Find out where to add this volume.  This means locating its mother.  
     // If no mother can be found, it goes under root.
-    //
     G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
@@ -637,63 +630,47 @@ void G4OpenInventorSceneHandler::PreAddThis
       //printf("debug : PreAddThis : has no mother\n");
       fDetectorRoot->addChild(g4DetectorTreeKit);
     }
+
     fCurrentSeparator = previewSeparator;
   } else {
-    //
     // This block of code is executed for leaf parts.
-    //
-    //
+
     // Locate the mother volume and find it's corresponding full separator
-    //
-    fCurrentSeparator = 0;
     G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
         fCurrentSeparator = fSeparatorMap[MotherVolume];
       } else {
-        G4cerr << "ERROR - G4OpenInventorSceneHandler::PreAddThis()"
-               << "        OIScene leaf protocol error. Mother volume "
-               << MotherVolume->GetName() <<  " missing." << G4endl;
-        G4cerr << "        Daughter volume was: "
-               << fpCurrentPV->GetName()
+/*
+        G4cerr << "G4OpenInventorSceneHandler::PreAddThis() : WARNING :"
+               << " volume " << fpCurrentPV->GetName()
+               << " has invisible mother (" << MotherVolume->GetName() << ")." 
                << G4endl;
+        G4cerr << " Its scene graph will be put under the viewer"
+               << " detector root scene graph."
+               << G4endl;
+*/
+        fCurrentSeparator = fDetectorRoot;
       }
-    }
-    //
-    // If the mother volume has no full separator, then the solid and its 
-    // attributes will go under "fDetectorRoot"
-    //
-    if (!fCurrentSeparator) {
-      SoMaterial* material = 
-        fStyleCache->getMaterial((float)red,
-                                 (float)green,
-                                 (float)blue,
-                                 (float)transparency);
-      fDetectorRoot->addChild(material);
-
-      SoLightModel* lightModel = 
-        fModelingSolid ? fStyleCache->getLightModelPhong() : 
-                         fStyleCache->getLightModelBaseColor();
-      fDetectorRoot->addChild(lightModel);
-
-      fCurrentSeparator = fDetectorRoot;
     } else {
-      SoMaterial* material = 
-        fStyleCache->getMaterial((float)red,
-                                 (float)green,
-                                 (float)blue,
-                                 (float)transparency);
-      fCurrentSeparator->addChild(material);    
-
-      SoLightModel* lightModel = 
-        fModelingSolid ? fStyleCache->getLightModelPhong() : 
-                         fStyleCache->getLightModelBaseColor();
-      fCurrentSeparator->addChild(lightModel);
+      fCurrentSeparator = fDetectorRoot;
     }
+
+    SoMaterial* material = 
+      fStyleCache->getMaterial((float)red,
+                               (float)green,
+                               (float)blue,
+                               (float)transparency);
+    fCurrentSeparator->addChild(material);    
+
+    SoLightModel* lightModel = 
+      fModelingSolid ? fStyleCache->getLightModelPhong() : 
+                       fStyleCache->getLightModelBaseColor();
+    fCurrentSeparator->addChild(lightModel);
   }
-  //
+
   // Set up the geometrical transformation for the coming 
-  //
+
   G4OpenInventorTransform3D oiTran (objectTransformation);
   SoSFMatrix* oiMat = oiTran.GetOIMatrix();
   SoMatrixTransform* xform = new SoMatrixTransform;
