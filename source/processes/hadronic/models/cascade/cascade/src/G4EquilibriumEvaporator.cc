@@ -60,7 +60,9 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
     G4std::vector<G4double> PEX = nuclei_target->getMomentum();
     G4double EEXS = nuclei_target->getExitationEnergy();
 
-    if (EEXS < 0.0) cout << " after noeq: eexs " << EEXS << endl;
+    if (verboseLevel > 3) {
+      if (EEXS < 0.0) cout << " after noeq: eexs " << EEXS << endl;
+    }
 
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
@@ -68,7 +70,10 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
     G4std::vector<G4double> ppout(4, 0.0);
   
     if (timeToBigBang(A, Z, EEXS)) {
-      G4cout << " big bang in eql start " << G4endl;
+
+      if (verboseLevel > 3) {
+	G4cout << " big bang in eql start " << G4endl;
+      }
 
       return theBigBanger->collide(0, target);
 
@@ -503,8 +508,13 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
       };
       // this time it's final nuclei
 
-      if (itry_global == itry_global_max) G4cout << " ! itry_global " <<
-					    itry_global_max << G4endl;
+      if (itry_global == itry_global_max) {
+
+	if (verboseLevel > 3) {
+	  G4cout << " ! itry_global " << itry_global_max << G4endl;
+	}
+
+      }
 
       G4std::vector<G4double> pnuc(4);
 
