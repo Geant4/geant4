@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.2 1999-07-22 15:33:30 johna Exp $
+// $Id: G4PlacedPolyhedron.hh,v 1.3 1999-10-05 07:50:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4PLACEDPOLYHEDRON_HH
@@ -14,9 +14,6 @@
 #include "G4Polyhedron.hh"
 #include "G4Transform3D.hh"
 #include <rw/tvordvec.h>
-
-class G4PlacedPolyhedron;
-typedef RWTValOrderedVector<G4PlacedPolyhedron> G4PlacedPolyhedronList;
 
 class G4PlacedPolyhedron {
 
@@ -48,5 +45,7 @@ private:
   G4Transform3D fTransform;
 
 };
+
+typedef RWTValOrderedVector<G4PlacedPolyhedron> G4PlacedPolyhedronList;
 
 #endif /* G4PLACEDPOLYHEDRON_HH */
