@@ -70,7 +70,12 @@ G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& process
  
 // destructor
  
-G4PionMinusAbsorptionAtRest::~G4PionMinusAbsorptionAtRest(){;}
+G4PionMinusAbsorptionAtRest::~G4PionMinusAbsorptionAtRest()
+{
+  delete pv;
+  delete eve;
+  delete gkin;
+}
  
  
 // methods.............................................................................
