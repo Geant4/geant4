@@ -36,7 +36,8 @@ help /vis/sceneHandler/create
 # Edit the next line(s) to choose another graphic system
 #/vis/sceneHandler/create DAWNFILE
 #/vis/sceneHandler/create DAWN
-#/vis/sceneHandler/create RayX
+#/vis/sceneHandler/create OGLIXm
+#/vis/sceneHandler/create OGLSXm
 #/vis/sceneHandler/create OGLIX
 /vis/sceneHandler/create OGLSX
 #/vis/sceneHandler/create VRML1
@@ -44,21 +45,38 @@ help /vis/sceneHandler/create
 #/vis/sceneHandler/create Xo
 #/vis/sceneHandler/create Wo
 #
+# Add world volume.
+/vis/scene/add/volume
+#
 # Create a viewer.
 /vis/viewer/create
+/vis/camera/viewpoint 35 35
 #
-# Draw current scene
 /vis/scene/notifyHandlers
+/vis/draw/axes     0 0 0 500
+/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
+/vis/show/view
 #
 # Test logical volume model...
-#/run/beamOn 1
-#/vis/scene/create
-#/vis/sceneHandler/create OGLSX
-#/vis/scene/add/logicalVolume expHall_L
-#/vis/viewer/create
-#/vis/scene/notifyHandlers
+/vis/scene/create
+/vis/scene/add/logicalVolume expHall_L
+/vis/sceneHandler/create OGLSX
+/vis/viewer/create
+/vis/camera/viewpoint 35 35
+/vis/scene/notifyHandlers
+/vis/show/view
 #
 # for drawing the tracks
-# if too many tracks cause core dump => storeTrajectory 0
-/tracking/storeTrajectory 1
+# if too many tracks cause core dump =storeTrajectory 0
+/vis/scene/create
+/vis/scene/add/volume
 /vis/scene/include/trajectories
+/vis/sceneHandler/create OGLSX
+/vis/viewer/create
+/vis/camera/viewpoint 35 35
+/vis/scene/notifyHandlers
+/tracking/storeTrajectory 1
+/run/beamOn 1
+/vis/show/view
+
+
