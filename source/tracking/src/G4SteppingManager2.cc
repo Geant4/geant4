@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.10 2002-12-16 12:04:25 gcosmo Exp $
+// $Id: G4SteppingManager2.cc,v 1.11 2003-04-11 09:46:55 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -230,6 +230,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 // returns the time before a process occurs.
    G4double lifeTime, shortestLifeTime;
 
+   fAtRestDoItProcTriggered = 0;
    fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
