@@ -266,8 +266,8 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   G4int      i = 0;
   G4bool found = false;
   if(verbosityLevel == 2)
-    G4cout << PVStore->length() << G4endl;
-  while (!found && i<PVStore->length()) {
+    G4cout << PVStore->size() << G4endl;
+  while (!found && i<PVStore->size()) {
     tempPV = (*PVStore)[i];
     found  = tempPV->GetName() == theRequiredVolumeName;
     if(verbosityLevel == 2)

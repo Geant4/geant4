@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2001-02-08 06:13:53 asaim Exp $
+$Id: History,v 1.22 2001-04-20 20:40:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 20 2001, G.Cosmo (event-V03-01-00)
+- Modified G4GeneralParticleSource.cc according to recent migration to
+  STL vector for the geometry domain (tag "geometry-V03-01-00").
 
 Feb 8 2001, M.Asai (event-V03-00-03)
 - Migration to STL vector classes
