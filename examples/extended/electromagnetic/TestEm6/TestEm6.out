@@ -211,7 +211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=56s Real=67s Sys=10s
+  User=51s Real=61s Sys=9.8s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=0.0147529 +- 0.00406827  mm  
@@ -237,24 +237,24 @@ Run Summary
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=56s Real=66s Sys=10s
+  Number of events processed : 100
+  User=5s Real=6.1s Sys=1s
  ================== run summary =====================
- end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=0.00913263 +- 0.00344976  mm  
+ end of Run TotNbofEvents = 100
+    mean charged track length   in absorber=0 +- 0  mm  
 
-            mean energy deposit in absorber=0.00178667 +- 0.000625494  MeV 
+            mean energy deposit in absorber=0 +- 0  MeV 
 
- mean number of steps in absorber (charged) =281.93 +- 1.38131      
- mean number of steps in absorber (neutral) =297.295 +- 6.09923      
+ mean number of steps in absorber (charged) =279.89 +- 3.64738      
+ mean number of steps in absorber (neutral) =293.7 +- 18.7385      
 
-   mean number of charged secondaries = 4.075 +- 0.0645087
+   mean number of charged secondaries = 4.07 +- 0.195067
 
-   mean number of neutral secondaries = 4.12 +- 0.0617705
+   mean number of neutral secondaries = 4.01 +- 0.197228
 
-   mean number of e-s =4.048  and e+s =0.027
+   mean number of e-s =4.04  and e+s =0.03
 
-(number) transmission coeff=0.085  reflection coeff=0.054
+(number) transmission coeff=0.08  reflection coeff=0.06
 
 #
 # Gun with IonC12 100 MeV
@@ -264,26 +264,25 @@ Run Summary
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=55s Real=66s Sys=9.8s
+  Number of events processed : 100
+  User=4.7s Real=5.6s Sys=0.87s
  ================== run summary =====================
- end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=0.0169369 +- 0.00716996  mm  
+ end of Run TotNbofEvents = 100
+    mean charged track length   in absorber=0.0211493 +- 0.0148059  mm  
 
-            mean energy deposit in absorber=0.00305399 +- 0.001254  MeV 
+            mean energy deposit in absorber=0.00365839 +- 0.00250438  MeV 
 
- mean number of steps in absorber (charged) =278.204 +- 1.47858      
- mean number of steps in absorber (neutral) =292.72 +- 6.18325      
+ mean number of steps in absorber (charged) =274.36 +- 5.17406      
+ mean number of steps in absorber (neutral) =247.41 +- 17.9913      
 
-   mean number of charged secondaries = 4.094 +- 0.0649089
+   mean number of charged secondaries = 3.99 +- 0.188942
 
-   mean number of neutral secondaries = 4.081 +- 0.0605181
+   mean number of neutral secondaries = 3.58 +- 0.191927
 
-   mean number of e-s =4.076  and e+s =0.018
+   mean number of e-s =3.97  and e+s =0.02
 
-(number) transmission coeff=0.082  reflection coeff=0.043
+(number) transmission coeff=0.09  reflection coeff=0.03
 
-#
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

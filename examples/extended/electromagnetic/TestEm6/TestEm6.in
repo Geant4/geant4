@@ -36,7 +36,7 @@
 /run/initialize
 /gun/particle anti_proton
 /gun/energy 10.0 MeV
-/run/beamOn 1000
+/run/beamOn 100
 #
 # Gun with IonC12 100 MeV
 #
@@ -44,8 +44,7 @@
 /run/initialize
 /gun/particle IonC12
 /gun/energy 50.0 MeV
-/run/beamOn 1000
-#
+/run/beamOn 100
 
 
 
