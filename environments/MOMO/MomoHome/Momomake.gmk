@@ -6,7 +6,7 @@
 # with users selection of G4TARGET, UI and VIS variables
 #  Momo is the name of legendary samurai who conquered bad geants. ----   H. Yoshida.
 
-name := MomoN02.cc
+name := linac
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -14,7 +14,6 @@ G4EXLIB := true
 G4VIS_USE_DAWN := 1
 G4VIS_USE_DAWNFILE := 1
 G4VIS_USE_OPENGLX := 1
-G4VIS_USE_RAYTRACER := 1
 G4VIS_USE_VRML := 1
 G4VIS_USE_VRMLFILE := 1
 # Vis/GUI built
@@ -27,7 +26,7 @@ G4VIS_BUILD_VRMLFILE_DRIVER := 1
 # General Envs defined
 G4SYSTEM:=Linux-g++
 G4INSTALL:=/home/yoshidah/geant4
-G4WORKDIR:=.
+G4WORKDIR:=/home/yoshidah/geant4
 G4BINDIR:=/home/yoshidah/geant4/bin/Linux-g++
 G4USE_STL:=1
 G4LIB_BUILD_STATIC:=1
