@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.hh,v 1.8 2001-10-28 05:03:48 kurasige Exp $
+// $Id: G4ChargedGeantino.hh,v 1.9 2002-12-16 11:15:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,6 @@ class G4ChargedGeantino : public G4VBoson
    static G4ChargedGeantino* ChargedGeantinoDefinition();
    static G4ChargedGeantino* ChargedGeantino();
 
-   virtual void CalcEnergyCuts( const G4Material* );
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.hh,v 1.9 2001-10-28 05:01:29 kurasige Exp $
+// $Id: G4PionZero.hh,v 1.10 2002-12-16 11:15:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ class G4PionZero : public G4VMeson
 
    static G4PionZero* PionZeroDefinition();
    static G4PionZero* PionZero();
-   void CalcEnergyCuts( const G4Material* );
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.12 2001-10-15 09:58:30 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.13 2002-12-16 11:15:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,8 +106,8 @@ class G4ParticleDefinition
       virtual void            SetRangeCut(G4double ,const G4Material*);
       virtual void            SetRangeCutVector(G4std::vector<G4double>&);
  
-      virtual G4double*       GetEnergyCuts() const;
-      virtual G4double        GetEnergyThreshold(const G4Material* ) const;
+      virtual G4double*       GetEnergyCuts() const; 
+      virtual G4double        GetEnergyThreshold(const G4Material* ) const ;
    
       virtual G4double*       GetLengthCuts() const;
       virtual G4double        GetRangeThreshold(const G4Material* ) const;

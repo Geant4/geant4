@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000-10-24 13:36:51 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2002-12-16 11:15:43 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for particle management library.  G.Cosmo, 4/4/97.
 # ----------------------------------------------------------------
@@ -16,6 +16,7 @@ CPPFLAGS += \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/materials/include
 
 

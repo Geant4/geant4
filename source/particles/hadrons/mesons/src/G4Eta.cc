@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.11 2001-10-28 05:01:33 kurasige Exp $
+// $Id: G4Eta.cc,v 1.12 2002-12-16 11:15:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,18 +108,4 @@ G4Eta G4Eta::theEta(
 
 G4Eta*    G4Eta::EtaDefinition(){return &theEta;}
 G4Eta*    G4Eta::Eta(){return &theEta;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-
-void G4Eta::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-}
-
-
 

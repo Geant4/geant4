@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoTau.hh,v 1.8 2001-10-28 05:05:28 kurasige Exp $
+// $Id: G4AntiNeutrinoTau.hh,v 1.9 2002-12-16 11:15:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ class G4AntiNeutrinoTau : public G4VLepton
    static G4AntiNeutrinoTau* AntiNeutrinoTauDefinition();
    static G4AntiNeutrinoTau* AntiNeutrinoTau();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

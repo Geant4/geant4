@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,11 +20,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.14 2001-10-30 20:08:46 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.15 2002-12-16 11:15:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------
+// --------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      History: 
@@ -35,6 +34,8 @@
 //                                           by L.Urban, 10 May 1996
 //       added  RestoreCuts  H.Kurashige 09 Mar. 2001
 //       introduced material dependent range cuts   08 Sep. 2001
+//       
+//       restructuring for Cuts per Region  by Hisaya    07 Oct.2002 
 // ----------------------------------------------------------------
 // Class Description
 // "theCutInMaxInteractionLength", for charged particles, is
@@ -78,8 +79,9 @@
 #include "G4PhysicsTable.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
-class G4PhysicsLogVector;
 
+class G4PhysicsLogVector;
+class G4ProductionCutsTable;
 
 class G4ParticleWithCuts : public G4ParticleDefinition
 {
@@ -106,8 +108,7 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    
   //--------------for SetCuts-------------------------------------------
   protected:
-   G4double*  theCutInMaxInteractionLength;
-   G4double*  theKineticEnergyCuts;
+      G4ProductionCutsTable* theCutsTable;
 
   public:  // With Description
    // G4ParticleWithCuts  
@@ -146,137 +147,19 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    // G4VUserPhysicsList to restore cutvalues witout calculation
 
    virtual void                  RestoreCuts(const G4double* cutInLength,
-					     const G4double* cutInEnergy );
+					     const G4double* cutInEnergy )
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " RestoreCuts is currently not supported." << G4endl;
+   }
       
- protected:
-    void    SetCutInMaxInteractionLength(G4double aCut);
-    // Set a value of theCutInMaxInteractionLength for all materials
-    void    SetCutInMaxInteractionLength(G4double aCut , G4int matrialIndex);
-    // Set a value of theCutInMaxInteractionLength for a material
-    void    SetCutInMaxInteractionLength(G4double aCut , 
-                                         const G4Material* aMaterial);
-    // Set a value of theCutInMaxInteractionLength for a material       
-    void    SetEnergyCutValues(G4double energyCuts);
-    // Set a energy cut value for all materials
+  protected: 
+   G4int     GetParticleIndex() const;
+  
+  protected: 
+    G4double* theCutInMaxInteractionLength;
+    G4double* theKineticEnergyCuts;
 
-    virtual   void  CalcEnergyCuts(const G4Material* material=0);
-    // Calculate energy cut values by using range cuts
-
-    // BuildPhysicsTable is defined as a dummy routine
-    void  BuildPhysicsTable() {};
-
-  protected:
-  // cut values for proton is used for all heavy charged particles 
-    static G4ParticleDefinition* theProton;
-    G4bool  UseProtonCut();
-
-    G4bool  CheckEnergyBinSetting() const;
-
-  //-------------- Loss Table ------------------------------------------
-  // theLossTable is a collection of loss vectors for all elements.
-  // Each loss vector has energy loss values (cross section values 
-  // for neutral particles) which are calculated by  
-  // ComputeLoss(G4double AtomicNumber,G4double KineticEnergy).
-
-  protected:
-    typedef G4PhysicsTable     G4LossTable;
-    G4LossTable*               theLossTable;
-    G4int                      NumberOfElements;
-
-    typedef G4PhysicsLogVector G4LossVector;
-    static G4double            LowestEnergy, HighestEnergy;
-    G4int                      TotBin;
-
-  protected:  
-    virtual void BuildLossTable();
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-                                ) const;
-
-//-------------- Range Table ------------------------------------------
-  protected:  
-    typedef G4PhysicsLogVector G4RangeVector;
-    virtual void BuildRangeVector(const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,     
-				  G4double       aMass,
-                                  G4RangeVector* rangeVector);
-
-  protected:  
-    G4double ConvertCutToKineticEnergy(
-				       G4RangeVector* theRangeVector,
-                                       size_t         materialIndex
-				      ) const;
-
-    static G4double RangeLinSimpson(
-			    const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-                            const G4LossTable* aLossTable,
-                            G4double aMass,   
-			    G4double taulow, G4double tauhigh,
-                            G4int nbin, G4int NumEl
-                          );
-   static G4double RangeLogSimpson(
-			    const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-                            const G4LossTable* aLossTable,
-                            G4double aMass,   
-			    G4double ltaulow, G4double ltauhigh,
-                            G4int nbin, G4int NumEl
-                          );
-   
 };
 
-inline G4double*        G4ParticleWithCuts::GetLengthCuts() const 
-{
-        return theCutInMaxInteractionLength;
-}
-
-inline G4double*        G4ParticleWithCuts::GetEnergyCuts() const 
-{
-        return theKineticEnergyCuts;
-}
-  
-inline void G4ParticleWithCuts::ResetCuts()
-{
-   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-   theKineticEnergyCuts = 0;
-}
-
-inline void G4ParticleWithCuts::ReCalcCuts()
-{
-  if (theCutInMaxInteractionLength != 0) {
-    CalcEnergyCuts();
-  } else {
-    if (GetVerboseLevel()>0) {
-      G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
-      G4cout << "theCutInMaxInteractionLength is not defined " << G4endl; 
-    }
-  }
-}
-
-#include "G4Material.hh"
-
-inline 
- G4double  G4ParticleWithCuts::GetEnergyThreshold(const G4Material* aMaterial) const
-{
-   return theKineticEnergyCuts[aMaterial->GetIndex()]; 
-}
-
-inline 
- G4double  G4ParticleWithCuts::GetRangeThreshold(const G4Material* aMaterial) const
-{
-   return theCutInMaxInteractionLength[aMaterial->GetIndex()]; 
-}
-
-
 #endif
-
-
-
-
-
-
-
-
-

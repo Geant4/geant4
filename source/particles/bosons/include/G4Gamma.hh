@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: G4Gamma.hh,v 1.11 2001-12-13 12:04:11 gunter Exp $
+// $Id: G4Gamma.hh,v 1.12 2002-12-16 11:15:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,37 +56,6 @@ class G4Gamma : public G4VBoson
  private:
    static G4Gamma theGamma;
    
-   //-------- the followings are used privately in G4Gamma ----
- private:
-    typedef G4LossTable G4CrossSectionTable;
-    void BuildAbsorptionLengthVector(
-                              const G4Material* aMaterial,
-			      const G4CrossSectionTable* aCrossSectionTable,
-			      G4double       maxEnergy,     
-			      G4double       aMass,
-                              G4RangeVector* absorptionLengthVector 
-			     );
-    G4double ComputeCrossSection(
-                              G4double AtomicNumber,
-                              G4double KineticEnergy
-                             ) const;
-
- //--------------for SetCuts----------------------------------------------
- protected:    
-  G4double ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const;
-
-  void BuildRangeVector(
-			const G4Material* aMaterial,
-			const G4LossTable* aLossTable,
-			G4double       maxEnergy,     
-			G4double       aMass,
-			G4RangeVector* rangeVector);
-
-  G4double ConvertCutToKineticEnergy(
-				     G4RangeVector* absorptionLengthVector,
-				     size_t materialIndex
-                                ) const;
-
  private: // hide conxtructor as private
    G4Gamma(
        const G4String&     aName,        G4double            mass,
@@ -106,25 +75,6 @@ class G4Gamma : public G4VBoson
    static G4Gamma* GammaDefinition();
    static G4Gamma* Gamma();
 };
-
-inline 
- G4double G4Gamma::ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
-{
-  return ComputeCrossSection(AtomicNumber,KineticEnergy);
-}
-
-inline 
- void G4Gamma::BuildRangeVector(
-				const G4Material* aMaterial,
-				const G4LossTable* aLossTable,
-				G4double       maxEnergy,     
-				G4double       aMass,
-				G4RangeVector* rangeVector)
-{
-  BuildAbsorptionLengthVector(aMaterial,
-			      (const G4CrossSectionTable*)aLossTable,
-			      maxEnergy, aMass, rangeVector);
-}
 
 
 #endif

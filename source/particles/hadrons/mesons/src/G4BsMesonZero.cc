@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.cc,v 1.10 2001-10-28 05:01:33 kurasige Exp $
+// $Id: G4BsMesonZero.cc,v 1.11 2002-12-16 11:15:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,21 +83,4 @@ G4BsMesonZero G4BsMesonZero::theBsMesonZero(
 
 G4BsMesonZero*  G4BsMesonZero::BsMesonZeroDefinition(){return &theBsMesonZero;}
 G4BsMesonZero*  G4BsMesonZero::BsMesonZero(){return &theBsMesonZero;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-
-void G4BsMesonZero::CalcEnergyCuts( const G4Material* )
-{
-  
-  
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-}
-
-
-
 

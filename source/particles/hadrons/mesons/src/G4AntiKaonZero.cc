@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.cc,v 1.10 2001-10-28 05:01:32 kurasige Exp $
+// $Id: G4AntiKaonZero.cc,v 1.11 2002-12-16 11:15:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,18 +100,5 @@ G4AntiKaonZero G4AntiKaonZero::theAntiKaonZero(
 
 G4AntiKaonZero* G4AntiKaonZero::AntiKaonZeroDefinition(){return &theAntiKaonZero;}
 G4AntiKaonZero* G4AntiKaonZero::AntiKaonZero(){return &theAntiKaonZero;}
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4AntiKaonZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-
-}
 

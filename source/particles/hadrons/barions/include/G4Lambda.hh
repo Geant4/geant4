@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.hh,v 1.9 2001-10-28 05:08:21 kurasige Exp $
+// $Id: G4Lambda.hh,v 1.10 2002-12-16 11:15:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ class G4Lambda : public G4VBaryon
 
    static G4Lambda* Lambda();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.hh,v 1.8 2001-10-28 05:01:28 kurasige Exp $
+// $Id: G4KaonZeroLong.hh,v 1.9 2002-12-16 11:15:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ class G4KaonZeroLong : public G4VMeson
    static G4KaonZeroLong* KaonZeroLongDefinition();
    static G4KaonZeroLong* KaonZeroLong();
 
-   virtual void        CalcEnergyCuts( const G4Material* );
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.10 2001-10-28 05:01:33 kurasige Exp $
+// $Id: G4JPsi.cc,v 1.11 2002-12-16 11:15:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,23 +87,4 @@ G4JPsi G4JPsi::theJPsi(
 
 G4JPsi*  G4JPsi::JPsiDefinition(){return &theJPsi;}
 G4JPsi*  G4JPsi::JPsi(){return &theJPsi;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-
-void G4JPsi::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
- 
-}
-
-
-
-
 

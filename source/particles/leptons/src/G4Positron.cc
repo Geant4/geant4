@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.6 2001-10-16 08:16:18 kurasige Exp $
+// $Id: G4Positron.cc,v 1.7 2002-12-16 11:15:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,83 +83,6 @@ G4Positron G4Positron::thePositron(
 );
 
 G4Positron* G4Positron::PositronDefinition() {return &thePositron;}
-
-// **********************************************************************
-// ************************* ComputeLoss ********************************
-// **********************************************************************
-
-G4double G4Positron::ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy) const
-{
-  static G4double Z;  
-  static G4double taul, ionpot, ionpotlog;
-  const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
-  const  G4double Tlow=10.*keV, Thigh=1.*GeV;
-  static G4double bremfactor = 0.1 ;
-
-  //  calculate dE/dx for electrons
-  if( abs(AtomicNumber-Z)>0.1 )
-  {
-    Z = AtomicNumber;
-    taul = Tlow/GetPDGMass();
-    ionpot = 1.6e-5*MeV*exp(0.9*log(Z))/GetPDGMass();
-    ionpotlog = log(ionpot);
-  } 
-
-
-  G4double tau = KineticEnergy/GetPDGMass();
-  G4double dEdx;
-
-  if(tau<taul)
-  {
-    G4double t1 = taul+1.;
-    G4double t2 = taul+2.;
-    G4double tsq = taul*taul;
-    G4double beta2 = taul*t2/(t1*t1);
-    G4double     f = 2.*log(taul)
-                     -(6.*taul+1.5*tsq-taul*(1.-tsq/3.)/t2-tsq*(0.5-tsq/12.)/
-                       (t2*t2))/(t1*t1);
-    dEdx = (log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
-    dEdx = twopi_mc2_rcl2*Z*dEdx;
-    G4double clow = dEdx*sqrt(taul);
-    dEdx = clow/sqrt(KineticEnergy/GetPDGMass());
-  } else {
-    G4double t1 = tau+1.;
-    G4double t2 = tau+2.;
-    G4double tsq = tau*tau;
-    G4double beta2 = tau*t2/(t1*t1);
-    G4double f = 2.*log(tau)
-                 - (6.*tau+1.5*tsq-tau*(1.-tsq/3.)/t2-tsq*(0.5-tsq/12.)/
-                     (t2*t2))/(t1*t1);
-    dEdx = (log(2.*tau+4.)-2.*ionpotlog+f)/beta2;
-    dEdx = twopi_mc2_rcl2*Z*dEdx;
-
-    // loss from bremsstrahlung follows
-    G4double cbrem = (cbr1+cbr2*Z)
-                       *(cbr3+cbr4*log(KineticEnergy/Thigh));
-    cbrem = Z*(Z+1.)*cbrem*tau/beta2;
-    cbrem *= bremfactor ;
-    dEdx += twopi_mc2_rcl2*cbrem;
-  }
-  return dEdx;
-}
-
-// **********************************************************************
-// *********************** BuildRangeVector *****************************
-// **********************************************************************
-void G4Positron::BuildRangeVector(const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,
-				  G4double       aMass,
-                                  G4PhysicsLogVector* rangeVector)
-{
-  G4Electron* pElectron = G4Electron::ElectronDefinition();
-  pElectron->BuildRangeVector(aMaterial,
-			      aLossTable,
-			      maxEnergy,
-			      aMass,
-                              rangeVector);
-}
 
 G4Positron*  G4Positron::Positron()
 {

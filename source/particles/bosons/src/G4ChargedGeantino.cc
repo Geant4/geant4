@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.cc,v 1.10 2001-10-28 05:03:49 kurasige Exp $
+// $Id: G4ChargedGeantino.cc,v 1.11 2002-12-16 11:15:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,12 +89,6 @@ G4ChargedGeantino* G4ChargedGeantino::ChargedGeantinoDefinition(){return &theCha
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
-
-void G4ChargedGeantino::CalcEnergyCuts( const G4Material* )
-{
-  // Set Energy Cut values to zero  for all materials
-  SetEnergyCutValues( 0.0*keV);
-}
 
 
 G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()

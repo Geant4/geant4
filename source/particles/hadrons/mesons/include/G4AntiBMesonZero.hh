@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.hh,v 1.7 2001-10-28 05:01:23 kurasige Exp $
+// $Id: G4AntiBMesonZero.hh,v 1.8 2002-12-16 11:15:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ class G4AntiBMesonZero : public G4VMeson
    static G4AntiBMesonZero* AntiBMesonZeroDefinition();
    static G4AntiBMesonZero* AntiBMesonZero();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 

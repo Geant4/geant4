@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.11 2001-10-28 05:08:22 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.12 2002-12-16 11:15:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,16 +79,3 @@ G4AntiNeutron G4AntiNeutron::theAntiNeutron(
 G4AntiNeutron* G4AntiNeutron::AntiNeutronDefinition(){return &theAntiNeutron;}
 G4AntiNeutron* G4AntiNeutron::AntiNeutron(){return &theAntiNeutron;}
 
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4AntiNeutron::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
- 
-}

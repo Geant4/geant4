@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.hh,v 1.7 2001-10-16 08:16:16 kurasige Exp $
+// $Id: G4Positron.hh,v 1.8 2002-12-16 11:15:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,25 +60,6 @@ class G4Positron : public G4VLepton
  private:
    static G4Positron thePositron;
  
- protected:  
-   G4double ComputeLoss(G4double AtomicNumber, G4double KineticEnergy) const;
-
-   void BuildRangeVector( const G4Material* aMaterial,
-			  const G4LossTable* aLossTable,
-			  G4double       maxEnergy,     
-			  G4double       aMass,
-                          G4RangeVector* rangeVector
-                         );
-
-   friend void G4Electron::BuildRangeVector(
-				  const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,     
-				  G4double       aMass,
-                                  G4RangeVector* rangeVector
-                         );
-
-
  private:   //hide constructor as private 
    G4Positron(	
        const G4String&     aName,        G4double            mass,

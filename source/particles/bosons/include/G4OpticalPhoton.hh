@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.hh,v 1.7 2001-10-16 08:15:41 kurasige Exp $
+// $Id: G4OpticalPhoton.hh,v 1.8 2002-12-16 11:15:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ class G4OpticalPhoton: public G4VBoson
 
    static G4OpticalPhoton* OpticalPhotonDefinition();
    static G4OpticalPhoton* OpticalPhoton();
-   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.8 2001-10-20 01:36:37 kurasige Exp $
+// $Id: G4Gamma.cc,v 1.9 2002-12-16 11:15:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,18 +61,8 @@ G4Gamma::G4Gamma(
  : G4VBoson( aName,mass,width,charge,iSpin,iParity,
              iConjugation,iIsospin,iIsospin3,gParity,pType,
              lepton,baryon,encoding,stable,lifetime,decaytable )
-   //-- members initialisation for SetCuts ------------------------------
 {
    SetParticleSubType("photon");
-   const G4double DefaultLowestEnergy  = 1.0*keV;
-   const G4double DefaultHighestEnergy = 1.0*GeV;
-   const G4int DefaultTotBin = 100;
-
-   //-- members initialisation for SetCuts ------------------------------
-   LowestEnergy  = DefaultLowestEnergy;
-   HighestEnergy = DefaultHighestEnergy;
-   TotBin = DefaultTotBin;
-
    // Anti-particle of gamma is gamma itself
    SetAntiPDGEncoding(encoding);
 }
@@ -96,182 +86,6 @@ G4Gamma G4Gamma::theGamma(
 		 true,             0.0,          NULL
 );
 G4Gamma*  G4Gamma::GammaDefinition() {return &theGamma;}
-
-// ***********************************************************************
-// ******************* BuildAbsorptionLengthVector ***********************
-// ***********************************************************************
-
-void G4Gamma::BuildAbsorptionLengthVector(
-                            const G4Material* aMaterial,
-			    const G4CrossSectionTable* aCrossSectionTable,
-			    G4double       ,     
-			    G4double       ,
-			    G4RangeVector* absorptionLengthVector )
-{
-  // fill the absorption length vector for this material
-  // absorption length is defined here as
-  //
-  //    absorption length = 5./ macroscopic absorption cross section
-  //
-  const G4ElementVector* elementVector = aMaterial->GetElementVector();
-  const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  //  fill absorption length vector
-  if (absorptionLengthVector == NULL) {
-    G4String aErrorMessage("Error in G4Gamma::BuildAbsorptionLengthVector()");
-    aErrorMessage += " NULL pointer is found in absorptionLengthVector \n";
-    G4Exception((const char*)aErrorMessage);
-  }
-  G4int NumEl = aMaterial->GetNumberOfElements();
-  G4double absorptionLengthMax = 0.0;
-  for (G4int ibin=0; ibin<TotBin; ibin++)
-  {
-    G4double lowEdgeEnergy = absorptionLengthVector->GetLowEdgeEnergy(ibin);
-
-    G4double SIGMA = 0. ;
-    for (G4int iel=0; iel<NumEl; iel++)
-    {
-      G4bool isOut;
-      G4int IndEl = (*elementVector)[iel]->GetIndex();
-      SIGMA +=  atomicNumDensityVector[iel]*
-                (*aCrossSectionTable)[IndEl]->GetValue(lowEdgeEnergy,isOut);
-    }
-    //  absorption length=5./SIGMA
-    absorptionLengthVector->PutValue(ibin, 5./SIGMA);
-    if (absorptionLengthMax < 5./SIGMA ) absorptionLengthMax = 5./SIGMA;
-  }
-
-   //----- Get maximum cut in length
-  G4int ii,siz = G4Material::GetNumberOfMaterials();
-  G4double maxCut = 0;
-  for( ii = 0; ii < siz; ii++ ){
-    if( theCutInMaxInteractionLength[ii] > maxCut ) maxCut = theCutInMaxInteractionLength[ii]
-; 
-  }
-
-  if ( maxCut >= absorptionLengthMax ) {
-      G4cout << "******** SetCuts for " << GetParticleName(); 
-      G4cout << " ********************" << G4endl;
-      G4cout << "The maximal meaningful cut is ";
-      G4cout << absorptionLengthMax/mm << " mm." << G4endl;
-      G4cout << "All the " << GetParticleName() << "will be killed !" << G4endl;
-      G4cout << "in the material " << aMaterial->GetName() << "." << G4endl;
-  }
-}
-
-
-// ***********************************************************************
-// ********************** ComputeCrossSection ****************************
-// ***********************************************************************
-
-G4double G4Gamma::ComputeCrossSection(G4double AtomicNumber,
-                                      G4double KineticEnergy) const
-{
-  //  Compute the "absorption" cross section of the photon "absorption"
-  //  cross section means here the sum of the cross sections of the
-  //  pair production, Compton scattering and photoelectric processes
-  static G4double Z;  
-  const  G4double t1keV = 1.*keV;
-  const  G4double t200keV = 200.*keV;
-  const  G4double t100MeV = 100.*MeV;
-
-  static G4double s200keV, s1keV;
-  static G4double tmin, tlow; 
-  static G4double smin, slow;
-  static G4double cmin, clow, chigh;
-  //  compute Z dependent quantities in the case of a new AtomicNumber
-  if(abs(AtomicNumber-Z)>0.1)
-  {
-    Z = AtomicNumber;
-    G4double Zsquare = Z*Z;
-    G4double Zlog = log(Z);
-    G4double Zlogsquare = Zlog*Zlog;
-
-    s200keV = (0.2651-0.1501*Zlog+0.02283*Zlogsquare)*Zsquare;
-    tmin = (0.552+218.5/Z+557.17/Zsquare)*MeV;
-    smin = (0.01239+0.005585*Zlog-0.000923*Zlogsquare)*exp(1.5*Zlog);
-    cmin=log(s200keV/smin)/(log(tmin/t200keV)*log(tmin/t200keV));
-
-    tlow = 0.2*exp(-7.355/sqrt(Z))*MeV;
-    slow = s200keV*exp(0.042*Z*log(t200keV/tlow)*log(t200keV/tlow));
-    s1keV = 300.*Zsquare;
-    clow =log(s1keV/slow)/log(tlow/t1keV);
-
-    chigh=(7.55e-5-0.0542e-5*Z)*Zsquare*Z/log(t100MeV/tmin);
-  }
-
-  //  calculate the cross section (using an approximate empirical formula)
-  G4double s;
-  if ( KineticEnergy<tlow ) {
-    if(KineticEnergy<t1keV) s = slow*exp(clow*log(tlow/t1keV));
-    else                    s = slow*exp(clow*log(tlow/KineticEnergy));
-  } else if ( KineticEnergy<t200keV ) {
-    s = s200keV
-         * exp(0.042*Z*log(t200keV/KineticEnergy)*log(t200keV/KineticEnergy));
-  } else if( KineticEnergy<tmin ){
-    s = smin
-         * exp(cmin*log(tmin/KineticEnergy)*log(tmin/KineticEnergy));
-  } else {
-    s = smin + chigh*log(KineticEnergy/tmin);
-  }
-  return s * barn;
-
-}
-
-// **********************************************************************
-// ******************** ConvertCutToKineticEnergy ***********************
-// **********************************************************************
-
-G4double 
-  G4Gamma::ConvertCutToKineticEnergy(
-				     G4RangeVector* absorptionLengthVector,
-				     size_t         materialIndex
-				     ) const
-{
-  const G4double epsilon=0.01;
-  const G4int NBIN=200;
-  
-  //  find max. absorption length and the corresponding energy (rmax,Tmax)
-  G4double fac=log(HighestEnergy/LowestEnergy)/NBIN;
-  fac=exp(fac);
-  G4double T=LowestEnergy/fac;
-  G4double Tmax = T;
-  G4double rmax = -1.e10*mm;
-  G4bool isOut;
-  for (G4int ibin=0; ibin<NBIN; ibin++)
-  {
-    T=fac*T;
-    G4double r=absorptionLengthVector->GetValue(T,isOut);
-    if ( r>rmax ) 
-    {
-       Tmax=T;
-       rmax=r;
-    }
-  }
-  G4double T1 = LowestEnergy;
-  G4double r1 = absorptionLengthVector->GetValue(T1,isOut);
-  if ( theCutInMaxInteractionLength[materialIndex] <= r1 ) {
-     return T1;
-  } else if ( theCutInMaxInteractionLength[materialIndex] >= rmax ) {
-      G4cout << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
-      G4cout << " ********************" << G4endl;
-      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<G4endl; 
-      return  DBL_MAX;
-  } else {
-    G4double T2 = Tmax;
-    G4double T3 = sqrt(T1*T2);
-    G4double r3 = absorptionLengthVector->GetValue(T3,isOut);
-    while ( abs(1.-r3/theCutInMaxInteractionLength[materialIndex])>epsilon ) {
-      if ( theCutInMaxInteractionLength[materialIndex] <= r3 ) 
-        T2 = T3;
-      else 
-        T1 = T3;
-    T3 = sqrt(T1*T2);
-    r3 = absorptionLengthVector->GetValue(T3,isOut);
-    }
-    return T3;
-  }
-}
-
 
 G4Gamma* G4Gamma::Gamma()
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaZero.cc,v 1.12 2001-10-28 05:08:24 kurasige Exp $
+// $Id: G4SigmaZero.cc,v 1.13 2002-12-16 11:15:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,26 +95,4 @@ G4SigmaZero G4SigmaZero::theSigmaZero(
 
 G4SigmaZero* G4SigmaZero::SigmaZeroDefinition(){return &theSigmaZero;}
 G4SigmaZero* G4SigmaZero::SigmaZero(){return &theSigmaZero;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4SigmaZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-
-}
-
-
-
-
-
-
-
-
 
