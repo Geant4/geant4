@@ -43,12 +43,12 @@ ExN04CalorimeterSD::ExN04CalorimeterSD(G4String name)
 ExN04CalorimeterSD::~ExN04CalorimeterSD()
 {;}
 
-void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new ExN04CalorimeterHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
-  for(int j=0;j<numberOfCellsInZ;j++)
-  for(int k=0;k<numberOfCellsInPhi;k++)
+  for(G4int j=0;j<numberOfCellsInZ;j++)
+  for(G4int k=0;k<numberOfCellsInPhi;k++)
   {
     CellID[j][k] = -1;
   }
@@ -63,8 +63,8 @@ G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   G4VPhysicalVolume* physVol = ROhist->GetVolume();
   //ROhist->MoveUpHistory();
   //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
-  int copyIDinZ = ROhist->GetReplicaNumber();
-  int copyIDinPhi = ROhist->GetReplicaNumber(1);
+  G4int copyIDinZ = ROhist->GetReplicaNumber();
+  G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
 
   if(CellID[copyIDinZ][copyIDinPhi]==-1)
   {
@@ -76,7 +76,7 @@ G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     calHit->SetEdep( edep );
     calHit->SetPos( physVol->GetTranslation() );
     calHit->SetRot( rotM );
-    int icell = CalCollection->insert( calHit );
+    G4int icell = CalCollection->insert( calHit );
     CellID[copyIDinZ][copyIDinPhi] = icell - 1;
     if(verboseLevel>0)
     { G4cout << " New Calorimeter Hit on CellID " 

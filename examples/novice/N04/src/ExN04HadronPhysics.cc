@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04HadronPhysics.cc,v 1.8 2003-05-27 14:52:25 hpw Exp $
+// $Id: ExN04HadronPhysics.cc,v 1.9 2003-05-28 10:59:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -78,7 +78,7 @@ void ExN04HadronPhysics::ConstructProcess()
   G4cout << " - Note that this hadronic physics list is not optimized for any particular usage" << G4endl;
   G4cout << " - If you wish to have a starting point tailored for a particular area of work," << G4endl;
   G4cout << "   please use one of the available physics lists by use-case." << G4endl;
-  G4cout << "   Please check the geant4 HyperNews for more information." << G4endl;
+  G4cout << "   More information can also be found from the Geant4 HyperNews." << G4endl;
   G4cout << "" << G4endl;
   // Elastic Process
   theElasticModel = new G4LElastic();

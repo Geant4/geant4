@@ -38,15 +38,14 @@ ExN04TrackerParametrisation::~ExN04TrackerParametrisation()
 {;}
 
 void ExN04TrackerParametrisation::ComputeTransformation
-(const G4int copyNo,G4VPhysicalVolume *physVol) const
+(const G4int, G4VPhysicalVolume* physVol) const
 {
   G4ThreeVector origin;
   physVol->SetTranslation(origin);
 }
 
 void ExN04TrackerParametrisation::ComputeDimensions
-(G4Tubs & trackerLayer, const G4int copyNo,
- const G4VPhysicalVolume * physVol) const
+(G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
   trackerLayer.SetInnerRadius(tracker_radius[copyNo]);
   trackerLayer.SetOuterRadius(tracker_radius[copyNo]+tracker_thick);
