@@ -1460,14 +1460,13 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     
   //   C L O S E   C O N T O U R
   
-  int *pnext, nnode = 0;
-  pnext = &ihead;
+  int ipnext = ihead, nnode = 1;
   for (;;) {
-    if (*pnext > 0) {
-      pnext = &edges[*pnext].inext;
+    if (edges[ipnext].inext > 0) {
+      ipnext = edges[ipnext].inext;
       nnode++; 
     }else{
-      *pnext = ihead;
+      edges[ipnext].inext = ihead;
       break;
     }
   }
@@ -1476,7 +1475,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
 
   int iedge1, iedge2, iedge3, istart = 0;
   for (;;) {
-    iedge1 = *pnext;
+    iedge1 = edges[ipnext].inext;
     iedge2 = edges[iedge1].inext;
     if (istart == 0) {
       istart = iedge1;
@@ -1506,19 +1505,18 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     //   C H E C K   C O R E C T N E S S   O F   T H E   T R I A N G L E
 
     if (checkTriangle(iedge1,iedge2,ix,iy) != 0) {
-      pnext  = &edges[*pnext].inext;
+      ipnext  = edges[ipnext].inext;
       continue; 
     }
 
     //   M O D I F Y   C O N T O U R  
     
     int i1 = edges[iedge1].i1;
-//    int i2 = edges[iedge1].i2;
     int i3 = edges[iedge2].i2;
     int iface1 = edges[iedge1].iface1;
     int iface2 = faces.size();
 
-    *pnext = edges.size();
+    edges[ipnext].inext = edges.size();
     edges.push_back(ExtEdge(i1, i3, iface1, -(edges.size()+1), -1));
     edges.back().inext = edges[iedge2].inext;
 
@@ -1531,7 +1529,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     faces.back().inew   = ORIGINAL_FACE;
     edges[iedge1].iface1 = iface2;
     edges[iedge2].iface1 = iface2;
-    pnext  = &edges[*pnext].inext;
+    ipnext  = edges[ipnext].inext;
     istart = 0;
     nnode--; 
 
