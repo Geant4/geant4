@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.9 2002-05-21 10:31:25 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.10 2002-05-24 10:58:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,14 +64,14 @@ class G4Allocator
   private:
 
     void AddNewPage();
-    Type *AddNewElement();	
+    Type* AddNewElement();	
 
   private:
 
     enum { Allocated = 0x47416C, Deleted = 0xB8BE93 };
 
-    G4AllocatorPage<Type> *fPages;
-    G4AllocatorUnit<Type> *fFreeList;
+    G4AllocatorPage<Type> * fPages;
+    G4AllocatorUnit<Type> * fFreeList;
 };
 
 // ------------------------------------------------------------
@@ -100,8 +100,8 @@ G4Allocator<Type>::G4Allocator()
 template <class Type>
 G4Allocator<Type>::~G4Allocator()
 {
-  G4AllocatorPage<Type> *aPage;
-  G4AllocatorPage<Type> *aNextPage;
+  G4AllocatorPage<Type> * aPage;
+  G4AllocatorPage<Type> * aNextPage;
 
   aPage = fPages;
   while (aPage != 0)
@@ -145,8 +145,19 @@ void G4Allocator<Type>::FreeSingle(Type* anElement)
 {
   G4AllocatorUnit<Type> * fUnit;
 
-  fUnit = (G4AllocatorUnit<Type> *)
-          ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
+  // The gcc-3.1 compiler will complain and not correctly handle offsets
+  // computed from non-POD types. Pointers to member data should be used
+  // instead. This advanced C++ feature seems not to work on earlier
+  // versions of the same compiler.
+  //
+  #if (GNU_GCC==1) && (__GNUC__==3) && (__GNUC_MINOR__>0)
+    Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
+    fUnit = (G4AllocatorUnit<Type> *) ((char *)anElement - size_t(pOffset));
+  #else
+    fUnit = (G4AllocatorUnit<Type> *)
+            ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
+  #endif
+
   if (fUnit->deleted == Allocated)
   {
     fUnit->deleted = Deleted;
@@ -162,7 +173,7 @@ void G4Allocator<Type>::FreeSingle(Type* anElement)
 template <class Type>
 void G4Allocator<Type>::AddNewPage()
 {
-  G4AllocatorPage<Type> *aPage;
+  G4AllocatorPage<Type> * aPage;
   register G4int unit_no;
 
   aPage = new G4AllocatorPage<Type>;
@@ -186,9 +197,9 @@ void G4Allocator<Type>::AddNewPage()
 // ************************************************************
 //
 template <class Type>
-Type *G4Allocator<Type>::AddNewElement()
+Type* G4Allocator<Type>::AddNewElement()
 {
-  Type *anElement;
+  Type* anElement;
 
   AddNewPage();
   fFreeList->deleted = Allocated;
