@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.9 2000-09-16 14:16:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.10 2000-09-18 07:47:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1286,15 +1286,54 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
             tot4M+=last4M;                      // Update (increase) the total 4-momentum
             totMass=tot4M.m();                  // Calculate new real total mass
             G4int bn=totQC.GetBaryonNumber();   // The BaryNum after addition
+            totPDG=totQC.GetSPDGCode();
             if(bn>1)
 			{
-              G4QNucleus newN(totQC,tot4M);
-              totPDG=newN.GetPDG();
-              totM  =newN.GetMZNS();            // Calculate new minimum (GS) mass
+              totS  =totQC.GetStrangeness();    // Total Strangeness of this System
+              if(totS>=0)                       // => "This is a normal nucleus" case
+			  {
+                G4QNucleus newN(totQC,tot4M);
+                totPDG=newN.GetPDG();
+                totM  =newN.GetMZNS();          // Calculate new minimum (GS) mass
+			  }
+              else if(totS==-1)                 // => "Try to decay in K+/aK0 and finish" case
+			  {
+                G4double m1=mK;         
+                G4int  PDG1=321;
+                G4QNucleus  newNp(totQC-KpQC);
+                G4int  PDG2=newNp.GetPDG();
+                G4double m2=newNp.GetMZNS();
+                G4QNucleus  newN0(totQC-KpQC);
+                G4double m3=newN0.GetMZNS();
+                if (m3+mK0<m2+mK)                // => "aK0+ResA is better" case
+	            {
+                  m1  =mK0;
+                  PDG1=311;
+                  m2  =m3;
+                  PDG2=newN0.GetPDG();
+	            }
+                if(totMass>m1+m2)               // => "can decay" case
+                {
+                  G4LorentzVector fq4M(0.,0.,0.,m1);
+                  G4LorentzVector qe4M(0.,0.,0.,m2);
+                  if(!G4QHadron(tot4M).DecayIn2(fq4M,qe4M))
+			      {
+                    G4cerr<<"***G4QEnv::HadQEnv: tM="<<tot4M.m()<<"-> aK="<<PDG1<<"(M="
+					      <<m1<<") + ResA="<<PDG2<<"(M="<<m2<<")"<<G4endl;
+				    G4Exception("G4QEnv::HadrQEnv: aK+ResA DecayIn2 did not succeed");
+			      }
+                  G4QHadron* H1 = new G4QHadron(PDG1,fq4M);
+                  theQHadrons.insert(H1);
+                  G4QHadron* H2 = new G4QHadron(PDG2,qe4M);
+                  theQHadrons.insert(H2);
+                  break;
+			    }
+                else totM=100000.;              // => "Continue reversion" case
+			  }
+              else totM=200000.;                // => "Continue reversion" case
 			}
             else
 			{
-              totPDG=totQC.GetSPDGCode();
               if     (totPDG==1114||totPDG==2224||totPDG==10) // Decay right now and finish
 			  {
                 G4double m1=mNeut;
@@ -1334,10 +1373,10 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   theQHadrons.insert(H2);
                   break;
 				}
-                else totM=100000.;
+                else totM=300000.;
 			  }
 			  else if(totPDG) totM=G4QPDGCode(totPDG).GetMass();
-              else totM=200000.;
+              else totM=400000.;
 			}
             G4double dM=totMass-totM;
 #ifdef pdebug
