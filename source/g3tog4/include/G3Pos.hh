@@ -3,6 +3,7 @@
 
 #include "G4ThreeVector.hh"
 #include "G3VolTable.hh"
+#include "VolTableEntry.hh"
 
 class G3Pos{
 private:
@@ -15,18 +16,28 @@ private:
   G4int _Irot;
   G4String _Only;
 public:
-  G3Pos(const G4String& LV, const G4int C, const G4String& M, 
-	G4ThreeVector* T, const G4int R, const G4String& O);
+  G3Pos(G4String& LV, G4int C, G4String& M, 
+	G4ThreeVector* T, G4int R, G4String& O);
 
   G4bool operator == (const G3Pos& g3p) const;
 
-  virtual ~G3Pos(){;}
+  virtual ~G3Pos();
 
   VolTableEntry* GetMotherVTE();
 
-  G4String GetName();
+  VolTableEntry* GetVTE();
 
-  G4String GetMotherName();
+  G4String& GetName();
+
+  G4String& GetMotherName();
+
+  G4int GetIrot();
+
+  G4ThreeVector* GetPos();
+
+  G4int GetCopy();
+
+  
 };
 #endif
 

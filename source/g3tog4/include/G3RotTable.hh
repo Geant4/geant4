@@ -8,7 +8,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.4 1999-05-12 17:37:52 lockman Exp $
+// $Id: G3RotTable.hh,v 1.5 1999-05-26 03:46:29 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,8 +25,8 @@ private:
 public:
   G3RotTable();
   ~G3RotTable();
-  G3toG4RotationMatrix* get(G4int rotid);
-  void put(G4int rotid, G3toG4RotationMatrix* rotpt);
+  G3toG4RotationMatrix* Get(G4int rotid);
+  void Put(G4int rotid, G3toG4RotationMatrix* rotpt);
 };
 
 extern G3RotTable G3Rot;

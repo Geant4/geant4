@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.2 1999-05-06 05:14:15 lockman Exp $
+// $Id: G3EleTable.cc,v 1.3 1999-05-26 03:47:07 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,6 +15,7 @@
 
 G3EleTable::G3EleTable() :_MaxEle(109){
   _EleNames = new char*[_MaxEle];
+  // create an array of pointers to elements
   _Ele = new G4Element*[_MaxEle];
   LoadUp();
 }
@@ -28,18 +29,17 @@ G3EleTable::~G3EleTable(){
 G4Element* 
 G3EleTable::GetEle(G4double Z){
   G4double A;
-  G4Element* E=0;
   char name[20], sym[3];
+  G4int index = Z-1;
   if (!parse(Z, name, sym, A)) {
     G4String nm(name);
     G4String sy(sym);
-    G4int z = Z-1;
-    if (_Ele[z] == 0) {
-      _Ele[z] = new G4Element(nm, sy, Z, A*g/mole);
+    if (_Ele[index] == 0) {
+      // add an element to the element table here
+      _Ele[index] = new G4Element(nm, sy, Z, A*g/mole);
     }
-    E = _Ele[z];
   }
-  return E;
+  return _Ele[index];
 }
 
 int 

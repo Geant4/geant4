@@ -2,7 +2,10 @@
 #define _G4MAKEVOL_ 1
 
 void
-G4makevol(const G4String& vname, const G4String& shape, const G4int nmed, 
-	  const G4double* Rpar, const G4int npar);
+G4makevol(G4String& vname, G4String& shape, G4int nmed, 
+	  G4double* Rpar, G4int npar);
 #endif
+
+
+
 

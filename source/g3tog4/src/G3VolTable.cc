@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.8 1999-05-22 06:51:00 lockman Exp $
+// $Id: G3VolTable.cc,v 1.9 1999-05-26 03:47:33 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -13,7 +13,7 @@
 #include "G3Pos.hh"
 
 G3VolTable::G3VolTable() 
-  : _VTD(0), G3toG4LogicalMother(0), _FirstKey(0) {
+  : _VTD(0), G3toG4TopVTE(0), _FirstKey("UnDefined"), _NVTE(0), _NG3Pos(0){
     _VTD = new RWTPtrHashDictionary<G4String,VolTableEntry>(RWCString::hash);
 };
 
@@ -24,19 +24,21 @@ G3VolTable::~G3VolTable(){
 };
 
 VolTableEntry*
-G3VolTable::GetVTE(const G4String& Vname){
+G3VolTable::GetVTE(G4String& Vname) {
   return _VTD->findValue(&Vname);
 };
 
 RWTPtrHashDictionary <G4String, VolTableEntry>* 
-G3VolTable::GetVTD(){return _VTD;}
+G3VolTable::GetVTD() {return _VTD;}
 
 void
-G3VolTable::PutVTE(const G4String& Vname, const G4String& Shape, 
-		   const G4double* Rpar,  const G4int Npar, const G4int Nmed, 
-		   const G4Material* Mat, const G4VSolid* Solid,
-		   const G4bool Deferred, const G4bool NegVolPars){
+G3VolTable::PutVTE(G4String& Vname, G4String& Shape, 
+		   G4double* Rpar,  G4int Npar, G4int Nmed, 
+		   G4Material* Mat, G4VSolid* Solid,
+		   G4bool Deferred, G4bool NegVolPars){
   if (GetVTE(Vname) == 0) {
+
+    _NVTE++;
 
     // create a VolTableEntry
     _VTE = new 
@@ -46,24 +48,36 @@ G3VolTable::PutVTE(const G4String& Vname, const G4String& Shape,
     // create a hash key
     G4String* _HashID = new G4String(Vname);
 
-    if (_FirstKey == 0) _FirstKey = _HashID;
+    if (_FirstKey == "UnDefined") _FirstKey = *(_HashID);
 
     // insert into dictionary
     _VTD->insertKeyAndValue(_HashID, _VTE);
   }
 };
 
-VolTableEntry* 
-G3VolTable::GetFirstVTE(){
-  _VTE = _VTD->findValue(_FirstKey);
-  if (_VTE->NPCopies() > 0) {
-    _FirstKey = _VTE->GetG3PosCopy(0)->GetMotherVTE()->GetName();
-    _VTE = GetFirstVTE();
-  }
-  return _VTE;
+void 
+G3VolTable::CountG3Pos(){
+  _NG3Pos++;
 }
 
-G4LogicalVolume*
-G3VolTable::GetG3toG4Mother() {
-  return GetFirstVTE()->GetLV();
+void
+G3VolTable::SetFirstVTE(){
+  G3toG4TopVTE = _VTD->findValue(&_FirstKey);
+  if (G3toG4TopVTE->NPCopies() > 0) {
+    _FirstKey = G3toG4TopVTE->GetG3PosCopy(0)->GetMotherVTE()->GetName();
+    SetFirstVTE();
+  }
+}
+
+VolTableEntry*
+G3VolTable::GetFirstVTE() {
+  return G3toG4TopVTE;
 };
+
+void
+G3VolTable::VTEStat() {
+  G4cout << "VTEStat: instantiated " << _NVTE << " logical  and "
+	 << _NG3Pos << " positioned volumes." << endl;
+}
+
+

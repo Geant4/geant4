@@ -17,31 +17,33 @@ private:
   G4String _Shape;
   G4double* _Rpar;
   G4int _Npar;
-  const G4Material* _Mat;
-  const G4VSolid* _Solid;
+  G4Material* _Mat;
+  G4VSolid* _Solid;
   G4LogicalVolume* _LV;
   G4bool _Deferred;
   G4bool _NegVolPars;
-  RWTPtrOrderedVector <G3Pos> _Daughters; // G3Pos Daughters
+  RWTPtrOrderedVector <VolTableEntry> _Daughters; // VolTableEntry Daughters
   RWTPtrOrderedVector <G3Pos> _G3Pos; // associated G3Pos objects
 
 public:
-  VolTableEntry(const G4String& v, const G4String& sh, const G4double* R, 
-		const G4int n, const G4int nmed, const G4Material* m, 
-		const G4VSolid* so, const G4bool Deferred, 
-		const G4bool NegVolPars);
+  VolTableEntry(G4String& v, G4String& sh, G4double* R, 
+		G4int n, G4int nmed, G4Material* m, 
+		G4VSolid* so, G4bool Deferred, 
+		G4bool NegVolPars);
 
   virtual ~VolTableEntry();
 
   void SetLV(G4LogicalVolume* ll);
 
-  G4String* GetName();
+  G4String GetName();
+
+  G4VSolid* GetSolid();
 
   void AddG3Pos(G3Pos* aG3Pos);
 
-  G4int NPCopies() const;
+  G4int NPCopies();
 
-  G3Pos* GetG3PosCopy(G4int copy=0) const;
+  G3Pos* GetG3PosCopy(G4int copy=0);
 
   G4bool HasNegVolPars();
 
@@ -53,20 +55,21 @@ public:
 
   G4int GetNpar();
 
-  const G4Material* GetMaterial();
+  G4Material* GetMaterial();
 
   G4LogicalVolume* GetLV();
 
   G4int GetNmed();
 
-  void AddDaughter(G3Pos* aDaughter);
+  void AddDaughter(VolTableEntry* aDaughter);
 
-  G4int GetNoDaughters() const;
+  G4int GetNoDaughters();
 
-  G3Pos* GetDaughter(const G4int i) const;
+  VolTableEntry* GetDaughter(G4int i);
+
+  VolTableEntry* FindDaughter(G4String& vname);
 
   G4bool operator == ( const VolTableEntry& vte) const;
-
 };
 #endif
 

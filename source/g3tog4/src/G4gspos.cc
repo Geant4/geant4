@@ -5,10 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.7 1999-05-22 06:31:52 lockman Exp $
+// $Id: G4gspos.cc,v 1.8 1999-05-26 03:50:00 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "globals.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "VolTableEntry.hh"
@@ -32,9 +33,9 @@ void PG4gspos(RWCString tokens[])
     G4gspos(name, num, moth, x, y, z, irot, only);
 }
 
-void G4gspos(const G4String& vname, const G4int num, const G4String& vmoth, 
-	     G4double x, G4double y, G4double z, const G4int irot, 
-	     const G4String& vonly){
+void G4gspos(G4String& vname, G4int num, G4String& vmoth, 
+	     G4double x, G4double y, G4double z, G4int irot, 
+	     G4String& vonly){
 
   VolTableEntry* _VTE = G3Vol.GetVTE(vname);
   VolTableEntry* MVTE = G3Vol.GetVTE(vmoth);
@@ -54,8 +55,8 @@ void G4gspos(const G4String& vname, const G4int num, const G4String& vmoth,
     G3Pos* aG3Pos = new G3Pos(vname, num, vmoth, offset, irot, vonly);
     _VTE->AddG3Pos(aG3Pos);
 
-    // add the G3Pos object as a daughter to its mother
-    MVTE->AddDaughter(aG3Pos);
+    // add the VolTableEntry as a daughter to its mother if not there already
+    MVTE->AddDaughter(_VTE);
   }
 }
 

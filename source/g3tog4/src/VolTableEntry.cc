@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.3 1999-05-22 07:00:41 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.4 1999-05-26 03:50:30 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -20,11 +20,11 @@
 #include "G4LogicalVolume.hh"
 #include "G3Pos.hh"
 
-VolTableEntry::VolTableEntry(const G4String& Vname, const G4String& Shape, 
-			     const G4double* Rpar,  const G4int Npar, 
-			     const G4int Nmed, 
-			     const G4Material* Mat, const G4VSolid* Solid,
-			     const G4bool Deferred, const G4bool NegVolPars)
+VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape, 
+			     G4double* Rpar,  G4int Npar, 
+			     G4int Nmed, 
+			     G4Material* Mat, G4VSolid* Solid,
+			     G4bool Deferred, G4bool NegVolPars)
   : _Rpar(0), _Npar(0), _Nmed(0), _Mat(0), _Solid(0), _LV(0), _Deferred(0), 
     _NegVolPars(0), _Daughters(0), _G3Pos(0){
       _Nmed = Nmed;
@@ -46,9 +46,14 @@ VolTableEntry::SetLV(G4LogicalVolume* ll){
   _LV = ll;
 };
 
-G4String*
-VolTableEntry::GetName(){
-  return &_Vname;
+G4String
+VolTableEntry::GetName() {
+  return _Vname;
+};
+
+G4VSolid*
+VolTableEntry::GetSolid() {
+  return _Solid;
 };
 
 G4bool 
@@ -56,33 +61,33 @@ VolTableEntry::HasDeferred(){
   return _Deferred;
 };
 
-G4String 
-VolTableEntry::GetShape(){
+G4String
+VolTableEntry::GetShape() {
   return _Shape;
 };
 
 G4double* 
-VolTableEntry::GetRpar(){
+VolTableEntry::GetRpar() {
   return _Rpar;
 };
 
 G4int 
-VolTableEntry::GetNpar(){
+VolTableEntry::GetNpar() {
   return _Npar;
 };
 
-const G4Material* 
-VolTableEntry::GetMaterial(){
+G4Material* 
+VolTableEntry::GetMaterial() {
   return _Mat;
 }
 
 G4LogicalVolume* 
-VolTableEntry::GetLV(){
+VolTableEntry::GetLV() {
   return _LV;
 };
 
 G4int 
-VolTableEntry::GetNmed(){
+VolTableEntry::GetNmed() {
   return _Nmed;
 };
 
@@ -92,36 +97,45 @@ VolTableEntry::HasNegVolPars(){
 };
 
 G3Pos* 
-VolTableEntry::GetG3PosCopy(G4int copy) const {
+VolTableEntry::GetG3PosCopy(G4int copy) {
   return _G3Pos[copy];
 }
 
 G4int 
-VolTableEntry::NPCopies() const {
+VolTableEntry::NPCopies() {
   return _G3Pos.length();
 };
 
 void
 VolTableEntry::AddG3Pos(G3Pos* aG3Pos){
+  G3Vol.CountG3Pos();
   _G3Pos.resize(_G3Pos.length()+1);
   _G3Pos.insert(aG3Pos);
-  //  G4cout << "Added G3Pos " << aG3Pos->GetName() << " copy " << _G3Pos.length()
-  // << " to VTE " << *GetName() <<  endl;
 };
 
 void
-VolTableEntry::AddDaughter(G3Pos* aDaughter){
-  _Daughters.resize(_Daughters.length()+1);
-  _Daughters.insert(aDaughter);
+VolTableEntry::AddDaughter(VolTableEntry* aDaughter){
+  if (FindDaughter(aDaughter->GetName()) == 0) {
+    _Daughters.resize(_Daughters.length()+1);
+    _Daughters.insert(aDaughter);
+  }
+};
+
+VolTableEntry*
+VolTableEntry::FindDaughter(G4String& Dname){
+  for (int idau=0; idau<GetNoDaughters(); idau++){
+    if (GetDaughter(idau)->GetName() == Dname) return GetDaughter(idau);
+  }
+  return 0;
 };
 
 G4int
-VolTableEntry::GetNoDaughters() const{
+VolTableEntry::GetNoDaughters() {
   return _Daughters.length();
 };
 
-G3Pos* 
-VolTableEntry::GetDaughter(const G4int i) const {
+VolTableEntry* 
+VolTableEntry::GetDaughter(G4int i) {
   return _Daughters[i];
 };
 

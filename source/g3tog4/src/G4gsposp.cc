@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.8 1999-05-22 06:51:00 lockman Exp $
+// $Id: G4gsposp.cc,v 1.9 1999-05-26 03:50:05 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,9 +32,9 @@ void PG4gsposp(RWCString tokens[]){
   G4gsposp(name, num, moth, x, y, z, irot, only, pars, npar);
 }
 
-void G4gsposp(const G4String& vname, const G4int num, const G4String& vmoth, 
-	      G4double x, G4double y, G4double z, const G4int irot, 
-	      const G4String& vonly, G4double* pars, G4int npar){
+void G4gsposp(G4String& vname, G4int num, G4String& vmoth, 
+	      G4double x, G4double y, G4double z, G4int irot, 
+	      G4String& vonly, G4double* pars, G4int npar){
   
   // VTable entry
   VolTableEntry* VTE = G3Vol.GetVTE(vname);
@@ -45,7 +45,7 @@ void G4gsposp(const G4String& vname, const G4int num, const G4String& vmoth,
     G4int Nmed = VTE->GetNmed();
 
     // get pointer to key for current entry
-    const G4String* Key = G3Vol.GetVTD()->find(&vname);
+    G4String* Key = G3Vol.GetVTD()->find(&vname);
 
     // remove the current entry from the dictionary
     G3Vol.GetVTD()->remove(Key);

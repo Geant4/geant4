@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.13 1999-05-22 07:30:33 lockman Exp $
+// $Id: G4makevol.cc,v 1.14 1999-05-26 03:50:25 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,8 +16,8 @@
 #include "G3MedTable.hh"
 #include "G3toG4MakeSolid.hh"
         
-void G4makevol(const G4String& vname, const G4String& shape, const G4int nmed,
-	       const G4double* Rpar, const G4int npar){
+void G4makevol(G4String& vname, G4String& shape, G4int nmed,
+	       G4double* Rpar, G4int npar){
     
   G4bool NegVolPars = false;
   G4bool Deferred   = false;

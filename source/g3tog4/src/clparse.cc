@@ -5,30 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.4 1999-05-21 22:22:02 gcosmo Exp $
+// $Id: clparse.cc,v 1.5 1999-05-26 03:50:35 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// G3CLParse
-//
-// Parse the call List of Geant3 geometry calls and execute them
-// in Geant4.
-//
-// Torre Wenaus, LLNL  6/95
-//
-// To do:
-// - Build a linked List container for tokens rather than fixed array.
-//   Not going to be appreciably slower; time goes into I/O.
-//
-// Comments:
-// - RWCString doesn't have toInt, toFloat methods! Had to use C's
-//   atol, atof
-//
-#include "G4ios.hh"
+#include "globals.hh"
 #include <fstream.h>
 #include <rw/rstream.h>
 #include <rw/ctoken.h>
-
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3VolTable.hh"
@@ -88,18 +71,15 @@ void PG4gsdetd(RWCString *tokens);
 void PG4gsdetu(RWCString *tokens);
 void PG4ggclos();
 
-void G3CLRead(G4String & fname, char *select = NULL)
+void G3CLRead(G4String & fname, char *select = NULL){
 //
 //  G3CLRead
 //  Read the call List file, parse the tokens, and pass the token
 //  List to the Geant4 interpreter
 //
 //  fname: call List filename
-//  select: if non-NULL, the selected context. Only the subset of
-//          the call List matching the selected context will be
-//          executed. If NULL, the full call List will run.
 //
-{
+  
   RWCString line;
   RWCString tokens[1000];
 
@@ -112,19 +92,9 @@ void G3CLRead(G4String & fname, char *select = NULL)
   ifstream istr(fname);
   G4bool _debug=false;
     
-  while (line.readLine(istr) && ! istr.eof())
-  {
+  while (line.readLine(istr) && ! istr.eof()){
       count++;
       ntokens = G3CLTokens(&line,tokens);  // tokenize the line
-      
-          // check tokens
-      //      if (_debug) {
-      //  G4cout << "==== Line " << count << " Tokens " << ntokens 
-      //   << " Nvol " << G3Vol.GetEntryCount() << endl;
-      //
-      //  G4cout << line << " // " << G3Vol.GetEntryCount() << endl;
-      //}
-      
       for (G4int i=0; i < ntokens; i++) ofile << tokens[i] << endl;
       
           // interpret the line as a Geant call

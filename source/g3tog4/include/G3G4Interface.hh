@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3G4Interface.hh,v 1.3 1999-05-22 06:30:49 lockman Exp $
+// $Id: G3G4Interface.hh,v 1.4 1999-05-26 03:46:16 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,13 +18,13 @@ class G4LogicalVolume;
 void G4gsvolu(G4String name, G4String shape, G4int nmed, G4double* par,
               G4int npar);
 
-void G4gspos(const G4String& name, const G4int num, const G4String& moth, 
-	     G4double x, G4double y, G4double z, const G4int irot, 
-	     const G4String& only);
+void G4gspos(G4String& name, G4int num, G4String& moth, 
+	     G4double x, G4double y, G4double z, G4int irot, 
+	     G4String& only);
 
-void G4gsposp(const G4String& name, const G4int num, const G4String& moth, 
-	      G4double x, G4double y, G4double z, const G4int irot, 
-	      const G4String& only, G4double* Rpar, G4int npar);
+void G4gsposp(G4String& name, G4int num, G4String& moth, 
+	      G4double x, G4double y, G4double z, G4int irot, 
+	      G4String& only, G4double* Rpar, G4int npar);
 
 void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
               G4double theta2, G4double phi2, G4double theta3, G4double phi3);
