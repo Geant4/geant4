@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.9 2002-11-02 00:10:34 mverderi Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.10 2002-11-15 11:41:56 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -257,7 +257,7 @@ G4VFastSimulationModel*
 G4GlobalFastSimulationManager::GetFastSimulationModel(const G4String& modelName,
 						      const G4VFastSimulationModel* previousFound) const
 {
-  G4VFastSimulationModel* model(0);
+  G4VFastSimulationModel* model = 0;
   // -- flag used to navigate accross the various managers;
   bool foundPrevious(false);
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)

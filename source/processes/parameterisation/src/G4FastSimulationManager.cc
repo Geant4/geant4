@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.7 2002-11-02 00:10:34 mverderi Exp $
+// $Id: G4FastSimulationManager.cc,v 1.8 2002-11-15 11:41:56 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -123,7 +123,7 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
 						const G4VFastSimulationModel* previousFound,
 						bool &foundPrevious) const
 {
-  G4VFastSimulationModel* model(0);
+  G4VFastSimulationModel* model = 0;
   for (size_t iModel=0; iModel<ModelList.size(); iModel++)
     {
       if(ModelList[iModel]->GetName() == modelName)
