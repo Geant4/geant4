@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacMLCDecorator.cc,v 1.1 2004-11-24 16:53:29 mpiergen Exp $
+// $Id: MedLinacMLCDecorator.cc,v 1.2 2004-11-25 16:28:39 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -490,325 +490,174 @@ void MedLinacMLCDecorator::PrintParametersMLC()
   G4cout <<"leaf B39 position "<< b39y/cm << " cm "<<G4endl ;  
   G4cout <<"leaf B40 position "<< b40y/cm << " cm "<<G4endl ;
 }
-void MedLinacMLCDecorator::SetA1Pos_y (G4double val)
+void MedLinacMLCDecorator::SetLeafName (G4String newleaf_name)
 { 
-  a1y    = val;
+  leaf_name= newleaf_name;
 }
-void MedLinacMLCDecorator::SetA2Pos_y (G4double val)
+void MedLinacMLCDecorator::SetPos_y (G4double pos)
 { 
-  a2y    = val;
-}
-void MedLinacMLCDecorator::SetA3Pos_y (G4double val)
-{ 
-  a3y    = val;
-}
-void MedLinacMLCDecorator::SetA4Pos_y (G4double val)
-{ 
-  a4y    = val;
-}
-void MedLinacMLCDecorator::SetA5Pos_y (G4double val)
-{ 
-  a5y    = val;
-}
-void MedLinacMLCDecorator::SetA6Pos_y (G4double val)
-{ 
-  a6y    = val;
-}
-void MedLinacMLCDecorator::SetA7Pos_y (G4double val)
-{ 
-  a7y    = val;
-}
-void MedLinacMLCDecorator::SetA8Pos_y (G4double val)
-{ 
-  a8y    = val;
-}
-void MedLinacMLCDecorator::SetA9Pos_y (G4double val)
-{ 
-  a9y    = val;
-}
-void MedLinacMLCDecorator::SetA10Pos_y (G4double val)
-{ 
-  a10y    = val;
-}
-void MedLinacMLCDecorator::SetA11Pos_y (G4double val)
-{ 
-  a11y    = val;
-}
-void MedLinacMLCDecorator::SetA12Pos_y (G4double val)
-{ 
-  a12y    = val;
-}
-void MedLinacMLCDecorator::SetA13Pos_y (G4double val)
-{ 
-  a13y    = val;
-}
-void MedLinacMLCDecorator::SetA14Pos_y (G4double val)
-{ 
-  a14y    = val;
-}
-void MedLinacMLCDecorator::SetA15Pos_y (G4double val)
-{ 
-  a15y    = val;
-}
-void MedLinacMLCDecorator::SetA16Pos_y (G4double val)
-{ 
-  a16y    = val;
-}
-void MedLinacMLCDecorator::SetA17Pos_y (G4double val)
-{ 
-  a17y    = val;
-}
-void MedLinacMLCDecorator::SetA18Pos_y (G4double val)
-{ 
-  a18y    = val;
-}
-void MedLinacMLCDecorator::SetA19Pos_y (G4double val)
-{ 
-  a19y    = val;
-}
-void MedLinacMLCDecorator::SetA20Pos_y (G4double val)
-{ 
-  a20y    = val;
-}
-void MedLinacMLCDecorator::SetA21Pos_y (G4double val)
-{ 
-  a21y    = val;
-}
-void MedLinacMLCDecorator::SetA22Pos_y (G4double val)
-{ 
-  a22y    = val;
-}
-void MedLinacMLCDecorator::SetA23Pos_y (G4double val)
-{ 
-  a23y    = val;
-}
-void MedLinacMLCDecorator::SetA24Pos_y (G4double val)
-{ 
-  a24y    = val;
-}
-void MedLinacMLCDecorator::SetA25Pos_y (G4double val)
-{ 
-  a25y    = val;
-}
-void MedLinacMLCDecorator::SetA26Pos_y (G4double val)
-{ 
-  a26y    = val;
-}
-void MedLinacMLCDecorator::SetA27Pos_y (G4double val)
-{ 
-  a27y    = val;
-}
-void MedLinacMLCDecorator::SetA28Pos_y (G4double val)
-{ 
-  a28y    = val;
-}
-void MedLinacMLCDecorator::SetA29Pos_y (G4double val)
-{ 
-  a29y    = val;
-}
-void MedLinacMLCDecorator::SetA30Pos_y (G4double val)
-{ 
-  a30y    = val;
-}
-void MedLinacMLCDecorator::SetA31Pos_y (G4double val)
-{ 
-  a31y    = val;
-}
-void MedLinacMLCDecorator::SetA32Pos_y (G4double val)
-{ 
-  a32y    = val;
-}
-void MedLinacMLCDecorator::SetA33Pos_y (G4double val)
-{ 
-  a33y    = val;
-}
-void MedLinacMLCDecorator::SetA34Pos_y (G4double val)
-{ 
-  a34y    = val;
-}
-void MedLinacMLCDecorator::SetA35Pos_y (G4double val)
-{ 
-  a35y    = val;
-}
-void MedLinacMLCDecorator::SetA36Pos_y (G4double val)
-{ 
-  a36y    = val;
-}
-void MedLinacMLCDecorator::SetA37Pos_y (G4double val)
-{ 
-  a37y    = val;
-}
-void MedLinacMLCDecorator::SetA38Pos_y (G4double val)
-{ 
-  a38y    = val;
-}
-void MedLinacMLCDecorator::SetA39Pos_y (G4double val)
-{ 
-  a39y    = val;
-}
-void MedLinacMLCDecorator::SetA40Pos_y (G4double val)
-{ 
-  a40y    = val;
-}
+  if (leaf_name=="a1")
+    a1y = pos;
+  if (leaf_name=="a2")
+    a2y = pos;
+  if (leaf_name=="a3")
+    a3y = pos;
+  if (leaf_name=="a4")
+    a4y = pos;
+  if (leaf_name=="a5")
+    a5y = pos;
+  if (leaf_name=="a6")
+    a6y = pos;
+  if (leaf_name=="a7")
+    a7y = pos;
+  if (leaf_name=="a8")
+    a8y = pos;
+  if (leaf_name=="a9")
+    a9y = pos;
+  if (leaf_name=="a10")
+    a10y = pos;
+  if (leaf_name=="a11")
+    a11y = pos;
+  if (leaf_name=="a12")
+    a12y = pos;
+  if (leaf_name=="a13")
+    a13y = pos;
+  if (leaf_name=="a14")
+    a14y = pos;
+  if (leaf_name=="a15")
+    a15y = pos;
+  if (leaf_name=="a16")
+    a16y = pos;
+  if (leaf_name=="a17")
+    a17y = pos;
+  if (leaf_name=="a18")
+    a18y = pos;
+  if (leaf_name=="a19")
+    a19y = pos;
+  if (leaf_name=="a20")
+    a20y = pos;
+  if (leaf_name=="a21")
+    a21y = pos;
+  if (leaf_name=="a22")
+    a22y = pos;
+  if (leaf_name=="a23")
+    a23y = pos;
+  if (leaf_name=="a24")
+    a24y = pos;
+  if (leaf_name=="a25")
+    a25y = pos;
+  if (leaf_name=="a26")
+    a26y = pos;
+  if (leaf_name=="a27")
+    a27y = pos;
+  if (leaf_name=="a28")
+    a28y = pos;
+  if (leaf_name=="a29")
+    a29y = pos;
+  if (leaf_name=="a30")
+    a30y = pos;
+  if (leaf_name=="a31")
+    a31y = pos;
+  if (leaf_name=="a32")
+    a32y = pos;
+  if (leaf_name=="a33")
+    a33y = pos;
+  if (leaf_name=="a34")
+    a34y = pos;
+  if (leaf_name=="a35")
+    a35y = pos;
+  if (leaf_name=="a36")
+    a36y = pos;
+  if (leaf_name=="a37")
+    a37y = pos;
+  if (leaf_name=="a38")
+    a38y = pos;
+  if (leaf_name=="a39")
+    a39y = pos;
+  if (leaf_name=="a40")
+    a40y = pos;
 
 
-void MedLinacMLCDecorator::SetB1Pos_y (G4double val)
-{ 
-  b1y    = val;
-}
-void MedLinacMLCDecorator::SetB2Pos_y (G4double val)
-{
-  b2y    = val;
-}
-void MedLinacMLCDecorator::SetB3Pos_y (G4double val)
-{ 
-  b3y    = val;
-}
-void MedLinacMLCDecorator::SetB4Pos_y (G4double val)
-{
-  b4y    = val;
-}
-void MedLinacMLCDecorator::SetB5Pos_y (G4double val)
-{ 
-  b5y    = val;
-}
-void MedLinacMLCDecorator::SetB6Pos_y (G4double val)
-{ 
-  b6y    = val;
-}
-void MedLinacMLCDecorator::SetB7Pos_y (G4double val)
-{ 
-  b7y    = val;
-}
-void MedLinacMLCDecorator::SetB8Pos_y (G4double val)
-{ 
-  b8y    = val;
-}
-void MedLinacMLCDecorator::SetB9Pos_y (G4double val)
-{
-  b9y    = val;
-}
-void MedLinacMLCDecorator::SetB10Pos_y (G4double val)
-{ 
-  b10y    = val;
-}
-void MedLinacMLCDecorator::SetB11Pos_y (G4double val)
-{ 
-  b11y    = val;
-}
-void MedLinacMLCDecorator::SetB12Pos_y (G4double val)
-{ 
-  b12y    = val;
-}
-void MedLinacMLCDecorator::SetB13Pos_y (G4double val)
-{ 
-  b13y    = val;
-}
-void MedLinacMLCDecorator::SetB14Pos_y (G4double val)
-{ 
-  b14y    = val;
-}
-void MedLinacMLCDecorator::SetB15Pos_y (G4double val)
-{ 
-  b15y    = val;
-}
-void MedLinacMLCDecorator::SetB16Pos_y (G4double val)
-{ 
-  b16y    = val;
-}
-void MedLinacMLCDecorator::SetB17Pos_y (G4double val)
-{ 
-  b17y    = val;
-}
-void MedLinacMLCDecorator::SetB18Pos_y (G4double val)
-{ 
-  b18y    = val;
-}
-void MedLinacMLCDecorator::SetB19Pos_y (G4double val)
-{ 
-  b19y    = val;
-}
-void MedLinacMLCDecorator::SetB20Pos_y (G4double val)
-{ 
-  b20y    = val;
-}
-void MedLinacMLCDecorator::SetB21Pos_y (G4double val)
-{ 
-  b21y    = val;
-}
-void MedLinacMLCDecorator::SetB22Pos_y (G4double val)
-{ 
-  b22y    = val;
-}
-void MedLinacMLCDecorator::SetB23Pos_y (G4double val)
-{ 
-  b23y    = val;
-}
-void MedLinacMLCDecorator::SetB24Pos_y (G4double val)
-{ 
-  b24y    = val;
-}
-void MedLinacMLCDecorator::SetB25Pos_y (G4double val)
-{ 
-  b25y    = val;
-}
-void MedLinacMLCDecorator::SetB26Pos_y (G4double val)
-{ 
-  b26y    = val;
-}
-void MedLinacMLCDecorator::SetB27Pos_y (G4double val)
-{ 
-  b27y    = val;
-}
-void MedLinacMLCDecorator::SetB28Pos_y (G4double val)
-{ 
-  b28y    = val;
-}
-void MedLinacMLCDecorator::SetB29Pos_y (G4double val)
-{ 
-  b29y    = val;
-}
-void MedLinacMLCDecorator::SetB30Pos_y (G4double val)
-{ 
-  b30y    = val;
-}
-void MedLinacMLCDecorator::SetB31Pos_y (G4double val)
-{ 
-  b31y    = val;
-}
-void MedLinacMLCDecorator::SetB32Pos_y (G4double val)
-{ 
-  b32y    = val;
-}
-void MedLinacMLCDecorator::SetB33Pos_y (G4double val)
-{ 
-  b33y    = val;
-}
-void MedLinacMLCDecorator::SetB34Pos_y (G4double val)
-{ 
-  b34y    = val;
-}
-void MedLinacMLCDecorator::SetB35Pos_y (G4double val)
-{ 
-  b35y    = val;
-}
-void MedLinacMLCDecorator::SetB36Pos_y (G4double val)
-{ 
-  b36y    = val;
-}
-void MedLinacMLCDecorator::SetB37Pos_y (G4double val)
-{ 
-  b37y    = val;
-}
-void MedLinacMLCDecorator::SetB38Pos_y (G4double val)
-{ 
-  b38y    = val;
-}
-void MedLinacMLCDecorator::SetB39Pos_y (G4double val)
-{ 
-  b39y    = val;
-}
-void MedLinacMLCDecorator::SetB40Pos_y (G4double val)
-{ 
-  b40y    = val;
+
+
+  if (leaf_name=="b1")
+    b1y = pos;
+  if (leaf_name=="b2")
+    b2y = pos;
+  if (leaf_name=="b3")
+    b3y = pos;
+  if (leaf_name=="b4")
+    b4y = pos;
+  if (leaf_name=="b5")
+    b5y = pos;
+  if (leaf_name=="b6")
+    b6y = pos;
+  if (leaf_name=="b7")
+    b7y = pos;
+  if (leaf_name=="b8")
+    b8y = pos;
+  if (leaf_name=="b9")
+    b9y = pos;
+  if (leaf_name=="b10")
+    b10y = pos;
+  if (leaf_name=="b11")
+    b11y = pos;
+  if (leaf_name=="b12")
+    b12y = pos;
+  if (leaf_name=="b13")
+    b13y = pos;
+  if (leaf_name=="b14")
+    b14y = pos;
+  if (leaf_name=="b15")
+    b15y = pos;
+  if (leaf_name=="b16")
+    b16y = pos;
+  if (leaf_name=="b17")
+    b17y = pos;
+  if (leaf_name=="b18")
+    b18y = pos;
+  if (leaf_name=="b19")
+    b19y = pos;
+  if (leaf_name=="b20")
+    b20y = pos;
+  if (leaf_name=="b21")
+    b21y = pos;
+  if (leaf_name=="b22")
+    b22y = pos;
+  if (leaf_name=="b23")
+    b23y = pos;
+  if (leaf_name=="b24")
+    b24y = pos;
+  if (leaf_name=="b25")
+    b25y = pos;
+  if (leaf_name=="b26")
+    b26y = pos;
+  if (leaf_name=="b27")
+    b27y = pos;
+  if (leaf_name=="b28")
+    b28y = pos;
+  if (leaf_name=="b29")
+    b29y = pos;
+  if (leaf_name=="b30")
+    b30y = pos;
+  if (leaf_name=="b31")
+    b31y = pos;
+  if (leaf_name=="b32")
+    b32y = pos;
+  if (leaf_name=="b33")
+    b33y = pos;
+  if (leaf_name=="b34")
+    b34y = pos;
+  if (leaf_name=="b35")
+    b35y = pos;
+  if (leaf_name=="b36")
+    b36y = pos;
+  if (leaf_name=="b37")
+    b37y = pos;
+  if (leaf_name=="b38")
+    b38y = pos;
+  if (leaf_name=="b39")
+    b39y = pos;
+  if (leaf_name=="b40")
+    b40y = pos;
 }

@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2004-11-24 16:53:28 mpiergen Exp $
+$Id: README,v 1.4 2004-11-25 16:28:39 mpiergen Exp $
 -------------------------------------------------------------------
 
 
@@ -114,14 +114,18 @@ idle>/Jaws/Y2/DistanceFromAxis 20. cm
 idle>/Jaws/update
 
 The user can select the position of every single leaf of the Multi-Leaf Collimator, for example:
-Idle> /MLC/A/A1position 0. cm
-Idle> /MLC/A/A2position 1. cm
-Idle> /MLC/A/A3position 2. cm
-Idle> /MLC/A/A4position 3. cm
-Idle> /MLC/A/A5position 4. cm
-...
-...
-Idle> /MLC/B/B40position 0. cm
+Idle> /MLC/leaf_selection  a1
+Idle> /MLC/position 0. cm
+Idle> /MLC/leaf_selection  a2
+Idle> /MLC/position 0. cm
+..
+..
+..
+Idle> /MLC/leaf_selection  b39
+Idle> /MLC/position 0. cm
+Idle> /MLC/leaf_selection  b40
+Idle> /MLC/position 0. cm
+
 The distance selected represent the distance between the leaf tip and the beam axis projected at isocenter.
 
 

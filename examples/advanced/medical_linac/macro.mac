@@ -7,93 +7,177 @@
 /tracking/storeTrajectory 1
 
 #    Multi Leaf
-/MLC/A/A1position 0. cm
-/MLC/A/A2position 0. cm
-/MLC/A/A3position 0. cm
-/MLC/A/A4position 0. cm
-/MLC/A/A5position 0. cm
-/MLC/A/A6position 0. cm
-/MLC/A/A7position 0. cm
-/MLC/A/A8position 0. cm
-/MLC/A/A9position 0. cm
-/MLC/A/A10position 0. cm
-/MLC/A/A11position 0. cm
-/MLC/A/A12position 0. cm
-/MLC/A/A13position 0. cm
-/MLC/A/A14position 0. cm
-/MLC/A/A15position 0. cm
-/MLC/A/A16position 0. cm
-/MLC/A/A17position 2.4 cm
-/MLC/A/A18position 2.7 cm
-/MLC/A/A19position 3.5 cm
-/MLC/A/A20position 4.0 cm
-/MLC/A/A21position 4.6 cm
-/MLC/A/A22position 5.0 cm
-/MLC/A/A23position 5.8 cm
-/MLC/A/A24position 6.0 cm
-/MLC/A/A25position 5.6 cm
-/MLC/A/A26position 0. cm
-/MLC/A/A27position 0. cm
-/MLC/A/A28position 0. cm
-/MLC/A/A29position 0. cm
-/MLC/A/A30position 0. cm
-/MLC/A/A31position 0. cm
-/MLC/A/A32position 0. cm
-/MLC/A/A33position 0. cm
-/MLC/A/A34position 0. cm
-/MLC/A/A35position 0. cm
-/MLC/A/A36position 0. cm
-/MLC/A/A37position 0. cm
-/MLC/A/A38position 0. cm
-/MLC/A/A39position 0. cm
-/MLC/A/A40position 0. cm
-
-/MLC/B/B1position 0. cm
-/MLC/B/B2position 0. cm
-/MLC/B/B3position 0. cm
-/MLC/B/B4position 0. cm
-/MLC/B/B5position 0. cm
-/MLC/B/B6position 0. cm
-/MLC/B/B7position 0. cm
-/MLC/B/B8position 0. cm
-/MLC/B/B9position 0. cm
-/MLC/B/B10position 0. cm
-/MLC/B/B11position 0. cm
-/MLC/B/B12position 0. cm
-/MLC/B/B13position 0. cm
-/MLC/B/B14position 0. cm
-/MLC/B/B15position 0. cm
-/MLC/B/B16position 0. cm
-/MLC/B/B17position 2.3 cm
-/MLC/B/B18position 2.8 cm
-/MLC/B/B19position 3.5 cm
-/MLC/B/B20position 4.4 cm
-/MLC/B/B21position 4.7 cm
-/MLC/B/B22position 5.4 cm
-/MLC/B/B23position 5.7 cm
-/MLC/B/B24position 5.8 cm
-/MLC/B/B25position 5.4 cm
-/MLC/B/B26position 0. cm
-/MLC/B/B27position 0. cm
-/MLC/B/B28position 0. cm
-/MLC/B/B29position 0. cm
-/MLC/B/B30position 0. cm
-/MLC/B/B31position 0. cm
-/MLC/B/B32position 0. cm
-/MLC/B/B33position 0. cm
-/MLC/B/B34position 0. cm
-/MLC/B/B35position 0. cm
-/MLC/B/B36position 0. cm
-/MLC/B/B37position 0. cm
-/MLC/B/B38position 0. cm
-/MLC/B/B39position 0. cm
-/MLC/B/B40position 0. cm
 
 
-/Jaws/X1/DistanceFromAxis -15. cm
-/Jaws/X2/DistanceFromAxis 15. cm
-/Jaws/Y1/DistanceFromAxis -15. cm
-/Jaws/Y2/DistanceFromAxis 15. cm
+/MLC/leaf_selection  a1
+/MLC/position 0. cm
+/MLC/leaf_selection  a2
+/MLC/position 0. cm
+/MLC/leaf_selection  a3
+/MLC/position 0. cm
+/MLC/leaf_selection  a4
+/MLC/position 0. cm
+/MLC/leaf_selection  a5
+/MLC/position 0. cm
+/MLC/leaf_selection  a6
+/MLC/position 0. cm
+/MLC/leaf_selection  a7
+/MLC/position 0. cm
+/MLC/leaf_selection  a8
+/MLC/position 0. cm
+/MLC/leaf_selection  a9
+/MLC/position 0. cm
+/MLC/leaf_selection  a10
+/MLC/position 0. cm
+/MLC/leaf_selection  a11
+/MLC/position 0. cm
+/MLC/leaf_selection  a12
+/MLC/position 0. cm
+/MLC/leaf_selection  a13
+/MLC/position 0. cm
+/MLC/leaf_selection  a14
+/MLC/position 0. cm
+/MLC/leaf_selection  a15
+/MLC/position 0. cm
+/MLC/leaf_selection  a16
+/MLC/position 0. cm
+/MLC/leaf_selection  a17
+/MLC/position 2.4 cm
+/MLC/leaf_selection  a18
+/MLC/position 2.7 cm
+/MLC/leaf_selection  a19
+/MLC/position 3.5 cm
+/MLC/leaf_selection  a20
+/MLC/position 4.0 cm
+/MLC/leaf_selection  a21
+/MLC/position 4.6 cm
+/MLC/leaf_selection  a22
+/MLC/position 5.0 cm
+/MLC/leaf_selection  a23
+/MLC/position 5.8 cm
+/MLC/leaf_selection  a24
+/MLC/position 6.0 cm
+/MLC/leaf_selection  a25
+/MLC/position 5.6 cm
+/MLC/leaf_selection  a26
+/MLC/position 0. cm
+/MLC/leaf_selection  a27
+/MLC/position 0. cm
+/MLC/leaf_selection  a28
+/MLC/position 0. cm
+/MLC/leaf_selection  a29
+/MLC/position 0. cm
+/MLC/leaf_selection  a30
+/MLC/position 0. cm
+/MLC/leaf_selection  a31
+/MLC/position 0. cm
+/MLC/leaf_selection  a32
+/MLC/position 0. cm
+/MLC/leaf_selection  a33
+/MLC/position 0. cm
+/MLC/leaf_selection  a34
+/MLC/position 0. cm
+/MLC/leaf_selection  a35
+/MLC/position 0. cm
+/MLC/leaf_selection  a36
+/MLC/position 0. cm
+/MLC/leaf_selection  a37
+/MLC/position 0. cm
+/MLC/leaf_selection  a38
+/MLC/position 0. cm
+/MLC/leaf_selection  a39
+/MLC/position 0. cm
+/MLC/leaf_selection  a40
+/MLC/position 0. cm
+
+
+/MLC/leaf_selection  b1
+/MLC/position 0. cm
+/MLC/leaf_selection  b2
+/MLC/position 0. cm
+/MLC/leaf_selection  b3
+/MLC/position 0. cm
+/MLC/leaf_selection  b4
+/MLC/position 0. cm
+/MLC/leaf_selection  b5
+/MLC/position 0. cm
+/MLC/leaf_selection  b6
+/MLC/position 0. cm
+/MLC/leaf_selection  b7
+/MLC/position 0. cm
+/MLC/leaf_selection  b8
+/MLC/position 0. cm
+/MLC/leaf_selection  b9
+/MLC/position 0. cm
+/MLC/leaf_selection  b10
+/MLC/position 0. cm
+/MLC/leaf_selection  b11
+/MLC/position 0. cm
+/MLC/leaf_selection  b12
+/MLC/position 0. cm
+/MLC/leaf_selection  b13
+/MLC/position 0. cm
+/MLC/leaf_selection  b14
+/MLC/position 0. cm
+/MLC/leaf_selection  b15
+/MLC/position 0. cm
+/MLC/leaf_selection  b16
+/MLC/position 0. cm
+/MLC/leaf_selection  b17
+/MLC/position 2.3 cm
+/MLC/leaf_selection  b18
+/MLC/position 2.8 cm
+/MLC/leaf_selection  b19
+/MLC/position 3.5 cm
+/MLC/leaf_selection  b20
+/MLC/position 4.4 cm
+/MLC/leaf_selection  b21
+/MLC/position 4.7 cm
+/MLC/leaf_selection  b22
+/MLC/position 5.4 cm
+/MLC/leaf_selection  b23
+/MLC/position 5.7 cm
+/MLC/leaf_selection  b24
+/MLC/position 5.8 cm
+/MLC/leaf_selection  b25
+/MLC/position 5.4 cm
+/MLC/leaf_selection  b26
+/MLC/position 0. cm
+/MLC/leaf_selection  b27
+/MLC/position 0. cm
+/MLC/leaf_selection  b28
+/MLC/position 0. cm
+/MLC/leaf_selection  b29
+/MLC/position 0. cm
+/MLC/leaf_selection  b30
+/MLC/position 0. cm
+/MLC/leaf_selection  b31
+/MLC/position 0. cm
+/MLC/leaf_selection  b32
+/MLC/position 0. cm
+/MLC/leaf_selection  b33
+/MLC/position 0. cm
+/MLC/leaf_selection  b34
+/MLC/position 0. cm
+/MLC/leaf_selection  b35
+/MLC/position 0. cm
+/MLC/leaf_selection  b36
+/MLC/position 0. cm
+/MLC/leaf_selection  b37
+/MLC/position 0. cm
+/MLC/leaf_selection  b38
+/MLC/position 0. cm
+/MLC/leaf_selection  b39
+/MLC/position 0. cm
+/MLC/leaf_selection  b40
+/MLC/position 0. cm
+
+
+
+/Jaws/X1/DistanceFromAxis -4.2 cm
+/Jaws/X2/DistanceFromAxis 5.2 cm
+/Jaws/Y1/DistanceFromAxis -6.6 cm
+/Jaws/Y2/DistanceFromAxis 6.8. cm
 /Jaws/update
 
 /energy 6.0 MeV

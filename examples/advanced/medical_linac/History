@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2004-11-24 16:53:28 mpiergen Exp $
+$Id: History,v 1.7 2004-11-25 16:28:39 mpiergen Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25.11.2004   Michela Piergentili, tag medical_linac-V06-02-00
+	     Maintenance of the code.
+
 24.11.2004   Michela Piergentili, tag medical_linac-V07-00-01
 	     Added MedLinacTrackingAction, MedLinacMLCDecorator 
 	     and MedLinacMLCMessenger.
