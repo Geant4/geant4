@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.26 2002-06-10 17:25:35 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.27 2002-06-11 08:15:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -195,7 +195,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #ifdef  G4DEBUG_FIELD
      if(dbg && (nstp>nStpPr)) {
        G4cout << "hdid="  << G4std::setw(12) << hdid  << " "
-	      << "hnext=" << G4std::setw(12) << hnext << " " << endl;
+	      << "hnext=" << G4std::setw(12) << hnext << " " << G4endl;
        PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
      }
 #endif
@@ -210,7 +210,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #ifdef  G4DEBUG_FIELD
            if(dbg){
 	      WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
-	      G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
+	      G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << G4endl;
 	      // G4cerr << "Mid:EndPtFar> ";
 	      PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
                 // Potentially add as arguments:  <dydx> - as Initial Force
@@ -281,7 +281,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   if( dbg && no_warnings ){
      G4cerr << " Exiting status: "
 	   << " no-steps " << nstp
-	   <<endl;
+	   <<G4endl;
      PrintStatus( yEnd, x1, y, x, hstep, nstp);
   }
 #endif
@@ -549,9 +549,12 @@ G4MagInt_Driver::ComputeNewStepSize(
 
     // Step failed; compute the size of retrial Step.
     hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPshrnk()) ;
-  }else{
+  }else if(errMaxNorm > 0.0 ){
     // Compute size of next Step for a successful step
     hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPgrow()) ;
+  }else {
+    // if error estimate is zero (possible) or negative (dubious)
+    hnew = max_stepping_increase * hstepCurrent; 
   }
 
   return hnew;
