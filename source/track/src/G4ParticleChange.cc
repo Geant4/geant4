@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.24 2003-11-24 10:27:52 vnivanch Exp $
+// $Id: G4ParticleChange.cc,v 1.25 2004-03-31 01:21:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -223,7 +223,6 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
 
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
   G4double     mass = theMassChange;
 
   // Set Mass/Charge
@@ -273,6 +272,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetWeight( newWeight );
 
 #ifdef G4VERBOSE
+  G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
