@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.hh,v 1.7 2003-10-31 14:35:52 gcosmo Exp $
+// $Id: G4Mag_EqRhs.hh,v 1.8 2003-11-05 12:54:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,14 +29,10 @@
 //
 // Class description:
 //
-// The "standard" right-hand side for the equation of motion of a particle 
-// in a pure magnetic field.
-// Others that might be required are:
-//     i) when using a moving reference frame ... or
-//    ii) extending for other forces, eg an electric field.
+// The "standard" equation of motion of a particle in a pure magnetic field.
 
 // History:
-// - Created. J.Apostolakis, January 13th 1996
+// - Created. J.Apostolakis, January 13th 1997
 // --------------------------------------------------------------------
 
 #ifndef G4_MAG_EQRHS_DEF
