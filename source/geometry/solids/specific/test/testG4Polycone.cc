@@ -39,7 +39,7 @@
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
   double RMINVec[8];
   RMINVec[0] = 30;
