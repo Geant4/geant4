@@ -7,7 +7,6 @@
 ./source/processes/photolepton_hadron		photolepton_hadron-V03-02-01
 ./source/run		run-V03-02-07
 ./source/track		track-V03-02-02a
-./tests/test17		test17-V03-02-01
 .		geant4-03-02-ref-05
 ./config		config-V03-02-06b
 ./source/geometry		geometry-V03-02-01
