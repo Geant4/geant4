@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.9 2003-06-25 09:01:12 gcosmo Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.10 2004-04-08 12:26:15 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,12 @@ void G4OpenGLWin32Viewer::FinishView (
 {
   if(!fHDC) return;
   ::SwapBuffers(fHDC);
+  // Empty the Windows message queue ???
+  //MSG event;
+  //while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    //::TranslateMessage(&event);
+    //::DispatchMessage (&event);
+  //}
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -201,6 +207,7 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
   case WM_PAINT:{
     G4OpenGLWin32Viewer* This = 
       (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+/*
     HDC	hDC;
     PAINTSTRUCT	ps;
     hDC = BeginPaint(aWindow,&ps);
@@ -208,6 +215,17 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
       // FIXME : To have an automatic refresh someone have to redraw here.
     }
     EndPaint(aWindow, &ps);
+
+    //FIXME : have to handle WM_RESIZE
+    //pView->WinSize_x = (G4int) width;
+    //pView->WinSize_y = (G4int) height;
+
+    This->SetView();
+    glViewport(0,0,This->WinSize_x,This->WinSize_y);
+    This->ClearView();
+    This->DrawView();
+    This->FinishView();
+*/
     }
     return 0;
   default:
