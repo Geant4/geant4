@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.4 2002-07-23 08:50:34 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.5 2003-02-06 15:37:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -68,6 +68,7 @@ class G4GeometryMessenger : public G4UImessenger
   private:
 
     void Init();
+    void CheckGeometry();
     void ResetNavigator();
     void LineTest();
     void GridTest();
@@ -80,7 +81,6 @@ class G4GeometryMessenger : public G4UImessenger
                               *cylCmd, *runCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
   
-    G4bool geometryOpened;
     G4ThreeVector x, p;
     G4bool        newtol;
     G4double      tol;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.7 2002-08-06 08:23:37 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.8 2003-02-06 15:37:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -55,9 +55,8 @@
 // Constructor
 //
 G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
-  : geometryOpened(true), x(0,0,0), p(0,0,1),
-    newtol(false), tol(1E-4*mm), tmanager(tman),
-    tlogger(0), tvolume(0)
+  : x(0,0,0), p(0,0,1), newtol(false), tol(1E-4*mm),
+    tmanager(tman), tlogger(0), tvolume(0)
 {
   geodir = new G4UIdirectory( "/geometry/" );
   geodir->SetGuidance( "Geometry control commands." );
@@ -70,6 +69,9 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 
   resCmd = new G4UIcmdWithoutParameter( "/geometry/navigator/reset", this );
   resCmd->SetGuidance( "Reset navigator and navigation history." );
+  resCmd->SetGuidance( "NOTE: must be called only after kernel has been" );
+  resCmd->SetGuidance( "      initialized once through the run manager!" );
+  resCmd->AvailableForStates(G4State_Idle);
 
   //
   // Geometry verification test commands
@@ -229,6 +231,20 @@ G4GeometryMessenger::GetCurrentValue(G4UIcommand* command )
 }
 
 //
+// CheckGeometry
+//
+void
+G4GeometryMessenger::CheckGeometry()
+{
+  // Verify that the geometry is closed
+  //
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  if (!geomManager->IsGeometryClosed()) {
+    geomManager->CloseGeometry(true);
+  }	
+}
+
+//
 // ResetNavigator
 //
 void
@@ -236,12 +252,7 @@ G4GeometryMessenger::ResetNavigator()
 {
   // Close geometry if necessary
   //
-  if (geometryOpened) {
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(true);
-    geometryOpened = false;
-  }	
+  CheckGeometry();
 
   // Reset navigator's state
   //
@@ -257,12 +268,7 @@ G4GeometryMessenger::LineTest()
 {
   // Close geometry if necessary
   //
-  if (geometryOpened) {
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(true);
-    geometryOpened = false;
-  }	
+  CheckGeometry();
 
   // Verify if error tolerance has changed
   //
@@ -285,12 +291,7 @@ G4GeometryMessenger::GridTest()
 {
   // Close geometry if necessary
   //
-  if (geometryOpened) {
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(true);
-    geometryOpened = false;
-  }	
+  CheckGeometry();
 
   // Verify if error tolerance has changed
   //
@@ -313,12 +314,7 @@ G4GeometryMessenger::RecursiveGridTest()
 {
   // Close geometry if necessary
   //
-  if (geometryOpened) {
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(true);
-    geometryOpened = false;
-  }	
+  CheckGeometry();
 
   // Verify if error tolerance has changed
   //
@@ -341,12 +337,7 @@ G4GeometryMessenger::CylinderTest()
 {
   // Close geometry if necessary
   //
-  if (geometryOpened) {
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(true);
-    geometryOpened = false;
-  }	
+  CheckGeometry();
 
   // Verify if error tolerance has changed
   //
