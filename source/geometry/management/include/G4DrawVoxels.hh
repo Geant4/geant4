@@ -1,4 +1,24 @@
-//version: Thu Jul 22 09:52:44 CEST 1999
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4DrawVoxels.hh,v 1.4 1999-08-03 09:09:40 graignac Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4DrawVoxels
+//
+// Implementation
+//
+// Define G4DrawVoxelsDebug for debugging information on G4cout
+//
+// History:
+// 03/08/1999 The G4VisAttributes have been made member data for lifetime reasons / visualisation  L.G (see John Allison for further explanation) 
+// 29.07.99 first comitted version L.G.
+
 
 #ifndef G4DrawVoxels_HH
 #define G4DrawVoxels_HH
@@ -30,16 +50,16 @@ class G4DrawVoxels{
     ~G4DrawVoxels(){};
     //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
     
-    void DrawVoxels(const G4LogicalVolume* lv);
-    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*);
+    void DrawVoxels(const G4LogicalVolume* lv) const;
+    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*) const;
 
-    void SetVoxelColours(G4Colour&,G4Colour&,G4Colour&);
-    void SetBoundingBoxColour(G4Colour&);
+    void SetVoxelsVisAttributes(G4VisAttributes&,G4VisAttributes&,G4VisAttributes&);
+    void SetBoundingBoxVisAttributes(G4VisAttributes&);
 
   private:
     //Member data
-    G4Colour fvoxelcolours[3];
-    G4Colour fboundingboxcolour;
+    G4VisAttributes fVoxelsVisAttributes[3];
+    G4VisAttributes fBoundingBoxVisAttributes;
     
     void ComputeVoxelPolyhedra(const G4LogicalVolume*,const G4SmartVoxelHeader*,G4VoxelLimits&,G4PlacedPolyhedronList*);
     

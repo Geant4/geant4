@@ -1,4 +1,24 @@
-//version: Tue Jul 13 09:16:46 MET DST 1999
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4DrawVoxels.cc,v 1.5 1999-08-03 09:10:01 graignac Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4DrawVoxels
+//
+// Implementation
+//
+// Define G4DrawVoxelsDebug for debugging information on G4cout
+//
+// History:
+// 03/08/1999 The G4VisAttributes have been made member data for lifetime reasons / visualisation  L.G (see John Allison for further explanation) 
+// 29/07/1999 first comitted version L.G.
+
 
 //Including the necessary data
 #include "G4DrawVoxels.hh"
@@ -6,13 +26,13 @@
 /****************************/
 
 //Methods that allow changing colors of the drawing
-void G4DrawVoxels::SetVoxelColours(G4Colour& col_voxelX,G4Colour& col_voxelY,G4Colour& col_voxelZ){
-   fvoxelcolours[0]=col_voxelX;
-   fvoxelcolours[1]=col_voxelY;
-   fvoxelcolours[2]=col_voxelZ;
+void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,G4VisAttributes& VA_voxelY,G4CVisAttributes& VA_voxelZ){
+   fVoxelsVisAttributes[0]=VA_voxelX;	//operateur de copie ...
+   fVoxelsVisAttributes[1]=VA_voxelY;
+   fVoxelsVisAttributes[2]=VA_voxelZ;
 }
-void G4DrawVoxels::SetBoundingBoxColour(G4Colour& boundingboxcolour){
-   fboundingboxcolour=boundingboxcolour;
+void G4DrawVoxels::SetBoundingBoxVisAttributes(G4VisAttributes& VA_boundingbox){
+   fBoundingBoxVisAttributes=VA_boundingbox;	//operateur de copie ...
 }
 
 
@@ -54,14 +74,14 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 
    //Preparing the colored bounding polyhedronBox for the pVolume
    G4PolyhedronBox bounding_polyhedronBox(dx*0.5,dy*0.5,dz*0.5);
-   bounding_polyhedronBox.SetVisAttributes(G4VisAttributes(fboundingboxcolour));
+   bounding_polyhedronBox.SetVisAttributes(fBoundingBoxVisAttributes);
    G4ThreeVector t_centerofBoundingBox((xmin+xmax)*0.5,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
    
    //ppl->resize(ppl->entries()+1);	//manual resize to avoid Rogue grabbing RW_DEFAULT
    ppl->insert(G4PlacedPolyhedron(bounding_polyhedronBox,G4Translate3D(t_centerofBoundingBox)));
    
    G4ThreeVector t_FirstCenterofVoxelPlane;
-   G4Colour voxelcolour;
+   G4VisAttributes* voxelsVisAttributes;
 
    G4ThreeVector unit_translation_vector;
    G4ThreeVector current_translation_vector;
@@ -72,19 +92,19 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 		    dx=voxel_width;
 		    unit_translation_vector=G4ThreeVector(1,0,0);
 		    t_FirstCenterofVoxelPlane=G4ThreeVector(xmin,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
-		    voxelcolour=fvoxelcolours[0];
+		    voxelsVisAttributes=&fVoxelsVisAttributes[0];
 		    break;
 		case kYAxis:
 		    dy=voxel_width;
 		    t_FirstCenterofVoxelPlane=G4ThreeVector((xmin+xmax)*0.5,ymin,(zmin+zmax)*0.5);
 		    unit_translation_vector=G4ThreeVector(0,1,0);
-		    voxelcolour=fvoxelcolours[1];
+		    voxelsVisAttributes=&fVoxelsVisAttributes[1];
 		    break;
 		case kZAxis:
 		    dz=voxel_width;
 		    t_FirstCenterofVoxelPlane=G4ThreeVector((xmin+xmax)*0.5,(ymin+ymax)*0.5,zmin);
 		    unit_translation_vector=G4ThreeVector(0,0,1);
-		    voxelcolour=fvoxelcolours[2];
+		    voxelsVisAttributes=&fVoxelsVisAttributes[2];
 		    break;
 		default:
 		//erreur interne
@@ -96,7 +116,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 	};
      
    G4PolyhedronBox voxel_plane(dx*0.5,dy*0.5,dz*0.5);
-   voxel_plane.SetVisAttributes(G4VisAttributes(voxelcolour));
+   voxel_plane.SetVisAttributes(voxelsVisAttributes);
    
    G4SmartVoxelProxy* slice=header->GetSlice(0);
    G4int slice_no=0,no_slices=header->GetNoSlices();
@@ -136,10 +156,10 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 
 //Private Constructor
 G4DrawVoxels::G4DrawVoxels(){
-	fvoxelcolours[0]=G4Colour(1.,0.,0.);
-	fvoxelcolours[1]=G4Colour(0.,1.,0.);
-	fvoxelcolours[2]=G4Colour(0.,0.,1.);
-	fboundingboxcolour=G4Colour(.3,0.,.2);
+	fvoxelsVisAttributes[0].SetColour(G4Colour(1.,0.,0.));
+	fvoxelsVisAttributes[1].SetColour(G4Colour(0.,1.,0.));
+	fvoxelsVisAttributes[2].SetColour(G4Colour(0.,0.,1.));
+	fboundingboxVisAttributes.SetColour(G4Colour(.3,0.,.2));
 }
 
 G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv)
