@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2000-10-18 14:14:28 allison Exp $
+$Id: History,v 1.93 2000-11-03 22:06:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd November 2000  Gunter Folger  (vis-V02-00-02)
+- Added targets includes and clean_libs to visualization/GNUmakefile.
 
 18th October 2000  John Allison  (vis-V02-00-01)
 - G4PhysicalVolumeModel: protected against volumes without material.
