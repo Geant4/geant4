@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.13 2001-09-05 12:29:49 vnivanch Exp $
+// $Id: G4LowEnergyRayleigh.hh,v 1.14 2001-09-10 18:05:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 // -----------
 // 02 Mar 1999   A. Forti   1st implementation
 // 11 Aug 2001   MGP        Major revision according to a design iteration
-// 04 Sep 2001   V.Ivanchenko MeanFreePath -> public
 //
 // -------------------------------------------------------------------
 
@@ -70,17 +69,17 @@ public:
   
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
  
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+
+protected:
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
-
-  // For testing purpose only
-  //  G4double DumpMeanFreePath(const G4Track& aTrack, 
-  //			    G4double previousStepSize, 
-  //			    G4ForceCondition* condition) 
-  //  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
-
-protected:
 
 private:
 

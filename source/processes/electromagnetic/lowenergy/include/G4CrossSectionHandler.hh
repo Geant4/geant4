@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.4 2001-09-07 18:39:15 vnivanch Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.5 2001-09-10 18:05:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,8 +29,6 @@
 // History:
 // -----------
 //  1 Aug 2001   MGP        Created
-//
-//  Modified: 30.08.01 V.Ivanchenko add G4VEMSecondaryGenerator
 //
 // -------------------------------------------------------------------
 
@@ -53,7 +51,6 @@ class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 class G4Material;
 class G4Element;
-class G4VEMSecondaryGenerator;
 
 class G4CrossSectionHandler {
  
@@ -77,14 +74,7 @@ public:
 
   G4int SelectRandomShell(G4int Z, G4double e) const;
 
-  const G4VEMDataSet* ShellDataSet(G4int Z) const;
-
-  // For Discrete Processes
-  G4VEMDataSet* BuildMeanFreePathForMaterials();
-
-  G4VEMDataSet* BuildMeanFreePathForMaterials(
-                const G4DataVector& minEnergy,
-                const G4DataVector& maxEnergy);
+  G4VEMDataSet* BuildMeanFreePathForMaterials(G4double energyThreshold = 0.);
  
   void LoadData(const G4String& dataFile);
 
@@ -93,10 +83,6 @@ public:
   void PrintData() const;
   
   void Clear();
-
-  void SetSecondaryGenerator(G4VEMSecondaryGenerator* p) {theGenerator = p;};
-
-  void SetVerbose(G4int val) {verbose = val;};
    
 private:
  
@@ -104,11 +90,7 @@ private:
 
   void BuildCrossSectionsForMaterials(const G4DataVector& energyVector);
 
-  void BuildCrossSectionsWithCut(const G4DataVector& energyVector,
-                                 const G4DataVector& minEnergy,
-                                 const G4DataVector& maxEnergy);
-
-  G4VEMDataSet* BuildMeanFreePathForMaterials(const G4DataVector& energies);
+  void BuildCrossSectionsWithCut(G4double energyCut, const G4DataVector& energyVector);
 
   void ActiveElements();
 
@@ -126,17 +108,9 @@ private:
 
   G4DataVector activeZ;
 
-  // Data from database
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataMap;
-
-  // Calculated data
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataWithCutMap;
   
   G4std::vector<G4VEMDataSet*> crossSections;
-
-  G4VEMSecondaryGenerator* theGenerator;
- 
-  G4int verbose;
 };
  
 #endif

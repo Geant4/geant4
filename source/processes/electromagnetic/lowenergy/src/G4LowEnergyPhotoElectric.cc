@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.32 2001-07-11 10:02:43 gunter Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.33 2001-09-10 18:07:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

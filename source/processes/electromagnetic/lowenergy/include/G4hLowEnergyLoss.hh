@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.11 2001-07-11 10:02:40 gunter Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.12 2001-09-10 18:05:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 

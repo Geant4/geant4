@@ -21,15 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.3 2001-09-09 17:53:51 vnivanch Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.4 2001-09-10 18:07:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 01.08.01   MGP        Created
-// 07.09.01 V.Ivanchenko Add case z=0 
+// 1 Aug 2001   MGP        Created
 //
 // -------------------------------------------------------------------
 
@@ -50,10 +49,9 @@ G4ShellEMDataSet::G4ShellEMDataSet(G4int Z,
   unit2 = unitData;
 }
 
-G4ShellEMDataSet::G4ShellEMDataSet(G4int Z, 
-                             const G4String& dataFile,
-			     const G4VDataSetAlgorithm* interpolation,
-			     G4double unitE, G4double unitData)
+G4ShellEMDataSet::G4ShellEMDataSet(G4int Z, const G4String& dataFile,
+					   const G4VDataSetAlgorithm* interpolation,
+					   G4double unitE, G4double unitData)
   :z(Z), algorithm(interpolation)
 {
   nComponents = 0;
@@ -70,7 +68,7 @@ G4ShellEMDataSet::~G4ShellEMDataSet()
     }
 }
 
-G4double G4ShellEMDataSet::FindValue(G4double e) const
+G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
 {
   // Returns the sum over the shells corresponding to e
   G4double value = 0.;
@@ -81,20 +79,6 @@ G4double G4ShellEMDataSet::FindValue(G4double e) const
       G4double shellValue = component->FindValue(e);
       value = value + shellValue;
     }
-
-  return value;
-}
-
-G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
-{
-  // Returns the id-th shells value corresponding to e
-  G4double value = 0.;
-
-  if(id >= 0 && id <nComponents) value = (components[id])->FindValue(e);
-  else {
-    G4cout << "G4ShellEMDataSet::FindValue WARNING: component "
-           << id << " is absent" << G4endl;
-  }
 
   return value;
 }
@@ -118,8 +102,7 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   char nameChar[100] = {""};
   G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
   
-  if(z) ost << fileName << z << ".dat";
-  else  ost << fileName;
+  ost << fileName << z << ".dat";
   
   G4String name(nameChar);
   
@@ -157,8 +140,7 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
 	if (s == 0)
 	  {
 	    // End of a shell data set
-	    G4VEMDataSet* dataSet = new G4EMDataSet(shellIndex,energies,
-                                                    data,algorithm);
+	    G4VEMDataSet* dataSet = new G4EMDataSet(shellIndex,energies,data,algorithm);
 	    AddComponent(dataSet);
 	    // Start of new shell data set
 	    energies = new G4DataVector;

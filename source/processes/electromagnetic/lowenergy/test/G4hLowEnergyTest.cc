@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyTest.cc,v 1.5 2001-07-11 10:02:50 gunter Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.6 2001-09-10 18:07:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonTest.cc,v 1.8 2001-08-20 17:28:50 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.9 2001-09-10 18:07:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,7 +50,6 @@
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyComptonMG.hh"
 #include "G4LowEnergyPolarizedCompton.hh"
 #include "G4ComptonScattering.hh"
 #include "G4LowEnergyIonisation.hh"
@@ -80,6 +79,7 @@ HepTupleManager* hbookManager;
 
 int main()
 {
+
   // Setup
 
   G4int nIterations = 100000;
@@ -143,6 +143,7 @@ int main()
   G4Element*   C  = new G4Element ("Carbon"  , "C", 6. , 12.00*g/mole);
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
+  G4Element*   N  = new G4Element("Nitrogen",   "N" , 7., 14.01*g/mole);
 
   G4Material*  maO = new G4Material("Oxygen", 8., 16.00*g/mole, 1.1*g/cm3);
 
@@ -157,6 +158,10 @@ int main()
   G4Material* csi = new G4Material ("CsI" , 4.53*g/cm3, 2);
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
+
+  G4Material* Air = new G4Material("Air"  ,  1.290*mg/cm3, 2);
+  Air->AddElement(N,0.7);
+  Air->AddElement(O,0.3);
 
 
   // Interactive set-up
@@ -229,10 +234,10 @@ int main()
 
   G4int processType;
   G4cout 
-    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3] or MG [4]?" 
+    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3]?" 
     << G4endl;
   cin >> processType;
-  if (processType <1 || processType >4 )
+  if (processType <1 || processType >3 )
     {
       G4Exception("Wrong input");
     }
@@ -240,7 +245,7 @@ int main()
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
 
-  if (processType == 1 || processType >= 3)
+  if (processType == 1 || processType == 3)
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
@@ -273,13 +278,9 @@ int main()
     {
       photonProcess = new G4ComptonScattering;
     }
-  else if (processType == 3)
+  else
     {
       photonProcess = new G4LowEnergyPolarizedCompton;
-    }
-  else if (processType == 4)
-    {
-      photonProcess = new G4LowEnergyComptonMG;
     }
 
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
@@ -314,15 +315,14 @@ int main()
   G4StepPoint* aPoint = new G4StepPoint();
   aPoint->SetPosition(aPosition);
   aPoint->SetMaterial(material);
-  G4double safety = 100.*cm;
+  G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
   G4StepPoint* newPoint = new G4StepPoint();
   newPoint->SetPosition(newPosition);
   newPoint->SetMaterial(material);
-  newPoint->SetSafety(safety);
   step->SetPostStepPoint(newPoint);
-
+  
   // Check applicability
   
   if (! (photonProcess->IsApplicable(*gamma)))
@@ -485,7 +485,7 @@ int main()
       
     } 
   
-
+  
   cout  << "End of iteration "  <<  G4endl;
   hbookManager->write();
   delete hbookManager;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.29 2001-09-05 12:29:52 vnivanch Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.30 2001-09-10 18:07:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -35,7 +35,6 @@
 // Added map of the elements A. Forti
 // 24.04.2001 V.Ivanchenko - Remove RogueWave 
 // 06.08.2001 MGP          - Revised according to a design iteration
-// 05.09.2001 V.Ivanchenko - Fix in initialisation 
 //
 // -------------------------------------------------------------------
 
@@ -62,7 +61,6 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     lowEnergyLimit(250*eV),             
     highEnergyLimit(100*GeV),
-    meanFreePathTable(0),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV)
 {
@@ -81,7 +79,9 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   G4String scatterFile = "comp/ce-sf-";
   scatterFunctionData = new G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
 
-   if (verboseLevel > -1) 
+  meanFreePathTable = 0;
+
+   if (verboseLevel > 0) 
      {
        G4cout << GetProcessName() << " is created " << G4endl
 	      << "Energy range: " 
@@ -101,20 +101,12 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  if (verboseLevel > -1) { 
-    G4cout << "G4LowEnergyCompton::BuildPhysicsTable start" << G4endl;
-  }
   crossSectionHandler->Clear();
-  G4cout << "Handler is cleared" << G4endl;
   G4String crossSectionFile = "comp/ce-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
-  G4cout << "Data are loaded" << G4endl;
 
-  if( meanFreePathTable ) delete meanFreePathTable;
+  delete meanFreePathTable;
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
-  if (verboseLevel > -1) { 
-    G4cout << "G4LowEnergyCompton::BuildPhysicsTable end" << G4endl;
-  }
 }
 
 G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, 
