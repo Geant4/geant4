@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.16 2001-07-11 09:59:55 gunter Exp $
+// $Id: G4Box.cc,v 1.17 2002-01-10 15:42:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -725,8 +725,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
-     // G4cout << "G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
+     G4cout << "G4Box::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Box::DistanceToOut(p), point p is outside") ;
   }
 #endif
 
@@ -787,7 +787,7 @@ G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   else
   {
-G4Exception("G4Box::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+    G4Exception("G4Box::CreateRotatedVertices - Out of memory !");
   }
   return vertices;
 }
@@ -815,6 +815,3 @@ G4NURBS* G4Box::CreateNURBS () const
 {
   return new G4NURBSbox (fDx, fDy, fDz);
 }
-
-
-

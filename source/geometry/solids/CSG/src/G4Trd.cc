@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.9 2001-07-11 09:59:59 gunter Exp $
+// $Id: G4Trd.cc,v 1.10 2002-01-10 15:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1119,6 +1119,26 @@ G4double G4Trd::DistanceToOut(const G4ThreeVector& p) const
     G4double tanyz,ydist,saf2;
     G4double zbase;
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Trapezoid parameters:" << G4endl << G4endl ;
+     G4cout << "fDx1 = " << fDx1/mm << " mm" << G4endl ;
+     G4cout << "fDx2 = " << fDx2/mm << " mm" << G4endl ;
+     G4cout << "fDy1 = " << fDy1/mm << " mm" << G4endl ;
+     G4cout << "fDy2 = " << fDy2/mm << " mm" << G4endl ;
+     G4cout << "fDz  = " << fDz/mm << " mm" << G4endl << G4endl;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Trd::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Trd::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
     safe=fDz-fabs(p.z());	// z perpendicular Dist
 
     zbase=fDz+p.z();
@@ -1178,7 +1198,7 @@ G4Trd::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 	}
     else
 	{
-	    G4Exception("G4Trd::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Trd::CreateRotatedVertices - Out of memory");
 	}
     return vertices;
 }

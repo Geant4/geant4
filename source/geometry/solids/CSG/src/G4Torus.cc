@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.25 2001-07-11 09:59:57 gunter Exp $
+// $Id: G4Torus.cc,v 1.26 2002-01-10 15:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2047,6 +2047,25 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p) const
   pt2  = fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
   pt   = sqrt(pt2) ;
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Torus parameters:" << G4endl << G4endl ;
+     G4cout << "fRmin = "   << fRmin/mm << " mm" << G4endl ;
+     G4cout << "fRmax = "   << fRmax/mm << " mm" << G4endl ;
+     G4cout << "fRtor = "   << fRtor/mm << " mm" << G4endl ;
+     G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+     G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Torus::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Torus::DistanceToOut(p), point p is outside") ;
+  }
+#endif
 #if DEBUGTORUS
 	G4cout << G4endl ;
 #endif
@@ -2162,7 +2181,7 @@ G4ThreeVectorList*
   }
   else
   {
-G4Exception("G4Torus::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+    G4Exception("G4Torus::CreateRotatedVertices - Out of memory !");
   }
   return vertices;
 }

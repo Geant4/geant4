@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.8 2001-07-11 09:59:56 gunter Exp $
+// $Id: G4Para.cc,v 1.9 2002-01-10 15:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -971,6 +971,27 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p) const
     G4double distz1,distz2,disty1,disty2,distx1,distx2;
     G4double trany,cosy,tranx,cosx;
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Parallelpiped parameters:" << G4endl << G4endl ;
+     G4cout << "fDx = "     << fDx/mm << " mm" << G4endl ;
+     G4cout << "fDy = "     << fDy/mm << " mm" << G4endl ;
+     G4cout << "fDz = "     << fDz/mm << " mm" << G4endl ;
+     G4cout << "fTalpha =     " << fTalpha/degree << " degree" << G4endl;
+     G4cout << "fTthetaCphi = " << fTthetaCphi/degree << " degree" << G4endl;
+     G4cout << "fTthetaSphi = " << fTthetaSphi/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Para::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
 // Z planes
     distz1=fDz-p.z();
     distz2=fDz+p.z();
@@ -1041,7 +1062,7 @@ G4ThreeVectorList*
 	}
     else
 	{
-	    G4Exception("G4Para::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Para::CreateRotatedVertices - Out of memory !");
 	}
     return vertices;
 }
@@ -1074,5 +1095,3 @@ G4NURBS* G4Para::CreateNURBS () const
 //
 //
 ///////////////////////////  End of G4Para.cc ///////////////////////////
-
-

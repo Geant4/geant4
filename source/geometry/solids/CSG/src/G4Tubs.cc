@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.31 2001-07-11 09:59:59 gunter Exp $
+// $Id: G4Tubs.cc,v 1.32 2002-01-10 15:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1578,13 +1578,13 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "fRMax = "   << fRMax/mm << " mm" << G4endl ;
     G4cout << "fDz = "   << fDz/mm << " mm" << G4endl ;
     G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl ;
-    G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl<<G4endl ;
+    G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl << G4endl ;
     G4cout << "Position:"  << G4endl << G4endl ;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
-    // G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
+    G4cout << "G4Tubs::DistanceToOut(p) - point p is outside !?" << G4endl ;
+    // G4Exception("Invalid call in G4Tubs::DistanceToOut(p), point p is outside") ;
   }
 #endif
 
@@ -1697,7 +1697,7 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   else
   {
-G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Can't alloc vertices");
+    G4Exception("G4Tubs::CreateRotatedVertices - Out of memory !");
   }
   return vertices ;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.12 2001-07-11 09:59:57 gunter Exp $
+// $Id: G4Trap.cc,v 1.13 2002-01-10 15:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1367,8 +1367,34 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safe,Dist;
   G4int i;
-  safe=fDz-fabs(p.z());
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Trapezoid parameters:" << G4endl << G4endl ;
+     G4cout << "fDz         = " << fDz/mm << " mm" << G4endl ;
+     G4cout << "fTthetaCphi = " << fTthetaCphi/degree << " degree" << G4endl ;
+     G4cout << "fTthetaSphi = " << fTthetaSphi/degree << " degree" << G4endl ;
+     G4cout << "fDy1     = " << fDy1/mm << " mm" << G4endl ;
+     G4cout << "fDx1     = " << fDx1/mm << " mm" << G4endl ;
+     G4cout << "fDx2     = " << fDx2/mm << " mm" << G4endl ;
+     G4cout << "fTalpha1 = " << fTalpha1/degree << " degree" << G4endl;
+     G4cout << "fDy2     = " << fDy2/mm << " mm" << G4endl ;
+     G4cout << "fDx3     = " << fDx3/mm << " mm" << G4endl ;
+     G4cout << "fDx4     = " << fDx4/mm << " mm" << G4endl ;
+     G4cout << "fTalpha2 = " << fTalpha2/degree << " degree" << G4endl << G4endl;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Trap::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
+  safe=fDz-fabs(p.z());
   if (safe<0) safe=0;
   else
   {
@@ -1420,7 +1446,7 @@ G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 	}
     else
 	{
-	    G4Exception("G4Trap::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Trap::CreateRotatedVertices - Out of memory !");
 	}
     return vertices;
 }

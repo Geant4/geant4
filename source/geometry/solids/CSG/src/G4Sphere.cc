@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.12 2001-12-12 11:04:46 japost Exp $
+// $Id: G4Sphere.cc,v 1.13 2002-01-10 15:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2522,6 +2522,27 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p) const
     rad=sqrt(rho2+p.z()*p.z());
     rho=sqrt(rho2);
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Sphere parameters:" << G4endl << G4endl ;
+     G4cout << "fRmin = "   << fRmin/mm << " mm" << G4endl ;
+     G4cout << "fRmax = "   << fRmax/mm << " mm" << G4endl ;
+     G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+     G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+     G4cout << "fSTheta = " << fSTheta/degree << " degree" << G4endl;
+     G4cout << "fDTheta = " << fDTheta/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Sphere::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Sphere::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
 //
 // Distance to r shells
 //    
@@ -2713,7 +2734,7 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
 	}
     else
 	{
-	    G4Exception("G4Sphere::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Sphere::CreateRotatedVertices - Out of memory !");
 	}
 
     delete[] cosCrossTheta;
