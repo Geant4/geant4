@@ -1,10 +1,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
-#include <unistd.h>
-#define _GNU_SOURCE
 #include "g4std/set"
-
-#include <iomanip>
+#include "g4std/iomanip"
 
 #include "B02DetectorConstruction.hh"
 #include "B02PhysicsList.hh"
@@ -18,14 +15,14 @@
 #include "G4ParallelScoreManager.hh"
 
 // helper function for print out
-std::string FillString(const std::string &name, char c, int n, bool back = true);
+G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back = true);
 
 
 int main(int argc, char **argv) {
   
 
   ostream *myout = &G4cout;
-  int numberOfEvent = 1000;
+  G4int numberOfEvent = 1000;
 
   G4String random_status_out_file, random_status_in_file;
   G4long myseed = 345354;
@@ -35,8 +32,7 @@ int main(int argc, char **argv) {
   G4RunManager *runManager = new G4RunManager;
   
   // create the   "tracking"    detector      -----------------
-  runManager->
-    SetUserInitialization(new B02DetectorConstruction);
+  runManager->SetUserInitialization(new B02DetectorConstruction);
   //  ---------------------------------------------------
   runManager->SetUserInitialization(new B02PhysicsList);
   runManager->SetUserAction(new B02PrimaryGeneratorAction);
@@ -63,9 +59,9 @@ int main(int argc, char **argv) {
   // print some exclusive numbers
 
   // head line
-  int FieldName = 25;
-  int FieldValue = 12;
-  std::string vname = FillString("Volume name", ' ', FieldName+1);
+  G4int FieldName = 25;
+  G4int FieldValue = 12;
+  G4std::string vname = FillString("Volume name", ' ', FieldName+1);
   *myout << vname << '|';
   vname = FillString(" AV E/Track ", ' ', FieldValue+1, false);
   *myout << vname << '|';
@@ -109,11 +105,11 @@ int main(int argc, char **argv) {
 
     // print values
 
-    std::string fname = FillString(name, '.', FieldName);
+    G4std::string fname = FillString(name, '.', FieldName);
     *myout << fname << " |";
-    *myout << std::setw(FieldValue) << meanTrackEnergy << " |"; 
-    *myout << std::setw(FieldValue) << sigmaTrackEnergy << " |";
-    *myout << std::setw(FieldValue) << colli_EnteringTrack << " |";
+    *myout << G4std::setw(FieldValue) << meanTrackEnergy << " |"; 
+    *myout << G4std::setw(FieldValue) << sigmaTrackEnergy << " |";
+    *myout << G4std::setw(FieldValue) << colli_EnteringTrack << " |";
     *myout << G4endl;
   }
 
@@ -121,16 +117,16 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-std::string FillString(const std::string &name, char c, int n, bool back){
-  std::string fname;
-  int k = n - name.size();
+G4std::string FillString(const G4std::string &name, char c, G4int n, bool back){
+  G4std::string fname;
+  G4int k = n - name.size();
   if (k > 0) {
     if (back) {
       fname = name;
-      fname += std::string(k,c);
+      fname += G4std::string(k,c);
     }
     else {
-      fname = std::string(k,c);
+      fname = G4std::string(k,c);
       fname += name;
     }
   }

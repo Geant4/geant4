@@ -198,7 +198,7 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   // physical shields
 
   //        physical shields for cell 2 to 4
-  for(int i=0; i<3; i++) {
+  for(G4int i=0; i<3; i++) {
     if (i+2<10)    sprintf(line,"cell: 0%d, shield",i+2);
     else sprintf(line,"cell: %d, shield",i+2);
     G4String name(line);
@@ -213,10 +213,10 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
   fIStore = new G4IStore(*worldCylinder_phys);
   // for the world volume repnum is -1 !!!!!!!!!!!!!!!!!!!!!!!
-  int n = 0;
+  G4int n = 0;
   for (G4std::vector<G4VPhysicalVolume *>::iterator it = physvolumes.begin();
        it != physvolumes.end(); it++) {
-    double i = pow(2, n++);
+    G4double i = pow(2., n++);
     G4cout << "Going to assign importance: " << i << ", to volume" 
 	   << (*it)->GetName() << G4endl;
     if (*it == worldCylinder_phys) {
