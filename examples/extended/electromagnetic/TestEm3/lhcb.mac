@@ -1,4 +1,4 @@
-# $Id: tbhec30gev.mac,v 1.1 2004-12-02 16:13:46 vnivanch Exp $
+# $Id: lhcb.mac,v 1.1 2004-12-03 12:27:39 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -6,34 +6,22 @@
 #
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 0
 #
-/testem/det/setNbOfLayers 25
+/testem/det/setNbOfLayers 66
 /testem/det/setNbOfAbsor  2
-/testem/det/setAbsor 0 liquidArgon 0.85 cm
-/testem/det/setAbsor 1 Copper 2.5 cm
-/testem/det/setSizeYZ 17 cm
+/testem/det/setAbsor 1 Lead         2 mm
+/testem/det/setAbsor 2 Scintillator 4 mm
+/testem/det/setSizeYZ 20 cm
 #
-#/testem/phys/addPhysics  g4v52
+####/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
-#/testem/run/setHisto 1 100   1150.   1850.  MeV
-#/testem/run/setHisto 2 100  27450.  28150.  MeV
-#
 /gun/particle e-
-/gun/energy 30 GeV
-/gun/position -40.635 0 0
+/gun/energy 10 GeV
 #
-#/process/eLoss/StepFunction 0.2 1 mm
-#
-#/testem/tracking/stepMax 1 mum
-#
-#/random/setSavingFlag true
-#/random/resetEngineFrom first.rndm
 /testem/event/printModulo 1000
 #
 /testem/phys/setCuts 10 mm
-#/process/eLoss/preciseRange true
 /run/initialize
 /run/beamOn 10000
 #
@@ -57,6 +45,10 @@
 /run/initialize
 /run/beamOn 10000
 #
+/testem/phys/setCuts 0.07 mm
+/run/initialize
+/run/beamOn 10000
+#
 /testem/phys/setCuts 0.03 mm
 /run/initialize
 /run/beamOn 10000
@@ -65,7 +57,10 @@
 /run/initialize
 /run/beamOn 10000
 #
-/testem/phys/setCuts 0.003 mm
+/testem/phys/setCuts 0.007 mm
 /run/initialize
 /run/beamOn 10000
 #
+/testem/phys/setCuts 0.003 mm
+/run/initialize
+/run/beamOn 10000

@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2004-12-02 16:13:46 vnivanch Exp $
+$Id: History,v 1.65 2004-12-03 12:27:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+     
+03-12-04 mma (testem3-V06-02-06)
+- update macros tbhec and lhcb
 
-02 Dec 04: V.Ivant (testem3-V06-02-05)
+02-12-04 V.Ivant (testem3-V06-02-05)
 - Migration to cmath
      
 24-11-04 mma (testem3-V06-02-04)
