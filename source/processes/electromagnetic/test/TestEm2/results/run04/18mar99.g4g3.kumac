@@ -1,0 +1,85 @@
+macro g4g3.kumac
+*
+set * ; opt * 
+*
+filecase keep
+h/file 1 18mar99.paw
+h/file 2 ../../geant3/results/run04/18mar99.paw
+h/file 3 ../../geant3/results/run04/egs4dat.paw
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'Fe  e- 30 GeV   G4-G3-Egs4 comparison'
+
+zone 1 2
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/4
+key 15 11 1  'G4' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/4 s
+key 15 10 2  'G3' ! l
+set dmod 3 ; set hcol 1 ; set plci 1
+h/pl //lun3/4 s
+key 15  9 3  'Egs4' ! l
+
+atitle L/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/5
+key 15 40 1  'G4' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/5 s
+key 15 30 2  'G3' ! l
+
+atitle L/Radl Ecumul/E0
+exec Redraw-Axis
+
+next
+zone 1 2
+
+opt logy
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/10
+key 4 200 1 'G4' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/10 s
+key 4 100  2 'G3' ! l
+
+atitle R/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+opt liny
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/11
+key 4 60 1 'G4' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/11 s
+key 4 50  2 'G3' ! l
+
+atitle R/Radl Ecumul/E0
+exec Redraw-Axis
+
+*close 0
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return

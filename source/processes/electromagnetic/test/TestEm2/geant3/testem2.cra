@@ -574,7 +574,7 @@ LIST
 MATE  7
 BINS  20 (nbZ)  20 (nbR)  1. (dZ/radl)   0.25 (dR/radl)
 TRIG  500
-KINE  3 (Itype)    1. (Ekine)
+KINE  3 (Itype)    5. (Ekine)
 DEBUG 10  5  10
 SWIT  0 (draw)  1 (save)
 CUTS    10.0e-6 (cutgam)    10.0e-6 (cutele) 3*10.e-03 (cutneu/had/muo)

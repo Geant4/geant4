@@ -1,0 +1,251 @@
+
+ MZSTOR.  ZEBRA table base TAB(0) in /MZCC/ at adr   269210589    100BD3DD HEX
+
+ MZSTOR.  Initialize Store  0  in /GCBANK/
+          with Store/Table at absolute adrs   268616769   269210589
+                                        HEX    1002C441    100BD3DD
+                                        HEX    FFF6F156           0
+                              relative adrs     -593578           0
+          with     1 Str. in     2 Links in   5300 Low words in  499970 words.
+          This store has a fence of   16 words.
+
+ MZLOGL.  Set Log Level 0 for store  0
+
+ MZSTOR.  Initialize Store  1  in /PAWC/  
+          with Store/Table at absolute adrs   269127801   269137392
+                                        HEX    100A9079    100AB5F0
+                                        HEX    FFFEBD8E    FFFEE213
+                              relative adrs      -82546      -73197
+          with     1 Str. in     1 Links in   5001 Low words in    9990 words.
+          This store has a fence of    5 words.
+
+ MZLINK.  Initialize Link Area  /HCBOOK/  for Store  1 NL/NS=    49     4
+
+ MZDIV.   Initialize Division  HIGZ      in Store  1
+          NW/NWMAX=   1000  10000,  MODE/KIND=  0  3
+          Division 20 initialized.
+
+ MZLINK.  Initialize Link Area  /HILINK/  for Store  1 NL/NS=    42     2
+ Version 1.25/05 of HIGZ started
+1*****  GEANT Version  3.21/12 Released on 270199
+0*****  Correction Cradle Version  0.1200
+ G3 > gives the filename of the data cards to be read:
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C            PbWO4  L=20radl   R=5radl                                          
+ ***** DATA CARD CONTENT     C            e- 5 GeV     500 events                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     MATE  7                                                                         
+ ***** DATA CARD CONTENT     BINS  20 (nbZ)  20 (nbR)  1. (dZ/radl)   0.25 (dR/radl)                         
+ ***** DATA CARD CONTENT     TRIG  500                                                                       
+ ***** DATA CARD CONTENT     KINE  3 (Itype)    5. (Ekine)                                                   
+ ***** DATA CARD CONTENT     DEBUG 10  5  50                                                                 
+ ***** DATA CARD CONTENT     SWIT  0 (draw)  1 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele) 3*10.E-03 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*85.0E-6 (bcute/m)  2*1.13E-3 (dcute/m)                                  
+ ***** DATA CARD CONTENT     LOSS 1                                                                          
+ ***** DATA CARD CONTENT     HADR 0                                                                          
+ ***** DATA CARD CONTENT     ABAN 0                                                                          
+ ***** DATA CARD CONTENT     TIME 2=1.                                                                       
+ ***** DATA CARD CONTENT     END                                                                             
+
+ MZDIV.   Initialize Division  Constant  in Store  0
+          NW/NWMAX=   2000 400000,  MODE/KIND=  1  2
+          Division 20 initialized.
+
+ MZLINK.  Initialize Link Area  /GCLINK/  for Store  0 NL/NS=    20    20
+
+ MZLINK.  Initialize Link Area  /GCSLNK/  for Store  0 NL/NS=   100   100
+
+ MZLINK.  Initialize Link Area  /GCHVIR/  for Store  0 NL/NS=     4     1
+
+ MZLINK.  Initialize Link Area  /GCDINA/  for Store  0 NL/NS=     4     4
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2112      DATE/TIME 990527/1818  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990527  1818    3.2112     3.77     *
+ *                                                          *
+ *           KINE       990527  1818    3.2112     3.77     *
+ *                                                          *
+ *           HITS       990527  1818    3.2112     3.77     *
+ *                                                          *
+ *           DIGI       990527  1818    3.2112     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 85.00 keV  BCUTM = 85.00 keV                    *
+ *  DCUTE =  1.13 MeV  DCUTM =  1.13 MeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        0.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300     0.001 0.284E+05 0.808E+05   2     A      Z     W
+                                                                                        14.01   7.00  0.700
+                                                                                        16.00   8.00  0.300
+        2 Water                   14.320     7.215     1.000 0.358E+02 0.949E+02   2     A      Z     W
+                                                                                         1.01   1.00  0.112
+                                                                                        16.00   8.00  0.888
+        3 Ar Liquid               40.000    18.000     1.390 0.140E+02 0.840E+02   1
+        4 Aluminium               26.980    13.000     2.700 0.890E+01 0.372E+02   1
+        5 Iron                    55.850    26.000     7.870 0.176E+01 0.171E+02   1
+        6 BGO                    155.392    62.524     7.100 0.112E+01 0.249E+02   3     A      Z     W
+                                                                                        16.00   8.00  0.154
+                                                                                        72.59  32.00  0.175
+                                                                                       208.98  83.00  0.671
+        7 PbWO                   170.865    68.360     8.280 0.893E+00 0.224E+02   3     A      Z     W
+                                                                                        16.00   8.00  0.141
+                                                                                       183.84  74.00  0.404
+                                                                                       207.19  82.00  0.455
+        8 Lead                   207.190    82.000    11.350 0.560E+00 0.185E+02   1
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 Absorber                   7       0     0      0.00   10.00 0.100E+11   0.250   0.001   0.023
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 ECAL    1   TUBE    3   0.000E+00 0.447E+01 0.893E+01
+      2 RING    1   TUBE    3   0.000E+00 0.223E+00 0.893E+01
+      3 SLAB    1   TUBE    3   0.000E+00 0.223E+00 0.447E+00
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     0.0000     0.0000     5.0005     5.0005     1.0000
+ **** GTRIGI: IEVENT=     50 IDEVT=     50 Random Seeds =  992464116   692894881
+ **** GTRIGI: IEVENT=    100 IDEVT=    100 Random Seeds =  134358577  1074981550
+ **** GTRIGI: IEVENT=    150 IDEVT=    150 Random Seeds =  308044662  1278449040
+ **** GTRIGI: IEVENT=    200 IDEVT=    200 Random Seeds = 1469414767   369020550
+ **** GTRIGI: IEVENT=    250 IDEVT=    250 Random Seeds =  951908927  1553635340
+ **** GTRIGI: IEVENT=    300 IDEVT=    300 Random Seeds = 1889739991   863511078
+ **** GTRIGI: IEVENT=    350 IDEVT=    350 Random Seeds =  580801490  1958194610
+ **** GTRIGI: IEVENT=    400 IDEVT=    400 Random Seeds = 1021355170   261929126
+ **** GTRIGI: IEVENT=    450 IDEVT=    450 Random Seeds =  254824227  1316508712
+ **** GTRIGI: IEVENT=    500 IDEVT=    500 Random Seeds = 2136956936   814810533
+1         **** NUMBER OF EVENTS PROCESSED =       500
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    474769264  2020182654
+          **** TIME TO PROCESS ONE EVENT IS =    0.6662 SECONDS
+
+
+
+ MZEND.   Usage statistics for  2 dynamic stores.
+
+   Map of store  0 /GCBANK/
+   ------------------------
+
+   Division                                        Number of times
+              Kind                Max-size                Garb-coll.
+            Mode    Position      used   allowed   Wiped  user  auto Pushd Redcd
+
+    1 QDIV1    0 1      5203         0    499968       0     0     0     0     0
+    2 QDIV2    1 1    443266       137    499968     500     0     0     0     0
+   19 system   1 8    443666       328    499968       0     0     0     0     0
+   20 Constant 1 2    499968     55331    400000       0     0     5     3     0
+
+   Map of store  1 /PAWC/  
+   ------------------------
+
+   Division                                        Number of times
+              Kind                Max-size                Garb-coll.
+            Mode    Position      used   allowed   Wiped  user  auto Pushd Redcd
+
+    1 QDIV1    0 1         2         0      9585       0     0     0     0     0
+    2 QDIV2    1 1      8185      2646      9585       0     0     0     0     0
+   19 system   1 8      8585       111      9585       0     0     0     0     0
+   20 HIGZ     0 4      8585         0     10000       0     0     0     0     0
+
+
+
+
+               LATERAL PROFILE                                   CUMULATIVE LATERAL PROFILE
+
+        Bin              Mean        rms                   Bin           Mean        rms
+
+    0.00-> 1.00 radl:    0.65%       0.33%             0-> 1.00 radl:    0.65%       0.33%
+    1.00-> 2.00 radl:    2.59%       1.25%             0-> 2.00 radl:    3.25%       1.47%
+    2.00-> 3.00 radl:    5.69%       2.33%             0-> 3.00 radl:    8.93%       3.57%
+    3.00-> 4.00 radl:    8.73%       2.86%             0-> 4.00 radl:   17.67%       5.98%
+    4.00-> 5.00 radl:   10.85%       2.77%             0-> 5.00 radl:   28.51%       8.00%
+    5.00-> 6.00 radl:   11.49%       2.45%             0-> 6.00 radl:   40.00%       9.27%
+    6.00-> 7.00 radl:   10.78%       2.05%             0-> 7.00 radl:   50.78%       9.62%
+    7.00-> 8.00 radl:    9.60%       1.99%             0-> 8.00 radl:   60.38%       9.31%
+    8.00-> 9.00 radl:    7.98%       1.76%             0-> 9.00 radl:   68.36%       8.57%
+    9.00->10.00 radl:    6.47%       1.72%             0->10.00 radl:   74.83%       7.60%
+   10.00->11.00 radl:    5.17%       1.61%             0->11.00 radl:   80.00%       6.54%
+   11.00->12.00 radl:    3.97%       1.43%             0->12.00 radl:   83.96%       5.51%
+   12.00->13.00 radl:    3.00%       1.30%             0->13.00 radl:   86.97%       4.48%
+   13.00->14.00 radl:    2.23%       1.08%             0->14.00 radl:   89.20%       3.62%
+   14.00->15.00 radl:    1.68%       0.94%             0->15.00 radl:   90.88%       2.88%
+   15.00->16.00 radl:    1.22%       0.73%             0->16.00 radl:   92.10%       2.30%
+   16.00->17.00 radl:    0.86%       0.61%             0->17.00 radl:   92.96%       1.83%
+   17.00->18.00 radl:    0.65%       0.47%             0->18.00 radl:   93.61%       1.49%
+   18.00->19.00 radl:    0.46%       0.39%             0->19.00 radl:   94.07%       1.23%
+   19.00->20.00 radl:    0.32%       0.29%             0->20.00 radl:   94.38%       1.06%
+
+
+
+               RADIAL PROFILE                                   CUMULATIVE RADIAL PROFILE
+
+        Bin              Mean        rms                   Bin           Mean        rms
+
+    0.00-> 0.25 radl:   34.37%       2.38%             0-> 0.25 radl:   34.37%       2.38%
+    0.25-> 0.50 radl:   17.83%       1.39%             0-> 0.50 radl:   52.20%       2.45%
+    0.50-> 0.75 radl:   10.54%       1.09%             0-> 0.75 radl:   62.74%       2.26%
+    0.75-> 1.00 radl:    6.79%       0.85%             0-> 1.00 radl:   69.53%       2.01%
+    1.00-> 1.25 radl:    4.81%       0.74%             0-> 1.25 radl:   74.34%       1.85%
+    1.25-> 1.50 radl:    3.63%       0.56%             0-> 1.50 radl:   77.97%       1.75%
+    1.50-> 1.75 radl:    2.85%       0.48%             0-> 1.75 radl:   80.82%       1.63%
+    1.75-> 2.00 radl:    2.30%       0.43%             0-> 2.00 radl:   83.12%       1.54%
+    2.00-> 2.25 radl:    1.88%       0.40%             0-> 2.25 radl:   85.00%       1.45%
+    2.25-> 2.50 radl:    1.58%       0.32%             0-> 2.50 radl:   86.58%       1.38%
+    2.50-> 2.75 radl:    1.34%       0.29%             0-> 2.75 radl:   87.92%       1.32%
+    2.75-> 3.00 radl:    1.17%       0.30%             0-> 3.00 radl:   89.09%       1.24%
+    3.00-> 3.25 radl:    1.01%       0.25%             0-> 3.25 radl:   90.10%       1.21%
+    3.25-> 3.50 radl:    0.90%       0.23%             0-> 3.50 radl:   90.99%       1.19%
+    3.50-> 3.75 radl:    0.77%       0.21%             0-> 3.75 radl:   91.77%       1.15%
+    3.75-> 4.00 radl:    0.67%       0.18%             0-> 4.00 radl:   92.43%       1.12%
+    4.00-> 4.25 radl:    0.60%       0.18%             0-> 4.25 radl:   93.03%       1.10%
+    4.25-> 4.50 radl:    0.52%       0.17%             0-> 4.50 radl:   93.56%       1.09%
+    4.50-> 4.75 radl:    0.46%       0.17%             0-> 4.75 radl:   94.01%       1.07%
+    4.75-> 5.00 radl:    0.37%       0.13%             0-> 5.00 radl:   94.38%       1.06%
+
+
+
+                              SUMMARY
+
+                         energy deposit :   94.38 % E0 +-    1.06 % E0
+                         charged traklen:  488.94 radl +-    5.68 radl
+                         neutral traklen: 4329.85 radl +-  131.76 radl
+ RZMAKE. Unit   1004 Initializing with LREC=  1024, OPT= X?C     
+
+ MZLINK.  Initialize Link Area  RZCL      for Store  0 NL/NS=    11     0
+ RZEND. called for HRPUT

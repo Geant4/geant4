@@ -1,0 +1,59 @@
+macro profila.kumac
+*
+set * ; opt *
+*
+filecase keep
+h/file 1 cuta005.paw
+h/file 2 cuta01.paw
+h/file 3 cuta05.paw
+h/file 4 cuta1.paw
+h/file 8 cuta5.paw
+h/file 9 cuta10.paw
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'PbWO4  e- 5 GeV   G3 standard'
+
+zone 1 2
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/4
+key 16 10 1  '50 mum' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun9/4 s
+key 16  9 2  '10 mm' ! l
+atitle L/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+opt logy
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/10
+key 4 100 1 '50 mum' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun9/10 s
+key 4 60  2 '10 mm' ! l
+atitle R/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+*close 0 
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return

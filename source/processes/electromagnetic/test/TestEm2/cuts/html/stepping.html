@@ -1,0 +1,53 @@
+<html>
+<head>  
+    <title> Stepping & cuts </title>
+</head>
+
+<boby>
+<div align=center><h1><font color="#800000">Charged Particles :
+   <font size="5"> Energy loss & stepping</font></font></h1>
+</div>
+<hr>
+<ul><i><b><li>Systematic use of the concept of range</li></i></b></ul>
+
+<table border width=98%>
+  <tr align=center>
+  <th>Geant3<th>Geant4</tr>
+  <tr align=center><td><img src="G3range.gif">
+                   <td><img src="G4range.gif"></tr>  
+  <tr align=center><td><a href="G3step.gif"><img src="G3step.gif" width=310></a>
+                   <td><a href="G4step.gif"><img src="G4step.gif" width=310></a></tr>
+  <tr align=center><td> <font size=4> stmin = R(cutele + 200 keV) <br>
+                        <font size=3> if (R(E).le.stmin) :</font> <br>
+				      final step = R(E) - R(cutele) </font>
+                   <td> <font size=4> <br> final step = R(E)</font></tr>
+  <tr align=center><td>tracking cuts:  <b>cutgam     cutele</b>		   
+		   <td><font color=red><i> NO tracking cut!</i></font><br>
+			 Once created, the particles are tracked 
+			 down to range=0</tr>
+  <tr align=center><td> Bethe & Moliere theory
+                   <td><i>No step limitation 
+		        from Multiple Scattering</i><br>
+		       (L. Urban model) <font color=green></tr>				 
+  <tr align=center><td>prod threshold:  <b>bcute     dcute</b>
+                   <td align=left><font color=red><i>Only threshold for production
+		                          of secondaries</i></font><br>
+		       (mainly ionisa. & brems)
+		       <ul><li><font color=red>expressed in range</font></li>
+		           <li>universal for all medium</li>
+		       </ul> </tr>
+  <tr align=center><td>
+                   <td>Comparison with geometry<br>
+		       production of secondaries <font color=green><b>
+		       below threshold</b></font> if needed</tr>		       	    			 		  		   
+</table>
+<br><br>
+<h2><font color=blue>Consequences</font></h2>
+<ul>
+   <li><a href="nbsteps.html">More efficient tracking</a>
+   <li><a href="results.html">Physics results stable against cuts</a>
+</ul> 
+<hr>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+<head>  
+    <title> Physics results versus cuts</title>
+</head>
+
+<boby>
+<div align=center><h1><font color="#800000">Physics results versus cuts
+                  </font></h1>
+</div>
+<hr>
+
+<h2><font color="#0000FF">Description </font></h2>
+Electromagnetic shower development in a homogeneous medium (PbWO4).<br>
+Physics results as a function of the <b>production threshold.</b>
+<p align=center>
+   <font color=red> Cut in Range -----> a set of cuts in energy:</font><br>
+   <i>(Energy threshold for Gamma, Energy threshold for e-+, ...)</i></p>
+
+<table border width=90%>
+  <tr align=center>
+  <th>Cut in length<th>Gamma Energy in PbWO4<th>e- Energy in PbWO4</tr>
+  <tr align=center><td> 50 micron<td> 12 keV<td> 136 keV<br></tr>
+  <tr align=center><td>100 micron<td> 20 keV<td> 210 keV<br></tr>
+  <tr align=center><td>500 micron<td> 60 keV<td> 642 keV<br></tr> 
+  <tr align=center><td>  1 mm    <td> 85 keV<td>1.13 MeV<br></tr>
+  <tr align=center><td>  5 mm    <td>137 keV<td>5.34 MeV<br></tr>
+  <tr align=center><td>  1 cm    <td>219 keV<td>11.5 MeV<br></tr> 
+</table>
+<br><br>
+<a href="profile5GeV.ps">Shower profiles</a> in the two extreme cases (50 micron, 1 cm)
+<h2><font color="#0000FF">Comparison with Geant3 </font></h2>
+<ul>
+ <li> <font color="#00FF00"><b>Geant3 "standard"</b></font>
+    <p> </p>
+    <ul>
+    <li> cutgam = energy threshold for Gamma (= bcute)
+    <li> cutele = energy threshold for e-+   (= dcute)
+    </ul>
+    <br>
+ <li> <font color="#00FF00"><b>Geant3 "non standard"</b></font>
+    <p> More close to the Geant4 behaviour</p>
+    <ul>
+    <li> cutgam = cutele = as lowest as possible : 10 keV
+    <li> bcute = energy threshold for Gamma
+    <li> dcute = energy threshold for e-+
+    </ul>
+    <br>
+</ul>    
+<a href="results5GeV.ps">Results :</a> total track length, total energy deposit
+<hr>
+<p align=center><a href="stepping.html">back</a></p>   
+</body>
+</html>

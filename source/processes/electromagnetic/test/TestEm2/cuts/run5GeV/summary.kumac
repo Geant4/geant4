@@ -1,0 +1,171 @@
+macro summary.kumac
+
+* summary of the cuts study. 
+* PbWO4. e- 5 GeV
+*
+*
+* 	cut		energy gamma	energy e-
+*	------------------------------------------
+*	 50 mum		12.5 keV	136  keV
+*	100 mum		20.1 keV	210  keV
+*	500 mum		60   keV	642  keV
+*	  1 mm		85   keV	1.13 MeV
+*	  5 mm		137  keV	5.34 MeV
+*	 10 mm		219  keV	11.5 MeV		
+*
+*
+set * ; opt *
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'PbWO4  e- 5 GeV  500 evts'
+opt logx
+opt liny
+
+set *fon -40
+set mscf 1.5
+zone 1 2
+
+nbin=6
+*
+vector/create cut([nbin])
+vector/input  cut 0.05  0.1  0.5  1.0  5.0  10.0 
+vector/create ercut([nbin]) r 0. 0. 0. 0. 0. 0.
+
+
+* charged track length
+*
+vector/create G4([nbin])
+vector/input  G4   513. 507.6 480.2 470. 459.5 457.
+
+vector/create G3ns([nbin])
+vector/input  G3ns 515. 510.4 496.4 489. 472. 467.
+
+vector/create G3st([nbin])
+vector/input  G3st 515. 464. 387.4 341. 189. 120. 
+
+vector/create error([nbin]) r  .5 .5 .5 .5 .5 .5
+
+set mtyp 20
+set pmci 4
+graph [nbin] cut G3st LWP
+graph/hpl/errors cut G3st ercut error [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] cut G3ns LP
+graph/hpl/errors cut G3ns ercut error [nbin]
+set mtyp 22
+set pmci 2
+graph [nbin] cut G4   LP
+graph/hpl/errors cut G4   ercut error [nbin]
+
+atitle 'cut (mm)' 'ch. trkl (radl)'
+itx .2  150. 'total charged track length'
+set pmci 4
+key .1 300. 20 'G3 standard'
+set pmci 3
+key .1 350. 21 'G3 non std'
+set pmci 2
+key .1 400. 22 'G4'
+
+* neutral track length
+*
+vector/input  G4   4095. 4116. 4134. 4124. 4112. 4059.
+
+vector/input  G3ns 4348. 4345. 4336. 4330. 4235. 4175.
+
+vector/input  G3st 4350. 4340. 4257. 4137. 3460. 2740. 
+
+vector/input error([nbin])  6. 6. 6. 6. 6. 6.
+
+set mtyp 20
+set pmci 4
+graph [nbin] cut G3st LWP
+graph/hpl/errors cut G3st ercut error [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] cut G3ns LP
+graph/hpl/errors cut G3ns ercut error [nbin]
+set mtyp 22
+set pmci 2
+graph [nbin] cut G4   LP
+graph/hpl/errors cut G4   ercut error [nbin]
+
+atitle 'cut (mm)' 'neutr. trkl (radl)'
+itx .2  2800. 'total gamma track length'
+set pmci 4
+key .1 3200. 20 'G3 standard'
+set pmci 3
+key .1 3400. 21 'G3 non std'
+set pmci 2
+key .1 3600. 22 'G4'
+
+* deposit energy
+*
+vector/input  G4   95.27  95.24  95.19  95.13  95.18  95.27
+
+vector/input  G3ns 94.35  94.26  94.28  94.38  94.36  94.52
+
+vector/input  G3st 94.34  94.41  94.35  94.38  95.57  97.10
+
+vector/input error .1 .1 .1 .1 .1 .1
+
+set mtyp 20
+set pmci 4
+graph [nbin] cut G3st LWP
+graph/hpl/errors cut G3st ercut error [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] cut G3ns LP
+graph/hpl/errors cut G3ns ercut error [nbin]
+set mtyp 22
+set pmci 2
+graph [nbin] cut G4   LP
+graph/hpl/errors cut G4   ercut error [nbin]
+
+atitle 'cut (mm)' 'Etot/E0'
+itx .03  96.8 'total energy deposit'
+set pmci 4
+key .04 96.0 20 'G3 standard'
+set pmci 3
+key .04 96.2 21 'G3 non std'
+set pmci 2
+key .04 96.4 22 'G4'
+
+* timing  (dxplus03;  ms/GeV)
+*
+vector/input  G4   381. 364. 332. 315. 292. 275.
+
+vector/input  G3ns 147. 142. 140. 132. 118. 111.
+
+vector/input  G3st 103.  90.  64.  54.  30.  21.
+
+option logy
+null 0.02 20. 20. 500.
+
+set mtyp 20
+set pmci 4
+graph [nbin] cut G3st LP
+set mtyp 21
+set pmci 3
+graph [nbin] cut G3ns LP
+set mtyp 22
+set pmci 2
+graph [nbin] cut G4   LP
+
+atitle 'cut (mm)' 'time (ms)'
+itx .03 55. 'timing (dxpuls03)'
+set pmci 4
+key .04 25. 20 'G3 standard'
+set pmci 3
+key .04 35. 21 'G3 non std'
+set pmci 2
+key .04 45. 22 'G4'
+
+*close 0
+return 	     

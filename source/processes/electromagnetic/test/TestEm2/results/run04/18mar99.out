@@ -1,0 +1,165 @@
+
+***** Table : Nb of materials = 8 *****
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:    Water  density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material:      lAr  density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element:      lAr      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       Al  density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element:       Al      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       Fe  density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:       Fe      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      BGO  density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+
+ Material:    PbWO4  density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
+   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
+   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+
+ Material:     Lead  density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+
+# $Id: 18mar99.out,v 1.1 1999-06-22 10:48:06 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# Fe L = 20 radl  R = 5 radl; electron 30 GeV
+#
+# EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
+#
+#
+/calor/setMat Fe
+/calor/setLbin 40 0.5
+/calor/setRbin 20 0.25
+/calor/update
+Absorber is 35.1708  cm of Fe
+#
+/run/particle/setCut 0.8 mm
+/run/cutoffModified
+/run/initialize
+Em2PhysicsList::SetCuts:CutLength : 0.8 (mm)
+
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                800 mum         800 mum         800 mum         800 mum         800 mum
+Cut in energy
+                Air         990 eV          990 eV         40.8 keV        60.4 keV         990 eV 
+              Water        2.68 keV         299 keV        2.99 MeV        7.87 MeV         990 eV 
+                lAr        5.54 keV         296 keV        2.85 MeV        7.26 MeV         990 eV 
+                 Al        6.19 keV         502 keV        4.44 MeV        11.6 MeV         990 eV 
+                 Fe        18.4 keV        1.06 MeV        7.44 MeV        19.2 MeV         990 eV 
+                BGO        70.1 keV         853 keV        6.26 MeV        15.8 MeV         990 eV 
+              PbWO4        77.7 keV         929 keV        6.66 MeV        16.8 MeV         990 eV 
+               Lead        96.6 keV        1.13 MeV        7.44 MeV        18.3 MeV         990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 10
+/run/save on
+#
+/gun/particle electron
+/gun/energy 30 GeV
+/run/beamOn 100
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+
+Run Summary
+  Number of events processed : 100
+  User=1710.6s Real=2112.7s Sys=234.8s
+  
+  
+                 LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.50 radl:    0.07%       0.03%             0-> 0.50 radl:    0.07%     0.03% 
+    0.50-> 1.00 radl:    0.20%       0.12%             0-> 1.00 radl:    0.27%     0.14% 
+    1.00-> 1.50 radl:    0.46%       0.22%             0-> 1.50 radl:    0.73%     0.33% 
+    1.50-> 2.00 radl:    0.88%       0.39%             0-> 2.00 radl:    1.60%     0.69% 
+    2.00-> 2.50 radl:    1.42%       0.58%             0-> 2.50 radl:    3.02%     1.22% 
+    2.50-> 3.00 radl:    2.08%       0.81%             0-> 3.00 radl:    5.10%     1.97% 
+    3.00-> 3.50 radl:    2.85%       1.05%             0-> 3.50 radl:    7.95%     2.96% 
+    3.50-> 4.00 radl:    3.52%       1.11%             0-> 4.00 radl:   11.47%     3.98% 
+    4.00-> 4.50 radl:    4.27%       1.27%             0-> 4.50 radl:   15.74%     5.11% 
+    4.50-> 5.00 radl:    4.84%       1.29%             0-> 5.00 radl:   20.58%     6.19% 
+    5.00-> 5.50 radl:    5.21%       1.27%             0-> 5.50 radl:   25.79%     7.22% 
+    5.50-> 6.00 radl:    5.55%       1.21%             0-> 6.00 radl:   31.34%     8.14% 
+    6.00-> 6.50 radl:    5.63%       1.16%             0-> 6.50 radl:   36.97%     8.93% 
+    6.50-> 7.00 radl:    5.66%       1.09%             0-> 7.00 radl:   42.63%     9.54% 
+    7.00-> 7.50 radl:    5.48%       1.01%             0-> 7.50 radl:   48.11%     9.99% 
+    7.50-> 8.00 radl:    5.24%       0.93%             0-> 8.00 radl:   53.35%    10.29% 
+    8.00-> 8.50 radl:    5.05%       0.92%             0-> 8.50 radl:   58.40%    10.40% 
+    8.50-> 9.00 radl:    4.73%       0.84%             0-> 9.00 radl:   63.13%    10.42% 
+    9.00-> 9.50 radl:    4.36%       0.78%             0-> 9.50 radl:   67.49%    10.28% 
+    9.50->10.00 radl:    3.95%       0.76%             0->10.00 radl:   71.44%     9.95% 
+   10.00->10.50 radl:    3.57%       0.82%             0->10.50 radl:   75.01%     9.46% 
+   10.50->11.00 radl:    3.13%       0.76%             0->11.00 radl:   78.14%     8.97% 
+   11.00->11.50 radl:    2.82%       0.81%             0->11.50 radl:   80.96%     8.39% 
+   11.50->12.00 radl:    2.52%       0.79%             0->12.00 radl:   83.48%     7.82% 
+   12.00->12.50 radl:    2.23%       0.78%             0->12.50 radl:   85.71%     7.20% 
+   12.50->13.00 radl:    1.91%       0.71%             0->13.00 radl:   87.62%     6.62% 
+   13.00->13.50 radl:    1.67%       0.69%             0->13.50 radl:   89.29%     6.05% 
+   13.50->14.00 radl:    1.46%       0.67%             0->14.00 radl:   90.75%     5.49% 
+   14.00->14.50 radl:    1.24%       0.65%             0->14.50 radl:   91.99%     4.93% 
+   14.50->15.00 radl:    1.07%       0.62%             0->15.00 radl:   93.06%     4.38% 
+   15.00->15.50 radl:    0.93%       0.55%             0->15.50 radl:   94.00%     3.90% 
+   15.50->16.00 radl:    0.80%       0.56%             0->16.00 radl:   94.80%     3.41% 
+   16.00->16.50 radl:    0.68%       0.49%             0->16.50 radl:   95.48%     2.97% 
+   16.50->17.00 radl:    0.57%       0.40%             0->17.00 radl:   96.04%     2.60% 
+   17.00->17.50 radl:    0.51%       0.36%             0->17.50 radl:   96.55%     2.27% 
+   17.50->18.00 radl:    0.42%       0.32%             0->18.00 radl:   96.97%     1.98% 
+   18.00->18.50 radl:    0.34%       0.27%             0->18.50 radl:   97.31%     1.73% 
+   18.50->19.00 radl:    0.29%       0.24%             0->19.00 radl:   97.60%     1.51% 
+   19.00->19.50 radl:    0.24%       0.23%             0->19.50 radl:   97.84%     1.29% 
+   19.50->20.00 radl:    0.19%       0.20%             0->20.00 radl:   98.04%     1.10% 
+
+
+
+                  RADIAL PROFILE                         CUMULATIVE  RADIAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.25 radl:   53.32%       1.37%             0-> 0.25 radl:   53.32%     1.37% 
+    0.25-> 0.50 radl:   18.14%       0.74%             0-> 0.50 radl:   71.46%     1.20% 
+    0.50-> 0.75 radl:    8.23%       0.52%             0-> 0.75 radl:   79.69%     1.04% 
+    0.75-> 1.00 radl:    4.72%       0.40%             0-> 1.00 radl:   84.41%     0.96% 
+    1.00-> 1.25 radl:    3.13%       0.26%             0-> 1.25 radl:   87.54%     0.95% 
+    1.25-> 1.50 radl:    2.29%       0.21%             0-> 1.50 radl:   89.82%     0.95% 
+    1.50-> 1.75 radl:    1.73%       0.21%             0-> 1.75 radl:   91.55%     0.97% 
+    1.75-> 2.00 radl:    1.33%       0.14%             0-> 2.00 radl:   92.89%     1.00% 
+    2.00-> 2.25 radl:    1.03%       0.11%             0-> 2.25 radl:   93.92%     1.02% 
+    2.25-> 2.50 radl:    0.83%       0.10%             0-> 2.50 radl:   94.75%     1.03% 
+    2.50-> 2.75 radl:    0.68%       0.09%             0-> 2.75 radl:   95.43%     1.04% 
+    2.75-> 3.00 radl:    0.55%       0.08%             0-> 3.00 radl:   95.97%     1.05% 
+    3.00-> 3.25 radl:    0.44%       0.07%             0-> 3.25 radl:   96.42%     1.06% 
+    3.25-> 3.50 radl:    0.38%       0.06%             0-> 3.50 radl:   96.80%     1.07% 
+    3.50-> 3.75 radl:    0.32%       0.06%             0-> 3.75 radl:   97.12%     1.07% 
+    3.75-> 4.00 radl:    0.26%       0.05%             0-> 4.00 radl:   97.38%     1.08% 
+    4.00-> 4.25 radl:    0.21%       0.05%             0-> 4.25 radl:   97.59%     1.08% 
+    4.25-> 4.50 radl:    0.18%       0.04%             0-> 4.50 radl:   97.77%     1.09% 
+    4.50-> 4.75 radl:    0.15%       0.03%             0-> 4.75 radl:   97.92%     1.10% 
+    4.75-> 5.00 radl:    0.12%       0.04%             0-> 5.00 radl:   98.04%     1.10% 
+
+                              SUMMARY
+                         energy deposit :   98.04 % E0 +-    1.10 % E0
+                         charged traklen: 1383.20 radl +-   15.08 radl
+                         neutral traklen: 23579.32 radl +-  475.94 radl
+
