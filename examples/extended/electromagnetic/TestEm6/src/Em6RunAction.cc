@@ -24,7 +24,6 @@
 #include <assert.h>
 #endif
 
-#include "G4hEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4ionLowEnergyIonisation.hh"
