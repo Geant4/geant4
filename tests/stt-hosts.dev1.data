@@ -2,7 +2,15 @@
 #                                                         all/lib/test
 #                                                             all/test.../
 #                                                                 all/test...
-#                                  absent=incremental 1=remove previous build
+#                                          absent=incremental 1=remove previous build
+# 
+# dcosf01  dev1   deb_NONISO    geant4-01-00-ref-08-tags18-dcosf01  all all all all  1
+# dcosf01  dev1   opt_ISO    geant4-01-00-ref-08-tags18-dcosf01  all all all all  1
+# sgmedia dev1  deb        geant4-01-00-ref-08-tags18  all all all all  1
+# sgmedia dev1  opt        geant4-01-00-ref-08-tags18  all all all all  1
+# SUN 5.0 optimised ISO hangs...
+# By hand after a few minutes to avoid OODMS lock clashes...
+#
 sungeant dev1   deb_NONISO geant4-01-01-ref-01-tags22  all all all all  1
 sungeant dev1   opt_NONISO geant4-01-01-ref-01-tags22  all all all all  1
 sungeant dev1   deb_ISO    geant4-01-01-ref-01-tags22  all all all all  1
