@@ -59,6 +59,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +73,7 @@
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,6 +97,7 @@ G4hIonisationSTD::~G4hIonisationSTD()
 void G4hIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
+  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -105,13 +108,13 @@ void G4hIonisationSTD::InitialiseProcess()
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
 
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  flucModel = new G4BohrFluctuations();
 
-  AddEmModel(1, em, fm);
+  AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.0*MeV);
   em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(2, em1, fm);
+  AddEmModel(2, em1, flucModel);
 
   mass = 0.0;
   ratio = 0.0;
@@ -132,7 +135,7 @@ const G4ParticleDefinition* G4hIonisationSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisationSTD::PrintInfoDefinition() const
+void G4hIonisationSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -150,3 +153,16 @@ void G4hIonisationSTD::SetSubCutoff(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4hIonisationSTD::SetIntegral(G4bool val)
+{ 
+  // Fluctuation model can be changed only before BuildPhysicsTable
+  if (!theParticle) {
+    delete  flucModel;
+    if(val) flucModel = new G4BohrFluctuations();
+    else    flucModel = new G4UniversalFluctuation();
+  }
+
+  G4VEnergyLossSTD::SetIntegral(val); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

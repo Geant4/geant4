@@ -287,6 +287,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
       x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
       y = 1.0 - x;
       z = 1.0 - g*x + x*x*(1.0 - g + (1.0 - g*y)/(y*y));
+      /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
@@ -294,6 +295,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                << " e-e- scattering"
                << G4endl;
       }
+      */
     } while(grej * G4UniformRand() > z);
 
   //Bhabha (e+e-) scattering
@@ -327,6 +329,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
       z += y*b4;
       z *= beta2;
       z += 1.0;
+      /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
@@ -334,6 +337,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                << " e+e- scattering"
                << G4endl;
       }
+      */
     } while(grej * G4UniformRand() > z);
   }
 

@@ -51,6 +51,7 @@
 // 23-12-02 Change interface in order to move to cut per region (VI)
 // 26-12-02 Secondary production moved to derived classes (VI)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +62,7 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,7 +71,8 @@ G4eIonisationSTD::G4eIonisationSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theElectron(G4Electron::Electron()),
     subCutoff(false),
-    isElectron(true)
+    isElectron(true),
+    isInitialised(false)
 {
   InitialiseProcess();
 }
@@ -84,18 +87,19 @@ G4eIonisationSTD::~G4eIonisationSTD()
 void G4eIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(theElectron);
+  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  flucModel = new G4BohrFluctuations();
 
   G4VEmModel* em = new G4MollerBhabhaModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em, fm);
+  AddEmModel(1, em, flucModel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,14 +107,16 @@ void G4eIonisationSTD::InitialiseProcess()
 const G4ParticleDefinition* G4eIonisationSTD::DefineBaseParticle(const G4ParticleDefinition* p)
 {
   if(p == G4Positron::Positron()) isElectron = false;
+  isInitialised = true;
   return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eIonisationSTD::PrintInfoDefinition() const
+void G4eIonisationSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
+
   G4cout << "      Delta cross sections from Moller+Bhabha, "
          << "good description from 1 KeV to 100 GeV."
          << G4endl;
@@ -121,6 +127,20 @@ void G4eIonisationSTD::PrintInfoDefinition() const
 void G4eIonisationSTD::SetSubCutoff(G4bool val)
 {
   subCutoff = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eIonisationSTD::SetIntegral(G4bool val)
+{ 
+
+  // Fluctuation model can be changed only before BuildPhysicsTable
+  if (!isInitialised) {
+    delete  flucModel;
+    if(val) flucModel = new G4BohrFluctuations();
+    else    flucModel = new G4UniversalFluctuation();
+  }
+  G4VEnergyLossSTD::SetIntegral(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -80,6 +80,7 @@ G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD()
 void G4MuBremsstrahlungSTD::InitialiseProcess() 
 {
   SetSecondaryParticle(G4Gamma::Gamma());
+  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);

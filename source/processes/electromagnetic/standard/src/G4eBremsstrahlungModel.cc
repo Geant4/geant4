@@ -679,7 +679,9 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   G4ThreeVector direction = dp->GetMomentumDirection();
   G4double xmin     = tmin/kineticEnergy;
   G4double xmax     = tmax/kineticEnergy;
-  G4double kappa    = log(xmax)/log(xmin);
+  G4double kappa    = 0.0;
+  if(xmax >= 1.) xmax = 1.;
+  else     kappa    = log(xmax)/log(xmin);
   G4double epsilmin = tmin/totalEnergy;
   G4double epsilmax = tmax/totalEnergy;
 
@@ -740,7 +742,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   //
   //  sample the energy rate of the emitted gamma for electron kinetic energy > 1 MeV
   //
-
+ 
   do {
     if (kineticEnergy > tlow) {
       do {
@@ -752,16 +754,16 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
         G4double F2 = G4std::max(ScreenFunction2(screenvar) - FZ ,0.);
         migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
         greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);      
-        /*
-        if ( greject > grejmax ) {
-           G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
-                  << greject << " > " << grejmax
-                  << " xmin= " << xmin
-                  << " xmax= " << xmax
-                  << " x= " << x 
-                  << G4endl;
+	/*
+	if ( greject > grejmax ) {
+            G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
+                   << greject << " > " << grejmax
+                   << " x= " << x 
+		   << " e= " << kineticEnergy
+                   << G4endl;
 	}
 	*/
+	
       } while( greject < G4UniformRand()*grejmax );
 
     } else {  
@@ -771,14 +773,13 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
         x = pow(xmin, q + kappa*(1.0 - q));
         migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));  
         greject = migdal*(1. + x* (ah + bh*x));
-        /*
-        if ( greject > grejmax ) {
-           G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
-                  << greject << " > " << grejmax 
-                  << " xmin= " << xmin
-                  << " xmax= " << xmax
-                  << " x= " << x 
-                  << G4endl;
+	/*
+	if ( greject > grejmax ) {
+	  G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
+                 << greject << " > " << grejmax 
+                 << " x= " << x 
+		 << " e= " << kineticEnergy
+                 << G4endl;
 	}
 	*/
       } while( greject < G4UniformRand()*grejmax );

@@ -51,6 +51,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //

@@ -86,6 +86,7 @@ G4MuPairProductionSTD::~G4MuPairProductionSTD()
 void G4MuPairProductionSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
+  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
