@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2003-06-02 08:47:45 vnivanch Exp $
+$Id: History,v 1.102 2003-06-04 14:31:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 June 03: V.Ivant (utils-V05-01-06)
+- Fix compilation warnings
+- Update STD initialisation 
 
 28 May 03: V.Ivant (utils-V05-01-05)
 - Remove absolete msc STD classes and add msc model (V.Ivanchenko)

@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2003-05-26 16:13:13 vnivanch Exp $
+$Id: History,v 1.93 2003-06-04 14:33:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 June 03: V.Ivant (stand-V05-01-03)
+- Update STD initialisation
 
 26 May 03: V.Ivant (stand-V05-01-02)
 -Fix compilation warnings for pedantic compiler options
