@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Touchables.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
+// $Id: testG4Touchables.cc,v 1.6 2002-10-22 12:38:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,7 +198,7 @@ G4bool testTouchableHistory(G4Navigator& nav)
   assert(!touch3->GetRotation()||touch3->GetRotation()->isIdentity());
   assert(touch3->GetHistory()->GetDepth()==2);
   
-  G4ThreeVector dir(0,0,0);
+  G4ThreeVector dir(0.0, 1., 0.);
   
   pvol=nav.LocateGlobalPointAndSetup(pos, dir, *((G4TouchableHistory*)touch()));
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(1,1,1)));
