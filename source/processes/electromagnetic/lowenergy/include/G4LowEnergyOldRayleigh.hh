@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldRayleigh.hh,v 1.1 2001-09-12 17:01:14 pia Exp $
+// $Id: G4LowEnergyOldRayleigh.hh,v 1.2 2001-09-23 19:57:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 
 // ************************************************************
 
-#ifndef G4LowEnergyRayleigh_h
-#define G4LowEnergyRayleigh_h 
+#ifndef G4LowEnergyOldRayleigh_h
+#define G4LowEnergyOldRayleigh_h 
 
 // Base Class Headers
 #include "G4VDiscreteProcess.hh"
@@ -48,19 +48,19 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
 
-class G4LowEnergyRayleigh : public G4VDiscreteProcess {
+class G4LowEnergyOldRayleigh : public G4VDiscreteProcess {
 
 private: 
 
   // hide assignment operator as private 
-  G4LowEnergyRayleigh& operator=(const G4LowEnergyRayleigh &right);
-  G4LowEnergyRayleigh(const G4LowEnergyRayleigh& );
+  G4LowEnergyOldRayleigh& operator=(const G4LowEnergyOldRayleigh &right);
+  G4LowEnergyOldRayleigh(const G4LowEnergyOldRayleigh& );
   
 public:
   
-  G4LowEnergyRayleigh(const G4String& processName ="LowEnRayleigh");
+  G4LowEnergyOldRayleigh(const G4String& processName ="LowEnRayleigh");
   
-  ~G4LowEnergyRayleigh();
+  ~G4LowEnergyOldRayleigh();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   

@@ -60,7 +60,8 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 	  vectorOfShells.push_back(shell);
 	}
     
-      shellTable.insert(std::make_pair(Z, vectorOfShells));
+      //     shellTable.insert(G4std::make_pair(Z, vectorOfShells));
+      shellTable[Z] = vectorOfShells;
     }
   
   // Fills transitionTable with the data from EADL, identities, transition 
@@ -98,7 +99,8 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 								    vectorOfEnergies,vectorOfProbabilities);
 	  vectorOfTransitions.push_back(transition); 
       }
-      transitionTable.insert(std::make_pair(Znum, vectorOfTransitions));
+    //      transitionTable.insert(G4std::make_pair(Znum, vectorOfTransitions));
+    transitionTable[Znum] = vectorOfTransitions;
       
       delete fluoManager;
     }
@@ -107,7 +109,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
   
-{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
  
  for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
    
@@ -122,7 +124,7 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
    
  }
  
- G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator ppos;
+ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator ppos;
  
  for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ppos++){
    
@@ -154,7 +156,7 @@ G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 
 const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex)
 { 
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
   
   pos = shellTable.find(Z);
   
@@ -180,7 +182,7 @@ const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex
 
 const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,size_t shellIndex)
 {
- G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
 
   pos = transitionTable.find(Z);
 
@@ -207,7 +209,7 @@ const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,siz
 G4int G4AtomicTransitionManager::NumberOfShells (G4int Z)
 {
 
-G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
 
   pos = shellTable.find(Z);
 
@@ -226,7 +228,7 @@ G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
 
 G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z)
 {
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
 
   pos = transitionTable.find(Z);
 
@@ -246,7 +248,7 @@ G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z,
 
 {
 
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
 
   pos = transitionTable.find(Z);
 
@@ -287,7 +289,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
 
 {
 
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
   
   pos = transitionTable.find(Z);
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldCompton.cc,v 1.1 2001-09-12 17:02:32 pia Exp $
+// $Id: G4LowEnergyOldCompton.cc,v 1.2 2001-09-23 19:56:42 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 
 // constructor
  
-G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
+G4LowEnergyOldCompton::G4LowEnergyOldCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     theCrossSectionTable(0),
     theScatteringFunctionTable(0),
@@ -68,7 +68,7 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
  
 // destructor
  
-G4LowEnergyCompton::~G4LowEnergyCompton()
+G4LowEnergyOldCompton::~G4LowEnergyOldCompton()
 {
    if (theCrossSectionTable) {
 
@@ -94,7 +94,7 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
  
 // methods.............................................................................
 
-void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
+void G4LowEnergyOldCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
   BuildZVec();
 
@@ -109,7 +109,7 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType
 
 }
 // BUILD THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
-void G4LowEnergyCompton::BuildCrossSectionTable(){
+void G4LowEnergyOldCompton::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
     
@@ -131,7 +131,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   }//end for on atoms
 }
 // BUILD THE SF TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
-void G4LowEnergyCompton::BuildScatteringFunctionTable(){
+void G4LowEnergyOldCompton::BuildScatteringFunctionTable(){
 
   if (theScatteringFunctionTable) {
     
@@ -153,7 +153,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   }//end for on atoms
 }
 // vector mapping the elements in the material table
-void G4LowEnergyCompton::BuildZVec(){
+void G4LowEnergyOldCompton::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
@@ -184,7 +184,7 @@ void G4LowEnergyCompton::BuildZVec(){
 }
 
 
-G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
+G4VParticleChange* G4LowEnergyOldCompton::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
 //
 // The scattered gamma energy is sampled according to Klein - Nishina formula.
@@ -321,7 +321,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
 // used log-log interpolation instead of linear interpolation to build the MFP 
 // as reported in the stepanek paper 
-void G4LowEnergyCompton::BuildMeanFreePathTable(){
+void G4LowEnergyOldCompton::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
@@ -376,7 +376,7 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
 
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
 // LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
-G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
+G4Element* G4LowEnergyOldCompton::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
                                                G4Material* aMaterial){
   // select randomly 1 element within the material 
   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();

@@ -99,11 +99,11 @@ private:
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicShell*.
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> > shellTable;
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicTransition*.
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> > transitionTable;
+  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> > transitionTable;
   
   // Minimum and maximum Z in EADL table containing identities and binding
   // energies of shells

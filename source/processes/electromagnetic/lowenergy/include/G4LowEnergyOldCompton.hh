@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldCompton.hh,v 1.1 2001-09-12 17:01:14 pia Exp $
+// $Id: G4LowEnergyOldCompton.hh,v 1.2 2001-09-23 19:57:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 
 // ************************************************************
 
-#ifndef G4LowEnergyCompton_h
-#define G4LowEnergyCompton_h 
+#ifndef G4LowEnergyOldCompton_h
+#define G4LowEnergyOldCompton_h 
 
 // Base Class Headers
 #include "G4VDiscreteProcess.hh"
@@ -48,19 +48,19 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
 
-class G4LowEnergyCompton : public G4VDiscreteProcess{
+class G4LowEnergyOldCompton : public G4VDiscreteProcess{
 
 private: 
 
   // hide assignment operator as private 
-  G4LowEnergyCompton& operator=(const G4LowEnergyCompton &right);
-  G4LowEnergyCompton(const G4LowEnergyCompton& );
+  G4LowEnergyOldCompton& operator=(const G4LowEnergyOldCompton &right);
+  G4LowEnergyOldCompton(const G4LowEnergyOldCompton& );
  
 public:
   
-  G4LowEnergyCompton(const G4String& processName ="LowEnCompton");
+  G4LowEnergyOldCompton(const G4String& processName ="LowEnCompton");
   
-  ~G4LowEnergyCompton();
+  ~G4LowEnergyOldCompton();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   

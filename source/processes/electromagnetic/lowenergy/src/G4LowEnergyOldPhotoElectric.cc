@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricOld.cc,v 1.1 2001-09-21 08:47:43 pia Exp $
+// $Id: G4LowEnergyOldPhotoElectric.cc,v 1.1 2001-09-23 19:56:42 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
 
 // constructor
  
-G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
+G4LowEnergyOldPhotoElectric::G4LowEnergyOldPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
   lowestEnergyLimit (250*eV),
   highestEnergyLimit(100*GeV),
@@ -91,7 +91,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
  
 // destructor
  
-G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
+G4LowEnergyOldPhotoElectric::~G4LowEnergyOldPhotoElectric()
 {
    if (theCrossSectionTable) {
       delete theCrossSectionTable;
@@ -133,14 +133,14 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
  
 //    ..
  
-void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut){
+void G4LowEnergyOldPhotoElectric::SetCutForLowEnSecPhotons(G4double cut){
 
   CutForLowEnergySecondaryPhotons = cut;
 }
 
 //    ..
 
-void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
+void G4LowEnergyOldPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
 
 // Build microscopic cross section table and mean free path table
 {
@@ -162,7 +162,7 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
 //    ..
 
 // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
-void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
+void G4LowEnergyOldPhotoElectric::BuildCrossSectionTable(){
 
   if (theCrossSectionTable) {
     
@@ -187,7 +187,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
 //    ..
 
 // CONSTRUCT THE SUBSHELL CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
-void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
+void G4LowEnergyOldPhotoElectric::BuildShellCrossSectionTable(){
 
    if (allAtomShellCrossSec) {
 
@@ -212,7 +212,7 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
 //    ..
 
 // CONSTRUCT THE BE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
-void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
+void G4LowEnergyOldPhotoElectric::BuildBindingEnergyTable(){
 
   if (theBindingEnergyTable) {
 
@@ -226,7 +226,7 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
 //    ..
 
 // CONSTRUCT THE FTP TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
-void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
+void G4LowEnergyOldPhotoElectric::BuildFluorTransitionTable(){
 
   if (theFluorTransitionTable) {
     
@@ -256,7 +256,7 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
 //
 // vector mapping the elements of the material table 
 // 
-void G4LowEnergyPhotoElectric::BuildZVec(){
+void G4LowEnergyOldPhotoElectric::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
@@ -291,7 +291,7 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
 // Compute total cross section from subshell integrated cross section: needed for 
 // selection of the first subshell ionized.
 
-G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
+G4double G4LowEnergyOldPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
 						    const G4double IncEnergy){
   // calculates the microscopic cross section from subshell cross sections
   //(it is called for elements , AtomicNumber = Z )
@@ -326,7 +326,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
 
 //    ..
 
-void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
+void G4LowEnergyOldPhotoElectric::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy(); 
@@ -384,7 +384,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
 //    .. 
 
-G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
+G4VParticleChange* G4LowEnergyOldPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
   // Fluorescence (as reported by stepanek):
   // J. Stepanek " A program to determine the radiation spectra due to a single atomic 
@@ -581,7 +581,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
 //    ..
 
-G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
+G4int G4LowEnergyOldPhotoElectric::SelectRandomShell(const G4int AtomIndex,
                                                   const G4double IncEnergy)
 {  
   G4double partialSum = 0;
@@ -619,7 +619,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
 //    ..
 
 G4Element*
-G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
+G4LowEnergyOldPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
                                            G4Material* aMaterial)
 {
   // select randomly 1 element within the material
@@ -666,7 +666,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
 // method using EADL data (A. Forti)
 //
 
-G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell, 
+G4bool G4LowEnergyOldPhotoElectric::SelectRandomTransition(G4int thePrimShell, 
 							G4double* TransParam,
 							const oneAtomTable* TransitionTable){
   

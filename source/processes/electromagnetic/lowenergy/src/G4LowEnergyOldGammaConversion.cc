@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldGammaConversion.cc,v 1.1 2001-09-12 17:02:33 pia Exp $
+// $Id: G4LowEnergyOldGammaConversion.cc,v 1.2 2001-09-23 19:56:42 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@
 
 // constructor
  
-G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processName)
+G4LowEnergyOldGammaConversion::G4LowEnergyOldGammaConversion(const G4String& processName)
   : G4VDiscreteProcess(processName),   
     theCrossSectionTable(0),
     theMeanFreePathTable(0),
@@ -71,7 +71,7 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
  
 // destructor
  
-G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
+G4LowEnergyOldGammaConversion::~G4LowEnergyOldGammaConversion()
 {
    if (theCrossSectionTable) {
 
@@ -91,7 +91,7 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
  
  
 // methods.............................................................................
-void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
+void G4LowEnergyOldGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
   BuildZVec();
 
@@ -102,7 +102,7 @@ void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& G
   BuildMeanFreePathTable();
 }
 
-void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
+void G4LowEnergyOldGammaConversion::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
     
@@ -124,7 +124,7 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   }//end for on atoms
 }
 
-void G4LowEnergyGammaConversion::BuildZVec(){
+void G4LowEnergyOldGammaConversion::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
@@ -155,7 +155,7 @@ void G4LowEnergyGammaConversion::BuildZVec(){
 }
 
 
-G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
+G4VParticleChange* G4LowEnergyOldGammaConversion::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
 //
 // The secondaries e+e- energies are sampled using the Bethe - Heitler 
@@ -335,7 +335,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
 
-void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
+void G4LowEnergyOldGammaConversion::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
@@ -390,7 +390,7 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
   }
 }
 
-G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma, G4Material* aMaterial){
+G4Element* G4LowEnergyOldGammaConversion::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma, G4Material* aMaterial){
 
   // select randomly 1 element within the material 
   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();

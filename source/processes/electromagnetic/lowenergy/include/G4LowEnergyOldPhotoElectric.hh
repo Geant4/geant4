@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricOld.hh,v 1.2 2001-09-23 17:46:42 pia Exp $
+// $Id: G4LowEnergyOldPhotoElectric.hh,v 1.1 2001-09-23 19:57:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,15 +56,15 @@ typedef G4ThirdLevel allAtomTable;
 
 //    ..
 
-class G4LowEnergyPhotoElectric : public G4VDiscreteProcess
+class G4LowEnergyOldPhotoElectric : public G4VDiscreteProcess
 
 {
   
 public:
   
-  G4LowEnergyPhotoElectric(const G4String& processName ="LowEnPhotoElec");
+  G4LowEnergyOldPhotoElectric(const G4String& processName ="LowEnPhotoElec");
   
- ~G4LowEnergyPhotoElectric();
+ ~G4LowEnergyOldPhotoElectric();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   
@@ -108,8 +108,8 @@ private:
 private:
   
   // hide assignment operator as private 
-  G4LowEnergyPhotoElectric& operator=(const G4LowEnergyPhotoElectric &right);
-  G4LowEnergyPhotoElectric(const G4LowEnergyPhotoElectric& );
+  G4LowEnergyOldPhotoElectric& operator=(const G4LowEnergyOldPhotoElectric &right);
+  G4LowEnergyOldPhotoElectric(const G4LowEnergyOldPhotoElectric& );
      
 private:
 

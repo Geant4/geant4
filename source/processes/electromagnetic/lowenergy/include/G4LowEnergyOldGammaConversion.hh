@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldGammaConversion.hh,v 1.1 2001-09-12 17:01:14 pia Exp $
+// $Id: G4LowEnergyOldGammaConversion.hh,v 1.2 2001-09-23 19:57:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 
 // ************************************************************
 
-#ifndef G4LowEnergyGammaConversion_h
-#define G4LowEnergyGammaConversion_h 1
+#ifndef G4LowEnergyOldGammaConversion_h
+#define G4LowEnergyOldGammaConversion_h 1
 
 // Base Class Headers
 #include "G4VDiscreteProcess.hh"
@@ -48,19 +48,19 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
 
-class G4LowEnergyGammaConversion : public G4VDiscreteProcess
+class G4LowEnergyOldGammaConversion : public G4VDiscreteProcess
  
 {
 private:
   // hide assignment operator as private 
-  G4LowEnergyGammaConversion& operator=(const G4LowEnergyGammaConversion &right);
-  G4LowEnergyGammaConversion(const G4LowEnergyGammaConversion& );
+  G4LowEnergyOldGammaConversion& operator=(const G4LowEnergyOldGammaConversion &right);
+  G4LowEnergyOldGammaConversion(const G4LowEnergyOldGammaConversion& );
   
 public:
  
-  G4LowEnergyGammaConversion(const G4String& processName ="LowEnConversion");
+  G4LowEnergyOldGammaConversion(const G4String& processName ="LowEnConversion");
  
-  ~G4LowEnergyGammaConversion();
+  ~G4LowEnergyOldGammaConversion();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 
