@@ -4,12 +4,13 @@ Files renamed to .cc
 Functions were modified to compile with C++ compiler, type-name rather than name { type, in:
 adler32.cc, compress.cc, crc32.cc, deflate.cc, gzio.cc, infback.cc, inffast.cc, inflate.cc
 inftrees.cc, trees.cc, uncompr.cc
+In: deflate.cc and trees.cc all strings are catsed to (char*) to avoid warnings.
 Files zconf.h zlib.h and zutil.h were prefix with HepRep- (HepRep)
 to avoid clashes with the same files in /usr/include and /usr/local/include
 on unix systems.
-Further mnodifications marked with MD: in:
+Further modifications marked with MD: in:
 HepRep-zconf.h, HepRep-zlib.h, inflate.h, infback.cc, inffast.cc, inflate.cc
-inftrees.cc
+inftrees.cc, gzio.cc
 =============================================================
 
 ZLIB DATA COMPRESSION LIBRARY
