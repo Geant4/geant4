@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.17 2003-04-04 17:06:42 asaim Exp $
+// $Id: G4ParticleDefinition.hh,v 1.18 2003-04-11 11:48:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,6 +311,13 @@ class G4ParticleDefinition
  
  private:
    G4int verboseLevel;
+
+ private:
+   G4bool fApplyCutsFlag;
+ public:
+
+   void SetApplyCutsFlag(G4bool);
+   G4bool GetApplyCutsFlag() const;
 
  public: // With Description
   // Following methods are moved from G4ParticleWithCuts class

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.15 2003-04-04 17:06:43 asaim Exp $
+// $Id: G4ParticleDefinition.cc,v 1.16 2003-04-11 11:48:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,8 +96,8 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
-//		   fApplyCutsFlag(false),
-                   verboseLevel(1)
+                   verboseLevel(1),
+  		   fApplyCutsFlag(false)
 {
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
@@ -247,6 +247,23 @@ void G4ParticleDefinition::DumpTable() const
     }
   }
 
+}
+
+void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
+{
+  if(theParticleName=="gamma"
+  || theParticleName=="e-"
+  || theParticleName=="e+")
+  { fApplyCutsFlag = flg; }
+  else
+  {
+    G4cerr
+     << "G4ParticleDefinition::SetApplyCutsFlag() for " << theParticleName
+     << G4endl;
+    G4cerr
+     << "becomes obsolete. Production threshold is applied only for "
+     << "gamma, e- and e+." << G4endl;
+  }
 }
 
 // Following methods are moved from G4ParticleWithCuts class
