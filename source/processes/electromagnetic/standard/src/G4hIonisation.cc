@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.3 1999-04-13 09:05:42 urban Exp $
+// $Id: G4hIonisation.cc,v 1.4 1999-07-27 10:41:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -32,14 +32,15 @@
 #include "G4hIonisation.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4hEnergyLoss::LowestKineticEnergy= 1.00*keV;
+G4double G4hEnergyLoss::HighestKineticEnergy= 100.*TeV;
+G4int G4hEnergyLoss::TotBin  ;
+
 // constructor and destructor
  
 G4hIonisation::G4hIonisation(const G4String& processName)
    : G4hEnergyLoss(processName),
      theMeanFreePathTable(NULL),
-     LowestKineticEnergy(1.00*keV),
-     HighestKineticEnergy(100.*TeV),
-     TotBin(100),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),
      theElectron ( G4Electron::Electron() )

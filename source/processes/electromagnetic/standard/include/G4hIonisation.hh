@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.3 1999-07-20 17:54:00 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.4 1999-07-27 10:41:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,14 +89,6 @@ class G4hIonisation : public G4hEnergyLoss
   //  private data members ...............................
 
     G4PhysicsTable* theMeanFreePathTable;
-
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy ionisation loss table-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;
 
     // particles , cuts in kinetic energy ........
     const G4Electron* theElectron;
