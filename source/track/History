@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2001-10-22 04:19:34 kurasige Exp $
+$Id: History,v 1.34 2001-10-26 07:08:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,13 @@ Oct. 22, 01  H.Kurashige (track-V03-02-04)
 Oct. 20, 01  H.Kurashige (track-V03-02-03)
 - Remove "static inline methods"
 - Disable EventBiasingMechanism 
+
+Oct. 26, 01  G.Cosmo (track-V03-02-02a)
+- Added implementation to assignment operator in G4ParticleChangeForRadDecay.hh
+  (H.Kurasige)
+
+Sep. 20, 01  H.Kurashige (track-V03-02-02)
+- Update to  G4Mars5GeVMechanism for STL migration of materials
 
 Sep. 20, 01  H.Kurashige (track-V03-02-01)
 - Modify  G4Mars5GeVMechanism for STL migration of materials
