@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.7 1999-05-24 20:39:23 gcosmo Exp $
+// $Id: globals.hh,v 1.8 1999-05-25 03:44:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,9 +44,6 @@
 #undef abs
 #endif
 
-// Include G4Timer and base types
-#include "G4Timer.hh"
-
 #ifdef G4USE_STL
 #include <algorithm>
 #define CLHEP_MAX_MIN_DEFINED
@@ -55,6 +52,9 @@
 // Includes also CLHEP.h with typedef for numeric types and
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
 #include <CLHEP/config/TemplateFunctions.h>
+
+// Include base types
+#include "G4Types.hh"
 
 // Other typedefs
 #include <rw/cstring.h>
