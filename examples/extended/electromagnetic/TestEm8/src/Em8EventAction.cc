@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8EventAction.cc,v 1.4 2001-07-11 09:57:56 gunter Exp $
+// $Id: Em8EventAction.cc,v 1.5 2001-10-16 12:22:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,9 +35,6 @@
 
 #include "Em8CalorHit.hh"
 #include "Em8EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
