@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.78 2003-05-21 21:06:01 asaim Exp $
+// $Id: G4RunManager.cc,v 1.79 2003-05-22 00:48:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -503,13 +503,30 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
                 "World would have a default region assigned by RunManager.");
     }
   }
-  else
+
+  // Remove old world logical volume from the default region, if exist
+  if(defaultRegion->GetNumberOfRootVolumes())
   {
-    // Set the default region to the world
-    G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
-    worldLog->SetRegion(defaultRegion);
-    defaultRegion->AddRootLogicalVolume(worldLog);
+    if(defaultRegion->GetNumberOfRootVolumes()>size_t(1))
+    {
+      G4Exception("G4RunManager::DefineWorldVolume",
+                "RUN:DefaultRegionHasMoreThanOneVolume",
+                FatalException,
+                "Default world region should have a unique logical volume.");
+    }
+    G4std::vector<G4LogicalVolume*>::iterator lvItr
+     = defaultRegion->GetRootLogicalVolumeIterator();
+    defaultRegion->RemoveRootLogicalVolume(*lvItr);
+    if(verboseLevel>1) G4cout << (*lvItr)->GetName()
+     << " is removed from the default region." << G4endl;
   }
+
+  // Set the default region to the world
+  G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
+  worldLog->SetRegion(defaultRegion);
+  defaultRegion->AddRootLogicalVolume(worldLog);
+  if(verboseLevel>1) G4cout << worldLog->GetName()
+   << " is registered to the default region." << G4endl;
 
   // Set the world volume, notify the Navigator and reset its state
   currentWorld = worldVol; 
