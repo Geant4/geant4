@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.6 2001-09-30 04:12:53 asaim Exp $
+// $Id: G4UIcontrolMessenger.hh,v 1.7 2001-10-02 00:32:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
+class G4UIcommand;
 
 // class description:
 //  This class is a concrete class of G4UImessenger which defines
@@ -48,6 +49,7 @@ class G4UIcmdWithoutParameter;
 //   /control/manual
 //   /control/alias
 //   /control/unalias
+//   /control/listAlias
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {
@@ -65,8 +67,9 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcmdWithAString * historyCommand;
       G4UIcmdWithoutParameter * stopStoreHistoryCommand;
       G4UIcmdWithAString * ManualCommand;
-      G4UIcmdWithAString * aliasCommand;
+      G4UIcommand * aliasCommand;
       G4UIcmdWithAString * unaliasCommand;
+      G4UIcmdWithoutParameter * listAliasCommand;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.11 2001-09-30 04:12:53 asaim Exp $
+// $Id: G4UImanager.hh,v 1.12 2001-10-02 00:32:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,12 +97,24 @@ class G4UImanager : public G4VStateDependent
       void ListCommands(G4String direc);
       //  All commands registored under the given directory will be listed to
       // G4cout.
+      void SetAlias(const char * aliasLine);
       void SetAlias(G4String aliasLine);
       //  Define an alias. The first word of "aliasLine" string is the
       // alias name and the remaining word(s) is(are) string value
       // to be aliased.
+      void RemoveAlias(const char * aliasName);
       void RemoveAlias(G4String aliasName);
       //  Remove the defined alias.
+      void ListAlias();
+      //  Print all aliases.
+
+
+  public:
+      //void Foreach(G4String macroFile,G4String variableName,
+      //             G4double initialValue,G4double finalValue,G4double stepSize);
+      //void Foreach(G4String macroFile,G4String variableName,
+      //             G4int initialValue,G4int finalValue,G4int stepSize);
+
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.

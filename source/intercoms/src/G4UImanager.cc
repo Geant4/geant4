@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.11 2001-09-30 04:12:55 asaim Exp $
+// $Id: G4UImanager.cc,v 1.12 2001-10-02 00:32:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -379,10 +379,16 @@ void G4UImanager::Interact(G4String pC)
 
 
 
- void G4UImanager::SetCoutDestination(G4UIsession *const value)
+void G4UImanager::SetCoutDestination(G4UIsession *const value)
 {
     G4coutbuf.SetDestination(value);
     G4cerrbuf.SetDestination(value);
+}
+
+void G4UImanager::SetAlias(const char * aliasLine)
+{
+  G4String aL = aliasLine;
+  SetAlias(aL);
 }
 
 void G4UImanager::SetAlias(G4String aliasLine)
@@ -390,13 +396,34 @@ void G4UImanager::SetAlias(G4String aliasLine)
   int i = aliasLine.index(" ");
   G4String aliasName = aliasLine(0,i);
   G4String aliasValue = aliasLine(i+1,aliasLine.length()-(i+1));
+  if(aliasValue(0)=='"')
+  { 
+    G4String strippedValue;
+    if(aliasValue(aliasValue.length()-1)=='"')
+    { strippedValue = aliasValue(1,aliasValue.length()-2); }
+    else
+    { strippedValue = aliasValue(1,aliasValue.length()-1); }
+    aliasValue = strippedValue;
+  }
+
   aliasList->ChangeAlias(aliasName,aliasValue);
+}
+
+void G4UImanager::RemoveAlias(const char * aliasName)
+{
+  G4String aL = aliasName;
+  RemoveAlias(aL);
 }
 
 void G4UImanager::RemoveAlias(G4String aliasName)
 {
   G4String targetAlias = aliasName.strip(G4String::both);
   aliasList->RemoveAlias(targetAlias);
+}
+
+void G4UImanager::ListAlias()
+{
+  aliasList->List();
 }
 
 

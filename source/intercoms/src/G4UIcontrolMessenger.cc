@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.5 2001-09-30 04:12:55 asaim Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.6 2001-10-02 00:32:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UIcontrolMessenger.hh"
 #include "G4UImanager.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -81,18 +83,24 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ManualCommand->SetParameterName("dirPath",true);
   ManualCommand->SetDefaultValue("/");
 
-  aliasCommand = new G4UIicmdWithAString("/control/alias",this);
+  aliasCommand = new G4UIcommand("/control/alias",this);
   aliasCommand->SetGuidance("Set an alias.");
-  aliasCommand->SetGuidance("String can be aliased bby this command.");
+  aliasCommand->SetGuidance("String can be aliased by this command.");
   aliasCommand->SetGuidance("The string may contain one or more spaces,");
-  aliasCommand->SetGuidance("the string must NOT be enclosed by double quarts (\").");
+  aliasCommand->SetGuidance("the string must be enclosed by double quarts (\").");
   aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
   aliasCommand->SetGuidance("parenthis \"[\" and \"]\".");
-  aliasCOmmand->SetParameterName("aliasName aliasString",false);
+  G4UIparameter* aliasNameParam = new G4UIparameter("aliasName",'s',false);
+  aliasCommand->SetParameter(aliasNameParam);
+  G4UIparameter* aliasValueParam = new G4UIparameter("aliasValue",'s',false);
+  aliasCommand->SetParameter(aliasValueParam);
 
-  unaliasCommand = new G4UIcmsWithAString("/control/unalias",this);
+  unaliasCommand = new G4UIcmdWithAString("/control/unalias",this);
   unaliasCommand->SetGuidance("Remove an alias.");
   unaliasCommand->SetParameterName("aliasName",false);
+
+  listAliasCommand = new G4UIcmdWithoutParameter("/control/listAlias",this);
+  listAliasCommand->SetGuidance("List aliases.");
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -105,6 +113,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete ManualCommand;
   delete aliasCommand;
   delete unaliasCommand;
+  delete listAliasCommand;
   
   delete controlDirectory;
 }
@@ -144,6 +153,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command==unaliasCommand)
   {
     UI->RemoveAlias(newValue);
+  }
+  if(command==listAliasCommand)
+  {
+    UI->ListAlias();
   }
 
 }
