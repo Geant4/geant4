@@ -34,7 +34,7 @@ Al
 5.
 //--------
 #kBound
-0.2
+0.1
 #generator
 binary
 #paw
@@ -42,3 +42,4 @@ kin.paw
 #run
 //--------Exit
 #exit
+ 

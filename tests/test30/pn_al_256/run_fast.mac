@@ -44,7 +44,7 @@ binary
 //binary
 #paw
 kin.paw
-#run
+#run 
 //--------
 #generator
 bertini
