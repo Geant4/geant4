@@ -25,6 +25,7 @@
 /gui/addButton vis Vis7(DAWNFILE) "/control/execute visTutor/exN03Vis7.mac"
 /gui/addButton vis Vis8(DAWNFILE) "/control/execute visTutor/exN03Vis8.mac"
 /gui/addButton vis Vis9(OGLIWIN) "/control/execute visTutor/exN03Vis9.mac"
+/gui/addButton vis Vis10(OIWin32) "/control/execute visTutor/exN03Vis10.mac"
 #
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100
