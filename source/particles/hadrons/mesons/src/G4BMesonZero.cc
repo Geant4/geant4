@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonZero.cc,v 1.13 2004-02-13 05:53:37 kurasige Exp $
+// $Id: G4BMesonZero.cc,v 1.14 2004-09-02 01:52:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,58 +30,56 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
-// ----------------------------------------------------------------
-
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------------
 
 #include "G4BMesonZero.hh"
-
-#include "G4DecayTable.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                          BMesonZero                            ###
 // ######################################################################
 
-G4BMesonZero::G4BMesonZero(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VMeson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4ParticleDefinition* G4BMesonZero::theInstance = 0;
+
+G4ParticleDefinition* G4BMesonZero::Definition()
 {
-   SetParticleSubType("B");
+  if (theInstance !=0) return theInstance;
+  const G4String name = "B0";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  theInstance = pTable->FindParticle(name);
+  if (theInstance !=0) return theInstance;
+
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+
+  theInstance = new G4ParticleDefinition(
+                 name,    5.2792*GeV,   4.27e-10*MeV,          0.,
+                    0,              -1,             0,
+                    1,              -1,             0,
+              "meson",               0,             0,         511,
+                false,      1.56e-3*ns,          NULL,
+                false,       "B");
+
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4ParticleDefinition*  G4BMesonZero::BMesonZeroDefinition()
+{
+  return Definition();
+}
 
-// In this version, charged pions are set to stable
-G4BMesonZero G4BMesonZero::theBMesonZero(
-	         "B0",      5.2792*GeV,   4.27e-10*MeV,          0., 
-		    0,              -1,             0,          
-		    1,              -1,             0,             
-	      "meson",               0,             0,         511,
-		false,      1.56e-3*ns,          NULL
-);
+G4ParticleDefinition*  G4BMesonZero::BMesonZero()
+{
+  return Definition();
+}
 
-G4BMesonZero*  G4BMesonZero::BMesonZeroDefinition(){return &theBMesonZero;}
-G4BMesonZero*  G4BMesonZero::BMesonZero(){return &theBMesonZero;}
 

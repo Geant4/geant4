@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonMinus.hh,v 1.5 2001-10-15 10:06:12 kurasige Exp $
+// $Id: G4DMesonMinus.hh,v 1.6 2004-09-02 01:52:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,47 +31,31 @@
 //
 //      Created,             Hisaya Kurashige, 15 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4DMesonMinus_h
 #define G4DMesonMinus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         DMesonMinus                            ###
 // ######################################################################
 
-class G4DMesonMinus : public G4VMeson
+class G4DMesonMinus
 {
  private:
-   static G4DMesonMinus theDMesonMinus;
-
- private: // constructors are hide as private  
-   G4DMesonMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4ParticleDefinition* theInstance;
+   G4DMesonMinus(){}
+   ~G4DMesonMinus(){}
 
  public:
-   virtual ~G4DMesonMinus() {}
-
-   static G4DMesonMinus* DMesonMinusDefinition();
-   static G4DMesonMinus* DMesonMinus();
+   static G4ParticleDefinition* Definition();
+   static G4ParticleDefinition* DMesonMinusDefinition();
+   static G4ParticleDefinition* DMesonMinus();
 };
 
 #endif

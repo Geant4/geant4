@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gluons.hh,v 1.4 2001-07-11 10:02:06 gunter Exp $
+// $Id: G4Gluons.hh,v 1.5 2004-09-02 01:52:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,9 +58,7 @@ class G4Gluons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   G4Gluons*    GluonsDefinition(){return this;};
-   G4Gluons*    Gluons(){return this;};
-   virtual      ~G4Gluons(){}
+   virtual      ~G4Gluons();
 };
 
 

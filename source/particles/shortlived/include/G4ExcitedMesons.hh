@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesons.hh,v 1.5 2001-07-11 10:02:05 gunter Exp $
+// $Id: G4ExcitedMesons.hh,v 1.6 2004-09-02 01:52:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,8 @@ class G4ExcitedMesons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-
-   G4ExcitedMesons*    ExcitedMesonsDefinition(){return this;};
-   G4ExcitedMesons*    ExcitedMesons(){return this;};
-  
+   virtual ~G4ExcitedMesons();
    void                SetMultipletName(const G4String& );
-
 };
 
 inline

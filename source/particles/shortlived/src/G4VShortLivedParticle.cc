@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VShortLivedParticle.cc,v 1.6 2003-03-10 08:43:56 kurasige Exp $
+// $Id: G4VShortLivedParticle.cc,v 1.7 2004-09-02 01:52:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,7 @@ G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,
    
 }
 
-
-const G4VShortLivedParticle & G4VShortLivedParticle::operator=(const G4VShortLivedParticle& right)
-{
-  if (this != &right) {
-  } return right;
-}
+G4VShortLivedParticle::~G4VShortLivedParticle() {}
 
 G4int G4VShortLivedParticle::operator==(const G4VShortLivedParticle &right) const
 {

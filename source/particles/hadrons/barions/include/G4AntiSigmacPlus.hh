@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlus.hh,v 1.6 2001-10-15 10:09:25 kurasige Exp $
+// $Id: G4AntiSigmacPlus.hh,v 1.7 2004-09-02 01:52:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,49 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 14 June 19
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4AntiSigmacPlus_h
 #define G4AntiSigmacPlus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
-// ###                          AntiSigmacPlus                             ###
+// ###                     AntiSigmacPlus                             ###
 // ######################################################################
 
-class G4AntiSigmacPlus : public G4VBaryon
+class G4AntiSigmacPlus
 {
  private:
-   static G4AntiSigmacPlus theAntiSigmacPlus;
-
- private:
-   G4AntiSigmacPlus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4ParticleDefinition* theInstance;
+   G4AntiSigmacPlus(){}
+   ~G4AntiSigmacPlus(){}
 
  public:
-   virtual  ~G4AntiSigmacPlus(){}
- 
-   static G4AntiSigmacPlus* AntiSigmacPlusDefinition();
-   static G4AntiSigmacPlus* AntiSigmacPlus();
+   static G4ParticleDefinition* Definition();
+   static G4ParticleDefinition* AntiSigmacPlusDefinition();
+   static G4ParticleDefinition* AntiSigmacPlus();
 };
-
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.cc,v 1.14 2003-06-16 16:57:05 gunter Exp $
+// $Id: G4Lambda.cc,v 1.15 2004-09-02 01:52:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,13 +31,11 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added particle definitions, H.Kurashige, 14 Feb 1997
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4Lambda.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -46,59 +44,59 @@
 // ###                           Lambda                               ###
 // ######################################################################
 
-G4Lambda::G4Lambda(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VBaryon( aName,mass,width,charge,iSpin,iParity,
-              iConjugation,iIsospin,iIsospin3,gParity,pType,
-              lepton,baryon,encoding,stable,lifetime,decaytable )
-{
-  SetParticleSubType("lambda");
- //create Decay Table 
-  G4DecayTable*   table = GetDecayTable();
-  if (table!=NULL) delete table;
-  table = new G4DecayTable();
+G4ParticleDefinition* G4Lambda::theInstance = 0;
 
-  // create decay channels
+G4ParticleDefinition* G4Lambda::Definition()
+{
+  if (theInstance !=0) return theInstance;
+  const G4String name = "lambda";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  theInstance = pTable->FindParticle(name);
+  if (theInstance !=0) return theInstance;
+
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity   
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+  
+  theInstance = new G4ParticleDefinition(
+                 name,    1.115684*GeV,  2.501e-12*MeV,         0.0,
+                    1,              +1,             0,
+                    0,               0,             0,             
+             "baryon",               0,            +1,        3122,
+                false,       0.2632*ns,          NULL,
+                false,       "lambda");
+ //create Decay Table 
+  G4DecayTable* table = new G4DecayTable();
+  
+  // create decay channels 
   G4VDecayChannel** mode = new G4VDecayChannel*[2];
   // lambda -> proton + pi-
   mode[0] = new G4PhaseSpaceDecayChannel("lambda",0.639,2,"proton","pi-");
  // lambda -> neutron + pi0
   mode[1] = new G4PhaseSpaceDecayChannel("lambda",0.358,2,"neutron","pi0");
- 
-  for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);  
+  
+  for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
-
-  SetDecayTable(table);
+  
+  theInstance->SetDecayTable(table);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4ParticleDefinition*  G4Lambda::LambdaDefinition()
+{ 
+  return Definition();
+}
 
-G4Lambda G4Lambda::theLambda(
-             "lambda",    1.115684*GeV,   2.501e-12*MeV,       0.0, 
-		    1,              +1,             0,          
-		    0,               0,             0,             
-	     "baryon",               0,            +1,        3122,
-	        false,       0.2632*ns,          NULL
-);
+G4ParticleDefinition*  G4Lambda::Lambda()
+{ 
+  return Definition();
+}
 
-G4Lambda* G4Lambda::LambdaDefinition(){return &theLambda;}
-
-G4Lambda* G4Lambda::Lambda() {return &theLambda;}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.hh,v 1.9 2002-12-16 11:15:39 gcosmo Exp $
+// $Id: G4EtaPrime.hh,v 1.10 2004-09-02 01:52:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,47 +30,31 @@
 //
 //      History: first implementation, 8 June 1998 Hisaya Kurashige
 // **********************************************************************
-// ------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
+//  New implementation as a utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------
 
 #ifndef G4EtaPrime_h
 #define G4EtaPrime_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         EtaPrime                               ###
 // ######################################################################
 
-class G4EtaPrime : public G4VMeson
+class G4EtaPrime
 {
  private:
-   static G4EtaPrime  theEtaPrime;
-
- private: // constructors are hide as private  
-   G4EtaPrime(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4ParticleDefinition* theInstance;
+   G4EtaPrime(){}
+   ~G4EtaPrime(){}
 
  public:
-   virtual  ~G4EtaPrime(){}
-
-   static G4EtaPrime*      EtaPrimeDefinition();
-   static G4EtaPrime*      EtaPrime();
-
+   static G4ParticleDefinition* Definition();
+   static G4ParticleDefinition* EtaPrimeDefinition();
+   static G4ParticleDefinition* EtaPrime();
 };
 
 #endif

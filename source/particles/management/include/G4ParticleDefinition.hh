@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.23 2004-07-26 08:14:45 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.24 2004-09-02 01:52:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,8 @@ class G4ProcessManager;
 class G4DecayTable;
 class G4ParticleTable;
 class G4ParticlePropertyTable;
+
+#include "G4Material.hh"
 
 class G4ParticleDefinition 
 {
@@ -96,7 +98,9 @@ class G4ParticleDefinition
 			   G4bool           stable,
 			   G4double         lifetime,
 			   G4DecayTable     *decaytable,
-			   G4bool           shortlived = false);
+			   G4bool           shortlived = false,
+			   const G4String&  subType ="",
+                           G4int            anti_encoding =0);
 
        virtual ~G4ParticleDefinition();
       
@@ -301,6 +305,16 @@ class G4ParticleDefinition
 
    void SetApplyCutsFlag(G4bool);
    G4bool GetApplyCutsFlag() const;
+
+ private:
+   G4int theAtomicNumber;
+   G4int theAtomicMass;
+
+ public:
+   void SetAtomicNumber(G4int);
+   G4int GetAtomicNumber() const;
+   void SetAtomicMass(G4int);
+   G4int GetAtomicMass() const;
 
 };
 

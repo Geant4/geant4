@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LeptonConstructor.cc,v 1.3 2001-07-11 10:01:53 gunter Exp $
+// $Id: G4LeptonConstructor.cc,v 1.4 2004-09-02 01:52:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

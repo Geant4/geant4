@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.13 2003-06-16 16:57:57 gunter Exp $
+// $Id: G4NeutrinoMu.cc,v 1.14 2004-09-02 01:52:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,59 +32,55 @@
 //      4th April 1996, G.Cosmo 
 //      by             H.Kurashige,7  July 1996
 // **********************************************************************
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------------
 
 #include "G4NeutrinoMu.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                     MU NEUTRINO                               ###
 // ######################################################################
+G4ParticleDefinition* G4NeutrinoMu::theInstance = 0;
 
-G4NeutrinoMu::G4NeutrinoMu(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VLepton( aName,mass,width,charge,iSpin,iParity,
-              iConjugation,iIsospin,iIsospin3,gParity,pType,
-              lepton,baryon,encoding,stable,lifetime,decaytable )
+G4ParticleDefinition* G4NeutrinoMu::Definition()
 {
-  SetParticleSubType("mu");
-}		     
+  if (theInstance !=0) return theInstance;
+  const G4String name = "nu_mu";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  theInstance = pTable->FindParticle(name);
+  if (theInstance !=0) return theInstance;
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-
-G4NeutrinoMu G4NeutrinoMu::theNeutrinoMu(
-              "nu_mu",         0.0*MeV,       0.0*MeV,         0.0, 
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+  theInstance = new G4ParticleDefinition(
+                 name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,           14,
-		 true,             0.0,          NULL
-);
+		 true,             0.0,          NULL,
+             false,           "mu"
+              );
 
-G4NeutrinoMu* G4NeutrinoMu::NeutrinoMuDefinition()
-{
-  return &theNeutrinoMu;
+  return theInstance;
 }
 
-G4NeutrinoMu* G4NeutrinoMu::NeutrinoMu()
+G4ParticleDefinition*  G4NeutrinoMu::NeutrinoMuDefinition()
 {
-  return &theNeutrinoMu;
+  return Definition();
 }
+
+G4ParticleDefinition*  G4NeutrinoMu::NeutrinoMu()
+{
+  return Definition();
+}
+
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.8 2003-06-16 16:57:23 gunter Exp $
+// $Id: G4GenericIon.cc,v 1.9 2004-09-02 01:52:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,59 +31,58 @@
 //      History: first implementation, based on object model of
 //      4 Dec. 98 by H.Kurashige
 // ----------------------------------------------------------------------
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------------
 
 #include "G4GenericIon.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
-// ###                           GenericIon                                ###
+// ###                           GenericIon                           ###
 // ######################################################################
+G4ParticleDefinition* G4GenericIon::theInstance = 0;
 
-G4GenericIon::G4GenericIon(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VIon( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable )
+G4ParticleDefinition* G4GenericIon::Definition()
 {
-  SetParticleSubType("generic");
-}
+  if (theInstance !=0) return theInstance;
+  const G4String name = "GenericIon";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  theInstance = pTable->FindParticle(name);
+  if (theInstance !=0) return theInstance;
 
-G4GenericIon::~G4GenericIon()
-{
-}
-
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
 //!!!!
-//!!!! this particle is not used for tracking
+//!!!! this particle should not be used for tracking
 //!!!! all properties except name and type are meaningless
 //!!!!
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table  
-
-G4GenericIon G4GenericIon::theGenericIon(
-         "GenericIon",   0.9382723*GeV,       0.0*MeV,       eplus,
+  theInstance = new G4ParticleDefinition(
+                 name,   0.9382723*GeV,       0.0*MeV,       eplus,
                     1,              +1,             0,          
                     1,              +1,             0,             
 	    "nucleus",               0,            +1,           0,
-		 true,            -1.0,          NULL
-);
+		 true,            -1.0,          NULL,
+             false,           "generic"
+              );
+  
+  return theInstance;
+}
 
-G4GenericIon* G4GenericIon::GenericIonDefinition(){return &theGenericIon;}
-G4GenericIon* G4GenericIon::GenericIon(){return &theGenericIon;}
+G4ParticleDefinition*  G4GenericIon::GenericIonDefinition()
+{ 
+  return Definition();
+}
+
+G4ParticleDefinition*  G4GenericIon::GenericIon()
+{ 
+  return Definition();
+}
+

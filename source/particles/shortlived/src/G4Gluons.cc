@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gluons.cc,v 1.5 2003-06-16 16:58:48 gunter Exp $
+// $Id: G4Gluons.cc,v 1.6 2004-09-02 01:52:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,3 +57,6 @@ G4Gluons::G4Gluons(
 {
    SetParticleSubType("gluon");
 }
+
+G4Gluons::~G4Gluons() {}
+

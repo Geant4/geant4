@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedBaryons.hh,v 1.5 2001-07-11 10:02:05 gunter Exp $
+// $Id: G4ExcitedBaryons.hh,v 1.6 2004-09-02 01:52:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,8 +58,7 @@ class G4ExcitedBaryons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   G4ExcitedBaryons*    ExcitedBaryonsDefinition(){return this;};
-   G4ExcitedBaryons*    ExcitedBaryons(){return this;};
+   virtual ~G4ExcitedBaryons();
    void                 SetMultipletName(const G4String& name);
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionPlus.hh,v 1.7 2001-10-16 08:16:10 kurasige Exp $
+// $Id: G4PionPlus.hh,v 1.8 2004-09-02 01:52:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,49 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4PionPlus_h
 #define G4PionPlus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         PIONPLUS                               ###
 // ######################################################################
 
-class G4PionPlus : public G4VMeson
+class G4PionPlus
 {
  private:
-   static G4PionPlus thePionPlus;
-
- private:
-   G4PionPlus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4ParticleDefinition* theInstance;
+   G4PionPlus(){}
+   ~G4PionPlus(){}
 
  public:
-   virtual ~G4PionPlus(){}
-
-   static G4PionPlus* PionPlusDefinition();
-   static G4PionPlus* PionPlus();
+   static G4ParticleDefinition* Definition();
+   static G4ParticleDefinition* PionPlusDefinition();
+   static G4ParticleDefinition* PionPlus();
 };
-
 
 #endif

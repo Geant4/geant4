@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedBaryons.cc,v 1.5 2003-06-16 16:58:46 gunter Exp $
+// $Id: G4ExcitedBaryons.cc,v 1.6 2004-09-02 01:52:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,3 +56,6 @@ G4ExcitedBaryons::G4ExcitedBaryons(
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
 }
+
+G4ExcitedBaryons::~G4ExcitedBaryons() {}
+

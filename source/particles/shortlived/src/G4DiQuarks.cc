@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiQuarks.cc,v 1.5 2003-06-16 16:58:45 gunter Exp $
+// $Id: G4DiQuarks.cc,v 1.6 2004-09-02 01:52:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,3 +57,6 @@ G4DiQuarks::G4DiQuarks(
 {
    SetParticleSubType("di_quark");
 }
+
+G4DiQuarks::~G4DiQuarks() {}
+
