@@ -1,20 +1,25 @@
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "FluoTestEventAction.hh"
 
-//#include "FluoTestSensorHit.hh"
+#include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
 
-#include "g4std/vector"
+#include "g4rw/tvordvec.h"
+
+#ifdef G4ANALYSIS_USE
+#include "FluoTestAnalysisManager.hh"
+#endif
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
-//#include "G4VHitsCollection.hh"
+#include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-//#include "G4SDManager.hh"
+#include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
@@ -22,18 +27,30 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifdef G4ANALYSIS_USE
+FluoTestEventAction::FluoTestEventAction(FluoTestAnalysisManager* aMgr):
+  drawFlag("all"),
+  HPGeCollID(-1),
+  eventMessenger(0), 
+  printModulo(1),fAnalysisManager(aMgr)
+ {
+   eventMessenger = new FluoTestEventActionMessenger(this);
 
+}
+
+#else
 
 FluoTestEventAction::FluoTestEventAction()
-  :
-  //HPGeCollID(-1),
-    drawFlag("all"), printModulo(1),
-   eventMessenger(0)
+  :drawFlag("all"),
+   HPGeCollID(-1),
+   eventMessenger(0),
+   printModulo(1)
+ 
 {
   eventMessenger = new FluoTestEventActionMessenger(this);
 }
 
-
+#endif
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,28 +65,24 @@ FluoTestEventAction::~FluoTestEventAction()
 
 void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  
-  G4int evtNb = evt->GetEventID(); 
-
-  //Returns the event ID
-    if (evtNb%printModulo == 0)
+  /* long a[2];
+  a[0] = 355790433;
+  a[1] = 694618692;
+  HepRandom::setTheSeeds(a);
+  */
+  G4int evtNb = evt->GetEventID(); // Returns the event ID
+     if (evtNb%printModulo == 0)
    { 
   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
   HepRandom::showEngineStatus();
-  //  HepRandom::getTheSeed();
-  //  G4cout <<HepRandom::getTheSeed()<<G4endl;
-  long seeds[2];
-  seeds[0] = 545028573;
-  seeds[1] = 2026541798;
-  HepRandom::setTheSeeds(seeds);
       }
-  
-    /* if (HPGeCollID==-1)
+ 
+  if (HPGeCollID==-1)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
       HPGeCollID = SDman->GetCollectionID("HPGeCollection");
       //the pointer points to the ID number of the sensitive detector
-      }*/
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,7 +94,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
  // extracted from hits, compute the total energy deposit (and total charged
   // track length) 
   
-  /*
+  
     G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
     
     FluoTestSensorHitsCollection* HPGeHC = 0;
@@ -91,16 +104,21 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
     if (HCE) HPGeHC = (FluoTestSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
     if(HPGeHC)
       {
-	n_hit = HPGeHC->size();
+	n_hit = HPGeHC->entries();
 	for (G4int i=0;i<n_hit;i++)
 	  {
 	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
-	    
+	    /*    
 #ifdef G4ANALYSIS_USE
 	    fAnalysisManager->InsGamDet((*HPGeHC)[i]->GetEdepTot()/keV);  
 #endif;
-	     
-	    energyD    = (*HPGeHC)[i]->RandomCut(totEnergy);
+	    */
+	    energyD = (*HPGeHC)[i]->RandomCut();
+	   
+#ifdef G4ANALYSIS_USE
+	    fAnalysisManager->InsGamDet(energyD/keV);  
+#endif
+
 	    totEnergyDetect += energyD;
 	  }
       }
@@ -115,27 +133,27 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 	// << G4BestUnit(totEnergyDetect,"Energy");
     //G4cout << "\n     " << n_hit
 	//      << " hits are stored in HPGeCollection." << G4endl;
-	
+	/*
 #ifdef G4ANALYSIS_USE
 	fAnalysisManager->InsDetETot(totEnergyDetect/keV);  
 #endif; 
-	
+	*/
       }
     
       }
-       
+    /*   
 #ifdef G4ANALYSIS_USE
     fAnalysisManager->EndOfEvent(evtNb);
 #endif 
-     
+    */ 
   // extract the trajectories and draw them
-    */
+    
   if (G4VVisManager::GetConcreteInstance())
     {
       
       G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
       G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->size();
+      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
       
       for (G4int i=0; i<n_trajectories; i++) 
 	{ G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);

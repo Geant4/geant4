@@ -14,12 +14,12 @@ FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstructio
 { 
    detDir = new G4UIdirectory("/apparate/");
   detDir->SetGuidance("detector control.");
-  /*    
+      
   SamMaterCmd = new G4UIcmdWithAString("/apparate/setSamMat",this);
   SamMaterCmd->SetGuidance("Select Material of the Sample.");
   SamMaterCmd->SetParameterName("choice",false);
   SamMaterCmd->AvailableForStates(Idle);
-
+  /*
   SiMaterCmd = new G4UIcmdWithAString("/apparate/setSiMat",this);
   SiMaterCmd->SetGuidance("Select Material of the SiSensor.");
   SiMaterCmd->SetParameterName("choice",false);
@@ -44,7 +44,7 @@ FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstructio
   Dia3MaterCmd->SetGuidance("Select Material of the 3rd diaphragm.");
   Dia3MaterCmd->SetParameterName("choice",false);
   Dia3MaterCmd->AvailableForStates(Idle);
-
+  */
 
   SamThickCmd = new G4UIcmdWithADoubleAndUnit("/apparate/setSamThick",this);
   SamThickCmd->SetGuidance("Set Thickness of the Sample");
@@ -52,7 +52,7 @@ FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstructio
   SamThickCmd->SetRange("Size>=0.");
   SamThickCmd->SetUnitCategory("Length");
   SamThickCmd->AvailableForStates(Idle);
-  
+  /*
   SiThickCmd = new G4UIcmdWithADoubleAndUnit("/apparate/setSiThick",this);
   SiThickCmd->SetGuidance("Set Thickness of the SiSensor");
   SiThickCmd->SetParameterName("Size",false);
@@ -228,12 +228,14 @@ FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstructio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
  FluoTestDetectorMessenger::~FluoTestDetectorMessenger()
-{/*
-  delete SamMaterCmd;   delete SiMaterCmd;
+{
+  delete SamMaterCmd;  delete SamThickCmd; 
+  /* 
+  delete SiMaterCmd;    delete SiThickCmd;
   delete HPGeMaterCmd;  delete Dia1MaterCmd;
   delete Dia2MaterCmd;  delete Dia3MaterCmd;
 
-  delete SamThickCmd;   delete SiThickCmd;
+  delete SiThickCmd;
   delete HPGeThickCmd;  delete Dia1ThickCmd;
   delete Dia2ThickCmd;  delete Dia3ThickCmd;
 
@@ -258,10 +260,10 @@ FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstructio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void FluoTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ /*
+{ 
   if( command == SamMaterCmd )
    { Detector->SetSampleMaterial(newValue);}
-   
+  /* 
   if( command == SiMaterCmd )
    { Detector->SetSiMaterial(newValue);}
 
@@ -291,10 +293,10 @@ void FluoTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 
  if( command == Dia3ThickCmd )
    { Detector->SetDia3Thickness(Dia3ThickCmd->GetNewDoubleValue(newValue));}
-
+  */
   if( command == SamThickCmd )
    { Detector->SetSampleThickness(SamThickCmd->GetNewDoubleValue(newValue));}
-
+  /*
   if( command == SiSizeYZCmd )
    { Detector->SetSiSizeYZ(SiSizeYZCmd->GetNewDoubleValue(newValue));}
 

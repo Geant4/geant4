@@ -32,6 +32,7 @@ G4cout << "### Run " << aRun << " start." << G4endl;
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
+     
     } 
 
 }
