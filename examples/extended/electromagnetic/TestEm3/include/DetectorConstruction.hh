@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003-09-22 14:06:39 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2004-01-15 10:37:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ class G4UserLimits;
 class DetectorMessenger;
 
      const G4int MaxAbsor = 10;
-     
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -74,7 +74,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      void PrintCalorParameters(); 
-                    
+
      G4double GetWorldSizeX()           {return WorldSizeX;}; 
      G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
      
@@ -82,7 +82,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double GetCalorSizeYZ()          {return CalorSizeYZ;};
       
      G4int GetNbOfLayers()              {return NbOfLayers;}; 
-     
+
      G4int       GetNbOfAbsor()             {return NbOfAbsor;}; 
      G4Material* GetAbsorMaterial(G4int i)  {return AbsorMaterial[i];};
      G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      

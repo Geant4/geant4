@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.3 2003-11-25 15:19:04 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2004-01-15 10:37:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -230,7 +230,7 @@ void DetectorConstruction::DefineMaterials()
   CO2->AddElement(C, natoms=1);
   CO2->AddElement(O, natoms=2);
 
-  G4Material* steam = 
+  G4Material* steam =
   new G4Material("WaterSteam", density= 0.3*mg/cm3, ncomponents=1,
                   kStateGas, temperature= 500.*kelvin, pressure= 2.*atmosphere);
   steam->AddMaterial(H2O, fractionmass=1.);
@@ -248,7 +248,7 @@ void DetectorConstruction::DefineMaterials()
   density     = 1.e-5*g/cm3;
   pressure    = 2.e-2*bar;
   temperature = STP_Temperature;         //from PhysicalConstants.h
-  G4Material* beam = 
+  G4Material* beam =
   new G4Material("Beam", density, ncomponents=1,
                          kStateGas,temperature,pressure);
   beam->AddMaterial(Air, fractionmass=1.);
@@ -260,10 +260,11 @@ void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
      LayerThickness = 0.;
-     for (G4int iAbs=0; iAbs<NbOfAbsor; iAbs++)
-     LayerThickness += AbsorThickness[iAbs];
+     for (G4int iAbs=0; iAbs<NbOfAbsor; iAbs++) {
+       LayerThickness += AbsorThickness[iAbs];
+     }
      CalorThickness = NbOfLayers*LayerThickness;
-     
+
      WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
 
@@ -362,14 +363,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
       xfront += AbsorThickness[k];
       physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
       		    	G4ThreeVector(xcenter,0.,0.),      //its position
-                        logicAbsor[k],     		   //its logical volume	
+                        logicAbsor[k],     		   //its logical volume
                     	AbsorMaterial[k]->GetName(),	   //its name
                         logicLayer,        		   //its mother
                         false,             		   //no boulean operat
                         k);               		   //copy number
 
      }
-     
+
   PrintCalorParameters();
 
   //always return the physical World
