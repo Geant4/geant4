@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2004-06-21 10:57:14 maire Exp $
+// $Id: HistoManager.cc,v 1.10 2004-09-20 08:33:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +39,8 @@
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
-  fileName = "testem5.paw";
-  fileType = "hbook";
+  fileName = "testem5.aida";
+  fileType = "xml";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -65,18 +65,17 @@ void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(fileName, fileType, readOnly, createNew);
+  tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  hf = af->createHistogramFactory(*tree);
+  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
 
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -89,8 +88,6 @@ void HistoManager::book()
   if(factoryOn) 
       G4cout << "\n----> Histogram Tree is opened " << G4endl;
 
-  delete tf;
-  delete af;
 #endif
 }
 
@@ -104,8 +101,6 @@ void HistoManager::save()
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
 
-    delete hf;
-    delete tree;
     factoryOn = false;
   }
 #endif

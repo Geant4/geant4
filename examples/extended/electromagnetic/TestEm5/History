@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2004-09-20 08:21:49 vnivanch Exp $
+$Id: History,v 1.52 2004-09-20 08:33:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 07-09-04 V.Ivant (testem5-V06-02-02)
 - Fix problem of PhysicsList for hadrons
+- Remove deletion of histo factories, add auto_ptr
 
 07-09-04 V.Ivant (testem5-V06-02-01)
 - fix a minor problem is energy deposit
