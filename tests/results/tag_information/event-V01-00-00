@@ -1,0 +1,26 @@
+event-V01-00-00
+---------------
+
+The modifications are the following.
+
+- G4EventManager becomes a singleton, so that classes rather than G4RunManager
+ can get the pointer to G4EventManager without accessing to G4RunManager.
+- G4EventManager keeps the pointers of all the user action classes except user
+ run action.
+
+These modifications are introduced because G4RayTracer needs to have its own
+event loop without accessing to G4RunManager. Accessing from G4RayTracer to
+G4RunManager violates the use dependency between run and visualization categories.
+Also G4RayTracer needs to have its own tracking action and stepping action.
+Thus G4RayTracer stores the user's action classes and sets its own classes while
+ray tracing is going.
+
+ At the same tag a minor correction for the null pointer protection is applied
+for G4StackManager. The same corrections for G4TrackingManager and 
+G4SteppingManager will be done by Takashi. He will commit them and tag within a
+couple of weeks or so. These corrections are not so serious for the user (I hope), 
+and they need not to go in a correction patch, but they are needed for introducing 
+G4RayTracer.
+
+                                                        Regards,
+                                                        Makoto
