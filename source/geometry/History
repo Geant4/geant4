@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-11 12:51:30 japost Exp $
+$Id: History,v 1.6 1999-05-12 17:55:22 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May  12,  98   John Apostolakis              geometry-01-00-04
+
+- Tagged.
+
+May  12,  98   Simone Giani
+  Fixes to G4BREPSolidPolyhedra and G4FPlane.
+
+May  10,  98   Frank  Behner
+  Changes in RW use for compatibility with RW/STL in
+        management/src/G4PhysicalVolumeStore.cc  
+        management/src/G4LogicalVolumeStore.cc
+  modifying  "delete first();" to "removeFirst();"     
+
+May   7,  98   John Apostolakis
+
+  Changed G4Navigator to issue warning in the case of small inaccuracies
+   & cause fatal exception only for large deviations.
+
 May   3,  98   John Apostolakis              geometry-01-00-03
 
  Minor fixes 
