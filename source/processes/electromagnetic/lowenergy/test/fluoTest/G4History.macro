@@ -7,7 +7,16 @@
 /vis/viewer/refresh
 /vis/viewer/update
 /tracking/storeTrajectory 1
-/gun/particle gamma
-/gun/energy 4.9 keV
-/run/beamOn 1
-/run/beamOn 1000000
+/gps/type Beam
+/gps/centre -10 0 0
+/gps/particle gamma
+/gps/monoenergy 5 keV
+/gps/shape Circle
+/gps/sigmaposr  0.5 mm
+/gps/posrot1 0 0 1
+/gps/posrot2 0 1 0
+/gps/angtype beam1d
+/gps/sigmaangr 0 deg
+/gps/angrot1 0 0 1
+/gps/angrot2 0 1 0
+/run/beamOn 5000
