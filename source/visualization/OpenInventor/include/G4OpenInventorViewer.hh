@@ -76,7 +76,7 @@ protected:
 private:
   static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);
-  static void SceneGraphSensorCB(void*,SoSensor*);
+  static void GroupCameraSensorCB(void*,SoSensor*);
   static void CameraSensorCB(void*,SoSensor*);
   static void pointAt(SoCamera*,const SbVec3f & targetpoint, const SbVec3f & upvector);
   static void lookAt(SoCamera*,const SbVec3f & dir, const SbVec3f & up);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.21 2004-11-25 13:39:54 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.22 2004-11-25 14:45:06 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -195,7 +195,10 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
 
 G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
   if(fShell) fInteractorManager->RemoveShell(fShell);
-  if(fViewer) delete fViewer;
+  if(fViewer) {
+    fViewer->setSceneGraph(0);
+    delete fViewer;
+  }
   if(fShell) {
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(0));
     ::DestroyWindow((HWND)fShell);

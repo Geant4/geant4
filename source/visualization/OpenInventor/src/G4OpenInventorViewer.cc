@@ -71,12 +71,10 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 
   // Main user scene graph root sent to the viewers.
   fSoSelection = new SoSelection;
-
+  fSoSelection->ref();
   fSoSelection->addSelectionCallback(SelectionCB,this);
   //fSoSelection->addDeselectionCallback(DeselectionCB,this);
-
   fSoSelection->policy = SoSelection::SINGLE;
-  fSoSelection->ref();
 
   SoGroup* group = new SoGroup;
   fSoSelection->addChild(group);
@@ -98,14 +96,6 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   camera->focalDistance.setValue(10);
   group->addChild(camera);
 
-  // To detect that the viewer had changed the camera type :
-  fGroupCameraSensor = new SoNodeSensor(SceneGraphSensorCB,this);
-  fGroupCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
-  fGroupCameraSensor->attach(group);
-
-  fCameraSensor = new SoNodeSensor(CameraSensorCB,this);
-  fCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
-
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
   // SoImageWriter should be the last.
@@ -113,6 +103,14 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoImageWriter->fileName.setValue("g4out.ps");
   fSoSelection->addChild(fSoImageWriter);
 
+  // Sensors :
+  // To detect that the viewer had changed the camera type :
+  fGroupCameraSensor = new SoNodeSensor(GroupCameraSensorCB,this);
+  fGroupCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
+  fGroupCameraSensor->attach(group);
+
+  fCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  fCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
@@ -328,17 +326,18 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
-void G4OpenInventorViewer::SceneGraphSensorCB(void* aThis,SoSensor* aSensor) { 
+void G4OpenInventorViewer::GroupCameraSensorCB(void* aThis,SoSensor* aSensor){ 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
   SoNode* node = ((SoNodeSensor*)aSensor)->getTriggerNode();
-  //printf("debug : SceneGraphCB %s\n",
+  //printf("debug : GroupCameraSensorCB %s\n",
   //node->getTypeId().getName().getString());
 
   if(node->isOfType(SoCamera::getClassTypeId())) {
     // Viewer had changed the camera type, 
     // attach the fCameraSensor to the new camera.
     SoCamera* camera = (SoCamera*)node;
+    This->fCameraSensor->detach();
     This->fCameraSensor->attach(camera);
   }
 
