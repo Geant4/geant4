@@ -533,7 +533,7 @@ if ( `uname -n` == auger5.lal.in2p3.fr ) then
   setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
-  setenv G4DEBUG 1
+#  setenv G4DEBUG 1
   setenv CPPVERBOSE 1
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.0.0/rh93_gcc322
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
