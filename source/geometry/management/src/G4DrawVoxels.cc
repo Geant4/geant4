@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.9 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4DrawVoxels.cc,v 1.10 2000-01-19 17:26:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -152,7 +152,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 		   
 	slice_no=(slice->IsHeader()?slice->GetHeader()->GetMaxEquivalentSliceNo()+1
 		  			     :slice->GetNode()->GetMaxEquivalentSliceNo()+1);
-	slice=header->GetSlice(slice_no);	
+	if (slice_no<no_slices)slice=header->GetSlice(slice_no);	
    }
 }//end of ComputeVoxelPolyhedra...
 //######################################################################################################################
