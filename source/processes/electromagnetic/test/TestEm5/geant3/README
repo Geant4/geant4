@@ -3,6 +3,7 @@
 
  % cd geant3
  % gmakeB           to make an executable  (Batch version)
+ % gmakeT           to make an executable  (inTeractive version) 
 
  To execute:
 
@@ -18,19 +19,19 @@
  ----------   standard data cards of GEANT3, but some of them
               are defined in testem5.cra. These latter cards are:
 
-              KEY      TYPE        Short description
+              KEY      VARIABLE/type     Short description
 
-              NAME   character     name of the hist.file <******* 
+              NAME    NAME (character)   name of the hist.file <******* 
 
-              ZABS    real         z size of the absorber
-              RABS    real         radius of the absorber
-              MATA    integer      mat.number of the absorber
+              ABSO
+	              MATABS (integer)   mat.number  of the absorber
+		      XABSOR (real)      X thickness of the absorber
+		      YZABSO (real)      YZ size     of the absorber
 
-              NH1     integer      number of bins in 1-st histogram
-              HI1     real,real    lower/upper limit in 1-st histogram
+              HIS1
+                      NH1    (integer)   number of bins in 1-st histogram
+                      HI1(2) (real)      lower/upper limit in 1-st histogram
               .......
-              NH10     integer      nb of bins in 10-th hist.
-              HI10    real,real     lower/upper limit in 10-th hist.
 
 
    ******>  the NAME data card should be the first , with the format

@@ -1,25 +1,15 @@
 FILE  geant3.plot21
 LIST
-TRIGGERS 100000
-DEBUG    1  1  1
-SWIT     1
-ANNI     1
-BREM     1
-COMP     1
-DRAY     1
-MULS     1
-PAIR     1
-PHOT     1
-LOSS     1
-PRINT  'MATE'  'VOLU'  'TMED'
-MATA   22
-ZABS   0.53  
-RABS   10.0
-TIME   2=5.
-KINE  1=3  2=25.00000  3=0.0  4=0.0  5=0.000511
-CUTS 10.0e-6  10.0e-6  10.0e-6  10.0e-6  10.0e-6  10.0e-6
-AUTO   1
+ABSOR  22 (mate)  0.53 (thicknX) 10.0 (sizeYZ)  0. (field)
+KINE   3 (Itype)  25.0 (Ekine) 90.0 (teta)  0.0 (phi)      
+TRIG   100000
+DEBUG  1  1  
+SWIT   0 (draw)
+LOSS   1
+HADR   0
 ABAN   0
-NH10  80
-HI10  0.1   1000.
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+TIME   2=5.
+HI10  80   0.1   1000.
 END

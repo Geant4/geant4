@@ -1,7 +1,7 @@
 #
 # Macro file for the initialization phase of "TestEm5.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# It creates the default geometry (simple absorber box )        
 #
 /control/verbose 2
 #control/saveHistory
@@ -10,8 +10,8 @@
 /run/initialize
 #
 /calor/setAbsMat Gold      
-/calor/setAbsThick 9.658e-3 mm  
-/calor/setAbsRad 100.0 mm
+/calor/setAbsThick 9.658 mum  
+/calor/setAbsYZ 10. cm
 /calor/update
 #
 #  hist file name
@@ -24,14 +24,12 @@
 /calor/cutG 13.0 micrometer
 /calor/cutE 1.12 micrometer
 /run/initialize
-/run/particle/dumpCutValues
 #
 #
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
 /run/beamOn 1000000
-#
 #
 
 

@@ -1,7 +1,7 @@
 #
 # Macro file for the initialization phase of "TestEm5.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# It creates the default geometry (simple absorber box )        
 #
 /control/verbose 2
 #control/saveHistory
@@ -11,20 +11,19 @@
 /plots/sethistName geant4.plot22
 #  PLOT: gamma energy at exit   
 /plots/setnbinGamma 80
-/plots/setElowGamma  0.1  MeV
+/plots/setElowGamma  0.1 MeV
 /plots/setEhighGamma 1. GeV
 #
 /run/initialize
 #
 /calor/setAbsMat Lead 
-/calor/setAbsThick 0.15  mm  
-/calor/setAbsRad 100.0 mm
+/calor/setAbsThick 0.15 mm  
+/calor/setAbsYZ 10. cm
 /calor/update
 #
 /calor/cutG 1.00 mm
-/calor/cutE 5.0 micrometer
+/calor/cutE 5.0 mum
 /run/initialize
-/run/particle/dumpCutValues
 #
 #
 /gun/particle e- 

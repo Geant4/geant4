@@ -1,7 +1,7 @@
 #
 # Macro file for the initialization phase of "TestEm5.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# It creates the default geometry (simple absorber box )        
 #
 /control/verbose 2
 #control/saveHistory
@@ -10,8 +10,8 @@
 /run/initialize
 #
 /calor/setAbsMat Silicon   
-/calor/setAbsThick 1000.0e-3 mm  
-/calor/setAbsRad 100.0 mm
+/calor/setAbsThick 1. mm  
+/calor/setAbsYZ 10. cm
 /calor/update
 #
 #  hist file name
@@ -19,12 +19,11 @@
 #  PLOT: energy deposit distribution in absorber............................
 /plots/setnbinEn 55
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 1.1  MeV  
+/plots/setEnhigh 1.1 MeV  
 #
 /calor/cutG 2.13 mm    
 /calor/cutE 7.00 micrometer
 /run/initialize
-/run/particle/dumpCutValues
 #
 /gun/particle e- 
 /gun/energy 1.00 MeV

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm5.cc,v 1.3 1999-03-10 11:44:31 maire Exp $
+// $Id: TestEm5.cc,v 1.4 1999-07-12 12:46:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,10 @@
 #include "G4UIterminal.hh"
 #include "Randomize.hh"
 
+#ifdef G4VIS_USE
+#include "Em5VisManager.hh"
+#endif
+
 #include "Em5DetectorConstruction.hh"
 #include "Em5PhysicsList.hh"
 #include "Em5PrimaryGeneratorAction.hh"
@@ -32,13 +36,6 @@
 #include "Em5EventAction.hh"
 #include "Em5SteppingAction.hh"
 
-#ifdef GNU_GCC
-#include <rw/tpordvec.h>
-#include "Em5CalorHit.hh"
-template class RWTPtrOrderedVector <Em5CalorHit>;
-template class RWTPtrVector <Em5CalorHit>;
-template class G4Allocator <Em5CalorHit>;
-#endif
 
 int main(int argc,char** argv) {
 
@@ -54,6 +51,12 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em5PhysicsList(detector));
   
+#ifdef G4VIS_USE
+  // visualization manager
+  G4VisManager* visManager = new Em5VisManager;
+  visManager->Initialize();
+#endif 
+ 
   // set user action classes
   runManager->SetUserAction(new Em5PrimaryGeneratorAction(detector));
   Em5RunAction* runaction = new Em5RunAction;
@@ -65,6 +68,9 @@ int main(int argc,char** argv) {
   Em5SteppingAction* steppingaction = new Em5SteppingAction(detector,
                                                eventaction, runaction);
   runManager->SetUserAction(steppingaction);
+  
+  //Initialize G4 kernel
+  runManager->Initialize();
     
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -82,7 +88,11 @@ int main(int argc,char** argv) {
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
+    
   // job termination
+#ifdef G4VIS_USE
+  delete visManager;
+#endif  
   delete runManager;
 
   return 0;
