@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.40 1999-10-20 14:46:03 gcosmo Exp $
+# $Id: architecture.gmk,v 1.41 1999-10-26 07:53:30 morita Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -37,6 +37,16 @@
 #				for g++ installed locally, because not full 
 #				installation on NICE)
 #
+#    Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
+#          $(HEP_ODBMS_DIR)/etc/.
+#
+
+# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS
+ifdef G4ODBMS
+  # variables LHCXXTOP and PLATF are used in HepODBMS setup
+  include $(HEP_ODBMS_DIR)/etc/$(OS).mk
+  G4ODBMS_LIBS := $(HEP_ODBMS_LIBS) $(OBJY_LIBS) $(OSPACE_LIBS)
+endif
 
 MAKEFLAGS= --no-print-directory
 
@@ -419,14 +429,6 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo_shar.4.02
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
-  endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
     CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
@@ -466,14 +468,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-  endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -L/usr/lib -lsocket -lnsl
@@ -519,14 +513,6 @@ ifeq ($(G4SYSTEM),HP-aCC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
-  endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
