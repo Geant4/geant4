@@ -81,7 +81,7 @@
     xSec[2] = xSec[1]+theTC.GetXsec(eKinetic);
     xSec[3] = xSec[2]+theLC.GetXsec(eKinetic);
     G4int it;
-    unsigned int i;
+    unsigned int i=0;
     G4double random = G4UniformRand();
     if(xSec[3]==0) 
     {
