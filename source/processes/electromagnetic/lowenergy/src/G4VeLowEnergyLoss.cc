@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.9 2001-05-18 17:44:13 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.10 2001-05-23 10:56:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,7 @@
 // 20/09/00 update fluctuations V.Ivanchenko
 // 22/11/00 minor fix in fluctuations V.Ivanchenko
 // 10/05/01  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 22/05/01  V.Ivanchenko Update range calculation
 //
 // --------------------------------------------------------------
 
@@ -58,7 +59,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss()
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
-     lastMaterial(NULL),
+     lastMaterial(0),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -74,7 +75,7 @@ G4VeLowEnergyLoss::~G4VeLowEnergyLoss()
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
-     lastMaterial(NULL),
+     lastMaterial(0),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -103,11 +104,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
      G4PhysicsLogVector* aVector;
      aVector = new G4PhysicsLogVector(LowestKineticEnergy,
                               HighestKineticEnergy,TotBin);
-     /*
      BuildRangeVector(theDEDXTable,LowestKineticEnergy,HighestKineticEnergy,
                       TotBin,J,aVector);
-		      */
-     BuildRangeVectorNew(theDEDXTable,TotBin,J,aVector);
      theRangeTable->insert(aVector);
    }
    return theRangeTable ;
@@ -115,14 +113,18 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VeLowEnergyLoss::BuildRangeVectorNew(const G4PhysicsTable* theDEDXTable,
-                                            G4int TotBin, G4int materialIndex,
-                                            G4PhysicsLogVector* rangeVector)
+void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
+                                         G4double LowestKineticEnergy,
+                                         G4double,
+                                         G4int TotBin,
+                                         G4int materialIndex,
+                                         G4PhysicsLogVector* rangeVector)
+
 //  create range vector for a material
 {
   G4bool isOut;
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  G4double energy1 = rangeVector->GetLowEdgeEnergy(0);
+  G4double energy1 = LowestKineticEnergy;
   G4double dedx    = physicsVector->GetValue(energy1,isOut);
   G4double range   = 0.5*energy1/dedx;
   rangeVector->PutValue(0,range);
@@ -146,129 +148,6 @@ void G4VeLowEnergyLoss::BuildRangeVectorNew(const G4PhysicsTable* theDEDXTable,
     energy1 = energy2 ;
   }
 }    
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
-                G4double LowestKineticEnergy,G4double HighestKineticEnergy,G4int TotBin,
-                                 G4int materialIndex,G4PhysicsLogVector* rangeVector)
-//  create range vector for a material
-{
-  G4int nbin=100,i;
-  G4bool isOut;
-
-  static G4double masslimit = 0.52*MeV ;
-
-  G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
-  G4double tlime=10.*keV,factor=2.*electron_mass_c2 ;
-  G4double loss1,loss2,ca,cb,cba ;
-  G4double losslim,clim ;
-  G4double taulim,rangelim,ltaulim,ltaumax,
-           LowEdgeEnergy,tau,Value,tau1,sqtau1 ;
-  G4double oldValue,tauold ;
-
-  G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  //  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-
-  // low energy part first...
- // heavy particle
- if(ParticleMass > masslimit)
- {
-  loss1 = physicsVector->GetValue(t1,isOut);
-  loss2 = physicsVector->GetValue(t2,isOut);
-  tau1 = t1/ParticleMass ;
-  sqtau1 = sqrt(tau1) ;
-  ca = (4.*loss2-loss1)/sqtau1 ;
-  cb = (2.*loss1-4.*loss2)/tau1 ;
-  cba = cb/ca ;
-  taulim = tlim/ParticleMass ;
-  ltaulim = log(taulim) ;
-  ltaumax = log(HighestKineticEnergy/ParticleMass) ;
-
-  i=-1;
-  oldValue = 0. ;
- 
-  do
-  {
-    i += 1 ;
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-    tau = LowEdgeEnergy/ParticleMass;
-    if ( tau <= tau1 )
-    {
-      Value = 2.*ParticleMass*log(1.+cba*sqrt(tau))/cb ;
-    }
-    else
-    {
-      Value = 2.*ParticleMass*log(1.+cba*sqtau1)/cb ;
-      if(tau<=taulim)
-      {
-        taulow = tau1 ;
-        tauhigh = tau ;
-        Value += RangeIntLin(physicsVector,nbin);
-      }
-      else
-      {
-
-        taulow = tau1 ;
-        tauhigh = taulim ;
-        Value += RangeIntLin(physicsVector,nbin) ;
-        ltaulow = ltaulim ;
-        ltauhigh = log(tau) ;
-        Value += RangeIntLog(physicsVector,nbin);
-      }
-    }
-
-    rangeVector->PutValue(i,Value);
-    oldValue = Value ;
-    tauold = tau ;
-  } while (tau<=taulim) ;
- }
- else
- // electron/positron 
- {
-  losslim = physicsVector->GetValue(tlime,isOut) ;
-  taulim  = tlime/electron_mass_c2;
-  clim    = losslim/sqrt(taulim);
-  ltaulim = log(taulim);
-  ltaumax = log(HighestKineticEnergy/electron_mass_c2);
-
-  i=-1;
-  oldValue = 0.;
-
-  do
-    {
-     i += 1 ;
-     LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-     tau = LowEdgeEnergy/electron_mass_c2;
-     if (tau <= taulim) Value = factor*sqrt(tau)/clim;
-     else {
-           rangelim = factor*taulim/losslim ;
-           ltaulow  = log(taulim);
-           ltauhigh = log(tau);
-           Value    = rangelim+RangeIntLog(physicsVector,nbin);
-          }
-     rangeVector->PutValue(i,Value);
-     oldValue = Value;
-     tauold   = tau;
-
-    } while (tau<=taulim);
-
- }
-
-  i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
-  {
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(j);
-    tau = LowEdgeEnergy/ParticleMass;
-    ltaulow = log(tauold);
-    ltauhigh = log(tau);
-    Value = oldValue+RangeIntLog(physicsVector,nbin);
-    rangeVector->PutValue(j,Value);
-    oldValue = Value ;
-
-    tauold = tau ;
-  }
-}   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -41,7 +41,6 @@
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyRayleigh.hh"
-
 #include "G4hLowEnergyIonisation.hh"
 
 #include "G4eIonisation.hh"
@@ -151,7 +150,6 @@ int main(int argc,char** argv)
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
   G4Material*  maO = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-
   G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
   water->AddElement(H,2);
   water->AddElement(O,1);
@@ -167,7 +165,6 @@ int main(int argc,char** argv)
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4int nMaterials = theMaterialTable->length();
-
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
@@ -377,7 +374,7 @@ int main(int argc,char** argv)
     if(lowE && !eionle) {
 
       eionle = new G4LowEnergyIonisation();
-      eionle->SetLowEnergyLimit(0.2*MeV);
+      //eionle->SetLowEnergyLimit(0.2*MeV);
       ebrle = new G4LowEnergyBremsstrahlung();
       comple = new G4LowEnergyCompton();
       convle = new G4LowEnergyGammaConversion();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.13 2001-05-18 17:44:12 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.14 2001-05-23 10:56:35 vnivanch Exp $
 //
 // 
 // ---------------------------------------------------------------
@@ -23,6 +23,7 @@
 // 14/07/99 corrections by L. Urban
 // 16/05/01 V.Ivanchenko: cross section is taken from the table.
 // 17/05/01 V.Ivanchenko: warning print out.
+// 22/05/01 V.Ivanchenko: switch on using tables of cross sections.
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -49,6 +49,7 @@
 // 21 Nov.  2000 V.Ivanchenko Fix a problem in fluctuations
 // 23 Nov.  2000 V.Ivanchenko Ion type fluctuations only for charge>0
 // 10 May   2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 23 May   2001 V.Ivanchenko Minor fix in PostStepDoIt
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -952,9 +953,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   aParticleChange.AddSecondary( theDeltaRay );
   aParticleChange.SetLocalEnergyDeposit (Edep);
   
-  //ResetNumberOfInteractionLengthLeft();
-  //return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-  return &aParticleChange ;
+  return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
