@@ -28,6 +28,7 @@
 //
 // Modifications:
 //
+// 17.08.04 V.Grichine, bug fixed for Tkin<=0 in SampleSecondary
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 //
 
@@ -581,8 +582,10 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
   G4double tmax = std::min(MaxSecondaryEnergy(dp), maxEnergy);
-  if( tmin >= tmax ) return 0;
-
+  if( tmin >= tmax )
+  {
+    G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;
+  }
   G4ThreeVector momentum = dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -592,7 +595,13 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
  
   G4double deltaTkin     = GetPostStepTransfer(scaledTkin);
-  if( deltaTkin <= 0. ) return 0;
+  if( deltaTkin <= 0. ) 
+  {
+    G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
+    G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    deltaTkin = 10*eV;
+    G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+  }
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);

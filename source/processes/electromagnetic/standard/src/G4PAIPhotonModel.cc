@@ -28,6 +28,7 @@
 //
 // Modifications:
 //
+// 17.08.04 V.Grichine, bug fixed for Tkin<=0 in SampleSecondary
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 //
 
@@ -764,7 +765,10 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   fdNdxCutPlasmonVector = fdNdxCutPlasmonTable[jMat];
 
   G4double tmax = std::min(MaxSecondaryEnergy(dp), maxEnergy);
-  if( tmin >= tmax ) return 0;
+  if( tmin >= tmax ) 
+  {
+    G4cout<<"G4PAIPhotonModel::SampleSecondary: tmin >= tmax "<<G4endl;
+  }
 
   G4ThreeVector momentum = dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
@@ -794,9 +798,15 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double deltaTkin     = GetPostStepTransfer(fPAIplasmonTable, fdNdxCutPlasmonVector,
                                                  iPlace, scaledTkin);
 
-    //  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+//  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
  
-    if( deltaTkin <= 0. ) return 0;
+    if( deltaTkin <= 0. ) 
+    {
+      G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
+      G4cout<<"G4PAIPhotonModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+      deltaTkin = 10*eV;
+      G4cout<<"Set G4PAIPhotonModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    }
 
     G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
     G4double totalMomentum      = sqrt(pSquare);
@@ -830,7 +840,13 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
 
     //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
 
-    if( deltaTkin <= 0. ) return 0;
+    if( deltaTkin <= 0. )
+    {
+      G4cout<<"Tkin of secondary photon <= 0."<<G4endl;
+      G4cout<<"G4PAIPhotonModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+      deltaTkin = 10*eV;
+      G4cout<<"Set G4PAIPhotonModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    }
 
     // G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
     // G4double totalMomentum      = sqrt(pSquare);
