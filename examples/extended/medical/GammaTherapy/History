@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2004-12-03 09:41:20 vnivanch Exp $
+$Id: History,v 1.7 2004-12-13 16:22:13 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 Dec 04: S.Sadilov (gtherapy-V06-02-06)
+- Comment out the StepFunction in GammaTherapy.in
 
 02 Dec 04: V.Ivant (gtherapy-V06-02-05)
 - Migration to cmath
