@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.4 2000-01-17 10:33:00 johna Exp $
+// $Id: test19.cc,v 1.5 2000-05-22 07:26:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 
 #ifdef G4UI_USE_TERMINAL
   #include "G4UIterminal.hh"
+  #include "G4UItcsh.hh"
 #endif
 #ifdef G4UI_USE_GAG
   #include "G4UIGAG.hh"
@@ -70,7 +71,8 @@ int main (int argc, char** argv) {
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
   if (argc >= 2) {
-    if (strcmp (argv[1], "dumb")==0)     session = new G4UIterminal;
+    if (strcmp (argv[1], "dumb")==0)     session =
+					   new G4UIterminal(new G4UItcsh);
 #ifdef G4UI_USE_WO
     else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
 #endif
