@@ -1,4 +1,4 @@
-$Id: History,v 1.254 2004-07-15 15:43:16 johna Exp $
+$Id: History,v 1.255 2004-07-16 14:33:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16h July 2004  John Allison
+- Refined forced wireframe algorithm - *always* force wireframe even
+  if hidden line removal is specified.
+- opengl-V06-02-04.
 
 15th July 2004  John Allison
 - Small improvement to G4XXX (sample graphics system).

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.28 2003-11-12 13:43:25 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.29 2004-07-16 14:33:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -563,8 +563,8 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
       pVisAttribs -> GetForcedDrawingStyle ();
-    // This is complicated because is hidden line removal has been
-    // requested we wish to preserve this.
+    // This is complicated because if hidden line and surface removal
+    // has been requested we wish to preserve this sometimes.
     switch (forcedStyle) {
     case (G4VisAttributes::solid):
       switch (style) {
@@ -582,18 +582,11 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
       break;
     case (G4VisAttributes::wireframe):
     default:
-      switch (style) {
-      case (G4ViewParameters::hlhsr):
-	style = G4ViewParameters::hlr;
-	break;
-      case (G4ViewParameters::hsr):
-	style = G4ViewParameters::wireframe;
-	break;
-      case (G4ViewParameters::hlr):
-      case (G4ViewParameters::wireframe):
-      default:
-	break;
-      }	
+      // But if forced style is wireframe, do it, because one of its
+      // main uses is in displaying the consituent solids of a Boolean
+      // solid and their surfaces overlap with the resulting Booean
+      // solid, making a mess if hlr is specified.
+      style = G4ViewParameters::wireframe;
       break;
     }
   }
