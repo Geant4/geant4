@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.3 1999-11-23 15:44:41 stesting Exp $
+// $Id: test16.hadronic.exerciser.cc,v 1.4 1999-11-23 16:04:15 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -28,7 +28,7 @@ static void OutputCases
 	   iParticle < particleNameList.entries ();
 	   iParticle++) {
 
-	cout << "\n#\# " << particleNameList [iParticle]
+	cout << "\n#\n# " << particleNameList [iParticle]
 	     << " at " << G4BestUnit (energyList [iEnergy], "Energy")
 	     << " in " << materialNameList [iMaterial]
 	     << "\n#";
