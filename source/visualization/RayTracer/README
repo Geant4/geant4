@@ -1,0 +1,82 @@
+
+G4RayTracer  version 1.0  (29/Jan/00)
+
+1. Introduction
+
+ G4RayTracer is a "ray tracing" package which uses Geant4 kernel mechanism
+of tracking/navigation. It visualizes any kinds of solids that Geant4
+kernel can navigate.
+
+2. Building a library
+
+ G4RayTracer is one of visualization driver which Geant4 supports. To build
+a library of G4RayTracer (library name G4RayTracer), set an environment
+variable G4VIS_BUILD_RAYTRACER_DRIVER.
+
+ $ setenv G4VIS_BUILD_RAYTRACER_DRIVER 1
+
+3. Using G4RayTracer
+
+ To use G4RayTracer, set an environment variable G4VIS_USE_RAYTRACER.
+
+ $ setenv G4VIS_USE_RAYTRACER 1
+
+Also, G4RayTracer has to be registored to the user's concrete VisManager.
+Refer an example given in 
+  geant4/source/visualization/management/include/MyVisManager.cc.
+
+4. Notes
+
+a) G4RayTracer generates JPEG file(s). To visualize these files, use your
+local program such as NetScape or xview, etc.
+
+b) The eye position must be inside of the defined world volume. If you want 
+to draw your detector setup from very far position, you need to enlarge
+your world volume.
+
+c) G4RayTracer ignores volumes without G4VisAttributes, volumes which are
+set as "forced wire frame", and volumes which are set as "invisible".
+
+d) In case you get unexpected figure, check 
+ d.1) eye position and target position are properly set,
+ d.2) light direction is properly set (note light direction is from
+     illumination light source to the objects),
+ d.3) span angle (given by angle for 100 pixels) is reasonable,
+ d.4) there is no surrounding volume(s) without transparency.
+
+e) G4RayTracer can be executed ONLY AT "Idle" state.
+
+5. Basic UI commands
+
+a) /vis/rayTracer/eyePosition x y z unit
+    eye position
+
+b) /vis/rayTracer/target x y z unit
+    target position
+    in default it is set to the origine
+
+c) /vis/rayTracer/lightDirection ex ey ez
+    vector of the illuminating light (need not to be a unit vector)
+    note light direction is from illumination light source to the objects
+
+d) /vis/rayTracer/column nColumn
+    number of holizontal pixels
+    in default 640 pixels
+
+e) /vis/rayTracer/row nRow
+    number of virtical pixels
+    in default 640 pixels
+
+f) /vis/rayTracer/span angle unit
+    angle for 100 pixels
+    in default 5 degree
+
+g) /vis/rayTracer/trace fileName
+    execution of G4RayTracer
+    "fileName" is the out put JPEG file name 
+    in default "g4RayTracer.jpeg"
+    NOTE THAT THIS COMMAND IS AVAILABLE ONLY AT IDLE STATE
+
+
+
+
