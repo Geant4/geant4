@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2002-01-22 22:51:01 radoone Exp $
+$Id: History,v 1.34 2002-01-28 16:36:47 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28/01/2002 : R. Chytracek
+- G4BREPSolidPCone::Inside() method restored back due to the fixes
+  in G4FPlane + fixes in constructor and ComputePlanarSurface helper
+  method.
+- Fixed first constructor of G4FPlane which now takes another argument
+  for setting explicitly the sense of a surface if required.
+- Fixed G4FPlane::Intersect() method which incorrectly ignored a special
+  case of a hit on surface point with ray direction opposite to surface
+  normal.
 
 22/01/2002 : R. Chytracek
 - Temporary fix of Inside() method in BREPSolidPCone.
