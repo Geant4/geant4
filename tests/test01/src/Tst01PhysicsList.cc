@@ -1,4 +1,4 @@
-// $Id: Tst01PhysicsList.cc,v 1.2 1999-04-17 04:05:07 kurasige Exp $
+// $Id: Tst01PhysicsList.cc,v 1.3 1999-10-03 09:48:46 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -19,7 +19,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -46,7 +46,7 @@ void Tst01PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -77,10 +77,10 @@ void Tst01PhysicsList::ConstructMesons()
   pConstructor.ConstructParticle();
 }
 
-void Tst01PhysicsList::ConstructBarions()
+void Tst01PhysicsList::ConstructBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 

@@ -30,7 +30,7 @@ protected:
   virtual void ConstructAllBosons();
   virtual void ConstructAllLeptons();
   virtual void ConstructAllMesons();
-  virtual void ConstructAllBarions();
+  virtual void ConstructAllBaryons();
   virtual void ConstructAllIons();
   virtual void ConstructAllShortLiveds();
 };
