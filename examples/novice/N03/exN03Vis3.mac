@@ -3,14 +3,15 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: September 12, 1999                                           #
+#  DATE: November 10, 1999                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
 #  USAGE:  % $G4BINDIR/exampleN03  exN03Vis3.mac                      #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN, Ghostview, Tcl/Tk            #
+#                                  DAWN (version 3.80 of after)       #
+#                                  Ghostview, Tcl/Tk                  #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
@@ -49,14 +50,6 @@ Setting to store particle trajactories for visualization
 # Add detector geometry to the current scene
 /vis/scene/add/volume
 
-# Make the low-density culling active.
-#  The global culling is "on" by default, and so
-#  the first line of the below is omittable.
-#  In order to visualize the "world box", set the 
-#  global culling "off": /vis/set/culling off.
-/vis/set/culling         on 
-/vis/set/cull_by_density on 0.01 
-
 # Bird-eye view of events with the hidden-surface 
 #  drawing style.
 /vis/camera/reset
@@ -67,19 +60,21 @@ Setting to store particle trajactories for visualization
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized views are saved to a vectorized
-#    EPS file "g4.eps".  
+#  * The visualized view is saved to a file "g4.eps"  
+#    with the "vectorized" PostScript format.
 #
 #  * In order to make the file "g4.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by hand.
 #
+#  * Set as follows to skip DAWN GUI.
+#    % setenv G4DAWNFILE_VIEWER "dawn -d"
+#
 #  * In order to save all views with a "multi-page" 
 #    EPS file "g4.eps", set the followings 
 #    in the 4th page of the DAWN GUI panel at 
-#    every visualization.
-#    (Note: You need DAWN version 3.80a or after.)
+#    "every" visualization.
 #
 #      Add  showpage: Yes
 #      Append mode  : Yes 
@@ -107,15 +102,9 @@ Setting to store particle trajactories for visualization
 /vis/scene/add/volume
 
 # Set camera parameters
+#  Camera is zoomed up by 1.5 times of the standard setting
 /vis/camera/reset 
 /vis/camera/zoom 1.5
-
-# Make the low-density culling active.
-#  These lines are omittable, since they have already 
-#  been written above for visualization with the 
-#  OGLIX driver.
-/vis/set/culling         on 
-/vis/set/cull_by_density on 0.01 
 
 # Bird-eye view of events with the wireframe drawing style
 /vis/camera/viewpoint    45 45 
@@ -129,8 +118,8 @@ Setting to store particle trajactories for visualization
 /run/beamOn              50
 
 # Cull detector geometry and show only trajectories.
-#  Note: The command "/vis/camera/reset" resets the zoom 
-#        factor to one.  But it does not reset view point.
+#  * The command "/vis/camera/reset" resets the zoom 
+#    factor to one.  But it does not reset view point.
 /vis/camera/reset 
 /vis/camera/viewpoint    0 0
 /vis/set/culling         on 

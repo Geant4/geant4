@@ -3,14 +3,15 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: September 12, 1999                                           #
+#  DATE: November 10, 1999                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of detector geometry     #
 #                                                                     #
 #  USAGE:  % $G4BINDIR/exampleN03  exN03Vis1.mac                      #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN, Ghostview, Tcl/Tk            #
+#                                  DAWN (version 3.80 of after)       #
+#                                  Ghostview, Tcl/Tk                  #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
@@ -29,9 +30,10 @@
 #                                                                     #
 #######################################################################
 
-#####################################################
-# Visualization with OGLSX (OpenGL Stored X) driver
-#####################################################
+#####################################
+# Visualization of detector geometry 
+#  with the OGLSX driver
+#####################################
 
 # Create "scene-0" 
 /vis/scene/create
@@ -40,57 +42,57 @@
 /vis/sceneHandler/create OGLSX
 /vis/viewer/create
 
-# Add detector geometry to the current scene
+# Add the detector geometry to the current scene
 /vis/scene/add/volume
 
-# Set camera parameters. 
-#   angle: (theta,phi) = (0, 0)
-#   zoom : 0.8 of the full screen size
-#
-# Note: The command "/vis/camera/reset" resets the zoom 
-#       factor to one.  But it does not reset viewpoint.
-#
-/vis/camera/reset
-/vis/camera/viewpoint 0 0
-/vis/camera/zoom      0.8 
+# Visualize the detector geometry 
+#  with the defalut camera parameters
+/vis/scene/notifyHandlers
+/vis/viewer/update
 
-# Visualize detector geometry with coordinate axes.
-#     x-axis:red,  y-axis:green,  z-axis:blue
-#
-#  Note: The command "/vis/scene/notifyHandlers" 
-#        does not co-work with "/vis/draw/axes".
-#        In future, /vis/scene/add/axes will be implemented.
-#        It will be used as follows:
-#          Idle> /vis/scene/add/volume
-#          Idle> /vis/scene/add/axes
-#          Idle> /vis/scene/notifyHandlers
-/vis/draw/current
-/vis/draw/axes       0 0 0 500
-/vis/show/view 
-
-# Slide show (spinning) of the view created above.
-#  Draw 60 frame with steps of 3 degrees.
+# Slide show (spinning) of the view visualized above.
+#  Draw 60 frames with steps of 3 degrees.
 /vis/camera/reset
 /vis/camera/viewpoint  20 20
 /vis/camera/zoom       0.8 
 /vis/camera/spin       60 3
 
-# Bird's-eye view of the detector
+# Bird's-eye view of the detector geometry 
+#
+#  viewpoint  : (theta,phi) = (20*deg, 70*deg), 
+#  zoom factor: 0.8 of the full screen size
+#  coordinate axes:
+#     x-axis:red,  y-axis:green,  z-axis:blue
+#     origin: (0,0,0),  length: 500
+#
+#  Note: The visualization commands are under reconstruction.
+#        In future, the lines below should be rewritten, 
+#        replacing  /vis/draw/... with  /vis/add/... .
+#        In using /vis/draw/..., use /vis/show/view 
+#        instead of  /vis/viewer/update  
+#        in order to flush visualization. 
+#
 /vis/camera/reset
-/vis/camera/viewpoint 20 70
+/vis/camera/viewpoint  20 70
 /vis/camera/zoom       0.8 
-/vis/scene/notifyHandlers
+/vis/draw/current
+/vis/draw/axes         0 0 0 500
+/vis/show/view
+
 
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a vectorized
-#    EPS file "g4.eps"  
+#  * The visualized view is saved to a file "g4.eps"  
+#    with the "vectorized" PostScript format.
 #
 #  * In order to make the file "g4.eps" printable, 
-#    append the "showpage" PostScript command to the file 
+#    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel 
-#    or by hand.
+#    or by editing the file by hand.
+#
+#  * Set as follows to skip DAWN GUI.
+#    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
 #-----
@@ -105,19 +107,21 @@
 # This line is omittable.
 /vis/sceneHandler/attach scene-1
 
-# Bird's-eye view of the detector geometry with coordinate axes.
+# Bird's-eye view of a detector component (Absorber.0)
 #  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
 #  zoom factor: 0.9 of the full screen size
 #  coordinate axes:
 #     x-axis:red,  y-axis:green,  z-axis:blue
-/vis/scene/add/volume Absorber 0
+#     origin: (0,0,0),  length: 500
+#
+/vis/scene/add/volume  Absorber 0
 /vis/camera/reset
-/vis/camera/zoom      0.9 
-/vis/camera/viewpoint 35 35
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
 /vis/draw/current
-/vis/draw/axes     0 0 0 500
-/vis/draw/text     0 0 0 mm 50 -120 -200   Absorber.0 
-/vis/show/view 
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm  50 -300 -200   Absorber.0 
+/vis/show/view
 
 #-----  
 # Create "scene-2" (Gap.0)
@@ -131,19 +135,16 @@
 # This line is omittable.
 /vis/sceneHandler/attach scene-2
 
-# Bird's-eye view of the detector geometry with coordinate axes.
-#  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
-#  zoom factor: 0.9 of the full screen size
-#  coordinate axes:
-#     x-axis:red,  y-axis:green,  z-axis:blue
-/vis/scene/add/volume Gap 0
+# Bird's-eye view of a detector component (Gap.0)
+#
+/vis/scene/add/volume  Gap 0
 /vis/camera/reset
-/vis/camera/zoom      0.9 
-/vis/camera/viewpoint 35 35
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
 /vis/draw/current
-/vis/draw/axes     0 0 0 500
-/vis/draw/text     0 0 0 mm 50 -120 -200   Gap.0
-/vis/show/view 
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm 50 -200 -200   Gap.0
+/vis/show/view
 
 #-----
 # Create "scene-3" (world)
@@ -157,25 +158,18 @@
 # This line is omittable.
 /vis/sceneHandler/attach scene-3
 
-# Bird's-eye view of the detector geometry with coordinate axes.
-#  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
-#  zoom factor: 0.9 of the full screen size
-#  coordinate axes:
-#     x-axis:red,  y-axis:green,  z-axis:blue
-#  
-#  Note: The argument of /vis/scene/add/volume, "world",
-#        is omittable.
-#  Note: "/vis/set/culling off" makes invisible volume 
-#        "world" visible.
+# Bird's-eye view of the whole detector components
+#  * The argument of /vis/scene/add/volume, "world",
+#    is omittable.
+#  * "/vis/set/culling off" makes invisible volume 
+#    "world" visible.
 #
-/vis/scene/add/volume world
+/vis/scene/add/volume  world
 /vis/camera/reset
-/vis/camera/zoom      0.9 
-/vis/camera/viewpoint 35 35
-/vis/set/culling      off
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
+/vis/set/culling       off
 /vis/draw/current
-/vis/draw/axes     0 0 0 500
-/vis/draw/text     0 0 0 mm 50 -120 -200   world
-/vis/show/view 
-
-
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm 50 -50 -200   world
+/vis/show/view
