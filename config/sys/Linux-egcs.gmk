@@ -16,15 +16,15 @@ ifeq ($(G4SYSTEM),Linux-egcs)
       CCFLAGS   := -g
     endif
   endif
-  ifdef G4LIB_BUILD_SHARED
-    CXXFLAGS  += -fPIC
-    FCFLAGS   += -fPIC
-    CCFLAGS   += -fPIC
-  endif
   ifdef G4PROFILE
     CXXFLAGS  += -pg
     FCFLAGS   += -pg
     CCFLAGS   += -pg
+  endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
