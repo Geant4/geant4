@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.31 2002-12-13 15:46:47 stesting Exp $
+# $Id: Configure,v 1.32 2003-02-21 15:22:04 stesting Exp $
 #
-# Generated on Fri Dec 13 16:43:52 CET 2002 [metaconfig 3.0 PL70]
+# Generated on Fri Feb 21 16:16:41 CET 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1812,7 +1812,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo CPPFLAGS=$CPPFLAGS
 	echo $CPPFLAGS
@@ -1826,7 +1826,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo CXXFLAGS=$CXXFLAGS
 	echo $CXXFLAGS
@@ -1840,7 +1840,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo INCFLAGS=$INCFLAGS
 	echo $INCFLAGS
@@ -1854,7 +1854,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo LDFLAGS=$LDFLAGS
 	echo $LDFLAGS
@@ -1889,8 +1889,8 @@ fi
 	
 # Global libs
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
-	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
+	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
 
 	echo "$LDLIBS_2 $c"
 
@@ -1909,8 +1909,8 @@ fi
 
 	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
 
-	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
-	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
 
