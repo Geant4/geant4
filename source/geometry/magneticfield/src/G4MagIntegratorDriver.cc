@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.16 2001-10-25 09:11:15 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.17 2001-10-25 09:16:50 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,7 +158,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         if( endPointDist >= h*(1.+perThousand) ){ 
            WarnEndPointTooFar ( endPointDist, h, eps, dbg ); 
 	   G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
-	   PrintStatus( ystart, x1, y, x, -nstp);  no_warnings++;
+	   // G4cerr << "Mid:EndPtFar> ";
+	   PrintStatus( ystart, x1, y, x, no_warnings?nstp:-nstp);  
+	   no_warnings++;
                 // Potentially add as arguments:  <dydx> - as Initial Force
 	}
      } else { // ie (!dbg)
@@ -177,7 +179,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	  ){
 	     //  Issue WARNING
 	     WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
-	     PrintStatus( ystart, x1, y, x, no_warnings?-nstp:nstp);
+	     // G4cerr << "Mid:SmallStep> ";
+	     PrintStatus( ystart, x1, y, x, no_warnings?nstp:-nstp);
 	     no_warnings++;
 	}
         // else 
