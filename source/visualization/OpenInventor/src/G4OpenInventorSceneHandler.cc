@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.12 2001-07-11 10:09:00 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.13 2002-12-11 16:08:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -789,4 +789,13 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 	return size ;
 
 } // G4OpenInventorSceneHandler::GetMarkerSize ()
+
+void G4OpenInventorSceneHandler::AddThis(const G4VTrajectory& traj) {
+  G4VSceneHandler::AddThis(traj);  // For now.
+}
+
+void G4OpenInventorSceneHandler::AddThis(const G4VHit& hit) {
+  G4VSceneHandler::AddThis(hit);  // For now.
+}
+
 #endif
