@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionDynamics.cc,v 1.3 1999-03-29 09:56:35 hpw Exp $
+// $Id: G4ReactionDynamics.cc,v 1.4 1999-06-17 13:41:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
@@ -31,6 +31,7 @@
  // J.L. Chuma, 06-Aug-97:  Added original incident particle, before Fermi motion and
  //                         evaporation effects are included, needed for self absorption
  //                         and corrections for single particle spectra (shower particles)
+ // J. Allison, 17-Jun-99:  Replaced a min function to get correct behaviour on DEC.
  
 #include "G4ReactionDynamics.hh"
 #include "Randomize.hh"
@@ -853,7 +854,20 @@
     {
       const G4double cpar[] = { 0.6, 0.6, 0.35, 0.15, 0.10 };
       const G4double gpar[] = { 2.6, 2.6, 1.80, 1.30, 1.20 };
-      G4int tempCount = min( 5, backwardNucleonCount ) - 1;
+      // Replaced the following min function to get correct behaviour on DEC.
+      // G4int tempCount = min( 5, backwardNucleonCount ) - 1;
+      G4int tempCount;
+      if (backwardNucleonCount < 5)
+	{
+	  tempCount = backwardNucleonCount;
+	}
+      else
+	{
+	  tempCount = 5;
+	}
+      tempCount--;
+      //cout << "backwardNucleonCount " << backwardNucleonCount << endl;
+      //cout << "tempCount " << tempCount << endl;
       G4double rmb0 = 0.0;
       if( targetParticle.GetSide() == -3 )
         rmb0 += targetParticle.GetMass()/GeV;
