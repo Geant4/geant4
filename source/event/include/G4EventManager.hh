@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.12 2003-09-09 20:09:17 asaim Exp $
+// $Id: G4EventManager.hh,v 1.13 2004-05-04 16:42:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -172,6 +172,11 @@ class G4EventManager
       // corresponding managers.
       void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
       { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
+
+      inline G4StackManager* GetStackManager() const
+      { return trackContainer; }
+      inline G4TrackingManager* GetTrackingManager() const
+      { return trackManager; }
 
   public: // with description
       inline G4int GetVerboseLevel()
