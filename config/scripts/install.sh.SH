@@ -428,7 +428,7 @@ $g4make 2>&1 | tee $g4conf/g4make.log
 fi
 
 # Check for errors in log file
-export err=\$[`grep Error $g4conf/g4make.log | wc -w`]
+export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
 # echo err=\$err
 
 if [ X\$err = X0 ] ; then

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.35 2003-08-26 23:27:51 stesting Exp $
+# $Id: Configure,v 1.36 2003-10-02 12:15:45 stesting Exp $
 #
-# Generated on Wed Aug 27 01:25:17 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 13:48:01 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2623,7 +2623,7 @@ gans=$ans
 done
 
 
-clhep_dirs=`find /usr/local/include /usr/include -type d -name CLHEP`
+clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
 #echo clhep_dirs=$clhep_dirs
 
 if test "X$clhep_dirs" != "X" ; then
@@ -2631,13 +2631,11 @@ if test "X$clhep_dirs" != "X" ; then
 g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
 #echo g4clhep_base_dir_found=$g4clhep_base_dir_found
 
-g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
+
+#g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
 #echo g4clhep_base_dir_n=$g4clhep_base_dir_n
-
-n=$[$g4clhep_base_dir_n-2]
-#echo n=$n
-
-g4clhep_base_dir_found=`echo $g4clhep_base_dir_found|cut -d"/" -f1-$n`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
 else
@@ -2668,9 +2666,11 @@ esac
 
 #while test 1 = 1  ; do
 
+if test "X$clhep_dirs" != "X" ; then
+
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed (it was found or set by defalt):
+Please, specify where CLHEP is installed (it was found in):
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -2683,6 +2683,24 @@ CLHEP_LIB
 You will be asked about customizing these next.
 EOM`
 
+else
+
+g4message=`cat << EOM
+
+Please, specify where CLHEP is installed (set by default):
+
+CLHEP_BASE_DIR:			$g4clhep_base_dir
+
+According to it will be set:
+
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
+
+You will be asked about customizing these next.
+EOM`
+
+fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
@@ -3566,6 +3584,8 @@ if test "X$ogl_dirs" != "X" ; then
 g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
 #echo g4ogl_base_dir_found=$g4ogl_base_dir_found
 
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 
 	g4vis_oglhome=$g4ogl_base_dir_found
@@ -4141,6 +4161,8 @@ esac
 
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
 
+if test "X$ogl_dirs" != "X" ; then
+
 g4message=`cat << EOM
 
   OGLHOME/include
@@ -4148,8 +4170,22 @@ g4message=`cat << EOM
 
 You have selected to use OpenGL driver.
 Specify the correct path (OGLHOME) where OpenGL is installed in your system
-(it was found or set by defalt):
+(it was found in):
 EOM`
+
+else
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+Specify the correct path (OGLHOME) where OpenGL is installed in your system
+(set by defalt):
+EOM`
+
+fi
 
 dflt=$g4vis_oglhome
 fn='d~'
