@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 1.7 2001-03-05 08:39:55 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.8 2001-03-12 05:58:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 //   remove BuildPhysicTabel()   06 June 1998 H.Kurashige
 //   bug in CalcEnergyCuts is corrected , 22 June 1998 L.Urban
 //   modify CalcEnergyCuts 09 Nov. 1998, L.Urban
+//   added  RestoreCuts  H.Kurashige 09 Mar. 2001
 // ------------------------------------------------------------
 #include "globals.hh"
 #include "G4ParticleWithCuts.hh"
@@ -274,6 +275,27 @@ G4double G4ParticleWithCuts::ConvertCutToKineticEnergy(G4RangeVector* rangeVecto
     return T3;
   }
 }
+
+// **********************************************************************
+// **************************** RestoreCuts *********************************
+// **********************************************************************
+
+void  G4ParticleWithCuts::RestoreCuts(G4double cutInLength,
+				      const G4double* cutInEnergy )
+{
+  // Set cut in stopping range
+  theCutInMaxInteractionLength = cutInLength;
+
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+
+  // Restore the vector of cuts in energy corresponding to the range cut
+  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
+  theKineticEnergyCuts = new G4double [materialTable->length()];
+  for (G4int j=0; j<materialTable->length(); j +=1) {
+    theKineticEnergyCuts[j] = cutInEnergy[j];
+  } 
+}
+      
 
 // **********************************************************************
 // **************************** SetCuts *********************************

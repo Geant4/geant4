@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.7 2000-02-25 07:36:15 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.8 2001-03-12 05:58:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 // added  ShortLived flag and ApplyCuts flag  H.Kurashige 27  June 1998
 // fixed  some improper codings   H.Kurashige 08 Apr. 1999
 // added  sub-type  H.Kurashige 15 Feb. 2000
+// added  RestoreCuts  H.Kurashige 09 Mar. 2001
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -96,7 +97,15 @@ class G4ParticleDefinition
       // applyCuts flag
       G4bool                GetApplyCutsFlag() const;
       void                  SetApplyCutsFlag(G4bool flag);
+
+  public: 
+      // This method concerning cut values is supposed to be used by
+      // G4VUserPhysicsList to restore cutvalues witout calculation
+      // Actual implementation can be seen in the class G4ParticleWithCuts  
+      virtual void          RestoreCuts(G4double cutInLength,
+					const G4double* cutInEnergy ){}
       
+    
   public: // With Description
   // By these following Getxxxx methods, you can get values 
   // for members which can not be changed

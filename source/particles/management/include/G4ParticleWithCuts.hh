@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.5 1999-12-15 14:51:11 gunter Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.6 2001-03-12 05:58:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 //      BuildPhysicsTable() becomes dummy H.Kurashige 06 June 1998
 //      added  GetEnergyThreshold  H.Kurashige 08 June 1998
 //      change Lowest/HighestEnergy as static H.Kurashige 18 June 1998 
+//      added  RestoreCuts  H.Kurashige 09 Mar. 2001
 // ----------------------------------------------------------------
 // Class Description
 // "theCutInMaxInteractionLength", for charged particles, is
@@ -110,6 +111,13 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    virtual G4double      	GetEnergyThreshold(const G4Material* aMaterial) const;
    static  void          	SetEnergyRange(G4double, G4double);
 
+  public:  // With Description
+   // This method concerning cut values is supposed to be used by
+   // G4VUserPhysicsList to restore cutvalues witout calculation
+
+   virtual void                  RestoreCuts(G4double cutInLength,
+					     const G4double* cutInEnergy );
+      
  protected:
     virtual   void  CalcEnergyCuts(G4double aCut);
 
