@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.hh,v 1.1 2001-11-06 11:48:06 johna Exp $
+// $Id: G4HepRepFileViewer.hh,v 1.2 2001-11-19 15:06:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 
 #ifndef G4HepRepFileVIEWER_HH
 #define G4HepRepFileVIEWER_HH
+
+// #define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VViewer.hh"
 

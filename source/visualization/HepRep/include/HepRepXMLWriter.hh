@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.1 2001-11-06 11:48:06 johna Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.2 2001-11-19 15:06:52 johna Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -17,7 +17,7 @@
 #ifndef HepRepXMLWriter_hh
 #define HepRepXMLWriter_hh
 
-#include <fstream.h>
+#include "g4std/fstream"
 
 class HepRepXMLWriter
 {
