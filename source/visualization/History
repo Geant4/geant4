@@ -1,4 +1,4 @@
-$Id: History,v 1.227 2003-10-17 09:22:37 gbarrand Exp $
+$Id: History,v 1.228 2003-11-04 09:17:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th November 2003  Gabriele Cosmo  (vis-V05-02-02)
+- Includes removal of OPACS module.
+- Includes "modeling-V05-02-00".
 
 17th October 2003  Guy Barrand
 - OPACS being (for long) deprecated, remove OPACS related things
