@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-04-17 07:00:35 kurasige Exp $
+$Id: History,v 1.3 1999-06-07 09:33:28 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 7 June, 1999 G.Folger
+- Modify GNUmakefile for NT.
 17 Apr., 1999 H.Kurashige 
 - Modify SetCuts() and ConstructParticle() in Tst07PhysicsList
 - Modify BeginOfRunAction() and EndOfRunAction() in Tst07RunAction
