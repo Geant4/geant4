@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.9 2001-08-01 17:11:27 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.10 2003-02-12 14:21:15 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -315,14 +315,15 @@
     G4Box* theFrame = new G4Box ("Frame",10*m, 10*m, 10*m);
     
     G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
-                                                        (*theMaterialTable)(imat),
+                                                        (*theMaterialTable)[imat],
                                                         "LFrame", 0, 0, 0);
     
     G4PVPlacement* PhysicalFrame = new G4PVPlacement(0,G4ThreeVector(),
                                                      "PFrame",LogicalFrame,0,false,0);
     G4RotationMatrix theNull;
     G4ThreeVector theCenter(0,0,0);
-    G4GRSVolume * theTouchable = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4GRSVolume * theTouch = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4TouchableHandle theTouchable(theTouch);
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
@@ -406,9 +407,9 @@ int j = 0;
            G4DynamicParticle* aParticle =
              new G4DynamicParticle( theParticles[i], theDirection, incomingEnergy );
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
-           aTrack->SetTouchable(theTouchable);
+           aTrack->SetTouchableHandle(theTouchable);
            aStep.SetTrack( aTrack );
-           aStepPoint.SetTouchable(theTouchable);
+           aStepPoint.SetTouchableHandle(theTouchable);
 	   aStepPoint.SetMaterial(theMaterials[0]);
            aStep.SetPreStepPoint(&aStepPoint);
 	   aStep.SetPostStepPoint(&aStepPoint);
