@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.3 1999-05-10 14:04:24 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.4 1999-10-04 15:37:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,20 +37,24 @@ public:
   (G4VPhysicalVolume*,
    G4int soughtDepth = UNLIMITED,
    const G4Transform3D& modelTransformation = G4Transform3D::Identity,
-   const G4ModelingParameters* = 0);
+   const G4ModelingParameters* = 0,
+   G4bool useFullExtent = false);
 
   virtual ~G4PhysicalVolumeModel ();
 
   void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene.  It
-  // can also provide special information through pointers to working
-  // space in the scene.  These pointers must be set up (if required
-  // by the scene) in the scene's implementaion of EstablishSpecials
+  // The main task of a model is to describe itself to the scene
+  // handler (a object which inherits G4VSceneHandler, which inherits
+  // G4VGraphicsScene).  It can also provide special information
+  // through pointers to working space in the scene handler.  These
+  // pointers must be set up (if required by the scene handler) in the
+  // scene handler's implementaion of EstablishSpecials
   // (G4PhysicalVolumeModel&) which is called from here.  To do this,
-  // the scene should call DefinePointersToWorkingSpace - see below.
-  // DecommissionSpecials (G4PhysicalVolumeModel&) is also called from
-  // here.  To see how this works, look at the implementation of this
-  // function and G4VScene::Establish/DecommissionSpecials.
+  // the scene handler should call DefinePointersToWorkingSpace - see
+  // below.  DecommissionSpecials (G4PhysicalVolumeModel&) is also
+  // called from here.  To see how this works, look at the
+  // implementation of this function and
+  // G4VSceneHandler::Establish/DecommissionSpecials.
 
   G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
@@ -73,21 +77,21 @@ public:
   // (inherited from G4VModel) and the access functions of
   // G4ModelingParameters.
 
-private:
+protected:
 
-  void VisitGeometryAndGetVisReps (G4VPhysicalVolume* pVPV,
+  void VisitGeometryAndGetVisReps (G4VPhysicalVolume*,
 				   G4int soughtDepth,
-				   const G4Transform3D& theAT,
-				   G4VGraphicsScene& scene);
-  void DescribeAndDescend (G4VPhysicalVolume* pVPV,
+				   const G4Transform3D&,
+				   G4VGraphicsScene&);
+  void DescribeAndDescend (G4VPhysicalVolume*,
 			   G4int soughtDepth,
-			   G4LogicalVolume* pLV,
-			   G4VSolid* pSol,
-			   const G4Material* pMaterial,
-			   const G4Transform3D& theAT,
-			   G4VGraphicsScene& scene);
-  G4bool IsThisCulled     (const G4LogicalVolume* pLV,
-			   const G4Material* pMaterial);
+			   G4LogicalVolume*,
+			   G4VSolid*,
+			   const G4Material*,
+			   const G4Transform3D&,
+			   G4VGraphicsScene&);
+  G4bool IsThisCulled     (const G4LogicalVolume*,
+			   const G4Material*);
   G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);
 
   /////////////////////////////////////////////////////////
@@ -109,7 +113,5 @@ private:
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
 
 };
-
-#include "G4PhysicalVolumeModel.icc"
 
 #endif
