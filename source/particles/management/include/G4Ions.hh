@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 1.2 1999-04-13 07:58:28 kurasige Exp $
+// $Id: G4Ions.hh,v 1.3 1999-08-18 09:15:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,8 @@
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
+//      Add excitation energy         17 Aug. 1999 H.Kurashige
+//
 
 
 #ifndef G4Ions_h
@@ -49,16 +51,75 @@ class G4Ions : public G4ParticleWithCuts
        G4DecayTable        *decaytable
    );
    virtual    			~G4Ions(){};
-   G4Ions*    			IonsDefinition(){return this;};
-   G4Ions*    			Ions(){return this;};
+   G4Ions*    			IonsDefinition();
+   G4Ions*    			Ions();
 
    virtual G4double 	   	GetCuts() {return theIonsLengthCut;}   
    virtual const G4double* 	GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
 
-   virtual void 			SetCuts(G4double aCut); 
+   virtual void 		SetCuts(G4double aCut); 
+
+
+  public: 
+   G4int    GetAtomicNumber() const;
+   G4int    GetAtomicMass() const;
+
+   G4int    GetExcitationLevel() const ; 
+   void     SetExcitationLevel(G4int value);
+
+   G4double GetExcitationEnergy() const ; 
+   void     SetExcitationEnergy(G4double value);
+  
+  private:
+   G4double theExcitationEnergy; 
+   G4int    theExcitationLevel; 
+
 };
 
-inline void G4Ions::SetCuts(G4double aCut)
+inline
+ G4Ions* G4Ions::Ions() 
+{
+  return this;
+}
+
+inline
+ G4int G4Ions::GetAtomicNumber() const 
+{
+  return int(GetPDGCharge()/eplus); 
+}
+
+inline
+ G4int G4Ions::GetAtomicMass() const 
+{
+  return GetBaryonNumber();
+}
+
+inline
+ G4double G4Ions::GetExcitationEnergy() const 
+{
+  return theExcitationEnergy;
+}
+
+inline
+ void G4Ions::SetExcitationEnergy(G4double value) 
+{
+  theExcitationEnergy = value;
+}
+
+inline
+ G4int G4Ions::GetExcitationLevel() const 
+{
+  return theExcitationLevel;
+}
+
+inline
+ void G4Ions::SetExcitationLevel(G4int value) 
+{
+  theExcitationLevel = value;
+}
+
+inline 
+ void G4Ions::SetCuts(G4double aCut)
 {
   CalcEnergyCuts(aCut);
   theIonsLengthCut = theCutInMaxInteractionLength;  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.3 1999-04-23 00:48:01 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.4 1999-08-18 09:15:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,9 @@
 //      modified FindIon                 02 Aug., 98 H.Kurashige
 //      added dictionary for encoding    24 Sep., 98 H.Kurashige
 //      added RemoveAllParticles()        8 Nov., 98 H.Kurashige
+//         --------------------------------
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
+//      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
@@ -89,15 +91,39 @@ class G4ParticleTable
    G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle);
    // returns a pointer to its anti-particle (0 if not contained)
 
+
    G4ParticleDefinition* FindIon( G4int atomicNumber, 
 				  G4int atomicMass, 
-				  G4int iAngularMomentum = 0, 
-				  G4int iCharge = -1);
+				  G4int excitationLevel = 0);
+   //  return the pointer to an ion (returns 0 if the ion does not exist)
+   //    excitationLevel is integer (0: ground state)
+
+   G4ParticleDefinition* GetIon(  G4int atomicNumber, 
+				  G4int atomicMass, 
+				  G4int excitationLevel = 0);
+   //  return the pointer to an ion ( create ion if the ion does not exist)
+   //    excitationLevel is integer (0: ground state)
+
+   G4ParticleDefinition* FindIon( G4int    atomicNumber, 
+				  G4int    atomicMass, 
+				  G4double excitationEnergy );
+   //  return the pointer to an ion  (returns 0 if the ion does not exist)
+   //  the ion has excitation energy nearest to given excitationEnergy  (0: ground state)
+
+   G4ParticleDefinition* GetIon(  G4int    atomicNumber, 
+				  G4int    atomicMass, 
+				  G4double   excitationEnergy);
+   //  return the pointer to an ion ( create ion if the ion does not exist)
+   //  It has excitation energy nearest to given excitationEnergy  (0: ground state)
+  
+   G4ParticleDefinition* FindIon( G4int atomicNumber, 
+				  G4int atomicMass, 
+				  G4int dummy1,
+				  G4int dummy2 );
    //  return the pointer to an ion
-   //    iAngularMomentum is integer and should be given in unit of 1/2 
-   //    (i.e. you should set iAngularMomentum = 2 if you want an ion with total angular momentum = 1)
-   //    iCharge is initeger and should be given in unit of eplus
-   //    you can omit spin (default value = 0) and charge (default value = -1 : fully ionized)
+   //  !! This routine behaves same as GetIon( atomicNumber, atomicMass, 0) 
+   //  !! The third and fourth arguments are meaningless
+   //  !! This routine is provided for compatibility to old version
 
    G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
    // insert the particle into ParticleTable 

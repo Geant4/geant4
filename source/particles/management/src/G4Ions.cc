@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.cc,v 1.1 1999-01-07 16:10:33 gunter Exp $
+// $Id: G4Ions.cc,v 1.2 1999-08-18 09:15:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,13 @@ G4Ions::G4Ions(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
-  // Initialise cuts at construction to enable production cuts since
-  // ions are not in the particle table at initialisation.
-  // SetCuts(1.e-30);
+  // initialize excitation energy/level
+   theExcitationLevel = 0;
+   theExcitationEnergy = 0.0;
+}
+
+
+G4Ions* G4Ions::IonsDefinition()
+{
+  return this;
 }

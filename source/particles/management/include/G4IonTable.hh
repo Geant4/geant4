@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.5 1999-05-06 16:37:36 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.6 1999-08-18 09:15:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //      modified GetIon                 02 Aug., 98 H.Kurashige
 //      added Remove()                  06 Nov.,98 H.Kurashige
 //      add GetNucleusMass              15 Mar. 99  H.Kurashige
+//          -----
+//      Modified GetIon methods         17 Aug. 99 H.Kurashige
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -44,26 +46,48 @@ class G4IonTable
    G4IonTable();
 
  protected:
+   // hide copy construictor as protected 
    G4IonTable(const  G4IonTable &right);
 
  public:
+  // destructor
    virtual ~G4IonTable();
 
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
-   // get a pointer to the ion with A,Z,J,Q 
+
+ public: 
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L);
+   // return pointer of ion if it exists 
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L);
+   // get a pointer to the ion with A,Z,J 
    // The ion will be created if not exist yet
    //   Z: Atomic Number
    //   A: Atomic Mass
-   //   J: Total Angular momentum
-   //   Q: Total charge  
-  
-   G4bool                IsIon(G4ParticleDefinition*) const;
-   // return true if the particle is ion
-  
-   void DumpTable(const G4String &particle_name = "ALL") const;
-   // dump information of particles specified by name 
+   //   L: Excitation level (0=stable state)
 
-   G4String             GetIonName(G4int Z, G4int A, G4int J, G4int Q) const;
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E);
+   // return pointer of ion if it exists 
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E);
+   // get a pointer to the ion with A,Z,J 
+   // The ion will be created if not exist yet
+   //   Z: Atomic Number
+   //   A: Atomic Mass
+   //   E: Excitaion energy
+   // !!  This method is a dummy now !!
+   // !! Implementation will be later !!
+ 
+
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
+   // This method is provided for compatibilties 
+   // The last argument of "Q" gives no effect
+   // The third argument of J corresponds the excitaion level
+   
+   // !! PDGCharge inG4ParticleDefinition of ions is           !!
+   // !! electric charge of nucleus (i.e. fully ionized ions)  !!
+
+   static G4bool        IsIon(G4ParticleDefinition*);
+   // return true if the particle is ion
+
+   G4String             GetIonName(G4int Z, G4int A, G4int L) const;
    // get ion name
 
    G4double             GetIonMass(G4int Z, G4int A) const;
@@ -72,18 +96,33 @@ class G4IonTable
    // ,where Z is Atomic Number (number of protons) and
    //  A is Atomic Number (number of nucleons)
 
+
    G4int                 Entries() const;
    G4bool                Contains(const G4ParticleDefinition *particle) const;
    void                  Insert(G4ParticleDefinition* particle);
    void                  Remove(G4ParticleDefinition* particle);
    G4ParticleDefinition* GetParticle(G4int index) const;
 
+    void DumpTable(const G4String &particle_name = "ALL") const;
+   // dump information of particles specified by name 
+
 
  protected:
+
+   G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
+   G4bool                IsLightIon(G4ParticleDefinition*) const;
+   // return true if the particle is pre-defined ion
+ 
+   // Utilities
+   G4double             GetProtonMass() const;
+   G4double             GetNeutronMass() const;
+   G4double             GetElectronMass() const;
+
+   // 
    G4int                GetVerboseLevel() const;
 
  private:
-   G4IonList*                  fIonList;
+   G4IonList*                  fIonList; 
 
    enum { numberOfElements = 110};
    static const G4String       elementName[numberOfElements];
@@ -105,6 +144,7 @@ inline G4ParticleDefinition*  G4IonTable::GetParticle(G4int index) const
 {
   return (*fIonList)[index];
 }
+
 
 #endif
 

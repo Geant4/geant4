@@ -1,0 +1,236 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4DynamicParticle.icc,v 1.1 1999-08-18 09:15:10 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+//
+//	For information related to this code contact:
+//	CERN, CN Division, ASD group
+//	History: first implementation, based on object model of
+//                             17 AUg. 1999   H.Kurashige  
+// ------------------------------------------------------------
+
+
+extern G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
+
+// ------------------------
+// Inlined operators
+// ------------------------
+
+inline void * G4DynamicParticle::operator new(size_t)
+{
+  void * aDynamicParticle;
+  aDynamicParticle = (void *) aDynamicParticleAllocator.MallocSingle();
+  return aDynamicParticle;
+}
+
+inline void G4DynamicParticle::operator delete(void * aDynamicParticle)
+{
+  aDynamicParticleAllocator.FreeSingle((G4DynamicParticle *) aDynamicParticle);
+}
+
+// ------------------------
+// Inlined functions
+// ------------------------
+
+inline G4ElectronOccupancy* G4DynamicParticle::GetElectronOccupancy() const
+{
+  return theElectronOccupancy;
+}
+
+inline G4int  G4DynamicParticle::GetTotalOccupancy() const
+{
+  G4int value = 0;
+  if ( theElectronOccupancy != 0) { 
+    value = theElectronOccupancy->GetTotalOccupancy();
+  }
+  return value;
+}
+
+inline G4int   G4DynamicParticle::GetOccupancy(G4int orbit) const
+{
+  G4int value = 0;
+  if ( theElectronOccupancy != 0) { 
+    value = theElectronOccupancy->GetOccupancy(orbit);
+  }
+  return value;
+}
+
+inline void  G4DynamicParticle::AddElectron(G4int orbit, G4int number )
+{
+  if ( theElectronOccupancy != 0) { 
+    G4int n = theElectronOccupancy->AddElectron(orbit, number );
+    theDynamicalCharge -= eplus * n;
+    theDynamicalMass += GetElectronMass() * n;
+  }
+}
+
+inline void    G4DynamicParticle::RemoveElectron(G4int orbit, G4int number)
+{
+  if ( theElectronOccupancy != 0) { 
+    G4int n = theElectronOccupancy->RemoveElectron(orbit, number );
+    theDynamicalCharge -+ eplus * n;
+    theDynamicalMass -= GetElectronMass() * n;
+  }
+}
+
+ 
+
+inline G4double G4DynamicParticle::GetCharge() const
+{
+  return theDynamicalCharge;
+}
+
+inline void G4DynamicParticle::SetCharge(G4double newCharge)
+{
+  theDynamicalCharge = newCharge;
+}
+
+inline void G4DynamicParticle::SetCharge(G4int newCharge)
+{
+  theDynamicalCharge = newCharge*eplus;
+}
+
+inline G4double G4DynamicParticle::GetMass() const
+{
+  return theDynamicalMass;
+}
+
+inline void G4DynamicParticle::SetMass(G4double newMass)
+{
+  theDynamicalMass = newMass;
+}
+
+inline const G4ThreeVector& G4DynamicParticle::GetMomentumDirection() const
+{
+  return theMomentumDirection;
+}
+
+inline G4ThreeVector G4DynamicParticle::GetMomentum() const
+{
+  G4double pModule = sqrt(theKineticEnergy*theKineticEnergy +
+                        2*theKineticEnergy*theDynamicalMass);
+  G4ThreeVector pMomentum(theMomentumDirection.x()*pModule,
+                          theMomentumDirection.y()*pModule,
+                          theMomentumDirection.z()*pModule);
+  return pMomentum;
+}
+
+inline  G4LorentzVector  G4DynamicParticle::Get4Momentum() const
+{       
+  G4double mass      = theDynamicalMass;
+  G4double energy    = theKineticEnergy;
+  G4double momentum  = sqrt(energy*energy+2.0*mass*energy);
+  G4LorentzVector    p4( theMomentumDirection.x()*momentum,
+       			 theMomentumDirection.y()*momentum,
+       			 theMomentumDirection.z()*momentum,
+       			 energy+mass);
+  return p4;
+}
+
+inline G4double G4DynamicParticle::GetTotalMomentum() const
+{
+  // The momentum is returned in energy equivalent.
+  return sqrt((theKineticEnergy + 2.*theDynamicalMass)* theKineticEnergy);
+}
+
+inline G4ParticleDefinition* G4DynamicParticle::GetDefinition() const
+{
+  return theParticleDefinition;
+}
+
+inline const G4ThreeVector& G4DynamicParticle::GetPolarization() const
+{
+  return thePolarization;
+}
+
+inline G4double G4DynamicParticle::GetProperTime() const
+{
+  return theProperTime;
+}
+
+inline G4double G4DynamicParticle::GetTotalEnergy() const
+{
+  return (theKineticEnergy+theDynamicalMass);
+}
+
+inline G4double G4DynamicParticle::GetKineticEnergy() const
+{
+  return theKineticEnergy;
+}
+
+inline void G4DynamicParticle::SetMomentumDirection(const G4ThreeVector &aDirection)
+{
+  theMomentumDirection = aDirection;
+}
+
+inline void G4DynamicParticle::SetMomentumDirection(G4double px, G4double py, G4double pz)
+{
+  theMomentumDirection.setX(px);
+  theMomentumDirection.setY(py);
+  theMomentumDirection.setZ(pz);
+}
+
+inline void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
+{
+  theParticleDefinition = aParticleDefinition;
+  theDynamicalMass = theParticleDefinition->GetPDGMass();
+}
+
+inline void G4DynamicParticle::SetPolarization(G4double polX, G4double polY, G4double polZ)
+{
+  thePolarization.setX(polX);
+  thePolarization.setY(polY);
+  thePolarization.setZ(polZ);
+}
+
+inline void G4DynamicParticle::SetKineticEnergy(G4double aEnergy)
+{
+  theKineticEnergy = aEnergy;
+}
+
+inline void G4DynamicParticle::SetProperTime(G4double atime)
+{
+  theProperTime = atime;
+}
+
+inline G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts()
+{ 
+  return thePreAssignedDecayProducts;
+}
+
+inline void G4DynamicParticle::SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts)
+{
+ thePreAssignedDecayProducts = aDecayProducts;
+}
+
+inline 
+void G4DynamicParticle::SetVerboseLevel(G4int value)
+{
+   verboseLevel = value;
+}
+
+inline 
+G4int G4DynamicParticle::GetVerboseLevel() const
+{
+   return verboseLevel;
+}
+
+
+
+
+
+
+
+
+
+
+

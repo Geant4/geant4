@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.6 1999-05-19 15:07:18 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.7 1999-08-18 09:15:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -21,7 +21,10 @@
 //      added dictionary for encoding    24 Sep., 98 H.Kurashige
 //      fixed bugs in destruction of IonTable 08 Nov.,98 H.Kurashige
 //      commented out G4cout/G4cout in the constructor 10 Nov.,98 H.Kurashige
+//         --------------------------------
 //      modified destructor for STL interface 18 May 1999
+//      fixed  some improper codings     08 Apr., 99 H.Kurashige
+//      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -34,6 +37,7 @@
 const G4int G4ParticleTableDefaultBucket = 32;
 const G4int G4ParticleTableMaxInABucket = 64;
 
+////////////////////
 G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0)
 {
   DictionaryBucketSize = G4ParticleTableDefaultBucket;
@@ -49,6 +53,7 @@ G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0)
 }
 
 
+////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
   if(fDictionary)
@@ -72,6 +77,7 @@ G4ParticleTable::~G4ParticleTable()
   if (fShortLivedTable!=0) delete fShortLivedTable;
 }
 
+////////////////////
 G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
 {
   G4Exception("you call copy constructor of G4ParticleTable");    
@@ -79,9 +85,12 @@ G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
   fIterator   = new G4PTblDicIterator(*fDictionary);
 }
 
+
+
 // Static class variable: ptr to single instance of class
 G4ParticleTable* G4ParticleTable::fgParticleTable =0;
 
+////////////////////
 G4ParticleTable* G4ParticleTable::GetParticleTable()
 {
     static G4ParticleTable theParticleTable;
@@ -91,6 +100,7 @@ G4ParticleTable* G4ParticleTable::GetParticleTable()
     return fgParticleTable;
 }
 
+////////////////////
 G4UImessenger* G4ParticleTable::CreateMessenger()
 {
   if (fParticleMessenger== 0) {
@@ -100,6 +110,7 @@ G4UImessenger* G4ParticleTable::CreateMessenger()
   return fParticleMessenger;
 }
 
+////////////////////
 void G4ParticleTable::DeleteMessenger()
 {
   if (fParticleMessenger!= 0) {
@@ -111,6 +122,7 @@ void G4ParticleTable::DeleteMessenger()
   }
 }
 
+////////////////////
 void G4ParticleTable::RemoveAllParticles()
 {
 
@@ -149,6 +161,7 @@ void G4ParticleTable::RemoveAllParticles()
     }
 }
 
+////////////////////
 G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 {
 
@@ -204,6 +217,8 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
   }
 }
 
+
+////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
   if (! contains(particle) ) return 0;
@@ -230,15 +245,53 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   return particle;
 }
 
+////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int J, G4int Q)
 {
    if (Z<=0) return 0;
    if (A<Z) return 0;
    if (J<0) return 0;
    if (Q<0) Q=Z;
-   return fIonTable->GetIon(Z, A, J, Q);
+   return fIonTable->GetIon(Z, A, 0);
 }
 
+////////////////////
+G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L)
+{
+   if (Z<=0) return 0;
+   if (A<Z) return 0;
+   if (L<0) return 0;
+   return fIonTable->FindIon(Z, A, L);
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L)
+{
+   if (Z<=0) return 0;
+   if (A<Z) return 0;
+   if (L<0) return 0;
+   return fIonTable->GetIon(Z, A, L);
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
+{
+   if (Z<=0) return 0;
+   if (A<Z) return 0;
+   if (E<0.) return 0;
+   return fIonTable->GetIon(Z, A, E);
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
+{
+   if (Z<=0) return 0;
+   if (A<Z) return 0;
+   if (E<0.) return 0;
+   return fIonTable->FindIon(Z, A, E);
+}
+
+////////////////////
 G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 {
   if ( (index >=0) && (index < entries()) ) {
@@ -259,6 +312,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
   return 0;
 }
 
+////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 {
     // check aPDGEncoding is valid
@@ -282,6 +336,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     return particle;
 }
 
+////////////////////
 void G4ParticleTable::DumpTable(const G4String &particle_name)  
 {
   if (( particle_name == "ALL" ) || (particle_name == "all")){

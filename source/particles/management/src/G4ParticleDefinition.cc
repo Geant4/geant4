@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.3 1999-04-14 10:28:28 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.4 1999-08-18 09:15:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,13 +28,16 @@
 //      added  Resonance flag and ApplyCuts flag  H.Kurashige 27  June 1998
 //      modify FillQuarkContents() for quarks/diquarks H.Kurashige 30 June 1998
 //      modify encoding rule H.Kurashige 23 Oct. 98
-//      modify FillQuarkContents() for deltas         25 Nov.,98 H.Kurashige
+//      modify FillQuarkContents() for deltas      25 Nov.,98 H.Kurashige
+//
+//      modify FillQuarkContents() to use G4PDGCodeChecker 17 Aug. 99 H.Kurashige
 // --------------------------------------------------------------
 
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4DecayTable.hh"
+#include "G4PDGCodeChecker.hh"
 
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
@@ -139,299 +142,21 @@ G4int G4ParticleDefinition::FillQuarkContents()
       //  It means error if the return value is differnt from
       //  this->thePDGEncoding.
 {
-  G4int tempPDGcode = thePDGEncoding;
+  G4PDGCodeChecker checker;
 
-  for (G4int flavor=0; flavor<NumberOfQuarkFlavor; flavor++){
-    theQuarkContent[flavor] =0;
-    theAntiQuarkContent[flavor] =0;
+  G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType, thePDGiSpin);
+
+  if ( temp != 0) {
+    G4int flavor;
+    for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
+      theQuarkContent[flavor]     = checker.GetQuarkContent(flavor);
+      theAntiQuarkContent[flavor] = checker.GetAntiQuarkContent(flavor);
+    }
+    if (!checker.CheckCharge(thePDGCharge) ){
+      temp = 0;
+    }
   }
-
-  G4int temp = abs(tempPDGcode);
-  
-  G4int higherSpin = temp/10000000;
-  temp -= G4int(higherSpin*10000000);
-  G4int exotic = temp/1000000;
-  temp -= G4int(exotic*1000000);
-  G4int radial = temp/100000;
-  temp -= G4int(radial*100000);
-  G4int multiplet = temp/10000;
-  temp -= G4int(multiplet*10000);
-  G4int quark1 = temp/1000;
-  temp -= G4int(quark1*1000);
-  G4int quark2 = temp/100;
-  temp -= G4int(quark2*100);
-  G4int quark3 = temp/10;
-  temp -= G4int(quark3*10);
-  G4int spin= temp;
-  if ((spin ==0) && ( higherSpin !=0 )) {
-    spin =  higherSpin-1;
-  } else {
-    spin -= 1;
-  }
-  
-  if (theParticleType =="quarks") {
-    if ((quark1 !=0) || (quark2 !=0) || (quark3 !=0)) { 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " ??? unknown quark ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-	//  --- thePDGEncoding is wrong 
-	tempPDGcode = 0;
-    } else {
-      quark1 = abs(tempPDGcode);
-      if (quark1>NumberOfQuarkFlavor){
-#ifdef G4VERBOSE
-	if (verboseLevel>1) {
-	  cout << " ??? unknown quark ";
-	  cout << " PDG code=" << thePDGEncoding <<endl;
-	}
-#endif
-	//  --- thePDGEncoding is wrong 
-	tempPDGcode = 0;
-      } else {
-	if (tempPDGcode>0){
-	  theQuarkContent[quark1-1] =1;
-	} else {
-	  theAntiQuarkContent[quark1-1] =1;
-	}
-      }
-    }
-
-  } else if (theParticleType =="diquarks") {
-    if ((quark1 ==0) || (quark2 ==0) || (quark3 !=0)) {
-      // quark3 should be 0
-      //  --- thePDGEncoding is wrong 
-      tempPDGcode = 0;
-    } else if (quark1 < quark2) {
-      //  --- thePDGEncoding is wrong 
-      tempPDGcode = 0;
-    } else if (quark2>NumberOfQuarkFlavor){
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " ??? unknown quark ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    } else {
-      if (tempPDGcode>0){
-	theQuarkContent[quark1-1] +=1;
-	theQuarkContent[quark2-1] +=1;
-      } else {
-	theAntiQuarkContent[quark1-1] +=1;
-	theAntiQuarkContent[quark2-1] +=1;
-      }
-    }
-
-  } else if (theParticleType =="gluons") {
-    // gluons 
-    //   do not care about
-
-  } else if (theParticleType == "meson") {
-     // check meson or not
-
-    //   -- exceptions --
-    if (tempPDGcode == 310) spin = 0;        //K0s
-    if (tempPDGcode == 130) {     //K0l
-      spin = 0;        
-      quark2 = 3;
-      quark3 = 1;
-    }
-
-    if (quark1 !=0) {
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " meson has only quark and anti-quark pair";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    } 
-     if ((quark2==0)||(quark3==0)){ 
-#ifdef G4VERBOSE
-       if (verboseLevel>1) {
-         G4cout << " meson has quark and anti-quark pair";
-         G4cout << " PDG code=" << thePDGEncoding <<endl;
-       }
-#endif
-      tempPDGcode = 0;
-     }
-    // check spin 
-    if ( spin != thePDGiSpin) {
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal SPIN (" << thePDGiSpin << "/2)";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    if (quark2<quark3) { 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal code for meson ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    // check quark flavor
-    if (quark2> NumberOfQuarkFlavor){
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " ??? unknown quark ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    // check heavier quark type
-    if (quark2 & 1) {
-      // down type qurak
-      if (tempPDGcode >0) {
-        theQuarkContent[quark3-1] =1;
-        theAntiQuarkContent[quark2-1] =1;
-      } else {
-        theQuarkContent[quark2-1] =1;
-        theAntiQuarkContent[quark3-1] =1;
-      }
-    } else {
-      // up type quark
-      if (tempPDGcode >0) {
-        theQuarkContent[quark2-1] =1;
-        theAntiQuarkContent[quark3-1] =1;
-      } else {
-        theQuarkContent[quark3-1] =1;
-        theAntiQuarkContent[quark2-1] =1;
-      }
-    }
-    // check charge
-    G4double totalCharge = 0.0;
-    for (G4int flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
-      totalCharge += (-1./3.)*eplus*theQuarkContent[flavor];
-      totalCharge += 1./3.*eplus*theAntiQuarkContent[flavor];
-      totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
-      totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
-    }
-    if (abs(totalCharge-thePDGCharge)>0.1*eplus) { 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal charge for meson " << thePDGCharge/eplus;
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-  } else if (theParticleType == "baryon"){
-    // check meson or not
-    if ((quark1==0)||(quark2==0)||(quark3==0)){ 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " meson has three quark ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    //exceptions
-    if (abs(tempPDGcode)%10000 == 3122) { 
-      // Lambda
-      quark2=2;  quark3 = 1; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 4122) { 
-      // Lambda_c
-      quark2=2;  quark3 = 1; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 4132) { 
-      // Xi_c0
-      quark2=3;  quark3 = 1; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 4232) { 
-      // Xi_c+
-      quark2=3;  quark3 = 2; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 2122) { 
-      // Delta+ (spin 1/2) 
-      quark2=2;  quark3 = 1; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 1212) { 
-      // Delta0 (spin 1/2) 
-      quark1=2;  quark2 = 1; spin = 1;
-    } else if (abs(tempPDGcode)%10000 == 2126) { 
-      // Delta+ (spin 5/2) 
-      quark2=2;  quark3 = 1; spin = 5;
-    } else if (abs(tempPDGcode)%10000 == 1216) { 
-      // Delta0 (spin 5/2) 
-      quark1=2;  quark2 = 1; spin = 5;
-    } else if (abs(tempPDGcode)%10000 == 2128) { 
-      // Delta+ (spin 7/2) 
-      quark2=2;  quark3 = 1; spin = 7;
-    } else if (abs(tempPDGcode)%10000 == 1218) { 
-      // Delta0 (spin 7/2) 
-      quark1=2;  quark2 = 1; spin = 7;
-    } else if (abs(tempPDGcode)%10000 == 2124) { 
-      // N*+ (spin 3/2) 
-      quark2=2;  quark3 = 1; spin = 3;
-    } else if (abs(tempPDGcode)%10000 == 1214) { 
-      // N*0 (spin 3/2) 
-      quark1=2;  quark2 = 1; spin = 3;
-    } 
-
-    // check spin 
-    if (spin != thePDGiSpin) {
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-      #endif
-      tempPDGcode = 0;
-    }
-    // check quark flavor
-    if ((quark1<quark2)||(quark2<quark3)||(quark1<quark3)) { 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal code for baryon ";
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    if (quark1> NumberOfQuarkFlavor) {
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " ??? unknown quark ";
-       G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-    if (tempPDGcode >0) {
-      theQuarkContent[quark1-1] ++;
-      theQuarkContent[quark2-1] ++;
-      theQuarkContent[quark3-1] ++;
-    } else {
-      theAntiQuarkContent[quark1-1] ++;
-      theAntiQuarkContent[quark2-1] ++;
-      theAntiQuarkContent[quark3-1] ++;
-    }
-    // check charge 
-    G4double totalCharge = 0.0;
-    for (G4int flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
-      totalCharge += (-1./3.)*eplus*theQuarkContent[flavor];
-      totalCharge += 1./3.*eplus*theAntiQuarkContent[flavor];
-      totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
-      totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
-    }
-    if (abs(totalCharge-thePDGCharge)>0.1*eplus) { 
-#ifdef G4VERBOSE
-      if (verboseLevel>1) {
-        G4cout << " illegal charge for baryon " << thePDGCharge/eplus;
-        G4cout << " PDG code=" << thePDGEncoding <<endl;
-      }
-#endif
-      tempPDGcode = 0;
-    }
-  } else {
-  }
-  return tempPDGcode;
+  return temp;
 }
 
 void G4ParticleDefinition::DumpTable() const
