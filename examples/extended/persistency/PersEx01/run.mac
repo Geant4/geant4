@@ -1,4 +1,4 @@
-# $Id: run.mac,v 1.2 2002-12-04 11:32:59 morita Exp $
+# $Id: run.mac,v 1.3 2002-12-04 18:32:59 morita Exp $
 #
 # Macro file for "G4PersEx01.cc"
 # 
@@ -24,4 +24,4 @@
 #
 /gun/particle e+
 /gun/energy 30 MeV
-/run/beamOn 3
+/run/beamOn 20
