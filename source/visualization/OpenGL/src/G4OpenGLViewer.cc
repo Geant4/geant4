@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.13 2002-02-24 01:48:24 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.14 2002-10-16 10:44:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,8 +51,7 @@ G4VViewer (scene, -1),
 white_background (false),
 transparency_enabled (false),
 antialiasing_enabled (false),
-haloing_enabled (false),
-fSceneHandler (scene)
+haloing_enabled (false)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);

@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2002-06-25 13:18:55 johna Exp $
+$Id: History,v 1.20 2002-10-16 10:44:12 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+16th October 2002  John Allison  (opengl-V04-01-01)
+- Fix for WIN32.  Now compiles but viewer not implemented.
 
 24th June 2002  John Allison  (opengl-V04-01-00)
 - Further cosmetic changes in G4OpenGLXViewer.cc for DEC compiler.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.hh,v 1.5 2001-07-11 10:08:48 gunter Exp $
+// $Id: G4OpenGLImmediateWin32.hh,v 1.6 2002-10-16 10:44:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,8 @@
 class G4OpenGLImmediateWin32: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateWin32 ();
-  G4VSceneHandler* CreateSceneHandler ();
-  G4VViewer*  CreateViewer  (G4VSceneHandler&);
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

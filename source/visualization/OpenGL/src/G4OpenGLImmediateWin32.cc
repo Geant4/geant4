@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.7 2002-02-24 01:47:58 johna Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.8 2002-10-16 10:44:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,16 +42,19 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 		     G4VisFeaturesOfOpenGLIWin32 (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler () {
-  G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this);
+G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler
+(const G4String& name) {
+  G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
        << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 
-G4VViewer* G4OpenGLImmediateWin32::CreateViewer (G4VSceneHandler& scene) {
+G4VViewer* G4OpenGLImmediateWin32::CreateViewer
+(G4VSceneHandler& scene, const G4String& name) {
   G4VViewer* pView =
-    new G4OpenGLImmediateWin32Viewer ((G4OpenGLImmediateSceneHandler&) scene);
+    new G4OpenGLImmediateWin32Viewer
+    ((G4OpenGLImmediateSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLImmediateWin32::CreateViewer: error flagged by negative"

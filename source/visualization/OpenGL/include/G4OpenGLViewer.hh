@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.8 2002-02-24 01:47:51 johna Exp $
+// $Id: G4OpenGLViewer.hh,v 1.9 2002-10-16 10:44:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,11 +59,6 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-
-  G4OpenGLSceneHandler&                    fSceneHandler;  // Graphics Scene for this view.
-
-private:
-  //  G4OpenGLSceneHandler&                    fSceneHandler;  // Graphics Scene for this view.
 };
 
 class G4OpenGLImmediateSceneHandler;

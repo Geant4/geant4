@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.7 2002-02-24 01:48:14 johna Exp $
+// $Id: G4OpenGLStoredWin32.cc,v 1.8 2002-10-16 10:44:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,16 +45,18 @@ G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
 		     G4VisFeaturesOfOpenGLSWin32 (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler () {
-  G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this);
+G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler
+(const G4String& name) {
+  G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
        << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 
-G4VViewer* G4OpenGLStoredWin32::CreateViewer (G4VSceneHandler& scene) {
+G4VViewer* G4OpenGLStoredWin32::CreateViewer
+(G4VSceneHandler& scene, const G4String& name) {
   G4VViewer* pView =
-    new G4OpenGLStoredWin32Viewer ((G4OpenGLStoredSceneHandler&) scene);
+    new G4OpenGLStoredWin32Viewer ((G4OpenGLStoredSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       delete pView;
