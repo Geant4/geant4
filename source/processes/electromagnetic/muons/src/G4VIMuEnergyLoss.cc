@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIMuEnergyLoss.cc,v 1.1 2000-04-25 14:19:02 maire Exp $
+// $Id: G4VIMuEnergyLoss.cc,v 1.2 2000-08-03 08:32:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -13,7 +13,7 @@
 //      GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4VIMuEnergyLoss physics process -----------
@@ -1492,7 +1492,7 @@ G4double G4VIMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
        rfac=dp3/(dnmaxCont2+dp3);
        namean=p3*rfac;
        sa=nmaxCont1*rfac;
-       na=RandGauss::shoot(namean,sa);
+       na=G4RandGauss::shoot(namean,sa);
 
        if(na>0.)
        {
@@ -1500,7 +1500,7 @@ G4double G4VIMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
          alfa1=alfa*log(alfa)/(alfa-1.);
          ea=na*ipotFluct*alfa1;
          sea=ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-         lossc +=RandGauss::shoot(ea,sea);
+         lossc +=G4RandGauss::shoot(ea,sea);
 
        }
      }

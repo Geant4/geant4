@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSectionTest.cc,v 1.4 1999-12-15 14:51:54 gunter Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.5 2000-08-03 08:37:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -617,7 +617,7 @@ int main()
 
           delta1 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
 
-          delta = RandGauss::shoot(delta1,0.3*delta1) ;
+          delta = G4RandGauss::shoot(delta1,0.3*delta1) ;
           if( delta < 0.0 ) delta = 0.0 ;
 
        //   delta2 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
