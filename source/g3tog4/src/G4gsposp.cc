@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.7 1999-05-22 06:31:55 lockman Exp $
+// $Id: G4gsposp.cc,v 1.8 1999-05-22 06:51:00 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G4makevol.hh"
-
-G4bool G3IsMany(G4String);
 
 void PG4gsposp(RWCString tokens[]){
   // fill the parameter containers

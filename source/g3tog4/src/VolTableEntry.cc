@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.1 1999-05-22 06:32:06 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.2 1999-05-22 06:51:01 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -46,9 +46,9 @@ VolTableEntry::SetLV(G4LogicalVolume* ll){
   _LV = ll;
 };
 
-G4String
+G4String*
 VolTableEntry::GetName(){
-  return _Vname;
+  return &_Vname;
 };
 
 G4bool 

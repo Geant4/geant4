@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.7 1999-05-22 06:31:26 lockman Exp $
+// $Id: G3VolTable.cc,v 1.8 1999-05-22 06:51:00 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -57,7 +57,7 @@ VolTableEntry*
 G3VolTable::GetFirstVTE(){
   _VTE = _VTD->findValue(_FirstKey);
   if (_VTE->NPCopies() > 0) {
-    _FirstKey = &(_VTE->GetG3PosCopy(0)->GetMotherVTE()->GetName());
+    _FirstKey = _VTE->GetG3PosCopy(0)->GetMotherVTE()->GetName();
     _VTE = GetFirstVTE();
   }
   return _VTE;
