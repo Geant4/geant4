@@ -1,11 +1,12 @@
 // This code implementation is the intellectual property of
+
 // the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201.cc,v 1.7 2000-06-08 12:51:44 barrand Exp $
+// $Id: test201.cc,v 1.8 2000-06-08 12:55:31 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
