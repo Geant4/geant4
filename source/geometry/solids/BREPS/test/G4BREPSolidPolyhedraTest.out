@@ -1,0 +1,76 @@
+
+=======     PGone test      ========
+Parameters of the G4PGone MyPolyhedra
+  starting angle =0
+  opening angle =6.28319
+  sides =4
+  nb of z planes=5
+   Z[0] = 0   Rmin[0] = 14.1421   Rmax[0] = 70.7107
+   Z[1] = 10   Rmin[1] = 14.1421   Rmax[1] = 70.7107
+   Z[2] = 20   Rmin[2] = 84.8528   Rmax[2] = 141.421
+   Z[3] = 30   Rmin[3] = 42.4264   Rmax[3] = 141.421
+   Z[4] = 40   Rmin[4] = 42.4264   Rmax[4] = 113.137
+
+
+PCone created ! 
+
+
+==================================================
+x=0  y=-110  z=20 is outside
+x=0  y=-100  z=20 is on the surface
+x=0  y=-90  z=20 is inside
+x=0  y=-80  z=20 is inside
+x=0  y=-70  z=20 is inside
+x=0  y=-60  z=20 is on the surface
+x=0  y=-50  z=20 is outside
+x=0  y=-40  z=20 is outside
+x=0  y=-30  z=20 is outside
+x=0  y=-20  z=20 is outside
+x=0  y=-10  z=20 is outside
+x=0  y=0  z=20 is outside
+x=0  y=10  z=20 is outside
+x=0  y=20  z=20 is outside
+x=0  y=30  z=20 is outside
+x=0  y=40  z=20 is outside
+x=0  y=50  z=20 is outside
+x=0  y=60  z=20 is on the surface
+x=0  y=70  z=20 is inside
+x=0  y=80  z=20 is inside
+x=0  y=90  z=20 is inside
+x=0  y=100  z=20 is on the surface
+x=0  y=110  z=20 is outside
+
+==================================================
+Pdep is (0, 0, z)
+Dir1 is (1, 0, 0)
+
+Dir2 is (1, 1, 0)
+x=0  y=0  z=-5 is outside  distance to in1 =9e+99  distance to in2 =9e+99
+x=0  y=0  z=0 is outside  distance to in1 =10  distance to in2 =7.07107
+x=0  y=0  z=5 is outside  distance to in1 =10  distance to in2 =7.07107
+x=0  y=0  z=10 is outside  distance to in1 =10  distance to in2 =7.07107
+x=0  y=0  z=15 is outside  distance to in1 =35  distance to in2 =24.7487
+x=0  y=0  z=20 is outside  distance to in1 =60  distance to in2 =42.4264
+x=0  y=0  z=25 is outside  distance to in1 =45  distance to in2 =31.8198
+x=0  y=0  z=30 is outside  distance to in1 =30  distance to in2 =21.2132
+x=0  y=0  z=35 is outside  distance to in1 =30  distance to in2 =21.2132
+x=0  y=0  z=40 is outside  distance to in1 =30  distance to in2 =9e+99
+x=0  y=0  z=45 is outside  distance to in1 =9e+99  distance to in2 =9e+99
+
+
+==================================================
+Pdep is (-110, -110, z)
+Dir is (1, 1, 0)
+x=-110  y=-110  z=-5 is outside  distance to in =9e+99
+x=-110  y=-110  z=0 is outside  distance to in =120.208
+x=-110  y=-110  z=5 is outside  distance to in =120.208
+x=-110  y=-110  z=10 is outside  distance to in =120.208
+x=-110  y=-110  z=15 is outside  distance to in =102.53
+x=-110  y=-110  z=20 is outside  distance to in =84.8528
+x=-110  y=-110  z=25 is outside  distance to in =84.8528
+x=-110  y=-110  z=30 is outside  distance to in =84.8528
+x=-110  y=-110  z=35 is outside  distance to in =91.9239
+x=-110  y=-110  z=40 is outside  distance to in =9e+99
+x=-110  y=-110  z=45 is outside  distance to in =9e+99
+
+
