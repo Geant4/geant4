@@ -1,10 +1,10 @@
-#ifdef G4VIS_BUILD_OIX_DRIVER
+#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.5 2004-11-23 23:06:30 gbarrand Exp $
+ * $Id: gl2ps.cc,v 1.6 2004-11-24 15:15:02 gbarrand Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/

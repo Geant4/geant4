@@ -1,4 +1,4 @@
-#ifdef G4VIS_BUILD_OIX_DRIVER
+#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
