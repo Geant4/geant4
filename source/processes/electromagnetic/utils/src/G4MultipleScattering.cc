@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.29 2002-12-11 10:53:34 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.30 2002-12-11 12:05:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -364,7 +364,7 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
         if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
         else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
         corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
+        corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.5 2002-10-30 17:33:58 maire Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.6 2002-12-11 12:05:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -52,6 +52,8 @@
 // 15-10-02 temporary fix for proton scattering
 // 30-10-02 modified angle distribution,mods in boundary algorithm,
 //          changes in data members, L.Urban
+// 11-12-02 precision problem in ComputeTransportCrossSection 
+//          for small Tkin/for heavy particles cured from L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -318,25 +320,25 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
   // correction if particle .ne. e-/e+            
   // compute equivalent kinetic energy 
   // lambda depends on p*beta ....
-   G4double Mass = ParticleMass ;
+  
    if((aParticleType.GetParticleName() != "e-") &&    
       (aParticleType.GetParticleName() != "e+") )     
    {
-     G4double Ecm = KineticEnergy*(KineticEnergy+2.*ParticleMass)/
-          (KineticEnergy+ParticleMass) ;   
-     KineticEnergy = 0.5*(Ecm - 2.*electron_mass_c2+
-                     sqrt(Ecm*Ecm + 2.*electron_mass_c2*electron_mass_c2)) ; 
-     Mass = electron_mass_c2 ;
+     G4double TAU = KineticEnergy/ParticleMass ;
+     G4double c = ParticleMass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+     G4double w = c-2. ;
+     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+     KineticEnergy = electron_mass_c2*tau ;
    }
 
    G4double Charge = aParticleType.GetPDGCharge();
    G4double ChargeSquare = Charge*Charge/(eplus*eplus);
 
-   G4double TotalEnergy = KineticEnergy + Mass ;
-   G4double beta2 = KineticEnergy*(TotalEnergy+Mass)
+   G4double TotalEnergy = KineticEnergy + electron_mass_c2 ;
+   G4double beta2 = KineticEnergy*(TotalEnergy+electron_mass_c2)
                                  /(TotalEnergy*TotalEnergy);
-   G4double bg2   = KineticEnergy*(TotalEnergy+Mass)
-                                 /(Mass*Mass);
+   G4double bg2   = KineticEnergy*(TotalEnergy+electron_mass_c2)
+                                 /(electron_mass_c2*electron_mass_c2);
 
    G4double eps = epsfactor*bg2/Z23;
 
@@ -362,7 +364,7 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
         if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
         else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
         corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
+        corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
  
