@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2004-05-28 08:31:02 hpw Exp $
+# $Id: GNUmakefile,v 1.18 2004-05-28 12:44:52 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -29,6 +29,7 @@ SUBDIRS += models/de_excitation/multifragmentation
 SUBDIRS += models/de_excitation/photon_evaporation
 SUBDIRS += models/de_excitation/util
 SUBDIRS += models/de_excitation/ablation
+SUBDIRS += models/em_dissociation
 SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/isotope_production
@@ -78,6 +79,7 @@ SUBLIBS +=  G4hadronic_deex_multifragmentation
 SUBLIBS +=  G4hadronic_deex_photon_evaporation
 SUBLIBS +=  G4hadronic_deex_util
 SUBLIBS +=  G4hadronic_ablation
+SUBLIBS +=  G4hadronic_em_dissociation
 SUBLIBS +=  G4had_preequ_exciton
 SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff

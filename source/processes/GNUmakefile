@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.26 2003-11-24 12:54:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.27 2004-05-28 12:45:01 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -51,6 +51,8 @@ SUBDIRS += hadronic/models/de_excitation/management
 SUBDIRS += hadronic/models/de_excitation/multifragmentation
 SUBDIRS += hadronic/models/de_excitation/photon_evaporation
 SUBDIRS += hadronic/models/de_excitation/util
+SUBDIRS += hadronic/models/de_excitation/ablation
+SUBDIRS += hadronic/models/em_dissociation
 SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
 SUBDIRS += hadronic/models/isotope_production
@@ -99,6 +101,8 @@ SUBLIBS +=  G4hadronic_deex_management
 SUBLIBS +=  G4hadronic_deex_multifragmentation
 SUBLIBS +=  G4hadronic_deex_photon_evaporation
 SUBLIBS +=  G4hadronic_deex_util
+SUBLIBS +=  G4hadronic_ablation
+SUBLIBS +=  G4hadronic_em_dissociation
 SUBLIBS +=  G4had_preequ_exciton
 SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff
