@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.5 2004-07-05 17:08:16 gcosmo Exp $
+// $Id: G4VTrajectory.cc,v 1.6 2004-12-07 09:16:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -145,13 +145,13 @@ void G4VTrajectory::DrawTrajectory(G4int i_mode) const
   // positive, red for negative, green for neutral) and, if i_mode!=0,
   // adds markers - yellow circles for step points and magenta squares
   // for auxiliary points, if any - whose screen size in pixels is
-  // given by abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
+  // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
   // visible markers.
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
 
-  const G4double markerSize = abs(i_mode)/1000;
+  const G4double markerSize = std::abs(i_mode)/1000;
   G4bool lineRequired (i_mode >= 0);
   G4bool markersRequired (markerSize > 0.);
 

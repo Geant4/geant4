@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.22 2004-12-01 17:08:11 gcosmo Exp $
+// $Id: G4SteppingManager2.cc,v 1.23 2004-12-07 09:16:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -536,7 +536,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
   if( aSecondary->GetKineticEnergy()<tProdThreshold )
   {
     tBelowCutEnergyAndSafety = true;
-    if(abs(aSecondary->GetDynamicParticle()->GetCharge()) > DBL_MIN)
+    if(std::abs(aSecondary->GetDynamicParticle()->GetCharge()) > DBL_MIN)
     {
       G4double currentRange
         = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),
