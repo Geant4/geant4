@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.4 1999-06-02 17:43:21 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.5 1999-06-03 14:19:55 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -625,8 +625,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     G4int numOfDau = numOfElec + numOfPhot;
     
     aParticleChange.SetNumberOfSecondaries(numOfDau);
-    
-    for( G4int l = 0; l<numOfElec; l++ ){
+    G4int l = 0;
+    for(l = 0; l<numOfElec; l++ ){
       
       aParticleChange.AddSecondary(elecvec[l]);
     }
@@ -708,6 +708,7 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex, const G4do
   }
 
   G4Exception("LEIonisation: Cannot select a shell");
+  return 0;
 }
 
 
@@ -781,7 +782,8 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   if(ShellNum != TransitionTable->entries()-1) {
     
     //TransProb start from 1 because the first element of the list is the primary shall id number
-    for(G4int TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
+    G4int TransProb = 1;
+    for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
       
       TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
     }
