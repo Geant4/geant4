@@ -149,7 +149,7 @@ processes/optical                                op-V06-02-06
 -----------------
 - Implemented migration to <cmath>.
 
-processes/parameterisarion                       param-V06-02-01
+processes/parameterisation                       param-V06-02-01
 --------------------------
 - Implemented migration to <cmath>.
 - Implemented migration to new G4VParticleChange interfaces.
