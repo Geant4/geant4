@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.18 2005-01-26 17:07:11 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.19 2005-03-04 16:25:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,15 +88,31 @@ public: // With description
   const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const {
     return this;
   }
+
   G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
     return this;
   }
 
   const G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
+
   G4int GetRequestedDepth () const {return fRequestedDepth;}
+
+  const G4VSolid* GetClippingVolume () const {return fpClippingSolid;}
+
+  const G4Transform3D& GetClippingTransform () const {
+    return fClippingTransform;
+  }
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
+  }
+
+  void SetClippingSolid (const G4VSolid* pClippingSolid) {
+    fpClippingSolid = pClippingSolid;
+  }
+
+  void SetClippingTransform (const G4Transform3D clippingTransform) {
+    fClippingTransform = clippingTransform;
   }
 
   G4bool Validate (G4bool warn);
@@ -152,6 +168,8 @@ protected:
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   G4bool             fCurtailDescent;// Can be set to curtail descent.
+  const G4VSolid*    fpClippingSolid;
+  G4Transform3D      fClippingTransform;
 
   ////////////////////////////////////////////////////////////
   // Pointers to working space in scene, if required.

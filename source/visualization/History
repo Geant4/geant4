@@ -1,4 +1,4 @@
-$Id: History,v 1.276 2005-03-03 16:48:28 allison Exp $
+$Id: History,v 1.277 2005-03-04 16:25:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th March 2005  John Allison  (vis-V07-00-09)
+- Added first implementation of cutaway - a clipping box for physical
+  volume tree:
+    vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1
+  (Does not seem properly to clip volumes wholly inside clipping volume.)
 
 3rd March 2005  John Allison  (vis-V07-00-08)
 - Introduced /vis/scene/add/logo.

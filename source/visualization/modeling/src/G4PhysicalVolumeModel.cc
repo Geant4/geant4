@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.27 2005-01-27 20:07:01 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.28 2005-03-04 16:25:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@
 #include "G4BoundingSphereScene.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
+#include "G4VVisManager.hh"
+#include "G4Polyhedron.hh"
 
 #include <strstream>
 
@@ -60,6 +62,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentPV     (0),
   fpCurrentLV     (0),
   fCurtailDescent (false),
+  fpClippingSolid (0),
   fpCurrentDepth  (0),
   fppCurrentPV    (0),
   fppCurrentLV    (0),
@@ -391,7 +394,15 @@ void G4PhysicalVolumeModel::DescribeSolid
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
   sceneHandler.PreAddSolid (theAT, *pVisAttribs);
-  pSol -> DescribeYourselfTo (sceneHandler);
+  if (fpClippingSolid) {  // Clip and force polyhedral representation...
+    G4Polyhedron clipper(*fpClippingSolid->GetPolyhedron());
+    clipper.Transform(theAT.inverse() * fClippingTransform);
+    G4Polyhedron clipped(pSol->GetPolyhedron()->subtract(clipper));
+    clipped.SetVisAttributes(pVisAttribs);
+    G4VVisManager::GetConcreteInstance()->Draw(clipped,theAT);
+  } else {               // Standard treatment...
+    pSol -> DescribeYourselfTo (sceneHandler);
+  }
   sceneHandler.PostAddSolid ();
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.46 2005-03-03 16:42:46 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.47 2005-03-04 16:25:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1227,6 +1227,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance ("Note: adds first occurence only.");
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
+  // (Always interpreted as GetNavigatorForTracking () -> GetWorldVolume ().)
   //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
   //    ("               \"list\" to list all volumes.");
   fpCommand -> SetGuidance
@@ -1244,6 +1245,42 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("depth", 'i', omitable = true);
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
+  parameter -> SetDefaultValue ("none");
+  parameter -> SetGuidance
+    ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
+     "\n Only \"box\" is programmed at present.");
+  /*
+Idle> vis/scene/create 
+New empty scene "scene-1" created.
+Idle> vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1
+First occurrence of "worldP" found at depth 0,
+  with a requested depth of further descent of <0 (unlimited),
+  has been added to scene "scene-1".
+Idle> vis/sceneHandler/attach 
+  */
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("m");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-1", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-2", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-3", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-4", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-5", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("parameter-6", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
   fpCommand -> SetParameter (parameter);
 }
 
@@ -1269,11 +1306,17 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4String name;
-  G4int copyNo;
-  G4int requestedDepthOfDescent;
+  G4String name, clipVolumeType, parameterUnit;
+  G4int copyNo, requestedDepthOfDescent;
+  G4double param1, param2, param3, param4, param5, param6;
   std::istrstream is (newValue);
-  is >> name >> copyNo >> requestedDepthOfDescent;
+  is >> name >> copyNo >> requestedDepthOfDescent
+     >> clipVolumeType >> parameterUnit
+     >> param1 >> param2 >> param3 >> param4 >> param5 >> param6;
+  G4double unit = G4UIcommand::ValueOf(parameterUnit);
+  param1 *= unit; param2 *= unit; param3 *= unit;
+  param4 *= unit; param5 *= unit; param6 *= unit;
+
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
@@ -1329,6 +1372,18 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
       }
       return;
     }
+  }
+
+  if (clipVolumeType == "box") {
+    const G4double dX = (param2 - param1) / 2.;
+    const G4double dY = (param4 - param3) / 2.;
+    const G4double dZ = (param6 - param5) / 2.;
+    const G4double x0 = (param2 + param1) / 2.;
+    const G4double y0 = (param4 + param3) / 2.;
+    const G4double z0 = (param6 + param5) / 2.;
+    G4Box* clippingBox = new G4Box("_clipping_box",dX,dY,dZ);
+    model->SetClippingSolid(clippingBox);
+    model->SetClippingTransform(G4Translate3D(x0,y0,z0));
   }
 
   const G4String& currentSceneName = pScene -> GetName ();
