@@ -21,16 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.5 2003-03-10 07:35:39 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.6 2003-03-17 00:51:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//
-// Class Description
-//  This class is 
 //
 // ------------------------------------------------------------
 //   First Implementation          05 Oct. 2002  M.Asai    
@@ -163,7 +160,7 @@ class G4ProductionCutsTable
   // check stored material and cut values are consistent with the current detector setup. 
   G4bool CheckForRetrieveCutsTable(const G4String& directory, 
 				   G4bool          ascii = false);
-  
+
   protected:
 
   // Store material information in files under the specified directory.
