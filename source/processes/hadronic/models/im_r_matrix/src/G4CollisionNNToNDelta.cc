@@ -21,35 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDelta.cc,v 1.3 2003-12-12 12:28:08 hpw Exp $ //
+// $Id: G4CollisionNNToNDelta.cc,v 1.4 2003-12-12 15:38:22 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNDelta.hh"
 #include "G4ConcreteNNToNDelta.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4ParticleTable.hh"
 #include "G4ShortLivedConstructor.hh"
-#include "G4Pair.hh"
-#include "G4HadParticleCodes.hh"
 
-// complete hpw
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, NeutronPC, Delta0PC)  theC1;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, ProtonPC,  DeltamPC)  theC2;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC,  ProtonPC,  Delta0PC)  theC3;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC,  NeutronPC, DeltapPC)  theC4;
-typedef INT4(G4ConcreteNNToNDelta, ProtonPC,  ProtonPC,  NeutronPC, DeltappPC) theC5;
-typedef INT4(G4ConcreteNNToNDelta, ProtonPC,  ProtonPC,  ProtonPC,  DeltapPC)  theC6;
-
-typedef GROUP6(theC1, theC2, theC3, theC4, theC5, theC6) theChannels;
-       
 G4CollisionNNToNDelta::G4CollisionNNToNDelta()
 { 
-  // Subtype of interacting particles
   G4ShortLivedConstructor ShortLived;
   ShortLived.ConstructParticle();
-  G4ForEach<theChannels, Resolve>::Apply(this);
-
+  MakeNNToNDelta<DeltamPC, Delta0PC, DeltapPC, DeltappPC, G4ConcreteNNToNDelta>(this);
 }
 
 

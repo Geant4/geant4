@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.4 2003-12-12 12:27:23 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.5 2003-12-12 15:38:21 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -46,6 +46,7 @@
 #include "G4KineticTrackVector.hh"
 #include "G4CrossSectionBuffer.hh"
 #include "G4Pair.hh"
+#include "G4ParticleTable.hh"
 
 class G4KineticTrack;
 class G4VCrossSectionSource;
@@ -89,6 +90,10 @@ protected:
       p3=G4ParticleTable::GetParticleTable()->FindParticle(t3);
       p4=G4ParticleTable::GetParticleTable()->FindParticle(t4);
       p5=G4ParticleTable::GetParticleTable()->FindParticle(t5);
+      if(p2->GetPDGCharge()+p3->GetPDGCharge() != p4->GetPDGCharge()+p5->GetPDGCharge())
+      {
+        G4cerr << "charge-unbalance in collision composite"<<G4endl;
+      }
       aC->AddComponent(new t1(p2, p3, p4, p5));  
     }
   };
