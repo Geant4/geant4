@@ -140,8 +140,8 @@ echo "Starting $1 in $G4WORKDIR `date`"
       $dir/$1.exerciser$dot_G4LARGE_N.in \
       > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
     else
-      if [ ! $G4LARGE_N -o \
-        \( $G4LARGE_N -a \
+      if [ -z "$G4LARGE_N" -o \
+        \( -n "$G4LARGE_N" -a \
            -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
