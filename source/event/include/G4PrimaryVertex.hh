@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.hh,v 1.3 1999-12-15 14:49:39 gunter Exp $
+// $Id: G4PrimaryVertex.hh,v 1.4 2000-07-22 10:40:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,8 @@ class G4PrimaryVertex
   public:
       inline G4ThreeVector GetPosition() const
       { return G4ThreeVector(X0,Y0,Z0); }
+      inline void SetPosition(G4double x0,G4double y0,G4double z0)
+      { X0 = x0; Y0 = y0; Z0 = z0; }
       inline G4double GetX0() const
       { return X0; }
       inline G4double GetY0() const
@@ -64,6 +66,8 @@ class G4PrimaryVertex
       { return Z0; }
       inline G4double GetT0() const
       { return T0; }
+      inline void SetT0(G4double t0)
+      { T0 = t0; }
       inline G4int GetNumberOfParticle() const
       { return numberOfParticle; }
       inline void SetPrimary(G4PrimaryParticle * pp)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.hh,v 1.3 1999-12-15 14:49:39 gunter Exp $
+// $Id: G4PrimaryParticle.hh,v 1.4 2000-07-22 10:40:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,7 +120,8 @@ class G4PrimaryParticle
       inline G4double GetPolY() const { return polY; }
       inline G4double GetPolZ() const { return polZ; }
 
-  public:
+  public: // with description
+      // Followings are available Set methods.
       void SetPDGcode(G4int Pcode);
       void SetG4code(G4ParticleDefinition * Gcode);
       inline void SetMomentum(G4double px, G4double py, G4double pz)

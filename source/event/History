@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-01-26 06:42:14 asaim Exp $
+$Id: History,v 1.10 2000-07-22 10:40:50 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 22 2000, M.Asai (tag event-V02-00-00)
+- Adding some new Set methods to G4PrimaryVertex and G4PrimaryParticle
+  classes.
 
 Jan 26, 00, M.Asai (tag event-V01-00-01)
 - Corrections for trajectories of suspended tracks
