@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.5 2004-03-31 08:29:41 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.6 2004-03-31 08:47:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -691,8 +691,6 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
 G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
 							   G4bool          ascii )
 {
-  verboseLevel =3;
-
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
   std::ifstream fIn;  
