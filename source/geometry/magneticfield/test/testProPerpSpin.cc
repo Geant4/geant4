@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.8 2002-10-29 14:00:11 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.9 2002-11-09 00:29:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -411,11 +411,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
 						     physStep, 
 						     safety
-#ifdef G4MAG_CHECK_VOLUME
 						     ,located);
-#else
-	                                             );
-#endif
 	  //       --------------------
 	  EndPosition=     pMagFieldPropagator->EndPosition();
 	  EndUnitMomentum= pMagFieldPropagator->EndMomentumDir();
