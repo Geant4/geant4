@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.hh,v 1.8 2001-07-11 10:00:49 gunter Exp $
+// $Id: G4OrderedTable.hh,v 1.9 2001-09-17 08:17:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,11 @@
 // Jan. 2001  : H.Kurashige
 //              - G4ValVector is replaced with G4DataVector 
 //              - Migrated to G4std::vector<G4DataVector*>.
+// Sep. 2001  : H.Kurashige
+//              - Add
+//                 G4bool Store(const G4String&, G4bool)
+//                 G4bool Retrieve(const G4String&, G4bool);
+//                 ostream& operator<<(ostream&, G4OrderedTable&)
 //
 // Class Description:
 //
@@ -45,7 +50,7 @@
 
 #include "globals.hh"
 #include "g4std/vector"
-#include "G4DataVector.hh"
+class G4DataVector;
 
 class G4OrderedTable : public G4std::vector<G4DataVector*> 
 {
@@ -65,7 +70,19 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
   inline void clearAndDestroy();
     // Removes all elements and deletes all non-NULL pointers
 
+  G4bool Store(const G4String& filename, G4bool ascii=false);
+    // Stores OrderedTable in a file (returns false in case of failure).
+  
+  G4bool Retrieve(const G4String& filename, G4bool ascii=false);
+    // Retrieves OrderedTable from a file (returns false in case of failure).
+
+  friend G4std::ostream& operator<<(G4std::ostream& out, G4OrderedTable& table);
+
 };
+
+typedef G4OrderedTable::iterator G4OrderedTableIterator;
+
+#include "G4DataVector.hh"
 
 inline
 G4OrderedTable::G4OrderedTable()
@@ -98,3 +115,5 @@ void G4OrderedTable::clearAndDestroy()
 
 
 #endif
+
+

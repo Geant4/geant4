@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.hh,v 1.9 2001-07-11 10:00:49 gunter Exp $
+// $Id: G4DataVector.hh,v 1.10 2001-09-17 08:17:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,9 @@
 
 #include "globals.hh"
 #include "g4std/vector"
+#include "G4ios.hh"
+#include "g4std/iostream"
+#include "g4std/fstream"
 
 class G4DataVector : public G4std::vector<G4double> 
 {
@@ -74,6 +77,14 @@ class G4DataVector : public G4std::vector<G4double>
 
   inline size_t removeAll(const G4double&);
     // Remove all elements same as given value  
+
+  enum {T_G4DataVector = 100};
+
+  G4bool Store(G4std::ofstream& fOut, G4bool ascii=false);
+  G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii=false);
+  // To store/retrieve persistent data to/from file streams.
+
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4DataVector&);
 };
 
 inline
@@ -155,3 +166,7 @@ size_t G4DataVector::removeAll(const G4double& a)
 }
 
 #endif
+
+
+
+

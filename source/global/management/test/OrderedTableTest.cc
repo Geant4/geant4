@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OrderedTableTest.cc,v 1.5 2001-07-11 10:01:00 gunter Exp $
+// $Id: OrderedTableTest.cc,v 1.6 2001-09-17 08:17:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,11 +48,10 @@ int main()
 
   for(I=0; I<Imax; I++)
   {
-    G4DataVector* aVector = new G4DataVector(I+1);
+    G4DataVector* aVector = new G4DataVector();
     *pl++ = aVector;
-//    pl = aTable.insert(pl, aVector); ++pl;
     for(J=0; J<=I; J++)
-      aVector->insertAt(J, G4double(J));
+      aVector->push_back(G4double(J));
   }
 
  // Now access the data contained in the table
@@ -63,6 +62,20 @@ int main()
     for(J=0; J<=I; J++)
       G4cout << (*aTable[I])[J] << " ";
   }
+
+
+ // Store in file in ascii mode 
+  aTable.Store("OrdTable.asc",true) ; 
+
+ // clear Ordered Table
+  aTable.clear();
+
+ // Retrieve from file
+  aTable.Retrieve("OrdTable.asc",true) ; 
+
+ // Print Out 
+  G4cout <<   G4endl << G4endl;
+  G4cout << aTable ;
 
  //
  // Create a G4OrderedTable object by pointer 
@@ -75,9 +88,8 @@ int main()
   {
     G4DataVector* aVector = new G4DataVector(I+1);
     *pl++ = aVector;
-//  pl = aTablePtr->insert(pl, aVector); ++pl;
     for(J=0; J<=I; J++)
-      aVector->insertAt(J, G4double(J));
+      (*aVector)[J]= G4double(J);
   }
 
  // Now access the data contained in the table 
@@ -89,6 +101,19 @@ int main()
       G4cout << (*(*aTablePtr)[I])[J] << " ";
   }
   G4cout << G4endl;
+
+  // Store in file in binary mode 
+  aTablePtr->Store("OrdTable.dat") ; 
+
+  aTablePtr->clearAndDestroy();
+
+ // Retrieve from file
+  aTablePtr->Retrieve("OrdTable.dat") ; 
+
+ // Print Out 
+  G4cout <<   G4endl << G4endl;
+  G4cout << *aTablePtr ;
+
 
   aTable.clearAndDestroy();
   aTablePtr->clearAndDestroy();
