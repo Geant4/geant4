@@ -31,6 +31,11 @@
 class G4GammaNuclearReaction : public G4HadronicInteraction
 {
   public: 
+    virtual ~G4GammaNuclearReaction()
+    {
+     G4int i=0; i/2.; // to be able to make a breakpoint
+    }
+    
     G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
 
   private:
