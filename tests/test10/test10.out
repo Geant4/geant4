@@ -1,9 +1,19 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 You select Sphere detector
+Visualization init
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  DAWNFILE (DAWNFILE)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 #
 # Macro file of "test10.cc"
 # for Optical photons geometry test

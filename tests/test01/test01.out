@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Now Detector is SimpleBox
@@ -210,4 +210,3 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5   -1e+03   -1e+03   -1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
-exit

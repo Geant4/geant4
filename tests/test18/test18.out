@@ -1,8 +1,20 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  DAWNFILE (DAWNFILE)
+  VRML1FILE (VRML1FILE)
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
  RDM Applies to all Volumes
          RDM Applies to Volume universe_L
          RDM Applies to Volume aSphere_L1
@@ -37,10 +49,6 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
@@ -51,10 +59,10 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -105,11 +113,11 @@ MuPairProd:  theoretical cross sections
 G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/data/RadiativeDecay/z12.a24
 The nucleus is assumed to be stable 
        0.001           1           0     Na24[0.0]
-         227           1   3.189e+04     e-
-    1.16e+03           1   3.189e+04     anti_nu_e
-    2.75e+03           1   3.189e+04     gamma
-    1.37e+03           1   3.189e+04     gamma
-      0.0266           1   3.189e+04     Mg24[0.0]
+        46.4           1   8.789e+04     e-
+    1.34e+03           1   8.789e+04     anti_nu_e
+    2.75e+03           1   8.789e+04     gamma
+    1.37e+03           1   8.789e+04     gamma
+      0.0429           1   8.789e+04     Mg24[0.0]
 
 #
 #
@@ -122,9 +130,9 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Ne24[0.0]
-         755           1       267.9     e-
-    1.24e+03           1       267.9     anti_nu_e
-      0.0156           1       267.9     Na24[472.2]
+    1.01e+03           1       330.9     e-
+         986           1       330.9     anti_nu_e
+       0.109           1       330.9     Na24[472.2]
 
 #
 #
@@ -137,10 +145,10 @@ The nucleus is assumed to be stable
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     F24[0.0]
-    2.86e+03           1      0.1979     e-
-    9.85e+03           1      0.1979     anti_nu_e
-    1.98e+03           1      0.1979     gamma
-        2.43           1      0.1979     Ne24[0.0]
+    5.85e+03           1      0.1606     e-
+    6.87e+03           1      0.1606     anti_nu_e
+    1.98e+03           1      0.1606     gamma
+       0.457           1      0.1606     Ne24[0.0]
 
 #
 #
@@ -153,12 +161,14 @@ The nucleus is assumed to be stable
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Al24[0.0]
-         692           1      0.4195     e+
-    3.67e+03           1      0.4195     nu_e
-    5.39e+03           1      0.4195     gamma
-    2.75e+03           1      0.4195     gamma
-    1.37e+03           1      0.4195     gamma
-       0.278           1      0.4195     Mg24[0.0]
+    2.65e+03           1       1.077     e+
+         511           1       1.077     gamma
+         511           1       1.077     gamma
+    2.79e+03           1       1.077     nu_e
+    4.32e+03           1       1.077     gamma
+    2.75e+03           1       1.077     gamma
+    1.37e+03           1       1.077     gamma
+       0.614           1       1.077     Mg24[0.0]
 
 #
 #
@@ -171,13 +181,13 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[472.0]
-         472           1     0.01896     gamma
-           0           1     0.01896     Na24[0.0]
-        46.4           1   8.789e+04     e-
-    1.34e+03           1   8.789e+04     anti_nu_e
-    2.75e+03           1   8.789e+04     gamma
-    1.37e+03           1   8.789e+04     gamma
-      0.0429           1   8.789e+04     Mg24[0.0]
+         472           1     0.02226     gamma
+           0           1     0.02226     Na24[0.0]
+         695           1        9314     e-
+         696           1        9314     anti_nu_e
+    2.75e+03           1        9314     gamma
+    1.37e+03           1        9314     gamma
+       0.023           1        9314     Mg24[0.0]
 
 #
 #
@@ -190,9 +200,11 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Cr46[0.0]
-    1.47e+03           1      0.8613     e+
-    6.14e+03           1      0.8613     nu_e
-       0.531           1      0.8613     V46[0.0]
+     5.5e+03           1      0.5435     e+
+         511           1      0.5435     gamma
+         511           1      0.5435     gamma
+     2.1e+03           1      0.5435     nu_e
+       0.477           1      0.5435     V46[0.0]
 
 #
 #
@@ -205,13 +217,8 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Po215[0.0]
-    7.39e+03           1   0.0002055     alpha
-         140           1   0.0002055     Pb211[0.0]
+    7.39e+03           1     0.00177     alpha
+         140           1     0.00177     Pb211[0.0]
 
-
-
-
-
-
-
-
+Graphics systems deleted.
+Visualization Manager deleting...
