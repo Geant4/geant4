@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.41 2002-11-22 11:19:51 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.42 2002-11-29 16:12:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -71,6 +71,9 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fFull_CurveLen_of_LastAttempt = -1; 
   fLast_ProposedStepLength = -1;
   fLargestAcceptableStep = 1000.0 * meter;
+
+  fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
+  fPreviousSafety= 0.0;
 }
 
 G4PropagatorInField::~G4PropagatorInField()
@@ -536,29 +539,13 @@ G4PropagatorInField::LocateIntersectionPoint(
                    - CurrentA_PointVelocity.GetCurveLength();
        if( curveDist*(curveDist+2*perMillion ) < linDistSq )
        {
-         // Re-integrate to obtain a new B
-         //
-         G4FieldTrack newEndpoint = CurrentA_PointVelocity;
-         GetChordFinder()->GetIntegrationDriver()
-           ->AccurateAdvance(newEndpoint, curveDist, fEpsilonStep);
-         CurrentB_PointVelocity = newEndpoint;
-
-#ifdef G4DEBUG_FIELD
-         static G4int noInaccuracyWarnings = 0; 
-         G4int maxNoWarnings = 10;
-         if ( (noInaccuracyWarnings < maxNoWarnings ) 
-           || (Verbose() > 1) )
-         {
-           G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
-                  << G4endl
-                  << "  Warning: Integration inaccuracy requires " << G4endl
-                  << " an adjustment in the step's endpoint "      << G4endl
-                  << "   Two mid-points are further apart than their "
-                  <<         "curve length difference"             << G4endl 
-                  << "   Dist = "       << sqrt(linDistSq)
-                  << " curve length = " << curveDist               << G4endl; 
-         }
-#endif
+          // Re-integrate to obtain a new B
+          //
+          G4FieldTrack newEndPoint=
+	          ReEstimateEndpoint( CurrentA_PointVelocity,
+				      CurrentB_PointVelocity,
+				      curveDist );
+ 	  CurrentB_PointVelocity = newEndPoint;
        }
        if( curveDist < 0.0 )
        {
@@ -715,18 +702,45 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
     G4bool intersects;
 
-    // Check whether any volumes are encountered by the chord AB
-    LinearStepLength = 
+    G4ThreeVector OriginShift = StartPointA - fPreviousSftOrigin ;
+    G4double      MagSqShift  = OriginShift.mag2() ;
+    G4double      currentSafety;
+
+    if( MagSqShift >= sqr(fPreviousSafety) )
+    {
+	currentSafety = 0.0 ;
+    }else{
+	currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
+    }
+
+    if( ChordAB_Length <= currentSafety )
+    {
+       // The Step is guaranteed to be taken
+
+       LinearStepLength = ChordAB_Length;
+       intersects = false;
+
+       NewSafety= currentSafety;
+    }
+    else
+    {
+       // Check whether any volumes are encountered by the chord AB
+       LinearStepLength = 
         fNavigator->ComputeStep( StartPointA, ChordAB_Dir,
                                  ChordAB_Length, NewSafety );
-    intersects = (LinearStepLength <= ChordAB_Length); 
-      // G4Navigator contracts to return k_infinity if len==asked
-      // and it did not find a surface boundary at that length
-    LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
+       intersects = (LinearStepLength <= ChordAB_Length); 
+       // G4Navigator contracts to return k_infinity if len==asked
+       // and it did not find a surface boundary at that length
+       LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
 
-    // Intersection Point of chord AB and either volume A's surface 
-    //                                or a daughter volume's surface ..
-    IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+       // Save the last calculated safety!
+       fPreviousSftOrigin = StartPointA;
+       fPreviousSafety= NewSafety;
+
+       // Intersection Point of chord AB and either volume A's surface 
+       //                                or a daughter volume's surface ..
+       IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+    }
 
     return intersects;
 }
@@ -737,9 +751,42 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 		    double              curveDist
 		  )
 {
-  G4Exception("G4PropagatorInField::ReEstimateEndpoint is not yet implemented.");
-  return CurrentStateA;
+  G4FieldTrack newEndPoint( CurrentStateA );
+  GetChordFinder()->GetIntegrationDriver()
+                  ->AccurateAdvance(newEndPoint, curveDist, fEpsilonStep);
+  // EstimatedEndStateB = newEndpoint;
+
+#ifdef G4DEBUG_FIELD
+  static G4int noInaccuracyWarnings = 0; 
+  G4int maxNoWarnings = 10;
+  if (  (noInaccuracyWarnings < maxNoWarnings ) 
+       || (Verbose() > 1) )
+    {
+      G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
+	     << G4endl
+	     << " Warning: Integration inaccuracy requires" 
+	     <<   " an adjustment in the step's endpoint."  << G4endl
+	     << "   Two mid-points are further apart than their"
+	     <<   " curve length difference"                << G4endl 
+	     << "   Dist = "       << sqrt(linDistSq)
+	     << " curve length = " << curveDist             << G4endl; 
+      G4cerr << " Correction applied is " 
+	     << (newEndpoint-EstimatedEndStateB).mag()
+	     << G4endl;
+    }
+#endif
+  return newEndPoint;
 }
+
+// Access the points which have passed through the filter. The
+// points are stored as ThreeVectors for the initial impelmentation
+// only (jacek 30/10/2002)
+// Responsibility for deleting the points lies with
+// SmoothTrajectoryPoint, which is the points' final
+// destination. The points pointer is set to NULL, to ensure that
+// the points are not re-used in subsequent steps, therefore THIS
+// METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
+
 
 G4std::vector<G4ThreeVector>*
 G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
@@ -755,4 +802,11 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
 void 
 G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
   fpTrajectoryFilter = filter;
+}
+
+
+void G4PropagatorInField::ClearPropagatorState()
+{
+  G4Exception("G4PropagatorInField::ClearPropagatorState is not yet implemented");
+
 }
