@@ -1,0 +1,371 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+#control/saveHistory
+/run/verbose 2
+#
+/run/initialize
+userDetector->Construct() start.
+
+***** Table : Nb of materials = 10 *****
+
+ Material: Beryllium  density:  1.848  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267  cm
+   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Silicon  density:  2.330  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368  cm
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron  density:  7.870  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759  cm
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Copper  density:  8.960  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436  cm
+   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Gold  density: 19.320  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344  mm
+   --->  Element:     Gold      Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+
+ The  WORLD   is made of 2e+02mm of Air, the transverse size (R) of the world is 2e+02 mm. 
+ The ABSORBER is made of 1e+02mm of Lead, the transverse size (R) is 1e+02 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+physicsList->Construct() start.
+physicsList->setCut() start.
+Em5PhysicsList::SetCuts:CutLength : 1 (mm)
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+total time(SetCuts)=5.36667 s 
+#
+/calor/setAbsMat Aluminium 
+/calor/setAbsThick 4.005  mm  
+/calor/setAbsRad 100.0 mm
+/calor/update
+
+ The  WORLD   is made of 8.01mm of Air, the transverse size (R) of the world is 200 mm. 
+ The ABSORBER is made of 4.005mm of Aluminium, the transverse size (R) is 100 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#
+#
+#  hist file name
+/plots/sethistName geant4.plot05 
+ hist file = geant4.plot05
+#  PLOT: angle distr. of transmitted particles
+/plots/setnbinTh 100
+ Nb of bins in Theta plot = 100
+/plots/setThlow 0.0 deg
+ Tlow  in the  Theta plot = 0
+/plots/setThhigh 0.01 deg
+ Thigh in the Theta plot = 0.000174533
+#
+/calor/cutG 2250.0 micrometer
+/run/cutoffModified
+/calor/cutE 6.050 micrometer
+/run/cutoffModified
+/run/initialize
+physicsList->setCut() start.
+Em5PhysicsList::SetCuts:CutLength : 1 (mm)
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+total time(SetCuts)=4.95 s 
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range               2.25  mm        6.05 mum           1  mm           1  mm           1  mm
+Cut in energy
+          Beryllium        2.49 keV        6.64 keV        4.28 MeV        11.5 MeV         990  eV
+          Aluminium          10 keV        9.97 keV        5.02 MeV        13.1 MeV         990  eV
+            Silicon        10.1 keV        8.45 keV        4.72 MeV        12.2 MeV         990  eV
+        liquidArgon        9.16 keV        3.98 keV        3.24 MeV        8.32 MeV         990  eV
+               Iron        31.4 keV        43.3 keV        8.52 MeV          22 MeV         990  eV
+             Copper        37.9 keV        45.5 keV        8.95 MeV          23 MeV         990  eV
+               Gold         150 keV          59 keV        11.7 MeV        29.2 MeV         990  eV
+               Lead         125 keV        42.8 keV        8.52 MeV        20.9 MeV         990  eV
+              Water         4.1 keV        3.27 keV        3.39 MeV        8.95 MeV         990  eV
+                Air         990  eV         990  eV        48.4 keV        83.2 keV         990  eV
+===================================================
+#
+#
+/gun/particle proton
+# momentum 70 GeV/c ....
+/gun/energy 69068. MeV
+#
+/run/beamOn 100000
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=165.467s Real=202.867s Sys=35.7667s
+ ================== run summary =====================
+ end of Run TotNbofEvents = 100000
+    mean charged track length   in absorber=4.57813 +- 0.00337337  mm  
+
+            mean energy deposit in absorber=1.73106 +- 0.00150131  MeV 
+
+ mean number of steps in absorber (charged) =11.5833 +- 0.0231296      
+ mean number of steps in absorber (neutral) =0.02845 +- 0.000635142      
+
+   mean number of charged secondaries = 9.5395 +- 0.0137643
+
+   mean number of neutral secondaries = 0.02538 +- 0.000538106
+
+   mean number of e-s =9.5395  and e+s =0
+
+(number) transmission coeff=1  reflection coeff=0
+
+      angle   distribution 
+#entries=100000    #underflows=0    #overflows=1435
+ bin nb  Thlowdeg      Thlowrad       entries         normalized 
+    0         0            0   1.90083e+09       19008.3             1
+    1    0.0001   1.74533e-06    2.5235e+09         25235       1.32758
+    2    0.0002   3.49066e-06   2.20013e+09       22001.3       1.15746
+    3    0.0003   5.23599e-06   2.18771e+09       21877.1       1.15092
+    4    0.0004   6.98132e-06    2.2982e+09         22982       1.20905
+    5    0.0005   8.72665e-06   2.16995e+09       21699.5       1.14158
+    6    0.0006   1.0472e-05   2.22159e+09       22215.9       1.16875
+    7    0.0007   1.22173e-05   2.18306e+09       21830.6       1.14847
+    8    0.0008   1.39626e-05   2.06534e+09       20653.4       1.08654
+    9    0.0009   1.5708e-05   2.14236e+09       21423.6       1.12706
+   10     0.001   1.74533e-05   2.15161e+09       21516.1       1.13193
+   11    0.0011   1.91986e-05   1.94727e+09       19472.7       1.02443
+   12    0.0012   2.0944e-05   2.04338e+09       20433.8       1.07499
+   13    0.0013   2.26893e-05   2.04299e+09       20429.9       1.07479
+   14    0.0014   2.44346e-05   1.90093e+09       19009.3       1.00005
+   15    0.0015   2.61799e-05    1.8406e+09         18406      0.968315
+   16    0.0016   2.79253e-05   1.79831e+09       17983.1      0.946064
+   17    0.0017   2.96706e-05   1.72577e+09       17257.7      0.907901
+   18    0.0018   3.14159e-05   1.69714e+09       16971.4       0.89284
+   19    0.0019   3.31613e-05   1.66834e+09       16683.4      0.877689
+   20     0.002   3.49066e-05   1.65093e+09       16509.3      0.868531
+   21    0.0021   3.66519e-05   1.52079e+09       15207.9      0.800066
+   22    0.0022   3.83972e-05   1.47744e+09       14774.4      0.777261
+   23    0.0023   4.01426e-05   1.45914e+09       14591.4      0.767635
+   24    0.0024   4.18879e-05   1.42378e+09       14237.8      0.749028
+   25    0.0025   4.36332e-05   1.36493e+09       13649.3      0.718069
+   26    0.0026   4.53786e-05   1.29419e+09       12941.9      0.680856
+   27    0.0027   4.71239e-05   1.22342e+09       12234.2      0.643623
+   28    0.0028   4.88692e-05    1.2063e+09         12063      0.634618
+   29    0.0029   5.06145e-05   1.15095e+09       11509.5        0.6055
+   30     0.003   5.23599e-05   1.11288e+09       11128.8      0.585468
+   31    0.0031   5.41052e-05   1.01518e+09       10151.8      0.534069
+   32    0.0032   5.58505e-05   9.56442e+08       9564.42       0.50317
+   33    0.0033   5.75959e-05   9.39817e+08       9398.17      0.494424
+   34    0.0034   5.93412e-05   9.03329e+08       9033.29      0.475228
+   35    0.0035   6.10865e-05   8.23645e+08       8236.45      0.433308
+   36    0.0036   6.28319e-05   8.07682e+08       8076.82       0.42491
+   37    0.0037   6.45772e-05   7.71724e+08       7717.24      0.405993
+   38    0.0038   6.63225e-05   7.45127e+08       7451.27      0.392001
+   39    0.0039   6.80678e-05   6.73752e+08       6737.52      0.354451
+   40     0.004   6.98132e-05   6.67599e+08       6675.99      0.351214
+   41    0.0041   7.15585e-05   6.25995e+08       6259.95      0.329327
+   42    0.0042   7.33038e-05   5.77503e+08       5775.03      0.303816
+   43    0.0043   7.50492e-05   5.31014e+08       5310.14      0.279359
+   44    0.0044   7.67945e-05   5.16187e+08       5161.87      0.271559
+   45    0.0045   7.85398e-05   4.52487e+08       4524.87      0.238047
+   46    0.0046   8.02851e-05   4.47713e+08       4477.13      0.235535
+   47    0.0047   8.20305e-05   4.16825e+08       4168.25      0.219285
+   48    0.0048   8.37758e-05   3.75129e+08       3751.29       0.19735
+   49    0.0049   8.55211e-05   3.73022e+08       3730.22      0.196241
+   50     0.005   8.72665e-05   3.41317e+08       3413.17      0.179562
+   51    0.0051   8.90118e-05   3.13012e+08       3130.12      0.164671
+   52    0.0052   9.07571e-05   2.86838e+08       2868.38      0.150902
+   53    0.0053   9.25025e-05   2.98019e+08       2980.19      0.156784
+   54    0.0054   9.42478e-05   2.75145e+08       2751.45       0.14475
+   55    0.0055   9.59931e-05   2.52898e+08       2528.98      0.133046
+   56    0.0056   9.77384e-05   2.34644e+08       2346.44      0.123443
+   57    0.0057   9.94838e-05   2.22276e+08       2222.76      0.116936
+   58    0.0058   0.000101229   1.98887e+08       1988.87      0.104632
+   59    0.0059   0.000102974   1.89373e+08       1893.73     0.0996266
+   60     0.006   0.00010472   1.81785e+08       1817.85     0.0956346
+   61    0.0061   0.000106465   1.70817e+08       1708.17     0.0898642
+   62    0.0062   0.00010821   1.71457e+08       1714.57      0.090201
+   63    0.0063   0.000109956   1.35336e+08       1353.36     0.0711984
+   64    0.0064   0.000111701   1.26092e+08       1260.92     0.0663349
+   65    0.0065   0.000113446   1.29265e+08       1292.65     0.0680045
+   66    0.0066   0.000115192   1.20639e+08       1206.39     0.0634662
+   67    0.0067   0.000116937   1.09461e+08       1094.61     0.0575858
+   68    0.0068   0.000118682   9.96956e+07       996.956     0.0524484
+   69    0.0069   0.000120428   9.22796e+07       922.796     0.0485469
+   70     0.007   0.000122173   8.66956e+07       866.956     0.0456093
+   71    0.0071   0.000123918    9.2164e+07        921.64     0.0484861
+   72    0.0072   0.000125664   7.33158e+07       733.158     0.0385704
+   73    0.0073   0.000127409   7.53504e+07       753.504     0.0396408
+   74    0.0074   0.000129154   6.14948e+07       614.948     0.0323515
+   75    0.0075    0.0001309   6.15732e+07       615.732     0.0323928
+   76    0.0076   0.000132645   5.99258e+07       599.258     0.0315261
+   77    0.0077   0.00013439   5.13355e+07       513.355     0.0270069
+   78    0.0078   0.000136136   4.88591e+07       488.591      0.025704
+   79    0.0079   0.000137881   4.50469e+07       450.469     0.0236985
+   80     0.008   0.000139626    3.6788e+07        367.88     0.0193536
+   81    0.0081   0.000141372   3.67167e+07       367.167     0.0193161
+   82    0.0082   0.000143117   3.60743e+07       360.743     0.0189782
+   83    0.0083   0.000144862   3.41072e+07       341.072     0.0179433
+   84    0.0084   0.000146608   3.09011e+07       309.011     0.0162566
+   85    0.0085   0.000148353    2.8303e+07        283.03     0.0148898
+   86    0.0086   0.000150098    2.7611e+07        276.11     0.0145257
+   87    0.0087   0.000151844   2.20038e+07       220.038     0.0115759
+   88    0.0088   0.000153589   2.66171e+07       266.171     0.0140028
+   89    0.0089   0.000155334   2.43637e+07       243.637     0.0128174
+   90     0.009   0.00015708   1.98754e+07       198.754     0.0104562
+   91    0.0091   0.000158825   1.98309e+07       198.309     0.0104327
+   92    0.0092   0.00016057   1.85727e+07       185.727    0.00977081
+   93    0.0093   0.000162316   1.66773e+07       166.773     0.0087737
+   94    0.0094   0.000164061   1.41421e+07       141.421    0.00743995
+   95    0.0095   0.000165806   1.73378e+07       173.378    0.00912119
+   96    0.0096   0.000167552   1.53389e+07       153.389    0.00806956
+   97    0.0097   0.000169297   1.32157e+07       132.157    0.00695257
+   98    0.0098   0.000171042   1.32502e+07       132.502    0.00697072
+   99    0.0099   0.000172788   9.91644e+06       99.1644     0.0052169
+
+ mean = 3.73643e-05  rad  or 0.00214082 deg.
+ theta(1/e)=6.63225e-05 - 6.80678e-05 rad    or 0.0038 - 0.0039 deg.
+
+#
+#
+
+
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.

@@ -1,0 +1,44 @@
+
+ testem5.cra is the geant3 equivalent of TestEm5
+
+ % cd geant3
+ % gmakeB           to make an executable  (Batch version)
+
+ To execute:
+
+ % cd geant3
+ % $G4SYSTEM/testem5.xb (for batch) 
+
+ The program will ask:
+ G3 > gives the filename of the data cards to be read:
+
+ run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
+
+ data cards:  most of the data cards used in runxx.dat are
+ ----------   standard data cards of GEANT3, but some of them
+              are defined in testem5.cra. These latter cards are:
+
+              KEY      TYPE        Short description
+
+              NAME   character     name of the hist.file <******* 
+
+              ZABS    real         z size of the absorber
+              RABS    real         radius of the absorber
+              MATA    integer      mat.number of the absorber
+
+              NH1     integer      number of bins in 1-st histogram
+              HI1     real,real    lower/upper limit in 1-st histogram
+              .......
+              NH10     integer      nb of bins in 10-th hist.
+              HI10    real,real     lower/upper limit in 10-th hist.
+
+
+   ******>  the NAME data card should be the first , with the format
+              A4,A2,A25.
+
+   all the others are the so called free format data records used
+   in GEANT3 .
+
+   materials: the materials used in this test are defined in
+   ---------  testem5.cra with materialnumbers 21 - 30 (see testem5.cra). 
+~

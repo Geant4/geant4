@@ -1,0 +1,304 @@
+
+ MZSTOR.  ZEBRA table base TAB(0) in /MZCC/ at adr   268883591    1006D687 HEX
+
+ MZSTOR.  Initialize Store  0  in /GCBANK/
+          with Store/Table at absolute adrs   268598781   268883591
+                                        HEX    10027DFD    1006D687
+                                        HEX    FFFBA868           0
+                              relative adrs     -284568           0
+          with     1 Str. in     2 Links in   5300 Low words in  199970 words.
+          This store has a fence of   16 words.
+
+ MZLOGL.  Set Log Level 0 for store  0
+
+ MZSTOR.  Initialize Store  1  in /PAWC/  
+          with Store/Table at absolute adrs   268809305   268818896
+                                        HEX    1005B459    1005D9D0
+                                        HEX    FFFEDEC4    FFFF0349
+                              relative adrs      -74044      -64695
+          with     1 Str. in     1 Links in   5001 Low words in    9990 words.
+          This store has a fence of    5 words.
+
+ MZLINK.  Initialize Link Area  /HCBOOK/  for Store  1 NL/NS=    49     4
+
+ MZDIV.   Initialize Division  HIGZ      in Store  1
+          NW/NWMAX=   1000  10000,  MODE/KIND=  0  3
+          Division 20 initialized.
+
+ MZLINK.  Initialize Link Area  /HILINK/  for Store  1 NL/NS=    42     2
+ Version 1.23/09 of HIGZ started
+1*****  GEANT Version  3.21/11 Released on 100298
+0*****  Correction Cradle Version  0.1100
+ G3 > gives the filename of the data cards to be read:
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     TRIGGERS 1000000                                                                
+ ***** DATA CARD CONTENT     DEBUG    1  1  1                                                                
+ ***** DATA CARD CONTENT     SWIT     1                                                                      
+ ***** DATA CARD CONTENT     ANNI     1                                                                      
+ ***** DATA CARD CONTENT     BREM     1                                                                      
+ ***** DATA CARD CONTENT     COMP     1                                                                      
+ ***** DATA CARD CONTENT     DRAY     1                                                                      
+ ***** DATA CARD CONTENT     MULS     1                                                                      
+ ***** DATA CARD CONTENT     PAIR     1                                                                      
+ ***** DATA CARD CONTENT     PHOT     1                                                                      
+ ***** DATA CARD CONTENT     LOSS     1                                                                      
+ ***** DATA CARD CONTENT     PRINT  'MATE'  'VOLU'  'TMED'                                                   
+ ***** DATA CARD CONTENT     MATA   23                                                                       
+ ***** DATA CARD CONTENT     ZABS   0.0061                                                                   
+ ***** DATA CARD CONTENT     RABS   10.0                                                                     
+ ***** DATA CARD CONTENT     TIME   2=5.                                                                     
+ ***** DATA CARD CONTENT     KINE  1=3 2=0.001000  3=0.0  4=0.0  5=0.000511                                  
+ ***** DATA CARD CONTENT     CUTS 10.0E-6  10.0E-6  10.0E-6  10.0E-6  10.0E-6  10.0E-6                       
+ ***** DATA CARD CONTENT     AUTO   1                                                                        
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     NH2  55.                                                                        
+ ***** DATA CARD CONTENT     HI2  0.     1.1                                                                 
+ ***** DATA CARD CONTENT     END                                                                             
+
+               histogram file --> NAME:geant3.plot11            
+
+ MZDIV.   Initialize Division  Constant  in Store  0
+          NW/NWMAX=   2000 160000,  MODE/KIND=  1  2
+          Division 20 initialized.
+
+ MZLINK.  Initialize Link Area  /GCLINK/  for Store  0 NL/NS=    20    20
+
+ MZLINK.  Initialize Link Area  /GCSLNK/  for Store  0 NL/NS=   100   100
+
+ MZLINK.  Initialize Link Area  /GCHVIR/  for Store  0 NL/NS=     4     1
+
+ MZLINK.  Initialize Link Area  /GCDINA/  for Store  0 NL/NS=     4     4
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2111      DATE/TIME 990302/1042  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990302  1042    3.2111     3.77     *
+ *                                                          *
+ *           KINE       990302  1042    3.2111     3.77     *
+ *                                                          *
+ *           HITS       990302  1042    3.2111     3.77     *
+ *                                                          *
+ *           DIGI       990302  1042    3.2111     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 keV *
+ *  CUTHAD= 10.00 keV  CUTMUO= 10.00 keV                    *
+ *  BCUTE = 10.00 keV  BCUTM = 10.00 keV                    *
+ *  DCUTE = 10.00 keV  DCUTM = 10.00 keV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        1.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 HYDROGEN                 1.010     1.000     0.071 0.865E+03 0.790E+03   1
+        2 DEUTERIUM                2.010     1.000     0.162 0.757E+03 0.342E+03   1
+        3 HELIUM                   4.000     2.000     0.125 0.755E+03 0.478E+03   1
+        4 LITHIUM                  6.940     3.000     0.534 0.155E+03 0.121E+03   1
+        5 BERILLIUM                9.010     4.000     1.848 0.353E+02 0.367E+02   1
+        6 CARBON                  12.010     6.000     2.265 0.188E+02 0.499E+02   1
+        7 NITROGEN                14.010     7.000     0.808 0.445E+02 0.994E+02   1
+        8 NEON                    20.180    10.000     1.207 0.240E+02 0.749E+02   1
+        9 ALUMINIUM               26.980    13.000     2.700 0.890E+01 0.372E+02   1
+       10 IRON                    55.850    26.000     7.870 0.176E+01 0.171E+02   1
+       11 COPPER                  63.540    29.000     8.960 0.143E+01 0.148E+02   1
+       12 TUNGSTEN               183.850    74.000    19.300 0.350E+00 0.103E+02   1
+       13 LEAD                   207.190    82.000    11.350 0.560E+00 0.185E+02   1
+       14 URANIUM                238.030    92.000    18.950 0.320E+00 0.120E+02   1
+       15 AIR                     14.610     7.300     0.001 0.304E+05 0.675E+05   1
+       16 VACUUM                   0.000     0.000     0.000 0.100E+17 0.100E+17   1
+       21 BERYLLIUM                9.010     4.000     1.848 0.353E+02 0.000E+00   1
+       22 ALUMINIUM               26.980    13.000     2.700 0.890E+01 0.000E+00   1
+       23 SILICON                 28.090    14.000     2.330 0.936E+01 0.455E+02   1
+       24 LIQUID ARGON            39.950    18.000     1.400 0.140E+02 0.837E+02   1
+       25 IRON                    55.850    26.000     7.870 0.176E+01 0.000E+00   1
+       26 COPPER                  63.540    29.000     8.960 0.143E+01 0.000E+00   1
+       27 GOLD                   196.967    79.000    19.320 0.330E+00 0.000E+00   1
+       28 LEAD                   207.190    82.000    11.350 0.560E+00 0.000E+00   1
+       29 WATER                   14.320     7.215     1.000 0.358E+02 0.949E+02   2     A      Z     W
+                                                                                         1.01   1.00  0.112
+                                                                                        16.00   8.00  0.888
+       30 AIR                     14.607     7.300     0.001 0.304E+05 0.865E+05   2     A      Z     W
+                                                                                        14.01   7.00  0.700
+                                                                                        16.00   8.00  0.300
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 ABSORBER                  23       0     0      0.00   10.00 0.100E+11   0.185   0.000   0.019
+     99 WORLD                     30       0     0      0.00   10.00 0.100E+11   0.249   0.000   0.592
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 ALL    99   TUBE    3   0.000E+00 0.200E+01 0.100E+01
+      2 DET     1   TUBE    3   0.000E+00 0.100E+02 0.305E-02
+
+
+     tkin=    0.001000
+
+
+   Vert        Vx           Vy           Vz        Tofg   Tbeam   Targ              Gener tracks
+     1       0.0000       0.0000      -0.0061     0.0000      0      0      1
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     0.0000     0.0000     0.0014     0.0015     1.0000
+1         **** NUMBER OF EVENTS PROCESSED =   1000000
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1867812443   613050746
+          **** TIME TO PROCESS ONE EVENT IS =    0.0002 SECONDS
+
+
+
+ MZEND.   Usage statistics for  2 dynamic stores.
+
+   Map of store  0 /GCBANK/
+   ------------------------
+
+   Division                                        Number of times
+              Kind                Max-size                Garb-coll.
+            Mode    Position      used   allowed   Wiped  user  auto Pushd Redcd
+
+    1 QDIV1    0 1      5203         0    199968       0     0     0     0     0
+    2 QDIV2    1 1    181451       137    199968 1000000     0     0     0     0
+   19 system   1 8    181851       328    199968       0     0     0     0     0
+   20 Constant 1 2    199968     16787    160000       0     1     2     3     0
+
+   Map of store  1 /PAWC/  
+   ------------------------
+
+   Division                                        Number of times
+              Kind                Max-size                Garb-coll.
+            Mode    Position      used   allowed   Wiped  user  auto Pushd Redcd
+
+    1 QDIV1    0 1         2         0      9585       0     0     0     0     0
+    2 QDIV2    1 1      8185      1207      9585       0     0     0     0     0
+   19 system   1 8      8585       111      9585       0     0     0     0     0
+   20 HIGZ     0 4      8585         0     10000       0     0     0     0     0
+     energy deposit=  0.4057E-05 +-   0.1451E-07
+
+  mean number of steps=          1.262 +-           0.001
+
+  mean nb of charged secondaries=         0.1244 +-          0.0004
+  mean nb of neutral secondaries=         0.0033 +-          0.0001
+
+  mean nb of e-s =          0.1244  and e+s=         0.0000
+
+  (number) transmission coeff=  0.9984E+00  reflexion coeff=  0.2060E-02
+
+  nb of (theta<0.001*bin) events=     0
+1
+ .............................................................................................................................
+ .                                                                                                                           .
+ .   HBOOK   HBOOK  CERN            VERSION   4.21       HISTOGRAM AND PLOT INDEX                             02/03/99       .
+ .                                                                                                                           .
+ .............................................................................................................................
+ .                                                                                                                           .
+ .  NO                     TITLE                      ID  B/C  ENTRIES DIM   NCHA     LOWER       UPPER       ADDRESS LENGTH .
+ .                                                                                                                           .
+ .............................................................................................................................
+ .                                                                                                                           .
+ .                                                                                                                           .
+ .   1  energy deposit in absorber (MeV)               2  32  1000000  1  X    55   0.000E+00   0.110E+01        7059    105 .
+ .                                                                                                                           .
+ .                                                                                                                           .
+ .............................................................................................................................
+
+
+
+ MEMORY UTILISATION
+
+      MAXIMUM TOTAL SIZE OF COMMON /PAWC/            10000
+1energy deposit in absorber (MeV)                                                
+ 
+ HBOOK     ID =         2                                        DATE  02/03/99              NO =     1
+ 
+     9200       -
+     9000       I
+     8800       I
+     8600       I
+     8400       I
+     8200       I
+     8000       I
+     7800       I
+     7600       I
+     7400       I
+     7200       I
+     7000       I
+     6800       I
+     6600       I
+     6400       I
+     6200       I
+     6000       I
+     5800       I
+     5600       I
+     5400       I
+     5200       I
+     5000       I
+     4800       I
+     4600       I
+     4400       I
+     4200       I
+     4000       I
+     3800       I
+     3600       I
+     3400       I
+     3200       I
+     3000       I
+     2800       I
+     2600       I
+     2400       I
+     2200       I
+     2000       I
+     1800       I
+     1600       I
+     1400       I
+     1200       I
+     1000       I
+      800       I
+      600       I-
+      400       II
+      200       II----------------------- -
+ 
+ CHANNELS  10   0        1         2         3         4         5        
+            1   1234567890123456789012345678901234567890123456789012345   
+ 
+ CONTENTS1000   9                                                      
+ *10**- 2 100   151                                                    
+           10   537631                                                 
+            1.  28084674211                                            
+            0   9937079113065321211100000000000000000000000000000000000
+ 
+ LOW-EDGE   1.                                                    11111
+            0   0000011111222223333344444555556666677777888889999900000
+            0   0246802468024680246802468024680246802468024680246802468
+ 
+ * ENTRIES =    1000000      * ALL CHANNELS = 0.1000E+07      * UNDERFLOW = 0.0000E+00      * OVERFLOW = 0.0000E+00
+ * BIN WID = 0.2000E-01      * MEAN VALUE   = 0.4057E-02      * R . M . S = 0.1451E-01      * NEQUIVAL = 0.1000E+07
+ RZMAKE. Unit   1004 Initializing with LREC=  1024, OPT= X?C     
+
+ MZLINK.  Initialize Link Area  RZCL      for Store  0 NL/NS=    11     0
+ RZEND. called for HRPUT

@@ -1,0 +1,25 @@
+FILE  geant3.plot05
+LIST
+TRIGGERS 100000
+DEBUG    1  1  1
+SWIT     1
+ANNI     1
+BREM     1
+COMP     1
+DRAY     1
+MULS     1
+PAIR     1
+PHOT     1
+LOSS     1
+PRINT  'MATE'  'VOLU'  'TMED'
+MATA   22
+ZABS   0.4005   
+RABS   10.0
+TIME   2=5.
+KINE  1=14 2=69.06800  3=0.0  4=0.0  5=0.938272
+CUTS 10.0e-6  10.0e-6  10.0e-6  10.0e-6  10.0e-6  10.0e-6
+AUTO   1
+ABAN   0
+NH3  100
+HI3  0.    0.01
+END
