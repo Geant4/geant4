@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ZIIIPhysicsList.cc,v 1.2 2001-06-26 11:31:00 ahoward Exp $
+// $Id: ZIIIPhysicsList.cc,v 1.3 2001-07-04 10:43:23 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,6 +311,13 @@ void ZIIIPhysicsList::ConstructEM()
 #include "G4HEAntiXiMinusInelastic.hh"
 #include "G4HEOmegaMinusInelastic.hh"
 #include "G4HEAntiOmegaMinusInelastic.hh"
+#include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPElasticData.hh"
+#include "G4NeutronHPCapture.hh"
+#include "G4NeutronHPCaptureData.hh"
+#include "G4NeutronHPInelastic.hh"
+#include "G4NeutronHPInelasticData.hh"
+#include "G4LCapture.hh"
 
 // Stopping processes
 
@@ -456,16 +463,48 @@ void ZIIIPhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "neutron") {
-         pmanager->AddDiscreteProcess(theElasticProcess);
-         G4NeutronInelasticProcess* theInelasticProcess = 
+          // elastic scattering
+         G4HadronElasticProcess* theNeutronElasticProcess = 
+                                    new G4HadronElasticProcess;
+         G4LElastic* theElasticModel1 = new G4LElastic;
+         G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
+         theNeutronElasticProcess->RegisterMe(theElasticModel1);
+         theElasticModel1->SetMinEnergy(19*MeV);
+         theNeutronElasticProcess->RegisterMe(theElasticNeutron);
+         G4CrossSectionDataStore * theStore = ((G4HadronElasticProcess*)theNeutronElasticProcess)->GetCrossSectionDataStore();
+         G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
+         theStore->AddDataSet(theNeutronData);
+         pmanager->AddDiscreteProcess(theNeutronElasticProcess);
+ 
+          // inelastic scattering
+         G4NeutronInelasticProcess* theInelasticProcess =
                                     new G4NeutronInelasticProcess("inelastic");
-         G4LENeutronInelastic* theLEInelasticModel = 
-                                    new G4LENeutronInelastic;
-         theInelasticProcess->RegisterMe(theLEInelasticModel);
-         G4HENeutronInelastic* theHEInelasticModel = 
-                                    new G4HENeutronInelastic;
-         theInelasticProcess->RegisterMe(theHEInelasticModel);
+         G4LENeutronInelastic* theInelasticModel = new G4LENeutronInelastic;
+         theInelasticModel->SetMinEnergy(19*MeV);
+         theInelasticProcess->RegisterMe(theInelasticModel);
+         G4NeutronHPInelastic * theLENeutronInelasticModel = new G4NeutronHPInelastic;
+         theInelasticProcess->RegisterMe(theLENeutronInelasticModel);
+         G4CrossSectionDataStore * theStore1 = ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
+         G4NeutronHPInelasticData * theNeutronData1 = new G4NeutronHPInelasticData;
+         theStore1->AddDataSet(theNeutronData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
+ 
+         // capture
+         G4HadronCaptureProcess* theCaptureProcess =
+                                    new G4HadronCaptureProcess;
+         G4LCapture* theCaptureModel = new G4LCapture;
+         theCaptureModel->SetMinEnergy(19*MeV);
+         theCaptureProcess->RegisterMe(theCaptureModel);
+         G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
+         theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
+         G4CrossSectionDataStore * theStore3 = ((G4HadronCaptureProcess*)theCaptureProcess)->GetCrossSectionDataStore();
+         G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
+         theStore3->AddDataSet(theNeutronData3);
+         pmanager->AddDiscreteProcess(theCaptureProcess);
+
+
+
+
       }  
       else if (particleName == "anti_neutron") {
          pmanager->AddDiscreteProcess(theElasticProcess);
