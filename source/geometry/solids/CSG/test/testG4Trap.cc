@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Trap.cc,v 1.2 1999-11-30 11:15:38 grichine Exp $
+// $Id: testG4Trap.cc,v 1.3 1999-12-10 15:06:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -212,18 +212,24 @@ G4bool testG4Trap()
 //DistanceToIn(P)
     
     Dist=trap1.DistanceToIn(pbig);
-    G4cout<<"trap1.DistanceToIn(pbig) = "<<Dist<<endl;
+    //  G4cout<<"trap1.DistanceToIn(pbig) = "<<Dist<<endl;
     assert(ApproxEqual(Dist,80));
+
     Dist=trap1.DistanceToIn(pbigx);
     assert(ApproxEqual(Dist,80));
+
     Dist=trap1.DistanceToIn(pbigmx);
     assert(ApproxEqual(Dist,80));
+
     Dist=trap1.DistanceToIn(pbigy);
     assert(ApproxEqual(Dist,70));
+
     Dist=trap1.DistanceToIn(pbigmy);
     assert(ApproxEqual(Dist,70));
+
     Dist=trap1.DistanceToIn(pbigz);
     assert(ApproxEqual(Dist,60));
+
     Dist=trap1.DistanceToIn(pbigmz);
     assert(ApproxEqual(Dist,60));
 
@@ -278,16 +284,36 @@ G4bool testG4Trap()
     assert(ApproxEqual(Dist,kInfinity));
 
     dist=trap3.DistanceToIn(G4ThreeVector(50,-50,0),vy);
-    G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vy) = "<<dist<<endl ;
+    //  G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vy) = "<<dist<<endl ;
+    assert(ApproxEqual(dist,50));
 
     dist=trap3.DistanceToIn(G4ThreeVector(50,-50,0),vmy);
-    G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vmy) = "<<dist<<endl ;
+    // G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vmy) = "<<dist<<endl ;
+    assert(ApproxEqual(dist,kInfinity));
 
     dist=trap4.DistanceToIn(G4ThreeVector(50,50,0),vy);
-    G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vy) = "<<dist<<endl ;
+    //  G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vy) = "<<dist<<endl ;
+    assert(ApproxEqual(dist,kInfinity));
 
     dist=trap4.DistanceToIn(G4ThreeVector(50,50,0),vmy);
-    G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vmy) = "<<dist<<endl ;
+    //  G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vmy) = "<<dist<<endl ;
+    assert(ApproxEqual(dist,50));
+
+    dist=trap1.DistanceToIn(G4ThreeVector(0,60,0),vxmy);
+    //  G4cout<<"trap1.DistanceToIn(G4ThreeVector(0,60,0),vxmy) = "<<dist<<endl ;
+    assert(ApproxEqual(dist,kInfinity));
+
+    dist=trap1.DistanceToIn(G4ThreeVector(40,60,0),vmx);
+    G4cout<<"trap1.DistanceToIn(G4ThreeVector(40,60,0),vmx) = "<<dist<<endl ;
+    //   assert(ApproxEqual(dist,kInfinity));
+
+    dist=trap1.DistanceToIn(G4ThreeVector(40,60,0),vmy);
+    G4cout<<"trap1.DistanceToIn(G4ThreeVector(40,60,0),vmy) = "<<dist<<endl ;
+    //   assert(ApproxEqual(dist,kInfinity));
+
+    dist=trap1.DistanceToIn(G4ThreeVector(40,60,50),vmz);
+    G4cout<<"trap1.DistanceToIn(G4ThreeVector(40,60,50),vmz) = "<<dist<<endl ;
+    //   assert(ApproxEqual(dist,kInfinity));
 
 
 
