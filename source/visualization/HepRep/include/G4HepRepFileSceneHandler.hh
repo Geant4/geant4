@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.7 2002-02-02 04:00:14 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.8 2002-11-26 07:14:57 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
 // Joseph Perl  27th January 2002
 // A base class for a scene handler to export geometry and trajectories
 // to the HepRep xml file format.
@@ -73,6 +73,8 @@ public:
   void AddThis(const G4Polycone&);
   void AddThis(const G4Polyhedra&);
   void AddThis(const G4VSolid&);
+  void AddThis (const G4VTrajectory&);
+  void AddThis (const G4VHit&);
   // void PreAddThis(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddThis();
