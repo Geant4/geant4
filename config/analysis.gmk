@@ -2,6 +2,20 @@
 #
 # Analysis variables...
 #
+
+# -----------------------------------
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+  G4ANALYSIS_BUILD = 1
+endif
+
+ifdef G4ANALYSIS_BUILD
+  CPPFLAGS += -DG4ANALYSIS_BUILD
+  INC_ANALYSIS = 1	
+  LIB_ANALYSIS = 1	
+endif
+
 # ------------- Lab -----------------
 ifdef G4ANALYSIS_USE_LAB
   CPPFLAGS += -DG4ANALYSIS_USE_LAB
@@ -52,12 +66,8 @@ endif
 
 # ------------- Else ---------------
 
-ifdef G4ANALYSIS_TUPLE
-  CPPFLAGS += -DG4ANALYSIS_TUPLE
-endif
-
-ifdef G4ANALYSIS_CLOUD
-  CPPFLAGS += -DG4ANALYSIS_CLOUD
+ifdef G4ANALYSIS_NON_AIDA
+  CPPFLAGS += -DG4ANALYSIS_NON_AIDA
 endif
 
 # ------------- Hook packages -----------------
