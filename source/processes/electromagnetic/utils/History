@@ -1,4 +1,4 @@
-$Id: History,v 1.137 2004-02-27 17:54:46 vnivanch Exp $
+$Id: History,v 1.138 2004-03-01 14:16:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 March 04: V.Ivant (utils-V06-00-06)
+- fixes of bugs coming with transition to model variant of msc 
+  and simplifications of calculation of energy dependence of internal
+  parameters (L.Urban)
+
+
 27 Feb 04: V.Ivant (utils-V06-00-05)
-- fix problem of ionisation in air with low presure 10^-4 Atm
+- fix problem of ionisation in air with low pressure 10^-4 Atm
 - add G4EmProcessOptions class
 - update calculation of energy from range
 

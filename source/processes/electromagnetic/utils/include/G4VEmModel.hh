@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.16 2004-03-01 12:17:06 urban Exp $
+// $Id: G4VEmModel.hh,v 1.17 2004-03-01 14:16:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -131,7 +131,7 @@ public:
   virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
 
   virtual G4double SampleCosineTheta(G4double,G4double,G4double ) {return 1.0;};
-  //  trueStepLength + Tkin + lambda   !!!!!!!!!!!
+  //  trueStepLength + Tkin + lambda   
 
   virtual G4double SampleDisplacement() {return 0.0;};
 
