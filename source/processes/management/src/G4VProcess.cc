@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 1.6 2001-05-22 17:32:11 gcosmo Exp $
+// $Id: G4VProcess.cc,v 1.7 2001-07-10 03:19:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,6 +157,22 @@ void G4VProcess::DumpInfo() const
   G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< G4endl;
 }
 
+
+const G4String&  G4VProcess::GetPhysicsTableFileName(G4ParticleDefinition* particle,
+						     const G4String& directory,
+						     const G4String& tableName,
+						     G4bool ascii)
+{
+  G4String thePhysicsTableFileExt;
+  if (ascii) thePhysicsTableFileExt = ".asc";
+  else       thePhysicsTableFileExt = ".dat";
+
+  thePhysicsTableFileName = directory + "/";
+  thePhysicsTableFileName += tableName + "." +  theProcessName + ".";
+  thePhysicsTableFileName += particle->GetParticleName() + thePhysicsTableFileExt;
+  
+  return thePhysicsTableFileName;
+}
 
 
 
