@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.7 2003-05-23 11:38:48 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.8 2003-05-24 14:33:03 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -71,7 +71,7 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   theMeanFreePath(0),
   energySpectrum(0)
 {
-  materialAngularData.clear();
+  // materialAngularData.clear();
   cutForPhotons = 0.;
   verboseLevel = 0;
   LoadAngularData();
@@ -83,6 +83,17 @@ G4PenelopeBremsstrahlung::~G4PenelopeBremsstrahlung()
   if(crossSectionHandler) delete crossSectionHandler;
   if(energySpectrum) delete energySpectrum;
   if(theMeanFreePath) delete theMeanFreePath;
+
+  for (size_t m=0; m<materialAngularData.size(); m++)
+    {
+      G4AngularData materialData = *(materialAngularData[m]);
+      for (size_t i=0; i<materialData.size(); i++)
+      {
+	delete materialData[i];
+        materialData[i] = 0;
+      }
+      delete &materialData;
+    }
 }
 
 
@@ -98,41 +109,43 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   // Create and fill BremsstrahlungParameters once
   if( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
- 
-  ebins.clear();
+  
+  G4DataVector ebins;
+  // ebins.clear();
 
-  ebins.push_back((G4double) 1.0e-12);
-  ebins.push_back((G4double) 0.05);
-  ebins.push_back((G4double) 0.075);
-  ebins.push_back((G4double) 0.1);
-  ebins.push_back((G4double) 0.125);
-  ebins.push_back((G4double) 0.15);
-  ebins.push_back((G4double) 0.2);
-  ebins.push_back((G4double) 0.25);
-  ebins.push_back((G4double) 0.3);
-  ebins.push_back((G4double) 0.35);
-  ebins.push_back((G4double) 0.40);
-  ebins.push_back((G4double) 0.45);
-  ebins.push_back((G4double) 0.50);
-  ebins.push_back((G4double) 0.55);
-  ebins.push_back((G4double) 0.60);
-  ebins.push_back((G4double) 0.65);
-  ebins.push_back((G4double) 0.70);
-  ebins.push_back((G4double) 0.75);
-  ebins.push_back((G4double) 0.80);
-  ebins.push_back((G4double) 0.85);
-  ebins.push_back((G4double) 0.90);
-  ebins.push_back((G4double) 0.925);
-  ebins.push_back((G4double) 0.95);
-  ebins.push_back((G4double) 0.97);
-  ebins.push_back((G4double) 0.99);
-  ebins.push_back((G4double) 0.995);
-  ebins.push_back((G4double) 0.999);
-  ebins.push_back((G4double) 0.9995);  
-  ebins.push_back((G4double) 0.9999);
-  ebins.push_back((G4double) 0.99995);
-  ebins.push_back((G4double) 0.99999);
-  ebins.push_back((G4double) 1.0);
+  G4double value;
+  ebins.push_back(1.0e-12);
+  ebins.push_back(0.05);
+  ebins.push_back(0.075);
+  ebins.push_back(0.1);
+  ebins.push_back(0.125);
+  ebins.push_back(0.15);
+  ebins.push_back(0.2);
+  ebins.push_back(0.25);
+  ebins.push_back(0.3);
+  ebins.push_back(0.35);
+  ebins.push_back(0.40);
+  ebins.push_back(0.45);
+  ebins.push_back(0.50);
+  ebins.push_back(0.55);
+  ebins.push_back(0.60);
+  ebins.push_back(0.65);
+  ebins.push_back(0.70);
+  ebins.push_back(0.75);
+  ebins.push_back(0.80);
+  ebins.push_back(0.85);
+  ebins.push_back(0.90);
+  ebins.push_back(0.925);
+  ebins.push_back(0.95);
+  ebins.push_back(0.97);
+  ebins.push_back(0.99);
+  ebins.push_back(0.995);
+  ebins.push_back(0.999);
+  ebins.push_back(0.9995);  
+  ebins.push_back(0.9999);
+  ebins.push_back(0.99995);
+  ebins.push_back(0.99999);
+  ebins.push_back(1.0);
 
  
   const G4String dataName("/penelope/br-sp-pen.dat");
