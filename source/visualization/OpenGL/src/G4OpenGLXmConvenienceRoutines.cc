@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.7 2001-11-29 12:14:02 johna Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.8 2002-06-19 15:48:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -190,8 +190,8 @@ void G4OpenGLXmViewer::Add_radio_box (char* label_string,
 				    char** button_names,
 				    G4OpenGLXmViewer* pView)
 {
-
-  XmString button_str = XmStringCreateLocalized(""); // ...to
+  char* emptyCstring = "";
+  XmString button_str = XmStringCreateLocalized(emptyCstring); // ...to
   // initialise to something to avoid pedantic warning.
   Arg** args;
   args = new Arg* [num_buttons];
@@ -369,7 +369,8 @@ void G4OpenGLXmViewer::Add_slider_box (char* label_string,
 				     XtCallbackRec** slider_box_callbacks,
 				     Widget* parent_widget)
 {
-  XmString slider_name_str = XmStringCreateLocalized(""); // ...to
+  char* emptyCstring = "";
+  XmString slider_name_str = XmStringCreateLocalized(emptyCstring); // ...to
   // initialise to something to avoid pedantic warning.
   Arg** slider_args;
   slider_args = new Arg*[num_sliders];
