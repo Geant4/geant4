@@ -67,50 +67,50 @@ fi
 #fi
 #
 if [ "$1" = "lib" ] ; then 
-if [ "$2" = "all" ] ; then 
-# Go in source and spawn libs reconstruction :
-cd $G4INSTALL/source
-(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
-exit
-else
-# Go in source/$2 and spawn category reconstruction :
-cd $G4INSTALL/source/$2
-(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
-exit
-fi
-else
-#
-if [ "$1" = "test201" ] ; then 
-# Go in tests/test201 and spawn reconstruction :
-##CPPVERBOSE=1;export CPPVERBOSE
-cd $G4INSTALL/tests/test201
-(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+  if [ "$2" = "all" ] ; then 
+    # Go in source and spawn libs reconstruction :
+    cd $G4INSTALL/source
+    (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+    exit
+  else
+    # Go in source/$2 and spawn category reconstruction :
+    cd $G4INSTALL/source/$2
+    (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+    exit
+  fi
 else
 #
-if [ "$1" = "test" ] ; then 
-if [ "$2" = "all" ] ; then 
-# Go in tests and spawn reconstruction :
-cd $G4INSTALL/tests
-##CPPVERBOSE=1;export CPPVERBOSE
-(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
-exit
-else
-# Go in tests/$2 and spawn reconstruction :
-##CPPVERBOSE=1;export CPPVERBOSE
-cd $G4INSTALL/tests/$2
-(date;$MAKECMD clean_bin;time $MAKECMD;date) > $dir/gmake.log 2>&1
-fi
-else
-#
-if [ "$1" = "all" ] ; then 
-(date;cd $G4INSTALL/source;time $MAKECMD;\
-cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
-> $dir/gmake.log 2>&1
-exit
-else
-echo "Unknwn option " $1
-fi
-fi
-fi
+  if [ "$1" = "test201" ] ; then 
+    # Go in tests/test201 and spawn reconstruction :
+    ##CPPVERBOSE=1;export CPPVERBOSE
+    cd $G4INSTALL/tests/test201
+    (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+  else
+    #
+    if [ "$1" = "test" ] ; then 
+      if [ "$2" = "all" ] ; then 
+        # Go in tests and spawn reconstruction :
+        cd $G4INSTALL/tests
+        ##CPPVERBOSE=1;export CPPVERBOSE
+        (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+        exit
+      else
+        # Go in tests/$2 and spawn reconstruction :
+        ##CPPVERBOSE=1;export CPPVERBOSE
+        cd $G4INSTALL/tests/$2
+        (date;$MAKECMD clean_bin;time $MAKECMD;date) > $dir/gmake.log 2>&1
+      fi
+    else
+    #
+      if [ "$1" = "all" ] ; then 
+        (date;cd $G4INSTALL/source;time $MAKECMD;\
+        cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
+        > $dir/gmake.log 2>&1
+        exit
+      else
+        echo "Unknown option " $1
+      fi
+    fi
+  fi
 fi
 #
