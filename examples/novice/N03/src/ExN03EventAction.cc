@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.2 1999-03-10 16:15:38 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.3 1999-04-16 11:55:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,10 +51,9 @@ ExN03EventAction::~ExN03EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ExN03EventAction::BeginOfEventAction()
+void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 {
- const G4Event* evt = fpEventManager->GetConstCurrentEvent();
- 
+  
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0)
    { 
@@ -71,10 +70,8 @@ void ExN03EventAction::BeginOfEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ExN03EventAction::EndOfEventAction()
+void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
   G4cout << ">>> Event " << evt->GetEventID() << endl;
   
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
@@ -114,7 +111,7 @@ void ExN03EventAction::EndOfEventAction()
   if(G4VVisManager::GetConcreteInstance())
   {
     for(G4int i=0; i<n_trajectories; i++) 
-         { G4Trajectory* trj = (*(evt->GetTrajectoryContainer()))[i];
+         { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
            if (drawFlag == "all") trj->DrawTrajectory(50);
            else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                   trj->DrawTrajectory(50); 

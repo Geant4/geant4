@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.hh,v 1.2 1999-03-10 16:15:37 maire Exp $
+// $Id: ExN03EventAction.hh,v 1.3 1999-04-16 11:55:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,11 +27,11 @@ class ExN03EventAction : public G4UserEventAction
 {
   public:
     ExN03EventAction();
-   ~ExN03EventAction();
+    virtual ~ExN03EventAction();
 
   public:
-    void BeginOfEventAction();
-    void   EndOfEventAction();
+    virtual void   BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
     void SetDrawFlag   (G4String val)  {drawFlag = val;};
     void SetPrintModulo(G4int    val)  {printModulo = val;};

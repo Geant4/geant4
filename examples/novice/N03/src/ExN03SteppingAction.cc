@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingAction.cc,v 1.1 1999-01-07 16:05:58 gunter Exp $
+// $Id: ExN03SteppingAction.cc,v 1.2 1999-04-16 11:55:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,9 +27,10 @@ ExN03SteppingAction::~ExN03SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ExN03SteppingAction::UserSteppingAction()
+void ExN03SteppingAction::UserSteppingAction(const G4Step*)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 

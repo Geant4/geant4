@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.cc,v 1.1 1999-01-07 16:05:57 gunter Exp $
+// $Id: ExN03PhysicsList.cc,v 1.2 1999-04-16 11:55:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,11 @@
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 2.0*mm;
-  SetVerboseLevel(1);
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForProton     = defaultCutValue;
+
+ SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -209,29 +213,74 @@ void ExN03PhysicsList::ConstructGeneral()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ExN03PhysicsList::SetCuts(G4double cut)
+void ExN03PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >1){
     G4cout << "ExN03PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForElectron, "e+");
  
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-   
-  SetCutValueForOthers(cut);
+  SetCutValue(cutForProton, "proton");
+  SetCutValue(cutForProton, "anti_proton");
+  
+  SetCutValueForOthers(defaultCutValue);
 
-  if (verboseLevel>1) DumpCutValuesTable();
+  if (verboseLevel>1) {
+    DumpCutValuesTable();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+void      ExN03PhysicsList::SetCutForGamma(G4double cut)
+{
+  ResetCuts();
+  cutForGamma = cut;
+}
+
+void      ExN03PhysicsList::SetCutForElectron(G4double cut)
+{
+  ResetCuts();
+  cutForElectron = cut;
+}
+
+void      ExN03PhysicsList::SetCutForProton(G4double cut)
+{
+  ResetCuts();
+  cutForProton = cut;
+}
+
+G4double  ExN03PhysicsList::GetCutForGamma() const
+{
+  return cutForGamma;
+}
+
+G4double  ExN03PhysicsList::GetCutForElectron() const
+{
+  return cutForElectron;
+}
+
+G4double  ExN03PhysicsList::GetCutForProton() const
+{
+  return cutForGamma;
+}
+
+
+
+
+
+
+
+
+
+
 
 
