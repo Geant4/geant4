@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.28 2001-02-05 17:45:18 gcosmo Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.29 2001-04-24 16:02:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,8 @@
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
-// 20/09/00 update printout V.Ivanchenko
+// 20.09.00 update printout V.Ivanchenko
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // --------------------------------------------------------------
 
 #include "G4LowEnergyBremsstrahlung.hh"
@@ -107,7 +108,6 @@ void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut){
 void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
 
- 
   BuildZVec();
 
   // energy sampling formula coefficient
@@ -116,6 +116,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
   BuildCrossSectionTable() ;
   
   BuildLossTable(aParticleType) ;
+
+
   if (&aParticleType==G4Electron::Electron()){
 
     RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
@@ -132,9 +134,6 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
  
   BuildDEDXTable(aParticleType) ;
  
- 
- 
-
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,7 +155,8 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
     
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "brem/br-cs-");
     
-    theCrossSectionTable->insert(oneAtomCS);
+    //    theCrossSectionTable->insert(oneAtomCS);
+    theCrossSectionTable->push_back(oneAtomCS);
     
   }//end for on atoms
 }

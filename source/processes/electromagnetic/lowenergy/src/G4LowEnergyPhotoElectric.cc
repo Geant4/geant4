@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.27 2001-02-05 17:45:21 gcosmo Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.28 2001-04-24 16:02:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
 // 07-09-99, if no e- emitted: edep=photon energy, mma
+// 24.04.01 V.Ivanchenko remove RogueWave 
 //                                  
 // --------------------------------------------------------------
 
@@ -44,7 +45,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Electron.hh"
 
-typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,12 +83,14 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
    }
 
    if (theBindingEnergyTable) {
-      theBindingEnergyTable->clearAndDestroy();
+     //      theBindingEnergyTable->clearAndDestroy();
+      theBindingEnergyTable->clear();
       delete theBindingEnergyTable;
    }
 
    if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
+     //      theMeanFreePathTable->clearAndDestroy();
+      theMeanFreePathTable->clear();
       delete theMeanFreePathTable;
    }
 
@@ -160,7 +163,8 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
 
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "phot/pe-cs-");
      
-     theCrossSectionTable->insert(oneAtomCS);
+    //     theCrossSectionTable->insert(oneAtomCS);
+     theCrossSectionTable->push_back(oneAtomCS);
    
   }//end for on atoms
 }
@@ -184,7 +188,8 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
 
      oneAtomTable* oneAtomShellCS = util.BuildSecondLevelTables(AtomInd, dataNum, "phot/pe-ss-cs-");
      
-     allAtomShellCrossSec->insert(oneAtomShellCS);
+     //     allAtomShellCrossSec->insert(oneAtomShellCS);
+     allAtomShellCrossSec->push_back(oneAtomShellCS);
    
    }//end for on atoms
 }
@@ -222,7 +227,8 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
     if(AtomInd > 5){
       
       oneAtomTable* oneAtomShellFL = util.BuildSecondLevelTables(AtomInd, dataNum, "fluor/fl-tr-pr-");
-      theFluorTransitionTable->insert(oneAtomShellFL);
+      //      theFluorTransitionTable->insert(oneAtomShellFL);
+      theFluorTransitionTable->push_back(oneAtomShellFL);
     }
     else{
       ZNumVecFluor->remove(AtomInd);
@@ -280,7 +286,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   const oneAtomTable* oneAtomCS
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
+  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec = 0;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -430,7 +436,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
-    elecvec.append(aElectron);
+    elecvec.push_back(aElectron);
   } // END OF CUTS
   
   else{
@@ -487,7 +493,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     fluorPar[2]*MeV);
-	    photvec.append(newPart);
+	    //	    photvec.append(newPart);
+	    photvec.push_back(newPart);
 	  }
 	}
 	else{
@@ -509,7 +516,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     lastTransEnergy) ;
-	    photvec.append(newPart);
+	    photvec.push_back(newPart);
            
 	  }
 	  thePrimShVec.insert(thePrimaryShell);
@@ -519,8 +526,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       }
     } //END OF THE CHECK ON ATOMIC NUMBER
     
-    G4int numOfElec = elecvec.entries(), numOfPhot = photvec.entries();
-    G4int numOfDau = numOfElec + numOfPhot;
+    G4int numOfElec = elecvec.size();
+    G4int numOfPhot = photvec.size();
+    G4int numOfDau  = numOfElec + numOfPhot;
 
     aParticleChange.SetNumberOfSecondaries(numOfDau);
     G4int l = 0;
@@ -568,7 +576,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
   const oneAtomTable* oneAtomCS 
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
+  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -655,7 +663,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
-  G4int maxNumOfShells = TransitionTable->entries()-1;
+  G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
      G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;

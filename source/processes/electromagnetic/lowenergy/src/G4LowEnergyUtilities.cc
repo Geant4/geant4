@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.8 2001-02-05 17:45:21 gcosmo Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.9 2001-04-24 16:02:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,8 @@
 // 
 // Creation date: 2 March 1999
 //
-// Modifications: 16/11/2000 MG Pia    Replaced HepString with G4String
+// Modifications: 16.11.00 MG Pia    Replaced HepString with G4String
+//                24.04.01 V.Ivanchenko remove RogueWave 
 //      
 // --------------------------------------------------------------
 
@@ -82,7 +83,8 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneShellPar->insertAt(j,new G4DataVector());
+    //    oneShellPar->insertAt(j,new G4DataVector());
+    oneShellPar->push_back(new G4DataVector());
   }
   
   G4double a = 0;
@@ -96,12 +98,14 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
       
       if(s == 0){
 	
-	oneAtomPar->insert(oneShellPar);
+	//	oneAtomPar->insert(oneShellPar);
+	oneAtomPar->push_back(oneShellPar);
 	oneShellPar = new oneShellTable();
 	
 	for(G4int j = 0; j < ParNum; j++){ 
 	  
-	  oneShellPar->insertAt(j,new G4DataVector());
+	  //	  oneShellPar->insertAt(j,new G4DataVector());
+	  oneShellPar->push_back(new G4DataVector());
 	}
       }
       
@@ -181,7 +185,8 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneAtomPar->insertAt(j,new G4DataVector());
+    //    oneAtomPar->insertAt(j,new G4DataVector());
+    oneAtomPar->push_back(new G4DataVector());
   }
   
   G4double a = 0;

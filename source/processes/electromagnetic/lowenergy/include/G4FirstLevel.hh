@@ -18,8 +18,10 @@
 // 
 //      Creation date: 1 Giugno 1999
 //
-//      Modifications: 
+//      Modifications: 24.04.01 V.Ivanchenko remove RogueWave
 // 
+// -------------------------------------------------------------------
+
 // Class description:
 // Utility for Low Energy e.m. e/photon processes
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
@@ -30,10 +32,12 @@
 #define G4FIRSTLEVEL_HH
 
 #include "G4DataVector.hh"
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
 
-class G4FirstLevel : public G4RWTPtrOrderedVector< G4DataVector >{
+//class G4FirstLevel : public G4RWTPtrOrderedVector< G4DataVector >{
+class G4FirstLevel : public G4std::vector< G4DataVector* >
 
+{
 
 public:
 

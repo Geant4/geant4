@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.19 2001-02-05 17:45:21 gcosmo Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.20 2001-04-24 16:02:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 // Added PostStepDoIt A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements  A.Forti
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // --------------------------------------------------------------
 
 // This Class Header
@@ -109,7 +110,8 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
     
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "rayl/re-cs-");
     
-    theCrossSectionTable->insert(oneAtomCS);
+    //    theCrossSectionTable->insert(oneAtomCS);
+    theCrossSectionTable->push_back(oneAtomCS);
     
   }//end for on atoms
 }
@@ -130,7 +132,8 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
     
     G4FirstLevel* oneAtomFF = util.BuildFirstLevelTables(AtomInd, dataNum, "rayl/re-ff-");
     
-    theFormFactorTable->insert(oneAtomFF);
+    //    theFormFactorTable->insert(oneAtomFF);
+    theFormFactorTable->push_back(oneAtomFF);
     
   }//end for on atoms
 }

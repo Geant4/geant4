@@ -18,7 +18,7 @@
 // 
 //      Creation date: 1 Giugno 1999
 //
-//      Modifications: 
+//      Modifications: 24.04.01 V.Ivanchenko remove RogueWave 
 //      
 // -------------------------------------------------------------------
 
@@ -27,18 +27,21 @@
 
 G4FirstLevel::~G4FirstLevel(){
 
-  this->clearAndDestroy();
+  //this->clearAndDestroy();
+  this->clear();
 }
 
 G4bool G4FirstLevel::operator == (const G4FirstLevel& input) const{
 
-  return( this->entries() == input.entries());
+  //  return( this->entries() == input.entries());
+  return( this->size() == input.size());
 
 }
 
 G4bool G4FirstLevel::operator < (const G4FirstLevel& input) const{
 
-  return(this->entries() < input.entries());
+  //  return(this->entries() < input.entries());
+  return(this->size() < input.size());
 
 }
 

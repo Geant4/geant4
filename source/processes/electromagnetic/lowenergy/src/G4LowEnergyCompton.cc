@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.21 2001-02-05 17:45:18 gcosmo Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.22 2001-04-24 16:02:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // --------------------------------------------------------------
 
 // This Class Header
@@ -110,7 +111,8 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
     
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-cs-");
     
-    theCrossSectionTable->insert(oneAtomCS);
+    //    theCrossSectionTable->insert(oneAtomCS);
+    theCrossSectionTable->push_back(oneAtomCS);
     
   }//end for on atoms
 }
@@ -131,7 +133,8 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
 
     G4FirstLevel* oneAtomSF = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-sf-");
      
-     theScatteringFunctionTable->insert(oneAtomSF);
+    //     theScatteringFunctionTable->insert(oneAtomSF);
+     theScatteringFunctionTable->push_back(oneAtomSF);
    
   }//end for on atoms
 }

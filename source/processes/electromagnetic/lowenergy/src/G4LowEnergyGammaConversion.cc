@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.16 2001-02-05 17:45:19 gcosmo Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.17 2001-04-24 16:02:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 // Change initialisation of LowestEnergyLimit from 1.22 to 1.022.
 // Note that the hard coded value 1.022 should be used instead of
 // 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
-//
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // **************************************************************
 
 // This Class Header
@@ -103,7 +103,8 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
 
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "pair/pp-cs-");
      
-     theCrossSectionTable->insert(oneAtomCS);
+    //     theCrossSectionTable->insert(oneAtomCS);
+     theCrossSectionTable->push_back(oneAtomCS);
    
   }//end for on atoms
 }
@@ -255,12 +256,19 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // distribution with respect to the Z axis along the parent photon.
 
   G4double LocalEnerDeposit = 0. ;
-  aParticleChange.SetNumberOfSecondaries(2) ; 
   
+  aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2) ;
 
-  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
-      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+  //  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
+  //      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+  if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
+        ElectKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
+         ||
+        (ElectKineEnergy >
+        (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
+
+      {
 
     G4ThreeVector ElectDirection ( dirx, diry, dirz );
     ElectDirection.rotateUz(GammaDirection);   
