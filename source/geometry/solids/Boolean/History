@@ -1,5 +1,5 @@
 
-$Id: History,v 1.25 2002-01-10 15:34:27 gcosmo Exp $
+$Id: History,v 1.26 2002-01-10 15:36:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,9 +21,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
  Jan 10  2001  Gabriele Cosmo       geom-solid-bool-V04-00-00
-  - Moved all verbosity mode warnings to G4BOOLDEBUG and commented
-    exceptions.
+  - Moved all verbosity mode warnings to G4BOOLDEBUG and commented exceptions.
   - Activated G4BOOLDEBUG mechanism in GNUmakefile.
+  - Fixed unit tests.
 
  Nov 08  2001  Gabriele Cosmo       geom-solid-bool-V03-02-02
   - Fix for verbosity in G4ReflectionFactory.cc. Reduced of one level.
