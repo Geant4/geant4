@@ -1,0 +1,28 @@
+/control/verbose 0
+/control/saveHistory
+/run/verbose 0
+/vis/scene/create
+/vis/open OGLIX
+#/vis/open DAWNFILE 
+/vis/drawVolume
+/vis/viewer/update
+/vis/viewer/set/viewpointThetaPhi 90 0 deg
+/vis/viewer/zoom 1
+/vis/viewer/flush
+#
+# draw scene/
+#
+#
+# for drawing the tracks
+/run/initialize
+/tracking/storeTrajectory 1
+/Jaws/X1/DistanceFromAxis -15. cm
+/Jaws/X2/DistanceFromAxis 15. cm
+/Jaws/Y1/DistanceFromAxis -15. cm
+/Jaws/Y2/DistanceFromAxis 15. cm
+/Jaws/update
+/energy 6.0 MeV
+/sourceType 0.127 MeV
+/vis/scene/endOfEventAction accumulate
+#/vis/viewer/update
+/run/beamOn 4
