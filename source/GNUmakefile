@@ -1,10 +1,11 @@
-# $Id: GNUmakefile,v 1.48 2004-06-02 07:25:29 gcosmo Exp $
+# $Id: GNUmakefile,v 1.49 2004-06-02 07:27:54 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
 #                Composite libraries are built.
 # "gmake includes" places header files .h/.hh in $G4INCLUDE
 # "gmake libmap" forces rebuilding of map-file for granular libraries.
+# "gmake dll" forces building of global libraries and generates DLLs on WIN32
 # "gmake clean_libs" removes just archive (.a) and shared (.so) libraries
 #                    of current platform installation.
 # "gmake clean" removes installation of current platform.
