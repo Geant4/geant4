@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.1 2001-09-18 02:15:13 kurasige Exp $
+// $Id: G4NeutronBetaDecayChannel.cc,v 1.2 2001-09-20 02:35:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
     daughtermass[index] = daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
-  G4double xmax = (parent->GetPDGMass())-sumofdaughtermass;  
+  G4double xmax = parentmass-sumofdaughtermass;  
 
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -107,7 +107,6 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   // calculate daughter momentum
   G4double daughtermomentum[3];
-  G4double energy;
 
   // calcurate electron energy
   G4double x;                    // Ee
