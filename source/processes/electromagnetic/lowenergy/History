@@ -1,4 +1,4 @@
-$Id: History,v 1.179 2003-04-24 15:34:55 pia Exp $
+$Id: History,v 1.180 2003-04-26 19:06:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.04-2003   VI, tag emlowen-V05-00-17
+             Fixes of stepLimit 
 
 24.04-2003   MGP, tag emlowen-V05-00-16
              Fixes related to "cuts-per-region"
