@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.19 2003-10-24 13:59:05 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.20 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 17-10-03 PrintInfoDefinition - virtual (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -64,13 +65,13 @@
 #ifndef G4eBremsstrahlung_h
 #define G4eBremsstrahlung_h 1
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
 class G4Material;
 
-class G4eBremsstrahlung : public G4VEnergyLossSTD
+class G4eBremsstrahlung : public G4VEnergyLossProcess
 {
 
 public:

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.21 2003-11-12 10:24:07 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.22 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
 // 03-08-03 Add effective charge and saturation of tmax (V.Ivanchenko)
 // 12-11-03 Fix problem of negative effective charge (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -57,12 +58,12 @@
 #ifndef G4ionIonisation_h
 #define G4ionIonisation_h 1
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
 
-class G4ionIonisation : public G4VEnergyLossSTD
+class G4ionIonisation : public G4VEnergyLossProcess
 {
 
 public:
@@ -176,7 +177,7 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
-  return G4VEnergyLossSTD::GetMeanFreePath(track, step, cond);
+  return G4VEnergyLossProcess::GetMeanFreePath(track, step, cond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

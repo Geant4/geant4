@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.23 2003-08-08 11:30:01 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.24 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,10 +31,10 @@
 // File name:     G4hIonisation
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1997
 //
-// Modifications: 
+// Modifications:
 //
 // corrected by L.Urban on 24/09/97
 // corrected by L.Urban on 13/01/98
@@ -54,6 +54,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 16-06-03 ShortLived are not applicable any more (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -67,7 +68,7 @@
 #ifndef G4hIonisation_h
 #define G4hIonisation_h 1
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
@@ -75,7 +76,7 @@
 class G4Material;
 class G4VEmFluctuationModel;
 
-class G4hIonisation : public G4VEnergyLossSTD
+class G4hIonisation : public G4VEnergyLossProcess
 {
 
 public:

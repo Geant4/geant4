@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.49 2003-11-03 19:25:52 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.50 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 04-08-03 Set integral=false to be default (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -84,7 +85,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hIonisation::G4hIonisation(const G4String& name)
-  : G4VEnergyLossSTD(name),
+  : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
     subCutoff(false),
@@ -150,7 +151,7 @@ const G4ParticleDefinition* G4hIonisation::DefineBaseParticle(
 
 void G4hIonisation::PrintInfoDefinition()
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Bether-Bloch model for Escaled > 2 MeV, "
          << "parametrisation of Bragg peak below, "

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.20 2003-11-12 10:24:08 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.21 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 18-04-03 Use IonFluctuations (V.Ivanchenko)
 // 03-08-03 Add effective charge (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -60,7 +61,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
-  : G4VEnergyLossSTD(name),
+  : G4VEnergyLossProcess(name),
     theParticle(0),
     subCutoff(false)
 {
@@ -76,8 +77,6 @@ G4ionIonisation::~G4ionIonisation()
 
 void G4ionIonisation::InitialiseProcess()
 {
-  SetVerboseLevel(0);
-
   SetSecondaryParticle(G4Electron::Electron());
 
   SetDEDXBinning(120);
@@ -96,10 +95,11 @@ void G4ionIonisation::InitialiseProcess()
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
+  SetIntegral(false);
   chargeLowLimit = 0.1;
   energyLowLimit = 250.*MeV;
   SetLinearLossLimit(0.15);
-  SetStepLimits(0.1, 0.1*mm);
+  //SetStepLimits(0.1, 0.1*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +116,7 @@ const G4ParticleDefinition* G4ionIonisation::DefineBaseParticle(
 
 void G4ionIonisation::PrintInfoDefinition()
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Scaling relation is used to proton dE/dx and range"
          << G4endl

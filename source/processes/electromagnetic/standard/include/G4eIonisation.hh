@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.19 2003-08-08 11:30:00 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.20 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,12 +49,13 @@
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 //
 // Class Description:
 //
 // This class manages the ionisation process for e-/e+
-// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
 //
 
 // -------------------------------------------------------------------
@@ -63,7 +64,7 @@
 #ifndef G4eIonisation_h
 #define G4eIonisation_h 1
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
@@ -71,7 +72,7 @@ class G4Material;
 class G4ParticleDefinition;
 class G4VEmFluctuationModel;
 
-class G4eIonisation : public G4VEnergyLossSTD
+class G4eIonisation : public G4VEnergyLossProcess
 {
 
 public:

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.36 2003-11-03 19:25:52 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.37 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -72,7 +73,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisation::G4eIonisation(const G4String& name)
-  : G4VEnergyLossSTD(name),
+  : G4VEnergyLossProcess(name),
     theElectron(G4Electron::Electron()),
     subCutoff(false),
     isElectron(true),
@@ -124,7 +125,7 @@ const G4ParticleDefinition* G4eIonisation::DefineBaseParticle(const G4ParticleDe
 
 void G4eIonisation::PrintInfoDefinition()
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Delta cross sections from Moller+Bhabha, "
          << "good description from 1 KeV to 100 GeV."

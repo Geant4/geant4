@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.36 2003-10-28 10:18:09 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.37 2003-11-12 16:23:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 // 26-12-02 Secondary production moved to derived classes (VI)
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +78,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name) 
-  : G4VEnergyLossSTD(name)
+  : G4VEnergyLossProcess(name)
 {
   InitialiseProcess();
 }
@@ -111,7 +112,7 @@ void G4eBremsstrahlung::InitialiseProcess()
 
 void G4eBremsstrahlung::PrintInfoDefinition() 
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Total cross sections from a parametrisation"
          << " based on the EEDL data library. " 
