@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.6 2000-02-22 15:31:33 johna Exp $
+// $Id: G4Polyhedron.hh,v 1.7 2000-02-23 16:57:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -84,13 +84,9 @@
 
 class G4Polyhedron : public HepPolyhedron, public G4VVisPrim {
 public:
-  G4Polyhedron () {}
-  G4Polyhedron (const G4Polyhedron& from) {
-    *this = from;
-  }
-  G4Polyhedron (const HepPolyhedron& from) {
-    *this = from;
-  }
+  G4Polyhedron ();
+  G4Polyhedron (const G4Polyhedron& from);
+  G4Polyhedron (const HepPolyhedron& from);
   virtual G4Visible& operator = (const G4Visible& from) {
     return G4Visible::operator = (from);
   }
@@ -100,41 +96,31 @@ public:
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
   }
-  G4Polyhedron& operator = (const G4Polyhedron& from) {
-    if (&from == this) return *this;
-    HepPolyhedron::operator = (from);
-    G4VVisPrim::operator = (from);
-    return *this;
-  }
+  G4Polyhedron& operator = (const G4Polyhedron& from);
 };
 
 class G4PolyhedronBox: public G4Polyhedron {
 public:
-  G4PolyhedronBox (G4double dx, G4double dy, G4double dz):
-    G4Polyhedron (HepPolyhedronBox (dx, dy, dz)) {}
+  G4PolyhedronBox (G4double dx, G4double dy, G4double dz);
 };
 
 class G4PolyhedronCone: public G4Polyhedron {
 public:
   G4PolyhedronCone (G4double Rmn1, G4double Rmx1, 
-                    G4double Rmn2, G4double Rmx2, G4double Dz):
-    G4Polyhedron (HepPolyhedronCone (Rmn1, Rmx1, Rmn2, Rmx2, Dz)) {}
+                    G4double Rmn2, G4double Rmx2, G4double Dz);
 };
 
 class G4PolyhedronCons: public G4Polyhedron {
 public:
   G4PolyhedronCons (G4double Rmn1, G4double Rmx1, 
                     G4double Rmn2, G4double Rmx2, G4double Dz,
-                    G4double Phi1, G4double Dphi):
-    G4Polyhedron (HepPolyhedronCons (Rmn1, Rmx1, Rmn2, Rmx2, Dz, Phi1, Dphi))
-  {}
+                    G4double Phi1, G4double Dphi);
 };
 
 class G4PolyhedronPara: public G4Polyhedron {
 public:
   G4PolyhedronPara (G4double Dx, G4double Dy, G4double Dz,
-                    G4double Alpha, G4double Theta, G4double Phi):
-    G4Polyhedron (HepPolyhedronPara (Dx, Dy, Dz, Alpha, Theta, Phi)) {}
+                    G4double Alpha, G4double Theta, G4double Phi);
 };
 
 class G4PolyhedronPcon: public G4Polyhedron {
@@ -142,8 +128,7 @@ public:
   G4PolyhedronPcon (G4double phi, G4double dphi, G4int nz,
                     const G4double *z,
                     const G4double *rmin,
-                    const G4double *rmax):
-    G4Polyhedron (HepPolyhedronPcon (phi, dphi, nz, z, rmin, rmax)) {}
+                    const G4double *rmax);
 };
 
 class G4PolyhedronPgon: public G4Polyhedron {
@@ -151,23 +136,20 @@ public:
   G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv, G4int nz,
                     const G4double *z,
                     const G4double *rmin,
-                    const G4double *rmax):
-    G4Polyhedron (HepPolyhedronPgon (phi, dphi, npdv, nz, z, rmin, rmax)) {}
+                    const G4double *rmax);
 };
 
 class G4PolyhedronSphere: public G4Polyhedron {
 public:
   G4PolyhedronSphere (G4double rmin, G4double rmax,
                       G4double phi, G4double dphi,
-                      G4double the, G4double dthe):
-    G4Polyhedron (HepPolyhedronSphere (rmin, rmax, phi, dphi, the, dthe)) {}
+                      G4double the, G4double dthe);
 };
 
 class G4PolyhedronTorus: public G4Polyhedron {
 public:
   G4PolyhedronTorus (G4double rmin, G4double rmax, G4double rtor,
-                    G4double phi, G4double dphi):
-    G4Polyhedron (HepPolyhedronTorus (rmin, rmax, rtor, phi, dphi)) {}
+                    G4double phi, G4double dphi);
 };
 
 class G4PolyhedronTrap: public G4Polyhedron {
@@ -176,36 +158,30 @@ public:
                     G4double Dy1,
                     G4double Dx1, G4double Dx2, G4double Alp1,
                     G4double Dy2,
-                    G4double Dx3, G4double Dx4, G4double Alp2):
-    G4Polyhedron (HepPolyhedronTrap (Dz, Theta, Phi, Dy1, Dx1, Dx2, Alp1,
-				     Dy2, Dx3, Dx4, Alp2)) {}
+                    G4double Dx3, G4double Dx4, G4double Alp2);
 };
 
 class G4PolyhedronTrd1: public G4Polyhedron {
 public:
   G4PolyhedronTrd1 (G4double Dx1, G4double Dx2,
-                    G4double Dy, G4double Dz):
-    G4Polyhedron (HepPolyhedronTrd1 (Dx1, Dx2, Dy, Dz)) {}
+                    G4double Dy, G4double Dz);
 };
 
 class G4PolyhedronTrd2: public G4Polyhedron {
 public:
   G4PolyhedronTrd2 (G4double Dx1, G4double Dx2,
-                    G4double Dy1, G4double Dy2, G4double Dz):
-    G4Polyhedron (HepPolyhedronTrd2 (Dx1, Dx2, Dy1, Dy2, Dz)) {}
+                    G4double Dy1, G4double Dy2, G4double Dz);
 };
 
 class G4PolyhedronTube: public G4Polyhedron {
 public:
-  G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz):
-    G4Polyhedron (HepPolyhedronTube (Rmin, Rmax, Dz)) {}
+  G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz);
 };
 
 class G4PolyhedronTubs: public G4Polyhedron {
 public:
   G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
-                    G4double Phi1, G4double Dphi):
-    G4Polyhedron (HepPolyhedronTubs (Rmin, Rmax, Dz, Phi1, Dphi)) {}
+                    G4double Phi1, G4double Dphi);
 };
 
 #endif /* G4POLYHEDRON_HH */
