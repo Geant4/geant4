@@ -150,7 +150,7 @@ G4double G4hParametrisedLossModel::TheValue(const G4DynamicParticle* particle,
                         * proton_mass_c2/(particle->GetMass());
   G4double factor = theZieglerFactor;
   if (scaledEnergy < lowEnergyLimit) {
-    if (modelName != "QAO") factor = sqrt(scaledEnergy/lowEnergyLimit);
+    if (modelName != "QAO") factor *= sqrt(scaledEnergy/lowEnergyLimit);
     scaledEnergy = lowEnergyLimit;
   }
   G4double eloss = StoppingPower(material,scaledEnergy) * factor;
@@ -169,7 +169,7 @@ G4double G4hParametrisedLossModel::TheValue(const G4ParticleDefinition* aParticl
 
   G4double factor = theZieglerFactor;
   if (scaledEnergy < lowEnergyLimit) {
-    if (modelName != "QAO") factor = sqrt(scaledEnergy/lowEnergyLimit);
+    if (modelName != "QAO") factor *= sqrt(scaledEnergy/lowEnergyLimit);
     scaledEnergy = lowEnergyLimit;
   }
   G4double eloss = StoppingPower(material,scaledEnergy) * factor;
@@ -228,29 +228,33 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
 						       G4double kineticEnergy)
 {
   G4double eloss = 0.0;
+
   const G4int numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
     material->GetAtomicNumDensityVector() ;
 
+
+  // compound material with parametrisation
+  if( (eStopingPowerTable->HasMaterial(material)) ) {
+
+    eloss = eStopingPowerTable->StoppingPower(material, kineticEnergy)
+                               * (material->GetTotNbOfAtomsPerVolume());
+    if(1 < numberOfElements) {
+      G4int nAtoms = 0;
+
+      const G4int* theAtomsVector = material->GetAtomsVector();
+      for (G4int iel=0; iel<numberOfElements; iel++) {
+        nAtoms += theAtomsVector[iel];
+      }
+      eloss /= nAtoms;
+    } 
+   
   // pure material
-  if(1 == numberOfElements) {
+  } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();
     eloss = (eStopingPowerTable->ElectronicStoppingPower(z, kineticEnergy))
                                * (material->GetTotNbOfAtomsPerVolume()) ;
-
-  // compaund material with parametrisation
-  } else if( (eStopingPowerTable->HasMaterial(material)) ) {
-
-    eloss = eStopingPowerTable->StoppingPower(material, kineticEnergy)
-                               * (material->GetTotNbOfAtomsPerVolume()) ;
-    G4int nAtoms = 0;
-
-    const G4int* theAtomsVector = material->GetAtomsVector() ;
-    for (G4int iel=0; iel<numberOfElements; iel++) {
-      nAtoms += theAtomsVector[iel];
-    }
-    eloss /= nAtoms;
 
   // Experimental data exist only for kinetic energy 125 keV
   } else if( MolecIsInZiegler1988(material) ) {
@@ -259,6 +263,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
     G4double eloss125 = 0.0 ;
     const G4ElementVector* theElementVector =
                            material->GetElementVector() ;
+
 
     //  loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++) {

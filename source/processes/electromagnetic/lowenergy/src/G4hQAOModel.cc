@@ -87,6 +87,18 @@ G4double G4hQAOModel::StoppingPower(const G4Material* material,
       eloss += ElectronicStoppingPower(z,kineticEnergy)*theAtomicNumDensityVector[i];
     }
 
+  G4double fac = 1.0;
+  if(1 < numberOfElements) {
+    G4int nAtoms = 0;
+
+    const G4int* theAtomsVector = material->GetAtomsVector();
+    for (G4int iel=0; iel<numberOfElements; iel++) {
+      nAtoms += theAtomsVector[iel];
+    }
+    fac *= nAtoms;
+  }
+  eloss *= fac/material->GetTotNbOfAtomsPerVolume();
+
   return eloss;
 }
 
@@ -99,7 +111,7 @@ G4double G4hQAOModel::ElectronicStoppingPower(G4double z,
   G4int nbOfShell = GetNumberOfShell(Z);
   if(nbOfShell < 1) nbOfShell = 1;
 
-  G4double dedx=0;
+  G4double dedx=0.0;
 
   G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
   G4double coeff = twopi*proton_mass_c2*z / (electron_mass_c2*theZieglerFactor) ;
@@ -197,7 +209,6 @@ G4double G4hQAOModel::GetOscillatorEnergy(G4int Z, G4int nbOfTheShell) const
 
   G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)
                        * squaredPlasmonEnergy / (Z*Z) ;
-
   G4double ionTerm = exp(0.5) * (currentElement->GetAtomicShell(nbOfTheShell)) ;
 
   ionTerm = ionTerm*ionTerm ;

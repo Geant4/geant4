@@ -117,12 +117,6 @@ public: // With description
   virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
-  void SetLowEnergyForParametrisation(G4double energy)
-                             {lowEnergy = energy;} ;
-  // Set of the boundary proton energy. For lower energies
-  // the Free Electron Gas model is used for the energy losses.
-  // Default is 0.1 keV.
-
   void SetHighEnergyForParametrisation(G4double energy)
                              {highEnergy = energy;} ;
   // Set of the boundary antiproton energy. For higher energies
@@ -205,7 +199,6 @@ private:
   G4String                     theTable;
 
   // interval of parametrisation of electron stopping power
-  G4double                     lowEnergy;
   G4double                     highEnergy;
 
   G4DataVector                 cutForDelta;
@@ -233,6 +226,7 @@ private:
   size_t                       fluobins;
   G4bool                       theBarkas;
   G4bool                       theFluo;
+  G4bool                       fluoIsInitialised;
   G4bool                       isInitialised;
 
 };

@@ -127,7 +127,7 @@
 
 G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
   : G4VEnergyLossProcess(processName),
-    theTable("SRIM2000p"),
+    theTable("ICRU_R49p"),
     flucModel(0),
     shellVacancy(0),
     shellCS(0),
@@ -137,16 +137,16 @@ G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
     theBaseParticle(0),
     fluobins(20),
     theBarkas(true),
-    theFluo(false)
+    theFluo(false),
+    fluoIsInitialised(false)
 {
-  lowEnergy          = 0.1*keV;
-  highEnergy         = 10.*MeV;
+  highEnergy         = 2.*MeV;
   minGammaEnergy     = 25.*keV;
   minElectronEnergy  = 25.*keV;
   verboseLevel       = 0;
   SetDEDXBinning(360);
   SetLambdaBinning(360);
-  SetMinKinEnergy(lowEnergy);
+  SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
   shellCS = new G4hShellCrossSection();
 }
@@ -172,13 +172,17 @@ G4hLowEnergyIonisationMA::~G4hLowEnergyIonisationMA()
 const G4ParticleDefinition* G4hLowEnergyIonisationMA::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
+  const G4ParticleDefinition* bp = 0;
   if(p) {
     theParticle = p;
-    if(p->GetPDGCharge() > 0.0) theBaseParticle = G4Proton::Proton();
-    else                        theBaseParticle = G4AntiProton::AntiProton();
+    G4double q = p->GetPDGCharge();
+    if(q > 0.0 && p != G4Proton::Proton())              bp = G4Proton::Proton();
+    else if(q < 0.0 && p != G4AntiProton::AntiProton()) bp = G4AntiProton::AntiProton();
   }
+  theBaseParticle = bp;
+  if(p->GetPDGCharge() < 0.0) theTable = "QAO";
   if(!isInitialised) InitialiseProcess();
-  return theBaseParticle;
+  return bp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -191,9 +195,8 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
   else            flucModel = new G4BohrFluctuations();
 
   G4hParametrisedLossModel* param = new G4hParametrisedLossModel(theTable);
-  lowEnergy = std::max(MinKinEnergy(),param->LowEnergyLimit(theParticle));
+  G4double lowEnergy = MinKinEnergy();
   G4double maxEnergy = MaxKinEnergy();
-  SetMinKinEnergy(lowEnergy);
 
   G4LowEnergyBraggModel* em = new G4LowEnergyBraggModel();
   em->SetLowEnergyLimit(lowEnergy);
@@ -212,15 +215,13 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
   SetLinearLossLimit(0.15);
   SetStepLimits(0.1, 0.1*mm);
 
-  BuildDataForFluorescence();
-
   isInitialised = true;
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisationMA::InitiliseProcess done for "
-           << theParticle->GetParticleName()
-	   << "  base particle " << theBaseParticle->GetParticleName()
-	   << G4endl;
+           << theParticle->GetParticleName();
+    if(theBaseParticle)	G4cout << "  base particle " << theBaseParticle->GetParticleName();
+    G4cout << G4endl;
   }
 }
 
@@ -228,11 +229,14 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
 
 void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
 {
-
+  fluoIsInitialised = true;
   if(verboseLevel > 1) {
     G4cout << "G4hLowEnergyIonisationMA::BuildDataForFluorescence for "
            << theParticle->GetParticleName() << " is started" << G4endl;
   }
+
+  G4double lowEnergy = MinKinEnergy();
+  G4double maxEnergy = MaxKinEnergy();
 
   // fill data for fluorescence
 
@@ -260,7 +264,7 @@ void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
   }
 
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(lowEnergy,
-		                		       highEnergy,
+		                		       maxEnergy,
 						       fluobins);
   const G4AtomicTransitionManager* transitionManager =
                              G4AtomicTransitionManager::Instance();
@@ -440,53 +444,57 @@ void G4hLowEnergyIonisationMA::SecondariesPostStep(
     G4DynamicParticle* aSecondary = 0;
     G4ParticleDefinition* type = 0;
 
-    // Select atom and shell
-    G4int Z = SelectRandomAtom(couple, kinEnergy);
+    if (theFluo && (kinEnergy > minGammaEnergy || kinEnergy > minElectronEnergy)) {
 
-    if (theFluo && Z > 5 && (kinEnergy > minGammaEnergy || kinEnergy > minElectronEnergy)) {
-      G4int shell = shellCS->SelectRandomShell(Z, kinEnergy,
+      if(!fluoIsInitialised) BuildDataForFluorescence();
+      // Select atom and shell
+      G4int Z = SelectRandomAtom(couple, kinEnergy);
+
+      if(Z > 5) {
+        G4int shell = shellCS->SelectRandomShell(Z, kinEnergy,
                                              mass,deltaKinEnergy);
-      const G4AtomicShell* atomicShell =
+        const G4AtomicShell* atomicShell =
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
-      G4double bindingEnergy = atomicShell->BindingEnergy();
+        G4double bindingEnergy = atomicShell->BindingEnergy();
 
-      if(verboseLevel > 1) {
-        G4cout << "PostStep Z= " << Z << " shell= " << shell
-               << " bindingE(keV)= " << bindingEnergy/keV
-               << " deltaE(keV)= " << deltaKinEnergy/keV
-               << " kinE(keV)= " << kinEnergy/keV
-               << G4endl;
-      }
+        if(verboseLevel > 1) {
+          G4cout << "PostStep Z= " << Z << " shell= " << shell
+		 << " bindingE(keV)= " << bindingEnergy/keV
+		 << " deltaE(keV)= " << deltaKinEnergy/keV
+		 << " kinE(keV)= " << kinEnergy/keV
+		 << G4endl;
+	}
 
-      // Fluorescence data start from element 6
+	// Fluorescence data start from element 6
 
-      if (kinEnergy >= bindingEnergy &&
-         (bindingEnergy >= minGammaEnergy || bindingEnergy >= minElectronEnergy) ) {
+	if (kinEnergy >= bindingEnergy &&
+           (bindingEnergy >= minGammaEnergy || bindingEnergy >= minElectronEnergy) ) {
 
-        G4int shellId = atomicShell->ShellId();
-        secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
+	  G4int shellId = atomicShell->ShellId();
+	  secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
 
-        if (secondaryVector != 0) {
+	  if (secondaryVector != 0) {
 
-          nSecondaries = secondaryVector->size();
-          for (size_t i = 0; i<nSecondaries; i++) {
+	    nSecondaries = secondaryVector->size();
+	    for (size_t i = 0; i<nSecondaries; i++) {
 
-            aSecondary = (*secondaryVector)[i];
-            if (aSecondary) {
+	      aSecondary = (*secondaryVector)[i];
+	      if (aSecondary) {
 
-              G4double e = aSecondary->GetKineticEnergy();
-              type = aSecondary->GetDefinition();
-              if (e < kinEnergy &&
-                 ((type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
-                  (type == G4Electron::Electron() && e > minElectronEnergy ))) {
+		G4double e = aSecondary->GetKineticEnergy();
+		type = aSecondary->GetDefinition();
+		if (e < kinEnergy &&
+		    ((type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
+		     (type == G4Electron::Electron() && e > minElectronEnergy ))) {
 
-                kinEnergy -= e;
-                totalNumber++;
+		  kinEnergy -= e;
+		  totalNumber++;
 
-	      } else {
+		} else {
 
-                delete aSecondary;
-                (*secondaryVector)[i] = 0;
+		  delete aSecondary;
+		  (*secondaryVector)[i] = 0;
+		}
 	      }
 	    }
 	  }
@@ -527,6 +535,7 @@ std::vector<G4DynamicParticle*>* G4hLowEnergyIonisationMA::DeexciteAtom(
                << G4endl;
   }
 
+  if(!fluoIsInitialised) BuildDataForFluorescence();
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
