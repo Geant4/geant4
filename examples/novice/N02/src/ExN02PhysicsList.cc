@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.cc,v 1.2 1999-04-16 11:19:59 kurasige Exp $
+// $Id: ExN02PhysicsList.cc,v 1.3 1999-10-03 10:04:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ void ExN02PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -106,7 +106,7 @@ void ExN02PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-void ExN02PhysicsList::ConstructBarions()
+void ExN02PhysicsList::ConstructBaryons()
 {
   //  barions
   G4Proton::ProtonDefinition();

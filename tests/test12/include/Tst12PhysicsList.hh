@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.hh,v 1.2 1999-04-17 08:34:14 kurasige Exp $
+// $Id: Tst12PhysicsList.hh,v 1.3 1999-10-03 10:07:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef Tst12PhysicsList_h
@@ -38,7 +38,7 @@ class Tst12PhysicsList: public G4VUserPhysicsList
     void  ConstructAllBosons();
     void  ConstructAllLeptons();
     void  ConstructAllMesons();
-    void  ConstructAllBarions();
+    void  ConstructAllBaryons();
     void  ConstructAllIons();
     void  ConstructAllShortLiveds();
 

@@ -38,7 +38,7 @@ void Tst03PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -70,7 +70,7 @@ void Tst03PhysicsList::ConstructMesons()
   G4PionZero::PionZeroDefinition();
 }
 
-void Tst03PhysicsList::ConstructBarions()
+void Tst03PhysicsList::ConstructBaryons()
 {
 //  barions
   G4Proton::ProtonDefinition();

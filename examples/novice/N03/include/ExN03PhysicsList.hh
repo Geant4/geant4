@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.hh,v 1.3 1999-08-19 11:42:36 maire Exp $
+// $Id: ExN03PhysicsList.hh,v 1.4 1999-10-03 10:04:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ class ExN03PhysicsList: public G4VUserPhysicsList
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
-    void ConstructBarions();
+    void ConstructBaryons();
 
   protected:
   // these methods Construct physics processes and register them

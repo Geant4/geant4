@@ -37,7 +37,7 @@ void ExN06PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -75,7 +75,7 @@ void ExN06PhysicsList::ConstructMesons()
   G4PionZero::PionZeroDefinition();
 }
 
-void ExN06PhysicsList::ConstructBarions()
+void ExN06PhysicsList::ConstructBaryons()
 {
 //  barions
   G4Proton::ProtonDefinition();

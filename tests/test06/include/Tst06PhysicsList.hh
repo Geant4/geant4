@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst06PhysicsList.hh,v 1.2 1999-04-17 06:56:23 kurasige Exp $
+// $Id: Tst06PhysicsList.hh,v 1.3 1999-10-03 09:58:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@ class Tst06PhysicsList: public G4VUserPhysicsList
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
-    void ConstructBarions(); 
+    void ConstructBaryons(); 
      
   public:
     virtual void SetCuts();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07PhysicsList.hh,v 1.2 1999-04-17 07:00:37 kurasige Exp $
+// $Id: T07PhysicsList.hh,v 1.3 1999-10-03 10:01:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ class T07PhysicsList: public G4VUserPhysicsList
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
-    void ConstructBarions();
+    void ConstructBaryons();
 
   protected:
   // these methods Construct physics processes and register them

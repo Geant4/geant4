@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.hh,v 1.3 1999-04-23 04:43:12 kurasige Exp $
+// $Id: ExN05PhysicsList.hh,v 1.4 1999-10-03 10:04:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@ protected:
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
   virtual void ConstructMesons();
-  virtual void ConstructBarions();
+  virtual void ConstructBaryons();
   virtual void ConstructIons();
   
 protected:

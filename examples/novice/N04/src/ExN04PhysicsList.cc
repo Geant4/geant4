@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN04PhysicsList.cc,v 1.5 1999-06-17 04:18:47 kurasige Exp $
+// $Id: ExN04PhysicsList.cc,v 1.6 1999-10-03 10:04:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
@@ -57,7 +57,7 @@ void ExN04PhysicsList::ConstructParticle()
   ConstructAllBosons();
   ConstructAllLeptons();
   ConstructAllMesons();
-  ConstructAllBarions();
+  ConstructAllBaryons();
   ConstructAllIons();
   ConstructAllShortLiveds();
 }
@@ -669,10 +669,10 @@ void ExN04PhysicsList::ConstructAllMesons()
   pConstructor.ConstructParticle();
 }
 
-void ExN04PhysicsList::ConstructAllBarions()
+void ExN04PhysicsList::ConstructAllBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 

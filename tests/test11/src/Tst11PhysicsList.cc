@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst11PhysicsList.cc,v 1.2 1999-04-17 08:24:08 kurasige Exp $
+// $Id: Tst11PhysicsList.cc,v 1.3 1999-10-03 10:13:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -19,7 +19,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
@@ -47,7 +47,7 @@ void Tst11PhysicsList::ConstructParticle()
   ConstructAllBosons();
   ConstructAllLeptons();
   ConstructAllMesons();
-  ConstructAllBarions();
+  ConstructAllBaryons();
   ConstructAllIons();
   ConstructAllShortLiveds();
 }
@@ -73,10 +73,10 @@ void Tst11PhysicsList::ConstructAllMesons()
   pConstructor.ConstructParticle();
 }
 
-void Tst11PhysicsList::ConstructAllBarions()
+void Tst11PhysicsList::ConstructAllBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 

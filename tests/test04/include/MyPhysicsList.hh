@@ -1,4 +1,4 @@
-// $Id: MyPhysicsList.hh,v 1.2 1999-04-17 05:04:42 kurasige Exp $
+// $Id: MyPhysicsList.hh,v 1.3 1999-10-03 09:54:21 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -33,7 +33,7 @@ class MyPhysicsList: public G4VUserPhysicsList
     virtual void ConstructBosons();
     virtual void ConstructLeptons();
     virtual void ConstructMesons();
-    virtual void ConstructBarions();
+    virtual void ConstructBaryons();
     virtual void ConstructIons();
 
   protected:

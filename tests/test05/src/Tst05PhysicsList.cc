@@ -1,4 +1,4 @@
-// $Id: Tst05PhysicsList.cc,v 1.2 1999-04-17 05:39:40 kurasige Exp $
+// $Id: Tst05PhysicsList.cc,v 1.3 1999-10-03 09:55:09 kurasige Exp $
 
 #include "globals.hh"
 #include "Tst05PhysicsList.hh"
@@ -11,7 +11,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -38,7 +38,7 @@ void Tst05PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
   ConstructIons();
 }
 
@@ -63,10 +63,10 @@ void Tst05PhysicsList::ConstructMesons()
   pConstructor.ConstructParticle();
 }
 
-void Tst05PhysicsList::ConstructBarions()
+void Tst05PhysicsList::ConstructBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 

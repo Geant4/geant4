@@ -31,7 +31,7 @@ class Tst03PhysicsList : public G4VUserPhysicsList
     virtual void ConstructBosons();
     virtual void ConstructLeptons();
     virtual void ConstructMesons();
-    virtual void ConstructBarions();
+    virtual void ConstructBaryons();
 
   protected:
   // these methods Construct physics processes and register them
