@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.17 2000-11-20 17:54:38 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.18 2001-04-20 19:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -123,7 +123,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	else
 	  tmp1->SetSameSense(0);
 
-	cv1.append(tmp1);
+	cv1.push_back(tmp1);
       }
 
       if(R2 != 0)  
@@ -135,7 +135,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	  tmp2->SetSameSense(0);
 	else
 	  tmp2->SetSameSense(1);
-	cv1.append(tmp2);
+	cv1.push_back(tmp2);
       }
 	
       SurfaceVec[b]   = new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
@@ -279,13 +279,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
     tmp->SetBounds(ArcStart1a, ArcStart1a);
     tmp->SetSameSense(0);
-    cv.append(tmp);
+    cv.push_back(tmp);
   
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMAX[0]);
     tmp->SetBounds(ArcStart1b, ArcStart1b);
     tmp->SetSameSense(1);
-    cv.append(tmp);
+    cv.push_back(tmp);
 
     SurfaceVec[nb_of_surfaces-2] = new G4FPlane(PlaneDir, -PlaneAxis, Origin);
     SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
@@ -311,14 +311,14 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	      RMIN[sections]);
     tmp->SetBounds(ArcStart2a, ArcStart2a);
     tmp->SetSameSense(0);
-    cv.append(tmp);
+    cv.push_back(tmp);
     
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
 	      RMAX[sections]);
     tmp->SetBounds(ArcStart2b, ArcStart2b);
     tmp->SetSameSense(1);
-    cv.append(tmp);
+    cv.push_back(tmp);
   
     SurfaceVec[nb_of_surfaces-1]= new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
     SurfaceVec[nb_of_surfaces-1]->SetBoundaries(&cv);

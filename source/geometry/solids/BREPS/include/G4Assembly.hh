@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.hh,v 1.6 2001-02-05 18:45:32 gcosmo Exp $
+// $Id: G4Assembly.hh,v 1.7 2001-04-20 19:55:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -27,10 +27,11 @@
 #ifndef G4ASSEMBLY_HH
 #define G4ASSEMBLY_HH
 
+#include "g4std/vector"
 #include "G4PlacedSolid.hh"
 #include "G4BREPSolid.hh"
 
-typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedVector;  
+typedef G4std::vector<G4PlacedSolid*> G4PlacedVector;  
 
 class G4Assembly
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DVector.hh,v 1.4 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4Point3DVector.hh,v 1.5 2001-04-20 19:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -20,9 +20,9 @@
 #ifndef included_G4Point3DVector
 #define included_G4Point3DVector
 
-#include "g4rw/tvvector.h"
+#include "g4std/vector"
 #include "G4Point3D.hh"
 
-typedef G4RWTValVector<G4Point3D> G4Point3DVector;
+typedef G4std::vector<G4Point3D> G4Point3DVector;
 
 #endif

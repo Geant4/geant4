@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.cc,v 1.8 2000-11-20 17:54:40 gcosmo Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.9 2001-04-20 19:55:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   bBox.Init(b->GetBoxMin(), b->GetBoxMax());
   
   size_t i;
-  for ( i=1; i<bounds.entries(); i++) 
+  for ( i=1; i<bounds.size(); i++) 
   {
     b= bounds[i]->BBox();
     bBox.Extend(b->GetBoxMin());
@@ -47,37 +47,37 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   // the points array is probably unused, so the following code is useless
   G4int cnt= 0;
 
-  size_t entr = bounds.entries();
+  size_t entr = bounds.size();
 
   for (i=0; i < entr; i++) 
   {
-    G4Curve* c = bounds(i);
+    G4Curve* c = bounds[i];
 
     if (c->GetEntityType() == "G4CompositeCurve") 
     {
       G4CompositeCurve* cc = (G4CompositeCurve*)c;
       const G4CurveVector& segments = cc->GetSegments();
-      cnt+= segments.entries();
+      cnt+= segments.size();
     } 
     else 
       cnt++;
   }
 
-  points.reshape(cnt);
+  points.resize(cnt);
   
   G4int j= 0;
   
-  for (i=0; i<bounds.entries(); i++) 
+  for (i=0; i<bounds.size(); i++) 
   {
-    G4Curve* c= bounds(i);
+    G4Curve* c= bounds[i];
     if (c->GetEntityType() == "G4CompositeCurve") 
     {
       G4CompositeCurve* cc = (G4CompositeCurve*)c;
       const G4CurveVector& segments = cc->GetSegments();
      
-      for (size_t i=0; i<segments.entries(); i++) 
+      for (size_t i=0; i<segments.size(); i++) 
       {
-	G4Curve* ccc = segments(i);
+	G4Curve* ccc = segments[i];
 	G4Point3D p  = ccc->GetEnd();
 	points[j]= p;
 	j++;
@@ -97,20 +97,37 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
 G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
 {
   G4CurveVector newBounds;
+  G4Curve* a = 0;
+  G4Curve* c = 0;
   
-  for (size_t i=0; i<bounds.entries(); i++)
+  for (size_t i=0; i<bounds.size(); i++)
   {
-    G4Curve* c= bounds[i]->Project(tr);
+    c= bounds[i]->Project(tr);
     
     if (c==0) 
     {
-      newBounds.clearAndDestroy();
+      // Remove newBounds and delete all its contents
+      while (newBounds.size()>0)
+      {
+        a = newBounds.back();
+        newBounds.pop_back();
+        for (G4CurveVector::iterator i=newBounds.begin();
+                                     i!=newBounds.end(); i++)
+        {
+          if (*i==a)
+          {
+	    newBounds.erase(i);
+	    i--;
+          }
+        } 
+        if ( a )  delete a;    
+      } 
       return 0;
     }
     // L. Broglia
     c->SetSameSense( bounds[i]->GetSameSense() );
 
-    newBounds.insert(c);
+    newBounds.push_back(c);
   }
   
   G4SurfaceBoundary* lof= new G4SurfaceBoundary;
@@ -143,9 +160,9 @@ G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
   G4int nbinter = 0;
   G4int temp = 0;
 
-  for (size_t i=0; i < bounds.entries(); i++) 
+  for (size_t i=0; i < bounds.size(); i++) 
   {   
-    G4Curve& c = *bounds.at(i);
+    G4Curve& c = *bounds[i];
     temp = c.IntersectRay2D(ray);
 
     // test if the point is on the boundary

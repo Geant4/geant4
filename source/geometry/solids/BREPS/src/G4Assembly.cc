@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.cc,v 1.3 2000-11-08 14:22:07 gcosmo Exp $
+// $Id: G4Assembly.cc,v 1.4 2001-04-20 19:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -25,14 +25,30 @@ G4Assembly::G4Assembly()
 
 G4Assembly::~G4Assembly()
 {
-  placedVec.clearAndDestroy();
+  G4PlacedSolid* a = 0;
+  
+  // Remove placedVec and delete all its contents
+  while (placedVec.size()>0)
+  {
+    a = placedVec.back();
+    placedVec.pop_back();
+    for (G4PlacedVector::iterator i=placedVec.begin(); i!=placedVec.end(); i++)
+    {
+      if (*i==a)
+      {
+	placedVec.erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
 }
 
 void G4Assembly::SetPlacedVector(G4PlacedVector& pVec)
 {
-  numberOfSolids = pVec.entries();
+  numberOfSolids = pVec.size();
   
   for(G4int a=0;a<numberOfSolids;a++)
-    placedVec.append( pVec[a]);
+    placedVec.push_back( pVec[a]);
   
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacementVector.hh,v 1.3 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4PlacementVector.hh,v 1.4 2001-04-20 19:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -21,9 +21,9 @@
 #ifndef included_G4PlacementVector
 #define included_G4PlacementVector
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4Axis2Placement3D.hh"
 
-typedef G4RWTPtrOrderedVector<G4Axis2Placement3D> G4PlacementVector;
+typedef G4std::vector<G4Axis2Placement3D*> G4PlacementVector;
 
 #endif

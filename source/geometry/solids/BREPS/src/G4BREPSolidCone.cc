@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCone.cc,v 1.4 2000-11-08 14:22:08 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.5 2001-04-20 19:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,12 +51,12 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   tmp = new G4CircularCurve();
   tmp->Init(G4Axis2Placement3D(direction, axis2, origin) , large_radius);
   tmp->SetBounds(ArcStart1, ArcStart1);
-  CVec.insert(tmp);
+  CVec.push_back(tmp);
 
   tmp = new G4CircularCurve();
   tmp->Init(G4Axis2Placement3D(direction, axis2, origin2), large_radius);
   tmp->SetBounds(ArcStart2, ArcStart2);
-  CVec.insert(tmp);
+  CVec.push_back(tmp);
 
   SurfaceVec[0] = new G4FConicalSurface(tmporigin, axis, 
 					length, radius, large_radius);
@@ -70,7 +70,7 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   tmp = new G4CircularCurve();
   tmp->Init(G4Axis2Placement3D(direction, axis2, origin), radius);
   tmp->SetBounds(ArcStart1, ArcStart1);
-  CVec2.insert(tmp);
+  CVec2.push_back(tmp);
 
   SurfaceVec[1] = new G4FPlane(tmpaxis, direction, origin2);
   //new G4AdvancedFace("G4FPlane" , origin2, direction, tmpaxis, CVec2, 1);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.17 2000-11-20 17:54:37 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.18 2001-04-20 19:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -668,7 +668,8 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   G4Point3D Max = bbox->GetBoxMax();
 
   G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList(8);
+  vertices=new G4ThreeVectorList();
+  vertices->reserve(8);
     
   if (vertices)
     {
@@ -681,14 +682,14 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
       G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
 
-      vertices->insert(pTransform.TransformPoint(vertex0));
-      vertices->insert(pTransform.TransformPoint(vertex1));
-      vertices->insert(pTransform.TransformPoint(vertex2));
-      vertices->insert(pTransform.TransformPoint(vertex3));
-      vertices->insert(pTransform.TransformPoint(vertex4));
-      vertices->insert(pTransform.TransformPoint(vertex5));
-      vertices->insert(pTransform.TransformPoint(vertex6));
-      vertices->insert(pTransform.TransformPoint(vertex7));
+      vertices->push_back(pTransform.TransformPoint(vertex0));
+      vertices->push_back(pTransform.TransformPoint(vertex1));
+      vertices->push_back(pTransform.TransformPoint(vertex2));
+      vertices->push_back(pTransform.TransformPoint(vertex3));
+      vertices->push_back(pTransform.TransformPoint(vertex4));
+      vertices->push_back(pTransform.TransformPoint(vertex5));
+      vertices->push_back(pTransform.TransformPoint(vertex6));
+      vertices->push_back(pTransform.TransformPoint(vertex7));
     }
   else
     {

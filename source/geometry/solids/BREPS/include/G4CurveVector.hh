@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CurveVector.hh,v 1.3 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4CurveVector.hh,v 1.4 2001-04-20 19:55:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -21,9 +21,9 @@
 #ifndef included_G4CurveVector
 #define included_G4CurveVector
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4Curve.hh"
 
-typedef G4RWTPtrOrderedVector<G4Curve> G4CurveVector;
+typedef G4std::vector<G4Curve*> G4CurveVector;
 
 #endif

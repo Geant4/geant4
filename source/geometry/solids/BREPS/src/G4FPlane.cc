@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.11 2000-11-20 17:54:40 gcosmo Exp $
+// $Id: G4FPlane.cc,v 1.12 2001-04-20 19:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
                    const G4Point3DVector* iVec,
 		   G4int sense)
   : pplace( (*pVec)[0]-(*pVec)[1],                    // direction
-	    ((*pVec)[pVec->length()-1]-(*pVec)[0])
+	    ((*pVec)[pVec->size()-1]-(*pVec)[0])
 	    .cross((*pVec)[0]-(*pVec)[1]),            // axis
 	    (*pVec)[0]                             )  // location
 
@@ -70,10 +70,10 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
 
   polygon= new G4CompositeCurve(*pVec);
  
-  for (size_t i=0; i< polygon->GetSegments().length(); i++) 
+  for (size_t i=0; i< polygon->GetSegments().size(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
-  bounds.insert(polygon);
+  bounds.push_back(polygon);
   
   // Eventual inner boundary
   
@@ -81,15 +81,15 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
   {
     polygon= new G4CompositeCurve(*iVec);
 
-    for (size_t i=0; i< polygon->GetSegments().length(); i++) 
+    for (size_t i=0; i< polygon->GetSegments().size(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
-    bounds.insert(polygon);
+    bounds.push_back(polygon);
   }
   
   // Set sense for boundaries  
   
-  for (size_t j=0; j< bounds.length(); j++) 
+  for (size_t j=0; j< bounds.size(); j++) 
     bounds[j]->SetSameSense(sameSense);
   
 
