@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-10-03 15:32:56 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2003-10-03 15:37:35 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -58,7 +58,7 @@ LDLIBS   := \
             -lG4decay \
             -lG4procman \
             -lG4materials \
-            -lG4digits+hits \
+            -lG4digits_hits \
             -lG4geometry \
             -lG4graphics_reps \
             -lG4intercoms \
