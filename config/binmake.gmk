@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.22 1999-06-04 07:01:00 stesting Exp $
+# $Id: binmake.gmk,v 1.23 1999-06-04 12:35:57 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -200,7 +200,7 @@ ifeq ($(G4SYSTEM),WIN32-VC-NICE)
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
 else
-  LDLIBS = LDLIBS_PREFINAL
+  LDLIBS = $(LDLIBS_PREFINAL)
 endif
 
 
