@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.7 2000-01-17 09:45:43 stesting Exp $
+# $Id: update.sh,v 1.8 2000-02-25 13:23:29 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n]
 
@@ -49,7 +49,7 @@ echo
 if [ X$NOTHING = X ]
 then
   echo ACTUALLY UPDATING...
-  echo DELETING G4RunManager.cc SO IT PICKS UP NEW '$Name: not supported by cvs2svn $'...
+  echo DELETING G4RunManager.cc SO IT PICKS UP NEW TAG NAME...
   rm -f $G4INSTALL/source/run/src/G4RunManager.cc
   echo GETTING NEW DIRECTORIES...
 else
