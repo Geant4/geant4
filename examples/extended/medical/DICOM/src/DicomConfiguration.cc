@@ -47,9 +47,8 @@ G4int DicomConfiguration::ReadDataFile()
 	DataFile.close();
 	return 0;
 }
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-int DicomConfiguration::Read_g4File( string g4File )
+
+G4int DicomConfiguration::ReadG4File( string g4File )
 {
 
 	DensityValue.clear();

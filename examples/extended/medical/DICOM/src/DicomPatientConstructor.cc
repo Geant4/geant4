@@ -56,7 +56,7 @@ void DicomGeometry::patientConstruction()
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
   ReadConfiguration->ReadDataFile();					// images must have the same dimension
-  ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[0] );		//  open a .g4 file to read some values
+  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );		//  open a .g4 file to read some values
 		
   PatientX = (ReadConfiguration->CompressionUsed*(ReadConfiguration->X_PixelSpacing)/2.0) *mm;
   PatientY = (ReadConfiguration->CompressionUsed*(ReadConfiguration->Y_PixelSpacing)/2.0) *mm;
@@ -75,7 +75,7 @@ void DicomGeometry::patientConstruction()
   double MiddleLocationValue=0;
   for (int i=0;i< totalNumberOfFile;i++)
     {
-      ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[i] );
+      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
     }
   MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;

@@ -37,7 +37,7 @@
 #include <string>
 #include <stdio.h>
 #include "globals.hh"
-
+#include "g4std/vector"
 using namespace std;
 
 class DicomConfiguration
@@ -46,22 +46,23 @@ public:
 
   // This function reads <Data.dat>, return 0/1 if successfull or not
   G4int ReadDataFile();
+  G4int ReadG4File(string g4File);
   G4int GetCompressionValue(){return CompressionValue;}
   G4int GetTotalNumberOfFile(){return TotalNumberOfFile;}
-
+  G4std::vector<G4String> GetListOfFile() {return ListOfFile;}
+  G4int GetTotalRows() {return TotalRows;}
+  
+ 
 private:
 	
-	G4int CompressionValue;
-	G4int TotalNumberOfFile;
+  G4int CompressionValue;
+  G4int TotalNumberOfFile;
+  vector<G4String> ListOfFile;
+  G4int  TotalRows;
+
 public:
 	
-	vector<G4String> ListOfFile;
-	
-	// This function reads one *.g4 given by char* g4File, return 0/1 if successfull or not
-	int Read_g4File(string g4File);
-	
-	// Public variables used in Read_g4File(), those are the variables that contains informations
-	int TotalRows, TotalColumns;
+	G4int  TotalColumns;
 	double  X_PixelSpacing, Y_PixelSpacing;
 	double  SliceTickness;
 	double  SliceLocation;
@@ -73,8 +74,7 @@ private:
 	// Private variables used in Read_DataFile()
 	string NameOfFileBuffer;
 	
-}
-;//$   vihut@phy.ulaval.ca
+};
 
 #endif
 

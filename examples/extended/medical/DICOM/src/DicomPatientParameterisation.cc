@@ -72,7 +72,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, doubl
   G4int totalNumberOfFile = ReadConfiguration -> GetTotalNumberOfFile();
   for (int i=0;i<totalNumberOfFile;i++)
     {
-      ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[i] );
+      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
     }
   MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
@@ -252,7 +252,7 @@ void DicomPatientParameterisation::GetDensity(double maxdensity , double mindens
     {
 
 
-      ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[z] );
+      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[z] );
 
       G4int compressionValue = ReadConfiguration->GetCompressionValue(); 
       lenr=abs(rows/compressionValue);
