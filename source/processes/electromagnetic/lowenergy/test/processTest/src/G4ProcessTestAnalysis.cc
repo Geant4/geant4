@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.5 2001-11-12 09:14:50 pia Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.6 2001-11-12 09:52:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -91,7 +91,7 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
 
   // Book ntuples
 
-  G4String ntFileName = storeName + "1.hbook::1";
+  G4String ntFileName = storeName + ".hbook::1";
   const char* name = ntFileName.c_str();
   ntuple1 = ntFactory->createC(name);
 
@@ -115,7 +115,7 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
     }
   // ntuples["primary"] = ntuple1;
 
-  ntFileName = storeName + "2.hbook::2";
+  ntFileName = storeName + ".hbook::2";
   name = ntFileName.c_str();
   ntuple2 = ntFactory->createC(name);
 
