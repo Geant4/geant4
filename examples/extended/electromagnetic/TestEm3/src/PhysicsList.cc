@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2004-03-16 18:38:42 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2004-03-24 18:25:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "PhysListEmG4v52.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

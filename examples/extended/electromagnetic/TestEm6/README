@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2004-03-15 11:23:16 maire Exp $
+$Id: README,v 1.10 2004-03-24 18:29:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -137,8 +137,13 @@ $Id: README,v 1.9 2004-03-15 11:23:16 maire Exp $
  9- ROOT
  
  To install root, see http://root.cern.ch
- Make sure that the environment variable ROOTSYS used in GNUmakefile is defined.
+ Make sure that the environment variable ROOTSYS, used in GNUmakefile, is
+ defined:
  
+ setenv ROOTSYS /???/ROOT/root_v3_10_02
+ setenv PATH ${PATH}:${ROOTSYS}/bin
+ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:/usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.
+  
  10- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
  
      The processes of gamma -> mu+mu-  and e+e- -> mu+mu-
