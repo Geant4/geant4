@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2004-04-05 19:04:02 vnivanch Exp $
+$Id: History,v 1.45 2004-04-13 15:06:58 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-04-04 mma (testem1-V06-01-02)
+- EmPhysicsList: set G4eBremsstrahlungCMS as default
 
 05-04-04 V.Ivan. (testem1-V06-01-01)
 - fix G4eBremsstrahlungCMS
