@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.26 2001-10-29 16:23:41 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.27 2001-11-08 08:17:17 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 // 12/09/01: min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // 17-09-01: migration of Materials to pure STL (mma)
 // 29-10-01 all static functions no more inlined (mma) 
+// 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,8 +95,6 @@ G4PhysicsTable* G4VhEnergyLoss::theDEDXTable = NULL ;
 
 G4double* G4VhEnergyLoss::ptableElectronCutInRange = 0 ;
 G4double* G4VhEnergyLoss::pbartableElectronCutInRange = 0 ;
-
-G4double         G4VhEnergyLoss::Charge ;   
 
 G4double G4VhEnergyLoss::LowerBoundEloss = 1.*keV ;
 G4double G4VhEnergyLoss::UpperBoundEloss = 100.*TeV;
@@ -200,7 +199,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
   G4double* ElectronCutInRange = G4Electron::Electron()->GetLengthCuts();
 
   // create/fill proton or antiproton tables depending on the charge 
-  Charge = aParticleType.GetPDGCharge()/eplus;
+  G4double Charge = aParticleType.GetPDGCharge()/eplus;
   ParticleMass = aParticleType.GetPDGMass() ;
 
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
@@ -444,7 +443,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   G4double KineticEnergy,StepLimit;
   //G4bool isOut ;
 
-  Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
 
   KineticEnergy = aParticle->GetKineticEnergy();
 
@@ -503,6 +502,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   Step = stepData.GetStepLength() ;
 
   aParticle = trackData.GetDynamicParticle() ;
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
   ChargeSquare = Charge*Charge ;
 
   G4int index = aMaterial->GetIndex() ;
@@ -666,8 +666,6 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
                    Pnew,urandom;
-	  //delTkin,delLoss,rate,
-          //G4StepPoint *point ;
   
           Tkin = E ;
           Etot = Tkin+mass ;
@@ -742,10 +740,6 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 
                aParticleChange.AddSecondary(deltaTrack) ;
- //  G4cout << " hEnLoss: subcutoff delta with T=" << T << " has been generated." << G4endl ;
- //  G4cout << "  pre/postsafety: " << setw(12) << presafety << setw(12) << postsafety
- //         << "  rcut=" << rcut << G4endl ; 
- //  G4cout << "  x,y,z:" << setw(12) << xd << setw(12) << yd << setw(12) << zd << G4endl ;
 
                }
 
@@ -784,7 +778,6 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
       aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
-  // aParticleChange.SetNumberOfSecondaries(0);
   aParticleChange.SetEnergyChange( finalT ) ;
   aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.12 2001-10-29 16:23:41 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.13 2001-11-08 08:17:16 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 10/02/00 modifications , new e.m. structure, L.Urban
 // 10/09/01 bugfix in subcutoff delta generation, L.Urban
 // 29-10-01 all static functions no more inlined (mma)
+// 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 //
 
 #ifndef G4VhEnergyLoss_h
@@ -84,6 +85,8 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
+    void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+
     G4double GetContinuousStepLimit(
                                     const G4Track& track,
                                     G4double previousStepSize,
@@ -100,10 +103,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
                                                const G4Step& Step) = 0 ;
-
-
-  protected:
-
 
   private:
 
@@ -167,11 +166,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double GetUpperBoundEloss();
     static G4int    GetNbinEloss();
 
-
-  protected:
-
-    static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
-
   protected:
 
     static G4PhysicsTable* theDEDXpTable ;
@@ -201,8 +195,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     // cut in range
     static G4double* ptableElectronCutInRange;
     static G4double* pbartableElectronCutInRange;
-
-    static G4double Charge ;
 
   private:
 
