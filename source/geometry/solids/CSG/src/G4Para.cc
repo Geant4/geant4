@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.22 2004-10-13 13:14:58 gcosmo Exp $
+// $Id: G4Para.cc,v 1.23 2004-11-29 07:51:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -436,22 +436,17 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector norm;
   G4double distx,disty,distz;
   G4double newpx,newpy,xshift;
-  G4double calpha,salpha;  // Sin/Cos(alpha) - needed to recalc G4Parameter 
+  G4double calpha,salpha;      // Sin/Cos(alpha) - needed to recalc G4Parameter 
   G4double tntheta,cosntheta;  // tan and cos of normal's theta component
   G4double ycomp;
 
-  newpx=p.x()-fTthetaCphi*p.z();
-  newpy=p.y()-fTthetaSphi*p.z();
+  newpx  = p.x()-fTthetaCphi*p.z();
+  newpy  = p.y()-fTthetaSphi*p.z();
+  calpha = 1/sqrt(1+fTalpha*fTalpha);
 
-  calpha=1/sqrt(1+fTalpha*fTalpha);
-  if (fTalpha)
-  {
-    salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
-  }
-  else
-  {
-    salpha=0;
-  }
+  if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+  else          salpha = 0.;
+  
 
   xshift=newpx*calpha+newpy*salpha;
 
@@ -459,53 +454,49 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   disty=fabs(fabs(newpy)-fDy);
   distz=fabs(fabs(p.z())-fDz);
     
-  if (distx<disty)
+
+#ifndef G4NEW_SURF_NORMAL
+
+  if (distx < disty)
   {
-    if (distx<distz) side=kNX;
-    else side=kNZ;
+    if (distx < distz) side = kNX;
+    else               side = kNZ;
   }
   else
   {
-    if (disty<distz) side=kNY;
-    else side=kNZ;
+    if (disty < distz) side = kNY;
+    else               side = kNZ;
   }
 
   switch (side)
   {
     case kNX:
-      tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-      if (xshift<0)
-      {
-        cosntheta=-1/sqrt(1+tntheta*tntheta);
-      }
-      else
-      {
-        cosntheta=1/sqrt(1+tntheta*tntheta);
-      }
-      norm=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
+      tntheta = fTthetaCphi*calpha+fTthetaSphi*salpha;
+
+      if ( xshift < 0 )  cosntheta = -1/sqrt(1+tntheta*tntheta);
+      else               cosntheta =  1/sqrt(1+tntheta*tntheta);
+      
+      norm = G4ThreeVector(calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
       break;
+
     case kNY:
-      if (newpy<0)
-      {
-        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
-      }
-      else
-      {
-        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
-      }
-      norm=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+      if (newpy < 0)   ycomp = -1/sqrt(1+fTthetaSphi*fTthetaSphi);    
+      else             ycomp =  1/sqrt(1+fTthetaSphi*fTthetaSphi);
+      
+      norm = G4ThreeVector(0, ycomp,-fTthetaSphi*ycomp);
       break;
-    case kNZ:           // Closest to Z
-      if (p.z()>=0)
-      {
-        norm=G4ThreeVector(0,0,1);
-      }
-      else
-      {
-        norm=G4ThreeVector(0,0,-1);
-      }
+
+    case kNZ:         
+      if (p.z() >= 0 )  norm = G4ThreeVector(0,0,1);      
+      else              norm = G4ThreeVector(0,0,-1);
+      
       break;
   }
+
+#else
+
+#endif
+
   return norm;
 }
 
