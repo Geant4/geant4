@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.64 2003-07-21 13:53:19 silvarod Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.65 2003-11-06 12:24:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -89,7 +89,6 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
 }
 
 /*
-// Commented out for release 5.2 (June 2003), allowing no interface change
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam, G4VBremAngularDistribution* distribution)
   : G4eLowEnergyLoss(nam),
     crossSectionHandler(0),
@@ -389,3 +388,30 @@ void G4LowEnergyBremsstrahlung::SetAngularGenerator(G4VBremAngularDistribution* 
   angularDistribution = distribution;
   angularDistribution->PrintGeneratorInformation();
 }
+
+void G4LowEnergyBremsstrahlung::SetAngularGenerator(const G4String& name)
+{
+
+  if (name == "tsai") 
+    {
+      delete angularDistribution;
+      angularDistribution = new G4ModifiedTsai("TsaiGenerator");
+    }
+  else if (name == "2bn")
+    {
+      delete angularDistribution;
+      angularDistribution = new G4Generator2BN("2BNGenerator");
+    }
+  else if (name == "2bs")
+    {
+       delete angularDistribution;
+       angularDistribution = new G4Generator2BS("2BSGenerator");
+    }
+  else
+    {
+      G4Exception("G4LowEnergyBremsstrahlung::SetAngularGenerator - generator does not exist");
+    }
+
+  angularDistribution->PrintGeneratorInformation();
+}
+
