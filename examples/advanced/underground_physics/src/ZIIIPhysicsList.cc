@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ZIIIPhysicsList.cc,v 1.1 2001-06-26 11:27:06 ahoward Exp $
+// $Id: ZIIIPhysicsList.cc,v 1.2 2001-06-26 11:31:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
