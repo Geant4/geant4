@@ -1,3 +1,6 @@
+DAWN-V04-01-00 Satoshi TANAKA  Sept 01, 2002
+- Precision control with "setenv G4DAWNFILE_PRECISION number".  
+
 DAWN-V03-02-01 Satoshi TANAKA  Sept 18, 2001
 - Maximal number of g4.prim file is changed from 99 to 100.
 
