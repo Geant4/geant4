@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.20 2004-05-14 20:35:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.21 2004-05-17 09:46:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -349,17 +349,17 @@ private:
   std::vector<G4int>                    idxSCoffRegions;
 
   // tables and vectors
-  G4PhysicsTable*  theDEDXTable;
-  G4PhysicsTable*  theRangeTableForLoss;
-  G4PhysicsTable*  thePreciseRangeTable;
-  G4PhysicsTable*  theSecondaryRangeTable;
-  G4PhysicsTable*  theInverseRangeTable;
-  G4PhysicsTable*  theLambdaTable;
-  G4PhysicsTable*  theSubLambdaTable;
-  G4double*        theDEDXAtMaxEnergy;
-  G4double*        theRangeAtMaxEnergy;
-  G4double*        theEnergyOfCrossSectionMax;
-  G4double*        theCrossSectionMax;
+  G4PhysicsTable*             theDEDXTable;
+  G4PhysicsTable*             theRangeTableForLoss;
+  G4PhysicsTable*             thePreciseRangeTable;
+  G4PhysicsTable*             theSecondaryRangeTable;
+  G4PhysicsTable*             theInverseRangeTable;
+  G4PhysicsTable*             theLambdaTable;
+  G4PhysicsTable*             theSubLambdaTable;
+  G4double*                   theDEDXAtMaxEnergy;
+  G4double*                   theRangeAtMaxEnergy;
+  G4double*                   theEnergyOfCrossSectionMax;
+  G4double*                   theCrossSectionMax;
 
   const G4DataVector*         theCuts;
 
@@ -399,13 +399,14 @@ private:
   G4double defaultRoverRange;
   G4double defaultIntegralRange;
   G4double lambdaFactor;
+  G4double mfpKinEnergy;
 
-  G4bool lossFluctuationFlag;
-  G4bool rndmStepFlag;
-  G4bool hasRestProcess;
-  G4bool tablesAreBuilt;
-  G4bool integral;
-  G4bool meanFreePath;
+  G4bool   lossFluctuationFlag;
+  G4bool   rndmStepFlag;
+  G4bool   hasRestProcess;
+  G4bool   tablesAreBuilt;
+  G4bool   integral;
+  G4bool   meanFreePath;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -419,7 +420,8 @@ inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* cou
     currentMaterialIndex = couple->GetIndex();
     minStepLimit = std::min(finalRange,
            currentCouple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut));
-    if(integral && !meanFreePath) ResetNumberOfInteractionLengthLeft();
+    if(integral && (!meanFreePath || preStepScaledEnergy < mfpKinEnergy))
+      ResetNumberOfInteractionLengthLeft();
   }
 }
 
@@ -498,26 +500,6 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossProcess::GetLambda(G4double e)
-{
-  G4bool b;
-  return chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
-{
-  meanFreePath  = false;
-  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
-  if (e <= emax)  preStepLambda = GetLambda(e);
-  else if (e*lambdaFactor > emax) 
-                  preStepLambda = GetLambda(e*lambdaFactor);
-  else            preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
                                                  const G4MaterialCutsCouple* couple)
 {
@@ -560,18 +542,54 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
+                                          const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  G4double x = 0.0;
+  if(theLambdaTable) x = GetLambda(kineticEnergy*massRatio);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetLambda(G4double e)
+{
+  G4bool b;
+  return chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
+{
+  meanFreePath  = false;
+  mfpKinEnergy  = 0.0;
+  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  if (e <= emax) preStepLambda = GetLambda(e);
+  else {
+    e *= lambdaFactor;
+    if(e > emax) {
+      mfpKinEnergy = e;
+      preStepLambda = GetLambda(e);
+    } else preStepLambda = theCrossSectionMax[currentMaterialIndex];
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
                                                             G4double, G4ForceCondition*)
 {
-  DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
+  DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambda(preStepScaledEnergy);
     else          preStepLambda = GetLambda(preStepScaledEnergy);
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
-    else                    preStepMFP = DBL_MAX;   
-  } 
+    else                    preStepMFP = DBL_MAX;
+  }
   // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
 }
@@ -633,22 +651,6 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::BaseParticle() const
 inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() const
 {
   return secondaryParticle;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
-                                          const G4MaterialCutsCouple* couple)
-{
-  DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  G4bool b;
-  if(theLambdaTable) {
-    G4double y = (((*theLambdaTable)[currentMaterialIndex])->
-                    GetValue(kineticEnergy*massRatio, b));
-    if(y > 0.0) x = 1.0/y;
-  }
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

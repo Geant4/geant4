@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.21 2004-05-14 20:35:57 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.22 2004-05-17 09:46:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,6 +137,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   defaultRoverRange(0.2),
   defaultIntegralRange(1.0),
   lambdaFactor(0.1),
+  mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
@@ -198,11 +199,11 @@ void G4VEnergyLossProcess::Clear()
     if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
     if(theLambdaTable) theLambdaTable->clearAndDestroy();
     if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
-    if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
-    if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
-    if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
-    if(theCrossSectionMax) delete [] theCrossSectionMax;
   }
+  if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
+  if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
+  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
+  if(theCrossSectionMax) delete [] theCrossSectionMax;
 
   theDEDXTable = 0;
   thePreciseRangeTable = 0;
@@ -213,6 +214,8 @@ void G4VEnergyLossProcess::Clear()
   theSubLambdaTable = 0;
   theDEDXAtMaxEnergy = 0;
   theRangeAtMaxEnergy = 0;
+  theEnergyOfCrossSectionMax = 0,
+  theCrossSectionMax = 0,
   tablesAreBuilt = false;
 }
 
@@ -902,7 +905,7 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
       theEnergyOfCrossSectionMax[i] = emax;
       theCrossSectionMax[i] = smax;
-      // G4cout << "i= " << i << " e2(MeV)= " << emax/MeV 
+      // G4cout << "i= " << i << " e2(MeV)= " << emax/MeV
       //       << " lambda= " << smax << G4endl;
     }
   }
@@ -1278,7 +1281,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
       }
       if(res) PrintInfoDefinition();
       else {
-        G4cout << "### BuildPhysicsTable will be requested for " <<  GetProcessName() 
+        G4cout << "### BuildPhysicsTable will be requested for " <<  GetProcessName()
                << " for " << particleName << G4endl;
       }
     }
@@ -1306,7 +1309,7 @@ void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetSubCutoff(G4bool) 
+void G4VEnergyLossProcess::SetSubCutoff(G4bool)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
