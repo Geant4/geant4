@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.cc,v 1.15 2002-12-10 17:20:30 maire Exp $
+// $Id: Em4RunAction.cc,v 1.16 2003-06-02 18:24:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  //  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
 
   if (G4VVisManager::GetConcreteInstance())
