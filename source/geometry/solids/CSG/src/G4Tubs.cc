@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.34 2002-10-28 11:43:07 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.35 2002-10-28 15:18:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,6 @@
 
 #include "G4Tubs.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -67,7 +66,6 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "G4Box.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -180,10 +178,6 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
                                       G4double&          pMin, 
                                       G4double&          pMax    ) const
 {
-  /*  
-  G4Box box("box",fRMax,fRMax,fDz) ;
-  return box.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax) ;
-  */
 
   if ( !pTransform.IsRotated() && fDPhi == 2.0*M_PI && fRMin == 0 )
   {
@@ -1635,11 +1629,11 @@ G4std::ostream& G4Tubs::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Tubs\n"
      << " Parameters: \n"
-     << "    inner radius : " << G4BestUnit(fRMin, "Length") << "\n"
-     << "    outer radius : " << G4BestUnit(fRMax, "Length") << "\n"
-     << "    half length Z: " << G4BestUnit(fDz, "Length") << "\n"
-     << "    starting phi : " << G4BestUnit(fSPhi, "Angle") << "\n"
-     << "    delta phi    : " << G4BestUnit(fDPhi, "Angle") << "\n"
+     << "    inner radius : " << fRMin/mm << " mm \n"
+     << "    outer radius : " << fRMax/mm << " mm \n"
+     << "    half length Z: " << fDz/mm << " mm \n"
+     << "    starting phi : " << fSPhi/degree << " degrees \n"
+     << "    delta phi    : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;

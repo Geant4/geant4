@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.18 2002-10-28 11:43:05 gcosmo Exp $
+// $Id: G4Box.cc,v 1.19 2002-10-28 15:18:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,6 @@
 // ********************************************************************
 
 #include "G4Box.hh"
-#include "G4UnitsTable.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -839,9 +838,9 @@ G4std::ostream& G4Box::StreamInfo(G4std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4Box\n"
      << " Parameters: \n"
-     << "    half length X: " << G4BestUnit(fDx, "Length") << "\n"
-     << "    half length Y: " << G4BestUnit(fDy, "Length") << "\n"
-     << "    half length Z: " << G4BestUnit(fDz, "Length") << "\n"
+     << "    half length X: " << fDx/mm << " mm \n"
+     << "    half length Y: " << fDy/mm << " mm \n"
+     << "    half length Z: " << fDz/mm << " mm \n"
      << "-----------------------------------------------------------\n";
 
   return os;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.6 2002-10-28 11:47:52 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.7 2002-10-28 15:18:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,6 @@
 // --------------------------------------------------------------------
 
 #include "G4Polycone.hh"
-
-#include "G4UnitsTable.hh"
 
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
@@ -453,8 +451,8 @@ G4std::ostream& G4Polycone::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Polycone\n"
      << " Parameters: \n"
-     << "    starting phi angle : " << G4BestUnit(startPhi, "Angle") << "\n"
-     << "    ending phi angle   : " << G4BestUnit(endPhi, "Angle") << "\n";
+     << "    starting phi angle : " << startPhi/degree << " degrees \n"
+     << "    ending phi angle   : " << endPhi/degree << " degrees \n";
   G4int i=0;
   if (original_parameters)
   {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.22 2002-10-28 11:43:05 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.23 2002-10-28 15:18:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -45,7 +45,6 @@
 
 #include "G4Cons.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -2191,13 +2190,13 @@ G4std::ostream& G4Cons::StreamInfo(G4std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4Cons\n"
      << " Parameters: \n"
-     << "   inside  -fDz radius: "  << G4BestUnit(fRmin1, "Length") << "\n"
-     << "   outside -fDz radius: "  << G4BestUnit(fRmax1, "Length") << "\n"
-     << "   inside  +fDz radius: "  << G4BestUnit(fRmin2, "Length") << "\n"
-     << "   outside +fDz radius: "  << G4BestUnit(fRmax2, "Length") << "\n"
-     << "   half length in Z   : "  << G4BestUnit(fDz, "Length")    << "\n"
-     << "   starting angle of segment: " << G4BestUnit(fSPhi, "Angle") << "\n"
-     << "   delta angle of segment   : " << G4BestUnit(fDPhi, "Angle") << "\n"
+     << "   inside  -fDz radius: "  << fRmin1/mm << " mm \n"
+     << "   outside -fDz radius: "  << fRmax1/mm << " mm \n"
+     << "   inside  +fDz radius: "  << fRmin2/mm << " mm \n"
+     << "   outside +fDz radius: "  << fRmax2/mm << " mm \n"
+     << "   half length in Z   : "  << fDz/mm << " mm \n"
+     << "   starting angle of segment: " << fSPhi/degree << " degrees \n"
+     << "   delta angle of segment   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;

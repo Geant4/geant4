@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.27 2002-10-28 11:43:06 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.28 2002-10-28 15:18:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,6 @@
 
 #include "G4Torus.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -2258,11 +2257,11 @@ G4std::ostream& G4Torus::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Torus\n"
      << " Parameters: \n"
-     << "    inner radius: " << G4BestUnit(fRmin, "Length") << "\n"
-     << "    outer radius: " << G4BestUnit(fRmax, "Length") << "\n"
-     << "    swept radius: " << G4BestUnit(fRtor, "Length") << "\n"
-     << "    starting phi: " << G4BestUnit(fSPhi, "Angle") << "\n"
-     << "    delta phi   : " << G4BestUnit(fDPhi, "Angle") << "\n"
+     << "    inner radius: " << fRmin/mm << " mm \n"
+     << "    outer radius: " << fRmax/mm << " mm \n"
+     << "    swept radius: " << fRtor/mm << " mm \n"
+     << "    starting phi: " << fSPhi/degree << " degrees \n"
+     << "    delta phi   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;

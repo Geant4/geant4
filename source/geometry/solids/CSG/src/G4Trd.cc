@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.11 2002-10-28 11:43:07 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.12 2002-10-28 15:18:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,6 @@
 
 #include "G4Trd.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1248,11 +1247,11 @@ G4std::ostream& G4Trd::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Trd\n"
      << " Parameters: \n"
-     << "    half length X, surface -dZ: " << G4BestUnit(fDx1, "Length") << "\n"
-     << "    half length X, surface +dZ: " << G4BestUnit(fDx2, "Length") << "\n"
-     << "    half length Y, surface -dZ: " << G4BestUnit(fDy1, "Length") << "\n"
-     << "    half length Y, surface +dZ: " << G4BestUnit(fDy2, "Length") << "\n"
-     << "    half length Z             : " << G4BestUnit(fDz,  "Length") << "\n"
+     << "    half length X, surface -dZ: " << fDx1/mm << " mm \n"
+     << "    half length X, surface +dZ: " << fDx2/mm << " mm \n"
+     << "    half length Y, surface -dZ: " << fDy1/mm << " mm \n"
+     << "    half length Y, surface +dZ: " << fDy2/mm << " mm \n"
+     << "    half length Z             : " << fDz/mm << " mm \n"
      << "-----------------------------------------------------------\n";
 
   return os;

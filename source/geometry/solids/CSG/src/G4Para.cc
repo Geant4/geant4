@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.12 2002-10-28 11:43:06 gcosmo Exp $
+// $Id: G4Para.cc,v 1.13 2002-10-28 15:18:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -37,7 +37,6 @@
 
 #include "G4Para.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -1124,12 +1123,12 @@ G4std::ostream& G4Para::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Para\n"
      << " Parameters: \n"
-     << "    half length X: " << G4BestUnit(fDx, "Length") << "\n"
-     << "    half length Y: " << G4BestUnit(fDy, "Length") << "\n"
-     << "    half length Z: " << G4BestUnit(fDz, "Length") << "\n"
-     << "    tan(alpha)         : " << G4BestUnit(fTalpha, "Angle") << "\n"
-     << "    tan(theta)*cos(phi): " << G4BestUnit(fTthetaCphi, "Angle") << "\n"
-     << "    tan(theta)*sin(phi): " << G4BestUnit(fTthetaSphi, "Angle") << "\n"
+     << "    half length X: " << fDx/mm << " mm \n"
+     << "    half length Y: " << fDy/mm << " mm \n"
+     << "    half length Z: " << fDz/mm << " mm \n"
+     << "    tan(alpha)         : " << fTalpha/degree << " degrees \n"
+     << "    tan(theta)*cos(phi): " << fTthetaCphi/degree << " degrees \n"
+     << "    tan(theta)*sin(phi): " << fTthetaSphi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;

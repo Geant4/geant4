@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.12 2002-10-28 11:47:51 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.13 2002-10-28 15:18:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,6 @@
 
 #include "G4EllipticalTube.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
@@ -710,7 +709,7 @@ G4std::ostream& G4EllipticalTube::StreamInfo(G4std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4EllipticalTube\n"
      << " Parameters: \n"
-     << "    length Z: " << G4BestUnit(dz, "Length") << "\n"
+     << "    length Z: " << dz/mm << " mm \n"
      << "    surface equation in X and Y: \n"
      << "       (X / " << dx << ")^2 + (Y / " << dy << ")^2 = 1 \n"
      << "-----------------------------------------------------------\n";

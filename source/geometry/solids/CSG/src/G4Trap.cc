@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.15 2002-10-28 11:43:07 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.16 2002-10-28 15:18:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -41,7 +41,6 @@
 
 #include "G4Trap.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -1636,21 +1635,17 @@ G4std::ostream& G4Trap::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Trap\n"
      << " Parameters: \n"
-     << "    half length Z: " << G4BestUnit(fDz, "Length") << "\n"
-     << "    half length Y of face -fDz: " << G4BestUnit(fDy1, "Length") << "\n"
-     << "    half length X of side -fDy1, face -fDz: "
-                              << G4BestUnit(fDx1, "Length") << "\n"
-     << "    half length X of side +fDy1, face -fDz: "
-                              << G4BestUnit(fDx2, "Length") << "\n"
-     << "    half length Y of face +fDz: " << G4BestUnit(fDy2, "Length") << "\n"
-     << "    half length X of side -fDy2, face +fDz: "
-                              << G4BestUnit(fDx3, "Length") << "\n"
-     << "    half length X of side +fDy2, face +fDz: "
-                              << G4BestUnit(fDx4, "Length") << "\n"
-     << "    tan(theta)*cos(phi): " << G4BestUnit(fTthetaCphi, "Angle") << "\n"
-     << "    tan(theta)*sin(phi): " << G4BestUnit(fTthetaSphi, "Angle") << "\n"
-     << "    tan(alpha), -fDz: " << G4BestUnit(fTalpha1, "Angle") << "\n"
-     << "    tan(alpha), +fDz: " << G4BestUnit(fTalpha2, "Angle") << "\n"
+     << "    half length Z: " << fDz/mm << " mm \n"
+     << "    half length Y of face -fDz: " << fDy1/mm << " mm \n"
+     << "    half length X of side -fDy1, face -fDz: " << fDx1/mm << " mm \n"
+     << "    half length X of side +fDy1, face -fDz: " << fDx2/mm << " mm \n"
+     << "    half length Y of face +fDz: " << fDy2/mm << " mm \n"
+     << "    half length X of side -fDy2, face +fDz: " << fDx3/mm << " mm \n"
+     << "    half length X of side +fDy2, face +fDz: " << fDx4/mm << " mm \n"
+     << "    tan(theta)*cos(phi): " << fTthetaCphi/degree << " degrees \n"
+     << "    tan(theta)*sin(phi): " << fTthetaSphi/degree << " degrees \n"
+     << "    tan(alpha), -fDz: " << fTalpha1/degree << " degrees \n"
+     << "    tan(alpha), +fDz: " << fTalpha2/degree << " degrees \n"
      << "    trap side plane equations:\n"
      << "        " << fPlanes[0].a << " X + " << fPlanes[0].b << " Y + "
                    << fPlanes[0].c << " Z + " << fPlanes[0].d << " = 0\n"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.8 2002-10-28 11:47:51 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.9 2002-10-28 15:18:40 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -51,7 +51,6 @@
 
 #include "G4Hype.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
@@ -88,10 +87,10 @@ G4Hype::G4Hype(const G4String& pName,
   {
     G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid Z half-length: "
-           << G4BestUnit(newHalfLenZ, "Length") << G4endl;
+           << newHalfLenZ/mm << " mm" << G4endl;
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid Z half-length: "
-           << G4BestUnit(newHalfLenZ, "Length") << G4endl;
+           << newHalfLenZ/mm << " mm" << G4endl;
     G4Exception("G4Hype::G4Hype() - invalid Z half-length");
   }
 
@@ -112,14 +111,14 @@ G4Hype::G4Hype(const G4String& pName,
 
       G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
              << "        Invalid radii !  Inner radius: "
-             << G4BestUnit(newInnerRadius, "Length") << G4endl
+             << newInnerRadius/mm << " mm" << G4endl
              << "                         Outer radius: "
-             << G4BestUnit(newOuterRadius, "Length") << G4endl;
+             << newOuterRadius/mm << " mm" << G4endl;
       G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
              << "        Invalid radii !  Inner radius: "
-             << G4BestUnit(newInnerRadius, "Length") << G4endl
+             << newInnerRadius/mm << " mm" << G4endl
              << "                         Outer radius: "
-             << G4BestUnit(newOuterRadius, "Length") << G4endl;
+             << newOuterRadius/mm << " mm" << G4endl;
       G4Exception("G4Hype::G4Hype() - outer > inner radius");
     }
   }
@@ -127,14 +126,14 @@ G4Hype::G4Hype(const G4String& pName,
   {
     G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid radii !  Inner radius: "
-           << G4BestUnit(newInnerRadius, "Length") << G4endl
+           << newInnerRadius/mm << " mm" << G4endl
            << "                         Outer radius: "
-           << G4BestUnit(newOuterRadius, "Length") << G4endl;
+           << newOuterRadius/mm << " mm" << G4endl;
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid radii !  Inner radius: "
-           << G4BestUnit(newInnerRadius, "Length") << G4endl
+           << newInnerRadius/mm << " mm" << G4endl
            << "                         Outer radius: "
-           << G4BestUnit(newOuterRadius, "Length") << G4endl;
+           << newOuterRadius/mm << " mm" << G4endl;
     G4Exception("G4Hype::G4Hype() - invalid radii");
   }
 
@@ -1149,11 +1148,11 @@ G4std::ostream& G4Hype::StreamInfo(G4std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4Hype\n"
      << " Parameters: \n"
-     << "    half length Z: " << G4BestUnit(halfLenZ, "Length") << "\n"
-     << "    inner radius : " << G4BestUnit(innerRadius, "Length") << "\n"
-     << "    outer radius : " << G4BestUnit(outerRadius, "Length") << "\n"
-     << "    inner stereo angle : " << G4BestUnit(innerStereo, "Angle") << "\n"
-     << "    outer stereo angle : " << G4BestUnit(outerStereo, "Angle") << "\n"
+     << "    half length Z: " << halfLenZ/mm << " mm \n"
+     << "    inner radius : " << innerRadius/mm << " mm \n"
+     << "    outer radius : " << outerRadius/mm << " mm \n"
+     << "    inner stereo angle : " << innerStereo/degree << " degrees \n"
+     << "    outer stereo angle : " << outerStereo/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;

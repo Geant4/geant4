@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.17 2002-10-28 11:43:06 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.18 2002-10-28 15:18:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -45,7 +45,6 @@
 
 #include "G4Sphere.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -2733,12 +2732,12 @@ G4std::ostream& G4Sphere::StreamInfo( G4std::ostream& os ) const
      << "    ===================================================\n"
      << " Solid type: G4Sphere\n"
      << " Parameters: \n"
-     << "    inner radius: " << G4BestUnit(fRmin, "Length") << "\n"
-     << "    outer radius: " << G4BestUnit(fRmax, "Length") << "\n"
-     << "    starting phi of segment  : " << G4BestUnit(fSPhi,"Angle") << "\n"
-     << "    delta phi of segment     : " << G4BestUnit(fDPhi,"Angle") << "\n"
-     << "    starting theta of segment: " << G4BestUnit(fSTheta,"Angle") << "\n"
-     << "    delta theta of segment   : " << G4BestUnit(fDTheta,"Angle") << "\n"
+     << "    inner radius: " << fRmin/mm << " mm \n"
+     << "    outer radius: " << fRmax/mm << " mm \n"
+     << "    starting phi of segment  : " << fSPhi/degree << " degrees \n"
+     << "    delta phi of segment     : " << fDPhi/degree << " degrees \n"
+     << "    starting theta of segment: " << fSTheta/degree << " degrees \n"
+     << "    delta theta of segment   : " << fDTheta/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;
