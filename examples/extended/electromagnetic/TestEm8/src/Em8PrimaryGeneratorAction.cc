@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PrimaryGeneratorAction.cc,v 1.1 2000-01-07 14:50:46 grichine Exp $
+// $Id: Em8PrimaryGeneratorAction.cc,v 1.2 2000-06-27 10:50:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,14 +117,14 @@ void Em8PrimaryGeneratorAction::Setzvertex(G4double z)
   vertexdefined = true ;
   zvertex = z ;
   G4cout << " Z coordinate of the primary vertex = " << zvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }
 void Em8PrimaryGeneratorAction::Setxvertex(G4double x)
 {
   vertexdefined = true ;
   xvertex = x ;
   G4cout << " X coordinate of the primary vertex = " << xvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }
 
 void Em8PrimaryGeneratorAction::Setyvertex(G4double y)
@@ -132,5 +132,5 @@ void Em8PrimaryGeneratorAction::Setyvertex(G4double y)
   vertexdefined = true ;
   yvertex = y ;
   G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8DetectorConstruction.cc,v 1.3 2000-06-22 16:42:53 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.4 2000-06-27 10:49:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -382,7 +382,7 @@ H2O->AddElement(elO, natoms=1);
   Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
 
 
-  G4cout << *(G4Material::GetMaterialTable()) << endl;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter and TR radiator
 
@@ -437,10 +437,10 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
   G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap   ;
 
   G4double zRad = fStartZ + 0.5*radThick ;
-  G4cout<<"zRad = "<<zRad/mm<<" mm"<<endl ;
+  G4cout<<"zRad = "<<zRad/mm<<" mm"<<G4endl ;
 
   radThick *= 1.2 ;
-  G4cout<<"radThick = "<<radThick/mm<<" mm"<<endl ;
+  G4cout<<"radThick = "<<radThick/mm<<" mm"<<G4endl ;
 
   G4Tubs* solidRadiator = new G4Tubs("Radiator", 0.0, 1.1*AbsorberRadius, 
                                       0.5*radThick, 0.0, twopi  ) ; 
@@ -476,8 +476,8 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     zModule = fStartZ + fRadThickness + 
               i*( fFoilNumber*(fRadThickness + fGasGap) + 
               fDetThickness + fDetGap )  ;
-    G4cout<<"zModule = "<<zModule/mm<<" mm"<<endl ;
-    G4cout<<"i = "<<i<<"\t"<<endl ; 
+    G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
+    G4cout<<"i = "<<i<<"\t"<<G4endl ; 
 
     for(j=0;j<fFoilNumber;j++)
     {  
@@ -511,7 +511,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     //                        fDetGap +0.5*fDetThickness),"DetSlice",
     //                        fLogicDetSlice,physiWorld,false,i); 
   }                                            
-  G4cout<<endl ;
+  G4cout<<G4endl ;
 
   G4Tubs* solidElectrode = new G4Tubs("Electrode",0.,AbsorberRadius,
                                        fElectrodeThick/2.,0.,twopi); 
@@ -589,14 +589,14 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   // Parameterisation
 
-  //  G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
-  //           fRadThickness,fGasGap);
+   G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
+            fRadThickness,fGasGap);
 
   //  G4VXrayTRmodel* pTRModel = new G4FoamXrayTRmodel(logicRadiator,
   //                                    fRadThickness,fGasGap);
 
-   G4VXrayTRmodel* pTRModel = new G4RegularXrayTRmodel(logicRadiator,
-                                                       fRadThickness,fGasGap);
+  //   G4VXrayTRmodel* pTRModel = new G4RegularXrayTRmodel(logicRadiator,
+  //                                                       fRadThickness,fGasGap);
 
   G4double alphaPlate = 160.0 ;
   G4double alphaGas   = 160.0 ;
@@ -626,12 +626,12 @@ void Em8DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n The  WORLD   is made of " 
        << WorldSizeZ/mm << "mm of " << WorldMaterial->GetName() ;
-  G4cout << ", the transverse size (R) of the world is " << WorldSizeR/mm << " mm. " << endl;
+  G4cout << ", the transverse size (R) of the world is " << WorldSizeR/mm << " mm. " << G4endl;
   G4cout << " The ABSORBER is made of " 
        << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() ;
-  G4cout << ", the transverse size (R) is " << AbsorberRadius/mm << " mm. " << endl;
-  G4cout << " Z position of the (middle of the) absorber " << zAbsorber/mm << "  mm." << endl;
-  G4cout << endl;
+  G4cout << ", the transverse size (R) is " << AbsorberRadius/mm << " mm. " << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " << zAbsorber/mm << "  mm." << G4endl;
+  G4cout << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////

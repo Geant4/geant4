@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8StepCut.cc,v 1.1 2000-01-07 14:50:47 grichine Exp $
+// $Id: Em8StepCut.cc,v 1.2 2000-06-27 10:51:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ Em8StepCut::Em8StepCut(const G4String& aName)
   : G4VDiscreteProcess(aName),MaxChargedStep(DBL_MAX)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 
@@ -45,4 +45,5 @@ void Em8StepCut::SetMaxStep(G4double step)
 {
   MaxChargedStep = step ;
 }
+
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8EventAction.cc,v 1.1 2000-01-07 14:50:45 grichine Exp $
+// $Id: Em8EventAction.cc,v 1.2 2000-06-27 10:49:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,10 +57,10 @@ void Em8EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << endl;
+    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
      
   if(verboselevel>1)
-    G4cout << "<<< Event  " << evtNb << " started." << endl;
+    G4cout << "<<< Event  " << evtNb << " started." << G4endl;
     
   if (calorimeterCollID==-1)
     {
@@ -93,7 +93,7 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
     int n_hit = CHC->entries();
    // if(verboselevel==2)
    // G4cout << "     " << n_hit
-   //      << " hits are stored in Em8CalorHitsCollection." << endl;
+   //      << " hits are stored in Em8CalorHitsCollection." << G4endl;
 
     G4double totEAbs=0, totLAbs=0;
     for (int i=0;i<n_hit;i++)
@@ -102,11 +102,11 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
       }
   if(verboselevel==2)
     G4cout
-       << "   Absorber: total energy: " << setw(7) << 
+       << "   Absorber: total energy: " << G4std::setw(7) << 
                              G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << setw(7) <<
+       << "       total track length: " << G4std::setw(7) <<
                              G4BestUnit(totLAbs,"Length")
-       << endl;           
+       << G4endl;           
 
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
@@ -114,7 +114,7 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddnStepsCharged(nstepCharged) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
     if(verboselevel==2)
-      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << endl;
+      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
@@ -141,7 +141,7 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
   }  
 
   if(verboselevel>0)
-    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << endl;
+    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
   
   
   //save rndm status
@@ -151,7 +151,7 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
-        G4cout << "\n---> End of Event: " << evtNb << endl;
+        G4cout << "\n---> End of Event: " << evtNb << G4endl;
         HepRandom::showEngineStatus();
        }
     }     

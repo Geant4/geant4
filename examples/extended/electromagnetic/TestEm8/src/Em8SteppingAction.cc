@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8SteppingAction.cc,v 1.1 2000-01-07 14:50:47 grichine Exp $
+// $Id: Em8SteppingAction.cc,v 1.2 2000-06-27 10:51:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 #include "G4EventManager.hh"
 #include "Em8SteppingMessenger.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include <g4std/iomanip>
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
