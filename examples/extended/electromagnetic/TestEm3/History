@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2003-05-16 16:57:24 vnivanch Exp $
+$Id: History,v 1.30 2003-06-03 10:36:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-06-03 V.Ivanchenko (testem3-V05-01-02)
+- Fix compilation warnings
 
 15-05-03 V.Ivanchenko (testem3-V05-01-01)
 - Proper deletion of old geometry when it is updated

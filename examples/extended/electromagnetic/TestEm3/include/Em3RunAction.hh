@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.hh,v 1.11 2002-12-12 11:19:37 maire Exp $
+// $Id: Em3RunAction.hh,v 1.12 2003-06-03 10:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,27 +47,27 @@ namespace AIDA {
  class ITree;
  class IHistogramFactory;
  class IHistogram1D;
-} 
+}
 #endif
 
 class Em3RunAction : public G4UserRunAction
 {
   public:
-  
+
     Em3RunAction(Em3DetectorConstruction*);
    ~Em3RunAction();
 
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
-    
+
     void fillPerEvent(G4int,G4double,G4double);
-    
+
 #ifndef G4NOHIST
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}    
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
 
     void SetHisto (G4int id, G4int nbins, G4double vmin, G4double vmax);
-    
+
     void PrintDedxTables();
             
   private:

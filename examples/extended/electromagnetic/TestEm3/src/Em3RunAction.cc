@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.22 2003-03-17 17:30:53 vnivanch Exp $
+// $Id: Em3RunAction.cc,v 1.23 2003-06-03 10:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
    
  delete tf;
  delete af;
-#endif    
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,41 +82,41 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 Em3RunAction::~Em3RunAction()
 {
   delete runMessenger;
-  
+
 #ifndef G4NOHIST
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
 
   delete hf;
-  delete tree;  
-#endif  
+  delete tree;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
+
   // save Rndm status
   //
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
-       
+
   //initialize cumulative quantities
   //
-  for (G4int k=0; k<MaxAbsor; k++)     
+  for (G4int k=0; k<MaxAbsor; k++)
       sumEAbs[k]=sum2EAbs[k]=sumLAbs[k]=sum2LAbs[k]=0.;
 
   //drawing
-  // 
+  //
   if (G4VVisManager::GetConcreteInstance())
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-     
+
   //histograms
   //
   bookHisto();
-  
+
   //example of print dEdx tables
   //
   ////PrintDedxTables();
@@ -137,22 +137,24 @@ void Em3RunAction::bookHisto()
       if (histo[k]==0)
         { histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
           G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
-	}  
-     }   
-#endif   
+	}
+     }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3RunAction::SetHisto(G4int k,G4int nbins,G4double vmin,G4double vmax)
 {
+  G4cout << "SetHisto: #" << k << "  nbins" << nbins 
+         << " min= " << vmin << " max= " << vmax << G4endl;
 #ifndef G4NOHIST
   // (re)book histograms
   const G4String title  = "Edep/Ebeam in absorber ";
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};  
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
   histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
-  G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;  
-#endif   
+  G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,40 +164,40 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 {
   if (G4VVisManager::GetConcreteInstance())
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-     
+
   //compute and print statistic
-  //     
-  G4int NbOfEvents = aRun->GetNumberOfEvent();  
+  //
+  G4int NbOfEvents = aRun->GetNumberOfEvent();
   G4double norme = 1./NbOfEvents;
-  
+
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
-  
+
 #ifdef G4USE_STD_NAMESPACE
   G4std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#else 
+#else
   G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
 #endif
   G4int  prec = G4cout.precision(2);
-    
+
   G4cout << "\n-------------------------------------------------------------\n"
-         << G4std::setw(51) << "total energy dep" 
+         << G4std::setw(51) << "total energy dep"
 	 << G4std::setw(30) << "total tracklen \n \n";
-	   
+
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
      MeanEAbs = norme*sumEAbs[k];
       rmsEAbs = norme*sqrt(abs(NbOfEvents*sum2EAbs[k] - sumEAbs[k]*sumEAbs[k]));
-  
+
      MeanLAbs = norme*sumLAbs[k];
       rmsLAbs = norme*sqrt(abs(NbOfEvents*sum2LAbs[k] - sumLAbs[k]*sumLAbs[k]));
-  
+
      //print
-     //    
+     //
      G4cout
-     << " Absorber" << k 
-     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName() 
-     << ") :" 
+     << " Absorber" << k
+     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName()
+     << ") :"
      << G4std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
      << G4std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
      << G4std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
