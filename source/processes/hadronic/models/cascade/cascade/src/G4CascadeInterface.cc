@@ -172,7 +172,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       case proton: 
 #ifdef debug_G4CascadeInterface
 	G4cerr << "proton "<< counter<<G4endl;
-#endit
+#endif
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
 	break; 

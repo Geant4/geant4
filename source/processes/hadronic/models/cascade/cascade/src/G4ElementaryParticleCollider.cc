@@ -1185,6 +1185,8 @@ generateOutgoingKindsFor2toMany(
     ks = 12;
   };      
 
+
+  G4int i(0);
   for(i = 0; i < mult; i++)  
     kinds.push_back(ifkn[l - 1][ml][i + ks]);
 
@@ -1465,7 +1467,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   G4bool rech = false;
 
   if (is == 6 || is == 5 || is == 7 || is == 14) {
-    pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+    G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
     G4double chrg;
@@ -1484,7 +1486,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   return rech;
 }
 
-pair<G4double, G4double> G4ElementaryParticleCollider::
+G4std::pair<G4double, G4double> G4ElementaryParticleCollider::
 adjustIntervalForElastic(
 			 G4double ekin, 
 			 G4double ak, 
@@ -1620,7 +1622,7 @@ adjustIntervalForElastic(
     };
   };
 
-  return pair<G4double, G4double>(a, b);
+  return G4std::pair<G4double, G4double>(a, b);
 }  
 
 G4std::vector<G4double> G4ElementaryParticleCollider::
@@ -1717,7 +1719,7 @@ particleSCMmomentumFor2to2(
     G4double b = 0.0;
 
     if(k <= 3) {
-      pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
+      G4std::pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
 
       a = ab.first;
       b = ab.second;
@@ -1925,7 +1927,7 @@ generateSCMpionAbsorption(G4double etot_scm,
 
   G4double pmod = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
   G4std::vector<G4double> mom(4);
-  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
 
