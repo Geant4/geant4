@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingVerbose.cc,v 1.2 2002-10-01 13:54:19 pmendez Exp $
+// $Id: ExN03SteppingVerbose.cc,v 1.3 2002-10-01 14:19:04 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,7 +20,8 @@
 
 #include "ExN03SteppingVerbose.hh"
 #include "G4SteppingManager.hh"
-
+#include "G4VProcess.hh"
+#include "G4ParticleTypes.hh"
 #include "G4UnitsTable.hh"
 
 ////////////////////////////////////////////////
@@ -95,12 +96,12 @@ void ExN03SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
