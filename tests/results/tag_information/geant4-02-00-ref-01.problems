@@ -1,0 +1,103 @@
+            Problems and Fixes with geant4-02-00-ref-01
+            ===========================================
+
+   Provisional Report -  some tests not yet completed.
+
+This is the reference tag. It is geant4-02-00-cand-00 plus:
+
+./config		config-V02-00-00
+./examples/extended/electromagnetic/TestEm2		testem2-V02-00-00
+./examples/extended/electromagnetic/TestEm8		TestEm8-V02-00-01
+./examples/extended/g3tog4		g3tog4Tests-V02-00-00
+./examples/novice/N05		exampleN05-V02-00-01
+./source/event		event-V02-00-00
+./source/g3tog4		g3tog4-V02-00-02
+./source/global		global-V02-00-01
+./source/intercoms		intercoms-V02-00-01
+./source/interfaces		interfaces-V02-00-00
+./source/processes/electromagnetic/lowenergy		emlowen-V02-00-01
+./source/processes/hadronic/models/high_energy		high_energy-V02-00-00
+./source/run		run-V02-00-00
+./tests/GNUmakefile		testtool-V02-00-01
+./tests/test01		test01-V02-00-00
+
+Problems Fixed
+--------------
+
+(Waiting for installation of afs client and reboot of DEC machines)
+
+
+Problems remaining
+------------------
+
+G4Exceptions, not terminating program, are reported from
+
+  G4CameronTruranHilfShellCorrections
+    out of table for Z = 1               (and/or)
+    out of table for N = 0
+
+  G4ExcitationHandler
+    Warning: Photonevaporation data not exact.
+    Warning: Found gamma with energy = 1.44773e-13MeV 
+
+  G4VParticleChange::SetNumberOfSecondaries() 
+    Warning theListOfSecondaries is not empty
+
+on many platforms.
+
+
+  DEC: NONISO: G4UIterminal shows prompt *after* command.
+               G4UIterminal with G4UItcsh: typing blind.
+
+  All ISO modes: T11, T15: problem reading neutron data.
+
+  DEC: optim:     ISO: T02.hadron: crash with K+ in Pb. (check)
+
+  DEC: optim:     ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+
+  DEC: debug: NON-ISO: T18: Appears to stop early - G4cout lost?
+
+  Linux: debug:           T12:      G4ExcitationHandler exception.
+  Linux: debug:           T15:      G4ExcitationHandler exception.
+  Linux: optim:           T15:      G4ExcitationHandler exception.
+
+  Linux: debug:           T16:      G4CameronTruranHilfShellCorrections exception.
+
+  TestEm8: large memory leak.
+
+Large N Problems
+----------------
+
+  DEC: debug:    ISO: T13: *** Error in G4HEInelastic::GenerateNBodyEvent
+                           total mass (1.87784) >= total energy (1.81268)
+                           but it runs to completion.
+
+  DEC: optim:    ISO: T02.hadron: crash with proton in Pb.
+
+  DEC:   optim:   ISO:  T13:         Crash during 1Tev proton in Al.
+
+  DEC:   optim:NONISO:  T02.hadron:  G4ExcitationHandler exception.
+
+  HP:    debug:         T02.hadron:  G4CameronTruranHilfShellCorrections exception.
+  HP:    optim:         T02.hadron:  G4CameronTruranHilfShellCorrections exception.
+
+  HP:    debug:         T09:         G4VParticleChange exception.
+  HP:    optim:         T09:         G4VParticleChange exception.
+
+  HP:    optim:         T13:         Crash with 400 GeV proton in Al.
+  DEC:   optim:   ISO:  T13:         Crash during 1Tev proton in Al.
+
+  Linux: optim:         T02.hadron:  G4ExcitationHandler exception.
+  Linux: debug:         T02.hadron:  G4CameronTruranHilfShellCorrections exception.
+  Linux: debug:         T12:         G4ExcitationHandler exception.
+  Linux: debug:         T15:         G4ExcitationHandler exception.
+  Linux: optim:         T15:         G4ExcitationHandler exception.
+  Linux: debug:         T16:         G4ExcitationHandler exception.
+  Linux: debug:         T16:         G4CameronTruranHilfShellCorrections exception.
+  Linux: optim:         T16:         G4ExcitationHandler exception.
+
+  SUN: debug: NONISO: T09: G4VParticleChange::SetNumberOfSecondaries() Warning
+                           theListOfSecondaries is not empty -
+                           but it runs to completion.
+  SUN: optim: NONISO: T09: As debug.
