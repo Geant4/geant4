@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.hh
-//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.1 2002-04-29 20:43:45 asaim Exp $
+//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.2 2002-11-19 10:15:51 murakami Exp $
 //
 // ====================================================================
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H
@@ -45,7 +45,7 @@ private:
 
   G4VPrimaryGenerator* currentGenerator;
   G4String currentGeneratorName;
-  std::map<G4String, G4VPrimaryGenerator*> gentypeMap;
+  G4std::map<G4String, G4VPrimaryGenerator*> gentypeMap;
 
   ExN04PrimaryGeneratorMessenger* messenger;
 

@@ -1,31 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-// $Id: ExN04HadronPhysics.cc,v 1.1 2002-04-29 20:44:01 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-
 #include "ExN04HadronPhysics.hh"
 
 #include "globals.hh"
@@ -40,6 +12,7 @@ ExN04HadronPhysics::ExN04HadronPhysics(const G4String& name)
 
 ExN04HadronPhysics::~ExN04HadronPhysics()
 {
+delete theStringDecay;
 }
 
 #include "G4ParticleDefinition.hh"
@@ -78,15 +51,25 @@ void ExN04HadronPhysics::ConstructProcess()
   theElasticModel = new G4LElastic();
   theElasticProcess.RegisterMe(theElasticModel);
 
+  // pi+ and pi-
+  
+  thePreEquilib = new G4PreCompoundModel(&theHandler);
+  theCascade.SetDeExcitation(thePreEquilib);  
+  theTheoModel.SetTransport(&theCascade);
+  theTheoModel.SetHighEnergyGenerator(&theStringModel);
+  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
+  theStringModel.SetFragmentationModel(theStringDecay);
+  theTheoModel.SetMinEnergy(15*GeV);
+  theTheoModel.SetMaxEnergy(100*TeV);
+
   // PionPlus
   pManager = G4PionPlus::PionPlus()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEPionPlusModel = new G4LEPionPlusInelastic();
-  theHEPionPlusModel = new G4HEPionPlusInelastic();
   thePionPlusInelastic.RegisterMe(theLEPionPlusModel);
-  thePionPlusInelastic.RegisterMe(theHEPionPlusModel);
+  thePionPlusInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&thePionPlusInelastic);
 
   pManager->AddProcess(&thePionPlusIonisation, ordInActive,2, 2);
@@ -101,9 +84,8 @@ void ExN04HadronPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEPionMinusModel = new G4LEPionMinusInelastic();
-  theHEPionMinusModel = new G4HEPionMinusInelastic();
   thePionMinusInelastic.RegisterMe(theLEPionMinusModel);
-  thePionMinusInelastic.RegisterMe(theHEPionMinusModel);
+  thePionMinusInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&thePionMinusInelastic);
 
   pManager->AddProcess(&thePionMinusIonisation, ordInActive,2, 2);
@@ -122,7 +104,7 @@ void ExN04HadronPhysics::ConstructProcess()
   theLEKaonPlusModel = new G4LEKaonPlusInelastic();
   theHEKaonPlusModel = new G4HEKaonPlusInelastic();
   theKaonPlusInelastic.RegisterMe(theLEKaonPlusModel);
-  theKaonPlusInelastic.RegisterMe(theHEKaonPlusModel);
+  theKaonPlusInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&theKaonPlusInelastic);
 
   pManager->AddProcess(&theKaonPlusIonisation, ordInActive,2, 2);
@@ -180,7 +162,7 @@ void ExN04HadronPhysics::ConstructProcess()
   theLEProtonModel = new G4LEProtonInelastic();
   theHEProtonModel = new G4HEProtonInelastic();
   theProtonInelastic.RegisterMe(theLEProtonModel);
-  theProtonInelastic.RegisterMe(theHEProtonModel);
+  theProtonInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&theProtonInelastic);
 
   pManager->AddProcess(&theProtonIonisation, ordInActive,2, 2);
@@ -216,7 +198,7 @@ void ExN04HadronPhysics::ConstructProcess()
   theLENeutronModel = new G4LENeutronInelastic();
   theHENeutronModel = new G4HENeutronInelastic();
   theNeutronInelastic.RegisterMe(theLENeutronModel);
-  theNeutronInelastic.RegisterMe(theHENeutronModel);
+  theNeutronInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&theNeutronInelastic);
   
   //theNeutronFissionModel = new G4LFission();

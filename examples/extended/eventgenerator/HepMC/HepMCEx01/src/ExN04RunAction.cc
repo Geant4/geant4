@@ -19,56 +19,58 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-// ====================================================================
 //
-//   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.2 2002-11-19 10:17:05 murakami Exp $
 //
-// ====================================================================
-#include "HepMCG4AsciiReader.hh"
-#include "HepMCG4AsciiReaderMessenger.hh"
+// $Id: ExN04RunAction.cc,v 1.1 2002-11-19 10:17:05 murakami Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include "ExN04RunAction.hh"
 
-////////////////////////////////////////
-HepMCG4AsciiReader::HepMCG4AsciiReader()
-  :  filename("xxx.dat"), verbose(0)
-////////////////////////////////////////
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4VVisManager.hh"
+#include "G4ios.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExN04RunAction::ExN04RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExN04RunAction::~ExN04RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN04RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 
-  messenger= new HepMCG4AsciiReaderMessenger(this);
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4UImanager* UI = G4UImanager::GetUIpointer();
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
+    } 
 }
 
-/////////////////////////////////////////
-HepMCG4AsciiReader::~HepMCG4AsciiReader()
-/////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN04RunAction::EndOfRunAction(const G4Run*)
 {
-  delete asciiInput;
-  delete messenger;
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
 }
 
-/////////////////////////////////////
-void HepMCG4AsciiReader::Initialize()
-/////////////////////////////////////
-{
-  delete asciiInput;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
-  asciiInput-> print();
-}
 
-/////////////////////////////////////////////////////////
-HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
-/////////////////////////////////////////////////////////
-{
-  HepMC::GenEvent* evt= asciiInput-> read_next_event();
-  if(!evt) return 0; // no more event
-
-  if(verbose>0) evt-> print();
-    
-  return evt;
-}
 

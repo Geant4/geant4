@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04IonPhysics.hh,v 1.1 2002-04-29 20:43:41 asaim Exp $
+// $Id: ExN04IonPhysics.hh,v 1.2 2002-11-19 10:15:51 murakami Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

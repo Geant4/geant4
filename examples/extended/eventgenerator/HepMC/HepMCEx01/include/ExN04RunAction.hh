@@ -19,56 +19,40 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-// ====================================================================
 //
-//   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.2 2002-11-19 10:17:05 murakami Exp $
 //
-// ====================================================================
-#include "HepMCG4AsciiReader.hh"
-#include "HepMCG4AsciiReaderMessenger.hh"
+// $Id: ExN04RunAction.hh,v 1.1 2002-11-19 10:15:51 murakami Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "g4std/iostream"
-#include "g4std/fstream"
+#ifndef ExN04RunAction_h
+#define ExN04RunAction_h 1
 
-////////////////////////////////////////
-HepMCG4AsciiReader::HepMCG4AsciiReader()
-  :  filename("xxx.dat"), verbose(0)
-////////////////////////////////////////
+#include "G4UserRunAction.hh"
+#include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4Run;
+
+class ExN04RunAction : public G4UserRunAction
 {
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
+  public:
+    ExN04RunAction();
+   ~ExN04RunAction();
 
-  messenger= new HepMCG4AsciiReaderMessenger(this);
-}
+  public:
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
+};
 
-/////////////////////////////////////////
-HepMCG4AsciiReader::~HepMCG4AsciiReader()
-/////////////////////////////////////////
-{
-  delete asciiInput;
-  delete messenger;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/////////////////////////////////////
-void HepMCG4AsciiReader::Initialize()
-/////////////////////////////////////
-{
-  delete asciiInput;
+#endif
 
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
-  asciiInput-> print();
-}
 
-/////////////////////////////////////////////////////////
-HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
-/////////////////////////////////////////////////////////
-{
-  HepMC::GenEvent* evt= asciiInput-> read_next_event();
-  if(!evt) return 0; // no more event
 
-  if(verbose>0) evt-> print();
-    
-  return evt;
-}
+
 

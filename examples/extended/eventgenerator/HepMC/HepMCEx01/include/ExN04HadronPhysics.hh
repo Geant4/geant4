@@ -1,39 +1,6 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-// $Id: ExN04HadronPhysics.hh,v 1.1 2002-04-29 20:43:40 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//
-// ------------------------------------------- 
-//	History
-//        first version                   12 Nov. 2000 by H.Kurashige 
-// ------------------------------------------------------------
+//========================
+// taken from example N04 of G4 distribution
+//========================
 #ifndef ExN04HadronPhysics_h
 #define ExN04HadronPhysics_h 1
 
@@ -147,6 +114,16 @@
 #include "G4KaonMinusAbsorptionAtRest.hh"
 #endif
 
+// quark gluon string model with chips afterburner.
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+
 class ExN04HadronPhysics : public G4VPhysicsConstructor
 {
   public: 
@@ -171,14 +148,12 @@ class ExN04HadronPhysics : public G4VPhysicsConstructor
    // Pi + 
    G4PionPlusInelasticProcess thePionPlusInelastic;
    G4LEPionPlusInelastic* theLEPionPlusModel;
-   G4HEPionPlusInelastic* theHEPionPlusModel;
    G4MultipleScattering thePionPlusMult;
    G4hIonisation thePionPlusIonisation;
 
    // Pi -
    G4PionMinusInelasticProcess thePionMinusInelastic;
    G4LEPionMinusInelastic* theLEPionMinusModel;
-   G4HEPionMinusInelastic* theHEPionMinusModel;
    G4MultipleScattering thePionMinusMult;
    G4hIonisation thePionMinusIonisation;
 #ifdef TRIUMF_STOP_PIMINUS
@@ -187,13 +162,23 @@ class ExN04HadronPhysics : public G4VPhysicsConstructor
    G4PiMinusAbsorptionAtRest thePionMinusAbsorption;
 #endif
 
+   // pi+ and pi-
+   
+    G4TheoFSGenerator theTheoModel;
+    G4ExcitationHandler theHandler;
+    G4PreCompoundModel * thePreEquilib;
+    G4GeneratorPrecompoundInterface theCascade;
+    G4QGSModel< G4QGSParticipants > theStringModel;
+    G4QGSMFragmentation theFragmentation;
+    G4ExcitedStringDecay * theStringDecay;
+
    // K + 
    G4KaonPlusInelasticProcess theKaonPlusInelastic;
    G4LEKaonPlusInelastic* theLEKaonPlusModel;
    G4HEKaonPlusInelastic* theHEKaonPlusModel;
    G4MultipleScattering theKaonPlusMult;
    G4hIonisation theKaonPlusIonisation;
-
+	
    // K -
    G4KaonMinusInelasticProcess theKaonMinusInelastic;
    G4LEKaonMinusInelastic* theLEKaonMinusModel;

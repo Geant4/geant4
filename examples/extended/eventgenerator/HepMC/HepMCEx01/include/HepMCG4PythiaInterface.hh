@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.hh
-//   $Id: HepMCG4PythiaInterface.hh,v 1.1 2002-05-28 13:52:40 murakami Exp $
+//   $Id: HepMCG4PythiaInterface.hh,v 1.2 2002-11-19 10:15:52 murakami Exp $
 //
 //   A generic interface class with Pythia event generator via HepMC.
 //
@@ -69,7 +69,7 @@ public:
   void CallPygive(G4String par);
   void CallPyrget(G4int lun, G4int move);
   void CallPyrset(G4int lun, G4int move);
-  void PrintRandomStatus(G4std::ostream& ostr=G4std::cout) const;
+  void PrintRandomStatus(G4std::ostream& ostr=G4cout) const;
 
   // setup user parameters (empty in default).
   // Implement your parameters in a delived class if you want.

@@ -19,56 +19,54 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-// ====================================================================
 //
-//   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.2 2002-11-19 10:17:05 murakami Exp $
 //
-// ====================================================================
-#include "HepMCG4AsciiReader.hh"
-#include "HepMCG4AsciiReaderMessenger.hh"
+// $Id: ExN04VisManager.hh,v 1.1 2002-11-19 10:15:52 murakami Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#include "g4std/iostream"
-#include "g4std/fstream"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-////////////////////////////////////////
-HepMCG4AsciiReader::HepMCG4AsciiReader()
-  :  filename("xxx.dat"), verbose(0)
-////////////////////////////////////////
-{
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-  messenger= new HepMCG4AsciiReaderMessenger(this);
-}
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
 
-/////////////////////////////////////////
-HepMCG4AsciiReader::~HepMCG4AsciiReader()
-/////////////////////////////////////////
-{
-  delete asciiInput;
-  delete messenger;
-}
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-/////////////////////////////////////
-void HepMCG4AsciiReader::Initialize()
-/////////////////////////////////////
-{
-  delete asciiInput;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), G4std::ios::in);
-  asciiInput-> print();
-}
+#ifndef ExN04VisManager_h
+#define ExN04VisManager_h 1
 
-/////////////////////////////////////////////////////////
-HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
-/////////////////////////////////////////////////////////
-{
-  HepMC::GenEvent* evt= asciiInput-> read_next_event();
-  if(!evt) return 0; // no more event
+#ifdef G4VIS_USE
 
-  if(verbose>0) evt-> print();
-    
-  return evt;
-}
+#include "G4VisManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class ExN04VisManager: public G4VisManager {
+
+public:
+
+  ExN04VisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+#endif

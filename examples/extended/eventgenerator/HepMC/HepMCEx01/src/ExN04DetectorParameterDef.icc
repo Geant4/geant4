@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 
-  expHall_x = 800.*cm;
-  expHall_y = 800.*cm;
-  expHall_z = 800.*cm;
+  expHall_x = 600.*cm;
+  expHall_y = 600.*cm;
+  expHall_z = 600.*cm;
 
   trkTubs_rmax =  50.*cm;
   trkTubs_rmin =  20.*cm;
@@ -72,5 +72,5 @@
   muBox_radius = 350.*cm;
   muBox_width  = muBox_radius - 5.*cm;
   muBox_thick  = 1.*cm;
-  muBox_length = 2.*muBox_radius;
+  muBox_length = expHall_z - 10.*cm;
 
