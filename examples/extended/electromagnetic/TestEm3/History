@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2004-04-28 16:58:43 maire Exp $
+$Id: History,v 1.50 2004-04-28 17:43:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
      
 28-04-04 mma
 - print resolution at EndOfRun
+- suppress PhysicsList Particles and General
      
 31-03-04 mma (testem3-V06-01-00)
 - README : more informations about ROOT installation
