@@ -64,6 +64,7 @@
       index = theMaterial->GetElement(i)->GetIndex();
       if(random<=running/sum) break;
     }
+    if(i==n) i=G4std::max(0, n-1);
     delete [] xSec;
     if(aTrack.GetKineticEnergy()<100*keV)
     {
