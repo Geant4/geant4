@@ -65,7 +65,7 @@ G4bool FluoTestHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   else
     { 
  (*HPGeCollection)[HitHPGeID[PixelNumber]]->AddEnergy(edep);
-      G4double ED =(*HPGeCollection)[HitHPGeID[PixelNumber]]->GetEdepTot(); 
+ //G4double ED =(*HPGeCollection)[HitHPGeID[PixelNumber]]->GetEdepTot(); 
  if (verboseLevel>0)
 	G4cout << " Energy added to Pixel: " << PixelNumber << G4endl; 
     }

@@ -143,7 +143,8 @@ public:
   G4double           OhmicPosThickness;
      
   G4Material*        OhmicNegMaterial;
-  G4double           OhmicNegThickness;
+  G4double           OhmicNegThickness; 
+  G4Material*        defaultMaterial;
   //G4double           EHPEnergy; 
   //G4double           FanoValue;
 
@@ -152,9 +153,9 @@ public:
   //G4double           DevNoise;
 
   G4int              PixelCopyNb;
-  G4int              NbOfPixels;
   G4int              NbOfPixelRows;
-  G4int              NbOfPixelColumns;
+  G4int              NbOfPixelColumns; 
+  G4int              NbOfPixels;
   G4double           PixelThickness;
   
   G4double           PixelSizeYZ;
@@ -188,8 +189,6 @@ private:
      G4double           SiThickness;
   G4double           SampleSizeYZ;
      G4double           SiSizeYZ; 
-  //   G4double           HPGeThickness;
-  //  G4double           HPGeSizeYZ;
      G4double           Dia1Thickness;
      G4double           Dia1SizeYZ;
      G4double           Dia2Thickness;
@@ -222,8 +221,6 @@ public:
 
 private:
 
- 
-  G4Material*        defaultMaterial;
   G4double           ThetaHPGe;
   G4double           ThetaSi;
   G4double           ThetaDia1;
