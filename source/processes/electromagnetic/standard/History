@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2000-08-10 22:13:01 vnivanch Exp $
+$Id: History,v 1.11 2000-08-11 10:33:01 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11 Aug 00 mma
+   tag stand-V02-00-01     
 
 10 Aug 00 V.Ivanchenko
 -  Change G4VhEnergyLoss.cc, G4VhEnergyLoss.hh, G4hIonisation.cc 

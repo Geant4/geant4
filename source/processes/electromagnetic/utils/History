@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-08-03 08:20:45 gcosmo Exp $
+$Id: History,v 1.4 2000-08-11 10:40:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11 aug 00: mma (utils-V02-00-01)
 
 03 aug 00: gc
 - fixed problem for event reproducibility: changed RandGauss to G4RandGauss
