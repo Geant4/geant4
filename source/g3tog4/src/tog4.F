@@ -5,7 +5,7 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: tog4.F,v 1.1 1999-01-07 16:06:54 gunter Exp $
+*     $Id: tog4.F,v 1.2 1999-05-04 21:17:14 lockman Exp $
 *     GEANT4 tag $Name: not supported by cvs2svn $
 *    
       subroutine tog4
@@ -18,43 +18,57 @@
 ************************************************************************
       implicit none
 #include "gcbank.inc"
-      integer nvol, nrotm, nmate, ntmed, nset, i, j, k, nin, in
-      integer jdiv, jd, iaxis, ivo, ndiv, numed, npar, natt, ivol, jin
-      integer nparv, npard, nr, irot, konly, nwbuf, isvol, nmat, ifield
-      integer nbits(5000), idtyp, nwhi, nwdi, iset, idet
-      integer jdh, jdd, jdu, ndet, nn, nupar, npos, ndvol
-
-      real c0, step, x, y, z, a, dens, radl, absl
-***   real fieldm, tmaxfd, stemax, deemax, epsil, stmin, orig, fact
-***   make orig, fact arrays with same dimension as nbits, etc.
-      real fieldm, tmaxfd, stemax, deemax, epsil, stmin, orig(5000), 
-     >     fact(5000)
-      real upar(5000)
-      character shape*4, name*4, dname*4, chonly*4, chmat*20, chtmed*20
-      character chset*4, chdet*4, chnms(5000)*4
-      integer maxdivols, ndivols
+      integer maxdivols
       parameter (maxdivols=20000)
-      character divols(maxdivols)*4
-      integer npositioned
-      integer ii,iia(10000)
+      integer nvol, nrotm, nmate, ntmed, nset, i, jma, nmixt, k, nin,
+     >     jdiv, jd, iaxis, ivo, ndiv, numed, npar, natt, ivol, jin,
+     >     nparv, npard, nr, irot, konly, nwbuf, isvol, nmat, ifield,
+     >     nbits(5000), idtyp, nwhi, nwdi, iset, idet, j, in, jmx,
+     >     jdh, jdd, jdu, ndet, nn, nupar, npos, ndvol, ndivols, ii, 
+     >     npositioned, iia(10000), imate, smixt
+
+      real c0, step, x, y, z, a, dens, radl, absl, fact(5000), 
+     >     fieldm, tmaxfd, stemax, deemax, epsil, stmin, orig(5000), 
+     >     upar(5000)
+
+      character shape*4, name*4, dname*4, chonly*4, chmat*20, chtmed*20,
+     >     chset*4, chdet*4, chnms(5000)*4, divols(maxdivols)*4
 *     
       npositioned = 0
 *     
 ***   count materials and convert
       call bankcnt(jmate,iia, nmate)
       print *,'Materials: ',nmate
-      do i=1,nmate
-         ii=iia(i)
-         j = lq(jmate-ii)
-         call uhtoc(iq(j+1),4,chmat,20)
-         a = q(j+6)
-         z = q(j+7)
-         dens = q(j+8)
-         radl = q(j+9)
-         absl = q(j+10)
-         nwbuf = iq(j-1)-11
-         call ksmate(ii,chmat,a,z,dens,radl,absl,q(j+12),nwbuf)
+      do imate=1,nmate
+         ii=iia(imate)
+         jma = lq(jmate-ii)
+         call uhtoc(iq(jma+1),4,chmat,20)
+         a = q(jma+6)
+         z = q(jma+7)
+         dens = q(jma+8)
+         radl = q(jma+9)
+         absl = q(jma+10)
+         nwbuf = iq(jma-1)-11
+         if (jma.gt.0) then
+            smixt=q(jma+11)
+            nmixt=abs(smixt)
+            if (nmixt.le.1) then
+               write(6,101) imate, chmat, a, z, dens, radl, absl
+               call ksmate(ii, chmat, a, z, dens, radl, absl,
+     >              q(jma+12), nwbuf)
+            else
+               jmx = lq(jma-5)
+               write(6,102) imate, chmat, a, z, dens, radl, absl,
+     >              (j,q(jmx+j),q(jmx+nmixt+j),q(jmx+2*nmixt+j), 
+     >              j=1,nmixt)
+               call ksmixt(ii, chmat, q(jmx+1), q(jmx+nmixt+1),
+     >              dens, smixt, q(jmx+2*nmixt+1))
+            end if
+         end if
       enddo
+ 101  format(1x,i5,1x,A12,f6.2,f5.1,f8.2,2f9.2)
+ 102  format(1x,i5,1x,A12,f6.2,f5.1,f8.2,2f9.2,1x,i2, f6.2, f5.1, 
+     >     f6.2/(57x, i2, f6.2, f5.1, f6.2))
 *     
 ***   count tracking media and convert
       call bankcnt(jtmed,iia, ntmed)

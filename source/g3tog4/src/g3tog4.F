@@ -5,7 +5,7 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: g3tog4.F,v 1.1 1999-01-07 16:06:53 gunter Exp $
+*     $Id: g3tog4.F,v 1.2 1999-05-04 21:17:03 lockman Exp $
 *     GEANT4 tag $Name: not supported by cvs2svn $
 *    
 *
@@ -123,14 +123,6 @@ c      dogeom = index(chopt,'G') + index(chopt,'g') .ne. 0
 *
 ************************************************************************
       implicit none
-c      call ctocp('G3VolTable G3Vol;')
-c      call ctocp('G3MatTable G3Mat;')
-c      call ctocp('G3MedTable G3Med;')
-c      call ctocp('G3RotTable G3Rot;')
-c      call ctocp('G3PartTable G3Part;')
-c      call ctocp('G4int Ipar[100];')
-c      call ctocp('G4double Rpar[100];')
-c      call ctocp('RWCString Spar[100];')
       call g4init
       end
 

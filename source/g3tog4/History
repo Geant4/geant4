@@ -1,8 +1,9 @@
-$Id: History,v 1.4 1999-05-02 05:07:59 lockman Exp $
+$Id: History,v 1.5 1999-05-04 21:16:20 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 g3tog4-01-00-02 24-Apr-1999 Lockman
+- tog4.F, g3routines.F: generate gsmixt instructions in call list
 - clGeometry.cc: cleaned up and added some default commands
 - added G3toG4EventAction and EventActionMessenger classes to draw tracks
 - GNUmakefile: clean now cleans g3tog4 and all subdirectories

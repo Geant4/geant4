@@ -5,7 +5,7 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: g3routines.F,v 1.1 1999-01-07 16:06:53 gunter Exp $
+*     $Id: g3routines.F,v 1.2 1999-05-04 21:16:52 lockman Exp $
 *     GEANT4 tag $Name: not supported by cvs2svn $
 *    
 #define CALL_GEANT
@@ -418,10 +418,6 @@
      +     (imate, name, a, z, dens, radl, absl, ubf, nwbf)
 #endif
       if (lunlist.ne.0) then
-*         write(lunlist,
-*     +        '(a4,1x,a6,i5,1x,''"'',a,''"'',4e15.8,i3,<nwbf>e15.8)')
-*     +        context, rname, imate, name, a, z, dens, radl,
-*     +        nwbf, (ubf(k), k=1,nwbf)
          write(fmt,'(A,I3,A)')
      >        '(a4,1x,a6,i5,1x,''"'',a,''"'',4(1x,e16.8),i3,',
      >        max(nwbf,1),'(1x,e16.8))'
@@ -466,16 +462,9 @@
 #endif
       if (lunlist.ne.0) then
          nlmata = abs(nlmat)
-*         write(lunlist,
-*     +        '(a4,1x,a6,i5,1x,''"'',a,''"'',5e15.8,i3,<nlmata>e15.8,
-*     +        <nlmata>e15.8,<nlmata>e15.8)')
-*     +        context, rname, imate, name, dens,
-*     +        nlmat, 
-*     +        (a(k), k=1,abs(nlmat)),
-*     +        (z(k), k=1,abs(nlmat)),
-*     +        (wmat(k), k=1,abs(nlmat))
          write(fmt,'(A,I3,A,I3,A,I3,A)')
-     +        '(a4,1x,a6,i5,1x,",a,",5(1x,e16.8),i3,',max(nlmata,1),
+     +        '(a4,1x,a6,i5,1x,''"'',a,''"'',1x,e16.8,1x,i3,',
+     >        max(nlmata,1),
      >        '(1x,e16.8),',max(nlmata,1),'(1x,e16.8),',
      >        max(nlmata,1),'(1x,e16.8))'
          write(lunlist,fmt)
