@@ -1,9 +1,12 @@
-$Id: History,v 1.43 2005-03-09 16:06:53 allison Exp $
+$Id: History,v 1.44 2005-03-23 17:44:05 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.43  2005/03/09 16:06:53  allison
+Added test of /vis/scene/add/logo.
+
 Revision 1.42  2005/03/09 16:05:48  allison
 Added G4Polyhedra.
 
