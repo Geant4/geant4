@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-05-23 20:00:27 pia Exp $
+$Id: History,v 1.17 2000-05-24 20:58:57 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.05.2000 - MGP, tag emlowen-V01-01-17
+             Modifications to G4QAOLowEnergyloss and G4hLowEnergyIonisation
+	     by Stephane Chauvie: physics fixes
+	     Modifications to G4QAOLowEnergyloss and G4hLowEnergyIonisation
+	     by MG Pia:	fixes to the private interface,
+                        fixes to remove compilation warnings
+                        added protections
+                        proper code indentation to improve legibility
+             Reorganization of the test directory by Petteri Nieminen:
+			content of eUnitTests/ moved to ePhotonIntegration/
+                        (indeed they were not unit tests)
+			content of validation/ moved to aluminumtest/
+	     Corrections by MG Pia to GNUmakefiles in test/ subdirectories 
+             TestEm6, TestP, eUnitTests and validation are obsolete
+             directories, still in the repository but not to be used
+
 23.05.2000 - MGP, tag emlowen-V01-01-16
              New G4QAOLowEnergyloss class by Stephane Chauvie for
              antiproton energy loss model
-	     Modifications to G4hlowEnergyIonisation for the new
+	     Modifications to G4hLowEnergyIonisation for the new
              antiproton models
 	     Physics extension to lower energies for antiprotons for a 
              set of materials
