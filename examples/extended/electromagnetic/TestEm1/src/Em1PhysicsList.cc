@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.cc,v 1.8 2003-03-06 17:52:58 maire Exp $
+// $Id: Em1PhysicsList.cc,v 1.9 2003-03-11 18:00:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ void Em1PhysicsList::ConstructParticle()
   // In this method, static member functions should be called
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
-  // created in the program. 
+  // created in the program.
 
   ConstructBosons();
   ConstructLeptons();
@@ -198,7 +198,7 @@ void Em1PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      
+
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
@@ -283,13 +283,15 @@ void Em1PhysicsList::SetElectronCut(G4double val)
 
 void Em1PhysicsList::GetRange(G4double val)
 {
+  G4LogicalVolume* lBox = pDet->GetWorld()->GetLogicalVolume();
   G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetMaterial();
+  const G4MaterialCutsCouple* couple = lBox->GetMaterialCutsCouple();
+  const G4Material* currMat = lBox->GetMaterial();
 
   G4ParticleDefinition* part;
   G4double cut;
   part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  cut = G4EnergyLossTables::GetRange(part,val,couple);
   G4cout << "material : " << currMat->GetName()       << G4endl;
   G4cout << "particle : " << part->GetParticleName()  << G4endl;
   G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
