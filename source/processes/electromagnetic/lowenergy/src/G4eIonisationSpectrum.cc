@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.14 2002-05-30 17:53:09 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.15 2002-05-31 19:44:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,7 @@
 
 G4eIonisationSpectrum::G4eIonisationSpectrum():G4VEnergySpectrum(),
   lowestE(0.1*eV),
-  factor(1.25),
+  factor(1.3),
   iMax(24),
   verbose(0)
 {
@@ -112,6 +112,8 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
     if(i<4) x /= energy; 
     p.push_back(x); 
   }
+
+  if(p[3] > 0.5) p[3] = 0.5;
   
   p[iMax-1] = Function(p[3], p);
 
@@ -193,6 +195,7 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
     p.push_back(x);
   }
 
+  if(p[3] > 0.5) p[3] = 0.5;
   p[iMax-1] = Function(p[3], p);
 
   G4double g = energy/electron_mass_c2 + 1.;
@@ -270,6 +273,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     p.push_back(x);
   }
 
+  if(p[3] > 0.5) p[3] = 0.5;
   p[iMax-1] = Function(p[3], p);
 
   G4double g = energy/electron_mass_c2 + 1.;
@@ -291,7 +295,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   if(aria <= aria1) { 
 
-    amaj = p[7]*factor;
+    amaj = G4std::max(p[7],p[23]) * factor;
     a1 = 1./a1;
     a2 = 1./a2;
 
@@ -302,17 +306,20 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       z2 = p[3];
       dx = (p[2] - p[1]) / 3.0;
       dx1= exp(log(p[3]/p[2]) / 16.0);
-      for (size_t i=0; i<18; i++) {
+      for (size_t i=5; i<23; i++) {
 
-        if (i <= 3) {
+        if (i <= 8) {
           z2 = z1 + dx;
+        } else if(22 == i) {
+          z2 = p[3];
+          break;
         } else {
           z2 = z1*dx1;
         }
-        if(x <= z2 || 17 == i) break;
+        if(x <= z2) break;
         z1 = z2;
       }
-      fun = p[i+5] + (x - z1) * (p[i+6] - p[i+5])/(z2 - z1);
+      fun = p[i] + (x - z1) * (p[i+1] - p[i])/(z2 - z1);
 
       if(fun > amaj) {
           G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
@@ -330,7 +337,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   } else {
 
-    amaj = G4std::max(p[23], Function(0.5, p));
+    amaj = G4std::max(p[iMax-1], Function(0.5, p)) * factor;
     a1 = 1./a3;
     a2 = 1./a4;
 
