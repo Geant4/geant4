@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.9 2001-11-09 19:28:56 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.10 2002-03-25 14:36:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -284,6 +284,7 @@ void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
                       Mass );
 }
 
+G4PropagatorInField *pMagFieldPropagator=0; 
 //
 // Test Stepping
 //
@@ -302,7 +303,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
     G4UniformMagField MagField(10.*tesla, 0., 0.);  // Tesla Defined ? 
     G4Navigator   *pNavig= G4TransportationManager::
                     GetTransportationManager()-> GetNavigatorForTracking();
-    G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
+    // G4PropagatorInField 
+    pMagFieldPropagator= SetupPropagator(type);
 
     SetChargeMomentumMass(  +1.,                    // charge in e+ units
 			   0.5 * proton_mass_c2,    // Momentum in Mev/c ?
@@ -439,6 +441,23 @@ int main(int argc, char **argv)
     testG4PropagatorInField(myTopNode, type);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
+
+
+// Repeat tests with full voxels and modified parameters
+
+    pMagFieldPropagator->SetMaximumEpsilonStep(0.001);
+    pMagFieldPropagator->SetMinimumEpsilonStep(1.0e-07);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4GeometryManager::GetInstance()->CloseGeometry(true);
+
+    testG4PropagatorInField(myTopNode, type);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+
+
+
+
     return 0;
 }
 
