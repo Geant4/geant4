@@ -5,18 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.11 2000-11-20 17:26:49 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.12 2001-03-01 16:05:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
-// ------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//      ------------ class G4UnitsTable ------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
 // 17-05-98: first version, M.Maire
 // 05-08-98: angstrom,microbarn,picobarn,petaelectronvolt
-// 13-10-98: Units and symbols printed in fixed length  
+// 13-10-98: Units and symbols printed in fixed length
+// 01-03-01: parsec  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -147,6 +144,7 @@ void G4UnitDefinition::PrintDefinition()
 void G4UnitDefinition::BuildUnitsTable()
 {
  //Length
+ new G4UnitDefinition(    "parsec","pc"      ,"Length",parsec); 
  new G4UnitDefinition( "kilometer","km"      ,"Length",kilometer);
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.h,v 1.4 1999-11-19 09:19:31 gcosmo Exp $
+// $Id: SystemOfUnits.h,v 1.5 2001-03-01 16:05:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ----------------------------------------------------------------------
@@ -47,7 +47,8 @@
 // 05.12.97   E.Tcherniaev: Redefined pascal (to avoid warnings on WinNT)
 // 20.05.98   names: meter, second, gram, radian, degree. (from Blasiuk (STAR))
 //            Added luminous units.
-// 05.08.98   angstrom,picobarn,microsecond,picosecond,petaelectronvolt    
+// 05.08.98   angstrom,picobarn,microsecond,picosecond,petaelectronvolt
+// 01.03.01   parsec    
 
 #ifndef HEP_SYSTEM_OF_UNITS_H
 #define HEP_SYSTEM_OF_UNITS_H
@@ -72,6 +73,8 @@ static const HepDouble meter3 = meter*meter*meter;
 static const HepDouble kilometer = 1000.*meter;                   
 static const HepDouble kilometer2 = kilometer*kilometer;
 static const HepDouble kilometer3 = kilometer*kilometer*kilometer;
+
+static const HepDouble parsec = 3.0856775807e+16*meter;
 
 static const HepDouble micrometer = 1.e-6 *meter;             
 static const HepDouble  nanometer = 1.e-9 *meter;
@@ -100,6 +103,8 @@ static const HepDouble m3 = meter3;
 static const HepDouble km  = kilometer;                   
 static const HepDouble km2 = kilometer2;
 static const HepDouble km3 = kilometer3;
+
+static const HepDouble pc = parsec;
 
 //
 // Angle
