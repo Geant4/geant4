@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.7 1999-04-19 21:29:25 gcosmo Exp $
+# $Id: architecture.gmk,v 1.8 1999-04-29 00:39:54 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -129,7 +129,7 @@ endif
 #
 
 ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := /afs/cern.ch/sw/geant4/dev/CLHEP/$(G4SYSTEM)/pro
+  CLHEP_BASE_DIR    := /afs/cern.ch/sw/geant4/dev/CLHEP/$(G4SYSTEM)/new
 endif
 CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
 CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
