@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2000-10-31 13:34:07 barrand Exp $
+$Id: README,v 1.4 2000-10-31 13:49:11 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,29 +23,43 @@ $Id: README,v 1.3 2000-10-31 13:34:07 barrand Exp $
     G4ANALYSIS_USE_JAS
 
   Then to cosntruct this example :
+    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
     csh> setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
     csh> setenv G4ANALYSIS_USE_JAS 1
     csh> gmake
  
-  To use it, select one analysis system with the environment
- variable :
-    G4ANALYSIS_SYSTEM OpenScientist
-
-  For example :
-    csh> setenv G4ANALYSIS_SYSTEM OpenScientist
-  or :
-    csh> setenv G4ANALYSIS_SYSTEM jas
- Today, only one system could be used at a time.
-
  Working with OpenScientist :
  --------------------------
   If working with OpenScientist run the program
  from the analysis/OpenScientist directory :
    csh> cd analyis/OpenScientist
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 OpenScientist
   It must produce a g4osc.root file that contains
  some histograms. You can visualize them with :
    csh> source <path>/Lab/<version>/cmt/setup.csh
    csh> oxm
  and click in File/session to execute the session.tcl 
  file.
+
+ Working with jas :
+ --------------------------
+  If working with jas :
+   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 jas
+  The program will pend for a connection toward jas, then
+ spawn jas :
+   csh> <path_to_jas_bin>/jas
+
+  From jas panel, open a connection toward the AnaEx01 job :
+  - File/Reconnect
+  - Give no server name if running on same machine.
+  - Next to end the connect panel.
+
+  When connection is established, the tree widget 
+ on the left of jas panel must display "G4Job".
+ Click on the tree items to access an histogram.
+ Double click on the histogram name to visualize it.
+ 
+  The histogram will update itself according time.
+
+
