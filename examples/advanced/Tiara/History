@@ -1,4 +1,4 @@
-# $Id: History,v 1.7 2003-06-18 15:24:51 dressel Exp $
+# $Id: History,v 1.8 2003-06-20 15:34:37 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun  20th, 2003 M.Dressel - Tiara-V05-01-04
+- using CLHEP units replacing G4Dimensions.hh
 
 Jun  18th, 2003 M.Dressel - Tiara-V05-01-03
 - change environment configuration for swig
