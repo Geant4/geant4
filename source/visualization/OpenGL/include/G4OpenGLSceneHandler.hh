@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.6 2001-01-16 18:29:57 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.7 2001-01-18 11:59:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,14 +62,18 @@ private:
   void AddCircleSquare (const G4VMarker&, G4int nSides);
   /**************************************************
   Not needed - but see note on future development in .cc.
-  void DrawXYPolygon (G4double size,
-		      const G4Point3D& centre,
-		      G4int nSides);
+  void DrawScreenPolygon (G4double size,
+		          const G4Point3D& centre,
+		          G4int nSides);
+  // Draws in screen coordinates.
   *********************************/
+
   void DrawXYPolygon (G4double size,
 		      const G4Point3D& centre,
-		      const G4Vector3D& normal,
 		      G4int nSides);
+  // Draws in world coordinates a polygon in the screen plane knowing
+  // viewpoint direction and up vector.
+
   GLdouble clear_colour[4];
   static const GLubyte fStippleMaskHashed [128];
 };

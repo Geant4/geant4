@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.6 2001-01-16 18:29:58 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.7 2001-01-18 11:59:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,6 +174,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
   const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
   const G4Vector3D& viewpointDirection =
     fpViewer -> GetViewParameters().GetViewpointDirection();
+  const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
   G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
   G4double size = scale *
     userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
@@ -181,18 +182,16 @@ void G4OpenGLSceneHandler::AddCircleSquare
   // Find "size" of marker in world space (but see note below)...
   G4double worldSize;
   if (size) {  // Size specified in world coordinates.
-
     worldSize = size;
-
   }
   else { // Size specified in screen (window) coordinates.
 
     // Find window coordinates of centre...
-    GLdouble* modelMatrix = new G4double[16];
+    GLdouble modelMatrix[16];
     glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
-    G4double* projectionMatrix = new G4double[16];
+    G4double projectionMatrix[16];
     glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
-    GLint* viewport = new G4int[4];
+    GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT,viewport);
     GLdouble winx, winy, winz;
     gluProject(centre.x(), centre.y(), centre.z(),
@@ -200,29 +199,21 @@ void G4OpenGLSceneHandler::AddCircleSquare
 	       &winx, &winy, &winz);
 
     // Determine ratio window:world...
-    const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
     const G4Vector3D inScreen = (up.cross(viewpointDirection)).unit();
     const G4Vector3D p = centre + inScreen;
     GLdouble winDx, winDy, winDz;
     gluProject(p.x(), p.y(), p.z(),
                modelMatrix, projectionMatrix, viewport,
                &winDx, &winDy, &winDz);
-    G4double winWorldRatio = sqrt((pow(winx - winDx, 2) +
-				   pow(winy - winDy, 2)) / 2.);
+    G4double winWorldRatio = sqrt(pow(winx - winDx, 2) +
+				  pow(winy - winDy, 2));
     G4double winSize = scale *
       userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
     worldSize = winSize / winWorldRatio;
-
-    delete[] viewport;
-    delete[] projectionMatrix;
-    delete[] modelMatrix;
   }
 
   // Draw...
-  DrawXYPolygon (worldSize,
-		 G4Point3D(centre.x(), centre.y(), centre.z()),
-		 viewpointDirection,
-		 nSides);
+  DrawXYPolygon (worldSize, centre, nSides);
 }
 
 /***************************************************
@@ -238,11 +229,11 @@ transformations.  Some clever stuff is needed.
 
   ...
   // Find window coordinates of centre...
-  GLdouble* modelMatrix = new G4double[16];
+  GLdouble modelMatrix[16];
   glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
-  G4double* projectionMatrix = new G4double[16];
+  G4double projectionMatrix[16];
   glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
-  GLint* viewport = new G4int[4];
+  GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT,viewport);
   GLdouble winx, winy, winz;
   gluProject(centre.x(), centre.y(), centre.z(),
@@ -280,20 +271,16 @@ transformations.  Some clever stuff is needed.
   glLoadIdentity();
 
   // Draw in window coordinates...
-  DrawXYPolygon (winSize, G4Point3D(winx, winy, winz), nSides);
+  DrawScreenPolygon (winSize, G4Point3D(winx, winy, winz), nSides);
 
   // Re-instate matrices...
   glMatrixMode (GL_PROJECTION);
   glPopMatrix();
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
-
-  delete[] viewport;
-  delete[] projectionMatrix;
-  delete[] modelMatrix;
   ...
 
-void G4OpenGLSceneHandler::DrawXYPolygon
+void G4OpenGLSceneHandler::DrawScreenPolygon
 (G4double size,
  const G4Point3D& centre,
  G4int nSides) {
@@ -316,17 +303,18 @@ void G4OpenGLSceneHandler::DrawXYPolygon
 void G4OpenGLSceneHandler::DrawXYPolygon
 (G4double size,
  const G4Point3D& centre,
- const G4Vector3D& normal,
  G4int nSides) {
+  const G4Vector3D& viewpointDirection =
+    fpViewer -> GetViewParameters().GetViewpointDirection();
   const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
   const G4double dPhi = 2. * M_PI / nSides;
   const G4double radius = size / 2.;
-  G4Vector3D start = radius * (up.cross(normal)).unit();
+  G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
   G4double phi;
   G4int i;
   glBegin (GL_POLYGON);
   for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
-    G4Vector3D r = start; r.rotate(phi, normal);
+    G4Vector3D r = start; r.rotate(phi, viewpointDirection);
     G4Vector3D p = centre + r;
     glVertex3d (p.x(), p.y(), p.z());
   }
