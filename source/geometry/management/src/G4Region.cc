@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.2 2002-12-16 09:24:04 gcosmo Exp $
+// $Id: G4Region.cc,v 1.3 2003-01-14 22:34:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,11 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     currentRegion = this;
 
     pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
-    if (pos == fMaterials.end()) fMaterials.push_back(volMat);
+    if (pos == fMaterials.end())
+    {
+      fMaterials.push_back(volMat);
+      fRegionMod = true;
+    }
   }
 
   if(noDaughters==0) return;
@@ -88,7 +92,11 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     {
       volMat = pParam->ComputeMaterial(repNo, daughterPVol);
       pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
-      if (pos == fMaterials.end()) fMaterials.push_back(volMat);
+      if (pos == fMaterials.end())
+      {
+        fMaterials.push_back(volMat);
+        fRegionMod = true;
+      }
     }
     G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
     daughterLVol->SetRegion(currentRegion);
@@ -183,7 +191,7 @@ void G4Region::ClearMaterialList()
 
 // *******************************************************************
 // UpdateMaterialList:
-//  - Clears material list and recomputes it looping through
+//  - computes material list looping through
 //    each root logical volume in the region.
 // *******************************************************************
 //
