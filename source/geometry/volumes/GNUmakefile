@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2001-10-24 08:53:02 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2001-10-24 15:33:47 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/volumes library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------
@@ -12,10 +12,12 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/magneticfield/include \
+            -I$(G4BASE)/geometry/verification/include \
             -I$(G4BASE)/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk

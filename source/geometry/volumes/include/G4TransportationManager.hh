@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.6 2001-07-11 10:00:31 gunter Exp $
+// $Id: G4TransportationManager.hh,v 1.7 2001-10-24 15:33:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -45,6 +45,7 @@
 #include "G4Navigator.hh"
 
 class G4PropagatorInField;
+class G4GeometryMessenger;
 class G4FieldManager;
 
 class G4TransportationManager 
@@ -72,6 +73,7 @@ class G4TransportationManager
      G4Navigator*            fNavigatorForTracking ;
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;
+     G4GeometryMessenger*    fGeomMessenger;
 
      static G4TransportationManager*  fTransportationManager;
 };

@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2001-10-22 14:59:23 japost Exp $
+$Id: History,v 1.51 2001-10-24 15:33:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,14 @@ committal in the CVS repository !
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
  - Added a new 'maximum' epsilon value in G4PropagatorInField,
     as some ill-conditions appear to be due to large proposed relative errors.
+
+Oct 24th, 2001       G. Cosmo - geomvol-V03-02-00a
+- Moved G4GeomTestMessenger from geometry/verification to geometry/volumes.
+  Renamed to G4GeometryMessenger.
+- GeometryMessenger: renamed directory to geometry/test. Added directory
+                     geometry/navigator. Added geometry/navigator/reset command
+                     for resetting navigation history and position.
+- G4PropagatorInField.icc: fixed warning on Linux-g++....
 
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-00
 - Corrected the initialisation of fEpsilonMin in G4PropagatorInField 
