@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.3 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.4 2003-07-21 15:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,9 +51,9 @@
 #ifndef G4MscModel_h
 #define G4MscModel_h 1
 
-#include "G4VMscModel.hh"
+#include "G4VEmModel.hh"
 
-class G4MscModel : public G4VMscModel
+class G4MscModel : public G4VEmModel
 {
 
 public:

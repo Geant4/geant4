@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.11 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.12 2003-07-21 15:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,11 +57,12 @@
 #define G4VEmModel_h 1
 
 #include "globals.hh"
-#include <vector>
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DataVector.hh"
+
+class G4PhysicsTable;
 
 class G4VEmModel
 {
@@ -114,6 +115,24 @@ public:
 				const G4DynamicParticle* dynParticle) = 0;
 
   G4String GetName() const {return name;};
+
+  virtual G4double GeomPathLength(G4PhysicsTable*,
+                            const G4MaterialCutsCouple*,
+		            const G4ParticleDefinition*,
+		                  G4double&,
+			          G4double,
+			          G4double,
+    			          G4double truePathLength) {return truePathLength;};
+  // G4double parameters: kinEnergy, lambda, range,
+  // G4PhysicsTable: theLambdaTable
+
+  virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
+
+  virtual G4double SampleCosineTheta(G4double ) {return 1.0;};
+  // G4double parameter trueStepLength
+
+  virtual G4double SampleDisplacement() {return 0.0;};
+
 
 protected:
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.9 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.10 2003-07-21 15:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,7 @@
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
-#include "G4VMscModel.hh"
+#include "G4VEmModel.hh"
 
 class G4Step;
 class G4ParticleDefinition;
@@ -128,7 +128,7 @@ public:
     // File name should is constructed as processName+particleName and the
     // should be placed under the directory specifed by the argument.
 
-  void AddEmModel(G4int, G4VMscModel*, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
@@ -196,7 +196,7 @@ private:
   G4ParticleChangeForMSC      fParticleChange;
   G4EmModelManager*           modelManager;
   G4Navigator*                navigator;
-  G4VMscModel*                currentModel;
+  G4VEmModel*                 currentModel;
 
   // tables and vectors
   G4PhysicsTable*             theLambdaTable;
@@ -333,8 +333,8 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 
 inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
 {
-  currentModel = dynamic_cast<G4VMscModel*>
-                 (modelManager->SelectModel(kinEnergy, currentMaterialIndex));
+//  currentModel = dynamic_cast<G4VMscModel*>
+  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

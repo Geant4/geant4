@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.9 2003-07-21 12:52:11 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.10 2003-07-21 15:04:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -169,7 +169,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::AddEmModel(G4int order, G4VMscModel* p,
+void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
                                  const G4Region* region)
 {
   G4VEmFluctuationModel* fm = 0;

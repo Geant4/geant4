@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.3 2003-07-21 12:52:10 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.4 2003-07-21 15:04:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,7 +70,7 @@
 G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
                            G4double& m_FactPar, G4double& m_facxsi,
 			   G4bool& m_samplez, const G4String& nam)
-  : G4VMscModel(nam),
+  : G4VEmModel(nam),
   highKinEnergy(10.0*TeV),
   lowKinEnergy(0.1*keV),
   taubig(8.0),
