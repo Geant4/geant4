@@ -7,53 +7,53 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 
 ***** Table : Nb of materials = 13 *****
 
- Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
-   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Beryllium            density:  1.848 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm
+   --->  Element: Beryllium    Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Aluminum     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminum      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Aluminum            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Aluminum    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:   Carbon     density:  2.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.348 cm 
-   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Carbon            density:  2.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.348 cm
+   --->  Element: Carbon    Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Silicon            density:  2.330 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm
+   --->  Element: Silicon    Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: liquidArgon            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
+   --->  Element: liquidArgon    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Iron            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
+   --->  Element: Iron    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Copper            density:  8.960 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm
+   --->  Element: Copper    Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:     Gold     density: 19.320 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm 
-   --->  Element:     Gold      Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Gold            density: 19.320 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm
+   --->  Element: Gold    Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: Lead    Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+ Material: Water        H_2O   density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material:  Methane CH_4   density:  0.667 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.375 m  
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
+ Material: Methane        CH_4   density:  0.667 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.375 m
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
 
- Material: Graphite Graphite   density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Graphite        Graphite   density:  2.265 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:      Air     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 367.858 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+ Material: Air            density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 367.858 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
 
 
- The  WORLD   is made of 21 cm  of Air. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 1 items of 10 cm  of Water. The transverse size (YZ) is 10 cm 
- X position of the middle of the absorber 0 fm 
+ The  WORLD   is made of 21 cm of Air. The transverse size (YZ) of the world is 12 cm
+ The ABSORBER is made of 1 items of 10 cm of Water. The transverse size (YZ) is 10 cm
+ X position of the middle of the absorber 0 fm
 G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
@@ -68,7 +68,7 @@ MuonMinusCaptureAtRest is created
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
-Test17PhysicsList::SetCuts:CutLength : 1 mm 
+Test17PhysicsList::SetCuts:CutLength : 1 mm
 Set cuts for all particles! 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -87,7 +87,7 @@ Set cuts for gamma
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -97,19 +97,19 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Beryllium         104.75
-            Aluminum         125.06
-              Carbon         113.94
-             Silicon         116.06
-         liquidArgon         78.362
-                Iron         224.07
-              Copper         238.25
-                Gold         334.83
-                Lead         229.53
-               Water         81.507
-             Methane        0.11903
-            Graphite         122.93
-                 Air        0.18052
+Beryllium         104.75
+Aluminum         125.06
+Carbon         113.94
+Silicon         116.06
+liquidArgon         78.362
+Iron         224.07
+Copper         238.25
+Gold         334.83
+Lead         229.53
+Water         81.507
+Methane        0.11903
+Graphite         122.93
+Air        0.18052
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -127,7 +127,7 @@ Set cuts for mu-
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
@@ -146,14 +146,19 @@ Set cuts for mu+
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 hLowEIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
+        Good description above the mean excitation energy.
+        Delta ray energy sampled from  differential Xsection.
         PhysicsTables from 10 eV  to 100 TeV  in 150 bins.
-        Low energy losses approximation is taken from  Ziegler1977H
+        Electronic stopping power model is  ICRU_R49p
         from 1 keV  to 2 MeV .
+
+        Parametrisation model for antiprotons is  ICRU_R49p
+        from 50 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+        Nuclear stopping power model is ICRU_R49Mollere
 Set cuts for proton
 Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
@@ -175,27 +180,27 @@ Set cuts for pi-
 Set cuts for pi0
 Set cuts for triton
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
+                      gamma            e-            mu-            proton            neutron           
+Cut in range                  1 mm             1 mm             1 mm             1 mm             1 mm
 Cut in energy
-          Beryllium        2.01 keV         468 keV        4.29 MeV        11.5 MeV           1 eV 
-           Aluminum         6.9 keV         599 keV        5.03 MeV        13.1 MeV           1 eV 
-             Carbon        3.16 keV         523 keV        4.67 MeV        12.4 MeV           1 eV 
-            Silicon         6.9 keV         542 keV        4.73 MeV        12.2 MeV           1 eV 
-        liquidArgon        6.14 keV         344 keV        3.25 MeV        8.33 MeV           1 eV 
-               Iron        20.6 keV        1.28 MeV        8.54 MeV          22 MeV           1 eV 
-             Copper        24.7 keV         1.4 MeV        8.97 MeV        23.1 MeV           1 eV 
-               Gold         112 keV        2.29 MeV        11.8 MeV        29.2 MeV           1 eV 
-               Lead         100 keV        1.37 MeV        8.54 MeV          21 MeV           1 eV 
-              Water        2.89 keV         353 keV        3.39 MeV        8.97 MeV           1 eV 
-            Methane           1 eV          119 eV         39.4 keV        82.5 keV           1 eV 
-           Graphite        3.33 keV         570 keV        4.97 MeV        13.1 MeV           1 eV 
-                Air           1 eV          181 eV         39.4 keV        58.5 keV           1 eV 
+ Beryllium                         2.01 keV           468 keV          4.29 MeV          11.5 MeV             1 eV
+   Aluminum                          6.9 keV           599 keV          5.03 MeV          13.1 MeV             1 eV
+   Carbon                         3.16 keV           523 keV          4.67 MeV          12.4 MeV             1 eV
+   Silicon                          6.9 keV           542 keV          4.73 MeV          12.2 MeV             1 eV
+   liquidArgon                         6.14 keV           344 keV          3.25 MeV          8.33 MeV             1 eV
+   Iron                         20.6 keV          1.28 MeV          8.54 MeV            22 MeV             1 eV
+   Copper                         24.7 keV           1.4 MeV          8.97 MeV          23.1 MeV             1 eV
+   Gold                          112 keV          2.29 MeV          11.8 MeV          29.2 MeV             1 eV
+   Lead                          100 keV          1.37 MeV          8.54 MeV            21 MeV             1 eV
+   Water                         2.89 keV           353 keV          3.39 MeV          8.97 MeV             1 eV
+   Methane                            1 eV           119 eV          39.4 keV          82.5 keV             1 eV
+   Graphite                         3.33 keV           570 keV          4.97 MeV          13.1 MeV             1 eV
+   Air                            1 eV           181 eV          39.4 keV          58.5 keV             1 eV
 ===================================================
 #
 # Macro file for the initialization phase of "test17" based on "TestEm6.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# It creates the default geometry (simple absorber box )        
 #
 /event/setverbose 0
 #
@@ -209,7 +214,7 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00964644 +- 4.56247e-06  mm  
+    Range in absorber = 0.00915554 +- 4.81887e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -221,7 +226,7 @@ Cut in energy
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.0112642 +- 8.49301e-06  mm  
+    Range in absorber = 0.00964414 +- 5.54469e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -235,7 +240,7 @@ Cut in energy
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.0107379 +- 2.05076e-05  mm  
+    Range in absorber = 0.00944516 +- 2.52661e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 
