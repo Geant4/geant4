@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-11-30 18:01:48 stesting Exp $
+# $Id: GNUmakefile,v 1.2 1999-12-06 12:07:59 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,8 +16,14 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
+
+ifeq ($(G4SYSTEM),Linux-g++)
+LDFLAGS  += -L/afs/cern.ch/asis/i386_redhat51/cern/pro/lib
+LOADLIBS += -lpacklib $(FCLIBS)
+else
 LDFLAGS  += -L/cern/pro/lib
 LOADLIBS += -lpacklib $(FCLIBS)
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
