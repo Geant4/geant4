@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -60,6 +60,8 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
+
+  //pointer to XrayFluoAnalysisManager
   XrayFluoAnalysisManager* XrayFluoAnalysis;
   G4UIdirectory*              XrayFluoAnalysisDir;
  

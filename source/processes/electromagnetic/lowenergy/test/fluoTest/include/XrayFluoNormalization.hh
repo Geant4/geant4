@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoNormalization.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -40,12 +40,23 @@ class XrayFluoNormalization
 {
 public:
 
+  //constructor
   XrayFluoNormalization();
+
+  //destructor
   ~XrayFluoNormalization();
+
+  //this method returns a data set equivalent to the one in the file whose 
+  //name must be passed as the last argument normalized to the value returned 
+  //by Integrate
+  //the first and second arguments identifies the energy value in which 
+  //Integrate() integrates, the third is the number of buns used in the
+  //integration
   const XrayFluoDataSet* Normalize(G4double, G4double, G4int,G4String);
 
 private:
-
+  //this method integrates the function achieved interpolating
+  //berween the points of the data file and returns the value of the integral 
   G4double Integrate(G4double, G4double, G4int, XrayFluoDataSet*);
 
 };

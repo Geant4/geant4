@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDataSet.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -32,6 +32,7 @@
 //
 // -------------------------------------------------------------------
 
+//for the documentation of this class see also G4EMDataSet class
 
 #ifndef FluoDataSet_hh
 #define FluoDataSet_hh 1
@@ -51,7 +52,7 @@ public:
 	      G4DataVector* values,
 	      const G4VDataSetAlgorithm* interpolation,
 	      G4double unitE = MeV, G4double unitData = barn);
-
+  
   XrayFluoDataSet(G4int Z,
 		  const G4String& dataFile,
 	      const G4VDataSetAlgorithm* interpolation,
@@ -59,6 +60,8 @@ public:
 
   ~XrayFluoDataSet();
  
+  //find the value corresponding to the energy e in the set
+  //identified by id
   G4double FindValue(G4double e, G4int id = 0) const;
   
   void PrintData() const;

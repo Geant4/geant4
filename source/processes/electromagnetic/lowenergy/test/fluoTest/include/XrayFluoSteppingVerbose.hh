@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoSteppingVerbose.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -41,14 +41,16 @@ class XrayFluoSteppingVerbose;
 #include "G4SteppingVerbose.hh"
 
 class XrayFluoSteppingVerbose : public G4SteppingVerbose {
-public:   
+
+public: 
+ 
 // Constructor/Destructor
   XrayFluoSteppingVerbose();
  ~XrayFluoSteppingVerbose();
-//
+
   void StepInfo();
   void TrackingStarted();
-//
+
 
 
 };

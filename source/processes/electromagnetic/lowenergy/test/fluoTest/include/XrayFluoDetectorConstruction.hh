@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -97,7 +97,7 @@ public:
   
 private:
   
- G4double           DeviceSizeX;
+  G4double           DeviceSizeX;
   G4double           DeviceSizeY;
   G4double           DeviceThickness;
   
@@ -116,7 +116,7 @@ private:
   G4Tubs*             solidDia1; //pointer to the solid  Diaphragm
   G4LogicalVolume*   logicDia1; //pointer to the logical  Diaphragm
   G4VPhysicalVolume* physiDia1; //pointer to the physical Diaphragm 
-
+  
   G4Tubs*             solidDia3; //pointer to the solid  Diaphragm
   G4LogicalVolume*   logicDia3; //pointer to the logical  Diaphragm
   G4VPhysicalVolume* physiDia3; //pointer to the physical Diaphragm  
@@ -132,10 +132,11 @@ private:
   G4Box*             solidPixel;   
   G4LogicalVolume*   logicPixel;  
   G4VPhysicalVolume* physiPixel;    
-  
+ 
+  //pointers to the materials used 
   G4Material*        OhmicPosMaterial;
   G4Material*        OhmicNegMaterial; 
-  G4Material*      pixelMaterial;
+  G4Material*        pixelMaterial;
   G4Material*        sampleMaterial;
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
@@ -161,6 +162,7 @@ public:
   G4Material* GetDia3Material()  {return Dia3Material;}; 
   
 private:
+
   G4double           SampleThickness;
   G4double           SampleSizeXY;
   G4double           SiSizeXY; 
@@ -216,6 +218,8 @@ private:
   
   void DefineMaterials();
   G4VPhysicalVolume* ConstructApparate();
+
+  //calculates some quantities used to construct geometry
   void ComputeApparateParameters();
 };
 

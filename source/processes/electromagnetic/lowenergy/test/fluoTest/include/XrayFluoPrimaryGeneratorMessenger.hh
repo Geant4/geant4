@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPrimaryGeneratorMessenger.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -53,10 +53,19 @@ class XrayFluoPrimaryGeneratorMessenger: public G4UImessenger
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
+
   XrayFluoPrimaryGeneratorAction* XrayFluoAction; 
+
+  //command to set a random impact point
   G4UIcmdWithAString*          RndmCmd;
+
+ //command to choose a plane circular source
   G4UIcmdWithAString*          RndmVert;
+ 
+  //command to shot particles according to certain spectra
   G4UIcmdWithAString*        spectrum;
+
+ //command to shot particles from an isotropic source
   G4UIcmdWithAString*        isoVert;
 };
 

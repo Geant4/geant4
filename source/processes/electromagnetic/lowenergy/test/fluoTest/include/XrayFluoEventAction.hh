@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoEventAction.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -57,6 +57,7 @@ public:
   virtual void   BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
   
+  //method used to set the flags for drawing the tracks
   void SetDrawFlag   (G4String val)  {drawFlag = val;};
   void SetPrintModulo(G4int    val)  {printModulo = val;};
   
@@ -64,10 +65,19 @@ private:
   
   G4String                    drawFlag;
   G4int                       HPGeCollID; 
+  
+  //pointer to XrayFluoEventActionMessenger
   XrayFluoEventActionMessenger*  eventMessenger;
   G4int                       printModulo;                         
   
+  //this method generates a gaussian distribution
+  //the argument is the mean
+  //the sigma is to be set in the file XrayFluoEventAction.cc 
   G4double RandomCut(G4double);
+
+  //this method distributes the energy deposit (which must be given as
+  //argument) according to the response function stored in the file 
+  //response.dat
   G4double ResponseFunction(G4double);
   
   XrayFluoRunAction* runManager;

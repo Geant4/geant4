@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoAnalysisManager.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -68,26 +68,33 @@ public:
   
   void finish();
   
+  //fill histograms with data from XrayFluoSteppingAction
   void analyseStepping(const G4Step* aStep);
- 
+  
+ //fill histograms with data from XrayFluoEventAction
   void analyseEnergyDep(G4double eDep);
-
- void analysePrimaryGenerator(G4double energy);
-
- static XrayFluoAnalysisManager* getInstance();
+  
+ //fill histograms with data from XrayFluoPrimarygeneratoraction
+  void analysePrimaryGenerator(G4double energy);
+  
+  //method to call to create an instance of this class
+  static XrayFluoAnalysisManager* getInstance();
  
 
 private:
   
+  //private constructor in order to create a singleton
   XrayFluoAnalysisManager();
  
   static XrayFluoAnalysisManager* instance;
   
   IHistoManager* histoManager;
  
+  //nTuple factory
   Lizard::NTupleFactory* factory;
   Lizard::NTuple* ntuple;
   
+  //pointer to the analysis messenger
   XrayFluoAnalysisMessenger* analysisMessenger;
 
   // Quantities for the ntuple

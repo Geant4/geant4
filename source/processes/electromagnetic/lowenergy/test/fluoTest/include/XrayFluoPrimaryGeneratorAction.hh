@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPrimaryGeneratorAction.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -57,22 +57,40 @@ class XrayFluoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:
   void GeneratePrimaries(G4Event*);
+
+  //method to set a random impact point on the sample
   void SetRndmFlag(G4String val) { rndmFlag = val;}
+
+  //method to choose a circular non-point source
   void SetRndmVert (G4String val) { beam = val;}
+
+  //set the flag for shooting particles according to certain spectra 
   void SetSpectrum (G4String val) { spectrum= val  ;}
+
+ //set the flag for shooting particles from an isotropic source
   void SetIsoVert  (G4String val) { isoVert = val  ;}
 
 private:
-  G4ParticleGun*                particleGun;	  //pointer a to G4 service class
-  XrayFluoDetectorConstruction*    XrayFluoDetector;  //pointer to the geometry
+//pointer a to G4 service class
+  G4ParticleGun*                particleGun;	  
 
-  XrayFluoPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
+ //pointer to the geometry
+  XrayFluoDetectorConstruction*    XrayFluoDetector;  
+
+  //messenger of this class
+  XrayFluoPrimaryGeneratorMessenger* gunMessenger; 
   XrayFluoRunAction*  runManager;
 
+ //flag for a random impact point 
+  G4String                      rndmFlag;   
 
-  G4String                      rndmFlag;   //flag for a random impact point 
+  //flag for a circular non-point source
   G4String                      beam;
+
+ //flag  for shooting particles according to certain spectra 
   G4String                      spectrum;
+
+ //flag  for shooting particles from an isotropic source
   G4String                      isoVert;
 };
 

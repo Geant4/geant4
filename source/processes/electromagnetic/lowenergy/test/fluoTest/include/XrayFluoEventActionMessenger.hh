@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoEventActionMessenger.hh
-// GEANT4 tag $Name: 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
