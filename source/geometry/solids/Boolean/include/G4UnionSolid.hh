@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh,v 1.6 2001-07-11 09:59:51 gunter Exp $
+// $Id: G4UnionSolid.hh,v 1.7 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,9 @@
 
 // History: 
 //
-// 12.09.98 V.Grichine, created.
+// 12.09.98 V.Grichine: created
+//
+// ********************************************************************
 
 #ifndef G4UNIONSOLID_HH
 #define G4UNIONSOLID_HH
@@ -72,9 +74,9 @@ class G4UnionSolid : public G4BooleanSolid
   public:  // without description
 
     G4bool CalculateExtent( const EAxis pAxis,
-			    const G4VoxelLimits& pVoxelLimit,
-			    const G4AffineTransform& pTransform,
-				  G4double& pMin, G4double& pMax) const ;
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pMin, G4double& pMax ) const ;
        
     EInside Inside( const G4ThreeVector& p ) const ;
 
@@ -83,19 +85,19 @@ class G4UnionSolid : public G4BooleanSolid
     G4double DistanceToIn( const G4ThreeVector& p,
                            const G4ThreeVector& v  ) const ;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const ;
+    G4double DistanceToIn( const G4ThreeVector& p ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    const G4bool calcNorm=false,
-			    G4bool *validNorm=0,
-			    G4ThreeVector *n=0      ) const ;
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm=false,
+                                  G4bool *validNorm=0,
+                                  G4ThreeVector *n=0 ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
 
-    void ComputeDimensions( G4VPVParameterisation* p,
-	                    const G4int n,
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
@@ -105,4 +107,3 @@ class G4UnionSolid : public G4BooleanSolid
 };
 
 #endif
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.11 2001-07-11 09:59:51 gunter Exp $
+// $Id: G4DisplacedSolid.hh,v 1.12 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,8 +35,10 @@
 
 // History:
 //
-// 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
-// 22.11.00 V.Grichine, new set methods for matrix/vectors
+// 28.10.98 V.Grichine: created
+// 22.11.00 V.Grichine: new set methods for matrix/vectors
+//
+// ********************************************************************
 
 #ifndef G4DisplacedSolid_HH
 #define G4DisplacedSolid_HH
@@ -130,6 +132,8 @@ class G4DisplacedSolid : public G4VSolid
     void  SetObjectTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the object.
 
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
+
   public:  // without description
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
@@ -151,7 +155,3 @@ class G4DisplacedSolid : public G4VSolid
 } ;
 
 #endif
-
-
-
-

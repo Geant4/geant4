@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.hh,v 1.5 2001-07-11 09:59:51 gunter Exp $
+// $Id: G4SubtractionSolid.hh,v 1.6 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,8 +33,9 @@
 
 // History: 
 //
-// 14.10.98 V.Grichine - first implementation.
-
+// 14.10.98 V.Grichine: first implementation
+//
+// ********************************************************************
 
 #ifndef G4SUBTRACTIONSOLID_HH
 #define G4SUBTRACTIONSOLID_HH
@@ -74,9 +75,9 @@ class G4SubtractionSolid : public G4BooleanSolid
   public:  // without description
 
     G4bool CalculateExtent( const EAxis pAxis,
-			    const G4VoxelLimits& pVoxelLimit,
-			    const G4AffineTransform& pTransform,
-			    G4double& pMin, G4double& pMax) const ;
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pMin, G4double& pMax) const ;
        
     EInside Inside( const G4ThreeVector& p ) const ;
 
@@ -88,16 +89,16 @@ class G4SubtractionSolid : public G4BooleanSolid
     G4double DistanceToIn( const G4ThreeVector& p) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    const G4bool calcNorm=false,
-			    G4bool *validNorm=0,
-			    G4ThreeVector *n=0      ) const ;
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm=false,
+                                  G4bool *validNorm=0,
+                                  G4ThreeVector *n=0   ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
 
-    void ComputeDimensions( G4VPVParameterisation* p,
-	                    const G4int n,
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
@@ -107,4 +108,3 @@ class G4SubtractionSolid : public G4BooleanSolid
 };
 
 #endif
-

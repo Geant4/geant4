@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.5 2001-07-11 09:59:51 gunter Exp $
+// $Id: G4BooleanSolid.hh,v 1.6 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,9 @@
 
 // History:
 //
-// 10.09.98 V.Grichine, creation according J. Apostolakis's recommendations.
+// 10.09.98 V.Grichine, created
+//
+// ********************************************************************
 
 
 #ifndef G4BOOLEANSOLID_HH
@@ -74,6 +76,10 @@ class G4BooleanSolid : public G4VSolid
       // If Solid is made up from a Boolean operation of two solids,
       //    return the corresponding solid (for no=0 and 1)
       // If the solid is not a "Boolean", return 0.
+
+    virtual G4GeometryType  GetEntityType() const;
+
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
   protected:
   

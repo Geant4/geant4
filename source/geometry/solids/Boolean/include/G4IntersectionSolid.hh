@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.hh,v 1.5 2001-07-11 09:59:51 gunter Exp $
+// $Id: G4IntersectionSolid.hh,v 1.6 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,9 +33,10 @@
 
 // History: 
 //
-// 12.09.98 V. Grichine, initial design according to J.Apostolakis's
-//                       recommendations
-// 28.10.98 V. Grichine, addition of two constructors with G4PlacedSolid
+// 12.09.98 V.Grichine: initial design and implementation
+// 28.10.98 V.Grichine: addition of two constructors with G4PlacedSolid
+//
+// ********************************************************************
 
 #ifndef G4INTERSECTIONSOLID_HH
 #define G4INTERSECTIONSOLID_HH

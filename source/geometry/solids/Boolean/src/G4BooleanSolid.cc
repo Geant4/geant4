@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.6 2002-01-10 15:34:27 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.7 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -29,7 +29,9 @@
 //
 // History:
 //
-// 10.09.98 V.Grichine, creation according J. Apostolakis's recommendations
+// 10.09.98 V.Grichine, created
+//
+// ********************************************************************
 
 #include "G4BooleanSolid.hh"
 #include "G4DisplacedSolid.hh"
@@ -41,7 +43,7 @@
 
 //////////////////////////////////////////////////////////////////
 //
-//
+// Constructor
 
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
@@ -55,7 +57,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 
 //////////////////////////////////////////////////////////////////
 //
-//
+// Constructor
 
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
@@ -71,7 +73,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 
 //////////////////////////////////////////////////////////////////
 //
-//
+// Constructor
 
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
@@ -98,6 +100,7 @@ G4BooleanSolid::~G4BooleanSolid()
 // If Solid is made up from a Boolean operation of two solids,
 //   return the corresponding solid (for no=0 and 1)
 // If the solid is not a "Boolean", return 0
+
 const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 {
   const G4VSolid*  subSolid=0;
@@ -106,12 +109,21 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   else if( no == 1 ) 
     subSolid = fPtrSolidB;
   else
-    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid subsolid index");
+  {
+    DumpInfo();
+    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid solid index");
+  }
 
   return subSolid;
 }
 
-  G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
+///////////////////////////////////////////////////////////////
+//
+// If Solid is made up from a Boolean operation of two solids,
+//   return the corresponding solid (for no=0 and 1)
+// If the solid is not a "Boolean", return 0
+
+G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
 {
   G4VSolid*  subSolid=0;
   if( no == 0 )  
@@ -119,11 +131,38 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   else if( no == 1 ) 
     subSolid = fPtrSolidB;
   else
-    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid subsolid index");
+  {
+    DumpInfo();
+    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid solid index");
+  }
 
   return subSolid;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Returns entity type
 
+G4GeometryType G4BooleanSolid::GetEntityType() const 
+{
+  return G4String("G4BooleanSolid");
+}
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Stream object contents to an output stream
 
+G4std::ostream& G4BooleanSolid::StreamInfo(G4std::ostream& os) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for Boolean solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: " << GetEntityType() << "\n"
+     << " Parameters of constituent solids: \n"
+     << "===========================================================\n";
+  fPtrSolidA->StreamInfo(os);
+  fPtrSolidB->StreamInfo(os);
+  os << "===========================================================\n";
+
+  return os;
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.5 2002-02-15 15:55:25 grichine Exp $
+// $Id: G4ReflectedSolid.hh,v 1.6 2002-10-28 11:36:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,8 +34,10 @@
 
 // History:
 //
-// 23.07.01 V.Grichine, creation according John/Gabriele recommendations
-// 15.02.02 V.Grichine, get/set methods for fPtr(Direct)Transform3D
+// 23.07.01 V.Grichine: created
+// 15.02.02 V.Grichine: get/set methods for fPtr(Direct)Transform3D
+//
+// ********************************************************************
 
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
@@ -64,10 +66,10 @@ class G4ReflectedSolid : public G4VSolid
 
     EInside Inside( const G4ThreeVector& p ) const ; 
 
-    G4bool CalculateExtent(const EAxis pAxis,
-			   const G4VoxelLimits& pVoxelLimit,
-			   const G4AffineTransform& pTransform,
-				 G4double& pMin, G4double& pMax) const ;
+    G4bool CalculateExtent( const EAxis pAxis,
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pMin, G4double& pMax) const ;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
 
@@ -77,16 +79,15 @@ class G4ReflectedSolid : public G4VSolid
     G4double DistanceToIn( const G4ThreeVector& p) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    const G4bool calcNorm=false,
-			    G4bool *validNorm=0,
-			    G4ThreeVector *n=0      ) const ;
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm=false,
+                                  G4bool *validNorm=0,
+                                  G4ThreeVector *n=0      ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
-
-    void ComputeDimensions( G4VPVParameterisation* p,
-	                    const G4int n,
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
   public:  // with description 
@@ -106,6 +107,7 @@ class G4ReflectedSolid : public G4VSolid
     void       SetDirectTransform3D(G4Transform3D&);
       // Accessors methods.
 
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
   public:  // without description
 
@@ -148,11 +150,3 @@ class G4ReflectedSolid : public G4VSolid
 } ;
 
 #endif
-
-
-
-
-
-
-
-

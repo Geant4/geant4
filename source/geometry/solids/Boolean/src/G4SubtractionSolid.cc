@@ -21,24 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.16 2002-01-10 15:34:27 gcosmo Exp $
+// $Id: G4SubtractionSolid.cc,v 1.17 2002-10-28 11:36:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
 // History:
 //
-// 14.10.98 V.Grichine, implementation of the first version 
-// 19.10.98 V.Grichine, new algorithm of DistanceToIn(p,v) according to
-//          J.Apostolakis recommendations (while loops)
-// 02.08.99 V.Grichine, bugs fixed in DistanceToOut(p,v,...)
+// 14.10.98 V.Grichine: implementation of the first version 
+// 19.10.98 V.Grichine: new algorithm of DistanceToIn(p,v)
+// 02.08.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
 //                      while -> do-while & surfaceA limitations
-// 13.09.00 V.Grichine, bug fixed in SurfaceNormal(p), p can be inside
-//                      
+// 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
 //
+// ********************************************************************
 
 #include "G4SubtractionSolid.hh"
-// #include "G4DisplacedSolid.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -58,71 +56,70 @@
 // Transfer all data members to G4BooleanSolid which is responsible
 // for them. pName will be in turn sent to G4VSolid
 
-G4SubtractionSolid:: G4SubtractionSolid( const G4String& pName,
-                                           G4VSolid* pSolidA ,
-                                           G4VSolid* pSolidB   ):
-G4BooleanSolid(pName,pSolidA,pSolidB)
+G4SubtractionSolid::G4SubtractionSolid( const G4String& pName,
+                                              G4VSolid* pSolidA ,
+                                              G4VSolid* pSolidB   )
+  : G4BooleanSolid(pName,pSolidA,pSolidB)
 {
-   ;
 }
 
 ///////////////////////////////////////////////////////////////
 //
-//
+// Constructor
  
-G4SubtractionSolid:: 
-G4SubtractionSolid( const G4String& pName,
-                          G4VSolid* pSolidA ,
-                          G4VSolid* pSolidB ,
-                          G4RotationMatrix* rotMatrix,
-                    const G4ThreeVector& transVector    ):
-G4BooleanSolid(pName,pSolidA,pSolidB,rotMatrix,transVector)
+G4SubtractionSolid::G4SubtractionSolid( const G4String& pName,
+                                              G4VSolid* pSolidA ,
+                                              G4VSolid* pSolidB ,
+                                              G4RotationMatrix* rotMatrix,
+                                        const G4ThreeVector& transVector )
+  : G4BooleanSolid(pName,pSolidA,pSolidB,rotMatrix,transVector)
 {
-   ;
 } 
 
 ///////////////////////////////////////////////////////////////
 //
-//
+// Constructor
 
-G4SubtractionSolid:: 
-G4SubtractionSolid( const G4String& pName,
-                          G4VSolid* pSolidA ,
-                          G4VSolid* pSolidB ,
-                    const G4Transform3D& transform  ):
-G4BooleanSolid(pName,pSolidA,pSolidB,transform)
+G4SubtractionSolid::G4SubtractionSolid( const G4String& pName,
+                                              G4VSolid* pSolidA ,
+                                              G4VSolid* pSolidB ,
+                                        const G4Transform3D& transform )
+  : G4BooleanSolid(pName,pSolidA,pSolidB,transform)
 {
-   ;
-} 
+}
 
+
+///////////////////////////////////////////////////////////////
+//
+// Destructor
 
 G4SubtractionSolid::~G4SubtractionSolid()
 {
-    ;
 }
 
 ///////////////////////////////////////////////////////////////
 //
-//
+// CalculateExtent
      
 G4bool 
-G4SubtractionSolid::CalculateExtent(const EAxis pAxis,
-				     const G4VoxelLimits& pVoxelLimit,
-				     const G4AffineTransform& pTransform,
-				     G4double& pMin, G4double& pMax) const 
+G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
+                                     const G4VoxelLimits& pVoxelLimit,
+                                     const G4AffineTransform& pTransform,
+                                           G4double& pMin,
+                                           G4double& pMax ) const 
 {
   // Since we cannot be sure how much the second solid subtracts 
   // from the first,    we must use the first solid's extent!
 
   return fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
-                                      pTransform, pMin, pMax);
+                                      pTransform, pMin, pMax );
 }
  
 /////////////////////////////////////////////////////
 //
 // Touching ? Empty subtraction ?
 
-EInside G4SubtractionSolid::Inside(const G4ThreeVector& p) const
+EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p) ;
   EInside positionB = fPtrSolidB->Inside(p) ;
@@ -148,7 +145,7 @@ EInside G4SubtractionSolid::Inside(const G4ThreeVector& p) const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// SurfaceNormal
 
 G4ThreeVector 
 G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const 
@@ -157,10 +154,14 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   if( Inside(p) == kOutside )
   {
 #ifdef G4BOOLDEBUG
-    G4cout << "WARNING - Invalid call in G4SubtractionSolid::SurfaceNormal(p),"
-           << " point p is inside" << G4endl;
+    G4cout << "WARNING - Invalid call [1] in "
+           << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
+           << "  Point p is inside !" << G4endl;
     G4cout << "          p = " << p << G4endl;
-    // G4Exception("Invalid call in G4SubtractionSolid::SurfaceNormal(p), p is outside") ;
+    G4cerr << "WARNING - Invalid call [1] in "
+           << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
+           << "  Point p is inside !" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
 #endif
   }
   else
@@ -186,7 +187,14 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
         normal = -fPtrSolidB->SurfaceNormal(p) ;
       }
 #ifdef G4BOOLDEBUG
-      G4cout << "G4SubtractionSolid::SurfaceNormal(p), point p is inside" << G4endl ;
+      G4cout << "WARNING - Invalid call [2] in "
+             << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
+             << "  Point p is inside !" << G4endl;
+      G4cout << "          p = " << p << G4endl;
+      G4cerr << "WARNING - Invalid call [2] in "
+             << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
+             << "  Point p is inside !" << G4endl;
+      G4cerr << "          p = " << p << G4endl;
 #endif
     }
   }
@@ -206,17 +214,21 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
   {
-    G4cout << "WARNING - Invalid call in G4SubtractionSolid::DistanceToIn(p,v),"
-           << " point p is inside" << G4endl;
+    G4cout << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToIn(p,v)" << G4endl
+           << "  Point p is inside !" << G4endl;
     G4cout << "          p = " << p << G4endl;
     G4cout << "          v = " << v << G4endl;
-    // G4Exception("Invalid call in G4SubtractionSolid::DistanceToIn(p,v), p is inside") ;
+    G4cerr << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToIn(p,v)" << G4endl
+           << "  Point p is inside !" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
+    G4cerr << "          v = " << v << G4endl;
   }
 #endif
 
-  if( // ( fPtrSolidA->Inside(p) != kOutside) &&     // case1:p in both A&B 
-
-      ( fPtrSolidB->Inside(p) != kOutside)    )   // start: out of B
+    // if( // ( fPtrSolidA->Inside(p) != kOutside) &&  // case1:p in both A&B 
+    if ( fPtrSolidB->Inside(p) != kOutside )   // start: out of B
     {
       dist = fPtrSolidB->DistanceToOut(p,v) ; // ,calcNorm,validNorm,n) ;
       
@@ -229,19 +241,19 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
           if(disTmp == kInfinity)
           {  
             return kInfinity ;
-	  }
+          }
           dist += disTmp ;
 
           if( Inside(p+dist*v) == kOutside )
-	  {
+          {
             disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
             dist += disTmp ;
-	  }         
+          }         
         }
         while( Inside(p+dist*v) == kOutside ) ;
       }
     }
-  else // p outside A, start in A
+    else // p outside A, start in A
     {
       dist = fPtrSolidA->DistanceToIn(p,v) ;
 
@@ -251,24 +263,22 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       }
       else
       {
-	 while( Inside(p+dist*v) == kOutside )  // pushing loop
-	//  do
-	{
+        while( Inside(p+dist*v) == kOutside )  // pushing loop
+        {
           disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
           dist += disTmp ;
 
           if( Inside(p+dist*v) == kOutside )
-	  { 
+          { 
             disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
 
             if(disTmp == kInfinity) // past A, hence past A\B
             {  
               return kInfinity ;
-	    }                 
+            }                 
             dist += disTmp ;
-	  }
-	}
-	//  while( Inside(p+dist*v) == kOutside ) ;
+          }
+        }
       }
     }
   
@@ -282,17 +292,21 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 // isotropic safety
 
 G4double 
-G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p) const 
+G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
   G4double dist;
 
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
   {
-    G4cout << "WARNING - Invalid call in G4SubtractionSolid::DistanceToIn(p),"
-           << " point p is inside" << G4endl;
+    G4cout << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToIn(p)" << G4endl
+           << "  Point p is inside !" << G4endl;
     G4cout << "          p = " << p << G4endl;
-    // G4Exception("Invalid call in G4SubtractionSolid::DistanceToIn(p), p is inside") ;
+    G4cerr << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToIn(p)" << G4endl
+           << "  Point p is inside !" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
   }
 #endif
 
@@ -315,10 +329,10 @@ G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p) const
 
 G4double 
 G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
-			           const G4ThreeVector& v,
-			           const G4bool calcNorm,
-			           G4bool *validNorm,
-			           G4ThreeVector *n      ) const 
+                 const G4ThreeVector& v,
+                 const G4bool calcNorm,
+                       G4bool *validNorm,
+                       G4ThreeVector *n ) const 
 {
 #ifdef G4BOOLDEBUG
     if( Inside(p) == kOutside )
@@ -331,11 +345,16 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
       G4cout << "v.x() = "   << v.x() << G4endl;
       G4cout << "v.y() = "   << v.y() << G4endl;
       G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-      G4cout << "WARNING - Invalid call in G4SubtractionSolid::DistanceToOut(p,v),"
-             << " point p is outside" << G4endl;
+      G4cout << "WARNING - Invalid call in "
+             << "G4SubtractionSolid::DistanceToOut(p,v)" << G4endl
+             << "  Point p is outside !" << G4endl;
       G4cout << "          p = " << p << G4endl;
       G4cout << "          v = " << v << G4endl;
-    // G4Exception("Invalid call in G4SubtractionSolid::DistanceToOut(p,v), p is outside") ;
+      G4cerr << "WARNING - Invalid call in "
+             << "G4SubtractionSolid::DistanceToOut(p,v)" << G4endl
+             << "  Point p is outside !" << G4endl;
+      G4cerr << "          p = " << p << G4endl;
+      G4cerr << "          v = " << v << G4endl;
     }
 #endif
 
@@ -370,10 +389,14 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
   if( Inside(p) == kOutside )
   { 
 #ifdef G4BOOLDEBUG
-    G4cout << "WARNING - Invalid call in G4SubtractionSolid::DistanceToOut(p),"
-           << " point p is outside" << G4endl;
+    G4cout << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToOut(p)" << G4endl
+           << "  Point p is outside" << G4endl;
     G4cout << "          p = " << p << G4endl;
-    // G4Exception("Invalid call in G4SubtractionSolid::DistanceToOut(p), p is outside") ;
+    G4cerr << "WARNING - Invalid call in "
+           << "G4SubtractionSolid::DistanceToOut(p)" << G4endl
+           << "  Point p is outside" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
 #endif
   }
   else
@@ -398,11 +421,10 @@ G4GeometryType G4SubtractionSolid::GetEntityType() const
 //
 
 void 
-G4SubtractionSolid::ComputeDimensions( G4VPVParameterisation* p,
-	                                const G4int n,
-                                        const G4VPhysicalVolume* pRep ) 
+G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
+                                       const G4int,
+                                       const G4VPhysicalVolume* ) 
 {
-  return ;
 }
 
 /////////////////////////////////////////////////
@@ -435,7 +457,7 @@ G4SubtractionSolid::CreatePolyhedron () const
 //
 
 G4NURBS*      
-G4SubtractionSolid::CreateNURBS      () const 
+G4SubtractionSolid::CreateNURBS () const 
 {
   // Take into account boolean operation - see CreatePolyhedron.
   // return new G4NURBSbox (1.0, 1.0, 1.0);
