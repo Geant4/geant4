@@ -1,6 +1,10 @@
  Testing with stepper number 4 and PiF safety optimisation on
  Using default values for  Min Eps = 1e-07 and  MaxEps = 1e-07
  Test with no voxels
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 1e-07 &  max= 1e-07
+ Delta Intersection=  0.001 Delta One step    =  0.01
 
 
 Test PropagateMagField: ***********************
@@ -8,7 +12,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0,0.6,0.8)
  Momentum in MeV/c is 50
  Spin is not equal to Momentum  Diff = 0.000116
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -5.1e-10       2.5       2.5        50        World 
  Spin is not equal to Momentum  Diff = 0.000348
   1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035 -4.6e-09         5         5      47.5        World 
@@ -42,7 +46,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0.07332,0.5866,0.8066)
  Momentum in MeV/c is 150
  Spin is not equal to Momentum  Diff = 5.98e-05
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5      49.8        World 
  Spin is not equal to Momentum  Diff = 0.0001794
   1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.5e-09         5         5      47.3        World 
@@ -71,6 +75,10 @@ Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z  
  Spin is not equal to Momentum  Diff = 0.681
  13    40.4    24.2 1.33e+04   -0.54  -0.241   0.807  -0.531   0.435   0.727     0.68   -0.079   13006.9     20480   1.5e+03 Big Target 2 
  Test with full voxels
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 1e-07 &  max= 1e-07
+ Delta Intersection=  0.001 Delta One step    =  0.01
 
 
 Test PropagateMagField: ***********************
@@ -78,7 +86,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0,0.6,0.8)
  Momentum in MeV/c is 50
  Spin is not equal to Momentum  Diff = 0.000116
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -5.1e-10       2.5       2.5         0        World 
  Spin is not equal to Momentum  Diff = 0.000348
   1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035 -4.6e-09         5         5     0.112        World 
@@ -112,7 +120,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0.07332,0.5866,0.8066)
  Momentum in MeV/c is 150
  Spin is not equal to Momentum  Diff = 5.98e-05
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5       0.2        World 
  Spin is not equal to Momentum  Diff = 0.0001794
   1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.5e-09         5         5      0.42        World 
@@ -144,6 +152,10 @@ Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z  
 ----------------------------------------------------------
 Test with more accurate parameters 
  Setting values for Min Eps = 2.5e-08 and MaxEps = 0.001
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 2.5e-08 &  max= 0.001
+ Delta Intersection=  0.001 Delta One step    =  0.01
 
 
 Test PropagateMagField: ***********************
@@ -151,7 +163,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0,0.6,0.8)
  Momentum in MeV/c is 50
  Spin is not equal to Momentum  Diff = 0.000116
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012    2e-10       2.5       2.5         0        World 
  Spin is not equal to Momentum  Diff = 0.000348
   1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035  4.1e-08         5         5     0.112        World 
@@ -185,7 +197,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0.07332,0.5866,0.8066)
  Momentum in MeV/c is 150
  Spin is not equal to Momentum  Diff = 5.98e-05
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5       0.2        World 
  Spin is not equal to Momentum  Diff = 0.0001794
   1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.4e-09         5         5      0.42        World 
@@ -214,6 +226,10 @@ Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z  
  Spin is not equal to Momentum  Diff = 0.6811
  13    40.4    24.2 1.33e+04  -0.539  -0.242   0.807  -0.531   0.435   0.727     0.68   -0.079   13006.8     20480   1.5e+03 Big Target 2 
  Now test with safety optimisation off
+Test G4PropInFld with optimise = off
+ The global field manager has the following parameters 
+ Eps min= 2.5e-08 &  max= 0.001
+ Delta Intersection=  0.001 Delta One step    =  0.01
 
 
 Test PropagateMagField: ***********************
@@ -221,7 +237,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0,0.6,0.8)
  Momentum in MeV/c is 50
  Spin is not equal to Momentum  Diff = 0.000116
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012    2e-10       2.5       2.5        50        World 
  Spin is not equal to Momentum  Diff = 0.000348
   1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035  4.1e-08         5         5      49.9        World 
@@ -255,7 +271,7 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0.07332,0.5866,0.8066)
  Momentum in MeV/c is 150
  Spin is not equal to Momentum  Diff = 5.98e-05
-Stp#    X(mm)    Y(mm)    Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
   0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5      49.8        World 
  Spin is not equal to Momentum  Diff = 0.0001794
   1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.4e-09         5         5      49.6        World 
