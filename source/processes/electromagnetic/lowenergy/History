@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2001-11-28 18:04:40 pia Exp $
+$Id: History,v 1.131 2001-11-30 01:31:40 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.11.2001 - MGP, tag emlowen-V03-02-49
+             Major physics improvement in electron processes by V.I.
+             Significant improvement of performance
+             Requires new version of data: G4EMLOW0.5
 
 28.11.2001 - MGP, tag emlowen-V03-02-48
              Fix for compilation on Windows 
