@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.6 1999-05-10 16:34:22 japost Exp $
+// $Id: G4MultipleScattering.cc,v 1.7 1999-06-14 12:51:08 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -69,7 +69,7 @@
   //   tables are built for MATERIALS
   {
     if((&aParticleType == G4Electron::Electron()) ||
-       (&aParticleType == G4Electron::Electron())   )
+       (&aParticleType == G4Positron::Positron())   )
        Tlimit = 100.*keV ;
     
     const G4double sigmafactor = twopi*classic_electr_radius*
