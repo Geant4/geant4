@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.4 1999-10-04 15:37:03 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.5 1999-11-10 18:20:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
 class G4Material;
+class G4VisAttributes;
 
 class G4PhysicalVolumeModel: public G4VModel {
 
@@ -83,6 +84,7 @@ protected:
 				   G4int soughtDepth,
 				   const G4Transform3D&,
 				   G4VGraphicsScene&);
+
   void DescribeAndDescend (G4VPhysicalVolume*,
 			   G4int soughtDepth,
 			   G4LogicalVolume*,
@@ -90,6 +92,12 @@ protected:
 			   const G4Material*,
 			   const G4Transform3D&,
 			   G4VGraphicsScene&);
+
+  void DescribeSolids (const G4Transform3D& theAT,
+		       G4VSolid* pSol,
+		       const G4VisAttributes* pVisAttribs,
+		       G4VGraphicsScene& sceneHandler);
+
   G4bool IsThisCulled     (const G4LogicalVolume*,
 			   const G4Material*);
   G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);

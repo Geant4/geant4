@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.4 1999-10-04 15:37:06 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.5 1999-11-10 18:20:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4BooleanSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingSphereScene.hh"
@@ -171,14 +173,15 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
   G4VSolid* pSol;
   G4Material* pMaterial;
 
-  /* Booleans...
-     G4DisplacedSolid.hh:    { return G4String("G4DisplacedSolid"); }
-     G4IntersectionSolid.hh:    { return G4String("G4IntersectionSolid"); }
-     G4SubtractionSolid.hh:    { return G4String("G4SubtractionSolid"); }
-     G4UnionSolid.hh:    { return G4String("G4IntersectionSolid"); }
-  */
-
-  if (pVPV -> IsReplicated ()) {
+  if (!(pVPV -> IsReplicated ())) {
+    // Non-replicated physical volume.
+    pSol = pLV -> GetSolid ();
+    pMaterial = pLV -> GetMaterial ();
+    DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
+			theAT, sceneHandler);
+  }
+  else {
+    // Replicated or parametrised physical volume.
     EAxis axis;
     G4int nReplicas;
     G4double width;
@@ -258,11 +261,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       }
     }
   }
-  else {
-    pSol = pLV -> GetSolid ();
-    pMaterial = pLV -> GetMaterial ();
-    DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial, theAT, sceneHandler);
-  }
 
   return;
 }
@@ -278,8 +276,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
   const Hep3Vector&  translation     = pVPV -> GetTranslation ();
-  G4Transform3D theLT = G4Transform3D (*pObjectRotation, translation);
-  G4Transform3D theNewAT = theAT * theLT;
+  G4Transform3D theLT (G4Transform3D (*pObjectRotation, translation));
+  G4Transform3D theNewAT (theAT * theLT);
 
   /********************************************************
   G4cout << "G4PhysicalVolumeModel::DescribeAndDescend: "
@@ -312,9 +310,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
     const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
     if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
-    sceneHandler.PreAddThis (theNewAT, *pVisAttribs);
-    pSol -> DescribeYourselfTo (sceneHandler);
-    sceneHandler.PostAddThis ();
+    DescribeSolids (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
   // First check if mother covers...
@@ -332,11 +328,43 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	  G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
 	  // Descend the geometry structure recursively...
 	  fCurrentDepth++;
-	  VisitGeometryAndGetVisReps (pVPV, soughtDepth - 1, theNewAT, sceneHandler);
+	  VisitGeometryAndGetVisReps
+	    (pVPV, soughtDepth - 1, theNewAT, sceneHandler);
 	  fCurrentDepth--;
 	}
       }
     }
+  }
+}
+
+void G4PhysicalVolumeModel::DescribeSolids
+(const G4Transform3D& theAT,
+ G4VSolid* pSol,
+ const G4VisAttributes* pVisAttribs,
+ G4VGraphicsScene& sceneHandler) {
+  // Look for "constituents".  Could be a Boolean solid.
+  G4VSolid* pBoolSolA = pSol -> GetConstituentSolid (0);
+  if (pBoolSolA) {
+    // Boolean solid - display components...
+    DescribeSolids (theAT, pBoolSolA, pVisAttribs, sceneHandler);
+    G4VSolid* pBoolSolB = pSol -> GetConstituentSolid (1);
+    if (!pBoolSolB) {
+      G4Exception
+	("G4PhysicalVolumeModel::DescribeSolids:"
+	 " 2nd component solid is missing.");
+    }
+    G4Transform3D theBT (theAT);
+    G4DisplacedSolid* pDisSol = pBoolSolB -> GetDisplacedSolidPtr ();
+    if (pDisSol) {
+      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation (),
+				     pDisSol -> GetObjectTranslation ());
+    }
+    DescribeSolids (theBT, pBoolSolB, pVisAttribs, sceneHandler);
+  }
+  else { // Non-boolean solid.
+    sceneHandler.PreAddThis (theAT, *pVisAttribs);
+    pSol -> DescribeYourselfTo (sceneHandler);
+    sceneHandler.PostAddThis ();
   }
 }
 
