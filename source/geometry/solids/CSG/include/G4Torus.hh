@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Torus.hh,v 1.5 2000-05-26 13:20:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,8 @@
 // History:
 // 30.10.96 V.Grichine     First version of G4Torus
 // 21.04.98 J.Apostolakis  Added SetAllParameters function
+// 26.05.00 V.Grichine, new SolveBiQuadratic/Cubic developed by O.Cremonesi were
+//          added     
 // --------------------------------------------------------------------
 
 #ifndef G4Torus_HH
@@ -130,8 +132,12 @@ G4Torus(const G4String &pName,
 
 protected:
 
-    G4int SolveBiQuadratic(double c[], double s[]  ) const ;
-    G4int SolveCubic(double c[], double s[]  ) const ;
+    G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
+    G4int SolveCubic(G4double c[], G4double s[]  ) const ;
+
+    G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
+    G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
+
     G4int SolveQuadratic(double c[], double s[]  ) const ;
     
     G4ThreeVectorList*
