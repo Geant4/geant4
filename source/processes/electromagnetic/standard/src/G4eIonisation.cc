@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.24 2002-03-26 18:16:35 maire Exp $
+// $Id: G4eIonisation.cc,v 1.25 2002-04-09 17:34:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.6 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.7 2002-04-09 17:34:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------

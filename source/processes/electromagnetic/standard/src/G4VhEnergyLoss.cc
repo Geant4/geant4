@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.32 2002-02-27 14:40:51 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.33 2002-04-09 17:34:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

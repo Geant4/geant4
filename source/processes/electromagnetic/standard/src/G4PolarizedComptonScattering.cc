@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.8 2001-09-21 09:50:54 maire Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.9 2002-04-09 17:34:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.27 2002-03-27 21:49:40 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.28 2002-04-09 17:34:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -46,7 +46,8 @@
 // 25-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined
 // 08-11-01 Charge renamed zparticle; added to the dedx
-// 27-03-03 Bug fix in scaling of lambda table (V.Ivanchenko)
+// 27-03-02 Bug fix in scaling of lambda table (V.Ivanchenko)
+// 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -56,6 +57,7 @@
 #include "G4hIonisation.hh"
 #include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -114,6 +116,46 @@ G4int G4hIonisation::GetNbinLambda()
 void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
+           << aParticleType.GetParticleName()
+           << " mass(MeV)= " << aParticleType.GetPDGMass()/MeV
+           << " charge= " << aParticleType.GetPDGCharge()/eplus
+           << " type= " << aParticleType.GetParticleType()
+           << G4endl;
+
+    if(verboseLevel > 1) {
+      G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
+      G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
+             << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
+	//             << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
+             << G4endl;
+      G4cout << " MFPtable= " << theMeanFreePathTable
+             << " DEDXtable= " << theDEDXpTable
+             << " iniMass= " << initialMass
+             << G4endl;
+    }
+  }
+
+  if(aParticleType.GetParticleType() == "nucleus" && 
+     aParticleType.GetParticleName() != "GenericIon" &&
+     theMeanFreePathTable) {
+
+     G4EnergyLossTables::Register(&aParticleType,  
+              theDEDXpTable,
+              theRangepTable,
+              theInverseRangepTable,
+              theLabTimepTable,
+              theProperTimepTable,
+              LowestKineticEnergy, HighestKineticEnergy,
+              proton_mass_c2/aParticleType.GetPDGMass(),
+              TotBin);
+
+     return;
+  }
+
+
   // get bining from EnergyLoss
   LowestKineticEnergy  = GetLowerBoundEloss();
   HighestKineticEnergy = GetUpperBoundEloss();
@@ -292,7 +334,6 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Bethe-Bloch formula
  //
- initialMass = aParticleType.GetPDGMass();
  G4double particleMass   = proton_mass_c2;
  
  G4double ElectronDensity = material->GetElectronDensity();

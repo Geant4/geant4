@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.9 2002-02-08 16:48:46 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.10 2002-04-09 17:34:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.16 2002-03-21 16:28:08 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.17 2002-04-09 17:34:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------

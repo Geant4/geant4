@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.8 2001-10-01 15:00:28 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.9 2002-04-09 17:34:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------

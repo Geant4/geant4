@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.10 2002-03-27 21:43:55 vnivanch Exp $
+// $Id: G4hIonisation.icc,v 1.11 2002-04-09 17:34:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 // 24/09/97: corrected by L.Urban
 // 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
 // 14-08-01: 'cleanup' of GetMeanFreePath (mma)
+// 09-04-02: e+- are not applicable (V.Ivanchenko)
 // 
 //------------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@
 inline G4bool G4hIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
-   return(particle.GetPDGCharge() != 0.);
+   return(particle.GetPDGCharge() != 0. && particle.GetPDGMass() > 10.*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.hh,v 1.10 2001-11-08 08:45:43 urban Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.11 2002-04-09 17:34:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

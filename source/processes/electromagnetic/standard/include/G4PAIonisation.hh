@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.11 2001-10-29 16:23:40 maire Exp $
+// $Id: G4PAIonisation.hh,v 1.12 2002-04-09 17:34:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

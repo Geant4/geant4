@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.14 2001-10-01 15:00:29 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.15 2002-04-09 17:34:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.13 2001-10-01 15:00:29 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.14 2002-04-09 17:34:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
