@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2002-02-14 10:48:44 gcosmo Exp $
+$Id: History,v 1.42 2002-02-26 12:21:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+26 feb 02: mma (utils-V04-00-02)
+- initial value of data member of G4VEnergyLoss finalRange = 1 mm
+  (actual value of this data member is computed in
+   G4VeEnergyLoss,G4VhEnergyLoss and G4VMuEnergyLoss.)
+   
 14 feb 02: L.Urban (utils-V04-00-01)
 - initial value of data member of G4VEnergyLoss finalRange
   has been changed
