@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2003-10-13 22:36:01 perl Exp $
+$Id: README,v 1.7 2003-10-14 01:18:02 perl Exp $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -9,7 +9,9 @@ $Id: README,v 1.6 2003-10-13 22:36:01 perl Exp $
 
   Example A01 implements a double-arm spectrometer with wire chambers, 
   hodoscopes and calorimeters.  Event simulation and collection are 
-  enabled, as well as event display and analysis.
+  enabled, as well as event display and analysis.  This example is
+  extensively documented on the Geant4 Workshop Tutorial CD available at:
+  http://geant4.slac.stanford.edu/g4cd/Welcome.html
 
 
   1. GEOMETRY
@@ -131,8 +133,9 @@ $Id: README,v 1.6 2003-10-13 22:36:01 perl Exp $
      the spectrometer.  vis.mac outputs .heprep files suitable for
      viewing in WIRED and .prims files suitable for viewing in DAWN.
      For more information on visualization with this A01 example,
-     see the visualization tutorials at:
-     http://www.slac.stanford.edu/comp/physics/geant4/g4cd
+     see the visualization tutorials on the Geant4 Workshop Tutorial CD
+     available at:
+     http://geant4.slac.stanford.edu/g4cd/Welcome.html
 
   6. ANALYSIS:
 
