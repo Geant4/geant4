@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.10 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.11 2001-11-28 15:42:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,7 @@ void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 {
 	G4MPVEntry *newElement;
-	G4MPVEntry *success(0);
+	G4MPVEntry *success=0;
 
 	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
 
