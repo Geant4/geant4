@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.14 2000-12-12 14:55:28 stesting Exp $
+# $Id: update.sh,v 1.15 2002-04-18 17:18:10 stesting Exp $
 # For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
 # Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 
@@ -70,7 +70,7 @@ if [ X$NOTHING = X ]
 then
   echo ACTUALLY UPDATING...
   echo DELETING G4RunManager.cc SO IT PICKS UP NEW TAG NAME...
-  rm -f $G4INSTALL/source/run/src/G4RunManager.cc
+#  rm -f $G4INSTALL/source/run/src/G4RunManager.cc
   echo GETTING NEW DIRECTORIES...
 else
   echo "DOING NOTHING (cvs -n)..."
