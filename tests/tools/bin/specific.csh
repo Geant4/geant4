@@ -193,16 +193,20 @@ setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-#setenv G4VIS_BUILD_DAWN_DRIVER     1
-#setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-#setenv G4VIS_BUILD_VRML_DRIVER     1
-#setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
 setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
+setenv G4VIS_USE_DAWN              1
+setenv G4VIS_USE_DAWNFILE          1
+setenv G4VIS_USE_VRML              1
+setenv G4VIS_USE_VRMLFILE          1
 # Specific :
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/HP-UX-aCC
 setenv OGLHOME        /lal/Mesa/3.0/HP-UX
@@ -222,6 +226,8 @@ setenv G4VIS_USE_OPACS             1
 setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
 # Else :
+setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+setenv PATH "${PATH}:/lal/DAWN/3.72b/HP-UX-aCC"
 setenv CPPVERBOSE 1
 set prompt='g4-aleph> ' 
 endif
@@ -246,10 +252,10 @@ setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 #setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-#setenv G4VIS_BUILD_DAWN_DRIVER     1
-#setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-#setenv G4VIS_BUILD_VRML_DRIVER     1
-#setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4UI_USE_XAW                1
@@ -257,6 +263,10 @@ setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
 #setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
+setenv G4VIS_USE_DAWN              1
+setenv G4VIS_USE_DAWNFILE          1
+setenv G4VIS_USE_VRML              1
+setenv G4VIS_USE_VRMLFILE          1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
@@ -275,6 +285,7 @@ setenv G4VIS_USE_OPACS             1
 source /lal/OPACS/v3/setup.csh
 set prompt=${G4INSTALL}-${G4SYSTEM}'> '
 # Else :
+setenv PATH "${PATH}:/lal/DAWN/3.72b/OSF1-cxx"
 setenv CPPVERBOSE 1
 set prompt='g4-asc> ' 
 endif
@@ -303,6 +314,10 @@ setenv G4VIS_USE_OPENGLXM          1
 setenv G4VIS_USE_OPENGLX           1
 setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
+setenv G4VIS_USE_DAWN              1
+setenv G4VIS_USE_DAWNFILE          1
+setenv G4VIS_USE_VRML              1
+setenv G4VIS_USE_VRMLFILE          1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/Linux-gxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
@@ -323,6 +338,8 @@ setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-egcs:/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF"
 # Else :
+setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
 setenv CPPVERBOSE 1
 set prompt='g4-lx1> ' 
 endif
