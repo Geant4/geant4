@@ -297,7 +297,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	  {
 	    gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    if(histo_2) {
-	      histo_2->fill(gammaBornInSample);
+	      histo_2->fill(gammaBornInSample/keV);
 	    }
 	  }
 	}
@@ -314,7 +314,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	  {
 	    eleBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    if(histo_3) {
-	      histo_3->fill(eleBornInSample);
+	      histo_3->fill(eleBornInSample/keV);
 	    }
 	  }
 	}
@@ -334,7 +334,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	      gammaAtTheDetPre = 
 		(aStep->GetPreStepPoint()->GetKineticEnergy());
 	      if(histo_6) {
-		histo_6->fill( gammaAtTheDetPre);
+		histo_6->fill( gammaAtTheDetPre/keV);
 	      }
 	    }
 	  else if ((aStep->GetTrack()->GetDynamicParticle()
@@ -343,7 +343,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	      protonsAtTheDetPre = 
 		(aStep->GetPreStepPoint()->GetKineticEnergy());
 	      if(histo_8) {
-		histo_8->fill( protonsAtTheDetPre);
+		histo_8->fill( protonsAtTheDetPre/keV);
 	      }
 	    }
 	}
