@@ -1,4 +1,4 @@
-$Id: History,v 1.158 2002-11-08 16:47:14 pia Exp $
+$Id: History,v 1.159 2002-11-08 17:56:01 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08.11-2002   MGP, tag emlowen-V04-01-06
+             New model for angular distribution in Rayleigh by Gerardo
+             Depaola and Francesco Longo; corrects PRS problem 406
 
 08.11-2002   MGP, tag emlowen-V04-01-05
              VI optimisation of tables in G4LowEnergyIonisation,
