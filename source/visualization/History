@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2001-06-15 12:29:02 johna Exp $
+$Id: History,v 1.132 2001-06-15 16:25:22 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th June 2001  John Allison
+- Added GAGTree to G4VisManager.cc, MyVisManager.cc.  Need corresponding
+  changes in config.
 
 15th June 2001  John Allison (vis-V03-01-06)
 - Added 2nd template argument (less) to sets in G4ASCIITreeSceneHandler and

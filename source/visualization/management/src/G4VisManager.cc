@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.25 2001-06-05 09:58:48 johna Exp $
+// $Id: G4VisManager.cc,v 1.26 2001-06-15 16:25:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,6 +147,9 @@ void G4VisManager::Initialise () {
 #endif
 #ifdef G4VIS_BUILD_ASCIITREE_DRIVER
       "\n    G4VIS_USE_ASCIITREE"
+#endif
+#ifdef G4VIS_BUILD_GAGTREE_DRIVER
+      "\n    G4VIS_USE_GAGTREE"
 #endif
       "\n  Thus, in your main() you have something like:"
       "\n    G4VisManager* visManager = new MyVisManager;"
@@ -886,6 +889,9 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #ifdef G4VIS_BUILD_ASCIITREE_DRIVER
        << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
 #endif
+#ifdef G4VIS_BUILD_GAGTREE_DRIVER
+       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
+#endif
        << G4endl;
 }
 
@@ -1120,7 +1126,20 @@ public:
 };
 G4ASCIITree::G4ASCIITree ():
   G4VGraphicsSystem ("ASCIITree",
-                     "ATREE",
+                     "ATree",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_GAGTREE_DRIVER
+
+class G4GAGTree: public G4VGraphicsSystem {
+public:
+  G4GAGTree ();
+};
+G4GAGTree::G4GAGTree ():
+  G4VGraphicsSystem ("GAGTree",
+                     "GAGTree",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

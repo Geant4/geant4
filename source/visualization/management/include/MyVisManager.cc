@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyVisManager.cc,v 1.7 2001-05-24 13:39:56 johna Exp $
+// $Id: MyVisManager.cc,v 1.8 2001-06-15 16:25:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,10 @@
 
 #ifdef G4VIS_USE_DAWNFILE
 #include "G4DAWNFILE.hh"
+#endif
+
+#ifdef G4VIS_USE_GAGTREE
+#include "G4GAGTree.hh"
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -83,6 +87,10 @@ void MyVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWNFILE
   RegisterGraphicsSystem (new G4DAWNFILE);
+#endif
+
+#ifdef G4VIS_USE_GAGTREE
+  RegisterGraphicsSystem (new G4GAGTree);
 #endif
 
 #ifdef G4VIS_USE_OPACS
