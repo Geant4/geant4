@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BMesonZero.cc,v 1.1 1999-01-07 16:10:15 gunter Exp $
+// $Id: G4BMesonZero.cc,v 1.2 1999-06-09 16:07:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ G4BMesonZero::G4BMesonZero(
 
 // In this version, charged pions are set to stable
 G4BMesonZero G4BMesonZero::theBMesonZero(
-	         "B0",      5.21792*GeV,       0.0*MeV,          0., 
+	         "B0",      5.2792*GeV,   4.22e-10*MeV,          0., 
 		    0,              -1,             0,          
 		    1,              -1,             0,             
 	      "meson",               0,             0,         511,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiOmegacZero.cc,v 1.1 1999-01-07 16:09:58 gunter Exp $
+// $Id: G4AntiOmegacZero.cc,v 1.2 1999-06-09 16:08:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ G4AntiOmegacZero::G4AntiOmegacZero(
 //             stable         lifetime    decay table 
 
 G4AntiOmegacZero G4AntiOmegacZero::theAntiOmegacZero(
-      "anti_omega_c0",       2.704*GeV,       0.0*MeV,    0.*eplus, 
+      "anti_omega_c0",       2.704*GeV,   1.02e-8*MeV,    0.*eplus, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            -1,       -4332,

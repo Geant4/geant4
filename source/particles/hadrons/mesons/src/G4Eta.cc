@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Eta.cc,v 1.1 1999-01-07 16:10:17 gunter Exp $
+// $Id: G4Eta.cc,v 1.2 1999-06-09 16:07:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4Eta::G4Eta(
 //             stable         lifetime    decay table 
 
 G4Eta G4Eta::theEta(
-		"eta",     0.54745*GeV,      1.20*keV,         0.0, 
+		"eta",     0.54730*GeV,      1.18*keV,         0.0, 
 		    0,              -1,            +1,          
 		    0,               0,            +1,             
 	      "meson",               0,             0,         221,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4XiZero.cc,v 1.1 1999-01-07 16:10:03 gunter Exp $
+// $Id: G4XiZero.cc,v 1.2 1999-06-09 16:08:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ G4XiZero::G4XiZero(
 //             stable         lifetime    decay table 
 
 G4XiZero G4XiZero::theXiZero(
-                "xi0",      1.3149*GeV,       0.0*MeV,         0.0, 
+                "xi0",      1.3149*GeV,  2.27e-12*MeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            +1,        3322,

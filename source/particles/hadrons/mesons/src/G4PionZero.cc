@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionZero.cc,v 1.1 1999-01-07 16:10:19 gunter Exp $
+// $Id: G4PionZero.cc,v 1.2 1999-06-09 16:07:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ G4PionZero::G4PionZero(
 //             stable         lifetime    decay table 
 
 G4PionZero G4PionZero::thePionZero(
-		"pi0",   0.1349764*GeV,       0.0*MeV,         0.0, 
+		"pi0",   0.1349764*GeV,   7.8e-06*MeV,         0.0, 
 		    0,              -1,            +1,          
 		    2,               0,            -1,             
 	      "meson",               0,             0,         111,

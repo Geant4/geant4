@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiLambda.cc,v 1.1 1999-01-07 16:09:57 gunter Exp $
+// $Id: G4AntiLambda.cc,v 1.2 1999-06-09 16:08:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ G4AntiLambda::G4AntiLambda(
 //             stable         lifetime    decay table 
 
 G4AntiLambda G4AntiLambda::theAntiLambda(
-        "anti_lambda",    1.115684*GeV,       0.0*MeV,         0.0, 
+        "anti_lambda",    1.115684*GeV,  2.501e-12*MeV,         0.0, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            -1,       -3122,

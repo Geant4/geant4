@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaPlus.cc,v 1.1 1999-01-07 16:09:58 gunter Exp $
+// $Id: G4AntiSigmaPlus.cc,v 1.2 1999-06-09 16:08:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ G4AntiSigmaPlus::G4AntiSigmaPlus(
 //             stable         lifetime    decay table 
 
 G4AntiSigmaPlus G4AntiSigmaPlus::theAntiSigmaPlus(
-        "anti_sigma+",     1.18937*GeV,       0.0*MeV,   -1.*eplus, 
+        "anti_sigma+",     1.18937*GeV,  8.24e-12*MeV,   -1.*eplus, 
 		    1,              +1,             0,          
 		    2,              -2,             0,             
 	     "baryon",               0,            -1,       -3222,

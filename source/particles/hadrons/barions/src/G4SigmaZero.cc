@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaZero.cc,v 1.1 1999-01-07 16:10:02 gunter Exp $
+// $Id: G4SigmaZero.cc,v 1.2 1999-06-09 16:08:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4SigmaZero::G4SigmaZero(
 //             stable         lifetime    decay table 
 
 G4SigmaZero G4SigmaZero::theSigmaZero(
-             "sigma0",     1.19255*GeV,       0.0*MeV,         0.0, 
+             "sigma0",     1.19255*GeV,    8.9e-3*MeV,         0.0, 
 		    1,              +1,             0,          
 		    2,               0,             0,             
 	     "baryon",               0,            +1,        3212,
