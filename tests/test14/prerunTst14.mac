@@ -2,25 +2,3 @@
 # Macro file for the initialization phase of "test14"
 # (Based on electromagnetic/test/TestEm5.)
 #
-# It creates the default geometry (simple absorber cylinder )        
-#
-#
-#
-/run/initialize
-#
-#/tracking/verbose 2
-/calor/setAbsMat Aluminium
-/calor/setAbsThick 10 cm  
-/calor/setAbsRad 12.0 cm
-/calor/update
-#
-/lowenergy/lowlimG 2.5e-4
-/lowenergy/lowlimE 2.5e-4
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/secphotcut 10 eV
-/lowenergy/seceleccut 10 eV
-/run/initialize
-/gun/particle gamma
-/gun/energy 10 keV
-/run/beamOn 1
