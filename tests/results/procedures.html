@@ -34,7 +34,7 @@ is so that you can easily and with confidence go back to the previous version
 ifa tag is rejected.
 
 <P>The <B><TT><FONT SIZE=+1>system-test-directory</FONT></TT></B> for each
-platform is given in <B><TT><FONT SIZE=+1><A HREF="tags_database.html#CurrentTestPLatforms">geant/tests/results/tags_database.html</A></FONT></TT></B>.
+platform is given in <B><TT><FONT SIZE=+1><A HREF="tags_database.html#CurrentTestPLatforms">geant4/tests/results/tags_database.html</A></FONT></TT></B>.
 
 <P>Under <B><TT><FONT SIZE=+1>ref</FONT></TT></B> and <B><TT><FONT SIZE=+1>ref+</FONT></TT></B>
 is a set of directories, e.g.:
@@ -60,8 +60,8 @@ Those STT members who are available when the tag is notified:
 
 <BR>&nbsp;
 <LI>
-update to the head of <B><TT><FONT SIZE=+1>geant/tests</FONT></TT></B>
-(<B><TT><FONT SIZE=+1>cvs update -d -P -A geant/tests</FONT></TT></B>).</LI>
+update to the head of <B><TT><FONT SIZE=+1>geant4/tests</FONT></TT></B>
+(<B><TT><FONT SIZE=+1>cvs update -d -P -A geant4/tests</FONT></TT></B>).</LI>
 
 <BR>&nbsp;
 <LI>
@@ -69,14 +69,14 @@ Define the basic environment variables <B><TT><FONT SIZE=+1>G4SYSTEM</FONT></TT>
 <B><TT><FONT SIZE=+1>G4INSTALL</FONT></TT></B>, <B><TT><FONT SIZE=+1>G4WORKDIR</FONT></TT></B>
 and <B><TT><FONT SIZE=+1>G4LIB</FONT></TT></B>:</LI>
 
-<BLOCKQUOTE><B><TT><FONT SIZE=+1>cd geant/tests/tools/bin</FONT></TT></B>
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>cd geant4/tests/tools/bin</FONT></TT></B>
 <BR><B><TT><FONT SIZE=+1>source setup.csh</FONT></TT></B> (or <B><FONT SIZE=+1>.
 <TT>setup.sh</TT></FONT></B>)</BLOCKQUOTE>
 For the time being, this does not work on all test platforms (we are working
 on it - see script <B><TT><FONT SIZE=+1>specific.csh/sh</FONT></TT></B>).&nbsp;
 In that case set these by hand.&nbsp; E.g.:
 <BR><B><TT><FONT SIZE=+1>setenv G4SYSTEM AIX-AFS</FONT></TT></B>
-<BR><B><TT><FONT SIZE=+1>setenv G4INSTALL /afs/cern.ch/rd44/ref+/src/geant</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>setenv G4INSTALL /afs/cern.ch/rd44/ref+/src/geant4</FONT></TT></B>
 <BR><B><TT><FONT SIZE=+1>setenv G4WORKDIR /afs/cern.ch/rd44/ref+/$G4SYSTEM</FONT></TT></B>
 <BR><B><TT><FONT SIZE=+1>setenv G4LIB $G4WORKDIR/lib</FONT></TT></B>
 <BR><B><TT><FONT SIZE=+1>setenv G4DEBUG 1</FONT></TT></B>
@@ -101,13 +101,13 @@ version).</LI>
 
 <BR>&nbsp;
 <LI>
-Edit <B><TT><FONT SIZE=+1>geant/tests/stt-ref+.sdb</FONT></TT></B>
+Edit <B><TT><FONT SIZE=+1>geant4/tests/stt-ref+.sdb</FONT></TT></B>
 to include the new tag (unless someone has already done it).</LI>
 
 <BR>&nbsp;
 <LI>
 Update the reference version to the new category tag using <B><TT><FONT SIZE=+1>update.sh</FONT></TT></B>
-from <B><TT><FONT SIZE=+1>geant/tests/tools/bin/</FONT></TT></B>:</LI>
+from <B><TT><FONT SIZE=+1>geant4/tests/tools/bin/</FONT></TT></B>:</LI>
 
 <BLOCKQUOTE><B><TT><FONT SIZE=+1>update.sh &amp;</FONT></TT></B></BLOCKQUOTE>
 Submitting to the background means you can monitor with commands like <B><TT><FONT SIZE=+1>jobs</FONT></TT></B>
