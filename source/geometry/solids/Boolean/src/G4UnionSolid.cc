@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.7 2000-04-27 09:59:40 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.8 2000-05-25 07:11:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -217,6 +217,14 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 
   if( Inside(p) == kOutside )
   {
+     G4cout << "Position:"  << G4endl << G4endl;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+     G4cout << "Direction:" << G4endl << G4endl;
+     G4cout << "v.x() = "   << v.x() << G4endl;
+     G4cout << "v.y() = "   << v.y() << G4endl;
+     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v),  point p is outside") ;
   }
   else
