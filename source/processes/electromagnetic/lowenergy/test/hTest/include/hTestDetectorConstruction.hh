@@ -1,3 +1,8 @@
+#ifndef hTestDetectorConstruction_h
+#define hTestDetectorConstruction_h 1
+
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -6,21 +11,20 @@
 // and all its terms.
 //
 // -------------------------------------------------------------
-//      GEANT 4 class example
+//      GEANT4 hTest
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- hTestDetectorConstruction -------
-//                by Vladimir Ivanchenko, 23 July 1999 
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
 // 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef hTestDetectorConstruction_h
-#define hTestDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -46,95 +50,74 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetAbsorberMaterial (G4String);     
-     void SetNumberOfAbsorbers (G4int);     
-     void SetAbsorberThickness(G4double);     
-     void SetAbsorberSizeYZ   (G4double);          
+    void SetAbsorberMaterial (G4String);     
+    void SetNumberOfAbsorbers(G4int);     
+    void SetAbsorberThickness(G4double);     
+    void SetAbsorberSizeXY   (G4double);          
       
-     void SetAbsorberXpos(G4double);
+    void SetWorldMaterial(G4String);
+    void SetWorldSizeZ   (G4double);
 
-     void SetWorldMaterial(G4String);
-     void SetWorldSizeX   (G4double);
-     void SetWorldSizeYZ  (G4double);
-
-     void SetMagField(G4double);
+    void SetMagField(G4double,G4int);
+    void SetVerbose(G4int val) {verbose = val;};
      
-     G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
+    void UpdateGeometry();
      
-  public:
-  
-     void PrintCalorParameters(); 
+    void PrintGeomParameters(); 
                     
-     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-     G4double    GetAbsorberSizeYZ()    {return AbsorberSizeYZ;};
+    G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
+    G4double    GetAbsorberThickness() {return AbsorberThickness;};      
+    G4double    GetAbsorberSizeXY()    {return SizeXY;};
+          
+    G4Material* GetWorldMaterial()     {return WorldMaterial;};
+    G4double    GetWorldSizeZ()        {return WorldSizeZ;}; 
+    G4double    GetWorldSizeXY()       {return SizeXY;};
      
-     G4double    GetAbsorberXpos()      {return XposAbs;}; 
-     G4double    GetxstartAbs()         {return xstartAbs;};
-     G4double    GetxendAbs()           {return xendAbs;};
-     
-     G4Material* GetWorldMaterial()     {return WorldMaterial;};
-     G4double    GetWorldSizeX()        {return WorldSizeX;}; 
-     G4double    GetWorldSizeYZ()       {return WorldSizeYZ;};
-     
-     const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
-     const G4LogicalVolume* GetAbsorber()   {return logicAbsorber;};
+    const G4VPhysicalVolume* GetPhysWorld() {return physWorld;};           
+    const G4LogicalVolume*   GetAbsorber()  {return logicAbs;};
                  
   private:
+
+    // Methods
+
+     void DefineMaterials();
+     void ComputeGeomParameters();
+     G4VPhysicalVolume* ConstructGeometry();     
+     void GeometryIsChanged();     
+     void MaterialIsChanged();     
+
+    // Members
      
      G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberSizeYZ;
+     G4double           AbsorberThickness;  // 
+     G4double           SizeXY;
 
      G4int              NumberOfAbsorbers;
 
-     G4double           XposAbs;
-     G4double           xstartAbs, xendAbs;
+     G4double           ZposAbs;
      
      G4Material*        WorldMaterial;
-     G4double           WorldSizeX;     
-     G4double           WorldSizeYZ;
-     
-     G4bool             defaultWorld;     
-           
+     G4double           WorldSizeZ;     
+                
      G4Box*             solidWorld;    //pointer to the solid World 
      G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+     G4VPhysicalVolume* physWorld;     //pointer to the physical World
 
-     G4Box*             solidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
-     G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
+     G4Box*             solidAbs;      //pointer to the solid Absorber
+     G4LogicalVolume*   logicAbs;      //pointer to the logical Absorber
+     G4VPhysicalVolume* physAbs;       //pointer to the physical Absorber
      
      G4UniformMagField* magField;      //pointer to the magnetic field
      
      hTestDetectorMessenger* detectorMessenger;  //pointer to the Messenger
      hTestCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
-      
-  private:
-    
-     void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+
+     G4int verbose;      
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void hTestDetectorConstruction::ComputeCalorParameters()
-{
-  // Compute derived parameters of the 1st absorber 
-     
-     xstartAbs = XposAbs-0.5*AbsorberThickness; 
-     xendAbs   = XposAbs+0.5*AbsorberThickness;
-     
-     if (defaultWorld)
-       {
-        WorldSizeX  = 2.1*AbsorberThickness*NumberOfAbsorbers; 
-        WorldSizeYZ = 1.2*AbsorberSizeYZ;
-       } 	
-}
-
 
 #endif
 

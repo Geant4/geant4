@@ -1,3 +1,8 @@
+#ifndef hTestCalorimeterSD_h
+#define hTestCalorimeterSD_h 1
+
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,24 +10,28 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// Class Description:
-// The sensitive detector is defined
-// Class Description - end
+// -------------------------------------------------------------
+//      GEANT4 hTest
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTestCalorimeterSD -------------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
 // 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef hTestCalorimeterSD_h
-#define hTestCalorimeterSD_h 1
 
 #include "G4VSensitiveDetector.hh"
+#include "hTestRunAction.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Step.hh"
 #include "globals.hh"
-
-class hTestDetectorConstruction;
-class G4HCofThisEvent;
-class G4Step;
-#include "hTestCalorHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -30,7 +39,7 @@ class hTestCalorimeterSD : public G4VSensitiveDetector
 {
 public: // Without description
   
-      hTestCalorimeterSD(G4String, hTestDetectorConstruction* );
+      hTestCalorimeterSD(G4String);
      ~hTestCalorimeterSD();
 
       void Initialize(G4HCofThisEvent*);
@@ -41,10 +50,11 @@ public: // Without description
 
   private:
   
-      hTestCalorHitsCollection*  CalCollection;      
-      hTestDetectorConstruction* Detector;
-      G4int HitID[500];
+      hTestRunAction* theRun;
+      G4int verbose;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

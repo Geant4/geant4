@@ -127,6 +127,7 @@ void hTestPhysicsList::ConstructIons()
 {
 //  Ions
   G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
   G4Alpha::AlphaDefinition();
   G4IonC12::IonC12Definition();
   G4IonAr40::IonAr40Definition();
@@ -187,24 +188,24 @@ void hTestPhysicsList::ConstructEM()
      
     if (particleName == "gamma") {
     // gamma
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);    
+      //      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+      //  pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+      //  pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+      // pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);    
 
-      //pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      //pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      //pmanager->AddDiscreteProcess(new G4GammaConversion);    
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);    
       
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
 
-      //pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
-      //pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+      pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
-       pmanager->AddProcess(new G4LowEnergyIonisation,  -1, 2,2);
-       pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1,3);   
+      // pmanager->AddProcess(new G4LowEnergyIonisation,  -1, 2,2);
+      // pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1,3);   
 
       hTestStepCut* theeminusStepCut = new hTestStepCut();
       theeminusStepCut->SetMaxStep(MaxChargedStep);  
@@ -245,9 +246,9 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //            G4hIonisation* hIon = new G4hIonisation() ;
+                 G4hIonisation* hIon = new G4hIonisation() ;
 
-       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+      //  G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
       // hIon->SetNuclearStoppingOff() ;
       // hIon->SetNuclearStoppingOn() ;
 
@@ -267,6 +268,7 @@ void hTestPhysicsList::ConstructEM()
    
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
+               || particleName == "triton"  
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
@@ -277,10 +279,10 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //   G4hIonisation* iIon = new G4hIonisation() ;
+      G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-      G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+      //  G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
 
       // iIon->SetNuclearStoppingOff() ;
       // iIon->SetNuclearStoppingOn() ;

@@ -6,6 +6,18 @@
 // and all its terms.
 //
 // 
+// -------------------------------------------------------------
+//      GEANT4 hTest
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTestDetectorMessenger -------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
+// 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -21,73 +33,74 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction * hTestDet)
-:hTestDetector(hTestDet)
+hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
+  hDet(h)
 { 
-  hTestdetDir = new G4UIdirectory("/calor/");
-  hTestdetDir->SetGuidance("hTest detector control.");
+  hTestdetDir = new G4UIdirectory("/hTest/");
+  hTestdetDir->SetGuidance("hTest commands");
       
-  AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  AbsMaterCmd = new G4UIcmdWithAString("/hTest/setAbsoberMaterial",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(Idle);
   
-  WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
+  WorldMaterCmd = new G4UIcmdWithAString("/hTest/setWorldMaterial",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",false);
   WorldMaterCmd->AvailableForStates(Idle);
 
-  NumOfAbsCmd = new G4UIcmdWithAnInteger("/calor/setNumOfAbs",this);
+  NumOfAbsCmd = new G4UIcmdWithAnInteger("/hTest/setAbsorberNumber",this);
   NumOfAbsCmd->SetGuidance("Set number of absorbers");
   NumOfAbsCmd->SetParameterName("Nabs",false);
   NumOfAbsCmd->AvailableForStates(Idle);
   
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setAbsorberThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false);  
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
   AbsThickCmd->AvailableForStates(Idle);
   
-  AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsYZ",this);
-  AbsSizYZCmd->SetGuidance("Set sizeYZ of the Absorber");
+  AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setAbsorberXY",this);
+  AbsSizYZCmd->SetGuidance("Set sizeXY of the Absorber");
   AbsSizYZCmd->SetParameterName("SizeYZ",false);
   AbsSizYZCmd->SetRange("SizeYZ>0.");
   AbsSizYZCmd->SetUnitCategory("Length");
   AbsSizYZCmd->AvailableForStates(Idle);
-  
-  AbsXposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsXpos",this);
-  AbsXposCmd->SetGuidance("Set X pos. of the Absorber");
-  AbsXposCmd->SetParameterName("Xpos",false);
-  AbsXposCmd->SetUnitCategory("Length");
-  AbsXposCmd->AvailableForStates(Idle);
-  
-  WorldXCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldX",this);
+    
+  WorldXCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setWorldZ",this);
   WorldXCmd->SetGuidance("Set X size of the World");
   WorldXCmd->SetParameterName("WSizeX",false);
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
   WorldXCmd->AvailableForStates(Idle);
-  
-  WorldYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldYZ",this);
-  WorldYZCmd->SetGuidance("Set sizeYZ of the World");
-  WorldYZCmd->SetParameterName("WSizeYZ",false);
-  WorldYZCmd->SetRange("WSizeYZ>0.");
-  WorldYZCmd->SetUnitCategory("Length");
-  WorldYZCmd->AvailableForStates(Idle);
-  
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+    
+  UpdateCmd = new G4UIcmdWithoutParameter("/hTest/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);  
+  XMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setFieldX",this);  
+  XMagFieldCmd->SetGuidance("Define magnetic field along X");
+  XMagFieldCmd->SetGuidance("Magnetic field will be in X direction.");
+  XMagFieldCmd->SetParameterName("Bx",false);
+  XMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  XMagFieldCmd->AvailableForStates(Idle);  
+
+  YMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setFieldY",this);  
+  YMagFieldCmd->SetGuidance("Define magnetic field along Y");
+  YMagFieldCmd->SetGuidance("Magnetic field will be in Y direction.");
+  YMagFieldCmd->SetParameterName("Bx",false);
+  YMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  YMagFieldCmd->AvailableForStates(Idle);  
+
+  ZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setFieldZ",this);  
+  ZMagFieldCmd->SetGuidance("Define magnetic field along Z");
+  ZMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  ZMagFieldCmd->SetParameterName("Bx",false);
+  ZMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  ZMagFieldCmd->AvailableForStates(Idle);  
 
 }
 
@@ -99,12 +112,12 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete AbsMaterCmd; 
   delete AbsThickCmd; 
   delete AbsSizYZCmd;  
-  delete AbsXposCmd; 
   delete WorldMaterCmd;
   delete WorldXCmd;
-  delete WorldYZCmd;
   delete UpdateCmd;
-  delete MagFieldCmd;
+  delete XMagFieldCmd;
+  delete YMagFieldCmd;
+  delete ZMagFieldCmd;
   delete hTestdetDir;
 }
 
@@ -112,36 +125,35 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
 
 void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  if( command == NumOfAbsCmd )
+   { hDet->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));}
+
   if( command == AbsMaterCmd )
-   { hTestDetector->SetAbsorberMaterial(newValue);}
-   
-  if( command == WorldMaterCmd )
-   { hTestDetector->SetWorldMaterial(newValue);}
+   { hDet->SetAbsorberMaterial(newValue);}
    
   if( command == AbsThickCmd )
-   { hTestDetector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+   { hDet->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
 
-  if( command == NumOfAbsCmd )
-   { hTestDetector->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));}
+  if( command == WorldMaterCmd )
+   { hDet->SetWorldMaterial(newValue);}
    
   if( command == AbsSizYZCmd )
-   { hTestDetector->SetAbsorberSizeYZ(AbsSizYZCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == AbsXposCmd )
-   { hTestDetector->SetAbsorberXpos(AbsXposCmd->GetNewDoubleValue(newValue));}
-   
+   { hDet->SetAbsorberSizeXY(AbsSizYZCmd->GetNewDoubleValue(newValue));}
+      
   if( command == WorldXCmd )
-   { hTestDetector->SetWorldSizeX(WorldXCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldYZCmd )
-   { hTestDetector->SetWorldSizeYZ(WorldYZCmd->GetNewDoubleValue(newValue));}
-   
+   { hDet->SetWorldSizeZ(WorldXCmd->GetNewDoubleValue(newValue));}
+      
   if( command == UpdateCmd )
-   { hTestDetector->UpdateGeometry(); }
+   { hDet->UpdateGeometry(); }
 
-  if( command == MagFieldCmd )
-   { hTestDetector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == XMagFieldCmd )
+   { hDet->SetMagField(XMagFieldCmd->GetNewDoubleValue(newValue),1);}
+
+  if( command == YMagFieldCmd )
+   { hDet->SetMagField(YMagFieldCmd->GetNewDoubleValue(newValue),2);}
+
+  if( command == ZMagFieldCmd )
+   { hDet->SetMagField(ZMagFieldCmd->GetNewDoubleValue(newValue),3);}
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,20 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: hTest.cc,v 1.4 2001-03-12 09:17:14 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - TesthTest 
+// -------------------------------------------------------------
+//      GEANT4 hTest
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD Group
-// --------------------------------------------------------------
-// Comments
-//     
-//   
-// --------------------------------------------------------------
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTest ----------------------------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
+// 
+// -------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -31,49 +32,45 @@
 
 #include "hTestDetectorConstruction.hh"
 #include "hTestPhysicsList.hh"
-//#include "Tst11PhysicsList.hh"
 #include "hTestPrimaryGeneratorAction.hh"
 #include "hTestRunAction.hh"
 #include "hTestEventAction.hh"
 #include "hTestSteppingAction.hh"
-#include "hTestSteppingVerbose.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  //  HepRandom::setTheEngine(new RanecuEngine);
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new hTestSteppingVerbose);
-    
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager * runManager = new G4RunManager();
 
   // set mandatory initialization classes
-  hTestDetectorConstruction* detector;
-  detector = new hTestDetectorConstruction;
-  runManager->SetUserInitialization(detector);
-   runManager->SetUserInitialization(new hTestPhysicsList(detector));
-  //runManager->SetUserInitialization(new Tst11PhysicsList());
-  /*  
+  hTestDetectorConstruction* det = new hTestDetectorConstruction();
+  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(new hTestPhysicsList(det));
+
 #ifdef G4VIS_USE
   G4cout << "VisManager will be inicialized" << G4endl;
   // visualization manager
   G4VisManager* visManager = new hTestVisManager;
   visManager->Initialize();
 #endif 
-*/
-  G4cout << "User actions will be inicialized" << G4endl;
+
+  G4cout << "User actions will be initialized" << G4endl;
  
   // set user action classes
-  runManager->SetUserAction(new hTestPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new hTestPrimaryGeneratorAction(det));
   hTestRunAction* runaction = new hTestRunAction;
   runManager->SetUserAction(runaction);
 
   hTestEventAction* eventaction = new hTestEventAction(runaction);
   runManager->SetUserAction(eventaction);
 
-  hTestSteppingAction* steppingaction = new hTestSteppingAction(detector,
+  hTestSteppingAction* steppingaction = new hTestSteppingAction(det,
                                                eventaction, runaction);
   runManager->SetUserAction(steppingaction);
   
@@ -98,16 +95,15 @@ int main(int argc,char** argv) {
     }
     
   // job termination
-  /*
+  
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-*/
+
   G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
   G4cout << "runManager is deleted" << G4endl;  
 
   return 0;
-
 }
 

@@ -1,3 +1,5 @@
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,105 +7,81 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// -------------------------------------------------------------
+//      GEANT4 hTest
 //
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTestCalorimeterSD -------------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
 // 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "hTestCalorimeterSD.hh"
 
-#include "hTestCalorHit.hh"
-#include "hTestDetectorConstruction.hh"
-
+#include "G4RunManager.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4Step.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
-#include "G4SDManager.hh"
-  
-#include "G4ios.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Track.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestCalorimeterSD::hTestCalorimeterSD(G4String name,
-                                   hTestDetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+hTestCalorimeterSD::hTestCalorimeterSD(G4String name)
+ :G4VSensitiveDetector(name)
 {
-  collectionName.insert("CalCollection");
+  theRun = (G4RunManager::G4RunManager())->GetUserRunAction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestCalorimeterSD::~hTestCalorimeterSD()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
-   
- CalCollection = new hTestCalorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1; j++) {HitID[j] = -1;};
-  
+  verbose = run->GetVerbose();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* h)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
-  G4double stepl = 0.;
-  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-      stepl = aStep->GetStepLength();
-      
-  if ((edep==0.)&&(stepl==0.)) return false;      
+  G4double z = 0.0;
 
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-    
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
-  G4LogicalVolume* logVol = physVol->GetLogicalVolume();
-  //theTouchable->MoveUpHistory();
-  G4int hTestNumber = 0 ;
+  if(0.0 < edep) {
+    G4double z1 = (aStep->GetPreStepPoint()->GetPosition()).z();
+    G4double z2 = (aStep->GetPostStepPoint()->GetPosition()).z();
+    z  = (z1 + z2)*0.5;
+    run->AddEnergy(edep, z);
+  }
 
-  if (HitID[hTestNumber]==-1)
-    { 
-      hTestCalorHit* calHit = new hTestCalorHit();
-      if (logVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      HitID[hTestNumber] = CalCollection->insert(calHit) - 1;
-      if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on hTest: " << hTestNumber << G4endl;
-    }
-  else
-    { 
-      if (logVol == Detector->GetAbsorber())
-         (*CalCollection)[HitID[hTestNumber]]->AddAbs(edep,stepl);
-      if (verboseLevel>0)
-        G4cout << " Energy added to hTest: " << hTestNumber << G4endl; 
-    }
-    
+  if(1 < verbose) {
+    G4cout << "hTestCalorimeterSD: energy = " << edep/MeV
+           << " MeV is deposited at Z = " << z/mm
+           << " mm " << G4endl;
+
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
-{
-  static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection(HCID,CalCollection);
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestCalorimeterSD::clear()
-{
-  delete CalCollection;
-} 
+{} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
