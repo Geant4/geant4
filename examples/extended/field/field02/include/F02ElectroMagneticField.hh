@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectroMagneticField.hh,v 1.4 2001-10-15 17:20:41 gcosmo Exp $
+// $Id: F02ElectroMagneticField.hh,v 1.5 2001-12-04 16:12:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,24 +56,24 @@ class F02FieldMessenger;
 class F02ElectroMagneticField :  public G4UniformElectricField
 {
 public:
+
   F02ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
   F02ElectroMagneticField() ;               //  A zero field
 
  ~F02ElectroMagneticField() ;  
       
-  void  GetFieldValue( const  G4double Point[3],
-			      G4double Bfield[3] ) const {;} ;
+  void GetFieldValue( const G4double [], G4double * ) const {;}
   
-  void SetStepperType( G4int i) { fStepperType = i ; } ;
+  void SetStepperType( G4int i) { fStepperType = i ; }
 
   void SetStepper();
 
-  void SetMinStep(G4double s) { fMinStep = s ; } ;
+  void SetMinStep(G4double s) { fMinStep = s ; }
 
   void UpdateField();
 
-  void SetFieldValue(G4ThreeVector fieldVector) ;
-  void SetFieldValue(G4double      fieldValue) ;
+  void SetFieldValue(G4ThreeVector fieldVector);
+  void SetFieldValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
 
 protected:
