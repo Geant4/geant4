@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.15 2002-02-24 01:48:09 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.16 2002-11-11 18:08:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -588,6 +588,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   delete [] ctrl_pnt_array;
 
   gluDeleteNurbsRenderer (gl_nurb);
+}
+
+void G4OpenGLSceneHandler::AddThis(const G4VTrajectory& traj) {
+  G4VSceneHandler::AddThis(traj);  // For now.
+}
+
+void G4OpenGLSceneHandler::AddThis(const G4VHit& hit) {
+  G4VSceneHandler::AddThis(hit);  // For now.
 }
 
 #endif

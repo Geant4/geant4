@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.11 2002-02-24 01:47:49 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.12 2002-11-11 18:08:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,8 @@ public:
   void AddThis (const G4Polycone&);
   void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
+  void AddThis (const G4VTrajectory&);
+  void AddThis (const G4VHit&);
 
 protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
