@@ -4,8 +4,6 @@
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.12-20 i686) [Netscape]">
 <title>Geant4 System Testing Team</title>
-<!-- Changed by: Steve O'Neale, 1-Dec-2000 -->
-<!-- Changed by: Serguei SADILOV, 15-Jul-2001 -->
 </head>
 <body background="http://wwwinfo.cern.ch/asd/geant4/icons/backg.jpg">
 
@@ -52,27 +50,24 @@ rejected.
 The tag has been selected for testing and will contribute
 to an sdb file extracted from the bonsai database. 
 There are three directories (prod,dev1 and dev2) in which testing may take place.
-(You cannot tell from the first stage of the Bonsai database which code is on test
-in which directories - maybe add to this page later. These was possible from the 
-two rightmost columns of the html file with headings  # and Status).
 </li>
 
 <li>
-<b>Tag Accepted </b>- the tag has passed the stt procedures and no futher action 
+<b>Tag Accepted </b>- the tag has passed the stt procedures and no further action 
 from the author is anticipated. The tag should be included in the next reference tag.
 </li>
 
 <li>
-<b>Tag Rejected </b>- the tag has failed the stt procedures. This may happen if the 
-author (or one of the required platform compilers) fails to compile the code,
-build the libraries and executables 
-or unacceptable results are produced when executing the test program suite.
-The stt team should contact the submitter with further information by mail.
+<b>Tag Rejected </b>- the tag has failed the STT procedures. This may happen if the 
+code (on one of the supported platform compilers) fails to compile, or causes failures
+in compilation of the base code, or unacceptable results are produced when executing 
+the test program suite.
+The STT team may contact the submitter with further information by mail.
 </li>
 
 <li>
 <b>Global </b>- the tag is a global reference tag and should conform to Geant4 
-naming conventions.
+naming conventions. Only the release manager is allowed to issue this selection.
 </li>
 
 </blockquote>
