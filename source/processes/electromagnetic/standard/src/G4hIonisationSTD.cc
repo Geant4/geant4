@@ -92,13 +92,13 @@ void G4hIonisationSTD::InitialiseProcess()
   SetSecondaryParticle(G4Electron::Electron());
   SetSubCutoffIsDesired(true);
 
-  SetDEDXBinning(150);
-  SetLambdaBinning(100);
-  SetMinKinEnergy(1.0*keV);
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0, 0.1*MeV);
+  em->SetLowEnergyLimit(0, 0.1*keV);
   em->SetHighEnergyLimit(0, 2.0*MeV);
   AddEmModel(em, 0);
   G4VEmModel* em1 = new G4BetheBlochModel();

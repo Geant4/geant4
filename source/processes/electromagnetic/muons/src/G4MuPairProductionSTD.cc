@@ -84,14 +84,14 @@ void G4MuPairProductionSTD::InitialiseProcess()
   SetSecondaryParticle(G4Electron::Electron());
   SetSubCutoffIsDesired(true);
 
-  SetDEDXBinning(150);
-  SetLambdaBinning(100);
-  SetMinKinEnergy(1.0*keV);
-  SetMaxKinEnergy(1000000.0*TeV);
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MuPairProductionModel();
-  em->SetLowEnergyLimit(0, 1.0*keV);
-  em->SetHighEnergyLimit(0, 1000000.0*TeV);
+  em->SetLowEnergyLimit(0, 0.1*keV);
+  em->SetHighEnergyLimit(0, 100.0*TeV);
   AddEmModel(em, 0);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   AddEmFluctuationModel(fm);

@@ -609,7 +609,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     eloss = finalT*sqrt(length/fRange);
 
   // Short step
-  } else if(length <= linLossLimit * fRange || preStepScaledEnergy > maxKinEnergy) {
+  } else if( length <= linLossLimit * fRange ) {
     eloss = (((*theDEDXTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
 
@@ -617,17 +617,15 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   } else {
     G4double x = (fRange-length)/reduceFactor;
     G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
-    // G4double esc = v->GetValue(fRange/reduceFactor, b);
-    G4double esp = v->GetValue(x, b);
-    eloss = (preStepScaledEnergy - esp)/massRatio;
+    G4double postStepScaledEnergy = v->GetValue(x, b);
+    eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
     
     /*    
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
-             << " ePre0(MeV)= " << esc/MeV
-             << " ePost(MeV)= " << esp/MeV
+             << " ePost(MeV)= " << postStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV 
              << " eloss0(MeV)= " << (((*theDEDXTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio

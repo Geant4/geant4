@@ -82,13 +82,13 @@ void G4eIonisationSTD::InitialiseProcess()
   SetSecondaryParticle(theElectron);
   SetSubCutoffIsDesired(true);
 
-  SetDEDXBinning(150);
-  SetLambdaBinning(100);
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MollerBhabhaModel();
-  em->SetLowEnergyLimit(0, 1.0*keV);
+  em->SetLowEnergyLimit(0, 0.1*keV);
   em->SetHighEnergyLimit(0, 100.0*TeV);
   AddEmModel(em, 0);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();

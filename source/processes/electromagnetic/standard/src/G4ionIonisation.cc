@@ -71,16 +71,23 @@ void G4ionIonisation::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
   SetSubCutoffIsDesired(true);
-  G4VEmModel* em = new G4BraggModel();
-  AddEmModel(em, 0);
-  G4VEmModel* em1 = new G4BetheBlochModel();
-  AddEmModel(em1, 1);
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
-  SetDEDXBinning(150);
-  SetLambdaBinning(100);
+
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
+
+  G4VEmModel* em = new G4BraggModel();
+  em->SetLowEnergyLimit(0, 0.1*keV);
+  em->SetHighEnergyLimit(0, 2.0*MeV);
+  AddEmModel(em, 0);
+  G4VEmModel* em1 = new G4BetheBlochModel();
+  em1->SetLowEnergyLimit(0, 2.0*MeV);
+  em1->SetHighEnergyLimit(0, 100.0*TeV);
+  AddEmModel(em1, 1);
+
+  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  AddEmFluctuationModel(fm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
