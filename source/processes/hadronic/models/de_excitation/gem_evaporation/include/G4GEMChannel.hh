@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.1 2003-08-26 18:42:11 lara Exp $
+// $Id: G4GEMChannel.hh,v 1.2 2003-08-29 08:24:13 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,7 +34,6 @@
 
 #include "G4VEvaporationChannel.hh"
 #include "G4GEMProbability.hh"
-#include "G4EvaporationProbability.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
