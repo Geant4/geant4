@@ -67,18 +67,18 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   G4ParticleDefinition* particle = aTrack->GetDefinition();
   G4String name = particle->GetParticleName();
   theHisto->ResetTrackLength();
-  G4int pid = aTrack->GetParentID(); 
+  G4int pid = aTrack->GetParentID();
 
   if(1 < theHisto->GetVerbose() &&
-    (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0)) 
+    (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0))
   {
-    G4cout << "Track #" 
+    G4cout << "Track #"
            << aTrack->GetTrackID() << " of " << name
            << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
            << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
-           << " ## EventID= " 
+           << " ## EventID= "
            << (G4EventManager::GetEventManager())->GetConstCurrentEvent()
-              ->GetEventID() 
+              ->GetEventID()
            << G4endl;
   }
 
@@ -86,22 +86,20 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   if(0 == pid) {
 
-    //    theHisto->StartEvent();      
+    //    theHisto->StartEvent();
 
     G4double kinE = aTrack->GetKineticEnergy();
-    theHisto->SaveToTuple("TKIN", kinE/MeV);      
+    theHisto->SaveToTuple("tkin", kinE/MeV);
 
     G4double mass = 0.0;
     if(particle) {
       mass = particle->GetPDGMass();
-      theHisto->SaveToTuple("MASS", mass/MeV);      
-      theHisto->SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);      
+      theHisto->SaveToTuple("mass", mass/MeV);
+      //theHisto->SaveToTuple("char",(particle->GetPDGCharge())/eplus);
       G4double beta = 1.;
-	if(mass > 0.) {
-          G4double gamma = kinE/mass + 1.;
-          beta = sqrt(1. - 1./(gamma*gamma));
-	}
-      theHisto->SaveToTuple("BETA", beta);            
+      if(mass > 0.) beta = sqrt(kinE*(kinE + 2.0*mass))/(kinE + mass);
+
+      theHisto->SaveToTuple("beta", beta);
     }
 
     G4ThreeVector pos = aTrack->GetPosition();
@@ -113,7 +111,7 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     */
     if(1 < theHisto->GetVerbose()) {
       G4cout << "test31TrackingAction: Primary kinE(MeV)= " << kinE/MeV
-           << "; m(MeV)= " << mass/MeV   
+           << "; m(MeV)= " << mass/MeV
            << "; pos= " << pos << ";  dir= " << dir << G4endl;
     }
 
@@ -135,16 +133,9 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       G4cout << "test31TrackingAction: Secondary gamma " << G4endl;
     }
     theHisto->AddPhoton(aTrack->GetDynamicParticle());
- 
+
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
 
