@@ -64,46 +64,6 @@ G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4i
 }
 G4BertiniRegionModel::~G4BertiniRegionModel(){}
 
-/*
-void G4BertiniRegionModel::Init(const G4int numberOfLayers, const G4int A, const G4int Z){
-  //count the radiuses, densities and fermi momenta with A and Z
-  G4double r = radius0*pow(A, 1/3);
-
-  if(numberOfLayers==1){ 
-    radius.push_back(r);
-
-    G4double rho = A / (4/3*pi*pow(r,3)); 
-    density.push_back(rho);
-
-    G4double protonMass = G4Proton::Proton()->GetPDGMass()/MeV;
-    G4double neutronMass = G4Neutron::Neutron()->GetPDGMass()/MeV ;
-    G4double protonDensity = Z / (4/3*pi*pow(r,3));
-    G4double neutronDensity = (A-Z) / (4/3*pi*pow(r,3));
-
-    protonFermiEnergy.push_back(GetFermiEnergy(protonDensity, protonMass));
-    neutronFermiEnergy.push_back(GetFermiEnergy(neutronDensity, neutronMass));
-    
-    protonFermiMomentum.push_back(GetFermiMomentum(protonDensity, protonMass));
-    neutronFermiMomentum.push_back(GetFermiMomentum(neutronDensity, neutronMass));
-
-    G4double fermiEP = *protonFermiEnergy.begin();
-    G4double fermiEN = *neutronFermiEnergy.begin();
-    protonPotentialEnergy.push_back(-(fermiEP + BE));
-    neutronPotentialEnergy.push_back(-(fermiEN + BE));
-  }
-  else{
-  if(numberOfLayers==3){
-    radius.push_back(0.1*r);
-    radius.push_back(0.2*r);
-    radius.push_back(0.9*r);
-    
-  }
-  }
-}
-*/
-
-//--------------------------------------------------------------
-
 G4double G4BertiniRegionModel::GetDensity(G4double r){
   my_iterator j=density.begin();
      for(my_iterator i=radius.begin(); i<radius.end(); i++){
@@ -112,7 +72,6 @@ G4double G4BertiniRegionModel::GetDensity(G4double r){
    }
    return 0;
 }
-
 
 G4double G4BertiniRegionModel::GetPotentialEnergy(G4double r, G4int particle){
   if(particle == 0){ //proton
@@ -136,8 +95,7 @@ G4double G4BertiniRegionModel::GetPotentialEnergy(G4double r, G4int particle){
 }
 
 G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
-						  G4int nucleon){
- 
+						  G4int nucleon){ 
   if(nucleon == 0){
      my_iterator j=protonFermiMomentum.begin();
      for(my_iterator i=radius.begin(); i<radius.end(); i++){
@@ -152,28 +110,22 @@ G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
      j++;
      }
   }
+
   G4Exception("G4BertiniRegionModel::GetMaximumNucleonMomentum - return value undefined");
   return 0;
 
 }
 
-
 G4double G4BertiniRegionModel::GetFermiMomentum(G4double aDensity,
 					 G4double aMass){
   
   return sqrt(2*aMass*GetFermiEnergy(aDensity, aMass));
-  
- 
 }
 
 G4double G4BertiniRegionModel::GetFermiEnergy(G4double aDensity,
 					 G4double aMass){
-  
-  //G4double hbar = 1.0E-6;
 G4double twoThirds = 2.0/3.0;
-    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity),twoThirds)); 
- 
- 
+    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity), twoThirds)); 
 }
 
 
