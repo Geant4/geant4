@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.10 2001-07-11 10:08:59 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.11 2001-08-14 18:38:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,6 +89,11 @@ private:
   static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
   static 	G4int    fSceneCount;     // No. of extanct scene handlers.
   G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
+         // namely the ones which go with the graphical database
+         // (display lists).  A view may interrogate this to decide if
+         // it needs to visit the kernel, i.e., to remake the
+         // graphical database.
 
   //
   // Stop-gap solution of structure re-use.

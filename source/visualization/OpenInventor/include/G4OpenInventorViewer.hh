@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.hh,v 1.8 2001-07-11 10:09:00 gunter Exp $
+// $Id: G4OpenInventorViewer.hh,v 1.9 2001-08-14 18:38:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,10 @@ private:
   void FinishView          ();
   void SetView             ();
   void KernelVisitDecision ();
+  G4bool CompareForKernelVisit(G4ViewParameters&);
 
-  G4OpenInventorSceneHandler&	fSceneHandler; 	// Graphics Scene for this view.
+  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   Widget fShell;
   SoWindow* fWindow;
   SoXtComponent* fViewer;	  // The Inventor Viewer
@@ -71,5 +73,3 @@ private:
 #endif
 
 #endif
-
-

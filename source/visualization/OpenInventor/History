@@ -1,0 +1,24 @@
+$Id: History,v 1.1 2001-08-14 18:38:30 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/OpenInventor
+-------------------------------------------
+
+14th August 2001  John Allison  (vis-V03-02-11)
+- Improved KernelVisitDecision - but see note therein.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.cc,v 1.6 2001-07-11 10:09:01 gunter Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.7 2001-08-14 18:38:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -87,56 +87,69 @@ int quitCB(void* interactorManager) {
 
 void G4OpenInventorViewer::KernelVisitDecision () {
   
-  //
-  // Trigger a display List refresh if necessary.  This is a checklist
-  // of relevant view parameters.
-  //
-  static G4ViewParameters lastVP;  // Initialised to default.
+  // If there's a significant difference with the last view parameters
+  // of either the scene handler or this viewer, trigger a rebuild.
+
+  if (
+      //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
+      // We need a test for empty scene graph, such as
+      // staticRoot.size() or something??????????  See temporary fix
+      // in contructor.  (John Allison Aug 2001)
+      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
+      CompareForKernelVisit(fLastVP)) {
+    NeedKernelVisit ();
+  }      
+  fLastVP = fVP;
+  fG4OpenInventorSceneHandler.fLastVP = fVP;
+}
+ 
+G4bool G4OpenInventorViewer::CompareForKernelVisit
+(G4ViewParameters& lastVP) {
   G4bool need = false;
   if (
-      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (lastVP.IsSection ()          != fVP.IsSection ())          ||
+      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
+      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
+      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
 
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.GetCutawayPlanes ().size () !=
+      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      (fLastVP.GetCutawayPlanes ().size () !=
                                  fVP.GetCutawayPlanes ().size ()) ||
 
-      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
+      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
       ) {
       need = true;;
   }
-  if (!need && lastVP.IsDensityCulling () &&
-      (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+  if (!need && fLastVP.IsDensityCulling () &&
+      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     need = true;
 
-  if (!need && lastVP.IsExplode () &&
-      (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+  if (!need && fLastVP.IsExplode () &&
+      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     need = true;
       
-  if (need) {
-    lastVP = fVP;
-    NeedKernelVisit ();
-  }
+  return need;
 }
 
-G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
-					const G4String& name)
-:G4VViewer (scene, scene.IncrementViewCount(), name)
-,fSceneHandler(scene)
+G4OpenInventorViewer::G4OpenInventorViewer
+(G4OpenInventorSceneHandler& sceneHandler,
+ const G4String& name)
+:G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
+,fG4OpenInventorSceneHandler(sceneHandler)
 ,fShell(NULL)
 ,fWindow(NULL)
 ,fViewer(NULL)
 ,fSelection(NULL)
 ,fInteractorManager(NULL)
 {
+  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
+
   fInteractorManager = 
-    ((G4OpenInventor*)fSceneHandler.GetGraphicsSystem())->
+    ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
     GetInteractorManager();
 //Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
 
@@ -150,7 +163,7 @@ G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
   fSelection = new SoSelection;
   fSelection->policy = SoSelection::SINGLE;
   fSelection->ref();
-  fSelection->addChild(fSceneHandler.root);
+  fSelection->addChild(fG4OpenInventorSceneHandler.root);
 
   Widget    parent = (Widget)fInteractorManager->GetParentInteractor ();
 
