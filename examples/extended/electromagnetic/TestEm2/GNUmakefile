@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2004-05-04 09:10:00 vnivanch Exp $
+# $Id: GNUmakefile,v 1.16 2004-05-21 18:21:47 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -28,7 +28,7 @@ endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
-analclean:
+histclean:
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/RunAction.o
 
 visclean:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.3 2004-05-04 09:10:01 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.4 2004-05-21 18:21:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void     SetEdepAndRMS(G4ThreeVector);
      G4double GetAverageEdep() const    {return edeptrue;};
      G4double GetRMSEdep() const        {return rmstrue;};
+     G4double GetLimitEdep() const      {return limittrue;};
 
      // Histogram name and type
      void SetHistoName(G4String& val)   {histoName = val;};
@@ -116,6 +117,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      G4double           edeptrue;
      G4double           rmstrue;
+     G4double           limittrue;
      G4String           histoName;
      G4String           histoType;
 };

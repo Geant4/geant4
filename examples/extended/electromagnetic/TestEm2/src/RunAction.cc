@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.6 2004-05-04 09:10:01 vnivanch Exp $
+// $Id: RunAction.cc,v 1.7 2004-05-21 18:21:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -402,22 +402,29 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
-  G4double x = sqrt((G4double)NbOfEvents);
-  G4double etrue = Det->GetAverageEdep();
-  G4double rtrue = Det->GetRMSEdep();
-  G4double de = (MeanELongitCumul[nLbin-1]/100. - etrue)*x/rtrue;
-  G4double dr = ( rmsELongitCumul[nLbin-1]/100. - rtrue)*x/rtrue;
-  G4String resume = "IS ACCEPTED";
-  if(abs(de) > 3.0 || abs(dr) > 5.0) resume = "IS NOT ACCEPTED";
-
   // show Rndm status
   HepRandom::showEngineStatus();
-  G4cout << G4endl;
-  G4cout << "<<<<<ACCEPTANCE>>>>>   2   values " << G4endl;
-  G4cout << "Edep=     " << de << G4endl;
-  G4cout << "RMSedep=  " << dr << G4endl;
-  G4cout << "<<<<<END>>>>>   " << resume << G4endl;
-  G4cout << G4endl;
+
+  // Acceptance
+  G4double ltrue = Det->GetLimitEdep();
+  if(ltrue < DBL_MAX) {
+    G4double x = sqrt((G4double)NbOfEvents);
+    G4double etrue = Det->GetAverageEdep();
+    G4double rtrue = Det->GetRMSEdep();
+    G4double dde = (MeanELongitCumul[nLbin-1]/100. - etrue);
+    G4double ddr = ( rmsELongitCumul[nLbin-1]/100. - rtrue);
+    G4double de = dde*x/rtrue;
+    G4double dr = ddr*x/rtrue;
+    G4String resume = "IS ACCEPTED";
+    if(abs(de) > ltrue || abs(dr) > 1.5*ltrue) resume = "IS NOT ACCEPTED";
+
+    G4cout << G4endl;
+    G4cout << "<<<<<ACCEPTANCE>>>>> 2 values " << NbOfEvents << " events" << G4endl;
+    G4cout << "Edep= " << etrue << "  delEdep= " << dde << " nEdep= " << de << G4endl;
+    G4cout << "RMSe= " << rtrue << "  delRms=  " << ddr << " nRms=  " << dr << G4endl;
+    G4cout << "<<<<<END>>>>>   " << resume << G4endl;
+    G4cout << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
