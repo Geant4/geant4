@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoStyleCache                                           */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/misc/SoStyleCache.h>
 
@@ -174,3 +183,5 @@ SoResetTransform* SoStyleCache::getResetTransform(
 {
   return fResetTransform;
 }
+
+#endif

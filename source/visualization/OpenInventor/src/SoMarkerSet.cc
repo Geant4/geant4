@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoMarkerSet                                            */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/nodes/SoMarkerSet.h>
 
@@ -753,3 +762,5 @@ GLubyte* getBitmap(
   }
   return bitmap; 
 }
+
+#endif

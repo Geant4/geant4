@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SbPainter                                              */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/SbPainter.h>
 
@@ -42,3 +51,4 @@ void SbPainter::enableEdges(
   fEdges = aValue;
 }
 
+#endif

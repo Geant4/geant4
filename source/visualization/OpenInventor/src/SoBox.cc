@@ -1,3 +1,5 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,16 +23,20 @@
 // ********************************************************************
 //
 //
-// $Id: SoBox.cc,v 1.2 2004-06-14 09:27:39 gcosmo Exp $
+// $Id: SoBox.cc,v 1.3 2004-11-23 21:51:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*----------------------------Hepvis----------------------------------------*/
+/*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
 /* Node:             SoBox                                                  */
 /* Description:      Represents the G4Box Geant Geometry entity             */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+// this :
+#include "HEPVis/nodes/SoBox.h"
+
 #include <assert.h>
 #include <math.h>
 
@@ -44,8 +50,6 @@
 #include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/elements/SoTextureCoordinateElement.h>
-
-#include "HEPVis/nodes/SoBox.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoBox)
@@ -271,3 +275,4 @@ void SoBox::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoImageWriter                                          */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/nodes/SoImageWriter.h>
 
@@ -309,6 +318,4 @@ int getRGB(
   return 1;
 }
 
-
-
-
+#endif

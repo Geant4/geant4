@@ -1,8 +1,10 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 /*
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.3 2004-11-10 20:16:13 gbarrand Exp $
+ * $Id: gl2ps.cc,v 1.4 2004-11-23 21:51:05 gbarrand Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/
@@ -2326,3 +2328,5 @@ GL2PSDLL_API GLint gl2psLineWidth(GLfloat value){
 
   return GL2PS_SUCCESS;
 }
+
+#endif

@@ -1,3 +1,5 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,18 +23,23 @@
 // ********************************************************************
 //
 //
-// $Id: SoTubs.cc,v 1.2 2004-06-14 09:27:41 gcosmo Exp $
+// $Id: SoTubs.cc,v 1.3 2004-11-23 21:51:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*-----------------------------Hepvis---------------------------------------*/
+/*-----------------------------HEPVis---------------------------------------*/
 /*                                                                          */
 /* Node:             SoTubs                                                 */
 /* Description:      Represents the G4Tubs Geant Geometry entity            */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+// this :
+#include "HEPVis/nodes/SoTubs.h"
+
 #include <assert.h>
 #include <math.h>
+
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -46,7 +53,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoTubs.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoTubs)
@@ -460,3 +466,4 @@ void SoTubs::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

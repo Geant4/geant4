@@ -1,3 +1,5 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,10 +23,10 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.4 2004-11-22 23:04:08 gbarrand Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.5 2004-11-23 21:51:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*-----------------------------Hepvis----------------------------------------*/
+/*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */
 /* Node:             SoDetectorTreeKit                                       */
 /* Description:      Represents a single sided silicon strip detector        */
@@ -219,3 +221,5 @@ void SoDetectorTreeKit::generateAlternateRep() {
 void SoDetectorTreeKit::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
+
+#endif

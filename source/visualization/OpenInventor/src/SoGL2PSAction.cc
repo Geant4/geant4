@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoGL2PSAction                                          */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/actions/SoGL2PSAction.h>
 
@@ -190,3 +199,5 @@ void SoGL2PSAction::gl2psBegin(
                  bufsize, 
                  fFile,fFileName.getString());    
 }
+
+#endif

@@ -1,3 +1,12 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoCounterAction                                        */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include <HEPVis/actions/SoCounterAction.h>
 
@@ -67,3 +76,5 @@ void SoCounterAction::setName(const SbName aName){
 int SoCounterAction::getCount() const {
   return fCount;
 }
+
+#endif

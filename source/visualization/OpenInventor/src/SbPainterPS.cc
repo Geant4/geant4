@@ -1,3 +1,11 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SbPainterPS                                            */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
 // this :
 #include <HEPVis/SbPainterPS.h>
 
@@ -1019,3 +1027,4 @@ double ConvertRGB_ToGrey(
   return (0.30 * a_red + 0.59 * a_green + 0.11 * a_blue);
 }
 
+#endif

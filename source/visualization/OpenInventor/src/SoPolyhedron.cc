@@ -1,3 +1,13 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+/*----------------------------HEPVis----------------------------------------*/
+/*                                                                          */
+/* Node:             SoPolyhedron                                           */
+/* Description:      SoNode to represent HepPolyhedron                      */
+/* Author:           Guy Barrand                                            */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
 // this :
 #include "Geant4_SoPolyhedron.h"
 
@@ -267,4 +277,4 @@ void Geant4_SoPolyhedron::computeBBox(
 }
 
 
-
+#endif

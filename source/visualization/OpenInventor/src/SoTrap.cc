@@ -1,3 +1,5 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,10 +23,10 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrap.cc,v 1.2 2004-06-14 09:27:40 gcosmo Exp $
+// $Id: SoTrap.cc,v 1.3 2004-11-23 21:51:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*-----------------------------Hepvis----------------------------------------*/
+/*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */
 /* Node:             SoTrap                                                  */
 /* Description:      Represents the G4Trap Geant Geometry entity             */
@@ -32,6 +34,10 @@
 /*                                                                           */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
+
+// this :
+#include "HEPVis/nodes/SoTrap.h"
+
 #include <assert.h>
 #include <math.h>
 #include <Inventor/SbBox.h>
@@ -48,7 +54,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoTrap.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoTrap)
@@ -401,3 +406,4 @@ void SoTrap::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

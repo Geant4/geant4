@@ -1,3 +1,5 @@
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,16 +23,20 @@
 // ********************************************************************
 //
 //
-// $Id: SoCons.cc,v 1.2 2004-06-14 09:27:39 gcosmo Exp $
+// $Id: SoCons.cc,v 1.3 2004-11-23 21:51:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*-----------------------------Hepvis---------------------------------------*/
+/*-----------------------------HEPVis---------------------------------------*/
 /*                                                                          */
 /* Node:             SoCons                                                 */
 /* Description:      Represents the G4Cons Geant Geometry entity            */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+// this :
+#include "HEPVis/nodes/SoCons.h"
+
 #include <assert.h>
 #include <math.h>
 #include <Inventor/SbBox.h>
@@ -46,7 +52,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoCons.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoCons)
@@ -434,3 +439,4 @@ void SoCons::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif
