@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.cc,v 1.2 2003-11-07 11:52:58 vnivanch Exp $
+// $Id: PhysListEmG4v52.cc,v 1.3 2003-11-07 11:54:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ PhysListEmG4v52::~PhysListEmG4v52()
 
 void PhysListEmG4v52::ConstructProcess()
 {
-  // Add EM processes realised on base of prototype of model approach design
+  // Add EM processes realised on base of Geant4 version 5.2
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -87,7 +87,8 @@ void PhysListEmG4v52::ConstructProcess()
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      //      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,      0,-1,4);
