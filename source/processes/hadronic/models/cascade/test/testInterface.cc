@@ -29,7 +29,7 @@ int main(int argc, char **argv ) {
 
   G4std::vector<G4double>  momentumBullet(4, 0.0);
   momentumBullet[0] = 1.37126;
-  momentumBullet[3] = 1;
+  momentumBullet[3] = 1.5;
 
   G4InuclParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, 1); 
 
@@ -53,18 +53,18 @@ int main(int argc, char **argv ) {
 
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-  for (G4int i = 1; i< 10 ; i++) {
+  for (G4int i = 1; i< 100 ; i++) {
     if ( theNucleusA < 1.5 ) 
       {
 	model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
 	targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
    
-	do
+	//		do
 	  {
 	    cout << "+";
 	    output = collider->collide(bullet, targetH); 
 	  } 
-	while(output.getOutgoingParticles().size()<2.5);
+	  //		while(output.getOutgoingParticles().size()<2.5);
       } 
     else 
       {
@@ -83,8 +83,7 @@ int main(int argc, char **argv ) {
     G4std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
     G4int numSecondaries = nucleiFragments.size()+particles.size();
-    // theResult.SetNumberOfSecondaries(numSecondaries);
-
+    cout << "num secondaries: " << numSecondaries << G4endl;
     if(!particles.empty()) { 
       particleIterator ipart;
       G4int outgoingParticle;
