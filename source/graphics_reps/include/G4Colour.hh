@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.6 2001-07-11 10:01:01 gunter Exp $
+// $Id: G4Colour.hh,v 1.7 2002-10-23 12:03:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,9 +32,7 @@
 // and alpha) components of colour. Each component takes a value between 
 // 0 and 1. If an irrelevant value, i.e., a value less than 0 or greater 
 // than 1, is given as an argument of the constructor, such a value is 
-// automatically clipped to 0 or 1. Alpha is opacity, which is not used 
-// at present. You can use its default value 1, which means "opaque" 
-// in instantiation of G4Colour. 
+// automatically clipped to 0 or 1. Alpha is opacity (1 = opaque).
 // 
 // A G4Colour object is instantiated by giving red, green, and blue 
 // components to its constructor, i.e., 
