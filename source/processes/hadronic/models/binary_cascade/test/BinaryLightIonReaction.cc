@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.1 2003-05-05 16:19:58 hpw Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.2 2003-05-06 14:03:34 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -50,8 +50,8 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 
-#include "G4ExcitationHandler.hh"
- 
+#include "G4TripathiCrossSection.hh"
+
  // forward declarations
  
  G4int sortEnergies( const double Px, const double Py, const double Pz,
@@ -153,6 +153,8 @@
    theIon->SetProcessManager(theIonProcessManager);
    G4IonInelasticProcess theInelasticProcess; 
    G4BinaryLightIonReaction theIonModel;
+   G4TripathiCrossSection theXSec;
+   theInelasticProcess.GetCrossSectionDataStore()->AddDataSet(&theXSec);
 
 //   theInelasticProcess.RegisterMe(theTheoModel);
    theInelasticProcess.RegisterMe(&theIonModel);
