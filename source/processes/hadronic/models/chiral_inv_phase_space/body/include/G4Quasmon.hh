@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.35 2005-02-04 08:53:50 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.36 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -61,7 +61,7 @@ public:
   G4bool operator!=(const G4Quasmon &right) const;
 
   // Static functions
-  static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
+  static void SetParameters(G4double temper=180., G4double ssin2g=.3, G4double etaetap=.3);
   static void SetTemper(G4double temperature);
   static void SetSOverU(G4double ssin2g);
   static void SetEtaSup(G4double etaetap);

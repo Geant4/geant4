@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.97 2005-02-04 08:53:52 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.98 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -799,7 +799,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
         G4double QTemper=fakeQ.GetTemper();// Temperature defined by user for Quasmons   ^
         G4double QSOverU=fakeQ.GetSOverU();// S/U defined by user for Quasmons           ^
         G4double QEtaSup=fakeQ.GetEtaSup();// Eta Suppresion defined by user in Quasmons ^
-        G4Quasmon::SetParameters(180.,.1,.3);// Fixed Parameters for N-barN Annihilation ^
+        G4Quasmon::SetParameters(180.,QSOverU,.3); // Parameters for N-barN Annihilation ^
         // From this point the new temporary environment is created (recursive)          ^
         G4QEnvironment* muq = new G4QEnvironment(input,theEnvironment.GetPDG());//---+   ^
 #ifdef pdebug

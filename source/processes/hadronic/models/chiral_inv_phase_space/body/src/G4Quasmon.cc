@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.75 2005-02-04 08:53:58 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.76 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -168,8 +168,8 @@ G4double G4Quasmon::EtaEtaprime=0.3;
 // Fill the private static parameters
 void G4Quasmon::SetParameters(G4double temperature, G4double ssin2g, G4double etaetap)
 {//  =================================================================================
-  Temperature=temperature; 
-  SSin2Gluons=ssin2g; 
+  Temperature=temperature;
+  SSin2Gluons=ssin2g;
   EtaEtaprime=etaetap;
 }
 void G4Quasmon::SetTemper(G4double temperature) {Temperature=temperature;}
@@ -257,7 +257,7 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
   if(maxBar>nOfBaryons) maxBar=nOfBaryons;
   if(maxBar>=0) for (i=0; i<maxBar; i++) 
   {
-    theQCandidates.push_back(new G4QCandidate(baryonPDG[i]));
+    theQCandidates.push_back(new G4QCandidate(baryonPDG[i])); // delete equivalent
 #ifdef sdebug
     G4cout<<"G4Quasmon::InitCandidateVector: "<<ind++<<", Baryon # "<<i<<" with code = "
           <<baryonPDG[i]<< ", QC="<<theQCandidates[i]->GetQC()<<" is initialized"<<G4endl;
@@ -271,7 +271,7 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
     G4QPDGCode clustQPDG;
     clustQPDG.InitByQCode(clustQCode);
     G4int clusterPDG=clustQPDG.GetPDGCode();
-    theQCandidates.push_back(new G4QCandidate(clusterPDG));
+    theQCandidates.push_back(new G4QCandidate(clusterPDG)); // delete equivalent
 #ifdef sdebug
     G4cout<<"G4Quasmon::InitCandidateVector:"<<ind++<<", Cluster # "<<i<<" with code = "
           <<clusterPDG<<", QC="<<clustQPDG.GetQuarkContent()<<" is initialized"<<G4endl;

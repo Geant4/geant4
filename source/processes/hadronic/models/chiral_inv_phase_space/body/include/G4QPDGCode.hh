@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.22 2004-03-25 10:44:43 gunter Exp $
+// $Id: G4QPDGCode.hh,v 1.23 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -37,6 +37,8 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
+#include "G4ParticleTypes.hh"
+
 #include "G4QContent.hh"
 
 class G4QPDGCode
@@ -94,10 +96,13 @@ public:
 private:
   // Encapsulated functions
   G4bool   TestRealNeutral(const G4int& PDGCode);
-  G4int    MakeQCode(const G4int& PDGCode);         // Make Q Code, using PDG Code
-  G4int    MakePDGCode(const G4int& QCode);         // Make PDG Code, using Q Code
-
+  G4int    MakeQCode(const G4int& PDGCode);              // Make Q Code, using PDG Code
+  G4int    MakePDGCode(const G4int& QCode);              // Make PDG Code, using Q Code
+  G4double CalculateNuclMass(G4int Z, G4int N, G4int S); // Nuclear Mass Calculation
+  G4double QHaM(G4int nQ);                      // Definition of hadronic masses in Q-order
 private:
+  // Static parameter
+  static const G4int nQHM=90;
   // the Body
   G4int              thePDGCode;
   G4int              theQCode;

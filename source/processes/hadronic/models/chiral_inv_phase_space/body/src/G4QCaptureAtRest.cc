@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.10 2005-02-04 08:53:52 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.11 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -44,12 +44,51 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::Constructor is called"<<G4endl;
 #endif
-  if (verboseLevel>0) 
-    { G4cout << GetProcessName() << " is created "<< G4endl; }
-  G4QCHIPSWorld::Get()->GetParticles(234);           // Create CHIPS World of 234 particles
-  G4QNucleus::SetParameters(0.,0.,1.,1.);            // Nuclear clusterization parameters
-  G4Quasmon::SetParameters(180.,.09,.3);             // Temperature, s-antis, eta suppress
-  G4QEnvironment::SetParameters(.5);                 // SolAngle (pbar-A secondary capture)
+  if (verboseLevel>0) G4cout << GetProcessName() << " is created "<< G4endl;
+
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
+}
+
+G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
+G4double G4QCaptureAtRest::SSin2Gluons=0.1;  // Supression of s-quarks (in respect to u&d)
+G4double G4QCaptureAtRest::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
+G4double G4QCaptureAtRest::freeNuc=0.0;      // Percentage of free nucleons on the surface
+G4double G4QCaptureAtRest::freeDib=0.0;      // Percentage of free diBaryons on the surface
+G4double G4QCaptureAtRest::clustProb=1.;     // Nuclear clusterization parameter
+G4double G4QCaptureAtRest::mediRatio=1.;     // medium/vacuum hadronization ratio
+G4int    G4QCaptureAtRest::nPartCWorld=234;  // The#of particles initialized in CHIPS World
+G4double G4QCaptureAtRest::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
+G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
+G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
+G4double G4QCaptureAtRest::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
+G4double G4QCaptureAtRest::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+
+// Fill the private parameters
+void G4QCaptureAtRest::SetParameters(G4double temper, G4double ssin2g, G4double etaetap,
+                                     G4double fN, G4double fD, G4double cP, G4double mR,
+                                     G4int nParCW, G4double solAn, G4bool efFlag,
+                                     G4double piThresh, G4double mpisq, G4double dinum)
+{//  =============================================================================
+  Temperature=temper;
+  SSin2Gluons=ssin2g;
+  EtaEtaprime=etaetap;
+  freeNuc=fN;
+  freeDib=fD;
+  clustProb=cP;
+  mediRatio=mR;
+  nPartCWorld = nParCW;
+  EnergyFlux=efFlag;
+  SolidAngle=solAn;
+  PiPrThresh=piThresh;
+  M2ShiftVir=mpisq;
+  DiNuclMass=dinum;
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
 
 // Destructor

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.2 2005-02-04 08:53:52 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.3 2005-02-17 17:13:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -110,8 +110,9 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     G4int nIs=cs->size();                         // A#Of Isotopes in the Element
     if(nIs) for(G4int j=0; j<nIs; j++)            // Calculate CS for eachIsotope of El
     {
-      G4int N=cs->at(j)->first;                   // #ofNeuterons in the isotope
-      cs->at(j)->second = CSmanager->GetCrossSection(Momentum, Z, N); // CS calculation
+      std::pair<G4int,G4double>* curIs=(*cs)[j];  // A pointer, which is used twice
+      G4int N=curIs->first;                       // #ofNeuterons in the isotope
+      curIs->second = CSmanager->GetCrossSection(Momentum, Z, N); // CS calculation
     } // End of temporary initialization of the cross sections in the G4QIsotope singeltone
     sigma+=Isotopes->GetMeanCrossSection(Z)*NOfNucPerVolume[i]; // SUM(MeanCS*NOFNperV)
   } // End of LOOP over Elements
@@ -361,7 +362,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4int targPDG=90000000+Z*1000+N;       // PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
   G4double tM=targQPDG.GetMass();
-  EnMomConservation=projPDG+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
+  EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   G4QHadronVector* output=new G4QHadronVector; // Prototype of the output G4QHadronVector
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin
   G4bool elF=false; // Flag of the ellastic scattering is "false" by default
