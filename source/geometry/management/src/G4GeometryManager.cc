@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.7 2002-02-26 18:26:39 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.8 2002-04-22 14:18:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -30,24 +30,47 @@
 //
 // Author:
 // 26.07.95 P.Kent Initial version, including optimisation Build
+// ********************************************************************
 
+#include "g4std/iomanip"
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
-#include "g4std/iomanip"
 
-// Close geometry - perform sanity checks and optionally Build optimisation
-// for placed volumes (always built for replicas & parameterised)
-// NOTE: Currently no sanity checks
+// ***************************************************************************
+// Static class variable: ptr to single instance of class
+// ***************************************************************************
+//
+G4GeometryManager* G4GeometryManager::fgInstance = 0;
+
+// ***************************************************************************
+// Constructor. Set the geometry to be open
+// ***************************************************************************
+//
+G4GeometryManager::G4GeometryManager() 
+{
+  fIsClosed=false;
+}
+
+// ***************************************************************************
+// Closes geometry - performs sanity checks and optionally builds optimisation
+// for placed volumes (always built for replicas & parameterised).
+// NOTE: Currently no sanity checks are performed.
+// ***************************************************************************
+//
 G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose)
 {
   if (!fIsClosed)
   {
-     BuildOptimisations(pOptimise, verbose);
-     fIsClosed=true;
+    BuildOptimisations(pOptimise, verbose);
+    fIsClosed=true;
   }
   return true;
 }
 
+// ***************************************************************************
+// Opens the geometry and removes all optimisations.
+// ***************************************************************************
+//
 void G4GeometryManager::OpenGeometry()
 {
   if (fIsClosed)
@@ -57,29 +80,25 @@ void G4GeometryManager::OpenGeometry()
   }
 }
 
-// Static class variable: ptr to single instance of class
-G4GeometryManager* G4GeometryManager::fgInstance = 0;
-
+// ***************************************************************************
+// Returns the instance of the singleton.
+// Creates it in case it's called for the first time.
+// ***************************************************************************
+//
 G4GeometryManager* G4GeometryManager::GetInstance()
 {
-   static G4GeometryManager worldManager;
-   if (!fgInstance)
-   {
-     fgInstance = &worldManager;
-   }
-   return fgInstance;    
+  static G4GeometryManager worldManager;
+  if (!fgInstance)
+  {
+    fgInstance = &worldManager;
+  }
+  return fgInstance;    
 }
 
-
-// Constructor. Set the geometry to be open
-G4GeometryManager::G4GeometryManager() 
-{
-   fIsClosed=false;
-}
-
-//
-// Create optimisation info. Build all voxels if allOpts=true
-// else only for replicated volumes
+// ***************************************************************************
+// Creates optimisation info. Builds all voxels if allOpts=true
+// otherwise it builds voxels only for replicated volumes.
+// ***************************************************************************
 //
 void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
 {
@@ -91,53 +110,56 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
    G4LogicalVolumeStore *Store;
    G4LogicalVolume *volume;
    G4SmartVoxelHeader *head;
-   G4int nVolumes,n;
+   G4int nVolumes, n;
    Store=G4LogicalVolumeStore::GetInstance();
    nVolumes=Store->size();
-   for (n=0;n<nVolumes;n++)
+ 
+   for (n=0; n<nVolumes; n++)
    {
-      volume=(*Store)[n];
-      // For safety, check if there are any existing voxels and delete before
-      // replacement
-      head = volume->GetVoxelHeader();
-      if (head) 
-      {
-        delete head;
-        volume->SetVoxelHeader(0);
-      }
-      if ((volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) ||
-          (volume->GetNoDaughters()==1 &&
-           volume->GetDaughter(0)->IsReplicated()==true))
-      {
+     volume=(*Store)[n];
+     // For safety, check if there are any existing voxels and
+     // delete before replacement
+     //
+     head = volume->GetVoxelHeader();
+     if (head) 
+     {
+       delete head;
+       volume->SetVoxelHeader(0);
+     }
+     if ((volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) ||
+         (volume->GetNoDaughters()==1 &&
+          volume->GetDaughter(0)->IsReplicated()==true))
+     {
 #ifdef G4GEOMETRY_VOXELDEBUG
-        G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
-               << "     Examining logical volume name = "
-               << volume->GetName() << G4endl;
+       G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
+              << "     Examining logical volume name = "
+              << volume->GetName() << G4endl;
 #endif
-        head = new G4SmartVoxelHeader(volume);
-        if (head)
-        {
-           volume->SetVoxelHeader(head);
-        }
-        else
-        {
-           G4Exception("G4GeometryManager::BuildOptimisations voxelheader new failed");
-        }
-        if (verbose)
-        {
-           timer.Stop();
-           stats.push_back( G4SmartVoxelStat( volume, head,
-                                              timer.GetSystemElapsed(),
-                                              timer.GetUserElapsed()   ) );
-        }
+       head = new G4SmartVoxelHeader(volume);
+       if (head)
+       {
+         volume->SetVoxelHeader(head);
+       }
+       else
+       {
+         G4cout << "ERROR - VoxelHeader new failed." << G4endl;
+         G4Exception("ERROR - G4GeometryManager::BuildOptimisations");
+       }
+       if (verbose)
+       {
+         timer.Stop();
+         stats.push_back( G4SmartVoxelStat( volume, head,
+                                            timer.GetSystemElapsed(),
+                                            timer.GetUserElapsed() ) );
+       }
      }
      else
      {
-        // Don't create voxels for this node
+       // Don't create voxels for this node
 #ifdef G4GEOMETRY_VOXELDEBUG
-        G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
-               << "     Skipping logical volume name = " << volume->GetName()
-               << G4endl;
+       G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
+              << "     Skipping logical volume name = " << volume->GetName()
+              << G4endl;
 #endif
      }
   }
@@ -149,37 +171,37 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
   }
 }
 
-// Remove all optimisation info
+// ***************************************************************************
+// Removes all optimisation info.
+// Loops over all logical volumes, deleting non-null voxels pointers.
+// ***************************************************************************
 //
-// Process:
-//
-// Loop over all logical volumes, deleting non-null voxels ptrs
-
 void G4GeometryManager::DeleteOptimisations()
 {
-   G4LogicalVolumeStore *Store=G4LogicalVolumeStore::GetInstance();
-   G4LogicalVolume *volume;
-   G4SmartVoxelHeader *head;
-   G4int nVolumes,n;
-   nVolumes=Store->size();
-   for (n=0;n<nVolumes;n++)
-   {
-      volume=(*Store)[n];
-      head=volume->GetVoxelHeader();
-      if (head)
-      {
-        delete head;
-        volume->SetVoxelHeader(0);
-      }
-   }
+  G4LogicalVolumeStore* Store=G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* volume;
+  G4SmartVoxelHeader* head;
+  G4int nVolumes, n;
+  nVolumes = Store->size();
+
+  for (n=0; n<nVolumes; n++)
+  {
+    volume=(*Store)[n];
+    head=volume->GetVoxelHeader();
+    if (head)
+    {
+      delete head;
+      volume->SetVoxelHeader(0);
+    }
+  }
 }
 
+// ***************************************************************************
+// Reports statistics on voxel optimisation when closing geometry.
+// ***************************************************************************
 //
-// ReportVoxelStats
-//
-
 void
-G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
+G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
                                      G4double totalCpuTime )
 {
   G4cout << "G4GeometryManager::ReportVoxelStats -- Voxel Statistics"
