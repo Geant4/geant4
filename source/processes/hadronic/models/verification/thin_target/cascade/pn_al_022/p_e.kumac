@@ -11,25 +11,20 @@ set NDVY 010205
  zone 1 4
  opt logy
  
- hi/file 1 par.paw
+ hi/file 1 bic.paw
  hi/pl 12 hist
 * itx 40 140000 'protons 160.3 MeV on Al'
- itx 50 10000 'LEPAR'
+ itx 50 10000 'Binary'
  close 1
  
- hi/file 1 prec.paw
+ hi/file 1 ber.paw
  hi/pl 12 hist
- itx 50 10000 'PREC'
+ itx 50 10000 'Bertini'
  close 1
  
  hi/file 1 chips.paw
- hi/pl 12 hist
- itx 50 10000 'CHIPS'
- close 1
- 
- hi/file 1 kin.paw
- hi/pl 12 hist
- itx 50 5000 'KIN'
+* hi/pl 12 hist
+* itx 50 10000 'CHIPS'
  close 1
  
  opt liny

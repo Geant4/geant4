@@ -14,19 +14,19 @@ set NDVY 010205
  null 0 25 0.01 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 150 deg'
  
- hi/file 1 prec.paw
+ hi/file 1 bic.paw
  set dmod 3
  hi/pl 32 shist
  line 10 0.6 11 0.6
- itx 11.5 3.5 'PREC'
+ itx 11.5 3.5 'Binary'
  close 1
  
  
- hi/file 1 kin.paw
+ hi/file 1 ber.paw
  set dmod 1
  hi/pl 32 shist
  line 10 0.2 11 0.2
- itx 11.5 1.5 'KIN'
+ itx 11.5 1.5 'Bertini'
  close 1
  
 ve/create X(32) R .75 1.25 1.75 2.25 2.75 3.25 3.75 4.25 4.75 5.25 5.75 6.25 6.75 7.25 7.75 8.25 8.75 9.25 9.75 10.25 10.75 11.25 11.75 12.25 12.75 13.25 13.75 14.25 14.75 15.25 15.75 16.25 
@@ -34,27 +34,6 @@ ve/create Y(32) R 3.35 3.28 3.07 2.59 2.125 1.775 1.49 1.17 1.07 0.81 0.78 0.56 
 gr/h/symb X Y 32 21 0.2
  
  exe ../prf n_a4 eps
-
- null 0 25 0.01 10
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 150 deg'
- 
- gr/h/symb X Y 32 21 0.2
-
- hi/file 1 par.paw
- set dmod 4
- hi/pl 32 shist
- line 10 0.8 11 0.8
- itx 11.5 6.0 'LEPAR'
- close 1
- 
- hi/file 1 chips.paw
- set dmod 1
- hi/pl 32 shist
- line 10 0.4 11 0.4
- itx 11.5 2.2 'CHIPS'
- close 1
- 
- exe ../prf nk_a4 eps
 
  opt liny
 

@@ -14,7 +14,6 @@ set NDVY 010205
  null 0 25 0.01 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 150 deg'
 
-
  hi/file 1 bin.paw
  set dmod 1
  hi/pl 32 shist
