@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.13 2002-11-21 23:10:43 gum Exp $
+// $Id: G4Scintillation.cc,v 1.14 2002-11-25 18:48:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,8 @@ G4Scintillation::G4Scintillation(const G4String& processName)
 {
 	fTrackSecondariesFirst = false;
 
-        ScintillationYieldFactor = 1.0;
+        YieldFactor = 1.0;
+        ExcitationRatio = 1.0;
 
         theFastIntegralTable = NULL;
         theSlowIntegralTable = NULL;
@@ -168,7 +169,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double ResolutionScale    = aMaterialPropertiesTable->
                                       GetConstProperty("RESOLUTIONSCALE");
 
-        ScintillationYield = ScintillationYieldFactor * ScintillationYield;
+        ScintillationYield = YieldFactor * ScintillationYield;
 
 	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
 
@@ -231,7 +232,12 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                else {
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
-                 Num = (G4int) G4std::min(YieldRatio,1.0) * NumPhotons;
+                 if ( ExcitationRatio == 1.0 ) {
+                    Num = (G4int) G4std::min(YieldRatio,1.0) * NumPhotons;
+                 }
+                 else {
+                    Num = (G4int) G4std::min(ExcitationRatio,1.0) * NumPhotons;
+                 }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
                  ScintillationIntegral =

@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2002-11-21 23:11:28 gum Exp $
+$Id: History,v 1.18 2002-11-25 18:50:19 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 November 02: P. Gumplinger (xrays-V04-01-03)
+- G4Scintillation now allows for particle dependent excitation levels
 
 21 November 02: P. Gumplinger (xrays-V04-01-02)
 - G4Scintillation now uses G4Poisson for small MeanNumPhotons in a step

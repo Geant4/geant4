@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.10 2002-11-21 23:10:26 gum Exp $
+// $Id: G4Scintillation.hh,v 1.11 2002-11-25 18:48:51 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,6 +149,15 @@ public: // With description
         G4double GetScintillationYieldFactor() const;
         // Returns the photon yield factor.
 
+        void SetScintillationExcitationRatio(const G4double excitationratio);
+        // Called to set the scintillation exciation ratio, needed when
+        // the scintillation level excitation is different for different
+        // types of particles. This overwrites the YieldRatio obtained
+        // from the G4MaterialPropertiesTable.
+
+        G4double GetScintillationExcitationRatio() const;
+        // Returns the scintillation level excitation ratio.
+
         G4PhysicsTable* GetFastIntegralTable() const;
         // Returns the address of the fast scintillation integral table.
 
@@ -177,7 +186,9 @@ private:
 
 	G4bool fTrackSecondariesFirst;
 
-        G4double ScintillationYieldFactor;
+        G4double YieldFactor;
+
+        G4double ExcitationRatio;
 
 };
 
@@ -210,13 +221,25 @@ G4bool G4Scintillation::GetTrackSecondariesFirst() const
 inline
 void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
 {
-        ScintillationYieldFactor = yieldfactor;
+        YieldFactor = yieldfactor;
 }
 
 inline
 G4double G4Scintillation::GetScintillationYieldFactor() const
 {
-        return ScintillationYieldFactor;
+        return YieldFactor;
+}
+
+inline
+void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio)
+{
+        ExcitationRatio = excitationratio;
+}
+
+inline
+G4double G4Scintillation::GetScintillationExcitationRatio() const
+{
+        return ExcitationRatio;
 }
 
 inline
