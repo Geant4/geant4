@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.6 2004-08-06 11:35:29 vnivanch Exp $
+// $Id: RunAction.hh,v 1.7 2004-08-13 10:07:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,7 @@ class RunAction : public G4UserRunAction
        
     G4double GetBinLength() {return binLength;};
     G4double GetOffsetX()   {return offsetX;} 
-    void     FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    void     FillHisto(G4int id, G4double x, G4double weight = 1.0);
     
     void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
                    

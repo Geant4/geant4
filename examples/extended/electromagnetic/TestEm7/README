@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2004-07-08 16:21:07 maire Exp $
+$Id: README,v 1.9 2004-08-13 10:07:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -84,7 +84,7 @@ $Id: README,v 1.8 2004-07-08 16:21:07 maire Exp $
  	% gmake
  		
      - execute Test  in 'batch' mode from macro files
- 	% TestEm7    run01.mac
+ 	% TestEm7    proton.mac
  		
      - execute Test  in 'interactive mode' with visualization
  	% TestEm7 
@@ -110,7 +110,7 @@ $Id: README,v 1.8 2004-07-08 16:21:07 maire Exp $
      
      The bin size is egal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
-     The total energy deposited is plotted in MeV/mm.  
+     The total energy deposited is plotted in MeV/mm per incident particle.  
 
      Note that, by default, histograms are disabled. To activate them, uncomment
      G4ANALYSIS_USE in GNUmakefile.

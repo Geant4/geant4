@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2004-08-06 11:37:24 vnivanch Exp $
+$Id: History,v 1.21 2004-08-13 10:07:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13-08-04 mma (testem7-V06-02-02)
+- update proton.mac, ionC12.mac and remove run01.mac
 
 06-08-04 V.Ivanchenko (testem7-V06-02-01)
 - fix minor problem in stepping action

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.9 2004-08-06 11:35:29 vnivanch Exp $
+// $Id: RunAction.cc,v 1.10 2004-08-13 10:08:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,10 +113,10 @@ void RunAction::cleanHisto()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::FillHisto(G4int ih, G4double e, G4double weight)
+void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
 #ifdef G4ANALYSIS_USE
-  if(histo[ih]) histo[ih]->fill(e, weight);
+  if(histo[ih]) histo[ih]->fill(x, weight);
 #endif
 }
 
