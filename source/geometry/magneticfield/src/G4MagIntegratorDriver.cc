@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.28 2002-07-23 09:06:00 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.29 2002-11-09 02:35:12 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,15 @@ const G4int  G4MagInt_Driver::fMaxStepBase = 250;  // Was 5000
 G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
 				  G4MagIntegratorStepper *pItsStepper,
 				  G4int                   numComponents)
-  : nvar(numComponents), 
+  : fNoIntegrationVariables(numComponents), 
+    fMinNoVars(12), 
+    fNoVars( G4std::max( fNoIntegrationVariables, fMinNoVars )),
     fVerboseLevel(0)
 {  
+// In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8 is required.
+// For proper time of flight and spin,  fMinNoVars must be 12
+
+      // fNoVars= G4std::max( fNoVars, fMinNoVars );  
       RenewStepperAndAdjust( pItsStepper );
       hminimum_val= hminimum;
       fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
@@ -124,6 +130,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   G4int  noFullIntegr=0, noSmallIntegr = 0 ;
   static G4int  noGoodSteps =0, noBadSteps = 0 ;  // Bad = chord > curve-len 
+  const  int    nvar= fNoVars;
 
   for(i=0;i<nvar;i++) y[i] = ystart[i] ;
 
@@ -402,7 +409,6 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 {
       G4double errpos_sq, errvel_sq, errmax_sq;
       G4double errmax, h, htemp, xnew ;
-      G4int i;
 
       G4double yerr[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
 
@@ -452,10 +458,10 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
       x += (hdid = h) ;
 
+      int i;
+      const int nvar= fNoIntegrationVariables;   
       for(i=0;i<nvar;i++) y[i] = ytemp[i] ;
 
-      // delete[] ytemp ;
-      // delete[] yerr  ;
       return ;
 
 }   // end of  OneGoodStep .............................
