@@ -40,8 +40,11 @@ void RadioactiveDecayGun::SetNucleus (Nucleus theIon1)
 {
   theIon = theIon1;
 
+  //  G4IonTable *theIonTable =
+  //   const_cast<G4IonTable* const>(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4IonTable *theIonTable =
-     const_cast<G4IonTable* const>(G4ParticleTable::GetParticleTable()->GetIonTable());
+    (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+
   G4ParticleDefinition *aIon = NULL;
 
   G4int A = theIon.GetA();
