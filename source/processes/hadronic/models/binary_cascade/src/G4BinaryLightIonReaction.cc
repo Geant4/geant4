@@ -179,10 +179,11 @@
     G4LorentzRotation toLab(toZ.inverse());
   
     // Fill the particle change, while rotating. Boost from projectile breit-frame in case we swapped.  
-    theParticleChange.Clear();
-    theParticleChange.Initialize(aTrack);
-    theParticleChange.SetStatusChange(fStopAndKill);
-    theParticleChange.SetNumberOfSecondaries(result->size());
+    // theResult.Clear();
+    theResult.Initialize(aTrack);
+    theResult.SetStatusChange(fStopAndKill);
+    G4int nProducts = result->size();
+    theResult.SetNumberOfSecondaries(nProducts);
     for(i=0; i<result->size(); i++)
     {
       if((*result)[i]->GetNewlyAdded())
@@ -198,8 +199,11 @@
 	}    
 	tmp *= toLab;
 	aNew->Set4Momentum(tmp);
-	theParticleChange.AddSecondary(aNew);
+	theResult.AddSecondary(aNew);
       }
     }
+    debug.push_back("Result analysis");
+    debug.push_back(theResult.GetNumberOfSecondaries());
+    debug.dump();
     return &theResult;
   }
