@@ -94,7 +94,7 @@ G4bool XrayFluoHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     //    G4String processName = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
     
     //    G4double partEnergy = aStep->GetPreStepPoint()->GetKineticEnergy(); 
-    G4double secondEnergy = aStep->GetPostStepPoint()->GetKineticEnergy();
+    //    G4double secondEnergy = aStep->GetPostStepPoint()->GetKineticEnergy();
     //    G4cout << " la particella che deposita e': " << particleName << " ha una energia di keV "
     //  	 << partEnergy  << " e deposita "<< edep << G4endl;
     //    G4cout << " la particella creata deposita: " << secondEnergy << G4endl;  
@@ -109,15 +109,13 @@ G4bool XrayFluoHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     
     if ((edep==0.)) return false;      
     
-    // added, vediamo se funziona 
-    edep = edep + secondEnergy;
     //  G4cout << " edep =  " << edep << G4endl;
     
     G4TouchableHistory* theTouchable
       = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
     G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
-    theTouchable->MoveUpHistory();     
+    //  theTouchable->MoveUpHistory();     
     G4int PixelNumber = 0;
     if (Detector->GetNbOfPixels()>1) PixelNumber= physVol->GetCopyNo() ;
     if ( HitHPGeID[PixelNumber]==-1)
