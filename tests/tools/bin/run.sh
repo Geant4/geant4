@@ -119,58 +119,67 @@ else
     # Other tests :
     shortname=`basename $1 .hadron`
     shortname=`basename $shortname .EMtest`
-    cd $G4INSTALL/tests/$shortname
-#
-# Echo marks
-#
-echo "Starting $1 in $G4WORKDIR `date`"
 
-    if [ $G4LARGE_N ]; then
-      dot_G4LARGE_N=.$G4LARGE_N
-    fi
-
-    if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
-      -o $1 = test15 -o $1 = test16 ]
-    then
-      rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
-      $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
-      > $dir/$1.exerciser$dot_G4LARGE_N.in
-      rm -f $dir/$1$dot_G4LARGE_N.out
-      rm -f $dir/$1$dot_G4LARGE_N.err
-      time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-      $dir/$1.exerciser$dot_G4LARGE_N.in \
-      > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+    if [ ! -f $G4WORKDIR/bin/$G4SYSTEM/$shortname ]; then
+      echo "$1 does not exist - not built?"
     else
-      if [ -z "$G4LARGE_N" -o \
-        \( -n "$G4LARGE_N" -a \
-           -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
+
+      if [ $G4LARGE_N ]; then
+        dot_G4LARGE_N=.$G4LARGE_N
+      fi
+
+      cd $G4INSTALL/tests/$shortname
+
+      echo "Starting $1 in $G4WORKDIR `date`"
+
+      if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
+        -o $1 = test15 -o $1 = test16 ]
+      then
+        rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
+        $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
+        > $dir/$1.exerciser$dot_G4LARGE_N.in
         rm -f $dir/$1$dot_G4LARGE_N.out
         rm -f $dir/$1$dot_G4LARGE_N.err
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-        $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
+        $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
-      fi
-    fi
-
-echo "Finished $1 in $G4WORKDIR `date`"
-
-    if [ -f $1$dot_G4LARGE_N.evalsh ]; then
-      rm -f $dir/$1$dot_G4LARGE_N.eval
-      $1$dot_G4LARGE_N.evalsh $dir/$1$dot_G4LARGE_N.out \
-      $1$dot_G4LARGE_N.out > $dir/$1$dot_G4LARGE_N.eval 2>&1
-      if [ $? != 0 ]; then
-        if [ ! -f $dir/$1$dot_G4LARGE_N.badflag ]; then
-          touch $dir/$1$dot_G4LARGE_N.badflag
+      else
+        if [ -z "$G4LARGE_N" -o \
+          \( -n "$G4LARGE_N" -a \
+             -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
+          rm -f $dir/$1$dot_G4LARGE_N.out
+          rm -f $dir/$1$dot_G4LARGE_N.err
+          time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+          $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
+          > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+        else
+          echo "tests/$shortname/$1$dot_G4LARGE_N.in does not exist."
         fi
-        echo $1$dot_G4LARGE_N run failure \
-        >> $dir/$1$dot_G4LARGE_N.badflag 2>&1
       fi
-    else
-      rm -f $dir/$1$dot_G4LARGE_N.diff
-      rm -f $dir/$1$dot_G4LARGE_N.diff_err
-      diff -w $dir/$1$dot_G4LARGE_N.out $1$dot_G4LARGE_N.out \
-      > $dir/$1$dot_G4LARGE_N.diff 2> $dir/$1$dot_G4LARGE_N.diff_err
-      #cat $dir/$1$dot_G4LARGE_N.diff
+
+      echo "Finished $1 in $G4WORKDIR `date`"
+
+      if [ -f $1$dot_G4LARGE_N.evalsh ]; then
+        rm -f $dir/$1$dot_G4LARGE_N.eval
+        $1$dot_G4LARGE_N.evalsh $dir/$1$dot_G4LARGE_N.out \
+        $1$dot_G4LARGE_N.out > $dir/$1$dot_G4LARGE_N.eval 2>&1
+        if [ $? != 0 ]; then
+          if [ ! -f $dir/$1$dot_G4LARGE_N.badflag ]; then
+            touch $dir/$1$dot_G4LARGE_N.badflag
+          fi
+          echo $1$dot_G4LARGE_N run failure \
+          >> $dir/$1$dot_G4LARGE_N.badflag 2>&1
+        fi
+      else
+        rm -f $dir/$1$dot_G4LARGE_N.diff
+        rm -f $dir/$1$dot_G4LARGE_N.diff_err
+        if [ -f $dir/$1$dot_G4LARGE_N.out ]; then
+          diff -w $dir/$1$dot_G4LARGE_N.out $1$dot_G4LARGE_N.out \
+          > $dir/$1$dot_G4LARGE_N.diff 2> $dir/$1$dot_G4LARGE_N.diff_err
+          #cat $dir/$1$dot_G4LARGE_N.diff
+        fi
+      fi
+
     fi
 
   fi
