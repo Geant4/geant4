@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.30 2003-01-20 18:16:26 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.31 2003-04-26 02:40:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -937,6 +937,8 @@ G4bool G4MuPairProduction::RetrievePhysicsTable(G4ParticleDefinition* particle,
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+  electronEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
+  positronEnergyCuts = theCoupleTable->GetEnergyCutsVector(2);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
