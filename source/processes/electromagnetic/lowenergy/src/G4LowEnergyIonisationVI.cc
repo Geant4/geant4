@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.3 2001-10-18 09:49:57 vnivanch Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.4 2001-10-18 09:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -74,7 +74,9 @@
 //                          compilation warnings and extra protection to
 //                          prevent from accessing a null pointer                                               
 // 29.09.01 V.Ivanchenko    revision based on design iteration
-// 10.10.01 MGP             Revision to improve code quality and consistency with design
+// 10.10.01 MGP             Revision to improve code quality and consistency 
+//                          with design
+// 18.10.01 V.Ivanchenko    Add fluorescence AlongStepDoIt
 //
 // --------------------------------------------------------------
 

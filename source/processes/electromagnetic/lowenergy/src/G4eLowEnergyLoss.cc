@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.13 2001-10-18 09:49:57 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.14 2001-10-18 09:56:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -48,7 +48,8 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 11/04/00: Bug fix in dE/dx fluctuation simulation, Veronique Lefebure
 // 19-09-00  change of fluctuation sampling V.Ivanchenko
-// 20/09/00 update fluctuations V.Ivanchenko
+// 20/09/00  update fluctuations V.Ivanchenko
+// 18/10/01  add fluorescence AlongStepDoIt V.Ivanchenko
 // --------------------------------------------------------------
  
 #include "G4eLowEnergyLoss.hh"
