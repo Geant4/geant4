@@ -44,7 +44,7 @@ G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
 G4int printData(G4int event);
 G4int test();
 
-  G4int verboseLevel = 1;
+G4int verboseLevel = 1;
 
 int main(int argc, char **argv ) {
 
@@ -92,7 +92,7 @@ G4int testINCEvap() {
 
 G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
-  G4int verboseLevel = 3;
+  G4int verboseLevel = 1;
 
   if (verboseLevel > 1) {
     G4cout << " >>> testINCAll() " << G4endl;
@@ -121,7 +121,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     //    if (verboseLevel > 2) {
     //  G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
-   //};
+    //};
 
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
@@ -153,7 +153,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
       if (verboseLevel > 1) {
 	G4cout << "Target:  " << G4endl;  
-targ->printParticle();
+	targ->printParticle();
       }
 
     };
@@ -173,13 +173,13 @@ targ->printParticle();
       if ( G4int(A) == 1 ) {
 	targIsH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
 
-      if (verboseLevel > 1) {
-	G4cout << "Target:  " << G4endl;  
-targIsH->printParticle();
-      }
+	if (verboseLevel > 1) {
+	  G4cout << "Target:  " << G4endl;  
+	  targIsH->printParticle();
+	}
 
 
-      G4int s = 0;
+	G4int s = 0;
 
 	output = collider->collide(bull, targIsH);
 	s = output.getOutgoingParticles().size();
@@ -207,7 +207,7 @@ targIsH->printParticle();
 
 G4int printData(G4int i) {
 
-  G4int verboseLevel = 3;
+  G4int verboseLevel = 1;
 
   if (verboseLevel > 4) {
     G4cout << " After Cascade " << G4endl;
@@ -226,8 +226,11 @@ G4int printData(G4int i) {
     
     
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
-      G4std::vector<G4double> m = ifrag->getMomentum();
-      G4ThreeVector mom(m[1], m[2], m[3]);    
+    
+      //          G4std::vector<G4double> m = ifrag->getMomentum();
+
+    G4std::vector<G4double>  m(3, 0.0);
+	       G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
 
       G4int type = 0; // :::
@@ -263,11 +266,11 @@ G4int printData(G4int i) {
 	  setw(13) << fZ           << 
 	  setw(13) << fEx          << G4endl;
       }
-   G4double particleMass = ifrag->getMass();
+      G4double particleMass = ifrag->getMass();
 
-eTot   += sqrt(mom[0] * mom[0] + mom[1] * mom[1] +
-		       mom[2] * mom[2] + particleMass * particleMass) * GeV;
-    eKinTot += ekin;
+      eTot   += sqrt(mom[0] * mom[0] + mom[1] * mom[1] +
+		     mom[2] * mom[2] + particleMass * particleMass) * GeV;
+      eKinTot += ekin;
     }
 
   }
@@ -277,7 +280,8 @@ eTot   += sqrt(mom[0] * mom[0] + mom[1] * mom[1] +
     particleIterator ipart;
 
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-      G4std::vector<G4double> mom = ipart->getMomentum();
+      //   G4std::vector<G4double> mom = ipart->getMomentum();
+    G4std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
       G4int type = ipart->type();
 
@@ -288,26 +292,26 @@ eTot   += sqrt(mom[0] * mom[0] + mom[1] * mom[1] +
 	  setw(8)  << i            << 
 	  setw(8)  << type         << 
 	  setw(13) << ekin / GeV   << 
-	  setw(13) << mom[1]       << 
-	  setw(13) << mom[2]       << 
+       	  setw(13) << mom[1]       << 
+       	  setw(13) << mom[2]       << 
 	  setw(13) << mom[3]       << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
 	  setw(13) << 0.0          << G4endl;
       }
 
-eTot   += sqrt(mom[0] * mom[0]) * GeV;
-    eKinTot += ekin;
+      eTot   += sqrt(mom[0] * mom[0]) * GeV;
+      eKinTot += ekin;
     }
 
   }
 
-      if (verboseLevel > 2) {
+  if (verboseLevel > 2) {
 
-	G4cout << "Total energy           : " << eTot / GeV << "GeV" << G4endl; 
-	G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
+    G4cout << "Total energy           : " << eTot / GeV << "GeV" << G4endl; 
+    G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
 
-     }
+  }
 
   return 0;
 };
