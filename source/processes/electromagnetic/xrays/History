@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-08-11 10:45:29 maire Exp $
+$Id: History,v 1.4 2000-10-06 06:46:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 oct 00: pg  (xrays-V02-00-02)
+- G4Cerenkov.cc: calculate secondary position from aStep.GetDeltaPosition().
+- G4Scintillation.cc: calculate secondary position from aStep.GetDeltaPosition().
      
 11 aug 00: mma  (xrays-V02-00-01)
 
