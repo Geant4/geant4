@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.35 2003-10-27 17:24:27 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.36 2003-10-28 10:18:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,8 +98,8 @@ void G4eBremsstrahlung::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmFluctuationModel* fm =  0;
-  //G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  //G4VEmFluctuationModel* fm =  0;
+  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4eBremsstrahlungModel();
   em->SetLowEnergyLimit(0.1*keV);
