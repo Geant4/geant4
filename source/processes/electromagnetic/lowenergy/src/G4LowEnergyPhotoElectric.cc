@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.39 2001-10-08 07:49:00 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.40 2001-10-08 15:29:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -171,7 +171,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
 
-  // There may be cases where the bnding energy of the selectd shell is > photon energy
+  // There may be cases where the binding energy of the selected shell is > photon energy
   // In such cases do not generate secondaries
   if (eKineticEnergy > 0.)
     {

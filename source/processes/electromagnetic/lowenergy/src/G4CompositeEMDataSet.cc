@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.3 2001-10-08 07:48:56 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.4 2001-10-08 15:29:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,7 +39,7 @@
 #include "g4std/strstream"
 
 
-G4CompositeEMDataSet::G4CompositeEMDataSet(const G4VDataSetAlgorithm* interpolation,
+G4CompositeEMDataSet::G4CompositeEMDataSet(G4VDataSetAlgorithm* interpolation,
 					   G4double unitE, G4double unitData,
 					   G4int minZ, G4int maxZ)
   :algorithm(interpolation), unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ)
@@ -48,7 +48,7 @@ G4CompositeEMDataSet::G4CompositeEMDataSet(const G4VDataSetAlgorithm* interpolat
 }
 
 G4CompositeEMDataSet::G4CompositeEMDataSet(const G4String& dataFile,
-					   const G4VDataSetAlgorithm* interpolation,
+					   G4VDataSetAlgorithm* interpolation,
 					   G4double unitE, G4double unitData,
 					   G4int minZ, G4int maxZ)
   : algorithm(interpolation), unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ)
