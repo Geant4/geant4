@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2002-05-15 10:07:40 gcosmo Exp $
+$Id: History,v 1.35 2002-05-17 18:00:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 17, 2002  G. Cosmo                     geommng-V04-00-06
+- Added ability to optionally optimise/non-optimise detector regions
+  using logical volumes:
+  o G4LogicalVolume:
+    - Introduced additional bool argument to constructor,
+      set to 'true' by default.
+    - Added method IsToOptimise() with corresponding bool flag attribute.
+  o G4GeometryManager:
+    - Adapted BuildOptimisations() method to consider optional optimisation
+      flag from G4LogicalVolume.
 
 May 15, 2002  G. Cosmo                     geommng-V04-00-05
 - G4SmartVoxelHeader:
