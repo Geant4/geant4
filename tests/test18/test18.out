@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-August-2003)
+                                (3-October-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -38,67 +38,117 @@ G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins.
-        Step function: finalRange(mm)= 10,  dRoverRange= 0.05
+eIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+eBrem:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-        Step function: finalRange(mm)= 10,  dRoverRange= 0.05
+hIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuBrems:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuPairProd:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+MuBrems:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.11613 GeV    e+ 1.0625 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run : 0
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.37s Real=1.42s Sys=0s
+  User=0.21s Real=0.39s Sys=0.02s
     1000.000           1           0     Na24[0.0]
-        46.4           1   1.551e+05     e-
-    1.34e+03           1   1.551e+05     anti_nu_e
-    2.75e+03           1   1.551e+05     gamma
-    1.37e+03           1   1.551e+05     gamma
-      0.0429           1   1.551e+05     Mg24[0.0]
+         820           1   2.947e+04     e-
+         571           1   2.947e+04     anti_nu_e
+    2.75e+03           1   2.947e+04     gamma
+    1.37e+03           1   2.947e+04     gamma
+      0.0354           1   2.947e+04     Mg24[0.0]
 
 #
 #
@@ -107,23 +157,49 @@ Run Summary
 #/grdm/nucleusLimits 24 24 10 10
 /gun/ion 10 24 10 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=0.65s Sys=0.02s
+  User=0.28s Real=0.39s Sys=0.02s
        1e+03           1           0     Ne24[0.0]
-         375           1       255.1     e-
-    1.62e+03           1       255.1     anti_nu_e
-      0.0641           1       255.1     Na24[472.2]
-         472           1       255.1     gamma
-           0           1       255.1     Na24[0.0]
-         695           1   1.885e+04     e-
-         696           1   1.885e+04     anti_nu_e
-    2.75e+03           1   1.885e+04     gamma
-    1.37e+03           1   1.885e+04     gamma
-       0.023           1   1.885e+04     Mg24[0.0]
+    1.01e+03           1       80.09     e-
+         989           1       80.09     anti_nu_e
+      0.0251           1       80.09     Na24[472.2]
+         472           1       80.11     gamma
+           0           1       80.11     Na24[0.0]
+         351           1   5.703e+04     e-
+    1.04e+03           1   5.703e+04     anti_nu_e
+    2.75e+03           1   5.703e+04     gamma
+    1.37e+03           1   5.703e+04     gamma
+      0.0431           1   5.703e+04     Mg24[0.0]
 
 #
 #
@@ -132,27 +208,53 @@ Run Summary
 #/grdm/nucleusLimits 24 24 9 9
 /gun/ion 9 24 9 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.47s Real=0.71s Sys=0s
+  User=0.1s Real=0.11s Sys=0s
        1e+03           1           0     F24[0.0]
-    1.09e+04           1     0.02878     e-
-    1.86e+03           1     0.02878     anti_nu_e
-    1.98e+03           1     0.02878     gamma
-        3.22           1     0.02878     Ne24[0.0]
-         808           1       270.3     e-
-    1.19e+03           1       270.3     anti_nu_e
-      0.0856           1       270.3     Na24[472.2]
-         472           1       270.3     gamma
-           0           1       270.3     Na24[0.0]
-         405           1   2.143e+05     e-
-         986           1   2.143e+05     anti_nu_e
-    2.75e+03           1   2.143e+05     gamma
-    1.37e+03           1   2.143e+05     gamma
-      0.0277           1   2.143e+05     Mg24[0.0]
+     3.8e+03           1      0.0309     e-
+    8.91e+03           1      0.0309     anti_nu_e
+    1.98e+03           1      0.0309     gamma
+        3.56           1      0.0309     Ne24[0.0]
+    1.56e+03           1       409.1     e-
+         438           1       409.1     anti_nu_e
+       0.111           1       409.1     Na24[472.2]
+         472           1       409.1     gamma
+           0           1       409.1     Na24[0.0]
+         695           1     1.9e+04     e-
+         696           1     1.9e+04     anti_nu_e
+    2.75e+03           1     1.9e+04     gamma
+    1.37e+03           1     1.9e+04     gamma
+       0.023           1     1.9e+04     Mg24[0.0]
 
 #
 #
@@ -161,20 +263,47 @@ Run Summary
 #/grdm/nucleusLimits 24 24 13 13
 /gun/ion 13 24 13 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.71s Sys=0.01s
+  User=0.08s Real=0.09s Sys=0s
        1e+03           1           0     Al24[0.0]
-    3.69e+03           1       4.458     e+
-         511           1       4.458     gamma
-         511           1       4.458     gamma
-    5.04e+03           1       4.458     nu_e
-    2.75e+03           1       4.458     gamma
-    1.37e+03           1       4.458     gamma
-        1.25           1       4.458     Mg24[0.0]
+    1.86e+03           1       18.51     e+
+         511           1       18.51     gamma
+         511           1       18.51     gamma
+    1.48e+03           1       18.51     nu_e
+    5.39e+03           1       18.51     gamma
+    2.75e+03           1       18.51     gamma
+    1.37e+03           1       18.51     gamma
+       0.185           1       18.51     Mg24[0.0]
 
 #
 #
@@ -183,20 +312,46 @@ Run Summary
 #/grdm/nucleusLimits 24 24 11 11
 /gun/ion 11 24 11 472
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
        1e+03           1           0     Na24[472.0]
-         472           1   0.0007044     gamma
-           0           1   0.0007044     Na24[0.0]
-         364           1   1.822e+05     e-
-    1.03e+03           1   1.822e+05     anti_nu_e
-    2.75e+03           1   1.822e+05     gamma
-    1.37e+03           1   1.822e+05     gamma
-      0.0106           1   1.822e+05     Mg24[0.0]
+         472           1     0.01558     gamma
+           0           1     0.01558     Na24[0.0]
+         535           1        4015     e-
+         856           1        4015     anti_nu_e
+    2.75e+03           1        4015     gamma
+    1.37e+03           1        4015     gamma
+      0.0549           1        4015     Mg24[0.0]
 
 #
 #
@@ -205,23 +360,49 @@ Run Summary
 #/grdm/nucleusLimits 46 46 24 24
 /gun/ion 24 46 24 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.36s Sys=0s
+  User=0.35s Real=0.38s Sys=0s
        1e+03           1           0     Cr46[0.0]
-     2.6e+03           1      0.1036     e+
-         511           1      0.1036     gamma
-         511           1      0.1036     gamma
-    3.98e+03           1      0.1036     nu_e
-      0.0833           1      0.1036     V46[0.0]
-    2.19e+03           1      0.7949     e+
-         511           1      0.7949     gamma
-         511           1      0.7949     gamma
-    3.84e+03           1      0.7949     nu_e
-       0.214           1      0.7949     Ti46[0.0]
+    1.93e+03           1       1.021     e+
+         511           1       1.021     gamma
+         511           1       1.021     gamma
+    4.65e+03           1       1.021     nu_e
+       0.542           1       1.021     V46[0.0]
+    4.51e+03           1       1.822     e+
+         511           1       1.822     gamma
+         511           1       1.822     gamma
+    1.52e+03           1       1.822     nu_e
+        0.39           1       1.822     Ti46[0.0]
 
 #
 #
@@ -230,15 +411,41 @@ Run Summary
 /grdm/nucleusLimits 215 215 84 84
 /gun/ion 84 215 84 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.39s Sys=0.01s
+  User=0.01s Real=0.04s Sys=0.01s
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1   1.956e-05     alpha
-         140           1   1.956e-05     Pb211[0.0]
+    7.39e+03           1   0.0001246     alpha
+         140           1   0.0001246     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

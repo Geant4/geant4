@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-August-2003)
+                                (3-October-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -49,6 +49,7 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->Construct() start.
 
 
 Bremsstrahlung Angular Generator is Modified Tsai
@@ -66,11 +67,6 @@ physicsList->setCut() start.
  Z position of the (middle of the) absorber 0  mm.
 
 World is registered to the default region.
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 #
 /lowenergy/lowlimG 2.5e-4
 Tst20PhysicsList::SetCuts:Gamma cut in energy: 0.00025 (MeV)
@@ -105,10 +101,9 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
 G4AugerData for Element no. 13 are loaded
@@ -132,23 +127,37 @@ LowEnBrem:  Total cross sections from EEDL database.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
 
+eIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33111 keV    e- 130.147 keV    e+ 127.666 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -182,19 +191,63 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.04s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.4s Real=0.71s Sys=0s
+  User=0.43s Real=0.43s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -218,19 +271,63 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=1.2s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -254,19 +351,63 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.42s Real=0.5s Sys=0s
+  User=0.41s Real=0.42s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -290,14 +431,36 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.87s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.4s Real=1.1s Sys=0s
+  User=0.4s Real=0.41s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -310,10 +473,9 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.2
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -327,9 +489,47 @@ LowEnBrem:  Total cross sections from EEDL database.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
 
+eIoni:  
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -353,19 +553,73 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.05s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.59s Real=2s Sys=0s
+  User=0.59s Real=0.6s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -389,19 +643,73 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.54s Real=1.4s Sys=0s
+  User=0.55s Real=0.56s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -425,19 +733,73 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.52s Real=0.52s Sys=0s
+  User=0.51s Real=0.52s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -461,14 +823,41 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.78s Sys=0s
+  User=0.5s Real=0.5s Sys=0s
 #
 /calor/setAbsMat Water
 #======================
@@ -481,10 +870,9 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.2
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -498,9 +886,52 @@ LowEnBrem:  Total cross sections from EEDL database.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
 
+eIoni:  
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -525,19 +956,83 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=2.8s Sys=0.1s
+  User=1.5s Real=1.6s Sys=0.07s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -561,19 +1056,83 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=2.7s Sys=0.06s
+  User=1.4s Real=1.4s Sys=0.09s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -597,19 +1156,83 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.5s Real=6s Sys=0.1s
+  User=3.4s Real=3.5s Sys=0.1s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 
 *********************************************************************************************************
@@ -634,14 +1257,46 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.02s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.9s Real=6.1s Sys=0.08s
+  User=1.9s Real=2s Sys=0.06s
 #
 /gun/particle gamma
 #------------------
@@ -659,64 +1314,255 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.88s Real=1.2s Sys=0.04s
+  User=0.88s Real=0.93s Sys=0.02s
 /gun/energy 100 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=1.3s Sys=0s
+  User=0.48s Real=0.49s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.1s Real=13s Sys=0.25s
+  User=4.1s Real=4.4s Sys=0.25s
 /gun/energy 100 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Lead 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.6s Real=5.3s Sys=0.09s
+  User=2.4s Real=2.5s Sys=0.11s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.5s Real=0.84s Sys=0s
+  User=0.52s Real=0.54s Sys=0.01s
 /gun/energy 100 MeV
 /run/beamOn 1000
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.36s Sys=0s
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
+  User=0.35s Real=0.35s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 G4SDManager deleted.
 LowEnBrem for e- in Water : 81 calls
 LowEnConversion for gamma in Air : 1 calls
 LowEnConversion for gamma in Aluminium : 465 calls
-LowEnConversion for gamma in Lead : 1552 calls
-LowEnConversion for gamma in Water : 121 calls
+LowEnConversion for gamma in Lead : 1537 calls
+LowEnConversion for gamma in Water : 101 calls
 LowEnPhotoElec for gamma in Air : 19 calls
 LowEnPhotoElec for gamma in Aluminium : 4055 calls
 LowEnPhotoElec for gamma in Lead : 4011 calls
@@ -724,25 +1570,26 @@ LowEnPhotoElec for gamma in Water : 4031 calls
 LowEnRayleigh for gamma in Aluminium : 35 calls
 LowEnRayleigh for gamma in Lead : 33 calls
 LowEnRayleigh for gamma in Water : 45 calls
-LowEnergyIoni for e- in Air : 68 calls
+LowEnergyIoni for e- in Air : 65 calls
 LowEnergyIoni for e- in Aluminium : 4054 calls
 LowEnergyIoni for e- in Lead : 4011 calls
 LowEnergyIoni for e- in Water : 9547 calls
-Transportation for e+ in Air : 1408 calls
-Transportation for e- in Air : 6570 calls
-Transportation for gamma in Air : 5356 calls
+Transportation for e+ in Air : 1406 calls
+Transportation for e- in Air : 6511 calls
+Transportation for gamma in Air : 5325 calls
 Transportation for gamma in Aluminium : 2003 calls
 Transportation for gamma in Lead : 2006 calls
 Transportation for gamma in Water : 2004 calls
 annihil for e+ in Aluminium : 35 calls
-annihil for e+ in Lead : 689 calls
+annihil for e+ in Lead : 656 calls
 annihil for e+ in Water : 6 calls
 msc for e- in Air : 1 calls
 polarLowEnCompt for gamma in Air : 3 calls
 polarLowEnCompt for gamma in Aluminium : 3738 calls
-polarLowEnCompt for gamma in Lead : 40305 calls
-polarLowEnCompt for gamma in Water : 814 calls
+polarLowEnCompt for gamma in Lead : 38794 calls
+polarLowEnCompt for gamma in Water : 840 calls
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.
