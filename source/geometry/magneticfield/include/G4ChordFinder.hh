@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.15 2003-11-08 03:29:45 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.16 2003-11-13 17:53:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,9 @@ class G4ChordFinder
 
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
                                        G4double stepInitial,
-                                       G4double epsStep_Relative  );
+                                       G4double epsStep_Relative,
+                                       const G4ThreeVector latestSafetyOrigin,
+                                       G4double lasestSafetyRadius);
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
@@ -114,7 +116,10 @@ class G4ChordFinder
                               G4FieldTrack& yEnd,
                               G4double&    dyErr,      //  Error of endpoint 
                               G4double     epsStep,
-                              G4double*  pNextStepForAccuracy= 0);  
+                              G4double*  pNextStepForAccuracy,  // = 0,
+                              const G4ThreeVector latestSafetyOrigin,
+                              G4double       latestSafetyRadius 
+                                      );  
 
       void     PrintDchordTrial(G4int     noTrials, 
                                 G4double  stepTrial, 
@@ -133,10 +138,17 @@ class G4ChordFinder
       inline   G4double GetMultipleRadius();        // No original value
        //  Parameters for adapting performance ... use with great care
 
-   protected:    
+   public:  // with description 
       void     SetFractions_Last_Next( G4double fractLast= 0.90, 
 				       G4double fractNext= 0.95 ); 
       //  Parameters for  performance ... change with great care
+
+      inline   void     SetFirstFraction(G4double fractFirst);
+      //  Parameter for  performance ... change with great care
+
+   protected:
+      inline G4double GetLastStepEstimateUnc(); 
+      inline void     SetLastStepEstimateUnc( G4double stepEst ); 
 
    private:  // ............................................................
 
