@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2004-11-13 17:34:35 gcosmo Exp $
+$Id: History,v 1.75 2004-11-15 14:12:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,7 @@ Nov 13, 2004  G.Cosmo                      geommng-V06-02-05
 - Added method TotalVolumeEntities() to G4LogicalVolume, returning the
   total number of physical volumes (placed or replicated/parameterised)
   included in the tree represented by the current logical volume.
+- Correction in the computation of mass for parameterised volumes.
 
 Nov 12, 2004  G.Cosmo                      geommng-V06-02-04
 - Added method GetMass() to G4LogicalVolume, returning the value in absolute
