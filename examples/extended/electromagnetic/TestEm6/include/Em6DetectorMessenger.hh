@@ -44,6 +44,8 @@ public: // Without description
     G4UIdirectory*             Em6detDir;
 
     G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithAnInteger*      NumOfAbsCmd;
+
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;
     G4UIcmdWithADoubleAndUnit* AbsSizYZCmd;
 
@@ -57,6 +59,7 @@ public: // Without description
     G4UIcmdWithoutParameter*   UpdateCmd;
 
 };
+
 
 #endif
 

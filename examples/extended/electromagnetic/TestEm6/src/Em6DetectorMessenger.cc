@@ -36,6 +36,11 @@ Em6DetectorMessenger::Em6DetectorMessenger(Em6DetectorConstruction * Em6Det)
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",false);
   WorldMaterCmd->AvailableForStates(Idle);
+
+  NumOfAbsCmd = new G4UIcmdWithAnInteger("/calor/setNumOfAbs",this);
+  NumOfAbsCmd->SetGuidance("Set number of absorbers");
+  NumOfAbsCmd->SetParameterName("Nabs",false);
+  NumOfAbsCmd->AvailableForStates(Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
@@ -90,6 +95,7 @@ Em6DetectorMessenger::Em6DetectorMessenger(Em6DetectorConstruction * Em6Det)
 
 Em6DetectorMessenger::~Em6DetectorMessenger()
 {
+  delete NumOfAbsCmd; 
   delete AbsMaterCmd; 
   delete AbsThickCmd; 
   delete AbsSizYZCmd;  
@@ -114,6 +120,9 @@ void Em6DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == AbsThickCmd )
    { Em6Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+
+  if( command == NumOfAbsCmd )
+   { Em6Detector->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));}
    
   if( command == AbsSizYZCmd )
    { Em6Detector->SetAbsorberSizeYZ(AbsSizYZCmd->GetNewDoubleValue(newValue));}
@@ -133,5 +142,6 @@ void Em6DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == MagFieldCmd )
    { Em6Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

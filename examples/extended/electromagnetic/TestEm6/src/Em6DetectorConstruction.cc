@@ -160,6 +160,7 @@ CH4->AddElement(elC, natoms=1);
 G4Material*  Graphite = new G4Material(name="Graphite", symbol="Graphite",
 				       density=2.265*g/cm3, ncomponents=1);
 Graphite->AddElement( elC, 1 );
+
 //
 // define a material from elements.   case 2: mixture by fractional mass
 //
@@ -294,6 +295,14 @@ void Em6DetectorConstruction::SetWorldMaterial(G4String materialChoice)
       PrintCalorParameters();     
      }
 }
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em6DetectorConstruction::SetNumberOfAbsorbers(G4int val)
+{
+  // change Absorber thickness and recompute the calorimeter parameters
+  NumberOfAbsorbers = val;
+}  
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

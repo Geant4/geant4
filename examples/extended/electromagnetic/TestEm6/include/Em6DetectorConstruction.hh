@@ -47,6 +47,7 @@ class Em6DetectorConstruction : public G4VUserDetectorConstruction
   public:
      
      void SetAbsorberMaterial (G4String);     
+     void SetNumberOfAbsorbers (G4int);     
      void SetAbsorberThickness(G4double);     
      void SetAbsorberSizeYZ   (G4double);          
       
@@ -133,6 +134,7 @@ inline void Em6DetectorConstruction::ComputeCalorParameters()
         WorldSizeYZ = 1.2*AbsorberSizeYZ;
        } 	
 }
+
 
 #endif
 

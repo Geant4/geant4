@@ -1,0 +1,33 @@
+#
+# Macro file for the initialization phase of "TestEm6.cc"
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/run/verbose 2
+#
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+#/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/create OGLIX
+#
+# Create a viewer
+/vis/viewer/create
+#
+# Draw scene
+/vis/scene/notifyHandlers
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/event/drawTracks charged
+#
+# Flush visualization
+/vis/viewer/update

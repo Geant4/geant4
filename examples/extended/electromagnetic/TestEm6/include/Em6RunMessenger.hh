@@ -90,6 +90,7 @@ private:
    G4UIcmdWithAnInteger*      setnbinzvertexCmd; 
    G4UIcmdWithADoubleAndUnit* setzlowCmd; 
    G4UIcmdWithADoubleAndUnit* setzhighCmd; 
+
  
 };
 
