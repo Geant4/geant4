@@ -57,8 +57,10 @@
 
 
 
- The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
-ExN03PhysicsList::SetCuts:CutLength : 2 mm 
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
+------------------------------------------------------------
+ExN03PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -119,83 +121,24 @@ MuPairProd:  theoretical cross sections
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
-Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
 Cut in energy
-          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
-        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
-             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
-               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
-              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
-       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
-             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
-                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
-            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
-        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
-         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
+          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV         990 eV 
+        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV         990 eV 
+             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV         990 eV 
+               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
+              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV         990 eV 
+       Scintillator        2.37 keV         356 keV        3.43 MeV        9.06 MeV         990 eV 
+             quartz        5.52 keV         534 keV        4.66 MeV        12.2 MeV         990 eV 
+                Air         990 eV          990 eV         48.4 keV        83.2 keV         990 eV 
+            Aerogel        1.71 keV         119 keV        1.28 MeV        3.18 MeV         990 eV 
+        CarbonicGas         990 eV         36.5 keV         393 keV         853 keV         990 eV 
+         WaterSteam         990 eV          990 eV         11.9 keV        14.9 keV         990 eV 
            Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
                Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
-#
-# Macro file for the initialization phase of "exampleN03.cc"
-#
-# Sets some default verbose
-# and initializes the graphic.
-#
-/control/saveHistory
-/run/verbose 2
-#
-# Create empty scene ("world" is default)
-/vis/scene/create
-#
-# Add volume to scene
-/vis/scene/add/volume
-#
-# Create a scene handler for a specific graphics system
-# Edit the next line(s) to choose another graphic system
-#
-#/vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIX
-#
-# Create a viewer
-/vis/viewer/create
-#
-# Draw scene
-/vis/scene/notifyHandlers
-#
-# for drawing the tracks
-# if too many tracks cause core dump => storeTrajectory 0
-/tracking/storeTrajectory 1
-#/vis/scene/include/trajectories
-#
-# Flush visualization
-/vis/viewer/update
-
-Idle> /run/particle/dumpCutValues
-============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
-Cut in energy
-          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
-        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
-             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
-               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
-              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
-       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
-             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
-                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
-            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
-        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
-         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
-           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
-               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
-===================================================
-Idle> # e+ 300MeV 
-Idle> /gun/particle e+
-Idle> /gun/energy 300 MeV
-Idle> /run/beamOn 1
+# e+ 300MeV 
 ### Run 0 start.
-Start closing geometry.
-Start Run processing.
 
 ---> Event: 0
 
@@ -204,91 +147,57 @@ Start Run processing.
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 >>> Event 0
-     9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
-        Gap: total energy:      13 MeV       total track length:       7 cm 
-    210 trajectories stored in this event.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.44s Real=0.57s Sys=0.05s
-Idle> #
-Idle> # list the existing physics processes
-Idle> /process/list
+     10 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      16 cm 
+        Gap: total energy:     3.7 MeV       total track length:     1.5 cm 
+    0 trajectories stored in this event.
+#
+# list the existing physics processes
      Transportation,                msc,              hIoni,              eIoni
               eBrem,            annihil,               phot,              compt
                conv,             MuIoni,            MuBrems,         MuPairProd
               Decay
-Idle> #
-Idle> # switch off MultipleScattering
-Idle> /process/inactivate msc
-Idle> /run/beamOn 1
+#
+# switch off MultipleScattering
 ### Run 1 start.
-Start Run processing.
 
 ---> Event: 0
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1364523396, 538526746
+ Current couple of seeds = 1081085135, 235076861
 ----------------------------------------
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.9e+02 MeV       total track length:      15 cm 
-        Gap: total energy:      14 MeV       total track length:     6.3 cm 
-    216 trajectories stored in this event.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.47s Real=0.47s Sys=0s
-Idle> #
-Idle> # switch on MultipleScattering
-Idle> /process/activate msc
-Idle> #
-Idle> # change detector parameter
-Idle> /calor/setAbsMat Aluminium
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
+        Gap: total energy:      20 MeV       total track length:     9.8 cm 
+    0 trajectories stored in this event.
+#
+# switch on MultipleScattering
+#
+# change detector parameter
 
- The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
-Idle> /calor/setGapMat Aerogel
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
+------------------------------------------------------------
 
- The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
-Idle> /calor/setAbsThick 2. cm
-Idle> /calor/setGapThick 5. cm
-Idle> /calor/setNbOfLayers 30
-Idle> /calor/setSizeYZ   1.5 m
-Idle> /calor/update
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
+------------------------------------------------------------
 
- The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /gun/particle gamma
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 1
+------------------------------------------------------------
+---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+------------------------------------------------------------
 ### Run 2 start.
-Start closing geometry.
-Start Run processing.
 
 ---> Event: 0
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1243028270, 582042789
+ Current couple of seeds = 1062777741, 543200454
 ----------------------------------------
 >>> Event 0
-     26 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 3.7e+02 MeV       total track length:      85 cm 
-        Gap: total energy:      77 MeV       total track length:     2.1 m  
-    175 trajectories stored in this event.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1.1s Real=1.2s Sys=0.08s
-Idle> G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-G4SDManager deleted.
-EventManager deleted.
-UImanager deleted.
-StateManager deleted.
-RunManager is deleting.
+     30 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 3.9e+02 MeV       total track length:      91 cm 
+        Gap: total energy:      81 MeV       total track length:     2.2 m  
+    0 trajectories stored in this event.
