@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.87 2004-03-18 08:02:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.88 2004-03-25 08:15:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -2432,7 +2432,6 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
               }
               delete quasH;  
               return theQHadrons;
-
 			}
             else
 			{
@@ -5321,11 +5320,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           theQHadrons.pop_back();              // exclude theLastHadron pointer from OUTPUT
           delete theLast; //*!! When killing, DON'T forget to delete the last QHadron !!*
           G4QContent cqQC=qH->GetQC();
-          G4Quasmon* quasH = new G4Quasmon(cqQC,qH->Get4Momentum());//Crea fakeQuasm
+          G4LorentzVector tqLV=qH->Get4Momentum();
+          G4Quasmon* quasH = new G4Quasmon(cqQC,tqLV);//Create fakeQuasm
           if(!CheckGroundState(quasH,true))         // Try to correct by other hadrons
           {
 #ifdef chdebug
-            G4cerr<<"---Warning---G4QE::FSI:Failed for PDG="<<hPDG<<", 4M="<<h4Mom<<G4endl;
+            G4cerr<<"-W-G4QE::FSI:E="<<theEnvironment<<",Q="<<cqQC<<tqLV<<tqLV.m()<<G4endl;
 #endif
             theQHadrons.push_back(qH);              // Fill as it is (delete equivalent)
           }
@@ -8376,7 +8376,9 @@ void G4QEnvironment::DecayAntiStrange(G4QHadron* qH)
         G4Quasmon* quasH = new G4Quasmon(qQC,q4M);
 		if(!CheckGroundState(quasH,true))
         {
+#ifdef chdebug
           G4cerr<<"---Warning---G4QE::DecAntiStran:Failed FillAsItIs h="<<qQC<<q4M<<G4endl;
+#endif
           theQHadrons.push_back(qH);// @@ Can cause problems with ParticleConversion in G4
         }
         else delete qH;  
@@ -9131,14 +9133,15 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mLamb= G4QPDGCode(3122).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
+  //static const G4double dmPi  = mPi+mPi;
   ///@@@///
   ///////////////corFlag=true;
   ///@@@///
   G4QContent valQ=quasm->GetQC();               // Quark content of the Quasmon
   G4int    resQPDG=valQ.GetSPDGCode();          // Reachable in a member function
-  G4int    resB=valQ.GetBaryonNumber();      // Baryon number of the Quasmon
-  G4int    resC=valQ.GetCharge();            // Charge of the Quasmon
-  G4int    resS=valQ.GetStrangeness();       // Strangeness of the Quasmon
+  G4int    resB=valQ.GetBaryonNumber();         // Baryon number of the Quasmon
+  G4int    resC=valQ.GetCharge();               // Charge of the Quasmon
+  G4int    resS=valQ.GetStrangeness();          // Strangeness of the Quasmon
   if(resQPDG==10 && resB>0) resQPDG=valQ.GetZNSPDGCode();
   G4double resQMa=G4QPDGCode(resQPDG).GetMass();// GS Mass of the Residual Quasmon
   G4double resEMa=0.;                           // GS Mass of the EmptyResidualEnvironment
@@ -9146,12 +9149,40 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   G4LorentzVector enva4M=G4LorentzVector(0.,0.,0.,0.);
   G4QContent reTQC=valQ;                        // Prototype QuarkContent of the ResidNucl
   G4LorentzVector reTLV=quasm->Get4Momentum();  // Prototyoe 4-Mom of the Residual Nucleus
+  G4double reTM=reTLV.m();                      // Real mass of the Quasmon
+  G4int envPDG=theEnvironment.GetPDG();
+  if(resB>1 && (!resS && (resC==resB && reTM>resC*mProt || !resC && reTM>resB*mNeut)
+	            || resS==resB && reTM>resS*mLamb) ) // Immediate Split(@@Decay) MultiBaryon
+  {
+#ifdef chdebug
+    //if(resQPDG==89998005)
+      G4cout<<"G4QE::CGS:*MultB* E="<<envPDG<<",B="<<resB<<",C="<<resC<<",S"<<resS<<G4endl;
+#endif
+    if(envPDG!=90000000)
+    {
+      resEMa=theEnvironment.GetMZNS();          // GSMass of the Residual Environment
+      enva4M=theEnvironment.Get4Momentum();     // 4-Mom of the Residual Environment
+      G4LorentzVector toLV=reTLV+enva4M;        // Total 4-mom for decay
+      enva4M=G4LorentzVector(0.,0.,0.,resEMa);  // GSM of the Environment
+      reTLV=G4LorentzVector(0.,0.,0.,resQMa);   // GSM of the Quasmon
+      if(G4QHadron(toLV).DecayIn2(reTLV,enva4M))
+	  {
+        theQHadrons.push_back(new G4QHadron(envPDG,enva4M));
+        theEnvironment=G4QNucleus(G4QContent(0,0,0,0,0,0), G4LorentzVector(0.,0.,0.,0.));
+      }
+      else G4cerr<<"*G4QE::CGS:tM="<<toLV.m()<<toLV<<"<q="<<resQMa<<"+EM="<<resEMa<<G4endl;
+    }
+    G4int  baPDG=3122;                          // Prototype for MultiLambda
+    if(!resS) baPDG = (!resC) ? 2112 : 2212;    // MultiNeutron or MultiProton
+    reTLV/=resB;                                // Recalculate! Anyway go out...
+    for(G4int ib=0; ib<resB; ib++) theQHadrons.push_back(new G4QHadron(baPDG,reTLV));
+    return true;
+  }
 #ifdef cdebug
    if(resQPDG==89998005)
    G4cout<<"G4QE::CGS:Q="<<valQ<<resQPDG<<",GM="<<resQMa<<",4M="<<reTLV<<reTLV.m()<<G4endl;
 #endif
   G4double resSMa=resQMa;                       // Prototype MinimalSplitMass of ResidNucl
-  G4int envPDG=theEnvironment.GetPDG();
   if(envPDG!=90000000)                          // => "Environment is not vacuum" case
   { // @@@@@@@@@@@@@@@@@@@ CALL SUBROUTINE @@@@@@@@@
     resEMa=theEnvironment.GetMZNS();            // GSMass of the Residual Environment
@@ -9341,20 +9372,36 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
         {
 #ifdef cdebug
           //if(resQPDG==89998004)
-		    G4cout<<"G4QE::CGS: P&L didn't help,nH="<<nOfOUT<<">2"<<",MQ="<<resQMa<<G4endl;
+		    G4cout<<"G4QE::CGS: P&L didn't help, nH="<<nOfOUT<<">2, MQ="<<resQMa<<G4endl;
 #endif
 		  if(nOfOUT)                         // Try to find the appropriate partner in OUT
           {
             G4int nphot=-1;
             G4int npip=-1;
+            G4int npiz=-1;
             G4int npim=-1;
+            G4double emaz=0.;                   // Prototype of the maximum energy for pi0
             for(G4int id=nOfOUT-1; id>=0; id--) // Search for photons and pi+, and pi-
   			{
                G4QHadron* curHadr = theQHadrons[id];
                G4int hPDG=curHadr->GetPDGCode();
+               
                if(hPDG==  22) nphot=id;
-               if(hPDG== 211) npip=id;
-               if(hPDG==-211) npim=id;
+               else if(hPDG==211) npip=id;
+               else if(hPDG==111)
+               {
+				 G4double piE=curHadr->Get4Momentum().e();
+#ifdef chdebug
+                 if(resQPDG==89998004)
+                   G4cout<<"G4QE::CheckGroundState:"<<id<<",Epi0="<<piE<<">"<<emaz<<G4endl;
+#endif
+                 if(piE>emaz)
+                 {
+                   npiz=id;
+                   emaz=piE;
+                 }
+               }
+               else if(hPDG==-211) npim=id;
             }
             if(nphot>=0)                 // Photon is found, try to use it to resolve PANIC
 			{
@@ -9399,10 +9446,10 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
 		        }
               } // End of the KINEMATIC CHECK FOR THE PHOTON if
             } // End of nphot IF
-#ifdef cdebug
-            if(resQPDG==89998005)
-              G4cout<<"G4QE::CGS:S="<<resS<<",B="<<resB<<",C="<<resC<<",pi#"<<npip<<",E="
-                    <<envPDG<<G4endl;
+#ifdef chdebug
+            if(resQPDG==89998004)
+              G4cout<<"G4QE::CGS:S="<<resS<<",B="<<resB<<",C="<<resC<<",+#"<<npip
+                    <<",-#"<<npim<<",0#"<<npiz<<",E="<<envPDG<<G4endl;
 #endif
             //if(npip>=0&&resQPDG==89998004 || npim>=0&&resQPDG==90003998)// D+D+pi->N+N+pi
             if(envPDG==90000000&&!resS&&resB>1&&(npip>=0&&resC==-2||npim>=0&&resC-resB==2))
@@ -9462,8 +9509,74 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
 
                   return true;
 		        }
-              } // End of the KINEMATIC CHECK FOR THE PHOTON if
-            } // End of nphot IF
+              } // End of the KINEMATIC CHECK FOR THE PI+/PI- if
+            } // End of npip/pin Isonucleus IF
+            if(envPDG==90000000&&!resS&&resB>1&&npiz>=0&&(resC<-1||resC-resB>1))
+			{
+#ifdef chdebug
+              //if(resQPDG==89998004)
+                G4cerr<<"***G4QE::CGS:Pi0,PDG="<<resQPDG<<",C="<<resC<<",B="<<resB<<G4endl;
+#endif
+              G4int npi=-resC;                // k*(Delta-)+m*n+pi0->(k+m)*k+(pi-)
+              G4int piPD=-211;
+              G4int nuPD=2112;
+              G4double nuM=mNeut;
+              if(resC!=-2)                    // k*(Delta++)+m*p+pi0->(k+m)*p+k*(pi+)
+              {
+                npi=resC-resB;
+                piPD=211;
+                nuPD=2212;
+                nuM=mProt;
+              }
+              G4QPDGCode piQPDG(piPD);
+              G4double suB=resB*nuM;          // Total mass of nucleons
+              G4double suM=npi*mPi;           // Total mass of pions
+              G4double sum=suB+suM;           // Total mass of secondaries
+              G4QHadron* curHadr = theQHadrons[npiz]; // Pointer to pi0
+              G4LorentzVector ch4M=curHadr->Get4Momentum(); // 4-Mom of the Pion
+              G4LorentzVector tt4M=ch4M+reTLV;// (resQMa=GSMass of the ResidQuasmon(+Env.))
+              G4double ttM=tt4M.m();          // Mass of the Pion+ResidQm compaund system
+#ifdef chdebug
+              //if(resQPDG==89998004)
+                G4cout<<"G4QE::CGS:sum="<<sum<<"<"<<ttM<<tt4M
+                                          <<",pi0="<<ch4M<<",Q="<<reTLV.m()<<reTLV<<G4endl;
+#endif
+              if(sum<ttM)                     // PANIC can be resolved with this Pi0
+			  {
+                G4LorentzVector fn4M = G4LorentzVector(0.,0.,0.,suB); // Nucleon(s)
+                G4LorentzVector pi4M = G4LorentzVector(0.,0.,0.,suM); // Pion(s)
+                if(!G4QHadron(tt4M).DecayIn2(fn4M,pi4M))
+                {
+#ifdef chdebug
+                  //if(resQPDG==89998004)
+                    G4cerr<<"***G4QEnv::CheckGS:DecayIn3:*Pi0* tM="<<ttM<<","<<sum<<G4endl;
+#endif
+                }
+                else
+                {
+                  if(npi>1) pi4M/=npi;
+                  curHadr->Set4Momentum(pi4M);// Change 4M of the Pion (reduced by decay)
+                  curHadr->SetQPDG(piQPDG);   // Change Charge of thePion
+                  if(npi>1) for(G4int ip=1; ip<npi; ip++)
+                  {
+                    G4QHadron* piH = new G4QHadron(piPD,pi4M);// Pion(s)
+                    theQHadrons.push_back(piH); // Fill Pion(s) (delete equivalent)
+                  }
+                  if(resB>1) fn4M/=resB;
+                  for(G4int ib=0; ib<resB; ib++)
+                  {
+                    G4QHadron* fnH = new G4QHadron(nuPD,fn4M);// Nucleon(s)
+                    theQHadrons.push_back(fnH); // Fill Nucleon(s) (delete equivalent)
+                  }
+#ifdef chdebug
+                  //if(resQPDG==89998004)
+					G4cout<<"G4QE::CGS:nuc="<<nuPD<<fn4M<<resB<<", pi="<<pi4M<<npi<<G4endl;
+#endif
+
+                  return true;
+		        }
+              } // End of the KINEMATIC CHECK FOR THE PI0 if
+            } // End of npiz Isonucleus IF
 #ifdef cdebug
             //if(resQPDG==89998004)
 		      G4cout<<"G4QE::CGS: No Photon help nP="<<nphot<<". TryChangeCharge."<<G4endl;
