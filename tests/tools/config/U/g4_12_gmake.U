@@ -77,8 +77,6 @@ You have NO GNU make which could be used to build GEANT4.
 Please select your own 'make' program compatible with GNU make.
 EOM`
 
-fi
-
 dflt=$g4make
 rp=$g4message
 
@@ -95,5 +93,8 @@ gans=$ans
 		g4make=$gans
 		;;
 	esac
+
+fi
+
 
 
