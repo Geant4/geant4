@@ -1,13 +1,21 @@
 #
-# ------ MacOS-X ------      !!! not supported !!!
-#                          MacOS 10.1 GNU-gcc 2.92.2
+# ------ MacOS-X ------      !!! not generally supported !!!
 #
+# MacOS 10.1 GNU-gcc 2.92.2
+# MacOS 10.2 there is g++2 and g++3, choose consistently one,
+#            like g++2 which is 2.95.2
+# use   echo -n    (there is not the echo -e option of Linux)
+# 
 # Helmut Burkhardt - CERN
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
-  CXX       := g++
+# choice of GNU compilers:
+  CXX       := g++2
+# CXX       := g++3
   GNU_GCC = 1
   CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
+# optionally add verbose flag
+# CXXFLAGS  += -v
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -33,7 +41,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
-  ECHO    := /bin/echo -e
+  ECHO    := /bin/echo -n
   SHEXT   := so
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
