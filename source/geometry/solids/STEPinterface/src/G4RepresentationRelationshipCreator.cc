@@ -1,5 +1,6 @@
 #include "G4RepresentationRelationshipCreator.hh"
 #include "G4PlacementVector.hh"
+#include "STEPcomplex.h"
 
 G4RepresentationRelationshipCreator G4RepresentationRelationshipCreator::csc;
 G4int G4RepresentationRelationshipCreator::placeCount=0;
