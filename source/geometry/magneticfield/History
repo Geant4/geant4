@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2003-11-08 03:59:59 japost Exp $
+$Id: History,v 1.89 2003-11-13 18:26:02 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov 7th, 2003  J.Apostolakis - field-V05-02-07
-----------------------------
+Nov 13th, 2003  J.Apostolakis - field-V05-02-08
+-----------------------------
+- G4ChordFinder:  extended the arguments of
+     AdvanceChordLimited  and  FindNextChord
+   adding the current safety sphere (origin, radius), for use in optimising.
+
+Nov  7th, 2003  J.Apostolakis - field-V05-02-07
+-----------------------------
 - G4ChordFinder 
   o Made this a base class
     * to enable specialised implementations
