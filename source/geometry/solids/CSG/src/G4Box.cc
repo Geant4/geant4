@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.4 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Box.cc,v 1.5 2000-05-05 14:17:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,7 @@
 //
 //  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
 //  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
+//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
 
 #include "G4Box.hh"
 
@@ -375,14 +376,8 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
       }
       else
       {
-         if (v.x() > 0)
-	 {
-            sOut = (fDx - p.x())*stmp ;
-	 }
-         if (v.x() < 0)
-	 {
-            sOut = (fDx + p.x())*stmp ;
-	 }
+         if (v.x() > 0)  sOut = (fDx - p.x())*stmp ;
+         if (v.x() < 0)  sOut = (fDx + p.x())*stmp ;
       }
    }
 
@@ -398,7 +393,6 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
          smaxy = (fDy+fabs(p.y()))*stmp ;
 
          if (sminy > smin) smin=sminy ;
-
          if (smaxy < smax) smax=smaxy ;
 
          if (smin >= smax-kCarTolerance*0.5)
@@ -408,14 +402,8 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
       }
       else
       {
-         if (v.y() > 0)
-	 {
-            sOuty = (fDy - p.y())*stmp ;
-	 }
-         if (v.y() < 0)
-	 {
-            sOuty = (fDy + p.y())*stmp ;
-	 }
+         if (v.y() > 0)  sOuty = (fDy - p.y())*stmp ;
+         if (v.y() < 0)  sOuty = (fDy + p.y())*stmp ;
          if( sOuty < sOut ) sOut = sOuty ;
       }     
    }
@@ -433,7 +421,6 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
          smaxz = (fDz+fabs(p.z()))*stmp ;
 
          if (sminz > smin) smin = sminz ;
-
          if (smaxz < smax) smax = smaxz ;
 
          if (smin >= smax-kCarTolerance*0.5)
@@ -443,14 +430,8 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
       }
       else
       {
-         if (v.z() > 0)
-	 {
-            sOutz = (fDz - p.z())*stmp ;
-	 }
-         if (v.z() < 0)
-	 {
-            sOutz = (fDz + p.z())*stmp ;
-	 }
+         if (v.z() > 0)  sOutz = (fDz - p.z())*stmp ;
+         if (v.z() < 0)  sOutz = (fDz + p.z())*stmp ;
          if( sOutz < sOut ) sOut = sOutz ;
       }
    }
@@ -459,11 +440,8 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
    {
       return kInfinity ;
    }
+   if (smin < 0.5*kCarTolerance)  smin = 0.0 ;
 
-   if (smin < 0)
-   {
-      smin= 0.0;
-   }
    return smin ;
 }
 

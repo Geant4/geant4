@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Box.cc,v 1.2 1999-12-15 14:50:08 gunter Exp $
+// $Id: testG4Box.cc,v 1.3 2000-05-05 14:17:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,23 +53,9 @@ G4bool testG4Box()
 
     G4Box b1("Test Box #1",20,30,40);
     G4Box b2("Test Box #2",10,10,10);
-
-    G4ThreeVector pJohnXZ(9,0,12);
-    Dist = b2.DistanceToIn(pJohnXZ,vxmz) ;
-    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<G4endl ;
-
-    G4ThreeVector pJohnXY(12,9,0);
-    Dist = b2.DistanceToIn(pJohnXY,vmxy) ;
-    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<G4endl ;
-
-    Dist = b2.DistanceToIn(pJohnXY,vmx) ;
-    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<G4endl ;
-
-    G4ThreeVector pMyXY(32,-11,0);
-    Dist = b2.DistanceToIn(pMyXY,vmxy) ;
-    G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<G4endl ;
-
-
+    G4Box box3("BABAR Box",0.14999999999999999, 
+                           24.707000000000001,  
+	                   22.699999999999999) ;
 
 // Check name
     assert(b1.GetName()=="Test Box #1");
@@ -133,8 +119,8 @@ G4bool testG4Box()
     Dist=b1.DistanceToOut(ponxside,vmx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,40)&&ApproxEqual(*pNorm,vmx)&&*pgoodNorm);
     Dist=b1.DistanceToOut(pbigx,vy,calcNorm,pgoodNorm,pNorm);
-G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<Dist<<G4endl;
-//   assert(ApproxEqual(Dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
+    // G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,30)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
     Dist=b1.DistanceToOut(ponmxside,vmx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(norm,vmx)&&*pgoodNorm);
     Dist=b1.DistanceToOut(ponyside,vy,calcNorm,pgoodNorm,pNorm);
@@ -177,6 +163,50 @@ G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,kInfinity));
     Dist=b1.DistanceToIn(pbigmx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
+
+    G4ThreeVector pJohnXZ(9,0,12);
+    Dist = b2.DistanceToIn(pJohnXZ,vxmz) ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<endl ;
+    assert(ApproxEqual(Dist,kInfinity));
+
+    G4ThreeVector pJohnXY(12,9,0);
+    Dist = b2.DistanceToIn(pJohnXY,vmxy) ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<endl ;
+    assert(ApproxEqual(Dist,kInfinity));
+
+    Dist = b2.DistanceToIn(pJohnXY,vmx) ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<endl ;
+    assert(ApproxEqual(Dist,2));
+
+    G4ThreeVector pMyXY(32,-11,0);
+    Dist = b2.DistanceToIn(pMyXY,vmxy) ;
+    //   G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<endl ;
+    assert(ApproxEqual(Dist,kInfinity));
+
+    Dist = b1.DistanceToIn(G4ThreeVector(-25,-35,0),vx) ;
+    assert(ApproxEqual(Dist,kInfinity));
+
+    Dist = b1.DistanceToIn(G4ThreeVector(-25,-35,0),vy) ;
+    assert(ApproxEqual(Dist,kInfinity));
+    
+
+    Dist = b2.DistanceToIn(pJohnXY,vmx) ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<G4endl ;
+    assert(ApproxEqual(Dist,2));
+
+    Dist=box3.DistanceToIn(G4ThreeVector(  0.15000000000000185,
+                                         -22.048743592955137,
+                                           2.4268539333219472),
+                           G4ThreeVector(-0.76165597579890043,
+                                          0.64364445891356026,
+                                         -0.074515708658524193)) ;
+    assert(ApproxEqual(Dist,0.0));
+
+    //    G4cout<<"BABAR box distance = "<<Dist<<G4endl ;
+
+
+
+
 
 // CalculateExtent
     G4VoxelLimits limit;		// Unlimited
