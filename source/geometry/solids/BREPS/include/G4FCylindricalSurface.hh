@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.3 1999-01-27 16:11:58 broglia Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.4 1999-05-19 16:55:46 magni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __FCYLINDER_H
@@ -74,10 +74,22 @@ class G4FCylindricalSurface: public G4Surface
     return G4String("Cylindrical_Surface");
   }
   
-  //
+  // This function count the number of intersections of a 
+  // bounded cylindrical surface by a ray.
+  // At first, calculates the intersections with the infinite 
+  // cylindrical surfsace. After, count the intersections within the
+  // finite cylindrical surface boundaries, and set "distance" to the 
+  // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
+
+  // If no intersection is founded, set distance = kInfinity and
+  // return 0
   int Intersect(const G4Ray&);	
- 
-  virtual G4double HowNear( const G4Vector3D& x ) const;
+
+  // Shortest distance from the point x to the G4FCylindricalSurface.
+  // The distance will be always positive. 
+   virtual G4double HowNear( const G4Vector3D& x ) const;
 
   //
   void CalcBBox();
