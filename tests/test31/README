@@ -1,0 +1,27 @@
+                                    GEOMETRY
+
+
+ibrem application geometry consists of along z:
+
+1. Generator of electrons directed along z-axis
+2. Target1 (Be)
+3. Target2 (W,Cu)
+4. GasVolume (He)
+5. CheckVolume (Air) it is sensitive for killing of rest electrons
+6. Phantom (H2O)
+7. Absorber in Phantom (H2O) it is sensitive for absorbed energy calculation
+
+World volume consists of Air.
+
+Geometry aand otherr parammeters can be defined by G4 UI commands.
+
+Two main macro ffiles be.in (thin taarget) and be_w.in (thick) targeet is provided.
+
+AIDA hhistograms can bee activated by defining environment variable. For example,
+using t-shell:
+
+setenv G4ANALYSIS_USE 1
+gmake
+
+
+

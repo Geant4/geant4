@@ -22,13 +22,13 @@
 //
 //
 // -------------------------------------------------------------
-//      GEANT4 test31
+//      GEANT4 ibrem
 //
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- test31 ----------------------------
-//              
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of test31 
+//      ---------- ibrem ----------------------------
+//
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of ibrem
 //
 // -------------------------------------------------------------
 
@@ -38,81 +38,66 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "VisManager.hh"
-#endif
 
-#include "test31DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "test31PrimaryGeneratorAction.hh"
-#include "test31EventAction.hh"
-#include "test31TrackingAction.hh"
-#include "test31RunAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "RunAction.hh"
+#include "Histo.hh"
 
-#include "G4Timer.hh"
+#include <string>
+#include <fstream>
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
 
-  G4Timer* timer = new G4Timer();
-  timer->Start();
-
   G4int verbose = 1;
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-  
+
+  //  G4String fName = argv[1];
+  //  (Histo::GetInstance)->LoadParameters(fName);
+
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager();
 
   // set mandatory initialization classes
-  test31DetectorConstruction* det = new test31DetectorConstruction();
+  DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
-  det->SetVerbose(verbose);
-  if(verbose >0) G4cout << "Detector Construction is defined" << G4endl;
-  
+
   runManager->SetUserInitialization(new PhysicsList());
-  if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
-#ifdef G4VIS_USE
-  G4cout << "VisManager will be inicialized" << G4endl;
   // visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new VisManager();
   visManager->Initialize();
-#endif 
 
-  G4cout << "User actions will be initialized" << G4endl;
- 
   // set user action classes
-  runManager->SetUserAction(new test31PrimaryGeneratorAction(det));
-  if(verbose >0) G4cout << "test31PrimaryGeneratorAction is defined" << G4endl;
-
-  runManager->SetUserAction(new test31RunAction());
-  if(verbose >0) G4cout << "test31RunAction is defined" << G4endl;
-
-  test31EventAction* event = new test31EventAction(det);
-  runManager->SetUserAction(event);
-  if(verbose >0) G4cout << "EventAction is defined" << G4endl;
-
-  runManager->SetUserAction(new test31TrackingAction());
-  if(verbose >0) G4cout << "TrackingAction is defined" << G4endl;
+  runManager->SetUserAction(new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(new RunAction());
+  runManager->SetUserAction(new EventAction());
+  runManager->SetUserAction(new TrackingAction());
 
   // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(1 < verbose) UI->ListCommands("/test31/");
-     
-  // Initialize G4 kernel
-  G4cout << "Start initialisation for test31" << G4endl;
-//  runManager->Initialize();
+  if(1 < verbose) UI->ListCommands("/testem/");
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
-
      G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");
+#ifdef G4UI_USE_TCSH
+     session = new G4UIterminal(new G4UItcsh);
+#else
+     session = new G4UIterminal();
+#endif
      session->SessionStart();
      delete session;
     }
@@ -122,40 +107,14 @@ int main(int argc,char** argv) {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
-
-     // Initialize G4 kernel
-     G4int nev = det->GetNumberOfEvents();
-     if(nev > 0) {
-
-       if(verbose >0) {
-         G4cout << "Start event loop for " << nev
-                << " events" << G4endl;
-       }
-
-       runManager->BeamOn(nev);
-     }
-
-     // next file
-     if(argc==3) {
-       if(verbose >0) G4cout << "Second mac file is applied" << G4endl; 
-       UI->ApplyCommand(command+argv[2]);
-     }
     }
-    
+
   // job termination
-  
-#ifdef G4VIS_USE
+
   delete visManager;
-#endif
-
-  timer->Stop();
-  G4cout << "  "  << *timer << G4endl;
-  delete timer;
-
-  //  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
-  //  G4cout << "runManager is deleted" << G4endl;  
 
   return 0;
 }
+
 

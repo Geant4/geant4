@@ -1,14 +1,14 @@
-# $Id: GNUmakefile,v 1.6 2004-01-07 11:29:59 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2004-07-27 08:33:01 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := test31
+name := GammaTherapy
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../
+  G4INSTALL = ../geant4
 endif
 
 .PHONY: all
@@ -21,8 +21,14 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
+  CPPFLAGS   += `aida-config --include`
+  LDFLAGS    += `aida-config --lib`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+histclean:
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
+
+visclean:
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/VisManager.o
