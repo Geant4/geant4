@@ -81,7 +81,7 @@ else
 #
 if [ "$1" = "test201" ] ; then 
 # Go in tests/test201 and spawn reconstruction :
-CPPVERBOSE=1;export CPPVERBOSE
+##CPPVERBOSE=1;export CPPVERBOSE
 cd $G4INSTALL/tests/test201
 (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
 else
@@ -101,12 +101,12 @@ if [ "$1" = "test" ] ; then
 if [ "$2" = "all" ] ; then 
 # Go in tests and spawn reconstruction :
 cd $G4INSTALL/tests
-CPPVERBOSE=1;export CPPVERBOSE
+##CPPVERBOSE=1;export CPPVERBOSE
 (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
 exit
 else
 # Go in tests/$2 and spawn reconstruction :
-CPPVERBOSE=1;export CPPVERBOSE
+##CPPVERBOSE=1;export CPPVERBOSE
 cd $G4INSTALL/tests/$2
 (date;$MAKECMD clean_bin;time $MAKECMD;date) > $dir/gmake.log 2>&1
 fi
