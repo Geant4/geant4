@@ -74,8 +74,8 @@ More verified configurations:
 <LI>MacOS 10.3, gcc-3.3</LI>
 </UL>
 
-More verified configurations which will not supported any longer
-in future releases:
+More verified configurations, which we plan to stop supporting
+in releases or patches after November 2004:
 <UL>
 <LI>Linux, gcc 2.95.2.</LI>
 <LI>Windows/2000 and CygWin Tools, Visual C++ 6.0 Service Pack 5</LI>
@@ -332,21 +332,18 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><TT>G4VEnergyLoss</TT> and related classes:
     <UL>
-    <LI>Correction of error when retrieving <TT>dE/dx</TT> from tables
-        (affected proton around <TT>1 MeV</TT>).</LI>
-    <LI>Fixed a problem of retrieving tables from files if <TT>PreciseRange</TT>
-        is missing.</LI>
+    <LI>Corrected error in retrieving <TT>dE/dx</TT> from tables
+        (it affected proton around <TT>1 MeV</TT>).</LI>
+    <LI>Fixed a problem in retrieving physics tables from files. </LI>
     <LI>Fixed a problem of energy below <TT>lowestKinEnergy</TT> (simulation of
         energy loss of low energy particles in low density gases).</LI>
 
-    <LI>Updated integral method taking into account 1 peak in cross section.</LI>
+    <LI>Improved sampling in integral method for cross sections with peaks.</LI>
     <LI>Added new methods to define simulation options to
         <TT>G4EmProcessOptions</TT>.</LI>
-    <LI>Added protected method <TT>GetCurrentRange()</TT> to
-        <TT>G4VEnergyLossProcess</TT>.</LI>
-    <LI>Updated printout format in <TT>G4VEnergyLossProcess</TT>.</LI>
+    <LI>Revised printout format in <TT>G4VEnergyLossProcess</TT>.</LI>
     </UL></LI>
-<LI>EnergyLoss fluctuations:
+<LI>Energy-loss fluctuations:
     <UL>
     <LI>Reduced area of applicability of the model for simulation of
         fluctuations at very small steps to provide less step dependent
@@ -354,27 +351,25 @@ please refer to the related History files provided in most packages):
     <LI>Smoothed out sampling of Gaussian fluctuations, when sigma is much
         bigger than energy loss.</LI>
     </UL>
-    The purpose of both changes is to provide less step dependent
-    results. For example, for steps down to 0.1 mm in solid materials
-    energy deposition distribution in thin absorber is not dependent on the
+    The purpose of both changes is to provide results that are less dependent
+    on step size. For example, for steps down to 0.1 microns (in solid materials)
+    the energy deposition distribution in a thin absorber is not dependent on the
     step limit.</LI>
 <LI>Ionization for muons, hadrons, ions:
     <UL>
-    <LI>Set integral regime to be the default (was already for electrons).
-        The range limitation is 20%, as in Geant4 5.2.</LI>
+    <LI>Set the integral method to be the default (it already was for electrons).
+        The step remains limited to 20% of the current range, as in Geant4 5.2.</LI>
     </UL></LI>
 <LI>Multiple Scattering:
     <UL>
     <LI>Changes in <TT>G4MscModel</TT>: <TT>t->z</TT> and <TT>z->t</TT>
         transformations (true length to geometrical length and back) have
-        been rewritten. The purpose is to remove step limit dependence of
+        been rewritten. The purpose is to reduce the step-size dependence of
         results, which was mainly connected with simulation of multiple
         scattering of low energy particles. It will affect the resolution
         of sampling calorimeters.</LI>
     <LI>Change in the angular distribution for <TT>e+/e-</TT>: correction
         to the Highland formula for the central part of the distribution.</LI>
-    <LI>Use truncated range table for estimation of energy loss inside
-        multiple-scattering model.</LI>
     </UL></LI>
 <LI>Multiple Scattering for ions:
     <UL>
@@ -392,9 +387,8 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI>PAI ionisation:
     <UL>
-    <LI>Introduced new model <TT>G4PAIPhotonModel</TT>, PAI model splitting
-        into plasmon and photon cross-sections using the interface from
-        the <TT>G4PAIxSection</TT> class.</LI>
+    <LI>Introduced new model <TT>G4PAIPhotonModel</TT>, PAI model that splits
+        the cross-section into plasmon and photon parts.</LI>
     <LI>Removed limitations on cut values in both PAI models.</LI>
     <LI>Use precise integrator for initialisation of PAI models.</LI>
     </UL></LI>
@@ -405,14 +399,15 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><B>Cuts</B>:
     <UL>
-    <LI>Modified <TT>G4ProductionCutsTable::RetrieveCutsTable()</TT> to allow
-        for ordering of materials and couples to be different from one in file.</LI>
+    <LI>Enabled the user to retrieve from a file tables with materials and
+        couples which are in a different order to that in memory.
+        Modified <TT>G4ProductionCutsTable::RetrieveCutsTable()</TT> to enable this.</LI>
     <LI><TT>G4ProductionCuts</TT>: moved usage of statics in inline functions
-        to non-inline to allow porting for DLLs on Windows.</LI>
+        to non-inline for porting to DLLs on Windows.</LI>
     </UL></LI>
 <LI><B>Decay</B>:
     <UL>
-    <LI>Use new interface to methods in <TT>G4VParticleChange</TT>.</LI>
+    <LI>Use new interface methods of <TT>G4VParticleChange</TT>.</LI>
     </UL></LI>
 <LI><B>Management</B>:
     <UL>
