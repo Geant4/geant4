@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-11-02 16:54:48 gcosmo Exp $
+$Id: History,v 1.14 2000-11-13 08:12:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-Nov-2000, G.Cosmo     (geom-solids-specific-V02-00-03)
+--------------------
+- Added definition of empty constructor for G4ClippablePolygon which
+  went lost by mistake...
 
 02-Nov-2000, G.Cosmo     (geom-solids-specific-V02-00-02)
 --------------------
