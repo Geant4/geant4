@@ -34,6 +34,11 @@
 //                    (27th November 2001)
 //
 // PhysicsList program
+//
+// Modified:
+//
+// 14-02-03 Fix bugs in msc and hIon instanciation + cut per region
+//
 // --------------------------------------------------------------
 
 #include "DMXPhysicsList.hh"
@@ -256,23 +261,15 @@ void DMXPhysicsList::AddTransportation() {
 void DMXPhysicsList::ConstructEM() {
 
 // processes:
-  G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
 
   G4LowEnergyPhotoElectric* lowePhot = new G4LowEnergyPhotoElectric();
   G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation();
   G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung();
-  G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
 
   // note LowEIon uses proton as basis for its data-base, therefore
   // cannot specify different LowEnergyIonisation models for different
   // particles, but can change model globally for Ion, Alpha and Proton.
 
-  // ahadronLowEIon->SetNuclearStoppingOff() ;
-  ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ;
-  ahadronLowEIon->SetNuclearStoppingOn() ;
-  
-  //fluorescence switch off for hadrons (for now) PIXE:
-  ahadronLowEIon->SetFluorescence(false);
 
   //fluorescence apply specific cut for fluorescence from photons, electrons
   //and bremsstrahlung photons:
@@ -312,6 +309,7 @@ void DMXPhysicsList::ConstructEM() {
 	//electron
 	// process ordering: AddProcess(name, at rest, along step, post step)
 	// -1 = not implemented, then ordering
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
 	pmanager->AddProcess(loweIon,                 -1, 2, 2);
 	pmanager->AddProcess(loweBrem,                -1,-1, 3);
@@ -319,6 +317,7 @@ void DMXPhysicsList::ConstructEM() {
     else if (particleName == "e+") 
       {
 	//positron
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
 	pmanager->AddProcess(new G4eIonisation(),     -1, 2, 2);
 	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
@@ -328,6 +327,7 @@ void DMXPhysicsList::ConstructEM() {
 	     particleName == "mu-"    ) 
       {
 	//muon  
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,           -1, 1, 1);
 	pmanager->AddProcess(new G4MuIonisation(),          -1, 2, 2);
 	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
@@ -346,14 +346,24 @@ void DMXPhysicsList::ConstructEM() {
 	// OBJECT may be dynamically created as either a GenericIon or nucleus
 	// G4Nucleus exists and therefore has particle type nucleus
 	// genericIon:
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
 	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
+        // ahadronLowEIon->SetNuclearStoppingOff() ;
+	//        ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ;
+	//        ahadronLowEIon->SetNuclearStoppingOn() ;
+  
+        //fluorescence switch off for hadrons (for now) PIXE:
+        ahadronLowEIon->SetFluorescence(false);
       } 
     else if ((!particle->IsShortLived()) &&
 	     (charge != 0.0) && 
 	     (particle->GetParticleName() != "chargedgeantino")) 
       {
 	//all others charged particles except geantino
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
 	pmanager->AddProcess(ahadronLowEIon,       -1,2,2);      
 	//      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
@@ -807,12 +817,12 @@ void DMXPhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
   
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-  SetCutValue(cutForAlpha,  "alpha");
-  SetCutValue(cutForGenericIon,  "GenericIon");
+  //  SetCutValue(cutForProton, "proton");
+  //  SetCutValue(cutForProton, "anti_proton");
+  //  SetCutValue(cutForAlpha,  "alpha");
+  //  SetCutValue(cutForGenericIon,  "GenericIon");
   
-  SetCutValueForOthers(defaultCutValue);
+  //  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }
