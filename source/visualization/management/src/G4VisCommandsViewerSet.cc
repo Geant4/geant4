@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.25 2004-07-23 15:24:24 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.26 2004-08-03 15:58:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -367,14 +367,14 @@ G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
 			   fLightsVector.phi(), "deg");
   }
   else if (command == fpCommandLightsVector) {
-    currentValue = ConvertToString(fLightsVector);
+    currentValue = G4UIcommand::ConvertToString(fLightsVector);
   }
   else if (command == fpCommandViewpointThetaPhi) {
     currentValue = ConvertToString(fViewpointVector.theta(),
 			   fViewpointVector.phi(), "deg");
   }
   else if (command == fpCommandViewpointVector) {
-    currentValue = ConvertToString(fViewpointVector);
+    currentValue = G4UIcommand::ConvertToString(fViewpointVector);
   }
   else {
     currentValue = "invalid";
@@ -433,7 +433,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandAutoRefresh) {
-    G4bool autoRefresh = GetNewBoolValue(newValue);
+    G4bool autoRefresh = G4UIcommand::ConvertToBool(newValue);
     vp.SetAutoRefresh(autoRefresh);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Views will ";
@@ -444,7 +444,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandAuxEdge) {
-    vp.SetAuxEdgeVisible(GetNewBoolValue(newValue));
+    vp.SetAuxEdgeVisible(G4UIcommand::ConvertToBool(newValue));
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Auxiliary edges will ";
       if (!vp.IsAuxEdgeVisible()) G4cout << "not ";
@@ -458,13 +458,13 @@ void G4VisCommandsViewerSet::SetNewValue
     G4bool boolFlag;
     std::istrstream is ((char*)newValue.data());
     is >> cullingOption >> stringFlag >> density >> unit;
-    boolFlag = GetNewBoolValue(stringFlag);
+    boolFlag = G4UIcommand::ConvertToBool(stringFlag);
     if (cullingOption == "global") {
       vp.SetCulling(boolFlag);
       if (verbosity >= G4VisManager::confirmations) {
 	G4cout <<
 	  "G4VisCommandsViewerSet::SetNewValue: culling: global culling flag"
-	  " set to " << ConvertToString(boolFlag) <<
+	  " set to " << G4UIcommand::ConvertToString(boolFlag) <<
 	  ".\n  Does not change specific culling flags."
 	       << G4endl;
       }
@@ -475,7 +475,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	G4cout <<
 	  "G4VisCommandsViewerSet::SetNewValue: culling: culling covered"
 	  "\n  daughters flag set to "
-	       << ConvertToString(boolFlag) <<
+	       << G4UIcommand::ConvertToString(boolFlag) <<
 	  ".  Daughters covered by opaque mothers"
 	  "\n  will be culled, i.e., not drawn, if this flag is true."
 	  "\n  Note: this is only effective in surface drawing style,"
@@ -490,7 +490,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	G4cout <<
 	  "G4VisCommandsViewerSet::SetNewValue: culling: culling invisible"
 	  "\n  flag set to "
-	       << boolFlag << ConvertToString(boolFlag) <<
+	       << boolFlag << G4UIcommand::ConvertToString(boolFlag) <<
 	  ".  Volumes marked invisible will be culled,"
 	  "\n  i.e., not drawn, if this flag is true."
 	       << G4endl;
@@ -508,7 +508,7 @@ void G4VisCommandsViewerSet::SetNewValue
       if (verbosity >= G4VisManager::confirmations) {
 	G4cout <<
 	  "G4VisCommandsViewerSet::SetNewValue: culling: culling by density"
-	  "\n  flag set to " << ConvertToString(boolFlag) <<
+	  "\n  flag set to " << G4UIcommand::ConvertToString(boolFlag) <<
 	  ".  Volumes with density less than " <<
 	  G4BestUnit(density,"Volumic Mass") <<
 	  "\n  will be culled, i.e., not drawn, if this flag is true."
@@ -527,7 +527,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (GetNewBoolValue(newValue)) {
+    if (G4UIcommand::ConvertToBool(newValue)) {
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	break;
@@ -572,7 +572,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandHiddenEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (GetNewBoolValue(newValue)) {
+    if (G4UIcommand::ConvertToBool(newValue)) {
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	vp.SetDrawingStyle(G4ViewParameters::hlr);
@@ -608,7 +608,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandHiddenMarker) {
-    G4bool hidden = GetNewBoolValue(newValue);
+    G4bool hidden = G4UIcommand::ConvertToBool(newValue);
     if (hidden) vp.SetMarkerHidden();
     else vp.SetMarkerNotHidden();
     if (verbosity >= G4VisManager::confirmations) {
@@ -639,7 +639,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandLightsThetaPhi) {
     G4double theta, phi;
-    GetNewDoublePairValue(newValue, theta, phi);
+    ConvertToDoublePair(newValue, theta, phi);
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
@@ -652,7 +652,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandLightsVector) {
-    fLightsVector = GetNew3VectorValue(newValue);
+    fLightsVector = G4UIcommand::ConvertToInt(newValue);
     vp.SetLightpointDirection(fLightsVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Lights direction set to "
@@ -661,7 +661,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandLineSegments) {
-    G4int nSides = GetNewIntValue(newValue);
+    G4int nSides = G4UIcommand::ConvertToInt(newValue);
     vp.SetNoOfSides(nSides);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<
@@ -681,7 +681,7 @@ void G4VisCommandsViewerSet::SetNewValue
       G4String unit;
       std::istrstream is ((char*)newValue.data());
       is >> dummy >> fieldHalfAngle >> unit;
-      fieldHalfAngle *= ValueOf(unit);
+      fieldHalfAngle *= G4UIcommand::ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
 	if (verbosity >= G4VisManager::errors) {
 	  G4cout <<
@@ -742,7 +742,7 @@ void G4VisCommandsViewerSet::SetNewValue
       vp.UnsetSectionPlane();
       break;
     case 1:
-      F = ValueOf(unit);
+      F = G4UIcommand::ValueOf(unit);
       x *= F; y *= F; z *= F;
       vp.SetSectionPlane(G4Plane3D(G4Normal3D(nx,ny,nz),
 				   G4Point3D(x,y,z)));
@@ -813,7 +813,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandUpThetaPhi) {
     G4double theta, phi;
-    GetNewDoublePairValue(newValue, theta, phi);
+    ConvertToDoublePair(newValue, theta, phi);
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
@@ -825,7 +825,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandUpVector) {
-    fUpVector = GetNew3VectorValue(newValue);
+    fUpVector = G4UIcommand::ConvertToInt(newValue);
     vp.SetUpVector(fUpVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
@@ -834,7 +834,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandViewpointThetaPhi) {
     G4double theta, phi;
-    GetNewDoublePairValue(newValue, theta, phi);
+    ConvertToDoublePair(newValue, theta, phi);
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
@@ -851,7 +851,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = GetNew3VectorValue(newValue);
+    fViewpointVector = G4UIcommand::ConvertToInt(newValue);
     vp.SetViewAndLights(fViewpointVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Viewpoint direction set to "

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.38 2004-07-14 15:38:57 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.39 2004-08-03 15:57:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -647,11 +647,11 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
   G4ViewParameters vp = currentViewer->GetViewParameters();
 
   if (command == fpCommandPan) {
-    GetNewDoublePairValue(newValue, fPanIncrementRight, fPanIncrementUp);
+    ConvertToDoublePair(newValue, fPanIncrementRight, fPanIncrementUp);
     vp.IncrementPan(fPanIncrementRight, fPanIncrementUp);
   }
   else if (command == fpCommandPanTo) {
-    GetNewDoublePairValue(newValue, fPanToRight, fPanToUp);
+    ConvertToDoublePair(newValue, fPanToRight, fPanToUp);
     vp.SetPan(fPanToRight, fPanToUp);
   }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.258 2004-07-28 15:46:15 johna Exp $
+$Id: History,v 1.259 2004-08-03 15:57:35 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,35 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd August 2004  John Allison
+- Rationalised vis command code (uses G4UIcommand static conversion
+  functions where possible).
+- Removed G4ViewParameters::DrawingStyle GetDrawingStyle (const
+  G4Visible&).  Instead, developer has to:
+    // Get vis attributes - pick up defaults if none.
+    const G4VisAttributes* pVA =
+      fpViewer -> GetApplicableVisAttributes (v.GetVisAttributes ());
+  where v is the visible object (polyline, circle, polyhedron, etc.), and:
+    // Get view parameters that the user can force through the vis
+    // attributes, thereby over-riding the current view parameter.
+    G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+    G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  Most developers do this anyway, so the removed routine was redundant
+  and resulting code is more efficient and transparent.  To get
+  colour, the developer can pick up directly from the vis attrributes,
+  pVA, obtained as above:
+    const G4Colour& c = pVA -> GetColour ();
+  or use a slightly less efficient method:
+    const G4Colour& c = GetColour (v);
+  where v is the visible object.
+  Note that for text, the developer must use a different procedure,
+  since the default text colour is determined by the default text vis
+  attributes, which may be specified independent of default vis
+  attributes of other types of visible objects.  A function,
+  GetTextColour, is provided and the recommended use is:
+    const G4Colour& c = GetTextColour (text);  // Picks up default if none.
+- Rationalised use of vis attributes in OpenGL and XXX.
 
 28th July 2004  John Allison  (vis-V06-02-02 with greps-V06-02-00)
 - Implemented force auxiliary edge visible feature of G4VisAttributes.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.39 2003-11-12 13:14:27 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.40 2004-08-03 15:57:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -118,7 +118,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   std::istrstream is ((char*)s);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
-  G4double unit = ValueOf(unitString);
+  G4double unit = G4UIcommand::ValueOf(unitString);
   x0 *= unit; y0 *= unit; z0 *= unit; length *= unit;
 
   G4VModel* model = new G4AxesModel(x0, y0, z0, length);
@@ -460,8 +460,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
      >> auto_manual
      >> xmid >> ymid >> zmid >> positionUnit;
 
-  G4double length = userLength * ValueOf(userLengthUnit);
-  G4double unit = ValueOf(positionUnit);
+  G4double length = userLength * G4UIcommand::ValueOf(userLengthUnit);
+  G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
   char tempcharstring [50];
@@ -685,7 +685,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   std::istrstream is ((char*)s);
   is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
 
-  G4double unit = ValueOf(unitString);
+  G4double unit = G4UIcommand::ValueOf(unitString);
   x *= unit; y *= unit; z *= unit;
 
   G4Text g4text(text, G4Point3D(x,y,z));
