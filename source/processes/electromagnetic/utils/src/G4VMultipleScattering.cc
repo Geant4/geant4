@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.28 2004-11-29 14:44:06 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.29 2004-12-01 17:41:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -262,7 +262,6 @@ void G4VMultipleScattering::PrintInfoDefinition()
 {
   G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering "
          << "for " << firstParticle->GetParticleName()
-         << " " << verboseLevel
          << G4endl;
   if (theLambdaTable) {
     G4cout << "      Lambda tables from "

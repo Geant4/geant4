@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2004-11-29 19:01:17 vnivanch Exp $
+$Id: History,v 1.181 2004-12-01 17:43:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 Dec 04: V.Ivant (utils-V06-02-19)
+- Move the classes with real models from utils to standard
 
 29 November 04: V.Ivanchenko (utils-V06-02-18)
 - Restructure of standard subdirectories
