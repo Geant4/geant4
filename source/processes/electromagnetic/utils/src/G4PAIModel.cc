@@ -34,17 +34,23 @@
 #include "G4PAIModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4Poisson.hh"
+#include "G4Step.hh"
+#include "G4Material.hh"
+#include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
+
 
 ////////////////////////////////////////////////////////////////////////
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
-  : G4VEmModel(nam),
-  particle(0),
-  highKinEnergy(100.*TeV),
-  lowKinEnergy(2.0*MeV),
-  twoln10(2.0*log(10.0)),
-  bg2lim(0.0169),
-  taulim(8.4146e-3)
+  : G4VEmModel(nam),G4VEmFluctuationModel(nam),
+  fParticle(0),
+  fHighKinEnergy(100.*TeV),
+  fLowKinEnergy(2.0*MeV),
+  fTwoln10(2.0*log(10.0)),
+  fBg2lim(0.0169),
+  fTaulim(8.4146e-3)
 {
   if(p) SetParticle(p);
 }
@@ -58,30 +64,30 @@ G4PAIModel::~G4PAIModel()
 
 void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  lowKinEnergy *= mass/proton_mass_c2;
-  ratio = electron_mass_c2/mass;
-  qc = mass/ratio;
+  fParticle = p;
+  fMass = fParticle->GetPDGMass();
+  fSpin = fParticle->GetPDGSpin();
+  G4double q = fParticle->GetPDGCharge()/eplus;
+  fChargeSquare = q*q;
+  fLowKinEnergy *= fMass/proton_mass_c2;
+  fRatio = electron_mass_c2/fMass;
+  fQc = fMass/fRatio;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
-  if(!particle) SetParticle(p);
-  return highKinEnergy;
+  if(!fParticle) SetParticle(p);
+  return fHighKinEnergy;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIModel::LowEnergyLimit(const G4ParticleDefinition* p)
 {
-  if(!particle) SetParticle(p);
-  return lowKinEnergy;
+  if(!fParticle) SetParticle(p);
+  return fLowKinEnergy;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -96,7 +102,7 @@ G4double G4PAIModel::MinEnergyCut(const G4ParticleDefinition*,
 
 G4bool G4PAIModel::IsInCharge(const G4ParticleDefinition* p)
 {
-  if(!particle) SetParticle(p);
+  if(!fParticle) SetParticle(p);
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
 }
 
@@ -105,7 +111,7 @@ G4bool G4PAIModel::IsInCharge(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
+  if(!fParticle) SetParticle(p);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -116,7 +122,7 @@ G4double G4PAIModel::ComputeDEDX(const G4Material* material,
                                               G4double cutEnergy)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double tau   = kineticEnergy/mass;
+  G4double tau   = kineticEnergy/fMass;
   G4double x     = 1.0;
   if(cutEnergy < tmax) x = cutEnergy/tmax;
   G4double gam   = tau + 1.0;
@@ -137,17 +143,17 @@ G4double G4PAIModel::ComputeDEDX(const G4Material* material,
         
   G4double dedx = log(2.0*electron_mass_c2*bg2*tmax*x/eexc2)-(1.0 + x)*beta2;
     
-  if(0.5 == spin) 
+  if(0.5 == fSpin) 
   {
-    G4double del = 0.5*x*tmax/(kineticEnergy + mass);
+    G4double del = 0.5*x*tmax/(kineticEnergy + fMass);
     dedx += del*del;
   }
 
   // density correction     
-  x = log(bg2)/twoln10;
+  x = log(bg2)/fTwoln10;
   if ( x >= x0den ) 
   {
-    dedx -= twoln10*x - cden ;
+    dedx -= fTwoln10*x - cden ;
     if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
   }
     
@@ -155,7 +161,7 @@ G4double G4PAIModel::ComputeDEDX(const G4Material* material,
   G4double sh = 0.0;      
   x  = 1.0;
 
-  if ( bg2 > bg2lim ) 
+  if ( bg2 > fBg2lim ) 
   {
     for (G4int k=0; k<3; k++) 
     {
@@ -168,10 +174,10 @@ G4double G4PAIModel::ComputeDEDX(const G4Material* material,
   {
     for (G4int k=0; k<3; k++) 
     {
-	x *= bg2lim ;
+	x *= fBg2lim ;
 	sh += shellCorrectionVector[k]/x;
     }
-    sh *= log(tau/taul)/log(taulim/taul);
+    sh *= log(tau/taul)/log(fTaulim/taul);
   }
   dedx -= sh;
     
@@ -179,7 +185,7 @@ G4double G4PAIModel::ComputeDEDX(const G4Material* material,
 
   if (dedx < 0.0) dedx = 0.0 ;
   
-  dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
+  dedx *= twopi_mc2_rcl2*fChargeSquare*eDensity/beta2;
 
   return dedx; 
 }
@@ -198,27 +204,27 @@ G4double G4PAIModel::CrossSection(const G4Material* material,
   {
 
     G4double x      = cutEnergy/tmax;
-    G4double energy = kineticEnergy + mass;
-    G4double gam    = energy/mass;
+    G4double energy = kineticEnergy + fMass;
+    G4double gam    = energy/fMass;
     G4double beta2  = 1. - 1./(gam*gam);
     cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
 
     // +term for spin=1/2 particle
-    if( 0.5 == spin ) 
+    if( 0.5 == fSpin ) 
     {
       cross +=  0.5 * (tmax - cutEnergy) / (energy*energy);
 
     // +term for spin=1 particle
     } 
-    else if( 0.9 < spin ) 
+    else if( 0.9 < fSpin ) 
     {
 
-      cross += -log(x)/(3.0*qc) +
-	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/qc)/(energy*energy)
-	- beta2 / (tmax * qc) )/3.0;
+      cross += -log(x)/(3.0*fQc) +
+	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/fQc)/(energy*energy)
+	- beta2 / (tmax * fQc) )/3.0;
     }
     
-    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
+    cross *= twopi_mc2_rcl2*fChargeSquare*material->GetElectronDensity()/beta2;
   }
   //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax 
   //       << " cross= " << cross << G4endl; 
@@ -241,22 +247,22 @@ G4DynamicParticle* G4PAIModel::SampleSecondary(
   G4ThreeVector momentum = dp->GetMomentumDirection();
 
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double energy = kineticEnergy + mass;
-  G4double beta2 = 1. - mass*mass/(energy*energy);
-  G4double totMomentum = sqrt(energy*energy - mass*mass);
+  G4double energy = kineticEnergy + fMass;
+  G4double beta2 = 1. - fMass*fMass/(energy*energy);
+  G4double totMomentum = sqrt(energy*energy - fMass*fMass);
   G4double x = 0.0;
   G4double y = 0.0;
   G4double grej = 1.0 - beta2*xmin;
-  if(spin > 0.0) 
+  if(fSpin > 0.0) 
   {
     x = 0.5*tmax*tmax/(energy*energy);
-    if(spin < 0.9) 
+    if(fSpin < 0.9) 
     {
       grej += xmax*xmax*x;
     } 
     else 
     {
-      y = tmax/(3.0*qc);
+      y = tmax/(3.0*fQc);
       grej += (1.0 - beta2*xmin)*xmin*y + x*xmin*xmin*(2.0/3.0 + xmin*y);
     }
   }
@@ -270,7 +276,7 @@ G4DynamicParticle* G4PAIModel::SampleSecondary(
 
     f = 1.0 - z * (beta2 - z*x);
 
-    if (spin > 0.9) 
+    if (fSpin > 0.9) 
     {
       f += (1.0 - beta2*z)*z*y + x*z*z*(2.0/3.0 + z*y);
     }
@@ -321,6 +327,41 @@ std::vector<G4DynamicParticle*>* G4PAIModel::SampleSecondaries(
 
   return vdp;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+G4double G4PAIModel::SampleFluctuations(const G4Material* material,
+                                                const G4DynamicParticle* dp,
+				                      G4double& tmax,
+					              G4double& length,
+                                                      G4double& meanLoss)
+{
+  G4double loss=0.,minLoss=0.;
+
+  if(meanLoss < minLoss) return meanLoss;
+
+  return loss;
+}
+
+////////////////////////////////////////////////////////////////////////..
+
+
+G4double G4PAIModel::Dispersion( const G4Material* material, 
+                                 const G4DynamicParticle* dp,
+ 				       G4double& tmax, 
+			               G4double& length       )
+{
+  G4double electronDensity = material->GetElectronDensity();
+  G4double particleMass = dp->GetDefinition()->GetPDGMass();
+  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0; 
+  G4double beta2 = 1.0 - 1.0/(gam*gam);
+ 
+  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+                 * electronDensity * fChargeSquare;
+
+  return siga;
+}
+
 
 //
 //

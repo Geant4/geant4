@@ -47,8 +47,9 @@
 #define G4PAIModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4VEmFluctuationModel.hh"
 
-class G4PAIModel : public G4VEmModel
+class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:
@@ -63,9 +64,9 @@ public:
 
   G4double LowEnergyLimit(const G4ParticleDefinition* p);
 
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
+  void SetHighEnergyLimit(G4double e) {fHighKinEnergy = e;};
 
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
+  void SetLowEnergyLimit(G4double e) {fLowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
@@ -97,6 +98,17 @@ public:
 
   G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
+  G4double SampleFluctuations(const G4Material*,
+                          const G4DynamicParticle*,
+ 				G4double&,
+                                G4double&,
+                                G4double&);
+
+  G4double Dispersion(    const G4Material*,
+                          const G4DynamicParticle*,
+ 				G4double&,
+                                G4double&);
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -110,29 +122,28 @@ private:
   G4PAIModel & operator=(const  G4PAIModel &right);
   G4PAIModel(const  G4PAIModel&);
 
-  const G4ParticleDefinition* particle;
-  G4double mass;
-  G4double spin;
-  G4double chargeSquare;
-  G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
-  G4double twoln10;
-  G4double bg2lim; 
-  G4double taulim;
-  G4double qc;
+  const G4ParticleDefinition* fParticle;
+  G4double fMass;
+  G4double fSpin;
+  G4double fChargeSquare;
+  G4double fRatio;
+  G4double fHighKinEnergy;
+  G4double fLowKinEnergy;
+  G4double fTwoln10;
+  G4double fBg2lim; 
+  G4double fTaulim;
+  G4double fQc;
 };
 
 /////////////////////////////////////////////////////////////////////
 
-inline G4double G4PAIModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
-                G4double kinEnergy) 
+inline G4double G4PAIModel::MaxSecondaryEnergy( const G4ParticleDefinition*,
+                                                      G4double kinEnergy) 
 {
 
-  G4double gamma= kinEnergy/mass + 1.0;
+  G4double gamma= kinEnergy/fMass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
+                  (1. + 2.0*gamma*fRatio + fRatio*fRatio);
   
   return tmax;
 }
@@ -143,9 +154,9 @@ inline G4double G4PAIModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
 
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double gamma= kineticEnergy/mass + 1.0;
+  G4double gamma= kineticEnergy/fMass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
+                  (1. + 2.0*gamma*fRatio + fRatio*fRatio);
   
   return tmax;
 }
