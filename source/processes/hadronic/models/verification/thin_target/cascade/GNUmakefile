@@ -1,16 +1,13 @@
-# $Id: GNUmakefile,v 1.2 2003-11-14 17:02:42 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2003-11-14 17:39:20 vnivanch Exp $
 # --------------------------------------------------------------
 
 name := cascade
-G4TARGET := $(name)
-G4EXLIB := true
+G4TARGET := cascade
+G4EXLIB  := true
 
-ifndef G4INSTALL
-  G4INSTALL = ../../../../../../../
-endif
 
 .PHONY: all tools
- 
+
 
 all: lib bin
 

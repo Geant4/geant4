@@ -187,7 +187,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   // Choose generator
 
-  if(gen_name == "LEparametrisation") {
+  if(gen_name == "lepar") {
     if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
     else if(part_name == "pi+") sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
     else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
@@ -201,15 +201,15 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "stringCHIPS") {
+  } else if(gen_name == "strCHIPS") {
     sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
 
     //G4cout <<  "Generator is ready" << G4endl;
     theProcess->SetSecondaryGenerator(sg);
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
-
 */
+
   } else if(gen_name == "preCompound") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
@@ -218,7 +218,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "binary") {
+  } else if(gen_name == "binary_pc") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
     thePreCompound = pcm;
@@ -229,19 +229,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     hkm->SetDeExcitation(pcm);
     hkmod = hkm;
 
-  } else if(gen_name == "binary_no_pc") {
+  } else if(gen_name == "binary") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-    hkm->SetDeExcitation(0);
+//    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-//    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
