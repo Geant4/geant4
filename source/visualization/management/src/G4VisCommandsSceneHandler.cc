@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.21 2001-08-24 20:49:35 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.22 2001-09-10 10:56:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -135,7 +135,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
   if (iScene < nScenes) {
     G4Scene* pScene = sceneList [iScene];
     pSceneHandler -> SetScene (pScene);
-    fpVisManager -> SetCurrentScene (pScene);
+    UpdateVisManagerScene(sceneName);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Scene \"" << sceneName
 	     << "\" attached to scene handler \""
