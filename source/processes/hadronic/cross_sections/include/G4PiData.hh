@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 // by J.P Wellisch, Sun Sep 15 2002.
 
 #ifndef G4PiData_h

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4DetailedBalancePhaseSpaceIntegral.hh"
 #include "G4ResonanceID.hh"
 

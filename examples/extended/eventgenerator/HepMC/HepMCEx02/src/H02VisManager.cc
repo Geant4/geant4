@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02VisManager.cc
-//   $Id: H02VisManager.cc,v 1.2 2003-11-13 15:11:16 johna Exp $
+//   $Id: H02VisManager.cc,v 1.3 2003-12-09 15:31:28 gunter Exp $
 //
 // ====================================================================
 #include "H02VisManager.hh"

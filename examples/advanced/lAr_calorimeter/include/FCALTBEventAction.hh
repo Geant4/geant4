@@ -19,11 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.8 2003-12-02 14:39:03 gcosmo Exp $
+// $Id: FCALTBEventAction.hh,v 1.9 2003-12-09 15:30:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //   Name of file:       FCALHadModule.cc
 //   Author:             Mathieu Fontaine           Rachid Mazini
 //                       fontainerlps.umontreal.ca  Rachid.Mazinircern.ch

@@ -19,8 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
-
+//
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -35,7 +34,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc,v 1.15 2003-05-26 09:20:14 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorAction.cc,v 1.16 2003-12-09 15:30:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"

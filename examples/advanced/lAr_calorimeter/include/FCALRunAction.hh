@@ -19,11 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALRunAction.hh,v 1.7 2003-05-26 12:51:18 pmendez Exp $
+// $Id: FCALRunAction.hh,v 1.8 2003-12-09 15:30:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4DynamicParticleVector.hh"

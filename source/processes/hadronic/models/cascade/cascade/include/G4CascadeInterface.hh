@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 // CLASS DESCRIPTION
 // G4CascadeInterface defines an interface to HETC and INUCL 
 // models of an medium energy (~ 0.5 - 5 GeV) intra-nuclear transport.

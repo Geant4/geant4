@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   G4HepMCInterface.cc
-//   $Id: G4HepMCInterface.cc,v 1.3 2003-08-02 00:18:30 asaim Exp $
+//   $Id: G4HepMCInterface.cc,v 1.4 2003-12-09 15:35:06 gunter Exp $
 //
 // ====================================================================
 

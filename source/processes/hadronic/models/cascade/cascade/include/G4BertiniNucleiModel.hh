@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #ifndef G4BERTININUCLEI_MODEL_HH
 #define G4BERTININUCLEI_MODEL_HH
 

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4XAnnihilationChannel.hh"

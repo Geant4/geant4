@@ -19,8 +19,6 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
-
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -36,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.21 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.22 2003-12-09 15:29:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"

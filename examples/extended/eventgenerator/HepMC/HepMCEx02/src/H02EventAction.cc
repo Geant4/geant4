@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02EventAction.cc
-//   $Id: H02EventAction.cc,v 1.2 2003-07-04 09:34:01 gcosmo Exp $
+//   $Id: H02EventAction.cc,v 1.3 2003-12-09 15:31:20 gunter Exp $
 //
 // ====================================================================
 #include "H02EventAction.hh"

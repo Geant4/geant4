@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"

@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.hh
-//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.4 2003-07-04 09:23:04 gcosmo Exp $
+//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.5 2003-12-09 15:30:40 gunter Exp $
 //
 // ====================================================================
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H

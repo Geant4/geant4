@@ -19,11 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: lArCal.cc,v 1.5 2003-05-26 12:51:17 pmendez Exp $
+// $Id: lArCal.cc,v 1.6 2003-12-09 15:30:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

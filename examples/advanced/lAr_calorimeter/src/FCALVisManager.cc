@@ -19,11 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALVisManager.cc,v 1.7 2003-11-13 15:09:56 johna Exp $
+// $Id: FCALVisManager.cc,v 1.8 2003-12-09 15:30:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

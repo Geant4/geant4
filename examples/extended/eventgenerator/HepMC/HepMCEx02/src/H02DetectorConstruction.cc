@@ -19,10 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //    H02DetectorConstruction.cc
-//    $Id: H02DetectorConstruction.cc,v 1.2 2003-07-04 09:34:01 gcosmo Exp $
+//    $Id: H02DetectorConstruction.cc,v 1.3 2003-12-09 15:31:19 gunter Exp $
 //
 // ====================================================================
 #include "H02DetectorConstruction.hh"

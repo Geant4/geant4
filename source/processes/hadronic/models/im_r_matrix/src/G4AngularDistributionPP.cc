@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #include "G4AngularDistributionPP.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"

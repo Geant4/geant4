@@ -19,11 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALCalorHit.cc,v 1.3 2003-12-02 14:39:03 gcosmo Exp $
+// $Id: FCALCalorHit.cc,v 1.4 2003-12-09 15:30:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.6 2003-11-18 13:31:46 guatelli Exp $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.7 2003-12-09 15:29:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"

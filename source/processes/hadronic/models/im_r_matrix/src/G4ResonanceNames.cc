@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "globals.hh"
 #include "G4ResonanceNames.hh"
 #include "G4VCrossSectionSource.hh"

@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02MuonHit.cc
-//   $Id: H02MuonHit.cc,v 1.3 2003-07-04 09:34:01 gcosmo Exp $
+//   $Id: H02MuonHit.cc,v 1.4 2003-12-09 15:31:23 gunter Exp $
 //
 // ====================================================================
 #include "H02MuonHit.hh"

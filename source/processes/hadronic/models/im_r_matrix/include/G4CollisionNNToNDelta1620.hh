@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #ifndef G4CollisionNNToNDelta1620_h
 #define G4CollisionNNToNDelta1620_h
 

@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: G4eIonisationSpectrum.hh,v 1.5 2003-05-20 20:03:34 pia Exp $
+//
+// $Id: G4eIonisationSpectrum.hh,v 1.6 2003-12-09 15:36:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

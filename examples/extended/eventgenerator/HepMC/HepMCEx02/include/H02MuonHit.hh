@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02MuonHit.hh
-//   $Id: H02MuonHit.hh,v 1.2 2003-07-04 09:34:00 gcosmo Exp $
+//   $Id: H02MuonHit.hh,v 1.3 2003-12-09 15:31:08 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_MUON_HIT_H

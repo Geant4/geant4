@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-// $Id: G4LowEnergyCompton.hh,v 1.19 2001-12-13 12:04:13 gunter Exp $
+//
+// $Id: G4LowEnergyCompton.hh,v 1.20 2003-12-09 15:36:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti

@@ -19,7 +19,6 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
 //
 // File name:     G4PAIModel.cc
 //

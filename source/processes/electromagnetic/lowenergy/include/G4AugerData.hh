@@ -19,8 +19,6 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-//
 //
 // $Id: G4AugerData.hh
 // GEANT4 tag $Name: not supported by cvs2svn $

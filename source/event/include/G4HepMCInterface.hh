@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   G4HepMCInterface.hh
-//   $Id: G4HepMCInterface.hh,v 1.2 2003-08-02 00:18:30 asaim Exp $
+//   $Id: G4HepMCInterface.hh,v 1.3 2003-12-09 15:35:03 gunter Exp $
 //
 //   A base class for primary generation via HepMC object.
 //   This class is derived from G4VPrimaryGenerator.
