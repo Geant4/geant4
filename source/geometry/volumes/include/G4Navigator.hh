@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.hh,v 1.6 2000-11-01 16:51:07 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.7 2001-06-01 18:46:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,7 @@
 #include "G4GRSVolume.hh"
 #include "G4GRSSolid.hh"
 #include "G4TouchableHistory.hh"
+#include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
 #include "G4NormalNavigation.hh"
@@ -152,6 +153,16 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
+  // inline
+  G4TouchableHistoryHandle LocateGlobalPointAndReturnTouchableHandle(
+			  const G4ThreeVector&       position,
+			  const G4ThreeVector&       direction,
+				G4TouchableHistoryHandle& oldTouchableToUpdate,
+			  const G4bool               RelativeSearch  =true);
+    // First, search the geometrical hierarchy like the above method
+    // LocateGlobalPointAndSetup(). Then use the volume found and its
+    // navigation history to update the touchable.
+
   inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
@@ -209,6 +220,11 @@ class G4Navigator
   G4GRSVolume* CreateGRSVolume() const;
   G4GRSSolid* CreateGRSSolid() const; 
   G4TouchableHistory* CreateTouchableHistory() const;
+    // `Touchable' creation methods: caller has deletion responsibility.
+
+  // G4GRSVolume* CreateGRSVolume() const;
+  // G4GRSSolid*  CreateGRSSolid() const; 
+  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   inline G4bool IsExitNormalValid();

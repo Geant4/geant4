@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.13 2001-05-30 11:10:09 japost Exp $
+// $Id: G4Navigator.cc,v 1.14 2001-06-01 18:47:32 japost Exp $
 // GEANT4 tag $ Name:  $
 //
 // 
@@ -987,3 +987,27 @@ void  G4Navigator::SetVerboseLevel(G4int level)
    fVerbose=level;
 }
 
+
+G4TouchableHistoryHandle
+G4Navigator::LocateGlobalPointAndReturnTouchableHandle(
+			  const G4ThreeVector&       position,
+			  const G4ThreeVector&       direction,
+				G4TouchableHistoryHandle& oldTouchableToUpdate,
+			  const G4bool               RelativeSearch  =true)
+{
+  G4TouchableHistoryHandle nextTouchableHandle= oldTouchableToUpdate;
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);
+
+  // touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+
+  if( fEntering | fExiting )  // fEnteredDaughter | fExitedMother
+     nextTouchableHandle= CreateTouchableHistoryHandle();
+
+  return nextTouchableHandle;
+}
+
+G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
+{
+  return G4TouchableHistoryHandle( CreateTouchableHistory() );
+}
