@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 1.5 2001-02-20 18:15:40 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.6 2001-03-27 15:35:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ class  G4FieldTrack
      inline const G4ThreeVector& GetMomentumDir() const;
      inline G4double       GetCurveLength() const;
        // Distance along curve of point.
-     inline G4double       GetMomentumModulus() const;
+     // inline G4double       GetMomentumModulus() const;  // Obsolete
      inline G4ThreeVector  GetSpin()   const;
      inline G4double       GetLabTimeOfFlight() const;
      inline G4double       GetProperTimeOfFlight() const;
@@ -74,7 +74,7 @@ class  G4FieldTrack
        // Distance along curve.
      inline void SetKineticEnergy(G4double nEnergy);
        // Does not modify momentum.
-     inline void SetMomentumModulus(G4double nMomentumMod);
+     // inline void SetMomentumModulus(G4double nMomentumMod);  // Obsolete
        // Does not modify energy.
      inline void SetSpin(G4ThreeVector nSpin);
      inline void SetLabTimeOfFlight(G4double nTOF); 
@@ -110,7 +110,7 @@ class  G4FieldTrack
      G4double  fRestMass_c2;
      G4double  fLabTimeOfFlight;
      G4double  fProperTimeOfFlight;
-     G4double  fMomentumModulus;
+     // G4double  fMomentumModulus;  // Unused
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
 }; 
