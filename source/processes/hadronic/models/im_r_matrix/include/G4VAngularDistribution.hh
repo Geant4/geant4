@@ -57,8 +57,7 @@ public:
 
   virtual G4double CosTheta(G4double s, G4double m1, G4double m2) const = 0;
 
-  virtual G4double Phi() const;
- 
+  virtual G4double Phi() const { return 2.*pi*G4UniformRand(); }
 
 protected:
 
