@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.4 1999-05-04 14:24:23 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.5 1999-05-07 09:03:02 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -20,6 +20,7 @@
 // **************************************************************
 // 04-06-98, in DoIt,secondary production condition:range>min(threshold,safety)
 // 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
+// 06/05/99 , bug fixed , L.Urban
 // --------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
