@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.4 2002-07-18 14:55:50 dressel Exp $
+// $Id: G4ParallelNavigator.hh,v 1.5 2002-07-29 15:56:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -92,9 +92,18 @@ private:
 				    const G4ThreeVector &aPosition, 
 				    const G4ThreeVector &aDirection);
 
+  G4double GetStepLength(const G4String methodname,
+			 const G4ThreeVector &aPosition, 
+			 const G4ThreeVector &aDirection);
+  
+  G4double GetStepLengthUseLocate(const G4String methodname,
+				  const G4ThreeVector &aPosition, 
+				  const G4ThreeVector &aDirection);
+  
   void Locate(const G4ThreeVector &aPosition, 
 	      const G4ThreeVector &aDirection,
-	      G4bool useDirection= false); 
+	      G4bool historysearch,
+	      G4bool useDirection); 
 			
   void Error(const G4String &m,
              const G4ThreeVector &pos,
@@ -105,8 +114,10 @@ private:
 private:
   
   G4Navigator &fNavigator;
-  G4TouchableHandle fCurrentTouchableH;
   G4int fNlocated;
+  G4int fMaxShiftedTrys;  
+  G4TouchableHandle fCurrentTouchableH;
+
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.6 2002-07-18 14:55:50 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.7 2002-07-29 15:56:20 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,9 @@
 #include "G4VParallelStepper.hh"
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
-  : fNavigator(*(new G4Navigator)), fNlocated(0)
+  : fNavigator(*(new G4Navigator)), 
+  fNlocated(0),
+  fMaxShiftedTrys(10)  
 {
   fNavigator.SetWorldVolume(&aWorldVolume);
   fCurrentTouchableH = fNavigator.CreateTouchableHistory();
@@ -56,10 +58,18 @@ G4ParallelNavigator::~G4ParallelNavigator()
 G4PTouchableKey G4ParallelNavigator::
 LocateOnBoundary(const G4ThreeVector &aPosition, 
 		 const G4ThreeVector &aDirection)
-{
+{/*
   fNavigator.SetGeometricallyLimitedStep();
-  Locate(aPosition, aDirection, true);
-  // since the track crosses a boundary ipdate stepper 
+  fNavigator.
+    LocateGlobalPointAndUpdateTouchableHandle( aPosition,
+					       aDirection,
+					       fCurrentTouchableH,
+					       true);
+  fNlocated++;
+ */
+  fNavigator.SetGeometricallyLimitedStep();
+  Locate(aPosition, aDirection, false, true);
+  //  since the track crosses a boundary ipdate stepper 
   return GetCurrentTouchableKey();
 }
 
@@ -67,22 +77,12 @@ G4double G4ParallelNavigator::
 ComputeStepLengthInit(const G4ThreeVector &aPosition, 
 		      const G4ThreeVector &aDirection)
 {
-  G4double newSafety;
-  G4double stepLength;
-
   // initialization
   fNlocated = 0;
-  
-  // first try
-  Locate(aPosition, aDirection, true);
-  stepLength  = fNavigator.ComputeStep( aPosition, aDirection,
-					kInfinity, newSafety);
-  if (stepLength<=0.0) {
-    // second try with schifted position
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthInit",
-					   aPosition, aDirection);
-  } 
-  return stepLength;
+
+  Locate(aPosition, aDirection, false, false);
+  return GetStepLength("ComputeStepLengthInit",
+			 aPosition, aDirection);
 }
 
 G4double G4ParallelNavigator::
@@ -94,24 +94,14 @@ ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition,
 	  aPosition, aDirection);
   }
 
-  // if the track is on boundary the location was done
-  // in the DOIT of the ImportanceSplitExaminer
+  // if the track is on boundary the LocateOnBoundary was called
+  // in the DOIT of the ParalleTransport
 
-  G4double newSafety;    
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-				       kInfinity, newSafety);
-  if (stepLength<=0.) {
-    // second try with schifted position
-    G4cout << "Warning: G4ParallelNavigator::ComputeStepLengthCrossBoundary: "
-	   << G4endl;
-    G4cout << "stepLength<=0." << ", pos = " << aPosition 
-	   << ", dir = " << aDirection << G4endl;
-    G4cout << "try ComputeStepLengthShifted" << G4endl;
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthCrossBoundary",
-					   aPosition, aDirection);
-  }
-  return stepLength;
+
+  return  GetStepLength("ComputeStepLengthCrossBoundary",
+			 aPosition, aDirection);
 }
+
 
 G4double G4ParallelNavigator::
 ComputeStepLengthInVolume(const G4ThreeVector &aPosition, 
@@ -126,33 +116,24 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
   // not the first step, the location must be inside the 
   // volume 
 
-  //  fNavigator.LocateGlobalPointWithinVolume(aPosition);
-  Locate(aPosition, aDirection, true); // reduces stepLength<=0. calls
-
-  G4double newSafety;
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-				       kInfinity, newSafety);
-  if (stepLength<=0.) {
-    // second try with schifted position
-    G4cout << "Warning: G4ParallelNavigator::ComputeStepLengthInVolume: "
-	   << G4endl;
-    G4cout << "stepLength<=0." << ", pos = " << aPosition 
-	   << ", dir = " << aDirection << G4endl;
-    G4cout << "try ComputeStepLengthShifted" << G4endl;
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthInVolume",
-					   aPosition, aDirection);
-  }
-  return stepLength;
+  fNavigator.LocateGlobalPointWithinVolume(aPosition);
+  //  Locate(aPosition, aDirection, true); // reduces stepLength<=0. calls
+  return  GetStepLengthUseLocate("ComputeStepLengthInVolume",
+				 aPosition, aDirection);
 }
 
 // private functions
 
 void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition, 
                                  const G4ThreeVector &aDirection,
-                                       G4bool useDirection)
+				 G4bool historysearch,
+				 G4bool useDirection)
 {
 
-  fNavigator.LocateGlobalPointAndSetup( aPosition, &aDirection, true, !useDirection);
+  fNavigator.LocateGlobalPointAndSetup( aPosition, 
+					&aDirection, 
+					historysearch, 
+					!useDirection);
   fCurrentTouchableH = fNavigator.CreateTouchableHistory();
 
   fNlocated++;
@@ -160,23 +141,69 @@ void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition,
   return;
 }
 
+
+G4double G4ParallelNavigator::
+GetStepLength(const G4String methodname,
+	      const G4ThreeVector &aPosition, 
+	      const G4ThreeVector &aDirection) {
+  G4double newSafety;    
+  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+						kInfinity, newSafety);
+  // if stepLength = 0 try shifting
+  if (stepLength<=0.) {
+    stepLength  = 
+      ComputeStepLengthShifted(methodname,
+			       aPosition, aDirection);
+  }
+  return stepLength;
+}
+
+G4double G4ParallelNavigator::
+GetStepLengthUseLocate(const G4String methodname,
+	      const G4ThreeVector &aPosition, 
+	      const G4ThreeVector &aDirection) {
+  G4double newSafety;    
+  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+						kInfinity, newSafety);
+  // if stepLength = 0 try locate
+  if (stepLength<=0.) {
+    Locate(aPosition, aDirection, true, true);    
+    stepLength  = GetStepLength(methodname + 
+				"form GetStepLengthUseLocate",
+				aPosition, 
+				aDirection);
+  }
+  return stepLength;
+}
+
+
 G4double
-G4ParallelNavigator::ComputeStepLengthShifted(const G4String &m,
-                                              const G4ThreeVector &aPosition, 
-                                              const G4ThreeVector &aDirection)
+G4ParallelNavigator::
+ComputeStepLengthShifted(const G4String &m,
+			 const G4ThreeVector &aPosition, 
+			 const G4ThreeVector &aDirection)
 {
+  G4cerr << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
+	 << m << G4endl;
   G4ThreeVector shift_pos(aPosition);
   shift_pos+=G4ThreeVector(Shift(aDirection.x()), 
 			   Shift(aDirection.y()), 
 			   Shift(aDirection.z()));
-  Locate(shift_pos, aDirection, true);
-  G4double newSafety;
-  G4double stepLength = fNavigator.ComputeStep( shift_pos, aDirection,
-                                                kInfinity, newSafety);
+  G4double stepLength = 0.;
+  G4int trys = 0;
+  while (stepLength<=0 && trys < fMaxShiftedTrys) {
+    G4cerr << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
+	   << ++trys << G4endl;
+    G4cerr << "shifted position: " << shift_pos 
+	   << ", direction: " << aDirection << G4endl;
+    Locate(shift_pos, aDirection, true, true);
+    G4double newSafety;
+    stepLength = fNavigator.ComputeStep( shift_pos, aDirection,
+					 kInfinity, newSafety);
+  }
   if (stepLength<=0.0) {
     G4std::ostrstream os;
-    os << "ComputeStepLengthShifted: called by " << m << "\n";
-    os << "shifted positio in second try: " << shift_pos << '\0' << G4endl;
+    os << "still got stepLength<=0.0: " << shift_pos << '\0' << G4endl;
     Error(os.str() , aPosition, aDirection);
   } 
   return stepLength;
@@ -192,9 +219,9 @@ void G4ParallelNavigator::Error(const G4String &m,
                                 const G4ThreeVector &pos,
                                 const G4ThreeVector &dir)
 {
-  G4cout << "ERROR - G4ParallelNavigator::" << m << G4endl;
-  G4cout << "aPosition: " << pos << G4endl;
-  G4cout << "dir: " << dir << G4endl;
+  G4cerr << "ERROR - G4ParallelNavigator::" << m << G4endl;
+  G4cerr << "aPosition: " << pos << G4endl;
+  G4cerr << "dir: " << dir << G4endl;
   G4Exception("Program aborted.");
 }
 
