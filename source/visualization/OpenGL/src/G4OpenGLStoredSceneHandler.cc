@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.14 2002-02-24 01:48:11 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.15 2002-11-27 12:44:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   if (!fTopPODL) {
     G4cout <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
-      "  display List for fTopPODL - suggest trying OpenGL Immediated mode."
+      "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
   }
   else {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.8 2002-02-24 01:48:12 johna Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.9 2002-11-27 12:44:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,6 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
 
 G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
-  G4bool need = false;
-
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
@@ -78,26 +76,26 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      // No need if section plane changes.
+      // No need to visit kernel if section plane changes.
       (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
       (lastVP.GetCutawayPlanes ().size () !=
                                  fVP.GetCutawayPlanes ().size ()) ||
-      // No need if cutaway planes change.
+      // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
       ) {
-    need = true;
+    return true;
   }
 
-  if (!need && lastVP.IsDensityCulling () &&
+  if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    need = true;
+    return true;
 
-  if (!need && lastVP.IsExplode () &&
+  if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    need = true;
+    return true;
 
-  return need;
+  return false;
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
