@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2002-10-28 09:51:46 vnivanch Exp $
+$Id: History,v 1.158 2002-11-08 16:47:14 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28.10-2002   MGP, tag emlowen-V04-01-??
+08.11-2002   MGP, tag emlowen-V04-01-05
              VI optimisation of tables in G4LowEnergyIonisation,
                 G4eLowEnergyLoss, G4hLowEnergyLoss, G4hLowEnergyIonisation
 
