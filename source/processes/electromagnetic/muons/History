@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2002-02-11 15:16:50 maire Exp $
+$Id: History,v 1.28 2002-02-26 18:43:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 feb 02: mma (muons-V0
+- V.Ivanchenko G4VMuEnergyLoss - PostStep->PreStep for touchebleHandler 
      
 10 fev 02: mma (muons-V04-00-00)
 - G4VMuEnergyLoss : error in SetMindeltaCutInRange, was set in energy !
