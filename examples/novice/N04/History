@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003-03-26 11:39:25 maire Exp $
+$Id: History,v 1.27 2003-03-26 11:40:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-26-03-03  mma 
+26-03-03  mma (exampleN04-V05-00-01)
 - Use G4PVPlacement and G4PVParametrised constructors in logical mother.
       
 Feb 27, 2003  mma (exampleN04-V05-00-00)
