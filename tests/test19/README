@@ -1,0 +1,30 @@
+====================================================================== 
+test19
+======================================================================
+
+System test for the energy dependence of the process level simulation
+
+Authors: Mikhail Kosov
+
+======================================================================
+
+---- Status: Under construction
+
+---- Input: chipstest.in file (internal), test19(.large_N).in (external)
+
+---- Output: screan or any file named after >&
+
+---- Location of the reference output: test29.out and test19.large_N.out
+
+---- Macros: test29.in and test19.large_N.in
+
+---- Other files required
+
+---- How to run it?
+     >test19 (uses internally chipstest.in file)
+     >test19 test19.in >& result.out (not implemented yet)
+     >test19 test19.large_N.in >& result.large_N.out (not yet)
+
+---- Contactperson: Mikhail.Kossov@cern.ch
+
+======================================================================
