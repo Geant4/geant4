@@ -66,9 +66,6 @@ DMXPhysicsList::DMXPhysicsList() : G4VUserPhysicsList()
   cutForGamma         = defaultCutValue;
   cutForElectron      = 1.0*nanometer;
   cutForPositron      = defaultCutValue;
-  cutForProton        = defaultCutValue;
-  cutForAlpha         = 1.0*nanometer;
-  cutForGenericIon    = 1.0*nanometer;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
@@ -807,22 +804,13 @@ void DMXPhysicsList::SetCuts()
 
   //special for low energy physics
   G4double lowlimit=250*eV;  
-  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
-  G4Electron::SetEnergyRange(lowlimit,100*GeV);
-  G4Positron::SetEnergyRange(lowlimit,100*GeV);
-   
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,100.*GeV);
+
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
-  
-  //  SetCutValue(cutForProton, "proton");
-  //  SetCutValue(cutForProton, "anti_proton");
-  //  SetCutValue(cutForAlpha,  "alpha");
-  //  SetCutValue(cutForGenericIon,  "GenericIon");
-  
-  //  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }

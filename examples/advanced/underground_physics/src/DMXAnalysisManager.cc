@@ -247,8 +247,8 @@ void DMXAnalysisManager::PulseTimeFit()
   }
 
   G4cout << " Started Pulse Time Fit " << G4endl;
-
-  for (int i = 0; i <  2 ; ++i) 
+  int i;
+  for (i = 0; i <  2 ; ++i) 
     G4cout << "\n Fit Parameters: " << i << ":\t" 
 	   << exponFun->parameterNames()[i] << G4endl;
   // first fit to time histogram:
