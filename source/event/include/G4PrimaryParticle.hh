@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.11 2003-09-12 21:51:32 asaim Exp $
+// $Id: G4PrimaryParticle.hh,v 1.12 2004-06-07 12:31:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -188,7 +188,7 @@ class G4PrimaryParticle
       }
 };
 
-extern G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+G4extern G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 
 inline void * G4PrimaryParticle::operator new(size_t)
 {

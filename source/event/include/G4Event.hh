@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.7 2003-09-09 20:09:17 asaim Exp $
+// $Id: G4Event.hh,v 1.8 2004-06-07 12:31:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -155,7 +155,7 @@ class G4Event
       //  Set and Get method of G4VUserEventInformation
 };
 
-extern G4Allocator<G4Event> anEventAllocator;
+G4extern G4Allocator<G4Event> anEventAllocator;
 
 inline void* G4Event::operator new(size_t)
 {

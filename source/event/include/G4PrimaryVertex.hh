@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.8 2003-09-12 21:51:32 asaim Exp $
+// $Id: G4PrimaryVertex.hh,v 1.9 2004-06-07 12:31:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -139,7 +139,7 @@ class G4PrimaryVertex
       { return userInfo; }
 };
 
-extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
+G4extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
 
 inline void * G4PrimaryVertex::operator new(size_t)
 {
