@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.19 2001-08-05 19:02:29 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.20 2001-08-24 20:34:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fTopPVName      (pVPV -> GetName ()),
   fTopPVCopyNo    (pVPV -> GetCopyNo ()),
   fRequestedDepth (requestedDepth),
+  fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
   fpCurrentPV     (0),
   fpCurrentLV     (0),
@@ -69,7 +70,13 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
-  if (useFullExtent) {
+  CalculateExtent ();
+}
+
+G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
+
+void G4PhysicalVolumeModel::CalculateExtent () {
+  if (fUseFullExtent) {
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
   else {
@@ -93,8 +100,6 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
     fpMP = tempMP;
   }
 }
-
-G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
 
 void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler) {
@@ -437,32 +442,41 @@ G4bool G4PhysicalVolumeModel::IsDaughterCulled
   }
 }
 
-G4bool G4PhysicalVolumeModel::Validate () {
+G4bool G4PhysicalVolumeModel::Validate (G4bool warn) {
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
+  if (warn) {
+    G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
+  }
   G4PhysicalVolumeSearchScene searchScene (fTopPVName, fTopPVCopyNo);
   G4PhysicalVolumeModel searchModel (world);
+  G4ModelingParameters mp;  // Default modeling parameters for this search.
+  searchModel.SetModelingParameters (&mp);
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
   if (foundVolume) {
-    G4cout << "  Volume of the same name and copy number (\""
-	   << fTopPVName << "\", copy " << fTopPVCopyNo
-	   << ") still exists and is being used."
-      "\n  Be warned that this does not necessarily guarantee it's the same"
-      "\n  volume you originally specified in /vis/scene/add/."
-	   << G4endl;
+    if (warn) {
+      G4cout << "  Volume of the same name and copy number (\""
+	     << fTopPVName << "\", copy " << fTopPVCopyNo
+	     << ") still exists and is being used."
+	"\n  Be warned that this does not necessarily guarantee it's the same"
+	"\n  volume you originally specified in /vis/scene/add/."
+	     << G4endl;
+    }
     fpTopPV = foundVolume;
+    CalculateExtent ();
     return true;
   }
   else {
-    G4cout << "  A volume of the same name and copy number (\""
-	   << fTopPVName << "\", copy " << fTopPVCopyNo
-	   << ") no longer exists."
-	   << G4endl;
+    if (warn) {
+      G4cout << "  A volume of the same name and copy number (\""
+	     << fTopPVName << "\", copy " << fTopPVCopyNo
+	     << ") no longer exists."
+	     << G4endl;
+    }
     return false;
   }
 }
