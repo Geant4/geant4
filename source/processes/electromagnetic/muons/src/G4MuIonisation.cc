@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.39 2004-02-10 18:07:26 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.40 2004-02-15 17:46:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,8 +148,9 @@ void G4MuIonisation::PrintInfoDefinition()
   G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Bether-Bloch model for E > 0.2 MeV, "
-         << "parametrisation of Bragg peak below, rad.corrections for E > 1 GeV"
+         << "parametrisation of Bragg peak below, "
          << G4endl;
+  G4cout << "      radiative corrections for E > 1 GeV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

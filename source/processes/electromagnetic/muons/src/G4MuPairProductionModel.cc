@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.15 2004-02-10 18:07:26 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.16 2004-02-15 17:46:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,7 +155,7 @@ G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple
   if (minPairEnergy >= cutEnergy || kineticEnergy <= lowestKinEnergy) return dedx;
 
   G4double tmax = MaxSecondaryEnergy(particle, kineticEnergy);
-  G4double cut = std::min(cutEnergy,tmax);
+  G4double cut  = std::min(cutEnergy,tmax);
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -449,7 +449,7 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double cut,
-                                   G4double maxEnergy)
+                                   G4double tmax)
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
   G4double totalEnergy   = kineticEnergy + particleMass ;
@@ -460,8 +460,9 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   if(it == ntdat) it--;
   G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
 
-  G4double maxPairEnergy = std::min(maxEnergy,MaxSecondaryEnergy(particle,kineticEnergy));
-  G4double minEnergy     = std::min(maxPairEnergy, cut);
+  G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
+  G4double maxEnergy     = std::min(tmax, maxPairEnergy);
+  G4double minEnergy     = std::min(maxEnergy, cut);
 
   G4int iymin = 0;
   G4int iymax = nbiny;

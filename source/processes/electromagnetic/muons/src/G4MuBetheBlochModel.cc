@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.10 2004-02-10 18:07:26 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.11 2004-02-15 17:46:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,11 +137,11 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
 G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                                const G4ParticleDefinition* p,
                                                      G4double kineticEnergy,
-                                                     G4double cutEnergy)
+                                                     G4double cut)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
-  if(cutEnergy > tmax) cutEnergy = tmax;
+  G4double cutEnergy = std::min(cut,tmax);
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
@@ -224,11 +224,11 @@ G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
-                                                 G4double maxEnergy)
+                                                 G4double maxKinEnergy)
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  if(maxEnergy > tmax) maxEnergy = tmax;
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -283,8 +283,11 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
   G4double etot2         = totEnergy*totEnergy;
   G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
 
-  G4double a0    = log(2.*totEnergy/mass);
-  G4double grej  = 1. + alphaprime*a0*a0;
+  G4double grej  = 1.;
+  if(tmax > limitKinEnergy) {
+    G4double a0    = log(2.*totEnergy/mass);
+    grej  += alphaprime*a0*a0;
+  }
 
   G4double deltaKinEnergy, f;
 
@@ -312,7 +315,6 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
 
 
   } while( grej*G4UniformRand() > f );
-//  G4cout << "MuBB: edelta= " << deltaKinEnergy << G4endl;
 
   G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
