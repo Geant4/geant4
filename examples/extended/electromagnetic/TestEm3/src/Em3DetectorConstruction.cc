@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.6 2002-12-12 11:19:37 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.7 2003-02-10 16:51:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -367,19 +367,19 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
                           
       logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
       			                  AbsorMaterial[k], //its material
-      			                  "Absorber");      //its name
+      			                  AbsorMaterial[k]->GetName()); 
 					  
       logicAbsor[k]->SetUserLimits(userLimits);
 
       G4double xcenter = xfront+0.5*AbsorThickness[k];
-      xfront += AbsorThickness[k];       			                  
+      xfront += AbsorThickness[k];
       physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
-      		    G4ThreeVector(xcenter,0.,0.),          //its position
-                                        "Absorber",        //its name
-                                        logicAbsor[k],     //its logical volume
-                                        physiLayer,        //its mother
-                                        false,             //no boulean operat
-                                        k);                //copy number
+      		    	G4ThreeVector(xcenter,0.,0.),      //its position
+                    	AbsorMaterial[k]->GetName(),	   //its name
+                        logicAbsor[k],     		   //its logical volume
+                        physiLayer,        		   //its mother
+                        false,             		   //no boulean operat
+                        k);               		   //copy number
                                         
      }
    
