@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.5 2001-07-13 15:01:55 gcosmo Exp $
+// $Id: G4StackedTrack.cc,v 1.6 2003-05-21 20:52:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,11 +45,11 @@ G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory)
 G4StackedTrack::~G4StackedTrack()
 { }
 
-const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &right)
+const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &)
 { return *this; }
 G4int G4StackedTrack::operator==(const G4StackedTrack &right) const 
-{ return false; }
+{ return (this==&right); }
 G4int G4StackedTrack::operator!=(const G4StackedTrack &right) const 
-{ return true; }
+{ return (this!=&right); }
 
 

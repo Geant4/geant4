@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.5 2001-07-13 15:01:54 gcosmo Exp $
+// $Id: G4PrimaryVertex.cc,v 1.6 2003-05-21 20:52:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,12 +59,12 @@ G4PrimaryVertex::~G4PrimaryVertex()
 }
 
 const G4PrimaryVertex & 
-G4PrimaryVertex::operator=(const G4PrimaryVertex &right)
+G4PrimaryVertex::operator=(const G4PrimaryVertex &)
 { return *this; }
 G4int G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
-{ return false; }
+{ return (this==&right); }
 G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
-{ return true; }
+{ return (this!=&right); }
 
 void G4PrimaryVertex::Print() const
 {

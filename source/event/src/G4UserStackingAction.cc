@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStackingAction.cc,v 1.4 2001-07-11 09:58:54 gunter Exp $
+// $Id: G4UserStackingAction.cc,v 1.5 2003-05-21 20:52:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,7 @@ G4UserStackingAction::~G4UserStackingAction()
 {;}
 
 G4ClassificationOfNewTrack G4UserStackingAction::ClassifyNewTrack
-(const G4Track* aTrack)
+(const G4Track*)
 {
   return fUrgent;
 }
