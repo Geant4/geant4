@@ -31,6 +31,14 @@ Cascade is stopped when all the particles, which can escape the nucleus, do it.
 Then conformity with the energy - conservation law is checked.
 %and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
 
+
+%Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
+%Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
+
+%[Nuclear density]
+%Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. 
+%In cascade part, nucleus is divided into a finite number of zones with constant density.
+
 % Short sketch of the model:
 
 % \begin{itemize}
@@ -58,7 +66,9 @@ where $\delta_{B}$ is the de Broglie wavelenth of the nucleons, v is the average
 At energies higher than $\approx$ 10 GeV) the INC picture breaks down, 
 also physical foundation comes approximate at energies less than $200 MeV$, and needs to be supported with pre-quilibrium model.
 
-\subsection{Intra nuclear cascade model}
+\subsection{Intranuclear cascade model}
+
+
 
 Basic steps of the INC model are summarised below:
 
@@ -76,6 +86,16 @@ After INC, the residual excitation energy of the resulting nucleus (A', Z') are 
 
 \subsection{Nuclei model}
 
+Some of the basic featusers of the nuclei are:
+
+\begin{itemize}
+\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation.
+\item Nuclear density effects are recalculated after each step.
+\item Nucleons binding energies (BE) are calculated using mass formula.
+A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
+experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+\end{itemize}
+
 \subsubsection{Initialization}
 Nuclear radius is defined using A dependent parametrization. 
 
@@ -88,7 +108,8 @@ If $1 < A < 4$, a nuclei model consisting one layer with radius of 8.0 fermi is 
 
 
 For $4 < A < 11$, nuclei model is composed of three consentric spheres $i = \{1, 2, 3\}$ with radius
-$$r_{i}(\alpha_{i}) = \sqrt{C_{1}^{2} (1 - \frac{1}{A}) + 6.4} \sqrt{-log( \alpha_{i})}$$.
+$$r_{i}(\alpha_{i}) = \sqrt{C_{1}^{2} (1 - \frac{1}{A}) + 6.4} \sqrt{-log( \alpha_{i})}$$
+
 Here $\alpha_{i} = \{0.01, 0.3, 0.7\}$ and $C_{1} = 3.3836 A^{1/3}$
 
 % CU2 = sqrt(CU1 * (1.0 - 1.0 / a) + 6.4);
@@ -97,7 +118,7 @@ Here $\alpha_{i} = \{0.01, 0.3, 0.7\}$ and $C_{1} = 3.3836 A^{1/3}$
 % zone_radii.push_back(CU2 * y);
 
 If $A > 11$, nuclei model with three consentric spheres is used. The shere radius is now defined as:
-$$r_{i}(\alpha_{i}) =  C_{2} \log({\frac{1 + e^{- \frac{C_{1}}{C_{2}}}}{\alpha_{i}} - 1}) + C_{1}$$,
+$$r_{i}(\alpha_{i}) =  C_{2} \log({\frac{1 + e^{- \frac{C_{1}}{C_{2}}}}{\alpha_{i}} - 1}) + C_{1}$$
 
 where $C_{2} = 1.7234$.
 
@@ -117,7 +138,7 @@ where $p_f$ is a momentum of degenerate Fermi gas. %:::
 
 %G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
 %G4double rd = dd0 * v[i] / v1[i];
-%G4double pff = pf_coeff * pow(rd, one_third);
+ %G4double pff = pf_coeff * pow(rd, one_third);
 
 %G4double CU = cuu * pow(a, one_third);
 %G4double D1 = CU / AU;
@@ -129,24 +150,6 @@ where $p_f$ is a momentum of degenerate Fermi gas. %:::
 %Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
 %Nuclear radius uses parameterization. If A 
 
-%Layer radius is defined to be  0.01, 0.3, or 0.7times the nuclear radius.
-\subsubsection{Layers}
-
-
-%Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
-%Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
-
-%[Nuclear density]
-%Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. 
-%In cascade part, nucleus is divided into a finite number of zones with constant density.
-
-\begin{itemize}
-\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation.
-\item Nuclear density effects are recalculated after each step.
-\item Nucleons binding energies (BE) are calculated using mass formula.
-A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
-experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
-\end{itemize}
 
 %For pions $V_{opt}$ is taken to be constant (about 7 MeV).
 %Smooth liquid high energy formula  has  
@@ -330,7 +333,7 @@ The parameterization described in \cite{barashenkov72} is used.
 %Total inelastic cross section has to be taken from outside to normalize all data. 
 % \item 
 
-\subsubsection{Exiton model}
+\subsection{Pre-equilibrium model}
 
 {\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
 The his model nucleon states are characterized by the number of exited particles and holes (the exitons).
@@ -410,7 +413,6 @@ where p is the number of particle, h is number of holes and n = p + h is the num
 
 % \end{itemize}
 
-\subsection{Pre-equilibrium model}
 
 Cascade pre-equilibrium model uses target exitation data, exiton configuration for neutron and proton to produce non-equilibrium evaporation.
 %Implementation inclues holes and quasiparticles.
@@ -458,18 +460,17 @@ The angular distribution is isotropic in the frame of rest of the exiton system.
 
 % In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
 
-\subsection{Fermi break-up model}
+\subsection{Break-up models}
 
-Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3 (a - z) < Z < 6$ ) and $E_{exitation} > 3 E_{binding}$ 
+Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3 (A - Z) < Z < 6$ ) and $E_{exitation} > 3 E_{binding}$ 
 %If the light nuclei exitation energy is higher than three times the binding energy, 
 %the nuclei expolision is performed. 
-
 Simple explosion model decays the nuleus into neutrons and protons and decreases exotic evaporation processes.
 
-\subsection{Fission model}
 
-Fission model is phenomenological model of potential minimization. Binding energy paramerization is used and
-some features of the fission statistical model are incorporated.
+%The mechanism of nuclear fission \cite{bohr39}.
+Fission model is phenomenological model using potential minimization. Binding energy paramerization is used and
+some features of the fission statistical model are incorporated \cite{fong69}.
 
 \subsection{Evaporation model}
 
