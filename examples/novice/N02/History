@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-01-31 18:05:28 gcosmo Exp $
+$Id: History,v 1.15 2001-02-07 14:25:06 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-02-05 S.O'Neale (exampleN02-V03-00-01)
+- update reference output for Batch Mode system testing for
+  exampleN02-V03-00-00 and recent EM Physics tags.
 
 31-01-01 G.Cosmo (exampleN02-V03-00-00)
 - fix to ExN02ChamberParameterisation and ExN02DetectorConstruction
