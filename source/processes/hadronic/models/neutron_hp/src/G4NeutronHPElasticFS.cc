@@ -212,8 +212,8 @@
     {
       theNeutron.Lorentz(theNeutron, theCMS);
       theTarget.Lorentz(theTarget, theCMS);
-      G4double en = the3CMS.mag();
-      G4ThreeVector cmsMom=theCMS.GetMomentum();
+      G4double en = theNeutron.GetTotalMomentum(); // already in CMS.
+      G4ThreeVector cmsMom=theNeutron.GetMomentum(); // for neutron direction in CMS
       G4double cms_theta=cmsMom.theta();
       G4double cms_phi=cmsMom.phi();
       G4ThreeVector tempVector;
