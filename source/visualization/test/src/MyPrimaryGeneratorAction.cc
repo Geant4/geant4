@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyPrimaryGeneratorAction.cc,v 1.3 2001-07-11 10:09:28 gunter Exp $
+// $Id: MyPrimaryGeneratorAction.cc,v 1.4 2005-01-26 17:15:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,7 @@
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
+//#include "G4GeneralParticleSource.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
@@ -37,6 +38,7 @@ MyPrimaryGeneratorAction::MyPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
+  //particleGun = new G4GeneralParticleSource;
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle 
@@ -74,3 +76,10 @@ G4ParticleGun* MyPrimaryGeneratorAction::GetParticleGun()
 {
   return particleGun;
 } 
+
+/*
+G4GeneralParticleSource* MyPrimaryGeneratorAction::GetGeneralParticleSource()
+{
+  return particleGun;
+} 
+*/

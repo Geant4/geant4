@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.23 2004-12-10 18:16:00 gcosmo Exp $
+// $Id: MyDetectorConstruction.cc,v 1.24 2005-01-26 17:15:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,9 +62,9 @@ MyDetectorConstruction::MyDetectorConstruction()
 {
   new MyDetectorMessenger(this);
 
-  expHall_x = 600.*cm;
-  expHall_y = 600.*cm;
-  expHall_z = 600.*cm;
+  expHall_x = 10. * m;
+  expHall_y = 10. * m;
+  expHall_z = 10. * m;
 
   calBox_x = 100.*cm;
   calBox_y = 50.*cm;
@@ -494,5 +494,51 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 		    "e-tube-phys", eTubeLog,
 		    experimentalHall_phys,false,0);
 
+  /*
+  //--------------------------- Simple shared logical volume tree
+
+  G4VSolid* boxTwo = new G4Box("Box2", 100.*cm, 100.*cm, 100.*cm);
+  G4LogicalVolume* log2 = new G4LogicalVolume(boxTwo,Ar,"Log2");
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(600.*cm,0.,0.)),
+		    "B",log2,
+		    experimentalHall_phys,false,0);
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(900.*cm,0.,0.)),
+		    "C",log2,
+		    experimentalHall_phys,false,0);
+  G4VSolid* boxThree = new G4Box("Box3", 50.*cm, 50.*cm, 50.*cm);
+  G4LogicalVolume* log3 = new G4LogicalVolume(boxThree,Ar,"Log3");
+  new G4PVPlacement(G4Translate3D(),
+		    log3,"D",
+		    log2,false,0);
+  G4VSolid* boxFour = new G4Box("Box3", 30.*cm, 30.*cm, 30.*cm);
+  G4LogicalVolume* log4 = new G4LogicalVolume(boxFour,Ar,"Log4");
+  new G4PVPlacement(G4Translate3D(),
+		    log4,"E",
+		    log3,false,0);
+  */
+
+  /*
+  //--------------------------- Boolean for logical volume test
+
+  G4double alSLayer_x = 30.*cm;
+  G4double alSLayer_y = 50.*cm;
+  G4double alSLayer_z = 2.5*cm;
+
+  G4Box* box1B = new
+    G4Box("alSLayer_box",alSLayer_x/2.,alSLayer_y/2.,alSLayer_z/2.);
+
+  G4Tubs* Cylinder1 = new G4Tubs("Cylinder#1",0.*mm,alSLayer_x/2.,alSLayer_x/2.,0.,2.*M_PI); 
+
+  G4UnionSolid* b1UnionC1 = new G4UnionSolid("Box+Cylinder", box1B,
+			 Cylinder1); 
+
+  G4LogicalVolume* alSpaceCraft_log = new
+    G4LogicalVolume(b1UnionC1,Al,"alLayer_log",0,0,0);  
+
+  new G4PVPlacement(0,G4ThreeVector(900.*cm, 200.*cm, 0.),alSpaceCraft_log,"alLayer_phys",experimentalHall_log,false,0);
+  // new G4PVPlacement(G4Translate3D(G4ThreeVector(900.*cm, 200.*cm, 0.)),"alLayer_phys",alSpaceCraft_log,experimentalHall_log,false,0);
+  */
+
+  //-------------------------------------------- return
   return experimentalHall_phys;
 }
