@@ -91,7 +91,11 @@ class G4ParticleChange;
       return anIsoResult;
     }
 
-    void BiasCrossSectionByFactor(G4double aScale) {aScaleFactor = aScale;}
+    void BiasCrossSectionByFactor(G4double aScale) 
+    {
+      xBiasOn = true;
+      aScaleFactor = aScale;
+    }
     
  protected:
     
@@ -156,7 +160,8 @@ class G4ParticleChange;
 
     G4double GetTotalNumberOfInteractionLengthTraversed()
     {
-      return theInitialNumberOfInteractionLength-G4VProcess::theNumberOfInteractionLengthLeft;
+      return theInitialNumberOfInteractionLength
+            -G4VProcess::theNumberOfInteractionLengthLeft;
     }
     
     G4double GetDistanceToBoundary(const G4Track & aT);
@@ -167,6 +172,9 @@ class G4ParticleChange;
     {
        theCrossSectionDataStore = aDataStore;
     }
+    
+    G4double XBiasSurvivalProbability();
+    G4double XBiasSecondaryWeight();
     
  private:
     
@@ -200,6 +208,7 @@ class G4ParticleChange;
     G4double theInitialNumberOfInteractionLength;   
 
     G4double aScaleFactor;
+    G4bool xBiasOn;
     G4double theLastCrossSection;
  };
  

@@ -48,8 +48,12 @@
  G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
  G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
  G4bool G4HadronicProcess::isoIsEnabled = true;
- void G4HadronicProcess::EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
- void G4HadronicProcess::DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
+ 
+ void G4HadronicProcess::
+ EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
+ 
+ void G4HadronicProcess::
+ DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
  
  G4HadronicProcess::G4HadronicProcess( const G4String &processName) :
       G4VDiscreteProcess( processName )
@@ -58,13 +62,18 @@
    theTotalResult = new G4ParticleChange();
    theCrossSectionDataStore = new G4CrossSectionDataStore();
    aScaleFactor = 1;
+   xBiasOn = false;
  }
 
  G4HadronicProcess::~G4HadronicProcess()
  { 
    delete theTotalResult;
-   for_each(theProductionModels.begin(), theProductionModels.end(), Delete<G4VIsotopeProduction>());
-   for_each(theBias.begin(), theBias.end(), Delete<G4VLeadingParticleBiasing>());
+   for_each(theProductionModels.begin(), 
+            theProductionModels.end(), 
+	    Delete<G4VIsotopeProduction>());
+   for_each(theBias.begin(), 
+            theBias.end(), 
+	    Delete<G4VLeadingParticleBiasing>());
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -329,7 +338,29 @@
     return theResult;
   }
 
-    void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
+G4double G4HadronicProcess::
+XBiasSurvivalProbability()
+{
+  G4double result = 0;
+  G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
+  G4double biasedProbability = exp(-nLTraversed);
+  G4double realProbability = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor);
+  result = (biasedProbability-realProbability)/biasedProbability;
+  return result;
+}
+
+G4double G4HadronicProcess::
+XBiasSecondaryWeight()
+{
+  G4double result = 0;
+  G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
+  G4double biasedProbability = exp(-nLTraversed);
+  G4double realProbability = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor);
+  result = realProbability/biasedProbability;
+  return result;
+}
+
+void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
       theTotalResult->Clear();
       theTotalResult->Initialize(aT);
@@ -339,23 +370,35 @@
       G4ThreeVector it(0., 0., 1.);
       if(aR->GetStatusChange()==stopAndKill)
       {
-        theTotalResult->SetStatusChange(fStopAndKill);
-        theTotalResult->SetEnergyChange( 0.0 );
+	if( xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
+	{
+ 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability() );
+	}
+	else
+	{
+          theTotalResult->SetStatusChange(fStopAndKill);
+          theTotalResult->SetEnergyChange( 0.0 );
+	}
       }
       if(aR->GetStatusChange()==suspend)
       {
         theTotalResult->SetStatusChange(fSuspend);
+	if(xBiasOn)
+	{
+	  G4Exception("Cannot cross-section bias a process that suspends tracks.");
+	}
       }
       if(aR->GetStatusChange()!=stopAndKill )
       {
-	theTotalResult->SetWeightChange(aR->GetWeightChange()); // This is multiplicative
+	if(xBiasOn)
+	{
+	  G4Exception("Cross-section biasing applicable only to destructive processes.");
+	}
+	G4double newWeight = aR->GetWeightChange();
+	theTotalResult->SetWeightChange(newWeight); // This is multiplicative
 	if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
 	G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
-	//G4cout << "Token before "<<
-        //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
 	newDirection*=aR->GetTrafoToLab();
-	//G4cout << "Token after "<<aT.GetMomentum().unit()-newDirection.vect()<<
-        //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
 	theTotalResult->SetMomentumDirectionChange(newDirection.vect());
       }
       theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
@@ -371,7 +414,9 @@
         G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
 				     aT.GetGlobalTime(),
 				     aT.GetPosition());
-	track->SetWeight(aT.GetWeight()*aR->GetSecondary(i)->GetWeight());
+	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
+	if(xBiasOn) newWeight *= XBiasSecondaryWeight();
+	track->SetWeight(newWeight);
 	theTotalResult->AddSecondary(track);
       }
       return;
