@@ -1,7 +1,11 @@
-$Id: History,v 1.26 1999-12-05 17:49:58 gcosmo Exp $
+$Id: History,v 1.27 1999-12-06 19:19:56 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4- 06-Dec-1999 W.Lockman
+- removed G3fillParams.cc
+- G3Eletable.cc: cast double Z to int
 
 g3tog4-V00-01-cand03 05-Dec-1999  G.Cosmo
 - Merged HEAD of main trunk with tag "wsl-991205" which now includes

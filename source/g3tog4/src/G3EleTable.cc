@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.6 1999-12-05 17:50:09 gcosmo Exp $
+// $Id: G3EleTable.cc,v 1.7 1999-12-06 19:19:57 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@ G4Element*
 G3EleTable::GetEle(G4double Z){
   G4double A;
   char name[20], sym[3];
-  G4int index = Z-1;
+  G4int index = (G4int) Z-1;
   if (!parse(Z, name, sym, A)) {
     G4String nm(name);
     G4String sy(sym);
@@ -45,7 +45,7 @@ int
 G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){ 
  int rc = 0;
   if (Z>0 && Z <=_MaxEle){
-    G4int z = Z-1;
+    G4int z = (G4int) Z-1;
     istrstream in(_EleNames[z]);
     in >> name >> sym >> A;
   } else {
