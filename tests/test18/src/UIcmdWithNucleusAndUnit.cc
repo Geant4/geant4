@@ -1,9 +1,9 @@
 
 #include "UIcmdWithNucleusAndUnit.hh"
 #ifdef WIN32
-#  include <Strstream.h>
+#  include "g4std/Strstream"
 #else
-#  include <strstream.h>
+#  include "g4std/strstream"
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -37,7 +37,7 @@ Nucleus UIcmdWithNucleusAndUnit::GetNewNucleusValue(G4String paramString)
   char unts[30];
 
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> a >> z >> e >>unts;
   G4String unt = unts;
 
@@ -53,7 +53,7 @@ G4double UIcmdWithNucleusAndUnit::GetNewUnitValue(G4String paramString)
   char unts[30];
   
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> a >> z >> e  >> unts;
 
   G4String unt = unts;
@@ -70,7 +70,7 @@ G4String UIcmdWithNucleusAndUnit::ConvertToString(Nucleus def,
   G4double uv = ValueOf(unitName);
 
   char st[100];
-  ostrstream os(st,100);
+  G4std::ostrstream os(st,100);
   os << def.GetA() << " " << def.GetZ()
      << " "<< def.GetE()/uv<<" "<< unitName <<  '\0';
   G4String vl = st;

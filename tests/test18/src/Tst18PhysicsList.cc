@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18PhysicsList.cc,v 1.4 2000-06-14 12:33:20 flei Exp $
+// $Id: Tst18PhysicsList.cc,v 1.5 2000-06-14 17:48:13 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,6 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>   
 
 #include "G4IonTable.hh"
 #include "G4Ions.hh"

@@ -25,8 +25,6 @@
 #include "G4ParticleGun.hh"
 #include "G4Event.hh"
 #include "globals.hh"
-#include <iostream.h>
-#include <vector.h>
 
 #include "Nucleus.hh"
 #include "RadioactiveDecayGunmessenger.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18RunAction.cc,v 1.4 2000-06-14 12:33:21 flei Exp $
+// $Id: Tst18RunAction.cc,v 1.5 2000-06-14 17:48:13 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 #include "G4ios.hh"
 //#include "Histo.hh"
 
-#include <fstream>
-#include <iomanip>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "g4std/vector"
 
 //using namespace std;
@@ -57,7 +57,7 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
  
   G4int RunN = aRun->GetRunID();
   if ( RunN % 1000 == 0 ) 
-    G4cout << "### Run : " << RunN << endl;
+    G4cout << "### Run : " << RunN << G4endl;
 
   if (G4VVisManager::GetConcreteInstance())
     {
@@ -85,18 +85,18 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
 
     //    outscat 
     G4cout
-      << G4std::setiosflags(ios::fixed)
+      << G4std::setiosflags(G4std::ios::fixed)
       << G4std::setprecision(3)
-      << G4std::setiosflags(ios::right)
+      << G4std::setiosflags(G4std::ios::right)
       << G4std::setw(12)
       << Energies[i]
       << G4std::setw(12)<<G4std::setprecision(4) 
-      << setiosflags(ios::scientific)
-      << setiosflags(ios::right)
+      << setiosflags(G4std::ios::scientific)
+      << setiosflags(G4std::ios::right)
       << Weights[i]
       << G4std::setw(12)<<G4std::setprecision(4)
-      << setiosflags(ios::scientific)
-      << setiosflags(ios::right)
+      << setiosflags(G4std::ios::scientific)
+      << setiosflags(G4std::ios::right)
       << Times[i] << "     "
       << Particles[i]
       << G4endl ;    

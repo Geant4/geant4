@@ -1,14 +1,3 @@
-#include "G4ios.hh"
-#include <assert.h>
-#include <fstream.h>
-#include <iomanip.h>
-#include <iostream.h>
-
-//#include "CLHEP/Hist/TupleManager.h"
-//#include "CLHEP/Hist/HBookFile.h"
-//#include "CLHEP/Hist/Histogram.h"
-//#include "CLHEP/Hist/Tuple.h"
-
 #include "Tst18SteppingAction.hh"
 #include "G4Track.hh"
 #include "globals.hh"

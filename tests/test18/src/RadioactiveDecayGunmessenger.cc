@@ -1,7 +1,7 @@
 
 #include "RadioactiveDecayGunmessenger.hh"
 
-#include <iostream.h>
+#include "g4std/iostream"
 ////////////////////////////////////////////////////////////////////////////////
 //
 RadioactiveDecayGunmessenger::RadioactiveDecayGunmessenger

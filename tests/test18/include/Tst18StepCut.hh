@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18StepCut.hh,v 1.4 2000-06-14 12:33:13 flei Exp $
+// $Id: Tst18StepCut.hh,v 1.5 2000-06-14 17:48:11 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

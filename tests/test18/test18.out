@@ -108,6 +108,8 @@ MuPairProd:  theoretical cross sections
 # 
 G4ProcessManagerMessenger:: copy constructor 
 ### Run : 0
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /home/geant4/g4/geant4/data/Radioactivity/z12.a24
+The nucleus is assumed to be stable 
 G4ProcessManagerMessenger:: copy constructor 
        0.001           1           0     Na24[0.0]
          227           1   3.189e+04     e-
