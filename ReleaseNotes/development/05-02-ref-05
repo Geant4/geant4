@@ -117,7 +117,7 @@ visualization/OpenInventor                            openinventor-V05-02-00
   is no longer available.
 - Cleared usage of 'NULL' in favour of '0'.
 
-examples                                              examples-V05-02-04
+examples                                              examples-V05-02-05
 --------
 - Updated reference outputs.
 - advanced:
