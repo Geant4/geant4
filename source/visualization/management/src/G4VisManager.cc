@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.61 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VisManager.cc,v 1.62 2005-03-03 16:13:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,23 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0)   // All other objects use default constructors.
 {
+  VerbosityGuidanceStrings.push_back
+    ("Simple graded message scheme - digit or string (1st character defines):");
+  VerbosityGuidanceStrings.push_back
+    ("  0) quiet,         // Nothing is printed.");
+  VerbosityGuidanceStrings.push_back
+    ("  1) startup,       // Startup and endup messages are printed...");
+  VerbosityGuidanceStrings.push_back
+    ("  2) errors,        // ...and errors...");
+  VerbosityGuidanceStrings.push_back
+    ("  3) warnings,      // ...and warnings...");
+  VerbosityGuidanceStrings.push_back
+    ("  4) confirmations, // ...and confirming messages...");
+  VerbosityGuidanceStrings.push_back
+    ("  5) parameters,    // ...and parameters of scenes and views...");
+  VerbosityGuidanceStrings.push_back
+    ("  6) all            // ...and everything available.");
+
   if (fpInstance) {
     G4Exception
       ("G4VisManager: attempt to Construct more than one VisManager.");
@@ -812,6 +829,7 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
   fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddLogo);
   fMessengerList.push_back (new G4VisCommandSceneAddScale);
   fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
@@ -850,8 +868,8 @@ void G4VisManager::RegisterMessengers () {
 
   // Compound commands...
   fMessengerList.push_back (new G4VisCommandDrawTree);
-  fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandDrawView);
+  fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandOpen);
   fMessengerList.push_back (new G4VisCommandSpecify);
 }
@@ -984,17 +1002,7 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   else return 0;
 }
 
-G4String G4VisManager::VerbosityGuidanceString
-("\n  default:    warnings"
- "\nSimple graded message scheme - digit or string (1st character defines):"
- "\n  0) quiet,         // Nothing is printed."
- "\n  1) startup,       // Startup and endup messages are printed..."
- "\n  2) errors,        // ...and errors..."
- "\n  3) warnings,      // ...and warnings..."
- "\n  4) confirmations, // ...and confirming messages..."
- "\n  5) parameters,    // ...and parameters of scenes and views..."
- "\n  6) all            // ...and everything available."
- );
+std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
   G4String s;
@@ -1023,16 +1031,17 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
   else if (s(0) == 'a') verbosity = all;
   else {
     G4int intVerbosity;
-    const char* t = s;
-    std::istrstream is((char*)t);
+    std::istrstream is(s);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
-	     << verbosityString << "\"\n"
-	     << VerbosityGuidanceString
-	     << "\n  Returning \"warnings\" == " << (G4int)warnings
-	     << G4endl;
+	     << verbosityString << "\"";
+      for (size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
+	G4cout << '\n' << VerbosityGuidanceStrings[i];
+      }
       verbosity = warnings;
+      G4cout << "\n  Returning " << VerbosityString(verbosity)
+	     << G4endl;
     }
     else {
       verbosity = GetVerbosityValue(intVerbosity);

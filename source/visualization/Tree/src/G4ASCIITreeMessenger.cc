@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.10 2005-02-15 14:11:12 johna Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.11 2005-03-03 16:13:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,9 +52,9 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpCommandVerbose -> SetGuidance ("/vis/ASCIITree/verbose [<verbosity>]");
   fpCommandVerbose -> SetGuidance
     ("0 (default) mimimum - 10 maximum printing.");
-  fpCommandVerbose -> SetParameterName ("verbosity",
-					omitable = true,
-					currentAsDefault = false);
+  fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
+  fpCommandVerbose -> SetDefaultValue(0);
+
   fpCommandSetOutFile = new G4UIcmdWithAString ("/vis/ASCIITree/set/outFile", this
 );
   fpCommandSetOutFile -> SetGuidance
