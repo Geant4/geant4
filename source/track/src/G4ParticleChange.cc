@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.9 2000-01-18 02:54:14 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.10 2000-02-13 15:08:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -471,7 +471,6 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   // dump out information of this particle change
   if (!itsOK) { 
     G4cout << " G4ParticleChange::CheckIt " <<G4endl;
-    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
 

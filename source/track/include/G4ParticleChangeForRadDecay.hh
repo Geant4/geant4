@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForRadDecay.hh,v 1.1 2000-01-26 10:09:13 kurasige Exp $
+// $Id: G4ParticleChangeForRadDecay.hh,v 1.2 2000-02-13 15:08:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ class G4ParticleChangeForRadDecay: public G4ParticleChange
 
 };
 
-inline void G4ParticleChange::AddSecondary(G4Track *aTrack)
+inline void G4ParticleChangeForRadDecay::AddSecondary(G4Track *aTrack)
 {
   // add a secondary after size check
   if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
