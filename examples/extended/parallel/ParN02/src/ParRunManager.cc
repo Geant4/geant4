@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.1 2002-03-05 15:22:03 gcosmo Exp $
+// $Id: ParRunManager.cc,v 1.2 2002-03-09 06:17:35 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -199,7 +199,6 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   if (origUserEventAction)
     origUserEventAction->BeginOfEventAction( currentEvent );
 
-  // Patches minor bug in Geant4 4.0;  see ../BUG.userStackingAction
   // When Geant4 4.0 sees empty event, it still calls userStackingAction.
   // On master, only trivial events exist, so we delete userStackingAction
   SetUserAction( (G4UserStackingAction*)NULL );
