@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.1 1999-01-08 16:31:53 gunter Exp $
+// $Id: testG4Tubs.cc,v 1.2 1999-11-19 16:13:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,6 +14,11 @@
 //  Test file for class G4Tubs [NOT thorough]
 //
 //             Ensure asserts are compiled in
+//
+// History:
+//
+// ~95-96 P. Kent R&D
+// 21.5.99 V. Grichine tests of phi-intersections (t3 and t4)
 
 #include <assert.h>
 #include <math.h>
@@ -52,8 +57,16 @@ G4bool testG4Tubs()
     pNorm=&norm;
     pgoodNorm=&goodNorm;
 
-    G4Tubs t1("Solid Tube #1",0,50,50,0,360);
-    G4Tubs t2("Hole Tube #2",45,50,50,0,360);
+    G4Tubs t1("Solid Tube #1",0,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t2("Hole Tube #2",45*mm,50*mm,50*mm,0,2*M_PI);
+
+    G4Tubs t3("Solid Sector #3",0,50*mm,50*mm,pi/2,pi/2);
+
+    G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,pi/2,pi/2);
+
+    G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
+
 // Check name
     assert(t1.GetName()=="Solid Tube #1");
 
@@ -88,24 +101,56 @@ G4bool testG4Tubs()
     assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vxy)&&*pgoodNorm);
 
     Dist=t2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pzero,vxy) = "<<Dist<<endl;
+    //  G4cout<<"Dist=t2.DistanceToOut(pzero,vxy) = "<<Dist<<endl;
 
     Dist=t2.DistanceToOut(ponxside,vmx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmx) = "<<Dist<<endl;
+    //  G4cout<<"Dist=t2.DistanceToOut(ponxside,vmx) = "<<Dist<<endl;
+
     Dist=t2.DistanceToOut(ponxside,vmxmy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<endl;
+    //  G4cout<<"Dist=t2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<endl;
+
     Dist=t2.DistanceToOut(ponxside,vz,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vz) = "<<Dist<<endl;
+    //  G4cout<<"Dist=t2.DistanceToOut(ponxside,vz) = "<<Dist<<endl;
 
     Dist=t2.DistanceToOut(pbigx,vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vx) = "<<Dist<<endl;
-    Dist=t2.DistanceToOut(pbigx,vxy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vxy) = "<<Dist<<endl;
-    Dist=t2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vz) = "<<Dist<<endl;
+    //   G4cout<<"Dist=t2.DistanceToOut(pbigx,vx) = "<<Dist<<endl;
 
+    Dist=t2.DistanceToOut(pbigx,vxy,calcNorm,pgoodNorm,pNorm);
+    //   G4cout<<"Dist=t2.DistanceToOut(pbigx,vxy) = "<<Dist<<endl;
+
+    Dist=t2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
+    //   G4cout<<"Dist=t2.DistanceToOut(pbigx,vz) = "<<Dist<<endl;
+
+    Dist=t2.DistanceToOut(G4ThreeVector(45.5,0,0),vx,calcNorm,pgoodNorm,pNorm);
+    //  G4cout<<"Dist=t2.DistanceToOut((45.5,0,0),vx) = "<<Dist<<endl;
+
+    Dist=t2.DistanceToOut(G4ThreeVector(49.5,0,0),vx,calcNorm,pgoodNorm,pNorm);
+    //  G4cout<<"Dist=t2.DistanceToOut((49.5,0,0),vx) = "<<Dist<<endl;
+
+
+    Dist=t3.DistanceToOut(G4ThreeVector(0,10,0),vx,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((0,10,0),vx) = "<<Dist<<endl;
+    //    assert(ApproxEqual(Dist,0));
+
+    Dist=t3.DistanceToOut(G4ThreeVector(0.5,10,0),vx,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((0.5,10,0),vx) = "<<Dist<<endl;
+
+    Dist=t3.DistanceToOut(G4ThreeVector(-0.5,9,0),vx,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((-0.5,9,0),vx) = "<<Dist<<endl;
+
+    Dist=t3.DistanceToOut(G4ThreeVector(-5,9.5,0),vx,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vx) = "<<Dist<<endl;
+
+    Dist=t3.DistanceToOut(G4ThreeVector(-5,9.5,0),vmy,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vmy) = "<<Dist<<endl;
+
+    Dist=t3.DistanceToOut(G4ThreeVector(-5,9,0),vxmy,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t3.DistanceToOut((-5,9,0),vxmy) = "<<Dist<<endl;
+
+    G4cout<<endl ;
 
 //DistanceToIn(P)
+
     Dist=t1.DistanceToIn(pbigx);
     assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigmx);
@@ -120,6 +165,7 @@ G4bool testG4Tubs()
     assert(ApproxEqual(Dist,50));
 
 // DistanceToIn(P,V)
+
     Dist=t1.DistanceToIn(pbigx,vmx);
     assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigmx,vx);
@@ -135,7 +181,55 @@ G4bool testG4Tubs()
     Dist=t1.DistanceToIn(pbigx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
 
+    Dist=t2.DistanceToIn(G4ThreeVector(45.5,0,0),vx);
+    //  G4cout<<"Dist=t2.DistanceToIn((45.5,0,0),vx) = "<<Dist<<endl;
+   
+    Dist=t2.DistanceToIn(G4ThreeVector(45.5,0,0),vmx);
+    //  G4cout<<"Dist=t2.DistanceToIn((45.5,0,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t2.DistanceToIn(G4ThreeVector(49.5,0,0),vmx);
+    //  G4cout<<"Dist=t2.DistanceToIn((49.5,0,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t2.DistanceToIn(G4ThreeVector(49.5,0,0),vx);
+    //   G4cout<<"Dist=t2.DistanceToIn((49.5,0,0),vx) = "<<Dist<<endl;
+   
+    Dist=t3.DistanceToIn(G4ThreeVector(49.5,0,0),vmx);
+    //  G4cout<<"Dist=t2.DistanceToIn((49.5,0,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t3.DistanceToIn(G4ThreeVector(49.5,5,0),vmx);
+    //  G4cout<<"Dist=t2.DistanceToIn((49.5,5,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t3.DistanceToIn(G4ThreeVector(49.5,-0.5,0),vmx);
+    //  G4cout<<"Dist=t2.DistanceToIn((49.5,-0.5,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-20.0,0),vxy);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vxy) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-70.0,0),vxy);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vxy) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-20.0,0),vmxmy);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vmxmy) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-70.0,0),vmxmy);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vmxmy) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(50.0,-20.0,0),vy);
+    G4cout<<"Dist=t5.DistanceToIn((50.0,-20.0,0),vy) = "<<Dist<<endl;
+
+    Dist=t5.DistanceToIn(G4ThreeVector(100.0,-20.0,0),vy);
+    G4cout<<"Dist=t5.DistanceToIn((100.0,-20.0,0),vy) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-50.0,0),vmx);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-50.0,0),vmx) = "<<Dist<<endl;
+   
+    Dist=t5.DistanceToIn(G4ThreeVector(30.0,-100.0,0),vmx);
+    G4cout<<"Dist=t5.DistanceToIn((30.0,-100.0,0),vmx) = "<<Dist<<endl;
+   
+
+
 // CalculateExtent
+
     G4VoxelLimits limit;		// Unlimited
     G4RotationMatrix noRot;
     G4AffineTransform origin;
