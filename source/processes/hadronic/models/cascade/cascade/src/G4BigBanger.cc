@@ -7,7 +7,7 @@
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4BigBanger::G4BigBanger()
-  : verboseLevel(2) {
+  : verboseLevel(1) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::G4BigBanger" << G4endl;
   }
@@ -43,7 +43,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
 
     G4double etot = 0.001 * (EEXS - bindingEnergy(A, Z));
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 2) {
       G4cout << " BigBanger: target " << G4endl;
       nuclei_target->printParticle(); 
       G4cout << " BigBanger: a " << A << " z " << Z << " eexs " << EEXS << " etot " <<
