@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.27 2002-06-02 22:49:03 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.28 2002-06-03 00:07:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -55,7 +55,7 @@
 // 26/10/01  VI Clean up access to deexcitation 
 // 23/11/01  VI Move static member-functions from header to source
 // 28/05/02  VI Remove flag fStopAndKill
-// 03.06.02 MGP Restore fStopAndKill (effect of remove not sufficiently tested)
+// 03/06/02  MGP - Restore fStopAndKill
 //
 // --------------------------------------------------------------
  
