@@ -21,7 +21,7 @@
 // corrected by L.Urban on 24/09/97
 // 06.01.00 V.Grichine, modifications in GetConstraints and GetMenaFreePath
 // 11.07.00 V.Grichine, modifications in GetMeanFreePath
-//
+// 12.07.00 V.Grichinw, GetFreePath and GetdEdx were added
 
 
 ////////////////////////////////////////////////////////////////////
@@ -73,8 +73,6 @@ G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
 
   return Step ;
 }
-
-
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -139,6 +137,95 @@ GetMeanFreePath( const G4Track&          trackData,
     // meanFreePath = DBL_MAX ;
   }
   return meanFreePath ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4PAIonisation::
+GetFreePath( G4double scaledTkin, G4double charge2 ) 
+{
+// G4cout<<"G4PAIonisation::GetFreePath is called"<<G4endl ;
+
+  G4int iTkin, iPlace ;
+  G4double meanFreePath ;
+  G4double E1, E2, W, W1, W2, primaryIon ; 
+
+  for( iTkin = 0 ; iTkin < G4PAIonisation::GetBinNumber() ; iTkin++ )
+  {
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ; 
+  }
+  iPlace = iTkin - 1 ; 
+
+  if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
+  {
+      meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace))(0)/charge2 ;
+  }
+  else
+  {
+    if(iTkin == 0) // Tkin is too small, trying from right only
+    {
+        meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace+1))(0)/charge2 ;
+    }
+    else
+    {
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      W  = 1.0/(E2 - E1) ;
+      W1 = (E2 - scaledTkin)*W ;
+      W2 = (scaledTkin - E1)*W ;
+      primaryIon = (*(*fPAItransferBank)(iPlace  ))(0)*W1 + 
+                     (*(*fPAItransferBank)(iPlace+1))(0)*W2    ;
+      meanFreePath = 1.0/primaryIon/charge2 ;
+    }
+  }
+  // meanFreePath = DBL_MAX ;
+  
+  return meanFreePath ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4PAIonisation::
+GetdEdx( G4double scaledTkin, G4double charge2 ) 
+{
+// G4cout<<"G4PAIonisation::GetdEdx is called"<<G4endl ;
+
+  G4int iTkin, iPlace ;
+  G4double dEdx ;
+  G4double E1, E2, W, W1, W2 ; 
+
+  for( iTkin = 0 ; iTkin < G4PAIonisation::GetBinNumber() ; iTkin++ )
+  {
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ; 
+  }
+  iPlace = iTkin - 1 ; 
+
+  if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
+  {
+      dEdx = (*(*theLossTable)(iPlace))(0)*charge2 ;
+  }
+  else
+  {
+    if(iTkin == 0) // Tkin is too small, trying from right only
+    {
+        dEdx = (*(*theLossTable)(iPlace+1))(0)*charge2 ;
+    }
+    else
+    {
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      W  = 1.0/(E2 - E1) ;
+      W1 = (E2 - scaledTkin)*W ;
+      W2 = (scaledTkin - E1)*W ;
+      dEdx = (*(*theLossTable)(iPlace))(0)*W1 + (*(*theLossTable)(iPlace+1))(0)*W2;
+      dEdx *= charge2 ;
+    }
+  }  
+  return dEdx ;
 }
 
 //////////////////////////////////////////////////////////////////////

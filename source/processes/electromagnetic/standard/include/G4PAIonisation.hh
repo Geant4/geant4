@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.5 2000-07-11 15:11:46 grichine Exp $
+// $Id: G4PAIonisation.hh,v 1.6 2000-07-13 08:34:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 // ************************************************************
 //
 // corrected by V. Grichine on 24/11/97
-//
+// 12.07.00 V.Grichine GetFreePath and GetdEdx were added
 //
 
  
@@ -77,13 +77,13 @@ class G4PAIonisation : public G4VPAIenergyLoss
                                       const G4Step& Step      ) ;                 
 
 
-     void BuildLossTable(const G4ParticleDefinition& aParticleType);
+     //  void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
      void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
      void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  //   void  BuildPAIonisationTable() ;
+     void  BuildPAIonisationTable() ;
 
 
      virtual G4double ComputeMicroscopicCrossSection(
@@ -99,9 +99,13 @@ class G4PAIonisation : public G4VPAIenergyLoss
                                     G4double currentMinimumStep,
                                     G4double& currentSafety) ; 
 
-     G4double GetMeanFreePath( const G4Track& track,
+    G4double GetMeanFreePath( const G4Track& track,
                                G4double previousStepSize,
-                               G4ForceCondition* condition ) ;
+                               G4ForceCondition* condition   ) ;
+
+    G4double GetFreePath( G4double scaledTkin, G4double charge2 ) ;
+
+    G4double GetdEdx( G4double scaledTkin, G4double charge2 ) ;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
 
