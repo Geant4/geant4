@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.18 2002-02-26 18:11:33 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.19 2002-02-27 14:40:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4hIonisation physics process -------------------------------
@@ -35,8 +35,7 @@
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
 // 19-09-01 come back to previous process name "hIoni"
-// 29-10-01 all static functions no more inlined 
-// 26-02-02 add initial mass (V.Ivanchenko) 
+// 29-10-01 all static functions no more inlined  
 //
 // -----------------------------------------------------------------------------
 
@@ -151,7 +150,7 @@ class G4hIonisation : public G4VhEnergyLoss
     G4int    TotBin;
     
     G4double Tmincut;                      // min energy of d-rays
-    G4double initialMass;
+    G4double initialMass;                  // min energy of d-rays
 
   public:  // with description
 

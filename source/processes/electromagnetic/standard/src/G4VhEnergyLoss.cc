@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.31 2002-02-26 18:15:33 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.32 2002-02-27 14:40:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -291,7 +291,6 @@ void G4VhEnergyLoss::BuildDEDXTable(
       // reset counter to zero 
       if(Charge >0.) CounterOfpProcess=0;
       else           CounterOfpbarProcess=0;
-      ParticleMass = aParticleType.GetPDGMass();
 
       if(Charge > 0.)
       {

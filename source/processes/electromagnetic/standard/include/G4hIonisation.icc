@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.8 2002-02-26 18:11:33 vnivanch Exp $
+// $Id: G4hIonisation.icc,v 1.9 2002-02-27 14:40:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*) 
 {
  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
- G4double KineticEnergy = (dynParticle->GetKineticEnergy())*initialMass/(dynParticle->GetMass());
+ G4double kinEnergy = (dynParticle->GetKineticEnergy())*initialMass/(dynParticle->GetMass());
  G4double q = dynParticle->GetCharge()/eplus;
  G4double currentChargeSquare = q*q;
  G4Material* aMaterial  = track.GetMaterial();
@@ -58,10 +58,10 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
  G4double MeanFreePath;
  G4bool isOut;
    
- if(KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
- if(KineticEnergy > LowestKineticEnergy)
+ if(kinEnergy > HighestKineticEnergy) kinEnergy = HighestKineticEnergy;
+ if(kinEnergy > LowestKineticEnergy)
          MeanFreePath = (((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                        GetValue(KineticEnergy, isOut))/currentChargeSquare; 
+                        GetValue(kinEnergy, isOut))/currentChargeSquare; 
  else    MeanFreePath = DBL_MAX;
 
  return MeanFreePath;

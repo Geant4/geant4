@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.24 2002-02-26 18:15:33 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.25 2002-02-27 14:40:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -117,6 +117,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   LowestKineticEnergy  = GetLowerBoundEloss();
   HighestKineticEnergy = GetUpperBoundEloss();
   TotBin               = GetNbinEloss();
+  const G4ParticleDefinition* theProton = G4Proton::Proton();
 
   G4double* ElectronCutInRange = G4Electron::Electron()->GetLengthCuts(); 
 
@@ -125,7 +126,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if( !EqualCutVectors(ptableElectronCutInRange,ElectronCutInRange)  
                        || (theDEDXpTable == NULL))
     {
-      BuildLossTable(aParticleType);
+      BuildLossTable(*theProton);
       RecorderOfpProcess[CounterOfpProcess] = theLossTable;
       CounterOfpProcess++;
     }
@@ -135,7 +136,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if( !EqualCutVectors(pbartableElectronCutInRange,ElectronCutInRange)  
                         || (theDEDXpbarTable == NULL))
     {
-      BuildLossTable(aParticleType) ;
+      BuildLossTable(*(G4AntiProton::AntiProton())) ;
       RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable;
       CounterOfpbarProcess++;
     }
@@ -145,7 +146,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   BuildDEDXTable(aParticleType);
 
-  if (&aParticleType == G4Proton::Proton())  PrintInfoDefinition();
+  if (&aParticleType == theProton)  PrintInfoDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -266,6 +267,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Bethe-Bloch formula
  //
+ initialMass = aParticleType.GetPDGMass();
  G4double particleMass   = proton_mass_c2;
  
  G4double ElectronDensity = material->GetElectronDensity();
@@ -373,7 +375,6 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
  //
  // nb: cross section formula is OK for spin=0 and 1/2 only ! 
      
- G4double initialMass = aParticleType.GetPDGMass();
  G4double particleMass = initialMass;
            
  G4double TotalEnergy = KineticEnergy + particleMass;
