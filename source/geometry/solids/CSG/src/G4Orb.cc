@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.11 2004-01-26 09:03:19 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.12 2004-01-26 09:05:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -387,7 +387,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     else // inside ???
     {
       G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
-                  JustWarning, "Point p is inside !?"");
+                  JustWarning, "Point p is inside !?");
     }
   }
   return snxt;
