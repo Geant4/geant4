@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.cc,v 1.4 2001-08-01 17:12:48 hpw Exp $
+// $Id: G4ReactionProduct.cc,v 1.5 2002-07-15 08:36:11 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
@@ -39,7 +39,8 @@
     kineticEnergy(0.0),
     timeOfFlight(0.0),
     side(0),
-    NewlyAdded(false)
+    NewlyAdded(false),
+    MayBeKilled(true)
   {
     SetMomentum( 0.0, 0.0, 0.0 );
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
@@ -59,6 +60,7 @@
     (aParticleDefinition->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     NewlyAdded = false;
+    MayBeKilled = true;
   }
  
  G4ReactionProduct::G4ReactionProduct(
@@ -75,6 +77,7 @@
     timeOfFlight = right.timeOfFlight;
     side = right.side;
     NewlyAdded = right.NewlyAdded;
+    MayBeKilled = right.MayBeKilled;
   }
  
  G4ReactionProduct &G4ReactionProduct::operator=(
@@ -92,6 +95,7 @@
       timeOfFlight = right.timeOfFlight;
       side = right.side;
       NewlyAdded = right.NewlyAdded;
+      MayBeKilled = right.MayBeKilled;
     }
     return *this;
   }
@@ -110,6 +114,7 @@
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     NewlyAdded = false;
+    MayBeKilled = true;
     return *this;
   }
  

@@ -1,7 +1,8 @@
-# $Id: GNUmakefile,v 1.6 2002-02-20 18:06:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2002-07-15 08:36:10 jwellisc Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
+
 
 name := G4hadronic_util
 

@@ -45,6 +45,7 @@
  // J.L. Chuma, 06-Aug-97:  Added original incident particle, before Fermi motion and
  //                         evaporation effects are included, needed for self absorption
  //                         and corrections for single particle spectra (shower particles)
+ // logging stopped 1997
  // J. Allison, 17-Jun-99:  Replaced a min function to get correct behaviour on DEC.
  
 #include "G4ReactionDynamics.hh"
@@ -53,7 +54,44 @@
 #include "Randomize.hh"
 #include "g4std/iostream"
 // #include "DumpFrame.hh"
- //#include "../../alpha_test/cxx/NametoGheishNumber.cc"
+
+/* 	   G4double GetQValue(G4ReactionProduct * aSec)
+	   {
+	     double QValue=0;
+	     if(aSec->GetDefinition()->GetParticleType() == "baryon")
+	     { 
+	       if(aSec->GetDefinition()->GetBaryonNumber() < 0)
+	       {
+                 QValue = aSec->GetTotalEnergy();
+                 QValue += G4Neutron::Neutron()->GetPDGMass();
+	       }
+	       else
+	       {
+                 G4double ss = 0;
+	         ss +=aSec->GetDefinition()->GetPDGMass();
+		 if(aSec->GetDefinition() == G4Proton::Proton())
+		 {
+		   ss -=G4Proton::Proton()->GetPDGMass();
+		 }
+		 else
+		 {
+	           ss -=G4Neutron::Neutron()->GetPDGMass();
+		 }
+	         ss += aSec->GetKineticEnergy();
+	         QValue = ss;
+	       }
+	     }
+	     else if(aSec->GetDefinition()->GetPDGEncoding() == 0)
+	     {
+	       QValue = aSec->GetKineticEnergy();
+	     }
+	     else
+	     {
+               QValue = aSec->GetTotalEnergy();
+	     }
+	     return QValue;
+           }
+*/
  
  G4bool G4ReactionDynamics::GenerateXandPt(
    G4FastVector<G4ReactionProduct,128> &vec,
@@ -210,6 +248,7 @@
       xtarg = afc * (pow(atomicWeight,0.33)-1.0) * (2.0*backwardCount);
     if( xtarg <= 0.0 )xtarg = 0.01;
     G4int nuclearExcitationCount = Poisson( xtarg );
+    if(atomicWeight<1.0001) nuclearExcitationCount = 0;
     G4int extraNucleonCount = 0;
     G4double extraNucleonMass = 0.0;
     if( nuclearExcitationCount > 0 )
@@ -270,11 +309,11 @@
       G4int forwardParticlesLeft = 0;
       for( i=(vecLen-1); i>=0; --i )
       {
-        if( vec[i]->GetSide() == 1 )
+        if( vec[i]->GetSide() == 1 && vec[i]->GetMayBeKilled())
         {
           forwardParticlesLeft = 1;  
           if( ++is == iskip )
-          {
+          { 
             forwardEnergy += vec[i]->GetMass()/GeV;
             for( G4int j=i; j<(vecLen-1); j++ )*vec[j] = *vec[j+1];    // shift up
             --forwardCount;
@@ -309,8 +348,8 @@
       G4int backwardParticlesLeft = 0;
       for( i=(vecLen-1); i>=0; --i )
       {
-        if( vec[i]->GetSide() < 0 )
-        {
+        if( vec[i]->GetSide() < 0 && vec[i]->GetMayBeKilled())
+	{
           backwardParticlesLeft = 1;
           if( ++is == iskip )        // eliminate the i'th particle
           {
@@ -480,7 +519,6 @@
               + dndl[l-1];
         }
         innerCounter = 0;
-        // bug: reset the x,y components of the momentum, please. @@@@@@@
         vec[i]->SetMomentum( pt*cos(phi)*GeV, pt*sin(phi)*GeV );
         //
         //   start of inner iteration loop
@@ -612,7 +650,7 @@
         }
       }    // closes outer loop
               
-      if( eliminateThisParticle )  // not enough energy, eliminate this particle
+      if( eliminateThisParticle && vec[i]->GetMayBeKilled())  // not enough energy, eliminate this particle
       {
         if( vec[i]->GetSide() > 0 )
         {
@@ -999,23 +1037,61 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     
     G4int numberofFinalStateNucleons = 0;
-    if( (currentParticle.GetDefinition() == aProton) ||
-        (currentParticle.GetDefinition() == aNeutron) )++numberofFinalStateNucleons;
+    if( currentParticle.GetDefinition() ==aProton ||
+        currentParticle.GetDefinition() == aNeutron ||
+	currentParticle.GetDefinition() == G4SigmaMinus::SigmaMinus()||
+	currentParticle.GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	currentParticle.GetDefinition() == G4SigmaZero::SigmaZero()||
+	currentParticle.GetDefinition() == G4XiZero::XiZero()||
+	currentParticle.GetDefinition() == G4XiMinus::XiMinus()||
+	currentParticle.GetDefinition() == G4OmegaMinus::OmegaMinus()||
+	currentParticle.GetDefinition() == G4Lambda::Lambda()) ++numberofFinalStateNucleons;
     currentParticle.Lorentz( currentParticle, pseudoParticle[1] );
     
-    if( (targetParticle.GetDefinition() == aProton) ||
-        (targetParticle.GetDefinition() == aNeutron) )++numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==aProton ||
+        targetParticle.GetDefinition() == aNeutron ||
+        targetParticle.GetDefinition() == G4Lambda::Lambda() ||
+	targetParticle.GetDefinition() == G4XiZero::XiZero()||
+	targetParticle.GetDefinition() == G4XiMinus::XiMinus()||
+	targetParticle.GetDefinition() == G4OmegaMinus::OmegaMinus()||
+	targetParticle.GetDefinition() == G4SigmaZero::SigmaZero()||
+	targetParticle.GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	targetParticle.GetDefinition() == G4SigmaMinus::SigmaMinus()) ++numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiProton::AntiProton()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiNeutron::AntiNeutron()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaMinus::AntiSigmaMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaPlus::AntiSigmaPlus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaZero::AntiSigmaZero()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiXiZero::AntiXiZero()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiXiMinus::AntiXiMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiOmegaMinus::AntiOmegaMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiLambda::AntiLambda()) --numberofFinalStateNucleons;
     targetParticle.Lorentz( targetParticle, pseudoParticle[1] );
     
     for( i=0; i<vecLen; ++i )
     {
-      if( (vec[i]->GetDefinition() == aProton) ||
-          (vec[i]->GetDefinition() == aNeutron) )++numberofFinalStateNucleons;
-       if( (vec[i]->GetDefinition() == anAntiProton) ||
-          (vec[i]->GetDefinition() == anAntiNeutron) )--numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==aProton ||
+          vec[i]->GetDefinition() == aNeutron ||
+          vec[i]->GetDefinition() == G4Lambda::Lambda() ||
+          vec[i]->GetDefinition() == G4XiZero::XiZero() ||
+          vec[i]->GetDefinition() == G4XiMinus::XiMinus() ||
+          vec[i]->GetDefinition() == G4OmegaMinus::OmegaMinus() ||
+	  vec[i]->GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	  vec[i]->GetDefinition() == G4SigmaZero::SigmaZero()||
+	  vec[i]->GetDefinition() == G4SigmaMinus::SigmaMinus()) ++numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiProton::AntiProton()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiNeutron::AntiNeutron()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaMinus::AntiSigmaMinus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaPlus::AntiSigmaPlus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaZero::AntiSigmaZero()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiLambda::AntiLambda()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiXiZero::AntiXiZero()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiXiMinus::AntiXiMinus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiOmegaMinus::AntiOmegaMinus()) --numberofFinalStateNucleons;
      vec[i]->Lorentz( *vec[i], pseudoParticle[1] );
     }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+    if(veryForward) numberofFinalStateNucleons++;
     numberofFinalStateNucleons = G4std::max( 1, numberofFinalStateNucleons );
     //
     // leadFlag will be true
@@ -1113,7 +1189,7 @@
     pseudoParticle[7].SetZero();
     pseudoParticle[7] = pseudoParticle[7] + currentParticle;
     pseudoParticle[7] = pseudoParticle[7] + targetParticle;
-    
+
     for( i=0; i<vecLen; ++i )
     {
       pseudoParticle[7] = pseudoParticle[7] + *vec[i];
@@ -1139,11 +1215,14 @@
       wgt = GenerateNBodyEvent( pseudoParticle[3].GetTotalEnergy()/MeV+
                                 pseudoParticle[4].GetTotalEnergy()/MeV,
        constantCrossSection, tempV, tempLen );
-      theoreticalKinetic = 0.0;
-      for( i=0; i<tempLen; ++i )
+      if(wgt>-.5)
       {
-        pseudoParticle[6].Lorentz( *tempV[i], pseudoParticle[4] );
-        theoreticalKinetic += pseudoParticle[6].GetKineticEnergy()/MeV;
+        theoreticalKinetic = 0.0;
+        for( i=0; i<tempLen; ++i )
+        {
+          pseudoParticle[6].Lorentz( *tempV[i], pseudoParticle[4] );
+          theoreticalKinetic += pseudoParticle[6].GetKineticEnergy()/MeV;
+        }
       }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       //delete [] tempR;
@@ -1253,10 +1332,15 @@
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
                              modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
+//       G4double jpw=0; 
+//       jpw+=GetQValue(&currentParticle);
+//       jpw+=GetQValue(&targetParticle);
+//       for( i=0; i<vecLen; ++i )jpw += GetQValue(vec[i]);
+//       G4cout << "JPW ### "<<jpw<<G4endl;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
-    if( centerofmassEnergy <= (4.0+G4UniformRand()) )
-      MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
+    //if( centerofmassEnergy <= (4.0+G4UniformRand()) )
+    //  MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
     //
     //  calculate time delay for nuclear reactions
     //
@@ -1370,6 +1454,7 @@
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
+    G4ParticleDefinition *aSigmaMinus = G4SigmaMinus::SigmaMinus();
     const G4double protonMass = aProton->GetPDGMass()/MeV;
     const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/GeV;
     const G4double etOriginal = modifiedOriginal.GetTotalEnergy()/GeV;
@@ -1381,6 +1466,7 @@
                                         2.0*targetMass*etOriginal );  // GeV
     G4double currentMass = currentParticle.GetMass()/GeV;
     targetMass = targetParticle.GetMass()/GeV;
+
     if( currentMass == 0.0 && targetMass == 0.0 )
     {
       G4double ek = currentParticle.GetKineticEnergy();
@@ -1447,6 +1533,7 @@
       xtarg = afc * (pow(atomicWeight,0.33)-1.0) * (2*backwardCount);
     if( xtarg <= 0.0 )xtarg = 0.01;
     G4int nuclearExcitationCount = Poisson( xtarg );
+    if(atomicWeight<1.0001) nuclearExcitationCount = 0;
     G4int extraNucleonCount = 0;
     G4double extraMass = 0.0;
     G4double extraNucleonMass = 0.0;
@@ -1501,7 +1588,7 @@
       secondaryDeleted = false;
       for( i=(vecLen-1); i>=0; --i )
       {
-        if( vec[i]->GetSide() == 1 )
+        if( vec[i]->GetSide() == 1 && vec[i]->GetMayBeKilled())
         {
           pMass = vec[i]->GetMass()/GeV;
           for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];     // shift up
@@ -1511,7 +1598,7 @@
           secondaryDeleted = true;
           break;
         }
-        else if( vec[i]->GetSide() == -1 )
+        else if( vec[i]->GetSide() == -1 && vec[i]->GetMayBeKilled())
         {
           pMass = vec[i]->GetMass()/GeV;
           for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];    // shift up
@@ -1611,7 +1698,7 @@
     else
     {
 //      G4int ntc = G4std::min(5,forwardCount); // check if offset by 1 @@
-      G4int ntc = G4std::max(1, G4std::min(5,forwardCount)); // check if offset by 1 @@
+      G4int ntc = G4std::max(1, G4std::min(5,forwardCount))-1; // check if offset by 1 @@
       rmc = forwardMass + pow(-log(1.0-G4UniformRand()),cpar[ntc-1])/gpar[ntc-1];
     }
     if( backwardCount == 1 )rmd = backwardMass;
@@ -1843,15 +1930,54 @@
     //
     G4int numberofFinalStateNucleons = 0;
     if( currentParticle.GetDefinition() ==aProton ||
-        currentParticle.GetDefinition() == aNeutron ) ++numberofFinalStateNucleons;
+        currentParticle.GetDefinition() == aNeutron ||
+	currentParticle.GetDefinition() == aSigmaMinus||
+	currentParticle.GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	currentParticle.GetDefinition() == G4SigmaZero::SigmaZero()||
+	currentParticle.GetDefinition() == G4XiZero::XiZero()||
+	currentParticle.GetDefinition() == G4XiMinus::XiMinus()||
+	currentParticle.GetDefinition() == G4OmegaMinus::OmegaMinus()||
+	currentParticle.GetDefinition() == G4Lambda::Lambda()) ++numberofFinalStateNucleons;
     currentParticle.Lorentz( currentParticle, pseudoParticle[2] );
     if( targetParticle.GetDefinition() ==aProton ||
-        targetParticle.GetDefinition() == aNeutron) ++numberofFinalStateNucleons;
+        targetParticle.GetDefinition() == aNeutron ||
+        targetParticle.GetDefinition() == G4Lambda::Lambda() ||
+	targetParticle.GetDefinition() == G4XiZero::XiZero()||
+	targetParticle.GetDefinition() == G4XiMinus::XiMinus()||
+	targetParticle.GetDefinition() == G4OmegaMinus::OmegaMinus()||
+	targetParticle.GetDefinition() == G4SigmaZero::SigmaZero()||
+	targetParticle.GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	targetParticle.GetDefinition() == aSigmaMinus) ++numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiProton::AntiProton()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiNeutron::AntiNeutron()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaMinus::AntiSigmaMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaPlus::AntiSigmaPlus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiSigmaZero::AntiSigmaZero()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiXiZero::AntiXiZero()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiXiMinus::AntiXiMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiOmegaMinus::AntiOmegaMinus()) --numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==G4AntiLambda::AntiLambda()) --numberofFinalStateNucleons;
     targetParticle.Lorentz( targetParticle, pseudoParticle[2] );
     for( i=0; i<vecLen; ++i )
     {
       if( vec[i]->GetDefinition() ==aProton ||
-          vec[i]->GetDefinition() == aNeutron)++numberofFinalStateNucleons;
+          vec[i]->GetDefinition() == aNeutron ||
+          vec[i]->GetDefinition() == G4Lambda::Lambda() ||
+          vec[i]->GetDefinition() == G4XiZero::XiZero() ||
+          vec[i]->GetDefinition() == G4XiMinus::XiMinus() ||
+          vec[i]->GetDefinition() == G4OmegaMinus::OmegaMinus() ||
+	  vec[i]->GetDefinition() == G4SigmaPlus::SigmaPlus()||
+	  vec[i]->GetDefinition() == G4SigmaZero::SigmaZero()||
+	  vec[i]->GetDefinition() == aSigmaMinus) ++numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiProton::AntiProton()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiNeutron::AntiNeutron()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaMinus::AntiSigmaMinus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaPlus::AntiSigmaPlus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiSigmaZero::AntiSigmaZero()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiLambda::AntiLambda()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiXiZero::AntiXiZero()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiXiMinus::AntiXiMinus()) --numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==G4AntiOmegaMinus::AntiOmegaMinus()) --numberofFinalStateNucleons;
       vec[i]->Lorentz( *vec[i], pseudoParticle[2] );
     }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
@@ -2003,7 +2129,7 @@
     // make sure that kinetic energies are correct
     // the backward nucleon cluster is not produced within proper kinematics!!!
     //
-
+    
     if( simulatedKinetic != 0.0 )
     {
       wgt = (theoreticalKinetic)/simulatedKinetic;
@@ -2102,8 +2228,8 @@
                               vec, vecLen );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
-    if( centerofmassEnergy <= (4.0+G4UniformRand()) )
-      MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
+    //if( centerofmassEnergy <= (4.0+G4UniformRand()) )
+    //  MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
     //
     //  calculate time delay for nuclear reactions
     //
@@ -2153,16 +2279,13 @@
     const G4double pOriginal = modifiedOriginal.GetMomentum().mag()/GeV;
     G4double currentMass = currentParticle.GetMass()/GeV;
     G4double targetMass = targetParticle.GetDefinition()->GetPDGMass()/GeV;
-//    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
-//                                        targetMass*targetMass +
-//                                        2.0*targetMass*etOriginal );  // GeV
+
     targetMass = targetParticle.GetMass()/GeV;
     const G4double atomicWeight = targetNucleus.GetN();
-//    const G4double atomicNumber = targetNucleus.GetZ();
     
     G4double etCurrent = currentParticle.GetTotalEnergy()/GeV;
     G4double pCurrent = currentParticle.GetTotalMomentum()/GeV;
-//    G4double ekCurrent = currentParticle.GetKineticEnergy()/GeV;
+
     G4double cmEnergy = sqrt( currentMass*currentMass +
                               targetMass*targetMass +
                               2.0*targetMass*etCurrent );  // in GeV
@@ -2229,9 +2352,9 @@
       }
       else
       {
-        pseudoParticle[0].SetMass( mOriginal*GeV );
-        pseudoParticle[0].SetTotalEnergy( etOriginal*GeV );
-        pseudoParticle[0].SetMomentum( 0.0, 0.0, pOriginal*GeV );
+        pseudoParticle[0].SetMass( currentMass*GeV );
+        pseudoParticle[0].SetTotalEnergy( etCurrent*GeV );
+        pseudoParticle[0].SetMomentum( 0.0, 0.0, pCurrent*GeV );
       
         pseudoParticle[1].SetMomentum( 0.0, 0.0, 0.0 );
         pseudoParticle[1].SetMass( targetMass*GeV );
@@ -2405,12 +2528,14 @@
     //for( i=0; i<3; ++i )pcm[i] = new G4double [vecLen];
     
     G4double totalMass = 0.0;
+    G4double extraMass = 0;
     G4double sm[18];
     //G4double *sm = new G4double [vecLen];
     
     for( i=0; i<vecLen; ++i )
     {
       mass[i] = vec[i]->GetMass()/GeV;
+      if(vec[i]->GetSide() == -2) extraMass+=vec[i]->GetMass()/GeV;
       vec[i]->SetMomentum( 0.0, 0.0, 0.0 );
       pcm[0][i] = 0.0;      // x-momentum of i-th particle
       pcm[1][i] = 0.0;      // y-momentum of i-th particle
@@ -2998,6 +3123,7 @@
     // epnb is the kinetic energy available for proton/neutron black track particles
     // edta is the kinetic energy available for deuteron/triton/alpha particles
     //
+    
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aDeuteron = G4Deuteron::Deuteron();
@@ -3015,6 +3141,7 @@
     
     G4int i;
     G4double pp;
+    G4double totalQ = 0;
     G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * exp(-(atomicWeight-1.0)/120.0);
     if( npnb > 0)  // first add protons and neutrons
     {
@@ -3052,10 +3179,11 @@
         vec[vecLen]->SetNewlyAdded( true );
         vec[vecLen]->SetKineticEnergy( kinetic*GeV );
         pp = vec[vecLen]->GetTotalMomentum()/MeV;
-        vec[vecLen++]->SetMomentum( pp*sint*sin(phi)*MeV,
+        vec[vecLen]->SetMomentum( pp*sint*sin(phi)*MeV,
                                     pp*sint*cos(phi)*MeV,
                                     pp*cost*MeV );
-        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+	vecLen++;
+	// DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
       if( (atomicWeight >= 10.0) && (ekOriginal <= 2.0*GeV) )
       {
@@ -3297,12 +3425,16 @@
           vec[0]->SetDefinition( aNeutron );
           p1->SetDefinition( anAntiNeutron );
           (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
+	  vec[0]->SetMayBeKilled(false);
+	  p1->SetMayBeKilled(false);
         }
         else
         {
           vec[0]->SetDefinition( aProton );
           p1->SetDefinition( anAntiProton );
           (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
+	  vec[0]->SetMayBeKilled(false);
+	  p1->SetMayBeKilled(false);
         }
         vec.SetElement( vecLen++, p1 );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
@@ -3313,11 +3445,15 @@
         {
           vec[i3]->SetDefinition( aNeutron );
           vec[i4]->SetDefinition( anAntiNeutron );
+	  vec[i3]->SetMayBeKilled(false);
+	  vec[i4]->SetMayBeKilled(false);
         }
         else
         {
           vec[i3]->SetDefinition( aProton );
           vec[i4]->SetDefinition( anAntiProton );
+	  vec[i3]->SetMayBeKilled(false);
+	  vec[i4]->SetMayBeKilled(false);
         }
       }
     }
@@ -3341,12 +3477,15 @@
       {
        case 10:
          vec[i3]->SetDefinition( aKaonPlus );
+	 vec[i3]->SetMayBeKilled(false);
          break;
        case 11:
          vec[i3]->SetDefinition( aKaonZS );
+	 vec[i3]->SetMayBeKilled(false);
          break;
        case 12:
          vec[i3]->SetDefinition( aKaonZL );
+	 vec[i3]->SetMayBeKilled(false);
          break;
       }
       if( vecLen == 1 )                          // add a secondary
@@ -3356,12 +3495,15 @@
         {
          case 11:
            p1->SetDefinition( aKaonZS );
+	   p1->SetMayBeKilled(false);
            break;
          case 12:
            p1->SetDefinition( aKaonZL );
+	   p1->SetMayBeKilled(false);
            break;
          case 13:
            p1->SetDefinition( aKaonMinus );
+	   p1->SetMayBeKilled(false);
            break;
         }
         (G4UniformRand() < 0.5) ? p1->SetSide( -1 ) : p1->SetSide( 1 );
@@ -3374,12 +3516,15 @@
         {
          case 11:
            vec[i4]->SetDefinition( aKaonZS );
+	   vec[i4]->SetMayBeKilled(false);
            break;
          case 12:
            vec[i4]->SetDefinition( aKaonZL );
+	   vec[i4]->SetMayBeKilled(false);
            break;
          case 13:
            vec[i4]->SetDefinition( aKaonMinus );
+	   vec[i4]->SetMayBeKilled(false);
            break;
         }
       }
@@ -3425,12 +3570,15 @@
         {
          case 10:
            vec[i3]->SetDefinition( aKaonPlus ); 
+	   vec[i3]->SetMayBeKilled(false);
            break;
          case 11:
            vec[i3]->SetDefinition( aKaonZS );
+	   vec[i3]->SetMayBeKilled(false);
            break;
          case 12:
            vec[i3]->SetDefinition( aKaonZL );
+	   vec[i3]->SetMayBeKilled(false);
            break;
         }
       }
@@ -3463,12 +3611,15 @@
           {
            case 11:
              vec[i3]->SetDefinition( aKaonZS ); 
+	     vec[i3]->SetMayBeKilled(false);
              break;
            case 12:
              vec[i3]->SetDefinition( aKaonZL );
+	     vec[i3]->SetMayBeKilled(false);
              break;
            case 13:
              vec[i3]->SetDefinition( aKaonMinus );
+	     vec[i3]->SetMayBeKilled(false);
              break;
           }
         }
@@ -3494,12 +3645,15 @@
           {
            case 10:
              vec[i3]->SetDefinition( aKaonPlus ); 
+	     vec[i3]->SetMayBeKilled(false);
              break;
            case 11:
              vec[i3]->SetDefinition( aKaonZS );
+	     vec[i3]->SetMayBeKilled(false);
              break;
            case 12:
              vec[i3]->SetDefinition( aKaonZL );
+	     vec[i3]->SetMayBeKilled(false);
              break;
           }
         }

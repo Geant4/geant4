@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.hh,v 1.4 2001-08-01 17:12:42 hpw Exp $
+// $Id: G4ReactionProduct.hh,v 1.5 2002-07-15 08:36:11 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
@@ -139,6 +139,12 @@
     inline G4bool GetNewlyAdded() const
     { return NewlyAdded; }
     
+    inline void SetMayBeKilled( const G4bool f )
+    { MayBeKilled = f; }
+    
+    inline G4bool GetMayBeKilled() const
+    { return MayBeKilled; }
+
     void SetZero();
     
     void Lorentz( const G4ReactionProduct &p1, const G4ReactionProduct &p2 );
@@ -197,6 +203,7 @@
     // NewlyAdded refers to particles added by "nuclear excitation", or as
     //  "black track" particles, or as deuterons, tritons, and alphas
     G4bool NewlyAdded;
+    G4bool MayBeKilled;
  };
  
 #endif

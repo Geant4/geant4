@@ -280,6 +280,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
       pnBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
       dtaBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
     }
+//    G4cout << "EvaporationEffects "<<kineticEnergy<<" "
+//           <<pnBlackTrackEnergy+dtaBlackTrackEnergy<<endl;
     return (pnBlackTrackEnergy+dtaBlackTrackEnergy)*GeV;
   }
  
