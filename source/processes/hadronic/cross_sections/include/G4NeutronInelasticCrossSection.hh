@@ -41,12 +41,13 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
    public:
    
    virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*)
+   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
    {
      G4bool result = false;
      if(( aPart->GetDefinition()==G4Neutron::Neutron()) &&
         ( aPart->GetKineticEnergy()<20*GeV) &&
           aPart->GetKineticEnergy()>19.9*MeV) result = true;
+     if(aEle->GetZ()<2) result = false;
      return result;
    }
 

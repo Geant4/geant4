@@ -46,6 +46,7 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
      G4bool result = false;
      if(( aPart->GetDefinition()==G4Proton::Proton()) &&
         ( aPart->GetKineticEnergy()<20*GeV) ) result = true;
+     if(aEle->GetZ()<3) result = false;
      return result;
    }
 
