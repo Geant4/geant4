@@ -1132,33 +1132,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   
   // fill aParticleChange 
   finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ;
-  G4double Edep = 0 ;
-  
-  if (finalKineticEnergy > MinKineticEnergy)
-    {
-      finalPx = TotalMomentum*ParticleDirection.x()
-	- DeltaTotalMomentum*DeltaDirection.x();
-      finalPy = TotalMomentum*ParticleDirection.y()
-	- DeltaTotalMomentum*DeltaDirection.y();
-      finalPz = TotalMomentum*ParticleDirection.z()
-	- DeltaTotalMomentum*DeltaDirection.z();
-      finalMomentum =
-	sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
-      finalPx /= finalMomentum ;
-      finalPy /= finalMomentum ;
-      finalPz /= finalMomentum ;
-      
-      aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
-    }
-  else
-    {
-      finalKineticEnergy = 0. ;
-      Edep = finalKineticEnergy ;
-      if (aParticle->GetDefinition()->GetParticleName() == "proton")
-	aParticleChange.SetStatusChange(fStopAndKill);
-      else  aParticleChange.SetStatusChange(fStopButAlive);
-    }
-
+  G4double theEnergyDeposit = 0.;
 
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
@@ -1175,7 +1149,6 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
   G4double bindingEnergy = atomicShell->BindingEnergy();
   G4double cutForPhotons = gammaCutInEnergy[aMaterial->GetIndex()];
-  G4double theEnergyDeposit = bindingEnergy;
  
   // Fluorescence data start from element 6
 
@@ -1196,7 +1169,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
 	  
           G4double e = aSecondary->GetKineticEnergy();
           type = aSecondary->GetDefinition();
-          if (e < theEnergyDeposit && 
+          if (e < finalKineticEnergy && 
                 ((type == G4Gamma::Gamma() && e > cutForPhotons ) || 
                  (type == G4Electron::Electron() && e > DeltaCut ))) {
 
@@ -1215,9 +1188,33 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
       
   // Save delta-electrons
 
+  if (finalKineticEnergy > 0.0)
+    {
+      finalPx = TotalMomentum*ParticleDirection.x()
+	- DeltaTotalMomentum*DeltaDirection.x();
+      finalPy = TotalMomentum*ParticleDirection.y()
+	- DeltaTotalMomentum*DeltaDirection.y();
+      finalPz = TotalMomentum*ParticleDirection.z()
+	- DeltaTotalMomentum*DeltaDirection.z();
+      finalMomentum =
+	sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
+      
+      aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+    }
+  else
+    {
+      finalKineticEnergy = 0.;
+      if (aParticle->GetDefinition()->GetParticleName() == "proton")
+	aParticleChange.SetStatusChange(fStopAndKill);
+      else  aParticleChange.SetStatusChange(fStopButAlive);
+    }
+
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
-  aParticleChange.SetLocalEnergyDeposit (Edep);
+  aParticleChange.SetLocalEnergyDeposit (0.0);
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);
 

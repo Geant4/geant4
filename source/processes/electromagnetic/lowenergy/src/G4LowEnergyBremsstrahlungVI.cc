@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlungVI.cc,v 1.2 2001-10-18 14:15:27 pia Exp $
+// $Id: G4LowEnergyBremsstrahlungVI.cc,v 1.3 2001-10-25 14:31:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -76,9 +76,9 @@ G4LowEnergyBremsstrahlungVI::G4LowEnergyBremsstrahlungVI(const G4String& nam)
 
 G4LowEnergyBremsstrahlungVI::~G4LowEnergyBremsstrahlungVI()
 {
-  delete crossSectionHandler;
-  delete energySpectrum;
-  delete theMeanFreePath;
+  if(crossSectionHandler) delete crossSectionHandler;
+  if(energySpectrum) delete energySpectrum;
+  if(theMeanFreePath) delete theMeanFreePath;
   cutForSecondaryPhotons.clear();
 }
 
@@ -308,7 +308,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlungVI::PostStepDoIt(const G4Track& trac
   G4double finalZ = momentum*electronDirection.z() - tGamma*gammaDirection.z();
       
   aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.SetMomentumChange(finalX, finalY, finalZ);
+  G4double norm = 1./sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ);
+  aParticleChange.SetMomentumChange(finalX*norm, finalY*norm, finalZ*norm);
   aParticleChange.SetEnergyChange( finalEnergy );
 
   // create G4DynamicParticle object for the gamma 

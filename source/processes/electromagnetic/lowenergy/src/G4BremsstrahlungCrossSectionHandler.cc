@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.4 2001-10-24 22:02:18 pia Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.5 2001-10-25 14:31:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,8 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
 
     G4double tcut  = (*energyCuts)[m];
 
-    G4VEMDataSet* setForMat = new G4CompositeEMDataSet(interp,1.,1.);
+    G4VDataSetAlgorithm* algo = interp->Clone();
+    G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);
 
     for (G4int i=0; i<nElements; i++) {
  
@@ -113,7 +114,8 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
 	}
         cs->push_back(value);
       } 
-      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,interp,1.,1.);
+      G4VDataSetAlgorithm* algol = interp->Clone();
+      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algol,1.,1.);
       setForMat->AddComponent(elSet);
     }
     set->push_back(setForMat);

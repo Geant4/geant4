@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.19 2001-10-24 10:56:59 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.20 2001-10-25 14:31:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -342,7 +342,8 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   
   G4double Step = stepData.GetStepLength();
 
-  fParticleChange.Initialize(trackData);  
+  aParticleChange.Initialize(trackData);  
+  //fParticleChange.Initialize(trackData);  
   
   G4double MeanLoss, finalT; 
 
@@ -386,22 +387,29 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    if (Charge < 0.) fParticleChange.SetStatusChange(fStopAndKill);
-    else             fParticleChange.SetStatusChange(fStopButAlive); 
+    if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
+    else             aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
   G4double edep = E - finalT;
 
-  fParticleChange.SetEnergyChange(finalT);
+  aParticleChange.SetEnergyChange(finalT);
+  size_t nSecondaries = 0;  
+
   
   // Deexcitation of ionised atoms
-  G4std::vector<G4DynamicParticle*>* deexcitationProducts = DeexciteAtom(aMaterial,E,edep);
+  G4std::vector<G4DynamicParticle*>* deexcitationProducts = 
+                                     DeexciteAtom(aMaterial,E,edep);
 
-  if (deexcitationProducts != 0) {
+  
+  if (deexcitationProducts == 0) {
+    aParticleChange.SetNumberOfSecondaries(nSecondaries);
 
-    size_t nSecondaries = deexcitationProducts->size();
+  } else {
 
-    fParticleChange.SetNumberOfSecondaries(nSecondaries);
+    nSecondaries = deexcitationProducts->size();
+    aParticleChange.SetNumberOfSecondaries(nSecondaries);
+
     const G4StepPoint* preStep = stepData.GetPreStepPoint();
     const G4StepPoint* postStep = stepData.GetPostStepPoint();
     G4ThreeVector r = preStep->GetPosition();
@@ -414,7 +422,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     G4ThreeVector position;
  
     for (size_t i=0; i<nSecondaries; i++) {
-      //    G4cout << "i= " << i << G4endl;
+
       G4DynamicParticle* part = (*deexcitationProducts)[i]; 
       if (part != 0) {
         G4double eSecondary = part->GetKineticEnergy();
@@ -426,7 +434,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 	    position  = deltaR*q;
 	    position += r;
 	    G4Track* newTrack = new G4Track(part, time, position);
-	    fParticleChange.AddSecondary(newTrack);
+	    aParticleChange.AddSecondary(newTrack);
 	  }
 	else
 	  {
@@ -437,11 +445,12 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       }
     }
     delete deexcitationProducts;   
-  }
+  } 
+ 
 
-  fParticleChange.SetLocalEnergyDeposit(edep);
+  aParticleChange.SetLocalEnergyDeposit(edep);
   
-  return &fParticleChange;
+  return &aParticleChange;
 }
 
 //    

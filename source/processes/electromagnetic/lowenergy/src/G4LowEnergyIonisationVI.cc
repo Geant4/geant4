@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.14 2001-10-25 02:30:54 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.15 2001-10-25 14:31:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -412,6 +412,7 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
   diry = deltaDir.y();
   dirz = deltaDir.z();
 
+
   // Take into account atomic motion del is relative momentum of the motion
   // kinetic energy of the motion == bindingEnergy in V.Ivanchenko model
 
@@ -432,10 +433,34 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* theDeltaRay = new G4DynamicParticle();
   theDeltaRay->SetKineticEnergy(tDelta);
+  G4double norm = 1.0/sqrt(dirx*dirx + diry*diry + dirz*dirz);
+  dirx *= norm;
+  diry *= norm;
+  dirz *= norm;
   theDeltaRay->SetMomentumDirection(dirx, diry, dirz); 
   theDeltaRay->SetDefinition(G4Electron::Electron());
      
   G4double theEnergyDeposit = bindingEnergy;
+
+  // fill ParticleChange 
+  // changed energy and momentum of the actual particle
+
+  G4double finalKinEnergy = kineticEnergy - tDelta - theEnergyDeposit;
+  if(finalKinEnergy < 0.0) {
+    theEnergyDeposit += finalKinEnergy;
+    finalKinEnergy    = 0.0;
+
+  } else {
+
+    G4double norm = 1.0/sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+    finalPx *= norm;
+    finalPy *= norm;
+    finalPz *= norm;
+    aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
+  }
+
+
+  aParticleChange.SetEnergyChange(finalKinEnergy);
 
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
@@ -445,7 +470,7 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
   G4ParticleDefinition* type = 0;
  
   // Fluorescence data start from element 6
-
+  
   if (Z > 5 && (bindingEnergy >= cutForPhotons 
             ||  bindingEnergy >= cutForElectrons)) {
 
@@ -477,39 +502,28 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
       }
     }
   }
-      
+    
   // Save delta-electrons
 
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);
 
   // Save Fluorescence and Auger
-
+  
   if (secondaryVector) {
 
     for (size_t l = 0; l < nSecondaries; l++) {
 
       aSecondary = (*secondaryVector)[l];
-      if(aSecondary) aParticleChange.AddSecondary(aSecondary); 
+
+      if(aSecondary) {
+
+        aParticleChange.AddSecondary(aSecondary);
+      } 
     }
     delete secondaryVector;
   }
-     
-  // fill ParticleChange 
-  // changed energy and momentum of the actual particle
-
-  G4double finalKinEnergy = kineticEnergy - tDelta - theEnergyDeposit;
-  if(finalKinEnergy < 0.0) {
-    theEnergyDeposit += finalKinEnergy;
-    finalKinEnergy    = 0.0;
-  }
-  G4double norm = 1.0/sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-  finalPx *= norm;
-  finalPy *= norm;
-  finalPz *= norm;
-
-  aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
-  aParticleChange.SetEnergyChange(finalKinEnergy);
+   
   if(theEnergyDeposit < 0.) {
     G4cout << "G4LowEnergyIonisation: Negative energy deposit: " 
            << theEnergyDeposit/eV << " eV" << G4endl;
@@ -569,6 +583,7 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
       G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
 									 incidentEnergy,eLoss);
      
+      /*
       G4std::vector<size_t> counters; 
       size_t totCounters = 0;
       size_t totVacancies = 0;
@@ -597,7 +612,13 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 	    counters[intRandom]++;
 	    G4cout << "totCounters =" << totCounters << G4endl;
 	    totCounters++;
-	    G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
+	    */
+
+      for (size_t i=0; i<nElements; i++) {
+
+	//	    G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
+	    G4int Z = (G4int)((*theElementVector)[i]->GetZ());
+    	    size_t nVacancies = n[i];
 	 
 	    G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 	    
@@ -618,6 +639,9 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 		      
 		      aSecondary = (*partVector)[l];
 		      if (aSecondary != 0) {
+
+        G4ThreeVector v = aSecondary->GetMomentumDirection();
+        G4cout << "Fluo AlongStep= " << v << " norm= " << v.mag() << G4endl;
 			
 			e = aSecondary->GetKineticEnergy();
 			type = aSecondary->GetDefinition();
@@ -636,9 +660,9 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 		      }
 		    }
 		  } 
-		}
 	      }
-	  }
+	      
+	 }
       }
     }
   return partVector;

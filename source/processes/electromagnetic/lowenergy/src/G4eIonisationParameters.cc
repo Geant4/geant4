@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.13 2001-10-25 10:13:45 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.14 2001-10-25 14:31:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -101,8 +101,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
     if(shellIndex < nShells) { 
       const G4VEMDataSet* component = dataSet->GetComponent(shellIndex);
       const G4DataVector ener = component->GetEnergies(0);
-      G4double ee = G4std
-    G4::max(ener.front(),G4std::min(ener.back(),e));
+      G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
       value = component->FindValue(ee);
 
     } else {
