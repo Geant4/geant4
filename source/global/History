@@ -1,4 +1,4 @@
-$Id: History,v 1.9 1999-05-19 18:49:00 gcosmo Exp $
+$Id: History,v 1.10 1999-05-19 21:46:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 19th G.Cosmo
+May 19th G.Cosmo (global-01-00-02)
 - templates.hh: added definition of DBL_EPSILON and FLT_EPSILON.
   Added 'F' to single precision literal constants.
 
