@@ -28,12 +28,12 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "BOX SUBSCRIBER:: ";
+    //std::cout << "BOX SUBSCRIBER:: ";
     if( object != 0 ) {
       try {
         const box* obj = dynamic_cast<const box*>( object );    
         
-        std::cout << "GOT BOX " << obj->get_name() << std::endl;
+        //std::cout << "GOT BOX " << obj->get_name() << std::endl;
       
         GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
       
@@ -51,9 +51,9 @@ public:
         sval += obj->get_lunit();
         double dz = calc->Eval( sval ); dz = dz/2.;
         
-        std::cout << "x: " << obj->get_x() << obj->get_lunit() << " dx: " << dx << std::endl;
-        std::cout << "y: " << obj->get_y() << obj->get_lunit() << " dy: " << dy << std::endl;
-        std::cout << "z: " << obj->get_z() << obj->get_lunit() << " dx: " << dz << std::endl;
+        //std::cout << "x: " << obj->get_x() << obj->get_lunit() << " dx: " << dx << std::endl;
+        //std::cout << "y: " << obj->get_y() << obj->get_lunit() << " dy: " << dy << std::endl;
+        //std::cout << "z: " << obj->get_z() << obj->get_lunit() << " dx: " << dz << std::endl;
 
         G4VSolid* newobj = new G4Box( name, dx, dy, dz );
       

@@ -262,7 +262,7 @@ void SAXProcessor::ProcessEvent( const SAXEvent* const event )
         }
 
         fStack->Pop();
-        std::cout << "--------------------------------------------------------------" << std::endl;
+        //std::cout << "--------------------------------------------------------------" << std::endl;
       }
     }
   }

@@ -28,12 +28,12 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "SPHERE SUBSCRIBER:: ";
+    //std::cout << "SPHERE SUBSCRIBER:: ";
     if( object != 0 ) {
       try {
         const sphere* obj = dynamic_cast<const sphere*>( object );    
         
-        std::cout << "GOT SPHERE " << obj->get_name() << std::endl;
+        //std::cout << "GOT SPHERE " << obj->get_name() << std::endl;
       
         GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
       
@@ -60,18 +60,18 @@ public:
         sval += "*"+aunit;
         double deltatheta = calc->Eval( sval );
         
-        std::cout << "rmin:       "  << obj->get_rmin()       << lunit
-                  << " rmin: "       << rmin << std::endl;
-        std::cout << "rmax:       "  << obj->get_rmax()       << lunit
-                  << " rmax: "       << rmax << std::endl;
-        std::cout << "startphi:   "  << obj->get_startphi()   << aunit
-                  << " startphi: "   << startphi << std::endl;
-        std::cout << "deltaphi:   "  << obj->get_deltaphi()   << aunit
-                  << " deltaphi: "   << deltaphi << std::endl;
-        std::cout << "starttheta: "  << obj->get_starttheta() << aunit
-                  << " starttheta: " << starttheta << std::endl;
-        std::cout << "deltatheta: "  << obj->get_deltatheta() << aunit
-                  << " deltatheta: " << deltatheta << std::endl;
+//         std::cout << "rmin:       "  << obj->get_rmin()       << lunit
+//                   << " rmin: "       << rmin << std::endl;
+//         std::cout << "rmax:       "  << obj->get_rmax()       << lunit
+//                   << " rmax: "       << rmax << std::endl;
+//         std::cout << "startphi:   "  << obj->get_startphi()   << aunit
+//                   << " startphi: "   << startphi << std::endl;
+//         std::cout << "deltaphi:   "  << obj->get_deltaphi()   << aunit
+//                   << " deltaphi: "   << deltaphi << std::endl;
+//         std::cout << "starttheta: "  << obj->get_starttheta() << aunit
+//                   << " starttheta: " << starttheta << std::endl;
+//         std::cout << "deltatheta: "  << obj->get_deltatheta() << aunit
+//                   << " deltatheta: " << deltatheta << std::endl;
 
         G4VSolid* newobj = new G4Sphere( name, rmin,       rmax,
                                                startphi,   deltaphi,

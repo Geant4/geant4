@@ -29,7 +29,7 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object )  {
-    std::cout << "define SUBSCRIBER:: " << std::endl;
+    //std::cout << "define SUBSCRIBER:: " << std::endl;
     GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
     const define* define_element = 0;
     if( object != 0 )    {
@@ -47,25 +47,25 @@ public:
               ContentGroup::ContentItem item = choice->content();
               if( item.tag == "constant" ) {
                 define::constant* c = dynamic_cast<define::constant*>(item.object);
-                std::cout << "GOT constant " << c->get_name() << " = " << c->get_value() << std::endl;
+                //std::cout << "GOT constant " << c->get_name() << " = " << c->get_value() << std::endl;
                 calc->RegisterConstant( c );
               } else if( item.tag == "quantity" ) {
                 define::quantity* q = dynamic_cast<define::quantity*>(item.object);
-                std::cout << "GOT quantity " << q->get_name() << " = " << q->get_value() << q->get_unit() << std::endl;
+                //std::cout << "GOT quantity " << q->get_name() << " = " << q->get_value() << q->get_unit() << std::endl;
                 calc->RegisterPhysConstant( q );
               } else if( item.tag == "expression" ) {
                 define::expression* e = dynamic_cast<define::expression*>(item.object);
                 calc->RegisterExpression( e );
-                std::cout << "GOT expression " << e->get_name()
-                          << " = "             << e->get_text()
-                          << std::endl;
+                //std::cout << "GOT expression " << e->get_name()
+                //          << " = "             << e->get_text()
+                //          << std::endl;
               } else if( item.tag == "position" ) {
                 define::position* p = dynamic_cast<define::position*>(item.object);
-                std::cout << "GOT position " << p->get_name() << " = ("
-                                             << p->get_x()    << ","
-                                             << p->get_y()    << ","
-                                             << p->get_z()    << ")"
-                                             << p->get_unit() << std::endl;
+                //std::cout << "GOT position " << p->get_name() << " = ("
+                //                             << p->get_x()    << ","
+                //                             << p->get_y()    << ","
+                //                             << p->get_z()    << ")"
+                //                             << p->get_unit() << std::endl;
                 std::string
                 expr = p->get_x() + "*" + p->get_unit();
                 double dx = calc->Eval( expr.c_str() );
@@ -77,11 +77,11 @@ public:
                 GDMLProcessor::GetInstance()->AddPosition( p->get_name(), posobj );
               } else if( item.tag == "rotation" ) {
                 define::rotation* r = dynamic_cast<define::rotation*>(item.object);
-                std::cout << "GOT rotation " << r->get_name() << " = " << "("
-                                             << r->get_x()    << ","
-                                             << r->get_y()    << ","
-                                             << r->get_z()    << ")"
-                                             << r->get_unit() << std::endl;
+                //std::cout << "GOT rotation " << r->get_name() << " = " << "("
+                //                             << r->get_x()    << ","
+                //                             << r->get_y()    << ","
+                //                             << r->get_z()    << ")"
+                //                             << r->get_unit() << std::endl;
                 std::string
                 expr = r->get_x() + "*" + r->get_unit();
                 double dx = calc->Eval( expr.c_str() );

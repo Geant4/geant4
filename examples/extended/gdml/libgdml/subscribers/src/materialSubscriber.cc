@@ -30,7 +30,7 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "MATERIAL SUBSCRIBER:: " << std::endl;
+    //std::cout << "MATERIAL SUBSCRIBER:: " << std::endl;
     
     GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
     
@@ -42,7 +42,7 @@ public:
         obj = dynamic_cast<const material*>(object);
         
         if( obj != 0 ) {
-          std::cout << "GOT MATERIAL " << obj->get_name() << std::endl;
+          //std::cout << "GOT MATERIAL " << obj->get_name() << std::endl;
 
           double      z = 0.0;
           double      a = 0.0;
@@ -70,13 +70,13 @@ public:
             // Can't happen
             ;
           }
-          std::cout << "State: " << s << " " << str << std::endl;
+          //std::cout << "State: " << s << " " << str << std::endl;
           
           f = obj->get_formula();
           if( f.empty() ) {
             f=obj->get_name();
           }
-          std::cout << "Formula: " << f << std::endl;
+          //std::cout << "Formula: " << f << std::endl;
 
           // Retrieve density
           const ContentChoice* dchoice = dynamic_cast<const ContentChoice*>( obj->get_DorDref() );
@@ -93,7 +93,7 @@ public:
             str = dref->get_ref();
             d   = calc->Eval( str );
           }
-          std::cout << "D: " << d/(g/cm3) << "[g/cm3]" << std::endl;
+          //std::cout << "D: " << d/(g/cm3) << "[g/cm3]" << std::endl;
           
           // Retrieve temperature if any
           const SAXObject* tso = obj->get_TorTref();
@@ -112,7 +112,7 @@ public:
               str = tref->get_ref();
               t   = calc->Eval( str );
             }
-            std::cout << "T: " << t/(kelvin) << "[kelvin]" << std::endl;
+            //std::cout << "T: " << t/(kelvin) << "[kelvin]" << std::endl;
           }
 
           // Retrieve pressure if any
@@ -132,7 +132,7 @@ public:
               str = pref->get_ref();
               p   = calc->Eval( str );
             }
-            std::cout << "P: " << p/(atmosphere) << "[atmosphere]" << std::endl;
+            //std::cout << "P: " << p/(atmosphere) << "[atmosphere]" << std::endl;
           }
           
           std::string tag;
@@ -147,20 +147,20 @@ public:
             sA += "*";
             sA += am->get_unit();
             a = calc->Eval( sA );
-            std::cout << "Simple definition by atom" << std::endl;
-            std::cout << "Z: " << z          << std::endl;
-            std::cout << "A: " << a/(g/mole) << "[g/mole]" << std::endl;
+//             std::cout << "Simple definition by atom" << std::endl;
+//             std::cout << "Z: " << z          << std::endl;
+//             std::cout << "A: " << a/(g/mole) << "[g/mole]" << std::endl;
             G4Material* mnew = new G4Material( obj->get_name(), z, a, d, s, t, p );
             std::cout << *mnew << std::endl;
           } else {
             // Must be a sequence of composites or fractions
-            std::cout << "Complex definition by ";
+            //std::cout << "Complex definition by ";
             const ContentSequence* cseq = dynamic_cast<const ContentSequence*>( cc->content().object );
             count = cseq->size();
             std::string tag = cseq->content( 0 ).tag;
             if( tag == "composite" ) {
               // Composition by atoms of elements
-              std::cout << count << " composites" << std::endl;
+              //std::cout << count << " composites" << std::endl;
 		          G4Material* mnew = new G4Material( obj->get_name(), d, count, s, t, p );
 		          for( unsigned int i = 0; i < count; i++ ) {
 		            composite* ci = dynamic_cast<composite*>( cseq->content( i ).object );
@@ -181,7 +181,7 @@ public:
               std::cout << *mnew << std::endl;
             } else {
               // Composition by fraction of mass
-              std::cout << count << " fractions" << std::endl;
+              //std::cout << count << " fractions" << std::endl;
 		          G4Material* mnew = new G4Material( obj->get_name(), d, count, s, t, p );
 		          for( unsigned int i = 0; i < count; i++ ) {
 		            fraction* fi = dynamic_cast<fraction*>( cseq->content( i ).object );

@@ -28,7 +28,7 @@ public:
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object )
   {
-    std::cout << "SETUP SUBSCRIBER:: " << std::endl;
+    //std::cout << "SETUP SUBSCRIBER:: " << std::endl;
     
     const setup* obj = 0;
     
@@ -37,8 +37,8 @@ public:
       try {
         obj = dynamic_cast<const setup*>(object);       
         if( obj != 0 ) {
-          std::cout << "GOT SETUP " << obj->get_name()
-                    << " version "  << obj->get_version() << std::endl;
+          //std::cout << "GOT SETUP " << obj->get_name()
+          //          << " version "  << obj->get_version() << std::endl;
           
           if( obj->get_match() ) {
             // The selected setup has been found

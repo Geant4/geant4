@@ -28,12 +28,12 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "GENERAL TRAPEZOID SUBSCRIBER:: ";
+    //std::cout << "GENERAL TRAPEZOID SUBSCRIBER:: ";
     if( object != 0 ) {
       try {
         const trap* obj = dynamic_cast<const trap*>( object );    
         
-        std::cout << "GOT GENERAL TRAPEZOID " << obj->get_name() << std::endl;
+        //std::cout << "GOT GENERAL TRAPEZOID " << obj->get_name() << std::endl;
       
         GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
       
@@ -76,17 +76,17 @@ public:
         sval += "*"+aunit;
         double dalpha2 = calc->Eval( sval );
         
-        std::cout << "x1:    " << obj->get_x1()    << lunit << " dx1:    " << dx1     << std::endl;
-        std::cout << "x2:    " << obj->get_x2()    << lunit << " dx2:    " << dx2     << std::endl;
-        std::cout << "x3:    " << obj->get_x3()    << lunit << " dx3:    " << dx3     << std::endl;
-        std::cout << "x4:    " << obj->get_x4()    << lunit << " dx4:    " << dx4     << std::endl;
-        std::cout << "y1:    " << obj->get_y1()    << lunit << " dy1:    " << dy1     << std::endl;
-        std::cout << "y2:    " << obj->get_y2()    << lunit << " dy2:    " << dy2     << std::endl;
-        std::cout << "z:     " << obj->get_z()     << lunit << " dz:     " << dz      << std::endl;
-        std::cout << "theta: " << obj->get_theta() << lunit << " dtheta: " << dtheta  << std::endl;
-        std::cout << "phi:   " << obj->get_phi()   << aunit << " dphi:   " << dphi    << std::endl;
-        std::cout << "alpha1: " << obj->get_alpha1() << aunit << " dalpha1: " << dalpha1 << std::endl;
-        std::cout << "alpha1: " << obj->get_alpha2() << aunit << " dalpha2: " << dalpha2 << std::endl;
+//         std::cout << "x1:    " << obj->get_x1()    << lunit << " dx1:    " << dx1     << std::endl;
+//         std::cout << "x2:    " << obj->get_x2()    << lunit << " dx2:    " << dx2     << std::endl;
+//         std::cout << "x3:    " << obj->get_x3()    << lunit << " dx3:    " << dx3     << std::endl;
+//         std::cout << "x4:    " << obj->get_x4()    << lunit << " dx4:    " << dx4     << std::endl;
+//         std::cout << "y1:    " << obj->get_y1()    << lunit << " dy1:    " << dy1     << std::endl;
+//         std::cout << "y2:    " << obj->get_y2()    << lunit << " dy2:    " << dy2     << std::endl;
+//         std::cout << "z:     " << obj->get_z()     << lunit << " dz:     " << dz      << std::endl;
+//         std::cout << "theta: " << obj->get_theta() << lunit << " dtheta: " << dtheta  << std::endl;
+//         std::cout << "phi:   " << obj->get_phi()   << aunit << " dphi:   " << dphi    << std::endl;
+//         std::cout << "alpha1: " << obj->get_alpha1() << aunit << " dalpha1: " << dalpha1 << std::endl;
+//         std::cout << "alpha1: " << obj->get_alpha2() << aunit << " dalpha2: " << dalpha2 << std::endl;
 
         G4VSolid* newobj = new G4Trap( name, dz, dtheta, dphi, dy1, dx1, dx2, dalpha1,
                                                                dy2, dx3, dx4, dalpha2);

@@ -37,7 +37,7 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "BOOLEAN SOLID SUBSCRIBER:: ";
+    //std::cout << "BOOLEAN SOLID SUBSCRIBER:: ";
     
     GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
     
@@ -47,7 +47,7 @@ public:
         const BooleanSolidType* obj = dynamic_cast<const BooleanSolidType*>( object );
         
         if( obj != 0 ) {
-          std::cout << "GOT BOOLEAN SOLID " << obj->get_name() << std::endl;
+          //std::cout << "GOT BOOLEAN SOLID " << obj->get_name() << std::endl;
 
           const ContentSequence* bseq = obj->get_content();
           size_t seqlen               = bseq->size();
@@ -90,11 +90,11 @@ public:
 //                BooleanSolidType::position* p = dynamic_cast<BooleanSolidType::position*>
                 define::position* p = dynamic_cast<define::position*>
                                                             ( bschoice->content().object );
-                std::cout << "GOT position " << p->get_name() << " = ("
-                                             << p->get_x()    << ","
-                                             << p->get_y()    << ","
-                                             << p->get_z()    << ")"
-                                             << p->get_unit() << std::endl;
+//                 std::cout << "GOT position " << p->get_name() << " = ("
+//                                              << p->get_x()    << ","
+//                                              << p->get_y()    << ","
+//                                              << p->get_z()    << ")"
+//                                              << p->get_unit() << std::endl;
                 std::string
                 expr = p->get_x() + "*" + p->get_unit();
                 double dx = calc->Eval( expr.c_str() );
@@ -109,11 +109,11 @@ public:
 //                BooleanSolidType::rotation* r = dynamic_cast<BooleanSolidType::rotation*>
                 define::rotation* r = dynamic_cast<define::rotation*>
                                                             ( bschoice->content().object );
-                std::cout << "GOT rotation " << r->get_name() << " = " << "("
-                                             << r->get_x() << ","
-                                             << r->get_y() << ","
-                                             << r->get_z() << ")"
-                                             << r->get_unit() << std::endl;
+//                 std::cout << "GOT rotation " << r->get_name() << " = " << "("
+//                                              << r->get_x() << ","
+//                                              << r->get_y() << ","
+//                                              << r->get_z() << ")"
+//                                              << r->get_unit() << std::endl;
                 std::string
                 expr = r->get_x() + "*" + r->get_unit();
                 double dx = calc->Eval( expr.c_str() );

@@ -36,7 +36,7 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "VOLUME SUBSCRIBER:: " << std::endl;
+    //std::cout << "VOLUME SUBSCRIBER:: " << std::endl;
     
     //GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
     GDMLProcessor* processor = GDMLProcessor::GetInstance();
@@ -48,7 +48,7 @@ public:
         obj = dynamic_cast<const volume*>( object );
         
         if( obj != 0 ) {
-          std::cout << "GOT VOLUME " << obj->get_name() << std::endl;
+          //std::cout << "GOT VOLUME " << obj->get_name() << std::endl;
 
           // Let's analyze content model if volume
           const ContentSequence* seq = obj->get_content();

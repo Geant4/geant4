@@ -28,12 +28,12 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "PARA SUBSCRIBER:: ";
+    //std::cout << "PARA SUBSCRIBER:: ";
     if( object != 0 ) {
       try {
         const para* obj = dynamic_cast<const para*>( object );    
         
-        std::cout << "GOT PARA " << obj->get_name() << std::endl;
+        //std::cout << "GOT PARA " << obj->get_name() << std::endl;
       
         GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
       
@@ -60,12 +60,12 @@ public:
         sval += "*"+aunit;
         double dphi = calc->Eval( sval );
         
-        std::cout << "x:     " << obj->get_x()     << lunit << " dx:     " << dx     << std::endl;
-        std::cout << "y:     " << obj->get_y()     << lunit << " dy:     " << dy     << std::endl;
-        std::cout << "z:     " << obj->get_z()     << lunit << " dx:     " << dz     << std::endl;
-        std::cout << "alpha: " << obj->get_alpha() << aunit << " dalpha: " << dalpha << std::endl;
-        std::cout << "theta: " << obj->get_theta() << aunit << " dtheta: " << dtheta << std::endl;
-        std::cout << "phi:   " << obj->get_phi()   << aunit << " dphi:   " << dphi   << std::endl;
+//         std::cout << "x:     " << obj->get_x()     << lunit << " dx:     " << dx     << std::endl;
+//         std::cout << "y:     " << obj->get_y()     << lunit << " dy:     " << dy     << std::endl;
+//         std::cout << "z:     " << obj->get_z()     << lunit << " dx:     " << dz     << std::endl;
+//         std::cout << "alpha: " << obj->get_alpha() << aunit << " dalpha: " << dalpha << std::endl;
+//         std::cout << "theta: " << obj->get_theta() << aunit << " dtheta: " << dtheta << std::endl;
+//         std::cout << "phi:   " << obj->get_phi()   << aunit << " dphi:   " << dphi   << std::endl;
 
         G4VSolid* newobj = new G4Para( name, dx, dy, dz, dalpha, dtheta, dphi);
       

@@ -29,7 +29,7 @@ public:
   // The activation callback invoked by SAXProcessor whenever it has
   // a new object created from XML and a corresponding subcriber exists
   virtual void Activate( const SAXObject* object ) {
-    std::cout << "ELEMENT SUBSCRIBER:: " << std::endl;
+    //std::cout << "ELEMENT SUBSCRIBER:: " << std::endl;
     
     GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
     
@@ -41,7 +41,7 @@ public:
         obj = dynamic_cast<const element*>(object);
         
         if( obj != 0 ) {
-          std::cout << "GOT ELEMENT " << obj->get_name() << std::endl;
+          //std::cout << "GOT ELEMENT " << obj->get_name() << std::endl;
 
           double      z = 0.0;
           double      a = 0.0;
@@ -68,8 +68,8 @@ public:
             sA += "*";
             sA += ae->get_unit();
             a = calc->Eval( sA );
-            std::cout << "Z: " << z  << " " << z          << std::endl;
-            std::cout << "A: " << sA << " " << a/g/mole << std::endl;
+            //std::cout << "Z: " << z  << " " << z          << std::endl;
+            //std::cout << "A: " << sA << " " << a/g/mole << std::endl;
             G4Element* enew = new G4Element( obj->get_name(), f, z, a );
             std::cout << *enew << std::endl;
           } else {
