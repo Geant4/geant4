@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.6 2001-10-29 16:23:41 maire Exp $
+// $Id: G4VPAIenergyLoss.hh,v 1.7 2001-11-08 08:13:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@
 // corrected by V. Grichine on 24/11/97 
 // corrected by L. Urban    on 27/05/98  (other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 08/11/01  BuildDEDXTable is not static any more, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4VPAIenergyLoss_h
@@ -118,7 +119,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
 
   // Build energy loss table (total continuous energy loss)
   
-    static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+    void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
 
   //----------------------------------------------
   //  public functions .........................
