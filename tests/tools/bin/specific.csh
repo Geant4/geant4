@@ -144,10 +144,7 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  setenv OGLHOME /usr/local
-  setenv OGLFLAGS "-I$OGLHOME/include"
-  setenv OGLLIBS "-L$OGLHOME/LIB -lMesaGLU -lMesaGL"
+  #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
@@ -178,15 +175,14 @@ if ( `uname -n | grep hp` != "" ) then
 endif
 
 if ( `uname -n` == aleph ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
-setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-setenv G4INSTALL /geant4/dev/geant4
-setenv G4LIB     /geant4/dev/lib
-setenv G4WORKDIR /geant4/dev
+#  if ( $?G4_STT_USE_STL ) then
+#    setenv G4USE_OSPACE 1
+#  endif
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+setenv G4INSTALL /geant4/0.1
 setenv G4SYSTEM  HP-aCC
 setenv G4DEBUG   1
+# RW comes with the compiler : setenv G4USE_STL 1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
@@ -237,10 +233,9 @@ if ( `uname -n` == asc ) then
 #if ( $?G4_STT_USE_STL ) then
 #???  setenv G4USE_OSPACE 1
 #endif
+setenv G4USE_STL 1
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-setenv G4INSTALL /geant4/dev/geant4
-setenv G4LIB     /geant4/dev/lib
-setenv G4WORKDIR /geant4/dev
+setenv G4INSTALL /geant4/0.1
 setenv G4SYSTEM DEC-cxx
 setenv G4DEBUG 1
 #setenv G4MAKESHLIB $G4INSTALL/config/makeshlib.sh
@@ -265,8 +260,9 @@ setenv G4VIS_USE_DAWNFILE          1
 setenv G4VIS_USE_VRML              1
 setenv G4VIS_USE_VRMLFILE          1
 # Specific :
-setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
+#setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
+#setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx-STD
 #setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/OSF1-cxx
 setenv OGLHOME        /lal/Mesa/3.0/OSF1
 setenv OIVHOME        /lal/OpenInventor/2.5
@@ -288,12 +284,11 @@ set prompt='g4-asc> '
 endif
 #---------------------------------------------------
 if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
-setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-setenv G4INSTALL /geant4/dev/geant4
-setenv G4LIB     /geant4/dev/lib
-setenv G4WORKDIR /geant4/dev
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+setenv G4INSTALL /geant4/0.1
 setenv G4SYSTEM  Linux-g++
 setenv G4DEBUG   1
+setenv G4USE_STL 1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
@@ -314,7 +309,7 @@ setenv G4VIS_USE_DAWNFILE          1
 setenv G4VIS_USE_VRML              1
 setenv G4VIS_USE_VRMLFILE          1
 # Specific :
-setenv RWBASE         /lal/rogue/6.1/Linux-gxx
+#setenv RWBASE         /lal/rogue/6.1/Linux-gxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
 setenv OGLHOME        /lal/Mesa/3.0/Linux
 #setenv OIVHOME        /lal/SoFree/v2r3
@@ -322,16 +317,15 @@ setenv OGLHOME        /lal/Mesa/3.0/Linux
 setenv OIVHOME        /projects/SoFree
 setenv HEPVISHOME     /projects/HEPVis
 setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-setenv OIVLIBS        "-L$HEPVISHOME/Linux-egcs-SF -lHEPVis -L$OIVHOME/Linux-egcs -lSoFree"
+setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
 setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
 setenv G4VIS_BUILD_OPACS_DRIVER    1
 setenv G4UI_USE_WO                 1
 setenv G4VIS_USE_OPACS             1
-setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-egcs:/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF"
 # Else :
 setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
 setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
@@ -340,7 +334,7 @@ set prompt='g4-lx1> '
 endif
 # Comments :
 # --------
-#  Problems with advance method in rogue/6.1/rw/tpsldict.h, 
+# RW : Problems with advance method in rogue/6.1/rw/tpsldict.h, 
 # tvsldict.h. Solved by editing directly the file !
 #---------------------------------------------------
 if ( `uname -n` == "papou1" ) then
@@ -349,8 +343,6 @@ if ( `uname -n` == "papou1" ) then
   endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
-setenv G4LIB     /geant4/dev/lib
-setenv G4WORKDIR /geant4/dev
 setenv G4SYSTEM  SUN-CC
 setenv G4DEBUG   1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
@@ -381,7 +373,6 @@ setenv G4UI_BUILD_WO_SESSION       1
 setenv G4VIS_BUILD_OPACS_DRIVER    1
 setenv G4UI_USE_WO                 1
 setenv G4VIS_USE_OPACS             1
-setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
 setenv LD_LIBRARY_PATH "$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
 # Else :
