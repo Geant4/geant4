@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.cc,v 1.3 2003-10-24 12:06:36 maire Exp $
+// $Id: G4eBremsstrahlungCMS.cc,v 1.4 2003-10-28 10:27:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,7 +75,6 @@ void G4eBremsstrahlungCMS::SecondariesPostStep( G4VEmModel* model,
   aParticleChange.SetLocalEnergyDeposit(0.0);
   if(nSecond == 2) {
     aParticleChange.SetStatusChange(fStopAndKill);
-    if(kinEnergy <= 0.001*eV) kinEnergy = 0.001*eV;
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
                                                   dp->GetMomentumDirection(),
                                                   kinEnergy);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.hh,v 1.1 2003-10-06 10:02:24 maire Exp $
+// $Id: EventAction.hh,v 1.2 2003-10-28 10:27:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void addEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
+    void AddEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
     G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
     void SetDrawFlag(G4String val) {drawFlag = val;};
     void SetPrintModulo(G4int val) {printModulo = val;};

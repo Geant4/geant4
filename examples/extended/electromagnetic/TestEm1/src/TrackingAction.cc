@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.4 2003-10-24 12:06:36 maire Exp $
+// $Id: TrackingAction.cc,v 1.5 2003-10-28 10:27:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -45,7 +45,7 @@ TrackingAction::TrackingAction(RunAction* RunAct)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
+void TrackingAction::PreUserTrackingAction(const G4Track*)
 {
   //  G4cout << "ID= " << aTrack->GetTrackID() << "  e(MeV)= " 
   //         << aTrack->GetDynamicParticle()->GetKineticEnergy()/MeV << "  "

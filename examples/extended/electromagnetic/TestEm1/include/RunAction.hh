@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
+// $Id: RunAction.hh,v 1.2 2003-10-28 10:27:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,7 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
     
+    void AddEdep(G4double val) { edep += val;}
     void CountTraks0(G4int nt) { NbOfTraks0 += nt;}
     void CountTraks1(G4int nt) { NbOfTraks1 += nt;}
     void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
@@ -74,6 +75,7 @@ class RunAction : public G4UserRunAction
   private:
     G4int NbOfTraks0, NbOfTraks1;
     G4int NbOfSteps0, NbOfSteps1;
+    G4double edep;
     ProcessesCount*   ProcCounter;   
 
 #ifdef G4ANALYSIS_USE       

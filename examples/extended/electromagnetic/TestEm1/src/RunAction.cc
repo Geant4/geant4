@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003-10-06 10:02:33 maire Exp $
+// $Id: RunAction.cc,v 1.2 2003-10-28 10:27:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,6 +115,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   HepRandom::showEngineStatus();
 
   NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;
+  edep = 0.0;
   ProcCounter = new ProcessesCount;
      
   //histograms
@@ -158,6 +159,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
              << "\n nb  steps/event"
              << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
              << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
+             << "\n total energy deposit(MeV) " << edep/(G4double)dNbOfEvents
              << G4endl;
       
       //frequency of processes call       

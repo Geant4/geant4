@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
+// $Id: SteppingAction.hh,v 1.2 2003-10-28 10:27:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,8 @@
 
 #include "G4UserSteppingAction.hh"
 
-class RunAction;
 class EventAction;
+class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +49,8 @@ class SteppingAction : public G4UserSteppingAction
     
   private:
     RunAction*   runAction;
-    EventAction* eventAction;    
+    EventAction* eventAction;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
