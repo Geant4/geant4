@@ -1,7 +1,10 @@
-$Id: History,v 1.30 2000-03-02 17:53:58 gcosmo Exp $
+$Id: History,v 1.31 2000-03-07 10:51:40 stesting Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V01-00-00a 07-Mar-2000 J.Allison
+- Changed char* to const char* where ISO compiler warned.
 
 g3tog4-V01-00-00 02-Mar-2000 G.Cosmo
 - included fixes by Ivana:

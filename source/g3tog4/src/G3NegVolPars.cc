@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3NegVolPars.cc,v 1.5 1999-12-05 17:50:09 gcosmo Exp $ 
+// $Id: G3NegVolPars.cc,v 1.6 2000-03-07 10:51:40 stesting Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -20,7 +20,7 @@ G4bool G3CalcParamsFn(G4double* Rpar, G4int npar, G4double* Rparm,
                                   G4String shape, G4String shapem);
 
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 
-          G3VolTableEntry* vte, G3VolTableEntry* mvte,  char routine[])
+          G3VolTableEntry* vte, G3VolTableEntry* mvte,  const char routine[])
 {
   G4bool NegPresent = FALSE;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.10 1999-12-15 14:49:44 gunter Exp $
+// $Id: clparse.cc,v 1.11 2000-03-07 10:51:41 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
@@ -199,7 +199,7 @@ void G3CLEval(G4String tokens[], char *select)
     if ( !strcmp(routine,"GGCLOS") ) { PG4ggclos(); return;}
 }
 
-void G3fillParams(G4String *tokens, char *ptypes)
+void G3fillParams(G4String *tokens, const char *ptypes)
 //
 // G3fillParams
 //

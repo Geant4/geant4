@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.12 1999-12-15 14:49:43 gunter Exp $
+// $Id: G4gsposp.cc,v 1.13 2000-03-07 10:51:40 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
@@ -18,7 +18,7 @@
 #include "G4VSolid.hh"
 
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 
-          G3VolTableEntry* vte, G3VolTableEntry* mvte, char routine[]);		       
+          G3VolTableEntry* vte, G3VolTableEntry* mvte, const char routine[]);		       
 
 void PG4gsposp(G4String tokens[]){
   // fill the parameter containers

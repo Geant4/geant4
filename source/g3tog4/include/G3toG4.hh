@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4.hh,v 1.5 1999-12-09 01:27:46 lockman Exp $
+// $Id: G3toG4.hh,v 1.6 2000-03-07 10:51:40 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 27 Sep 99
@@ -23,7 +23,7 @@ extern G4String Spar[1000];
 
 //extern G4double min(G4double, G4double);
 
-void G3fillParams(G4String *tokens, char *ptypes);
+void G3fillParams(G4String *tokens, const char *ptypes);
 // G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,
 //               char* routine);
 
