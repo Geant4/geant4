@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2003-03-06 17:55:08 maire Exp $
+$Id: History,v 1.25 2003-04-01 16:51:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-04-03 mma (testem5-V05-00-05)
+- PVPlacement in logical mother
 
 06-03-03 mma (testem5-V05-00-03)
 - PhysicsList::SetCuts : suppress cutForProton

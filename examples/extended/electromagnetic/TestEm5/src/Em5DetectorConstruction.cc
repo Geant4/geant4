@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.9 2003-02-11 10:44:08 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.10 2003-04-01 16:51:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -251,9 +251,9 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
                                    
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
-                                 "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 "World",		//its name
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
   
@@ -269,9 +269,9 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
       			                  
   physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		  G4ThreeVector(XposAbs,0.,0.),    //its position
-                               "Absorber",         //its name
                                 logicAbsorber,     //its logical volume
-                                physiWorld,        //its mother
+				"Absorber",         //its name
+                                logicWorld,        //its mother
                                 false,             //no boulean operat
                                 0);                //copy number
                                         
