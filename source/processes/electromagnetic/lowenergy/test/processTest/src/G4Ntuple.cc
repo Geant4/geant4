@@ -34,11 +34,13 @@
 
 #include "G4Ntuple.hh"
 
+// New Histogramming (from AIDA and Anaphe):
+#include "Interfaces/IHistoManager.h"
 #include "G4AnalysisBag.hh"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Tuple.h"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/Histogram.h"
+// For NtupleTag from Anaphe
+#include "NtupleTag/LizardNTupleFactory.h"
+using namespace Lizard;
+
 
 G4Ntuple::G4Ntuple()
 {
@@ -54,9 +56,9 @@ G4Ntuple::~G4Ntuple()
 void G4Ntuple::Book(const G4String& name)
 {
   G4AnalysisBag* container = G4AnalysisBag::getInstance(); 
-  HepTupleManager* hbookManager = container->getManager();  
+  NTupleFactory* factory = container->getFactory();  
   const char* name2(name);
-  ntuple = hbookManager->ntuple(name2);
+  ntuple = factory->createC(name2);
 
   //NTupleFactory* factory = container->GetNtupleFactory();
 
@@ -89,18 +91,8 @@ G4bool G4Ntuple::AddAndBind(const G4String& attribute, float quantity)
 
 void G4Ntuple::AddRow(const G4DataVector& row)
 {
-  G4int n = attributes.size();
-  for (G4int i=0; i<n; i++)
-    {
-      ntuple->column(attributes[i],row[i]);
-    }
-  ntuple->dumpData();
+  ntuple->addRow();
 }
-
-//void G4Ntuple::AddRow()
-//{
-//  ntuple->AddRow();
-//}
 
 
 

@@ -44,16 +44,15 @@
 #include "NtupleTag/LizardNTupleFactory.h"
 using namespace Lizard;
 
-G4AnalysisBag::G4AnalysisBag()
-{
-
-  histoManager = createIHistoManager();
-}
+G4AnalysisBag::G4AnalysisBag() : histoManager(0), factory(0)
+{ }
 
 G4AnalysisBag::~G4AnalysisBag()
 { 
   delete factory;
-  delete hbookManager;
+  factory = 0;
+  delete histoManager;
+  histoManager = 0;
 
   G4int n = ntuples.size();
   for (G4int i=0; i<n; ++i)
@@ -77,30 +76,24 @@ G4AnalysisBag* G4AnalysisBag::getInstance()
 
 void G4AnalysisBag::init(const G4String& file)
 {
+  histoManager = createIHistoManager();
   G4String name = file + ".hbook";
-  hbookManager->selectStore(name);
+  histoManager->selectStore(name);
 
   // Create a nTuple factory:
-  NTupleFactory* factory = createNTupleFactory();}
+  factory = createNTupleFactory();
+}
 
-void G4AnalysisBag::addNtuple(G4Ntuple* ntuple)
+void G4AnalysisBag::addNtuple(G4Ntuple* ntuple,const G4String& name)
 {
   ntuples.push_back(ntuple);
 }
 
-const G4Ntuple* G4AnalysisBag::retrieveNtuple(G4int id) const
+const G4Ntuple* G4AnalysisBag::getNtuple(const G4String& name) const
 {
-  G4Ntuple* nt = ntuples[id];
-  return nt;
+  return 0;
 }
 
-void G4AnalysisBag::write()
+void G4AnalysisBag::store()
 {
-  hbookManager->write();
-}
-
-
-const HepTupleManager* G4AnalysisBag::getManager() const 
-{
-  return hbookManager;
 }

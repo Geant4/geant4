@@ -46,14 +46,13 @@
 #include "g4std/vector"
 #include "globals.hh"
 
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+// For NtupleTag from Anaphe
+#include "NtupleTag/LizardNTupleFactory.h"
+using namespace Lizard;
 
 class IHistoManager;
 class G4Ntuple;
-class NTupleFactory;
+class IHistogram;
 
 class G4AnalysisBag {
 
@@ -75,7 +74,8 @@ public:
 
   void store();
 
-  const IHistogramManager* getManager() const { return histoManager; }
+  const IHistoManager* getManager() const { return histoManager; }
+  const NTupleFactory* getFactory() const { return factory; }
 
 private:
  

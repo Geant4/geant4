@@ -47,7 +47,10 @@
 
 // For old CLHEP stuff
 #include "G4DataVector.hh"
-class HepTuple;
+
+// For NtupleTag from Anaphe
+#include "NtupleTag/LizardNTupleFactory.h"
+using namespace Lizard;
 
 class G4Ntuple {
 
@@ -77,10 +80,7 @@ private:
   // Used for old CLHEP ntuples
   G4std::vector<G4String> attributes;
 
-  // Old CLHEP
-  HepTuple* ntuple;
-  // New
-  // NTuple* ntuple;
+  NTuple* ntuple;
 
 };
 
