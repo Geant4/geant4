@@ -28,21 +28,19 @@
 G4Data::~G4Data(){
 
   this->clear();
-  //  cout<<"G4Data Destructor"<<endl;
 }
 
 G4bool G4Data::operator == (const G4Data& input) const {
 
-  //  cout<<"G4Data equality operator"<<endl;
   return(length() == input.length());
 
 }
 
 G4bool G4Data::operator < (const G4Data& input) const {
 
-  //  cout<<"G4Data less than operator"<<endl;
   return(length() < input.length());
 
 }
+
 
 

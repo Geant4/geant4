@@ -28,7 +28,6 @@
 G4FirstLevel::~G4FirstLevel(){
 
   this->clearAndDestroy();
-  //  cout<<"G4FirstLevel Destructor"<<endl;
 }
 
 G4bool G4FirstLevel::operator == (const G4FirstLevel& input) const{

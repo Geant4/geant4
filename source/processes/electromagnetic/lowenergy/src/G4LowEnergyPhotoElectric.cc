@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.8 1999-06-02 17:43:21 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.9 1999-06-04 14:01:11 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,6 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
-   cout<<"************** Starting PE DoIt ****************"<<endl;
   // incoming particle initialization
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
 
@@ -135,7 +134,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4Element* anElement = SelectRandomAtom(aDynamicPhoton, aMaterial);
 
   // PAY ATTENTION TO THE MEANING OF THIS NUMBER
-  G4int AtomNum = anElement->GetZ();
+  G4int AtomNum = (G4int) anElement->GetZ();
 
   // Select the subshell ionized the first one 
   // with binding energy less than the photon energy
@@ -147,7 +146,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     g++;
   }
 
-  G4int thePrimaryShell = theBindEnVec->GetLowEdgeEnergy(g);
+  G4int thePrimaryShell = (G4int) theBindEnVec->GetLowEdgeEnergy(g);
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   G4ParticleVector photvec;
@@ -159,14 +158,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double ElecKineEnergy = (PhotonEnergy - (*theBindEnVec)(g))*MeV;
   G4double theEnergyDeposit = (PhotonEnergy - ElecKineEnergy)*MeV;
 
-  // cout<<"The electron enloss range is: "
-  //  <<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
-  //  <<endl;
-  
-  //cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
-  
-  //cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
-  
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
@@ -184,7 +175,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       
       G4bool ThereAreShells = TRUE;
       oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomNum-6]; 
-      cout<<"oneAtomFluorTrans length: "<<oneAtomFluorTrans->length()<<endl;
+
       while(ThereAreShells == TRUE){
 	
 	// Select the second transition from another subshell
@@ -213,7 +204,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	
 	if(ThereAreShells != FALSE){
 	  
-	  thePrimaryShell = fluorPar[0];
+	  thePrimaryShell = (G4int) fluorPar[0];
 	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[3]) ;
 	  photvec.append(newPart);
 	  theEnergyDeposit -= fluorPar[3]*MeV;
@@ -229,14 +220,14 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  
 	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
 	  photvec.append(newPart);
-	  thePrimaryShell = fluorPar[0];
+	  thePrimaryShell = (G4int) fluorPar[0];
 	  theEnergyDeposit -= lastTransEnergy*MeV;
 	  
 	}
       }
      
       // oneAtomFluorTrans->clearAndDestroy();
-      //      delete oneAtomFluorTrans;
+      delete oneAtomFluorTrans;
     } //END OF THE CHECK ON ATOMIC NUMBER
     
     //controllare se il setnumberofsecondaries  si puo' cambiare
@@ -257,7 +248,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     
     photvec.clear();
     elecvec.clear();
-    //cout<<"END OF FLUORESCENCE"<<endl;
   } // END OF CUTS
   
   else{
@@ -280,7 +270,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
-  //cout<<"END OF PE POSTSTEPDOIT"<<endl;
 }
 
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
@@ -290,7 +279,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
     theCrossSectionTable->clearAndDestroy(); 
     delete theCrossSectionTable; 
   }
-  cout<<"************** PE CS ****************"<<endl;
+
   G4int par[4] = {73, 0, 0, 0}; G4String name("epdl97");
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
@@ -307,7 +296,6 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
     delete theBindingEnergyTable; 
   }
 
-  cout<<"************** PE BE ****************"<<endl;
   G4int par[4] = {91, 913, 0, 0}; G4String name("eadl.asc");
   G4Epdl89File File(name,par);
   G4EpdlTables table(File);
@@ -317,8 +305,6 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
 }
 
 void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
-
-  cout<<"************** PE FL ****************"<<endl;
 
    if (theFluorTransitionTable) {
 
@@ -330,8 +316,8 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
  
    for(G4int TableInd = 5; TableInd < 100; TableInd++){
 
-     //oneAtomShellFL = new oneAtomTable();
-     oneAtomTable* oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
+     oneAtomTable* oneAtomShellFL = new oneAtomTable();
+     oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
      
      theFluorTransitionTable->insert(oneAtomShellFL);
      oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[TableInd-5]; 
@@ -474,7 +460,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
-	G4int tableIndex = (*theElementVector)(k)->GetZ()-1;
+	G4int tableIndex = (G4int) (*theElementVector)(k)->GetZ()-1;
 	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, tableIndex, theCrossSectionTable)*barn;
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
       }       
@@ -517,7 +503,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
 
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
 
-      G4int tableIndex = (*theElementVector)(i)->GetZ()-1;
+      G4int tableIndex = (G4int) (*theElementVector)(i)->GetZ()-1;
       crossSection = DataLogInterpolation(GammaEnergy, tableIndex, theCrossSectionTable)*barn;
     }
 
@@ -528,7 +514,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   }
 
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements, NULL pointer returned." << endl;
+	 << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -554,18 +540,11 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
-  cout<<"oneAtomFluorTrans length: "<<TransitionTable->length()<<endl;
-  cout<<"ShellNum: "<<ShellNum<<endl;
-
   while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
   
-    cout<<"TransitionTable entries: "<<TransitionTable->entries()
-        <<" ShellNum: "<<ShellNum<<endl;
-
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
-
     ShellNum++;
   }
 
@@ -612,13 +591,12 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
     }
 
     if(TransProb == (*(*TransitionTable)[ShellNum])[ProbCol]->length()-1) {
-      cout<<"It's the last possible transition subshell in this column"<<endl;
+
       ColIsFull = FALSE;
     }
   }
   else{
    
-    cout<<"There are no more shells for this element"<<endl;
     ColIsFull = FALSE;
   }
   

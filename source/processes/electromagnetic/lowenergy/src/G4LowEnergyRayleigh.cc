@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.4 1999-05-05 09:09:26 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.5 1999-06-04 14:01:12 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,6 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // The random number techniques of Butcher & Messel are used 
 // (Nuc Phys 20(1960),15). GEANT4 internal units
 //
-  cout<<"************** Starting RE DoIt ****************"<<endl;
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
 
   
@@ -118,7 +117,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   // sample the energy rate of the scattered gamma 
 
   G4double wlGamma = h_Planck*c_light/GammaEnergy0;
-  G4double elementZ = theElement->GetZ();
+  G4int elementZ = (G4int) theElement->GetZ();
   G4double tableIndex = elementZ - 1;
 
   G4double Theta, DataFormFactor;
@@ -172,8 +171,6 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-  cout<<"************** RE CS ****************"<<endl;
-
 }
 
 void G4LowEnergyRayleigh::BuildFormFactorTable(){
@@ -188,7 +185,6 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theFormFactorTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-  cout<<"************** RE FF ****************"<<endl;
 }
 
 void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
@@ -272,7 +268,7 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.5 1999-06-02 17:43:20 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.6 1999-06-04 14:01:09 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -502,7 +502,6 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = table.GetFstDataTable();
-  cout<<"************** BR CS ****************"<<endl;
 }
 
 void G4LowEnergyBremsstrahlung::BuildATable(){
@@ -638,7 +637,7 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 
    for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ ){
 
-     G4int tableIndex = (*theElementVector)(Ielem)->GetZ()-1;
+     G4int tableIndex = (G4int) (*theElementVector)(Ielem)->GetZ()-1;
      G4double interCrsSec = DataLogInterpolation(KineticEnergy, tableIndex, 
 						 theCrossSectionTable)*barn;
      
@@ -669,7 +668,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 // 
 {
 
-  cout<<"************** Starting BR DoIt ****************"<<endl;
   const G4double MigdalConstant = classic_electr_radius
                                         *electron_Compton_length
                                         *electron_Compton_length/pi;
@@ -691,7 +689,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 
   // Gamma production cut in this material
   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-  cout<<"GammaEnergyCut: "<<GammaEnergyCut<<endl;
 
   // check against insufficient energy
   if (ElectKinEn < GammaEnergyCut){
@@ -719,7 +716,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 
   G4double p1 = 0, p2 = 0;
   G4double coeffA = 0, coeffB = 0;
-  G4int AtomicNum = anElement->GetZ();
+  G4int AtomicNum = (G4int) anElement->GetZ();
   coeffA = ComputeA(AtomicNum, ElectKinEn);
   coeffB = ComputeB(AtomicNum, ElectKinEn);
 
@@ -839,7 +836,7 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

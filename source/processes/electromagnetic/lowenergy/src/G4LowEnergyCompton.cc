@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.4 1999-05-05 09:09:25 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.5 1999-06-04 14:01:10 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,8 +115,6 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 // (Nuc Phys 20(1960),15).
 // GEANT4 internal units
 //
-  cout<<"************** Starting CE DoIt ****************"<<endl;
-
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
  
   // Dynamic particle quantities  
@@ -130,7 +128,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   const G4int numOfElem = aMaterial->GetNumberOfElements();
   
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-  G4int elementZ = theElement->GetZ();
+  G4int elementZ = (G4int) theElement->GetZ();
   G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
   G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
@@ -227,7 +225,6 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-  cout<<"************** CE CS ****************"<<endl;
 }
 
 void G4LowEnergyCompton::BuildScatteringFunctionTable(){
@@ -242,7 +239,6 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theScatteringFunctionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
-  cout<<"************** CE SF ****************"<<endl;
 }
 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
@@ -320,13 +316,11 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
-    //    cout<<"rval: "<<rval<<"   PSS: "<<PartialSumSigma<<endl;
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
 
-  cout<<"         *************************     "<<endl;
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements, NULL pointer returned." << endl;
+	 << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.5 1999-06-02 17:43:20 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.6 1999-06-04 14:01:10 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,7 +103,6 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // Note 2 : The differential cross section implicitly takes account of 
 // pair creation in both nuclear and atomic electron fields. However triplet 
 // prodution is not generated.
- cout<<"************** Starting PP DoIt ****************"<<endl;
 
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
 
@@ -209,7 +208,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetNumberOfSecondaries(2) ; 
   
   G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2) ;
-  cout<<"GetSafety: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
+
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
@@ -271,7 +270,6 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   G4EpdlTables table(File);
   table.FillDataTable();
   theCrossSectionTable = table.GetFstDataTable();
-  cout<<"************** PP CS ****************"<<endl;
 }
 
 void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
@@ -308,7 +306,7 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
-	G4int tableIndex = (*theElementVector)(k)->GetZ()-1;
+	G4int tableIndex = (G4int) (*theElementVector)(k)->GetZ()-1;
 	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, tableIndex, theCrossSectionTable)*barn;
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
 
@@ -351,7 +349,7 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.6 1999-06-03 14:23:27 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.7 1999-06-04 14:01:11 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -214,15 +214,13 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
 
 void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
 
-  cout<<"************** IO SS CS ****************"<<endl;
-
    if (allAtomShellCrossSec) {
-     //    allAtomShellCrossSec->clearAndDestroy();
+
     delete allAtomShellCrossSec;
   }
 
    if(theBindingEnergyTable){
-     // theBindingEnergyTable->clearAndDestroy();
+
      delete theBindingEnergyTable;
    }
 
@@ -232,8 +230,7 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
    G4int dataNum = 2;
  
    for(G4int TableInd = 0; TableInd < 100; TableInd++){
-     //     cout<<"ELEMENTO: "<<TableInd<<endl;
-     //     oneAtomTable* oneAtomShellCS = new oneAtomTable();
+
      oneAtomTable* oneAtomShellCS = BuildTables(TableInd, dataNum, "ion-ss-cs-");
      
      G4FirstLevel* oneAtomBindingTable 
@@ -265,8 +262,6 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
 
 void G4LowEnergyIonisation::BuildFluorTransitionTable(){
 
-  cout<<"************** IO FL ****************"<<endl;
-
    if (theFluorTransitionTable) {
 
     delete theFluorTransitionTable;
@@ -289,8 +284,6 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
-
-  cout<<"************** IO Sc ****************"<<endl;
 
    if (theSamplingCoeffTable) {
 
@@ -446,9 +439,8 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
  
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData,   
-                                                const G4Step&  stepData)         
-{
-  cout<<"************** Starting IO DoIt ****************"<<endl;
+							const G4Step&  stepData){
+
   if(getenv("GENERAL")) aParticleChange.Initialize(trackData) ;
   
   G4Material*               aMaterial = trackData.GetMaterial() ;
@@ -485,7 +477,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
   // select randomly one element constituing the material.
   G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
-  G4int AtomIndex = anElement->GetZ();
+  G4int AtomIndex = (G4int) anElement->GetZ();
 
   // Select the subshell WARNING!!!!
   G4int subShellIndex = SelectRandomShell(AtomIndex,KineticEnergy);
@@ -500,7 +492,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   
   // 
   G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[AtomIndex-1];
-  G4int thePrimaryShell = (*(*theBindEnVec)[0])[subShellIndex];
+  G4int thePrimaryShell = (G4int) (*(*theBindEnVec)[0])[subShellIndex];
   G4double BindingEn = (*(*theBindEnVec)[1])[subShellIndex];
   G4double theEnergyDeposit = BindingEn; // inc energy - deltaray energy = binding energy
 
@@ -520,11 +512,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     G4double costheta = (Psquare-(finalMomentum*finalMomentum)+
 			 (DeltaTotalMomentum*DeltaTotalMomentum))/(2*DeltaTotalMomentum*TotalMomentum); 
     
-    //    cout<<"DeltaTotalMomentum: "<<DeltaTotalMomentum<<endl;    
-    //    cout<<"TotalMomentum: "<<TotalMomentum<<endl;    
-    //    cout<<"finalTotalMomentum: "<<finalMomentum<<endl;    
-    //    cout<<"costheta: "<<costheta<<endl;    
-    //    cout<<"ratio: "<<DeltaTotalMomentum/(2*TotalMomentum)<<endl;
     if (costheta < -1.) costheta = -1.;
     if (costheta > +1.) costheta = +1.;
 
@@ -595,7 +582,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	
 	if(ThereAreShells != FALSE){
 	  
-	  thePrimaryShell = fluorPar[0];
+	  thePrimaryShell = (G4int) fluorPar[0];
 	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[2]) ;
 	  photvec.insert(newPart);
 	  theEnergyDeposit -= fluorPar[2]*MeV;
@@ -612,7 +599,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
 	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
 	  photvec.insert(newPart);
-	  thePrimaryShell = fluorPar[0];
+	  thePrimaryShell = (G4int) fluorPar[0];
 	  theEnergyDeposit -= lastTransEnergy*MeV;
 	}
       }
@@ -638,7 +625,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     photvec.clear();
     elecvec.clear();
-    //    cout<<"END OF FLUORESCENCE"<<endl;
     
     // fill aParticleChange 
     // changed energy and momentum of the actual particle
@@ -666,7 +652,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       
       
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-  //  cout<<"************** End IO DoIt ****************"<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -741,7 +726,7 @@ G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticl
 
       if (KineticEnergy > HighestKineticEnergy) KineticEnergy = 0.99*HighestKineticEnergy;
 
-      G4int tableIndex = (*theElementVector)(i)->GetZ()-1;
+      G4int tableIndex = (G4int) (*theElementVector)(i)->GetZ()-1;
       crossSection = ComputeCrossSection(tableIndex, KineticEnergy);
     }
 
@@ -752,7 +737,7 @@ G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticl
   }
 
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements, NULL pointer returned." << endl;
+	 << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -771,8 +756,6 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
 
   while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
   
-    //    cout<<"TransitionTable entries: "<<TransitionTable->entries()
-    //        <<" ShellNum: "<<ShellNum<<endl;
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
@@ -809,13 +792,11 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
 
     if(TransProb == (*(*TransitionTable)[ShellNum])[ProbCol]->length()-1) {
 
-      cout<<"It's the last possible transition subshell in this column"<<endl;
       ColIsFull = FALSE;
     }
   }
   else{
    
-    cout<<"There are no more shells for this element"<<endl;
     ColIsFull = FALSE;
   }
   
@@ -827,13 +808,11 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 					       const G4double KinEn){
 
   // 1) Load Coefficients (I need Z number and the index of the shell)
-  //***************** RICORDATI DI CORREGGERLO ************************
    G4int dataNum = 12;
    oneAtomTable* oneAtomCoeffTable = BuildTables(AtomicNumber-1, dataNum, "ioni-co-");
 
     //(*theSamplingCoeffTable)[AtomicNumber-12];
 
-  //  cout<<"Atomicnumber: "<<AtomicNumber<<" ShellNum "<<ShellIndex<<" KinEn: "<<KinEn<<endl;
   oneShellTable* oneShellCoeffTable = (*oneAtomCoeffTable)[ShellIndex];
   G4double BindingEn = (*(*(*theBindingEnergyTable)[AtomicNumber-1])[1])[ShellIndex];
 
@@ -849,18 +828,16 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     const G4Data* oneCoeffVec = (*oneShellCoeffTable)[ind]; 
 
     for(G4int chep = 0; chep < energyVec->length(); chep++){
-      //      cout<<"Energia: "<<(*energyVec)[chep]<<" Parametro "
-      //  <<ind<<" : "<<(*oneCoeffVec)[chep]<<endl;
+
     }
  
     if(KinEn < (*energyVec)[0]){
-      //cout<<"energy LESS then minen"<<endl;
+
       Parms.insert((*oneCoeffVec)[0]);
     }
 
     else if(KinEn > (*energyVec)[LastPar]){
       
-      // cout<<"energy GREATER then maxen"<<endl;
       Parms.insert((*oneCoeffVec)[LastPar]);
     }
 
@@ -868,25 +845,12 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 	
       G4double par = DataSemiLogInterpolation(KinEn,(*energyVec),(*oneCoeffVec));
       Parms.insert(par);
-      // cout<<"enrgy ok for Interp: "<<par<<endl;
     }
   }
+
   // cut in energy is always the same
   Parms.insert((*(*oneShellCoeffTable)[CoeffNumber-1])[0]);
 
-  //  cout<<"Parms:"<<endl
-  //  <<"1) "<<Parms[0]
-  //  <<" 2) "<<Parms[1]
-  //  <<" 3) "<<Parms[2]
-  //  <<" 4) "<<Parms[3]
-  //  <<" 5) "<<Parms[4]<<endl
-  //  <<"6) "<<Parms[5]
-  //  <<" 7) "<<Parms[6]
-  //  <<" 8) "<<Parms[7]
-  //  <<" 9) "<<Parms[8]
-  //  <<" 10) "<<Parms[9]
-  //  <<" 10) "<<Parms[10]
-  //  <<endl;
   // 2') order of parameters:
   //     * Parms[0] = par1 LET
   //     * Parms[1] = par2 LET
@@ -915,16 +879,11 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   const G4double maxEn = (KinEn-BindingEn)/2;
   
   const G4double area2 = Parms[9];
-  //(Parms[6]/Parms[10])-(Parms[6]/maxEn);
   
   G4double areaTot = area1+area2;
 
   // 4) Generate a random number .to select the region of work
   G4double rand1 = areaTot*G4UniformRand();
-
-  // cout<<"******************************************"<<endl
-  //  <<"area1: "<<area1<<" area2: "<<area2<<endl
-  //  <<"somma: "<<areaTot<<" rand1: "<<rand1<<endl;
 
   // 5) Sampling
   G4double sample = 0;
@@ -937,15 +896,18 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       
       G4double rand2 = G4UniformRand();
       G4double Ka = (BindingEn + Parms[10])/(minEn+BindingEn);
+
       sample = (minEn + BindingEn)*pow(Ka,rand2)-BindingEn;
+
       G4double arg = sample+BindingEn;
+
       rejection = Parms[0]/arg+Parms[1]/pow(arg,2)+Parms[2]/pow(arg,3)+
 	Parms[3]/pow(arg,4)+Parms[4]/pow(arg,5)+Parms[5]/pow(arg,6);
-      //  cout<<"REJECTION: "<<rejection<<endl;	
-	rejection /= Parms[7];
-      
+
+      rejection /= Parms[7];
+	
     }while(rejection < G4UniformRand());
-    //   cout<<"scelta l'area 1: ";
+
   }
 
   else if(area1 < rand1 && rand1 < areaTot){
@@ -954,11 +916,9 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     G4double Norm = (1/Parms[10])-(1/maxEn);
     G4double rand2 = Norm*G4UniformRand();
     sample = 1/((1/Parms[10])-rand2);
-    // cout<<"scelta l'area 2: ";
+
   }
-  // cout<<" sample: "<<sample<<endl;
-  //clear the table
-  //  oneAtomCoeffTable->clearAndDestroy();
+
   delete oneAtomCoeffTable;
                  
   return sample;

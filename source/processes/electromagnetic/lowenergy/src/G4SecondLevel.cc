@@ -28,7 +28,6 @@
 G4SecondLevel::~G4SecondLevel(){
 
   this->clearAndDestroy();
-  //  cout<<"G4SecondLevel Destructor"<<endl;
 }
 
 G4bool G4SecondLevel::operator == (const G4SecondLevel& input) const{

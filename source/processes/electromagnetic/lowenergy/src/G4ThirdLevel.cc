@@ -27,7 +27,6 @@
 
 G4ThirdLevel::~G4ThirdLevel(){
 
-  cout<<"G4ThirdLevel Destructor"<<endl;
   this->clearAndDestroy();
 }
 
