@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.13 2002-01-10 15:42:25 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.14 2002-01-12 20:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -1879,12 +1879,12 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 //
   const G4double  fractionTolerance = 1.0e-14;
-  const G4double  flexRadMaxTolerance= max( kRadTolerance, 
-					    fractionTolerance * fRmax);
-  const G4double  Rmax_plus=  fRmax+ flexRadMaxTolerance*0.5;
+  const G4double  flexRadMaxTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmax);
+  const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
 
-  const G4double  flexRadMinTolerance= max( kRadTolerance, 
-					    fractionTolerance * fRmin);
+  const G4double  flexRadMinTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmin);
   const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
