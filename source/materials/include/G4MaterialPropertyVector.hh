@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.2 1999-10-30 01:42:31 gum Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.3 1999-11-05 21:11:47 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class decriptors
+// Updated:     1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
 //              > value.h -> templates.hh
 // mail:        gum@triumf.ca
