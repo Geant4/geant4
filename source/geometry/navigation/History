@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003-10-24 12:53:03 gcosmo Exp $
+$Id: History,v 1.3 2003-10-29 10:48:53 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 29th, 2003 - J.Apostolakis  (geomnav-V05-02-02)
+------------------------------
+ - G4PropagatorInField: 
+    Added option to turn On/Off the optimisation of using the safety 
+    in calling G4Navigator. 
 
 Oct 24th, 2003 - G.Cosmo  (geomnav-V05-02-01)
 ------------------------
