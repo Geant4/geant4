@@ -34,7 +34,6 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
-#include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
@@ -244,12 +243,6 @@ G4VPhysicalVolume* Test17DetectorConstruction::ConstructCalorimeter()
   SDman->AddNewDetector( calorimeterSD );
   logicAbsorber->SetSensitiveDetector(calorimeterSD);
       
-  //                                        
-  // Visualization attributes
-  //
-  G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  VisAtt->SetVisibility(true);
-  logicWorld->SetVisAttributes(VisAtt);
   
   //
   //always return the physical World

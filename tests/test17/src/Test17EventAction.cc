@@ -24,7 +24,6 @@
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
@@ -119,21 +118,7 @@ void Test17EventAction::EndOfEventAction(const G4Event* evt)
 
     runaction->SaveEvent();
   }
-  
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
-  if(pVVisManager)
-  {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-   G4int n_trajectories = 0;
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(50);
-        else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50); 
-      }
-  }  
 
   if(verboselevel>0)
     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;

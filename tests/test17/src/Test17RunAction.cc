@@ -11,17 +11,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Test17RunAction.hh"
-//#include "Test17RunMessenger.hh"
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"
 
 #include "G4EnergyLossTables.hh"
-#include "G4hLowEnergyIonisation.hh"
-#include "G4ionLowEnergyIonisation.hh"
 #include "Test17PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,14 +112,7 @@ void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  }
-      
+         
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
   tlSumAbs = 0. ;
@@ -334,30 +323,12 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
           "  MeV " << G4endl ;
   G4cout << G4endl ;
-  /*
-  G4cout << " mean number of steps in absorber (charged) = " <<
-           nStepSumCharged         << " +- " << sigch     <<
-          "      " << G4endl ;
-  G4cout << " mean number of steps in absorber (neutral) = " <<
-           nStepSumNeutral         << " +- " << signe     <<
-          "      " << G4endl ;
-  G4cout << G4endl ;
 
-  G4cout << "   mean number of charged secondaries = " <<
-           SumCharged << " +- " << sigcharged << G4endl;  
-  G4cout << G4endl ;
-  G4cout << "   mean number of neutral secondaries = " <<
-           SumNeutral << " +- " << signeutral << G4endl;  
-  G4cout << G4endl ;
-  
-  G4cout << "   mean number of e-s =" << Selectron << 
-            "  and e+s =" << Spositron << G4endl;
-  G4cout << G4endl; 
-  */
   G4cout << "(number) transmission coeff=" << Transmitted <<
             "  reflection coeff=" << Reflected << G4endl;
   G4cout << G4endl; 
 
+  /*
   if(nbinStep>0)
   {G4double E , dnorm, norm ;
    G4cout << "   step number/event distribution " << G4endl ;
@@ -680,12 +651,9 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
      G4cout << G4endl;
    }
   }
-  
+  */  
  G4cout.precision(prec);
-  
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    
+      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

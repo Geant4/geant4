@@ -5,18 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test17.cc,v 1.4 2000-05-26 15:50:12 pia Exp $
+// $Id: test17.cc,v 1.5 2000-08-18 14:35:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - TestTest17 
+//      GEANT 4 - test17 
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD Group
 // --------------------------------------------------------------
 // Comments
 //     
+// 18.08.2000 V.Ivanchenko clean up visualisation and dummy output
 //   
 // --------------------------------------------------------------
 
@@ -24,10 +25,6 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "Test17VisManager.hh"
-#endif
 
 #include "Test17DetectorConstruction.hh"
 #include "Test17PhysicsList.hh"
@@ -53,13 +50,7 @@ int main(int argc,char** argv) {
   detector = new Test17DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Test17PhysicsList(detector));
-  
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new Test17VisManager;
-  visManager->Initialize();
-#endif 
- 
+   
   // set user action classes
   runManager->SetUserAction(new Test17PrimaryGeneratorAction(detector));
   Test17RunAction* runaction = new Test17RunAction;
@@ -93,9 +84,6 @@ int main(int argc,char** argv) {
     }
     
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif  
   delete runManager;
 
   return 0;

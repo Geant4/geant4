@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-08-18 11:10:22 maire Exp $
+$Id: History,v 1.4 2000-08-18 14:35:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      
 18th August 2000  Michel Maire  
 - standard G4ionIonisation removed from the PhysicsList
+
+18.08.2000 - VI,
+             Remove G4ionIonisation and G4ionLowEnergyIonisation
+             Clean up output and remove visualisation
 
 26.06.2000 - JA, tag test17-V01-01-03
 - Added test17.large_N.in.
