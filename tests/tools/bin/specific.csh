@@ -421,7 +421,7 @@ endif
 # Comments :
 # --------
 #
-if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+if ( `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-00-ref-03
   setenv G4WORKDIR $G4INSTALL
@@ -441,7 +441,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" || `uname -n` == "pcal26" )
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
   setenv G4ANALYSIS_BUILD_LAB        1
   setenv G4ANALYSIS_BUILD_JAS        1
-  setenv G4ANALYSIS_BUILD_LIZARD     1
+#  setenv G4ANALYSIS_BUILD_LIZARD     1
   #setenv G4ANALYSIS_TUPLE 1
   #setenv G4ANALYSIS_CLOUD 1
   setenv G4ANALYSIS_LAB_VISUALIZATION 1
@@ -456,10 +456,10 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" || `uname -n` == "pcal26" )
   setenv G4VIS_USE_VRMLFILE          1
   setenv G4ANALYSIS_USE_LAB          1
   setenv G4ANALYSIS_USE_JAS          1
-  setenv G4ANALYSIS_USE_LIZARD       1
+#  setenv G4ANALYSIS_USE_LIZARD       1
   setenv G4ANALYSIS_SYSTEM           Lab
   # AIDA : 
-  setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
+  setenv G4ANALYSIS_AIDA /lal/AIDA/1.0/AIDA
   # Lab :
   source /projects/Lab/v4r1/cmt/setup.csh
   # CLHEP :
