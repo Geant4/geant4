@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.hh,v 1.1 2003-03-10 18:16:49 maire Exp $
+// $Id: IonC12.hh,v 1.2 2003-08-08 08:26:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Each class inheriting from G4VIon
@@ -43,22 +43,22 @@
 class IonC12 : public G4VIon
 {
  private:
-   static IonC12 theIon;
+   static IonC12 theIonC12;
 
  public:
    IonC12(
        const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
+       G4double            width,        G4double            charge,
+       G4int               iSpin,        G4int               iParity,
+       G4int               iConjugation, G4int               iIsospin,
        G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
+       const G4String&     pType,        G4int               lepton,
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
    virtual ~IonC12();
-  
+
    static IonC12*    IonDefinition();
    static IonC12*    Ion();
 };

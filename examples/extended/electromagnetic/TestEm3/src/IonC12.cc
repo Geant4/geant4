@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.cc,v 1.3 2003-08-08 07:53:32 vnivanch Exp $
+// $Id: IonC12.cc,v 1.4 2003-08-08 08:26:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,17 +37,17 @@
 IonC12::IonC12(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
+       G4int               iSpin,        G4int               iParity,
+       G4int               iConjugation, G4int               iIsospin,
        G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
+       const G4String&     pType,        G4int               lepton,
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable )
  : G4VIon( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
-{ 
+{
   SetParticleSubType("static");
 }
 
@@ -66,18 +66,18 @@ IonC12::~IonC12() { }
 //               type    lepton number  baryon number   PDG encoding
 //             stable         lifetime    decay table
 
-IonC12 IonC12::theIon(
+IonC12 IonC12::theIonC12(
              "ionC12",    11.17793*GeV,       0.0*MeV,  +6.0*eplus,
 		    0,              +1,             0,
 		    0,               0,             0,
-            "nucleus",               0,           +12,           0,
+     "static_nucleus",               0,           +12,           0,
 		 true,            -1.0,             0
 );
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonC12* IonC12::IonDefinition() {return &theIon;}
+IonC12* IonC12::IonDefinition() {return &theIonC12;}
 
-IonC12* IonC12::Ion()           {return &theIon;}
+IonC12* IonC12::Ion()           {return &theIonC12;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
