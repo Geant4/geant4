@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.4 1999-07-27 10:41:16 urban Exp $
+// $Id: G4hEnergyLoss.hh,v 1.5 1999-09-19 08:59:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -90,6 +90,12 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected:
 
+    virtual G4double GetConstraints(const G4DynamicParticle *aParticle,
+                            G4Material *aMaterial);
+                                       
+    virtual G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
+                              G4Material *aMaterial,
+                              G4double MeanLoss) ;
 
   private:
 
@@ -98,33 +104,17 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     G4hEnergyLoss(G4hEnergyLoss &);
     G4hEnergyLoss & operator=(const G4hEnergyLoss &right);
 
-    G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
-    G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial,
-                              G4double MeanLoss) ;
 
 // =====================================================================
 
   public:
 
-
-  protected:
-
-    G4PhysicsTable* theLossTable ;
-   
-    G4double MinKineticEnergy ;
-
   private:
-
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
-    G4double linLossLimit ;
 
     // variables for the integration routines
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
+  protected:
     // data members to speed up the fluctuation calculation
     G4Material *lastMaterial ;
     G4int imat ;
@@ -282,18 +272,26 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* theRangeCoeffATable;
     static G4PhysicsTable* theRangeCoeffBTable;
     static G4PhysicsTable* theRangeCoeffCTable;
+    static G4int NumberOfProcesses ;
 
     static G4double dRoverRange ; // maximum allowed deltarange/range
                                   //  in one step  
+  protected:
+
+    G4PhysicsTable* theLossTable ;
+
+    G4double linLossLimit ;
+   
+    G4double MinKineticEnergy ;
+
+    G4double fdEdx;      // computed in GetContraints
+    G4double fRangeNow ; // computed in GetContraints
 
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 
     static G4bool rndmStepFlag ;
     static G4bool EnlossFlucFlag ;
-
-    static G4int NumberOfProcesses ;
-
 
 };
  
