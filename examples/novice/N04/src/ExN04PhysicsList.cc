@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04PhysicsList.cc,v 1.13 2003-06-16 16:49:57 gunter Exp $
+// $Id: ExN04PhysicsList.cc,v 1.14 2003-09-29 04:53:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,6 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
