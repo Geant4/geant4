@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2001-08-17 23:04:21 johna Exp $
+$Id: History,v 1.2 2001-08-24 20:39:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Added example unpacking code for G4Polyhedron objects.
 
 17th August 2001  John Allison  (vis-V03-02-12)
 - Added template graphics system XXX.

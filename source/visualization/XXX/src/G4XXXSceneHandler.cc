@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.1 2001-08-17 23:04:35 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.2 2001-08-24 20:39:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -214,6 +214,78 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     "G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called."
 	 << G4endl;
   PrintThings();
+
+  if (polyhedron.GetNoFacets() == 0) return;
+
+  //Assume all facets are convex quadrilaterals.
+  //Draw each G4Facet individually
+  
+  //Get colour, etc..
+  const G4Colour& c = GetColour (polyhedron);
+  
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  switch (drawing_style) {
+  case (G4ViewParameters::hsr):
+    {
+      break;
+    }
+  case (G4ViewParameters::hlr):
+    {
+      break;
+    }
+  case (G4ViewParameters::wireframe):
+    {
+      break;
+    }
+  default:
+    {
+      break;
+    }     
+  }
+
+  //Loop through all the facets...
+  G4bool notLastFace;
+  G4Normal3D SurfaceUnitNormal;
+  do {  // loop over faces...
+
+    //First, find surface normal for the facet...
+    notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
+        
+    //Loop through the four edges of each G4Facet...
+    G4bool notLastEdge;
+    G4Point3D vertex[4];
+    G4int edgeFlag[4], lastEdgeFlag (true);
+    edgeFlag[0] = G4int (true);
+    G4int edgeCount = 0;
+    // glEdgeFlag (GL_TRUE);
+    do {  // loop over edges...
+      notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
+                                              edgeFlag[edgeCount]);
+      // Check to see if edge is visible or not...
+      if (edgeFlag[edgeCount] != lastEdgeFlag) {
+        lastEdgeFlag = edgeFlag[edgeCount];
+        if (edgeFlag[edgeCount]) {
+          // glEdgeFlag (GL_TRUE);
+        } else {
+          // glEdgeFlag (GL_FALSE);
+        }
+      }
+      // glVertex3d (vertex[edgeCount].x(), 
+      //             vertex[edgeCount].y(),
+      //             vertex[edgeCount].z());
+      edgeCount++;
+    } while (notLastEdge);
+
+    // Duplicate last real vertex if necessary to guarantee quadrilateral....
+    while (edgeCount < 4) {
+      vertex[edgeCount] = vertex[edgeCount-1];
+      // glVertex3d (vertex[edgeCount].x(),
+      //             vertex[edgeCount].y(), 
+      //             vertex[edgeCount].z());
+      edgeCount++;
+    }
+
+  } while (notLastFace);  
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
