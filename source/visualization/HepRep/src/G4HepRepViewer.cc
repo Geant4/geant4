@@ -44,7 +44,8 @@ using namespace std;
 #define SDEBUG 1
 
 G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
-        : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name) {
+        : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name),
+        geometryIncluded(false) {
 
 #ifdef SDEBUG
     cout << "G4HepRepViewer::G4HepRepViewer " << name << endl;
@@ -88,7 +89,12 @@ void G4HepRepViewer::DrawView () {
 #ifdef SDEBUG
     cout << "G4HepRepViewer::DrawView" << endl;
 #endif
-    ProcessScene();
+    if (!geometryIncluded) {
+        // draws the geometry
+        NeedKernelVisit();
+        ProcessView();
+        geometryIncluded = true;
+    }
 }
 
 void G4HepRepViewer::ShowView () {
@@ -100,6 +106,7 @@ void G4HepRepViewer::ShowView () {
     G4HepRepSceneHandler* sceneHandler = dynamic_cast<G4HepRepSceneHandler*>(GetSceneHandler());
     if (sceneHandler->closeHepRep()) {
         sceneHandler->openHepRep();
+        geometryIncluded = false;
     }
 }
 
@@ -108,10 +115,4 @@ void G4HepRepViewer::FinishView () {
     cout << "G4HepRepViewer::FinishView" << endl;
 #endif
     G4VViewer::FinishView();
-}
-
-void G4HepRepViewer::ProcessScene() {
-// draws the geometry
-    NeedKernelVisit();
-    ProcessView();
 }

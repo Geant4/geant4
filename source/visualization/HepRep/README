@@ -65,7 +65,17 @@ G4HepRepOutput.heprep.zip, use:
 /vis/open HepRepXML
 
 
-To write 10 events, use:
+(Optional) To write a geometry, use:
+
+/vis/viewer/flush
+
+
+(Optional) To signal a change in geometry (to be written with the next event), use:
+
+/vis/viewer/refresh
+
+
+To write 10 events (and geometries), use:
 
 /run/beamOn 10
 

@@ -239,8 +239,7 @@ bool G4HepRepSceneHandler::closeHepRep() {
 #endif
 
     // add geometry to the heprep
-    G4HepRepViewer* viewer = dynamic_cast<G4HepRepViewer*>(GetCurrentViewer());
-    viewer->ProcessScene();
+    GetCurrentViewer()->DrawView();
 
     // Give this HepRep all of the layer order info for both geometry and event,
     // since these will both end up in a single HepRep.
@@ -273,9 +272,6 @@ bool G4HepRepSceneHandler::closeHepRep() {
 
     if (writeMultipleFiles) closeFile();
 
-#ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::CloseHepRep() end" << endl;
-#endif
     return true;
 }
 
