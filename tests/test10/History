@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2004-11-12 14:42:53 link Exp $
+$Id: History,v 1.11 2004-11-27 18:27:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 13th, 2004 Oliver Link
-- Added G4TwistedBox and G4TwistedTrap in test10
+Nov 13th, 2004 Oliver Link (test10-V06-02-00)
+- Added G4TwistedBox and G4TwistedTrap as test cases also in the
+  default input macros.
 
 Jan 26th, 2003  Gabriele Cosmo (test10-V06-00-00)
 - Added G4Orb, G4Polycone, G4Polyhedra as tested solids.
