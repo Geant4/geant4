@@ -1,12 +1,9 @@
-# Preparing HETC cascade documentation
 all:
-	# make web pages
-	texi2html cascade
-	# make pdf document
-	#	texi2pdf sample #needs pdftex.fmt file
-	# make ps from texinfo file
-	tex cascade
+	latex cascade.tex
+	latex cascade.tex
 	dvips cascade.dvi
-	gv cascade.ps &
+	gv cascade.ps
+html:
+	latex2html cascade.html
 clean:
-	rm *.html *.ps *.dvi *.cp *.cps *.fn *.info *.ky *.log *.pg *.toc *.tp *.vr *.aux	
+	rm *.dvi *.*~ #*# *.log *.aux
