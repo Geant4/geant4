@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.12 2001-10-12 13:10:56 pia Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.13 2002-08-08 16:58:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -80,23 +80,32 @@
 #include "G4ParticleWithCuts.hh"
 #include "G4Ions.hh"
 
+// New Histogramming (from AIDA and Anaphe):
+#include <memory> // for the auto_ptr(T>
 
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+#include "AIDA/IAnalysisFactory.h"
 
-HepTupleManager* hbookManager;
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
+
+#include "hTest/include/G4IonC12.hh"
+#include "hTest/include/G4IonAr40.hh"
+
+#include "G4Timer.hh"
 
 main()
 {
   // ---- HBOOK initialization
 
-  hbookManager = new HBookFile("stop85nuc.paw", 58);
-  assert (hbookManager != 0);
-  
-  // ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<G4endl;
+  G4String hFile = "htest.hbook";
     
   //--------- Materials definition ---------
 
@@ -260,6 +269,16 @@ main()
 
   G4cout << "Fill Hbook!" << G4endl;
 
+    // Creating the analysis factory
+    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+
+    // Creating the tree factory
+    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
+    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+
   G4Material* material ;
  
   G4double minE = 1.0*eV, maxE = 10000.0*MeV, s;
@@ -267,166 +286,166 @@ main()
   G4double tkin;
   s = (log10(maxE)-log10(minE))/num;
 
- HepHistogram* h[71] ;
+  IHistogram1D* h[71] ;
        
   // Test on Stopping Powers for all elements
 
- h[1] = hbookManager->histogram("p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[1] = hf->create1D("1","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[2] =  hbookManager->histogram("p 100 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[2] =  hf->create1D("2","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[3] =  hbookManager->histogram("p 400 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[3] =  hf->create1D("3","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
     
- h[4] =  hbookManager->histogram("p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[4] =  hf->create1D("4","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[5] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-
- h[6] =  hbookManager->histogram("p 40 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[7] =  hbookManager->histogram("p 100 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[8] =  hbookManager->histogram("p 400 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[9] =  hbookManager->histogram("p 1 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[10] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
+ h[5] =  hf->create1D("5","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
 
- h[11] =  hbookManager->histogram("p 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[6] =  hf->create1D("6","p 40 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[12] =  hbookManager->histogram("p 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[7] =  hf->create1D("7","p 100 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[13] =  hbookManager->histogram("p 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[8] =  hf->create1D("8","p 400 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[14] =  hbookManager->histogram("p 1 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[9] =  hf->create1D("9","p 1 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[15] =  hbookManager->histogram("p 4 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[10] =  hf->create1D("10","p 4 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
 
- h[16] =  hbookManager->histogram("He 10 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[11] =  hf->create1D("11","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[17] =  hbookManager->histogram("He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[12] =  hf->create1D("12","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[18] =  hbookManager->histogram("He 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[13] =  hf->create1D("13","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[14] =  hf->create1D("14","p 1 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[15] =  hf->create1D("15","p 4 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+
+ h[16] =  hf->create1D("16","He 10 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[17] =  hf->create1D("17","He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[18] =  hf->create1D("18","He 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
  
- h[19] =  hbookManager->histogram("He 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[19] =  hf->create1D("19","He 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[20] =  hbookManager->histogram("He 1 MeV  (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[20] =  hf->create1D("20","He 1 MeV  (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[21] =  hbookManager->histogram("He 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[21] =  hf->create1D("21","He 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[22] =  hbookManager->histogram("He 10 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[22] =  hf->create1D("22","He 10 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[23] =  hbookManager->histogram("He 40 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[23] =  hf->create1D("23","He 40 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[24] =  hbookManager->histogram("He 100 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[24] =  hf->create1D("24","He 100 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[25] =  hbookManager->histogram("He 400 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[25] =  hf->create1D("25","He 400 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[26] =  hbookManager->histogram("He 1 MeV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[26] =  hf->create1D("26","He 1 MeV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[27] =  hbookManager->histogram("He 4 MeV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[27] =  hf->create1D("27","He 4 MeV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
 
- h[28]= hbookManager->histogram("p   in C (MeV/mm) ICRU49p"
+ h[28]= hf->create1D("28","p   in C (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[29]= hbookManager->histogram("p   in Al (MeV/mm) ICRU49p"
+ h[29]= hf->create1D("29","p   in Al (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[30]= hbookManager->histogram("p   in Si (MeV/mm) ICRU49p"
+ h[30]= hf->create1D("30","p   in Si (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[31]= hbookManager->histogram("p   in Cu (MeV/mm) ICRU49p"
+ h[31]= hf->create1D("31","p   in Cu (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[32]= hbookManager->histogram("p   in Fe (MeV/mm) ICRU49p"
+ h[32]= hf->create1D("32","p   in Fe (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[33]= hbookManager->histogram("p   in Pb (MeV/mm) ICRU49p"
+ h[33]= hf->create1D("33","p   in Pb (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[34]= hbookManager->histogram("p   in C2H6 (MeV/mm) ICRU49p"
+ h[34]= hf->create1D("34","p   in C2H6 (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[35]= hbookManager->histogram("p   in H2O (MeV/mm) ICRU49p"
+ h[35]= hf->create1D("35","p   in H2O (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[36]= hbookManager->histogram("p   in lAr (MeV/mm) ICRU49p"
+ h[36]= hf->create1D("36","p   in lAr (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[37]= hbookManager->histogram("p   in CsI (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
-
-
- h[38]= hbookManager->histogram("p   in C (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[39]= hbookManager->histogram("p   in Al (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[40]= hbookManager->histogram("p   in Si (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[41]= hbookManager->histogram("p   in Cu (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[42]= hbookManager->histogram("p   in Fe (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[43]= hbookManager->histogram("p   in Pb (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[44]= hbookManager->histogram("p   in C2H6 (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[45]= hbookManager->histogram("p   in H2O (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[46]= hbookManager->histogram("p   in lAr (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[47]= hbookManager->histogram("p   in CsI (MeV/mm)Ziegler1985p"
+ h[37]= hf->create1D("37","p   in CsI (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
 
 
- h[48]= hbookManager->histogram("He effective charge for Cu"
+ h[38]= hf->create1D("38","p   in C (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[49]= hbookManager->histogram("C12 effective charge in Cu"
+ h[39]= hf->create1D("39","p   in Al (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[40]= hf->create1D("40","p   in Si (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[41]= hf->create1D("41","p   in Cu (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[42]= hf->create1D("42","p   in Fe (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[43]= hf->create1D("43","p   in Pb (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[44]= hf->create1D("44","p   in C2H6 (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[45]= hf->create1D("45","p   in H2O (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[46]= hf->create1D("46","p   in lAr (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[47]= hf->create1D("47","p   in CsI (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
 
- h[50]= hbookManager->histogram("He in Al (MeV/(mg/cm2)) ICRU49p"
+
+ h[48]= hf->create1D("48","He effective charge for Cu"
                                    ,num,log10(minE),log10(maxE)) ;
- h[51]= hbookManager->histogram("C12 in Al (MeV/(mg/cm2)) ICRU49p"
+ h[49]= hf->create1D("49","C12 effective charge in Cu"
                                    ,num,log10(minE),log10(maxE)) ;
- h[52]= hbookManager->histogram("Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
+
+ h[50]= hf->create1D("50","He in Al (MeV/(mg/cm2)) ICRU49p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[51]= hf->create1D("51","C12 in Al (MeV/(mg/cm2)) ICRU49p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[52]= hf->create1D("52","Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
 
  // Table with the data
- h[53] = hbookManager->histogram("Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[53] = hf->create1D("53","Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[54] =  hbookManager->histogram("Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[54] =  hf->create1D("54","Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
 
- h[55] = hbookManager->histogram("p 40 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[55] = hf->create1D("55","p 40 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[56] =  hbookManager->histogram("p 100 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[56] =  hf->create1D("56","p 100 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[57] =  hbookManager->histogram("p 400 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[57] =  hf->create1D("57","p 400 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;    
- h[58] =  hbookManager->histogram("p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[58] =  hf->create1D("58","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[59] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[59] =  hf->create1D("59","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
 // Histo for Antiproton
  
- h[60]= hbookManager->histogram("pbar   in C (MeV/mm) QAOLoss"
+ h[60]= hf->create1D("60","pbar   in C (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[61]= hbookManager->histogram("pbar   in Al (MeV/mm) QAOLoss"
+ h[61]= hf->create1D("61","pbar   in Al (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[62]= hbookManager->histogram("pbar   in Si (MeV/mm) QAOLoss"
+ h[62]= hf->create1D("62","pbar   in Si (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[63]= hbookManager->histogram("pbar   in Cu (MeV/mm) QAOLoss"
+ h[63]= hf->create1D("63","pbar   in Cu (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[64]= hbookManager->histogram("pbar   in Fe (MeV/mm) QAOLoss"
+ h[64]= hf->create1D("64","pbar   in Fe (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[65]= hbookManager->histogram("pbar   in Pb (MeV/mm) QAOLoss"
+ h[65]= hf->create1D("65","pbar   in Pb (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[66]= hbookManager->histogram("pbar   in C2H6 (MeV/mm) QAOLoss"
+ h[66]= hf->create1D("66","pbar   in C2H6 (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[67]= hbookManager->histogram("pbar   in H2O (MeV/mm) QAOLoss"
+ h[67]= hf->create1D("67","pbar   in H2O (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[68]= hbookManager->histogram("pbar   in lAr (MeV/mm) QAOLoss"
+ h[68]= hf->create1D("68","pbar   in lAr (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[69]= hbookManager->histogram("pbar   in CsI (MeV/mm) QAOLoss"
+ h[69]= hf->create1D("69","pbar   in CsI (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
 
- h[70] = hbookManager->histogram("p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
+ h[70] = hf->create1D("70","p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
                                                   ,92,0.5,92.5) ;
 
  
@@ -448,35 +467,35 @@ main()
     z = G4double(j);
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[1]->accumulate(z,de) ;
+    h[1]->fill(z,de) ;
     de = Z85p->ElectronicStoppingPower(z, tau) ;
-    h[55]->accumulate(z,de) ;
+    h[55]->fill(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
-    h[6]->accumulate(z,de) ;
+    h[6]->fill(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
-    h[11]->accumulate(z,de) ;
+    h[11]->fill(z,de) ;
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[17]->accumulate(z,de) ;
+    h[17]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[23]->accumulate(z,de) ;
+    h[23]->fill(z,de) ;
   }
   tau = 100.0*keV ;
   for ( j=1; j<93; j++)
   { 
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[2]->accumulate(z,de) ;
+    h[2]->fill(z,de) ;
     de = Z85p->ElectronicStoppingPower(z, tau) ;
-    h[56]->accumulate(z,de) ;
+    h[56]->fill(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
-    h[7]->accumulate(z,de) ;
+    h[7]->fill(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
-    h[12]->accumulate(z,de) ;
+    h[12]->fill(z,de) ;
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[18]->accumulate(z,de) ;
+    h[18]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[24]->accumulate(z,de) ;
+    h[24]->fill(z,de) ;
   }
   
   tau = 400.0*keV ;
@@ -484,61 +503,61 @@ main()
   { 
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[3]->accumulate(z,de) ;
+    h[3]->fill(z,de) ;
     de = Z85p->ElectronicStoppingPower(z, tau) ;
-    h[57]->accumulate(z,de) ;
+    h[57]->fill(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
-    h[8]->accumulate(z,de) ;
+    h[8]->fill(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
-    h[13]->accumulate(z,de) ;
+    h[13]->fill(z,de) ;
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[19]->accumulate(z,de) ;
+    h[19]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[25]->accumulate(z,de) ;
+    h[25]->fill(z,de) ;
   }
   tau = 1000.0*keV ;
   for ( j=1; j<93; j++)
   { 
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[4]->accumulate(z,de) ;
+    h[4]->fill(z,de) ;
     de = Z85p->ElectronicStoppingPower(z, tau) ;
-    h[58]->accumulate(z,de) ;
+    h[58]->fill(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
-    h[9]->accumulate(z,de) ;
+    h[9]->fill(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
-    h[14]->accumulate(z,de) ;
+    h[14]->fill(z,de) ;
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[20]->accumulate(z,de) ;
+    h[20]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[26]->accumulate(z,de) ;
+    h[26]->fill(z,de) ;
   }
   tau = 4000*keV ;
   for ( j=1; j<93; j++)
   { 
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[5]->accumulate(z,de) ;
+    h[5]->fill(z,de) ;
     de = Z85p->ElectronicStoppingPower(z, tau) ;
-    h[59]->accumulate(z,de) ;
+    h[59]->fill(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
-    h[10]->accumulate(z,de) ;
+    h[10]->fill(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
-    h[15]->accumulate(z,de) ;
+    h[15]->fill(z,de) ;
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[21]->accumulate(z,de) ;
+    h[21]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[27]->accumulate(z,de) ;
+    h[27]->fill(z,de) ;
   }
   tau = 6.5*MeV ;
   for ( j=1; j<93; j++)
   { 
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
-    h[70]->accumulate(z,de) ;
+    h[70]->fill(z,de) ;
   }
   tau = 10.0*keV ;
   for ( j=1; j<93; j++)
@@ -546,9 +565,9 @@ main()
     z = G4double(j);
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = (Z77He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[16]->accumulate(z,de) ;
+    h[16]->fill(z,de) ;
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
-    h[22]->accumulate(z,de) ;
+    h[22]->fill(z,de) ;
   }
 
   for ( j=1; j<93; j++)
@@ -564,7 +583,7 @@ main()
     28.1, 28.9, 27.3,  26.3, 29.9, 29.1, 28.4, 25.8, 28.0, 24.9,
     27.3, 30.7, 34.3,  35.4, 35.6, 35.5, 39.8, 42.9, 43.7, 44.1,
     42.4, 41.8} ;
-    h[53]->accumulate(double(j),p40[j-1]) ;
+    h[53]->fill(double(j),p40[j-1]) ;
 
     static G4double he40[92] = {
     11.8, 16.7, 21.9,  24.1, 34.7, 36.1, 45.5, 46.1, 45.8, 44.9,
@@ -577,7 +596,7 @@ main()
     119.0, 120.0, 121.0, 122.0, 125.0, 127.0, 128.0, 120.0, 125.0, 128.0,
     136.0, 138.0, 144.0, 148.0, 151.0, 162.0, 166.0, 177.0, 179.0, 183.0, 
     177.0, 176.0 } ;   
-    h[54]->accumulate(double(j),he40[j-1]) ;
+    h[54]->fill(double(j),he40[j-1]) ;
   }
 
   G4cout << "Stopping Power histograms are filled!" << G4endl;
@@ -586,28 +605,28 @@ main()
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[0]->ComputeDEDX(part[0],Graphite,tkin) ;
-    h[28]->accumulate(log10(tkin),de) ;
+    h[28]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Al,tkin) ;
-    h[29]->accumulate(log10(tkin),de) ;
+    h[29]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Si,tkin) ;
-    h[30]->accumulate(log10(tkin),de) ;
+    h[30]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Cu,tkin) ;
-    h[31]->accumulate(log10(tkin),de) ;
+    h[31]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Fe,tkin) ;
-    h[32]->accumulate(log10(tkin),de) ;
+    h[32]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Pb,tkin) ;
-    h[33]->accumulate(log10(tkin),de) ;
+    h[33]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[34]->accumulate(log10(tkin),de) ;
+    h[34]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],water,tkin) ;
     //    de += theNuclearStoppingModel->TheValue(part[1],water,tkin) ;
     //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
-    h[35]->accumulate(log10(tkin),de) ;
+    h[35]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],LAr,tkin) ;
-    h[36]->accumulate(log10(tkin),de) ;
+    h[36]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],csi,tkin) ;
-    h[37]->accumulate(log10(tkin),de) ;
+    h[37]->fill(log10(tkin),de) ;
   }
 
   G4cout << "Proton's dEdx histograms are filled!" << G4endl;
@@ -615,27 +634,27 @@ main()
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[0]->ComputeDEDX(part[1],Graphite,tkin) ;
-    h[60]->accumulate(log10(tkin),de) ;
+    h[60]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Al,tkin) ;
-    h[61]->accumulate(log10(tkin),de) ;
+    h[61]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Si,tkin) ;
-    h[62]->accumulate(log10(tkin),de) ;
+    h[62]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Cu,tkin) ;
-    h[63]->accumulate(log10(tkin),de) ;
+    h[63]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Fe,tkin) ;
-    h[64]->accumulate(log10(tkin),de) ;
+    h[64]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Pb,tkin) ;
-    h[65]->accumulate(log10(tkin),de) ;
+    h[65]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[66]->accumulate(log10(tkin),de) ;
+    h[66]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],water,tkin) ;
     // G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
-    h[67]->accumulate(log10(tkin),de) ;
+    h[67]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],LAr,tkin) ;
-    h[68]->accumulate(log10(tkin),de) ;
+    h[68]->fill(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],csi,tkin) ;
-    h[69]->accumulate(log10(tkin),de) ;
+    h[69]->fill(log10(tkin),de) ;
   }
 
   G4cout << "AntiProton's dEdx histograms are filled!" << G4endl;
@@ -647,21 +666,21 @@ main()
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
     de = theIonEffChargeModel->TheValue(part[3],Cu,tkin) ;
     //  G4cout << "E = " << tkin << "; dedx = " << de << G4endl;
-    h[48]->accumulate(log10(tkin),de) ;
+    h[48]->fill(log10(tkin),de) ;
     de = theIonEffChargeModel->TheValue(part[4],Cu,tkin) ;
-    h[49]->accumulate(log10(tkin),de) ;
+    h[49]->fill(log10(tkin),de) ;
     G4double tRed = tkin * (part[3]->GetPDGMass())/mProt ;
     de = hIon[3]->ComputeDEDX(part[3],Al,tRed) ;
     de += theNuclearStoppingModel->TheValue(part[3],Al,tRed) ;
-    h[50]->accumulate(log10(tkin),de*fact) ;
+    h[50]->fill(log10(tkin),de*fact) ;
     tRed = tkin * (part[4]->GetPDGMass())/mProt ;
     de = hIon[4]->ComputeDEDX(part[4],Al,tRed) ;
     //de += theNuclearStoppingModel->TheValue(part[4],Al,tRed) ;
-    h[51]->accumulate(log10(tkin),de*fact) ;
+    h[51]->fill(log10(tkin),de*fact) ;
     tRed = tkin * (part[5]->GetPDGMass())/mProt ;
     de = hIon[5]->ComputeDEDX(part[5],Al,tRed) ;
     //de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
-    h[52]->accumulate(log10(tkin),de*fact) ;
+    h[52]->fill(log10(tkin),de*fact) ;
   } 
 
   G4cout << "Ions's dEdx histograms are filled!" << G4endl;
@@ -681,27 +700,27 @@ main()
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[7]->ComputeDEDX(part[0],Graphite,tkin) ;
-    h[38]->accumulate(log10(tkin),de) ;
+    h[38]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Al,tkin) ;
-    h[39]->accumulate(log10(tkin),de) ;
+    h[39]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Si,tkin) ;
-    h[40]->accumulate(log10(tkin),de) ;
+    h[40]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Cu,tkin) ;
-    h[41]->accumulate(log10(tkin),de) ;
+    h[41]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Fe,tkin) ;
-    h[42]->accumulate(log10(tkin),de) ;
+    h[42]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Pb,tkin) ;
-    h[43]->accumulate(log10(tkin),de) ;
+    h[43]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[44]->accumulate(log10(tkin),de) ;
+    h[44]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],water,tkin) ;
     //    G4cout << "water:  E = " << tkin << "; dedx = " << de << G4endl;
-    h[45]->accumulate(log10(tkin),de) ;
+    h[45]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],LAr,tkin) ;
-    h[46]->accumulate(log10(tkin),de) ;
+    h[46]->fill(log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],csi,tkin) ;
-    h[47]->accumulate(log10(tkin),de) ;
+    h[47]->fill(log10(tkin),de) ;
   }
  
   //---------------------- Fill Ntuple ------------------------
@@ -761,10 +780,11 @@ main()
   */				      
   //----------- End of work -------------------------------------      
 
-  G4cout << "Save Ntuple and Hbook" << G4endl;  
-  hbookManager->write();
+      G4std::cout << "Committing..." << G4std::endl;
+      tree->commit();
+      G4std::cout << "Closing the tree..." << G4std::endl;
+      tree->close();
 
-  delete hbookManager;
   G4cout << "Ntuple and Hbook are saved" << G4endl;
 
   // delete materials and elements
