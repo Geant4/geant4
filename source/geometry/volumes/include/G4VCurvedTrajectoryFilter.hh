@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.hh,v 1.3 2002-11-19 16:40:09 jacek Exp $
+// $Id: G4VCurvedTrajectoryFilter.hh,v 1.4 2003-02-06 18:53:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,8 +33,8 @@
 // being stored. Defines the compromise between accuracy of
 // representation of the curved trajectory and memory use.
 //
-// Derived classes should implement the filetring algorithm in the
-// method TakeIntermediatePoint.
+// Derived classes should implement the filtering algorithm in the
+// method TakeIntermediatePoint().
 //
 // IMPORTANT: This class heap allocates vectors of auxiliary points,
 // which it does not delete. The vectors must find their way to a
@@ -42,14 +42,9 @@
 // deleting them.
 
 // History
-
-// - Modified: 
-//
-// (jacek 19/11/2002) - Moved identity filter implementation out into
-//                      separate concrete class
 //
 // - First version: Oct 30, 2002  Jacek Generowicz
-
+// ------------------------------------------------------------------------
 
 #ifndef G4VCurvedTrajectoryFilter_hh
 #define G4VCurvedTrajectoryFilter_hh
@@ -58,27 +53,29 @@
 #include "g4std/vector"
 #include "G4TransportationManager.hh"
 
-class G4VCurvedTrajectoryFilter {
-public:
+class G4VCurvedTrajectoryFilter
+{
 
-  G4VCurvedTrajectoryFilter(){};
-  virtual ~G4VCurvedTrajectoryFilter(){};
+public:  // with description
 
-  // Probably do not want these objects to be copied, so make the copy
-  // constructor prvate (jacek 30/10/2002)
+  G4VCurvedTrajectoryFilter();
+  virtual ~G4VCurvedTrajectoryFilter();
+
+    // Probably do not want these objects to be copied,
+    // so make the copy constructor private
   
-  // Each segment stores the auxiliary points of a single step.
   void CreateNewTrajectorySegment( );
+    // Each segment stores the auxiliary points of a single step.
 
-  // Submit intermediate points for the filter to consider keeping or
-  // rejecting.
-  // Derived classes should implement the filtering algorithm in this
-  // method.
   virtual void TakeIntermediatePoint( G4ThreeVector newPoint ) = 0;
-  
+    // Submit intermediate points for the filter to consider keeping or
+    // rejecting. Derived classes should implement the filtering algorithm
+    // in this method.
+
   G4std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
   
 protected:
+
   G4std::vector<G4ThreeVector>* fpFilteredPoints;
 };
 

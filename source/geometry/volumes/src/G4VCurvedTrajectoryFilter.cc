@@ -21,13 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.cc,v 1.3 2002-11-30 17:22:37 stesting Exp $
+// $Id: G4VCurvedTrajectoryFilter.cc,v 1.4 2003-02-06 18:53:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4VCurvedTrajectoryFilter.hh"
 
+G4VCurvedTrajectoryFilter::G4VCurvedTrajectoryFilter()
+  : fpFilteredPoints(0)
+{
+}
+
+G4VCurvedTrajectoryFilter::~G4VCurvedTrajectoryFilter()
+{
+}
+
 G4std::vector<G4ThreeVector>* 
-G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem() {
+G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem()
+{
   G4std::vector<G4ThreeVector>* tmp = fpFilteredPoints;
   // ParticleChangeForTransport invokes this method (via
   // PropagatorInField) at every Step, even if the step did not
@@ -37,17 +47,20 @@ G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem() {
   // responsibility for deleting the vector lies with the
   // SmoothTrajctoryPoint, which is the vector's final destination.)
   // (jacek 08/11/2002)
-  fpFilteredPoints = NULL;
+  fpFilteredPoints = 0;
   return tmp;
 }
 
 void
-G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( ) {
-  if (fpFilteredPoints) {
+G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( )
+{
+  if (fpFilteredPoints)
+  {
     // GimmePoints has not been called (it would have set the
     // pointer to NULL), therefore nobody has taken charge of the
     // points and they will never be deleted!
-    G4cout << "!!!!!!!! Filter: auxliary points are being memory leaked !!!!!" << G4endl;
+    G4cout << "!!!!!!!! Filter: auxiliary points are being memory leaked !!!!!"
+           << G4endl;
   }
   fpFilteredPoints = new G4std::vector<G4ThreeVector>;
 }    

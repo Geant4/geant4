@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.hh,v 1.1 2002-11-19 15:23:24 jacek Exp $
+// $Id: G4IdentityTrajectoryFilter.hh,v 1.2 2003-02-06 18:53:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,27 +37,29 @@
 // for deleting them.
 
 // History
-// - Modified:
+//
 // - First version: Nov 19, 2002  Jacek Generowicz
+// ------------------------------------------------------------------------
 
 #ifndef G4IdentityTrajectoryFilter_hh
 #define G4IdentityTrajectoryFilter_hh
 
-//#include "g4std/vector"
 #include "G4VCurvedTrajectoryFilter.hh"
 
-class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter {
-public:
+class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
+{
 
-  G4IdentityTrajectoryFilter(){};
-  virtual ~G4IdentityTrajectoryFilter(){};
+public:  // with description
 
-  // Probably do not want these objects to be copied, so make the copy
-  // constructor prvate (jacek 30/10/2002)
+  G4IdentityTrajectoryFilter();
+  virtual ~G4IdentityTrajectoryFilter();
 
-  // Submit intermediate points for the filter to consider keeping or
-  // rejecting.
+    // Probably do not want these objects to be copied,
+    // so make the copy constructor private
+
   void TakeIntermediatePoint( G4ThreeVector newPoint );
+    // Submit intermediate points for the filter
+    // to consider keeping or rejecting
 };
 
 #endif  /* End of ifndef G4IdentityTrajectoryFilter_hh */

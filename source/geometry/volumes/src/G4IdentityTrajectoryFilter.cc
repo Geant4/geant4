@@ -21,18 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.cc,v 1.3 2002-11-30 17:22:37 stesting Exp $
+// $Id: G4IdentityTrajectoryFilter.cc,v 1.4 2003-02-06 18:53:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4IdentityTrajectoryFilter.hh"
 
+G4IdentityTrajectoryFilter::G4IdentityTrajectoryFilter()
+{
+}
+
+G4IdentityTrajectoryFilter::~G4IdentityTrajectoryFilter()
+{
+}
+
 void
-G4IdentityTrajectoryFilter::TakeIntermediatePoint( G4ThreeVector newPoint ) {
+G4IdentityTrajectoryFilter::TakeIntermediatePoint( G4ThreeVector newPoint )
+{
   // Just store every single point, initially. (jacek 30/10/2002)
   // Implement more sophisticated filters later.  Copy by value into
   // the vector; the vector will never be copied by value itself. In
   // the final version, will probably want to create the intermediate
   // points at this stage.
   fpFilteredPoints->push_back( newPoint );
-  G4cout << "spong: G4IdentityTrajectoryFilter::TakeIntermediatePoint" << G4endl;
+  G4cout << "spong: G4IdentityTrajectoryFilter::TakeIntermediatePoint"
+         << G4endl;
 }
