@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.91s Real=1.91s Sys=0s
+  User=1.95s Real=1.95s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=40.2593 +- 0.20516  mm  

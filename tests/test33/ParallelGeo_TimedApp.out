@@ -6,46 +6,10 @@
 
 phot:  Total cross sections from Sandia parametrisation. 
 Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
-=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
-  ProcessName: Tst33WeightChangeProcess
-The initial Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   Transportation
-DoIt Vector: 
-   Transportation
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
-GPIL Vector: 
-   Tst33WeightChangeProcess
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   Transportation
-DoIt Vector: 
-   Transportation
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-   Tst33WeightChangeProcess
-================================================
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
   ProcessName: PScoreProcess
 The initial Vectors: 
 GPIL Vector: 
-   Tst33WeightChangeProcess
    Decay
    LCapture
    LFission
@@ -59,10 +23,8 @@ DoIt Vector:
    LFission
    LCapture
    Decay
-   Tst33WeightChangeProcess
 The final Vectors: 
 GPIL Vector: 
-   Tst33WeightChangeProcess
    Decay
    LCapture
    LFission
@@ -78,13 +40,11 @@ DoIt Vector:
    LFission
    LCapture
    Decay
-   Tst33WeightChangeProcess
 ================================================
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
-  ProcessName: ParallelImportanceProcess
+  ProcessName: ParallelWWnTransportProcess
 The initial Vectors: 
 GPIL Vector: 
-   Tst33WeightChangeProcess
    Decay
    LCapture
    LFission
@@ -100,75 +60,25 @@ DoIt Vector:
    LFission
    LCapture
    Decay
-   Tst33WeightChangeProcess
 The final Vectors: 
 GPIL Vector: 
-   Tst33WeightChangeProcess
    Decay
    LCapture
    LFission
    inelastic
    LElastic
    PScoreProcess
-   ParallelImportanceProcess
+   ParallelWWnTransportProcess
    Transportation
 DoIt Vector: 
    Transportation
-   ParallelImportanceProcess
+   ParallelWWnTransportProcess
    PScoreProcess
    LElastic
    inelastic
    LFission
    LCapture
    Decay
-   Tst33WeightChangeProcess
-================================================
-=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
-  ProcessName: WeightCutOffProcess
-The initial Vectors: 
-GPIL Vector: 
-   Tst33WeightChangeProcess
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   ParallelImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   ParallelImportanceProcess
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-   Tst33WeightChangeProcess
-The final Vectors: 
-GPIL Vector: 
-   WeightCutOffProcess
-   Tst33WeightChangeProcess
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   ParallelImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   ParallelImportanceProcess
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-   Tst33WeightChangeProcess
-   WeightCutOffProcess
 ================================================
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -179,114 +89,1620 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins.
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+eIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+eBrem:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+hIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering 
+      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuBrems:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 16384
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1012 (mu)seconds
+MuPairProd:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuIoni:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+MuBrems:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:  
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1044 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.00394979, error= 0.213258, fom*time= 21.9882, time= 1012, n= 246
+    mean= 0.0143903, error= 0.271737, fom*time= 13.5426, time= 1044, n= 127
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |         198 |         202 |          55 |     47.5665 |     8.58128 |     9.33179 |    0.849137 |
-cell_01I1-_rep:0......... |           1 |         254 |         263 |          53 |     50.1713 |     9.31018 |     9.56739 |     0.88466 |
-cell_01_rep:0............ |           1 |         678 |         317 |         148 |     130.638 |     9.15308 |     9.50795 |    0.862625 |
-cell_02I1+_rep:0......... |           2 |         201 |         211 |          66 |      22.827 |     8.50985 |     9.23157 |      0.6794 |
-cell_02I1-_rep:0......... |           2 |         268 |         281 |          64 |     24.9925 |     8.21955 |     9.14356 |    0.769034 |
-cell_02_rep:0............ |           2 |         598 |         367 |         206 |     77.0957 |     8.24302 |     9.06404 |    0.715583 |
-cell_03I1+_rep:0......... |           4 |         233 |         242 |          68 |     10.7201 | 8.58274e-07 |      8.9678 |    0.667939 |
-cell_03I1-_rep:0......... |           4 |         313 |         321 |          74 |     12.4347 | 3.34486e-06 |     9.02457 |     0.66469 |
-cell_03_rep:0............ |           4 |         691 |         403 |         236 |     39.8488 | 1.36601e-06 |     8.80758 |    0.657195 |
-cell_04I1+_rep:0......... |           8 |         239 |         250 |          83 |     6.19293 | 2.10562e-06 |     8.62421 |    0.630492 |
-cell_04I1-_rep:0......... |           8 |         341 |         354 |         108 |      8.0424 |     7.58899 |     8.87357 |    0.618372 |
-cell_04_rep:0............ |           8 |         739 |         466 |         298 |      22.197 | 3.02955e-06 |     8.70571 |    0.628352 |
-cell_05I1+_rep:0......... |          16 |         252 |         256 |          88 |     2.98166 |      5.2182 |     7.90882 |    0.546299 |
-cell_05I1-_rep:0......... |          16 |         346 |         351 |         113 |     4.00138 |     6.18505 |     8.38269 |    0.539351 |
-cell_05_rep:0............ |          16 |         769 |         463 |         354 |     12.4779 |  9.4105e-06 |     8.15402 |     0.55496 |
-cell_06I1+_rep:0......... |          32 |         261 |         269 |          88 |     1.35116 |     5.44558 |     7.58908 |    0.498876 |
-cell_06I1-_rep:0......... |          32 |         368 |         380 |         130 |     2.21352 |     5.32439 |     7.74201 |    0.532115 |
-cell_06_rep:0............ |          32 |         815 |         498 |         387 |     6.20446 |      5.3106 |     7.63159 |    0.509091 |
-cell_07I1+_rep:0......... |          64 |         253 |         264 |          92 |    0.662004 |     5.81116 |     7.73456 |     0.46481 |
-cell_07I1-_rep:0......... |          64 |         361 |         371 |         121 |    0.916992 |      5.9045 |     7.87724 |    0.472794 |
-cell_07_rep:0............ |          64 |         819 |         538 |         438 |     3.20072 |     5.64625 |     7.49499 |    0.468203 |
-cell_08I1+_rep:0......... |         128 |         252 |         261 |          97 |    0.340221 |     5.25834 |     7.29568 |    0.450643 |
-cell_08I1-_rep:0......... |         128 |         377 |         386 |         116 |    0.406844 |     6.49667 |     7.82842 |    0.452486 |
-cell_08_rep:0............ |         128 |         851 |         575 |         476 |     1.71501 |     5.50923 |     7.26287 |    0.464395 |
-cell_09I1+_rep:0......... |         256 |         249 |         258 |          97 |     0.16946 |     5.15825 |      7.1858 |    0.454037 |
-cell_09I1-_rep:0......... |         256 |         343 |         353 |         118 |    0.214405 |     5.69576 |     7.26419 |    0.455822 |
-cell_09_rep:0............ |         256 |         810 |         583 |         564 |     1.02006 |     5.26532 |     6.88741 |     0.46455 |
-cell_10I1+_rep:0......... |         512 |         256 |         257 |          90 |   0.0817653 |      5.4242 |     6.80843 |    0.453834 |
-cell_10I1-_rep:0......... |         512 |         362 |         373 |         157 |    0.137237 |     4.96315 |     6.94683 |    0.456405 |
-cell_10_rep:0............ |         512 |         858 |         606 |         635 |    0.581681 | 5.61331e-06 |      6.4696 |    0.465038 |
-cell_11I1+_rep:0......... |        1024 |         243 |         252 |          90 |    0.036835 |     5.30582 |      7.1478 |    0.424052 |
-cell_11I1-_rep:0......... |        1024 |         339 |         348 |         114 |   0.0483275 |     5.56876 |      7.2513 |    0.428923 |
-cell_11_rep:0............ |        1024 |         834 |         656 |         715 |    0.315597 |     4.95304 |     6.53033 |    0.454524 |
-cell_12I1+_rep:0......... |        2048 |         217 |         227 |          90 |   0.0175946 |     5.06137 |     6.27995 |    0.406097 |
-cell_12I1-_rep:0......... |        2048 |         336 |         342 |         135 |   0.0270804 |     4.97076 |     6.58399 |    0.421339 |
-cell_12_rep:0............ |        2048 |         819 |         670 |         795 |    0.172733 | 1.15596e-05 |     6.08112 |    0.449139 |
-cell_13I1+_rep:0......... |        4096 |         206 |         211 |          78 |  0.00797401 |     4.42011 |      6.1507 |    0.425404 |
-cell_13I1-_rep:0......... |        4096 |         290 |         296 |         123 |   0.0124857 |      4.4906 |     6.00811 |    0.421016 |
-cell_13_rep:0............ |        4096 |         741 |         623 |         732 |   0.0804593 |     4.49949 |     6.04136 |    0.451196 |
-cell_14I1+_rep:0......... |        8192 |         169 |         173 |          54 |  0.00288709 |     5.05543 |      6.6587 |    0.421854 |
-cell_14I1-_rep:0......... |        8192 |         262 |         265 |         103 |  0.00534671 |     5.11139 |     6.59355 |    0.425049 |
-cell_14_rep:0............ |        8192 |         682 |         616 |         683 |   0.0373069 | 9.58006e-05 |     6.26938 |    0.446094 |
-cell_15I1+_rep:0......... |       16384 |         150 |         151 |          45 |  0.00116722 |     5.74538 |      6.7141 |    0.424552 |
-cell_15I1-_rep:0......... |       16384 |         228 |         233 |          94 |  0.00229053 |     4.66482 |     6.46722 |    0.423378 |
-cell_15_rep:0............ |       16384 |         654 |         642 |         752 |   0.0201486 | 8.59894e-06 |      6.2573 |    0.446882 |
-cell_16I1+_rep:0......... |       32768 |         155 |         155 |          69 | 0.000920988 |     5.09038 |     6.12089 |    0.438551 |
-cell_16I1-_rep:0......... |       32768 |         232 |         238 |         100 |  0.00135616 |     5.01659 |     6.28215 |    0.436923 |
-cell_16_rep:0............ |       32768 |         661 |         673 |         810 |   0.0110137 |      4.7601 |      6.1822 |    0.451638 |
-cell_17I1+_rep:0......... |       65536 |         132 |         139 |          63 | 0.000440026 |     3.97137 |     5.47964 |    0.442905 |
-cell_17I1-_rep:0......... |       65536 |         212 |         212 |          73 |  0.00050391 |     4.36753 |     5.88497 |    0.441429 |
-cell_17_rep:0............ |       65536 |         609 |         642 |         802 |  0.00543791 |      4.3656 |     5.86298 |    0.451331 |
-cell_18I1+_rep:0......... |      131072 |         117 |         116 |          45 | 0.000153258 |     2.28958 |     5.32147 |    0.436536 |
-cell_18I1-_rep:0......... |      131072 |         178 |         179 |          82 | 0.000277649 |     4.28887 |     5.68129 |     0.43437 |
-cell_18_rep:0............ |      131072 |         523 |         577 |         766 |  0.00263489 |     3.78017 |     5.60102 |    0.443778 |
-cell_19_rep:0............ |      262144 |         247 |         247 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |         103 |         105 |          31 |          31 |     8.01164 |     8.99629 |           1 |
+cell_01I1-_rep:0......... |           1 |         130 |         131 |          40 |          40 |     8.53461 |     9.35077 |           1 |
+cell_01_rep:0............ |           1 |         353 |         166 |          90 |          90 |     8.36225 |     9.17067 |           1 |
+cell_02I1+_rep:0......... |           1 |         125 |         127 |          54 |          27 |     6.46797 |     8.24483 |         0.5 |
+cell_02I1-_rep:0......... |           1 |         160 |         163 |          70 |          35 |     5.84131 |     8.09308 |         0.5 |
+cell_02_rep:0............ |           1 |         348 |         212 |         153 |        76.5 |     6.46965 |     8.19746 |         0.5 |
+cell_03I1+_rep:0......... |           1 |         149 |         155 |          54 |        13.5 |      6.8224 |     8.16641 |        0.25 |
+cell_03I1-_rep:0......... |           1 |         180 |         182 |          53 |       13.25 |     7.08057 |     8.37326 |        0.25 |
+cell_03_rep:0............ |           1 |         408 |         226 |         165 |       41.25 |     6.37495 |     8.10485 |        0.25 |
+cell_04I1+_rep:0......... |           1 |         166 |         176 |          69 |       8.625 |     5.91214 |     7.83679 |       0.125 |
+cell_04I1-_rep:0......... |           1 |         225 |         231 |          73 |       9.125 |     6.50493 |     8.17596 |       0.125 |
+cell_04_rep:0............ |           1 |         490 |         299 |         249 |      31.125 |     5.76706 |     7.71649 |       0.125 |
+cell_05I1+_rep:0......... |           1 |         173 |         176 |          69 |      4.3125 |     5.61644 |     7.48946 |      0.0625 |
+cell_05I1-_rep:0......... |           1 |         234 |         234 |          73 |      4.5625 |     6.73391 |     8.00613 |      0.0625 |
+cell_05_rep:0............ |           1 |         510 |         315 |         290 |      18.125 |      5.7473 |     7.30205 |      0.0625 |
+cell_06I1+_rep:0......... |           1 |         166 |         169 |          54 |      1.6875 |     6.17551 |     7.79723 |     0.03125 |
+cell_06I1-_rep:0......... |           1 |         236 |         242 |         105 |     3.28125 |     5.41664 |     7.47943 |     0.03125 |
+cell_06_rep:0............ |           1 |         518 |         333 |         294 |      9.1875 |     4.91695 |     7.17347 |     0.03125 |
+cell_07I1+_rep:0......... |           1 |         168 |         170 |          58 |     0.90625 |     5.36941 |     7.12412 |    0.015625 |
+cell_07I1-_rep:0......... |           1 |         228 |         234 |          86 |     1.34375 |     5.79945 |     7.35165 |    0.015625 |
+cell_07_rep:0............ |           1 |         524 |         345 |         325 |     5.07812 |     4.32245 |     6.60331 |    0.015625 |
+cell_08I1+_rep:0......... |           1 |         169 |         170 |          47 |    0.367188 |     5.21591 |     7.17105 |   0.0078125 |
+cell_08I1-_rep:0......... |           1 |         242 |         252 |          88 |      0.6875 |     4.77538 |     7.02836 |   0.0078125 |
+cell_08_rep:0............ |           1 |         563 |         373 |         377 |     2.94531 |      4.1422 |     6.40785 |   0.0078125 |
+cell_09I1+_rep:0......... |           1 |         192 |         193 |          84 |    0.328125 |     4.72065 |     6.81657 |  0.00390625 |
+cell_09I1-_rep:0......... |           1 |         256 |         265 |          87 |    0.339844 |     5.57039 |     7.35992 |  0.00390625 |
+cell_09_rep:0............ |           1 |         610 |         413 |         462 |     1.80469 |     3.86328 |     6.22879 |  0.00390625 |
+cell_10I1+_rep:0......... |           1 |         181 |         191 |          86 |    0.167969 |      5.0744 |      6.8601 |  0.00195312 |
+cell_10I1-_rep:0......... |           1 |         256 |         263 |         104 |    0.203125 |     4.67972 |     6.88622 |  0.00195312 |
+cell_10_rep:0............ |           1 |         627 |         448 |         511 |    0.998047 |     3.52303 |     5.89031 |  0.00195312 |
+cell_11I1+_rep:0......... |           1 |         177 |         184 |          72 |   0.0703125 |     5.78085 |     7.06993 | 0.000976562 |
+cell_11I1-_rep:0......... |           1 |         268 |         272 |         112 |    0.109375 |     5.29604 |     6.85211 | 0.000976562 |
+cell_11_rep:0............ |           1 |         650 |         506 |         661 |    0.645508 |     3.54447 |     5.72468 | 0.000976562 |
+cell_12I1+_rep:0......... |           1 |         176 |         176 |          83 |   0.0405273 |     3.17668 |     6.32571 | 0.000488281 |
+cell_12I1-_rep:0......... |           1 |         240 |         249 |         108 |   0.0527344 |     4.55015 |     6.50878 | 0.000488281 |
+cell_12_rep:0............ |           1 |         630 |         516 |         666 |    0.325195 |     3.37365 |     5.76249 | 0.000488281 |
+cell_13I1+_rep:0......... |           1 |         175 |         178 |          67 |   0.0163574 |     4.22903 |     6.63095 | 0.000244141 |
+cell_13I1-_rep:0......... |           1 |         233 |         237 |          77 |   0.0187988 |     3.43631 |     6.70592 | 0.000244141 |
+cell_13_rep:0............ |           1 |         628 |         523 |         713 |    0.174072 |     2.61788 |      5.5741 | 0.000244141 |
+cell_14I1+_rep:0......... |           1 |         191 |         194 |          83 |   0.0101318 |     5.13618 |      6.5569 |  0.00012207 |
+cell_14I1-_rep:0......... |           1 |         256 |         266 |         114 |    0.013916 |     4.80221 |      6.4114 |  0.00012207 |
+cell_14_rep:0............ |           1 |         698 |         562 |         707 |   0.0863037 |     3.87948 |     5.57724 |  0.00012207 |
+cell_15I1+_rep:0......... |           1 |         193 |         199 |          74 |   0.0045166 |     4.39152 |     5.86009 | 6.10352e-05 |
+cell_15I1-_rep:0......... |           1 |         261 |         268 |         102 |  0.00622559 |     4.51084 |     6.08798 | 6.10352e-05 |
+cell_15_rep:0............ |           1 |         723 |         621 |         830 |   0.0506592 |     3.53515 |     5.18331 | 6.10352e-05 |
+cell_16I1+_rep:0......... |           1 |         192 |         184 |          95 |  0.00289917 |     3.71117 |      5.4058 | 3.05176e-05 |
+cell_16I1-_rep:0......... |           1 |         264 |         268 |         120 |  0.00366211 |     4.31345 |     5.83894 | 3.05176e-05 |
+cell_16_rep:0............ |           1 |         724 |         633 |         895 |   0.0273132 |     3.17558 |     4.91379 | 3.05176e-05 |
+cell_17I1+_rep:0......... |           1 |         188 |         191 |          86 |  0.00131226 |     2.94611 |     4.92137 | 1.52588e-05 |
+cell_17I1-_rep:0......... |           1 |         263 |         257 |         110 |  0.00167847 |     3.47984 |     5.42072 | 1.52588e-05 |
+cell_17_rep:0............ |           1 |         720 |         615 |         915 |   0.0139618 |     2.81129 |     4.64367 | 1.52588e-05 |
+cell_18I1+_rep:0......... |           1 |         177 |         184 |          83 |  0.00063324 |     2.25417 |      4.4067 | 7.62939e-06 |
+cell_18I1-_rep:0......... |           1 |         255 |         260 |         120 | 0.000915527 | 7.71041e-07 |     4.84386 | 7.62939e-06 |
+cell_18_rep:0............ |           1 |         676 |         626 |         993 |  0.00757599 | 7.23235e-05 |     4.32945 | 7.62939e-06 |
+cell_19_rep:0............ |           1 |         278 |         278 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelWWnTransportProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWWnTransportProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWWnTransportProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelWWnTransportProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWWnTransportProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWWnTransportProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1002 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.0239486, error= 0.288543, fom*time= 12.011, time= 1002, n= 222
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01I1+_rep:0......... |           1 |         174 |         177 |          42 |          42 |     8.71216 |     9.18386 |           1 |
+cell_01I1-_rep:0......... |           1 |         231 |         239 |          67 |          67 |     7.47435 |     9.12295 |           1 |
+cell_01_rep:0............ |           1 |         606 |         273 |         170 |         170 |       7.982 |     9.03971 |     1.01777 |
+cell_02I1+_rep:0......... |           1 |         120 |         121 |          40 |        40.5 |     7.33693 |     8.34659 |     1.00052 |
+cell_02I1-_rep:0......... |           1 |         149 |         151 |          44 |          44 | 7.62766e-07 |     8.76407 |           1 |
+cell_02_rep:0............ |           1 |         401 |         192 |         140 |         140 | 1.60012e-06 |      8.5682 |    0.998299 |
+cell_03I1+_rep:0......... |           1 |          75 |          76 |          29 |       25.25 |     6.95221 |     8.22713 |    0.869725 |
+cell_03I1-_rep:0......... |           1 |          91 |          96 |          31 |      30.375 |     7.07853 |     8.35544 |    0.929683 |
+cell_03_rep:0............ |           1 |         257 |         120 |          99 |      87.125 |     6.28601 |     7.81583 |    0.887908 |
+cell_04I1+_rep:0......... |           1 |          93 |          93 |          43 |       14.25 |     4.90781 |     7.03904 |    0.358031 |
+cell_04I1-_rep:0......... |           1 |         135 |         135 |          53 |     19.6875 |     5.87353 |     7.42556 |    0.365881 |
+cell_04_rep:0............ |           1 |         274 |         171 |         157 |     53.8125 |     5.97593 |     7.54127 |    0.354113 |
+cell_05I1+_rep:0......... |           1 |         100 |         101 |          38 |      6.1875 |     6.67436 |      7.9023 |     0.17372 |
+cell_05I1-_rep:0......... |           1 |         160 |         157 |          71 |     13.0312 |     5.67741 |     7.34825 |    0.181566 |
+cell_05_rep:0............ |           1 |         321 |         195 |         169 |     29.1562 |     5.84409 |      7.3834 |    0.175997 |
+cell_06I1+_rep:0......... |           1 |         117 |         124 |          63 |     5.01562 |     6.23448 |     7.71727 |   0.0868352 |
+cell_06I1-_rep:0......... |           1 |         147 |         147 |          45 |     4.17188 |     6.42054 |     8.03753 |   0.0914171 |
+cell_06_rep:0............ |           1 |         350 |         215 |         170 |          15 |     5.38511 |     7.17105 |   0.0886837 |
+cell_07I1+_rep:0......... |           1 |         142 |         144 |          55 |     2.15625 |     5.13956 |     6.86543 |   0.0405991 |
+cell_07I1-_rep:0......... |           1 |         170 |         177 |          62 |      2.8125 |      5.5519 |     7.32912 |   0.0453987 |
+cell_07_rep:0............ |           1 |         427 |         265 |         247 |     10.8281 | 1.92731e-05 |     7.05663 |   0.0436905 |
+cell_08I1+_rep:0......... |           1 |         156 |         155 |          80 |     1.60547 |     4.88126 |     7.20554 |   0.0213576 |
+cell_08I1-_rep:0......... |           1 |         200 |         203 |          98 |     2.19141 |  1.3501e-06 |      6.7641 |   0.0223797 |
+cell_08_rep:0............ |           1 |         477 |         315 |         347 |     7.25391 | 2.40647e-06 |     6.56188 |   0.0213251 |
+cell_09I1+_rep:0......... |           1 |         147 |         156 |          62 |    0.708984 |     2.93584 |     6.78884 |   0.0107705 |
+cell_09I1-_rep:0......... |           1 |         214 |         216 |          91 |     1.03125 |     5.15607 |     7.18941 |   0.0115881 |
+cell_09_rep:0............ |           1 |         479 |         345 |         372 |     4.14258 |     3.90434 |     6.71241 |    0.011111 |
+cell_10I1+_rep:0......... |           1 |         163 |         165 |          66 |    0.336914 |    0.931899 |     6.16896 |   0.0052618 |
+cell_10I1-_rep:0......... |           1 |         218 |         225 |         102 |    0.577148 |       1.099 |     6.42562 |  0.00564105 |
+cell_10_rep:0............ |           1 |         525 |         326 |         447 |     2.44336 |     1.31384 |     5.75558 |  0.00539324 |
+cell_11I1+_rep:0......... |           1 |         163 |         168 |          71 |      0.1875 |     4.38036 |     6.36554 |  0.00269479 |
+cell_11I1-_rep:0......... |           1 |         224 |         220 |          95 |    0.270996 |     4.42602 |     6.32105 |  0.00287793 |
+cell_11_rep:0............ |           1 |         560 |         364 |         461 |     1.24805 |       1.333 |     5.50997 |  0.00276813 |
+cell_12I1+_rep:0......... |           1 |         180 |         179 |          91 |    0.122314 |     3.06976 |     5.50508 |   0.0013207 |
+cell_12I1-_rep:0......... |           1 |         251 |         249 |         137 |    0.191162 |     3.26414 |     5.52384 |  0.00140131 |
+cell_12_rep:0............ |           1 |         626 |         436 |         645 |    0.878906 |     2.56625 |     4.94759 |  0.00134244 |
+cell_13I1+_rep:0......... |           1 |         200 |         201 |         119 |   0.0769043 |     2.48472 |     5.02908 | 0.000656794 |
+cell_13I1-_rep:0......... |           1 |         258 |         253 |         122 |    0.086792 |      3.0421 |     5.39581 | 0.000707104 |
+cell_13_rep:0............ |           1 |         659 |         464 |         712 |    0.479004 |     2.72623 |     4.58217 | 0.000672902 |
+cell_14I1+_rep:0......... |           1 |         203 |         196 |          93 |   0.0305786 |     2.23278 |     4.81696 | 0.000330752 |
+cell_14I1-_rep:0......... |           1 |         261 |         265 |         139 |   0.0492554 |     2.42381 |     5.26504 | 0.000357372 |
+cell_14_rep:0............ |           1 |         679 |         471 |         767 |    0.259644 |     1.72053 |     4.52173 | 0.000341551 |
+cell_15I1+_rep:0......... |           1 |         235 |         226 |         132 |   0.0224304 |     2.78716 |     5.04737 | 0.000170747 |
+cell_15I1-_rep:0......... |           1 |         293 |         283 |         152 |   0.0267334 |     2.26916 |     4.78668 | 0.000180045 |
+cell_15_rep:0............ |           1 |         763 |         515 |         870 |    0.151062 |     1.78177 |     4.20262 | 0.000172952 |
+cell_16I1+_rep:0......... |           1 |         249 |         249 |         129 |   0.0108032 |      3.0913 |     5.05744 | 8.34364e-05 |
+cell_16I1-_rep:0......... |           1 |         319 |         318 |         165 |   0.0144196 |     2.71158 |     5.10124 | 8.81927e-05 |
+cell_16_rep:0............ |           1 |         818 |         570 |         958 |   0.0812531 |     1.56079 |     4.30081 | 8.53824e-05 |
+cell_17I1+_rep:0......... |           1 |         249 |         248 |         136 |  0.00576782 |     3.27832 |      4.8328 | 4.26982e-05 |
+cell_17I1-_rep:0......... |           1 |         345 |         340 |         180 |   0.0079422 |     3.33781 |     5.17668 | 4.35032e-05 |
+cell_17_rep:0............ |           1 |         865 |         642 |        1108 |   0.0468979 |     1.90252 |     4.15861 | 4.25665e-05 |
+cell_18I1+_rep:0......... |           1 |         219 |         223 |         127 |   0.0029068 |      2.8308 |     4.46393 | 2.28882e-05 |
+cell_18I1-_rep:0......... |           1 |         345 |         337 |         183 |  0.00418854 | 1.04662e-06 |     4.86413 | 2.28882e-05 |
+cell_18_rep:0............ |           1 |         817 |         664 |        1176 |   0.0269165 | 7.15023e-06 |     3.94877 | 2.28882e-05 |
+cell_19_rep:0............ |           1 |         301 |         301 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelWWnTransportProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWWnTransportProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWWnTransportProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelWeightWindowProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelTransport
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1737 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 1.74556, error= 0.766542, fom*time= 1.70188, time= 1737, n= 45
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01I1+_rep:0......... |           1 |          39 |          40 |          14 |      13.375 |     9.56845 |     9.61926 |    0.988214 |
+cell_01I1-_rep:0......... |           1 |          48 |          51 |          13 |          13 |     9.46785 |     9.52404 |           1 |
+cell_01_rep:0............ |           1 |         131 |          56 |          30 |          30 |     9.60262 |     9.64851 |    0.995531 |
+cell_02I1+_rep:0......... |           1 |          24 |          26 |           7 |           7 |       7.613 |     8.96619 |    0.975794 |
+cell_02I1-_rep:0......... |           1 |          32 |          33 |          15 |          15 |      6.7838 |     9.16018 |    0.979898 |
+cell_02_rep:0............ |           1 |          83 |          38 |          23 |          23 |     8.12771 |     9.25053 |    0.975253 |
+cell_03I1+_rep:0......... |           1 |          15 |          14 |           4 |           4 |     7.28272 |     7.85901 |     0.94899 |
+cell_03I1-_rep:0......... |           1 |          21 |          23 |           9 |           9 |     8.86306 |     9.18112 |    0.978613 |
+cell_03_rep:0............ |           1 |          55 |          24 |          23 |      22.375 |     8.31366 |     8.89757 |    0.964548 |
+cell_04I1+_rep:0......... |           1 |          15 |          16 |           5 |         1.7 |     9.34048 |     9.38074 |     0.48447 |
+cell_04I1-_rep:0......... |           1 |          11 |          11 |           4 |         1.5 |     9.08772 |     9.11694 |     0.61705 |
+cell_04_rep:0............ |           1 |          34 |          22 |           8 |      2.8125 |     9.29952 |     9.33552 |    0.613831 |
+cell_05I1+_rep:0......... |           1 |          13 |          19 |           8 |       1.525 |     9.40725 |     9.44787 |    0.255993 |
+cell_05I1-_rep:0......... |           1 |          16 |          21 |          10 |         1.9 |     8.94007 |     9.03609 |    0.299023 |
+cell_05_rep:0............ |           1 |          44 |          32 |          12 |     2.04062 |     9.46349 |     9.49955 |    0.310792 |
+cell_06I1+_rep:0......... |           1 |          21 |          22 |           4 |    0.328125 |     9.57889 |     9.60654 |    0.136754 |
+cell_06I1-_rep:0......... |           1 |          20 |          25 |          11 |    0.960938 |     9.38838 |     9.44772 |    0.150566 |
+cell_06_rep:0............ |           1 |          59 |          36 |          17 |     1.46484 |     9.36996 |       9.423 |    0.135591 |
+cell_07I1+_rep:0......... |           1 |          42 |          42 |           9 |    0.304688 |      8.1893 |     8.78429 |   0.0585746 |
+cell_07I1-_rep:0......... |           1 |          27 |          42 |          10 |    0.621875 |     8.30655 |      8.8172 |   0.0814562 |
+cell_07_rep:0............ |           1 |         101 |          61 |          34 |     1.25977 |     8.16147 |     8.75951 |   0.0633312 |
+cell_08I1+_rep:0......... |           1 |          58 |          63 |          24 |    0.533203 |     7.71232 |      8.3958 |   0.0312357 |
+cell_08I1-_rep:0......... |           1 |          51 |          58 |          15 |    0.331055 |     8.06662 |     8.65499 |   0.0380797 |
+cell_08_rep:0............ |           1 |         154 |          96 |          68 |     1.46867 | 5.02893e-06 |     8.20082 |   0.0314321 |
+cell_09I1+_rep:0......... |           1 |          75 |          90 |          28 |    0.310913 | 4.49455e-05 |     8.43001 |   0.0159167 |
+cell_09I1-_rep:0......... |           1 |          60 |          74 |          24 |    0.272461 | 3.65126e-06 |     8.43722 |   0.0217331 |
+cell_09_rep:0............ |           1 |         214 |         140 |         110 |     1.11694 |   9.039e-07 |     8.04301 |    0.016465 |
+cell_10I1+_rep:0......... |           1 |         111 |         137 |          51 |    0.326116 |     6.41411 |     8.51058 |  0.00812092 |
+cell_10I1-_rep:0......... |           1 |          95 |         117 |          43 |    0.244516 |     8.34836 |     9.00492 |   0.0110168 |
+cell_10_rep:0............ |           1 |         325 |         208 |         165 |    0.809392 |     7.37715 |     8.48092 |  0.00856877 |
+cell_11I1+_rep:0......... |           1 |         139 |         162 |          56 |    0.140568 |     6.97513 |     8.56806 |  0.00490395 |
+cell_11I1-_rep:0......... |           1 |         140 |         153 |          43 |    0.116737 |     7.48046 |     8.67488 |  0.00554579 |
+cell_11_rep:0............ |           1 |         412 |         257 |         201 |    0.564212 |     6.82824 |     8.32255 |  0.00472072 |
+cell_12I1+_rep:0......... |           1 |         223 |         251 |          80 |    0.119144 | 0.000455096 |     8.66042 |  0.00231831 |
+cell_12I1-_rep:0......... |           1 |         181 |         230 |          96 |    0.149869 |     6.29751 |     8.16528 |  0.00295251 |
+cell_12_rep:0............ |           1 |         603 |         414 |         325 |    0.475717 | 1.01472e-05 |     8.32178 |  0.00238884 |
+cell_13I1+_rep:0......... |           1 |         354 |         414 |         150 |     0.10457 |     6.70979 |      8.7078 |  0.00104661 |
+cell_13I1-_rep:0......... |           1 |         289 |         372 |         122 |   0.0885231 | 2.84289e-06 |     8.71571 |  0.00137681 |
+cell_13_rep:0............ |           1 |         988 |         662 |         469 |    0.335924 | 7.56461e-06 |       8.398 |  0.00112525 |
+cell_14I1+_rep:0......... |           1 |         564 |         606 |         212 |    0.068974 |       6.873 |     8.71589 | 0.000503533 |
+cell_14I1-_rep:0......... |           1 |         463 |         560 |         202 |   0.0708572 |     6.43038 |     8.53936 | 0.000665351 |
+cell_14_rep:0............ |           1 |        1543 |        1039 |         849 |    0.279858 | 9.56795e-05 |     8.26289 | 0.000559378 |
+cell_15I1+_rep:0......... |           1 |         793 |         905 |         303 |   0.0518083 |      6.8467 |     8.73654 |  0.00025945 |
+cell_15I1-_rep:0......... |           1 |         690 |         861 |         302 |    0.058987 |      6.4147 |     8.66033 | 0.000328196 |
+cell_15_rep:0............ |           1 |        2300 |        1531 |        1216 |    0.206697 |     5.73592 |     8.24324 | 0.000274794 |
+cell_16I1+_rep:0......... |           1 |        1228 |        1388 |         440 |   0.0383568 |     6.69032 |     8.75904 | 0.000128211 |
+cell_16I1-_rep:0......... |           1 |        1014 |        1255 |         434 |   0.0391546 |     6.37873 |     8.69784 | 0.000169111 |
+cell_16_rep:0............ |           1 |        3395 |        2290 |        1821 |     0.16014 |     5.61574 |     8.20937 | 0.000137382 |
+cell_17I1+_rep:0......... |           1 |        1673 |        1906 |         642 |    0.029269 | 7.66475e-06 |     8.81067 |  6.7923e-05 |
+cell_17I1-_rep:0......... |           1 |        1468 |        1809 |         610 |   0.0293105 |     6.80292 |     8.72692 | 8.49629e-05 |
+cell_17_rep:0............ |           1 |        4747 |        3249 |        2609 |    0.117451 | 2.33067e-05 |     8.17923 | 7.19205e-05 |
+cell_18I1+_rep:0......... |           1 |        2194 |        2563 |         762 |    0.018158 | 1.05325e-05 |     8.87081 | 3.63543e-05 |
+cell_18I1-_rep:0......... |           1 |        1898 |        2466 |         688 |   0.0165532 |     7.36029 |      8.9063 | 4.57479e-05 |
+cell_18_rep:0............ |           1 |        6161 |        4307 |        3023 |   0.0720348 | 4.37437e-05 |     8.42955 | 3.93946e-05 |
+cell_19_rep:0............ |           1 |        2416 |        2416 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelTransport, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelWeightWindowProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelWeightWindowProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelTransport
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1004 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.019974, error= 0.280476, fom*time= 12.7119, time= 1004, n= 265
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01I1+_rep:0......... |           1 |         238 |         247 |          66 |          66 |     8.77772 |     9.12994 |           1 |
+cell_01I1-_rep:0......... |           1 |         283 |         292 |          67 |          67 |     9.08436 |     9.41848 |           1 |
+cell_01_rep:0............ |           1 |         779 |         347 |         175 |         175 |     8.88478 |     9.27477 |           1 |
+cell_02I1+_rep:0......... |           1 |         124 |         126 |          35 |          35 |     7.54421 |     8.66293 |           1 |
+cell_02I1-_rep:0......... |           1 |         182 |         187 |          75 |          75 |     6.30078 |     8.67049 |           1 |
+cell_02_rep:0............ |           1 |         476 |         231 |         141 |         141 |     7.68427 |     8.77794 |           1 |
+cell_03I1+_rep:0......... |           1 |          83 |          85 |          25 |      20.625 |     7.81745 |     8.71212 |    0.880382 |
+cell_03I1-_rep:0......... |           1 |         112 |         115 |          42 |       38.25 |     7.06183 |      8.5324 |    0.898254 |
+cell_03_rep:0............ |           1 |         301 |         136 |          98 |          78 |     7.71059 |      8.7301 |    0.893808 |
+cell_04I1+_rep:0......... |           1 |         102 |         105 |          39 |     13.3125 |     7.05075 |      8.3694 |    0.351488 |
+cell_04I1-_rep:0......... |           1 |         146 |         149 |          49 |       17.25 |     7.15244 |     8.19755 |    0.360873 |
+cell_04_rep:0............ |           1 |         297 |         205 |         143 |     51.1875 |     7.40541 |     8.43986 |    0.354952 |
+cell_05I1+_rep:0......... |           1 |         118 |         122 |          41 |       7.125 |     8.01824 |     8.73026 |    0.176147 |
+cell_05I1-_rep:0......... |           1 |         155 |         158 |          48 |       8.625 |      7.9459 |     8.61833 |    0.182637 |
+cell_05_rep:0............ |           1 |         347 |         210 |         141 |     24.9375 |     8.01989 |     8.62806 |    0.178188 |
+cell_06I1+_rep:0......... |           1 |         123 |         133 |          48 |     4.03125 |      6.2616 |     7.69664 |   0.0878641 |
+cell_06I1-_rep:0......... |           1 |         162 |         165 |          42 |     3.79688 |      6.8103 |     8.05923 |   0.0908546 |
+cell_06_rep:0............ |           1 |         379 |         250 |         195 |     16.9219 |     6.85791 |     7.91964 |   0.0890143 |
+cell_07I1+_rep:0......... |           1 |         119 |         127 |          43 |     1.73438 |     6.83424 |     7.94038 |     0.04195 |
+cell_07I1-_rep:0......... |           1 |         177 |         183 |          62 |     2.69531 |     6.72879 |     7.76953 |   0.0447139 |
+cell_07_rep:0............ |           1 |         403 |         261 |         206 |     9.02344 |     6.64029 |     7.66803 |   0.0434504 |
+cell_08I1+_rep:0......... |           1 |         134 |         133 |          55 |     1.23047 |     4.60217 |       6.852 |    0.021075 |
+cell_08I1-_rep:0......... |           1 |         173 |         174 |          63 |     1.39453 |     5.92923 |     7.62938 |   0.0225558 |
+cell_08_rep:0............ |           1 |         422 |         304 |         312 |     6.55078 | 7.88307e-06 |     7.09304 |   0.0213982 |
+cell_09I1+_rep:0......... |           1 |         143 |         148 |          53 |    0.580078 |     5.37276 |     6.95854 |   0.0109846 |
+cell_09I1-_rep:0......... |           1 |         198 |         202 |          81 |    0.925781 |     4.21702 |     6.77009 |   0.0114243 |
+cell_09_rep:0............ |           1 |         473 |         298 |         318 |     3.48633 |     4.06578 |     6.33014 |   0.0108997 |
+cell_10I1+_rep:0......... |           1 |         142 |         139 |          48 |    0.275391 |     4.58945 |      6.2814 |  0.00555209 |
+cell_10I1-_rep:0......... |           1 |         211 |         219 |         107 |    0.612305 |     4.53654 |      6.4841 |  0.00573421 |
+cell_10_rep:0............ |           1 |         490 |         341 |         386 |     2.12988 | 1.07597e-05 |      5.9928 |  0.00555641 |
+cell_11I1+_rep:0......... |           1 |         166 |         168 |          68 |     0.18457 |     5.47381 |      6.8512 |  0.00266323 |
+cell_11I1-_rep:0......... |           1 |         211 |         221 |          87 |    0.244629 |     5.02427 |     6.81908 |  0.00281145 |
+cell_11_rep:0............ |           1 |         533 |         361 |         394 |     1.07227 |     3.90718 |     5.96305 |  0.00270522 |
+cell_12I1+_rep:0......... |           1 |         160 |         162 |          51 |   0.0637207 |     4.29442 |     6.34923 |  0.00137431 |
+cell_12I1-_rep:0......... |           1 |         222 |         231 |          91 |    0.128906 |     5.38119 |     6.53443 |  0.00142345 |
+cell_12_rep:0............ |           1 |         559 |         415 |         469 |    0.651855 |     4.21818 |     6.12717 |  0.00138489 |
+cell_13I1+_rep:0......... |           1 |         174 |         178 |          91 |   0.0615234 |     3.46806 |      5.8398 | 0.000680536 |
+cell_13I1-_rep:0......... |           1 |         246 |         244 |         127 |   0.0897217 |     2.53651 |     5.64477 | 0.000714075 |
+cell_13_rep:0............ |           1 |         634 |         478 |         716 |    0.498779 |      2.6338 |     5.15772 | 0.000694097 |
+cell_14I1+_rep:0......... |           1 |         181 |         177 |          90 |   0.0303955 | 1.31584e-06 |     5.25415 |   0.0003368 |
+cell_14I1-_rep:0......... |           1 |         237 |         244 |         119 |   0.0419312 |     3.82864 |     5.37013 |  0.00035556 |
+cell_14_rep:0............ |           1 |         660 |         550 |         732 |    0.244629 | 4.19092e-06 |     4.80815 |  0.00033912 |
+cell_15I1+_rep:0......... |           1 |         195 |         201 |         104 |   0.0178528 |     2.98979 |     4.63948 | 0.000167634 |
+cell_15I1-_rep:0......... |           1 |         269 |         268 |         139 |    0.024353 | 7.44152e-07 |     5.13828 | 0.000175589 |
+cell_15_rep:0............ |           1 |         736 |         594 |         903 |    0.153534 | 3.37923e-05 |     4.50392 | 0.000170719 |
+cell_16I1+_rep:0......... |           1 |         220 |         220 |         132 |    0.011261 |     2.69876 |     4.21519 | 8.42949e-05 |
+cell_16I1-_rep:0......... |           1 |         280 |         287 |         156 |   0.0139618 | 8.22697e-07 |     4.47716 | 8.93514e-05 |
+cell_16_rep:0............ |           1 |         784 |         629 |        1046 |   0.0854187 | 0.000205628 |     4.10265 | 8.40535e-05 |
+cell_17I1+_rep:0......... |           1 |         226 |         225 |         118 |  0.00508118 |      2.0183 |     3.75565 |  4.1463e-05 |
+cell_17I1-_rep:0......... |           1 |         307 |         316 |         176 |  0.00780487 |     2.61175 |     4.13849 | 4.41436e-05 |
+cell_17_rep:0............ |           1 |         829 |         669 |        1123 |   0.0482025 |     2.38097 |     3.87004 | 4.27042e-05 |
+cell_18I1+_rep:0......... |           1 |         202 |         204 |          94 |  0.00215149 |      2.2129 |     3.96748 | 2.28882e-05 |
+cell_18I1-_rep:0......... |           1 |         301 |         301 |         170 |  0.00389099 |     2.14661 |      3.8669 | 2.28882e-05 |
+cell_18_rep:0............ |           1 |         768 |         699 |        1197 |   0.0273972 |     2.08729 |     3.61412 | 2.28882e-05 |
+cell_19_rep:0............ |           1 |         332 |         332 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelTransport, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelWeightWindowProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  ProcessName: Tst33WeightChangeProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelWeightWindowProcess
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelTransport
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.000855603, error= 0.336575, fom*time= 8.82749, time= 1000, n= 1475
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01I1+_rep:0......... |           1 |         966 |         988 |         216 |     263.989 |     7.57849 |     9.17408 |     1.15012 |
+cell_01I1-_rep:0......... |           1 |        1421 |        1468 |         312 |     345.022 | 7.35222e-05 |     9.48947 |     1.01232 |
+cell_01_rep:0............ |           1 |        3562 |        1743 |         844 |     947.299 | 8.24285e-06 |     9.33012 |      1.0658 |
+cell_02I1+_rep:0......... |           1 |         497 |         517 |         125 |     126.401 | 2.51391e-06 |     8.96647 |     1.02957 |
+cell_02I1-_rep:0......... |           1 |         702 |         731 |         191 |     197.563 | 3.62331e-05 |     8.98573 |     1.04985 |
+cell_02_rep:0............ |           1 |        1794 |         904 |         542 |     561.333 |   2.559e-06 |     8.87062 |     1.04101 |
+cell_03I1+_rep:0......... |           1 |         331 |         339 |         131 |     90.3305 |  2.6871e-05 |     8.26458 |     0.70472 |
+cell_03I1-_rep:0......... |           1 |         422 |         433 |         124 |     99.0438 | 2.11093e-06 |     8.66914 |    0.766339 |
+cell_03_rep:0............ |           1 |        1069 |         560 |         387 |     275.703 | 2.19806e-06 |     8.35845 |    0.740085 |
+cell_04I1+_rep:0......... |           1 |         321 |         336 |         110 |     34.7285 |     7.30273 |     8.49127 |      0.3106 |
+cell_04I1-_rep:0......... |           1 |         411 |         430 |         138 |     50.7725 |     6.59809 |     8.36221 |    0.361598 |
+cell_04_rep:0............ |           1 |         939 |         564 |         462 |     150.591 |     6.15097 |     8.05399 |    0.333489 |
+cell_05I1+_rep:0......... |           1 |         285 |         285 |          79 |     12.5137 |      6.3851 |     8.30173 |    0.158836 |
+cell_05I1-_rep:0......... |           1 |         373 |         386 |         121 |     21.5189 |     6.20335 |     8.21218 |     0.17326 |
+cell_05_rep:0............ |           1 |         866 |         526 |         438 |     75.4691 |     5.87333 |     7.85093 |    0.169516 |
+cell_06I1+_rep:0......... |           1 |         235 |         242 |          80 |     6.04049 |     6.51213 |     7.85818 |   0.0811009 |
+cell_06I1-_rep:0......... |           1 |         338 |         346 |         122 |      10.085 |     6.36652 |     8.01796 |    0.085629 |
+cell_06_rep:0............ |           1 |         755 |         447 |         341 |     28.6796 |     5.58211 |     7.59632 |   0.0843822 |
+cell_07I1+_rep:0......... |           1 |         189 |         193 |          72 |     2.94664 |     6.09118 |     7.57137 |   0.0408562 |
+cell_07I1-_rep:0......... |           1 |         274 |         283 |          92 |     3.96678 |     6.32786 |     7.80691 |     0.04351 |
+cell_07_rep:0............ |           1 |         626 |         421 |         361 |     15.2621 |      5.7114 |     7.42407 |   0.0421641 |
+cell_08I1+_rep:0......... |           1 |         144 |         149 |          58 |     1.34981 |     5.08524 |     7.73046 |   0.0214105 |
+cell_08I1-_rep:0......... |           1 |         208 |         211 |          60 |     1.23017 |     6.53279 |      7.7618 |   0.0223401 |
+cell_08_rep:0............ |           1 |         489 |         326 |         297 |     6.32498 |     5.84787 |     7.29754 |    0.021768 |
+cell_09I1+_rep:0......... |           1 |         129 |         132 |          48 |    0.495775 |     5.48644 |     7.03251 |   0.0103443 |
+cell_09I1-_rep:0......... |           1 |         173 |         173 |          63 |    0.638257 |     6.19032 |      7.6565 |   0.0105826 |
+cell_09_rep:0............ |           1 |         428 |         311 |         321 |      3.3941 | 3.87945e-05 |     6.75573 |   0.0107233 |
+cell_10I1+_rep:0......... |           1 |         120 |         123 |          41 |    0.188829 |     5.09478 |     7.04979 |  0.00502703 |
+cell_10I1-_rep:0......... |           1 |         156 |         156 |          47 |    0.273681 | 3.66136e-07 |     7.16738 |  0.00560395 |
+cell_10_rep:0............ |           1 |         403 |         272 |         255 |     1.31729 | 3.39305e-06 |     6.60854 |  0.00537265 |
+cell_11I1+_rep:0......... |           1 |         104 |         104 |          46 |    0.112599 |     6.26795 |      7.3416 |   0.0025582 |
+cell_11I1-_rep:0......... |           1 |         165 |         168 |          63 |    0.174106 |     5.65778 |     7.29989 |  0.00275515 |
+cell_11_rep:0............ |           1 |         373 |         281 |         275 |    0.744235 |     5.16084 |     6.70074 |  0.00270037 |
+cell_12I1+_rep:0......... |           1 |          78 |          81 |          23 |   0.0288731 |     6.09261 |     7.26641 |  0.00127325 |
+cell_12I1-_rep:0......... |           1 |         116 |         114 |          42 |    0.056532 |     5.75643 |     7.04819 |  0.00132009 |
+cell_12_rep:0............ |           1 |         295 |         226 |         263 |    0.351213 |     4.76286 |     6.10499 |  0.00133435 |
+cell_13I1+_rep:0......... |           1 |          62 |          61 |          14 |  0.00936038 |     6.13814 |     6.83242 | 0.000622501 |
+cell_13I1-_rep:0......... |           1 |          85 |          89 |          33 |   0.0224347 |     5.78392 |     6.57962 | 0.000709673 |
+cell_13_rep:0............ |           1 |         234 |         182 |         211 |    0.135831 |     3.95427 |     5.33614 |  0.00066014 |
+cell_14I1+_rep:0......... |           1 |          54 |          58 |          25 |  0.00737451 |     5.11269 |      6.0835 | 0.000298331 |
+cell_14I1-_rep:0......... |           1 |          72 |          76 |          25 |  0.00821694 |      5.5247 |     6.28886 | 0.000334004 |
+cell_14_rep:0............ |           1 |         219 |         196 |         247 |   0.0787799 |     3.68785 |     5.14359 | 0.000326176 |
+cell_15I1+_rep:0......... |           1 |          33 |          32 |          13 |  0.00209746 |     4.22461 |     5.35079 | 0.000161523 |
+cell_15I1-_rep:0......... |           1 |          42 |          43 |          19 |   0.0031245 |       3.986 |     5.18421 | 0.000173886 |
+cell_15_rep:0............ |           1 |         168 |         189 |         305 |    0.048691 | 6.00105e-07 |     4.95071 | 0.000161565 |
+cell_16I1+_rep:0......... |           1 |          42 |          38 |          19 |  0.00111866 |     4.40066 |      5.6883 | 7.31416e-05 |
+cell_16I1-_rep:0......... |           1 |          45 |          47 |          17 |  0.00152193 |     4.64966 |     5.80317 | 8.15052e-05 |
+cell_16_rep:0............ |           1 |         173 |         174 |         294 |    0.023908 |     3.10225 |     4.81742 | 8.30616e-05 |
+cell_17I1+_rep:0......... |           1 |          37 |          39 |          12 | 0.000415638 |      2.3051 |     5.52611 | 3.83569e-05 |
+cell_17I1-_rep:0......... |           1 |          54 |          58 |          16 | 0.000730706 |     4.27226 |     6.21759 | 4.08996e-05 |
+cell_17_rep:0............ |           1 |         165 |         154 |         215 |  0.00906041 |     2.67446 |     4.97798 | 4.13697e-05 |
+cell_18I1+_rep:0......... |           1 |          27 |          28 |          12 | 0.000283499 |     4.84092 |     5.91127 | 2.29779e-05 |
+cell_18I1-_rep:0......... |           1 |          38 |          38 |          20 | 0.000446349 |     3.03837 |     5.71191 | 2.29198e-05 |
+cell_18_rep:0............ |           1 |         119 |         135 |         209 |  0.00456827 |     2.56633 |     4.92953 | 2.22409e-05 |
+cell_19_rep:0............ |           1 |          53 |          53 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelTransport, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ParallelWeightWindowProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelWeightWindowProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelWeightWindowProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: Tst33WeightChangeProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  ProcessName: Tst33WeightChangeProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: ParallelImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  ProcessName: WeightCutOffProcess
+The initial Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+The final Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 512
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1001 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.00329335, error= 0.245098, fom*time= 16.6464, time= 1001, n= 220
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01I1+_rep:0......... |           1 |         172 |         181 |          61 |     51.0106 |     7.99585 |     8.83163 |    0.840007 |
+cell_01I1-_rep:0......... |           1 |         228 |         244 |          70 |     58.0924 |     8.09605 |     9.02831 |    0.874727 |
+cell_01_rep:0............ |           1 |         599 |         290 |         136 |     118.966 |     8.24049 |     9.08929 |    0.861287 |
+cell_02I1+_rep:0......... |           2 |         181 |         188 |          52 |     18.9839 |  1.8806e-05 |     8.51054 |    0.724073 |
+cell_02I1-_rep:0......... |           2 |         259 |         266 |          89 |     33.9263 | 3.52672e-07 |     8.46932 |    0.752853 |
+cell_02_rep:0............ |           2 |         552 |         335 |         192 |     71.9648 | 6.98008e-07 |     8.61652 |    0.749564 |
+cell_03I1+_rep:0......... |           4 |         196 |         201 |          61 |     9.74589 |      7.4605 |     8.59893 |     0.59197 |
+cell_03I1-_rep:0......... |           4 |         276 |         289 |          92 |     15.2867 |      7.5778 |     8.46756 |    0.674737 |
+cell_03_rep:0............ |           4 |         603 |         379 |         256 |     43.7703 |     6.49399 |     8.20458 |    0.658811 |
+cell_04I1+_rep:0......... |           8 |         218 |         218 |          57 |     3.93151 |     6.15393 |     8.25542 |    0.569294 |
+cell_04I1-_rep:0......... |           8 |         285 |         294 |          97 |     7.15546 |     6.73446 |      8.3542 |    0.606118 |
+cell_04_rep:0............ |           8 |         636 |         375 |         280 |     20.6567 |     6.49683 |     8.10188 |     0.59445 |
+cell_05I1+_rep:0......... |          16 |         217 |         230 |          79 |     2.54263 |     5.80885 |     8.10162 |    0.570195 |
+cell_05I1-_rep:0......... |          16 |         317 |         327 |         126 |     4.23847 |     5.42142 |     7.97439 |    0.570639 |
+cell_05_rep:0............ |          16 |         679 |         420 |         313 |     10.8881 |     5.45186 |     7.65522 |    0.569192 |
+cell_06I1+_rep:0......... |          32 |         220 |         230 |          83 |     1.38311 |     5.70845 |     7.79309 |    0.519294 |
+cell_06I1-_rep:0......... |          32 |         317 |         330 |         128 |     2.00143 |     5.85707 |     7.96502 |    0.506147 |
+cell_06_rep:0............ |          32 |         687 |         436 |         371 |     5.85146 |     5.00701 |     7.67042 |    0.517977 |
+cell_07I1+_rep:0......... |          64 |         211 |         215 |          74 |     0.50853 |     6.19361 |     7.53602 |    0.468431 |
+cell_07I1-_rep:0......... |          64 |         295 |         308 |         135 |     1.10476 |     4.85902 |     7.47209 |    0.493598 |
+cell_07_rep:0............ |          64 |         673 |         445 |         443 |     3.18238 |     4.02395 |      6.8904 |    0.468975 |
+cell_08I1+_rep:0......... |         128 |         225 |         229 |          89 |    0.302602 |     5.29576 |     7.16596 |    0.454483 |
+cell_08I1-_rep:0......... |         128 |         297 |         299 |         112 |    0.400059 |     5.24961 |      7.1974 |    0.461254 |
+cell_08_rep:0............ |         128 |         702 |         461 |         430 |     1.51939 |     4.26436 |     6.59881 |    0.456952 |
+cell_09I1+_rep:0......... |         256 |         205 |         212 |         102 |    0.181368 |     4.21739 |     7.01855 |    0.462442 |
+cell_09I1-_rep:0......... |         256 |         303 |         307 |         132 |    0.238719 |     4.35058 |     6.71297 |    0.453597 |
+cell_09_rep:0............ |         256 |         698 |         503 |         562 |    0.962496 |     3.86656 |     6.13597 |    0.448188 |
+cell_10I1+_rep:0......... |         512 |         181 |         189 |          82 |   0.0728532 |     5.38993 |      7.6275 |    0.454965 |
+cell_10I1-_rep:0......... |         512 |         280 |         289 |         127 |    0.115876 |      4.8784 |     7.03108 |     0.45576 |
+cell_10_rep:0............ |         512 |         616 |         476 |         493 |     0.41715 |     4.00303 |     6.50623 |    0.436227 |
+cell_11I1+_rep:0......... |        1024 |         153 |         157 |          56 |   0.0240355 |     6.02313 |     7.44874 |    0.449948 |
+cell_11I1-_rep:0......... |        1024 |         221 |         228 |          86 |   0.0356256 |     5.33869 |     7.50654 |    0.429762 |
+cell_11_rep:0............ |        1024 |         515 |         398 |         392 |    0.164559 |     5.40996 |     6.95728 |    0.435468 |
+cell_12I1+_rep:0......... |        2048 |         126 |         133 |          41 |  0.00872312 |     5.31102 |     7.15823 |    0.441167 |
+cell_12I1-_rep:0......... |        2048 |         186 |         194 |          71 |   0.0157864 |     5.55096 |     7.10292 |    0.438883 |
+cell_12_rep:0............ |        2048 |         458 |         379 |         382 |   0.0798035 |     4.67954 |     6.53877 |    0.432227 |
+cell_13I1+_rep:0......... |        4096 |         149 |         154 |          47 |  0.00511586 |     5.42072 |     7.11045 |    0.428556 |
+cell_13I1-_rep:0......... |        4096 |         197 |         202 |          66 |  0.00723525 |     5.40497 |     7.04882 |    0.431624 |
+cell_13_rep:0............ |        4096 |         504 |         410 |         383 |   0.0398813 |     5.02383 |     6.49622 |    0.426588 |
+cell_14I1+_rep:0......... |        8192 |         126 |         125 |          38 |  0.00200362 |     5.50289 |     7.24261 |    0.429371 |
+cell_14I1-_rep:0......... |        8192 |         207 |         210 |          73 |  0.00341624 |     5.44433 |      7.1161 |    0.426305 |
+cell_14_rep:0............ |        8192 |         515 |         445 |         438 |     0.02192 |     4.93443 |     6.35923 |    0.415448 |
+cell_15I1+_rep:0......... |       16384 |         147 |         155 |          55 |  0.00148882 |     5.21928 |     6.61218 |    0.439125 |
+cell_15I1-_rep:0......... |       16384 |         188 |         193 |          76 |  0.00201162 |     5.45397 |     6.90285 |    0.435014 |
+cell_15_rep:0............ |       16384 |         539 |         499 |         577 |   0.0153081 | 3.68809e-06 |     5.93354 |    0.431829 |
+cell_16I1+_rep:0......... |       32768 |         144 |         148 |          57 | 0.000740911 |     3.45472 |     6.46513 |    0.428589 |
+cell_16I1-_rep:0......... |       32768 |         197 |         200 |          65 |  0.00086432 |     4.93898 |     6.62304 |    0.432454 |
+cell_16_rep:0............ |       32768 |         553 |         519 |         628 |  0.00814302 |     3.54921 |     5.59372 |    0.427588 |
+cell_17I1+_rep:0......... |       65536 |         127 |         129 |          52 | 0.000347255 |     4.68179 |     6.06371 |    0.439543 |
+cell_17I1-_rep:0......... |       65536 |         191 |         196 |          81 | 0.000536408 |     5.20825 |     6.35997 |    0.433402 |
+cell_17_rep:0............ |       65536 |         529 |         528 |         715 |  0.00477083 |     3.65941 |     5.61776 |    0.440622 |
+cell_18I1+_rep:0......... |      131072 |         105 |         113 |          58 | 0.000194558 |      3.3182 |     5.11594 |    0.419181 |
+cell_18I1-_rep:0......... |      131072 |         155 |         158 |          78 |  0.00025293 |     3.68306 |     5.52027 |    0.421023 |
+cell_18_rep:0............ |      131072 |         431 |         477 |         703 |  0.00234735 |     3.34497 |     5.29809 |    0.439526 |
+cell_19_rep:0............ |      131072 |         184 |         184 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -619,66 +2035,66 @@ DoIt Vector:
    Tst33WeightChangeProcess
    WeightCutOffProcess
 ================================================
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 8192
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 131072
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.000460848, error= 0.296313, fom*time= 11.3894, time= 1000, n= 1178
+    mean= 0.000362437, error= 0.529562, fom*time= 3.56588, time= 1000, n= 999
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |         764 |         796 |         183 |         183 |      8.4922 |     9.30989 |           1 |
-cell_01I1-_rep:0......... |           1 |        1107 |        1153 |         235 |         235 |     9.44773 |     9.67099 |           1 |
-cell_01_rep:0............ |           1 |        2848 |        1421 |         657 |         657 |     8.80964 |      9.4467 |           1 |
-cell_02I1+_rep:0......... |           2 |         715 |         737 |         194 |          97 |     8.27917 |     9.09138 |           1 |
-cell_02I1-_rep:0......... |           2 |        1025 |        1058 |         265 |       132.5 |     8.59716 |     9.20994 |           1 |
-cell_02_rep:0............ |           2 |        2114 |        1312 |         723 |       361.5 |     8.52701 |     9.20137 |           1 |
-cell_03I1+_rep:0......... |           4 |         622 |         658 |         189 |       47.25 |     7.70611 |      8.9341 |           1 |
-cell_03I1-_rep:0......... |           4 |         930 |         966 |         260 |          65 | 6.51575e-06 |     9.18981 |           1 |
-cell_03_rep:0............ |           4 |        1898 |        1244 |         667 |      166.75 | 3.78314e-05 |     9.05443 |           1 |
-cell_04I1+_rep:0......... |           8 |         561 |         582 |         165 |      20.625 | 2.50209e-06 |     8.73488 |           1 |
-cell_04I1-_rep:0......... |           8 |         822 |         845 |         226 |       28.25 | 2.28377e-06 |     8.81469 |           1 |
-cell_04_rep:0............ |           8 |        1701 |        1085 |         683 |      85.375 | 3.36313e-06 |     8.64286 |           1 |
-cell_05I1+_rep:0......... |          16 |         457 |         473 |         119 |      7.4375 | 1.28998e-06 |     8.58621 |           1 |
-cell_05I1-_rep:0......... |          16 |         710 |         731 |         203 |     12.6875 |  2.7367e-06 |     8.69952 |           1 |
-cell_05_rep:0............ |          16 |        1442 |         967 |         603 |     37.6875 | 1.78255e-06 |     8.44049 |           1 |
-cell_06I1+_rep:0......... |          32 |         376 |         388 |         119 |     3.71875 |     7.32439 |     8.50231 |           1 |
-cell_06I1-_rep:0......... |          32 |         578 |         595 |         167 |     5.21875 | 4.57596e-06 |     8.60729 |           1 |
-cell_06_rep:0............ |          32 |        1190 |         802 |         531 |     16.5938 | 6.08207e-06 |     8.33936 |           1 |
-cell_07I1+_rep:0......... |          64 |         282 |         291 |          85 |     1.32812 |     6.63897 |     8.42132 |           1 |
-cell_07I1-_rep:0......... |          64 |         468 |         488 |         150 |     2.34375 |     7.02245 |     8.43846 |           1 |
-cell_07_rep:0............ |          64 |         959 |         688 |         506 |     7.90625 |     6.72914 |     8.14616 |           1 |
-cell_08I1+_rep:0......... |         128 |         233 |         239 |          87 |    0.679688 |     5.90047 |     7.72121 |           1 |
-cell_08I1-_rep:0......... |         128 |         335 |         343 |          85 |    0.664062 |      6.5201 |     8.36312 |           1 |
-cell_08_rep:0............ |         128 |         747 |         528 |         374 |     2.92188 |      6.4226 |      8.0004 |           1 |
-cell_09I1+_rep:0......... |         256 |         191 |         197 |          52 |    0.203125 |     6.47346 |     8.02666 |           1 |
-cell_09I1-_rep:0......... |         256 |         281 |         293 |         103 |    0.402344 |     5.96162 |     8.00758 |           1 |
-cell_09_rep:0............ |         256 |         613 |         452 |         330 |     1.28906 |     6.20131 |     7.73304 |           1 |
-cell_10I1+_rep:0......... |         512 |         155 |         162 |          54 |    0.105469 |     5.79619 |     7.65731 |           1 |
-cell_10I1-_rep:0......... |         512 |         231 |         238 |          64 |       0.125 |     6.71207 |     8.18892 |           1 |
-cell_10_rep:0............ |         512 |         508 |         410 |         331 |    0.646484 |      6.1202 |     7.53588 |           1 |
-cell_11I1+_rep:0......... |        1024 |         111 |         118 |          46 |   0.0449219 |     6.44635 |     7.83641 |           1 |
-cell_11I1-_rep:0......... |        1024 |         183 |         188 |          70 |   0.0683594 |     6.08115 |     7.64851 |           1 |
-cell_11_rep:0............ |        1024 |         410 |         347 |         314 |    0.306641 |     6.13231 |     7.31659 |           1 |
-cell_12I1+_rep:0......... |        2048 |          88 |          96 |          42 |   0.0205078 |     5.00806 |     7.51955 |           1 |
-cell_12I1-_rep:0......... |        2048 |         131 |         131 |          34 |   0.0166016 |     5.40419 |     7.19633 |           1 |
-cell_12_rep:0............ |        2048 |         337 |         319 |         302 |    0.147461 |      5.8576 |      7.1874 |           1 |
-cell_13I1+_rep:0......... |        4096 |          69 |          72 |          31 |  0.00756836 |     4.25021 |     7.08565 |           1 |
-cell_13I1-_rep:0......... |        4096 |         102 |         104 |          37 |   0.0090332 |      4.0224 |     7.25223 |           1 |
-cell_13_rep:0............ |        4096 |         262 |         278 |         261 |   0.0637207 |     5.14649 |     6.88587 |           1 |
-cell_14I1+_rep:0......... |        8192 |          56 |          60 |          16 |  0.00195312 |     4.90497 |     6.27105 |           1 |
-cell_14I1-_rep:0......... |        8192 |          82 |          85 |          27 |   0.0032959 |     4.60946 |     6.58924 |           1 |
-cell_14_rep:0............ |        8192 |         226 |         212 |         206 |   0.0251465 |     3.55721 |     6.41879 |           1 |
-cell_15I1+_rep:0......... |       16384 |          44 |          44 |          15 | 0.000915527 |     4.68917 |     6.49638 |           1 |
-cell_15I1-_rep:0......... |       16384 |          71 |          77 |          32 |  0.00195312 |     3.96953 |     6.85956 |           1 |
-cell_15_rep:0............ |       16384 |         185 |         201 |         217 |   0.0132446 | 3.49776e-05 |     6.71576 |           1 |
-cell_16I1+_rep:0......... |       32768 |          26 |          28 |          10 | 0.000305176 |     4.92543 |     6.33376 |           1 |
-cell_16I1-_rep:0......... |       32768 |          55 |          56 |          22 | 0.000671387 |     4.65926 |     5.92107 |           1 |
-cell_16_rep:0............ |       32768 |         145 |         166 |         166 |  0.00506592 |     3.83499 |     6.82984 |           1 |
-cell_17I1+_rep:0......... |       65536 |          29 |          30 |           8 |  0.00012207 |     5.22963 |     6.70866 |           1 |
-cell_17I1-_rep:0......... |       65536 |          44 |          47 |          17 | 0.000259399 |     5.59319 |      6.8783 |           1 |
-cell_17_rep:0............ |       65536 |         131 |         153 |         165 |   0.0025177 |     4.25255 |     6.97098 |           1 |
-cell_18I1+_rep:0......... |      131072 |          19 |          19 |           5 |  3.8147e-05 |     4.89765 |     6.08865 |           1 |
-cell_18I1-_rep:0......... |      131072 |          32 |          33 |          10 | 7.62939e-05 | 2.68914e-07 |      6.4224 |           1 |
-cell_18_rep:0............ |      131072 |          97 |         128 |         164 |  0.00125122 | 1.80775e-06 |     6.68197 |           1 |
-cell_19_rep:0............ |      262144 |          45 |          45 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |         659 |         684 |         171 |         171 |     8.29997 |      9.2627 |           1 |
+cell_01I1-_rep:0......... |           1 |         932 |         965 |         211 |         211 |     7.91169 |     9.32005 |           1 |
+cell_01_rep:0............ |           1 |        2463 |        1204 |         569 |         569 |     8.14386 |     9.30144 |           1 |
+cell_02I1+_rep:0......... |           2 |         609 |         629 |         162 |          81 |     7.39052 |     8.77287 |           1 |
+cell_02I1-_rep:0......... |           2 |         908 |         936 |         232 |         116 |     7.41194 |     8.89406 |           1 |
+cell_02_rep:0............ |           2 |        1851 |        1151 |         640 |         320 |     7.91952 |     8.99428 |           1 |
+cell_03I1+_rep:0......... |           4 |         521 |         543 |         152 |          38 |     6.65873 |     8.74133 |           1 |
+cell_03I1-_rep:0......... |           4 |         812 |         832 |         216 |          54 |     7.56756 |     8.76293 |           1 |
+cell_03_rep:0............ |           4 |        1597 |        1041 |         602 |       150.5 |     7.17898 |     8.65436 |           1 |
+cell_04I1+_rep:0......... |           8 |         429 |         448 |         119 |      14.875 |      7.8752 |     8.73223 |           1 |
+cell_04I1-_rep:0......... |           8 |         649 |         659 |         179 |      22.375 |     7.99026 |     8.75155 |           1 |
+cell_04_rep:0............ |           8 |        1327 |         859 |         509 |      63.625 |      7.4552 |     8.59015 |           1 |
+cell_05I1+_rep:0......... |          16 |         357 |         375 |         118 |       7.375 |     7.26408 |     8.10764 |           1 |
+cell_05I1-_rep:0......... |          16 |         544 |         563 |         169 |     10.5625 |     7.59179 |      8.4903 |           1 |
+cell_05_rep:0............ |          16 |        1120 |         747 |         458 |      28.625 |     7.16203 |     8.21774 |           1 |
+cell_06I1+_rep:0......... |          32 |         292 |         301 |          97 |     3.03125 |     7.02623 |     8.16311 |           1 |
+cell_06I1-_rep:0......... |          32 |         429 |         454 |         133 |     4.15625 |     7.75045 |     8.51285 |           1 |
+cell_06_rep:0............ |          32 |         919 |         631 |         407 |     12.7188 |     6.88111 |     8.03452 |           1 |
+cell_07I1+_rep:0......... |          64 |         232 |         236 |          67 |     1.04688 |     7.19201 |     8.05633 |           1 |
+cell_07I1-_rep:0......... |          64 |         353 |         369 |          92 |      1.4375 |     7.52354 |     8.31005 |           1 |
+cell_07_rep:0............ |          64 |         746 |         548 |         393 |     6.14062 | 9.60854e-06 |     7.64787 |           1 |
+cell_08I1+_rep:0......... |         128 |         180 |         183 |          55 |    0.429688 |     6.45756 |     7.64883 |           1 |
+cell_08I1-_rep:0......... |         128 |         269 |         271 |          92 |     0.71875 |     7.00591 |     7.83135 |           1 |
+cell_08_rep:0............ |         128 |         567 |         406 |         296 |      2.3125 | 2.79319e-06 |     7.49767 |           1 |
+cell_09I1+_rep:0......... |         256 |         138 |         139 |          51 |    0.199219 |     4.82358 |     7.19728 |           1 |
+cell_09I1-_rep:0......... |         256 |         215 |         221 |          64 |        0.25 |     6.97223 |     7.74511 |           1 |
+cell_09_rep:0............ |         256 |         473 |         347 |         295 |     1.15234 |     5.77103 |     7.17593 |           1 |
+cell_10I1+_rep:0......... |         512 |         109 |         108 |          32 |      0.0625 |     5.26167 |     6.61691 |           1 |
+cell_10I1-_rep:0......... |         512 |         169 |         172 |          57 |    0.111328 |     6.79697 |     7.54433 |           1 |
+cell_10_rep:0............ |         512 |         373 |         281 |         263 |    0.513672 |     5.37091 |     6.83748 |           1 |
+cell_11I1+_rep:0......... |        1024 |          76 |          78 |          38 |   0.0371094 | 2.05615e-07 |     6.17974 |           1 |
+cell_11I1-_rep:0......... |        1024 |         121 |         120 |          50 |   0.0488281 | 2.67725e-06 |     6.98271 |           1 |
+cell_11_rep:0............ |        1024 |         284 |         230 |         228 |    0.222656 | 7.63191e-07 |     6.42207 |           1 |
+cell_12I1+_rep:0......... |        2048 |          49 |          51 |          20 |  0.00976562 |     6.13396 |     6.92797 |           1 |
+cell_12I1-_rep:0......... |        2048 |          88 |          89 |          24 |   0.0117188 |     5.83413 |      6.8517 |           1 |
+cell_12_rep:0............ |        2048 |         215 |         222 |         225 |    0.109863 |      5.2266 |     6.49192 |           1 |
+cell_13I1+_rep:0......... |        4096 |          50 |          49 |          24 |  0.00585938 |     4.91169 |     6.08579 |           1 |
+cell_13I1-_rep:0......... |        4096 |          63 |          65 |          13 |  0.00317383 |     6.32338 |     7.14009 |           1 |
+cell_13_rep:0............ |        4096 |         177 |         188 |         171 |    0.041748 |     5.56869 |     6.40346 |           1 |
+cell_14I1+_rep:0......... |        8192 |          32 |          32 |          13 |  0.00158691 |     5.13679 |     5.81231 |           1 |
+cell_14I1-_rep:0......... |        8192 |          48 |          50 |          20 |  0.00244141 |     5.39004 |     6.06513 |           1 |
+cell_14_rep:0............ |        8192 |         148 |         172 |         184 |   0.0224609 |     4.71398 |     5.91961 |           1 |
+cell_15I1+_rep:0......... |       16384 |          23 |          22 |          12 | 0.000732422 |     5.16267 |     5.71417 |           1 |
+cell_15I1-_rep:0......... |       16384 |          34 |          36 |          15 | 0.000915527 |     4.90789 |     5.53266 |           1 |
+cell_15_rep:0............ |       16384 |         122 |         158 |         194 |   0.0118408 |     4.47069 |     5.72278 |           1 |
+cell_16I1+_rep:0......... |       32768 |          20 |          19 |          11 | 0.000335693 |      3.2116 |     3.70665 |           1 |
+cell_16I1-_rep:0......... |       32768 |          33 |          32 |          13 | 0.000396729 |     4.43628 |     4.90109 |           1 |
+cell_16_rep:0............ |       32768 |         112 |         141 |         166 |  0.00506592 |     5.48425 |     6.10305 |           1 |
+cell_17I1+_rep:0......... |       65536 |          15 |          15 |           8 |  0.00012207 |     3.20027 |     3.53852 |           1 |
+cell_17I1-_rep:0......... |       65536 |          26 |          24 |           7 | 0.000106812 |     4.42668 |      4.9303 |           1 |
+cell_17_rep:0............ |       65536 |          88 |         123 |         132 |  0.00201416 |     5.65852 |       6.288 |           1 |
+cell_18I1+_rep:0......... |      131072 |           8 |           8 |           2 | 1.52588e-05 |     3.29427 |     3.56387 |           1 |
+cell_18I1-_rep:0......... |      131072 |          13 |          13 |           5 |  3.8147e-05 |     3.59624 |     3.76902 |           1 |
+cell_18_rep:0............ |      131072 |          55 |          84 |          92 | 0.000701904 |      5.6168 |     6.16152 |           1 |
+cell_19_rep:0............ |      131072 |          34 |          34 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -921,66 +2337,66 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 16384
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1023 (mu)seconds
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 256
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1008 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.0337535, error= 0.219848, fom*time= 20.6898, time= 1023, n= 96
+    mean= 0.0188853, error= 0.276947, fom*time= 13.0379, time= 1008, n= 128
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |          84 |          86 |          25 |          25 |     7.24045 |     8.98658 |           1 |
-cell_01I1-_rep:0......... |           1 |         103 |         105 |          17 |          17 |     9.55459 |     9.64893 |           1 |
-cell_01_rep:0............ |           1 |         285 |         120 |          80 |          80 |     6.64997 |     8.80591 |           1 |
-cell_02I1+_rep:0......... |           2 |         107 |         111 |          26 |          13 |     8.36105 |     9.31846 |           1 |
-cell_02I1-_rep:0......... |           2 |         138 |         140 |          31 |        15.5 |     7.11695 |      9.0661 |           1 |
-cell_02_rep:0............ |           2 |         304 |         162 |         105 |        52.5 |     6.33015 |     8.70119 |           1 |
-cell_03I1+_rep:0......... |           4 |         134 |         142 |          44 |          11 |     7.77476 |     9.04751 |           1 |
-cell_03I1-_rep:0......... |           4 |         167 |         173 |          36 |           9 |     8.18775 |     9.34568 |           1 |
-cell_03_rep:0............ |           4 |         387 |         218 |         113 |       28.25 |     7.77637 |     9.15296 |           1 |
-cell_04I1+_rep:0......... |           8 |         163 |         165 |          45 |       5.625 |     7.97408 |     8.75622 |           1 |
-cell_04I1-_rep:0......... |           8 |         210 |         217 |          67 |       8.375 |     8.05456 |     8.81195 |           1 |
-cell_04_rep:0............ |           8 |         472 |         260 |         180 |        22.5 |     7.94073 |     8.79381 |           1 |
-cell_05I1+_rep:0......... |          16 |         206 |         216 |          84 |        5.25 |     7.70003 |     8.50162 |           1 |
-cell_05I1-_rep:0......... |          16 |         260 |         270 |          79 |      4.9375 |     7.74725 |      8.5851 |           1 |
-cell_05_rep:0............ |          16 |         579 |         358 |         242 |      15.125 |     7.44094 |      8.4387 |           1 |
-cell_06I1+_rep:0......... |          32 |         196 |         199 |          70 |      2.1875 |      6.1847 |     8.12727 |           1 |
-cell_06I1-_rep:0......... |          32 |         286 |         286 |          96 |           3 |     6.66192 |     8.16534 |           1 |
-cell_06_rep:0............ |          32 |         618 |         366 |         302 |      9.4375 |     6.32076 |     7.95142 |           1 |
-cell_07I1+_rep:0......... |          64 |         199 |         205 |          59 |    0.921875 |     6.32004 |     8.15404 |           1 |
-cell_07I1-_rep:0......... |          64 |         290 |         305 |         104 |       1.625 | 8.75418e-07 |     8.40061 |           1 |
-cell_07_rep:0............ |          64 |         640 |         412 |         306 |     4.78125 | 5.50001e-06 |     7.89917 |           1 |
-cell_08I1+_rep:0......... |         128 |         203 |         208 |          65 |    0.507812 |      6.5047 |     8.15013 |           1 |
-cell_08I1-_rep:0......... |         128 |         289 |         292 |          88 |      0.6875 |     6.36283 |     8.30575 |           1 |
-cell_08_rep:0............ |         128 |         652 |         422 |         369 |     2.88281 |     5.18504 |     7.29232 |           1 |
-cell_09I1+_rep:0......... |         256 |         211 |         222 |          87 |    0.339844 | 7.46369e-07 |     7.62863 |           1 |
-cell_09I1-_rep:0......... |         256 |         287 |         293 |         108 |    0.421875 |     5.35371 |     7.86981 |           1 |
-cell_09_rep:0............ |         256 |         669 |         463 |         438 |     1.71094 | 1.37445e-05 |     7.22368 |           1 |
-cell_10I1+_rep:0......... |         512 |         220 |         231 |          67 |    0.130859 |     4.97481 |     7.99346 |           1 |
-cell_10I1-_rep:0......... |         512 |         304 |         309 |          79 |    0.154297 |     4.91245 |     7.78533 |           1 |
-cell_10_rep:0............ |         512 |         707 |         454 |         401 |    0.783203 |     4.43912 |     7.06193 |           1 |
-cell_11I1+_rep:0......... |        1024 |         243 |         257 |          91 |   0.0888672 | 2.20192e-06 |     7.65374 |           1 |
-cell_11I1-_rep:0......... |        1024 |         332 |         341 |         127 |    0.124023 |  2.9837e-06 |     7.12721 |           1 |
-cell_11_rep:0............ |        1024 |         797 |         537 |         492 |    0.480469 | 1.48258e-06 |      6.9152 |           1 |
-cell_12I1+_rep:0......... |        2048 |         277 |         280 |         126 |   0.0615234 |     3.40444 |     6.57424 |           1 |
-cell_12I1-_rep:0......... |        2048 |         372 |         382 |         127 |   0.0620117 |     3.88487 |     7.11556 |           1 |
-cell_12_rep:0............ |        2048 |         913 |         669 |         715 |    0.349121 | 1.34228e-05 |     6.50759 |           1 |
-cell_13I1+_rep:0......... |        4096 |         300 |         303 |         130 |   0.0317383 |     2.63274 |      6.3353 |           1 |
-cell_13I1-_rep:0......... |        4096 |         419 |         426 |         165 |   0.0402832 |     3.39737 |     6.62125 |           1 |
-cell_13_rep:0............ |        4096 |        1021 |         747 |         835 |    0.203857 |     3.33115 |     6.05661 |           1 |
-cell_14I1+_rep:0......... |        8192 |         324 |         328 |         166 |   0.0202637 |     2.14604 |     5.57368 |           1 |
-cell_14I1-_rep:0......... |        8192 |         464 |         472 |         214 |    0.026123 |     2.46565 |     6.12827 |           1 |
-cell_14_rep:0............ |        8192 |        1113 |         807 |         940 |    0.114746 |     2.95098 |     5.91936 |           1 |
-cell_15I1+_rep:0......... |       16384 |         337 |         343 |         165 |   0.0100708 |     2.10672 |     5.27984 |           1 |
-cell_15I1-_rep:0......... |       16384 |         464 |         483 |         241 |   0.0147095 |     2.27539 |     5.67677 |           1 |
-cell_15_rep:0............ |       16384 |        1141 |         844 |        1081 |    0.065979 |     2.64828 |     5.59273 |           1 |
-cell_16I1+_rep:0......... |       32768 |         371 |         373 |         165 |   0.0050354 |     2.16258 |     5.39718 |           1 |
-cell_16I1-_rep:0......... |       32768 |         486 |         489 |         233 |   0.0071106 |     2.10329 |     5.59088 |           1 |
-cell_16_rep:0............ |       32768 |        1219 |         872 |        1050 |   0.0320435 |      2.5619 |     5.62764 |           1 |
-cell_17I1+_rep:0......... |       65536 |         362 |         367 |         186 |  0.00283813 |     1.97666 |     5.26911 |           1 |
-cell_17I1-_rep:0......... |       65536 |         539 |         546 |         291 |  0.00444031 |     2.03962 |     5.19631 |           1 |
-cell_17_rep:0............ |       65536 |        1294 |         979 |        1268 |   0.0193481 | 1.19213e-06 |     5.22967 |           1 |
-cell_18I1+_rep:0......... |      131072 |         362 |         366 |         160 |   0.0012207 |     1.52623 |     4.74798 |           1 |
-cell_18I1-_rep:0......... |      131072 |         517 |         521 |         280 |  0.00213623 | 5.12737e-06 |     5.11741 |           1 |
-cell_18_rep:0............ |      131072 |        1229 |         984 |        1374 |   0.0104828 |  2.3119e-06 |     5.22122 |           1 |
-cell_19_rep:0............ |      262144 |         451 |         451 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |         107 |         107 |          33 |          33 |     8.93141 |     9.14393 |           1 |
+cell_01I1-_rep:0......... |           1 |         129 |         131 |          32 |          32 |     8.87282 |     9.24056 |           1 |
+cell_01_rep:0............ |           1 |         360 |         172 |         110 |         110 |     8.63199 |     9.09448 |           1 |
+cell_02I1+_rep:0......... |           2 |         110 |         116 |          38 |          19 |     7.01188 |     8.56804 |           1 |
+cell_02I1-_rep:0......... |           2 |         156 |         161 |          63 |        31.5 |     7.68478 |     9.05742 |           1 |
+cell_02_rep:0............ |           2 |         330 |         202 |         116 |          58 |     7.51185 |      8.8675 |           1 |
+cell_03I1+_rep:0......... |           4 |         128 |         130 |          45 |       11.25 |     7.50803 |     8.43522 |           1 |
+cell_03I1-_rep:0......... |           4 |         163 |         167 |          60 |          15 |      7.9294 |     8.64973 |           1 |
+cell_03_rep:0............ |           4 |         366 |         216 |         147 |       36.75 |     7.65049 |     8.37003 |           1 |
+cell_04I1+_rep:0......... |           8 |         130 |         135 |          48 |           6 |     6.22236 |     8.12316 |           1 |
+cell_04I1-_rep:0......... |           8 |         180 |         185 |          66 |        8.25 |     6.69276 |      8.3139 |           1 |
+cell_04_rep:0............ |           8 |         400 |         250 |         174 |       21.75 |     6.34376 |     8.01368 |           1 |
+cell_05I1+_rep:0......... |          16 |         146 |         159 |          75 |      4.6875 |     5.80764 |     7.14308 |           1 |
+cell_05I1-_rep:0......... |          16 |         199 |         206 |          74 |       4.625 |     6.71217 |     7.83977 |           1 |
+cell_05_rep:0............ |          16 |         452 |         290 |         226 |      14.125 |     6.02385 |     7.28838 |           1 |
+cell_06I1+_rep:0......... |          32 |         167 |         172 |          78 |      2.4375 |      5.2542 |     6.84527 |           1 |
+cell_06I1-_rep:0......... |          32 |         218 |         227 |         103 |     3.21875 |     4.69417 |     6.53392 |           1 |
+cell_06_rep:0............ |          32 |         510 |         326 |         298 |      9.3125 |     5.11543 |     6.65663 |           1 |
+cell_07I1+_rep:0......... |          64 |         165 |         169 |          67 |     1.04688 |     4.44316 |     6.20713 |           1 |
+cell_07I1-_rep:0......... |          64 |         224 |         233 |          83 |     1.29688 |     5.17871 |      7.1119 |           1 |
+cell_07_rep:0............ |          64 |         529 |         339 |         307 |     4.79688 |      4.6126 |     6.51212 |           1 |
+cell_08I1+_rep:0......... |         128 |         156 |         158 |          57 |    0.445312 |     5.61188 |     6.52153 |           1 |
+cell_08I1-_rep:0......... |         128 |         238 |         243 |         103 |    0.804688 |      4.9705 |     6.33223 |           1 |
+cell_08_rep:0............ |         128 |         542 |         346 |         376 |      2.9375 |     4.11119 |      6.2266 |           1 |
+cell_09I1+_rep:0......... |         256 |         179 |         184 |          68 |    0.265625 |     6.08764 |     6.85175 |           1 |
+cell_09I1-_rep:0......... |         256 |         219 |         226 |          77 |    0.300781 |     4.70561 |     6.37377 |           1 |
+cell_09_rep:0............ |         256 |         546 |         364 |         355 |     1.38672 |     3.94056 |     6.15968 |           1 |
+cell_10I1+_rep:0......... |         512 |         171 |         180 |          72 |    0.140625 | 2.21159e-06 |     7.28096 |           1 |
+cell_10I1-_rep:0......... |         512 |         231 |         244 |          97 |    0.189453 |     5.76618 |     6.74666 |           1 |
+cell_10_rep:0............ |         512 |         560 |         404 |         431 |    0.841797 | 3.48962e-06 |     6.07296 |           1 |
+cell_11I1+_rep:0......... |        1024 |         171 |         180 |          62 |   0.0605469 |     4.68249 |     6.50124 |           1 |
+cell_11I1-_rep:0......... |        1024 |         236 |         243 |          82 |   0.0800781 |     3.36303 |     7.10596 |           1 |
+cell_11_rep:0............ |        1024 |         583 |         405 |         410 |    0.400391 | 4.73911e-06 |     6.02737 |           1 |
+cell_12I1+_rep:0......... |        2048 |         188 |         193 |          70 |   0.0341797 |     5.18144 |     6.38849 |           1 |
+cell_12I1-_rep:0......... |        2048 |         252 |         254 |         111 |   0.0541992 |     5.02568 |     6.47662 |           1 |
+cell_12_rep:0............ |        2048 |         634 |         462 |         576 |     0.28125 |     3.77321 |     5.63726 |           1 |
+cell_13I1+_rep:0......... |        4096 |         175 |         175 |          64 |    0.015625 |      4.9366 |     6.28973 |           1 |
+cell_13I1-_rep:0......... |        4096 |         258 |         265 |         137 |   0.0334473 |     4.83498 |     6.08199 |           1 |
+cell_13_rep:0............ |        4096 |         639 |         491 |         604 |    0.147461 | 6.36708e-06 |     5.63641 |           1 |
+cell_14I1+_rep:0......... |        8192 |         200 |         196 |          72 |  0.00878906 |     4.70452 |     5.99019 |           1 |
+cell_14I1-_rep:0......... |        8192 |         263 |         263 |         110 |   0.0134277 |     4.88916 |     6.21384 |           1 |
+cell_14_rep:0............ |        8192 |         682 |         521 |         658 |   0.0803223 |     4.06766 |     5.41743 |           1 |
+cell_15I1+_rep:0......... |       16384 |         211 |         223 |          91 |   0.0055542 |     4.41326 |     5.98353 |           1 |
+cell_15I1-_rep:0......... |       16384 |         307 |         310 |         125 |  0.00762939 |     4.45451 |     6.02455 |           1 |
+cell_15_rep:0............ |       16384 |         770 |         595 |         793 |   0.0484009 |     3.37418 |     5.22531 |           1 |
+cell_16I1+_rep:0......... |       32768 |         203 |         208 |         103 |  0.00314331 |     3.80892 |     5.41592 |           1 |
+cell_16I1-_rep:0......... |       32768 |         297 |         297 |         139 |  0.00424194 |     4.30992 |     5.81849 |           1 |
+cell_16_rep:0............ |       32768 |         771 |         642 |         880 |   0.0268555 |     3.27114 |      4.9101 |           1 |
+cell_17I1+_rep:0......... |       65536 |         196 |         194 |          95 |  0.00144958 |     3.99825 |     5.16294 |           1 |
+cell_17I1-_rep:0......... |       65536 |         275 |         287 |         142 |  0.00216675 |     4.30725 |     5.38353 |           1 |
+cell_17_rep:0............ |       65536 |         766 |         682 |         953 |   0.0145416 |     3.23451 |     4.77889 |           1 |
+cell_18I1+_rep:0......... |      131072 |         185 |         192 |          87 | 0.000663757 |     3.75526 |     5.09491 |           1 |
+cell_18I1-_rep:0......... |      131072 |         256 |         267 |         135 |  0.00102997 |     3.36979 |     5.07145 |           1 |
+cell_18_rep:0............ |      131072 |         695 |         688 |         947 |  0.00722504 |     3.23919 |     4.88137 |           1 |
+cell_19_rep:0............ |      131072 |         311 |         311 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -1225,63 +2641,63 @@ DoIt Vector:
 ================================================
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1000, n= 3192
+    mean= 0.0975576, error= 0.999814, fom*time= 1.00037, time= 1000, n= 2694
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |        2526 |        2620 |         634 |      523.72 |     8.10246 |     9.28205 |    0.836551 |
-cell_01I1-_rep:0......... |           1 |        3168 |        3284 |         748 |      671.19 |     8.95285 |     9.54936 |     0.90459 |
-cell_01_rep:0............ |           1 |        8611 |        3904 |        2104 |     1828.69 |     8.64459 |     9.45482 |     0.87444 |
-cell_02I1+_rep:0......... |           1 |        1497 |        1538 |         427 |     302.673 |     7.68419 |     9.00072 |    0.712126 |
-cell_02I1-_rep:0......... |           1 |        1922 |        1971 |         506 |     380.176 |     7.86106 |     8.99414 |    0.754915 |
-cell_02_rep:0............ |           1 |        5212 |        2412 |        1463 |     1055.77 |     7.22567 |     9.01251 |    0.732919 |
-cell_03I1+_rep:0......... |           1 |         848 |         862 |         232 |      144.17 | 9.63405e-06 |     8.86007 |    0.624119 |
-cell_03I1-_rep:0......... |           1 |        1157 |        1194 |         372 |     250.999 | 5.45557e-06 |     8.75911 |    0.659084 |
-cell_03_rep:0............ |           1 |        3040 |        1451 |         952 |     599.094 | 9.30784e-06 |     8.79931 |    0.642721 |
-cell_04I1+_rep:0......... |           1 |         437 |         451 |         119 |     65.4926 |     7.97321 |     8.74908 |     0.55567 |
-cell_04I1-_rep:0......... |           1 |         610 |         624 |         184 |     107.018 | 2.02098e-06 |     8.69059 |    0.576318 |
-cell_04_rep:0............ |           1 |        1619 |         797 |         561 |     304.925 | 3.62237e-06 |     8.63764 |    0.566483 |
-cell_05I1+_rep:0......... |           1 |         241 |         249 |          83 |     45.1498 |     7.23272 |      8.1493 |    0.523491 |
-cell_05I1-_rep:0......... |           1 |         325 |         342 |         105 |     58.5901 |     7.38153 |     8.41481 |     0.53299 |
-cell_05_rep:0............ |           1 |         862 |         433 |         312 |     158.707 | 4.03287e-06 |     8.17989 |    0.522166 |
-cell_06I1+_rep:0......... |           1 |         118 |         122 |          35 |     15.0205 |     7.16449 |     8.12748 |    0.467271 |
-cell_06I1-_rep:0......... |           1 |         161 |         170 |          47 |     22.3691 |     7.31151 |     8.19754 |    0.509891 |
-cell_06_rep:0............ |           1 |         439 |         223 |         198 |      96.252 |     6.62745 |     7.73585 |    0.499751 |
-cell_07I1+_rep:0......... |           1 |          46 |          48 |          11 |     5.32163 |     6.14754 |     7.89959 |    0.496827 |
-cell_07I1-_rep:0......... |           1 |          74 |          80 |          31 |     13.9679 |     6.69609 |     8.03538 |    0.444906 |
-cell_07_rep:0............ |           1 |         195 |         113 |          95 |     42.1747 |     5.28061 |     7.13453 |    0.482796 |
-cell_08I1+_rep:0......... |           1 |          25 |          26 |           7 |     4.81666 |     6.97417 |     7.77011 |    0.537079 |
-cell_08I1-_rep:0......... |           1 |          38 |          39 |          13 |     6.83418 |     6.11242 |     7.87114 |    0.524142 |
-cell_08_rep:0............ |           1 |         102 |          48 |          51 |     25.5685 |     4.29557 |     6.47963 |    0.504854 |
-cell_09I1+_rep:0......... |           1 |          13 |          13 |           3 |     1.98951 |     6.82698 |     7.60545 |    0.500241 |
-cell_09I1-_rep:0......... |           1 |          17 |          18 |           7 |     3.22971 |     6.87133 |     7.83102 |    0.506086 |
-cell_09_rep:0............ |           1 |          50 |          26 |          30 |     14.2103 |     4.99976 |       6.268 |    0.471568 |
-cell_10I1+_rep:0......... |           1 |           6 |           6 |           4 |     2.01376 |     7.86932 |     7.98074 |    0.566464 |
-cell_10I1-_rep:0......... |           1 |          11 |          11 |           7 |     2.71835 |     6.14069 |     6.88507 |    0.503199 |
-cell_10_rep:0............ |           1 |          29 |          18 |          17 |     10.0381 |     4.84344 |     5.80568 |    0.502956 |
-cell_11I1+_rep:0......... |           1 |           4 |           5 |           3 |     1.04134 |     6.59825 |      6.7754 |    0.437936 |
-cell_11I1-_rep:0......... |           1 |           5 |           5 |           2 |           1 |     8.06809 |     8.22344 |    0.523579 |
-cell_11_rep:0............ |           1 |          15 |          12 |          11 |     4.02436 |     5.52137 |     6.20841 |    0.422723 |
-cell_12I1+_rep:0......... |           1 |           2 |           2 |           2 |           1 |     4.38924 |     4.75828 |    0.498813 |
-cell_12I1-_rep:0......... |           1 |           2 |           2 |           0 |           0 |     5.49251 |     5.56487 |    0.344927 |
-cell_12_rep:0............ |           1 |           7 |           5 |           3 |     1.10337 |     5.07317 |     5.58301 |      0.3792 |
-cell_13I1+_rep:0......... |           1 |           2 |           2 |           1 |         0.5 |     2.61176 |     3.09267 |    0.399612 |
-cell_13I1-_rep:0......... |           1 |           2 |           2 |           2 |    0.909153 |     3.19829 |     3.84661 |    0.472422 |
-cell_13_rep:0............ |           1 |           6 |           2 |           0 |           0 |     2.80257 |     3.35345 |    0.404718 |
-cell_14I1+_rep:0......... |           1 |           2 |           1 |           5 |     2.20191 |     1.74307 |     1.74414 |    0.458169 |
-cell_14I1-_rep:0......... |           1 |           2 |           1 |           0 |           0 |     1.74162 |     1.74545 |     0.45808 |
-cell_14_rep:0............ |           1 |           6 |           2 |           7 |      3.1635 |     2.05805 |     2.30515 |    0.428133 |
-cell_15I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_15I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_15_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_16I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_16I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_16_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_17I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_17I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_17_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |        2108 |        2184 |         568 |     460.209 | 7.02639e-06 |     9.20638 |    0.828224 |
+cell_01I1-_rep:0......... |           1 |        2735 |        2813 |         696 |     618.146 |     8.12818 |      9.4788 |    0.900981 |
+cell_01_rep:0............ |           1 |        7272 |        3322 |        1944 |     1660.81 | 3.10943e-05 |     9.36677 |    0.864651 |
+cell_02I1+_rep:0......... |           1 |        1196 |        1238 |         354 |     254.238 | 1.28363e-06 |     8.87291 |    0.713555 |
+cell_02I1-_rep:0......... |           1 |        1575 |        1626 |         531 |     400.319 | 3.97527e-06 |     8.83038 |    0.770398 |
+cell_02_rep:0............ |           1 |        4214 |        1991 |        1311 |     951.738 | 2.37545e-06 |     8.94496 |    0.739975 |
+cell_03I1+_rep:0......... |           1 |         631 |         636 |         183 |     111.073 | 2.68563e-06 |     8.61411 |    0.621143 |
+cell_03I1-_rep:0......... |           1 |         868 |         892 |         278 |     171.861 |  7.5933e-06 |     8.65027 |    0.650744 |
+cell_03_rep:0............ |           1 |        2290 |        1111 |         749 |     468.948 | 3.78103e-06 |     8.61255 |    0.639096 |
+cell_04I1+_rep:0......... |           1 |         327 |         335 |         109 |     55.5054 | 1.25409e-06 |     8.55344 |    0.562536 |
+cell_04I1-_rep:0......... |           1 |         457 |         467 |         136 |     79.7521 |     7.01493 |     8.54775 |    0.609842 |
+cell_04_rep:0............ |           1 |        1207 |         582 |         401 |     228.041 | 5.73896e-06 |     8.51213 |    0.580344 |
+cell_05I1+_rep:0......... |           1 |         179 |         183 |          57 |     34.4664 |     7.76407 |     8.32356 |    0.583282 |
+cell_05I1-_rep:0......... |           1 |         248 |         252 |          81 |     44.1076 |     7.90441 |     8.47741 |    0.566919 |
+cell_05_rep:0............ |           1 |         656 |         314 |         232 |     130.542 | 1.58126e-05 |     8.36645 |    0.573363 |
+cell_06I1+_rep:0......... |           1 |          88 |          93 |          26 |     14.4272 |      6.9816 |      8.3847 |    0.536549 |
+cell_06I1-_rep:0......... |           1 |         134 |         136 |          35 |     19.0096 |     7.61064 |     8.24624 |    0.560229 |
+cell_06_rep:0............ |           1 |         349 |         172 |         115 |     61.5794 |     7.41978 |     8.18492 |    0.554218 |
+cell_07I1+_rep:0......... |           1 |          47 |          48 |          15 |     9.24592 |     8.12173 |     8.55878 |    0.546696 |
+cell_07I1-_rep:0......... |           1 |          67 |          67 |          20 |     9.14327 |     8.30247 |     8.66946 |    0.484274 |
+cell_07_rep:0............ |           1 |         173 |          84 |          62 |     33.4843 |     7.87837 |     8.37685 |    0.507402 |
+cell_08I1+_rep:0......... |           1 |          18 |          19 |          11 |     5.06939 |      6.0264 |     7.04746 |    0.436226 |
+cell_08I1-_rep:0......... |           1 |          27 |          28 |          15 |     5.88794 |     7.34472 |     8.11588 |    0.444731 |
+cell_08_rep:0............ |           1 |          71 |          35 |          24 |     11.4616 |     6.52073 |     7.43186 |    0.460536 |
+cell_09I1+_rep:0......... |           1 |           9 |           9 |           2 |    0.638681 |     7.49874 |     8.88614 |    0.406164 |
+cell_09I1-_rep:0......... |           1 |          13 |          13 |           2 |     0.80037 |     5.57805 |     7.28221 |    0.387198 |
+cell_09_rep:0............ |           1 |          37 |          17 |          10 |     3.44606 |     7.12403 |     8.37697 |    0.398144 |
+cell_10I1+_rep:0......... |           1 |           4 |           4 |           0 |           0 |     5.01154 |     7.89692 |    0.377269 |
+cell_10I1-_rep:0......... |           1 |           7 |           8 |           1 |         0.5 |     7.43378 |     8.81791 |    0.453193 |
+cell_10_rep:0............ |           1 |          21 |          12 |           8 |     3.57736 |     7.63253 |     8.86094 |    0.444432 |
+cell_11I1+_rep:0......... |           1 |           3 |           3 |           0 |           0 |     8.58436 |     8.66134 |    0.468583 |
+cell_11I1-_rep:0......... |           1 |           3 |           3 |           1 |         0.5 |      9.6078 |     9.61273 |         0.5 |
+cell_11_rep:0............ |           1 |          12 |           6 |           2 |           1 |     8.86293 |     8.91766 |    0.505492 |
+cell_12I1+_rep:0......... |           1 |           2 |           2 |           0 |           0 |     9.95794 |     9.95805 |    0.435096 |
+cell_12I1-_rep:0......... |           1 |           2 |           2 |           0 |           0 |     9.95794 |     9.95805 |    0.435096 |
+cell_12_rep:0............ |           1 |           8 |           4 |           2 |     1.07166 |     9.64032 |     9.65392 |    0.479449 |
+cell_13I1+_rep:0......... |           1 |           2 |           2 |           1 |         0.5 |     9.93866 |     9.93874 |         0.5 |
+cell_13I1-_rep:0......... |           1 |           2 |           2 |           1 |         0.5 |     9.94979 |      9.9499 |         0.5 |
+cell_13_rep:0............ |           1 |           7 |           4 |           4 |     1.92124 |     7.07226 |     7.68532 |    0.474989 |
+cell_14I1+_rep:0......... |           1 |           2 |           4 |           2 |    0.827293 |     5.06766 |     5.53522 |    0.394456 |
+cell_14I1-_rep:0......... |           1 |           3 |           3 |           2 |    0.921239 |     5.59835 |     6.16953 |     0.44927 |
+cell_14_rep:0............ |           1 |           7 |           6 |           1 |         0.5 |     5.23312 |     5.70511 |    0.432193 |
+cell_15I1+_rep:0......... |           1 |           2 |           2 |           4 |     1.25617 |     3.02904 |      3.0363 |    0.314042 |
+cell_15I1-_rep:0......... |           1 |           1 |           1 |           0 |           0 |     3.62151 |     3.62151 |         0.5 |
+cell_15_rep:0............ |           1 |           4 |           2 |           5 |     1.75617 |     3.15702 |     3.16576 |    0.315529 |
+cell_16I1+_rep:0......... |           1 |           1 |           1 |           2 |    0.628085 |     2.64917 |      2.6504 |    0.314042 |
+cell_16I1-_rep:0......... |           1 |           1 |           1 |           1 |    0.314042 |     2.70215 |     2.70221 |    0.314042 |
+cell_16_rep:0............ |           1 |           3 |           1 |           2 |    0.628085 |     2.57405 |     2.57758 |    0.314042 |
+cell_17I1+_rep:0......... |           1 |           1 |           1 |           0 |           0 |     2.32562 |     2.32562 |         0.5 |
+cell_17I1-_rep:0......... |           1 |           1 |           1 |           0 |           0 |     2.32562 |     2.32562 |    0.314042 |
+cell_17_rep:0............ |           1 |           3 |           1 |           2 |    0.814042 |      2.3458 |     2.34606 |    0.416603 |
 cell_18I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_18I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_18_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_19_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_18I1-_rep:0......... |           1 |           1 |           1 |           2 |           1 |     2.19398 |     2.19398 |         0.5 |
+cell_18_rep:0............ |           1 |           2 |           1 |           7 |         3.5 |     2.11915 |     2.12138 |         0.5 |
+cell_19_rep:0............ |           1 |           1 |           1 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelTransport, will be removed!
@@ -1613,41 +3029,41 @@ DoIt Vector:
 ================================================
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1000, n= 4985
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 3946
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |        3241 |        3357 |         809 |         809 | 1.73321e-05 |     9.34402 |           1 |
-cell_01I1-_rep:0......... |           1 |        4639 |        4809 |        1066 |        1066 |     8.15485 |     9.51746 |           1 |
-cell_01_rep:0............ |           1 |       11975 |        5817 |        2732 |        2732 |  3.7984e-05 |     9.48892 |           1 |
-cell_02I1+_rep:0......... |           1 |        1418 |        1459 |         375 |         375 |     8.50768 |     9.14399 |           1 |
-cell_02I1-_rep:0......... |           1 |        2075 |        2163 |         542 |         542 |     8.31151 |     9.32511 |           1 |
-cell_02_rep:0............ |           1 |        5389 |        2693 |        1445 |        1445 | 5.04657e-05 |     9.24307 |           1 |
-cell_03I1+_rep:0......... |           1 |         602 |         611 |         168 |         168 |  8.6696e-06 |     8.81477 |           1 |
-cell_03I1-_rep:0......... |           1 |         887 |         923 |         255 |         255 |     8.29464 |      8.9718 |           1 |
-cell_03_rep:0............ |           1 |        2302 |        1160 |         642 |         642 | 8.34611e-06 |     8.90367 |           1 |
-cell_04I1+_rep:0......... |           1 |         227 |         241 |          80 |          80 |     7.35814 |     8.88049 |           1 |
-cell_04I1-_rep:0......... |           1 |         352 |         367 |         102 |         102 |     5.09323 |     8.65139 |           1 |
-cell_04_rep:0............ |           1 |         907 |         485 |         280 |         280 |     5.39317 |     8.72817 |           1 |
-cell_05I1+_rep:0......... |           1 |          92 |          95 |          25 |          25 |     3.34773 |     8.09423 |           1 |
-cell_05I1-_rep:0......... |           1 |         146 |         154 |          54 |          54 | 8.62171e-07 |     8.86333 |           1 |
-cell_05_rep:0............ |           1 |         356 |         197 |         117 |         117 | 4.29859e-06 |     8.47631 |           1 |
-cell_06I1+_rep:0......... |           1 |          28 |          28 |           6 |           6 |     4.90524 |     7.83441 |           1 |
-cell_06I1-_rep:0......... |           1 |          46 |          52 |          21 |          21 |     5.67469 |     7.59967 |           1 |
-cell_06_rep:0............ |           1 |         123 |          69 |          43 |          43 |     5.03424 |     8.03539 |           1 |
-cell_07I1+_rep:0......... |           1 |          10 |           9 |           6 |           6 |     5.76775 |     7.18255 |           1 |
-cell_07I1-_rep:0......... |           1 |          19 |          18 |           6 |           6 |     7.11032 |     8.02048 |           1 |
-cell_07_rep:0............ |           1 |          47 |          27 |          23 |          23 |     5.66631 |     6.81559 |           1 |
-cell_08I1+_rep:0......... |           1 |           3 |           3 |           0 |           0 |     6.23081 |     6.72515 |           1 |
-cell_08I1-_rep:0......... |           1 |           4 |           4 |           1 |           1 |     3.40842 |      4.6619 |           1 |
-cell_08_rep:0............ |           1 |          13 |           6 |          15 |          15 |      3.7938 |     4.83175 |           1 |
-cell_09I1+_rep:0......... |           1 |           2 |           2 |           1 |           1 |     4.81473 |     5.28632 |           1 |
-cell_09I1-_rep:0......... |           1 |           2 |           2 |           0 |           0 |     6.11301 |     6.81172 |           1 |
-cell_09_rep:0............ |           1 |           5 |           2 |           0 |           0 |     5.71685 |      6.3815 |           1 |
-cell_10I1+_rep:0......... |           1 |           2 |           2 |           1 |           1 |     3.69744 |     3.69744 |           1 |
-cell_10I1-_rep:0......... |           1 |           1 |           1 |           1 |           1 |     3.71629 |     3.71629 |           1 |
-cell_10_rep:0............ |           1 |           4 |           2 |           2 |           2 |     3.54615 |     3.55438 |           1 |
+cell_01I1+_rep:0......... |           1 |        2597 |        2679 |         648 |         648 | 9.11961e-05 |     9.26079 |           1 |
+cell_01I1-_rep:0......... |           1 |        3687 |        3808 |         844 |         844 | 8.93783e-06 |     9.48855 |           1 |
+cell_01_rep:0............ |           1 |        9553 |        4669 |        2241 |        2241 |  0.00013168 |     9.37662 |           1 |
+cell_02I1+_rep:0......... |           1 |        1248 |        1289 |         357 |         357 |     8.11885 |     8.98772 |           1 |
+cell_02I1-_rep:0......... |           1 |        1703 |        1765 |         397 |         397 |     8.25572 |     9.07817 |           1 |
+cell_02_rep:0............ |           1 |        4498 |        2242 |        1187 |        1187 |     8.14582 |     9.01185 |           1 |
+cell_03I1+_rep:0......... |           1 |         489 |         513 |         177 |         177 |     6.39377 |     8.20005 |           1 |
+cell_03I1-_rep:0......... |           1 |         769 |         798 |         209 |         209 |     7.32383 |     8.85463 |           1 |
+cell_03_rep:0............ |           1 |        1947 |        1003 |         570 |         570 |     7.14635 |     8.68713 |           1 |
+cell_04I1+_rep:0......... |           1 |         171 |         176 |          61 |          61 |     4.79551 |     8.29307 |           1 |
+cell_04I1-_rep:0......... |           1 |         282 |         292 |         106 |         106 |     6.86283 |     8.36919 |           1 |
+cell_04_rep:0............ |           1 |         717 |         387 |         256 |         256 |     6.92015 |     8.43779 |           1 |
+cell_05I1+_rep:0......... |           1 |          63 |          66 |          15 |          15 |     7.65512 |     8.76137 |           1 |
+cell_05I1-_rep:0......... |           1 |         110 |         114 |          44 |          44 |     6.60658 |     8.35161 |           1 |
+cell_05_rep:0............ |           1 |         268 |         141 |          84 |          84 |     6.84076 |     8.28187 |           1 |
+cell_06I1+_rep:0......... |           1 |          28 |          28 |           9 |           9 |     6.75717 |     8.41554 |           1 |
+cell_06I1-_rep:0......... |           1 |          37 |          36 |          13 |          13 |     7.24515 |     8.73084 |           1 |
+cell_06_rep:0............ |           1 |         106 |          50 |          38 |          38 |     6.94001 |     8.45518 |           1 |
+cell_07I1+_rep:0......... |           1 |          10 |          10 |           4 |           4 |     5.33266 |     7.84978 |           1 |
+cell_07I1-_rep:0......... |           1 |          13 |          13 |           1 |           1 |     5.81864 |     8.63661 |           1 |
+cell_07_rep:0............ |           1 |          40 |          22 |          21 |          21 |      5.6901 |     7.87424 |           1 |
+cell_08I1+_rep:0......... |           1 |           6 |           7 |           2 |           2 |     3.30548 |     6.97919 |           1 |
+cell_08I1-_rep:0......... |           1 |           7 |           8 |           4 |           4 |     3.82466 |     7.06537 |           1 |
+cell_08_rep:0............ |           1 |          21 |          11 |           5 |           5 |     3.83014 |     7.18933 |           1 |
+cell_09I1+_rep:0......... |           1 |           2 |           3 |           1 |           1 |       5.493 |     5.67384 |           1 |
+cell_09I1-_rep:0......... |           1 |           4 |           5 |           2 |           2 |     2.90903 |     6.22846 |           1 |
+cell_09_rep:0............ |           1 |          11 |           7 |           6 |           6 |     4.27989 |     6.22425 |           1 |
+cell_10I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_10I1-_rep:0......... |           1 |           1 |           1 |           0 |           0 |     7.68782 |     7.68782 |           1 |
+cell_10_rep:0............ |           1 |           2 |           1 |           1 |           1 |     7.68782 |     7.68782 |           1 |
 cell_11I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_11I1-_rep:0......... |           1 |           1 |           2 |           2 |           2 |     3.45976 |     3.46492 |           1 |
-cell_11_rep:0............ |           1 |           2 |           2 |           0 |           0 |     3.38776 |     3.39615 |           1 |
+cell_11I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_11_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_12I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_12I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_12_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
@@ -1911,50 +3327,50 @@ DoIt Vector:
 ================================================
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1000, n= 3039
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 2387
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01I1+_rep:0......... |           1 |        2463 |        2569 |         703 |         703 |     7.70967 |     9.18105 |           1 |
-cell_01I1-_rep:0......... |           1 |        3108 |        3205 |         789 |         789 | 3.89414e-05 |     9.35806 |           1 |
-cell_01_rep:0............ |           1 |        8371 |        3790 |        2161 |        2161 | 2.54391e-05 |     9.24199 |           1 |
-cell_02I1+_rep:0......... |           1 |        1498 |        1528 |         460 |         460 | 4.14188e-06 |     8.75306 |           1 |
-cell_02I1-_rep:0......... |           1 |        1931 |        1980 |         551 |         551 | 6.46871e-06 |     8.96757 |           1 |
-cell_02_rep:0............ |           1 |        5200 |        2405 |        1568 |        1568 | 3.62992e-06 |     8.83844 |           1 |
-cell_03I1+_rep:0......... |           1 |         852 |         882 |         280 |         280 |     6.15147 |     8.71025 |           1 |
-cell_03I1-_rep:0......... |           1 |        1141 |        1170 |         343 |         343 | 2.48953e-06 |     8.70884 |           1 |
-cell_03_rep:0............ |           1 |        3045 |        1445 |         978 |         978 | 5.23173e-06 |     8.58309 |           1 |
-cell_04I1+_rep:0......... |           1 |         501 |         500 |         154 |         154 |     6.77987 |     8.22468 |           1 |
-cell_04I1-_rep:0......... |           1 |         661 |         681 |         220 |         220 |     7.56086 |     8.61098 |           1 |
-cell_04_rep:0............ |           1 |        1761 |         835 |         655 |         655 |     7.02734 |     8.32569 |           1 |
-cell_05I1+_rep:0......... |           1 |         274 |         292 |          93 |          93 |     6.32661 |     8.08029 |           1 |
-cell_05I1-_rep:0......... |           1 |         367 |         381 |         137 |         137 |     6.32896 |     8.04664 |           1 |
-cell_05_rep:0............ |           1 |        1001 |         488 |         401 |         401 |     6.22674 |     7.89892 |           1 |
-cell_06I1+_rep:0......... |           1 |         152 |         154 |          54 |          54 |     6.85116 |     7.94204 |           1 |
-cell_06I1-_rep:0......... |           1 |         201 |         202 |          69 |          69 |     6.36448 |     7.93798 |           1 |
-cell_06_rep:0............ |           1 |         559 |         287 |         261 |         261 | 2.41501e-06 |     7.59463 |           1 |
-cell_07I1+_rep:0......... |           1 |          68 |          68 |          28 |          28 |     6.76851 |     8.08622 |           1 |
-cell_07I1-_rep:0......... |           1 |          98 |         101 |          35 |          35 |     6.61427 |     7.95317 |           1 |
-cell_07_rep:0............ |           1 |         275 |         137 |         156 |         156 |     5.13198 |     7.24955 |           1 |
-cell_08I1+_rep:0......... |           1 |          39 |          38 |          14 |          14 |     6.80446 |     7.67289 |           1 |
-cell_08I1-_rep:0......... |           1 |          49 |          49 |          14 |          14 |     6.30058 |      7.3195 |           1 |
-cell_08_rep:0............ |           1 |         143 |          66 |          54 |          54 |     6.14579 |     7.04094 |           1 |
-cell_09I1+_rep:0......... |           1 |          24 |          23 |           9 |           9 |     5.89498 |     6.88263 |           1 |
-cell_09I1-_rep:0......... |           1 |          32 |          32 |          11 |          11 |     6.58231 |     7.52531 |           1 |
-cell_09_rep:0............ |           1 |          93 |          44 |          35 |          35 |     6.45548 |     7.26528 |           1 |
-cell_10I1+_rep:0......... |           1 |           7 |           7 |           0 |           0 |     8.52635 |     8.79037 |           1 |
-cell_10I1-_rep:0......... |           1 |          11 |          12 |           3 |           3 |     6.21018 |     7.28688 |           1 |
-cell_10_rep:0............ |           1 |          38 |          24 |          25 |          25 |     6.29641 |     7.15135 |           1 |
-cell_11I1+_rep:0......... |           1 |           3 |           3 |           0 |           0 |     8.97903 |     9.00211 |           1 |
-cell_11I1-_rep:0......... |           1 |           7 |           7 |           2 |           2 |     8.47449 |     8.73609 |           1 |
-cell_11_rep:0............ |           1 |          19 |          10 |           8 |           8 |     6.69839 |     7.41286 |           1 |
-cell_12I1+_rep:0......... |           1 |           2 |           2 |           1 |           1 |     9.29319 |     9.33552 |           1 |
-cell_12I1-_rep:0......... |           1 |           3 |           3 |           1 |           1 |     8.97762 |     9.00289 |           1 |
-cell_12_rep:0............ |           1 |           6 |           3 |           0 |           0 |     9.07382 |     9.10939 |           1 |
+cell_01I1+_rep:0......... |           1 |        1980 |        2035 |         581 |         581 | 3.49821e-05 |     9.12642 |           1 |
+cell_01I1-_rep:0......... |           1 |        2459 |        2546 |         607 |         607 |     8.52815 |     9.35202 |           1 |
+cell_01_rep:0............ |           1 |        6656 |        3039 |        1766 |        1766 |     7.35781 |     9.17154 |           1 |
+cell_02I1+_rep:0......... |           1 |        1220 |        1262 |         367 |         367 | 3.49504e-06 |     8.85142 |           1 |
+cell_02I1-_rep:0......... |           1 |        1563 |        1595 |         436 |         436 | 1.36324e-05 |     9.05342 |           1 |
+cell_02_rep:0............ |           1 |        4188 |        1914 |        1275 |        1275 | 5.24058e-06 |     8.87422 |           1 |
+cell_03I1+_rep:0......... |           1 |         681 |         708 |         242 |         242 | 1.92376e-06 |     8.70616 |           1 |
+cell_03I1-_rep:0......... |           1 |         917 |         946 |         306 |         306 | 2.62423e-06 |     8.83138 |           1 |
+cell_03_rep:0............ |           1 |        2413 |        1144 |         788 |         788 | 2.68551e-06 |     8.54568 |           1 |
+cell_04I1+_rep:0......... |           1 |         390 |         398 |         131 |         131 |     6.06296 |     8.07846 |           1 |
+cell_04I1-_rep:0......... |           1 |         515 |         534 |         163 |         163 |     7.48192 |     8.61687 |           1 |
+cell_04_rep:0............ |           1 |        1387 |         656 |         488 |         488 | 8.62883e-05 |     8.22759 |           1 |
+cell_05I1+_rep:0......... |           1 |         234 |         228 |          88 |          88 |     4.79481 |     7.52042 |           1 |
+cell_05I1-_rep:0......... |           1 |         299 |         301 |         111 |         111 |     4.91907 |      7.6576 |           1 |
+cell_05_rep:0............ |           1 |         817 |         368 |         357 |         357 |     4.73103 |     7.31791 |           1 |
+cell_06I1+_rep:0......... |           1 |         111 |         116 |          39 |          39 |     5.22682 |     7.60907 |           1 |
+cell_06I1-_rep:0......... |           1 |         167 |         176 |          81 |          81 |     5.17532 |     7.50103 |           1 |
+cell_06_rep:0............ |           1 |         422 |         203 |         175 |         175 |     4.99208 |     7.31615 |           1 |
+cell_07I1+_rep:0......... |           1 |          61 |          62 |          18 |          18 |     2.96186 |     7.38127 |           1 |
+cell_07I1-_rep:0......... |           1 |          72 |          73 |          19 |          19 |     5.93785 |     7.50877 |           1 |
+cell_07_rep:0............ |           1 |         216 |         102 |          89 |          89 |     4.96687 |     7.57591 |           1 |
+cell_08I1+_rep:0......... |           1 |          34 |          34 |          10 |          10 |     6.42162 |     7.58463 |           1 |
+cell_08I1-_rep:0......... |           1 |          50 |          50 |          13 |          13 |     2.73414 |     7.38474 |           1 |
+cell_08_rep:0............ |           1 |         131 |          62 |          60 |          60 |     3.93944 |     7.05935 |           1 |
+cell_09I1+_rep:0......... |           1 |          21 |          22 |           8 |           8 |     5.43529 |     7.32924 |           1 |
+cell_09I1-_rep:0......... |           1 |          24 |          23 |           7 |           7 |     5.79335 |     6.97745 |           1 |
+cell_09_rep:0............ |           1 |          72 |          35 |          41 |          41 |     6.52134 |     7.77205 |           1 |
+cell_10I1+_rep:0......... |           1 |           9 |           8 |           2 |           2 |     8.10093 |     8.30152 |           1 |
+cell_10I1-_rep:0......... |           1 |          14 |          14 |           3 |           3 |     6.71621 |      7.5803 |           1 |
+cell_10_rep:0............ |           1 |          38 |          19 |          25 |          25 |      3.4288 |     6.97852 |           1 |
+cell_11I1+_rep:0......... |           1 |           3 |           3 |           0 |           0 |     4.61672 |     6.07914 |           1 |
+cell_11I1-_rep:0......... |           1 |           6 |           6 |           3 |           3 |      5.1342 |     6.24418 |           1 |
+cell_11_rep:0............ |           1 |          16 |          10 |          14 |          14 |     5.60259 |     6.53516 |           1 |
+cell_12I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_12I1-_rep:0......... |           1 |           2 |           2 |           1 |           1 |     2.81493 |     4.04216 |           1 |
+cell_12_rep:0............ |           1 |           4 |           3 |           3 |           3 |       2.844 |      3.5417 |           1 |
 cell_13I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_13I1-_rep:0......... |           1 |           1 |           1 |           2 |           2 |     9.93135 |     9.93139 |           1 |
-cell_13_rep:0............ |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_13I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_13_rep:0............ |           1 |           2 |           3 |           8 |           8 |     2.53392 |     3.01802 |           1 |
 cell_14I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_14I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-cell_14_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_14_rep:0............ |           1 |           2 |           2 |           2 |           2 |      1.4069 |     1.60958 |           1 |
 cell_15I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_15I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 cell_15_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
@@ -2078,10 +3494,10 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 131072
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1031 (mu)seconds
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 128
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1020 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1031, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1020, n= 0
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
