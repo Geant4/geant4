@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.8 2000-01-22 15:36:13 stesting Exp $
+// $Id: test16.hadronic.exerciser.cc,v 1.9 2000-01-24 11:28:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ int main (int argc, char** argv) {
   G4int N = 10;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
-      N = 200;
+      N = 100;
     }
   }
 
