@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2004-03-16 18:06:13 maire Exp $
+$Id: History,v 1.46 2004-03-17 12:32:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
      
-16-03-04 mma 
+167-03-04 mma (testem3-V06-00-01)
 - energy leakage only from secondaries.
 - idem in geant3
 - suppression of DataVector in EventAction
+- new macro dedx.max to quickly check dE/dx calculation
      
 15-03-04 mma (testem3-V06-00-00)
 - example of histograms with ROOT: USE_ROOT

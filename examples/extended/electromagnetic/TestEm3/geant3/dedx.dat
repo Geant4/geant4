@@ -1,0 +1,20 @@
+FILE  dedx.paw
+LIST
+C
+C     1 layer; minimum ionizing particle
+C
+CALOR  1 (nbAbs) 1 (nbLay)  1. (calorYZ) 0. (field)
+MATE   4 (water)
+THICK  1. (cm)
+LOSS   4
+MULS   0 
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e+3 (bcute/m)  2*10.0e+3 (dcute/m)
+C      
+KINE   5 (Itype) 0.3 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+SWIT   0 (draw)
+DEBUG  1  5 1000
+TRIG   2
+END
