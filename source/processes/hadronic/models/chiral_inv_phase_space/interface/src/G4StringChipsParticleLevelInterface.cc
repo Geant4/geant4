@@ -470,17 +470,26 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
 #endif
 
+    if(theDefinition)
+    {
     theSec = new G4ReactionProduct(theDefinition);
     G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
     current4Mom.boost(targ4Mom.boostVector());
     theSec->SetTotalEnergy(current4Mom.t());
     theSec->SetMomentum(current4Mom.vect());
     theResult->push_back(theSec);
+    }
+    else
+    {
+      G4cerr << G4endl<<"WARNING: "<<G4endl;
+      G4cerr << "Getting unknown pdgCode from chips in ParticleLevelInterface"<<G4endl;
+      G4cerr << "skipping particle with pdgCode = "<<pdgCode<<G4endl<<G4endl;
+    }
     
 #ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
-	   << current4Mom <<G4endl; 
+	   << output->operator[](particle)->Get4Momentum() <<G4endl; 
 #endif
 
     delete output->operator[](particle);
