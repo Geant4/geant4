@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2002-11-20 13:08:43 gcosmo Exp $
+$Id: History,v 1.105 2002-12-04 17:39:49 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 4, 2002 M.Asai (global-V04-01-03)
+- Migration to new G4ApplicationState.
 
 November 20, 2002 G.Cosmo (global-V04-01-02)
 - G4UnitsTable[.hh.cc]: made GetUnitsTable static method non inlined.

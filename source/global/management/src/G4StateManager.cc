@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.6 2002-04-16 18:19:14 asaim Exp $
+// $Id: G4StateManager.cc,v 1.7 2002-12-04 17:39:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
- : theCurrentState(PreInit),
-   thePreviousState(PreInit),
+ : theCurrentState(G4State_PreInit),
+   thePreviousState(G4State_PreInit),
    theBottomDependent(0),
    suppressAbortion(0),
    msgptr(0)
@@ -216,19 +216,19 @@ G4StateManager::GetStateString(G4ApplicationState aState) const
   G4String stateName;
   switch(aState)
   {
-    case PreInit:
+    case G4State_PreInit:
      stateName = "PreInit"; break;
-    case Init:
+    case G4State_Init:
      stateName = "Init"; break;
-    case Idle:
+    case G4State_Idle:
      stateName = "Idle"; break;
-    case GeomClosed:
+    case G4State_GeomClosed:
      stateName = "GeomClosed"; break;
-    case EventProc:
+    case G4State_EventProc:
      stateName = "EventProc"; break;
-    case Quit:
+    case G4State_Quit:
      stateName = "Quit"; break;
-    case Abort:
+    case G4State_Abort:
      stateName = "Abort"; break;
     default:
      stateName = "Unknown";

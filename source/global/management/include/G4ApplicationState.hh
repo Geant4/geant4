@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ApplicationState.hh,v 1.2 2001-07-11 10:00:49 gunter Exp $
+// $Id: G4ApplicationState.hh,v 1.3 2002-12-04 17:39:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,34 +33,34 @@
 // Specifies the state of the G4 application
 //
 // States:
-//  PreInit
+//  G4State_PreInit
 //    At the very begining of the Application. G4StateManager starts
 //    with this state. G4Initializer changes this state to Init when
 //    G4Initializer::Initialize() method starts. At the moment of
 //    the state change of PreInit->Init, no material, geometrical,
 //    particle or physics process has been initialized.
-//  Init
+//  G4State_Init
 //    During the G4Initializer::Initialize() method. G4Initializer
 //    changes this state to Idle when all initialization procedures
 //    are successfully Done.
-//  Idle
+//  G4State_Idle
 //    Ready to start "BeamOn". G4RunManager changes this state to
 //    GeomClosed when G4RunManager::BeamOn() method starts and
 //    G4GeometryManager::CloseGeometry() is Done. At the end of
 //    BeamOn() method, G4RunManager will reset the application state
 //    to Idle after G4GeometryManager::OpenGeometry() is Done.
-//  GeomClosed
+//  G4State_GeomClosed
 //    G4 is in this state between G4GeometryManager::CloseGeometry()
 //    and G4GeometryManager::OpenGeometry(), but no event is in 
 //    progress. At the begining of each event (construction of a
 //    G4Event object and primary particle generation), G4RunManager
 //    changes this state to EventProc and resets to GeomClosed state
 //    when G4EventManager::ProcessOneEvent() is over.
-//  EventProc
+//  G4State_EventProc
 //    Processing an event.
-//  Quit
+//  G4State_Quit
 //    G4 is in this state when the destructor of G4RunManager is invoked.
-//  Abort
+//  G4State_Abort
 //    G4 is in this state when G4Exception is invoked.
 //    
 //
@@ -80,7 +80,8 @@
 //
 
 enum G4ApplicationState 
-  {PreInit, Init, Idle, GeomClosed, EventProc, Quit, Abort};
+  {G4State_PreInit, G4State_Init, G4State_Idle, G4State_GeomClosed,
+   G4State_EventProc, G4State_Quit, G4State_Abort};
 
 #endif
 
