@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2003-01-15 09:37:55 gcosmo Exp $
+$Id: History,v 1.49 2003-01-15 09:48:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,7 +33,7 @@ December 16, 2002  G. Cosmo                geommng-V05-00-00
 
 December 6, 2002  V. Grichine              geommng-V04-01-06
 - G4VSolid.cc: restored original conditions for extent clipping in
-  method ClipPolygon().
+  method ClipPolygon(). Makes unit tests run successfully.
 
 November 19, 2002  G. Cosmo                geommng-V04-01-05
 - G4GeometryManager[.cc]
@@ -253,59 +253,47 @@ September 11, 2000   G.Cosmo               geommng-V02-00-00
   application exit when Boolean solids are involved (bug #154).
 
 June 06, 2000   G.Cosmo                    geommng-V01-01-00
-
 - G4DrawVoxels.hh: removed line '#define G4DrawVoxelsDebug' left in place
   accidentally in the code...
 
 April 20, 2000   G. Cosmo
-
 - Reorganised comments for the Software Reference Manual.
 - Moved inlined definition to .icc files, where needed.
   Created: G4SmartVoxelHeader.icc, G4SmartVoxelNode.icc,
            G4SmartVoxelProxy.icc, G4VoxelLimits.icc.
 
 April 11, 2000   J. Allison
-
 - Made virtual G4VisExtent G4VSolid::GetExtent() non-pure and implemented
-    a default in terms of CalculateExtent.
+  a default in terms of CalculateExtent.
 
-January 19, 00       G. Cosmo              geommng-V01-00-00
+January 19, 2000  G. Cosmo                 geommng-V01-00-00
 
-Syncronized file versioning with HEAD (several CVS headers changed
-due to the recent migration for ISO C++)
+- Syncronized file versioning with HEAD (several CVS headers changed
+  due to the recent migration for ISO C++)
 
-January 19, 00       J. Allison
+January 19, 2000  J. Allison
 
-G4DrawVoxels.cc:
+- G4DrawVoxels.cc: assured GetSlice(slice_no) is called for
+  slice_no < no_slices.
 
-Assured GetSlice(slice_no) is called for slice_no < no_slices.
+November 30, 1999  G. Cosmo                geommng-V00-01-01a
+- G4DrawVoxels.cc:
+  Fixed initialization of (const G4VPhysicalVolume*) in method
+  GetAbsoluteTransformation(). Fix needed for NT/VC++ compiler.
 
-November 30, 99      G. Cosmo              geommng-V00-01-01a
-
-G4DrawVoxels.cc:
-
-Fixed initialization of (const G4VPhysicalVolume*) in method
-GetAbsoluteTransformation(). Fix needed for NT/VC++ compiler.
-
-November 09, 99      J. Apostolakis        geommng-V00-01-01
-
-G4VPhysicalVolume:
-  i) Made G4RotationMatrix G4VPhysicalVolume::GetObjectRotation() const
+November 09, 1999  J. Apostolakis          geommng-V00-01-01
+- G4VPhysicalVolume:
+   i) Made G4RotationMatrix G4VPhysicalVolume::GetObjectRotation() const
       non-inline and moved it to source file from inline file.
- ii) Added GetObjectRotationValue() method.
-iii) Minimal changes of comments for Software Ref. Manual in header file
+  ii) Added GetObjectRotationValue() method.
+ iii) Minimal changes of comments for Software Ref. Manual in header file
 
   [ Change i) caused problem with HP aCC compiler A.01.19.  Atlas 
      was patching the code to try to get around this, but this 
      resolution is much better ] 
 
-March    17, 99      J. Apostolakis        geommng-01-00-02
-
-G4AffineTransform.icc:  
- 
+March 17, 1999  J. Apostolakis             geommng-01-00-02
+- G4AffineTransform.icc:  
   Corrected a typo in InverseProduct (rzy->ryz) that caused the incorrect 
-calculation of a compound transformation (if tf1.tz*tf2.ryz != 0). 
-
-  [ This problem was seen in the code of two Atlas Geant4 collaborators:
-     Andrea del' Acqua and Maya Stavrinakou ] 
-
+  calculation of a compound transformation (if tf1.tz*tf2.ryz != 0).
+  This problem was seen in ATLAS code.
