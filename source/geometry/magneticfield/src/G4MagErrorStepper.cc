@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.cc,v 1.9 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4MagErrorStepper.cc,v 1.10 2002-11-09 03:04:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagErrorStepper.hh"
@@ -52,6 +52,9 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
    //  Saving yInput because yInput and yOutput can be aliases for same array
 
    for(i=0;i<nvar;i++) yInitial[i]=yInput[i];
+   yInitial[7]= yInput[7];    // Copy the time in case ... even if not really needed
+   yMiddle[7] = yInput[7];  // Copy the time from initial value 
+   yOutput[7] = yInput[7]; // -> dumb stepper does it too for RK4
 
    G4double halfStep = hstep * 0.5; 
 
