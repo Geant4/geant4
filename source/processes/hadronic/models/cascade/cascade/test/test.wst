@@ -1,0 +1,72 @@
+WORKSET VERSION 1
+
+#
+# Workshop WorkSet File
+#
+
+%%File
+
+[FileData
+  (processDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (currentDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (files 
+    { 
+    })
+]
+
+%%Build
+
+[BuildData
+  (currentDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (targets 
+    { 
+      [BuildTarget
+        (makefile "test/GNUmakefile")
+        (target "<Default>")
+        (options "")
+        (command "gmake")
+        (buildDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+      ]
+    })
+]
+
+%%Debug
+
+[DebugData
+  (currentDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (programs 
+    { 
+    })
+]
+
+%%Browse
+
+[BrowseData
+  (AccuBrowseDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (PatternSearchDirectory "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade")
+  (mode "PatternSearch")
+  (directories 
+    { 
+    })
+]
+
+%%SUNW_Analyzer
+
+
+
+%%SUNW_Looptool
+
+
+
+%%SUNW_Codemgrtool
+
+
+
+%%tha
+
+
+
+%%SUNW_Visual
+
+
+
