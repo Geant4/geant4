@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.1 2001-03-26 15:52:27 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.2 2001-04-18 19:43:41 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ class G4ReferenceCountedHandle
          
          CountedObject::~CountedObject() {
             delete fRep;
+            fRep = 0;
          } // Destructor
       };
 
@@ -123,7 +124,7 @@ class G4ReferenceCountedHandle
          return *this;
       } // Assignment operator by pointer
    
-      G4ReferenceCountedHandle& operator =( const X* pRefObj ) {
+      G4ReferenceCountedHandle& operator =( X* pRefObj ) {
          if( 0 == Release() )      {
             if( fObj->fRep != 0 ) {
                delete fObj;
