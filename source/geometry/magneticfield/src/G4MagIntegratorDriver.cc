@@ -21,26 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.40 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.41 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
 // Implementation for class G4MagInt_Driver
-//   Tracking in space dependent magnetic field
+// Tracking in space dependent magnetic field
 //
 // History of major changes:
 //  8 Nov 01  J. Apostolakis:   Respect minimum step in AccurateAdvance
 // 27 Jul 99  J. Apostolakis:   Ensured that AccurateAdvance does not loop 
-//                                due to very small eps & step size (precision)
+//                              due to very small eps & step size (precision)
 // 28 Jan 98  W. Wander:        Added ability for low order integrators
 //  7 Oct 96  V. Grichine       First version
-#include <math.h>
-#include "G4ios.hh"
-#include "G4MagIntegratorDriver.hh"
-#include "G4FieldTrack.hh"
+// --------------------------------------------------------------------
+
+#include "globals.hh"
 #include "geomdefs.hh"         //  for kCarTolerance
 #include <iomanip>
+#include "G4MagIntegratorDriver.hh"
+#include "G4FieldTrack.hh"
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1

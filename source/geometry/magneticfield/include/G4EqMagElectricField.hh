@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.hh,v 1.6 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4EqMagElectricField.hh,v 1.7 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,6 +34,7 @@
 
 // History:
 // - Created. V.Grichine, 10.11.98
+// -------------------------------------------------------------------
 
 #ifndef G4EQMAGELECTRICFIELD_hh
 #define G4EQMAGELECTRICFIELD_hh
@@ -51,12 +52,12 @@ class G4EqMagElectricField : public G4Mag_EqRhs
     ~G4EqMagElectricField() {;} 
 
     void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
-			        G4double MomentumXc,
-				G4double mass);
+                                G4double MomentumXc,
+                                G4double mass);
 
     void EvaluateRhsGivenB(const G4double y[],
-			   const G4double Field[],
-			         G4double dydx[] ) const;
+                           const G4double Field[],
+                                 G4double dydx[] ) const;
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 

@@ -21,22 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.8 2002-11-09 02:58:14 japost Exp $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  This is the 'standard' right-hand side for the equation of motion
-//    of a charged particle in a magnetic field.
+//  of a charged particle in a magnetic field.
 //
 //  Initial version: J. Apostolakis, January 13th, 1997
-//  Modified:        J. Apostolakis, November 9th, 2002
 //
+// --------------------------------------------------------------------
+
 #include "G4Mag_UsualEqRhs.hh"
+#include "G4MagneticField.hh"
+
+G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
+  : G4Mag_EqRhs( MagField ) {}
+
+G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() {}
 
 void
 G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
-			      const G4double B[3],
-				    G4double dydx[] ) const
+			             const G4double B[3],
+				           G4double dydx[] ) const
 {
    G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
    G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );

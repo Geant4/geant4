@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.6 2001-11-08 17:31:07 grichine Exp $
+// $Id: G4Field.hh,v 1.7 2003-10-31 14:35:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 
 // History:
 // - Created:  John Apostolakis, 10.03.1997
+// -------------------------------------------------------------------
 
 #ifndef G4FIELD_HH
 #define G4FIELD_HH
@@ -44,7 +45,7 @@ class G4Field
   public:  // with description
 
       virtual void  GetFieldValue( const  double Point[4],
-					  double *Bfield ) const = 0;
+                                          double *Bfield ) const = 0;
       G4Field(){;}
       virtual ~G4Field(){;}
 
@@ -53,12 +54,4 @@ class G4Field
      // have the same "field signature"?
 };
 
-
 #endif /* G4FIELD_HH */
-
-
-
-
-
-
-

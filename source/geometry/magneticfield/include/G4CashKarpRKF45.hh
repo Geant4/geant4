@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh,v 1.8 2003-04-02 08:52:32 gcosmo Exp $
+// $Id: G4CashKarpRKF45.hh,v 1.9 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 
 // History:
 // - Created. J.Apostolakis, V.Grichine - 30.1.97
+// -------------------------------------------------------------------
 
 #ifndef G4CashKARP_RKF45
 #define G4CashKARP_RKF45

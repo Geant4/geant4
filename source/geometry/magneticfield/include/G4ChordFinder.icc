@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc,v 1.5 2003-06-12 13:06:01 japost Exp $
+// $Id: G4ChordFinder.icc,v 1.6 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ChordFinder inline implementations
@@ -63,8 +63,8 @@ G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) const
 
 inline
 void G4ChordFinder::SetChargeMomentumMass(G4double pCharge, // in e+ units
-				          G4double pMomentum,
-				          G4double pMass)
+                                          G4double pMomentum,
+                                          G4double pMass)
 {
   fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
 }

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.12 2003-04-02 08:53:21 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.13 2003-10-31 14:35:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// --------------------------------------------------------------------
+
 #include "G4MagHelicalStepper.hh"
-#include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
-// #include "G4MagneticField.hh"
 #include "G4Mag_EqRhs.hh"
 
 // given a purely magnetic field a better approach than adding a straight line

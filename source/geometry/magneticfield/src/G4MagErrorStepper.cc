@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.cc,v 1.11 2002-11-20 18:14:00 japost Exp $
+// $Id: G4MagErrorStepper.cc,v 1.12 2003-10-31 14:35:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// --------------------------------------------------------------------
+
 #include "G4MagErrorStepper.hh"
-#include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
 G4MagErrorStepper::~G4MagErrorStepper()

@@ -21,10 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.8 2003-06-20 23:02:45 japost Exp $
+// $Id: G4FieldManager.cc,v 1.9 2003-10-31 14:35:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -------------------------------------------------------------------
+
 #include "G4FieldManager.hh"
+#include "G4Field.hh"
+#include "G4MagneticField.hh"
+#include "G4ChordFinder.hh"
 
 G4FieldManager::G4FieldManager()
    : fDetectorField(0), fChordFinder(0), fAllocatedChordFinder(false),

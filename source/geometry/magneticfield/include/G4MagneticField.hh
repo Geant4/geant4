@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.11 2003-04-02 08:49:20 gcosmo Exp $
+// $Id: G4MagneticField.hh,v 1.12 2003-10-31 14:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,8 +33,7 @@
 
 // History:
 // - Created. JA, January 13th, 1996.
-// - Added default & copy constructors, virtual destructor and
-//   assignment operator. G.Cosmo, November 5th, 1997.
+// --------------------------------------------------------------------
 
 #ifndef G4MAGNETIC_FIELD_DEF
 #define G4MAGNETIC_FIELD_DEF
@@ -55,7 +54,7 @@ class G4MagneticField : public G4Field
        // Copy constructor & assignment operator.
 
      virtual void  GetFieldValue( const G4double Point[4],
-					G4double *Bfield ) const = 0;
+                                        G4double *Bfield ) const = 0;
 };
 
 #endif /* G4MAGNETIC_FIELD_DEF */

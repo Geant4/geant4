@@ -21,18 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.7 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4UniformMagField.cc,v 1.8 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 //
 // Class for creation of uniform Magnetic Field
 //
 // 30.1.97 V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4UniformMagField.hh"
-#include "globals.hh"
-#include "geomdefs.hh"
 
 G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
 {
@@ -89,13 +88,10 @@ G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField &p)
 
 // ------------------------------------------------------------------------
 
-
 void G4UniformMagField::GetFieldValue (const G4double [4],
                                              G4double *B  ) const 
 {
    B[0]= fFieldComponents[0] ;
    B[1]= fFieldComponents[1] ;
    B[2]= fFieldComponents[2] ;
-   return ;
 }
-

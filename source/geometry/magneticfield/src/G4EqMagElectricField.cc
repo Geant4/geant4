@@ -21,14 +21,20 @@
 // ********************************************************************
 //
 //
+// $Id: G4EqMagElectricField.cc,v 1.10 2003-10-31 14:35:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 //  This is the standard right-hand side for equation of motion.
 //
-//    The only case another is required is when using a moving reference
-//     frame ... or extending the class to include additional Forces,
-//     eg an electric field
+//  The only case another is required is when using a moving reference
+//  frame ... or extending the class to include additional Forces,
+//  eg an electric field
 //
-//           10.11.98   V.Grichine
+//  10.11.98   V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4EqMagElectricField.hh"
 
 void  
@@ -81,6 +87,3 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
    dydx[7] = inverse_velocity;
    return ;
 }
-
-
-

@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.8 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -------------------------------------------------------------------
+
 #include "G4RKG3_Stepper.hh"
-#include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
+#include "G4Mag_EqRhs.hh"
 
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
   : G4MagIntegratorStepper(EqRhs,6)

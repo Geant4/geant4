@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.9 2003-06-20 22:59:59 japost Exp $
+// $Id: G4FieldManager.hh,v 1.10 2003-10-31 14:35:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -57,15 +57,17 @@
 
 // History:
 // - 10.03.97 John Apostolakis, design and implementation.
+// -------------------------------------------------------------------
 
 #ifndef G4FIELDMANAGER_HH
 #define G4FIELDMANAGER_HH 1
 
-#include "G4Field.hh"
-#include "G4MagneticField.hh"
-#include "G4ChordFinder.hh"
+#include "globals.hh"
 
-class    G4Track;  // Forward reference for parameter configuration
+class G4Field;
+class G4MagneticField;
+class G4ChordFinder;
+class G4Track;  // Forward reference for parameter configuration
 
 class G4FieldManager
 {

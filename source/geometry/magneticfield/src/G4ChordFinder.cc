@@ -21,20 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.37 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.38 2003-10-31 14:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
 // 05.03.97 V. Grichine , style modification
+// -------------------------------------------------------------------
 
 #include "G4ChordFinder.hh"
-#include "G4MagIntegratorDriver.hh"
+#include "G4MagneticField.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ClassicalRK4.hh"
-// #include "G4Field.hh"
-                                       // #include "G4MagIntegratorStepper.hh"
-#include "G4MagIntegratorDriver.hh"
+
 #include <iomanip>
 
 //  For the moment fDeltaChord is a constant!

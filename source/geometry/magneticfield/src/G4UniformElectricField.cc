@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.8 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4UniformElectricField.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,9 +30,9 @@
 //
 // 30.1.97 V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4UniformElectricField.hh"
-#include "globals.hh"
-#include "geomdefs.hh"
 
 G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
 {
@@ -87,7 +87,6 @@ G4UniformElectricField::operator = (const G4UniformElectricField &p)
 
 // ------------------------------------------------------------------------
 
-
 void G4UniformElectricField::GetFieldValue (const G4double[4],
                                             G4double *fieldBandE ) const 
 {
@@ -97,6 +96,4 @@ void G4UniformElectricField::GetFieldValue (const G4double[4],
    fieldBandE[3]= fFieldComponents[3] ;
    fieldBandE[4]= fFieldComponents[4] ;
    fieldBandE[5]= fFieldComponents[5] ;
-   return ;
 }
-

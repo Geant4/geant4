@@ -21,35 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.hh,v 1.5 2002-11-29 13:48:47 japost Exp $
+// $Id: G4ImplicitEuler.hh,v 1.6 2003-10-31 14:35:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+// class G4ImplicitEuler
+//
+// Class description:
+//
+// Implicit Euler stepper for magnetic field:
+//      x_1 = x_0 + h/2 * ( dx(t_0,x_0) + dx(t_0+h,x_0+h*dx(t_0,x_0) ) )
+//
+// Second order solver.
+// Takes the current derivative and add it to the current position.
+// Takes the output and its derivative. Adds the mean of both
+// derivatives to form the final output.
+
 // W. Wander <wwc@mit.edu> 12/09/97
+// -------------------------------------------------------------------
 
 #ifndef G4IMPLICITEULER_HH
 #define G4IMPLICITEULER_HH
+
 #include "G4MagErrorStepper.hh"
 
 class G4ImplicitEuler : public G4MagErrorStepper
 {
 
-  public:
+  public:  // with description
+
     G4ImplicitEuler(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
    ~G4ImplicitEuler();
 
     void  DumbStepper(  const G4double y[] ,
-		        const G4double dydx[] ,
-		              G4double h ,
-			      G4double yout[] ) ;
+                        const G4double dydx[] ,
+                              G4double h ,
+                              G4double yout[] ) ;
+
+  public:  // without description
 
     G4int IntegratorOrder() const { return 2 ; } ;
 
-private: // No description
+  private:
 
     G4double*  dydxTemp;
     G4double*  yTemp;    
-    // Temporaries, created to avoid new/delete on every call
+      // Temporaries, created to avoid new/delete on every call
 };
 
 #endif /* G4IMPLICITEULER_HH */

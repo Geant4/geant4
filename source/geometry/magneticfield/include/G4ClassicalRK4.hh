@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.7 2003-04-02 08:52:54 gcosmo Exp $
+// $Id: G4ClassicalRK4.hh,v 1.8 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,9 +35,9 @@
 // History:
 // - Created: J.Apostolakis, V.Grichine - 30.1.97
 // - Moved into G4MagErrorStepper: W.Wander <wwc@mit.edu> - 12/09/97
+// -------------------------------------------------------------------
 
 #include "G4MagErrorStepper.hh"
-#include "G4ThreeVector.hh"
 
 class G4ClassicalRK4 : public G4MagErrorStepper 
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.5 2001-07-11 09:59:13 gunter Exp $
+// $Id: G4SimpleHeum.cc,v 1.6 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Heum:
@@ -29,11 +29,10 @@
 //                1/4 * dx(t0,x0)  +
 //                3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
 //
-// third order solver
+// Third order solver.
 //
 //  W.Wander <wwc@mit.edu> 12/09/97 
-//  6.11.98. V.Grichine new data member fNumberOfVariables
-
+// -------------------------------------------------------------------
 
 #include "G4SimpleHeum.hh"
 #include "G4ThreeVector.hh"
@@ -101,6 +100,4 @@ G4SimpleHeum::DumbStepper( const G4double  yIn[],
   }
       
   // NormaliseTangentVector( yOut );           
-  
-  return ;
 }  

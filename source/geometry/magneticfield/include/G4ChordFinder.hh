@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.10 2003-06-20 22:37:11 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.11 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,15 +36,15 @@
 // History:
 // - 25.02.97 John Apostolakis,  design and implementation 
 // - 05.03.97 V. Grichine , makeup to G4 'standard'
+// -------------------------------------------------------------------
 
 #ifndef G4CHORDFINDER_HH
 #define G4CHORDFINDER_HH
 
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
-#include "G4MagneticField.hh"
-                                             // class G4Mag_EqRhs;  
-                                             // class G4MagIntegratorStepper; 
+
+class G4MagneticField;  
 
 class G4ChordFinder
 { 
@@ -53,8 +53,8 @@ class G4ChordFinder
       G4ChordFinder( G4MagInt_Driver* pIntegrationDriver );
 
       G4ChordFinder( G4MagneticField* itsMagField,
-		     G4double         stepMinimum = 1.0e-2 * mm, 
-		     G4MagIntegratorStepper* pItsStepper = 0 );  
+                     G4double         stepMinimum = 1.0e-2 * mm, 
+                     G4MagIntegratorStepper* pItsStepper = 0 );  
         // A constructor that creates defaults for all "children" classes.
                   
       ~G4ChordFinder();
@@ -68,16 +68,16 @@ class G4ChordFinder
         // -> Returns Length of Step taken.
 
       G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
-		  	             const  G4FieldTrack&  curveBPointVelocity,
-			             const  G4ThreeVector& currentEPoint,
-			                    G4double      epsStep);
+                                     const  G4FieldTrack&  curveBPointVelocity,
+                                     const  G4ThreeVector& currentEPoint,
+                                            G4double      epsStep);
 
       inline G4double  GetDeltaChord() const;
       inline void      SetDeltaChord(G4double newval);
 
       inline void SetChargeMomentumMass(G4double pCharge,  // in e+ units
-				        G4double pMomentum,
-				        G4double pMass );
+                                        G4double pMomentum,
+                                        G4double pMass );
         // Function to inform integration driver of charge, speed.
 
       inline void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
@@ -92,25 +92,25 @@ class G4ChordFinder
       inline G4bool AcceptableMissDist(G4double dChordStep) const;
 
       G4double NewStep( G4double stepTrialOld, 
-		        G4double dChordStep,     // Current dchord estimate
+                        G4double dChordStep,     // Current dchord estimate
                         G4double& stepEstimate_Unconstrained ) ;  
       
       G4double FindNextChord( const  G4FieldTrack  yStart,
-		              G4double     stepMax,
-			      G4FieldTrack& yEnd,
-			      G4double&    dyErr,      //  Error of endpoint 
-			      G4double     epsStep,
-			      G4double*  pNextStepForAccuracy= 0);  
+                              G4double     stepMax,
+                              G4FieldTrack& yEnd,
+                              G4double&    dyErr,      //  Error of endpoint 
+                              G4double     epsStep,
+                              G4double*  pNextStepForAccuracy= 0);  
 
       void     PrintDchordTrial(G4int     noTrials, 
-				G4double  stepTrial, 
-				G4double  oldStepTrial, 
-				G4double  dChordStep);
+                                G4double  stepTrial, 
+                                G4double  oldStepTrial, 
+                                G4double  dChordStep);
   public:  // no description 
       void     TestChordPrint( G4int    noTrials, 
-			       G4int    lastStepTrial, 
-			       G4double dChordStep, 
-			       G4double nextStepTrial );
+                               G4int    lastStepTrial, 
+                               G4double dChordStep, 
+                               G4double nextStepTrial );
         //   Printing for monitoring ...
 
    private:  // ............................................................

@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.icc,v 1.10 2003-06-16 16:51:09 gunter Exp $
+// $Id: G4MagErrorStepper.icc,v 1.11 2003-10-31 14:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// --------------------------------------------------------------------
 
 inline
 G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
-				     G4int numberOfVariables)
+                                     G4int numberOfVariables)
      : G4MagIntegratorStepper(EqRhs,numberOfVariables)
   {
       G4int nvar = std::max(this->GetNumberOfVariables(), 8);

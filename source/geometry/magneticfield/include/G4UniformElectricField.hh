@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.hh,v 1.6 2001-12-04 17:35:52 gcosmo Exp $
+// $Id: G4UniformElectricField.hh,v 1.7 2003-10-31 14:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,17 +33,14 @@
 
 // History:
 // - 30.01.97 V.Grichine, Created.
-// - 01.08.97 J.Apostolakis, cleanup, new 3-vector constructor, 
-//             and removal of helix-stepper (to separate file).
-// - 05.11.97 G.Cosmo, added copy constructor and assignment operator.
+// -------------------------------------------------------------------
 
 #ifndef G4UNIFORMELECTRICFIELD_HH
 #define G4UNIFORMELECTRICFIELD_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4ElectroMagneticField.hh"
-#include "G4Mag_EqRhs.hh"
 
 class G4UniformElectricField : public G4ElectroMagneticField
 {
@@ -53,9 +50,9 @@ class G4UniformElectricField : public G4ElectroMagneticField
       // A field with value equal to FieldVector.
 
     G4UniformElectricField(G4double vField,
-	                   G4double vTheta,
-		           G4double vPhi     ) ;
-		       
+                           G4double vTheta,
+                           G4double vPhi     ) ;
+       
     virtual ~G4UniformElectricField() ;
 
     G4UniformElectricField(const G4UniformElectricField &p);

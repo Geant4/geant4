@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.12 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.13 2003-10-31 14:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
-//  order method (giving fifth-order accuracy) for the solution
-//  of an ODE. Two different fourth order estimates are calculated;
-//  their difference gives an error estimate.
-// (We use it to integrate the equations of the motion of a particle 
-//  in a magnetic field. )
+// order method (giving fifth-order accuracy) for the solution of an ODE.
+// Two different fourth order estimates are calculated; their difference
+// gives an error estimate. [ref. Numerical Recipes in C, 2nd Edition]
+// It is used to integrate the equations of the motion of a particle 
+// in a magnetic field.
 //
-//  Similar to Numerical Recipes, .... put REFerence here!
+//  [ref. Numerical Recipes in C, 2nd Edition]
 //
+// -------------------------------------------------------------------
 
 #include "G4CashKarpRKF45.hh"
 #include "G4LineSection.hh"

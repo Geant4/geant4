@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.7 2003-10-24 13:34:17 gcosmo Exp $
+// $Id: G4LineSection.cc,v 1.8 2003-10-31 14:35:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// typedef double    G4double;  
+// --------------------------------------------------------------------
 
 #include "G4LineSection.hh" 
 
@@ -104,5 +104,3 @@ G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt,
 
   return LineAB.Dist( OtherPnt );
 }
-
-

@@ -21,22 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.cc,v 1.7 2003-06-16 16:51:20 gunter Exp $
+// $Id: G4SimpleRunge.cc,v 1.8 2003-10-31 14:35:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Runge:
 //
 //        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
 //
-// second order solver
-// take the derivative at a position to be assumed at the middle of the
-// Step and add it to the current position.
+// Second order solver.
+// Takes the derivative at a position to be assumed at the middle of the
+// Step and adds it to the current position.
 //
 //
 //  W.Wander <wwc@mit.edu> 12/09/97 
-// 6.11.98 V.Grichine new data member fNumberOfVariables
-//
-
+// -------------------------------------------------------------------
 
 #include "G4SimpleRunge.hh"
 #include "G4ThreeVector.hh"
@@ -94,6 +92,4 @@ G4SimpleRunge::DumbStepper( const G4double  yIn[],
   {
     yOut[i] = yIn[i] + h * ( dydxTemp[i] );
   }
-
-  return ;
 }  

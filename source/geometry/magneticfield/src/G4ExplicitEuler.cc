@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.cc,v 1.5 2002-11-29 13:50:18 japost Exp $
+// $Id: G4ExplicitEuler.cc,v 1.6 2003-10-31 14:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,6 +31,7 @@
 //  Take the current derivative and add it to the current position.
 //
 //  W.Wander <wwc@mit.edu> 12/09/97 
+// -------------------------------------------------------------------
 
 #include "G4ExplicitEuler.hh"
 #include "G4ThreeVector.hh"

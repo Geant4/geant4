@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.hh,v 1.7 2003-04-02 08:49:19 gcosmo Exp $
+// $Id: G4ElectroMagneticField.hh,v 1.8 2003-10-31 14:35:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 
 // History:
 // - Created: J.Apostolakis, November 12th, 1998                   
+// -------------------------------------------------------------------
 
 #ifndef G4ELECTROMAGNETIC_FIELD_DEF
 #define G4ELECTROMAGNETIC_FIELD_DEF
