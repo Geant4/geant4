@@ -1,4 +1,4 @@
-$Id: History,v 1.20 1999-10-20 10:28:16 stesting Exp $
+$Id: History,v 1.21 1999-10-20 14:47:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 20th, 99 J.Allison
+October 20, 99 G.Cosmo (global-V00-01-02)
+- Tagged.
+
+October 20, 99 J.Allison
 - STLInterface: cstring.h: changed (*this)[i] to std_string::operator[](i).
 - STLInterface: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES; introduced
-    typename keyword where needed for HP aCC.
+  typename keyword where needed for HP aCC. Files modified:
+  cstring.h, tpordvec.h, tpsrtvec.h, tpvector.h, tvhdict.h, tvordvec.h
+  and tvvector.h.
 
-October 6th, 99 G.Cosmo (global-V00-01-01)
+October 6, 99 G.Cosmo (global-V00-01-01)
 - STLInterface: Changed tolower/toupper to old implementation in cstring.h
   (by F.Behner)
  
