@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlung.hh,v 1.4 2003-05-25 10:09:56 pia Exp $
+// $Id: G4PenelopeBremsstrahlung.hh,v 1.5 2003-05-25 10:13:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -100,9 +100,10 @@ private:
   G4VCrossSectionHandler* crossSectionHandler;
   G4VEMDataSet* theMeanFreePath;
   G4VEnergySpectrum* energySpectrum;
+
+  // Vector of pointers to the vectors containing tha angular data 
+  // one element = one material
   G4std::vector<G4AngularData*> materialAngularData;
-  //Vector of pointers to the vectors containing tha angular data 
-  //one element=one material
  
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;
