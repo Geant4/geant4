@@ -1,0 +1,212 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Step.icc,v 1.1 1999-10-06 01:21:48 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+//---------------------------------------------------------------
+//
+//-----------------------------------------------------------------
+//  In-line definitions
+//-----------------------------------------------------------------
+
+// Get/Set functions 
+inline 
+ G4StepPoint* G4Step::GetPreStepPoint() const 
+ { 
+   return fpPreStepPoint; 
+ }
+
+inline 
+ void G4Step::SetPreStepPoint(G4StepPoint* value)
+ { 
+   fpPreStepPoint = value; 
+ }
+
+inline 
+ G4StepPoint* G4Step::GetPostStepPoint() const
+ { 
+   return fpPostStepPoint; 
+ }
+   
+inline 
+ void G4Step::SetPostStepPoint(G4StepPoint* value)
+ { 
+   fpPostStepPoint = value; 
+ }
+
+inline 
+ G4double G4Step::GetStepLength() const
+ { 
+   return fStepLength; 
+ }
+
+inline 
+ void G4Step::SetStepLength(G4double value)
+ { 
+   fStepLength = value; 
+ }
+
+inline 
+ G4ThreeVector G4Step::GetDeltaPosition() const
+ { 
+   return fpPostStepPoint->GetPosition()
+            - fpPreStepPoint->GetPosition(); 
+ }
+
+inline 
+ G4double G4Step::GetDeltaTime() const
+ { 
+   return fpPostStepPoint->GetLocalTime()
+            - fpPreStepPoint->GetLocalTime(); 
+ }
+
+inline 
+ G4ThreeVector G4Step::GetDeltaMomentum() const
+ { 
+   return fpPostStepPoint->GetMomentum()
+            - fpPreStepPoint->GetMomentum(); 
+ }
+
+inline 
+ G4double G4Step::GetDeltaEnergy() const
+ { 
+   return fpPostStepPoint->GetKineticEnergy()
+            - fpPreStepPoint->GetKineticEnergy(); 
+ }
+
+inline 
+ G4double G4Step::GetTotalEnergyDeposit() const
+ { 
+   return fTotalEnergyDeposit; 
+ }
+
+inline 
+ void G4Step::SetTotalEnergyDeposit(G4double value)
+ { 
+   fTotalEnergyDeposit = value;   
+ }
+
+inline 
+ void G4Step::AddTotalEnergyDeposit(G4double value)
+ { 
+   fTotalEnergyDeposit += value;   
+ }
+
+inline 
+ void G4Step::ResetTotalEnergyDeposit()
+ { 
+   fTotalEnergyDeposit = 0.; 
+ }
+
+inline 
+ void G4Step::SetControlFlag(G4SteppingControl value)
+ {
+   fpSteppingControlFlag = value;     
+ }
+
+inline 
+ G4SteppingControl G4Step::GetControlFlag() const
+ {
+   return fpSteppingControlFlag;     
+ }
+
+inline 
+ void G4Step::CopyPostToPreStepPoint( )
+ { 
+   // Default equal operator is used for copy
+   *(fpPreStepPoint) = *(fpPostStepPoint);
+ }
+
+
+//-------------------------------------------------------------
+// To implement bi-directional association between G4Step and
+// and G4Track, a combined usage of 'forward declaration' and
+// 'include' is necessary.
+//-------------------------------------------------------------
+#include "G4Track.hh"
+
+inline 
+ G4Track* G4Step::GetTrack() const
+ { 
+   return fpTrack; 
+ }
+   
+inline 
+ void G4Step::SetTrack(G4Track* value)
+ { 
+   fpTrack = value; 
+ }
+
+
+// Other member functions
+inline 
+ void G4Step::InitializeStep( G4Track* aValue )
+ {
+   // Initialize G4Step attributes
+   fStepLength = 0.;
+   fTotalEnergyDeposit = 0.;
+   fpTrack = aValue;
+   fpTrack->SetStepLength(0.);
+   
+   // Initialize G4StepPoint attributes.
+   // To avoid the circular dependency between G4Track, G4Step
+   // and G4StepPoint, G4Step has to manage the copy actions.
+   fpPreStepPoint->SetPosition(fpTrack->GetPosition());
+   fpPreStepPoint->SetGlobalTime(fpTrack->GetGlobalTime());
+   fpPreStepPoint->SetLocalTime(fpTrack->GetLocalTime());
+   fpPreStepPoint->SetProperTime(fpTrack->GetProperTime());
+   fpPreStepPoint->SetMomentumDirection(fpTrack->GetMomentumDirection());
+   fpPreStepPoint->SetKineticEnergy(fpTrack->GetKineticEnergy());
+   fpPreStepPoint->SetTouchable(fpTrack->GetTouchable());
+   fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
+   fpPreStepPoint->SetSafety(0.);
+   fpPreStepPoint->SetStepStatus(fUndefined);
+   fpPreStepPoint->SetProcessDefinedStep(0);
+   fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
+   fpPreStepPoint->SetWeight(fpTrack->GetWeight());
+   
+   (*fpPostStepPoint) = (*fpPreStepPoint);
+ }
+
+inline 
+ void G4Step::UpdateTrack( )
+ { 
+   // To avoid the circular dependency between G4Track, G4Step
+   // and G4StepPoint, G4Step has to manage the update actions.
+   //  position, time
+   fpTrack->SetPosition(fpPostStepPoint->GetPosition());
+   fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
+   fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
+   fpTrack->SetProperTime(fpPostStepPoint->GetProperTime());
+   //  energy, momentum, polarization
+   fpTrack->SetMomentumDirection(fpPostStepPoint->GetMomentumDirection());
+   fpTrack->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
+   fpTrack->SetPolarization(fpPostStepPoint->GetPolarization());
+   //  mass charge
+   G4DynamicParticle* pParticle = fpTrack->GetDynamicParticle();
+   pParticle->SetMass(fpPostStepPoint->GetMass());
+   pParticle->SetCharge(fpPostStepPoint->GetCharge());
+   //  step length
+   fpTrack->SetStepLength(fStepLength);
+   // NextTouchable is updated 
+   // (G4Track::Touchable points touchable of Pre-StepPoint)
+   fpTrack->SetNextTouchable(fpPostStepPoint->GetTouchable());
+   fpTrack->SetWeight(fpPostStepPoint->GetWeight());
+ }
+
+
+
+
+
+
+
+
+
+
+

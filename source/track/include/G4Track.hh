@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.2 1999-04-13 09:43:28 kurasige Exp $
+// $Id: G4Track.hh,v 1.3 1999-10-06 01:21:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,6 +73,20 @@ class G4Track
       //"RWPtrOrderdVector" which requires this.
 
 // Get/Set functions
+  // track ID
+   G4int GetTrackID() const;
+   void SetTrackID(const G4int aValue);
+
+   G4int GetParentID() const;
+   void SetParentID(const G4int aValue);
+
+  // dynamic particle 
+   G4DynamicParticle* GetDynamicParticle() const;
+
+  // particle definition
+   G4ParticleDefinition* GetDefinition() const;
+
+  // position, time 
    const G4ThreeVector& GetPosition() const;
    void SetPosition(const G4ThreeVector& aValue);
 
@@ -88,18 +102,8 @@ class G4Track
    void SetProperTime(const G4double aValue);
       // Proper time of the current track
 
-   G4double GetTrackLength() const;
-   void AddTrackLength(const G4double aValue);
-      // Accumulated the track length
-
-   G4int GetParentID() const;
-   void SetParentID(const G4int aValue);
-
-   G4int GetTrackID() const;
-   void SetTrackID(const G4int aValue);
-
+  // volume, material, touchable
    G4VPhysicalVolume* GetVolume() const;
-
    G4VPhysicalVolume* GetNextVolume() const;
 
    G4Material* GetMaterial() const;
@@ -111,17 +115,27 @@ class G4Track
    G4VTouchable* GetNextTouchable() const;
    void SetNextTouchable(G4VTouchable* apValue);
 
+  // energy
    G4double GetKineticEnergy() const;
    void SetKineticEnergy(const G4double aValue);
 
-   G4double GetVelocity() const;
+   G4double GetTotalEnergy() const;
 
+ 
+  // moemtnum
    const G4ThreeVector& GetMomentumDirection() const;
    void SetMomentumDirection(const G4ThreeVector& aValue);
 
+   G4ThreeVector GetMomentum() const;
+
+   G4double GetVelocity() const;
+
+
+  // polarization 
    const G4ThreeVector& GetPolarization() const;
    void SetPolarization(const G4ThreeVector& aValue);
 
+  // track status, flags for tracking
    G4TrackStatus GetTrackStatus() const;
    void SetTrackStatus(const G4TrackStatus aTrackStatus);
 
@@ -131,16 +145,17 @@ class G4Track
    G4bool IsGoodForTracking() const;
    void   SetGoodForTrackingFlag(G4bool value = true);
 
+  // track length
+   G4double GetTrackLength() const;
+   void AddTrackLength(const G4double aValue);
+      // Accumulated the track length
+
+  // step information
+   G4Step* GetStep() const;
+   void SetStep(G4Step* aValue);
+
    G4int GetCurrentStepNumber() const;
    void IncrementCurrentStepNumber();
-
-   G4double GetTotalEnergy() const;
-
-   G4ThreeVector GetMomentum() const;
-
-   G4DynamicParticle* GetDynamicParticle() const;
-
-   G4ParticleDefinition* GetDefinition() const;
 
    G4double GetStepLength() const;
    void SetStepLength(G4double value);
@@ -148,6 +163,7 @@ class G4Track
    G4Step* GetStep() const;
    void SetStep(G4Step* aValue);
 
+  // vertex (,where this track was created) information  
    const G4ThreeVector& GetVertexPosition() const;
    void SetVertexPosition(const G4ThreeVector& aValue);
 
@@ -163,6 +179,7 @@ class G4Track
    const G4VProcess* GetCreatorProcess() const;
    void SetCreatorProcess(G4VProcess* aValue);
 
+  // track weight
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 
@@ -212,230 +229,7 @@ class G4Track
    G4VProcess* fpCreatorProcess;        // Process which created the track
    
 };
-
-
-//-----------------------------------------------------------------
-// Definitions of inline functions
-//-----------------------------------------------------------------
-
-// Operators
-   extern G4Allocator<G4Track> aTrackAllocator;
-   inline void* G4Track::operator new(size_t)
-   { void *aTrack;
-     aTrack = (void *) aTrackAllocator.MallocSingle();
-     return aTrack;
-   }
-      // Override "new" for "G4Allocator".
-
-   inline void G4Track::operator delete(void *aTrack)
-   { aTrackAllocator.FreeSingle((G4Track *) aTrack);}
-      // Override "delete" for "G4Allocator".
-
-   inline int G4Track::operator==( const G4Track& s)
-   { return (this==&s) ? 1 : 0; }
-      // Define "==" operator because "G4TrackVector" uses 
-      // "RWPtrOrderdVector" which requires this.
-
-// Get/Set functions
-   inline const G4ThreeVector& G4Track::GetPosition() const
-   { return fPosition; }
-   inline void G4Track::SetPosition(const G4ThreeVector& aValue)
-   { fPosition = aValue; }
-
-   inline G4double G4Track::GetGlobalTime() const
-   { return fGlobalTime; }
-   inline void G4Track::SetGlobalTime(const G4double aValue)
-   { fGlobalTime = aValue; }
-     // Time since the event in which the track belongs is created.
-
-   inline G4double G4Track::GetLocalTime() const
-   { return fLocalTime; }
-   inline void G4Track::SetLocalTime(const G4double aValue)
-   { fLocalTime = aValue; }
-      // Time since the current track is created.
-
-   inline G4double G4Track::GetProperTime() const
-   { return fpDynamicParticle->GetProperTime(); }
-   inline void G4Track::SetProperTime(const G4double aValue)
-   { fpDynamicParticle->SetProperTime(aValue); }
-      // Proper time of the current track
-
-   inline G4double G4Track::GetTrackLength() const
-   { return fTrackLength; }
-   inline void G4Track::AddTrackLength(const G4double aValue)
-   { fTrackLength += aValue; }
-      // Accumulated track length
-
-   inline G4int G4Track::GetParentID() const
-   { return fParentID; }
-   inline void G4Track::SetParentID(const G4int aValue)
-   { fParentID = aValue; }
-
-   inline G4int G4Track::GetTrackID() const
-   { return fTrackID; }
-   inline void G4Track::SetTrackID(const G4int aValue)
-   { fTrackID = aValue; }
-
-   inline G4VPhysicalVolume* G4Track::GetVolume() const
-   { return fpTouchable->GetVolume(); }
-
-   inline G4VPhysicalVolume* G4Track::GetNextVolume() const
-   { return fpNextTouchable->GetVolume(); }
-
-   inline G4Material* G4Track::GetMaterial() const
-   { return fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
-
-   inline G4Material* G4Track::GetNextMaterial() const
-   { return fpNextTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
-
-   inline G4VTouchable* G4Track::GetTouchable() const
-   { return fpTouchable; }
-   inline void G4Track::SetTouchable(G4VTouchable* apValue)
-   { fpTouchable = apValue; }
-
-   inline G4VTouchable* G4Track::GetNextTouchable() const
-   { return fpNextTouchable; }
-   inline void G4Track::SetNextTouchable(G4VTouchable* apValue)
-   { fpNextTouchable = apValue; }
-
-   inline G4double G4Track::GetKineticEnergy() const
-   { return fpDynamicParticle->GetKineticEnergy(); }
-   inline void G4Track::SetKineticEnergy(const G4double aValue)
-   { fpDynamicParticle->SetKineticEnergy(aValue); }
-
-   inline G4double G4Track::GetVelocity() const
-   { 
-    G4double velocity ;
-
-    G4double mass = fpDynamicParticle->GetMass();
-    if( mass == 0. )
-    {
-     velocity = c_light ; 
-     if((fpDynamicParticle->GetDefinition()->GetParticleName() ==
-                                                            "gamma")
-        ||
-        (fpDynamicParticle->GetDefinition()->GetParticleName() ==
-                                                    "opticalphoton"))
-     {
-       G4Material*
-        mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
-       if(mat->GetMaterialPropertiesTable() != 0)
-       {
-        if(mat->GetMaterialPropertiesTable()->GetProperty("RINDEX") != 0 ) 
-          velocity /= 
-          mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
-          GetMinProperty() ; 
-       }
-     }  
-       
-    }
-    else
-    {
-     G4double T = fpDynamicParticle->GetKineticEnergy();
-     velocity = c_light*sqrt(T*(T+2.*mass))/(T+mass) ;
-    }
-
-    return velocity ;
-
-   }
-
-   inline const G4ThreeVector& G4Track::GetMomentumDirection() const
-   { return fpDynamicParticle->GetMomentumDirection(); }
-   inline void G4Track::SetMomentumDirection(const G4ThreeVector& aValue)
-   { fpDynamicParticle->SetMomentumDirection(aValue) ;}
-
-   inline const G4ThreeVector& G4Track::GetPolarization() const
-   { return fpDynamicParticle->GetPolarization(); }
-   inline void G4Track::SetPolarization(const G4ThreeVector& aValue)
-   { fpDynamicParticle->SetPolarization(aValue.x(),
-                                        aValue.y(),
-                                        aValue.z()); }
-
-   inline G4TrackStatus G4Track::GetTrackStatus() const
-   { return fTrackStatus; }
-   inline void G4Track::SetTrackStatus(const G4TrackStatus aTrackStatus)
-   { fTrackStatus = aTrackStatus; }
-
-   inline G4int G4Track::GetCurrentStepNumber() const
-   { return fCurrentStepNumber; }
-   inline void G4Track::IncrementCurrentStepNumber()
-   { fCurrentStepNumber++; }
-
-   inline G4double G4Track::GetTotalEnergy() const
-   { return fpDynamicParticle->GetTotalEnergy(); }
-
-   inline G4ThreeVector G4Track::GetMomentum() const
-   { return fpDynamicParticle->GetMomentum(); }
-
-   inline G4DynamicParticle* G4Track::GetDynamicParticle() const
-   { return fpDynamicParticle; }
-
-   inline G4ParticleDefinition* G4Track::GetDefinition() const
-   { return fpDynamicParticle->GetDefinition(); }
-
-   inline G4double G4Track::GetStepLength() const
-   { return fStepLength; }
-   inline void G4Track::SetStepLength(G4double value)
-   { fStepLength = value; }
-
-   inline const G4ThreeVector& G4Track::GetVertexPosition() const
-   { return fVtxPosition; }
-   inline void G4Track::SetVertexPosition(const G4ThreeVector& aValue)
-   { fVtxPosition = aValue; }
-
-   inline const G4ThreeVector& G4Track::GetVertexMomentumDirection() const
-   { return fVtxMomentumDirection; }
-   inline void G4Track::SetVertexMomentumDirection(const G4ThreeVector& aValue)
-   { fVtxMomentumDirection = aValue ;}
-
-   inline G4double G4Track::GetVertexKineticEnergy() const
-   { return fVtxKineticEnergy; }
-   inline void G4Track::SetVertexKineticEnergy(const G4double aValue)
-   { fVtxKineticEnergy = aValue; }
-
-   inline  G4LogicalVolume* G4Track::GetLogicalVolumeAtVertex() const
-   { return fpLVAtVertex; } 
-   inline void G4Track::SetLogicalVolumeAtVertex(G4LogicalVolume* aValue)
-   { fpLVAtVertex = aValue; }
-
-   inline const G4VProcess* G4Track::GetCreatorProcess() const
-   { return fpCreatorProcess; }
-     // If the pointer is 0, this means the track is created
-     // by the event generator, i.e. the primary track.If it is not
-     // 0, it points to the process which created this track.
-   inline void G4Track::SetCreatorProcess(G4VProcess* aValue)
-   { fpCreatorProcess = aValue; }
-
-   inline G4bool G4Track::IsBelowThreshold() const
-   { return fBelowThreshold; }
-   inline void    G4Track::SetBelowThresholdFlag(G4bool value)
-   { fBelowThreshold = value; }
-
-   inline G4bool  G4Track::IsGoodForTracking() const
-   { return fGoodForTracking; }
-   inline void    G4Track::SetGoodForTrackingFlag(G4bool value)
-   { fGoodForTracking = value; }
-
-   inline void  G4Track::SetWeight(G4double aValue)
-   { fWeight = aValue; }
-   inline G4double G4Track::GetWeight() const
-   { return fWeight; }
-
-
-
-
-
-//-------------------------------------------------------------
-// To implement bi-directional association between G4Step and
-// and G4Track, a combined usage of 'forward declaration' and
-// 'include' is necessary.
-//-------------------------------------------------------------
-#include "G4Step.hh"
-
-   inline G4Step* G4Track::GetStep() const
-   { return fpStep; }
-   inline void G4Track::SetStep(G4Step* aValue)
-   { fpStep = aValue; }
+#include "G4Track.icc"
 
 #endif
 
