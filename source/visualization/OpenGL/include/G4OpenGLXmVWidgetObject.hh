@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmVWidgetObject.hh,v 1.1 1999-01-07 16:14:55 gunter Exp $
+// $Id: G4OpenGLXmVWidgetObject.hh,v 1.2 1999-01-09 16:23:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 #include <Xm/Xm.h>
 #include "X11/Intrinsic.h"
 #include <X11/Xlib.h>
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
 class G4OpenGLXmVWidgetObject {
 
@@ -29,11 +29,11 @@ public:
   G4OpenGLXmVWidgetObject ();  //constructor
   ~G4OpenGLXmVWidgetObject (); //destructor
   
-  G4OpenGLXmView* GetView ();  //access to the pView
+  G4OpenGLXmViewer* GetView ();  //access to the pView
   void ProcesspView ();
 
 protected:
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   Colormap cmap;
   Pixel borcol;
   Pixel bgnd;

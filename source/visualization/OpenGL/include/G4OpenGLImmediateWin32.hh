@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.hh,v 1.1 1999-01-07 16:14:48 gunter Exp $
+// $Id: G4OpenGLImmediateWin32.hh,v 1.2 1999-01-09 16:22:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,8 +21,8 @@
 class G4OpenGLImmediateWin32: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateWin32 ();
-  G4VScene* CreateScene ();
-  G4VView*  CreateView  (G4VScene&);
+  G4VSceneHandler* CreateScene ();
+  G4VViewer*  CreateView  (G4VSceneHandler&);
 };
 
 #endif

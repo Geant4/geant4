@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.1 1999-01-07 16:15:03 gunter Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.2 1999-01-09 16:23:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,14 +17,14 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
-void G4OpenGLXmView::drawing_style_callback (Widget w, 
+void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 
 					     XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -59,12 +59,12 @@ void G4OpenGLXmView::drawing_style_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::rep_style_callback (Widget w, 
+void G4OpenGLXmViewer::rep_style_callback (Widget w, 
 					 XtPointer clientData, 
 					 XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -91,12 +91,12 @@ void G4OpenGLXmView::rep_style_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::background_color_callback (Widget w, 
+void G4OpenGLXmViewer::background_color_callback (Widget w, 
 						XtPointer clientData, 
 						XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -134,12 +134,12 @@ void G4OpenGLXmView::background_color_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::transparency_callback (Widget w, 
+void G4OpenGLXmViewer::transparency_callback (Widget w, 
 					    XtPointer clientData, 
 					    XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -167,12 +167,12 @@ void G4OpenGLXmView::transparency_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::antialias_callback (Widget w, 
+void G4OpenGLXmViewer::antialias_callback (Widget w, 
 					 XtPointer clientData, 
 					 XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -202,12 +202,12 @@ void G4OpenGLXmView::antialias_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::haloing_callback (Widget w, 
+void G4OpenGLXmViewer::haloing_callback (Widget w, 
 				       XtPointer clientData, 
 				       XtPointer) 
 {
   G4long choice = (G4long)clientData;
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   XtVaGetValues (XtParent(w),
 		 XmNuserData, &pView,
 		 NULL);
@@ -231,13 +231,13 @@ void G4OpenGLXmView::haloing_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::projection_callback (Widget w, 
+void G4OpenGLXmViewer::projection_callback (Widget w, 
 					  XtPointer clientData, 
 					  XtPointer) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*)clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
 
-  G4int choice = G4OpenGLXmView::get_int_userData (w);
+  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
 
   switch (choice) {
   case 0:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.1 1999-01-07 16:15:04 gunter Exp $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.2 1999-01-09 16:23:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,14 +16,14 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
-void G4OpenGLXmView::resize_callback (Widget w, 
+void G4OpenGLXmViewer::resize_callback (Widget w, 
 				      XtPointer clientData, 
 				      XtPointer) 
 {
   Dimension width, height;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   
   XtVaGetValues (w, 
 		 XmNwidth, &width, 
@@ -36,11 +36,11 @@ void G4OpenGLXmView::resize_callback (Widget w,
 
 
 
-void G4OpenGLXmView::expose_callback (Widget w, 
+void G4OpenGLXmViewer::expose_callback (Widget w, 
 				      XtPointer clientData, 
 				      XtPointer) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   Dimension width, height;
 
   XtVaGetValues (w, 
@@ -58,34 +58,34 @@ void G4OpenGLXmView::expose_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmView::print_callback (Widget, 
+void G4OpenGLXmViewer::print_callback (Widget, 
 				    XtPointer clientData, 
 				    XtPointer) 
 {
-  G4OpenGLXView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXViewer* pView = (G4OpenGLXmViewer*) clientData;
   pView->print();
 }
 
-void G4OpenGLXmView::set_print_colour_callback (Widget w,
+void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
 						XtPointer clientData,
 						XtPointer) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*)clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmView::get_int_userData (w);
+  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
   
   pView->print_colour=(G4bool)choice;
   G4cout << "Print colour set to " << pView->print_colour;
   
 }
 
-void G4OpenGLXmView::set_print_style_callback (Widget w,
+void G4OpenGLXmViewer::set_print_style_callback (Widget w,
 					       XtPointer clientData,
 					       XtPointer) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*)clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmView::get_int_userData (w);
+  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
   
   pView->vectored_ps=(G4bool)choice;
   G4cout << "`Produce vectored PostScript ?' set to : " << pView->print_colour;

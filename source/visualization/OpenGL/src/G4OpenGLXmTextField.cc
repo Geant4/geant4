@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.1 1999-01-07 16:15:03 gunter Exp $
+// $Id: G4OpenGLXmTextField.cc,v 1.2 1999-01-09 16:23:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
@@ -136,12 +136,12 @@ void G4OpenGLXmTextField::AddYourselfTo (G4OpenGLXmVWidgetContainer* container)
   if (!text) {
     XtAddCallback (text_field, 
 		   XmNvalueChangedCallback,
-		   G4OpenGLXmView::get_double_value_callback,
+		   G4OpenGLXmViewer::get_double_value_callback,
 		   value);
   } else {
     XtAddCallback (text_field, 
 		   XmNvalueChangedCallback,
-		   G4OpenGLXmView::get_text_callback,
+		   G4OpenGLXmViewer::get_text_callback,
 		   value);
   }
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneInclude.cc,v 1.1 1999-01-07 16:15:29 gunter Exp $
+// $Id: G4VisCommandsSceneInclude.cc,v 1.2 1999-01-09 16:31:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -39,7 +39,7 @@ G4String G4VisCommandSceneIncludeHits::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneIncludeHits::SetNewValue (G4UIcommand* command,
 						G4String newValue) {
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
@@ -79,7 +79,7 @@ G4String G4VisCommandSceneIncludeTrajectories::GetCurrentValue (G4UIcommand* com
 
 void G4VisCommandSceneIncludeTrajectories::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;

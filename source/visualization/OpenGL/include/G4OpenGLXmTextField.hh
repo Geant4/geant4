@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.hh,v 1.1 1999-01-07 16:14:54 gunter Exp $
+// $Id: G4OpenGLXmTextField.hh,v 1.2 1999-01-09 16:23:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

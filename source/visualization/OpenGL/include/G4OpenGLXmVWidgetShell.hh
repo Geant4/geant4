@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmVWidgetShell.hh,v 1.1 1999-01-07 16:14:55 gunter Exp $
+// $Id: G4OpenGLXmVWidgetShell.hh,v 1.2 1999-01-09 16:23:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsLights.hh,v 1.1 1999-01-07 16:15:22 gunter Exp $
+// $Id: G4VisCommandsLights.hh,v 1.2 1999-01-09 16:30:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ public:
   void SetValue (G4bool value) {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (value);
-    G4VView* pView = pVMan -> GetCurrentView ();
+    G4VViewer* pView = pVMan -> GetCurrentView ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());

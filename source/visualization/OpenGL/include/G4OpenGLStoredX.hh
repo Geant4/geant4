@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredX.hh,v 1.1 1999-01-07 16:14:50 gunter Exp $
+// $Id: G4OpenGLStoredX.hh,v 1.2 1999-01-09 16:22:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 class G4OpenGLStoredX: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredX ();
-  G4VScene* CreateScene (const G4String& name = "");
-  G4VView*  CreateView  (G4VScene&, const G4String& name = "");
+  G4VSceneHandler* CreateScene (const G4String& name = "");
+  G4VViewer*  CreateView  (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

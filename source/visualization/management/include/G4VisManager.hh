@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.2 1999-01-08 16:33:53 gunter Exp $
+// $Id: G4VisManager.hh,v 1.3 1999-01-09 16:31:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,9 +47,9 @@
 
 #include "globals.hh"
 #include "G4GraphicsSystemList.hh"
+#include "G4SceneHandlerList.hh"
+#include "G4Scene.hh"
 #include "G4SceneList.hh"
-#include "G4SceneData.hh"
-#include "G4SceneDataObjectList.hh"
 #include "G4ViewParameters.hh"
 #include "G4Transform3D.hh"
 #include "G4UImessenger.hh"
@@ -62,8 +62,8 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
 class G4VGraphicsSystem;
-class G4VScene;
-class G4VView;
+class G4VSceneHandler;
+class G4VViewer;
 class G4Polyline;
 class G4Text;
 class G4Circle;
@@ -80,14 +80,14 @@ class G4VisManager: public G4VVisManager, public G4VStateDependent {
   // should use G4VVisManager::GetConcreteInstance () instead - always
   // testing for non-zero.
 
-  friend class G4VScene;
-  friend class G4VView;
+  friend class G4VSceneHandler;
+  friend class G4VViewer;
 
   friend class ostream & operator <<
   (class ostream &, const class G4VGraphicsSystem &);
 
   friend class ostream & operator <<
-  (class ostream &, const class G4VScene &);
+  (class ostream &, const class G4VSceneHandler &);
 
   // Now classes associated with the old commands...
   friend class G4VisManMessenger;
@@ -227,27 +227,27 @@ public:
   // Access functions.
 
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
-  G4VScene*                    GetCurrentScene             () const;
-  G4VView*                     GetCurrentView              () const;
-  const G4SceneData&           GetCurrentSceneData         () const;
+  G4VSceneHandler*                    GetCurrentScene             () const;
+  G4VViewer*                     GetCurrentView              () const;
+  const G4Scene&           GetCurrentSceneData         () const;
   const G4ViewParameters&      GetCurrentViewParameters    () const;
   const G4GraphicsSystemList&  GetAvailableGraphicsSystems ();
   // The above is non-const because it checks and updates the List by
   // calling RegisterGraphicsSystems() if no graphics systems are
   // already registered.
-  const G4SceneList&           GetAvailableScenes          () const;
-  const G4SceneDataObjectList& GetSceneDataObjectList      () const;
+  const G4SceneHandlerList&           GetAvailableScenes          () const;
+  const G4SceneList& GetSceneDataObjectList      () const;
   G4int                        GetVerboseLevel             () const;
   G4bool                       IsValidView                 ();
   void              SetCurrentGraphicsSystemAndCreateView
                                                 (G4VGraphicsSystem* pSystem);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
-  void              SetCurrentScene             (G4VScene* pScene);
-  void              SetCurrentView              (G4VView* pView);
-  G4SceneData&      SetCurrentSceneData         ();  // Returns lvalue.
+  void              SetCurrentScene             (G4VSceneHandler* pScene);
+  void              SetCurrentView              (G4VViewer* pView);
+  G4Scene&      SetCurrentSceneData         ();  // Returns lvalue.
   G4ViewParameters& SetCurrentViewParameters    ();  // Returns lvalue.
-  G4SceneList&      SetAvailableScenes          ();  // Returns lvalue.
-  G4SceneDataObjectList& SetSceneDataObjectList ();  // Returns lvalue.
+  G4SceneHandlerList&      SetAvailableScenes          ();  // Returns lvalue.
+  G4SceneList& SetSceneDataObjectList ();  // Returns lvalue.
   void              SetVerboseLevel             (G4int vLevel);
 
 protected:
@@ -261,12 +261,12 @@ protected:
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
-  G4VScene*             fpSceneHandler;     // Current scene handler.
-  G4VView*              fpViewer;           // Current viewer.
+  G4VSceneHandler*             fpSceneHandler;     // Current scene handler.
+  G4VViewer*              fpViewer;           // Current viewer.
   G4GraphicsSystemList  fAvailableGraphicsSystems;
-  G4SceneList           fAvailableScenes;
-  G4SceneDataObjectList fSceneDataObjectList;
-  G4SceneData           fSD;                // Current scene data object.
+  G4SceneHandlerList           fAvailableScenes;
+  G4SceneList fSceneDataObjectList;
+  G4Scene           fSD;                // Current scene data object.
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.

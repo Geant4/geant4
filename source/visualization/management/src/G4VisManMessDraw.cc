@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.1 1999-01-07 16:15:31 gunter Exp $
+// $Id: G4VisManMessDraw.cc,v 1.2 1999-01-09 16:31:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -234,7 +234,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
     }
     G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
 
-    G4SceneData& currentScene = theVisManager -> SetCurrentSceneData ();
+    G4Scene& currentScene = theVisManager -> SetCurrentSceneData ();
     // Ok, lets look on the parameters
     if(newValues=="all") {
       G4FlavoredParallelWorld* CurrentFlavoredWorld;

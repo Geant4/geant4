@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.1 1999-01-07 16:14:56 gunter Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.2 1999-01-09 16:23:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,11 +18,11 @@
 #include <GL/glu.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VScene.hh"
-#include "G4OpenGLScene.hh"
-#include "G4OpenGLView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 #include "G4OpenGLImmediateWin32.hh"
-#include "G4OpenGLImmediateWin32View.hh"
+#include "G4OpenGLImmediateWin32Viewer.hh"
 
 G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
   G4VGraphicsSystem ("OpenGLImmediateWin32",
@@ -30,20 +30,20 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 		     G4VisFeaturesOfOpenGLIWin32 (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VScene* G4OpenGLImmediateWin32::CreateScene () {
-  G4VScene* pScene = new G4OpenGLImmediateScene (*this);
-  G4cout << G4OpenGLImmediateScene::GetSceneCount ()
+G4VSceneHandler* G4OpenGLImmediateWin32::CreateScene () {
+  G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this);
+  G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VView* G4OpenGLImmediateWin32::CreateView (G4VScene& scene) {
-  G4VView* pView =
-    new G4OpenGLImmediateWin32View ((G4OpenGLImmediateScene&) scene);
+G4VViewer* G4OpenGLImmediateWin32::CreateView (G4VSceneHandler& scene) {
+  G4VViewer* pView =
+    new G4OpenGLImmediateWin32Viewer ((G4OpenGLImmediateSceneHandler&) scene);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLImmediateWin32::CreateView: error flagged by negative"
-	" view id in G4OpenGLImmediateWin32View creation."
+	" view id in G4OpenGLImmediateWin32Viewer creation."
 	"\n Destroying view and returning null pointer."
 	   << endl;
       delete pView;
@@ -52,7 +52,7 @@ G4VView* G4OpenGLImmediateWin32::CreateView (G4VScene& scene) {
   }
   else {
     G4cerr << "G4OpenGLImmediateWin32::CreateView: null pointer on"
-      " new G4OpenGLImmediateWin32View." << endl;
+      " new G4OpenGLImmediateWin32Viewer." << endl;
   }
   return pView;
 }

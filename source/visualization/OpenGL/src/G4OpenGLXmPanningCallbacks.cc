@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.1 1999-01-07 16:15:01 gunter Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.2 1999-01-09 16:23:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,14 +19,14 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
-void G4OpenGLXmView::zoom_callback (Widget w, 
+void G4OpenGLXmViewer::zoom_callback (Widget w, 
 				    XtPointer clientData, 
 				    XtPointer callData) 
 {
   XmScaleCallbackStruct *cbs = (XmScaleCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   short dp = -1;
   G4float ten_to_the_dp = 10.;
 
@@ -57,12 +57,12 @@ void G4OpenGLXmView::zoom_callback (Widget w,
   pView -> DrawView ();
 }  
 
-void G4OpenGLXmView::dolly_callback (Widget w, 
+void G4OpenGLXmViewer::dolly_callback (Widget w, 
 				     XtPointer clientData, 
 				     XtPointer callData) 
 {
   XmScaleCallbackStruct *cbs = (XmScaleCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   short dp = -1;
   G4float ten_to_the_dp = 10.;
 
@@ -90,14 +90,14 @@ void G4OpenGLXmView::dolly_callback (Widget w,
 
 }  
 
-void G4OpenGLXmView::pan_left_right_callback (Widget w, 
+void G4OpenGLXmViewer::pan_left_right_callback (Widget w, 
 					      XtPointer clientData, 
 					      XtPointer callData) 
 {
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->pan_right = G4OpenGLXmView::get_boolean_userData (w);
+  pView->pan_right = G4OpenGLXmViewer::get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
     left_right_pan_callback (pView,NULL);
@@ -106,11 +106,11 @@ void G4OpenGLXmView::pan_left_right_callback (Widget w,
   }
 }
 
-void G4OpenGLXmView::left_right_pan_callback (XtPointer clientData,
+void G4OpenGLXmViewer::left_right_pan_callback (XtPointer clientData,
 					      XtIntervalId* timer_id) 
 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   G4double delta;
   
   if (pView->pan_right) {
@@ -141,14 +141,14 @@ void G4OpenGLXmView::left_right_pan_callback (XtPointer clientData,
      pView);
 }  
 
-void G4OpenGLXmView::pan_up_down_callback (Widget w, 
+void G4OpenGLXmViewer::pan_up_down_callback (Widget w, 
 					   XtPointer clientData, 
 					   XtPointer callData) 
 {
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->pan_up = G4OpenGLXmView::get_boolean_userData (w);
+  pView->pan_up = G4OpenGLXmViewer::get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
     up_down_pan_callback (pView,NULL);
@@ -157,10 +157,10 @@ void G4OpenGLXmView::pan_up_down_callback (Widget w,
   }
 }
 
-void G4OpenGLXmView::up_down_pan_callback (XtPointer clientData,
+void G4OpenGLXmViewer::up_down_pan_callback (XtPointer clientData,
 					   XtIntervalId* timer_id) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   G4double delta;
   
   if (pView->pan_up) {
@@ -189,12 +189,12 @@ void G4OpenGLXmView::up_down_pan_callback (XtPointer clientData,
      pView);
 }  
 
-void G4OpenGLXmView::set_pan_sens_callback (Widget w, 
+void G4OpenGLXmViewer::set_pan_sens_callback (Widget w, 
 					    XtPointer clientData, 
 					    XtPointer callData) 
 {
   XmScaleCallbackStruct *cbs = (XmScaleCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   short dp = -1;
   G4float ten_to_the_dp = 10.;
 

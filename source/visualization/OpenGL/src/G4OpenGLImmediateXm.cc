@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.1 1999-01-07 16:14:57 gunter Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.2 1999-01-09 16:23:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,11 +19,11 @@
 #include <GL/glu.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VScene.hh"
-#include "G4OpenGLScene.hh"
-#include "G4OpenGLView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 #include "G4OpenGLImmediateXm.hh"
-#include "G4OpenGLImmediateXmView.hh"
+#include "G4OpenGLImmediateXmViewer.hh"
 
 G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
   G4VGraphicsSystem ("OpenGLImmediateXm",
@@ -31,21 +31,21 @@ G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
 		     G4VisFeaturesOfOpenGLIXm (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VScene* G4OpenGLImmediateXm::CreateScene (const G4String& name) {
-  G4VScene* pScene = new G4OpenGLImmediateScene (*this, name);
-  G4cout << G4OpenGLImmediateScene::GetSceneCount ()
+G4VSceneHandler* G4OpenGLImmediateXm::CreateScene (const G4String& name) {
+  G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
+  G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VView* G4OpenGLImmediateXm::CreateView (G4VScene& scene,
+G4VViewer* G4OpenGLImmediateXm::CreateView (G4VSceneHandler& scene,
 					  const G4String& name) {
-  G4VView* pView =
-    new G4OpenGLImmediateXmView ((G4OpenGLImmediateScene&) scene, name);
+  G4VViewer* pView =
+    new G4OpenGLImmediateXmViewer ((G4OpenGLImmediateSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLImmediateXm::CreateView: error flagged by"
-	" negative view id in G4OpenGLImmediateXmView creation."
+	" negative view id in G4OpenGLImmediateXmViewer creation."
 	"\n Destroying view and returning null pointer." << endl;
       delete pView;
       pView = 0;
@@ -53,7 +53,7 @@ G4VView* G4OpenGLImmediateXm::CreateView (G4VScene& scene,
   }
   else {
     G4cerr << "G4OpenGLImmediateXm::CreateView: null pointer on"
-      " new G4OpenGLImmediateXmView." << endl;
+      " new G4OpenGLImmediateXmViewer." << endl;
   }
   return pView;
 }

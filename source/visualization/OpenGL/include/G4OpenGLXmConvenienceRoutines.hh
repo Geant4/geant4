@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmConvenienceRoutines.hh,v 1.1 1999-01-07 16:14:51 gunter Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.hh,v 1.2 1999-01-09 16:22:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -15,7 +15,7 @@
 #ifndef G4OPENGLXMCONVENIENCEROUTINES_HH
 #define G4OPENGLXMCONVENIENCEROUTINES_HH
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
 // Methods contained in G4OpenGLXmConvenienceRoutines:
 //
@@ -27,7 +27,7 @@
 //
 // Description of methods in G4OpenGLXmConvenienceRoutines:
 //
-// 1) Add_four_arrow_buttons (G4OpenGLXmView* pView,
+// 1) Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 //			      XtCallbackProc* arrow_callbacks,
 //			      Widget* parent_widget)
 //
@@ -44,7 +44,7 @@
 //	            G4int default_button, 
 //	            char* radio_box_name, 
 //	            char** button_names, 
-//	            G4OpenGLXmView* pView);
+//	            G4OpenGLXmViewer* pView);
 //
 //    Adds a row column widget containing num_buttons toggle buttons, to the
 //    row column parent_widget passed in the arguments List. label_string is
@@ -64,7 +64,7 @@
 //                   Widget* row_col_box, 
 //		     Widget* wid, 
 //		     G4float* val, 
-//		     G4OpenGLXmView* pView);
+//		     G4OpenGLXmViewer* pView);
 //
 //    Adds a text field widget to the row_col_box supplied in the arguments
 //    List. widget goes towards giving the widgets created within Add_set_field
@@ -76,7 +76,7 @@
 // 4) Add_slider_box (char* label_string,
 //		      G4int num_sliders,
 //		      char** slider_names,
-//		      G4OpenGLXmView* pView,
+//		      G4OpenGLXmViewer* pView,
 //		      G4float* min_array,
 //		      G4float* max_array,
 //		      G4float* value_array,
@@ -112,7 +112,7 @@
 //    This XtCallbackProc reads a character string from a text field widget, 
 //    and converts it to a floating point number.
 
-void Add_four_arrow_buttons (G4OpenGLXmView* pView,
+void Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 			     XtCallbackProc* arrow_callbacks,
 			     Widget* parent_widget);
 
@@ -123,19 +123,19 @@ void Add_radio_box (char* label_string,
 		    G4int default_button, 
 		    char* radio_box_name, 
 		    char** button_names, 
-		    G4OpenGLXmView* pView);
+		    G4OpenGLXmViewer* pView);
 		    
 void Add_set_field (char* widget, 
 		    char* widget_text, 
 		    Widget* row_col_box, 
 		    Widget* wid, 
 		    G4float* val, 
-		    G4OpenGLXmView* pView);
+		    G4OpenGLXmViewer* pView);
 
 void Add_slider_box (char* label_string,
 		     G4int num_sliders,
 		     char** slider_names,
-		     G4OpenGLXmView* pView,
+		     G4OpenGLXmViewer* pView,
 		     G4float* min_array,
 		     G4float* max_array,
 		     G4float* value_array,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredX.cc,v 1.1 1999-01-07 16:14:58 gunter Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.2 1999-01-09 16:23:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,11 +20,11 @@
 #include <GL/glu.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VScene.hh"
-#include "G4OpenGLScene.hh"
-#include "G4OpenGLView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredX.hh"
-#include "G4OpenGLStoredXView.hh"
+#include "G4OpenGLStoredXViewer.hh"
 
 G4OpenGLStoredX::G4OpenGLStoredX ():
   G4VGraphicsSystem ("OpenGLStoredX",
@@ -32,29 +32,29 @@ G4OpenGLStoredX::G4OpenGLStoredX ():
 		     G4VisFeaturesOfOpenGLSX (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VScene* G4OpenGLStoredX::CreateScene (const G4String& name) {
-  G4VScene* pScene = new G4OpenGLStoredScene (*this, name);
-  G4cout << G4OpenGLStoredScene::GetSceneCount ()
+G4VSceneHandler* G4OpenGLStoredX::CreateScene (const G4String& name) {
+  G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
+  G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VView* G4OpenGLStoredX::CreateView (G4VScene& scene,
+G4VViewer* G4OpenGLStoredX::CreateView (G4VSceneHandler& scene,
 				      const G4String& name) {
-  G4VView* pView =
-    new G4OpenGLStoredXView ((G4OpenGLStoredScene&) scene, name);
+  G4VViewer* pView =
+    new G4OpenGLStoredXViewer ((G4OpenGLStoredSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       delete pView;
       pView = 0;
       G4cerr << "G4OpenGLStoredX::CreateView: error flagged by"
-	" negative view id in G4OpenGLStoredXView creation."
+	" negative view id in G4OpenGLStoredXViewer creation."
 	"\n Destroying view and returning null pointer." << endl;
     }
   }
   else {
     G4cerr << "G4OpenGLStoredX::CreateView: null pointer on"
-      " new G4OpenGLStoredXView." << endl;
+      " new G4OpenGLStoredXViewer." << endl;
   }
   return pView;
 }

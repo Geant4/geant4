@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSet.hh,v 1.1 1999-01-07 16:15:23 gunter Exp $
+// $Id: G4VisCommandsSet.hh,v 1.2 1999-01-09 16:31:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ public:
   void SetValue (G4bool value) {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCulling (value);
-    G4VView* pView = pVMan -> GetCurrentView ();
+    G4VViewer* pView = pVMan -> GetCurrentView ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
@@ -82,7 +82,7 @@ public:
 	 << endl;
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCullingCovered (value);
-    G4VView* pView = pVMan -> GetCurrentView ();
+    G4VViewer* pView = pVMan -> GetCurrentView ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
@@ -111,7 +111,7 @@ public:
   void SetValue (G4bool value) {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCullingInvisible (value);
-    G4VView* pView = pVMan -> GetCurrentView ();
+    G4VViewer* pView = pVMan -> GetCurrentView ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());

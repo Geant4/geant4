@@ -5,19 +5,37 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneList.hh,v 1.1 1999-01-07 16:15:17 gunter Exp $
+// $Id: G4SceneList.hh,v 1.2 1999-01-09 16:30:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  May 1996
+// John Allison  9th August 1998
 
 #ifndef G4SCENELIST_HH
 #define G4SCENELIST_HH
 
-#include <rw/tpordvec.h>
-#include "G4VScene.hh"
+#include "G4Scene.hh"
+#include "globals.hh"
+#include <rw/tvhdict.h>
 
-class G4SceneList: public RWTPtrOrderedVector<G4VScene> {
+class G4SceneList:
+  public RWTValHashDictionary <G4String, G4Scene>
+// Each scene is keyed to a name.
+{
+public:
+  G4SceneList
+  (
+   unsigned (*)(const G4String&),      // Hashing function
+   size_t size = RWDEFAULT_CAPACITY    // No. of buckets
+   );
+  friend class G4SceneListIterator;
+};
+
+class G4SceneListIterator:
+  public RWTValHashDictionaryIterator <G4String, G4Scene>
+{
+public:
+  G4SceneListIterator (G4SceneList&);
 };
 
 #endif

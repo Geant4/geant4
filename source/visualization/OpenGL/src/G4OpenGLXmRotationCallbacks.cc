@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.1 1999-01-07 16:15:02 gunter Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.2 1999-01-09 16:23:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,32 +17,32 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-void G4OpenGLXmView::theta_rotation_callback (Widget w, 
+void G4OpenGLXmViewer::theta_rotation_callback (Widget w, 
 					      XtPointer clientData, 
 					      XtPointer callData) 
 {
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotate_right = G4OpenGLXmView::get_boolean_userData (w);
+  pView->rotate_right = G4OpenGLXmViewer::get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
-    G4OpenGLXmView::rotate_in_theta (pView, NULL);
+    G4OpenGLXmViewer::rotate_in_theta (pView, NULL);
   } else if (cbs->reason == XmCR_DISARM) {
     XtRemoveTimeOut (pView->rotation_timer);
   }
 }
 
-void G4OpenGLXmView::rotate_in_theta (XtPointer clientData,
+void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
 				      XtIntervalId* timer_id) 
 {
   //theta spin stuff here
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   G4double delta_theta;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
@@ -88,32 +88,32 @@ void G4OpenGLXmView::rotate_in_theta (XtPointer clientData,
   pView->rotation_timer = XtAppAddTimeOut 
     (pView->app,
      timer_id == NULL ? 500 : 1,
-     G4OpenGLXmView::rotate_in_theta,
+     G4OpenGLXmViewer::rotate_in_theta,
      pView);
 }  
 
-void G4OpenGLXmView::phi_rotation_callback (Widget w, 
+void G4OpenGLXmViewer::phi_rotation_callback (Widget w, 
 					    XtPointer clientData, 
 					    XtPointer callData) 
 {
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotate_up = G4OpenGLXmView::get_boolean_userData (w);
+  pView->rotate_up = G4OpenGLXmViewer::get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
-    G4OpenGLXmView::rotate_in_phi (pView, NULL);
+    G4OpenGLXmViewer::rotate_in_phi (pView, NULL);
   } else if (cbs->reason == XmCR_DISARM) {
     XtRemoveTimeOut (pView->rotation_timer);
   }
 }
 
-void G4OpenGLXmView::rotate_in_phi (XtPointer clientData,
+void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
 				    XtIntervalId* timer_id)
 {
   //phi spin stuff here
   G4double delta_alpha;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {
@@ -149,16 +149,16 @@ void G4OpenGLXmView::rotate_in_phi (XtPointer clientData,
   pView->rotation_timer = XtAppAddTimeOut 
     (pView->app,
      timer_id == NULL ? 500 : 1,
-     G4OpenGLXmView::rotate_in_phi,
+     G4OpenGLXmViewer::rotate_in_phi,
      pView);
 }
 
-void G4OpenGLXmView::set_rot_sens_callback (Widget w, 
+void G4OpenGLXmViewer::set_rot_sens_callback (Widget w, 
 					    XtPointer clientData, 
 					    XtPointer callData) 
 {
   XmScaleCallbackStruct *cbs = (XmScaleCallbackStruct*) callData;
-  G4OpenGLXmView* pView = (G4OpenGLXmView*) clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   short dp = -1;
   G4float ten_to_the_dp = 10.;
 
@@ -179,13 +179,13 @@ void G4OpenGLXmView::set_rot_sens_callback (Widget w,
   pView->rot_sens = (G4float)(cbs->value) / ten_to_the_dp;
 }  
 
-void G4OpenGLXmView::set_rot_subject_callback (Widget w, 
+void G4OpenGLXmViewer::set_rot_subject_callback (Widget w, 
 					       XtPointer clientData, 
 					       XtPointer) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*)clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmView::get_int_userData (w);
+  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
   
   switch (choice) {
   case 0: 
@@ -205,11 +205,11 @@ void G4OpenGLXmView::set_rot_subject_callback (Widget w,
   }
 }  
 
-void G4OpenGLXmView::wobble_callback (Widget w, 
+void G4OpenGLXmViewer::wobble_callback (Widget w, 
 				      XtPointer, 
 				      XtPointer) 
 {
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   
   XtVaGetValues (w,
 		 XmNuserData, &pView,
@@ -218,14 +218,14 @@ void G4OpenGLXmView::wobble_callback (Widget w,
   pView->original_vp = pView->fVP.GetViewpointDirection();
   pView->wobble_timer = XtAppAddTimeOut (pView->app,
 					 1000. * (1. / pView->wob_sens),
-					 G4OpenGLXmView::wobble_timer_callback,
+					 G4OpenGLXmViewer::wobble_timer_callback,
 					 pView);
 }  
 
-void G4OpenGLXmView::wobble_timer_callback (XtPointer clientData,
+void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
 					    XtIntervalId*) 
 {
-  G4OpenGLXmView* pView = (G4OpenGLXmView*)clientData;
+  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   G4Vector3D up = pView->fVP.GetUpVector();
   G4Vector3D vp = pView->fVP.GetViewpointDirection();
   G4Vector3D third_axis = up.cross(pView->original_vp);
@@ -251,17 +251,17 @@ void G4OpenGLXmView::wobble_timer_callback (XtPointer clientData,
   } else {
     pView->wobble_timer = XtAppAddTimeOut (pView->app,
 					   1000. * (1. / pView->wob_sens),
-					   G4OpenGLXmView::wobble_timer_callback,
+					   G4OpenGLXmViewer::wobble_timer_callback,
 					   pView);
   }
 }
 
-void G4OpenGLXmView::reset_callback (Widget w, 
+void G4OpenGLXmViewer::reset_callback (Widget w, 
 				     XtPointer, 
 				     XtPointer) 
 {
   
-  G4OpenGLXmView* pView;
+  G4OpenGLXmViewer* pView;
   
   XtVaGetValues (w,
 		 XmNuserData, &pView,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.2 1999-01-08 16:33:55 gunter Exp $
+// $Id: G4VisManager.cc,v 1.3 1999-01-09 16:31:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 #include "G4VisFeaturesOfOpenInventor.hh"
 #include "G4VisFeaturesOfRay.hh"
 #include "G4VGraphicsSystem.hh"
-#include "G4VScene.hh"
-#include "G4VView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4VViewer.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -453,8 +453,8 @@ G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
 void G4VisManager::CreateScene (G4String name) {
   if (!fInitialised) Initialise ();
   if (fpGraphicsSystem) {
-    G4VScene* pScene = fpGraphicsSystem -> CreateScene (name);
-    G4VView* pView;
+    G4VSceneHandler* pScene = fpGraphicsSystem -> CreateScene (name);
+    G4VViewer* pView;
     if (pScene) {
       fAvailableScenes.append (pScene);
       fpSceneHandler = pScene;                         // Make current.
@@ -478,7 +478,7 @@ void G4VisManager::CreateView (G4String name) {
   if (!fInitialised) Initialise ();
 
   if (fpSceneHandler) {
-    G4VView* p = fpGraphicsSystem -> CreateView (*fpSceneHandler, name);
+    G4VViewer* p = fpGraphicsSystem -> CreateView (*fpSceneHandler, name);
     if (p) {
       fpViewer = p;                             // Make current.
       fpSceneHandler -> AddViewToList (fpViewer);
@@ -526,7 +526,7 @@ void G4VisManager::DeleteCurrentScene () {
     fAvailableScenes.remove (fpSceneHandler);
     delete fpSceneHandler;
   }
-  const G4SceneList& sceneHandlerList = fAvailableScenes;
+  const G4SceneHandlerList& sceneHandlerList = fAvailableScenes;
   G4int nSH = sceneHandlerList.entries ();
   G4int iSH;
   for (iSH = 0; iSH < nSH; iSH++) {
@@ -572,7 +572,7 @@ void G4VisManager::DeleteCurrentView () {
     fpViewer -> GetScene () -> RemoveViewFromList (fpViewer);
     delete fpViewer;
   }
-  const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
+  const G4ViewerList& viewerList = fpSceneHandler -> GetViewList ();
   if (viewerList.entries () > 0) {
     fpViewer = viewerList [0];
     fpSceneHandler -> SetCurrentView (fpViewer);
@@ -608,16 +608,16 @@ void G4VisManager::GeometryHasChanged () {
   }
 
   // Check scenes.
-  G4SceneDataObjectList& sceneList = fSceneDataObjectList;
+  G4SceneList& sceneList = fSceneDataObjectList;
   G4int nScenes;
   G4bool sceneChange;
   do {
     sceneChange = false;
     nScenes = sceneList.entries ();
     if (nScenes) {
-      G4SceneDataObjectListIterator iterator (sceneList);
+      G4SceneListIterator iterator (sceneList);
       while (++iterator) {
-	G4SceneData scene (iterator.value ());
+	G4Scene scene (iterator.value ());
 	RWTPtrOrderedVector <G4VModel>& modelList =
 	  scene.SetRunDurationModelList ();
 	G4int nModelsOriginal = modelList.entries ();
@@ -661,7 +661,7 @@ void G4VisManager::GeometryHasChanged () {
   } while (sceneChange);
 
   // Check the manager's current scene...
-  G4SceneDataObjectListIterator iterator (sceneList);
+  G4SceneListIterator iterator (sceneList);
   G4bool sceneFound = false;
   while (++iterator) {
     if (fSD == iterator.value ()) {
@@ -674,7 +674,7 @@ void G4VisManager::GeometryHasChanged () {
       "\n  Select or create a new scene.  (Alternatively accept the default"
       "\n  \"world\" scene that the manager creates for you.)."
 	   << endl;
-    fSD = G4SceneData ();
+    fSD = G4Scene ();
   }
 }
 
@@ -689,7 +689,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   G4cout << "G4VisManager::SetCurrentGraphicsSystem: system now "
 	 << pSystem -> GetName ();
-  const G4SceneList& sceneHandlerList = fAvailableScenes;
+  const G4SceneHandlerList& sceneHandlerList = fAvailableScenes;
   G4int nSH = sceneHandlerList.entries ();  // No. of scene handlers.
   G4int iSH;
   for (iSH = 0; iSH < nSH; iSH++) {
@@ -699,7 +699,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
     fpSceneHandler = sceneHandlerList [iSH];
     G4cout << "\n  Scene Handler now "
 	   << fpSceneHandler -> GetName ();
-    const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
+    const G4ViewerList& viewerList = fpSceneHandler -> GetViewList ();
     if (viewerList.entries ()) {
       fpViewer = viewerList [0];
       G4cout << "\n  Viewer now " << fpViewer -> GetName ();
@@ -720,7 +720,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   G4cout << endl; 
 }
 
-void G4VisManager::SetCurrentScene (G4VScene* pScene) {
+void G4VisManager::SetCurrentScene (G4VSceneHandler* pScene) {
   fpSceneHandler = pScene;
   G4cout << "G4VisManager::SetCurrentScene: scene handler now \""
 	 << pScene -> GetName () << "\"";
@@ -729,7 +729,7 @@ void G4VisManager::SetCurrentScene (G4VScene* pScene) {
     G4cout << "\n  graphics system now \""
 	   << fpGraphicsSystem -> GetName () << "\"";
   }
-  const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
+  const G4ViewerList& viewerList = fpSceneHandler -> GetViewList ();
   G4int nViewers = viewerList.entries ();
   if (nViewers) {
     G4int iViewer;
@@ -751,7 +751,7 @@ void G4VisManager::SetCurrentScene (G4VScene* pScene) {
   G4cout << endl; 
 }
 
-void G4VisManager::SetCurrentView (G4VView* pView) {
+void G4VisManager::SetCurrentView (G4VViewer* pView) {
   fpViewer  = pView;
   G4cout << "G4VisManager::SetCurrentView: viewer now "
 	 << pView -> GetName ()

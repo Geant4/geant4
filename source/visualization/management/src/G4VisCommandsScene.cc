@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.1 1999-01-07 16:15:28 gunter Exp $
+// $Id: G4VisCommandsScene.cc,v 1.2 1999-01-09 16:31:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -29,9 +29,9 @@ G4VVisCommandScene::G4VVisCommandScene () {}
 
 void G4VVisCommandScene::UpdateCandidateLists () {
 
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   // Seems it has to be non-const to satisfy iterator.
-  G4SceneDataObjectListIterator iterator (list);
+  G4SceneListIterator iterator (list);
 
   G4String fSceneNameList;
   while (++iterator) {
@@ -62,8 +62,8 @@ void G4VVisCommandScene::UpdateCandidateLists () {
 
 void G4VVisCommandScene::UpdateVisManagerSceneDataAndViewParameters
 (const G4String& sceneName) {
-  G4SceneData& currentScene = fpVisManager -> SetCurrentSceneData ();
-  G4SceneDataObjectList& sceneList = fpVisManager -> SetSceneDataObjectList ();
+  G4Scene& currentScene = fpVisManager -> SetCurrentSceneData ();
+  G4SceneList& sceneList = fpVisManager -> SetSceneDataObjectList ();
   if (sceneList.contains (sceneName)) {
     currentScene = sceneList [sceneName];
     G4ViewParameters& currentVP = fpVisManager -> SetCurrentViewParameters ();
@@ -72,7 +72,7 @@ void G4VVisCommandScene::UpdateVisManagerSceneDataAndViewParameters
     currentVP.SetDolly (0.);
   }
   else {
-    currentScene = G4SceneData ("invalid scene");
+    currentScene = G4Scene ("invalid scene");
   }
 }
 
@@ -117,13 +117,13 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
   }
   if (newName == nextName) fId++;
 
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   if (list.contains (newName)) {
     G4cout << "Scene \"" << newName << "\" already exists." << endl;
   }
   else {
 
-    list [newName] = G4SceneData (newName);
+    list [newName] = G4Scene (newName);
     // Adds empty scene data object to list.
 
     UpdateVisManagerSceneDataAndViewParameters (newName);
@@ -171,8 +171,8 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
   istrstream is ((char*)newValue.data());
   is >> name >> verbosity;
 
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
-  G4SceneDataObjectListIterator iterator (list);
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneListIterator iterator (list);
   G4bool found = false;
   while (++iterator) {
     if (name != "all") {
@@ -221,22 +221,22 @@ G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue
 void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 						   G4String newValue) {
   G4String& sceneName = newValue;
-  const G4SceneDataObjectList& sceneList =
+  const G4SceneList& sceneList =
     fpVisManager -> GetSceneDataObjectList ();
-  G4SceneList& sceneHandlerList = fpVisManager -> SetAvailableScenes ();
+  G4SceneHandlerList& sceneHandlerList = fpVisManager -> SetAvailableScenes ();
 
   // For each scene handler, if it contains the scene, for each viewer
   // clear, (re)draw, and show.
   const G4int nSceneHandlers = sceneHandlerList.entries ();
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
-    G4VScene* aSceneHandler = sceneHandlerList [iSH];
-    const G4SceneData& theScene = aSceneHandler -> GetSceneData ();
+    G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
+    const G4Scene& theScene = aSceneHandler -> GetSceneData ();
     const G4String& theSceneName = theScene.GetName ();
     if (sceneName == theSceneName) {
-      G4VViewList& viewerList = aSceneHandler -> SetViewList ();
+      G4ViewerList& viewerList = aSceneHandler -> SetViewList ();
       const G4int nViewers = viewerList.entries ();
       for (G4int iV = 0; iV < nViewers; iV++) {
-	G4VView* aViewer = viewerList [iV];
+	G4VViewer* aViewer = viewerList [iV];
 	aViewer -> ClearView ();
 	aViewer -> DrawView ();
 	aViewer -> ShowView ();
@@ -275,7 +275,7 @@ G4String G4VisCommandSceneRemove::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& removeName = newValue;
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   const G4String& currentSceneName =
     fpVisManager -> GetCurrentSceneData ().GetName ();
   if (list.contains (removeName)) {
@@ -288,7 +288,7 @@ void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
     }
     else {
       if (currentSceneName == removeName) {
-	G4SceneDataObjectListIterator iterator (list);
+	G4SceneListIterator iterator (list);
 	++iterator;
 	UpdateVisManagerSceneDataAndViewParameters (iterator.key ());
 	G4cout << "Current scene is now \""
@@ -333,7 +333,7 @@ G4String G4VisCommandSceneSelect::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& selectName = newValue;
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   G4cout << "Scene \"" << selectName;
   if (list.contains (selectName)) {
     UpdateVisManagerSceneDataAndViewParameters (selectName);

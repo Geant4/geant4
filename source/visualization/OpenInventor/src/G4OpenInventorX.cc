@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorX.cc,v 1.1 1999-01-07 16:15:08 gunter Exp $
+// $Id: G4OpenInventorX.cc,v 1.2 1999-01-09 16:25:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,8 @@
 #include <Inventor/Xt/SoXt.h>
 
 #include "G4OpenInventorX.hh"
-#include "G4OpenInventorScene.hh"
-#include "G4OpenInventorView.hh"
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorViewer.hh"
 
 #include "G4Xt.hh"
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.1 1999-01-07 16:15:32 gunter Exp $
+// $Id: G4VisManMessSet.cc,v 1.2 1999-01-09 16:31:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,7 +236,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       G4cout << "\nDensity cut is now: "
 	   << getVP.GetVisibleDensity () * cm3 / g << " g/cm3.";
       G4cout << endl;
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -340,7 +340,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       //}
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -386,7 +386,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	if (getVP.IsMarkerNotHidden ()) G4cout << "not";
 	G4cout << " hidden by surfaces." << endl;
       //}
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -441,7 +441,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       G4cout << "\nSection plane is now: "
 	   << getVP.GetSectionPlane ();
       G4cout << endl;
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -488,7 +488,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       }
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -631,15 +631,15 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   ///////////////////////////////////////////  /vis~/set/view  /////////
   if (commandPath == "/vis~/set/view") {
     // Make List of available views.
-    RWTPtrOrderedVector<G4VView> vList;
-    const G4SceneList& gml = fpVMan -> GetAvailableScenes ();
+    RWTPtrOrderedVector<G4VViewer> vList;
+    const G4SceneHandlerList& gml = fpVMan -> GetAvailableScenes ();
     G4int nViewTotal = 0;
     G4int iGM, nScenes = gml.entries ();
     for (iGM = 0; iGM < nScenes; iGM++) {
-      const G4VViewList& views = gml [iGM] -> GetViewList ();
+      const G4ViewerList& views = gml [iGM] -> GetViewList ();
       int nViews = views.entries ();
       for (int iView = 0; iView < nViews; iView++) {
-	G4VView* pView = views [iView];
+	G4VViewer* pView = views [iView];
 	vList.append (pView);
 	nViewTotal++;
       }
@@ -655,8 +655,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (iSelect < 0 || iSelect >= nViewTotal) {
 	G4cout << "Available views:";
 	for (int iView = 0; iView < nViewTotal; iView++) {
-	  const G4VView* pView = vList [iView];
-	  const G4VScene* pScene = pView -> GetScene ();
+	  const G4VViewer* pView = vList [iView];
+	  const G4VSceneHandler* pScene = pView -> GetScene ();
 	  const G4VGraphicsSystem* pSystem = pScene -> GetGraphicsSystem ();
 	  G4cout << "\n  " << iView << ") " << pView -> GetName ();
 	}
@@ -664,7 +664,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << endl;
       }
       else {
-	G4VView* pView = vList[iSelect];
+	G4VViewer* pView = vList[iSelect];
 	fpVMan -> SetCurrentView (pView);
 	if (fpVMan -> GetVerboseLevel () > 0) {
 	  G4cout << "Current view now " << pView -> GetName () << endl;

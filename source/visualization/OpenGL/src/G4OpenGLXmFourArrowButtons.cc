@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.1 1999-01-07 16:15:01 gunter Exp $
+// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.2 1999-01-09 16:23:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent

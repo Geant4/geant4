@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1.hh,v 1.1 1999-01-07 16:15:10 gunter Exp $
+// $Id: G4VRML1.hh,v 1.2 1999-01-09 16:27:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1.hh
@@ -19,7 +19,7 @@
 #include "G4VGraphicsSystem.hh"
 #include "FRClient.h"
 
-class G4VScene;
+class G4VSceneHandler;
 
 //#define FR_VRML_DEFAULT_PORT	40801
 //#define FR_VRML_PORT_ENV	"FR_VRML_PORT"
@@ -31,8 +31,8 @@ class G4VRML1: public G4VGraphicsSystem {
 public:
 	G4VRML1(); 
 	~G4VRML1();
-	G4VScene* CreateScene(const G4String& name = "");
-	G4VView*  CreateView(G4VScene&, const G4String& name = "");
+	G4VSceneHandler* CreateScene(const G4String& name = "");
+	G4VViewer*  CreateView(G4VSceneHandler&, const G4String& name = "");
 
 public:
 	const G4String& getHostName() { return fHostName; }

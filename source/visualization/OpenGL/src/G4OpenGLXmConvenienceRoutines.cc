@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.1 1999-01-07 16:15:01 gunter Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.2 1999-01-09 16:23:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,9 +20,9 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 //#include "G4OpenGLXmConvenienceRoutines.hh"
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
-void G4OpenGLXmView::Add_four_arrow_buttons (G4OpenGLXmView* pView,
+void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 					     XtCallbackRec** arrow_callbacks,
 					     Widget* parent_widget) {
   
@@ -166,14 +166,14 @@ void G4OpenGLXmView::Add_four_arrow_buttons (G4OpenGLXmView* pView,
   
 }
 
-void G4OpenGLXmView::Add_radio_box (char* label_string,
+void G4OpenGLXmViewer::Add_radio_box (char* label_string,
 				    Widget* parent_widget,
 				    XtCallbackRec* radio_box_callback,
 				    G4int num_buttons,
 				    G4int default_button,
 				    char* radio_box_name,
 				    char** button_names,
-				    G4OpenGLXmView* pView)
+				    G4OpenGLXmViewer* pView)
 {
 
   XmString button_str;
@@ -257,12 +257,12 @@ void G4OpenGLXmView::Add_radio_box (char* label_string,
   delete[] args;
 }  
 
-void G4OpenGLXmView::Add_set_field (char* w_name, 
+void G4OpenGLXmViewer::Add_set_field (char* w_name, 
 				    char* w_text,
 				    Widget* row_col_box,
 				    Widget* wid,
 				    G4double* val,
-				    G4OpenGLXmView* pView)
+				    G4OpenGLXmViewer* pView)
 {
 
   char local_w_text[50];
@@ -305,7 +305,7 @@ void G4OpenGLXmView::Add_set_field (char* w_name,
 
   XtAddCallback (*wid, 
 		 XmNvalueChangedCallback,
-		 G4OpenGLXmView::get_double_value_callback,
+		 G4OpenGLXmViewer::get_double_value_callback,
 		 val);
 
   Widget sep = XtVaCreateManagedWidget ("sep",
@@ -333,10 +333,10 @@ void G4OpenGLXmView::Add_set_field (char* w_name,
 				 NULL);
 }
 
-void G4OpenGLXmView::Add_slider_box (char* label_string,
+void G4OpenGLXmViewer::Add_slider_box (char* label_string,
 				     G4int num_sliders,
 				     char** slider_names,
-				     G4OpenGLXmView* pView,
+				     G4OpenGLXmViewer* pView,
 				     G4double* min_array,
 				     G4double* max_array,
 				     G4double* value_array,
@@ -449,7 +449,7 @@ void G4OpenGLXmView::Add_slider_box (char* label_string,
 
 }
 
-void G4OpenGLXmView::get_double_value_callback (Widget w, 
+void G4OpenGLXmViewer::get_double_value_callback (Widget w, 
 						XtPointer clientData, 
 						XtPointer) 
 {
@@ -464,7 +464,7 @@ void G4OpenGLXmView::get_double_value_callback (Widget w,
 
 }
 
-void G4OpenGLXmView::get_text_callback (Widget w, 
+void G4OpenGLXmViewer::get_text_callback (Widget w, 
 					XtPointer clientData, 
 					XtPointer) 
 {
@@ -478,14 +478,14 @@ void G4OpenGLXmView::get_text_callback (Widget w,
   sscanf (string, "%s", txt);
 }
 
-G4bool G4OpenGLXmView::get_boolean_userData (Widget w)
+G4bool G4OpenGLXmViewer::get_boolean_userData (Widget w)
 {
   XtPointer userData;
   XtVaGetValues (w,XmNuserData,&userData,NULL);
   return (G4bool)(unsigned long)userData;
 }
 
-G4int G4OpenGLXmView::get_int_userData (Widget w)
+G4int G4OpenGLXmViewer::get_int_userData (Widget w)
 {
   XtPointer userData;
   XtVaGetValues (w,XmNuserData,&userData,NULL);

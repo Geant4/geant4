@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.1 1999-01-07 16:15:31 gunter Exp $
+// $Id: G4VisManMessCamera.cc,v 1.2 1999-01-09 16:31:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,7 +203,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();
       // fpVMan -> Show ();
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -251,7 +251,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();    
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -316,7 +316,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	// fpVMan -> Draw ();    
 	// fpVMan -> Show ();    
       // }
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -373,7 +373,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();
     // }    
-    G4VView* pView = fpVMan -> GetCurrentView ();
+    G4VViewer* pView = fpVMan -> GetCurrentView ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -414,7 +414,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();    
-      G4VView* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentView ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.1 1999-01-07 16:15:29 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.2 1999-01-09 16:31:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -46,7 +46,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
     ("2nd parameter: copy number (default 0).");
   fpCommand -> SetGuidance
     ("3rd parameter: depth of descending geometry hierarchy"
-     " (default G4SceneData::UNLIMITED (-1)).");
+     " (default G4Scene::UNLIMITED (-1)).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("volume", 's', omitable = true);
   parameter -> SetDefaultValue ("world");
@@ -55,7 +55,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue (0);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("depth", 'i', omitable = true);
-  parameter -> SetDefaultValue (G4SceneData::UNLIMITED);
+  parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
 }
 
@@ -69,7 +69,7 @@ G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
@@ -163,7 +163,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   const G4String& currentSceneName =
     fpVisManager -> GetCurrentSceneData ().GetName ();
 
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;

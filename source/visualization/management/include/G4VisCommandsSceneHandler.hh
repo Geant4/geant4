@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.hh,v 1.1 1999-01-07 16:15:23 gunter Exp $
+// $Id: G4VisCommandsSceneHandler.hh,v 1.2 1999-01-09 16:31:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
