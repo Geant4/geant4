@@ -1,10 +1,10 @@
 #
 # Macro file for A01app
 #
-# Create a scene handler and viewer for HepRep and DAWN
+# Create a scene handler and viewer for HepRep
 #
 /vis/open HepRepFile
-/vis/open DAWNFILE
+#/vis/open DAWNFILE
 #
 # Create a new empty scene
 #
