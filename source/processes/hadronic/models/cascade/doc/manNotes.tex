@@ -1,0 +1,1618 @@
+\section{NOTES 2002}
+\subsection{November}
+\label{notes}
+
+\subsubsection{Postponed sofar}
+\begin{itemize}
+  
+\item HETC iteratively (HEH branch NUCNUC):
+
+  \begin{itemize}
+  \item new class G4BertiniHydrogenCollision (all goes there)
+  \item interfacing to InuclCollider::cascade (replace particel1 \&\&
+    particle2 with particel1 \&\& particle2 or {\sf targetA = 1}).
+    
+    Then add your call to hydrogen collision to, "can collide only
+    particel with particle".
+
+  \item see the result on very early stage
+  \end{itemize}
+  
+  if this works do the same for isob-branch (in same class).
+  
+\item -why be 130 MeV there is din in energy spectrum?  Too little
+  energy goes to evaporation?  Tell HPW when the cascade ends
+  
+\item -see why particle 10 data has same arfuments in cascade.cc
+  output ( 6 10 1.50965 1.50965 1.43313 -0.196957)
+  
+\item -make Bertini -files
+  
+\item -make nucleus model for HETC (different from current)
+  
+\item -see test/srt (grep cascade)
+  
+\item -test particle number in certain angles
+  
+\item -seek memoryleaks with target leak just add delete for all model
+  parts at the end of file (new vs. delete) (no leaks allowes)
+
+\begin{verbatim*}
+
+= LEAK SUMMARY:
+==8508==    definitely lost: 140 bytes in 3 blocks.
+==8508==    possibly lost:   0 bytes in 0 blocks.
+==8508==    still reachable: 12272 bytes in 11 blocks.
+
+goes to
+
+==9367== LEAK SUMMARY:
+==9367==    definitely lost: 0 bytes in 0 blocks.
+==9367==    possibly lost:   0 bytes in 0 blocks.
+==9367==    still reachable: 12208 bytes in 5 blocks.
+
+\end{verbatim*}
+  
+  with addition on 'delete' commands
+
+\end{itemize}
+\subsubsection{Monday 18.11}
+
+To be done:
+\begin{itemize}
+\item fix memory leaks
+\end{itemize}
+
+\subsubsection{Saturday 16.11.}
+
+\begin{itemize}
+\item final code cecks
+\end{itemize}
+
+\subsubsection{Friday 15.11}
+
+Done:
+
+\begin{itemize}
+
+\item committed cleaned files to cvs. Cleaning guidelines were separate with one emptyline the flow structures, separate brases from reserver words. Keep together variable statements and keep compact (no extra marks, spaces or lines) the statements inside strucures. ( Note keep '\} else \{' in one line as well as 'if () \{'.)
+\item committed new version of interface including target momentum.
+%\item Studied a way to give H target a proper momentum. 
+%Best idea so far: make  G4NucleiModel::generateNucleon public 
+
+\end{itemize}
+
+Description of problem:
+
+\begin{itemize}
+  
+\item neutron (2) is always generated with pi+(3), pi0 (7) is always with 2
+  p's, no pi- (5). 
+
+So the reactions are: elastic $p p \rightarrow pp$, 
+At Plab =1 GeV (Tlab = 0.44 GeV)  $\sigma \approx 24mb $.
+So there should be 22 times more pp-elastic scattering
+ than channels pi0's
+
+At Plab =1 GeV total $\sigma \approx 27mb $
+$p p \rightarrow p p pi0$ 
+
+Channel opens around  $Plab = 0.83~GeV$ or $Tlab = 0.31~GeV$. 
+At Plab =1 GeV (Tlab = 0.44 GeV)  $\sigma \approx 0.15mb $
+Run with thousand event got 13,
+
+$p p \rightarrow p n pi+$ 
+
+Open at a bit later as expected $Plab = 0.96~GeV$ or $Tlab = 0.40~GeV$ where $\sigma \approx 0.6 mb$. 
+At Plab =1 GeV  $\sigma \approx 1mb $ which is nearly 10 times more than for p0 channel.
+Run with 1000 event and got 110
+
+  Other cannels open after $Plab > 2~GeV$
+  
+\item when 7 created eTot 450.0 (585-450 = 135 equals pi0 mass) , when
+  3 created eTot 444.15 (585-444.15 = 140.8) close to pi-+ which is
+  139). This is the case with all energies.
+\item neutrons are not allowed to be produced on p -> p allowed casses
+  p -> pi + p (delta in between)?
+\item According to
+  
+  \htmladdnormallink{\textsf{Experimental Data for Hadronic
+      Reactions}}{http://nucl.sci.hokudai.ac.jp/~ohtsuka/Exp/} pp
+  total cross section are at
+
+\end{itemize}
+
+\subsubsection{Thursday 14.11}
+
+%Note: Pions production 1600 for 10000 (p, H2) --collisions (626 in
+%(n, H2) case)). Plan make H case with elemaentary particle
+%collider:
+
+WRONG: momentums (now back scattering) Done:
+
+\begin{itemize}
+  
+\item Hydrogen interface added: Pions, multiplicity and E distribution
+  ok.  Same iplies other particles.
+  
+\item ::: Created general naming sceme for plots.  Example: {\sf
+    z001n002p001e000585c010h000.eps} Most general {\bf h}histogram
+  listing all describing target A with {\bf z} = 1, {\bf n} = 2 with
+  bullet {\bf p}article type 1 (proton) at 585 MeV {\bf e}nergy. 10
+  thousand {\bf c}ollisions.
+  
+  Note: remember to use 3 and 6 data field lengths.
+
+\end{itemize}
+
+\subsubsection{Wendsday 13.11}
+
+Done:
+
+\begin{itemize}
+
+\item greated target t for hydrogen studies
+
+\item preparing for memory leak blocking
+
+\item in session with HPW Deuterium and Trinton pruved ok,
+
+\item interface with residuals ok
+
+\item Comparing differences between H1 and H2 cases:
+
+\begin{itemize}
+
+\item First clear diffference in data flow: In H1
+  G4ElementaryParticleCollider::collide called rarely from
+  G4NucleiModel::generateParticleFate. In H2 always.
+
+\item G4CollisionOutput output =
+  theElementaryParticleCollider->collide(\&bullet, \&target); 
+called always in H2 and rarely in H1 .
+
+\end{itemize}
+
+\item Verifying hydrogen isotopes deuterium and trituom to be working
+  ok.
+
+\item fragments added to interface
+
+\item fragmanets tested in cascade.*
+
+\end{itemize}
+
+
+\subsubsection{Tuesday 12.11}
+
+Done:
+
+\begin{itemize}
+
+\item HIP plan 2003 commented
+
+\item Mail to J.Apostolakis on Tapio's name spelling and money
+
+\item Studied LeTeX mode in emacs
+
+\item started using geant4-04-00-ref5 version, 
+same as HPW
+
+\end{itemize}
+
+
+\subsubsection{Monday 11.11}
+
+Done:
+
+\begin{itemize}
+
+\item HPW meeting: now evaporation is perfect. 
+Only H model is
+  missing.
+
+\item New interface including gamma. 
+And all models.
+
+\item ploting scripts improved.
+
+\end{itemize}
+
+\subsubsection{Sundaday 10.11}
+
+Done:
+\begin{itemize}
+\item cascade.C now produses analysis automatically from ntuple.
+  cascade.eps is produced for manual.
+\item rootlogon.C created added to cvs (this will form interactive
+  analysis environment)
+\item added benchmarks.cc and banchmarks.data to CVS
+\item updated test cascade.cc towards testing full interfaces (not
+  just cascade)
+\item 'Bertini' naming introduced
+\end{itemize}
+
+\subsubsection{Friday 8.11}
+
+Done:
+\begin{itemize}
+\item First proper G4 testruns (test30). Promising results. 8
+  differences with data listed
+\item organizing working environment
+\item remove last warning
+\end{itemize}
+
+\subsubsection{Thursday 7.11}
+
+Done:
+\begin{itemize}
+\item
+\item replace number generator with G4UniformRand
+\item make version of HIP plans
+\item follow programmed day plan
+\item warnings removed
+\item first draft for G4CascadeInterface, re-written with HPW
+\end{itemize}
+
+\subsubsection{Wendsday 6.11}
+
+Done:
+\begin{itemize}
+\item ``vector'' goes to ``g4std/vector'' and in the code vector goes
+  to G4std::vector
+\item Meeting with HPW at 513. We tested how the cascade code compiles
+  in his environment
+\item code added to cvs
+\item Meeting with Veikko
+\item made systematic root batch (silent code, output to file)
+\item start using public for coding (SCRATCH went down)
+\item test t2 gives now correct results (no code differences!), First
+  debug phase done.
+\item adding brackets to warning caused partially bracketed
+  initializers (currently at G4ElementaryParticleCollider)
+
+\begin{verbatim}
+ const G4int ifdef[4][7] = {
+    {2, 3, 2, 2, 3, 3, 2}, 
+    {4, 4, 3, 4, 4, 4, 3}, 
+    {5, 6, 4, 5, 5, 5, 4},
+    {7, 7, 5, 7, 6, 6, 5}
+  };
+\end{verbatim}
+  
+\item committed yesterdays changes to cms
+\item In GNUmakefiles tuned all compiler warnings
+\item Added timing functionalities to testing, also documentation
+\item Automating geant4 cvs co a bit
+\item No acces to lxplus038, so start using lxplus07
+
+\end{itemize}
+
+\subsubsection{Tuesday 5.11}
+
+Done:
+\begin{itemize}
+\item Cleaned the cascade warnings alphabetically from p* to G4I*
+\item g++ version: gcc version egcs-2.91.66 19990314/Linux (egcs-1.1.2
+  release)
+\item old files removed from cvs and new files updated
+\item Testing environment in lxplus038 \$G4INSTALL =
+  /tmp/miheikki/geant/geant4. Using geant4.4.1.p01.tar.gz with CLHEP
+  1.6.0.0
+\item all libraries(including cascade) are compiled.
+\item after GNUmakefile update testing works
+\item make silent source code version
+\item separated other models from cascade
+\item commit cvs
+\item make similar version of original code for comparison
+\item Meeting with J. Allison and H.P. Wellich
+
+\end{itemize}
+
+\subsubsection{Monday 4.11}
+\begin{itemize}
+\item Setting up Geant4 environment in lxplus. General files
+  structure: \$SCRATCH/geant has geant4 directrory for production
+  release and geant4Head. Updated p coGeant
+\item installed root and template for root bach analysis. (based on
+  tutorials/rootmarks.C)
+\end{itemize}
+
+
+\subsection{October}
+
+\subsubsection{29.10}
+\begin{itemize}
+\item -Release test results and code with new homepages
+\item -Making diffs with new code to find bugs
+\item -Make test given by HPW.
+\item -Tuning tests in INUCL++
+\end{itemize}
+
+\subsubsection{28.10}
+\begin{itemize}
+\item -Tuning tests in INUCL++
+\item +backups to cern
+\item +Web pages for HETC and INUCL created. Using Geant4
+  cascade/doc/-directory.
+\end{itemize}
+
+
+\subsubsection{24.10}
+
+\begin{itemize}
+\item Continue testing
+\item Organizing file structure and documentation.
+\item Environment is basically rewritten.
+\item Collecting material to one directory is done.
+\end{itemize}
+
+Comments from HPW:
+\begin{quotation} 
+
+  
+  first distributions look not so good. I simply get two spikes in the
+  kinetic energy distribution; one very close to zero, and another
+  around 0.5GeV kinetic energy.
+  
+  I have it running now, and passed through 1000 p-N collisions at
+  160MeV.  After commenting out the filling of the result, all went
+  through technically corret.  I did not verify results (and will not
+  make any distributions, unless you give me permission to do so.)
+ 
+  When trying with incident pion+ I get these messages:
+ 
+  Event number 0 uups, unknown particle type 135465800 Segmentation
+  fault
+
+                          
+  The way you do the interface is correct.  I now have a driver for
+  the Propagate interface, so I can easily do a few porting exercises,
+  once you give me the real thing.
+
+\end{quotation}
+
+
+CVSROOT=/afs/cern.ch/rd44/cvs
+
+eeting well documented at \htmladdnormallink{\textsf{http:
+    //wwwinfo.cern.ch /asd /geant4 /collaboration
+    /workshop2002}}{http://wwwinfo.cern.ch/asd/geant4/collaboration/workshop2002}
+%geant4/source/processes/hadronic/models/generator/quark_gluon_string/test/hammer.cc     
+\scriptsize
+
+\begin{verbatim}
+Date: Tue, 27 Aug 2002 15:55:11 +0200
+From: Hans-Peter Wellisch <Hans-Peter.Wellisch@cern.ch>
+To: Aatos Heikkinen <Mika.Heikkinen@cern.ch>
+Subject: Re: Cascade interface
+ 
+Hi Aathos,
+ 
+my test-program is in
+geant4/source/processes/hadronic/models/generator/quark_gluon_string/test/hammer.cc
+ 
+It wraps around the propagate interface, and just dumps the secondaries
+returned with a token to grep on. For this simple thing, rest I do with
+paw....
+I used you head revision, and did some changes in my local check-out
+area to get it to compile. I did not commit this, to make sure you have
+full control of the evolution of this code. I started from 'head'
+revision.
+ 
+Many greetings,
+ 
+Hans-Peter.
+
+
+Date: Wed, 27 Mar 2002 12:57:02 +0100 (CET)
+From: Nikita Stepanov <Nikita.Stepanov@cern.ch>
+To: Aatos Heikkinen <Mika.Heikkinen@cern.ch>
+Subject: Re: proceedings and poster on inucl
+ 
+ 
+Hi Aatos,
+ 
+i had a look into your poster. It sounds reasonable.
+Perhaps, just the picture on izotop yields can be updated
+using new data obtained with inucl++. Now the agreement with
+experiment is much better now. You can find all data in
+~stepanov/public/pictures/isot_benchm/
+ 
+All the best, Nikita         
+
+
+Date: Thu, 26 Jul 2001 12:02:18 +0200 (MET DST)
+From: Nikita Stepanov <Nikita.Stepanov@cern.ch>
+To: Aatos Heikkinen <Mika.Heikkinen@cern.ch>
+Subject: Re: inucl++ conversion to G4
+ 
+Great, i'll write some readme, put all code and test results to the html
+directory and also try to find and test recent some data on the proton,
+neutron production in p + A reactions. You are right we have to finish
+with publication in CompPhys. There is some weak point for me from the
+physics point of veiw, namely, elementary particle interaction
+phenomenology implemented. It's quite ald parametrisation. May be you know
+some more fresh one?
+ 
+All the best, Nikita
+                                   
+
+
+
+Date: Tue, 24 Jul 2001 19:57:34 +0200 (MET DST)
+From: Nikita Stepanov <Nikita.Stepanov@cern.ch>
+To: Aatos Heikkinen <Mika.Heikkinen@cern.ch>
+Subject: Re: inucl++ conversion to G4
+ 
+Hi Aatos,
+ 
+sorry for a delay, i have some "semi" vacation time.
+actially, i finished - last time i tested the program in different
+"crazy" regimes like d + d -> X, A + p -> x, A + A -> x to be sure
+that it does not crashed event in such cases. I also finished with two
+test cases: p + Au197 -> x at 800 MeV and p + Pb208 -> x at 1 GeV where
+i have the exprimental data for izotopes yeilds to compare.
+So, formally code is stable now. The best version is in my
+~stepanov/public/inucl++_fin/. I still need to put it into
+~/public/html/inucl as we agreed together with some readme file and
+benchmark results i produced.  It does not mean that the code is perfect
+i'm not happy with speed in particular. I think, its reasonable time for
+you to start with it.
+ 
+ Concerning the geant4 convertion, we have to discuss a lot.
+I think that it's suitable to have also standalone version for
+any simple compiler without any relations to lhc++ or geant4 and
+the version exectly for geant4.
+ 
+ 
+All the best, Nikita
+
+                                                     
+
+\end{verbatim}
+\normalsize
+ 
+ 
+Aatos Heikkinen wrote: > > Hi, > > Could you provide me the testing
+environment > (and more detailed results?) tag you are using, so I >
+could start debugging the code.  > - Aatos > > > first distributions
+look not so good. I simply get two spikes in the > > kinetic energy
+distribution; one very close to zero, and another around > > 0.5GeV
+kinetic energy.
+                                                                         
+
+\subsection{August}
+
+
+Now platform is ready. G4 and subcodes are organized and compiles. It
+is time to do actual interface.  Plan for today work 13-15 and 17-20.
+Build solid understanding of interface. And build it using tests.
+\begin{itemize}
+\item to do: ApplyYout self seciton CascadeInterfaceen, koncretic
+  conversion between system nucleust and particles, study more
+  interfacing, write towards working interface
+\item KineticTrack is starting point for us.
+\item Study G4VIntraNuclearTransport (base class
+  G4HadronicInteraction, G4KineticTrack, G4VParticleChange,
+  G4ReactionProductVector) class. And kinetic model. G4TheoFSGenerator
+  steers the collaboration between hadronic generator and
+  intra-nuclear transport
+\item Methods in CascadeInteface : {\tt G4VParticleChange*
+    ApplyYourself(const G4Track\& aTrack, G4Nucleus\& theNucleus);
+    G4ReactionProductVector* Propagate(G4KineticTrackVector*
+    theSecondaries, G4V3DNucleus* theNucleus);}
+  G4ReactionProductVector ok also for G4VParticleChange
+\item For use of ApplyYourself see G4PreCompoundModel
+\item
+\end{itemize}
+
+\subsection{July}
+\begin{itemize}
+\item {\bf}: localised files (inucl cascade code at {\tt
+    html/inucl/inucl++/demo}, hetc code at {\tt
+    html/geant4/geant4/source/processes/
+    hadronic/models/cascade/cascade}, documentation {\tt
+    html/inucl/doc}).  There is also another g4 version at {\tt
+    html/geant4/geant4.3.1 })
+\item studied g4 hadronic cascade interface.
+\item {\bf all code and documentation in one place} {\tt
+    html/geant4/geant4/source/processes/
+    hadronic/models/cascade/cascade}
+\item general plan: {\bf thursday} put cascade code to g4 installation
+  (+), make compile (+), study interface structure (+), make small
+  testing (+), {\bf friday} create real interface, {\bf sunday} create
+  inteface, and test basics (modify test13 hadronic testing) {\bf
+    monday morning at 8} co g4 at cern, pack {\tt
+    hadronic/models/cascade}, replace cascade files, add new ones, and
+  commit. Mail hpw. Start holiday at 10 am.
+\item cascading basic structure: {\tt G4Collider (base),
+    G4ElementaryParticlCollider, G4IntraNucleiCollider (:G4Collider,
+    has G4ElementaryParticlCollider, ), G4NucleiModel (initializes
+    cascade,zones, boundary trasitions, fermi energy, density,
+    potential), G4InucleNuclei/G4HETCNuclei (A, Z, kinetic energy,
+    mass formula, exiton configuration) }
+\item change G4vector to vector:
+\item {\tt G4InuclCollider} does the lining of different models inside
+  collision with method command {\tt collide(bull, targ)}
+\item {\tt G4IntraNucleiCascader} does the actual cascading. I starts
+  by setting elementary particel cascader {\tt G4IntraNucleiCascader*
+    incascader-> setElementaryParticleCollider(
+    G4ElementaryParticleCollider*)}
+\item The actual cascading is then done: {\tt theIntraNucleiCascader->
+    collide(\&nbullet, \&ntarget);}
+\item finally, laboratory frame change, and some other organizational
+  things happen
+\item g4 inc base class is defined in models/generator/
+  management/include/ G4VIntraNuclearTransportModel.hh
+\item INC model is set by G4TheoFSGenerator (: public
+  G4HadronicInteraction) by method: {\tt void SetTransport(
+    G4VIntraNuclearTransportModel *const value);}
+
+\end{itemize}
+
+\subsection{June}
+\begin{itemize}
+\item {\bf compilation}: made compilation faster (now takes 45
+  seconds) by tunig compiler setting and include-statements
+\item {\bf sample run}: result from original C++ test are saved to
+  this document as sample run.
+\item {\bf compilation}: fixed writing errors, so code now compiles
+\item {\bf manual pages}: tempalte for manual pages copied to this
+  document from GEANT4 ninematic model manual
+\end{itemize}
+
+\subsection{May}
+\begin{itemize}
+\item {\bf document template}: Added new style and collected material
+  to this documet. Rethinking chapter organization.
+\item {\bf picture rezise}: {\tt convert x.ps x.eps2}
+\item {\bf new references}: Some text added fron new sources
+\end{itemize}
+
+
+
+
+\section{NOTES 2001}
+
+\subsection{June}
+\scriptsize
+\begin{verbatim}
+
+Most of the methods in class G4Cascade are suitable for testing.
+So, prepare test for shorter routines (max 3 windows of code). 
+ 
+G4Cascade::exprnf
+G4Cascade::gaurn
+G4Cascade::gtiso
+G4Cascade::getrig
+G4Cascade::zfoi 
+G4Cascade::modify
+G4Cascade::energy 
+G4Cascade::enrg
+G4Cascade::xlamb  (note: xlamb.cc should work now!)
+
+G4Cascade::shxd 
+G4BertiniCascade::big7 
+
+G4BertiniCascade::mud
+
+\end{verbatim}
+\normalsize
+
+OO design and implementation of Bertini data set ({\tt chetc.dat})
+into HETC++.
+
+
+20.6.\\
+I did some cleaning of your functions and documented few parameters
+used there.
+
+
+{\bf tools} \\
+Use command {\tt please info {\it keyword}} to get help on the ugly
+variable names (example: {\tt please info pion}.  In file {\tt
+  hetc/inc/utils/globals.hh} we keep a list of all strange names of
+old and new version of HETC.
+
+Please, make your own list where all strange names are listend and
+explained.
+
+Suggested steps in this coding exercise:
+\begin{itemize}
+\item pahse 0: study carefully the code and make notes
+\item phase 1: use {\tt read.cc} as an help to implement commented
+  read lines in c++ code
+\item phase 2: create new class G4HETCData and implement Bertini data
+  in good OO manner
+\item phase 3: visualize cross section data, also the data in
+  global.hh, using ROOT (see FittingDemo.C as an example of
+  visualizing data vectors) is useful example)
+\item phase 4: use G4HETCData with other hetc++ classes
+\item phase 5: plan g4 integration
+\end{itemize}
+
+files/methods involved: \scriptsize
+\begin{verbatim}
+chetc.dat
+read.cc
+G4Cascade methods:
+gthsig 
+sgm
+xsec
+shxd
+readh,
+original code comes from dres.f 
+(reads data into vectors 
+waps, cam2 and cam3, which are 
+needed in G4Cascade::energy and enrg)
+\end{verbatim}
+\normalsize
+
+\begin{verbatim}
+
+mother classes
+...............
+
+G4VCrossSectionDataSet 
+
+G4VIntranuclearTransportModel
+
+G4VPreCompoundModel
+
+G4VElasticScatterer
+
+key classes
+...........
+
+
+Idea:  common block caterogies: COM3, COM and rest
+
+
+G4Cascade(Model) (manager, everything starts from here and is coordinated)
+
+----------------
+ -inherits form VIntranuclearTransportModel
+ - has Nucleus
+ -has ParticleVecors (G4KineticTrackVector, G4DynamicParticleVector,G4ParticleChange )?
+does: 
+-manage initialization
+-component suncronizations
+-
+cascad.f:
+COMON.F COMON2.F COMON3.F HIE.F PART2.F (all together)
+input.f:
+COMON.F HIE.F
+sprd.f:
+COMON.F
+main_broom.f:
+GMSTOR.F HIE.F (COMON.F COMON3.F COMON2.F PART2.F
+datalo_broom.f:
+(ECOMON.F PART2.F  HIE.F COMON2.F COMON3.F)
+analz1_broom.f:
+(HIE.F COMON.F)
+sors_broom.f:
+(COMON.F COMON2.F COMON3.F HIE.F)
+datahi.f:
+PART2.F COMON.F COMON2.F COMON3.F  HIE.F
+
+G4VBertini(Collision) (inc cascade) 
+---------
+- like in kinetic model
+ -subclasseses for different particles
+-has G4BeritiniData
+
+ -G4Bertini1.f: 
+ber1.f
+COM3.F COM.F (only once COM.F move to G4Nucleus)
+
+
+B4BertiniCollision (interaction, isobar) SUBCLASSES?
+-------------------
+hcol.f:
+COM1.F COM3.F COM.F COMON2.F COMON3.F (only once com1 and com2 together -> separata tha routine away)
+
+
+G4Nucleus (NucleusWithRegions)
+----------
+- material to G4collision or Scatterer
+ - has nucleons
+ - layers?
+ber2.f:
+COM.F
+
+G4Region (layer, lots of common variables together) 
+--------
+ber3.f 
+COM3.F
+
+
+G4BertiniUtils (tools, all)
+----------------
+-basic.f: (in order of importance)
+-COMON.F COMON2.F COMON3.F COM.F HIE.F PART.F PART2.F COM3.F
+
+PRE-EQUILIBRIUM MODEL:
+-follow closely the G4PreCompoundModel inherited from G4VPreCompoundModel
+-add G4Exiton
+particles
+..........
+
++G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
++aPiMinus->GetPDGCharge/GetBaryonNumber, Get4Momentum
++G4DynamicParticle *aParticle;
++aParticle->GetKineticEnergy()/GeV;   
++G4double protonMass = aProton->GetPDGMass()/MeV;
+
+G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
+if (aParticleType == G4PionPlus::PionPlus()) ipart = 7;
+
++G4DynamicParticle *dp = new G4DynamicParticle();
++dp->SetDefinition( aNeutron );
++dp->SetKineticEnergy( energy-neutronMass );
++dp->SetMomentum( m );
++dp->SetMomentumDirection(u, v, w);  
+
+G4Element, GetN/Z
+
+G4double a = anElement->GetA()*mole/g;
+if (a < 230.) return 0;
+
+G4DynamicParticle* resultant = new G4DynamicParticle;
+resultant->SetDefinition( aPiZero );
+delete resultant;
+
+
+Vectors
+.......
+
+-G4LorenzVector pTarget(0,0,0,m)
+G4LorenzVector pProjectile(aPart->Get4Momentum()), p.m()
+E_cm = eCm =(pTarget.mag() -targetMass - pProjectile.m())/MeV
+
++G4ThreeVector m;
++m.setX( alc ); m.setY( bec ); m.setZ( gac );
+
++#define G4Vector G4std::vector
++typedef G4Vector< G4DynamicParticle* > DPvector;
++typedef G4Vector< G4double > Dvector;
++Dvector v;
++v.reserve(6);  
++v.erase( v.begin(), v.end() );
++v.push_back( 1.0 );
++v.push_back( v[0] );
+
+
+nucleus
+........
+
+G4V3DNucleus
+
+Shell
+G4Fancy3DNucleus
+
+G4Nucleus, GetFermiMomentum, AddExitationEnergy, AtomicMass 
+G4Nucleus *theNucleus;
+theNucleus->GetN()
+G4double P = theNucleus->GetMomentum().mag()/MeV;
+theNucleus->GetEnergyDeposit() 
+theNucleus->SetParameters( afj[lm], zfj[lm] );
+theNucleus->AddExcitationEnergy();
+
+G4FermiMomentum
+
+Dvector *vtmp = new Dvector( 5 );
+vtmp->insert( vtmp->begin()+3, ep2 );
+
+theNucleus->GetMomentum().setX(theNucleus->GetMomentum().x()-pl.x()*GeV);
+
+pEmittedParticle = pSelectedChannel->emit();
+nucleusTotalMomentum = pEmittedParticle->GetTotalMomentum(); // CMS frame
+pEmittedParticle->GetKineticEnergy();
+
+G4Nucleon, Boost
+
+kinematics
+...........
+
+G4NuclearFermiDensity
+
+G4ReactionDynanics/Kinematics
+
+G4ReactionProduct , lorenz
+G4ReactionDynamics 
+
+G4ReactionKinematics (lorenz boost, lab system)
+
+G4LorentzVector lorentz1(px, py, pz, energy1);
+
+
+cross-sections
+..............
+
+// Initialize static pointer for singleton instance
+G4HadronCrossSections* 
+G4HadronCrossSections::theInstance = 0;
+static G4HadronCrossSections* Instance() {
+if (!theInstance) theInstance = new G4HadronCrossSections();
+  return theInstance;
+}
+
+G4float G4HadronCrossSections::plab[TSIZE] = {0.00000E+00, 0.10000, 0.15000}
+
+enum { TSIZE=41, PSIZE=35, NELAB=17, NCNLW=15, NFISS=21 };
+class G4HadronCrossSections {
+public:
+   G4HadronCrossSections() : verboseLevel(0)
+
+
+G4VCrossSectionDataSet 
+
+// This is the class to which to register data-sets. You can get the instance
+// from energy hadronic process, and use its 'AddDataSet(...)' method to tailor
+// the cross-sectinos for your application.
+G4CrossSectionDataStore, AddDataSet(G4VCrossSectionDataSet*);
+
+
+
+utilities
+.........
+G4double ekx = G4std::max(ek, 1.e-9);
+
+
+const G4double cech[] ={0.33,0.13,0.10,0.09,0.07};
+
+
+
+pre compund
+.............
+
+G4PreCompoundNeutron/Proton/Ion/Fragment
+
+G4LEPionPlusInelastic (cascade)
+
+G4Exiton
+
+
+void G4BertiniEvaporation::fillParticleChange( 
+                   vector<G4DynamicParticle *> secondaryParticleVector,
+                   G4ParticleChange * pParticleChange )
+{
+  // Fill the vector pParticleChange with secondary particles stored in vector.
+  pParticleChange->SetNumberOfSecondaries( secondaryParticleVector.size() );
+  for ( G4int i = 0 ; i < secondaryParticleVector.size() ; i++ )
+    pParticleChange->AddSecondary( secondaryParticleVector[i] ); 
+  return;
+}
+
+void G4ReactionKinematics::TwoBodyScattering(
+           const G4DynamicParticle* pIn1, const G4DynamicParticle* pIn2,
+           G4DynamicParticle* pOut1, G4DynamicParticle* pOut2)
+{           
+// initial particles:
+
+// total invariant mass
+   G4LorentzVector sumIn(pIn1->Get4Momentum()+pIn2->Get4Momentum());
+   G4double invariantMass=sumIn.mag();
+
+// beta of center-of-mass system
+   G4ThreeVector betaCMS=sumIn.boostVector();
+
+// final particles:
+
+// get final particle masses
+   G4double massOut1=pOut1->GetMass();
+   G4double massOut2=pOut2->GetMass();
+
+// calculate breakup momentum:
+   G4double breakupMomentum=BreakupMomentum(invariantMass, massOut1, massOut2);
+
+// random decay angle
+   G4double theta=RandFlat::shoot(HepDouble(0.),HepDouble(pi));  // isotropic decay angle theta
+   G4double phi  =RandFlat::shoot(HepDouble(0.),HepDouble(twopi));  // isotropic decay angle phi
+
+// setup LorentzVectors
+   G4double pz=cos(theta)*breakupMomentum;
+   G4double px=sin(theta)*cos(phi)*breakupMomentum;
+   G4double py=sin(theta)*sin(phi)*breakupMomentum;
+   
+   G4double breakupMomentumSquared=breakupMomentum*breakupMomentum;
+   G4double energy1=sqrt(breakupMomentumSquared+massOut1*massOut1);
+   G4double energy2=sqrt(breakupMomentumSquared+massOut2*massOut2);
+
+   G4LorentzVector lorentz1(px, py, pz, energy1);
+   G4LorentzVector lorentz2(px, py, pz, energy2);
+
+// back into lab system
+   lorentz1.boost(betaCMS);
+   lorentz2.boost(betaCMS);
+
+// fill in new particles:
+   pOut1->Set4Momentum(lorentz1);
+   pOut2->Set4Momentum(lorentz2);
+
+   return;
+}
+        
+\end{verbatim}
+
+\begin{itemize}
+\item
+\item
+\item
+\item {\bf pre-quilibrium} Joe Chumas work.
+
+\end{itemize}
+
+ 
+\begin{itemize}
+\item study pre-equilibrium theory
+\item study G4 pre-equilibrium module
+\item study G4
+\item browse pre-equilibrium code
+\item integrate it with G4
+\item try to compile it
+\item document it
+\item clean it
+\item develop OOA\&D
+\item make tests for individual functions (dump data to ASCII files)
+\item use ROOT to visualize test results
+\item run code and study results using ROOT
+\item document your work in special assignment paper
+\item {\bf documentation}
+\end{itemize}
+
+
+
+\begin{itemize}
+\item collect all material to this working document
+\item modularize manual?
+\item do major GNUmakefile to build HETC documentation
+\item generate HETC web pages using tex2html
+
+\end{itemize}
+
+
+
+\begin{itemize}
+\item {\bf testing}
+\item make test for key functions, classe,and modules
+\item use ROOT
+\item
+\end{itemize}
+
+
+
+\begin{itemize}
+\item {\bf results}
+\item collect Tapios results to common results area (?)
+\item make use of ROOT scripts to visualize some INC function outputs
+\item
+\end{itemize}
+
+% random note to be cleaned
+\begin{verbatim}
+
+/* hetc variable (lots of temporary stuff)
+
+
+rewrites to be done: 
+.............................
+basic.f (ppnp reading)
+basic.f (input2, ecol)
+input.f (input)
+mfpd2.f (mdpf2)
+datahi.f (datahi)
+
+do
+.............................................
+G4out to coherent form (remove format,write)
+go trough if   (i = 1 > i = 0 , and [i-1] > [i])
+clean translation results for read
+
+
+In original f77 (see make_bert) bertini simulation (no cem or other configurations, just bertini)
+is made with following configuration:
+
+basic.f        (basic utility stuff)
+ber1.f         (core bertini)
+ber2.f         (core bertini)
+ber3.f         (core bertini)
+cascad.f       ()
+hcol.f         ()
+dum_bert.f     (dummy functions listed)
+input.f        ()
+analz1_broom.f ()
+datalo_broom.f ()
+main_broom.f   ()
+sors_broom.f   ()  
+datahi.f       ()
+dres.f         ()
+geom.f         ()
+mfpd2.f        ()
+sprd.f         ()
+
+STATUS CODING: 
+// 0 nothing done    1 raw compilation   2 compiles   3 cleaned
+// 4 first draft oo  5 cleaned oo        OK done     
+
+  lines file            status 
+---------------------------------------
+   2193 basic.f           2         
+   1958 hcol.f            3
+   1840 ber1.f            3
+   1037 ber2.f            3
+   1664 ber3.f            3
+   1324 mfpd2.f           0 nor needed
+    883 cascad.f          3
+    511 dres.f            3 evaporation
+    293 input.f           0
+    164 datahi.f          0
+    822 main_broom.f      0
+    204 analz1_broom.f    0
+    118 datalo_broom.f    0
+    107 sors_broom.f      0
+    171 sprd.f            0  
+     65 dum_bert.f        OK              
+--------------------------------------
+
+These files include following common definitions:
+COMON.F COMON2.F COMON3.F COM.F COM1.F COM3.F PART.F PART2.F GMSTOR.F FINUC.F PAPROP.F HIE.F  
+  lines file             status
+------------------------------------------
+     28 COM3.F
+     22 COM.F
+     11 COM1.F
+
+     14 COMON.F
+      1 COMON2.F
+      1 COMON3.F
+
+      3 PAPROP.F
+      6 PART.F
+      6 PART2.F
+
+      2 FINUC.F
+      1 GMSTOR.F
+      1 HIE.F
+----------------
+
+Detailed usage of common blocks is as follows:
+
+basic.f: (in order of importance)
+COMON.F COMON2.F COMON3.F COM.F HIE.F PART.F PART2.F COM3.F
+
+ber1.f:
+COM3.F COM.F (only once COM.F)
+
+ber2.f:
+COM.F
+
+ber3.f
+COM3.F
+
+cascad.f: 
+COMON.F COMON2.F COMON3.F HIE.F PART2.F (all togeteher
+
+hcol.f:
+COM1.F COM3.F COM.F COMON2.F COMON3.F (once com1 and com2 together
+
+datahi.f:
+PART2.F COMON.F COMON2.F COMON3.F  HIE.F
+
+dres.f  
+COMON.F COMON2.F COMON3.F
+
+input.f:
+COMON.F HIE.F
+
+mfpd2.f:
+PART2.F FINUC.F COMON.F PAPROP.F PART2.F COMON3.F COMON2.F
+
+sprd.f:
+COMON.F
+
+main_broom.f:
+GMSTOR.F COMON.F HIE.F COMON3.F COMON2.F PART2.F
+
+datalo_broom.f:
+COMON.F PART2.F  HIE.F COMON2.F COMON3.F
+
+analz1_broom.f:
+HIE.F COMON.F
+
+sors_broom.f:
+COMON.F COMON2.F COMON3.F HIE.F 
+
+------------------------------------------------------
+ dummy functions not implemented in bertini version
+ (see makefile make_bert and dum_bert.f)
+-------------------------------------------------------
+mashnk         not implemented in HETC bertini cascade
+qhsigg         not implemented in HETC bertini cascade
+datar3         not implemented in HETC bertini cascade
+hadden         not implemented in HETC bertini cascade
+rchanw         not implemented in HETC bertini cascade
+chanwt         not implemented in HETC bertini cascade
+qheh           not implemented in HETC bertini cascade
+qevent         not implemented in HETC bertini cascade
+mcmosc         not implemented in HETC bertini cascade
+mesage         not implemented in HETC bertini cascade
+skale          not implemented in HETC bertini cascade
+inpcm          not implemented in HETC bertini cascade
+cemgeo         not implemented in HETC bertini cascade
+user           not implemented in HETC bertini cascade
+bertcem        not implemented in HETC bertini cascade
+crsec          not implemented in HETC bertini cascade
+heh            not implemented in HETC bertini cascade
+qmain          not implemented in HETC bertini cascade
+erupcem        not implemented in HETC bertini cascade
+pcol           not implemented in HETC bertini cascade
+-------------------------------------------------------
+
+...................
+id decription:
+...................
+1 single production  
+2 double production        
+3 elastic 
+4 exchange
+...................
+
+
+
+.........................
+  ncol
+.........................
+ -4 end of run
+ -3 end of batch    
+ -2 not used       
+ -1 start run    
+  0 not used        
+  1 source particle  
+  2 nuc interact      
+  3 particle slowed   
+  4 particle escape
+  5 pseudo collision
+  6 nuc absorption
+  7 medium bound crossing
+.........................
+
+
+
+ inc type of incident particle
+...............................
+ 0  proton
+ 1  neutron
+ 2  pi+
+ 3  pi0
+ 4  pi-
+ 5  mu+
+ 6  mu-
+
+                Naming conventions
+        meaning                 example
+ -----------------------------------------------
+ T      templates               
+ V      virtual                 G4VClass
+ i      iterators               iList
+ l      length                  lVector
+ r      reference               rData
+ p      pointer                 pLayers
+ n      number of               nParticles
+ f      file                    fCrosssection
+ e    enumerates                eQuarkFamilies
+ g      globals                 gDetector
+ k      constants               kPlancksConstant
+ -------------------------------------------------
+
+
+               naming conventions
+------------------------------------------------------------
+hetc      hetc++                   decription
+------------------------------------------------------------
+eswh()   > scatteringWithHydrogen
+sigels() > interpolateElasticNeutronData
+med      > medium
+e        > theEnergy
+kdd      > :::
+locf1[]  > :::
+datalo()                           transfers a particle from the cascade prod. bank or the evap. n/p bank to the below cut reac. report bank
+datahi()                           transfers a particle from the cascade prod. bank or the evap. n/p bank to the above cut reac. report bank >>>
+                                   reaction direction cosines are (relative to incoming particle) are transformed to coordinate system >>>
+                                   direction cosines using the values set by getrig. particle weights (also in datalo) are assigned to >>>
+                                   equal to the incoming particle weight unless scaling has occured, in which case this is muultiplied >>>
+                                   byt the scaling weight wtfas. this routine also assigns particle names.
+getrig()                           evaporation directions are chosen isotropically in the laboratory system.
+maxcas                             number of source particles to be started in each batch
+maxbch                             the number of batches to be run with the present se of input data
+n1col                              >0 each cascade history willb e computed only trough the history second generation 
+                                   that is, only trough the immediate descendants of source particles
+                                   <0 all generations will be computed (ittelevant for muon transport)
+                                   
+emax                               the maximum energy of particles being transported [MeV]
+elop                               cut-off energy for transporting protons [MeV], cutoff for pions (pi/proton mass) 0.1488 *elop
+
+cfepn(i+3)                         cutoff energies in each region for neutrons( = space(i+3)+ctofen)
+cfepn(i)                           cutoff energies in each region for protons (= space(i+9)+ctofe)
+nhstp     nhstp                    neutron history tape
+neutp     neutp                    flag to report neutrons below cut off
+sors()    sors                     source-particle data, sors(NCOL=-1): read input required by sors, problem dependent
+user()    user()                   may be problem dependent
+dres()    dres                     evaporation model
+itp       itp                      1 G4Proton, 2 G4Neutron, 3 G4PionPlus, 4 G4PionMinus
+ityp      ityp                     particle numbering ityp = tip + 1
+inc,tip   inc, tip                 type of incident particle, 0 proton, 1 neutron, 2 pi+, 3 pi0, 4 pi-, 5 mu+, 6 mu-
+e(1)      e[0]                     source-particle kinetic energy [MeV]
+x(1)      x[0]                     source-particle x position coordinates in cm
+y(1)      y[0]                     source-particle y position coordinates in cm
+z(1)      z[0]                     source-particle z position coordinates in cm
+u(1)      u[0]                     source-particle x direction cosine
+v(1)      v[0]                     source-particle y direction cosine
+w(1)      w[0]                     source-particle z direction cosine
+wt(1)     wt[0]                    source-particle statistical weight
+
+ctofe     ctoef                    INC cutoff energy
+xi(1..3) >coordinate[0..2]         x, y and z -coordinates of incoming particle 
+ec       >eCurrent                 energy usef for cross section interpolation
+amumev   >amu_c2                   AMU in MeV (CLHEP constant)
+dncms    >massNucleon              nucleon mass in center of mass (cm) frame
+1.0e-24  >millibarn                millibarn
+e(0)     >energy[0]                total p1 energy                   
+e[1]     >energy[1]                total energy sqrt(sqr(momentum struck particle) + sqr(nucleon mass))      
+1000.0   >MeV                      conversion of GeV to MeV units
+mp        protonMass               mass of proton
+charge    particleCharge           vector of particle charges
+rmass(7)  particleMass             vector of particle masses
+7.0      >bindingEnergy            binding energy
+pm()     >massParticle             particle mass
+hcs      >hadronCrossSection       hadron cross-section, hadronCrossSection[29850] corresponding file i gcalor 'chetc.dat'
+pnms     >massPionCharged          charged pion mass / cm
+poms     >massPionZero             neutral pion mass / cm
+bcs      >crossSection             total (p, p) and (n, p) cross-sections (single and double production + elastic)
+eco(1)    eco[0]                   proton  energy cut-off (= cfepn[med - 1]) 
+eco(2)    eco[1]                   neutron energy cut-off (= cfepn[med + 2])
+pppda     pppda                    probability (pi+, d) abs.
+ppmda     ppmda                    probability (pi-, d) abs.
+it        itxxx                    temporary rename
+es()      es1[]                    temporary rename
+pt(3)     pt[2]                    momentum of 3 in laboratory (e[3] - pm[3]) / rcpmv
+pt(15)    pt[14]                   momentum of 4 in laboratory (e[4] - pm[4]) / rcpmv
+adel      adel                     asymptotic density effect corrections
+ang1[][1][1] ang1[][0][0]          direction angle alpha
+ang1[][2][1] ang1[][1][0]          direction angle beta
+ang1[][3][1] ang1[][2][0]          direction angle gam
+ex        ex                       distance in sampling routine 
+sign      sign                     sigma ci region i  :::  
+plvc(1)   plvc[0]                  number of times entered for storage of velocity less than criterion 
+pgvc(1)   pgvc[0]                  number of times velocity greater than criterion entered 
+s.p.      s.p.                     single production ?
+rlke      rlke                     relative kinetic energy
+pol1      pol1                     calculate polar angles cos(theta) and sin(theta) ? 
+azio      azio                     calculate azimuthal angles  cos(phi) and sin(phi) ?
+pxyz      pxyz                     momentum vector
+pxyz      pxyz                     xyz coordinates of collision point
+p2        p2                       momentum of particle selected from proper fermi distribution                
+p1oe1     p1oe1                    p1 energy 
+pxyz(0)   pxyz[0]                  p1 momentum x coordinate
+pxyz(1)   pxyz[1]                  p2 sin(theta) cos(phi)
+pxyz(4)   pxyz[4]                  p1 momentum y coordinate
+pxyz(5)   pxyz[5]                  p2 sin(phi)
+pxyz(8)   pxyz[8]                  p1 momentum z coordinate sqrt(sqr(total energy)-sqr(mass))  
+pxyz(9)   pxyz[9]                  p2 cos(theta) 
+col       col                      part of isobar common :::
+col(1)    col[1]                   total energy of particles 1 and 2 (e[0] + e[1]) 
+col       col[21]                  qx :::
+col       col[22]                  qy :::  
+space     space                    well depth (MeV)
+space     space[13-16]             cross section (mb
+s         s[0-1]                   cross section
+pnidk(1)  pnidk[1]                 p x
+pnidk(2)  pnidk[2]                 p y
+pnidk(3)  pnidk[3]                 p z
+pnidk(4)  pnidk[4]                 :::
+pnidk(5)  pnidk[5]                 m(p1) decay pion mass squared
+pnidk(6)  pnidk[6]                 e(pi) prime decay pion energy prime 
+pnidk(7)  pnidk[7]                 decay pion   momentum           prime 
+pnidk(8)  pnidk[8]                 decay pion x momentum component prime 
+pnidk(9)  pnidk[9]                 decay pion y momentum component prime 
+pnidk(10) pnidk[10]                decay pion z momentum component prime 
+pnidk(11) pnidk[11]                decay pion energy e(pi) 
+pnidk(12) pnidk[12]                :::
+pnidk(13) pnidk[13]                :::
+pnidk(13) pnidk[14]                :::
+pnidk(14) pnidk[15]                :::
+pnidk(15) pnidk[16]                :::
+pnidk(16) pnidk[17]                :::
+pnidk(17) pnidk[18]                :::
+pnidk(18) pnidk[19]                :::
+pnidk(19) pnidk[20]                :::
+pnidk(20) pnidk[21]                :::
+pnidk(21) pnidk[22]                :::
+pnidk(22) pnidk[23]                :::
+dcintp()  dcintp()                 calculate (n - p) differential cross-section high energy?
+ifix      static_cast<G4int>       change data to integer
+sngl      static_cast<G4double>    change data to double (original real*4)    
+curr(1)   dcos[0]                  current incident particle
+curr(4)   curr[3]                  x coordinate of current incident particle
+curr(5)   dcos[4]                  y coordinate of current incident particle
+curr(6)   dcos[5]                  z coordinate of current incident particle
+xi(i)     xi[0]                    x coordinate
+xi(2)     xi[1]                    y coordinate
+xi(3)     xi[2]                    z coordinate
+dcos(7)   dcos[6]                  alpha direction cosine ?
+dcos(8)   dcos[7]                  beta direction cosine ?
+dcos(9)   dcos[8]                  gamma direction cosine ?
+curr(10)  curr[9]                  number of geometry ?
+icurr     icurr                    incident partice
+inc       inc                      inciden particle    
+pp0       pp0                      highest p0 of bin 
+cm        cm                       center of mass frame
+is        is                       (::sgm) used in cross-section vector to point correct partice data
+em        em                       (::sgm) energy used for cross-section calculation
+de        de                       (::sgm) difference of discrete energy points i cross-section tables 
+e         e                        (::sgm) fixed energy position used in cross-section tabulation
+s         s                        (::sgm) cross-section at energy position em
+it        it                       interaction type (single production, elastic, :::) or Al, Cu, Pb tabulated atom size? 
+npsg      npsg                     cross-section (n, p)
+pipsg     pipsg                    cross-section (pi+, :::) 
+ginum     ginum                    vector of particle masses
+fli       fli                      ::: data vector (globals.hh)
+dndpip    dndpip                   cross-section (pi-, N) ? or dn/dpi+
+dndpim    dndpim                   cross-section (pi-, N) ? or dn/dpi-
+pm        pmxxx (temporary)        momentum table ?           
+pm        pm                       particle mass
+ethr      ethr                     threshold kinetic energy in gev for particle prod.  
+cpnu      cpnu                     cross-section (p, N) ?
+cpimnu    cpimnu                   cross-section (pi-, N) ?
+cpipnu    cpipnu                   cross-section (pi+, N) ?
+cpimk     cpimk                    cross-section (pi-, :::) ?
+cpipk     cpipk                    cross-section (pi+, :::) ?
+cpk       cpk                      cross-section (p, :::) ?
+angle     angle                    vector of angle data (radians)
+ppdc      ppdc                     bertini data  ::: cross-section
+pmdd      pmdd                     bertini data  ::: cross-section
+pmdx      pmdx                     bertini data  ::: cross-section
+pndd      pndd                     bertini data: (pi-, p) direct cross-section :::
+ppnp      ppnp                     cross-section data defined (globals.hh)
+enrgy     enrgy                    energy vector defined (globals.hh)
+nwds      nwds                     total number of words (escaping particles) 
+nopart    nopart                   number or particles
+pnddi     pnddi                    (pi-, p) direct cross-section intermediate energy
+pnddl     pnddl                    (pi-, p) direct differential cross-section low energy  
+ppnda     ppnda                     probability (pi-, D) abs 
+dpcln(130) dpcln                   (n, p)   double production cross-section low energy (index 3841)
+pdpcl(130) pdpcl                   (p, p)   double production cross-section low energy (index 3553) 
+spcln(158) spcln                   (n, p)   single production cross-section low energy (index 3683)
+pspcl(158) pspcl                   (p, p)   single production cross-section low energy (index 3395)
+ppscl(117) ppscl                   (pi+, p) single production cross-section low energy (index 4409)
+pmscl(117) pmscl                   (pi-, p) single production cross-section low energy (index 4643) 
+pnscl(117) pnscl                   (pi0, p) single production cross-section low energy (index 4526)
+pnnsl(117) pnnsl                   (pi-, n) single production cross-section low energy (index 4760)
+pec(176)   pec                     (p, p)   elastic scattering cross-section           (index 6494)
+ecn(176)   ecn                     (n, p)   elastic scattering cross-section           (index 6370)
+pmec(126)  pmec                    (pi-, p) elastic scattering cross-section           (index 5942) 
+ppec(126)  ppec                    (pi+, p) elastic scattering cross-section           (index 6068)
+pnec(126)  pnec                    (pi0, p) elastic scattering cross-section           (index 5564)
+pnnec(126) pnnec                   (pin, n) elastic scattering cross-section           (index 5690)
+fripn(117) fripn                    ::: (index 5112)
+fmxsp(117)                          ::: (index 2925)
+pmxc(126) pmxc                      ::: (index 5816)
+ipec(10)  ipec[10]                 number of escaped particles on region 1 
+ipec(6)   ipec[6]                  number of escaped particles on region 2 
+ipec(1)   ipec[1]                  number of particles incident on region 3 escaping 
+wkrpn(4)  wkrpn[4]                 kinetic energy for protons and neutrons in region 2 
+wkrpn(1)  wkrpn[1]                 kinetic energy with respect to neutrons (protons) region 2 
+wkrpn(0)  wkrpn[0]                 kinetic energy with respect to neutrons (protons) region 1 
+wkrpn(2)  wkrpn[2]                 kinetic energy with respect to protons region 3 
+wkrpn(5)  wkrpn[5]                 kinetic energy with respect to neutrons region 3 
+xinc      xinc                     x-coordinate of incoming particle 
+esps      esps                     escaping particle storage :::  
+plvc      plvc                     particle with velocity less than criterion
+fcp       fcp                      number of forbidden collisions for protons
+fcn       fcn                      number of forbidden collisions for neutrons
+sf        sf                       scale factor (subject to change)
+rcpmv     rcpmv                    reciprocal cm / MeV
+sqnm      sqnm                     nucleon mass squared 
+nor       nor                      record number 
+nrt       nrt                      number of files 
+gam       gamma                    foton
+pm        pm                       pion or nucleon mass :::
+efrp      efrp                     ferm energy for protons (MeV)
+efrn      efrn                     ferm energy for neutrons (MeV)
+clsm      clsm                     collision medium
+crs       crs                      cross-section
+n         n                        neutron
+p         p                        proton
+d         d                        deuteron
+pi        pi                       pion
+pi+       pi+                      positive pion
+pip       pi+                      positive pion
+pi-       pi-                      negtive  pion
+pi0       pi0                      neutral  pion
+pizero    pi0                      neutral  pion
+pi+-      p+-                      charge   pion
+pin       pi-                      negtive  pion
+nu        N                        nucleon (neutron or proton)  
+N         N                        nucleon (neutron or proton)
+h         h                        hadron
+ce        ce                       coulomb energy
+r         r                        uniform random number
+alpfas    alpfas                   x-direction cosine
+betfas    betfas                   y-direction cosine 
+gamfas    gamfas                   z-direction cosine
+k.e.      kinetic energy           kinetic energy
+tke       tke                      laboratory kinetic energy of the particle (GeV)    
+ncas      ncas                     cumulative number of cascades completed
+eke1      ek1                      kinetic energy of incident particle (MeV)
+efas      efas                     kinetic energy of particles (MeV)
+p         p                        momentum
+pz        pz                       momentum ?
+p0        p0                       momentum of incident particle (GeV/c)
+ncasca    ncasca                   number of real collisions (non-hydrogen)
+nevaph    nevaph                   number of pre-equilibrium and evaporation neutrons in datahi
+ncoutp(1) ncoutp[1]                number of pre-equilibrium and evaporation (erupcem) neutrons
+nevapl    nevapl                   number of pre-equilibrium and evaporation o5r neutrons
+nerupl    nerupl                   number of evaporation (non-cem) o5r neutrons
+cnhist    cnhist                   total no. of histories
+no5rca    no5rca                   number of o5r neutrons from sub cascade
+cneuav    cneuav                   average number of o5r neutrons per history
+wttot     wttot                    total weight of o5r neutrons
+wtav      wtav                     average weight of o5r neutrons
+edtotn    edtotn                   average energy of o5r neutrons per history [MeV]
+edo5r     edo5r                    average energy per o5r neutron
+-------------------------------------------------------
+
+nofas ::: number of as
+itype intercation /initial ? type
+e benergy or secondary nucleon [GeV/c]
+etot total ? energy
+et total ? energy 
+erem remainded ? energy
+einc included ? energy
+av. average
+ang angle angle
+wmass mass mass
+es > es1 (because name clash)
+tpmass tp ? mass
+numnuc numberOfNucleus
+x x-direction cosine
+y y-direction cosine
+direction cosine
+pinc inc ? momentum
+pt
+itfas type of particle (same as above)
+rands location of random number sequence
+ratt[12]
+dum[18]
+v[161/126/19]
+w[101/26/19]
+x[161/126]
+y[130/126]
+z[176/127]
+neutp fNeutronp? neutron p? datafile
+revth real event
+rands integer location of random number sequence
+nobch End batch
+neutno Neutrons produced in this batch
+xtime cpu time [seconds]
+num number of qevent or qheh collision number
+nhist nhist
+dimension itfas(2), efas(2), alpfas(2), betfas(2), gamfas(2)
+dimension geosig(240)
+
+-----------------------------------------------------
+// fortran to C++ stuff
+//-----------------------
+
+removing LXX: 
+
+hae return;
+lisaa explisiittisesti hakevaan kohtaan,
+poista parittaisete linkit
+
+//  for (i = 2; i <= 4; ++i) {
+//    pnidk[i + 11] = pnidk[i - 1] * (univ + unive) + pnidk[i + 6]; 
+//    pnidk[i + 14] = pnidk[i - 1] - pnidk[i + 11];
+//  }
+   
+    for (i = 1; i <= 3; ++i) {
+    pnidk[i + 12] = pnidk[i] * (univ + unive) + pnidk[i + 7]; 
+    pnidk[i + 15] = pnidk[i] - pnidk[i + 12];
+  }
+[1: add one to each index in loop. 2: reduce index by one in for definition]
+
+-------------------
+
+k = 19;
+for (i = 3; i <= 11; i += 4) {
+  pxyz[i - 1] = col[k - 1] * univer + col[k + 2] * unive + col[k - 4] / * univ;
+   ++k;
+  }
+  
+k=19
+do10i=3,11,4
+pxyz(i)=col(k)*univer+col(k+3)*unive+col(k-3)*univ
+10 k=k+1
+
+----------------------
+This:
+ 135  write(ioo,7125)ne
+ 7125 format(1h ,5hne = ,i5)
+
+generates:
+ io64.ciunit = ioo;
+  swsfe(&io64);
+  dofio(c1, (char *)&ne, (ftnlen)sizeof(G4int));
+  ewsfe();
+
+\end{verbatim}
+
+This is left from BertiniUtils.hh 29.7:
+
+\begin{verbatim}
+static const G4double rcpmv           (0.50613e11);
+
+G4double crdt[24];
+
+//G4double pow(G4double x, G4double y) {return x ;}
+//template <class T> T max(T x, T y){ if (x > y) return x; else return y;}
+
+void gomsor(G4int x[], G4double y[], G4double z[], 
+            G4int nmed, G4double blz) {}                   
+
+void cole4() {};
+void pinst() {};
+void cangid() {};
+void alpha() {};
+void ecpl() {};
+void idk() {};
+void pstor() {};
+void angid() {};
+void alp19() {};
+void alp28() {};
+void dfmax() {};
+void store() {};
+void pfmax() {};
+void nn() {};
+void ccpes() {};
+void spcn() {};
+void erupcem(
+             G4double epart,    G4int npart,    G4double up, 
+             G4double apro,             G4double zpro,  G4double apr, 
+             G4double zpr,              G4double erec,  G4double uu, 
+             G4int nopart) {};
+void ersue(){};
+// bertini data
+G4double ppdc[6426]; //
+G4double pndd[6426]; //
+// rou20 data
+G4double dcin[115];  
+G4double dcln[80]; 
+G4double dchn[143]; 
+G4double pdci[60]; 
+G4double pdch[55];
+G4double locx[4][4];
+\end{verbatim}
+
+
+
+% End of file
+
+%::: extra material
+
+%\begin{figure}
+%  \begin{center}
+%    \leavevmode
+%    \mbox{\epsfxsize=12cm \epsfysize=15cm \epsffile{framework.eps} }
+%       \caption{Scematic diagram describing Helsinki trackfinder.}
+%  \label{hetc}
+%  \end{center}
+%\end{figure}
+
+%From Fig. \label{hetc} we can see ...
+
+%\cite{heikkinenweb99}
+
+
+

@@ -1,0 +1,56 @@
+\section{PRACTICAL GUIDES}
+
+\subsection{Starting with {\sc Geant4}}
+ 
+Visit \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ geant4/}}{http://wwwinfo.cern.ch/asd/geant4/}
+and study downloading documents. The quidance there should be enough, but here follows general outline, though.
+
+
+You can start {\sc Geant4} -use from the scratch, with following steps:
+ 
+\begin{enumerate}
+
+\item Prepare full Linux (A PC and even a Mac is a possibility.) environment (with minimum $\sim 1~GB$ free disk space)
+ 
+\item Set numeric libraries. {\sc Geant4} needs CLHEP-1.X library.
+Download it from \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ lhc++/ clhep/}}{http://wwwinfo.cern.ch/asd/lhc++/clhep/}. , and follow installation instructions. 
+Run tests in {\sf CLHEP/test} directory with command {\sf gmake})
+ 
+\item Set visualization packages you want use. Choises are listed in {\sc Geant4} documentation.
+I use Mesa (Dowload free OpenGL from \htmladdnormallink{\textsf{http:// www.mesa3d.org/}}{http://www.mesa3d.org/} , follow instructions and compile libraries and demos. 
+Run prgrams in samples and demos directories. 
+Also I've been using VRMLView Pro software to visualise geometries {\sf bash\$ vrmlview g4.wrl \&}
+ 
+\item Set environment variables as advised in geant4 installation guide
+\htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ geant4/ G4UsersDocuments/ UsersGuides/ InstallationGuide/ html/ UnixMachines/ unixMachines.html}}{http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/UsersGuides/InstallationGuide/html/UnixMachines/unixMachines.html}
+
+At least variables {\sf G4SYSTEM, G4INSTALL, CLHEP\_BASE\_DIR} are reguired.
+ 
+\item Do compilation as advised in installation guide
+ 
+\item Study and compile test programs in {\sf \$G4INSTALL/exaples} directory
+
+Example: 
+\begin{verbatim}
+cd N01, 
+gmake
+$G4BINDIR/exampleN02
+Idle> help (study command options carefully)
+\end{verbatim}
+
+\item Select the most apropriate sample progam, and modify it to your own use
+\item You are now ready to start your own studies. Have fun. 
+
+ \end{enumerate}                       
+
+
+%show g4 general installlation
+%explain recursive gmake
+%show gamma_ray general structure
+% show src files PhysicsList, DetectorConstruction, TrackerROGeometry, PrimaryGeneratorAction, TrackerSD, EventAction 
+%run example $G4BINDIR/GammaRayTel
+%show intro texts
+%show help (/particle/list, /process/list, show payload)
+%run ( /tracking/verbose 1, /gun/particle gamma, /gun/energy 200 MeV, /run/beamOn 1)
+%show outfile
+%show vrlmview g4.wrl

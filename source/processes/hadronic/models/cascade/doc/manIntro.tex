@@ -1,0 +1,225 @@
+
+\section{Introduction to intermediate-energy nuclear physics}
+%\section{Medium energy hadron interactions with matter,}
+
+\subsection{Basics}
+Often when a high energy hadron interacts with matter,
+many secondary particles are created.
+These particles will also interact and create more secondaries,
+until the energy of the incoming primary is all used.
+The process is called a hadron cascade. 
+
+
+How these cascades develop is of great interest 
+for the design and analysis of high energy physics experiments
+as well as for shielding and dosimetry.
+
+
+Calculation of hadronic cascades involves,
+in principle, a solution of the Bolzmann transport equation.
+Because different types of secondaries can be created in inelastic interactions
+and bacause of many processes,
+the equation is impossible to bormulate explitly.
+This together with the statistical nature of the transport process involved
+make the Monte Carlo methods a natural choice for solving the cascade equations.
+
+At enegies above $\approx 200 MeV$ the wavelenght assosiated to projectile hadron 
+is of same order as nulceon in the atom.
+From the projectile particle perspective the nucleon seems relatively transparent,
+and reminds a gas of independent nucleon particles.  
+\subsection{Simulation of Hadronic Cascades}
+
+Hadron nucleus (h-A) interaction can be scematically described as a
+sequence of the following steps \cite{ferrari00}:
+
+\begin{itemize}
+\item (Glauber-Gribov) cascade and high energy collisions
+\item (Generalized) intra nuclear cascade
+\item pre-equilibrium emission
+\item evaporation/fragmentation/fission and final de-exitation
+\end{itemize}
+
+\index{hadronic cascades} \label{sec:cascades}
+
+Although the basic physical processes occurring in 
+
+
+\begin{table}[!hbt]
+\caption{Characteristic stages of hadronic showers.}
+
+\hspace{0.5cm}
+
+\label{taul:hetcCharacteristics} %\cite???
+\centering
+\begin{tabular}{lcll}
+\hline
+\em Reaction     & \em Characteristic  & \em Characteristic             & \em Effects on energy      \\
+\em product      & \em time (s)        & \em properties                 & \em resolution             \\[2.5ex] 
+\hline
+    Secondary INC& $\sim 10^{-22}$     & Multiplicity 	                & Fluctuations in $\pi^\pm$  \\
+    hadrons      &    	               & $\sim A^{0.1} \ln E$[GeV]      & versus  $\pi^0$ production \\
+		 &                     &                                &                            \\
+    Nuclear      & $10^{-18}-10^{-13}$ & Emission if p's and n's        & $\sim 15 \%$ of hadronic   \\
+    excitation   &                     & ($\sim 100 MeV$);              & cascade energy             \\
+                 &                     & evaporation of n's, $\gamma$'s & converted into             \\
+                 &                     & ($\sim 10~MeV$)                & nuclear binding            \\
+                 &                     &                                & energy losses; large       \\
+                 &                     &                                & fluctuations and           \\
+                 &                     &                                & vastly different           \\
+                 &                     &                                & detection efficiencies     \\
+                 &                     &                                &                            \\
+Pion and         & $10^{-8}-10^{-6}$   & Fractional invisible           & Negligble contribution     \\
+muon decay       &                     & energy $\sim 0.04/\ln E$[GeVe]  & due to small loss of       \\
+                 &                     &                                & $\mu$'s and $\nu$'s        \\
+\hline
+\end{tabular} 
+\end{table}
+
+Fast tracks,coming from the projectile primary interactions, show the typical $\sim log$ increase observed for $(h, N)$ interactions. 
+Gray tracks, mostly due to INC reinteractions tend to saturate just above $10~GeV$.
+Black tracks, mostly due to evaporation charged particles saturate as well.
+
+\subsection{Search of an interaction point}
+
+For a particle moving in a uniform medium with a dencity $\rho_N$, the probability of undergoing a collision in the segment $[l, l + dl]$ of its way is given by the expression
+
+\begin{equation}
+W(l) dl = e^{l/L} dl/L,
+\end{equation}
+
+where $L= 1/\rho_N \sigma^{tot}$ is the measn free path of the particle.
+The distance run by the particle 
+until it undergoes the act of interaction 
+is determined by one random number $\beta$
+
+
+\begin{equation}
+l = - L \ln \beta
+\end{equation}
+
+The cross-section $\sigma^{tot}$ of the interaction 
+between a particle and an intranuclear nucleon 
+depends on a relative velocity of colliding particles, 
+i.e., on the Fermi motion of the partner.
+To take into account this effect the kinetic energy of the partner 
+and the direction of its motion are sampled. 
+
+
+%<a href="http://www.cern.ch/RD11/rkb/PH14pp/node58.html">
+%electromagnetic showers</a> 
+%
+%are well known, this is not quite so for 
+%<a
+%href="http://www.cern.ch/RD11/rkb/PH14pp/node80.html#SECTION000800000000000000000">
+%hadronic showers</a>. 
+%The simulation of showers in
+%<a href="http://www.cern.ch/RD11/rkb/PH14pp/node19.html">
+%calorimeters</a> 
+
+needs to follow all particles to rather small energies; for hadrons,
+phenomenological approximations for {\it intra-nuclear cascades}
+    and intermediate-energy processes have to be made, and also
+    electromagnetic simulation results can be sensitive to multiple
+    low-energy cutoff parameters. 
+
+A particle with $E \le E_{cutoff}$ is absorbed by the nucleus. 
+The calculation is carried out until all secondary particles are absorbed or leave the nucleus.
+
+The number of particles in a shower
+    is very large, particularly at high energies, so that even the computing
+    resources of large laboratories can be challenged by full simulation programs.
+
+\subsection{Quantum effects in INC}
+
+\begin{itemize}
+\item Pauli blocking
+\item formation time (inelastic)
+\item coherence length ((quasi)-elastic and charge exchange)
+\item nucleon antisymmetrization
+\item hard core nucleon correlations
+\end{itemize}
+
+\subsection{Physics of INC}
+
+The phenomena of intermediate nuclear physics provides a challenging simulations task.
+Cascade simulation
+
+
+
+Fig :::. Schematic nucleon structure. 
+The central nucleon is shown as collection of three constituent quarks interacting via the color force. 
+Closer views show a more complex picture.
+
+At higher energies ($~200~MeV$) energy is high enough to momentarily exite a nucleon into the exited dalta-resonant state ($\Delta$-resonance).
+
+\subsection{Classification of Cross-Sections of NRS}
+
+Let us denote an incident particle and a nucleus under investigation by the symbols $a$ and $A$, respectively.
+Following final states following from $a + A$ are possible \cite{iljinov94}:
+
+\begin{itemize}
+\item $a + A$ :  elastic scattering
+\item $a^{*} + A$ :  scattering with an exitation of the $a$ particle
+\item $a + A^{*}$ : scattering with an exitation of the nucleus
+\item $a^{*} + A^{*}$ : scattering in which both the particle and the nucleus are exited
+\item $a^{'} + A^{'}$ : reaction involving the production of a new particle and a new nucleus
+\item $a^{'} + a^{''} + A^{'}$ : reaction involving the production of two new particles and a new nucleus
+\end{itemize}
+
+\subsection{Quantum Formulation of Collision Problem}
+
+\subsubsection{Reaction Channels}
+
+Consider a collision of two complex particles. ::: \cite{iljinov94}
+
+\subsubsection{Transition Probabilities and S-Matrix}
+
+In accordance with general priciples of quantum theory, the probability 
+ ::: \cite{iljinov94}
+
+\subsubsection{S-Matrix and Cross-SectionsScattering Amplitude}
+
+ ::: \cite{iljinov94}
+
+
+\subsection{Nuclear Structure Phase Diagram}
+
+THe atomic nucleus with its $A$ nucleons is governed by a large number of degrees of freedom.
+
+\subsection{Nuclear density}
+
+Nuclear charge densities are usually well described using present-day effective two-body forces; it is also clear that saturation of the charge dencity indeed occurs. 
+The central density barely varies when the nucleon number changes.
+\subsection{Nuclear radius}
+
+\subsection{Mass formula}
+
+A parametrization of the nuclear binding energy in the groud state,
+was first discussed by Bethe, Bacher and Weizs\"{a}cker.
+Parametrization conatains volume, surface, Coulomb and symmetry correction terms (we neglegt here typical shell model correction terms) and reads
+
+$$B(E, A) = a_{\nu} A - a_{s} A^{2/3} - a_{c} Z(Z-1)A^{-1/3} -$$ 
+\begin{equation}
+  a_{A}\frac{(A-2Z)^2}{A}
+\end{equation}
+
+Nuclear charge radius turns out to be a rather well-defined quantity.
+
+\subsection{Symmetry consepts in Nuclear Physics}
+The nuclear two-body force obeys quite a large number of basic invariances.
+Forexample invariance under interchange of the spatial coordinates, translation invariance, Galilean invariance, space reflection symmetry, time reversal invariance, rotation invariance in coordinate space and rotation invariance in charge space (isospin).
+
+The symmetry consept (1932) of isospin symmetry, 
+describing the charge independence of the nuclear forces by means of the isospin consept with the SU(2) group as the underlying mathematical group was suggested by Heisenberg. 
+This (simplest of all dynamical symmetries) expresses the invariance of the Hamiltonian under the exchange of all proton and neutron coordinates \cite{heyde98}.
+
+\subsection{Quantum effects}
+
+On the level of the nucleons themselves, invariance of the total nuclear wave functions under the exchange of identical nucleons affects the possible models realized. 
+The Pauli principle implies antisymmetry for the total fermionic wave function and this has very definite consequences for the types of collective motion that can be set up inside the nucleus.
+
+
+\subsection{INC-Model}
+
+Widely used semiclassical miscroscopic description of a collision between a particle and a nucleus, 
+was proposed by Serber \cite{serber47} and Goldberger \cite{goldberger48}.
