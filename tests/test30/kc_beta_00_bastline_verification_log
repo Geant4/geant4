@@ -44,37 +44,27 @@ pn_fe_065 - hangs right away.
 pn_pb_065 - ==> looping right away ????
 pn_pb_120 - ==> semi-infinite loop.
 
+Gunter: Code Correct pion potential.
+
+Hans-Peter:
+DONE, is ok: pn_pb_800 - run again
+
+Hans-Peter:
+DONE, is ok: pn_zr_050 - seems ok, but needs more stats to say anything.
+
+HP: 
+DONE, is ok: check that Weisskopf-Ewing model is ok (gives neutrons) for pn_be_256
+
 HP:
+DONE, comes directly from test30.cc
 4-th secondary  neutron   Ekin(MeV)= 4.083272e+00   p(MeV)= (-1.361760e-02,8.769081e+01,7.094648e-03)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.436489e+02   pt(MeV)= 8.769081e+01
 1-th secondary  neutron   Ekin(MeV)= 1.526455e+01   p(MeV)= (-2.224871e-03,1.488845e+02,-8.216155e+01)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.548302e+02   pt(MeV)= 1.488845e+02
 
-Hans-Peter:
-pn_pb_800 - re-run ????
+HP: 
+DONE. NOW WIT GUNTER: Find Correct pion potential.
 
-Hans-Peter:
-pn_zr_050 - seems ok, but needs more stats to say anything.
-
-HP: Find Correct pion potential.
-Gunter: Code Correct pion potential.
-
-HP: check that Weisskopf-Ewing model is ok (gives neutrons) for pn_be_256
-
-HP - reproduce G4NucleiPropertiesTable::GetIndex : Nucleon number smaller than Z!
-
-For Later: SampleResonanceMass: mass range negative (minMass>maxMass)
-
-For Later:
-Fix this:
-pn_c_590  - 
- Reaction number ends 2489
- Reaction number starts 2489
- G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel
-  Probabilities: G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment
- while trying to de-excite
- Fragment: A = 11, Z = 8, U = 4.886e+01 MeV
-           P = (5.116e+01,-4.546e+02,1.370e+02) MeV   E = 1.037e+04 MeV
-           #Particles = 3, #Holes = 4, #Charged = 2
 pn_c_800 - 
+DONE - FIXED THE ARGUMENT OF A SQRT IN THE ION
 Reaction number starts 437
 G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel
 Probabilities: G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment
@@ -82,6 +72,34 @@ while trying to de-excite
 Fragment: A = 11, Z = 8, U = 1.063e+02 MeV
           P = (-3.876e+02,1.401e+02,1.395e+02) MeV   E = 1.043e+04 MeV
           #Particles = 4, #Holes = 5, #Charged = 3
+DONE:
+pn_c_590  - 
+ Reaction number ends 5941
+ Reaction number starts 5941
+ G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel
+  Probabilities: G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment
+ while trying to de-excite
+ Fragment: A = 11, Z = 8, U = 4.886e+01 MeV
+           P = (5.116e+01,-4.546e+02,1.370e+02) MeV   E = 1.037e+04 MeV
+           #Particles = 3, #Holes = 4, #Charged = 2
+
+
+HP: 
+    - reproduce G4NucleiPropertiesTable::GetIndex : Nucleon number smaller than Z!
+NEW - pn_pb_800 - fix the 75 MeV problem. (later)
+NEW - pn_zr_050 - hangs at Reaction number starts 12663
+NEW - rename the model, all classes, and the directory.
+NEW - run testbeam with km in
+NEW - pn_be_585 haengt in gamma evaporation
+NEW - pn_be_800 gibt Boost Vector supplied to set HepLorentzRotation represents speed >= c.
+      at line 33 in file LorentzRotation.cc
+      in reaction# 1209
+NEW - semi-infinite loops in precompound for pn_pb_120.
+
+NEW - 
+
+
+For Later: SampleResonanceMass: mass range negative (minMass>maxMass)
 
 Vladimir: Check pn_be_585 to make sure the data are ok.
 
@@ -94,7 +112,7 @@ pn_al_022 - evaporation neutrons missing.
 pn_al_039 - norm uncertain.
 pn_al_090 - test is wrong -- Vladimir to check
 pn_al_113 - somewhat too much backward
-pn_al_160 - somewhat too much backward
+pn_al_160 - somewhat too much backward, or maybe not
 pn_al_256 - dito
 pn_al_585 - warning particle may be looping, and negative excitation energies
           - do we decay short-lived particles at the end?
