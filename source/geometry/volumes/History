@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2000-11-01 16:51:05 gcosmo Exp $
+$Id: History,v 1.29 2000-11-20 19:07:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20th, 2000  G. Cosmo - geomvol-V02-00-01
+
+- Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
 
 November 1st, 2000   G. Cosmo - geomvol-V02-00-00
 

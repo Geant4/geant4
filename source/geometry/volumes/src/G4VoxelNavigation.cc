@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.5 2000-11-01 16:51:09 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.6 2000-11-20 19:06:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -296,14 +296,14 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 					   const G4ThreeVector& localDirection,
 					   const G4double currentStep)
 {
-	G4SmartVoxelHeader *workHeader,*newHeader;
-	G4SmartVoxelProxy *newProxy;
-	G4SmartVoxelNode *newVoxelNode;
+	G4SmartVoxelHeader *workHeader=0,*newHeader=0;
+	G4SmartVoxelProxy *newProxy=0;
+	G4SmartVoxelNode *newVoxelNode=0;
 	G4ThreeVector targetPoint,voxelPoint;
 	G4double workNodeWidth,workMinExtent,workCoord;
-	G4double minVal,maxVal,newDistance;
+	G4double minVal,maxVal,newDistance=0.;
 	G4double newHeaderMin,newHeaderNodeWidth;
-	G4int depth, newDepth,workNodeNo,newNodeNo,newHeaderNoSlices;
+	G4int depth=0,newDepth=0,workNodeNo=0,newNodeNo=0,newHeaderNoSlices=0;
 	EAxis workHeaderAxis,newHeaderAxis;
 	G4bool isNewVoxel=false;
 	

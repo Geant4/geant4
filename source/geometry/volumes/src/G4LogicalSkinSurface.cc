@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.4 2000-11-01 16:51:09 gcosmo Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.5 2000-11-20 19:05:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-	for (int i=0; i<theSurfaceTable.length(); i++) {
+	for (size_t i=0; i<theSurfaceTable.length(); i++) {
 		if(theSurfaceTable[i]->GetLogicalVolume() == vol)
 			return theSurfaceTable[i];
 	}
@@ -118,7 +118,7 @@ void G4LogicalSkinSurface::DumpInfo()
     G4cout << "***** Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (int i=0; i<theSurfaceTable.length(); i++) {
+    for (size_t i=0; i<theSurfaceTable.length(); i++) {
       G4LogicalSkinSurface *pSkinSurface= theSurfaceTable[i];
       G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl <<
 	" Skin of logical volume " << pSkinSurface->GetLogicalVolume()->GetName  ()

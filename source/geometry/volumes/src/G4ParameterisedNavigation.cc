@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.3 2000-11-20 19:05:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@ G4double G4ParameterisedNavigation::ComputeStep(const G4ThreeVector &localPoint,
 	G4VSolid *motherSolid,*sampleSolid;
 	G4ThreeVector sampleDirection;
 	G4double ourStep=currentProposedStepLength,motherSafety,ourSafety;
-	G4int sampleNo,blockedExitedReplicaNo=-1;
+	G4int sampleNo;
 
 	G4bool initialNode,noStep;
 	G4SmartVoxelNode *curVoxelNode;

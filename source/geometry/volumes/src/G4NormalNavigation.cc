@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NormalNavigation.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4NormalNavigation.cc,v 1.3 2000-11-20 19:05:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,12 +149,12 @@ G4double G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
 
 G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector &localPoint,
 			     const G4NavigationHistory &history,
-			     const G4double currentProposedStepLength)
+			     const G4double)
 {
      G4VPhysicalVolume *motherPhysical,*samplePhysical;
      G4LogicalVolume *motherLogical;
      G4VSolid *motherSolid;
-     G4double ourStep=currentProposedStepLength,motherSafety,ourSafety;
+     G4double motherSafety,ourSafety;
      G4int localNoDaughters,sampleNo;
 
      motherPhysical=history.GetTopVolume();

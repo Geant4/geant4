@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.cc,v 1.3 2000-05-17 16:32:27 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.4 2000-11-20 19:06:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,7 +128,8 @@ G4double G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double width,offset;
   G4bool consuming;
   
-  G4double safety,safe1,safe2;
+  G4double safety=0.;
+  G4double safe1,safe2;
   G4double coord,rho,rmin,rmax;
 
   pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
@@ -186,7 +187,8 @@ G4double G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double width,offset;
   G4bool consuming;
 
-  G4double coord,Comp,Dist,lindist;
+  G4double Dist=kInfinity;
+  G4double coord,Comp,lindist;
 
   pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
   assert(consuming);

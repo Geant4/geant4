@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.4 2000-11-01 16:51:09 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.cc,v 1.5 2000-11-20 19:05:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ G4LogicalBorderSurface*
 G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 				   const G4VPhysicalVolume* vol2)
 {
-	for (int i=0; i<theBorderSurfaceTable.length(); i++) {
+	for (size_t i=0; i<theBorderSurfaceTable.length(); i++) {
 		if(theBorderSurfaceTable[i]->GetVolume1() == vol1 &&
 		   theBorderSurfaceTable[i]->GetVolume2() == vol2 )
 			return theBorderSurfaceTable[i];
@@ -129,7 +129,7 @@ void G4LogicalBorderSurface::DumpInfo() // Class method (it is really const)
     G4cout << "***** Surface Table : Nb of Surfaces = " << 
             GetNumberOfBorderSurfaces() << " *****" << G4endl;
 
-    for (int i=0; i<theBorderSurfaceTable.length(); i++) {
+    for (size_t i=0; i<theBorderSurfaceTable.length(); i++) {
       G4cout << theBorderSurfaceTable[i]->GetName() << " : " << G4endl <<
           "  Surface type   = " << theBorderSurfaceTable[i]->GetName() << G4endl;
 #ifdef PRINT_INFO

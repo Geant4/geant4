@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.10 1999-12-15 17:51:53 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.11 2000-11-20 19:05:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,51 +121,51 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 	  else if (fEntering)
 	    {
 	      G4VPhysicalVolume *curPhysical=fHistory.GetTopVolume();
-	      switch (VolumeType(fCandidatePhysicalVolume))
+	      switch (VolumeType(fBlockedPhysicalVolume))
 		{
 		case kNormal:
-		  fCandidatePhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fCandidatePhysicalVolume);
+		  fBlockedPhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fBlockedPhysicalVolume);
 		  break;
 		case kReplica:
-		  freplicaNav.ComputeTransformation(fCandidateReplicaNo,
-						    fCandidatePhysicalVolume);
-		  fCandidatePhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fCandidatePhysicalVolume,
+		  freplicaNav.ComputeTransformation(fBlockedReplicaNo,
+						    fBlockedPhysicalVolume);
+		  fBlockedPhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fBlockedPhysicalVolume,
 				    kReplica,
-				    fCandidateReplicaNo);
-		  fCandidatePhysicalVolume->SetCopyNo(fCandidateReplicaNo);
+				    fBlockedReplicaNo);
+		  fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
 		  
 		  break;
 		case kParameterised:
 		  G4VSolid *pSolid;
-		  // G4VSolid *pSolid=fCandidatePhysicalVolume->
+		  // G4VSolid *pSolid=fBlockedPhysicalVolume->
 		  // GetLogicalVolume()-> GetSolid();
-		  G4VPVParameterisation *pParam=fCandidatePhysicalVolume->
+		  G4VPVParameterisation *pParam=fBlockedPhysicalVolume->
 		    GetParameterisation();
-		  pSolid= pParam->ComputeSolid(fCandidateReplicaNo,
-						fCandidatePhysicalVolume);
+		  pSolid= pParam->ComputeSolid(fBlockedReplicaNo,
+						fBlockedPhysicalVolume);
 		  pSolid->ComputeDimensions(pParam,
-					    fCandidateReplicaNo,
-					    fCandidatePhysicalVolume);
-		  pParam->ComputeTransformation(fCandidateReplicaNo,
-						fCandidatePhysicalVolume);
-		  fCandidatePhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fCandidatePhysicalVolume,
+					    fBlockedReplicaNo,
+					    fBlockedPhysicalVolume);
+		  pParam->ComputeTransformation(fBlockedReplicaNo,
+						fBlockedPhysicalVolume);
+		  fBlockedPhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fBlockedPhysicalVolume,
 				    kParameterised,
-				    fCandidateReplicaNo);
-		  fCandidatePhysicalVolume->SetCopyNo(fCandidateReplicaNo);
+				    fBlockedReplicaNo);
+		  fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
 		  // Set the correct solid and material in Logical Volume
 		  G4LogicalVolume *pLogical;
-		  pLogical= fCandidatePhysicalVolume->GetLogicalVolume();
+		  pLogical= fBlockedPhysicalVolume->GetLogicalVolume();
 		  pLogical->SetSolid( pSolid );
 		  pLogical->SetMaterial( 
-			     pParam->ComputeMaterial(fCandidateReplicaNo, 
-						     fCandidatePhysicalVolume));
+			     pParam->ComputeMaterial(fBlockedReplicaNo, 
+						     fBlockedPhysicalVolume));
 		  break;
 		}
 	      fEntering=false;
-	      fCandidatePhysicalVolume=0;
+	      fBlockedPhysicalVolume=0;
 	      localPoint=fHistory.GetTopTransform().TransformPoint(globalPoint);
 	      notKnownContained=false;
 	    }
@@ -173,7 +173,6 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
       else
 	{
 	  fBlockedPhysicalVolume=0;
-	  fCandidatePhysicalVolume=0;
 	  fEntering=false;
 	  fEnteredDaughter=false;  // Full Step was not taken, did not enter
 	  fExiting=false;
@@ -364,8 +363,8 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 //                    reference system
 // fExiting          - True if exiting mother
 // fEntering         - True if entering `daughter' volume (or replica)
-// fCandidatePhysicalVolume - Ptr to candidate (entered) volume
-// fCandidateReplicaNo - Replication no of candidate (entered) volume
+// fBlockedPhysicalVolume - Ptr to candidate (entered) volume
+// fBlockedReplicaNo - Replication no of candidate (entered) volume
 // fLastStepWasZero  - True if this Step size was zero.
 
 G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
@@ -373,17 +372,17 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				  const G4double pCurrentProposedStepLength,
 				  G4double	&pNewSafety)
 {
-  G4double Step;
+  G4double Step = DBL_MAX;
   G4ThreeVector localDirection=ComputeLocalAxis(pDirection);
   G4VPhysicalVolume  *motherPhysical=fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical=motherPhysical->GetLogicalVolume();
 
 #ifdef G4VERBOSE
-  G4cout.precision(8);
+  G4std::cout.precision(8);
   if( fVerbose > 1 ) 
     {
       G4cout << "*** G4Navigator::ComputeStep: ***" << G4endl; 
-      G4cout.precision(8);
+      G4std::cout.precision(8);
       G4cout << " I was called with the following arguments: " << G4endl
 	   << " Globalpoint = " << G4std::setw(25) << pGlobalpoint  << G4endl
 	   << " Direction   = " << G4std::setw(25) << pDirection    << G4endl
@@ -393,7 +392,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 
   if( fVerbose > 2 )
     {
-      // G4cout.precision(3);
+      // G4std::cout.precision(3);
       G4cout << " Upon entering my state is: " << G4endl;
       PrintState();
     }
@@ -497,14 +496,6 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
       }
     }
 
-  G4VPhysicalVolume *lBlockedOrCandidatePhysicalVolume;
-  G4int lBlockedOrCandidateReplicaNo;
-
-  // We need to give the "blocked volume" as input to the subNavigators
-  //   and receive the "Candidate volume"
-  lBlockedOrCandidatePhysicalVolume = fBlockedPhysicalVolume;
-  lBlockedOrCandidateReplicaNo      = fBlockedReplicaNo;
-
   if (fHistory.GetTopVolumeType()!=kReplica)
     {
       switch(CharacteriseDaughters(motherLogical))
@@ -521,8 +512,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 					 fExitNormal,
 					 fExiting,
 					 fEntering,
-					 &lBlockedOrCandidatePhysicalVolume,
-					 lBlockedOrCandidateReplicaNo);
+					 &fBlockedPhysicalVolume,
+					 fBlockedReplicaNo);
 	      
 	    }
 	  else
@@ -536,8 +527,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 					  fExitNormal,
 					  fExiting,
 					  fEntering,
-					  &lBlockedOrCandidatePhysicalVolume,
-					  lBlockedOrCandidateReplicaNo);
+					  &fBlockedPhysicalVolume,
+					  fBlockedReplicaNo);
 	    }
 	  break;
 	case kParameterised:
@@ -550,8 +541,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				     fExitNormal,
 				     fExiting,
 				     fEntering,
-				     &lBlockedOrCandidatePhysicalVolume,
-				     lBlockedOrCandidateReplicaNo);
+				     &fBlockedPhysicalVolume,
+				     fBlockedReplicaNo);
 	  break;
 	case kReplica:
 	  G4Exception("Logic Error in G4Navigator::ComputeStep()");
@@ -574,15 +565,11 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				   fExitNormal,
 				   exitingReplica,
 				   fEntering,
-				   &lBlockedOrCandidatePhysicalVolume,
-				   lBlockedOrCandidateReplicaNo);
+				   &fBlockedPhysicalVolume,
+				   fBlockedReplicaNo);
       // still ok to set it ??
       fExiting= exitingReplica;
      }
-
-  // We receive the "Candidate volume"
-  fCandidatePhysicalVolume= lBlockedOrCandidatePhysicalVolume;
-  fCandidateReplicaNo     = lBlockedOrCandidateReplicaNo;  
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
     {
@@ -615,8 +602,6 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     {
       G4cout << " Upon exiting my state is: " << G4endl;
       PrintState();
-      G4cout << "--> am returning a Step= " << G4std::setw(6) << Step << G4endl 
-	     << G4endl;
     }
 #endif
 
@@ -764,11 +749,10 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
   if( fVerbose > 0 ) 
     {
       G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
-      G4cout.precision(5);
+      G4cout.precision(8);
       G4cout << " I was called with the following arguments: " << G4endl
-	     << " Globalpoint = " 
-	     << G4std::setw(24) << pGlobalpoint << G4endl;
-      //       G4cout << "  pMaxLength  = " << pMaxLength  << G4endl;
+	   << " Globalpoint = " << pGlobalpoint << G4endl;
+      //       cout << "  pMaxLength  = " << pMaxLength  << G4endl;
 
       G4cout << " Upon entering my state is: " << G4endl;
       PrintState();
@@ -831,7 +815,7 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
     {
-      G4cout.precision(8);
+      G4std::cout.precision(8);
       G4cout << " Upon exiting my state is: " << G4endl;
       PrintState();
       G4cout << "  and I return a value of Safety = " << newSafety << G4endl;
@@ -876,33 +860,25 @@ void  G4Navigator::PrintState()
   if( ( 1 < fVerbose) && (fVerbose < 4) )
     {
       G4cout.precision(3);
-      G4cout << G4std::setw(15) << "   ExitNormal  "  << " "     
-	   << G4std::setw( 5) << "Valid"       << " "     
- 	   << G4std::setw(10) << "Exit/Enter"     << " "        //  Values use 7
-	   << G4std::setw(15) << "Blocked:Volume "  << " "   
-	   << G4std::setw( 5) << "Repl#"        << " "  
-	   << G4std::setw( 7) << "lStep=0"   << " "   
-	   << G4std::setw(12) << "Candidate:Volume "  << " "   
+      G4cout << G4std::setw(18) << " ExitNormal "  << " "     
+	   << G4std::setw( 5) << " Valid "       << " "     
+	   << G4std::setw( 9) << " Exiting "     << " "      
+	   << G4std::setw( 9) << " Entering"     << " " 
+	   << G4std::setw(15) << " Blocked:Volume "  << " "   
+	   << G4std::setw( 9) << " ReplicaNo"        << " "  
+	   << G4std::setw( 8) << " LastStepZero  "   << " "   
 	   << G4endl;   
-
-      G4cout << G4std::setw(10)  << fExitNormal       << " "
-	   << G4std::setw( 4)  << fValidExitNormal  << " "   
-	   << G4std::setw( 3)  << fExiting          << " "
-	   << G4std::setw( 2)  << fEntering         << " ";
+      G4cout << G4std::setw(18)  << fExitNormal       << " "
+	   << G4std::setw( 5)  << fValidExitNormal  << " "   
+	   << G4std::setw( 9)  << fExiting          << " "
+	   << G4std::setw( 9)  << fEntering         << " ";
       if (fBlockedPhysicalVolume==0 )
-	 G4cout << G4std::setw(12) << "None";
+	 G4cout << G4std::setw(15) << "None";
       else
- 	 G4cout << G4std::setw(12)<< fBlockedPhysicalVolume->GetName();
-      G4cout << G4std::setw( 8) << fBlockedPhysicalVolume << " "; // Hex would be better
-      G4cout << G4std::setw( 6)  << fBlockedReplicaNo  << " "
-	     << G4std::setw( 4)  << fLastStepWasZero   << " "; 
-      if (fCandidatePhysicalVolume==0 )
-	 G4cout << G4std::setw(12) << "None";
-      else
- 	 G4cout << G4std::setw(12)<< fCandidatePhysicalVolume->GetName();
-      G4cout << G4std::setw( 4)  << fCandidateReplicaNo  << " ";
-      G4cout << G4std::setw(12)  << fCandidatePhysicalVolume << " "
-	     << G4endl;   
+ 	 G4cout << G4std::setw(15)<< fBlockedPhysicalVolume->GetName();
+      G4cout << G4std::setw( 9)  << fBlockedReplicaNo  << " "
+	   << G4std::setw( 8)  << fLastStepWasZero   << " "
+	   << G4endl;   
     }
   if( fVerbose > 2 ) 
     {
@@ -962,17 +938,14 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
 	 }
      }
 
+#if 0
    else
      {
        // There is no state stored in G4ReplicaNavigation
        // freplicaNav.VoxelLocate( pVoxelHeader, localPoint );                
      }
+#endif
 
-   // Since we are doing a (fast) relocation,  invalidate 
-   //  any old values of fEntering, fExiting - which could no longer hold!
-   //                            July 20, 1999
-   fEntering = false;
-   fExiting  = false;
 
 #ifdef OLD_LOCATE
    //  An alternative implementation using LocateGlobalPointAndSetup.
