@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2001-11-06 09:46:20 pia Exp $
+# $Id: GNUmakefile,v 1.7 2001-11-11 12:04:23 pia Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -6,7 +6,6 @@
 ifndef G4TARGET
   G4TARGET := $(TESTTARGET)
 endif
-name:= $(G4TARGET)
 G4EXLIB := true
 
 ifndef G4INSTALL
