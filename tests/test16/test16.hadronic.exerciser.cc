@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.7 2000-01-22 13:21:35 stesting Exp $
+// $Id: test16.hadronic.exerciser.cc,v 1.8 2000-01-22 15:36:13 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,6 +64,7 @@ int main (int argc, char** argv) {
     "\n#"
     "\n/control/verbose 2"
     "\n# /run/verbose 2"
+    "\n/run/particle/setCut 1 m"
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
 
