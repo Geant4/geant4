@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.27 2002-06-01 02:37:14 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.28 2002-06-10 17:00:32 sussi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,7 +184,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
      stepForChord = NewStep(stepTrial, dChordStep, fLastStepEstimate_Unconstrained );
 
      if( ! validEndPoint ) {
-        if( stepForChord <= oldStepTrial )
+        if( (stepForChord <= oldStepTrial) || (stepTrial<=0.0) )
 	   stepTrial = stepForChord;
         else
  	   stepTrial *= 0.1;
@@ -223,6 +223,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
   stepOfLastGoodChord = stepTrial;
 #ifdef  TEST_CHORD_PRINT
+  static int dbg=0;
   if( dbg ) 
     G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
 	   << " StepForGoodChord=" << G4std::setw(10) << stepTrial << G4endl;
@@ -261,7 +262,7 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   // if ( dChordStep < threshold * fDeltaChord ){
   //    stepTrial= stepTrialOld *  multiplier;    
   // }
-  if( (stepTrial < 0.001 * stepTrialOld)
+  if( (stepTrial <= 0.001 * stepTrialOld)
     || (stepTrial > 1000.0 * stepTrialOld)
     ){
      if ( dChordStep > 1000.0 * fDeltaChord ){
@@ -274,6 +275,9 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 	  stepTrial= stepTrialOld * 0.5;   
 	}
      }
+  }
+  if( stepTrial == 0.0 ){
+     stepTrial= 0.000001;
   }
 
   lastStepTrial = stepTrialOld; 
