@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-11-05 06:18:36 asaim Exp $
+$Id: History,v 1.7 1999-11-09 00:57:22 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 4, 99, M.Asai (tag event-V01-01-01)
+Nov 4, 99, M.Asai (tag event-V00-01-01)
 - Comments are enriched for the software reference manual
 
 Oct 4, 99, J.Allison (tag event-V00-01-00)
