@@ -22,7 +22,7 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.12 2004-03-01 17:00:31 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.13 2004-10-19 01:45:23 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -457,7 +457,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 	aParticleChange.AddSecondary(aSecondaryTrack);
       }
       kinEnergy -= sumEnergyTR ;
-      aParticleChange.SetEnergyChange(kinEnergy) ;
+      aParticleChange.ProposeEnergy(kinEnergy) ;
     }
   }
   // return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);

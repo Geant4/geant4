@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.10 2003-06-03 08:11:01 vnivanch Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.11 2004-10-19 01:44:36 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -676,7 +676,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
         kinEnergy -= energyTR ;
-        aParticleChange.SetEnergyChange(kinEnergy);
+        aParticleChange.ProposeEnergy(kinEnergy);
 
         anglePos = (*(*fAngleDistrTable)(iPlace))(0)*G4UniformRand() ;
         for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
@@ -749,7 +749,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
           kinEnergy -= energyTR ;
-          aParticleChange.SetEnergyChange(kinEnergy);
+          aParticleChange.ProposeEnergy(kinEnergy);
 
           anglePos = ((*(*fAngleDistrTable)(iPlace))(0)*W1+
                        (*(*fAngleDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
