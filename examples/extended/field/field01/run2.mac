@@ -1,0 +1,93 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+# /run/setdefault  
+# /run/setintegral 
+# /run/setcontonly 
+# /run/setionplus  
+/run/setdefault 
+/run/setminDeltaEnergy 1. keV
+/run/setdRoverR 0.050
+/run/setfinalR  0.001 mm
+#
+#  PLOT: nb of steps ....................................................
+/plots/setnbinStep 100
+/plots/setSteplow 0.
+/plots/setStephigh 100.
+#  PLOT: sum of tracklength of charged particles .........................
+/plots/setnbinTl 50
+/plots/setTllow 0.0 mm
+/plots/setTlhigh 1.0 mm 
+#  PLOT: energy deposit distribution in absorber............................
+/plots/setnbinEn 60
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 1.20 MeV  
+#  PLOT: energy of transmitted particles (with quantum numbers of the primary)
+/plots/setnbinTt 50
+/plots/setTtlow 0.0 MeV
+/plots/setTthigh 1.0 MeV 
+#  PLOT: angle distr. of transmitted particles 
+/plots/setnbinTh 30
+/plots/setThlow 0.0 deg    
+/plots/setThhigh 90. deg    
+#  PLOT: lateral displacement for transmitted particles at exit
+/plots/setnbinR 50
+/plots/setRlow 0.0 mm
+/plots/setRhigh 0.25 mm
+#  PLOT: energy of backscattered particles (with quantum numbers of the primary)
+/plots/setnbinTb 50
+/plots/setTblow 0.0 MeV
+/plots/setTbhigh 1.0 MeV 
+#  PLOT: andle distr. of backscattered particles
+/plots/setnbinThback 30
+/plots/setThlowback 0.0 deg    
+/plots/setThhighback 90.0 deg    
+#  PLOT: energy spectrum of charged secondaries
+/plots/setnbinTsec 100
+/plots/setTseclow 0.00 MeV
+/plots/setTsechigh 0.50 MeV 
+#  PLOT: z coord. of e+/e- production 
+/plots/setnbinzvertex 100
+/plots/setzlow -0.0500 mm
+/plots/setzhigh 0.0500 mm
+#  PLOT: energy spectrum of photons escaping the absorber (forward)
+/plots/setnbinGamma 100
+/plots/setElowGamma 1.0 keV
+/plots/setEhighGamma 1000.0 keV
+#
+/run/initialize
+/calor/setAbsMat Gold  
+#
+/calor/setAbsThick 0.10 mm 
+/calor/setAbsRad 10.00 mm
+/calor/update
+#
+# /event/setsignoise 3.8 keV
+# /event/setcutlow 0.0 keV
+#
+/run/particle/setCut 0.0001000 mm
+/run/initialize
+/run/particle/dumpCutValues
+#
+/gun/particle e- 
+/gun/energy 1. MeV
+/gun/xvertex 0.000 mm
+/gun/yvertex 0.000 mm
+/gun/zvertex -0.0500 mm
+#
+/tracking/verbose 0
+/stepping/setprintlimit 1000
+/event/setverbose 0
+/stepping/setverbose 0
+/stepping/setnbofevents 0
+/stepping/seteventno  99
+#
+/run/beamOn 10000
+#
+

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2001-03-26 08:15:29 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2001-03-27 16:25:03 grichine Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,5 +13,15 @@ endif
 
 .PHONY: all
 all: lib bin
+
+include $(G4INSTALL)/config/architecture.gmk
+
+ifdef G4NOHIST
+  CPPFLAGS += -DG4NOHIST
+else
+  LDFLAGS  += -L/cern/pro/lib
+  LOADLIBS += -lpacklib $(FCLIBS)
+endif
+
 
 include $(G4INSTALL)/config/binmake.gmk
