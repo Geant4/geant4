@@ -6,7 +6,7 @@
 
 void Tst14TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 {
-  G4TrackingManager* trackingManager = fpTrackingManager;
+  //  G4TrackingManager* trackingManager = fpTrackingManager;
   const G4DynamicParticle* aParticle = aTrack->GetDynamicParticle(); 
 
   // Add polarization only for gamma
