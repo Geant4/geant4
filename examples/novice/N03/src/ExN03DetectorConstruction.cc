@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.15 2003-03-25 17:13:08 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.16 2003-04-08 13:10:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,6 +154,8 @@ density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
+// overwrite computed meanExcitationEnergy with ICRU recommended value 
+H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
 density = 1.032*g/cm3;
 G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
