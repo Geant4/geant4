@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.7 2001-10-05 22:44:29 asaim Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.8 2001-10-11 01:38:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,32 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ExecuteCommand = new G4UIcmdWithAString("/control/execute",this);
   ExecuteCommand->SetGuidance("Execute a macro file.");
   ExecuteCommand->SetParameterName("fileName",false);
+
+  loopCommand = new G4UIcommand("/control/loop",this);
+  loopCommand->SetGuidance("Execute a macro file more than once.");
+  loopCommand->SetGuidance("Loop counter can be used as an aliased variable.");
+  G4UIparameter* param1 = new G4UIparameter("macroFile",'s',false);
+  loopCommand->SetParameter(param1);
+  G4UIparameter* param2 = new G4UIparameter("counterName",'s',false);
+  loopCommand->SetParameter(param2);
+  G4UIparameter* param3 = new G4UIparameter("initialValue",'d',false);
+  loopCommand->SetParameter(param3);
+  G4UIparameter* param4 = new G4UIparameter("finalValue",'d',false);
+  loopCommand->SetParameter(param4);
+  G4UIparameter* param5 = new G4UIparameter("stepSize",'d',true);
+  param5->SetDefaultValue(1.0);
+  loopCommand->SetParameter(param5);
+
+  foreachCommand = new G4UIcommand("/control/foreach",this);
+  foreachCommand->SetGuidance("Execute a macro file more than once.");
+  foreachCommand->SetGuidance("Loop counter can be used as an aliased variable.");
+  foreachCommand->SetGuidance("Values must be separated by a space.");
+  G4UIparameter* param6 = new G4UIparameter("macroFile",'s',false);
+  foreachCommand->SetParameter(param6);
+  G4UIparameter* param7 = new G4UIparameter("counterName",'s',false);
+  foreachCommand->SetParameter(param7);
+  G4UIparameter* param8 = new G4UIparameter("valueList",'s',false);
+  foreachCommand->SetParameter(param8);
   
   suppressAbortionCommand = new G4UIcmdWithAnInteger("/control/suppressAbortion",this);
   suppressAbortionCommand->SetGuidance("Suppress the program abortion caused by G4Exception.");
@@ -78,19 +104,13 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
     = new G4UIcmdWithoutParameter("/control/stopSavingHistory",this);
   stopStoreHistoryCommand->SetGuidance("Stop saving history file.");
 
-  ManualCommand = new G4UIcmdWithAString("/control/manual",this);
-  ManualCommand->SetGuidance("Display all of sub-directories and commands.");
-  ManualCommand->SetGuidance("Directory path should be given by FULL-PATH.");
-  ManualCommand->SetParameterName("dirPath",true);
-  ManualCommand->SetDefaultValue("/");
-
   aliasCommand = new G4UIcommand("/control/alias",this);
   aliasCommand->SetGuidance("Set an alias.");
   aliasCommand->SetGuidance("String can be aliased by this command.");
   aliasCommand->SetGuidance("The string may contain one or more spaces,");
-  aliasCommand->SetGuidance("the string must be enclosed by double quarts (\").");
+  aliasCommand->SetGuidance("the string must be enclosed by double quotes (\").");
   aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
-  aliasCommand->SetGuidance("parenthis \"[\" and \"]\".");
+  aliasCommand->SetGuidance("parenthis \"{\" and \"}\".");
   G4UIparameter* aliasNameParam = new G4UIparameter("aliasName",'s',false);
   aliasCommand->SetParameter(aliasNameParam);
   G4UIparameter* aliasValueParam = new G4UIparameter("aliasValue",'s',false);
@@ -106,31 +126,18 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   shellCommand = new G4UIcmdWithAString("/control/shell",this);
   shellCommand->SetGuidance("Execute a (Unix) SHELL command.");
 
-  loopCommand = new G4UIcommand("/control/loop",this);
-  loopCommand->SetGuidance("Execute a macro file more than once.");
-  loopCommand->SetGuidance("Loop counter can be used as an aliased variable.");
-  G4UIparameter* param1 = new G4UIparameter("macroFile",'s',false);
-  loopCommand->SetParameter(param1);
-  G4UIparameter* param2 = new G4UIparameter("counterName",'s',false);
-  loopCommand->SetParameter(param2);
-  G4UIparameter* param3 = new G4UIparameter("initialValue",'d',false);
-  loopCommand->SetParameter(param3);
-  G4UIparameter* param4 = new G4UIparameter("finalValue",'d',false);
-  loopCommand->SetParameter(param4);
-  G4UIparameter* param5 = new G4UIparameter("stepSize",'d',true);
-  param5->SetDefaultValue(1.0);
-  loopCommand->SetParameter(param5);
+  ManualCommand = new G4UIcmdWithAString("/control/manual",this);
+  ManualCommand->SetGuidance("Display all of sub-directories and commands.");
+  ManualCommand->SetGuidance("Directory path should be given by FULL-PATH.");
+  ManualCommand->SetParameterName("dirPath",true);
+  ManualCommand->SetDefaultValue("/");
 
-  foreachCommand = new G4UIcommand("/control/foreach",this);
-  foreachCommand->SetGuidance("Execute a macro file more than once.");
-  foreachCommand->SetGuidance("Loop counter can be used as an aliased variable.");
-  foreachCommand->SetGuidance("Values must be separated by a space.");
-  G4UIparameter* param6 = new G4UIparameter("macroFile",'s',false);
-  foreachCommand->SetParameter(param6);
-  G4UIparameter* param7 = new G4UIparameter("counterName",'s',false);
-  foreachCommand->SetParameter(param7);
-  G4UIparameter* param8 = new G4UIparameter("valueList",'s',false);
-  foreachCommand->SetParameter(param8);
+  HTMLCommand = new G4UIcmdWithAString("/control/createHTML",this);
+  HTMLCommand->SetGuidance("Generate HTML files for all of sub-directories and commands.");
+  HTMLCommand->SetGuidance("Directory path should be given by FULL-PATH.");
+  HTMLCommand->SetParameterName("dirPath",true);
+  HTMLCommand->SetDefaultValue("/");
+
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -147,6 +154,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete shellCommand;
   delete loopCommand;
   delete foreachCommand; 
+  delete HTMLCommand;
   delete controlDirectory;
 }
 
@@ -201,6 +209,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command==foreachCommand)
   {
     UI->ForeachS(newValue);
+  }
+  if(command==HTMLCommand)
+  {
+    UI->CreateHTML(newValue);
   }
 
 }

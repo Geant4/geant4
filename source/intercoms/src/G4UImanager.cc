@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.14 2001-10-05 22:44:30 asaim Exp $
+// $Id: G4UImanager.cc,v 1.15 2001-10-11 01:38:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -309,20 +309,17 @@ int G4UImanager::ApplyCommand(const char * aCommand)
   return ApplyCommand(theCommand);
 }
 
-int G4UImanager::ApplyCommand(G4String aCommand)
+G4String G4UImanager::SolveAlias(G4String aCmd)
 {
-  if(verboseLevel) G4cout << aCommand << G4endl;
-
-  G4String commandString;
-  G4String commandParameter;
-
-  int ia = aCommand.index("[");
-  while( ia != int(G4std::string::npos) )
+  G4String aCommand = aCmd;
+  int ia = aCommand.index("{");
+  int iz = aCommand.index("#");
+  while((ia != int(G4std::string::npos))&&((iz==int(G4std::string::npos))||(ia<iz)))
   {
     int ibx = -1;
     while(ibx<0)
     {
-      int ib = aCommand.index("]");
+      int ib = aCommand.index("}");
       if( ib == int(G4std::string::npos) )
       {
         G4cerr << aCommand << G4endl;
@@ -332,26 +329,41 @@ int G4UImanager::ApplyCommand(G4String aCommand)
         return fAliasNotFound;
       }
       G4String ps = aCommand(ia+1,aCommand.length()-(ia+1));
-      int ic = ps.index("[");
-      int id = ps.index("]");
+      int ic = ps.index("{");
+      int id = ps.index("}");
       if(ic!=int(G4std::string::npos) && ic < id)
       { ia+=ic+1; }
       else
       { ibx = ib; }
     }
+    //--- Here ia represents the position of innermost "{"
+    //--- and ibx represents corresponding "}"
     G4String subs;
     if(ia>0) subs = aCommand(0,ia);
     G4String alis = aCommand(ia+1,ibx-ia-1);
-    G4String rems = aCommand(ibx+1,aCommand.length()-(ia+ibx));
+    G4String rems = aCommand(ibx+1,aCommand.length()-ibx);
+    // G4cout << "<" << subs << "> <" << alis << "> <" << rems << ">" << G4endl;
     G4String* alVal = aliasList->FindAlias(alis);
     if(!alVal)
     {
       G4cerr << "Alias <" << alis << "> not found -- command ignored" << G4endl;
-      return fAliasNotFound;
+      G4String nullStr;
+      return nullStr;
     }
     aCommand = subs+(*alVal)+rems;
-    ia = aCommand.index("[");
+    ia = aCommand.index("{");
   }
+  return aCommand;
+}
+
+int G4UImanager::ApplyCommand(G4String aCommand)
+{
+  G4String aCmd = SolveAlias(aCommand);
+  if(aCmd.isNull()) return fAliasNotFound;
+  aCommand = aCmd;
+  if(verboseLevel) G4cout << aCommand << G4endl;
+  G4String commandString;
+  G4String commandParameter;
 
   int i = aCommand.index(" ");
   if( i != int(G4std::string::npos) )
@@ -366,10 +378,7 @@ int G4UImanager::ApplyCommand(G4String aCommand)
 
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
   if( targetCommand == NULL )
-  {
-    // G4cout << commandString << " NOT FOUND." << G4endl;
-    return fCommandNotFound;
-  }
+  { return fCommandNotFound; }
 
   if(!(targetCommand->IsAvailable())) 
   { return fIllegalApplicationState; }
@@ -524,4 +533,12 @@ void G4UImanager::ListAlias()
   aliasList->List();
 }
 
+void G4UImanager::CreateHTML(const char* dir)
+{ 
+  G4UIcommandTree* tr = FindDirectory(dir);
+  if(tr!=0)
+  { tr->CreateHTML(); }
+  else
+  { G4cerr << "Directory <" << dir << "> is not found." << G4endl; }
+}
 

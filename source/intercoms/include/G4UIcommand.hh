@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.7 2001-07-11 10:01:13 gunter Exp $
+// $Id: G4UIcommand.hh,v 1.8 2001-10-11 01:37:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,6 +118,8 @@ class G4UIcommand
       { return parameter.size(); }
       inline G4UIparameter * GetParameter(int i) const
       { return parameter[i]; }
+      inline G4std::vector<G4ApplicationState>* GetStateList()
+      { return &availabelStateList; }
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.12 2001-10-05 22:44:29 asaim Exp $
+// $Id: G4UIcommand.cc,v 1.13 2001-10-11 01:37:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   availabelStateList.push_back(Idle);
   availabelStateList.push_back(GeomClosed);
   availabelStateList.push_back(EventProc);
+  availabelStateList.push_back(Abort);
 }
 
 void G4UIcommand::G4UIcommandCommonConstructorCode

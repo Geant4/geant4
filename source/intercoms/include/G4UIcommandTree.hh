@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.8 2001-07-11 10:01:14 gunter Exp $
+// $Id: G4UIcommandTree.hh,v 1.9 2001-10-11 01:37:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,8 +57,12 @@ class G4UIcommandTree
       void List();
       void ListCurrent();
       void ListCurrentWithNum();
+      void CreateHTML();
 
   private:
+      G4String CreateFileName(G4String pName);
+      G4String CVT(G4String str);
+
       G4std::vector<G4UIcommand*> command;
       G4std::vector<G4UIcommandTree*> tree;
       G4UIcommand *guidance;

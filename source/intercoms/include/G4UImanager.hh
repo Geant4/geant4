@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.13 2001-10-05 22:44:28 asaim Exp $
+// $Id: G4UImanager.hh,v 1.14 2001-10-11 01:37:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -117,6 +117,10 @@ class G4UImanager : public G4VStateDependent
       //  Remove the defined alias.
       void ListAlias();
       //  Print all aliases.
+      G4String SolveAlias(G4String aCmd);
+      //  Convert a command string which contains alias(es).
+      void CreateHTML(const char* dir = "/");
+      //  Generate HTML files for defined UI commands
 
 
   public: 
