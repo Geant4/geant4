@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.3 2001-11-06 02:06:21 kurasige Exp $
+// $Id: G4NeutronBetaDecayChannel.cc,v 1.4 2002-04-03 09:05:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,14 +116,12 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double r;  
   G4double r0;
   do {
-    do {
       x = xmax*G4UniformRand();
       p = sqrt(x*(x+2.0*m));
       w = 1.0-2.0*G4UniformRand();
       r = p*(x+m)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+m)*w);
       r0 = G4UniformRand()*(xmax+m)*(xmax+m)*xmax*xmax*(1.0+aENuCorr);
-    } while (r < r0);    
-  } while (xmax<x);
+  } while (r < r0);    
 
   //create daughter G4DynamicParticle 
   // rotation materix to lab frame
