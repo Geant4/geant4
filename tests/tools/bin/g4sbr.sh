@@ -78,7 +78,8 @@ echo "STT:SETUPEnvironment Complete"
 # Check if INPROGRESS
 ##########################
 if [ -e $G4WORKDIR/inprogress.stat ]; then
-  echo "In progress already!"
+  echo "STT:ABORT inprogress.stat exists."
+  cat $G4WORKDIR/inprogress.stat
   ls -l $G4WORKDIR/inprogress.stat
   exit 
 fi
@@ -102,6 +103,7 @@ then
   cd ${G4WORKDIR}/stt/${G4SYSTEM}
   NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
   mv gmake.log gmake.log.${NEXT_NUMBER}
+  echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
 else
   cd ${G4WORKDIR}
   if [ -d stt.${REFTAG} ]
@@ -111,7 +113,7 @@ else
   fi
   echo 'REMOVE bin/* lib/* tmp/*'
   rm -r bin/* lib/* tmp/*
-  echo CREATE stt.${REFTAG} and RESET stt symbolic link.
+  echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
   mkdir stt.${REFTAG}
   rm -rf stt
   ln -s stt.${REFTAG} stt
