@@ -103,7 +103,8 @@ C
             endif
             theta = facdeg*theta
             call hfill(3,theta,0.,w)
-
+          endif
+          if(nhi11.gt.0) then
 C           proj.angle distribution plot
             vx = vect(4)
             vy = vect(5)
