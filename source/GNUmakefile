@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.51 2004-06-02 07:49:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.52 2004-06-02 08:38:50 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -43,8 +43,8 @@ endif
 
 glob global:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
 ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
