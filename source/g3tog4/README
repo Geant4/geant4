@@ -11,7 +11,7 @@ geometry. The source code for this is fortran.
 
 Second, a call list interpreter (G4BuildGeom.cc) reads these instructions
 and builds the geometry in the user's G4 client code. Two examples of how
-to use the call list interpreter are supplied in g3tog4/examples. 
+to use the call list interpreter are supplied in g3tog4/test. 
 
 The first example, cltog4, is a simple example which simply invokes the
 call list interpreter method G4BuildGeom from G3toG4DetectorConstruction
