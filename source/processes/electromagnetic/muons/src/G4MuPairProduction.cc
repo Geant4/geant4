@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.26 2001-11-09 13:52:32 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.27 2003-01-07 23:40:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -854,19 +854,19 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
 
    aParticleChange.SetMomentumChange( ParticleDirection );
 
-   G4double KinEnergyCut = (aDynamicParticle->GetDefinition()->
-                            GetEnergyCuts())[aMaterial->GetIndex()];
+//------   G4double KinEnergyCut = (aDynamicParticle->GetDefinition()->
+//------                            GetEnergyCuts())[aMaterial->GetIndex()];
 
-   if (NewKinEnergy > KinEnergyCut)
-      {
+//------   if (NewKinEnergy > KinEnergyCut)
+//------      {
        aParticleChange.SetEnergyChange( NewKinEnergy );
-      }
-   else
-      {
-       aParticleChange.SetEnergyChange(0.);
-       LocalEnerDeposit += NewKinEnergy ;
-       aParticleChange.SetStatusChange(fStopButAlive);
-      }
+//------      }
+//------   else
+//------      {
+//------       aParticleChange.SetEnergyChange(0.);
+//------       LocalEnerDeposit += NewKinEnergy ;
+//------       aParticleChange.SetStatusChange(fStopButAlive);
+//------      }
 
    aParticleChange.SetLocalEnergyDeposit( LocalEnerDeposit ) ;
 
