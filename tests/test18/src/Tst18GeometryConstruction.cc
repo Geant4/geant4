@@ -51,7 +51,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 Tst18GeometryConstruction::Tst18GeometryConstruction ()
