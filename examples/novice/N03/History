@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2004-11-15 15:28:24 gbarrand Exp $
+$Id: History,v 1.83 2004-11-16 11:45:10 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-15-11-04 Guy Barrand
+15-11-04 Guy Barrand (exampleN03-V06-02-00)
 - visTutor/exN03Vis[5,10].mac : have commented examples
   on how to request the visualization of a particular volume.
 - visTutor/exN03Vis9.mac : WIN32 : having something with only
