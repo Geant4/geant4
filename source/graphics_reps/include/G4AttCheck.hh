@@ -21,58 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttValue.hh,v 1.4 2005-03-22 16:51:34 allison Exp $
+// $Id: G4AttCheck.hh,v 1.1 2005-03-22 16:51:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef G4ATTVALUE_HH
-#define G4ATTVALUE_HH
-
-#include "globals.hh"
+#ifndef G4ATTCHECK_HH
+#define G4ATTCHECK_HH
 
 // Class Description:
 //
-// @class G4AttValue
+// @class G4AttCheck
 //
-// @brief This class represents a HepRep-style Attribute Value.
-// G4AttValues can be attached to a Trajectory, Trajectory Point or Sensitive
-// Detector Hit.  These attributes are then made available to the end user
-// in interactive visualization systems (such as WIRED).
-// The G4AttValue is further defined in a G4AttDef object.
-// The association between the G4AttValue and the G4AttDef object is
-// made through the data member "name".
-// For details, see the HepRep home page at http://heprep.freehep.org
+// @brief Checks G4AttValue's and their corresponding G4AttDef map.
+//
+// Usage (a): G4AttCheck(values,definitions);
+//    or (b): G4cout << G4AttCheck(values,definitions) << G4endl;
+//
+// For further details, see the HepRep home page at http://heprep.freehep.org
 //  
-// @author M.Frailis 
-// @author R.Giannitrapani
+// @author J.Allison
 // @author J.Perl
 // Class Description - End:
 
+#include "globals.hh"
 
-  class G4AttValue {
-    
-  public:
-    G4AttValue(const G4String& name,
-	       const G4String& value,
-	       const G4String& showLabel): 
-      m_name(name),m_value(value),
-      m_showLabel(showLabel){};
-    G4AttValue(){};
-    
-    const G4String& GetName()const{return m_name;};
-    const G4String& GetValue()const{return m_value;};
-    const G4String& GetShowLabel()const{return m_showLabel;};
+#include <vector>
+#include<map>
+#include<iostream>
 
-    void SetName(const G4String& name){m_name = name;};
-    void SetValue(const G4String& val){m_value = val;};
-    void SetShowLabel(const G4String& lab){m_showLabel = lab;};
+class G4AttValue;
+class G4AttDef;
 
-  private:
-    /// The name of the attribute 
-    G4String m_name;
-    /// The value of the attribute
-    G4String m_value;
-    /// The bitmap for the label display
-    G4String m_showLabel;
-  };
+class G4AttCheck {
+public:
+  G4AttCheck
+  (const std::vector<G4AttValue>* values,
+   const std::map<G4String,G4AttDef>* definitions);
+  ~G4AttCheck();
+  friend std::ostream& operator<< (std::ostream&, const G4AttCheck&);
+private:
+  const std::vector<G4AttValue>* fpValues;
+  const std::map<G4String,G4AttDef>* fpDefinitions;
+};
 
-#endif //G4ATTVALUE_H
+#endif //G4ATTCHECK_HH

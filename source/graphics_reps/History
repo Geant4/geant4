@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.59 2005-03-22 16:44:21 allison Exp $
+cvs log $Id: History,v 1.60 2005-03-22 16:52:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 22nd March 2005  John Allison  (greps-V07-00-02)
 - G4Polyhedron: Added fLineSegmentsPerCircleAtTimeOfCreation.
+- G4VisAttributes: Changed std::vector<G4AttDef> to map<G4String,G4AttDef>.
+- Added first version of G4AttCheck.
 
 9th March 2005  John Allison  (greps-V07-00-01)
 - HepPolyhedron: Added IsErrorBooleanProcess().
