@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.7 2003-05-12 12:35:39 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.8 2003-05-22 10:01:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -581,6 +581,20 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
     G4Exception("G4ReflectionFactory::CheckScale() - unexpected scale");
   }
 }    
+
+//_____________________________________________________________________________
+
+void G4ReflectionFactory::SetScalePrecision(G4double scaleValue)
+{
+  fScalePrecision = scaleValue;
+}
+
+//_____________________________________________________________________________
+
+G4double G4ReflectionFactory::GetScalePrecision() const
+{
+  return fScalePrecision;
+}
 
 //_____________________________________________________________________________
 
