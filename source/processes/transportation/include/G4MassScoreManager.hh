@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.hh,v 1.4 2002-05-30 11:14:38 dressel Exp $
+// $Id: G4MassScoreManager.hh,v 1.5 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@
 // Class description:
 //
 // A user should use this class to set up scoring in the "mass" geometry.
-// Create an object and initialise it.
+// The user must create an object of this kind and initialise it.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -38,13 +38,13 @@
 #define G4MassScoreManager_hh G4MassScoreManager_hh
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4VProcess;
 class G4VPScorer;
 class G4MScoreProcess;
 
-class G4MassScoreManager : public G4VImportanceScoreConstructor
+class G4MassScoreManager : public G4VSampler
 {
 
 public:  // with description

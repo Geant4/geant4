@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreManager.hh,v 1.5 2002-05-30 11:14:38 dressel Exp $
+// $Id: G4ParallelScoreManager.hh,v 1.6 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // A user should use this class to set up scoring in a "parallel" 
 // geometry.
-// Create an object and initialise it.
+// The user must create an object of this kind and initialise it.
 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -40,14 +40,14 @@
 #define G4ParallelScoreManager_hh G4ParallelScoreManager_hh
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4VPhysicalVolume;
 class G4ParallelManager;
 class G4VPScorer;
 class G4PScoreProcess;
 
-class G4ParallelScoreManager : public G4VImportanceScoreConstructor
+class G4ParallelScoreManager : public G4VSampler
 {
 
 public:  // with description

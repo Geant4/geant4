@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.hh,v 1.6 2002-05-30 15:44:20 gcosmo Exp $
+// $Id: G4ParallelImportanceScoreManager.hh,v 1.7 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@
 #define G4ParallelImportanceScoreManager_hh G4ParallelImportanceScoreManager_hh
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4VIStore;
 class G4VPScorer;
@@ -49,7 +49,7 @@ class G4ParallelManager;
 class G4ParallelImportanceManager;
 
 class G4ParallelImportanceScoreManager : 
-  public G4VImportanceScoreConstructor
+  public G4VSampler
 {
 
 public:  // with description

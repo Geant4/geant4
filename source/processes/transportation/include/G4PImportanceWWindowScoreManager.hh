@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreManager.hh,v 1.3 2002-05-30 15:44:20 gcosmo Exp $
+// $Id: G4PImportanceWWindowScoreManager.hh,v 1.4 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@
 #define G4PImportanceWWindowScoreManager_hh G4PImportanceWWindowScoreManager_hh
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4VIStore;
 class G4VPScorer;
@@ -51,7 +51,7 @@ class G4VProcess;
 class G4VWeightWindowAlgorithm;
 
 class G4PImportanceWWindowScoreManager : 
-  public G4VImportanceScoreConstructor
+  public G4VSampler
 {
 
 public:  // with description

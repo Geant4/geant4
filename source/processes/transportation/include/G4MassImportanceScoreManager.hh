@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreManager.hh,v 1.5 2002-05-30 11:14:38 dressel Exp $
+// $Id: G4MassImportanceScoreManager.hh,v 1.6 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // A user should use this class to set up importance sampling and scoring
 // in the "mass" geometry.
-// Create an object and initialise it.
+// The user must create an object of this kind and initialise it.
 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -40,7 +40,7 @@
 #define G4MassImportanceScoreManager_hh G4MassImportanceScoreManager_hh
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4VIStore;
 class G4VPScorer;
@@ -48,7 +48,7 @@ class G4VImportanceAlgorithm;
 class G4MassImportanceManager;
 class G4MassScoreManager;
 
-class G4MassImportanceScoreManager : public G4VImportanceScoreConstructor
+class G4MassImportanceScoreManager : public G4VSampler
 {
 
 public:  // with description

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.hh,v 1.7 2002-05-30 11:14:38 dressel Exp $
+// $Id: G4ParallelImportanceManager.hh,v 1.8 2002-05-30 15:57:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // A user should use this class to set up importance sampling
 // in a "parallel" geometry.
-// Create an object and initialise it.
+// The user must create an object of this kind and initialise it.
 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -40,7 +40,7 @@
 #define G4ParallelImportanceManager_hh G4ParallelImportanceManager_hh 
 
 #include "globals.hh"
-#include "G4VImportanceScoreConstructor.hh"
+#include "G4VSampler.hh"
 
 class G4ParallelManager;
 class G4VIStore;
@@ -48,7 +48,7 @@ class G4VImportanceAlgorithm;
 class G4VImportanceSampler;
 class G4ParallelImportanceProcess;
 
-class G4ParallelImportanceManager : public G4VImportanceScoreConstructor
+class G4ParallelImportanceManager : public G4VSampler
 {
 
 public:  // with description
