@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.hh,v 1.7 2003-10-31 14:35:50 gcosmo Exp $
+// $Id: G4EqMagElectricField.hh,v 1.8 2003-11-05 12:46:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,15 +39,15 @@
 #ifndef G4EQMAGELECTRICFIELD_hh
 #define G4EQMAGELECTRICFIELD_hh
 
-#include "G4Mag_EqRhs.hh"
+#include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
-class G4EqMagElectricField : public G4Mag_EqRhs
+class G4EqMagElectricField : public G4EquationOfMotion
 {
   public:  // with description
 
     G4EqMagElectricField(G4ElectroMagneticField *emField )
-      : G4Mag_EqRhs( emField ) {;}
+      : G4EquationOfMotion( emField ) {;}
 
     ~G4EqMagElectricField() {;} 
 
