@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.7 2001-10-25 16:54:19 pia Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.8 2001-11-15 11:33:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -38,7 +38,7 @@
 #include "G4BremsstrahlungParameters.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
-#include "G4LogLogInterpolation.hh"
+#include "G4SemiLogInterpolation.hh"
 #include "G4Material.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
@@ -73,6 +73,7 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
 
 G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
 {
+  if(energy > 10.0*MeV) return -1.0;
   G4double value = 0.;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = paramA.find(Z);
@@ -83,12 +84,14 @@ G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
     G4String ex = "G4BremsstrahlungParameters::ParameterA - wrong Z=" + Z; 
     G4Exception(ex);
   }
+  if(value < -1.) value = -1.;
   return value;
 }
 
 
 G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
 {
+  if(energy > 10.0*MeV) return 0.75;
   if (Z < zMin || Z > zMax) {
     G4String ex = "G4BremsstrahlungParameters::ParameterB - wrong Z=" + Z; 
     G4Exception(ex);
@@ -96,8 +99,9 @@ G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
 
   G4double b0  = paramB0[Z-1];
   G4double b1  = paramB1[Z-1];
-  G4double b   = b0 + b1*log10(energy);
-  if(b < 0. || energy < 10.*eV) b = 0.;
+  G4double b   = b0 + b1*log10(energy/MeV);
+  if(b > 0.75) b = 0.75;
+  //  if(b < 0. || energy < 10.*eV) b = 0.;
 
   return b;
 }
@@ -114,6 +118,11 @@ void G4BremsstrahlungParameters::LoadData()
      G4Exception("G4CrossSectionHandler: no MaterialTable found)");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
+
+  G4double x = 1.e-9;
+  for (G4int mm=0; mm<100; mm++) {
+    paramC.push_back(x);
+  }
   
   for (G4int m=0; m<nMaterials; m++) {
 
@@ -124,12 +133,13 @@ void G4BremsstrahlungParameters::LoadData()
     for (G4int iEl=0; iEl<nElements; iEl++) {
       G4Element* element = (*elementVector)[iEl];
       G4double Z = element->GetZ();
+      G4int iz = (G4int)Z;
+      if(iz < 100)
+              paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
       if (!(activeZ.contains(Z)) && Z > 0 && Z < zMax) {
 	 activeZ.push_back(Z);
       }
     }
-    G4double x = 1.e-9;
-    paramC.push_back(x);
   }
 
   // Read parameters A
@@ -180,7 +190,7 @@ void G4BremsstrahlungParameters::LoadData()
     
 	// fill map
         if (z == (G4int)activeZ[i]) {
-	  G4VDataSetAlgorithm* interpolation  = new G4LogLogInterpolation();
+	  G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
           G4VEMDataSet* dataSet = 
                     new G4EMDataSet(z, energies, data, interpolation, 1., 1.);
           paramA[z] = dataSet;
@@ -197,7 +207,7 @@ void G4BremsstrahlungParameters::LoadData()
       energies   = new G4DataVector(); 
       data       = new G4DataVector(); 
       
-    } else {
+    } else if(e > 0) {
 
       energies->push_back(e);
       data->push_back(a);

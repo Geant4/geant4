@@ -93,8 +93,6 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -224,8 +222,6 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
            << aParticleType.GetParticleName() << G4endl;
   }
   
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&aParticleType);
 
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();

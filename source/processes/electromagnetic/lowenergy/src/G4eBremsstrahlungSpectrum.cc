@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.1 2001-10-10 12:03:02 pia Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.2 2001-11-15 11:33:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,7 +35,8 @@
 // Creation date: 29 September 2001
 //
 // Modifications: 
-// 10 Oct 2001  MGP  Revision to improve code quality and consistency with design
+// 10.10.01  MGP  Revision to improve code quality and consistency with design
+// 15.11.01  VI   Update spectrum model Bethe-Haitler spectrum at high energy
 //
 // -------------------------------------------------------------------
 
@@ -67,13 +68,18 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
-  if(tmin >= tm) return 0.0;
+  if(t0 >= tm) return 0.0;
 
   G4double a  = theBRparam->ParameterA(Z, e);
-  G4double b  = theBRparam->ParameterB(Z, e);
+  G4double b  = 0.5*theBRparam->ParameterB(Z, e);
 
-  G4double x  = a*log(tm/t0) + b*(tm - t0);
-  G4double y  = a*log(e/lowestE)   + b*(e - lowestE);
+  t0 /= e;
+  tm /= e;
+ 
+  G4double z = lowestE/e;
+
+  G4double x  = log(tm/t0) + (tm - t0)*(a + b*(tm + t0));
+  G4double y  = log(1./z)  + (1. - z) *(a + b*(1. + z));     
 
   if(y > 0.0) x /= y;
   else        x  = 0.0;
@@ -92,13 +98,25 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
-  if(tmin >= tm) return 0.0;
+  if(t0 >= tm) return 0.0;
 
   G4double a  = theBRparam->ParameterA(Z, e);
   G4double b  = theBRparam->ParameterB(Z, e);
+  G4double c  = theBRparam->ParameterC(Z);
 
-  G4double x  = (tm - t0)*(a + 0.5*b*(tm + t0));
-  G4double y  = a*log(e/lowestE)   + b*(e - lowestE);
+  t0 /= e;
+  tm /= e;
+
+  G4double z = lowestE/e;
+
+  G4double x  = (tm - t0)*(1.0 + 0.5*a*(tm + t0) 
+                                 + b*(tm*tm +t0*tm + t0*t0)/3.0 );
+  G4double z2 = z*z/c;
+  x += (1. + z2)*(1. + a*z + b*z*z)*0.5*c*(z2 - log(1. + z2))/z2;
+
+  x *= e; 
+
+  G4double y  = log(1./z)  + (1. - z) *(a + b*(1. + z));     
 
   if(y > 0.0) x /= y;
   else        x  = 0.0;
@@ -117,16 +135,17 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
-  if(tmin >= tm) return 0.0;
+  if(t0 >= tm) return 0.0;
 
   G4double a  = theBRparam->ParameterA(Z, e);
   G4double b  = theBRparam->ParameterB(Z, e);
 
-  // Sample gamma energy
-  // The emitted gamma energy is from EEDL data fitted with A/E+B function.
-  // Original formula A/E+B+C*E and sampling methods are reported by 
-  // J.Stepanek formula has been modified by A. Forti and S. Giani. 
-  G4double amaj = a + b*tm;
+  t0 /= e;
+  tm /= e;
+
+  G4double amaj = G4std::max(1. + a*t0 + b*t0*t0, 1. + a*tm + b*tm*tm);
+  G4double t    = -a*0.5/b;
+  if(t > t0 && t < tm) amaj = G4std::max(amaj, 1.0 + 0.5*t*a);
   G4double amax = log(tm);
   G4double amin = log(t0);
   G4double tgam, q;
@@ -134,7 +153,9 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
     G4double x = amin + G4UniformRand()*(amax - amin);
     tgam = exp(x);
     q = amaj * G4UniformRand();
-  } while (q >= a + b*tgam);
+  } while (q > 1. + a*tgam + b*tgam*tgam);
+
+  tgam *= e;
 
   return tgam; 
 }
