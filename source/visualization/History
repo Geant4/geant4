@@ -1,4 +1,4 @@
-$Id: History,v 1.263 2004-11-18 15:20:14 johna Exp $
+$Id: History,v 1.264 2004-11-26 20:44:26 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,11 +24,18 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+26th November 2004 Joseph Perl (vis-V06-02-06)
+- Tagged for release 7.0.
+- Made from vis-V06-02-05
+- plus opengl-V06-02-07 by John Allison
+- plus vis-HepRep-V06-02-02 by Mark Donszelmann
+- plus openinventor-V07-00-00 by Guy Barrand
+
 18th November 2004  John Allison
 - Included opengl-V06-02-07.
 
 11th November 2004  John Allison  (vis-V06-02-05)
-- Made use use of smart method GetPolyhedron for solids.  This greatly
+- Made use of smart method GetPolyhedron for solids.  This greatly
   speeds 2nd and subsequent drawings when kernel access is required.
 - Rationalised use of EstablishSpecials: functionality moved to base class.
 - Removed use of obsolete G4Polymarker::line.
