@@ -42,7 +42,7 @@ OctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double no
 	      (*current)[direction] = new MiddleNode( current );
             } else
 	      {
-                (*current)[direction] = new TerminalNode( current );
+                (*current)[direction] = new DicomOctreeTerminalNode( current );
 	      }
         }
 
@@ -107,7 +107,7 @@ void DicomOctree::CountRecursive( OctreeNode* pNode,
 G4int DicomOctree::CountMemory( G4int rMiddle, G4int rTerminal )
 {
   CountRecursive( mRoot, rMiddle, rTerminal );
-  G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
+  G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(DicomOctreeTerminalNode);
   return total;
 }
 

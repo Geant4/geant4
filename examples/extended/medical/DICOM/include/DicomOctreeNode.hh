@@ -1,5 +1,5 @@
-#ifndef OCTREE_NODE_H
-#define OCTREE_NODE_H
+#ifndef DICOMOCTREENODE_H
+#define DICOMOCTREENODE_H
 #include "globals.hh"
 
 class Octree;

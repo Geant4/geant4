@@ -20,7 +20,7 @@
 
 class DicomOctreeNode;
 class MiddleNode;
-class TerminalNode;
+class DicomTerminalNode;
 class OctreeNode;
 
 class DicomOctree

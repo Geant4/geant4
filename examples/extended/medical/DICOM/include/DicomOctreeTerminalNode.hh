@@ -2,12 +2,12 @@
 #define DicomOctreeTerminalNode_h
 
 class Octree;
-class TerminalNode : public OctreeNode
+class  DicomOctreeTerminalNode : public OctreeNode
 {
 public:
 
-  TerminalNode(OctreeNode* pParent );
-  ~TerminalNode();
+   DicomOctreeTerminalNode(OctreeNode* pParent );
+  ~ DicomOctreeTerminalNode();
 
 public:
   OctreeNode*& operator []( G4int index );

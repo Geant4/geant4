@@ -2,24 +2,24 @@
 #include "DicomOctreeTerminalNode.hh"
 
 
-OctreeNode* TerminalNode::mNull = 0;
-TerminalNode::TerminalNode( OctreeNode* pParent) : OctreeNode( pParent )
+OctreeNode* DicomOctreeTerminalNode::mNull = 0;
+DicomOctreeTerminalNode::DicomOctreeTerminalNode( OctreeNode* pParent) : OctreeNode( pParent )
 {
 
 }
-TerminalNode::~TerminalNode()
+DicomOctreeTerminalNode::~DicomOctreeTerminalNode()
 {
 
 }
 
-OctreeNode*& TerminalNode::operator []( G4int )
+OctreeNode*& DicomOctreeTerminalNode::operator []( G4int )
 {
   return mNull;
 }
 
-G4int TerminalNode::MemSize()
+G4int DicomOctreeTerminalNode::MemSize()
 {
-  return sizeof(TerminalNode);
+  return sizeof(DicomOctreeTerminalNode);
 }
 
 
