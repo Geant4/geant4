@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.23 2004-11-29 07:51:32 grichine Exp $
+// $Id: G4Para.cc,v 1.24 2004-12-01 11:16:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -29,11 +29,14 @@
 // Implementation for G4Para class
 //
 // History:
-// 21.03.95 P.Kent: Modified for `tolerant' geom
-// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
-// 18.11.99 V.Grichine: kUndef was added to ESide
+//
+// 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and in
+//                      constructor with vertices
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
-// --------------------------------------------------------------------
+// 18.11.99 V.Grichine: kUndef was added to ESide
+// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
+// 21.03.95 P.Kent: Modified for `tolerant' geom
+//
 
 #include "G4Para.hh"
 
@@ -62,14 +65,14 @@ enum ENSide {kNZ,kNX,kNY};
 void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz, 
                                G4double pAlpha, G4double pTheta, G4double pPhi )
 {
-  if (pDx>0&&pDy>0&&pDz>0)
+  if ( pDx > 0 && pDy > 0 && pDz > 0 )
   {
-    fDx=pDx;
-    fDy=pDy;
-    fDz=pDz;
-    fTalpha=tan(pAlpha);
-    fTthetaCphi=tan(pTheta)*cos(pPhi);
-    fTthetaSphi=tan(pTheta)*sin(pPhi);
+    fDx         = pDx;
+    fDy         = pDy;
+    fDz         = pDz;
+    fTalpha     = tan(pAlpha);
+    fTthetaCphi = tan(pTheta)*cos(pPhi);
+    fTthetaSphi = tan(pTheta)*sin(pPhi);
   }
   else
   {
@@ -117,11 +120,12 @@ G4Para::G4Para( const G4String& pName,
 {
   if ( pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() &&
        pt[0].z()==pt[3].z() && pt[4].z()>0 && pt[4].z()==pt[5].z() &&
-       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z() &&
-       (pt[0].z()+pt[4].z())==0 &&
-       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y() &&
-       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y() &&
-       (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0 )
+       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()           &&
+       (pt[0].z()+pt[4].z())==0                               &&
+       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()           &&
+       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()           &&
+       ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 && 
+       ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0)
   {
     fDz = (pt[7]).z() ;
 
@@ -494,6 +498,129 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   }
 
 #else
+
+  // New code for particle on surface including edges and corners with specific
+  // normals
+
+  G4double delta    = 0.5*kCarTolerance;
+
+            tntheta = fTthetaCphi*calpha + fTthetaSphi*salpha;
+          cosntheta =  1/sqrt(1+tntheta*tntheta);
+  G4ThreeVector nX  = G4ThreeVector( calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
+  G4ThreeVector nmX = -nX;
+
+              ycomp =  1/sqrt(1+fTthetaSphi*fTthetaSphi);
+  G4ThreeVector nY  = G4ThreeVector( 0, ycomp,-fTthetaSphi*ycomp);
+  G4ThreeVector nmY = -nY;
+  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+  G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
+
+  if (distx <= delta)         // on X/mX surface and around
+  {
+    if ( xshift >= 0.)         // on X surface
+    {
+      if (disty <= delta)
+      {
+        if (distz <= delta)   // corners around X surface
+        {
+          if ( newpy >= 0.)
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
+            else              norm = ( nX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
+            else              norm = ( nX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on XY edges
+	{
+          if ( newpy >= 0.)   norm = ( nX + nY  ).unit();
+          else                norm = ( nX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on XZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
+          else                norm = ( nX + nmZ ).unit();
+        }
+        else                  norm = nX;        
+      }
+    }
+    else                      // on mX surface
+    {
+      if (disty <= delta)
+      {
+        if (distz <= delta)   // corners around mX surface
+        {
+          if ( newpy >= 0.)
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
+            else              norm = ( nmX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
+            else              norm = ( nmX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on mXY edges
+	{
+          if ( newpy >= 0.)   norm = ( nmX + nY  ).unit();
+          else                norm = ( nmX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on mXZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
+          else                norm = ( nmX + nmZ ).unit();
+        }
+        else                  norm = nmX;        
+      }
+    }
+  }
+  else
+  {
+    if (disty <= delta)
+    {
+      if (distz <= delta)     // on YZ edges
+      {
+        if ( newpy >= 0.)
+	{
+          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
+          else                norm = ( nY + nmZ ).unit(); 
+	}
+        else
+	{
+            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
+            else              norm = ( nmY + nmZ ).unit(); 
+	}
+      }
+      else                    // on Y/mY surfaces
+      {
+        if ( newpy >= 0.)     norm = nY;
+        else                  norm = nmY;
+      } 
+    }
+    else                      // on Z/mZ surfaces
+    {
+      if (distz <= delta) 
+      {
+          if ( p.z() >= 0.)   norm = nZ;
+          else                norm = nmZ; 
+      }
+      else                    // is not on surface !?
+      {
+        G4Exception("G4Para::SurfaceNormal(p)", "Notification", JustWarning, 
+                    "Point p is not on surface !?" ); 
+      }
+    }      
+  }
 
 #endif
 
