@@ -3,9 +3,9 @@
 
 #include "newvector.hh"
 #include "globals.hh"
+#include "g4std/iostream"
 
 class String;
-class G4std::ostream;
 class QuantumState;
 class QuantumProjections;
 class ParticleType;

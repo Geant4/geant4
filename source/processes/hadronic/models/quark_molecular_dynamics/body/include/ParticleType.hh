@@ -10,9 +10,8 @@
 #include "DistributionFunction.hh"
 #include "undef.hh"
 #include "Pattern.hh"
+#include "g4std/iostream"
 
-class G4std::ostream;
-class G4std::istream;
 class decayMode;
 class ParticleDecayModes;
 class ParticleProperties;

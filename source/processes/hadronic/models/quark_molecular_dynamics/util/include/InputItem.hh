@@ -1,8 +1,8 @@
 #ifndef _InputItem_H
 #define _InputItem_H
 
-class G4std::istream;
-class G4std::ostream;
+#include "g4std/iostream"
+
 class String;                     
 class Boolean;
 

@@ -4,8 +4,7 @@
 #include "Definitions.hh"
 #include "Boolean.h"
 #include "Error.hh"
-
-class G4std::ostream;
+#include "g4std/iostream"
 
 class FallibleBase {
   public:

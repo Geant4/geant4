@@ -11,8 +11,6 @@
 #include "Fallible.hh"
 #include "String.hh"
 
-class G4std::istream;
-
 template<class T>
 class InputVariable
   : public InputItem,

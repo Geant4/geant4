@@ -2,8 +2,7 @@
 #define __MULTIINDEX__
 
 #include "globals.hh"
-
-class G4std::ostream;
+#include "g4std/iostream"
 
 class MultiIndex
 {

@@ -11,9 +11,7 @@ See README file for further details.
 #ifndef BOOLEANH
 #define BOOLEANH
 
-class G4std::ostream;
-class G4std::istream;
-
+#include "g4std/iostream"
 
 class Boolean {
   // I/O

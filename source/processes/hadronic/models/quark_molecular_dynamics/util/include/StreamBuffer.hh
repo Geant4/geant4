@@ -2,9 +2,7 @@
 #define __STREAMBUFFER__
 
 #include "String.hh"
-
-class G4std::istream;
-class G4std::ostream;
+#include "g4std/iostream"
 
 class StreamBuffer
 {

@@ -4,9 +4,7 @@
 #include "globals.hh"
 #include "array.hh"
 #include "g4std/strstream"
-
-class G4std::ostream;
-class G4std::istream;
+#include "g4std/iostream"
 
 class String 
 {

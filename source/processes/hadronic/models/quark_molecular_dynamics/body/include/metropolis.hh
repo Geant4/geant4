@@ -1,10 +1,10 @@
 #ifndef __METROPOLIS__
 #define __METROPOLIS__
 
+#include "g4std/iostream"
 #include "newvector.hh"
 
 class Geometry;
-class G4std::ostream;
 
 class Metropolis
 {

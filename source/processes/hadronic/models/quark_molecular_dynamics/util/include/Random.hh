@@ -2,8 +2,7 @@
 #define __RANDOM__
 
 #include <stdlib.h>
-
-class G4std::ostream;
+#include "g4std/iostream"
 
 //<etymology>
 // rand_gen is a contraction for <b>rand</b>om number <b>gen</b>erator.

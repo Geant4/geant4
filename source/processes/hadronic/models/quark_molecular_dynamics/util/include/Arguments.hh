@@ -8,9 +8,9 @@
 #include "DList.hh"
 #include "Boolean.h"
 #include "Fallible.hh"
+#include "g4std/iostream"
 
 class Arguments;
-class G4std::ostream;
 
 class ArgumentEntryBase
 {
