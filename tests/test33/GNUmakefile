@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-10-29 15:43:02 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2002-11-11 19:29:05 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -12,7 +12,6 @@ ifndef G4INSTALL
 endif
 
 CPPFLAGS  += -I$(G4INSTALL)/tests/tools/include
-EXTRALIBS += $(LIB_PATH)$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool -lXmu -lXm
 EXTRA_LINK_DEPENDENCIES := \
   $(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a 
 
