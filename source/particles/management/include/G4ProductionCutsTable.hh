@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.6 2003-03-17 00:51:03 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.7 2003-04-10 02:51:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,6 @@
 #ifndef G4ProductionCutsTable_h 
 #define G4ProductionCutsTable_h 1
 
-class G4Region;
 class G4RegionStore;
 class G4VRangeToEnergyConverter;
 class G4LogicalVolume;
@@ -46,6 +45,7 @@ class G4ProductionCuts;
 #include "G4ios.hh"
 #include "g4std/vector"
 #include "G4MaterialCutsCouple.hh"
+#include "G4Region.hh"
 
 
 class G4ProductionCutsTable  
@@ -248,6 +248,57 @@ inline
 inline
  G4ProductionCuts* G4ProductionCutsTable::GetDefaultProductionCuts() const
 { return defaultProductionCuts; }
+
+inline
+bool G4ProductionCutsTable::IsCoupleUsedInTheRegion(
+                                 const G4MaterialCutsCouple* aCouple,
+                                 const G4Region* aRegion) const
+{
+  G4ProductionCuts* fProductionCut = aRegion->GetProductionCuts();
+  G4std::vector<G4Material*>::const_iterator mItr = aRegion->GetMaterialIterator();
+  size_t nMaterial = aRegion->GetNumberOfMaterials();
+  for(size_t iMate=0;iMate<nMaterial;iMate++, mItr++){
+    if(aCouple->GetMaterial()==(*mItr) &&
+       aCouple->GetProductionCuts()==fProductionCut){
+      return true;
+    }
+  }
+  return false;
+}
+
+inline
+const G4MaterialCutsCouple* 
+     G4ProductionCutsTable::GetMaterialCutsCouple(const G4Material* aMat,
+                           const G4ProductionCuts* aCut) const
+{ 
+  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
+  { 
+    if((*cItr)->GetMaterial()!=aMat) continue;
+    if((*cItr)->GetProductionCuts()==aCut) return (*cItr);
+  }
+  return 0;
+}
+
+inline
+G4int G4ProductionCutsTable::GetCoupleIndex(const G4MaterialCutsCouple* aCouple) const
+{ 
+  G4int idx = 0;
+  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
+  {
+    if((*cItr)==aCouple) return idx;
+    idx++;
+  }
+  return -1;
+}
+
+inline
+G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
+                           const G4ProductionCuts* aCut) const
+{
+  const G4MaterialCutsCouple* aCouple = GetMaterialCutsCouple(aMat,aCut);
+  return GetCoupleIndex(aCouple);
+}
+
 
 #endif
 

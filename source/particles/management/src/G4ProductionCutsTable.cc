@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.12 2003-04-10 00:58:49 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.13 2003-04-10 02:51:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,16 +34,11 @@
 #include "G4ProductionCuts.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4RToEConvForElectron.hh"
 #include "G4RToEConvForGamma.hh"
 #include "G4RToEConvForPositron.hh"
-//#include "G4RToEConvForProton.hh"
-//#include "G4RToEConvForAntiProton.hh"
-//#include "G4RToEConvForNeutron.hh"
-//#include "G4RToEConvForAntiNeutron.hh"
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
@@ -106,14 +101,6 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     { converters[1] = new G4RToEConvForElectron(); }
     if(G4ParticleTable::GetParticleTable()->FindParticle("e+"))
     { converters[2] = new G4RToEConvForPositron(); }
-    //if(G4ParticleTable::GetParticleTable()->FindParticle("proton"))
-    //{ converters[3] = new G4RToEConvForProton(); }
-    //if(G4ParticleTable::GetParticleTable()->FindParticle("anti_proton"))
-    //{ converters[4] = new G4RToEConvForAntiProton(); }
-    //if(G4ParticleTable::GetParticleTable()->FindParticle("neutron"))
-    //{ converters[5] = new G4RToEConvForNeutron(); }
-    //if(G4ParticleTable::GetParticleTable()->FindParticle("anti_neutron"))
-    //{ converters[6] = new G4RToEConvForAntiNeutron(); }
     firstUse = false;
   }
 
@@ -134,7 +121,7 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     // The following part of the code should be removed once all EM processes
     // become "Region-aware"
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    ////////////////////G4Region* theWorldRegion = *(fG4RegionStore->begin());
+    //G4Region* theWorldRegion = *(fG4RegionStore->begin());
     //if((*rItr)==theWorldRegion)
     //{
     //  mItr = G4Material::GetMaterialTable()->begin();
@@ -321,52 +308,6 @@ void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,G4MaterialCuts
     G4LogicalVolume* daughterLVol = aLV->GetDaughter(i)->GetLogicalVolume();
     ScanAndSetCouple(daughterLVol,aCouple,aRegion);
   }
-}
-
-bool G4ProductionCutsTable::IsCoupleUsedInTheRegion(
-				 const G4MaterialCutsCouple* aCouple,
-				 const G4Region* aRegion) const
-{
-  G4ProductionCuts* fProductionCut = aRegion->GetProductionCuts();
-  G4std::vector<G4Material*>::const_iterator mItr = aRegion->GetMaterialIterator();
-  size_t nMaterial = aRegion->GetNumberOfMaterials();
-  for(size_t iMate=0;iMate<nMaterial;iMate++, mItr++){
-    if(aCouple->GetMaterial()==(*mItr) &&
-       aCouple->GetProductionCuts()==fProductionCut){
-      return true;
-    }
-  }
-  return false; 
-}
-
-const G4MaterialCutsCouple* 
-     G4ProductionCutsTable::GetMaterialCutsCouple(const G4Material* aMat, 
-                           const G4ProductionCuts* aCut) const
-{
-  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
-  {
-    if((*cItr)->GetMaterial()!=aMat) continue;
-    if((*cItr)->GetProductionCuts()==aCut) return (*cItr);
-  }
-  return 0;
-}
-
-G4int G4ProductionCutsTable::GetCoupleIndex(const G4MaterialCutsCouple* aCouple) const
-{
-  G4int idx = 0;
-  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
-  {
-    if((*cItr)==aCouple) return idx;
-    idx++;
-  }
-  return -1;
-}
-
-G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
-                           const G4ProductionCuts* aCut) const
-{
-  const G4MaterialCutsCouple* aCouple = GetMaterialCutsCouple(aMat,aCut);
-  return GetCoupleIndex(aCouple);
 }
 
 void G4ProductionCutsTable::DumpCouples() const

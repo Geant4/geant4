@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.hh,v 1.3 2003-01-14 22:26:49 asaim Exp $
+// $Id: G4MaterialCutsCouple.hh,v 1.4 2003-04-10 02:51:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "G4ios.hh"
 
 class G4Material;
-class G4ProductionCuts;
+#include "G4ProductionCuts.hh"
 
 class G4MaterialCutsCouple  
 {
@@ -150,20 +150,21 @@ inline
   return fMaterial;
 }
 
-///inline
-/// G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
-///{
-///  G4bool isCutModified = false;
-///  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
-///  return (isMaterialModified || isCutModified) && isUsedInGeometry;
-///}
-///
-///inline
-///  void   G4MaterialCutsCouple::PhysicsTableUpdated()
-///{
-///  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
-///  if(isUsedInGeometry) isMaterialModified = false;
-///}
+inline
+G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
+{
+  G4bool isCutModified = false;
+  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
+  return (isMaterialModified || isCutModified);
+}
+
+inline
+void   G4MaterialCutsCouple::PhysicsTableUpdated()
+{
+  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
+  isMaterialModified = false;
+}
+
 
 #endif
 

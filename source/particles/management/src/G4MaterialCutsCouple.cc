@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc,v 1.3 2003-01-14 22:26:50 asaim Exp $
+// $Id: G4MaterialCutsCouple.cc,v 1.4 2003-04-10 02:51:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,20 +76,5 @@ G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCoupl
   isUsedInGeometry = right.isUsedInGeometry;
 
   return *this;
-}
-
-G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
-{
-  G4bool isCutModified = false;
-  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
-//  return (isMaterialModified || isCutModified) && isUsedInGeometry;
-  return (isMaterialModified || isCutModified);
-}
-
-void   G4MaterialCutsCouple::PhysicsTableUpdated()
-{
-  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
-//  if(isUsedInGeometry) isMaterialModified = false;
-  isMaterialModified = false;
 }
 

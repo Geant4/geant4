@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.5 2003-04-02 21:56:47 asaim Exp $
+// $Id: G4ProductionCuts.cc,v 1.6 2003-04-10 02:51:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,10 @@
 
 #include "G4ProductionCuts.hh"
 #include "g4std/iomanip"
+
+const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
+const G4ParticleDefinition* G4ProductionCuts::electDef = 0;
+const G4ParticleDefinition* G4ProductionCuts::positDef = 0;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -75,96 +79,4 @@ G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 {
   return (this !=  &right);
 }
-
-
-G4int  G4ProductionCuts::GetIndex(const G4String& name)
-{
-  G4int index;
-  if       ( name == "gamma" )        { index =  0; }
-  else  if ( name == "e-" )           { index =  1; }
-  else  if ( name == "e+" )           { index =  2; }
-//  else  if ( name == "proton" )       { index =  3; }
-//  else  if ( name == "anti_proton" )  { index =  4; }
-//  else  if ( name == "neutron" )      { index =  5; }
-//  else  if ( name == "anti_neutron" ) { index =  6; }
-  else                                { index = -1; }
-
-  return index;
-}
-
-G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
-{ return GetIndex(ptcl->GetParticleName()); }
-  
-void  G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
-{
-  if (index<0) {
-    for(G4int i = 0; i < NumberOfG4CutIndex; i++) {
-      fRangeCuts[i] = cut;
-    }
-    isModified = true;
-
-  } else if (index < NumberOfG4CutIndex) {
-    fRangeCuts[index] = cut;
-    isModified = true;
-  }     
-}
-
-  
-void  G4ProductionCuts::SetProductionCut(G4double cut, G4ParticleDefinition* ptcl)
-{
-  G4int idx = -1;
-  if(ptcl) idx = GetIndex(ptcl->GetParticleName());
-  if(idx>=0) SetProductionCut(cut,idx);
-}
-
-
-G4double  G4ProductionCuts::GetProductionCut(G4int index) const
-{
-  G4double cut=-1.0;
-  if ( (index>=0) && (index<NumberOfG4CutIndex) ) {
-    cut = fRangeCuts[index]; 
-  }
-  return cut;
-}
-
-
-G4double  G4ProductionCuts::GetProductionCut(const G4String& name) const
-{
-  return GetProductionCut(GetIndex(name)); 
-}
-
-
-void  G4ProductionCuts::SetProductionCuts(G4std::vector<G4double>& cut)
-{
-  for(G4int i = 0; (i<NumberOfG4CutIndex); i++) {
-    fRangeCuts[i] = cut[i];
-  }
-  isModified = true;
-}
-
-
-const G4std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
-{
-  return fRangeCuts;
-}
-
-
-
-G4bool  G4ProductionCuts::IsModified() const
-{
-  return isModified;
-}
-
-
-void   G4ProductionCuts::PhysicsTableUpdated()
-{
-  isModified = false;
-}
-
-
-
-
-
-
-
 
