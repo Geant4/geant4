@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.2 2000-03-30 16:01:41 stesting Exp $
+// $Id: HepPolyhedron.h,v 1.3 2000-04-04 13:35:00 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,7 +122,10 @@
 //     (fpView -> GetViewParameters ().GetNoOfSides ());
 //    pPolyhedron = solid.CreatePolyhedron ();
 //    G4Polyhedron::ResetNumberOfRotationSteps ();
-
+//
+// 19.03.00 E.Chernyaev
+// - added boolean operations (add, subtract, intersect) on polyhedra;
+//
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
@@ -279,6 +282,11 @@ class HepPolyhedron {
 
   // Get normal of unit length of the next face 
   HepBoolean GetNextUnitNormal(HepNormal3D &normal) const;
+
+  // Boolean operations 
+  HepPolyhedron add(const HepPolyhedron &p) const;
+  HepPolyhedron subtract(const HepPolyhedron &p) const;
+  HepPolyhedron intersect(const HepPolyhedron &p) const;
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(int n);

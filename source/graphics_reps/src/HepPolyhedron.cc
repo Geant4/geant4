@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.cc,v 1.2 2000-02-22 16:41:47 johna Exp $
+// $Id: HepPolyhedron.cc,v 1.3 2000-04-04 13:35:30 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,10 @@
 //
 // 01.06.97 E.Chernyaev
 // - modified RotateAroundZ, added SetSideFacets
+//
+// 19.03.00 E.Chernyaev
+// - implemented boolean operations (add, subtract, intersect) on polyhedra;
+//
   
 #include "HepPolyhedron.h"
 
@@ -1598,4 +1602,44 @@ int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
  *                                                                     *
  ***********************************************************************/
 
-//#include "processor.cc"
+#include "BooleanProcessor.src"
+static BooleanProcessor processor;
+
+HepPolyhedron HepPolyhedron::add(const HepPolyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::add                          Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "union" of two polyhedra                          *
+ *                                                                     *
+ ***********************************************************************/
+{
+  return processor.execute(OP_UNION, *this, p);
+}
+
+HepPolyhedron HepPolyhedron::intersect(const HepPolyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::intersect                    Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "intersection" of two polyhedra                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  return processor.execute(OP_INTERSECTION, *this, p);
+}
+
+HepPolyhedron HepPolyhedron::subtract(const HepPolyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::add                          Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "subtraction" of "p" from "this"                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  return processor.execute(OP_SUBTRACTION, *this, p);
+}
