@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.8 2003-11-10 14:41:14 gcosmo Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.9 2004-11-25 23:35:16 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -85,10 +85,10 @@ void ExN05EMShowerModel::DoIt(const G4FastTrack& fastTrack,
 {
   G4cout << "ExN05EMShowerModel::DoIt" << G4endl;
 
-  // Kill the parawmeterised particle:
+  // Kill the parameterised particle:
   fastStep.KillPrimaryTrack();
-  fastStep.SetPrimaryTrackPathLength(0.0);
-  fastStep.SetTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
+  fastStep.ProposePrimaryTrackPathLength(0.0);
+  fastStep.ProposeTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
 
   // split into "energy spots" energy according to the shower shape:
   Explode(fastTrack);
