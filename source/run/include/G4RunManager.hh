@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.17 2001-07-13 15:57:03 gcosmo Exp $
+// $Id: G4RunManager.hh,v 1.18 2001-07-19 00:25:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -264,6 +264,13 @@ class G4RunManager
     inline const G4UserSteppingAction* GetUserSteppingAction() const
     { return userSteppingAction; }
     //  These methods returns respective user initialization and action classes.
+     
+    inline void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
+    { eventManager->SetNumberOfAdditionalWaitingStacks(iAdd); }
+      //  Set the number of additional (optional) waiting stacks.
+      // This method must be invoked at PreInit, Init or Idle states.
+      // Once the user set the number of additional waiting stacks,
+      // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
 
   public:
     inline void SetRandomNumberStore(G4int i)
