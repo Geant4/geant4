@@ -6,7 +6,7 @@
 G4Fissioner::G4Fissioner()
   : verboseLevel(2) {
   
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::G4Fissioner" << G4endl;
   }
 }
@@ -14,13 +14,13 @@ if (verboseLevel > 3) {
 G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 				       G4InuclParticle* target) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::collide" << G4endl;
   }
 
   const G4double one_third = 1.0/3.0;
   const G4double two_thirds = 2.0/3.0;
-  const G4int itry_max = 1000;
+  //  const G4int itry_max = 1000;
 
   G4CollisionOutput output;
 
@@ -173,12 +173,12 @@ if (verboseLevel > 3) {
 }
 
 G4double G4Fissioner::getC2(G4double A1, 
-			  G4double A2, 
-			  G4double X3, 
-			  G4double X4, 
-			  G4double R12) const {
+			    G4double A2, 
+			    G4double X3, 
+			    G4double X4, 
+			    G4double R12) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::getC2" << G4endl;
   }
 
@@ -189,13 +189,13 @@ if (verboseLevel > 3) {
 }
 
 G4double G4Fissioner::getZopt(G4double A1, 
-			    G4double A2, 
-			    G4double ZT, 
-			    G4double X3, 
-			    G4double X4, 
-			    G4double R12) const {
+			      G4double A2, 
+			      G4double ZT, 
+			      G4double X3, 
+			      G4double X4, 
+			      G4double R12) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::getZopt" << G4endl;
   }
 
@@ -217,13 +217,13 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 					vector<G4double>& BET1, 
 					G4double& R12) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::potentialMinimization" << G4endl;
   }
 
   const G4double huge = 2.0e35;
   const G4double one_third = 1.0 / 3.0;
-  const G4double two_thirds = 2.0 / 3.0;
+  //  const G4double two_thirds = 2.0 / 3.0;
   const G4int itry_max = 2000;
   const G4double DSOL1 = 1.0e-6;
   const G4double DS1 = 0.3;
@@ -389,13 +389,3 @@ if (verboseLevel > 3) {
   VP = VC + ED[0] + ED[1];
 
 }
-  
-
-
-
-
-
-
-
-
-
