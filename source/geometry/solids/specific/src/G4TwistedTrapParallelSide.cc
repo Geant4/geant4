@@ -758,14 +758,14 @@ G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
    G4int areacode = sInside;
    
    if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-      G4int yaxis = 0;
+      G4int xaxis = 0;
       G4int zaxis = 1;
       
       if (withTol) {
 
         G4bool isoutside   = false;
         
-        // test boundary of yaxis
+        // test boundary of xaxis
 
          if (yprime < fXAxisMin + ctol) {
             areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 

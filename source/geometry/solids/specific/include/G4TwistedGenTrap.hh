@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedGenTrap.hh,v 1.1 2005-03-02 15:40:37 link Exp $
+// $Id: G4TwistedGenTrap.hh,v 1.2 2005-03-07 13:24:06 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -62,11 +62,10 @@ class G4TwistedGenTrap: public G4VSolid
 		   G4double      pDy1,        // half y length at -pDz
 		   G4double      pDx1,        // half x length at -pDz,-pDy
 		   G4double      pDx2,        // half x length at -pDz,+pDy
-		   G4double      pAlph1,      // tilt angle at -pDz
 		   G4double      pDy2,        // half y length at +pDz
 		   G4double      pDx3,        // half x length at +pDz,-pDy
 		   G4double      pDx4,        // half x length at +pDz,+pDy
-		   G4double      pAlph2      // tilt angle at +pDz
+		   G4double      pAlph        // tilt angle at +pDz
 		   );
   
   virtual ~G4TwistedGenTrap();
@@ -120,7 +119,11 @@ class G4TwistedGenTrap: public G4VSolid
   inline G4double GetPhi () const { return fPhi ; }
   inline G4double GetTheta () const { return fTheta ; }
   inline G4double GetAlpha () const { return fAlph ; }
-  
+
+  inline G4double xAxisMin(G4double phi) const ;
+  inline G4double xAxisMax(G4double phi) const ;
+  inline G4double yAxisMax(G4double phi) const ;
+
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
 
@@ -157,6 +160,9 @@ class G4TwistedGenTrap: public G4VSolid
   
   G4double fAlph ;
   G4double fTAlph ;    // tan(fAlph)
+
+  G4double fdeltaX ;
+  G4double fdeltaY ;
     
   G4double fPhiTwist;   // twist angle ( dphi in surface equation)
 
@@ -256,6 +262,29 @@ G4double G4TwistedGenTrap::GetCubicVolume()
   else   fCubicVolume = 1 ;
   return fCubicVolume;
 }
+
+
+inline 
+G4double G4TwistedGenTrap::xAxisMin(G4double phi) const
+{
+  return ( - (2*fDx2*(fPhiTwist - 2*phi) + 2*fDx4*(fPhiTwist + 2*phi) + (2*fDy1*(fPhiTwist - 2*phi) + 2*fDy2*(fPhiTwist + 2*phi))*fTAlph)/(4.*fPhiTwist) ) ;
+}
+
+inline
+G4double G4TwistedGenTrap::xAxisMax(G4double phi) const
+{
+  return   (2*fDx2*(fPhiTwist - 2*phi) + 2*fDx4*(fPhiTwist + 2*phi) - (2*fDy1*(fPhiTwist - 2*phi) + 2*fDy2*(fPhiTwist + 2*phi))*fTAlph)/(4.*fPhiTwist) ;
+}
+
+inline 
+G4double G4TwistedGenTrap::yAxisMax(G4double phi) const
+{
+  return ( fDy1 + fDy2 + ( fDy2 - fDy1  )  * ( 2 * phi ) / fPhiTwist ) ;
+}
+
+
+
+
 
 
 #endif
