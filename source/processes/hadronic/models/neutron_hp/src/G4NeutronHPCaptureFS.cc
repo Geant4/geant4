@@ -97,8 +97,8 @@
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, tString, dbool);
     G4String filename = aFile.GetName();
-    theBaseA = aFile.GetA();
-    theBaseZ = aFile.GetZ();
+    theBaseA = A;
+    theBaseZ = G4int(Z+.5);
     if(!dbool)
     {
       hasAnyData = false;
