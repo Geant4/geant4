@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-05-12 17:55:22 japost Exp $
+$Id: History,v 1.7 1999-05-21 19:38:32 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May  21,  98   John Apostolakis              geometry-01-00-05
+
+- Tagged.
+
+May  20,  98   S.Giani, S.Magni
+
+  Fixes in BREP  Line, & (PCone, FCylindrical/FConical surf) respectively
+  For more details see solids/BREP/History
+
+  Also see changes mentioned in solids/CSG/History for CSG Pcon/Pgon
+
+May  19,  98   Frank  Behner
+  
+  Volumes: Further minor fixes for STL.
 
 May  12,  98   John Apostolakis              geometry-01-00-04
 
