@@ -179,6 +179,7 @@ void Test17PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
+#include "G4hLowEnergyIonisationMA.hh"
 
 #include "Test17StepCut.hh"
 
@@ -240,18 +241,19 @@ void Test17PhysicsList::ConstructEM()
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //       G4hIonisation* hIon = new G4hIonisation() ;
+      //   G4hIonisation* hIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extention
-      G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+      G4hLowEnergyIonisationMA* hIon = new G4hLowEnergyIonisationMA() ;
+       	   hIon->SetVerboseLevel(3);
       //      hIon->SetNuclearStoppingOff() ;
       //         hIon->SetBarkasOff() 
       // hIon->SetNuclearStoppingOff() ;
       // hIon->SetAntiProtonStoppingOff() ;
       //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
-            hIon->SetFluorescence(false) ;
-            hIon->SetCutForSecondaryPhotons(100.*eV) ;
+      //      hIon->SetFluorescence(false) ;
+      //      hIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
      //   hIon->SetElectronicStoppingPowerModel(particle,"Ziegler1977p") ;
@@ -259,7 +261,7 @@ void Test17PhysicsList::ConstructEM()
       //   hIon->SetElectronicStoppingPowerModel(particle,"ICRU_R49p") ;
 
       pmanager->AddProcess(hIon,-1,2,2);
-      hionVector.push_back(hIon);
+      //    hionVector.push_back(hIon);
       
       pmanager->AddProcess( theStepCut,       -1,-1,3);
 
@@ -276,10 +278,10 @@ void Test17PhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //      G4hIonisation* iIon = new G4hIonisation() ;
+      //  G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+	     G4hLowEnergyIonisationMA* iIon = new G4hLowEnergyIonisationMA() ;
        	   iIon->SetVerboseLevel(1);
 	   //   iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
@@ -289,10 +291,10 @@ void Test17PhysicsList::ConstructEM()
 	// iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
-            iIon->SetCutForSecondaryPhotons(100.*eV) ;
+	   //     iIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       pmanager->AddProcess(iIon,-1,2,2);
-      hionVector.push_back(iIon);
+      // hionVector.push_back(iIon);
       
       pmanager->AddProcess( theStepCut,       -1,-1,3);
     }
