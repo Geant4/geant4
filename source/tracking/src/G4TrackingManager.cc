@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.cc,v 1.7 2001-02-09 01:35:06 tsasaki Exp $
+// $Id: G4TrackingManager.cc,v 1.8 2001-03-02 02:58:29 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -21,11 +21,9 @@
 //---------------------------------------------------------------
 
 #include "G4TrackingManager.hh"
-#include "G4TrackingMessenger.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
 
-G4TrackingMessenger * messenger;
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////

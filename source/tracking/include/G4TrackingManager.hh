@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.11 2001-01-12 05:55:28 tsasaki Exp $
+// $Id: G4TrackingManager.hh,v 1.12 2001-03-02 02:57:27 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@ class G4TrackingManager;
 /////#include "G4Hit.hh"               // Include from 'Hit/dig'
 #include "G4SteppingManager.hh"        // Include from 'tracking'
 #include "G4Track.hh"                  // Include from 'tracking'
+#include "G4TrackingMessenger.hh"
 #include "G4TrackVector.hh"            // Include from 'tracking'
 #include "G4TrackStatus.hh"            // Include from 'tracking'
 #include "G4StepStatus.hh"             // Include from 'tracking'
@@ -128,7 +129,7 @@ public: // without description
    G4VTrajectory* fpTrajectory;
    G4bool StoreTrajectory;
    G4int verboseLevel;
-
+   G4TrackingMessenger* messenger;
 };
 
 
