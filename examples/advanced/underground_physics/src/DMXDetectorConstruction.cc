@@ -211,6 +211,7 @@ void DMXDetectorConstruction::DefineMaterials() {
   metalPb->AddElement(Pb, 1);
 
 
+  /*
   // Americium:
   G4Isotope* Am241 = new G4Isotope
     (name="Americium241", iz= 95, in=241, a=241.0*g/mole);
@@ -220,6 +221,18 @@ void DMXDetectorConstruction::DefineMaterials() {
   G4Material* sourceAm = new G4Material
     (name="AmericiumSource", density=13.61*g/cm3, ncomponents=1);
   sourceAm->AddElement(Am, 1);
+  */
+
+  // using Uranium because Americium not yet defined for RDM
+  G4Isotope* U235 = new G4Isotope
+    (name="Uranium235", iz= 92, in=235, a=235.0*g/mole);
+  G4Element* U = new G4Element
+    (name="Uranium", "U", ncomponents=1);
+  U->AddIsotope(U235, abundance=1);
+  G4Material* sourceAm = new G4Material
+    (name="UraniumSource", density=13.61*g/cm3, ncomponents=1);
+  sourceAm->AddElement(U, 1);
+
 
   // air
   G4Element* N = new G4Element
@@ -265,6 +278,7 @@ void DMXDetectorConstruction::DefineMaterials() {
     CuShield_mat = metalCu;
     liqPhase_mat = LXe;
        alpha_mat = metalPb;
+      recess_mat = metalPb;
    americium_mat = sourceAm;
         ring_mat = ssteel;
       mirror_mat = metalAl;
@@ -623,6 +637,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // Grids  *************************************************************
 
+  G4double alpha_hole     = 0.65*mm;  
   G4double gridHeight     = 0.100*mm;
   G4double gridRadius     = ringInnerRadius;
   G4double grid1VOffset   = 5.5*ringHeight+2.75*mm;
@@ -632,7 +647,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double grid2VPosition = 0.5*liqPhaseHeight+(detectorHeight-liqPhaseHeight)
                             - grid2VOffset;
 
-  G4Tubs* grid_tube=new G4Tubs("grid_tube", 0.*cm, gridRadius,
+  G4Tubs* grid_tube=new G4Tubs("grid_tube", alpha_hole, gridRadius,
      0.5*gridHeight, 0.*deg, 360.*deg);
 
   grid1_log = new G4LogicalVolume(grid_tube, grid_mat, "grid1_log");
@@ -650,41 +665,48 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   
   // alpha source holder ************************************************
   
-  G4double alphaHeight     = 1.230*mm; // position where alpha starts
+  G4double alphaHeight     = 1.0*mm; // position where alpha starts
   G4double recessHeight    = 0.23*mm;  // totals lead thickness = 1.23 mm
-  G4double alphaRadius     = 0.65*mm;  
+  G4double alphaRadius     = alpha_hole;  
   G4double recessRadius    = 0.40*mm;
 
-  G4double recessVOffset   = 0.5*(alphaHeight - recessHeight);
-  //  G4double recessVPosition = recessVOffset;
   G4double alphaVOffset    = grid1VOffset-0.5*alphaHeight;
   G4double alphaVPosition  = 0.5*liqPhaseHeight+(detectorHeight-liqPhaseHeight)
                              - alphaVOffset;
+  G4double recessVOffset   = 0.5*(alphaHeight + recessHeight);
+  G4double recessVPosition = alphaVPosition + recessVOffset;
 
   G4Tubs* alpha_tube  = new G4Tubs("alpha_tube", 0.*cm, alphaRadius,
      0.5*alphaHeight,  0.*deg, 360.*deg);
-  G4Tubs* recess_tube = new G4Tubs("recess_tube", 0.*cm, recessRadius,
+  G4Tubs* recess_tube = new G4Tubs("recess_tube", recessRadius, alphaRadius,
      0.5*recessHeight, 0.*deg, 360.*deg);
 
-  G4RotationMatrix rotMatrixAlpha;
-  rotMatrixAlpha.rotateY(0.0*deg);
-  G4SubtractionSolid* alpha_sol = new G4SubtractionSolid
-    ("alpha_sol", alpha_tube, recess_tube, G4Transform3D
-     (rotMatrixAlpha, G4ThreeVector(0,0,recessVOffset)));
-  alpha_log = new G4LogicalVolume(alpha_sol, alpha_mat, "alpha_log");
+  alpha_log = new G4LogicalVolume(alpha_tube, alpha_mat, "alpha_log");
   alpha_phys  = new G4PVPlacement(0, G4ThreeVector(0., 0., alphaVPosition),
     "alpha_phys", alpha_log, liqPhase_phys, false, 0);
+
+  recess_log = new G4LogicalVolume(recess_tube, recess_mat, "recess_log");
+  recess_phys  = new G4PVPlacement(0, G4ThreeVector(0., 0., recessVPosition),
+    "recess_phys", recess_log, liqPhase_phys, false, 0);
 
   G4VisAttributes* alpha_vat= new G4VisAttributes(white);
   alpha_vat->SetVisibility(true);
   alpha_log ->SetVisAttributes(alpha_vat);
+  recess_log ->SetVisAttributes(alpha_vat);
 
   // alpha source HOLDER surface
+
   G4OpticalSurface* OpAlphaSurface = new G4OpticalSurface("AlphaSurface", 
      unified, polished, dielectric_metal);
   G4LogicalBorderSurface* AlphaSurface;
   AlphaSurface = new G4LogicalBorderSurface
     ("Alpha", liqPhase_phys, alpha_phys, OpAlphaSurface);
+
+  G4OpticalSurface* OpRecessSurface = new G4OpticalSurface("RecessSurface", 
+     unified, polished, dielectric_metal);
+  G4LogicalBorderSurface* RecessSurface;
+  RecessSurface = new G4LogicalBorderSurface
+    ("Recess", liqPhase_phys, recess_phys, OpRecessSurface);
 
   G4double alpha_PP[NUM]   = { 7.00*eV, 7.50*eV };
   G4double alpha_REFL[NUM] = { 0.1, 0.1 };
@@ -692,12 +714,18 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   alpha_mt->AddProperty("REFLECTIVITY", alpha_PP, alpha_REFL, NUM);
   OpAlphaSurface->SetMaterialPropertiesTable(alpha_mt);
 
+  G4double recess_PP[NUM]   = { 7.00*eV, 7.50*eV };
+  G4double recess_REFL[NUM] = { 0.1, 0.1 };
+  G4MaterialPropertiesTable *recess_mt = new G4MaterialPropertiesTable();
+  recess_mt->AddProperty("REFLECTIVITY", recess_PP, recess_REFL, NUM);
+  OpRecessSurface->SetMaterialPropertiesTable(recess_mt);
 
   // americium ***********************************************************
 
   G4double americiumHeight    = 20.*nanometer;
   G4double americiumRadius    = recessRadius;
-  G4double americiumVOffset   = 0.5*(alphaHeight-americiumHeight)-recessHeight;
+  //  G4double americiumVOffset   = 0.5*(alphaHeight-americiumHeight)-recessHeight;
+  G4double americiumVOffset   = 0.5*(alphaHeight-americiumHeight);
   G4double americiumVPosition = americiumVOffset;
 
   sourceZ = -0.5*(detectorHeight-liqPhaseHeight)+
@@ -818,6 +846,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   grid2_log->SetUserLimits
     (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
   alpha_log->SetUserLimits
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+  recess_log->SetUserLimits
     (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
   americium_log->SetUserLimits
     (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
