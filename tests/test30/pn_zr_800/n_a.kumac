@@ -31,12 +31,9 @@ set NDVY 010205
  close 1
  
 ve/create X(5) R 0.991445 0.866025 0.5 -0.5 -0.866025
-ve/create Y(5) R 378.905 130.935 35.48 16.25 2.99
+ve/create Y(5) R 965.79 445.74 134.6 69.97 10.62
 gr/h/symb X Y 5 21 0.2
  
-ve/create X1(4) R  0.866025 0.5 -0.5 -0.866025
-ve/create Y1(4) R 86.99 39.95 7.87 5.59
-gr/h/symb X1 Y1 4 25 0.2
 
  exe ../prf n_a eps
 
@@ -44,7 +41,6 @@ gr/h/symb X1 Y1 4 25 0.2
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
  gr/h/symb X Y   5 21 0.2
- gr/h/symb X1 Y1 4 25 0.2
 
 
   hi/file 1 par.paw
