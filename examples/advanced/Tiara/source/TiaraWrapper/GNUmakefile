@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-06-13 16:05:33 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2003-06-16 15:36:53 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -27,12 +27,10 @@ SWIGFLAGS = -I$(G4INSTALL)/source/geometry/biasing/include \
 libdirTiara = $(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara
 SWIG_OBJ_DEP = $(wildcard $(libdirTiara)/*.o)
 
-#$(shell /bin/ls $(libdirTiara)/*.o)
-
 
 include $(TIARA_BASE)/source/swig.gmk
 
-tiaraDeps = $(shell cd  ${G4WORKDIR}/tmp/${G4SYSTEM}/tiara/; ls *.d)
+tiaraDeps = $(notdir $(wildcard ${G4WORKDIR}/tmp/${G4SYSTEM}/tiara/*.d))
 copyDeps = $(addprefix ${G4WORKDIR}/tmp/${G4SYSTEM}/TiaraWrapper/, $(tiaraDeps)) 
 
 
@@ -86,5 +84,6 @@ ${G4WORKDIR}/tmp/${G4SYSTEM}/TiaraWrapper/%.d: ${G4WORKDIR}/tmp/${G4SYSTEM}/tiar
 
 tiaraClean:
 	@echo Cleaning up $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
+	@echo $(tiaraDeps)
 	@rm -rf $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
 

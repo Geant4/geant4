@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-06-13 16:05:33 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2003-06-16 15:36:54 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -10,13 +10,13 @@ G4EXLIB := true
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all tiaraClean
 
-all: lib bin 
+all: lib bin
 
 
-include $(G4INSTALL)/config/architecture.gmk
 
 
 include $(G4INSTALL)/config/binmake.gmk
