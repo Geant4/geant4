@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4PenelopeCompton.hh,v 1.5 2003-02-24 00:36:10 pia Exp $
+// $Id: G4PenelopeCompton.hh,v 1.6 2003-04-16 16:25:41 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -30,6 +30,7 @@
 // 05 Dec 2002   L. Pandola   1st implementation
 // 12 Feb 2003   MG Pia       const argument in SelectRandomAtomForCompton
 // 14 Feb 2003   MG Pia       Modified some variables to lowercase initial 
+// 26 Mar 2003   L.Pandola    Added fluorescence
 //
 // -------------------------------------------------------------------
 
@@ -110,6 +111,7 @@ private:
   const G4int nBins; //for building cross section table
 
   G4std::vector<G4VEMDataSet*>* matCrossSections; //for random choice of atom
+  G4double cutForLowEnergySecondaryPhotons;
 };
 
 #endif
