@@ -15,6 +15,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   CPPFLAGS += -DWIN32
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
       
+  SHEXT := dll
   AR := LIB
   ECHO := echo -e
   FC := g77
@@ -75,5 +76,4 @@ ifeq ($(G4SYSTEM),WIN32-VC)
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
              $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
-
 endif
