@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoelectricTest.cc,v 1.1 2001-05-02 11:55:48 pia Exp $
+// $Id: G4PhotoelectricTest.cc,v 1.2 2001-05-02 15:48:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -15,11 +15,11 @@
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
 //
-//      File name:     G4BremsstrahlungTest
+//      File name:     G4PhotoelectricTest
 //
 //      Author:        Maria Grazia Pia
 // 
-//      Creation date: 20 June 2000
+//      Creation date: 1 May 2001
 //
 //      Modifications: 
 //
