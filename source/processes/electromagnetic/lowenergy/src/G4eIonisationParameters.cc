@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.7 2001-10-11 13:11:49 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.8 2001-10-23 13:19:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,7 +39,7 @@
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4SemiLogInterpolation.hh"
-#include "G4MaterialTable.hh"
+#include "G4Material.hh"
 #include "G4DataVector.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"

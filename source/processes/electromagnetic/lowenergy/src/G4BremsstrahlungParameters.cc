@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.4 2001-10-10 16:46:05 pia Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.5 2001-10-23 13:19:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,7 +39,7 @@
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
-#include "G4MaterialTable.hh"
+#include "G4Material.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
 
