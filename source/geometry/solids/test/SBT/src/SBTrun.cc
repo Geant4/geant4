@@ -324,6 +324,8 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
   G4VisAttributes redStuff( G4Color(1,0,0) );
   visManager->Draw( *testVolume, redStuff );
 
+  // visManager->Show();
+
   return 0;
 }
 
