@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.icc,v 1.2 1999-04-16 09:06:03 grichine Exp $
+// $Id: G4PAIonisation.icc,v 1.3 1999-05-26 13:56:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,38 @@
 // ***************************************************************
 // corrected by L.Urban on 24/09/97
 // ---------------------------------------------------------------
+
+
+////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double
+ G4PAIonisation::GetConstraints(const G4DynamicParticle *aParticle,
+                                              G4Material *aMaterial    ) 
+{  
+  G4int index = aMaterial->GetIndex() ;
+
+//  G4cout<<"G4PAIonisation::GetConstraints is called"<<endl ;
+
+  if(index != fMatIndex)
+  {
+    return DBL_MAX ;
+  } 
+  else
+  {
+    if(aMaterial->GetState() == kStateGas) 
+    {
+      return 10*mm ;
+    }
+    else
+    {
+      return 0.01*mm ;
+    }
+  }
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -44,113 +76,6 @@ G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
 
 
 
-////////////////////////////////////////////////////////////////////
-//
-// Returns the Step limit 
-// dToverTini is the max. allowed relative range loss in one Step
-// it calculates dEdx and the range as well....
-//
-
-inline G4double
- G4PAIonisation::GetConstraints(const G4DynamicParticle *aParticle,
-                                              G4Material *aMaterial    ) 
-{
-  G4double KineticEnergy,ScaledKineticEnergy,StepLimit; 
-  const G4double BigStep = DBL_MAX , SmallStep = DBL_MIN ;
-  G4bool isOutRange ;
-  G4int index,bin ;
-  
-  index = aMaterial->GetIndex() ;
-
-//  G4cout<<"G4PAIonisation::GetConstraints is called"<<endl ;
-
-  if(index != fMatIndex)
-  {
-    return DBL_MAX ;
-  } 
-  else
-  {
-    if(aMaterial->GetState() == kStateGas) 
-    {
-      return 10*mm ;
-    }
-    else
-    {
-      return 0.01*mm ;
-    }
-  }
-
-/* **********************************************************************
-
-  G4double Charge = aParticle->GetDefinition()->GetPDGCharge() ;
-  G4double Chargesquare = Charge*Charge ;
-  G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass();
-
-
-  // min.stepsize = p*CutInRange at energy , where range=p*CutInRange
-  //  random steplimit
-
-  const G4double p=1. , cc=p*CutInRange ;
-  const G4double c1=dToverTini , c2=(1.-2.*dToverTini)*cc ,
-                 c3=dToverTini*cc*cc ;
-  const G4double rangelim=1.5*cc ;
-  const G4double alfa = 0.05 , alfa1 = 1.-alfa , alfa2 = 2.*alfa ;
-
- //  SCALED kin.energy =protonmass*KineticEnergy/particlemass)!!!!!!
-
-  KineticEnergy = aParticle->GetKineticEnergy();
-  ScaledKineticEnergy = KineticEnergy*MassRatio ;
-  bin = G4int(log(ScaledKineticEnergy/LowestKineticEnergy)/LOGRTable) ;
-  EnergyBinNumber = bin ;
- 
-  if( ScaledKineticEnergy < LowestKineticEnergy )
-     StepLimit = SmallStep ;
-  else
-    {
-      if ( ScaledKineticEnergy > HighestKineticEnergy )
-         StepLimit = BigStep ;
-      else
-      {
-    
-         fdEdx = (*theDEDXTable)(index)->
-                            GetValue(ScaledKineticEnergy,isOutRange)*Chargesquare ;
-     
-  
-         RangeCoeffA = (*(*theRangeCoeffATable)(index))(EnergyBinNumber) ;
-         RangeCoeffB = (*(*theRangeCoeffBTable)(index))(EnergyBinNumber) ;
-         RangeCoeffC = (*(*theRangeCoeffCTable)(index))(EnergyBinNumber) ;
-
-         fRangeNow = ((RangeCoeffA*ScaledKineticEnergy+RangeCoeffB)
-                    *ScaledKineticEnergy+RangeCoeffC)/Chargesquare ;         
- 
-  //  vacuum ?
-    if(fRangeNow>=BigStep)
-     StepLimit = BigStep ;
-    else  
-    {
-  //  new method to compute the (random) Step limit ..............
-       if(fRangeNow>cc)
-       {
-         StepLimit = (c1*fRangeNow+c2+c3/fRangeNow)/(Chargesquare*MassRatio) ;
-
-        //  randomise this value
-            StepLimit = cc + (StepLimit-cc)*G4UniformRand() ;
-            if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
-       }
-       else
-         StepLimit = fRangeNow ;
-      }
-     }  
-    }   
-
-  return StepLimit ;
-
-***************************************************************** */ 
-}
-
-
-
-
 /////////////////////////////////////////////////////////////////////////
 //
 //
@@ -161,42 +86,19 @@ inline G4double G4PAIonisation::GetMeanFreePath(
                                                G4ForceCondition* condition) 
 {
 //   G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<endl ;
-   const G4DynamicParticle* aParticle ;
-   G4Material* aMaterial ;
-   G4double KineticEnergy,MeanFreePath;
-   const G4double SmallPath = DBL_MIN , BigPath = DBL_MAX ;
-   G4bool isOutRange ;
  
    *condition = NotForced ;
-
-   // return BigPath ;  // It doesn't limit step ???????????
+   
+   G4Material* aMaterial = trackData.GetMaterial() ;
 
    if( aMaterial->GetIndex() != fMatIndex ) 
    {
-     return BigPath ;
+     return DBL_MAX;
    }
    else 
    {
      return 1*mm ;
    }
-   aParticle = trackData.GetDynamicParticle() ;
-   aMaterial = trackData.GetMaterial() ;
-
-   KineticEnergy = aParticle->GetKineticEnergy() ;
-
-   if( KineticEnergy < LowestKineticEnergy )
-     MeanFreePath = BigPath ;
-   else
-     {
-       if( KineticEnergy > HighestKineticEnergy )
-       {
-           KineticEnergy = HighestKineticEnergy ;
-       }
-       MeanFreePath = ( (*theMeanFreePathTable)( aMaterial->GetIndex() ) )->
-                                GetValue(KineticEnergy,isOutRange) ;
-     }
-
-   return MeanFreePath ;
 }
 
 //////////////////////////////////////////////////////////////////////
