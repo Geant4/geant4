@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.73 2004-05-26 21:45:21 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.74 2004-05-26 22:04:07 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -949,7 +949,7 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
 
     type->addAttDef(  "CoordinateSystem", "Coordinate System", "Draw", "");
-    type->addAttValue("CoordinateSystem", G4String("xyz"));    
+    type->addAttValue("CoordinateSystem", messenger.getCoordinateSystem());    
     
     const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
     const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
