@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.3 2002-12-16 14:03:25 gcosmo Exp $
+// $Id: G4Region.hh,v 1.4 2003-01-30 07:58:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -96,6 +96,9 @@ class G4Region
       // Clears material list and recomputes it looping through
       // each root logical volume in the region.
 
+    void ClearMaterialList();
+      // Clears the material list.
+
     void ScanVolumeTree(G4LogicalVolume* lv, G4bool region);
       // Scans recursively the 'lv' logical volume tree, retrieves
       // and places all materials in the list if becoming a region.
@@ -105,9 +108,6 @@ class G4Region
     G4Region(const G4Region&);
     G4Region& operator=(const G4Region&);
       // Private copy constructor and assignment operator.
-
-    void ClearMaterialList();
-      // Clears the material list.
 
   private:
 
