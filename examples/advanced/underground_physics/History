@@ -9,6 +9,9 @@ $Id:
                       Category History file
                       ---------------------
 
+07.12.2004 - S. Guatelli (DMX-V06-02-02)
+            G4VParticleChange migrated
+
 29.11.2004 - S. Guatelli (DMX-V06-02-00)
              Migrated to <cmath>
 
