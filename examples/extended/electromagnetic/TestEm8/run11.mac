@@ -1,0 +1,51 @@
+#
+# Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#
+#control/saveHistory
+#
+/run/verbose 2
+#
+/run/initialize
+#
+#/calor/setAbsMat Xenon
+#  
+#/calor/setAbsThick  20.0 mm 
+# 
+#/calor/setAbsRad 100.0 mm
+#
+#/calor/update
+#
+#  hist file name
+#
+/plots/sethistName g4.p11
+#
+#  PLOT: energy deposit distribution in absorber
+#
+/plots/setnbinEn 50
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.020  MeV  
+#
+#/calor/cutG 3.0 mm    
+#
+#/calor/cutE 3.0 mm
+#
+/run/initialize
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+# 
+#/gun/energy 200.00 GeV
+#
+/gun/energy 2.00 MeV
+#
+#/tracking/verbose 2
+#
+/run/beamOn 1000
+#
+#
+
+

@@ -1,0 +1,138 @@
+$Id: README,v 1.1 2000-01-07 14:49:04 grichine Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm8 (based on TestEm5)  
+                            -------------------------
+
+    Test for investigation of ionisation in thin absorbers, transition 
+    and synchrotron radiations.
+
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	The "absorber" is a tube made of a given material.                
+ 	
+ 	Three parameters define the absorber :
+ 	- the material of the absorber,
+	- the thickness of an absorber,
+ 	- the transverse size of the absorber (the input face is a square). 
+    
+        The volume "World" contains the "absorber". 
+        In this test the parameters of the "World" can be changed , too.
+
+ 	In addition a transverse uniform magnetic field can be applied.
+ 	
+ 	The default geometry is constructed in DetectorConstruction class,
+ 	but all the parameters can be changed via
+ 	the commands defined in the DetectorMessenger class.
+ 	
+ 2- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle which hits the
+ 	absorber perpendicular to the input face. The type of the particle
+ 	and its energy are set in the PrimaryGeneratorAction class, and can
+ 	be changed via the G4 build-in commands of ParticleGun class (see
+ 	the macros provided with this example).
+ 	
+ 	A RUN is a set of events.
+ 	
+ 3- DETECTOR RESPONSE
+
+        Here we test G4PAIionisation , G4IonisationByLogicalVolume and 
+        transition radiation processes
+ 
+ 	A HIT is a record, event per event , of all the 
+ 	informations needed to simulate and analyse the detector response.
+ 	
+ 	In this example a CalorHit is defined as a set of 2 informations:
+ 	- the total energy deposit in the absorber,
+ 	- the total tracklength of all charged particles in the absorber,  
+ 	
+ 	Therefore  the absorber is declared
+ 	'sensitive detector' (SD), which means they can contribute to the hit.
+ 	
+ 	At the end of a run, from the histogram(s), one can study 
+	different physics quantities such as :
+                                - angle distribution,
+				- energy deposit,
+ 				- transmission/backscattering,
+ 				-  ...
+        
+        The test contains 10 built-in histograms, which can be activated by
+        interactive commands (see the macros runxx.mac for details).
+        The histograms/plots are in printed form in the corresponding 
+        resultxx (for GEANT4) and outxx (for GEANT3) files, and they are
+        saved as geant4.plotxx and geant3.plotxx histogram files, too.
+
+        The histogram files can be viewed using PAW e.g with the commands 
+
+                paw> h/file 1 geant4.plot01 or g4.p11
+                paw> option stat
+                paw> h/pl 1
+
+
+ 				
+ 4- PHYSICS DEMO
+ 
+ 	The particle's type and the physic processes which will be available
+ 	in this example are set in PhysicsList class.
+ 	
+ 	The  messenger classes introduce interactive commands . Using these
+        commands the geometry of the detector, the data of the primary
+        particle, the limits of the histograms , etc. can be changed.
+ 	
+
+ 5- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd TestEm8
+ 		% gmake
+ 		
+ 	- execute TestEm5 in 'batch' mode from macro files e.g.
+ 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8   run11.mac
+		
+ 	- execute TestEm5 in 'interactive' mode with visualization e.g.
+ 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8
+		....
+		Idle> type your commands
+		....
+		
+ 6- GEANT4/GEANT3/exp.data comparison
+
+        A GEANT4/GEANT3/exp. data comparison is given here for a few cases.
+        
+        The GEANT4 results can be found in the results/ directory, the resultxx
+        output was obtained with the runxx.mac macro.
+
+        The relevant part of the GEANT3 code is in the geant3/ directory
+        together with the runxx.dat input files. The outputs of the GEANT3 runs
+        geant3/results subdirectory.
+	
+        In order to make an executable of GEANT3 the gmakeB command should be
+        used in the geant3/ subdirectory.To run this executable with a given
+        input file the input file name should be given when it is being asked
+        by the program.(see geant3/README)
+ 		
+ 	The expdata/  directory contains some information
+        on the experimental data. 
+ 	  
+ 	
+ List of the built-in histograms
+ -------------------------------
+
+        1.   number of (tracking) steps/event
+        2.   energy deposit distribution in the absorber (in MeV)
+        3.   angle distribution of the primary particle at the exit
+             of the absorber (deg)
+        4.   distribution of the lateral displacement at exit(mm)
+        5.   kinetic energy of the transmitted primaries (MeV)
+        6.   angle distribution of the backscattered primaries (deg)
+        7.   kinetic energy of the backscattered primary particles (MeV)
+        8.   kinetic energy of the charged secondary particles (MeV)
+        9.   z distribution of the secondary charged vertices (mm)
+       10.   kinetic energy of the photons escaping the absorber (MeV)
+        
