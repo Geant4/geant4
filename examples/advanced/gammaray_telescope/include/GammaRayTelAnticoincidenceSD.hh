@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.2 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.3 2001-11-29 11:19:17 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -50,7 +50,7 @@ class GammaRayTelAnticoincidenceSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelAnticoincidenceSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelAnticoincidenceSD(G4String);
   ~GammaRayTelAnticoincidenceSD();
   
   void Initialize(G4HCofThisEvent*);

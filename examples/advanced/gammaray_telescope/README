@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2001-11-29 09:34:17 flongo Exp $
+$Id: README,v 1.6 2001-11-29 11:19:17 griccard Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -115,7 +115,14 @@ The main features of this example are
  ATTENTION:
  If you use analysis with Lizard, you have to remove any hbook file in the 
  example directory obtained in previous Geant4 sessions. This issues will be 
- solved in future releases.
+ solved in future releases. Note also that the following error can be reported
+ during run with analysis activated
+
+ ***** ERROR in HLNEXT : Bad sequence for RZ : ID=       1 
+
+ Ignore this message; the ntuple and histograms are correctly saved in the hbook 
+ files.
+
 
 3. Detector description
 -----------------------

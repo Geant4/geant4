@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.5 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.6 2001-11-29 11:19:17 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -56,7 +56,7 @@ class GammaRayTelPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
 
-  GammaRayTelPrimaryGeneratorAction(GammaRayTelDetectorConstruction*);    
+  GammaRayTelPrimaryGeneratorAction();    
   ~GammaRayTelPrimaryGeneratorAction();
   
 public:

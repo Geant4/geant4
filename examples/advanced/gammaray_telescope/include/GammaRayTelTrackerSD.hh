@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.hh,v 1.3 2001-11-28 14:31:46 flongo Exp $
+// $Id: GammaRayTelTrackerSD.hh,v 1.4 2001-11-29 11:19:17 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -50,7 +50,7 @@ class GammaRayTelTrackerSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelTrackerSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelTrackerSD(G4String);
   ~GammaRayTelTrackerSD();
   
   void Initialize(G4HCofThisEvent*);

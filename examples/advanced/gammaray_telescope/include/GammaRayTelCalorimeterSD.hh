@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.hh,v 1.3 2001-11-28 14:31:45 flongo Exp $
+// $Id: GammaRayTelCalorimeterSD.hh,v 1.4 2001-11-29 11:19:17 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -50,7 +50,7 @@ class GammaRayTelCalorimeterSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelCalorimeterSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelCalorimeterSD(G4String);
   ~GammaRayTelCalorimeterSD();
   
   void Initialize(G4HCofThisEvent*);

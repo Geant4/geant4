@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.4 2001-11-28 14:31:47 flongo Exp $
+// $Id: GammaRayTelTrackerROGeometry.cc,v 1.5 2001-11-29 11:19:18 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 //           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
 //
 // ************************************************************
-
+#include "G4RunManager.hh"
 #include "GammaRayTelTrackerROGeometry.hh"
 #include "GammaRayTelDummySD.hh"
 #include "GammaRayTelDetectorConstruction.hh"
@@ -53,14 +53,12 @@ GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry()
   : G4VReadOutGeometry()
 {
 }
-GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry(G4String aString,GammaRayTelDetectorConstruction* GammaRayTelDC)
-  :G4VReadOutGeometry(aString), GammaRayTelDetector(GammaRayTelDC)
-{
-}
-
 GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry(G4String aString)
-  : G4VReadOutGeometry(aString)
+  :G4VReadOutGeometry(aString)
 {
+ G4RunManager* runManager = G4RunManager::GetRunManager();
+  GammaRayTelDetector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
 }
 
 GammaRayTelTrackerROGeometry::~GammaRayTelTrackerROGeometry()

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-11-29 09:34:17 flongo Exp $
+# $Id: GNUmakefile,v 1.6 2001-11-29 11:19:16 griccard Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -40,17 +40,6 @@ ifdef G4ANALYSIS_USE
    LOADLIBS += -lCHBook -ldl -lg2c 
 # Xm Xt
    LDFLAGS  += -L$/usr/local/lib -lXm -L/usr/X11R6/lib -lXt
-
-# add for Ntuples:
-#LOADLIBS += -lAIDA_HTL -lAIDA_Ntuple -lNtupleTag -lNtupleTag_HBook -lAIDA_Plotter 
-# add for Histograms:
-#LOADLIBS += -lAIDA_HBook 
-# general stuff:
-#LOADLIBS += -lHepUtilities -lAIDA_Annotation
-# ... and finally system stuff and to deal with the "Fortran legacy":
-#LOADLIBS += -lCHBook -ldl -lg2c 
-# Lizard
-#LDFLAGS  += -L/afs/cern.ch/sw/lhcxx/specific/redhat61/Lizard/1.4.0.1/lib -lcommander.1.4.0.1
 
 endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.5 2001-11-28 14:31:47 flongo Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.6 2001-11-29 11:19:18 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -36,6 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4RunManager.hh"
 #include "GammaRayTelPrimaryGeneratorAction.hh"
 
 #include "GammaRayTelDetectorConstruction.hh"
@@ -49,11 +50,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction
-(GammaRayTelDetectorConstruction* GammaRayTelDC)
-  :GammaRayTelDetector(GammaRayTelDC),rndmFlag("off"),
-   nSourceType(0),nSpectrumType(0)
+GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
+  :rndmFlag("off"),nSourceType(0),nSpectrumType(0)
 {
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  GammaRayTelDetector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   

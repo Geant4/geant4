@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.6 2001-11-28 14:31:45 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.7 2001-11-29 11:19:16 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
   // Set mandatory user action classes
-  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
 
 
 #ifdef G4ANALYSIS_USE

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.cc,v 1.3 2001-11-28 14:31:47 flongo Exp $
+// $Id: GammaRayTelCalorimeterSD.cc,v 1.4 2001-11-29 11:19:18 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -32,7 +32,7 @@
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
-
+#include "G4RunManager.hh"
 #include "GammaRayTelCalorimeterSD.hh"
 #include "GammaRayTelCalorimeterHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
@@ -46,10 +46,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelCalorimeterSD::GammaRayTelCalorimeterSD(G4String name,
-                                   GammaRayTelDetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+GammaRayTelCalorimeterSD::GammaRayTelCalorimeterSD(G4String name):G4VSensitiveDetector(name)
 {
+ G4RunManager* runManager = G4RunManager::GetRunManager();
+  Detector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+  
   NbOfCALBars  = Detector->GetNbOfCALBars();
   NbOfCALLayers  = Detector->GetNbOfCALLayers();
 

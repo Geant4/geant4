@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.8 2001-11-28 14:31:47 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.9 2001-11-29 11:19:18 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -688,13 +688,13 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   
   if(!trackerSD)
     {
-      trackerSD = new GammaRayTelTrackerSD("TrackerSD",this);
+      trackerSD = new GammaRayTelTrackerSD("TrackerSD");
       SDman->AddNewDetector( trackerSD );		
     }
 
   G4String ROgeometryName = "TrackerROGeom";
   G4VReadOutGeometry* trackerRO = 
-    new GammaRayTelTrackerROGeometry(ROgeometryName, this);
+    new GammaRayTelTrackerROGeometry(ROgeometryName);
   
   trackerRO->BuildROGeometry();
   trackerSD->SetROgeometry(trackerRO);
@@ -713,7 +713,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 
   if(!calorimeterSD)
     {
-      calorimeterSD = new GammaRayTelCalorimeterSD("CalorimeterSD",this);
+      calorimeterSD = new GammaRayTelCalorimeterSD("CalorimeterSD");
       SDman->AddNewDetector( calorimeterSD );		
     }
   
@@ -729,7 +729,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   if(!anticoincidenceSD)
     {
       anticoincidenceSD = new GammaRayTelAnticoincidenceSD
-	("AnticoincidenceSD",this);
+	("AnticoincidenceSD");
       SDman->AddNewDetector( anticoincidenceSD );		
     }
   
