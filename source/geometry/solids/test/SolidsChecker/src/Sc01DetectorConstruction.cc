@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.5 2004-12-10 16:22:40 gcosmo Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.6 2005-01-12 07:59:27 grichine Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -132,6 +132,15 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   //  10*cm, 10*deg, 300*deg ); 
 			   //  0., pi); 
   }
+  else if (val == "manyCons")
+  {        
+    aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
+                           10*cm, 10*deg, 300*deg ); 
+  //  10*cm, 10*deg, 300*deg ); 
+			   //  0., pi);
+
+ 
+  }
   else if (val == "Tube")
   {
     //  aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
@@ -220,6 +229,29 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   PhysicalVolume
           = new G4PVPlacement(0,G4ThreeVector(),"Hall_P",Hall_log,0,false,0);
 
+  if(val == "manyCons")
+  {
+
+    G4Cons* cons1 = new G4Cons ( "cons1", 2*cm, 3*cm, 4*cm, 6*cm,
+                           10*cm, 0*deg, 360*deg );
+    G4Cons* cons2 = new G4Cons ( "cons2", 3*cm, 4*cm, 6*cm, 8*cm,
+                           10*cm, 0*deg, 360*deg );
+    G4Cons* cons3 = new G4Cons ( "cons3", 4*cm, 5*cm, 8*cm, 10*cm,
+                           10*cm, 0*deg, 360*deg );
+
+    G4LogicalVolume* lcons1 = new G4LogicalVolume(cons1, Water1,"lcons1",0,0,0);
+    G4LogicalVolume* lcons2 = new G4LogicalVolume(cons2, Water1,"lcons2",0,0,0);
+    G4LogicalVolume* lcons3 = new G4LogicalVolume(cons3, Water1,"lcons3",0,0,0);
+
+    G4VPhysicalVolume * pcons1 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+						   "pcons1",lcons1,PhysicalVolume, false, 0); 
+    G4VPhysicalVolume * pcons2 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+						   "pcons2",lcons2,PhysicalVolume, false, 0); 
+    G4VPhysicalVolume * pcons3 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+						   "pcons3",lcons3,PhysicalVolume, false, 0); 
+  }  
+  else
+  {    
    
   G4LogicalVolume* aVolume_log 
 
@@ -330,6 +362,7 @@ BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aSurface);
 */
+  }
   G4cout << "You select " << val << " detector" << G4endl;
 
   return PhysicalVolume;

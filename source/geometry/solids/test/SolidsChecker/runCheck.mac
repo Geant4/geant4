@@ -13,6 +13,8 @@
 #
 #/mydet/SelectDetector Cone
 #
+/mydet/SelectDetector manyCons
+#
 #/mydet/SelectDetector Trd
 #
 #/mydet/SelectDetector Torus
@@ -23,8 +25,8 @@
 #
 /mydet/SelectDetector TwistedBox
 #
-/event/printModulo 100000
-/run/beamOn 1000000
+/event/printModulo 10000000
+/run/beamOn 100000000
 #/event/printModulo 1
 #/tracking/verbose 3
 #/run/beamOn 1
