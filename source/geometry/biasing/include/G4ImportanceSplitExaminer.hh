@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.6 2003-08-19 15:44:57 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.7 2003-08-19 16:38:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,6 @@
 #define G4ImportanceSplitExaminer_hh G4ImportanceSplitExaminer_hh
 
 #include "G4VImportanceSplitExaminer.hh"
-#include "G4ImportanceFinder.hh"
 
 class G4VImportanceAlgorithm;
 class G4VParallelStepper;
@@ -71,7 +70,7 @@ private:
 
   const G4VImportanceAlgorithm &fIalgorithm;
   const G4VParallelStepper &fPStepper;
-  G4ImportanceFinder fIfinder;
+  const G4VIStore &fIStore;
 };
 
 
