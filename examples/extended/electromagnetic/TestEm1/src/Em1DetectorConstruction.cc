@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.11 2003-03-11 18:00:35 vnivanch Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.12 2003-03-12 12:00:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,8 +118,7 @@ void Em1DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->SetChemicalFormula("H_2O");
-  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
