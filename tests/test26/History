@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003-04-28 08:01:38 vnivanch Exp $
+$Id: History,v 1.9 2003-05-15 09:02:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2003  G.Cosmo (test26-V05-01-00)
+- Fixed initialisation of world-volume for geometry update, according to the
+  new technique implemented in G4RunManager, tag run-V05-01-00.
+- Cleared warnings...
 
 April 26, 2003  V.Ivanchenko (test26-V05-00-06)
 - Add macro to test store/restore tables
