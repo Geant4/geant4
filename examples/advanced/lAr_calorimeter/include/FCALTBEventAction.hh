@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.6 2002-12-17 15:53:22 pmendez Exp $
+// $Id: FCALTBEventAction.hh,v 1.7 2003-02-14 15:54:43 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,14 +42,14 @@
 #include "G4ThreeVector.hh"
 
 class FCALRunAction;
-
+class FCALTBEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALTBEventAction : public G4UserEventAction
 {
   public:
-    FCALTBEventAction(FCALSteppingAction*,FCALRunAction* );
+    FCALTBEventAction(FCALSteppingAction*);
     virtual ~FCALTBEventAction();
 
   public:
@@ -65,7 +65,8 @@ class FCALTBEventAction : public G4UserEventAction
     G4int                       printModulo;   
      
     FCALSteppingAction* StepAction;
-    FCALRunAction* RunAction;
+    FCALTBEventActionMessenger*  eventMessenger;
+    FCALRunAction* runManager;
 
   private:
   G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
