@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.4 1999-03-04 15:53:04 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.5 1999-03-15 12:05:09 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -1136,10 +1136,13 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
                // update initial particle,fill ParticleChange
                Tkin -= T ;
                Etot  = Tkin+electron_mass_c2 ;
-               Pnew  =sqrt(Tkin*(Etot+electron_mass_c2)) ;
-               Px =(P*ParticleDirection.x()-p*DeltaDirection.x())/Pnew ;
-               Py =(P*ParticleDirection.y()-p*DeltaDirection.y())/Pnew ;
-               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z())/Pnew ;
+               Px =(P*ParticleDirection.x()-p*DeltaDirection.x()) ;
+               Py =(P*ParticleDirection.y()-p*DeltaDirection.y()) ;
+               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z()) ;
+               Pnew = sqrt(Px*Px+Py*Py+Pz*Pz) ;
+               Px /= Pnew ;
+               Py /= Pnew ;
+               Pz /= Pnew ;
                P  = Pnew ;
                G4ThreeVector ParticleDirectionnew(Px,Py,Pz) ;
                ParticleDirection = ParticleDirectionnew;
