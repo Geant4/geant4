@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.10 2004-06-09 16:20:31 maire Exp $
+// $Id: PhysicsList.cc,v 1.11 2004-07-01 13:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -125,10 +125,10 @@ void PhysicsList::ConstructParticle()
 // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
-  
+
 // gamma
   G4Gamma::GammaDefinition();
-  
+
 // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 
@@ -141,7 +141,7 @@ void PhysicsList::ConstructParticle()
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 
 // mesons
   G4PionPlus::PionPlusDefinition();
@@ -181,14 +181,14 @@ void PhysicsList::ConstructProcess()
   // transportation
   //
   AddTransportation();
-  
+
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-  
+
   // hadronic physics lists
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
-  
+
   // decay process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -198,7 +198,7 @@ void PhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)) { 
+    if (fDecayProcess->IsApplicable(*particle)&&!particle->IsShortLived()) {
 
       pmanager ->AddProcess(fDecayProcess);
 
@@ -208,9 +208,9 @@ void PhysicsList::ConstructProcess()
 
     }
   }
-  
+
   // step limitation (as a full process)
-  //  
+  //
   AddStepMax();
 }
 
@@ -270,7 +270,7 @@ void PhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
+      if (stepMaxProcess->IsApplicable(*particle)&&!particle->IsShortLived())
         {
 	  pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
