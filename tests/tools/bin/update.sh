@@ -1,7 +1,7 @@
 #! /bin/sh
-# $Id: update.sh,v 1.10 2000-05-30 17:18:43 stesting Exp $
-# Edit stt-prod.sdb or stt-dev.sdb and execute.
-# Usage: update.sh [-n]
+# $Id: update.sh,v 1.11 2000-06-15 16:52:52 stesting Exp $
+# For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
+# Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 
 # Some checks :
 if [ -z "${G4INSTALL}" ] ; then
@@ -63,6 +63,4 @@ fi
 
 cd $G4INSTALL
 echo "RUNNING updt.sh IN $G4INSTALL"
-echo "REDIRECT Bonsai sdb FILE INTO INPUT, E.G., update.sh [-n] < bonsai.sdb"
-echo "REDIRECT OUTPUT TO WHERE YOU LIKE, E.G., update.sh [-n] < bonsai.sdb >& update.log"
 ${G4STTDIR}/bin/updt.sh
