@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.3 2004-11-06 10:08:18 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.4 2004-11-09 07:58:09 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -209,7 +209,12 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
 
 G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {
   if(fShell) fInteractorManager->RemoveShell(fShell);
-  if(fViewer) delete fViewer;
+  if(fViewer) {
+    fViewer->setSceneGraph(0);
+    //FIXME : SGI : the below "delete" block things.
+    //FIXME : CoinXt : the below "delete" crashe in ~SoXtRenderArea.
+    //FIXME : delete fViewer;
+  }
   if(fShell) XtDestroyWidget(fShell);
   if(fSelection) fSelection->unref();
 }
