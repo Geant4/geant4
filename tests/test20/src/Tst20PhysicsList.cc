@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.4 2001-07-11 10:10:17 gunter Exp $
+// $Id: Tst20PhysicsList.cc,v 1.5 2003-09-29 01:49:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,7 +32,7 @@
 #include "G4LowEnergyPolarizedCompton.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
@@ -157,9 +157,7 @@ void Tst20PhysicsList::SetGELowLimit(G4double lowCut)
 	   << lowCut*MeV << " (MeV)" << G4endl;
   }  
 
-  G4Gamma::SetEnergyRange(lowCut,1e5);
-  G4Electron::SetEnergyRange(lowCut,1e5);
-  G4Positron::SetEnergyRange(lowCut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
 
 }
 
@@ -171,7 +169,7 @@ void Tst20PhysicsList::SetGammaLowLimit(G4double lowCut)
 	   << lowCut*MeV << " (MeV)" << G4endl;
   }  
 
-  G4Gamma::SetEnergyRange(lowCut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
 
 }
 
@@ -184,7 +182,7 @@ void Tst20PhysicsList::SetElectronLowLimit(G4double lowCut)
 
   }  
 
-  G4Electron::SetEnergyRange(lowCut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
 
 }
 void Tst20PhysicsList::SetGammaCut(G4double val)
