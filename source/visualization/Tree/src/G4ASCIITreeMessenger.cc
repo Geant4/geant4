@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.7 2004-09-13 20:52:56 johna Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.8 2004-09-22 20:01:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpDirectory = new G4UIdirectory ("/vis/ASCIITree/");
   fpDirectory -> SetGuidance ("Commands for ASCIITree control.");
 
-  fpDirectorySet = new G4UIdirectory ("/vis/ASCIITree/set");
+  fpDirectorySet = new G4UIdirectory ("/vis/ASCIITree/set/");
   fpDirectorySet -> SetGuidance ("Settings for ASCIITree control.");
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
