@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2002-05-30 16:00:55 dressel Exp $
+$Id: History,v 1.9 2002-05-31 09:56:09 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May, 31th, 2002  M.Dressel - geombias-V04-00-04
+- change name ImportanceSampler to ImportanceSplitExaminer
 
 May, 30th, 2002  M.Dressel
 - change comments in WeightWindowAlgorithm

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.1 2002-05-31 08:07:47 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.2 2002-05-31 09:56:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -30,7 +30,8 @@
 // Class description:
 //
 // This class is used internally by importance sampling.
-// Implementation of a importance sampler (see G4VImportanceSplitExaminer).
+// Implementation of a importance split examiner 
+// (see G4VImportanceSplitExaminer).
 // This implementation is used for sampling in a "parallel"
 // geometry.
 
