@@ -35,7 +35,7 @@
 #include "Test17PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4IonC12.hh"
 #include "G4IonAr40.hh"
 #include "G4IonFe56.hh"
@@ -330,9 +330,7 @@ void Test17PhysicsList::SetCuts()
   //special for low energy physics
   //
   G4double lowlimit=1*eV;
-  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
-  G4Electron::SetEnergyRange(lowlimit,100*GeV);
-  G4Positron::SetEnergyRange(lowlimit,100*GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,100*GeV);
 
   if (verboseLevel >0){
     G4cout << "Test17PhysicsList::SetCuts:";
