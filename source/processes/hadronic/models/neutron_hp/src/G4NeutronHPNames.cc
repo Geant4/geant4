@@ -87,6 +87,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
       {
 	check->close();
 	delete check;
+        check = 0;
         aFlag = false;
         if(first)
         {
@@ -110,6 +111,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
           {
 	    check->close();
 	    delete check;
+            check = 0;
             aFlag = false;
           }
           else
@@ -166,7 +168,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
       }
       while(myZ==0 || myA==0);
     }
-    while(!(*check));
+    while((!check) || (!(*check)));
     if(getenv("NeutronHPNamesLogging") || getenv("NeutronHPNames")) 
     {
       G4cout << "Names::GetName: last theName proposal = "<< G4endl;
@@ -177,6 +179,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
     {
       check->close();
       delete check;
+      check = 0;
     }
     return result;
   }
