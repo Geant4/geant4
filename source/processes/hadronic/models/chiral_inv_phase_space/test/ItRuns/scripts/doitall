@@ -1,2 +1,5 @@
-./doit CHIPS_p_pBar_Integration
-./doit CHIPS_gamma_nucleus_Integration
+./doit CHIPS_pionMinus_AtRest_Integration
+# ./doit CHIPS_pionMinus_nucleus_Integration 
+# ./doit CHIPS_p_pBar_AtRest_Integration
+# ./doit CHIPS_p_pBar_Integration
+# ./doit CHIPS_gamma_nucleus_Integration

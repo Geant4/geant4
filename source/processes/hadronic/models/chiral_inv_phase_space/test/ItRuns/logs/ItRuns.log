@@ -1,40 +1,21 @@
 >>>>>>>
->>>>>>> STARTING TEST CHIPS_p_pBar_Integration <<<<<<<
+>>>>>>> STARTING TEST CHIPS_pionMinus_AtRest_Integration <<<<<<<
 >>>>>>>
 
 >>>>>>>
->>>>>>> Now building CHIPS_p_pBar_Integration <<<<<<<
+>>>>>>> Now building CHIPS_pionMinus_AtRest_Integration <<<<<<<
 >>>>>>>
+Making dependency for file CHIPS_pionMinus_AtRest_Integration.cc...
 Cleaning up ...
-Making dependency for file CHIPS_p_pBar_Integration.cc...
-Compiling CHIPS_p_pBar_Integration.cc ...
+Making dependency for file CHIPS_pionMinus_AtRest_Integration.cc...
+Compiling CHIPS_pionMinus_AtRest_Integration.cc ...
 Using granular libraries ...
-Linking CHIPS_p_pBar_Integration ...
+Linking CHIPS_pionMinus_AtRest_Integration ...
 >>>>>>>
->>>>>>> Now running CHIPS_p_pBar_Integration <<<<<<<
+>>>>>>> Now running CHIPS_pionMinus_AtRest_Integration <<<<<<<
 >>>>>>>
 /scratch/Release/Fri Jun  9/geant4/source/processes/hadronic/models/chiral_inv_phase_space/test/ItRuns/src
 >>>>>>>
->>>>>>> TEST CHIPS_p_pBar_Integration TERMINATED <<<<<<<
->>>>>>>
-
->>>>>>>
->>>>>>> STARTING TEST CHIPS_gamma_nucleus_Integration <<<<<<<
->>>>>>>
-
->>>>>>>
->>>>>>> Now building CHIPS_gamma_nucleus_Integration <<<<<<<
->>>>>>>
-Cleaning up ...
-Making dependency for file CHIPS_gamma_nucleus_Integration.cc...
-Compiling CHIPS_gamma_nucleus_Integration.cc ...
-Using granular libraries ...
-Linking CHIPS_gamma_nucleus_Integration ...
->>>>>>>
->>>>>>> Now running CHIPS_gamma_nucleus_Integration <<<<<<<
->>>>>>>
-/scratch/Release/Fri Jun  9/geant4/source/processes/hadronic/models/chiral_inv_phase_space/test/ItRuns/src
->>>>>>>
->>>>>>> TEST CHIPS_gamma_nucleus_Integration TERMINATED <<<<<<<
+>>>>>>> TEST CHIPS_pionMinus_AtRest_Integration TERMINATED <<<<<<<
 >>>>>>>
 

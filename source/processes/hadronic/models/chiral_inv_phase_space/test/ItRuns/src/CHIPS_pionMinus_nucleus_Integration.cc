@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_gamma_nucleus_Integration.cc,v 1.2 2000-08-19 12:14:45 hpw Exp $
+// $Id: CHIPS_pionMinus_nucleus_Integration.cc,v 1.1 2000-08-19 12:14:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -17,7 +17,7 @@
  
 #include "G4GRSVolume.hh"
 #include "G4ProcessManager.hh"
-#include "G4GammaInelasticProcess.hh"
+#include "G4PionMinusInelasticProcess.hh"
  
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -31,9 +31,8 @@
 
 #include "G4Step.hh"
 
-#include "../interface/include/G4GammaNuclearReaction.hh"
-#include "../interface/include/G4ProtonAntiProtonReaction.hh"
-
+#include "G4PionMinusNuclearReaction.hh"
+ 
  int main()
   {
     G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
@@ -201,8 +200,8 @@
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
-   G4ParticleDefinition* theGamma = G4Gamma::GammaDefinition();
-   theParticles[0]=theGamma;
+   G4ParticleDefinition* thePionMinus = G4PionMinus::PionMinusDefinition();
+   theParticles[0]=thePionMinus;
    
    //------ here all the particles are Done ----------
    G4cout << "Done with all the particles" << G4endl;
@@ -210,13 +209,13 @@
    //--------- Processes definitions ---------
    G4HadronInelasticProcess* theProcesses[1];
       
-   G4ProcessManager* theGammaProcessManager = new G4ProcessManager(theGamma);
-   theGamma->SetProcessManager(theGammaProcessManager);
-   G4GammaInelasticProcess theInelasticProcess; 
-   G4GammaNuclearReaction theGammaInelastic;
+   G4ProcessManager* thePionMinusProcessManager = new G4ProcessManager(thePionMinus);
+   thePionMinus->SetProcessManager(thePionMinusProcessManager);
+   G4PionMinusInelasticProcess theInelasticProcess; 
+   G4PionMinusNuclearReaction thePionMinusInelastic;
    G4cout << "Inelastic instanciated!!!"<<G4endl;
-   theInelasticProcess.RegisterMe(&theGammaInelastic);
-   theGammaProcessManager->AddDiscreteProcess(&theInelasticProcess);
+   theInelasticProcess.RegisterMe(&thePionMinusInelastic);
+   thePionMinusProcessManager->AddDiscreteProcess(&theInelasticProcess);
    theProcesses[0] = &theInelasticProcess;
    
    G4ForceCondition* condition = new G4ForceCondition;
@@ -253,7 +252,7 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the gamma energy"<<G4endl;
+   G4cout << "Please enter the PionMinus energy"<<G4endl;
    G4cin >> incomingEnergy;
    for (i=0; i<numberOfParticles; i++)
    {
@@ -287,7 +286,7 @@ int j = 0;
             debugThisOne+=0;
            }
            G4cout << "Last chance before DoIt call: "
-//                << theGammaInelastic.GetNiso()
+//                << thePionMinusInelastic.GetNiso()
                 <<G4endl;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
@@ -316,7 +315,7 @@ int j = 0;
        }  // energy loop
      }  // material loop
    }  // particle loop
-   G4cout << "CHIPS_gamma_nucleus_Integration terminated successfully"<<endl;
+   G4cout << "CHIPS_PionMinus_nucleus_Integration terminated successfully"<<endl;
    return EXIT_SUCCESS;
 }
 

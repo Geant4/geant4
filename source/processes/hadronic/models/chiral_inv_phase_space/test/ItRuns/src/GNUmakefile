@@ -18,6 +18,7 @@ include $(G4INSTALL)/config/architecture.gmk
 #
 INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/test \
             -I$(G4BASE)/digits+hits/include \
             -I$(G4BASE)/events+tracks/include \

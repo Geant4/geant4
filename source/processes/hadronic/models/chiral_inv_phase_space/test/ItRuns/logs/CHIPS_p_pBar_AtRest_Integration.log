@@ -1,0 +1,46 @@
+Please enter material number
+Active Material = Hydrogen
+Done with all the particles
+Starting process definitions
+Inelastic instanciated!!!
+Done with all the process definitions
+Entering the DoIt loops!!!!!
+Test the DoIt: please enter the number of events
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 22
+Particle code produced = 22
+Particle code produced = 22
+Particle code produced = 111
+Particle code produced = 111
+NUMBER OF SECONDARIES=5FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info6.569848e+02(-1.358073e+02,2.732692e+02,-5.818156e+02)5
+SECONDARIES info5.847294e+01(-1.807601e+01,5.204090e+01,1.959815e+01)0
+SECONDARIES info4.982970e+02(-3.242975e+01,1.528938e+02,4.731508e+02)-5
+SECONDARIES info4.506367e+02(2.174443e+02,-3.697342e+02,-2.948509e+01)-10
+SECONDARIES info2.121508e+02(-3.113129e+01,-1.084698e+02,1.185517e+02)-15
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 211
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = 111
+NUMBER OF SECONDARIES=4FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info3.307416e+02(-1.459823e+02,-2.323361e+02,-1.209105e+02)4
+SECONDARIES info6.346233e+02(-5.917177e+01,-1.849693e+02,5.878368e+02)0
+SECONDARIES info4.975808e+02(1.971883e+02,2.769332e+01,-4.355662e+02)-4
+SECONDARIES info4.135977e+02(7.965766e+00,3.896120e+02,-3.136002e+01)-8
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 211
+Particle code produced = 211
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = -211
+NUMBER OF SECONDARIES=5FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info6.969056e+02(5.615543e+02,3.305058e+02,2.040106e+02)5
+SECONDARIES info2.060618e+02(4.547166e+01,-1.270766e+02,-6.903294e+01)0
+SECONDARIES info2.257522e+02(1.491510e+01,-2.278655e+01,-1.753356e+02)-5
+SECONDARIES info4.863774e+02(-4.202562e+02,-1.589813e+02,1.282732e+02)-10
+SECONDARIES info2.614476e+02(-2.016849e+02,-2.166134e+01,-8.791518e+01)-15
+Last chance before DoIt call: 

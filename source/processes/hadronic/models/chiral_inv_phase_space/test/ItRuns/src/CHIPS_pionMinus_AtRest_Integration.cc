@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_gamma_nucleus_Integration.cc,v 1.2 2000-08-19 12:14:45 hpw Exp $
+// $Id: CHIPS_pionMinus_AtRest_Integration.cc,v 1.1 2000-08-19 12:14:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -17,7 +17,7 @@
  
 #include "G4GRSVolume.hh"
 #include "G4ProcessManager.hh"
-#include "G4GammaInelasticProcess.hh"
+#include "G4PionMinusNuclearAtRestChips.hh"
  
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -30,10 +30,7 @@
 #include "G4PVPlacement.hh"
 
 #include "G4Step.hh"
-
-#include "../interface/include/G4GammaNuclearReaction.hh"
-#include "../interface/include/G4ProtonAntiProtonReaction.hh"
-
+ 
  int main()
   {
     G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
@@ -58,6 +55,11 @@
 
     G4int numberOfMaterials=1;
     G4Material* theMaterials[2000];
+    
+//        G4Material *theH = new G4Material(name="Hydrogen", density=1.032*g/cm3, nEl=1);
+//        G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
+//        theH->AddElement( elH, 1 );
+//        theMaterials[1] = theH;
     
 //      G4Material *thePS = new G4Material(name="PolyStyrene", density=1.032*g/cm3, nEl=2);
 //      G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
@@ -175,8 +177,7 @@
      G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.2*g/mole);
      theAu->AddElement( elAu, 1 );
      theMaterials[23] = theAu;
-    
-    G4cout << "Please enter material number"<<G4endl;
+        G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
     G4cin >> inputNumber;
     theMaterials[0]=theMaterials[inputNumber];
@@ -201,23 +202,21 @@
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
-   G4ParticleDefinition* theGamma = G4Gamma::GammaDefinition();
-   theParticles[0]=theGamma;
+   G4ParticleDefinition* thePionMinus = G4PionMinus::PionMinusDefinition();
+   theParticles[0]=thePionMinus;
    
    //------ here all the particles are Done ----------
    G4cout << "Done with all the particles" << G4endl;
    G4cout << "Starting process definitions" << G4endl;
    //--------- Processes definitions ---------
-   G4HadronInelasticProcess* theProcesses[1];
+   G4VRestProcess* theProcesses[1];
       
-   G4ProcessManager* theGammaProcessManager = new G4ProcessManager(theGamma);
-   theGamma->SetProcessManager(theGammaProcessManager);
-   G4GammaInelasticProcess theInelasticProcess; 
-   G4GammaNuclearReaction theGammaInelastic;
+   G4ProcessManager* thePionMinusProcessManager = new G4ProcessManager(thePionMinus);
+   thePionMinus->SetProcessManager(thePionMinusProcessManager);
+   G4PionMinusNuclearAtRestChips theProcess; 
    G4cout << "Inelastic instanciated!!!"<<G4endl;
-   theInelasticProcess.RegisterMe(&theGammaInelastic);
-   theGammaProcessManager->AddDiscreteProcess(&theInelasticProcess);
-   theProcesses[0] = &theInelasticProcess;
+   thePionMinusProcessManager->AddDiscreteProcess(&theProcess);
+   theProcesses[0] = &theProcess;
    
    G4ForceCondition* condition = new G4ForceCondition;
    *condition = NotForced;
@@ -242,7 +241,7 @@
    G4Step aStep;
    aStep.SetPreStepPoint(&aStepPoint);
    G4double meanFreePath;
-   G4double incomingEnergy;
+   G4double incomingEnergy = 0;
    G4int k, i, l, hpw = 0;   
    // --------- Test the PostStepDoIt now, 10 events each --------------
    G4cout << "Entering the DoIt loops!!!!!"<< G4endl;
@@ -253,8 +252,6 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the gamma energy"<<G4endl;
-   G4cin >> incomingEnergy;
    for (i=0; i<numberOfParticles; i++)
    {
      for ( G4int k=0; k<numberOfMaterials; k++)
@@ -287,9 +284,9 @@ int j = 0;
             debugThisOne+=0;
            }
            G4cout << "Last chance before DoIt call: "
-//                << theGammaInelastic.GetNiso()
+//                << thePBarInelastic.GetNiso()
                 <<G4endl;
-           aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
+           aFinalState = (G4ParticleChange*)  (theProcesses[i]->AtRestDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
            const G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
@@ -316,7 +313,7 @@ int j = 0;
        }  // energy loop
      }  // material loop
    }  // particle loop
-   G4cout << "CHIPS_gamma_nucleus_Integration terminated successfully"<<endl;
+   G4cout << "CHIPS_pionMinus_AtRest_Integration terminated successfully"<<endl;
    return EXIT_SUCCESS;
 }
 
