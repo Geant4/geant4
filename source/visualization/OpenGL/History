@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2004-07-23 15:23:47 johna Exp $
+$Id: History,v 1.39 2004-09-13 12:12:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+13th September 2004  Gabriele Cosmo  (opengl-V06-02-05)
+- G4OpenGLTransform3D.cc: simplified implementation for GetMatrix()
+  to allow for porting on CLHEP-1.9.X series.
 
 23rd July 2004  John Allison
 - Draws auxiliary edges if required.
