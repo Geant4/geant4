@@ -100,7 +100,6 @@ processes/electromagnetic/utils         utils-V05-00-04a
 - Made the set of model per region available.
 - Made SubCutoff regime available per region.
 - Added control on CutsCouple usage.
-- Utilise SubType for GenericIons.
 - Fixed problems with lambda and range tables for STD hadrons/ions
   processes
 - Fixed problem of several runs with changed cuts/couples for STD processes.
