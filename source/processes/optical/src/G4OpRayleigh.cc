@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpRayleigh.cc,v 1.4 2001-01-29 23:05:07 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.5 2001-01-31 04:08:12 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,11 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
-// Updated:     2001-01-29 by Peter Gumplinger
+// Updated:     2001-01-30 by Peter Gumplinger
+//              > allow for positiv and negative CosTheta and force the
+//              > new momentum direction to be in the same plane as the
+//              > new and old polarization vectors
+//              2001-01-29 by Peter Gumplinger
 //              > fix calculation of SinTheta (from CosTheta)
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
@@ -105,6 +109,8 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double CosTheta = pow(rand, 1./3.);
 	G4double SinTheta = sqrt(1.-CosTheta*CosTheta);
 
+        if(G4UniformRand() < 0.5)CosTheta = -CosTheta;
+
 	// find azimuthal angle w.r.t old polarization vector 
 
 	rand = G4UniformRand();
@@ -122,35 +128,24 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         // Rotate new polarization direction into global reference system 
 
 	G4ThreeVector OldPolarization = aParticle->GetPolarization();
+        OldPolarization = OldPolarization.unit();
 
 	NewPolarization.rotateUz(OldPolarization);
+        NewPolarization = NewPolarization.unit();
 	
-        // -- new momentum direction is normal to the new polarization
-        // vector (components below expressed in reference system where
-        // new polarization vector is aligned with the z axis)
+        // -- new momentum direction is normal to the new
+        // polarization vector and in the same plane as the
+        // old and new polarization vectors --
 
-        SinTheta = 1.0;
-        CosTheta = 0.0;
+        G4ThreeVector NewMomentumDirection = 
+                              OldPolarization - NewPolarization * CosTheta;
 
-        rand = G4UniformRand();
+        if(G4UniformRand() < 0.5)NewMomentumDirection = -NewMomentumDirection;
+        NewMomentumDirection = NewMomentumDirection.unit();
 
-        Phi = twopi * rand;
-        SinPhi = sin(Phi);
-        CosPhi = cos(Phi);
+	aParticleChange.SetPolarizationChange(NewPolarization);
 
-        unit_x = SinTheta*CosPhi;
-        unit_y = SinTheta*SinPhi;
-        unit_z = CosTheta;
-
-        G4ThreeVector NewMomentumDirection(unit_x,unit_y,unit_z);
-
-        // Rotate New momentum direction vector into global reference system 
-
-	NewMomentumDirection.rotateUz(NewPolarization);
-
-	aParticleChange.SetPolarizationChange(NewPolarization.unit());
-
-	aParticleChange.SetMomentumChange(NewMomentumDirection.unit());
+	aParticleChange.SetMomentumChange(NewMomentumDirection);
 
         if (verboseLevel>0) {
 		G4cout << "New Polarization: " 
