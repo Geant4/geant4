@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2004-06-30 15:48:57 maire Exp $
+// $Id: RunAction.cc,v 1.3 2004-08-27 11:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,10 +179,14 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
-  if (process == "MuIoni")     { id = 1; cut = GetEnergyCut(material,1); }
-  if (process == "MuPairProd") { id = 2; cut = 2*GetEnergyCut(material,1); }
-  if (process == "MuBrems")    { id = 3; cut = GetEnergyCut(material,0); }
-  if (process == "MuNucl")       id = 4;
+  if (process == "muIoni")     
+     { id = 1; cut = GetEnergyCut(material,1); }
+  else if (process == "muPairProd") 
+     { id = 2; cut = 2*(GetEnergyCut(material,1) + electron_mass_c2); }
+  else if (process == "muBrems")    
+     { id = 3; cut = GetEnergyCut(material,0); }
+  else if (process == "MuNucl")       id = 4;
+
   if (id == 0) return 0.;
   
   G4int nbOfBins = 100;

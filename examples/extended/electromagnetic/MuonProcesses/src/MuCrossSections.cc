@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MuCrossSections.cc,v 1.2 2004-06-15 16:33:50 vnivanch Exp $
+// $Id: MuCrossSections.cc,v 1.3 2004-08-27 11:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@ MuCrossSections::~MuCrossSections()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_Macroscopic(G4String process, G4Material* material,
+G4double MuCrossSections::CR_Macroscopic(const G4String& process, G4Material* material,
                                          G4double tkin, G4double ep)
 					  
 // return the macroscopic cross section (1/L) in GEANT4 internal units
@@ -62,23 +62,23 @@ G4double MuCrossSections::CR_Macroscopic(G4String process, G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_PerAtom(G4String process, G4Element* element,
+G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element,
                                      G4double tkin, G4double ep)
 {
  G4double z = element->GetZ();
  G4double a = element->GetA();
  
  G4double sigma = 0.;
- if (process == "MuBrems")
+ if (process == "muBrems")
    sigma = CRB_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuIoni")
+ else if (process == "muIoni")
    sigma = CRK_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  else if (process == "MuNucl")
    sigma = CRN_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuPairProd")
+ else if (process == "muPairProd")
    sigma = CRP_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  return sigma;        
