@@ -4218,7 +4218,7 @@ for very small final interval.</a></td>
 
 <td></td>
 
-<td>Changes to AlongStepDoIt for LowEnergyIonisation.
+<td>New AlongStepDoIt for energy loss.
 <br>Deposit energy of electrons with energy less than 125 eV.</td>
 
 <td>Alessandra Forti</td>
@@ -4238,7 +4238,7 @@ for very small final interval.</a></td>
 
 <td></td>
 
-<td>Improvements for particles looping in magnetic field.</td>
+<td>Fixes for particles looping in magnetic field.</td>
 
 <td>John Apostolakis</td>
 
@@ -4264,7 +4264,7 @@ for very small final interval.</a></td>
 
 <td>46</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
@@ -4274,15 +4274,15 @@ for very small final interval.</a></td>
 
 <td></td>
 
-<td>Array index fixes and removal of 2 double deletes.</td>
+<td>Array index fixes and removal of 2 double deletes</td>
 
-<td>Hans-Peter Wellisch</td>
+<td>Hans-Peter</td>
 
 <td>990702</td>
 
 <td>46</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
@@ -4296,14 +4296,14 @@ for very small final interval.</a></td>
 the Transportation Manager in order to get the order of deletion of static
 objects defined.</td>
 
-<td>Gunter Folger,
-<br>John Apostolakis</td>
+<td>Gunter Folger,<br>
+John Apostolakis</td>
 
 <td>990702</td>
 
 <td>46</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
@@ -4313,17 +4313,17 @@ objects defined.</td>
 
 <td></td>
 
-<td>Improved README.
-<br>Corrected an fprintf in OpenGLXViewer::spew...EPS.</td>
+<td>Improved README.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Corrected an fprintf in OpenGLXViewer::spew...EPS.</td>
 
-<td>Guy Barrand
-<br>John Allison</td>
+<td>Guy Barrand<br>
+John Allison</td>
 
 <td>990703</td>
 
 <td>46</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
@@ -4340,9 +4340,157 @@ John Allison</td>
 
 <td>990705</td>
 
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>emlowen-01-00-09</td>
+
 <td></td>
 
 <td></td>
+
+<td>Removed AlongStepDoIt from bremstrahlung and ionisation products (electrons
+and photons killed directly in the PostStepDoIt for all processes). (Before
+processes were not called at all below 250 eV threshold.)</td>
+
+<td>Alessandra Forti</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>hadgenman-01-00-01</td>
+
+<td></td>
+
+<td></td>
+
+<td>~G4VIntraNuclearTransportModel: Remove delete theDeExcitation.</td>
+
+<td>Fred Jones
+<br>Hans-Peter</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>neutron_hp-01-00-01</td>
+
+<td></td>
+
+<td></td>
+
+<td>Zeroed targetMass in G4NeutronHPCaptureFS constructor.</td>
+
+<td>Hans-Peter</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>config-01-00-09</td>
+
+<td></td>
+
+<td></td>
+
+<td>Adaptations for NT.</td>
+
+<td>Gunter</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>STLInterface-24</td>
+
+<td></td>
+
+<td></td>
+
+<td>Adaptations for NT.</td>
+
+<td>Gunter</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>neutron_hp-01-00-01a</td>
+
+<td></td>
+
+<td></td>
+
+<td>~G4NeutronHPChannel: Comment out delete theBuffer, theFinalStates,
+active</td>
+
+<td>Fred Jones</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>config-01-00-10</td>
+
+<td></td>
+
+<td></td>
+
+<td>Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.</td>
+
+<td>John Allison</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>examples-01-00-13</td>
+
+<td></td>
+
+<td></td>
+
+<td>Relaxed non-optimised compiling for ExN04PhysicsList.cc for Linux.</td>
+
+<td>John Allison</td>
+
+<td>990706</td>
+
+<td>47</td>
+
+<td>testing</td>
 </tr>
 </table>
 
