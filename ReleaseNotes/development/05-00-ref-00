@@ -1,0 +1,201 @@
+
+                       geant4-05-00-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Migrated kernel examples and test to new G4ApplicationState.
+  o New module for persistency, implemented abstract layer to allow
+    to switch between multiple persistency technologies.
+    Removed specific ODBMS setup.
+  o Fixed problems in delta-electrons spectrum for STD prototype processes.
+  o Fixes for memory leaks in various hadronic models.
+  o Added new advanced examples (composite_calorimeter and lAr_calorimeter),
+    new extended example for persistency with ROOT-I/O.
+  o Migrated histogramming to AIDA 3.0 for most examples.
+  o New extended examples for biasing and scoring.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                   event-V04-01-11
+-----
+- Fix memory leak caused by deleting stacked tracks.
+- Migration to new G4ApplicationState.
+
+geometry                                geometry-V04-01-00
+--------
+- Merged changes for migration to new G4ApplicationState in messengers.
+
+geometry/magneticfield                  field-V04-01-06
+----------------------
+- Merged changes for migration to new G4ApplicationState in messengers
+  of unit tests.
+- Further fixes for unitialised variable in steppers: G4ExplicitEuler,
+  G4ImplicitEuler.
+- Fixed memory leaks in G4ImplicitEuler and ExplicitEuler.
+- Adjusted unit test accuracy requirements for spin.
+
+global                                  global-V04-01-05
+------
+- Merged changes for migration to new G4ApplicationState.
+- G4Integrator.icc: fixed some uninitialised variables.
+- Fixed unit test for G4Integrator.
+
+intercoms                               intercoms-V04-01-05
+---------
+- Merged changes for migration to new G4ApplicationState.
+
+interfaces                              interfaces-V04-01-02
+----------
+- Merged changes for migration to new G4ApplicationState.
+
+particles                               particles-V04-01-03
+---------
+- Merged changes for migration to new G4ApplicationState.
+
+persistency                             persistency-V04-01-02
+-----------
+- Implementation of abstract layer for persistency.
+  Separated functional interface (framework) and specific persistency
+  implementation. Removed ODBMS specific implementation and setup.
+  Now persistency library is part of the Geant4 kernel
+  (see documentation on user manuals for details).
+  o Ability to switch between multiple persistency technologies.
+  o Support persistent HepMC read and convert to transient HepMC.
+    NOTE - HepMC is not currently supported by CLHEP on Windows, so HepMC
+           persistency is temporarly excluded from compilation on Windows.
+  o Base class to register user converter.
+
+processes                               process-V04-01-01
+---------
+- Merged changes for migration to new G4ApplicationState.
+
+processes/electromagnetic/lowenergy     emlowen-V04-01-08
+-----------------------------------
+- Updated unit tests
+
+processes/electromagnetic/muons         muons-V04-01-03
+-------------------------------
+- Fixed problems in delta-electrons spectrum for STD prototype processes.
+- Fixed compilation warnings on SUN-CC for G4MuIonisationSTD.
+
+processes/electromagnetic/standard      stand-V04-01-07
+----------------------------------
+- Fix d-electron spectra for STD prototype processes.
+
+processes/electromagnetic/utils         utils-V04-01-11
+-------------------------------
+- Removed compilation warnings on SUN-CC for G4SCProcessorStand
+  and G4UniversalFluctuation
+- Merged changes for new G4ApplicationState in messengers.
+- STD prototype processes: fixed model selection + delta-electron spectra   
+
+processes/hadronic/cross_sections                      gcross-V04-01-07
+---------------------------------
+- Deleted unnecessary cerr diagnostic in G4QElectroNuclearCrossSection.
+
+processes/hadronic/models/chiral_inv_phase_space/body  ghad-chips-body-V04-01-08
+-----------------------------------------------------
+- Fixed bug of rho meson generated with zero width.
+- Fixed old bug "boost of not timelike Lor.V".
+- Fixed compilation warnings on SUN-CC.
+- Fixes for memory leaks.
+
+processes/hadronic/models/generator/kinetic_model      ghad-bin-V04-01-05
+-------------------------------------------------
+- Fixes for memory leaks and exceptions reported on Linux by system testing.
+
+processes/hadronic/models/generator/scattering         ghad-scatt-V04-01-08
+----------------------------------------------
+- Relaxed pion mass constraint in associated resonance production. 
+  to get rid of the mass range negative warning. 
+
+processes/hadronic/models/low_energy                   ghad-low-V04-01-01
+------------------------------------
+- Fixes for memory leaks.
+
+processes/hadronic/models/neutron_hp                   ghad-neu-V04-01-00
+------------------------------------
+- Fixed bug in accessing pointer to file stream in G4NeutronHPNames.
+  Added check to pointer validity and set to zero.
+
+run                                     run-V04-01-07
+---
+- Merged changes for migration to new G4ApplicationState.
+
+track                                   track-V04-01-03
+-----
+- Fixed initialisation of 'fCharge' in G4StepPoint constructor.
+
+tracking                                tracking-V04-01-13
+--------
+- Fix to G4VTrajectory::DrawTrajectory for default colors.
+- Fixed unprotected pointer in G4SmoothTrajectoryPoint::CreateAttValues.
+- Made Get/SetInstance() static methods not-inlined.
+
+visualization				vis-V04-01-10
+-------------
+- Merged changes for migration to new G4ApplicationState.
+- Fixes for compilation warnings on SUN-CC.
+- Fix memory leak in RayTracer.
+- Fixed /vis/scene/add/trajectories command.
+- Minor fixes in HepRep.
+
+environments                            envs-V04-01-00
+------------
+- Merged changes for migration to new G4ApplicationState.
+
+config                                  config-V04-01-08
+------
+- Removed ODBMS setup. Now library for persistency is built as part of the
+  kernel and specific implementations for persistency have been moved to
+  examples. Setup for ODBMS no more required. G4USE_HEPODBMS is no longer
+  used.
+- common.gmk, binmake.gmk: New dependency file algorithm that avoids
+  leaving corrupt .d files when #include'd files cannot be found.
+- Removed obsolete setup for ObjectSpace-STL (G4USE_OSPACE and related
+  variables). Removed obsolete variable G4USE_STL.
+- AIX-xlC.gmk: updated for porting on AIX with xlC 6.0.
+- Updated Configure scripts.
+
+examples                                examples-V04-01-05
+--------
+- Corrections to messengers for migration to new G4ApplicationState.
+- advanced:
+  + Migration of most examples to use AIDA 3.X for histogramming.
+  + Added "composite_calorimeter" example based on CMS test-beam
+    setup (ccal-V04-01-04).
+  + Added "lAr_calorimeter" example based on ATLAS lAr-calorimeter test-beam
+    setup (lAr_calorimeter-V04-01-03).
+
+- extended
+  + analysis (analysisExample-V04-01-01)
+    o added "A01" example for usage of analysis and HepRep.
+  + biasing (exbiasing-V04-01-01)
+    o reduced examples to three:
+      o B01 - importance sampling and scoring. Importance values are
+        defined according to the mass geometry. Scoring is also performed.
+      o B02 - uses a parallel geometry to define G4GeometryCell objects
+        for scoring and importance sampling. In addition it customizes
+        the scoring. In this example one scorer creates a histogram. It
+        can be run through a Python script.
+      o B03 - importance sampling and scoring interactively through Python.
+  + electromagnetic
+    o migrated histogramming to AIDA 3.X.
+    o fixes to allow compilation in gcc-3.2 (TestEm1, TestEm2, TestEm3).
+  + eventGenerator (exHepMC-V04-01-00)
+    o enhanced interface to HepMC to use CLHEP module.
+  + geometry/cad (cadex-V04-01-01)
+    o enhanced corrections for VERTEX_POINT, EDGE_LOOP and POLY_LOOP in
+      g4step_correct.pl script.
+  + persistency (PersistencyEx-V04-01-01)
+    o introduced example (PersEx01) for persistency of calorimeter hits
+      using ROOT-I/O.
+    o removed old ODBMS-based examples.
+
+tests                                   tests-V04-01-04
+-----
+- Corrections to messengers for migration to new G4ApplicationState.
+- test33: ported to gcc-3.2 compiler (test33-V04-01-05).
