@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
+// $Id: G4FissionProbability.cc,v 1.3 2003-11-12 14:20:11 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -83,11 +83,19 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
 
     G4double Cf = 2.0*sqrt(afission*MaximalKineticEnergy);
 
-    G4double Q1 = 1.0 + (Cf - 1.0)*exp(Cf);
-    G4double Q2 = 4.0*pi*afission*exp(SystemEntropy);
+    //    G4double Q1 = 1.0 + (Cf - 1.0)*exp(Cf);
+    //    G4double Q2 = 4.0*pi*afission*exp(SystemEntropy);
 	
-    G4double probability = Q1/Q2;
+    //    G4double probability = Q1/Q2;
  
+    
+    G4double Exp1 = 0.0;
+    if (SystemEntropy <= 160.0) Exp1 = exp(-SystemEntropy);
+    G4double Exp2 = exp( std::max(700.0,Cf-SystemEntropy) ); 
+
+    G4double probability = (Exp1 + (1.0-Cf)*Exp2) / 4.0*pi*afission;
+
+
     return probability;
 }
 
