@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.38 2003-06-21 01:34:02 japost Exp $
+// $Id: G4Transportation.cc,v 1.39 2003-06-25 15:30:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -55,42 +55,30 @@
 //
 // Constructor
 
-G4Transportation::G4Transportation()
-  : G4VProcess( G4String("Transportation") )
+G4Transportation::G4Transportation( G4int verboseLevel )
+  : G4VProcess( G4String("Transportation") ),
+    fParticleIsLooping( false ),
+    fPreviousSftOrigin (0.,0.,0.),
+    fPreviousSafety    ( 0.0 ),
+    fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
 
   transportMgr = G4TransportationManager::GetTransportationManager() ; 
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
-  fFieldPropagator = 0 ; 
 
-  // fFieldExists= false ; 
-
-  fParticleIsLooping = false ; 
- 
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
-  // Find out if an electromagnetic field exists
-  // 
-  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist() ;
-  // 
-  // The above code is problematic, because it only works if
-  // the field manager has informed about the detector's field 
-  // before this transportation process is constructed.
-  // I cannot foresee how the transportation can be informed later.
-  // The current answer is to ignore this data member and use 
-  // the member function DoesGlobalFieldExist() in its place ...
-  //    John Apostolakis, July 7, 1997
+  // Cannot determine whether a field exists here,
+  //  because it would only work if the field manager has informed 
+  //  about the detector's field before this transportation process 
+  //  is constructed.
+  // Instead later the method DoesGlobalFieldExist() is called
 
   fCurrentTouchableHandle = new G4TouchableHistory();
-  
-  // Initial value for safety and point-of-origin of safety
-
-  fPreviousSafety    = 0.0 ; 
-  fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
@@ -330,10 +318,46 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      }
      else
      {
-        // The energy is unchanged by field transport,
+        // The energy should be unchanged by field transport,
         //    - so the time changed will be calculated elsewhere
         //
         fEndGlobalTimeComputed = false;
+
+        // Check that the integration preserved the energy 
+        //     -  and if not correct this!
+        G4double  startEnergy= track.GetKineticEnergy();
+        G4double  endEnergy= fTransportEndKineticEnergy; 
+
+	static G4int no_inexact_steps=0, no_large_ediff;
+	G4double absEdiff = fabs(startEnergy- endEnergy);
+	if( absEdiff > perMillion * endEnergy ){
+	  no_inexact_steps++;
+	  // Possible statistics keeping here ...
+	}
+	if( fVerboseLevel > 1 ){
+	  if( fabs(startEnergy- endEnergy) > perThousand * endEnergy ){
+  	    static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
+            no_large_ediff ++;
+	    if( (no_large_ediff% warnModulo) == 0 ){
+	       no_warnings++;
+	       G4cout << "G4Transport: Energy changed in Step, more than per Mille: "
+		      << " Start= " << startEnergy
+		      << " End= "   << endEnergy
+		      << " Relative change= " << (startEnergy-endEnergy)/startEnergy
+		      << G4endl;
+	       G4cout << "G4Transport: Energy corrected -- but review field propagation parameters for accuracy." << G4endl;
+	       G4cerr << "G4Transport: Bad 'endpoint' Energy change detected and corrected,  occurred already " << no_large_ediff << " times." << G4endl;
+	       if( no_large_ediff == warnModulo * moduloFactor ){
+		  warnModulo *= moduloFactor;
+	       }
+	    }
+	  }
+	}  // end of if (fVerboseLevel)
+
+        // Correct the energy for fields that conserve it
+        //  This - hides the integration error
+        //       - but gives a better physical answer
+        fTransportEndKineticEnergy= track.GetKineticEnergy(); 
      }
 
      fTransportEndSpin = aFieldTrack.GetSpin();
