@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.33 2003-06-05 10:36:02 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.34 2003-06-13 09:42:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -83,9 +83,11 @@ class G4PropagatorInField
      // Inform this and all associated classes of q, p, m 
 
    G4FieldManager*  FindAndSetFieldManager(G4VPhysicalVolume* pCurrentPhysVol);
-     // Set the correct field manager (global or local), if one exists
-     //  and return it
-
+     // Set (and return) the correct field manager (global or local), 
+     //    if it exists.
+     // Should be called before ComputeStep is called;
+     //   - currently, ComputeStep will call it, if it has not been called.
+ 
    inline G4ChordFinder* GetChordFinder();
 
    inline G4int  SetVerboseLevel( G4int verbose );
@@ -156,6 +158,9 @@ class G4PropagatorInField
   // Clear all the State of this class and its current associates
   //   --> the current field manager & chord finder will also be called
 
+  inline void SetDetectorFieldManager( G4FieldManager* newGlobalFieldManager );
+      // Update this (dangerous) state -- for the time being
+
  protected:  // with description
 
    G4bool LocateIntersectionPoint( 
@@ -188,7 +193,6 @@ class G4PropagatorInField
                                    G4double      decreaseFactor,
                                    G4double      stepTrial,
                              const G4FieldTrack& aFieldTrack);
-
  private:
 
   // ----------------------------------------------------------------------
@@ -244,6 +248,9 @@ class G4PropagatorInField
    // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
    G4double       fPreviousSafety; 
+
+   // Flag whether field manager has been set for the current step
+   G4bool fSetFieldMgr; 
 
 private:
   // The filter encapsulates the algorithm which selects which
