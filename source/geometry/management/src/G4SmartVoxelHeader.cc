@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.21 2003-06-16 16:52:09 gunter Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.22 2003-10-01 15:05:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -783,9 +783,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
     }
 
-    // Setup volume, preserving current mother link
+    // Setup daughter's transformations
     //
-    pDaughter->Setup(pDaughter->GetMother());
     targetTransform = G4AffineTransform(pDaughter->GetRotation(),
                                         pDaughter->GetTranslation());
     replicated = true;
@@ -804,9 +803,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     {
       pDaughter=pVolume->GetDaughter(targetVolNo);
 
-      // Setup volume, preserving current mother link
+      // Setup daughter's transformations
       //
-      pDaughter->Setup(pDaughter->GetMother());
       targetTransform = G4AffineTransform(pDaughter->GetRotation(),
                                           pDaughter->GetTranslation());
       // Get underlying (and setup) solid

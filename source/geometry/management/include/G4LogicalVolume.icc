@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.12 2003-05-13 18:35:47 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.13 2003-10-01 15:05:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,29 +119,21 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
   // the World logical volume, propagates only if pointer != 0.
   // (one could also parameterise all the World volume for a particle type!)
 
-  G4VPhysicalVolume* myPhysical = pNewDaughter->GetMother();
-  G4VPhysicalVolume* pMotherPhys;
-  G4LogicalVolume* pDaughterLogical;
+  G4LogicalVolume* myLogical = pNewDaughter->GetMotherLogical();
+  G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
 
-  if( myPhysical !=0 )
+  if( myLogical !=0 )
   {
-    pMotherPhys = myPhysical->GetMother();
-    pDaughterLogical = pNewDaughter->GetLogicalVolume();
-
-    if( (pMotherPhys!=0) || ( pMotherPhys==0) && (fFastSimulationManager!=0) ) 
-    {
-     if( pDaughterLogical->GetFastSimulationManager()!=fFastSimulationManager )
-       pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,false);
-    }
-    else
-    {
-      pDaughterLogical->SetFastSimulationManager(0, false);
-    }
+    if( pDaughterLogical->GetFastSimulationManager()!=fFastSimulationManager )
+      pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,false);
+  }
+  else
+  {
+    pDaughterLogical->SetFastSimulationManager(0, false);
   }
 
   // Propagate the Field Manager, if the daughter has no field Manager.
   //
-  pDaughterLogical = pNewDaughter->GetLogicalVolume();
   G4FieldManager* pDaughterFieldManager = pDaughterLogical->GetFieldManager();
 
   if( pDaughterFieldManager == 0 )
