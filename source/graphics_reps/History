@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 16:32:03 gunter Exp $
+$Id: History,v 1.3 1999-02-07 17:02:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+greps-01-00-03  7th February 1999  John Allison
+- Removed GNU_GCC from G4Polymarker.cc.
+- Added G4VGraphicsScene::AddThis (G4Polycone and G4Polyhedra.
 
 greps-01-00-02  6th January 1999  John Allison
 - Very minor change in G4VisExtent.cc - 2 -> 2.
