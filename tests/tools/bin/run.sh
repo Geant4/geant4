@@ -71,7 +71,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test104.EMtest
   nice $G4INSTALL/tests/tools/bin/run.sh test105
   nice $G4INSTALL/tests/tools/bin/run.sh test106
-  if [ -n $G4USE_HEPODBMS ] ; then
+  if [ $G4USE_HEPODBMS ] ; then
     nice $G4INSTALL/tests/tools/bin/run.sh test401
     nice $G4INSTALL/tests/tools/bin/run.sh test402
   fi
@@ -125,12 +125,12 @@ echo "Starting $1 in $G4WORKDIR `date`"
     then
       $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
       > $dir/$1.exerciser.in; \
-      $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-      < $dir/$1.exerciser.in \
+      time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+      $dir/$1.exerciser.in \
       > $dir/$1.out 2> $dir/$1.err
     else
-      $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-      < $G4INSTALL/tests/$shortname/$1.in \
+      time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+      $G4INSTALL/tests/$shortname/$1.in \
       > $dir/$1.out 2> $dir/$1.err
     fi
 
