@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.2 1999-05-02 10:06:36 hpw Exp $
+// $Id: G4HadronicProcess.cc,v 1.3 1999-11-16 16:49:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
@@ -17,7 +17,7 @@
 #endif
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
-#include <typeinfo.h>
+//@@ add model name info, once typeinfo available #include <typeinfo.h>
  
  G4bool G4HadronicProcess::isoIsEnabled = true;
  void G4HadronicProcess::EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
