@@ -68,8 +68,8 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
          liquidArgon         78.362
            Aluminium         125.06
                 Iron         224.07
-                Lead         229.54
-             Uranium         296.04
+                Lead         229.55
+             Uranium         296.06
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -96,8 +96,8 @@ msc:   Tables of transport mean free paths.
          liquidArgon         78.362
            Aluminium         125.06
                 Iron         224.07
-                Lead         229.54
-             Uranium         296.04
+                Lead         229.55
+             Uranium         296.06
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -122,19 +122,19 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-                Air         990 eV          990 eV         48.4 keV        83.2 keV         990 eV 
-           H2liquid         990 eV          108 keV        1.23 MeV        3.18 MeV         990 eV 
-              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV         990 eV 
-        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV         990 eV 
-          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV         990 eV 
-               Iron        20.8 keV        1.28 MeV        8.52 MeV          22 MeV         990 eV 
-               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
-            Uranium         110 keV        1.92 MeV        10.5 MeV        26.1 MeV         990 eV 
+                Air         990 eV          990 eV 
+           H2liquid         990 eV          108 keV
+              Water         2.9 keV         347 keV
+        liquidArgon        6.18 keV         343 keV
+          Aluminium        6.89 keV         597 keV
+               Iron        20.8 keV        1.28 MeV
+               Lead         101 keV        1.38 MeV
+            Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.6 2000-08-28 13:56:48 stesting Exp $
+# $Id: TestEm1.out,v 1.7 2000-11-24 10:36:58 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -179,7 +179,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
          liquidArgon         3.7293
            Aluminium         6.3003
                 Iron         10.422
-                Lead         8.9776
+                Lead         8.9769
              Uranium          11.54
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -207,7 +207,7 @@ msc:   Tables of transport mean free paths.
          liquidArgon         3.7293
            Aluminium         6.3003
                 Iron         10.422
-                Lead         8.9776
+                Lead         8.9769
              Uranium          11.54
 
 hIoni:    Knock-on electron cross sections . 
@@ -233,17 +233,17 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                2.2 mm         6.05 mum           1 mm            1 mm            1 mm 
+                            gamma              e-    
+Cut in range                2.2 mm         6.05 mum
 Cut in energy
-                Air         990 eV          990 eV         48.4 keV        83.2 keV         990 eV 
-           H2liquid         990 eV          990 eV         1.23 MeV        3.18 MeV         990 eV 
-              Water        4.06 keV        3.27 keV        3.39 MeV        8.95 MeV         990 eV 
-        liquidArgon        9.08 keV        3.98 keV        3.24 MeV        8.32 MeV         990 eV 
-          Aluminium        9.99 keV        9.97 keV        5.02 MeV        13.1 MeV         990 eV 
-               Iron        31.1 keV        43.3 keV        8.52 MeV          22 MeV         990 eV 
-               Lead         124 keV        42.8 keV        8.52 MeV        20.9 MeV         990 eV 
-            Uranium         143 keV        53.4 keV        10.5 MeV        26.1 MeV         990 eV 
+                Air         990 eV          990 eV 
+           H2liquid         990 eV          990 eV 
+              Water        4.06 keV        3.27 keV
+        liquidArgon        9.08 keV        3.98 keV
+          Aluminium        9.99 keV        9.97 keV
+               Iron        31.1 keV        43.3 keV
+               Lead         124 keV        42.8 keV
+            Uranium         143 keV        53.4 keV
 ===================================================
 #
 /run/verbose 2
@@ -265,18 +265,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=65.34s Real=70.12s Sys=4.7s
+  User=70.06s Real=75.54s Sys=4.95s
 
- nb tracks/event   neutral:   27.00   charged:  641.13
- nb  steps/event   neutral:  143.17   charged: 1262.52
+ nb tracks/event   neutral:   28.42   charged:  650.00
+ nb  steps/event   neutral:  151.89   charged: 1278.63
 
  nb of process calls per event: 
-       eIoni    eBrem    compt     phot     conv  annihil
-     1236.72    24.55   116.17    25.75     1.25     1.25
+       eIoni    eBrem     phot    compt     conv  annihil
+     1251.55    25.69    27.03   123.47     1.39     1.39
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1940504003, 1661866614
+ Current couple of seeds = 1391858697, 202982242
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
