@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.11 2003-08-13 23:44:39 asaim Exp $
+// $Id: G4EventManager.hh,v 1.12 2003-09-09 20:09:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@ class G4EvManMessenger;
 #include "G4TrackStatus.hh"
 class G4SDManager;
 #include "globals.hh"
+class G4VUserEventInformation;
 
 #ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
                       // will support the HepMC module
@@ -182,6 +183,12 @@ class G4EventManager
         transformer->SetVerboseLevel( value );
       }
       // Set and get method of the verbose level
+
+      void SetUserInformation(G4VUserEventInformation* anInfo);
+      G4VUserEventInformation* GetUserInformation();
+      // Set and get method of G4VUserEventInformation object associating with
+      // the current event. Both methods are valid only for G4State_EventProc
+      // application state.
 
 };
 

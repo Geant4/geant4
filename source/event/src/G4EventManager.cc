@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.17 2003-08-13 23:44:39 asaim Exp $
+// $Id: G4EventManager.cc,v 1.18 2003-09-09 20:09:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -345,4 +345,32 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   if(tempEvent)
   { delete anEvent; }
 }
+
+void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
+{ 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_EventProc || currentEvent==0)
+  {
+    G4Exception("G4EventManager::SetUserInformation",
+                "IllegalApplicationState",
+                JustWarning,
+                "G4VUserEventInformation cannot be set because of ansense of G4Event.");
+    return;
+  }
+  
+  currentEvent->SetUserInformation(anInfo);
+}
+
+G4VUserEventInformation* G4EventManager::GetUserInformation()
+{ 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_EventProc || currentEvent==0)
+  { return 0; }
+  
+  return currentEvent->GetUserInformation();
+}
+
+
 
