@@ -25,6 +25,7 @@
 // 20 August 1999 G.Mancinelli added ICRU tables for alpha 
 // 31 August 1999 V.Ivanchenko update and cleen up 
 // 30 Sept.  1999 V.Ivanchenko minor upgrade 
+// 12 Dec.   1999 S. Chauvie added Barkas correction 
 // 19 Jan.   2000 V.Ivanchenko minor changing in Barkas corrections
 // --------------------------------------------------------------
 
@@ -1055,7 +1056,7 @@ G4double G4hLowEnergyIonisation::GetNuclearDEDX(G4Material* material,
   return ionloss;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //Function to compute the Barkas term from:
 //
 //Ref. Z_1^3 effect in the stopping power of matter for charged particles
@@ -1066,21 +1067,19 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   				                   const G4double KinEnergy)
 
 {
-  static double FTable[47][2]={ 0.02,21.5,   0.03,20.0,   0.04,18.0,   0.05,15.6,
-                                0.06,15.0,   0.07,14.0,   0.08,13.5,   0.09,13,
-                     0.1,12.2,  0.2,  9.25,  0.3,  7.0,     0.4,  6.0,   0.5,  4.5,
-                                0.6,  3.5,   0.7,  3.0,     0.8,  2.5,   0.9,  2.0, 
-                     1.0, 1.7,  1.2,  1.2,   1.3,  1.0,     1.4,  0.86,  1.5,  0.7,
-		                    1.6,  0.61,  1.7,  0.52,  1.8,  0.5,   1.9,  0.43,
-		                    2.0,  0.42,  2.1,  0.3,   2.4,  0.2,   
-				        3.0,    0.13,  3.08, 0.1,   3.1,  0.09, 3.3, 0.08,
-				        3.5,    0.07,  3.8,  0.06,		
-				        4.0,    0.051, 4.1,  0.04,  4.8,  0.03, 
-				        5.0,    0.024, 5.1,  0.02,
-                                        6.0,    0.013, 6.5,  0.01,
-				        7.0,    0.009, 7.1,  0.008,
-				        8.0,    0.006, 9.0,    0.0032, 
-	              10.0,   0.0025};
+static double FTable[47][2] = { 
+	0.02, 21.5,	0.03, 20.0,	0.04, 18.0,	0.05, 15.6,
+        0.06, 15.0,	0.07, 14.0,   	0.08, 13.5,   	0.09, 13,
+        0.1,  12.2,  	0.2,   9.25,  	0.3,   7.0,     0.4,   6.0,   
+	0.5,  4.5, 	0.6,   3.5,   	0.7,   3.0,     0.8,   2.5,   
+	0.9,  2.0,  	1.0,   1.7,  	1.2,   1.2,   	1.3,   1.0,     
+	1.4,  0.86,  	1.5,   0.7,	1.6,   0.61,  	1.7,   0.52,  
+	1.8,  0.5,   	1.9,   0.43,	2.0,   0.42,  	2.1,   0.3,   
+	2.4,  0.2,	3.0,   0.13,  	3.08,  0.1,   	3.1,   0.09, 
+	3.3,  0.08,     3.5,   0.07,  	3.8,   0.06,	4.0,   0.051, 
+	4.1,  0.04,  	4.8,   0.03,    5.0,   0.024,   5.1,   0.02,
+        6.0,  0.013,    6.5,   0.01,	7.0,   0.009, 	7.1,   0.008,
+	8.0,  0.006, 	9.0,   0.0032, 10.0,   0.0025 };
 
   // Internal variable for Kinetic Energy 
   // in order to keep Barkas correction to be constant below 500 keV 
@@ -1090,9 +1089,9 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
 
   // Information on particle and material
   
-  G4double BarkasTerm=0.0;
-  G4double AMaterial=0.0;
-  G4double ZMaterial=0.0;
+  G4double BarkasTerm = 0.0;
+  G4double AMaterial = 0.0;
+  G4double ZMaterial = 0.0;
   G4double RoMaterial = material->GetDensity()/6.2415063631e18;
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int i=0;
@@ -1109,20 +1108,31 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
     G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*pow( ZMaterial,-1.19 ) );
     G4double W = ( EtaChi * pow( ZMaterial,1.0/6.0 ) ) / sqrt(X); 
     G4double FunctionOfW = 0.0;
+    
     for(int IndexOfFTable=0; IndexOfFTable<47; IndexOfFTable++) {
+    
       if(W<FTable[IndexOfFTable][0]) {
+    
         if(0 == IndexOfFTable) {
      	  FunctionOfW = FTable[0][1] ;
         }
+    
      	else if(46 == IndexOfFTable) {
           FunctionOfW = FTable[46][1] ;
         }
+    
         else {
-     	  FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2.0;
-        }
+          FunctionOfW = ( W - FTable[IndexOfFTable-1][0]) 
+	   		/ (FTable[IndexOfFTable][0] - FTable[IndexOfFTable-1][0]) ;    	
+	  FunctionOfW *= (FTable[IndexOfFTable][1] - FTable[IndexOfFTable-1][1]) ;
+	  FunctionOfW += FTable[IndexOfFTable-1][1] ;
+	}
+    
         break;
       }
+    
     }
+    
     G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,1.5) );
     BarkasTerm += BarkasCoeffLbyARB * ( 0.030708 * ZMaterial * RoMaterial )
                	          / ( AMaterial*Beta*Beta );
@@ -1131,6 +1141,7 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   return BarkasTerm;
 }
         
+       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetMolecICRU_R49Loss(const G4Material* material, 
