@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.2 2001-10-11 13:59:21 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.3 2001-10-25 02:30:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@ G4eIonisationSpectrum::G4eIonisationSpectrum():
 G4eIonisationSpectrum::~G4eIonisationSpectrum() 
 {
   delete theParam;
+  theParam = 0;
 }
 
 

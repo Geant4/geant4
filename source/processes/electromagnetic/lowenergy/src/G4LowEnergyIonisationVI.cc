@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.13 2001-10-24 22:03:32 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.14 2001-10-25 02:30:54 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -202,7 +202,7 @@ void G4LowEnergyIonisationVI::BuildPhysicsTable(const G4ParticleDefinition& aPar
  
   BuildDEDXTable(aParticleType);
 
-  if(verboseLevel > 0) {
+  if (verboseLevel > 0) {
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable end"
            << G4endl;
       }
