@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2004-11-17 22:06:22 gbarrand Exp $
+$Id: History,v 1.37 2004-11-18 14:04:27 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+18th November 2004  Guy Barrand
+- G4OpenInventorView : have an SoOrthographicCamera
+  and a first implementation of SetView.
 
 17th November 2004  Guy Barrand
 - G4OpenInventorSceneHandler : rm the AddThis(G4Box,....). We use

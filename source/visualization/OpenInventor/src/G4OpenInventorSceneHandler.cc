@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.25 2004-11-17 22:06:22 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.26 2004-11-18 14:02:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -553,6 +553,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   } else {
     fModelingSolid = false;
   }
+
   //printf("debug : PreAddThis : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
                

@@ -27,6 +27,7 @@
 
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoShape.h>
+#include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoWriteAction.h>
 
@@ -36,6 +37,7 @@
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
+#include "G4Scene.hh"
 
 G4OpenInventorViewer::G4OpenInventorViewer(
  G4OpenInventorSceneHandler& sceneHandler
@@ -44,6 +46,7 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fG4OpenInventorSceneHandler(sceneHandler)
 ,fInteractorManager(0)
 ,fSoSelection(0)
+,fSoCamera(0)
 ,fSoImageWriter(0)
 ,fGL2PSAction(0) //To be set be suclass.
 {
@@ -62,8 +65,21 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoSelection = new SoSelection;
   fSoSelection->policy = SoSelection::SINGLE;
   fSoSelection->ref();
+
+  fSoCamera = new SoOrthographicCamera;
+  fSoCamera->viewportMapping.setValue(SoCamera::ADJUST_CAMERA);
+  //camera->aspectRatio.setValue(10);
+  fSoCamera->position.setValue(0,0,10);
+  fSoCamera->orientation.setValue(SbRotation(SbVec3f(0,1,0),0));
+  fSoCamera->height.setValue(10);
+  fSoCamera->nearDistance.setValue(1);
+  fSoCamera->farDistance.setValue(100);
+  fSoCamera->focalDistance.setValue(10);
+  fSoSelection->addChild(fSoCamera);
+
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
+  // SoImageWriter should be the last.
   fSoImageWriter = new SoImageWriter();
   fSoImageWriter->fileName.setValue("g4out.ps");
   fSoSelection->addChild(fSoImageWriter);
@@ -126,6 +142,61 @@ void G4OpenInventorViewer::ClearView () {
 }
 
 void G4OpenInventorViewer::SetView () {
+
+  // Get G4 camera infos :
+  const G4Point3D target
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const G4Vector3D& direction = fVP.GetViewpointDirection().unit();
+  const G4Point3D cameraPosition = target + cameraDistance * direction;
+  const GLdouble pnear = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar  = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  //const G4Normal3D& up = fVP.GetUpVector ();  
+
+  /*FIXME : G4OpenGLView::SetView does the below. Do we need that with IV ?
+  G4Point3D gltarget;
+  if (cameraDistance > 1.e-6 * radius) {
+    gltarget = target;
+  } else {
+    gltarget = target - radius * fVP.GetViewpointDirection().unit();
+  }
+  */  
+
+/*
+  printf("debug : target : %g %g %g\n",target.x(),
+                                       target.y(),
+                                       target.z());
+  printf("debug : dir : %g %g %g\n",direction.x(),
+                                    direction.y(),
+                                    direction.z());
+  printf("debug : pos : %g %g %g\n",cameraPosition.x(),
+                                    cameraPosition.y(),
+                                    cameraPosition.z());
+  printf("debug : near %g far %g\n",pnear,pfar);
+*/
+
+  // fSoCamera setup :
+  fSoCamera->position.setValue((float)cameraPosition.x(),
+                               (float)cameraPosition.y(),
+                               (float)cameraPosition.z());
+
+  //SbVec3f upFrom(0,1,0);
+  //SbVec3f upTo((float)up.x(),(float)up.y(),(float)up.z());
+  //fSoCamera->orientation.setValue(SbRotation(upFrom,upTo));
+  SbVec3f sbTarget((float)target.x(),
+                   (float)target.y(),
+                   (float)target.z());
+  sbTarget.normalize();
+  // PointAt by keeping a up along y.
+  fSoCamera->pointAt(sbTarget);
+
+  //fSoCamera->height.setValue(10);
+  fSoCamera->nearDistance.setValue(pnear);
+  fSoCamera->farDistance.setValue(pfar);
+  //fSoCamera->focalDistance.setValue((float)cameraDistance);
 }
 
 void G4OpenInventorViewer::DrawView () {

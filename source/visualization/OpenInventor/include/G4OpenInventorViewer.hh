@@ -31,6 +31,7 @@
 #include "G4VViewer.hh"
 
 class SoSelection;
+class SoOrthographicCamera;
 class Geant4_SoImageWriter;
 class Geant4_SoGL2PSAction;
 
@@ -68,6 +69,7 @@ protected:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4VInteractorManager* fInteractorManager;
   SoSelection* fSoSelection;
+  SoOrthographicCamera* fSoCamera;
   Geant4_SoImageWriter* fSoImageWriter;
   Geant4_SoGL2PSAction* fGL2PSAction;
 };
