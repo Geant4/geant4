@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.22 2000-11-20 17:58:02 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.23 2000-11-28 15:05:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,6 +27,7 @@
 // 02.08.00 V.Grichine, poin is outside check in   Distance ToOut(p)
 // 08.08.00 V.Grichine, more stable roots of 2-equation in Distance ToOut(p,v,...)
 // 31.10.00 V.Grichine, assign sr, sphi in Distance ToOut(p,v,...)
+// 28.11.00 V.Grichine, bug fixed in Inside(p)
 
 #include "G4Tubs.hh"
 
@@ -437,7 +438,7 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 	}
 	else
 	{
-	  //  if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
+	  if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
 
 	  if ( pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5 &&
 	       pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in = kSurface ;
