@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2004-02-09 14:45:20 gcosmo Exp $
+$Id: History,v 1.94 2004-10-28 17:19:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 20th, 2004  P.Gumplinger - field-V06-02-00
+----------------------------
+- Added Set/GetAnomaly() methods in G4Mag_SpinEqRhs.
 
 Feb 9th, 2004  G.Cosmo - field-V06-00-00
 ----------------------
