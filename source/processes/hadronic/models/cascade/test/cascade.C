@@ -10,7 +10,8 @@ printf(" ::: Reading cascade data ...\n");
 ifstream in;
 in.open("cascade.out", ios::in);
 
-Float_t nEve, typePart, eKin, momX, momY, momZ, nucA, nucZ, nucEx;
+Float_t nEve, typePart, eKin, momX, momY, momZ, nucEx;
+Int_t nucA, nucZ;
 Int_t nlines = 0;
 
 TFile *f = new TFile("cascade.root","RECREATE");
@@ -107,9 +108,9 @@ ntuple->SetLineColor(1);
 ntuple->SetFillColor(0);
 ntuple->Draw("eKin", "typePart==0");
 
-// Nucleons
+// Nuclei
 r->cd(5);
-gPad->GetFrame()->SetFillColor(0);
+//gPad->GetFrame()->SetFillColor(0);
 
 ntuple->SetFillStyle(4000);
 ntuple->SetFillColor(0); 
