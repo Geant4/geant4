@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2000-08-04 14:30:41 vnivanch Exp $
+$Id: History,v 1.31 2000-08-10 22:07:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.08.2000 - V.Ivanchenko: Old bug in Fluctuations of Electronic
+             Energy losses of hadrons and ions are fixed
 
 04.08.2000 - V.Ivanchenko: Fluctuations of Nuclear Stopping Powers are
              Energy losses of hadrons and ions are implemented

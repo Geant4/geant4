@@ -31,6 +31,7 @@
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
 // 25 July   2000 V.Ivanchenko New design iteration
+// 09 July   2000 V.Ivanchenko Add GetContinuousStepLimit
 // ------------------------------------------------------------
  
 #ifndef G4hLowEnergyIonisation_h
@@ -83,6 +84,11 @@ public: // Without description
   void SetLowEnergyForAntiProtonParametrisation(G4double energy) 
                               {antiProtonLowEnergy = energy;} ;
 
+  G4double GetContinuousStepLimit(const G4Track& track,
+                                        G4double previousStepSize,
+                                        G4double currentMinimumStep,
+                                        G4double& currentSafety); 
+
 public: // With description
   void SetElectronicStoppingPowerModel(const G4ParticleDefinition* aParticle,
                                        const G4String& dedxTable);
@@ -103,10 +109,6 @@ public: // With description
   
   void SetBarkasOff() {theBarkas = false;};
   // This method switch on calculation of the Barkas Effect for antiproton
-
-  G4double GetConstraints(const G4DynamicParticle* particle,
-                          const G4Material* material);
-  // Function to determine StepLimit
                                        
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
                                    const G4Step& stepData ) ;
@@ -140,8 +142,11 @@ private:
                   const G4ParticleDefinition& aParticleType,
 	  	        G4double kineticEnergy,
 			G4double atomicNumber,
-			G4double excEnergy,
                         G4double deltaCutInEnergy) const;
+
+  G4double GetConstraints(const G4DynamicParticle* particle,
+                          const G4Material* material);
+  // Function to determine StepLimit
 
   G4double ProtonParametrisedDEDX(const G4Material* material, 
                                         G4double kineticEnergy) const;
@@ -167,7 +172,8 @@ private:
   G4double ElectronicLossFluctuation(const G4DynamicParticle* particle,
                                      const G4Material* material,
                                            G4double chargeSquare,
-                                           G4double meanLoss) const;
+                                           G4double meanLoss,
+                                           G4double step) const;
   // Function to sample electronic losses
 		    
   // hide assignment operator 

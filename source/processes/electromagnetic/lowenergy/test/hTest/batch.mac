@@ -28,7 +28,7 @@
 /calor/cutG 1.0 mm
 /calor/cutE 1.0 mm
 #  hist file name
-/plots/sethistName c12s.paw 
+/plots/sethistName c12n.paw 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
@@ -39,7 +39,7 @@
 #/gun/energy 6.56 MeV
 /gun/energy 3240.0 MeV
 #
-/run/beamOn 10
+/run/beamOn 1000
 
 
 

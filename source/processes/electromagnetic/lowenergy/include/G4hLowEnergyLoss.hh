@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.4 2000-08-04 14:28:03 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.5 2000-08-10 22:07:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -37,8 +37,10 @@
 // 7/10/98 some bugs fixed + some cleanup , L.Urban 
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
-// 31/03/00 : rename to lowenergy subdirectory as G4hLowEnergyLoss.hh V.Ivanchenko
+// 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
+// 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 //
+// ****************************************************************************
 
 #ifndef G4hLowEnergyLoss_h
 #define G4hLowEnergyLoss_h 1
@@ -69,16 +71,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
     ~G4hLowEnergyLoss();
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
-
-    G4double GetContinuousStepLimit(
-                              const G4Track& track,
-                                    G4double previousStepSize,
-                                    G4double currentMinimumStep,
-                                    G4double& currentSafety); 
-
-    G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& Step);
-
     virtual G4double GetMeanFreePath(
                                 const G4Track& track,
                                       G4double previousStepSize,
@@ -90,13 +82,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
 
   protected:
-
-    virtual G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
-    virtual G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial,
-                              G4double MeanLoss) ;
 
   private:
 
@@ -294,8 +279,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4bool EnlossFlucFlag ;
 
 };
- 
-#include "G4hLowEnergyLoss.icc"
 
 #endif
  

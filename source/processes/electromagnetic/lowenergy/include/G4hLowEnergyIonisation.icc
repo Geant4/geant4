@@ -19,6 +19,7 @@
 // charged hadrons.
 // ************************************************************
 // 28 July 1999 V.Ivanchenko cleen up
+// 09 Aug  2000 V.Ivanchenko add GetContinuousStepLimit
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -50,6 +51,23 @@ inline G4double G4hLowEnergyIonisation::GetMeanFreePath(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+         
+inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
+                                        const G4Track& track,
+                                              G4double,
+                                              G4double currentMinimumStep,
+                                              G4double&)
+{ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4hLowEnergyIonisation::IsApplicable(
                                 const G4ParticleDefinition& particle) const
@@ -57,4 +75,8 @@ inline G4bool G4hLowEnergyIonisation::IsApplicable(
    return(particle.GetPDGCharge() != 0.);
 }
          
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
 

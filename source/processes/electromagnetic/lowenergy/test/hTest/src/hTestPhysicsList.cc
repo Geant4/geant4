@@ -260,11 +260,10 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      G4hIonisation* iIon = new G4hIonisation() ;
+      //      G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-      // G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-      // G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
+       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
 	//iIon->SetIonDefinition(particle) ;

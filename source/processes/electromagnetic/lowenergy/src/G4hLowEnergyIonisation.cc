@@ -346,15 +346,18 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-      G4double chargeSquare = theIonEffChargeModel->TheValue(&aParticleType,
-                              material,lowEdgeEnergy) ;
+      G4double chargeSquare = theIonEffChargeModel->
+                              TheValue(&aParticleType,material,lowEdgeEnergy) ;
 	  
       G4double sigma = 0.0 ;  
       for (G4int iel=0; iel<NumberOfElements; iel++ ) {
-	sigma += theAtomicNumDensityVector[iel]*chargeSquare*
-		 ComputeMicroscopicCrossSection(aParticleType,
-			lowEdgeEnergy,(*theElementVector)(iel)->GetZ(),
-                        excEnergy,deltaCut ) ;
+	sigma += theAtomicNumDensityVector[iel]*
+                 chargeSquare*
+		 ComputeMicroscopicCrossSection(
+                        aParticleType,
+			lowEdgeEnergy,
+                        (*theElementVector)(iel)->GetZ(),
+                        deltaCut ) ;
       }
 	  
       // mean free path = 1./macroscopic cross section
@@ -375,7 +378,6 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
                            const G4ParticleDefinition& aParticleType,
 			         G4double kineticEnergy,
 				 G4double atomicNumber,
-				 G4double excEnergy,
 				 G4double deltaCutInEnergy) const
 {
   //******************************************************************
@@ -388,7 +390,6 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   G4double energy, beta2, tmax, var ;
   G4double totalCrossSection = 0.0 ;
   
-  G4double eexc2 = excEnergy*excEnergy ;
   G4double particleMass = aParticleType.GetPDGMass() ;
   
   // get particle data ...................................
@@ -627,7 +628,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     if((EnlossFlucFlag) && (0.0 < eloss) ) {
       
       eloss = ElectronicLossFluctuation(particle, material, 
-                                        chargeSquare, eloss) ;
+                                        chargeSquare, eloss, step) ;
       finalT = kineticEnergy - eloss - nloss ;
     }    
   }
@@ -1050,7 +1051,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
                                  const G4DynamicParticle* particle,
                                  const G4Material* material,
                                        G4double chargeSquare,
-                                       G4double    meanLoss) const
+                                       G4double meanLoss,
+                                       G4double step) const
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same 
 // as in Glandz in Geant3.
@@ -1060,15 +1062,15 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
   G4int    imat        = material->GetIndex(); 
   G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double electronDensity = material->GetElectronDensity();
 
   // get particle data
   G4double tkin   = particle->GetKineticEnergy();
   G4double particleMass = particle->GetMass() ;
   G4double deltaCutInKineticEnergyNow = deltaCutInKineticEnergy[imat];
-  G4double mLoss = meanLoss/chargeSquare;
 
   // shortcut for very very small loss 
-  if(mLoss < minLoss) return meanLoss ;
+  if(meanLoss < minLoss) return meanLoss ;
 
   // Validity range for delta electron cross section
   G4double threshold = G4std::max(deltaCutInKineticEnergyNow,ipotFluct);
@@ -1086,16 +1088,17 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation 
-  if(mLoss > kappa*tmax)
+  if(meanLoss > kappa*tmax)
   {
-    siga = sqrt(mLoss*tmax*(1.-0.5*beta2)) ;
-    loss = G4RandGauss::shoot(mLoss,siga) ;
+    siga = sqrt(tmax * (0.5-0.25*beta2) * step *
+                factor * electronDensity * chargeSquare/ beta2) ;
+    loss = G4RandGauss::shoot(meanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
-    loss *= chargeSquare ;
     return loss ;
   }
 
   // Non Gaussian fluctuation 
+  G4double mLoss = meanLoss/chargeSquare;
   static const G4double probLim = 0.01 ;
   static const G4double sumaLim = -log(probLim) ;
   static const G4double alim = 10.;
