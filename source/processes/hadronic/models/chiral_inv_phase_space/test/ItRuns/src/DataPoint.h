@@ -6,8 +6,9 @@
 class ANADataPoint
 {
   public:
-  ANADataPoint(G4double aBin, G4double aMass) : 
-         highBin(aBin), theMass(aMass), meanKinetic(0), entries(0), xSec(0) {}
+  ANADataPoint(G4double aBin, G4double aWidth, G4double aMass) : 
+         highBin(aBin), theMass(aMass), meanKinetic(0), 
+	 entries(0), xSec(0), theWidth(aWidth) {}
   
   G4bool InsertAt(G4double anEnergy, G4double aXsec)
   {
@@ -27,7 +28,10 @@ class ANADataPoint
   void DumpInfo(ostream & aOStream)
   {
     // G4cout << "DataPoint Info "<<meanKinetic/GeV<<" "<<xSec<<" "<<highBin<<" "<<G4endl;
-    aOStream <<meanKinetic/GeV<<" "<<xSec<<G4endl;
+    G4double err=0;
+    if(entries) err=xSec/sqrt(G4double(entries));
+    aOStream <<meanKinetic/GeV<<" "<< 0.<<" "
+             <<xSec/theWidth<<" "<<err/theWidth<<G4endl;
   }
   G4double GetMeanKinetic(){return meanKinetic;}
   G4double GetXSec(){return xSec;}
@@ -36,6 +40,7 @@ class ANADataPoint
 
   G4double highBin;
   G4double theMass;
+  G4double theWidth;
 
   G4double meanKinetic;
   G4int entries;

@@ -24,6 +24,7 @@ class ANAParticle
     {
       return sqrt(max(G4double(0), px*px+py*py+pz*pz));
     }
+    G4double GetCosTheta() { return pz/GetMomentum(); }
     
     G4double GetWeight() 
     {

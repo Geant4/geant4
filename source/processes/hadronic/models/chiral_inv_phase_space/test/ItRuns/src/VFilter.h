@@ -6,7 +6,17 @@ class TVANAFilter
 {
   public:
   
+  TVANAFilter(G4String aName) : theName(aName) {}
   virtual G4bool Accept(Type & anInput) = 0;
+  G4String GetName() {return theName;}
+  
+  private:
+  
+  TVANAFilter() {}
+  
+  private:
+  
+  G4String theName;
 };
 
 #endif

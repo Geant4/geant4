@@ -5,11 +5,12 @@
 #include "Analysis/src/DataPoint.h"
 #include "Analysis/src/TVPlot.h"
 
-template <class DataPointType>
+template <class DataPointType, class FilterType>
 class ANAPlot : public TVANAPlot<DataPointType>
 {
   public:
-    ANAPlot(G4int aPDG, G4double aMass, G4double aTotalXsec, G4String fn = "");
+    ANAPlot(G4int aPDG, G4double aMass, G4double aTotalXsec, 
+           G4String fn = "", FilterType * aFilter = 0);
   
     G4bool Insert(G4int aPDG, G4double anEnergy, G4double aXsec)
     {
@@ -26,7 +27,8 @@ class ANAPlot : public TVANAPlot<DataPointType>
     void DumpInfo(ostream & aOStream)
     {
       G4cout <<" Dumping info for PDG = "<<thePDG<<G4endl;
-      ofstream theOutput(theOutputFile);
+      G4String it = theOutputFile+theFilter->GetName();
+      ofstream theOutput(it);
       for(G4int i=0; i<theDataPoints.size(); i++)
       {
         theDataPoints[i].DumpInfo(aOStream);
@@ -34,46 +36,50 @@ class ANAPlot : public TVANAPlot<DataPointType>
       }
     }
     
+    G4bool Filter(ANAParticle * aPart) {return theFilter->Accept(aPart->GetCosTheta());}
+    
   private:
     G4int thePDG;
     G4double theTotalXsec;
+    FilterType * theFilter;
     
     G4std::vector<DataPointType> theDataPoints;
     G4String theOutputFile;
 };
 
-template<class DataPointType>
-ANAPlot<DataPointType>::ANAPlot(G4int aPDG, G4double aMass, G4double aTotalXsec, G4String fn) : 
-         thePDG(aPDG), theTotalXsec(aTotalXsec)
+template<class DataPointType, class FilterType>
+ANAPlot<DataPointType, FilterType>::ANAPlot(G4int aPDG, G4double aMass, G4double aTotalXsec,
+                                            G4String fn, FilterType * aFilter) : 
+         thePDG(aPDG), theTotalXsec(aTotalXsec), theFilter(aFilter)
 {
   theOutputFile = fn;
-  theDataPoints.push_back(DataPointType(0.05*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.075*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.1*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.125*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.15*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.175*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.2*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.25*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.3*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.35*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.4*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.45*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.5*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.55*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.6*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.7*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.8*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.9*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.0*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.1*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.2*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.3*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.4*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.5*GeV, aMass));
-  theDataPoints.push_back(DataPointType(1.6*GeV, aMass));
-  theDataPoints.push_back(DataPointType(2.0*GeV, aMass));
-  theDataPoints.push_back(DataPointType(2.5*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.05*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.075*GeV, 0.025*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.1*GeV, 0.025*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.125*GeV, 0.025*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.15*GeV, 0.025*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.175*GeV, 0.025*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.2*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.25*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.3*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.35*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.4*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.45*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.5*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.55*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.6*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.7*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.8*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.9*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.0*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.1*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.2*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.3*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.4*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.5*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(1.6*GeV, 0.1*GeV, aMass));
+  theDataPoints.push_back(DataPointType(2.0*GeV, 0.4*GeV, aMass));
+  theDataPoints.push_back(DataPointType(2.5*GeV, 0.5*GeV, aMass));
 }
 
 #endif
