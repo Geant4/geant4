@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Trap.cc,v 1.1 1999-01-08 16:31:52 gunter Exp $
+// $Id: testG4Trap.cc,v 1.2 1999-11-30 11:15:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -44,7 +44,7 @@ G4bool testG4Trap()
     G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
     G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
 
-    G4double Dist;
+    G4double Dist, dist ;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -66,11 +66,17 @@ G4bool testG4Trap()
     
     G4Trap trap2("Test Trdlike #2",trapvert);
 
+    G4Trap trap3("trap3",50,0,0,50,50,50,pi/4,50,50,50,pi/4) ;
+    G4Trap trap4("trap4",50,0,0,50,50,50,-pi/4,50,50,50,-pi/4) ;
+
+
 // Check name
+
     assert(trap1.GetName()=="Test Boxlike #1");
     assert(trap2.GetName()=="Test Trdlike #2");
 
 // Check Inside
+
     assert(trap1.Inside(pzero)==kInside);
     assert(trap1.Inside(pbigz)==kOutside);
     assert(trap1.Inside(ponxside)==kSurface);
@@ -84,6 +90,7 @@ G4bool testG4Trap()
     assert(trap2.Inside(ponzside)==kSurface);
 
 // Check Surface Normal
+
     G4ThreeVector normal;
 
     normal=trap1.SurfaceNormal(ponxside);
@@ -269,6 +276,19 @@ G4bool testG4Trap()
     assert(ApproxEqual(Dist,kInfinity));
     Dist=trap2.DistanceToIn(pbigmx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
+
+    dist=trap3.DistanceToIn(G4ThreeVector(50,-50,0),vy);
+    G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vy) = "<<dist<<endl ;
+
+    dist=trap3.DistanceToIn(G4ThreeVector(50,-50,0),vmy);
+    G4cout<<"trap3.DistanceToIn(G4ThreeVector(50,-50,0),vmy) = "<<dist<<endl ;
+
+    dist=trap4.DistanceToIn(G4ThreeVector(50,50,0),vy);
+    G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vy) = "<<dist<<endl ;
+
+    dist=trap4.DistanceToIn(G4ThreeVector(50,50,0),vmy);
+    G4cout<<"trap4.DistanceToIn(G4ThreeVector(50,50,0),vmy) = "<<dist<<endl ;
+
 
 
 // CalculateExtent
