@@ -207,30 +207,37 @@
       // original was an anti-particle and annihilation has taken place
       annihilation = true;
       G4double ekcor = 1.0;
-      G4double ek = originalIncident->GetKineticEnergy()/GeV;
-      const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass()/GeV;
-      if( ek > 1.0 )ekcor = 1./ek;
+      G4double ek = originalIncident->GetKineticEnergy();
+      G4double ekOrg = ek;
+      
+      const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass();
+      if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
       const G4double atomicWeight = targetNucleus.GetN();
-//      ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
-      modifiedOriginal.SetKineticEnergy( ek*GeV );
+      ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
+      
+      G4double tkin = targetNucleus.Cinema( ek );
+      ek += tkin;
+      ekOrg += tkin;
+      modifiedOriginal.SetKineticEnergy( ekOrg );
+      
       //
       // evaporation --  re-calculate black track energies
       //                 this was Done already just before the cascade
       //
-      G4double tkin = targetNucleus.EvaporationEffects( ek*GeV )/GeV;
-      ek -= tkin;
-      ek = G4std::max( 0.0001, ek );
-      modifiedOriginal.SetKineticEnergy( ek*GeV );
-      G4double amas = originalIncident->GetDefinition()->GetPDGMass()/GeV;
-      G4double et = ek + amas;
+      tkin = targetNucleus.EvaporationEffects( ek );
+      ekOrg -= tkin;
+      ekOrg = G4std::max( 0.0001*GeV, ekOrg );
+      modifiedOriginal.SetKineticEnergy( ekOrg );
+      G4double amas = originalIncident->GetDefinition()->GetPDGMass();
+      G4double et = ekOrg + amas;
       G4double p = sqrt( abs(et*et-amas*amas) );
-      G4double pp = modifiedOriginal.GetMomentum().mag()/GeV;
+      G4double pp = modifiedOriginal.GetMomentum().mag();
       if( pp > 0.0 )
       {
         G4ThreeVector momentum = modifiedOriginal.GetMomentum();
         modifiedOriginal.SetMomentum( momentum * (p/pp) );
       }
-      if( ek <= 0.0001 )
+      if( ekOrg <= 0.0001 )
       {
         modifiedOriginal.SetKineticEnergy( 0.0 );
         modifiedOriginal.SetMomentum( 0.0, 0.0, 0.0 );
