@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-09-19 09:52:46 gcosmo Exp $
+$Id: History,v 1.8 2001-09-19 11:25:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 September 19, 2001      Gabriele Cosmo (STEP-V03-02-00)
+- SdaiCONFIG_CONTROL_DESIGN.cc: cleaned up warnings on SUN-CC.
 - dirobj.cc: restored usage of strdup() and force non-ansi compilation in GNUmakefile
   for Linux-g++, to avoid incompatibilities on the usage of C strings operations
   when "-ansi -pedantic" is adopted.
