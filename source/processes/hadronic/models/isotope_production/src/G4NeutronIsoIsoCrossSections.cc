@@ -3,7 +3,7 @@
 
 G4NeutronIsoIsoCrossSections::
 G4NeutronIsoIsoCrossSections()
-: theCrossSection(), theNNprimeCrossSection(), theNames()
+: theCrossSection(), theNames()
 {
   theProductionData = NULL;
   hasData = false;
@@ -127,25 +127,9 @@ Init(G4int A, G4int Z, G4double frac)
       theCrossSection = merged;
     }
     theCrossSection.Times(frac);
-    theInelasticCrossSection = inelasticData;
-    theInelasticCrossSection.Times(frac);
   }
   theCrossSection.Dump();
   
-  // now the n -> n' cross-sections
-  rest = "/F01/";
-  base1 = base + "/Inelastic/";
-  G4bool hasF01Data = false;
-  dataUsed = theNames.GetName(A, Z, base1, rest, hasF01Data);
-  aName = dataUsed.GetName();
-  if(hasF01Data)
-  {
-    ifstream aDataSet(aName, ios::in);
-    aDataSet >> dummy >> dummy >> dummy>>dummy>>dummy>>dummy>>total;
-    theNNprimeCrossSection.Init(aDataSet, total, eV);
-    theNNprimeCrossSection.Times(frac);
-  }
-
   // now isotope-production cross-sections
   theNames.SetMaxOffSet(1);
   rest = "/CrossSection/";
@@ -186,12 +170,8 @@ GetProductIsotope(G4double anEnergy)
 {
   G4String result = "UNCHANGED";
   
-  // first check for the n->n' reactions and return empty string
-  G4double nnpXsec = theNNprimeCrossSection.GetY(anEnergy);
   G4double totalXSec = theCrossSection.GetY(anEnergy);
-  G4double nonelXsec = theInelasticCrossSection.GetY(anEnergy);
-  G4double rand = G4UniformRand();
-  if(rand > (nonelXsec-nnpXsec)/totalXSec) return result;
+  if(totalXSec==0) return result;
   
   // now do the isotope changing reactions
   G4double * xSec = new G4double[theNumberOfProducts];
@@ -202,6 +182,13 @@ GetProductIsotope(G4double anEnergy)
     xSec[i] = theProductionData[i]->GetProductionCrossSection(anEnergy);
     sum += xSec[i];
   }
+  }
+  G4double isoChangeXsec = sum;
+  G4double rand = G4UniformRand();
+  if(rand > isoChangeXsec/totalXSec) 
+  {
+    delete [] xSec;
+    return result;
   }
   G4double random = G4UniformRand();
   G4double running = 0;

@@ -4,6 +4,7 @@
 #include "G4NeutronIsoIsoCrossSections.hh"
 #include "G4StableIsotopes.hh"
 #include "G4IsoResult.hh"
+#include "Randomize.hh"
 
 class G4NeutronElementIsoCrossSections
 {

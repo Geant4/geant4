@@ -4,6 +4,7 @@
 #include "globals.hh"
 #include "G4VIsotopeProduction.hh"
 #include "G4NeutronElementIsoCrossSections.hh"
+#include "Randomize.hh"
 
 class G4NeutronIsotopeProduction : public G4VIsotopeProduction
 {
