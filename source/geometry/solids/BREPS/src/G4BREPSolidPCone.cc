@@ -5,16 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.14 1999-12-15 17:17:16 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.15 2000-08-28 08:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
+// G4BREPSolidPCone.cc
+//
+// ----------------------------------------------------------------------
 // The polyconical solid G4BREPSolidPCone is a shape defined by a set of 
 // inner and outer conical or cylindrical surface sections and two planes 
 // perpendicular to the Z axis. Each conical surface is defined by its 
 // radius at two different planes perpendicular to the Z-axis. Inner and 
 // outer conical surfaces are defined using common Z planes. 
-//
+// ----------------------------------------------------------------------
 
 #include "G4BREPSolidPCone.hh"
 #include "G4FCylindricalSurface.hh"
@@ -23,18 +28,18 @@
 #include "G4FPlane.hh"
 
 
-G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
-				   const G4double start_angle,
-				   const G4double opening_angle,
-				   const int      num_z_planes, // sections,
-				   const G4double z_start,		   
-				   const G4double z_values[],
-				   const G4double RMIN[],
-				   const G4double RMAX[]
-				   ): G4BREPSolid(name)
+G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
+				   G4double start_angle,
+				   G4double opening_angle,
+				   G4int    num_z_planes, // sections,
+				   G4double z_start,		   
+				   G4double z_values[],
+				   G4double RMIN[],
+				   G4double RMAX[] )
+ : G4BREPSolid(name)
 
 {
-  const int  sections= num_z_planes-1;
+  G4int sections= num_z_planes-1;
   nb_of_surfaces = 2*sections+2;
   SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4ThreeVector Axis(0,0,1);
@@ -45,7 +50,6 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 
   G4ThreeVector PlaneAxis(0, 0, 1);
   G4ThreeVector PlaneDir (0, 1, 0);   
-
 
   ///////////////////////////////////////////////////
   // Test the validity of the R values
@@ -368,14 +372,12 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
   
 }
 
-
 G4BREPSolidPCone::~G4BREPSolidPCone()
 {
   delete[] original_parameters.Z_values;
   delete[] original_parameters.Rmin;
   delete[] original_parameters.Rmax;
 }
-
 
 void G4BREPSolidPCone::Initialize()
 { 
@@ -390,12 +392,10 @@ void G4BREPSolidPCone::Initialize()
   CalcBBoxes();
 }
 
-
 EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 {
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
-
 
   G4double halfTolerance = kCarTolerance*0.5;
 
@@ -426,15 +426,15 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       if(fabs(SurfaceVec[a]->HowNear(Pt)) < kCarTolerance)
 	return kSurface;
 
       if ( SurfaceVec[a]->Intersect(r) ) {
 	isIntersected = true;
-	if ( fabs(SurfaceVec[a]->Distance()) < dist ) {
-	  dist = SurfaceVec[a]->Distance();
+	if ( fabs(SurfaceVec[a]->GetDistance()) < dist ) {
+	  dist = SurfaceVec[a]->GetDistance();
 	  WhichSurface = a;
 	}
       }
@@ -451,7 +451,6 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   return kOutside;
 
 }
-
 
 G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
 {  
@@ -489,7 +488,6 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
     return ( G4ThreeVector(1,0,0));
   }
 }
-
 
 G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
 {
@@ -534,7 +532,6 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
     return fabs(Dist);
 }
 
-
 G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt, 
 					register const G4ThreeVector& V) const
 {
@@ -563,7 +560,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
   
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       // test if the ray intersect the surface
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
@@ -573,10 +570,10 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
 
 	// if more than 1 surface is intersected,
 	// take the nearest one
-	if( SurfaceVec[a]->Distance() < ShortestDistance )
-	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
+	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
 	    {
-	      ShortestDistance = SurfaceVec[a]->Distance();
+	      ShortestDistance = SurfaceVec[a]->GetDistance();
 	    }
       }
     }
@@ -590,7 +587,6 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
     // no intersection, return kInfinity
     return kInfinity; 
 }
-
 
 G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt, 
 					 register const G4ThreeVector& V, 
@@ -631,7 +627,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
  
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
       if( (Norm * Vtmp) > 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
@@ -641,10 +637,10 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
       {
 	// if more than 1 surface is intersected,
 	// take the nearest one
-	if( SurfaceVec[a]->Distance() < ShortestDistance )
-	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
+	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
 	  {
-	    ShortestDistance = SurfaceVec[a]->Distance();
+	    ShortestDistance = SurfaceVec[a]->GetDistance();
 	  }
       }
     }
@@ -659,7 +655,6 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
     // so return 0
     return 0; 
 }
-
 
 G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
 {
@@ -704,7 +699,6 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
     return fabs(Dist);
 }
 
-
 //  In graphics_reps:   
 
 #include "G4Polyhedron.hh"   
@@ -718,20 +712,3 @@ G4Polyhedron* G4BREPSolidPCone::CreatePolyhedron() const
 			       original_parameters.Rmin,
 			       original_parameters.Rmax);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

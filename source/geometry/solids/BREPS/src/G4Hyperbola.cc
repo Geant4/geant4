@@ -5,13 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4Hyperbola.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Hyperbola.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4Hyperbola.hh"
 
-G4Hyperbola::G4Hyperbola(){}
+G4Hyperbola::G4Hyperbola()
+{
+}
+
+G4Hyperbola::~G4Hyperbola()
+{
+}
 
 G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 {
@@ -107,10 +119,6 @@ void G4Hyperbola::InitBounded()
   }
 }
 
-
-G4Hyperbola::~G4Hyperbola(){}
-
-
 G4bool G4Hyperbola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
 {
   // The tangent is computed from the 3D point representation
@@ -125,4 +133,3 @@ G4bool G4Hyperbola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   
   return true;
 }
-

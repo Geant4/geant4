@@ -1,0 +1,53 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ProjectedSurface.icc,v 1.1 2000-08-28 08:57:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4ProjectedSurface.icc
+//
+// Implementation of inline methods of G4ProjectedSurface
+// --------------------------------------------------------------------
+
+inline
+G4Vector3D G4ProjectedSurface::SurfaceNormal(const G4Point3D& Pt) const
+{
+  return G4Vector3D(0,0,0);
+}
+
+inline
+G4int G4ProjectedSurface::GetOrder(G4int direction)
+{
+  return order[direction];
+}
+	
+inline
+void G4ProjectedSurface::PutOrder(G4int direction, G4int value)		
+{
+  order[direction]=value;
+}
+
+inline
+G4int G4ProjectedSurface::Amax(G4int i, G4int j) 
+{
+  return( (i) > (j) ? (i) : (j) );
+}
+  
+inline
+G4int G4ProjectedSurface::Amin(G4int i, G4int j) 
+{
+  return( (i) < (j) ? (i) : (j) );
+}
+  
+inline
+G4int G4ProjectedSurface::AhIndex(G4int j, G4int t, G4int iorder)
+{
+  return(( (j) * ((j)+1)/2) + (t) - ((iorder-1) - (j)));
+}

@@ -1,0 +1,102 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ToroidalSurface.icc,v 1.1 2000-08-28 08:57:50 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4ToroidalSurface.icc
+//
+// Implementation of inline methods of G4ToroidalSurface
+// --------------------------------------------------------------------
+
+inline
+G4String G4ToroidalSurface::GetEntityType()
+{
+  return G4String("Toroidal_Surface");
+}
+
+inline
+G4Vector3D G4ToroidalSurface::GetDirection()
+{
+  return Placement.GetRefDirection();
+}
+
+inline
+G4Vector3D G4ToroidalSurface::GetAxis()
+{
+  return Placement.GetAxis();
+}
+
+inline
+G4Point3D G4ToroidalSurface::GetLocation()
+{
+  return Placement.GetLocation();
+}
+
+inline
+G4double G4ToroidalSurface::GetMinRadius()
+{
+  return MinRadius;
+}
+
+inline G4double G4ToroidalSurface::GetMaxRadius()
+{
+  return MaxRadius;
+}
+
+inline
+void G4ToroidalSurface::MultiplyPointByMatrix(G4Point3D& Base)
+{
+  Base.setX((Base.x() * TransMatrix->get(0,0)) + 
+	    (Base.y() * TransMatrix->get(1,0)) + 
+	    (Base.z() * TransMatrix->get(2,0)));
+  Base.setY((Base.x() * TransMatrix->get(0,1)) + 
+	    (Base.y() * TransMatrix->get(1,1)) + 
+	    (Base.z() * TransMatrix->get(2,1)));
+  Base.setZ((Base.x() * TransMatrix->get(0,2)) + 
+	    (Base.y() * TransMatrix->get(1,2)) + 
+	    (Base.z() * TransMatrix->get(2,2)));
+}
+
+inline
+void G4ToroidalSurface::MultiplyVectorByMatrix(G4Vector3D& DCos)
+{
+  G4double w;
+  DCos.setX((DCos.x() * TransMatrix->get(0,0)) + 
+	    (DCos.y() * TransMatrix->get(1,0)) + 
+	    (DCos.z() * TransMatrix->get(2,0)) + TransMatrix->get(3,0));
+
+  DCos.setY((DCos.x() * TransMatrix->get(0,1)) + 
+	    (DCos.y() * TransMatrix->get(1,1)) + 
+	    (DCos.z() * TransMatrix->get(2,1)) + TransMatrix->get(3,1));
+
+  DCos.setY((DCos.x() * TransMatrix->get(0,2)) + 
+	    (DCos.y() * TransMatrix->get(1,2)) + 
+	    (DCos.z() * TransMatrix->get(2,2)) + TransMatrix->get(3,2));
+  
+  w      = ((DCos.x() * TransMatrix->get(0,3)) + 
+	    (DCos.y() * TransMatrix->get(1,3)) + 
+	    (DCos.z() * TransMatrix->get(2,3)) + TransMatrix->get(3,3));
+    
+  if (w != 0.0) 
+  {
+    DCos.setX(DCos.x() / w);  
+    DCos.setY(DCos.y() / w); 
+    DCos.setZ(DCos.z() / w);
+  }
+}
+
+inline
+G4int G4ToroidalSurface::IsZero(G4double x)
+{
+  if((x) > -EQN_EPS && (x) < EQN_EPS) 
+    return 1;
+  else return 0;
+}

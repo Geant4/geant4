@@ -1,59 +1,90 @@
-// inline members of G4Curve
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Curve.icc,v 1.2 2000-08-28 08:57:44 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Curve.icc
+//
+// Implementation of inline methods of G4Curve
+// --------------------------------------------------------------------
 
-inline const G4BoundingBox3D* G4Curve::BBox() const 
+inline G4bool G4Curve::operator==(const G4Curve& right) const 
+{
+  return this == &right;
+}
+
+inline
+const G4BoundingBox3D* G4Curve::BBox() const 
 {
   return &bBox;
 }
 
 // bounds related
 
-inline const G4Point3D& G4Curve::GetStart() const 
+inline
+const G4Point3D& G4Curve::GetStart() const 
 {
   return start;
 }
 
-inline const G4Point3D& G4Curve::GetEnd() const 
+inline
+const G4Point3D& G4Curve::GetEnd() const 
 {
   // workaround for an xlC bug
   const G4Point3D& lof= end;
   return lof;
 }
 
-inline G4double G4Curve::GetPStart() const 
+inline
+G4double G4Curve::GetPStart() const 
 {
   return pStart;
 }
 
-inline G4double G4Curve::GetPEnd() const 
+inline
+G4double G4Curve::GetPEnd() const 
 {
   return pEnd;
 }
 
-inline void G4Curve::SetStart(const G4Point3D& pt) 
+inline
+void G4Curve::SetStart(const G4Point3D& pt) 
 {
   start= pt;
   pStart= GetPPoint(pt);
 }
 
-inline void G4Curve::SetStart(G4double p) 
+inline
+void G4Curve::SetStart(G4double p) 
 {
   pStart= p;
   start= GetPoint(p);
 }
 
-inline void G4Curve::SetEnd(const G4Point3D& pt) 
+inline
+void G4Curve::SetEnd(const G4Point3D& pt) 
 {
   end= pt;
   pEnd= GetPPoint(pt);
 }
 
-inline void G4Curve::SetEnd(G4double p) 
+inline
+void G4Curve::SetEnd(G4double p) 
 {
   pEnd= p;
   end= GetPoint(p);
 }
 
-inline void G4Curve::SetBoundsRest()
+inline
+void G4Curve::SetBoundsRest()
 {
   pRange= pEnd-pStart;
   G4double pMax= GetPMax();
@@ -67,35 +98,40 @@ inline void G4Curve::SetBoundsRest()
   InitBounded();
 }
 
-inline void G4Curve::SetBounds(G4double p1, G4double p2) 
+inline
+void G4Curve::SetBounds(G4double p1, G4double p2) 
 {
   SetStart(p1); 
   SetEnd(p2);
   SetBoundsRest();
 }
 
-inline void G4Curve::SetBounds(G4double p1, const G4Point3D& p2)
+inline
+void G4Curve::SetBounds(G4double p1, const G4Point3D& p2)
 {
   SetStart(p1);
   SetEnd(p2);
   SetBoundsRest();
 }
 
-inline void G4Curve::SetBounds(const G4Point3D& p1, G4double p2) 
+inline
+void G4Curve::SetBounds(const G4Point3D& p1, G4double p2) 
 {
   SetStart(p1);
   SetEnd(p2);
   SetBoundsRest();
 }
 
-inline void G4Curve::SetBounds(const G4Point3D& p1, const G4Point3D& p2)
+inline
+void G4Curve::SetBounds(const G4Point3D& p1, const G4Point3D& p2)
 {
   SetStart(p1);
   SetEnd(p2);
   SetBoundsRest();
 }
 
-inline G4bool G4Curve::IsPOn(G4double param)
+inline
+G4bool G4Curve::IsPOn(G4double param)
 {
   G4double diff= param-pStart;
   G4double pMax= GetPMax();
@@ -106,18 +142,20 @@ inline G4bool G4Curve::IsPOn(G4double param)
   return diff<=pRange;
 }
 
-inline G4bool G4Curve::IsBounded() const 
+inline
+G4bool G4Curve::IsBounded() const 
 {
   return bounded;
 }
 
-inline void G4Curve::SetSameSense(G4int sameSense0) 
+inline 
+void G4Curve::SetSameSense(G4int sameSense0) 
 {
   sameSense= sameSense0;
 }
 
-inline G4int G4Curve::GetSameSense() const 
+inline
+G4int G4Curve::GetSameSense() const 
 {
   return sameSense;
 }
-

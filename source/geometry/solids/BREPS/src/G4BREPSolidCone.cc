@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCone.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BREPSolidCone.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolidCone.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BREPSolidCone.hh"
 #include "G4FPlane.hh"
@@ -15,26 +21,26 @@
 #include "G4FCylindricalSurface.hh"
 #include "G4CircularCurve.hh"
 
-G4BREPSolidCone::G4BREPSolidCone(G4String name,
+G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
 				 const G4ThreeVector& origin,
 				 const G4ThreeVector& axis,
 				 const G4ThreeVector& direction,
-				 const G4double length,
-				 const G4double radius,
-				 const G4double large_radius):G4BREPSolid(name)
-
+				 G4double length,
+				 G4double radius,
+				 G4double large_radius)
+  : G4BREPSolid(name)
 {
   SurfaceVec                      = new G4Surface*[3];
   G4Point3D    ArcStart1          = origin + (radius*direction);
   G4Vector3D   tmpaxis(axis);
   G4Vector3D   tmporigin(origin);  
-  G4Point3D    paska;
+  G4Point3D    tmppoint;
 
-  paska= origin + (length*tmpaxis);
-  G4Point3D origin2(paska.x(), paska.y(), paska.z());
+  tmppoint= origin + (length*tmpaxis);
+  G4Point3D origin2(tmppoint.x(), tmppoint.y(), tmppoint.z());
 
-  paska=  origin2 + (large_radius*tmpaxis);
-  G4Point3D ArcStart2(paska.x(), paska.y(), paska.z());
+  tmppoint=  origin2 + (large_radius*tmpaxis);
+  G4Point3D ArcStart2(tmppoint.x(), tmppoint.y(), tmppoint.z());
 
   G4Ray::Vcross(tmpaxis, axis, direction);
   G4ThreeVector axis2(tmpaxis.x(),tmpaxis.y(), tmpaxis.z());
@@ -94,7 +100,6 @@ void G4BREPSolidCone::Initialize()
   CalcBBoxes();
 }
 
-
 EInside G4BREPSolidCone::Inside(register const G4ThreeVector& Pt) const
 {
   G4double dist1 = SurfaceVec[0]->HowNear(Pt);
@@ -114,7 +119,6 @@ G4ThreeVector G4BREPSolidCone::SurfaceNormal(const G4ThreeVector& Pt) const
   return norm;
 }
 
-
 G4double G4BREPSolidCone::DistanceToIn(const G4ThreeVector& Pt) const
 {
   G4double dist1 = fabs(SurfaceVec[0]->HowNear(Pt));
@@ -125,7 +129,6 @@ G4double G4BREPSolidCone::DistanceToIn(const G4ThreeVector& Pt) const
   return dist1;
  
 }
-
 
 G4double G4BREPSolidCone::DistanceToIn(register const G4ThreeVector& Pt, 
 				       register const G4ThreeVector& V) const
@@ -138,12 +141,11 @@ G4double G4BREPSolidCone::DistanceToIn(register const G4ThreeVector& Pt,
 
   if(SurfaceVec[0]->Intersect( r ))
   {
-    ShortestDistance = SurfaceVec[0]->Distance();
+    ShortestDistance = SurfaceVec[0]->GetDistance();
     return ShortestDistance;
   }
   return kInfinity; 
 }
-
 
 G4double G4BREPSolidCone::DistanceToOut(register const G4ThreeVector& Pt, 
 					register const G4ThreeVector& V, 
@@ -162,12 +164,11 @@ G4double G4BREPSolidCone::DistanceToOut(register const G4ThreeVector& Pt,
   G4Ray r(Pttmp, Vtmp);
   if(SurfaceVec[0]->Intersect( r ))
   {
-    ShortestDistance = SurfaceVec[0]->Distance();
+    ShortestDistance = SurfaceVec[0]->GetDistance();
     return ShortestDistance;
   }
   return kInfinity; 
 }
-
 
 G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
 {
@@ -178,4 +179,3 @@ G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
   if(dist1 > dist3) dist1 = dist3;  
   return dist1;
 }
-

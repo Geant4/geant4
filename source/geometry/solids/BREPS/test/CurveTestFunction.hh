@@ -1,4 +1,14 @@
 //////////////////////////////////////////////////////////////////////////
+// $Id: CurveTestFunction.hh,v 1.3 2000-08-28 08:58:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
 // L. Broglia
 // October 26, 1998
@@ -161,7 +171,7 @@ void TestPlacement(G4Axis2Placement3D* p)
 // Test the project function
 void TestProject(G4Curve* c, const G4Transform3D& tr)
 {
-  int i;
+  G4int i;
   G4Curve*   projC = c->Project(tr);
   G4Ellipse* lof   = (G4Ellipse*)projC;
 
@@ -223,13 +233,3 @@ void TestProject(G4Curve* c, const G4Transform3D& tr)
     }
   }
 }
-
-
-
-
-
-
-
-
-
-

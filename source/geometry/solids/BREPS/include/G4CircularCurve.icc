@@ -1,16 +1,40 @@
-inline void G4CircularCurve::Init(const G4Axis2Placement3D& position0,
-				  G4double radius0) {
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4CircularCurve.icc,v 1.3 2000-08-28 08:57:43 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4CircularCurve.icc
+//
+// Implementation of inline methods of G4CircularCurve
+// --------------------------------------------------------------------
+
+inline
+void G4CircularCurve::Init(const G4Axis2Placement3D& position0,
+			   G4double radius0)
+{
   position= position0;
   radius= radius0;
 }
 
-inline G4double G4CircularCurve::GetRadius() const {
+inline
+G4double G4CircularCurve::GetRadius() const
+{
   return radius;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-inline G4double G4CircularCurve::GetPMax() {
+inline
+G4double G4CircularCurve::GetPMax()
+{
   return twopi;
 }
 
@@ -19,7 +43,9 @@ inline G4Point3D G4CircularCurve::GetPoint(G4double param) {
     ( cos(param)*position.GetPX() + sin(param)*position.GetPY() );
 }
 
-inline G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) {
+inline
+G4double G4CircularCurve::GetPPoint(const G4Point3D& pt)
+{
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
   G4double angle= atan2(ptLocal.y(), ptLocal.x());
   return (angle<0)? angle+twopi: angle;
@@ -30,20 +56,18 @@ inline G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) {
 #include "G4CurveRayIntersection.hh"
 
 /*
-inline void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
-					    G4CurveRayIntersection& is)
+inline
+void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
+				     G4CurveRayIntersection& is)
 {
   G4Exception("G4CircularCurve is always 3D!");
   exit(1);
 }
 */
 
-inline G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
+inline
+G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
 {
   G4Exception("G4CircularCurve is always 3D!");
   return 0;
 }
-
-
-
-

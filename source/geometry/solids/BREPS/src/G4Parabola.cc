@@ -5,10 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4Parabola.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Parabola.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Parabola.hh"
+#include "G4CurvePoint.hh"
 
 G4Parabola::G4Parabola(){}
 G4Parabola::~G4Parabola(){}
@@ -89,4 +97,3 @@ G4bool G4Parabola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   v= p.y()*pos.GetPX() + (2*focalDist)*pos.GetPY();
   return true;
 }
-

@@ -1,3 +1,15 @@
+//////////////////////////////////////////////////////////////////////////
+// $Id: G4FPlaneTest.cc,v 1.4 2000-08-28 08:58:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 // Test the G4FPlane class
 // Created by L. Broglia, 22 October 1998
 
@@ -238,18 +250,12 @@ int main()
       G4cout<<"\n\nPlain do not contain the hit point";
 
     G4cout<<"\n\nSquared distance from the Pdep to the hit point  :"
-	  <<"\n   distance="<<SurfaceVec1.Distance();
+	  <<"\n   distance="<<SurfaceVec1.GetDistance();
   }
   else
     G4cout<<"\n\nNo Intersection"
-	  <<"\n   distance="<<SurfaceVec1.Distance()<<G4endl;
+	  <<"\n   distance="<<SurfaceVec1.GetDistance()<<G4endl;
 
   G4cout<<G4endl;
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-

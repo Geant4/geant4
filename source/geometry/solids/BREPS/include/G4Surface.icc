@@ -1,0 +1,79 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Surface.icc,v 1.1 2000-08-28 08:57:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Surface.icc
+//
+// Implementation of inline methods of G4Surface
+// --------------------------------------------------------------------
+
+inline
+G4Vector3D G4Surface::GetOrigin() const
+{
+  return origin;
+}
+
+inline
+G4double G4Surface::GetDistance() const
+{
+  return distance;
+}
+
+inline
+void G4Surface::SetDistance(G4double Dist)
+{
+  distance=Dist;
+}
+
+inline
+G4int G4Surface::IsActive() const
+{
+  return active;
+}
+
+inline
+void G4Surface::SetActive(G4int act)
+{
+  active=act;
+}
+
+inline
+void G4Surface::Deactivate()
+{
+  active=0;
+}
+
+inline
+void G4Surface::SetSameSense(G4int sameSense0)
+{
+  sameSense = sameSense0;
+}
+
+inline
+G4int G4Surface::GetSameSense() const
+{
+  return sameSense;
+}
+
+inline
+G4BoundingBox3D* G4Surface::GetBBox() const
+{
+  return bbox;
+}
+
+inline
+void G4Surface::Project (G4double& Coord,
+                         const G4Point3D& Pt2, 
+                         const G4Plane& Pl1)
+{
+  Coord = Pt2.x()*Pl1.a + Pt2.y()*Pl1.b + Pt2.z()*Pl1.c - Pl1.d;
+}

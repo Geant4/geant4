@@ -1,0 +1,41 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SurfaceBoundary.icc,v 1.1 2000-08-28 08:57:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4SurfaceBoundary.icc
+//
+// Implementation of inline methods of G4SurfaceBoundary
+// --------------------------------------------------------------------
+
+inline
+const G4CurveVector& G4SurfaceBoundary::GetBounds() const
+{
+  return bounds;
+}
+
+inline
+const G4BoundingBox3D& G4SurfaceBoundary::BBox() const
+{
+  return bBox;
+}
+
+inline
+G4int G4SurfaceBoundary::GetNumberOfPoints()
+{
+  return points.length();
+}
+
+inline
+const G4Point3D& G4SurfaceBoundary::GetPoint(G4int Count)
+{
+  return points.ref(Count);
+}

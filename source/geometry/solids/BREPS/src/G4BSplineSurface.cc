@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.7 2000-02-25 15:58:47 gcosmo Exp $
+// $Id: G4BSplineSurface.cc,v 1.8 2000-08-28 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BSplineSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BSplineSurface.hh"
 #include "G4BezierSurface.hh"
@@ -85,7 +91,7 @@ G4BSplineSurface::~G4BSplineSurface()
 }
 
 
-int G4BSplineSurface::Intersect(const G4Ray& rayref)
+G4int G4BSplineSurface::Intersect(const G4Ray& rayref)
 {
   Intersected = 1;
   FindIntersections(rayref);
@@ -97,17 +103,17 @@ int G4BSplineSurface::Intersect(const G4Ray& rayref)
   {
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
     
-    if(bez_ptr->Active())
-      if(distance > bez_ptr->Distance())
+    if(bez_ptr->IsActive())
+      if(distance > bez_ptr->GetDistance())
       {
 	// Put data from closest bezier to b-spline data struct
 	closest_hit = bez_ptr->AveragePoint();
-	distance = bez_ptr->Distance();
+	distance = bez_ptr->GetDistance();
       }
       else
       {
 	// Set other beziers as inactive
-	bez_ptr->Active(0);
+	bez_ptr->SetActive(0);
 	    
 	// Remove beziers that are not closest
 	//  bezier_list.RemoveSurface(bez_ptr);
@@ -147,7 +153,7 @@ G4Point3D G4BSplineSurface::FinalIntersection()
     {
       bezier_list.RemoveSurface(bez_ptr);
       if(bezier_list.index != (G4Surface*)0)
-	bezier_list.index->Active(1);
+	bezier_list.index->SetActive(1);
     }
     else
       if(tmp==1)
@@ -345,7 +351,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
     bez_ptr->CalcDistance(rayref.GetStart());
 
     // Put closest to b_splines distance value
-    if(bez_ptr->Distance() < distance) distance = bez_ptr->Distance();  
+    if(bez_ptr->GetDistance() < distance) distance = bez_ptr->GetDistance();  
     
     // Remove the temporary Hit
     if (first_hit == Hit) first_hit = (G4UVHit*)0;
@@ -632,11 +638,3 @@ G4double G4BSplineSurface::ClosestDistanceToPoint(const G4Point3D& Pt)
   PointDistance = ctl_points->ClosestDistanceToPoint(Pt);
   return PointDistance;
 }
-
-
-
-
-
-
-
-

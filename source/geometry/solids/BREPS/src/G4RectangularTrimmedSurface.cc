@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.cc,v 1.3 2000-01-21 13:47:52 gcosmo Exp $
+// $Id: G4RectangularTrimmedSurface.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4RectangularTrimmedSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4RectangularTrimmedSurface.hh"
 #include "G4FPlane.hh"
@@ -15,12 +21,21 @@
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
 
-G4RectangularTrimmedSurface::G4RectangularTrimmedSurface(){}
+G4RectangularTrimmedSurface::G4RectangularTrimmedSurface()
+  : BasisSurface(0)
+{
+}
+
 G4RectangularTrimmedSurface::~G4RectangularTrimmedSurface()
 {
-  delete BasisSurface;
+  if (BasisSurface) delete BasisSurface;
 }  
 
+
+const char* G4RectangularTrimmedSurface::Name() const
+{
+  return "G4RectangularTrimmedSurface";
+}
 
 void G4RectangularTrimmedSurface::CalcBBox()
 {
@@ -29,7 +44,7 @@ void G4RectangularTrimmedSurface::CalcBBox()
 }
 
 
-int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
+G4int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
 {
   if(BasisSurface->Intersect(Rayref))
   {

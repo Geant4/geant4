@@ -1,3 +1,8 @@
+//////////////////////////////////////////////////////////////////////////
+// $Id: G4BREPSolidBoxTest.cc,v 1.6 2000-08-28 08:58:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -16,7 +21,7 @@
 #include "G4BREPSolidBox.hh"
 
 
-int main()
+G4int main()
 {
   G4Timer timer;
 

@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.6 2000-02-25 15:58:47 gcosmo Exp $
+// $Id: G4BSplineSurface.hh,v 1.7 2000-08-28 08:57:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4BSplineSurface
+//
+// Class description:
+// 
+// Definition of a generic BSpline surface.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __BSPLINESURFACE_H
 #define __BSPLINESURFACE_H
 
@@ -19,40 +29,65 @@
 
 class G4BSplineSurface : public G4Surface
 {
-public:
+
+ public:  // with description
 
   G4BSplineSurface();
-  G4BSplineSurface(const char*, G4Ray&);
-  G4BSplineSurface(const  G4BSplineSurface &tmp);
-  G4BSplineSurface(G4int, G4int, G4KnotVector&,  G4KnotVector&, 
-		   G4ControlPoints&);    
-  ~G4BSplineSurface();
+  G4BSplineSurface(const char* nurbfilename, G4Ray& rayref);
+  G4BSplineSurface(G4int u, G4int v, G4KnotVector& u_kv, G4KnotVector& v_kv, 
+		   G4ControlPoints& cp);    
+  G4BSplineSurface(const G4BSplineSurface& orig);
+  virtual ~G4BSplineSurface();
+    // Constructors & destructor.
 
-  int Intersect(const G4Ray&);
+  G4int Intersect(const G4Ray&);
   void CalcBBox();
+    // Finds the bounds of the b-spline surface.
+    // The bounding box is used for a preliminary check of intersection.
   
-  G4double GetUHit()  { return Hit->u; }  
-  G4double GetVHit()  { return Hit->v; } 
+  inline G4double GetUHit();
+  inline G4double GetVHit();
     	 
-  inline int MyType()const {return 2;}
-  
   G4double ClosestDistanceToPoint(const G4Point3D&);
 
-  inline void Reset()
-  {
-    active=1;
-    bezier_list.EmptyList();
-    projected_list.EmptyList();
-    Intersected=0;
-    distance = kInfinity;
-  }
+  inline void Reset();
 
-  // get for controlpoints
-  G4int     GetRows()                         { return ctl_points->GetRows(); }
-  G4int     GetCols()                         { return ctl_points->GetCols(); }
-  G4Point3D GetControlPoint(G4int a, G4int b) { return ctl_points->Get3D(a,b);}
-    
-    
+  inline G4int GetRows();
+  inline G4int GetCols();
+  inline G4Point3D GetControlPoint(G4int a, G4int b);
+    // Accessors for control points.
+
+public:
+ 
+  inline G4int MyType() const;
+
+private:
+
+  void FindIntersections(const G4Ray&);
+
+  inline G4int GetOrder(G4int direction);
+  inline void PutOrder(G4int direction, G4int value);
+
+  void AddHit(G4double u, G4double v);
+  void ProjectNURBSurfaceTo2D( const G4Plane& ,const G4Plane&,
+			       register G4ProjectedSurface*);
+    // Projects the nurb surface so that the z-axis = ray. 
+
+  G4ProjectedSurface* CopyToProjectedSurface(const G4Ray&);
+  G4Point3D  FinalIntersection();
+
+  // L. Broglia
+  // Because  G4BSplineSurface::Evaluate hides the virtual function 
+  // G4Surface::Evaluate(const G4Ray&), I modified the function name
+  // G4Point3D  Evaluate();  
+  G4Point3D  BSEvaluate();
+
+  G4PointRat& InternalEvalCrv(G4int i, G4ControlPoints *crv);
+  
+  G4Point3D   Evaluation(const G4Ray&);
+
+  inline G4Vector3D  SurfaceNormal(const G4Point3D& Pt) const;
+  
 private:
   
   G4SurfaceList bezier_list;
@@ -69,34 +104,8 @@ private:
   int k_index;
   G4double param;
   int Rational;
-  
-  void FindIntersections(const G4Ray&);
-
-  inline int GetOrder(int direction)             { return order[direction]; }
-  inline void PutOrder(int direction, int value) { order[direction]=value;  }
-
-  void AddHit(G4double u, G4double v);
-  void ProjectNURBSurfaceTo2D( const G4Plane& ,const G4Plane&,
-			       G4ProjectedSurface*);
-
-  G4ProjectedSurface* CopyToProjectedSurface(const G4Ray&);
-  G4Point3D  FinalIntersection();
-
-  // L. Broglia
-  // Because  G4BSplineSurface::Evaluate hides the virtual function 
-  // G4Surface::Evaluate(const G4Ray&), I modified the function name
-  // G4Point3D  Evaluate();  
-  G4Point3D  BSEvaluate();
-
-  G4PointRat& InternalEvalCrv(int i, G4ControlPoints *crv);
-  
-  G4Point3D   Evaluation(const G4Ray&);
-
-  G4Vector3D  SurfaceNormal(const G4Point3D& Pt)const
-  {
-    return G4Vector3D(0,0,0);
-  }
-  
 }; 
+
+#include "G4BSplineSurface.icc"
 
 #endif

@@ -1,0 +1,119 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BREPSolid.icc,v 1.1 2000-08-28 08:57:41 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4BREPSolid.icc
+//
+// Implementation of inline methods of G4BREPSolid
+// --------------------------------------------------------------------
+
+inline G4double G4BREPSolid::IntersectionDistance() const
+{
+  return intersectionDistance;
+}
+
+inline void G4BREPSolid::IntersectionDistance(G4double d) const 
+{
+  ((G4BREPSolid*)this)->intersectionDistance=d;
+}   
+
+inline G4Surface* G4BREPSolid::GetSurface(G4int nr)
+{
+  return SurfaceVec[nr];
+}
+  
+inline void G4BREPSolid::Active(G4int x) const 
+{
+  ((G4BREPSolid*)this)->active=x;
+}
+  
+inline G4int G4BREPSolid::Active() const
+{
+  return active;
+}
+
+inline G4double G4BREPSolid::GetShortestDistance() const
+{
+  return ShortestDistance;
+}
+
+inline G4int G4BREPSolid::GetId() const
+{
+  return Id;
+}
+
+inline void G4BREPSolid::SetId(G4int n)
+{
+  Id = n;
+}
+
+inline const G4String& G4BREPSolid::GetName() const
+{
+  return solidname;
+}
+
+inline void G4BREPSolid::SetName(const G4String& name)
+{
+  solidname = name;
+}
+
+inline G4int G4BREPSolid::NumberOfFaces() const
+{
+  return nb_of_surfaces;
+}
+
+inline G4Axis2Placement3D* G4BREPSolid::GetPlace() const
+{
+  return place;
+}
+
+inline G4BoundingBox3D* G4BREPSolid::GetBBox() const
+{
+  return bbox;
+} 
+
+inline G4int G4BREPSolid::StartInside() const 
+{
+  return startInside;
+}
+  
+inline void G4BREPSolid::StartInside(G4int si) const 
+{
+  ((G4BREPSolid*)this)->startInside=si;
+}  
+
+inline void G4BREPSolid::QuickSort( register G4Surface** SrfVec, 
+		                    register G4int left,
+				    register G4int right) const
+{
+    register G4int i=left;
+    register G4int j=right;
+    register G4Surface* elem1;
+    register G4Surface* elem2 = SrfVec[(left+right)/2];
+    register G4double tmpdistance;
+    do
+    {
+      tmpdistance = elem2->GetDistance();
+      while ( SrfVec[i]->GetDistance() < tmpdistance  && i < right ) i++;
+      while (tmpdistance < SrfVec[j]->GetDistance()  && j > left ) j--;
+      if(i<=j)
+      {
+	elem1 = SrfVec[i];
+	SrfVec[i] = SrfVec[j];
+	SrfVec[j] = elem1;
+	i++;j--;
+      }
+    } while (i<=j);
+      
+    if( left < j  ) QuickSort(SrfVec,left, j );
+    if( i < right ) QuickSort(SrfVec,i, right);    
+}

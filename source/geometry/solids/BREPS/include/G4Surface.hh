@@ -1,3 +1,23 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Surface.hh,v 1.4 2000-08-28 08:57:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4Surface
+//
+// Class description:
+// 
+// Base class for a generic surface.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __surface_h
 #define __surface_h 1
 
@@ -9,181 +29,174 @@
 #include "G4STEPEntity.hh"
 #include "G4SurfaceBoundary.hh"
 
-// This is the combined G4Surface class
-class G4Surface: public G4STEPEntity
+class G4Surface : public G4STEPEntity
 {
-public:
+
+public:  // with description
 
   G4Surface();
   virtual ~G4Surface();
+    // Constructor & destructor.
 
-  // sets the boundaries of the surface.
-  // The curves in the CurveVector must be non-intersecting
-  // closed curves.
+  G4int operator==( const G4Surface& s );
+    // Equality operator.
+
+  virtual G4String GetEntityType();
+    // Returns type information, needed for STEP output.
+
+  virtual const char* Name() const;
+  virtual G4int MyType() const;
+    // Returns type information, redundant versions...
+
   void SetBoundaries(G4CurveVector*);
-  // It calls InitBounded -- empty by default
+    // Sets the boundaries of the surface. The curves in the CurveVector
+    // must be non-intersecting closed curves.
 
-protected:
-
-  virtual void InitBounded() { }
-
-public:
-
-  // type information, needed for STEP output (see STEPinterface)
-  virtual G4String GetEntityType(){return G4String("Surface");}
-
-  // The origin should move to the derived classes
-  int operator==( const G4Surface& s ) { return origin == s.origin; }
-
-  // such a function is needed
-  // (see G4VSolid::DistanceToIn(const G4ThreeVector&) )
-  // but the G4surface implementation is useless.
-  // Overriding functions don't take the surface
-  // boundary into account.
   virtual G4double HowNear( const G4Vector3D& x ) const; 
+    // Returns the distance from the point x to the Surface.
+    // The default for a Surface is the distance from the point to the
+    // origin. Overridden by derived classes to take into account boundaries.
 
-  //virtual G4double distanceAlongRay( int which_way, const G4Ray* ry,
-  //				       G4Vector3D& p ) const;
+  virtual G4double ClosestDistanceToPoint(const G4Point3D& Pt);
+    // Returns the closest distance to point Pt, as for HowNear() above.
+    // This one is used by G4BREPSolid.
 
-  // unnecessary -- origin should move to descendants
-  G4Vector3D GetOrigin() const { return origin; }
+  inline G4Vector3D GetOrigin() const;
+  inline G4double GetDistance() const;
+  inline void SetDistance(G4double Dist);
+  inline G4int IsActive() const;
+  inline void SetActive(G4int act);
+  inline void Deactivate();
+  inline void SetSameSense(G4int sameSense0);
+  inline G4int GetSameSense() const;
+  inline G4BoundingBox3D* GetBBox() const;
+    // Get/Set methods for surface's attributes.
 
-  // Gerep members
-  // bad function names -- use Set and Get
-  // ??
-  inline G4double Distance()    { return distance; }
-  inline void Distance(const G4double Dist)  { distance=Dist; }    
+  virtual void Reset();
+    // Resets basic attributes.
 
-  // a boolean flag, not used by the surfaces themselves
-  virtual inline int  Active(){return active;}
-  virtual inline void Active(const int act){active=act;}
+  virtual G4int Intersect(const G4Ray&);
+    // Should return the intersection with a ray. Cannot be called from
+    // G4Surface base class. Overridden by subclasses.
 
-  // Isn't this the same as HowNear? (This one is used by G4BREPSolid.)
-  virtual G4double ClosestDistanceToPoint(const G4Point3D&);
-
-  // uhit and vhit are never set.
-  // Only BSplineSurface overrides.
-  // There is a G4UVHit class.
-  virtual G4double GetUHit() { return uhit; }
-  virtual G4double GetVHit() { return vhit; }  
-
-  // Intersection with a ray. the result is put into
-  // some data members.
-  virtual int Intersect(const G4Ray&);
-
-  // Surface normal calculation.
   virtual G4Vector3D Normal( const G4Vector3D& p ) const;
+    // Returns the Normal unit vector to a Surface at the point p on
+    // (or nearly on) the Surface. The default is not well defined,
+    // so return ( 0, 0, 0 ). Overridden by subclasses.
 
-  // Bounding box calculation.
   virtual void CalcBBox();
+    // Calculates the bounds for a bounding box to the surface.
+    // The bounding box is used for a preliminary check of intersection.
 
-  // For NURBS, there is a two pass intersection algorithm.
-  // Sometimes, the result of the cheap one tells us 
-  // that execution of the expensive one is not necessary.
-  // Evaluation (Evaluate?) is one of them.
-  // better names wanted!
+
+public:  // without description
+
+  inline static void Project (G4double& Coord, const G4Point3D& Pt, 
+			      const G4Plane& Pl);
+    // Utility function returning the projection (Coord) of a point Pt
+    // on a plane Pl.
+
+  virtual G4double GetUHit();
+  virtual G4double GetVHit();
+    // Overriden by BSplineSurface.
+    // uhit and vhit are never set.
+
   virtual G4Point3D Evaluation(const G4Ray& G4Rayref);
-  virtual int Evaluate(register const G4Ray& Rayref);  
+  virtual G4int Evaluate(register const G4Ray& Rayref);  
+    // For NURBS, there is a two pass intersection algorithm.
+    // Sometimes, the result of the cheap one tells us 
+    // that execution of the expensive one is not necessary.
+    // Evaluation (Evaluate?) is one of them. Better names wanted!
 
-  // There is Active(int) instead.
-  virtual inline void Deactivate(){active=0;}
-  
-  // Distance(kInfinity); bbox->SetDistance(kInfinity);};
+  virtual void Project();
+    // Used by BREPSolid. Thus it's probably needed.
 
-  virtual inline void Reset(){Intersected=0;active = 1; distance = kInfinity;};
+  virtual void CalcNormal();
+    // Used only in G4FPlane. Should be private to that class?
 
-  // one function for type info (GetEntityType) should be enough
-  virtual const char* Name() const { return "G4Surface"; }
-  virtual int MyType() const { return Type; }  
+  virtual G4int IsConvex();
+    // Only in G4FPlane. BREPSolid::IsConvex uses it.
+    // But who uses BREPSolid::IsConvex? Thus: probably not needed.
+    // However, knowing if the surface is convex could be used for
+    // optimization. 
 
-  // To be replaced by a CLHEP vector operation
-  inline static void Project (G4double& Coord, const G4Point3D& Pt2, 
-			      const G4Plane& Pl1                     )
-  {
-    Coord = Pt2.x()*Pl1.a + Pt2.y()*Pl1.b + Pt2.z()*Pl1.c - Pl1.d;
-  }
+  virtual G4int GetConvex();
+    // Only in G4FPlane, but G4BREPSolid uses them.
 
-  // Used by BREPSolid. Thus it's probably needed.
-  virtual void Project(){}
+  virtual G4int GetNumberOfPoints();
+  virtual const G4Point3D& GetPoint(G4int Count);
+    // ???
 
-  // Only in G4FPlane. Should be private to that class?
-  virtual void CalcNormal(){}  
+  virtual G4Ray* Norm();
+  virtual G4Vector3D SurfaceNormal(const G4Point3D& Pt) const = 0;  
+    // There is Normal as well -- so what do these do?
 
-  // Only in G4FPlane. BREPSolid::IsConvex uses it.
-  // But who uses BREPSolid::IsConvex?
-  // Thus: probably not needed. But knowing
-  // if the surface is convex could be used for optimization. 
-  virtual int IsConvex(){return -1;}
+/*
+  virtual G4double distanceAlongRay( G4int which_way, const G4Ray* ry,
+                                     G4Vector3D& p ) const;
+    // Returns distance along a Ray (straight line with G4ThreeVec) to leave
+    // or enter a Surface. The input variable which_way should be set to +1
+    // to indicate leaving a Surface, -1 to indicate entering a Surface.
+    // p is the point of intersection of the Ray with the Surface.
+    // This is a default function which just gives the distance
+    // between the origin of the Ray and the origin of the Surface.
+    // Since a generic Surface doesn't have a well-defined Normal, no
+    // further checks are Done. It must be overwritten by derived classes.
 
-  // Only in G4FPlane, but G4BREPSolid uses them.
-  virtual int GetConvex(){return 0;}
-
-  virtual int GetNumberOfPoints(){return 0;}
-
-  virtual const G4Point3D& GetPoint(const int Count)
-  {
-    const G4Point3D* tmp= new G4Point3D(0,0,0);
-    return *tmp;
-  }
-
-  // L. Broglia
-  void   SetSameSense(G4int sameSense0) { sameSense = sameSense0; }
-  G4int  GetSameSense()                 { return sameSense      ; }
-  
-  G4BoundingBox3D* GetBBox() { return bbox; }
-
-  // there is Normal as well -- so what do these do?
-  virtual G4Ray* Norm(){return (G4Ray*)0;}
-  virtual G4Vector3D SurfaceNormal(const G4Point3D& Pt) const =0;  
-
-  // should be at least protected, but BREPSolid uses these data members.
-  // So why not a Get function?
-
+  virtual G4double G4Surface::distanceAlongHelix( G4int which_way,
+                                                  const Helix* hx,
+                                                  G4ThreeVec& p ) const;
+    // Returns the distance along a Helix to leave or enter a Surface.  
+    // The input variable which_way should be set to +1 to indicate
+    // leaving a Surface, -1 to indicate entering a Surface.
+    // p is the point of intersection of the Helix with the Surface.
+    // This is a default function which just gives the distance
+    // between the origin of the Helix and the origin of the Surface.
+    // Since a generic Surface doesn't have a well-defined Normal, no
+    // further checks are Done. It must be overwritten by derived classes.
+*/
 
 public:
 
   G4BoundingBox3D* bbox;
   G4Point3D closest_hit;
+  G4Surface* next;
 
 protected:
 
-  // The boundaries of the surface.
+  virtual void InitBounded();
+
+protected:
+
   G4SurfaceBoundary surfaceBoundary;
+    // The boundaries of the surface.
 
-  // BSplineSurface anf FPlane sets it, no one gets it
-  int Intersected;
+  G4int Intersected;
+    // BSplineSurface and FPlane sets it, no one gets it.
 
-  // see Get... members
-  G4Vector3D origin;	// origin of Surface
-  int Type;
-  int AdvancedFace;
-  int active;
+  G4Vector3D origin;
+    // Origin of Surface.
+
+  G4int Type;
+  G4int AdvancedFace;
+  G4int active;
   G4double distance;
   G4double uhit,vhit;
+    // Generic attributes...
 
-  // L. Broglia
   G4int sameSense;
+    // by L. Broglia
 
 protected:
 
-  // Maybe kInfinity instead?
   const G4double FLT_MAXX;
+    // Maybe kInfinity instead?
 
-  // Maybe kCarTolerance instead?
   const G4double FLT_EPSILO;
-
-  // temporary solution so that G4SurfaceList sees this member
-  // but G4SurfaceList should go.
-
-
-public:
-  G4Surface* next;
+    // Maybe kCarTolerance instead?
 
 };
 
+#include "G4Surface.icc"
+
 #endif
-
-
-
-
-

@@ -1,8 +1,26 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4CompositeCurve.cc,v 1.4 2000-08-28 08:57:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4CircularCurve.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4CompositeCurve.hh"
 #include "G4Line.hh"
 
 
 G4CompositeCurve::G4CompositeCurve(){}
+
 G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
 {
   G4CurveVector cv;
@@ -23,6 +41,10 @@ G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
 
 G4CompositeCurve::~G4CompositeCurve(){}
 
+G4String G4CompositeCurve::GetEntityType() const 
+{
+  return G4String("G4CompositeCurve");
+}
 
 G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
 {
@@ -108,19 +130,3 @@ void G4CompositeCurve::InitBounded()
   
   // init for efficient parameter <-> 3D point conversions
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

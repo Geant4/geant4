@@ -1,33 +1,67 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Line.icc,v 1.4 2000-08-28 08:57:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Line.icc
+//
+// Implementation of inline methods of G4Line
+// --------------------------------------------------------------------
 
-inline G4double G4Line::GetPMax() { return -1; }
+inline
+G4double G4Line::GetPMax()
+{
+  return -1;
+}
 
-inline G4Point3D G4Line::GetPoint(G4double param) { return pnt+param*dir; }
+inline
+G4Point3D G4Line::GetPoint(G4double param)
+{
+  return pnt+param*dir;
+}
 
-inline G4double G4Line::GetPPoint(const G4Point3D& pt) 
+inline
+G4double G4Line::GetPPoint(const G4Point3D& pt) 
 { 
   return (pt-pnt)*invDir; 
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
-inline void G4Line::Init(const G4Point3D& pnt0, const G4Vector3D& dir0) {
+inline
+void G4Line::Init(const G4Point3D& pnt0, const G4Vector3D& dir0)
+{
   pnt= pnt0;
   dir= dir0;
   invDir= dir*(1/dir.mag2());
   v= dir.unit();
 }
 
-inline G4Point3D G4Line::GetPnt() const {
+inline
+G4Point3D G4Line::GetPnt() const
+{
   return pnt;
 }
 
-inline G4Vector3D G4Line::GetDir() const {
+inline
+G4Vector3D G4Line::GetDir() const
+{
   return dir;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
-inline void G4Line::InitBounded() {
+inline
+void G4Line::InitBounded()
+{
   bBox.Init(GetStart(), GetEnd());
 }
 
@@ -36,8 +70,9 @@ inline void G4Line::InitBounded() {
 #include "G4CurveRayIntersection.hh"
 
 /*
-inline void G4Line::IntersectRay2D(const G4Ray& ray,
-				   G4CurveRayIntersection& is)
+inline
+void G4Line::IntersectRay2D(const G4Ray& ray,
+                            G4CurveRayIntersection& is)
 {
   is.Init(*this, ray);
   G4CurveRayIntersection isTmp(*this, ray);
@@ -74,7 +109,8 @@ inline void G4Line::IntersectRay2D(const G4Ray& ray,
 }
 */
 
-inline G4int G4Line::IntersectRay2D(const G4Ray& ray)
+inline
+G4int G4Line::IntersectRay2D(const G4Ray& ray)
 {
   const G4Point3D& s= ray.GetStart();
   const G4Vector3D& d= ray.GetDir();
@@ -119,4 +155,3 @@ inline G4int G4Line::IntersectRay2D(const G4Ray& ray)
   
   return nbinter;
 }
-

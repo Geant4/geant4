@@ -5,23 +5,28 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolidCylinder.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BREPSolidCylinder.hh"
 #include "G4CircularCurve.hh"
 #include "G4FPlane.hh"
 #include "G4FCylindricalSurface.hh"
 
-
-G4BREPSolidCylinder::G4BREPSolidCylinder(G4String name,
+G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
 					 const G4ThreeVector& origin,
 					 const G4ThreeVector& axis,
 					 const G4ThreeVector& direction,
-					 const G4double& radius,
-					 const G4double& length)
-  :G4BREPSolid(name)
+					 G4double radius,
+					 G4double length)
+  : G4BREPSolid(name)
 {
   SurfaceVec = new G4Surface*[3];
   G4CurveVector cv;
@@ -35,7 +40,7 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(G4String name,
   //cv.clear();
 
 
-  // Creation of the first circlular surface, which origin is origin
+  // Creation of the first circular surface, which origin is origin
   G4Point3D  ArcStart1 = origin + ( radius*direction );
   G4Vector3D axis1     = axis.cross( direction );
 
@@ -49,7 +54,7 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(G4String name,
   cv.clear();
   
 
-  // Creation of the second circlular surfac
+  // Creation of the second circular surface
   G4Point3D  origin2   = origin  + ( length*axis );  
   G4Point3D  ArcStart2 = origin2 + ( radius*direction );
   G4Vector3D axis2     = axis1;
@@ -68,17 +73,3 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(G4String name,
   active=1;
   Initialize();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

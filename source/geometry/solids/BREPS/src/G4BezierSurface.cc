@@ -5,20 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BezierSurface.cc,v 1.3 2000-08-28 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// L. Broglia, 10/10/98
-// Error in line 331 and replaced addition of coordinates by 
-// addition of 2 points
-
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BezierSurface.cc
+//
+// ----------------------------------------------------------------------
+// History:
+// -------
+// - Replaced addition of coordinates by addition of 2 points
+//   (L. Broglia, 10/10/98)
+// ----------------------------------------------------------------------
 
 #include "G4BezierSurface.hh"
 #include "G4ConvexHull.hh"
 
 G4double G4BezierSurface::Tolerance=0;
-int G4BezierSurface::Clips=0;
-int G4BezierSurface::Splits=0;
+G4int G4BezierSurface::Clips=0;
+G4int G4BezierSurface::Splits=0;
 
 
 G4BezierSurface::G4BezierSurface()
@@ -72,8 +79,12 @@ G4BezierSurface::~G4BezierSurface()
   delete bbox;
 }
 
+G4Vector3D G4BezierSurface::SurfaceNormal(const G4Point3D& Pt) const
+{
+  return G4Vector3D(0,0,0);
+}
 
-int G4BezierSurface::ClipBothDirs()
+G4int G4BezierSurface::ClipBothDirs()
 {
   dir = ROW;
   ClipSurface(); 
@@ -131,9 +142,9 @@ void G4BezierSurface::CalcBBox()
     
   // Loop to search the whole control point mesh
   // for the minimum and maximum values for.X() and y.
-  for(register int a = ctl_points->GetRows()-1; a>=0;a--)
-    for(register int b = ctl_points->GetCols()-1; b>=0;b--)
-    {	    
+  for(register G4int a = ctl_points->GetRows()-1; a>=0;a--)
+    for(register G4int b = ctl_points->GetCols()-1; b>=0;b--)
+    {
 /* L. Broglia
       G4Point2d& tmp = (G4Point2d&)ctl_points->get(a,b);
       if((box_min.X()) > (tmp.X())) box_min.X(tmp.X());
@@ -191,7 +202,7 @@ void G4BezierSurface::SetValues()
 G4int G4BezierSurface::BIntersect(G4SurfaceList& bez_list)
 {
   bezier_list = &bez_list;
-  int clip_regions = 0; // Used for tolerance/efficiency-testing
+  G4int clip_regions = 0; // Used for tolerance/efficiency-testing
   
   do
   {
@@ -287,10 +298,10 @@ void G4BezierSurface::ClipSurface()
 
   //    G4cout << "\nBezier clip.";
   
-  register int i,j;
+  register G4int i,j;
   register G4ConvexHull *ch_ptr, *ch_tmp, *ch_first;
-  register int col_size = ctl_points->GetCols();
-  register int row_size = ctl_points->GetRows();
+  register G4int col_size = ctl_points->GetCols();
+  register G4int row_size = ctl_points->GetRows();
   
   // The four cornerpoints of the controlpoint mesh.
 
@@ -371,7 +382,7 @@ void G4BezierSurface::ClipSurface()
   if( dir == ROW)
   {
     // Create a Convex() hull List 
-    for(int a = 0; a < col_size; a++)
+    for(G4int a = 0; a < col_size; a++)
     {
       ch_ptr = new G4ConvexHull(a/(col_size - 1.0),1.0e8,-1.0e8);
       if(! a) 
@@ -389,9 +400,9 @@ void G4BezierSurface::ClipSurface()
     // Loops through the control point mesh and calculates
     // the nvex() hull for the surface.
     
-    for( int h = 0; h < row_size; h++)
+    for( G4int h = 0; h < row_size; h++)
     {
-      for(int k = 0; k < col_size; k++)
+      for(G4int k = 0; k < col_size; k++)
       {
 /* L. Broglia
 	G4Point2d& coordstmp = (G4Point2d&)ctl_points->get(h,k);  
@@ -415,10 +426,10 @@ void G4BezierSurface::ClipSurface()
     // minimum and maximum values to where to clip the
     // surface.
     
-    for(int l = 0; l < col_size - 1; l++)
+    for(G4int l = 0; l < col_size - 1; l++)
     {
       ch_tmp=ch_ptr->next;
-      for(int m = l+1; m < col_size; m++)
+      for(G4int m = l+1; m < col_size; m++)
       {
 	register G4double d;
 	register G4double param1, param2;
@@ -461,7 +472,7 @@ void G4BezierSurface::ClipSurface()
   } 
   else // Other G4Vector3D
   {
-    for(int n = 0; n < row_size; n++)
+    for(G4int n = 0; n < row_size; n++)
       {
 	ch_ptr = new G4ConvexHull(n/(row_size - 1.0),1.0e8,-1.0e8);
 	if(!n) 
@@ -476,9 +487,9 @@ void G4BezierSurface::ClipSurface()
     
     ch_ptr=ch_first;
     
-    for( int o = 0; o < col_size; o++)
+    for( G4int o = 0; o < col_size; o++)
     {
-      for(int p = 0; p < row_size; p++)
+      for(G4int p = 0; p < row_size; p++)
       {
 	register G4double value;
 
@@ -501,10 +512,10 @@ void G4BezierSurface::ClipSurface()
     ch_ptr=ch_first;
     ch_tmp=ch_first;
     
-    for(int q = 0; q < row_size - 1; q++)
+    for(G4int q = 0; q < row_size - 1; q++)
     {
       ch_tmp=ch_ptr->next;
-      for(int r = q+1; r < row_size; r++)
+      for(G4int r = q+1; r < row_size; r++)
       {
 	register G4double param1 = ch_ptr->param;
 	register G4double param2 = ch_tmp->param;
@@ -572,7 +583,7 @@ void G4BezierSurface::GetClippedRegionFromSurface()
   if ( dir == ROW) 
   {
     new_knots = new G4KnotVector(GetOrder(0) * 2);
-    for (register int i = 0; i < GetOrder(0); i++) 
+    for (register G4int i = 0; i < GetOrder(0); i++) 
     {
       new_knots->PutKnot(i, smin);
       new_knots->PutKnot(i+ GetOrder(0), smax);
@@ -581,7 +592,7 @@ void G4BezierSurface::GetClippedRegionFromSurface()
   else
   {
     new_knots = new G4KnotVector( GetOrder(1) * 2);
-    for ( register int i = 0; i <  GetOrder(1); i++) 
+    for ( register G4int i = 0; i <  GetOrder(1); i++) 
     {
       new_knots->PutKnot(i, smin);
       new_knots->PutKnot(i+ GetOrder(1), smax);
@@ -601,7 +612,7 @@ void G4BezierSurface::RefineSurface()
     // Row (u) G4Vector3D 
     ord = GetOrder(0);
     CalcOsloMatrix();
-    for(register int a=0;a<new_knots->GetSize();a++)
+    for(register G4int a=0;a<new_knots->GetSize();a++)
       u_knots->PutKnot(a, new_knots->GetKnot(a));
 	
     lower = 0; 
@@ -615,14 +626,14 @@ void G4BezierSurface::RefineSurface()
   {	
     ord = GetOrder(1);
     CalcOsloMatrix ();
-    for(register int a=0;a < new_knots->GetSize();a++)
+    for(register G4int a=0;a < new_knots->GetSize();a++)
       v_knots->PutKnot(a, new_knots->GetKnot(a));
 	
     // Copy of the old points.
     old_points = new G4ControlPoints(*ctl_points);
     
     // Make new controlpoint matrix,
-    register int cols = ctl_points->GetCols();
+    register G4int cols = ctl_points->GetCols();
     delete ctl_points;
 
     ctl_points = new G4ControlPoints(2,(new_knots->GetSize()-
@@ -643,12 +654,12 @@ void G4BezierSurface::CalcOsloMatrix()
  
   register G4KnotVector *ah;
   register G4KnotVector *newknots;		     
-  register int           i;
-  register int           j;
-  register int           mu, muprim;
-  register int           vv, p;
-  register int           iu, il, ih, n1;		
-  register int           ahi;	
+  register G4int         i;
+  register G4int         j;
+  register G4int         mu, muprim;
+  register G4int         vv, p;
+  register G4int         iu, il, ih, n1;		
+  register G4int         ahi;	
   register G4double      beta1;
   register G4double      tj;
 
@@ -818,19 +829,19 @@ void G4BezierSurface::MapSurface(G4Surface* tmp)
   // Copy the old points so they can be used in calculating the new ones.
   //  old_pts = new G4ControlPoints(*ctl_points);
   old_pts = old_points;
-  register int	j, 			//	 j loop 
-                i;			//	 oslo loop 
+  register G4int j, 			//	 j loop 
+                 i;			//	 oslo loop 
 
   c_ptr = new_pts;
-  register int size; // The number of rows or columns, 
-                     // depending on processing order
+  register G4int size; // The number of rows or columns, 
+                       // depending on processing order
 
   if(!dir)
     size=new_pts->GetRows();
   else
     size=new_pts->GetCols();
 
-  for(int a=0; a<size;a++)
+  for(G4int a=0; a<size;a++)
   {
     if ( lower != 0)
       for ( i = 0,  o_ptr = oslo_m; 
@@ -844,7 +855,7 @@ void G4BezierSurface::MapSurface(G4Surface* tmp)
       for ( j = lower; j < upper; j++, o_ptr = o_ptr->next) 
       {
 	register G4double o_scale;
-	register int x;
+	register G4int x;
 	x=a;
 
 /* L. Broglia	
@@ -883,7 +894,7 @@ void G4BezierSurface::MapSurface(G4Surface* tmp)
       for ( j = lower; j < upper; j++, o_ptr = o_ptr->next)
       {
 	register G4double o_scale;
-	register int x;
+	register G4int x;
 	x=a;
 
 /* L. Broglia	
@@ -925,10 +936,10 @@ void G4BezierSurface::SplitNURBSurface()
   //    G4cout << "\nBezier splitted.";
   
   register G4double value;
-  register int i;
-  register int k_index;
+  register G4int i;
+  register G4int k_index;
   G4BezierSurface *srf1, *srf2;
-  int nr,nc;
+  G4int nr,nc;
   
   if ( dir == ROW )
   {
@@ -1049,12 +1060,3 @@ void G4BezierSurface::SplitNURBSurface()
   // Testing
   Splits++;  
 }
-
-
-
-
-
-
-
-
-

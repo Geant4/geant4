@@ -5,10 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.hh,v 1.4 2000-01-21 13:47:43 gcosmo Exp $
+// $Id: G4Parabola.hh,v 1.5 2000-08-28 08:57:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4Parabola
+//
+// Class description:
+// 
+// Definition of a generic parabola.
 
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __PARABOLICCURVE_H
 #define __PARABOLICCURVE_H 
 
@@ -16,38 +25,49 @@
 
 class G4Parabola : public G4Conic
 {
-public:
+
+public:  // with description
+
   G4Parabola();
   ~G4Parabola();
+    // Constructor & destructor.
 
-  virtual G4Curve* Project(const G4Transform3D& tr = G4Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr=
+                   G4Transform3D::Identity);
+    // Transforms and projects the curve.
 
-  virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
+  G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
+    // Returns tangent to curve at a given point, if existing.
+    // The tangent is computed from the 3D point representation.
 
-  // virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
-  virtual G4int IntersectRay2D(const G4Ray& ray);
+  inline G4double  GetPMax();
+  inline G4Point3D GetPoint(G4double param);
+  inline G4double  GetPPoint(const G4Point3D& p);
+    // Accessors methods.
 
-  virtual G4double  GetPMax();
-  virtual G4Point3D GetPoint(G4double param);
-  virtual G4double  GetPPoint(const G4Point3D& p);
+  inline G4double GetFocalDist() const;
+  inline void Init(const G4Axis2Placement3D& position0, G4double focalDist0);
+    // Get/Set for the geometric data.
 
-  //G4Parabola(G4Point3d, G4Point3d, G4double );
-  //G4Point3d EvaluateByParameterValue(const G4double u);
-  //G4Point3d GetBoundMax();
-  //G4Point3d GetBoundMin();   
+public:  // without description
 
-  // Get/Set for the geometric data
-  void Init(const G4Axis2Placement3D& position0, G4double focalDist0);
-  double GetFocalDist() const;
+  inline G4int IntersectRay2D(const G4Ray& ray);
+
+  // void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  // G4Parabola(G4Point3d, G4Point3d, G4double );
+  // G4Point3d EvaluateByParameterValue(G4double u);
+  // G4Point3d GetBoundMax();
+  // G4Point3d GetBoundMin();   
 
 protected:
 
-  virtual void InitBounded();
+  void InitBounded();
 
 private:
 
   // geometric data
-  double focalDist;
+
+  G4double focalDist;
 
   // for the intersection
   G4Point3D F;

@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4CircularCurve.cc,v 1.3 2000-08-28 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4CircularCurve.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4CircularCurve.hh"
 #include "G4Ellipse.hh"
@@ -64,4 +70,3 @@ G4bool G4CircularCurve::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   v= -p.y()*pos.GetPX() + p.x()*pos.GetPY();
   return true;
 }
-

@@ -5,36 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.cc,v 1.3 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4ProjectedSurface.cc,v 1.4 2000-08-28 08:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4ProjectedSurface.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4ProjectedSurface.hh"
  
-int G4ProjectedSurface::Splits=0;
-
-G4ProjectedSurface::~G4ProjectedSurface()
-{
-  delete u_knots;
-  delete v_knots;
-  delete ctl_points;
-  
-  G4OsloMatrix* temp_oslo;
-  if(oslo_m!=(G4OsloMatrix*)0)
-  {
-    while(oslo_m->next != oslo_m)
-    {
-      temp_oslo = oslo_m;
-      oslo_m    = oslo_m->next;
-      
-      delete temp_oslo;
-    }
-    
-    delete oslo_m;
-  }
-  
-  delete bbox;
-}
-
+G4int G4ProjectedSurface::Splits=0;
 
 G4ProjectedSurface::G4ProjectedSurface()
 {
@@ -62,13 +45,37 @@ G4ProjectedSurface::G4ProjectedSurface(const G4ProjectedSurface &tmp)
 }
 
 
+G4ProjectedSurface::~G4ProjectedSurface()
+{
+  delete u_knots;
+  delete v_knots;
+  delete ctl_points;
+  
+  G4OsloMatrix* temp_oslo;
+  if(oslo_m!=(G4OsloMatrix*)0)
+  {
+    while(oslo_m->next != oslo_m)
+    {
+      temp_oslo = oslo_m;
+      oslo_m    = oslo_m->next;
+      
+      delete temp_oslo;
+    }
+    
+    delete oslo_m;
+  }
+  
+  delete bbox;
+}
+
+
 void  G4ProjectedSurface::CopySurface()
   // Copies the projected surface into a bezier surface
   // and adds it to the List of bezier surfaces.
 {
   G4BezierSurface *bez = new G4BezierSurface();
   
-  bez->Distance(distance);
+  bez->SetDistance(distance);
   bez->PutOrder(0, order[0]);
   bez->PutOrder(1, order[1]);
   bez->Dir(dir);
@@ -99,8 +106,8 @@ void G4ProjectedSurface::CalcBBox()
   bminx = box_minx; bminy = box_miny;
   bmaxx = box_maxx; bmaxy = box_maxy;	    
 
-  for(register int a = ctl_points->GetRows()-1; a>=0;a--)
-    for(register int b = ctl_points->GetCols()-1; b>=0;b--)
+  for(register G4int a = ctl_points->GetRows()-1; a>=0;a--)
+    for(register G4int b = ctl_points->GetCols()-1; b>=0;b--)
     {	    
 /* L. Broglia
       G4Point2d& tmp = (G4Point2d&)ctl_points->get(a,b);
@@ -238,7 +245,7 @@ void G4ProjectedSurface::ConvertToBezier(G4SurfaceList& proj_list,
 }
 
 
-int G4ProjectedSurface::CheckBezier()
+G4int G4ProjectedSurface::CheckBezier()
 {
   // Checks if the surface is a bezier surface by
   // checking wether internal knots exist. If no internal
@@ -264,10 +271,10 @@ void G4ProjectedSurface::SplitNURBSurface()
   //    G4cout << "\nProjected splitted.";
     
   register G4double value;
-  register int i;
-  register int k_index;
+  register G4int i;
+  register G4int k_index;
   register G4ProjectedSurface *srf1, *srf2;
-  register int nr,nc;
+  register G4int nr,nc;
     
   if ( dir == ROW )
   {
@@ -386,8 +393,8 @@ void G4ProjectedSurface::SplitNURBSurface()
   }
   
   // Check that surfaces are ok.
-  int col_size = srf1->ctl_points->GetCols();
-  int row_size = srf1->ctl_points->GetRows();
+  G4int col_size = srf1->ctl_points->GetCols();
+  G4int row_size = srf1->ctl_points->GetRows();
 
 /* L. Broglia  
   // get three cornerpoints of the controlpoint mesh.
@@ -459,12 +466,12 @@ void G4ProjectedSurface::CalcOsloMatrix()
  
   register G4KnotVector *ah;
   static G4KnotVector *newknots;		     
-  register int     i;
-  register int      j;
-  register int      mu, muprim;
-  register int      v, p;
-  register int      iu, il, ih, n1;		
-  register int      ahi;	
+  register G4int      i;
+  register G4int      j;
+  register G4int      mu, muprim;
+  register G4int      v, p;
+  register G4int      iu, il, ih, n1;		
+  register G4int      ahi;	
   register G4double beta1;
   register G4double tj;
 	
@@ -599,19 +606,6 @@ void G4ProjectedSurface::CalcOsloMatrix()
   oslo_m = o_ptr;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
 {
   // This algorithm is described in the paper "Making the Oslo-algorithm
@@ -630,19 +624,19 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
   // as parameters the copying is not necessary.
   
   old_pts = new G4ControlPoints(*ctl_points);
-  register int	j,    //  j loop 
-                i;    //  oslo loop 
+  register G4int j,    //  j loop 
+                 i;    //  oslo loop 
   c_ptr = new_pts;
   
-  register int size; // The number of rows or columns, 
-                     // depending on processing order
+  register G4int size; // The number of rows or columns, 
+                       // depending on processing order
 
   if(!dir)
     size=new_pts->GetRows();
   else
     size=new_pts->GetCols();
   
-  for( register int a=0; a<size;a++)
+  for( register G4int a=0; a<size;a++)
   {
     if ( lower != 0)
       for ( i = 0,  o_ptr = oslo_m; i < lower; i++,  o_ptr = o_ptr->next);
@@ -654,7 +648,7 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
       for ( j = lower; j < upper; j++, o_ptr = o_ptr->next) 
       {
 	register G4double o_scale;
-	register int x;
+	register G4int x;
 	x=a;
 
 /* L. Broglia	
@@ -692,7 +686,7 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
       for ( j = lower; j < upper; j++, o_ptr = o_ptr->next) 
       {
 	register G4double o_scale;
-	register int x;
+	register G4int x;
 	x=a;
 
 /* L.Broglia
@@ -724,16 +718,3 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
   
   delete old_pts;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

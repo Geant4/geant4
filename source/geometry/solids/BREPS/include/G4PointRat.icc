@@ -1,0 +1,83 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PointRat.icc,v 1.1 2000-08-28 08:57:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4PointRat.icc
+//
+// Implementation of inline methods of G4PointRat
+// --------------------------------------------------------------------
+
+inline
+G4double G4PointRat::x() const
+{
+  return pt3d.x();
+}
+
+inline
+void G4PointRat::setX (G4double Value)
+{
+  pt3d.setX ( Value );
+}
+
+inline
+G4double G4PointRat::y() const
+{
+  return pt3d.y();
+}
+
+inline
+void G4PointRat::setY (G4double Value)
+{
+  pt3d.setY ( Value );
+}
+
+inline
+G4double G4PointRat::z() const
+{
+  return pt3d.z();
+}
+
+inline
+void G4PointRat::setZ (G4double Value)
+{
+  pt3d.setZ ( Value );
+}
+
+inline
+G4double G4PointRat::w() const
+{
+  return s;
+}
+
+inline
+void G4PointRat::setW(G4double Value)
+{
+  s=Value;
+}
+
+inline
+G4Point3D G4PointRat::pt() const
+{
+  return pt3d;
+}
+
+inline
+G4double G4PointRat::PlaneDistance(const G4Plane3D& Pl)
+{
+  return ((Pl.a()*pt3d.x() + Pl.b()*pt3d.y() + Pl.c()*pt3d.z()) - Pl.d());
+}
+
+inline
+G4int G4PointRat::GetType(void) const
+{
+  return 4;
+}

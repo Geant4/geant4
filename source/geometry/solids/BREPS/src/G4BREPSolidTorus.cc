@@ -5,18 +5,26 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidTorus.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BREPSolidTorus.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolidTorus.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BREPSolidTorus.hh"
 #include "G4ToroidalSurface.hh"
 
-G4BREPSolidTorus::G4BREPSolidTorus(const    G4String name,
+G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
 				   const    G4ThreeVector& origin,
 				   const    G4ThreeVector& axis,
 				   const    G4ThreeVector& direction,
 				   G4double MinRadius,
-				   G4double MaxRadius): G4BREPSolid(name)
+				   G4double MaxRadius)
+  : G4BREPSolid(name)
 {
   SurfaceVec = new G4Surface*[1];
   SurfaceVec[0] = new G4ToroidalSurface( origin, axis, direction,
@@ -25,4 +33,3 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String name,
   active = 1;
   Initialize();
 }
-

@@ -5,21 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Globals.hh,v 1.2 1999-12-15 14:49:56 gunter Exp $
+// $Id: G4Globals.hh,v 1.3 2000-08-28 08:57:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*  /usr/local/gismo/repo/support/globals.h,v 1.8 1994/04/18 18:29:03 atwood Exp  */
-//  File: globals.h
-//  Author: Alan Breakstone
+// Author: A.Breakstone
+// Adaptation: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 //
-//  Description
+// Defines global constants required by some surfaces
 //
-//      Defines global variables and declarations for Gismo
-//
-//
+// ----------------------------------------------------------------------
 
-#ifndef __GLOBALS_H
-#define __GLOBALS_H
+#ifndef __G4BREPGLOBALS_H
+#define __G4BREPGLOBALS_H
 
 //
 //  Define a C preprocessor constant for a Scale factor to apply to 
@@ -33,10 +32,5 @@
 //  allowed for a Helix, which is used in some of the geometry routines
 //  to limit the size of for or while loops.  The default value is 50.
 #define HELIX_MAX_TURNS 50
-
-//  Define some geometric constants of use
-//  These should be gotten via math.h ... see M_PI etc....  
-//#define PI 3.14159265358979323846
-//#define TWO_PI 6.2831853071795862
 
 #endif

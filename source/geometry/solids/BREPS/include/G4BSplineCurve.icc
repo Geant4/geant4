@@ -1,19 +1,44 @@
-inline G4int G4BSplineCurve::GetDegree() const {
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BSplineCurve.icc,v 1.3 2000-08-28 08:57:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4BSplineCurve.icc
+//
+// Implementation of inline methods of G4BSplineCurve
+// --------------------------------------------------------------------
+
+inline G4int G4BSplineCurve::GetDegree() const
+{
   return degree;
 }
 
-inline const G4BSplineCurve::G4Point3DVector*
-G4BSplineCurve::GetControlPointsList() const {
+inline
+const G4BSplineCurve::G4Point3DVector*
+G4BSplineCurve::GetControlPointsList() const
+{
   return controlPointsList;
 }
 
-inline const G4BSplineCurve::G4doubleVector*
-G4BSplineCurve::GetKnots() const {
+inline
+const G4BSplineCurve::G4doubleVector*
+G4BSplineCurve::GetKnots() const
+{
   return knots;
 }
 
-inline const G4BSplineCurve::G4doubleVector*
-G4BSplineCurve::GetWeightsData() const {
+inline
+const G4BSplineCurve::G4doubleVector*
+G4BSplineCurve::GetWeightsData() const
+{
   return weightsData;
 }
 

@@ -5,8 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurfaceWithKnots.cc,v 1.1 2000-02-25 15:57:43 gcosmo Exp $
+// $Id: G4BSplineSurfaceWithKnots.cc,v 1.2 2000-08-28 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BSplineSurfaceWithKnots.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BSplineSurfaceWithKnots.hh"
 

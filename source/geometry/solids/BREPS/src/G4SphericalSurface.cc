@@ -5,41 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4SphericalSurface.cc,v 1.3 2000-08-28 08:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*  $Header: /private/Net/unixhub/u1/ea/liml/gismo/gismo-0.2/geometry/RCS/G4SphericalSurface.cc,v 1.10 1992/08   */
-//  File:  G4SphericalSurface.cc
-//  Author:  Lorraine Lim
-//  Additional author:  Alan Breakstone
-
-//  Contents ----------------------------------------------------------
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
-//	G4SphericalSurface::G4SphericalSurface()
-//	G4SphericalSurface::G4SphericalSurface( const G4Vector3D& o, const G4Vector3D& xhat,
-//                            const G4Vector3D& zhat,
-//			      G4double r, G4double ph1, G4double ph2,
-//		              G4double th1, G4double th2 )
-//	G4SphericalSurface::PrintOn( G4std::ostream& os ) const
-//	G4SphericalSurface::HowNear( const G4Vector3D& x ) const
-//	G4SphericalSurface::distanceAlongRay( int which_way, const Ray* ry,
-//				     G4Vector3D& p ) const
-//	G4SphericalSurface::distanceAlongHelix( int which_way, const Helix* hx,
-//				       G4Vector3D& p ) const
-//	G4SphericalSurface::Normal( const G4Vector3D& p ) const
-//	G4SphericalSurface::Inside( const G4Vector3D& x ) const
-//	G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
-//	G4SphericalSurface::Scale() const
-//	G4SphericalSurface::Area() const
-//	G4SphericalSurface::resize( G4double r, G4double ph1, G4double ph2,
-//			   G4double th1, G4double th2 )
-//	G4SphericalSurface::rotate( G4double alpha, G4double beta, 
-//			   G4double gamma, G4ThreeMat& m, int inverse ) 
-//	G4SphericalSurface::rotate( G4double alpha, G4double beta, 
-//			   G4double gamma, int inverse ) 
-//	G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
-// 
-//  End ---------------------------------------------------------------
+// G4SphericalSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4SphericalSurface.hh"
 
@@ -162,6 +136,28 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D& o,
 }
 
 
+G4SphericalSurface::~G4SphericalSurface()
+{
+}
+
+/*
+G4SphericalSurface::G4SphericalSurface( const G4SphericalSurface& s )
+ : G4Surface( s.origin )
+{ x_axis = s.x_axis;
+  z_axis = s.z_axis;
+  radius = s.radius;
+  phi_1 = s.phi_1;
+  phi_2 = s.phi_2;
+  theta_1 = s.theta_1;
+  theta_2 = s.theta_2;
+}			                               
+*/
+
+const char* G4SphericalSurface::NameOf() const
+{
+  return "G4SphericalSurface";
+}
+
 void G4SphericalSurface::PrintOn( G4std::ostream& os ) const
 {  
   //  printing function using C++ G4std::ostream class
@@ -188,11 +184,12 @@ G4double G4SphericalSurface::HowNear( const G4Vector3D& x ) const
 
 
 /*
-G4double G4SphericalSurface::distanceAlongRay( int which_way, const G4Ray* ry,
-        			    G4Vector3D& p ) const
+G4double G4SphericalSurface::distanceAlongRay( G4int which_way,
+                                               const G4Ray* ry,
+                                               G4Vector3D& p ) const
 {  //  Distance along a Ray (straight line with G4Vector3D) to leave or enter
    //  a G4SphericalSurface.  The input variable which_way should be set to +1 to
-   //  indicate leaving a G4SphericalSurface, -1 to indicate entering a G4SphericalSurface.
+   //  indicate leaving a G4SphericalSurface, -1 to indicate entering the surface.
    //  p is the point of intersection of the Ray with the G4SphericalSurface.
    //  If the G4Vector3D of the Ray is opposite to that of the Normal to
    //  the G4SphericalSurface at the intersection point, it will not leave the
@@ -212,7 +209,7 @@ G4double G4SphericalSurface::distanceAlongRay( int which_way, const G4Ray* ry,
 //  Origin and G4Vector3D unit vector of Ray.
 	G4Vector3D x = ry->Position( 0.0 );
 	G4Vector3D dhat = ry->Direction( 0.0 );
-	int isoln = 0, maxsoln = 2;
+	G4int isoln = 0, maxsoln = 2;
 //  array of solutions in distance along the Ray
 //	G4double s[2] = { -1.0, -1.0 };
 	G4double s[2];s[0] = -1.0; s[1]= -1.0 ;
@@ -274,7 +271,7 @@ void G4SphericalSurface::CalcBBox()
 }
 
 
-int G4SphericalSurface::Intersect( const G4Ray& ry )
+G4int G4SphericalSurface::Intersect( const G4Ray& ry )
 {
   //  Distance along a Ray (straight line with G4Vector3D) to leave or enter
   //  a G4SphericalSurface.  The input variable which_way should be set to +1 
@@ -295,7 +292,7 @@ int G4SphericalSurface::Intersect( const G4Ray& ry )
   //  If no valid intersection point is found, set the distance
   //  and intersection point to large numbers.
 
-  int which_way = (int)HowNear(ry.GetStart());
+  G4int which_way = (G4int)HowNear(ry.GetStart());
   //Originally a parameter.Read explanation above. 
   
   if(!which_way)which_way =-1;
@@ -312,7 +309,7 @@ int G4SphericalSurface::Intersect( const G4Ray& ry )
 
   //	G4Vector3D dhat = ry->direction( 0.0 );
   G4Vector3D dhat = ry.GetDir();
-  int isoln = 0, maxsoln = 2;
+  G4int isoln = 0, maxsoln = 2;
 
   //  array of solutions in distance along the Ray
   G4double s[2];
@@ -384,8 +381,9 @@ int G4SphericalSurface::Intersect( const G4Ray& ry )
 
 
 /*
-G4double G4SphericalSurface::distanceAlongHelix( int which_way, const Helix* hx,
-				      G4Vector3D& p ) const
+G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
+                                                 const Helix* hx,
+                                                 G4Vector3D& p ) const
 {  //  Distance along a Helix to leave or enter a G4SphericalSurface.
    //  The input variable which_way should be set to +1 to
    //  indicate leaving a G4SphericalSurface, -1 to indicate entering a G4SphericalSurface.
@@ -405,7 +403,7 @@ G4double G4SphericalSurface::distanceAlongHelix( int which_way, const Helix* hx,
 	G4double Dist = FLT_MAXX;
 	G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
 	p = lv;
-	int isoln = 0, maxsoln = 4;
+	G4int isoln = 0, maxsoln = 4;
 //  Array of solutions in turning angle
 //	G4double s[4] = { -1.0, -1.0, -1.0, -1.0 };
 	G4double s[4];s[0] = -1.0; s[1]= -1.0 ;s[2] = -1.0; s[3]= -1.0 ;
@@ -472,10 +470,10 @@ G4double G4SphericalSurface::distanceAlongHelix( int which_way, const Helix* hx,
 //  iterate it until the accuracy is below the user-set surface precision.
 			G4double delta = 0.;  
 			G4double delta0 = FLT_MAXX;
-			int dummy = 1;
-			int iter = 0;
-			int in0 = Inside( hx->position ( 0.0 ) );
-			int in1 = Inside( p );
+			G4int dummy = 1;
+			G4int iter = 0;
+			G4int in0 = Inside( hx->position ( 0.0 ) );
+			G4int in1 = Inside( p );
 			G4double sc = Scale();
 			while ( dummy ) {
 				iter++;
@@ -635,7 +633,7 @@ G4Vector3D G4SphericalSurface::SurfaceNormal( const G4Point3D& p ) const
 }
 
 
-int G4SphericalSurface::Inside ( const G4Vector3D& x ) const
+G4int G4SphericalSurface::Inside ( const G4Vector3D& x ) const
 {
   //  Return 0 if point x is outside G4SphericalSurface, 1 if Inside.
   //  Outside means that the distance to the G4SphericalSurface would 
@@ -648,7 +646,7 @@ int G4SphericalSurface::Inside ( const G4Vector3D& x ) const
 }
 
 
-int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
+G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
 { 
   //  return 1 if point x is on the G4SphericalSurface, otherwise return zero
   //  (x is assumed to lie on the surface of the G4SphericalSurface, so one 
@@ -785,7 +783,7 @@ void G4SphericalSurface::resize( G4double r,
 
 /*
 void G4SphericalSurface::rotate( G4double alpha, G4double beta,
-		        G4double gamma, G4ThreeMat& m, int inverse )
+		        G4double gamma, G4ThreeMat& m, G4int inverse )
 {  //  rotate G4SphericalSurface first about global x_axis by angle alpha,
    //                  second about global y-axis by angle beta,
    //               and third about global z_axis by angle gamma
@@ -803,7 +801,7 @@ void G4SphericalSurface::rotate( G4double alpha, G4double beta,
 
 /*
 void G4SphericalSurface::rotate( G4double alpha, G4double beta,
-		        G4double gamma, int inverse )
+		        G4double gamma, G4int inverse )
 {  //  rotate G4SphericalSurface first about global x_axis by angle alpha,
    //                  second about global y-axis by angle beta,
    //               and third about global z_axis by angle gamma
@@ -830,7 +828,7 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 //  of some fraction of a turn.  If at the end of a Step, the current position
 //  along the Helix and the previous position are on opposite sides of the
 //  G4SphericalSurface, then the solution must lie somewhere in between.
-	int one_over_f = 8;  // one over fraction of a turn to go in each Step
+	G4int one_over_f = 8;  // one over fraction of a turn to go in each Step
 	G4double turn_angle = 0.0;
 	G4double dist_along = 0.0;
 	G4double d_new;
@@ -841,10 +839,10 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 	G4Vector3D prp = hx->getPerp();	// perpendicular vector
 	G4double prpmag = prp.mag();
 	G4double rhp = rh / prpmag;
-	int max_iter = one_over_f * HELIX_MAX_TURNS;
+	G4int max_iter = one_over_f * HELIX_MAX_TURNS;
 //  Take up to a user-settable number of turns along the Helix,
 //  groping for an intersection point.
-	for ( int k = 1; k < max_iter; k++ ) {
+	for ( G4int k = 1; k < max_iter; k++ ) {
 		turn_angle = 2.0 * M_PI * k / one_over_f;
 		dist_along = turn_angle * fabs( rhp );
 		d_new = HowNear( hx->position( dist_along ) );
@@ -854,7 +852,7 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 //  Old and new points are on opposite sides of the G4SphericalSurface, therefore
 //  a solution lies in between, use a binary search to pin the point down
 //  to the surface precision, but don't do more than 50 iterations.
-			int itr = 0;
+			G4int itr = 0;
 			while ( fabs( d_new / scal ) > SURFACE_PRECISION ) {
 				itr++;
 				if ( itr > 50 )
@@ -876,6 +874,3 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 	return -1.0;
 }
 */
-
-
-

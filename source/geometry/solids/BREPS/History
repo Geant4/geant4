@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2000-05-31 14:44:14 gcosmo Exp $
+$Id: History,v 1.16 2000-08-28 08:57:39 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28/08/2000 : G. Cosmo            breps-V02-00-00
+- General reorganisation and code cleanup. No functional changes.
+  Created .icc files and moved inline methods implementation therein.
+- Added comments to headers for the Software Reference Manual.
+- Fixes for virtual destructors, inline virtual functions and operators,
+  const methods and arguments.
+- Updated reference outputs for unit tests (tests run on DEC-cxx with
+  ObjectSpace STL). Random generation changed since release 2.0.
 
 13/05/2000 : G. Cosmo            breps-V01-01-00
 - Added protection to arguments fed to atan2(x,y) in G4Ellipse::Project().

@@ -1,29 +1,60 @@
-inline G4Point3D G4Ray::GetPoint(G4double i) const {
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Ray.icc,v 1.2 2000-08-28 08:57:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Ray.icc
+//
+// Implementation of inline methods of G4Ray
+// --------------------------------------------------------------------
+
+inline
+G4Point3D G4Ray::GetPoint(G4double i) const
+{
   return start+i*dir;
 }
 
-inline G4double G4Ray::GetPPoint(const G4Point3D& p) const {
+inline
+G4double G4Ray::GetPPoint(const G4Point3D& p) const
+{
   // |dir|==1
   return (p-start)*dir;
 }
 
-inline const G4Vector3D& G4Ray::GetDir() const {
+inline
+const G4Vector3D& G4Ray::GetDir() const
+{
   return dir;
 }
 
-inline const G4Point3D& G4Ray::GetStart() const {
+inline
+const G4Point3D& G4Ray::GetStart() const
+{
   return start;
 }
 
-inline void G4Ray::SetDir(const G4Vector3D& dir0) {
+inline
+void G4Ray::SetDir(const G4Vector3D& dir0)
+{
   dir= dir0.unit();
 }
 
-inline void G4Ray::SetStart(const G4Point3D& start0) {
+inline
+void G4Ray::SetStart(const G4Point3D& start0)
+{
   start= start0;
 }
 
-inline void G4Ray::Init(const G4Point3D& start0, const G4Vector3D& dir0)
+inline
+void G4Ray::Init(const G4Point3D& start0, const G4Vector3D& dir0)
 {
   start= start0;
   dir=   dir0;
@@ -31,11 +62,88 @@ inline void G4Ray::Init(const G4Point3D& start0, const G4Vector3D& dir0)
   CreatePlanes();
 }
 
-inline G4Ray::G4Ray(const G4Point3D& start0, const G4Vector3D& dir0) {
-  Init(start0, dir0);
-}
-
-inline G4Ray::G4Ray()
+inline
+G4double G4Ray::P2(G4double x)
 {
+  return(x*x);
 }
 
+inline
+G4int G4Ray::NearZero(G4double val, G4double epsilon) 
+{
+  return ( ((val) > -epsilon) && ((val) < epsilon) );
+}
+
+inline
+void G4Ray::Vcross(G4Plane &a, const G4Vector3D &b, const G4Vector3D &c) 
+{ 
+  a.a = b.y()  * c.z()  - b.z()  * c.y() ;
+  a.b = b.z()  * c.x()  - b.x()  * c.z() ;
+  a.c = b.x()  * c.y()  - b.y()  * c.x() ;
+}
+
+inline
+void G4Ray::Vcross(G4Vector3D &a, const G4Vector3D &b, const G4Vector3D &c) 
+{ 
+  a.setX(b.y()  * c.z()  - b.z()  * c.y()) ;
+  a.setY(b.z()  * c.x()  - b.x()  * c.z()) ;
+  a.setZ(b.x()  * c.y()  - b.y()  * c.x()) ;
+}
+  
+inline
+void G4Ray::Vmove(G4Point3D &a, const G4Point3D &b) 
+{ 
+  a.setX(b.x());
+  a.setY(b.y());
+  a.setZ(b.z());
+}
+
+inline
+void G4Ray::Vadd2(G4Point3D &a, const G4Point3D &b, const G4Vector3D &c) 
+{
+  a.setX(b.x() + c.x()) ;
+  a.setY(b.y() + c.y()) ;
+  a.setZ(b.z() + c.z()) ;
+}	
+  
+inline
+void G4Ray::Vsub2(G4Vector3D &a, const G4Point3D &b, const G4Point3D &c) 
+{
+  a.setX(b.x() - c.x());
+  a.setY(b.y() - c.y());
+  a.setZ(b.z() - c.z());
+}
+
+inline
+void G4Ray::Vsetall(G4Vector3D &a, G4double s) 
+{
+  a.setX(s); a.setY(s); a.setZ(s);
+}
+  
+inline
+void G4Ray::Vscale(G4Plane& a, const G4Plane& b, G4double c) 
+{ 
+  a.a = b.a * c;
+  a.b = b.b * c;
+  a.c = b.c * c;
+}
+
+inline
+G4double G4Ray::Vdot(const G4Plane &a, const G4Point3D &b) 
+{
+  return (a.a * b.x() + 
+	  a.b * b.y() + 
+	  a.c * b.z());
+}
+  
+inline
+G4double G4Ray::Magsq(const G4Plane &a) 
+{
+  return ( a.a * a.a + a.b * a.b + a.c *a.c );
+}
+  
+inline
+G4double G4Ray::Magnitude(const G4Plane &a) 
+{
+  return (sqrt( Magsq( a )) );
+}

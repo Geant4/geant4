@@ -5,9 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceList.hh,v 1.2 1999-12-15 14:49:57 gunter Exp $
+// $Id: G4SurfaceList.hh,v 1.3 2000-08-28 08:57:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4SurfaceList
+//
+// Class description:
+// 
+// Class defining a list of surfaces.
+
+// Authors: J.Sulkimo, P.Urban.
+// ----------------------------------------------------------------------
 #ifndef __G4SurfaceList_h
 #define __G4SurfaceList_h 1
 
@@ -15,24 +24,17 @@
 
 class G4SurfaceList
 {
- public:
+ public:  // with description
   
   G4SurfaceList();
   ~G4SurfaceList();
-  
-  int number_of_elements;
-  
-  G4Surface* first;
-  G4Surface* next;
-  G4Surface* last;
-  G4Surface* temp;
-  G4Surface* index;
-  
+    // Constructor & destructor.
+
   void MoveToFirst(G4Surface *srf);
   void AddSurface(G4Surface *srf);
   
   G4Surface* GetSurface();
-  G4Surface* GetSurface(int number);
+  G4Surface* GetSurface(G4int number);
   G4Surface* GetLastSurface();
   
   void RemoveSurface(G4Surface* srf);
@@ -44,16 +46,18 @@ class G4SurfaceList
   void EmptyList();
   void G4SortList();
   
-  void QuickG4Sort(G4Surface**, int, int);
+  void QuickG4Sort(G4Surface**, G4int, G4int);
 
+ public:  // without description
+
+  G4int number_of_elements;
+  
+  G4Surface* first;
+  G4Surface* next;
+  G4Surface* last;
+  G4Surface* temp;
+  G4Surface* index;
+  
 };
 
 #endif
-
-
-
-
-
-
-
-

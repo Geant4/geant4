@@ -5,14 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidBox.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BREPSolidBox.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolidBox.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BREPSolidBox.hh"
 #include "G4FPlane.hh"
 #include "G4Point3DVector.hh"
 
-G4BREPSolidBox::G4BREPSolidBox(G4String name,
+G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
 			       const G4Point3D& Pt1,
 			       const G4Point3D& Pt2,
 			       const G4Point3D& Pt3,
@@ -65,7 +72,6 @@ G4BREPSolidBox::G4BREPSolidBox(G4String name,
   
 }
 
-
 EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
 {
   G4Point3D Point(Pt);
@@ -88,11 +94,4 @@ EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
     return kInside;
   
   return kSurface;
-
-
 }
-
-
-
-
-

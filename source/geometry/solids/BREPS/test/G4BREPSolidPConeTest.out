@@ -47,7 +47,7 @@ x=0  y=0  z=-30 is outside  distance to in=9e+99  closest distance to in=10
 x=0  y=0  z=-25 is outside  distance to in=9e+99  closest distance to in=5
 x=0  y=0  z=-20 is outside  distance to in=30  closest distance to in=0
 x=0  y=0  z=-15 is outside  distance to in=30  closest distance to in=5
-x=0  y=0  z=-10 is on the surface
+x=0  y=0  z=-10 is outside  distance to in=30  closest distance to in=0
 x=0  y=0  z=-5 is inside  distance to out=55  closest distance to out=5
 x=0  y=0  z=0 is inside  distance to out=40  closest distance to out=10
 x=0  y=0  z=5 is inside  distance to out=40  closest distance to out=15

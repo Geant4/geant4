@@ -1,0 +1,41 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PlacedSolid.icc,v 1.1 2000-08-28 08:57:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4PlacedSolid.icc
+//
+// Implementation of inline methods of G4PlacedSolid
+// --------------------------------------------------------------------
+
+inline
+G4bool G4PlacedSolid::operator==(const G4PlacedSolid& ps) const 
+{
+  return (this==&ps) ? true : false; 
+}
+
+inline
+G4VSolid* G4PlacedSolid::GetSolid()
+{
+  return solid;
+}
+
+inline
+G4RotationMatrix* G4PlacedSolid::GetRotation()
+{
+  return solidRotation;
+}
+
+inline
+G4ThreeVector* G4PlacedSolid::GetTranslation()
+{
+  return solidTranslation;
+} 

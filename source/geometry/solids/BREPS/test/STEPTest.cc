@@ -1,3 +1,16 @@
+//////////////////////////////////////////////////////////////////////////
+// $Id: STEPTest.cc,v 1.5 2000-08-28 08:58:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+
 #include "G4Timer.hh"
 
 #include "G4AssemblyCreator.hh"
@@ -6,7 +19,7 @@
 #include "globals.hh"
 
 
-int main()
+G4int main()
 {
 
   G4cout<<"//////////////////////////////////////////////////////////////\n";
@@ -26,7 +39,7 @@ int main()
   G4cout<<"    (9) G4spline1.stp                :";
 
   G4String stepfile;
-  int stepf;
+  G4int stepf;
   G4cin>>stepf;
   
   if(stepf == 1)

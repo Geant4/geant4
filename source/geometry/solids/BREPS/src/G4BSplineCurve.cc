@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.cc,v 1.2 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BSplineCurve.cc,v 1.3 2000-08-28 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BSplineCurve.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BSplineCurve.hh"
 #include "G4ControlPoints.hh"
 #include "G4KnotVector.hh"
@@ -122,9 +129,8 @@ void G4BSplineCurve::ProjectCurve(const G4Plane& Pl1, const G4Plane& Pl2)
 	Project((*ProjectedControlPoints[a]), ControlPointList->get(0,a), Pl1, Pl2); 
     }
 }
-*/
 
-/*
+
 int G4BSplineCurve::Inside( const G4Point3d& Hit, const G4Ray& rayref)
 {
   const G4Plane& Pl1 = rayref.GetPlane(0);

@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4KnotVector.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4KnotVector.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4KnotVector.hh"
 
@@ -16,28 +22,31 @@ G4KnotVector::G4KnotVector()
   knots=(G4double*)0;
 }
 
-G4KnotVector::G4KnotVector(const int sz)
+G4KnotVector::G4KnotVector(G4int sz)
 {
   k_size=sz; 
   knots = new G4double[k_size]; 
-  for(int a=0;a<k_size;a++)
+  for(G4int a=0;a<k_size;a++)
     knots[a]=0;
 }
 
 
-G4KnotVector::~G4KnotVector() { delete [] knots;}  
+G4KnotVector::~G4KnotVector()
+{
+  delete [] knots;
+}  
 
 //Copy constructor
 G4KnotVector::G4KnotVector(const G4KnotVector& old_kv)
 {
   k_size = old_kv.GetSize();
   knots = new G4double[k_size];
-  for(register int a=0; a < old_kv.k_size; a++)knots[a]=old_kv.knots[a];
+  for(register G4int a=0; a < old_kv.k_size; a++)knots[a]=old_kv.knots[a];
 }
 
-int G4KnotVector::GetKnotIndex(G4double k_value,const int order)
+G4int G4KnotVector::GetKnotIndex(G4double k_value, G4int order)
 {
-  int	   i, knot_index;
+  G4int	   i, knot_index;
   G4double knt;
  
   if ( k_value < ( knt = knots[order - 1])) 
@@ -69,16 +78,16 @@ int G4KnotVector::GetKnotIndex(G4double k_value,const int order)
 }
 
 
-G4KnotVector* G4KnotVector::MultiplyKnotVector(const int num,
-					       const G4double val)
+G4KnotVector* G4KnotVector::MultiplyKnotVector(G4int num,
+					       G4double val)
 {
-  int n;
+  G4int n;
   G4double* knots_to_add;
   
   n            = CheckKnotVector( val );
   knots_to_add = new G4double[num-n];	
   
-  for (int i = 0; i < num - n; i++)
+  for (G4int i = 0; i < num - n; i++)
     knots_to_add[i] = val;
   
   G4KnotVector* new_kv = new G4KnotVector();
@@ -92,13 +101,13 @@ G4KnotVector* G4KnotVector::MultiplyKnotVector(const int num,
 
 
 G4double* G4KnotVector::MergeKnotVector(const G4double* knots_to_add, 
-					const int add_size           )
+					G4int add_size           )
 {
   G4double *newknots;
-  int kv1_ptr = 0, 
-      kv2_ptr = 0, 
-      newptr;
-  int old_size = k_size;
+  G4int kv1_ptr = 0, 
+        kv2_ptr = 0, 
+        newptr;
+  G4int old_size = k_size;
 
   newknots = new G4double[k_size + add_size];
     
@@ -116,11 +125,11 @@ G4double* G4KnotVector::MergeKnotVector(const G4double* knots_to_add,
 }
 
 
-int G4KnotVector::CheckKnotVector(const G4double val)
+int G4KnotVector::CheckKnotVector(G4double val)
 {
-  int	num = 0;
+  G4int	num = 0;
   
-  for ( int i = 0; i < k_size; i++) 
+  for ( G4int i = 0; i < k_size; i++) 
   {
     //	  if ( abs(val - knots[i]) < kCarTolerance)
     if ( val == knots[i] )
@@ -132,14 +141,12 @@ int G4KnotVector::CheckKnotVector(const G4double val)
 
 
 void G4KnotVector::ExtractKnotVector( G4KnotVector* kv, 
-				      const int upper,const  int lower)
+				      G4int upper, G4int lower)
 {
   delete[] kv->knots;
   kv->k_size = upper-lower;
   kv->knots  = new G4double[kv->k_size];
   
-  for ( int i = lower; i < upper; i++)
+  for ( G4int i = lower; i < upper; i++)
     kv->knots[i-lower] = knots[i];
 }
-
-

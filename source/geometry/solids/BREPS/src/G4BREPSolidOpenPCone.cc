@@ -5,29 +5,41 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4BREPSolidOpenPCone.cc,v 1.4 2000-08-28 08:57:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolidOpenPCone.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BREPSolidOpenPCone.hh"
 #include "G4BREPSolidPCone.hh"
 #include "G4Tubs.hh"
 #include "G4VGraphicsScene.hh"
 
-G4BREPSolidOpenPCone::G4BREPSolidOpenPCone  (G4String name,
-                                   const G4double start_angle,
-                                   const G4double opening_angle,
-                                   const int      num_z_planes, // sections,
-                                   const G4double z_start,                 
-                                   const G4double z_values[],
-                                   const G4double RMIN[],
-                                   const G4double RMAX[]
-                                   ) : 
-                  G4IntersectionSolid ( name, 
-					new G4BREPSolidPCone ( name, start_angle, opening_angle, 
-							       num_z_planes,
-							       z_start, z_values, RMIN, RMAX ) ,
-					new G4Tubs( "IntersectionTubs", 0, 1*cm, 1*cm, 0*deg, 
-						    360*deg ) )
+G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
+                                  (const G4String& name,
+                                   G4double start_angle,
+                                   G4double opening_angle,
+                                   G4int    num_z_planes, // sections,
+                                   G4double z_start,                 
+                                   G4double z_values[],
+                                   G4double RMIN[],
+                                   G4double RMAX[]
+                                   )
+ : G4IntersectionSolid ( name,
+                         new G4BREPSolidPCone ( name,
+                                                start_angle,
+						opening_angle, 
+                                                num_z_planes,
+                                                z_start, z_values,
+                                                RMIN, RMAX ),
+                         new G4Tubs( "IntersectionTubs",
+                                     0, 1*cm, 1*cm, 0*deg, 360*deg ) )
 {
-
 
 // compute max radius
 
@@ -47,9 +59,7 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone  (G4String name,
 
 }
 
-#include "G4Polyhedron.hh"   
-
-
-void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const {
+void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
+{
   scene.AddThis ( *this );
 }

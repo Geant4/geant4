@@ -5,33 +5,32 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.9 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4FConicalSurface.cc,v 1.10 2000-08-28 08:57:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
-//  File:  G4FConicalSurface.cc
-//  Author:  Alan Breakstone
-
-//  Contents ----------------------------------------------------------
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
-//      G4FConicalSurface::G4FConicalSurface( const G4Point3D& o, 
-//                                            const G4Vector3D& a,
-//		G4double l, G4double sr, G4double lr )
-//	G4FConicalSurface::G4FConicalSurface( const G4FConicalSurface& c )
-//	G4FConicalSurface::PrintOn( G4std::ostream& os ) const
-//	G4FConicalSurface::operator==( const G4FConicalSurface& c )
-//	G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
-//	G4FConicalSurface::Scale() const
-//	G4FConicalSurface::Area() const
-//	G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
+// G4FConicalSurface.cc
 //
-//  End ---------------------------------------------------------------
-
+// ----------------------------------------------------------------------
 
 #include "G4FConicalSurface.hh"
 #include "G4Sort.hh"
 #include "G4CircularCurve.hh"
 
+
+G4FConicalSurface::G4FConicalSurface()
+{
+  length       = 1.0;
+  small_radius = 0.0;
+  large_radius = 1.0;
+  tan_angle = (large_radius-small_radius)/length;
+}
+
+G4FConicalSurface::~G4FConicalSurface()
+{
+}
 
 G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o, 
 				     const G4Vector3D& a,
@@ -103,6 +102,11 @@ G4FConicalSurface::G4FConicalSurface( const G4FConicalSurface& c )
 }
 
 
+const char* G4FConicalSurface::Name() const
+{
+  return "G4FConicalSurface";
+}
+
 // Modified by L. Broglia (01/12/98)
 void G4FConicalSurface::CalcBBox()
 {
@@ -150,7 +154,7 @@ void G4FConicalSurface::PrintOn( G4std::ostream& os ) const
 }
 
 
-int G4FConicalSurface::operator==( const G4FConicalSurface& c )
+G4int G4FConicalSurface::operator==( const G4FConicalSurface& c )
 {
   return ( origin             == c.origin                &&
 	   Position.GetAxis() == c.Position.GetAxis()    &&
@@ -161,7 +165,7 @@ int G4FConicalSurface::operator==( const G4FConicalSurface& c )
 }
 
 
-int G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
+G4int G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
 { 
   //  return 1 if point x is within the boundaries of the G4FConicalSurface
   //  return 0 otherwise (assume it is on the G4ConicalSurface)
@@ -249,7 +253,7 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
 }
 
 
-int G4FConicalSurface::Intersect(const G4Ray& ry )
+G4int G4FConicalSurface::Intersect(const G4Ray& ry )
 { 
   // This function count the number of intersections of a 
   // bounded conical surface by a ray.
@@ -391,7 +395,7 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   return n; 
 }
 
-int G4FConicalSurface::Inside ( const G4Vector3D& x ) const
+G4int G4FConicalSurface::Inside ( const G4Vector3D& x ) const
 { 
   // Return 0 if point x is outside G4ConicalSurface, 1 if Inside.
   if ( HowNear( x ) >= -0.5*kCarTolerance )

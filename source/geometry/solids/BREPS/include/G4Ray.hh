@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.hh,v 1.2 1999-12-15 14:49:57 gunter Exp $
+// $Id: G4Ray.hh,v 1.3 2000-08-28 08:57:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4Ray
+//
+// Class description:
+// 
+// Definition of a generic ray.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __G4Ray_h
 #define __G4Ray_h 1
 
@@ -20,25 +30,108 @@
 class G4Ray 
 {
   
-public:
+public:  // with description
 
   G4Ray();
-
   G4Ray(const G4Point3D& start0, const G4Vector3D& dir0);
+  ~G4Ray();
+    // Contructors and destructor.
+
+  inline G4Point3D GetPoint(G4double i) const;
+  inline G4double GetPPoint(const G4Point3D& p) const;
+  inline const G4Vector3D& GetDir() const;
+  inline const G4Point3D& GetStart() const;
+  inline void SetDir(const G4Vector3D& dir0);
+  inline void SetStart(const G4Point3D& start0);
+  const G4Plane& GetPlane(G4int number_of_plane) const;
+    // Get/Set methods of geometrical data.
+
+  void RayCheck();
+    // Makes sure that the vector has unit length.
+
+  void CreatePlanes();
+    // Creates two orthogonal planes (plane1,plane2), the ray (rray) 
+    // being situated in the intersection of the planes. The planes are 
+    // used to project the surface (nurb) in two dimensions.
+
+  static G4int CalcPlane3Pts( G4Plane& plane, const G4Point3D& a,
+			      const G4Point3D& b, const G4Point3D& c );
+    // Finds the equation of a G4Plane that contains three points.
+    // Note that Normal vector created is expected to point outside.
+    // This follows the outward-pointing Normal convention, and the
+    // right-hand rule for cross products.
+    //
+    //
+    //                      C
+    //                      *
+    //                      |\
+    //                      | \
+    //         ^     N      |  \
+    //         |      \     |   \
+    //         |       \    |    \
+    //         |C-A     \   |     \
+    //         |         \  |      \
+    //         |          \ |       \
+    //                     \|        \
+    //                      *---------*
+    //                      A         B
+    //                         ----->
+    //                          B-A
+    //
+    // If the points are given in the order A B C (eg, *counter*-clockwise),
+    // then the outward pointing surface Normal N = (B-A) x (C-A).
+    //
+    // Explicit return value:
+    //       0      OK
+    //      -1      Failure.  At least two of the points were not distinct,
+    //              or all three were colinear.
+    //
+    // Implicit return argument:
+    //      plane   The G4Plane equation coefficients are stored here.
+
+  inline G4double P2(G4double x);
+  inline G4int NearZero(G4double val, G4double epsilon);
+  void MatVecOrtho(register G4Vector3D &out, register const G4Vector3D in);
+    // Utility methods.
+
+  inline void Vsetall(G4Vector3D &a, G4double s);
+    // Sets all elements of vector to the same scalar value.
+  
+  static inline void Vcross(G4Plane &a, const G4Vector3D &b,
+                                        const G4Vector3D &c);
+    // Cross product of 'b' and 'c'. Stores result in 'a' (G4Plane).
+
+  static inline void Vcross(G4Vector3D &a, const G4Vector3D &b,
+                                           const G4Vector3D &c);
+    // Cross product of 'b' and 'c'. Stores result in 'a' (G4Vector3D).
+  
+  static inline void Vmove(G4Point3D &a, const G4Point3D &b);
+    // Sets 'a' equal to 'b'.
+
+  static inline void Vadd2(G4Point3D &a, const G4Point3D &b,
+                                         const G4Vector3D &c );
+    // Adds vector 'c' to 'b'. Stores result in 'a'.
+  
+  static inline void Vsub2(G4Vector3D &a, const G4Point3D &b,
+                                          const G4Point3D &c);
+    // Subtracts vector 'c' from 'b'. Stores result in 'a'.
+
+  static inline void Vscale(G4Plane& a, const G4Plane& b, G4double c);
+    // Scales vector at `b' by scalar `c'. Stores result in `a'.
+
+  static inline  G4double Vdot(const G4Plane &a, const G4Point3D &b);
+    // Computes dot product of vectors at `a' and `b'.
+  
+  static inline G4double Magsq(const G4Plane &a);
+    // Returns scalar Magnitude squared of vector at `a'.
+  
+  static inline G4double Magnitude(const G4Plane &a);
+    // Returns scalar Magnitude of vector at `a'.
+
+public:  // without description
 
   void Init(const G4Point3D& start0, const G4Vector3D& dir0);
-
-  G4Point3D GetPoint(G4double i) const;
-
-  G4double GetPPoint(const G4Point3D& p) const;
-
-  const G4Vector3D& GetDir() const;
-
-  const G4Point3D& GetStart() const;
-
-  void SetDir(const G4Vector3D& dir0);
-
-  void SetStart(const G4Point3D& start0);
+    // Initialisation of a G4Ray (called by constructor).
 
 private:
 
@@ -50,117 +143,8 @@ private:
   
   G4Plane    plane1, plane2; 
 
-
-public:
-
-  const G4Plane& GetPlane(const int number_of_plane)const;//1 or 2
-
-  void RayCheck();
-
-  void CreatePlanes();
-
-  static int CalcPlane3Pts( G4Plane &plane1, const G4Point3D& a,
-			    const G4Point3D& b, const G4Point3D& c );
-
-  inline G4double P2(const G4double x) {return(x*x);};
-
-  void MatVecOrtho( register G4Vector3D &out,  register const G4Vector3D in );
-
-  inline int NearZero(const G4double val, const G4double epsilon) 
-  {
-    return ( ((val) > -epsilon) && ((val) < epsilon) );
-  }
-
-  static inline void Vcross(G4Plane &a, 
-			    const G4Vector3D &b, const G4Vector3D &c) 
-  { 
-    a.a = b.y()  * c.z()  - b.z()  * c.y() ;
-    a.b = b.z()  * c.x()  - b.x()  * c.z() ;
-    a.c = b.x()  * c.y()  - b.y()  * c.x() ;
-  }
-
-  static inline void Vcross(G4Vector3D &a, 
-			    const G4Vector3D &b, const G4Vector3D &c) 
-  { 
-    a.setX(b.y()  * c.z()  - b.z()  * c.y()) ;
-    a.setY(b.z()  * c.x()  - b.x()  * c.z()) ;
-    a.setZ(b.x()  * c.y()  - b.y()  * c.x()) ;
-  }
-  
-  inline void Vmove(G4Point3D &a, const G4Point3D &b) 
-  { 
-    a.setX(b.x());
-    a.setY(b.y());
-    a.setZ(b.z());
-  }
-
-  inline void Vadd2(G4Point3D &a, const G4Point3D &b, const G4Vector3D &c ) 
-  {
-    a.setX(b.x() + c.x()) ;
-    a.setY(b.y() + c.y()) ;
-    a.setZ(b.z() + c.z()) ;
-  }	
-  
-  static inline void Vsub2(G4Vector3D &a, 
-			   const G4Point3D &b, const G4Point3D &c) 
-  {
-    a.setX(b.x() - c.x());
-    a.setY(b.y() - c.y());
-    a.setZ(b.z() - c.z());
-  }
-
-  // Set all elements of vector to same scalar value
-  inline void Vsetall(G4Vector3D &a, G4double s) 
-  {
-    a.setX(s); a.setY(s); a.setZ(s);
-  }
-  
-  // Scale vector at `b' by scalar `c', Store result at `a'
-  static inline void Vscale(G4Plane& a, const G4Plane& b, const G4double c) 
-  { 
-    a.a = b.a * c;
-    a.b = b.b * c;
-    a.c = b.c * c;
-  }
-
-  // Compute dot product of vectors at `a' and `b' 
-  static inline  G4double Vdot(const G4Plane &a, const G4Point3D &b) 
-  {
-    return (a.a * b.x() + 
-	    a.b * b.y() + 
-	    a.c * b.z());
-  }
-  
-  // Return scalar Magnitude squared of vector at `a'
-  static inline G4double Magsq(const G4Plane &a) 
-  {
-    return ( a.a * a.a + a.b * a.b + a.c *a.c );
-  }
-  
-  // Return scalar Magnitude of vector at `a' 
-  static inline G4double Magnitude(const G4Plane &a) 
-  {
-    return (sqrt( Magsq( a )) );
-  }
-
 };
 
 #include "G4Ray.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

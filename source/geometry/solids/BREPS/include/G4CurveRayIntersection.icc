@@ -1,4 +1,23 @@
-inline void G4CurveRayIntersection::Init(G4Curve& c0, const G4Ray& r0)
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4CurveRayIntersection.icc,v 1.2 2000-08-28 08:57:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4CurveRayIntersection.icc
+//
+// Implementation of inline methods of G4CurveRayIntersection
+// --------------------------------------------------------------------
+
+inline
+void G4CurveRayIntersection::Init(G4Curve& c0, const G4Ray& r0)
 {
   c= &c0;
   r= &r0;
@@ -6,46 +25,41 @@ inline void G4CurveRayIntersection::Init(G4Curve& c0, const G4Ray& r0)
   notComputed= allFlags;
 }
 
-inline G4CurveRayIntersection::G4CurveRayIntersection(G4Curve& c0, const G4Ray& r0)
-{
-  Init(c0, r0);
-}
-
-inline G4CurveRayIntersection::G4CurveRayIntersection()
-{
-  d= kInfinity;
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
-inline const G4Ray& G4CurveRayIntersection::GetRay() const
+inline
+const G4Ray& G4CurveRayIntersection::GetRay() const
 {
   return *r;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-inline void G4CurveRayIntersection::Reset()
+inline
+void G4CurveRayIntersection::Reset()
 {
   d= +kInfinity;
   notComputed= uFlag|pFlag;
 }
 
-inline void G4CurveRayIntersection::ResetPPoint(G4double u0)
+inline void
+G4CurveRayIntersection::ResetPPoint(G4double u0)
 {
   d= 0;
   u= u0;
   notComputed= pFlag|dFlag;
 }
 
-inline void G4CurveRayIntersection::Reset(const G4Point3D& p0)
+inline void
+G4CurveRayIntersection::Reset(const G4Point3D& p0)
 {
   d= 0;
   p= p0;
   notComputed= uFlag|dFlag;
 }
 
-inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0)
+inline
+void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0)
 {
   d= 0;
   u= u0;
@@ -53,26 +67,32 @@ inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0)
   notComputed= dFlag;
 }
 
-inline void G4CurveRayIntersection::ResetDistance(G4double d0)
+inline void
+G4CurveRayIntersection::ResetDistance(G4double d0)
 {
   d= d0;
   notComputed= uFlag|pFlag;
 }
-inline void G4CurveRayIntersection::Reset(G4double u0, G4double d0)
+
+inline
+void G4CurveRayIntersection::Reset(G4double u0, G4double d0)
 {
   d= d0;
   u= u0;
   notComputed= pFlag;
 }
 
-inline void G4CurveRayIntersection::Reset(const G4Point3D& p0, G4double d0)
+inline
+void G4CurveRayIntersection::Reset(const G4Point3D& p0, G4double d0)
 {
   d= d0;
   p= p0;
   notComputed= uFlag;
 }
 
-inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0, G4double d0)
+inline
+void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0,
+                                   G4double d0)
 {
   d= d0;
   u= u0;
@@ -82,7 +102,8 @@ inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0, G4do
 
 //////////////////////////////////////////////////////////////////////////////
 
-inline G4double G4CurveRayIntersection::GetPPoint()
+inline
+G4double G4CurveRayIntersection::GetPPoint()
 {
   if (notComputed & uFlag) {
     if (notComputed & pFlag) {
@@ -95,7 +116,8 @@ inline G4double G4CurveRayIntersection::GetPPoint()
   return u;
 }
 
-inline const G4Point3D& G4CurveRayIntersection::GetPoint()
+inline
+const G4Point3D& G4CurveRayIntersection::GetPoint()
 {
   if (notComputed & pFlag) {
     if (notComputed & dFlag) {
@@ -108,7 +130,8 @@ inline const G4Point3D& G4CurveRayIntersection::GetPoint()
   return p;
 }
 
-inline G4double G4CurveRayIntersection::GetDistance()
+inline
+G4double G4CurveRayIntersection::GetDistance()
 {
   if (notComputed & dFlag) {
     if (notComputed & pFlag) {
@@ -123,8 +146,8 @@ inline G4double G4CurveRayIntersection::GetDistance()
 
 //////////////////////////////////////////////////////////////////////////////
 
-inline void G4CurveRayIntersection::UpdateWithPointOnCurve(
-  G4CurveRayIntersection& is)
+inline
+void G4CurveRayIntersection::UpdateWithPointOnCurve(G4CurveRayIntersection& is)
 {
   if (d!=kInfinity) {
     // not the first intersection
@@ -138,7 +161,8 @@ inline void G4CurveRayIntersection::UpdateWithPointOnCurve(
   *this= is;
 }	
 
-inline void G4CurveRayIntersection::Update(G4CurveRayIntersection& is)
+inline
+void G4CurveRayIntersection::Update(G4CurveRayIntersection& is)
 {
   if (c->IsBounded()) {
     if (!c->IsPOn(is.GetPPoint())) {
@@ -147,6 +171,3 @@ inline void G4CurveRayIntersection::Update(G4CurveRayIntersection& is)
   }
   UpdateWithPointOnCurve(is);
 }
-
-
-

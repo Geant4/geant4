@@ -5,28 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sort.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4Sort.cc,v 1.3 2000-08-28 08:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  File: G4Sort.cc
-//  Author:  Alan Breakstone
+// ----------------------------------------------------------------------
+// GEANT 4 source file
 //
-//  Description
+// G4Sort.cc
 //
-//	Routines to G4Sort arrays of various kinds of numbers
-//
+// ----------------------------------------------------------------------
 
 #include "G4Sort.hh"
 
 
-void G4Sort_double( G4double v[], int left, int right )
+void sort_double( G4double v[], G4int left, G4int right )
 {
   //  G4Sort elements in array from v[left] to v[right]  
   //  used recursively  
   //  algorithm comes from Kernighan and Ritchie, "The C Programming
   //  Language", second edition, p.87  
   
-  int i, last;
+  G4int i, last;
   if ( left >= right )	// do nothing if array contains 
     return;		// fewer than two elements
   
@@ -39,13 +38,13 @@ void G4Sort_double( G4double v[], int left, int right )
   
   swap_double( v, left, last );	// restore partition element
   
-  G4Sort_double( v, left, last-1 );
-  G4Sort_double( v, last+1, right );
+  sort_double( v, left, last-1 );
+  sort_double( v, last+1, right );
   return;
 }
 
 
-void swap_double( G4double v[], int i, int j )
+void swap_double( G4double v[], G4int i, G4int j )
 {
   /*  interchange elements i and j in an array  */
   G4double temp;
@@ -53,7 +52,3 @@ void swap_double( G4double v[], int i, int j )
   v[i] = v[j];
   v[j] = temp;
 }
-
-
-
-

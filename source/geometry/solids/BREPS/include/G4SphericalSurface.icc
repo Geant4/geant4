@@ -1,0 +1,90 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SphericalSurface.icc,v 1.1 2000-08-28 08:57:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4SphericalSurface.icc
+//
+// Implementation of inline methods of G4SphericalSurface
+// --------------------------------------------------------------------
+
+inline
+G4int G4SphericalSurface::operator==( const G4SphericalSurface& s )
+{
+  return origin  == s.origin  &&  
+  x_axis  == s.x_axis  &&
+  z_axis  == s.z_axis  &&
+  radius  == s.radius  && 
+  phi_1   == s.phi_1   &&
+  phi_2   == s.phi_2   &&
+  theta_1 == s.theta_1 &&
+  theta_2 == s.theta_2;
+}   
+
+inline
+G4String G4SphericalSurface::GetEntityType()
+{
+  return G4String("Spherical_Surface");
+}
+
+inline
+void G4SphericalSurface::Comp(G4Vector3D& v, G4Point3D& min , G4Point3D& max)
+{
+  if(v.x() > max.x()) max.setX(v.x());
+  if(v.y() > max.y()) max.setY(v.y());
+  if(v.z() > max.z()) max.setZ(v.z());
+
+  if(v.x() < min.x()) min.setX(v.x());
+  if(v.y() < min.y()) min.setY(v.y());
+  if(v.z() < min.z()) min.setZ(v.z());
+}
+
+inline
+G4Vector3D G4SphericalSurface::GetXAxis() const
+{
+  return x_axis;
+}
+
+inline
+G4Vector3D G4SphericalSurface::GetZAxis() const
+{
+  return z_axis;
+}
+
+inline
+G4double G4SphericalSurface::GetRadius() const
+{
+  return radius;
+}
+
+inline
+G4double G4SphericalSurface::GetPhi1() const
+{
+  return phi_1;
+}
+
+inline
+G4double G4SphericalSurface::GetPhi2() const
+{
+  return phi_2;
+}
+
+inline
+G4double G4SphericalSurface::GetTheta1() const
+{
+  return theta_1;
+}
+
+inline
+G4double G4SphericalSurface::GetTheta2() const
+{
+  return theta_2;
+}

@@ -1,3 +1,8 @@
+//////////////////////////////////////////////////////////////////////////
+// $Id: G4BREPSolidConeTest.cc,v 1.5 2000-08-28 08:58:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -21,7 +26,7 @@
 #include "G4BREPSolidCone.hh"
 
 
-int main(int argc, char **argv)
+G4int main(G4int argc, char **argv)
 {
   G4Timer timer; 
 

@@ -1,0 +1,139 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BezierSurface.icc,v 1.1 2000-08-28 08:57:43 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4BezierSurface.icc
+//
+// Implementation of inline methods of G4BezierSurface
+// --------------------------------------------------------------------
+
+inline
+G4Point3D G4BezierSurface::AveragePoint()
+{
+  return average_pt;
+}
+
+inline
+void G4BezierSurface::SetAveragePoint(G4Point3D p)
+{
+  average_pt=p;
+}
+
+inline
+G4double G4BezierSurface::UAverage()
+{
+  return average_u;
+}
+
+inline
+G4double G4BezierSurface::VAverage()
+{
+  return average_v;
+}
+
+inline
+void G4BezierSurface::Dir(G4int d)
+{
+  dir=d;
+}
+
+inline
+void G4BezierSurface::ChangeDir()
+{
+  dir=!dir;
+}
+
+inline
+G4double G4BezierSurface::SMin()
+{
+  return smin;
+}
+
+inline
+G4double G4BezierSurface::SMax()
+{
+  return smax;
+}
+
+inline
+G4int G4BezierSurface::GetOrder(G4int direction)
+{
+  return order[direction];
+}
+
+inline
+void G4BezierSurface::PutOrder(G4int direction, G4int value)
+{
+  order[direction]=value;
+}
+
+inline
+G4double G4BezierSurface::GetU()
+{
+  return (u_min + u_max)/2.0;
+}
+
+inline
+G4double G4BezierSurface::GetV()
+{
+  return (v_min + v_max)/2.0;
+}
+
+inline
+void G4BezierSurface::LocalizeClipValues()
+{
+  if ( dir == ROW)
+  {
+    smin = (1.0 - smin) * u_knots->GetKnot(0) +
+      smin * u_knots->GetKnot(u_knots->GetSize() - 1);
+    smax = (1.0 - smax) * u_knots->GetKnot(0) +
+      smax * u_knots->GetKnot(u_knots->GetSize() - 1);
+  }
+  else
+  {
+    smin = (1.0 - smin) * v_knots->GetKnot(0) +
+      smin * v_knots->GetKnot(v_knots->GetSize() - 1);
+    smax = (1.0 - smax) * v_knots->GetKnot(0) +
+      smax * v_knots->GetKnot(v_knots->GetSize() - 1);
+  }  
+}
+
+inline
+G4double G4BezierSurface::Findzero(G4double x0, G4double x1,
+                                   G4double y0, G4double y1) 
+{
+  return(x0 - y0 * ( x1 - x0) / (y1-y0));
+}
+  
+inline
+G4int G4BezierSurface::Sign(G4double a)	
+{
+  return ((a < 0.0)? -1 : 1);
+}
+
+inline
+G4int G4BezierSurface::Amax(G4int i, G4int j)
+{
+  return( (i) > (j) ? (i) : (j) );
+}
+
+inline
+G4int G4BezierSurface::Amin(G4int i, G4int j)
+{
+  return( (i) < (j) ? (i) : (j) );
+}
+	
+inline
+G4int G4BezierSurface::AhIndex(G4int j, G4int t, G4int iorder)   
+{
+  return(( (j) * ((j)+1)/2) + (t) - ((iorder-1) - (j)));
+}

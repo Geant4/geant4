@@ -1,7 +1,25 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Surface.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Surface.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Surface.hh"
 #include "G4CompositeCurve.hh"
 
-G4Surface::G4Surface(): FLT_MAXX(kInfinity), FLT_EPSILO(0.0001)
+G4Surface::G4Surface()
+  : FLT_MAXX(kInfinity), FLT_EPSILO(0.0001)
 {
   AdvancedFace=0;
   active = 1;
@@ -10,18 +28,68 @@ G4Surface::G4Surface(): FLT_MAXX(kInfinity), FLT_EPSILO(0.0001)
   bbox = (G4BoundingBox3D*)0;
 }
 
-G4Surface::~G4Surface() {}
+G4Surface::~G4Surface()
+{
+}
+
+G4int G4Surface::operator==( const G4Surface& s )
+{
+  return origin == s.origin;
+}
+
+G4String G4Surface::GetEntityType()
+{
+  return G4String("Surface");
+}
+
+const char* G4Surface::Name() const
+{
+  return "G4Surface";
+}
+
+G4int G4Surface::MyType() const
+{
+  return Type;
+}
+
+void G4Surface::InitBounded()
+{
+}
+
+G4double G4Surface::GetUHit()
+{
+  return uhit;
+}
+
+G4double G4Surface::GetVHit()
+{
+  return vhit;
+}
 
 //void G4Surface::read_surface(fstream& tmp){;}
-G4Point3D G4Surface::Evaluation(const G4Ray& rayref){return closest_hit;}
-int G4Surface::Evaluate(const G4Ray& rayref){return 0;}
+
+G4Point3D G4Surface::Evaluation(const G4Ray& rayref)
+{
+  return closest_hit;
+}
+
+G4int G4Surface::Evaluate(const G4Ray& rayref)
+{
+  return 0;
+}
+
+void G4Surface::Reset()
+{
+  Intersected = 0;
+  active = 1;
+  distance = kInfinity;
+}
 
 void G4Surface::SetBoundaries(G4CurveVector* boundaries)
 {
   surfaceBoundary.Init(*boundaries);
   InitBounded();
 }
-
 
 void G4Surface::CalcBBox()
 {
@@ -47,9 +115,9 @@ G4Vector3D G4Surface::Normal( const G4Vector3D&  ) const
 }
 
 
-int G4Surface::Intersect(const G4Ray& rayref)
+G4int G4Surface::Intersect(const G4Ray& rayref)
 {
-  int Result = 0;
+  G4int Result = 0;
 
   G4Exception("G4Surface::Intersect is not implemented. It should not be called. ");
 
@@ -129,7 +197,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
   //  G4double TmpDistance=0;
   //  PointDistance = OuterBoundary->ClosestDistanceToPoint(Pt);
   //  TmpDistance =0;
-  //  for(int a=0;a<NumberOfInnerBoundaries;a++)
+  //  for(G4int a=0;a<NumberOfInnerBoundaries;a++)
   //    {
   //      TmpDistance = InnerBoundary[a]->ClosestDistanceToPoint(Pt);
   //      if(PointDistance > TmpDistance) PointDistance = TmpDistance;
@@ -140,7 +208,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
   //{
   //  G4double PointDistance = kInfinity;
   //  G4double TmpDistance = 0;
-  //  for(int a =0; a < NumberOfPoints;a++)
+  //  for(G4int a =0; a < NumberOfPoints;a++)
   //    {
   //      G4Point3d& Pt2 = GetPoint(a);
   //      TmpDistance = Pt2.Distance(Pt);
@@ -150,30 +218,6 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
   //}
 }
 
-
-// Gismo members, modified by J.Sulkimo 
-
-//  Author:  Alan Breakstone
-
-//  Contents ----------------------------------------------------------
-//
-//	operator<<( G4std::ostream& os, const Surface& s )
-//	Surface::PrintOn( G4std::ostream& os ) const
-//	Surface::HowNear( const G4ThreeVec& x ) const
-//	Surface::distanceAlongRay( int which_way, const Ray* ry,
-//				   G4ThreeVec& p ) const
-//	Surface::distanceAlongHelix( int which_way, const Helix* hx,
-//				     G4ThreeVec& p ) const
-//	Surface::Normal() const
-//	Surface::Normal( const G4ThreeVec& p ) const
-//	Surface::Inside( const G4ThreeVec& p ) const
-//	Surface::move( const G4ThreeVec& p ) 
-//	Surface::rotate( G4double alpha, G4double beta, 
-//			 G4double gamma, G4ThreeMat& m, int inverse ) 
-//	Surface::rotate( G4double alpha, G4double beta, 
-//			 G4double gamma, int inverse ) 
-//
-//  End ---------------------------------------------------------------
 
 G4std::ostream& operator<<( G4std::ostream& os, const G4Surface& s )
 {
@@ -192,8 +236,42 @@ G4double G4Surface::HowNear( const G4Vector3D& x ) const
   return p.mag();
 }
 
+void G4Surface::Project()
+{
+}
+
+void G4Surface::CalcNormal()
+{
+}  
+
+G4int G4Surface::IsConvex()
+{
+  return -1;
+}
+
+G4int G4Surface::GetConvex()
+{
+  return 0;
+}
+
+G4int G4Surface::GetNumberOfPoints()
+{
+  return 0;
+}
+
+const G4Point3D& G4Surface::GetPoint(G4int Count)
+{
+  const G4Point3D* tmp= new G4Point3D(0,0,0);
+  return *tmp;
+}
+
+G4Ray* G4Surface::Norm()
+{
+  return (G4Ray*)0;
+}
+
 /*
-G4double G4Surface::distanceAlongRay( int which_way, const G4Ray* ry,
+G4double G4Surface::distanceAlongRay( G4int which_way, const G4Ray* ry,
 			          G4ThreeVec& p ) const 
 {  //  Distance along a Ray (straight line with G4ThreeVec) to leave or enter
    //  a Surface.  The input variable which_way should be set to +1 to indicate
@@ -203,8 +281,9 @@ G4double G4Surface::distanceAlongRay( int which_way, const G4Ray* ry,
    //  between the origin of the Ray and the origin of the Surface.
    //  Since a generic Surface doesn't have a well-defined Normal, no
    //  further checks are Done.
-//  This should always be overwritten for derived classes so Print out
-//  a warning message if this is called.
+   
+        //  This should always be overwritten for derived classes so Print out
+        //  a warning message if this is called.
 	G4cout << "WARNING from Surface::distanceAlongRay\n"
 	     << "    This function should be overwritten by a derived class.\n"
 	     << "    Using the Surface base class default.\n";
@@ -213,7 +292,7 @@ G4double G4Surface::distanceAlongRay( int which_way, const G4Ray* ry,
 	return d.Magnitude();
 }
 
-G4double G4Surface::distanceAlongHelix( int which_way, const Helix* hx,
+G4double G4Surface::distanceAlongHelix( G4int which_way, const Helix* hx,
 			            G4ThreeVec& p ) const 
 {  //  Distance along a Helix to leave or enter a Surface.  
    //  The input variable which_way should be set to +1 to indicate
@@ -223,8 +302,9 @@ G4double G4Surface::distanceAlongHelix( int which_way, const Helix* hx,
    //  between the origin of the Helix and the origin of the Surface.
    //  Since a generic Surface doesn't have a well-defined Normal, no
    //  further checks are Done.
-//  This should always be overwritten for derived classes so Print out
-//  a warning message if this is called.
+
+        //  This should always be overwritten for derived classes so Print out
+        //  a warning message if this is called.
 	G4cout << "WARNING from Surface::distanceAlongHelix\n"
 	     << "    This function should be overwritten by a derived class.\n"
 	     << "    Using the Surface base class default.\n";
@@ -232,10 +312,8 @@ G4double G4Surface::distanceAlongHelix( int which_way, const Helix* hx,
 	G4ThreeVec d = hx->position() - p;
 	return d.Magnitude();
 }
-*/
 
 
-/*
 G4ThreeVec G4Surface::Normal() const
 {  //  return the Normal unit vector to a Surface
    //  (This is only meaningful for Surfaces for which the Normal does
@@ -243,10 +321,8 @@ G4ThreeVec G4Surface::Normal() const
    //  The default is not well defined, so return ( 0, 0, 0 ).
    	return G4ThreeVec( 0.0, 0.0, 0.0 );
 }
-*/
 
 
-/*
 G4ThreeVec G4Surface::Normal( const G4ThreeVec&  ) const
 {  //  return the Normal unit vector to a Surface at the point p on
    //  (or nearly on) the Surface.
@@ -254,7 +330,7 @@ G4ThreeVec G4Surface::Normal( const G4ThreeVec&  ) const
    	return G4ThreeVec( 0.0, 0.0, 0.0 );
 }
 
-int G4Surface::Inside( const G4ThreeVec&  ) const
+G4int G4Surface::Inside( const G4ThreeVec&  ) const
 {  //  return 0 if point p is outside Surface, 1 if Inside
    //  default is not well defined, so return 0
    	return 0;
@@ -266,7 +342,7 @@ void G4Surface::move( const G4ThreeVec& p )
 }
 
 void G4Surface::rotate( G4double alpha, G4double beta,
-		      G4double gamma, G4ThreeMat& m, int inverse )
+		      G4double gamma, G4ThreeMat& m, G4int inverse )
 {  //  rotate Surface first about global x-axis by angle alpha,
    //                second about global y-axis by angle beta,
    //             and third about global z-axis by angle gamma
@@ -307,7 +383,7 @@ void G4Surface::rotate( G4double alpha, G4double beta,
 }
 
 void G4Surface::rotate( G4double alpha, G4double beta,
-		      G4double gamma, int inverse )
+		      G4double gamma, G4int inverse )
 {  //  rotate Surface first about global x-axis by angle alpha,
    //                second about global y-axis by angle beta,
    //             and third about global z-axis by angle gamma
@@ -320,5 +396,3 @@ void G4Surface::rotate( G4double alpha, G4double beta,
 }
 
 */
-
-

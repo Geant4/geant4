@@ -5,38 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4CylindricalSurface.cc,v 1.3 2000-08-28 08:57:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/*  /usr/local/gismo/repo/geometry/G4CylindricalSurface.cc,v 1.24 1994/08/03 17:15:09 burnett Exp  */
-//  File:  G4CylindricalSurface.cc
-//  Author:  Alan Breakstone
-
-//  Contents ----------------------------------------------------------
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
-//	G4CylindricalSurface::G4CylindricalSurface()
-//	G4CylindricalSurface::G4CylindricalSurface( const G4Vector3D& o, 
-//                                                  const G4Vector3D& a,      
-//                                                  G4double r          )
-//	G4CylindricalSurface::PrintOn( G4std::ostream& os ) const
-//	G4CylindricalSurface::HowNear( const G4Vector3D& x ) const
-//	G4CylindricalSurface::distanceAlongRay( int which_way, const Ray* ry,
-//				    G4Vector3D& p ) const
-//	G4CylindricalSurface::distanceAlongHelix( int which_way, 
-//                                                const Helix* hx,
-//				                  G4Vector3D& p ) const
-//	G4CylindricalSurface::Normal( const G4Vector3D& p ) const
-//	G4CylindricalSurface::Inside( const G4Vector3D& x ) const
-//	G4CylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
-//	G4CylindricalSurface::Scale() const
-//	G4CylindricalSurface::rotate( G4double alpha, G4double beta, 
-//			  G4double gamma, G4ThreeMat& m, int inverse ) 
-//	G4CylindricalSurface::rotate( G4double alpha, G4double beta, 
-//			  G4double gamma, int inverse ) 
-//	G4CylindricalSurface::SetRadius( G4double r )
-//	G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
-// 
-//  End ---------------------------------------------------------------
+// G4CylindricalSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4CylindricalSurface.hh"
 #include "G4Sort.hh"
@@ -85,6 +62,23 @@ G4CylindricalSurface::G4CylindricalSurface( const G4Vector3D& o,
 }
 
 
+G4CylindricalSurface::~G4CylindricalSurface()
+{
+}
+
+/*
+G4CylindricalSurface::G4CylindricalSurface( const G4CylindricalSurface& c )
+  : G4Surface( c.origin )
+{
+  axis = c.axis;  radius = c.radius;
+}
+*/
+
+const char* G4CylindricalSurface::NameOf() const
+{
+  return "G4CylindricalSurface";
+}
+
 void G4CylindricalSurface::PrintOn( G4std::ostream& os ) const
 {
   // printing function using C++ G4std::ostream class
@@ -92,8 +86,8 @@ void G4CylindricalSurface::PrintOn( G4std::ostream& os ) const
      << "radius: " << radius << "\tand axis " << axis << "\n";
 }
 
-//int G4Surface::Intersect(const G4Ray& ry)
-int G4CylindricalSurface::Intersect(const G4Ray& ry)
+//G4int G4Surface::Intersect(const G4Ray& ry)
+G4int G4CylindricalSurface::Intersect(const G4Ray& ry)
 {
 
   //  L. Broglia : copy of G4FCylindricalSurface::Intersect
@@ -117,10 +111,10 @@ int G4CylindricalSurface::Intersect(const G4Ray& ry)
   //  If no valid intersection point is found, set the distance
   //  and intersection point to large numbers.
 
-  // int which_way = -1; 
+  // G4int which_way = -1; 
   //Originally a parameter.Read explanation above. 
   
-  int which_way=1;
+  G4int which_way=1;
   
   if(!Inside(ry.GetStart()))
     which_way = -1;	   
@@ -136,8 +130,8 @@ int G4CylindricalSurface::Intersect(const G4Ray& ry)
 
   //  Axis unit vector of the G4CylindricalSurface.
   G4Vector3D ahat = GetAxis();
-  int isoln   = 0, 
-      maxsoln = 2;
+  G4int isoln   = 0, 
+        maxsoln = 2;
   
   //  array of solutions in distance along the Ray
   G4double s[2];
@@ -176,7 +170,7 @@ int G4CylindricalSurface::Intersect(const G4Ray& ry)
 
   //  order the possible solutions by increasing distance along the Ray
   //  (G4Sorting routines are in support/G4Sort.h)
-  G4Sort_double( s, isoln, maxsoln-1 );
+  sort_double( s, isoln, maxsoln-1 );
 
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
@@ -230,18 +224,21 @@ G4double G4CylindricalSurface::HowNear( const G4Vector3D& x ) const
 
 
 /*
-G4double G4CylindricalSurface::distanceAlongRay( int which_way, const G4Ray* ry,
+G4double G4CylindricalSurface::distanceAlongRay( G4int which_way, const G4Ray* ry,
 				   G4Vector3D& p ) const 
 {  //  Distance along a Ray (straight line with G4Vector3D) to leave or enter
-   //  a G4CylindricalSurface.  The input variable which_way should be set to +1 to
-   //  indicate leaving a G4CylindricalSurface, -1 to indicate entering a G4CylindricalSurface.
+   //  a G4CylindricalSurface.  The input variable which_way should be set to +1
+   //  to indicate leaving a G4CylindricalSurface, -1 to indicate entering a
+   //  G4CylindricalSurface.
    //  p is the point of intersection of the Ray with the G4CylindricalSurface.
    //  If the G4Vector3D of the Ray is opposite to that of the Normal to
-   //  the G4CylindricalSurface at the intersection point, it will not leave the G4CylindricalSurface.
-   //  Similarly, if the G4Vector3D of the Ray is along that of the Normal 
-   //  to the G4CylindricalSurface at the intersection point, it will not enter the
+   //  the G4CylindricalSurface at the intersection point, it will not leave the
    //  G4CylindricalSurface.
-   //  This method is called by all finite shapes sub-classed to G4CylindricalSurface.
+   //  Similarly, if the G4Vector3D of the Ray is along that of the Normal 
+   //  to the G4CylindricalSurface at the intersection point, it will not enter
+   //  the G4CylindricalSurface.
+   //  This method is called by all finite shapes sub-classed to
+   //  G4CylindricalSurface.
    //  Use the virtual function table to check if the intersection point
    //  is within the boundary of the finite shape.
    //  A negative result means no intersection.
@@ -255,7 +252,7 @@ G4double G4CylindricalSurface::distanceAlongRay( int which_way, const G4Ray* ry,
 	G4Vector3D dhat = ry->Direction( 0.0 );
 //  Axis unit vector of the G4CylindricalSurface.
 	G4Vector3D ahat = GetAxis();
-	int isoln = 0, maxsoln = 2;
+	G4int isoln = 0, maxsoln = 2;
 //  array of solutions in distance along the Ray
 //	G4double s[2] = { -1.0, -1.0 };
 	G4double s[2];s[0] = -1.0; s[1]= -1.0 ;
@@ -312,18 +309,22 @@ G4double G4CylindricalSurface::distanceAlongRay( int which_way, const G4Ray* ry,
 /*
 
 
-G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* hx,
+G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
+                                   const Helix* hx,
 				   G4Vector3D& p ) const 
 {  //  Distance along a Helix to leave or enter a G4CylindricalSurface.
    //  The input variable which_way should be set to +1 to
-   //  indicate leaving a G4CylindricalSurface, -1 to indicate entering a G4CylindricalSurface.
+   //  indicate leaving a G4CylindricalSurface, -1 to indicate entering a
+   //  G4CylindricalSurface.
    //  p is the point of intersection of the Helix with the G4CylindricalSurface.
    //  If the G4Vector3D of the Helix is opposite to that of the Normal to
-   //  the G4CylindricalSurface at the intersection point, it will not leave the G4CylindricalSurface.
-   //  Similarly, if the G4Vector3D of the Helix is along that of the Normal 
-   //  to the G4CylindricalSurface at the intersection point, it will not enter the
+   //  the G4CylindricalSurface at the intersection point, it will not leave the
    //  G4CylindricalSurface.
-   //  This method is called by all finite shapes sub-classed to G4CylindricalSurface.
+   //  Similarly, if the G4Vector3D of the Helix is along that of the Normal 
+   //  to the G4CylindricalSurface at the intersection point, it will not enter
+   //  the G4CylindricalSurface.
+   //  This method is called by all finite shapes sub-classed to
+   //  G4CylindricalSurface.
    //  Use the virtual function table to check if the intersection point
    //  is within the boundary of the finite shape.
    //  If no valid intersection point is found, set the distance
@@ -333,14 +334,14 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 	G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
 	G4Vector3D zerovec;  // zero G4Vector3D
 	p = lv;
-	int isoln = 0, maxsoln = 4;
+	G4int isoln = 0, maxsoln = 4;
 //  Array of solutions in turning angle
 //	G4double s[4] = { -1.0, -1.0, -1.0, -1.0 };
 	G4double s[4];s[0]=-1.0;s[1]= -1.0;s[2]= -1.0;s[3]= -1.0;
 
 
 //  Flag set to 1 if exact solution is found
-	int exact = 0;
+	G4int exact = 0;
 //  Helix parameters
 	G4double rh = hx->GetRadius();  	// radius of Helix
 	G4Vector3D ah = hx->GetAxis();  	// axis of Helix
@@ -367,15 +368,15 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 	G4Vector3D ghat;
 //
 //  Set flag for special cases
-	int special_case = 0;  // 0 means general case
+	G4int special_case = 0;  // 0 means general case
 //
-//  Test to see if axes of Helix and G4CylindricalSurface are parallel, in which case
-//  there are exact solutions.
+//  Test to see if axes of Helix and G4CylindricalSurface are parallel, in which
+//  case there are exact solutions.
 	if ( ( fabs( ah.AngleBetween(ac) ) < FLT_EPSILO )
 	  || ( fabs( ah.AngleBetween(ac) - M_PI ) < FLT_EPSILO ) ) {
 	  	special_case = 1;
-//  If, in addition, gamma is a zero vector or is parallel to the G4CylindricalSurface
-//  axis, this simplifies the previous case.
+//  If, in addition, gamma is a zero vector or is parallel to the
+//  G4CylindricalSurface axis, this simplifies the previous case.
 		if ( gamma == zerovec ) {
 			special_case = 3;
 			ghat = gamma;
@@ -387,21 +388,21 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 			  				       FLT_EPSILO ) )
 				special_case = 3;
 		}
-//  Test to see if, in addition to the axes of the Helix and G4CylindricalSurface being
-//  parallel, the axis of the G4CylindricalSurface is perpendicular to the initial
-//  G4Vector3D of the Helix.
+//  Test to see if, in addition to the axes of the Helix and G4CylindricalSurface
+//  being parallel, the axis of the G4CylindricalSurface is perpendicular to the
+//  initial G4Vector3D of the Helix.
 		if ( fabs( ( ac * dh ) ) < FLT_EPSILO ) {
 //  And, if, in addition to all this, the difference in origins of the Helix
-//  and G4CylindricalSurface is  perpendicular to the initial G4Vector3D of the Helix,
-//  there is a separate special case.
+//  and G4CylindricalSurface is  perpendicular to the initial G4Vector3D of the
+//  Helix, there is a separate special case.
 			if ( fabs( ( ghat * dh ) ) < FLT_EPSILO )
 				special_case = 4;
 		}
 	}  // end of section with axes of Helix and G4CylindricalSurface parallel
 //
-//  Another peculiar case occurs if the axis of the G4CylindricalSurface and the initial
-//  G4Vector3D of the Helix line up and their origins are the same.  This will
-//  require a higher order approximation than the general case.
+//  Another peculiar case occurs if the axis of the G4CylindricalSurface and the
+//  initial G4Vector3D of the Helix line up and their origins are the same.
+//  This will require a higher order approximation than the general case.
 	if ( ( ( fabs( dh.AngleBetween(ac) ) < FLT_EPSILO )
 	    || ( fabs( dh.AngleBetween(ac) - M_PI ) < FLT_EPSILO ) )
 	    && ( gamma == zerovec ) )
@@ -599,10 +600,10 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 //  iterate it until the accuracy is below the user-set surface precision.
 			   G4double delta = 0.0;  
 			   G4double delta0 = FLT_MAXX;
-			   int dummy = 1;
-			   int iter = 0;
-			   int in0 = Inside( hx->position ( 0.0 ) );
-			   int in1 = Inside( p );
+			   G4int dummy = 1;
+			   G4int iter = 0;
+			   G4int in0 = Inside( hx->position ( 0.0 ) );
+			   G4int in1 = Inside( p );
 			   G4double sc = Scale();
 			   while ( dummy ) {
 				iter++;
@@ -657,9 +658,9 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 				                           SURFACE_PRECISION )
 					break;
 //  If delta has increased in absolute value from the previous iteration
-//  either the Helix doesn't Intersect the G4CylindricalSurface or the approximate solution
-//  is too far from the real solution.  Try groping for a solution.  If not
-//  found, Reset distance to large number, indicating no intersection with
+//  either the Helix doesn't Intersect the G4CylindricalSurface or the approximate
+//  solution is too far from the real solution.  Try groping for a solution.
+//  If not found, Reset distance to large number, indicating no intersection with
 //  the G4CylindricalSurface.
 				if ( fabs( delta ) > fabs( delta0 ) ) {
 					Dist = fabs( rhp ) * 
@@ -676,8 +677,10 @@ G4double G4CylindricalSurface::distanceAlongHelix( int which_way, const Helix* h
 				delta0 = delta;
 //  Add distance to G4CylindricalSurface to distance along Helix.
 				Dist += delta;
-//  Negative distance along Helix means Helix doesn't Intersect G4CylindricalSurface.
-//  Reset distance to large number, indicating no intersection with G4CylindricalSurface.
+//  Negative distance along Helix means Helix doesn't Intersect
+//  G4CylindricalSurface.
+//  Reset distance to large number, indicating no intersection with
+//  G4CylindricalSurface.
 				if ( Dist < 0.0 ) {
 					Dist = FLT_MAXX;
 					p = lv;
@@ -738,7 +741,7 @@ G4Vector3D G4CylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
 }
 
 
-int G4CylindricalSurface::Inside ( const G4Vector3D& x ) const
+G4int G4CylindricalSurface::Inside ( const G4Vector3D& x ) const
 { 
   //  Return 0 if point x is outside G4CylindricalSurface, 1 if Inside.
   //  Outside means that the distance to the G4CylindricalSurface would 
@@ -751,7 +754,7 @@ int G4CylindricalSurface::Inside ( const G4Vector3D& x ) const
 }
 
 
-int G4CylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
+G4int G4CylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 { 
   //  return 1 if point x is on the G4CylindricalSurface, otherwise return zero
   //  base this on the surface precision factor set in support/globals.h
@@ -776,7 +779,7 @@ G4double G4CylindricalSurface::Scale() const
 
 
 //void G4CylindricalSurface::rotate( G4double alpha, G4double beta,
-//		       G4double gamma, G4ThreeMat& m, int inverse )
+//		       G4double gamma, G4ThreeMat& m, G4int inverse )
 // //  rotate G4CylindricalSurface  first about global x-axis by angle alpha,
 //                  second about global y-axis by angle beta,
 //               and third about global z-axis by angle gamma
@@ -790,7 +793,7 @@ G4double G4CylindricalSurface::Scale() const
 //}
 
 //void G4CylindricalSurface::rotate( G4double alpha, G4double beta,
-//		       G4double gamma, int inverse )
+//		       G4double gamma, G4int inverse )
 //{  //  rotate G4CylindricalSurface  first about global x-axis by angle alpha,
 //                  second about global y-axis by angle beta,
 //               and third about global z-axis by angle gamma
@@ -832,7 +835,7 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 //  of some fraction of a turn.  If at the end of a Step, the current position
 //  along the Helix and the previous position are on opposite sides of the
 //  G4CylindricalSurface, then the solution must lie somewhere in between.
-	int one_over_f = 8;  // one over fraction of a turn to go in each Step
+	G4int one_over_f = 8;  // one over fraction of a turn to go in each Step
 	G4double turn_angle = 0.0;
 	G4double dist_along = 0.0;
 	G4double d_new;
@@ -843,10 +846,10 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 	G4Vector3D prp = hx->getPerp();	// perpendicular vector
 	G4double prpmag = prp.Magnitude();
 	G4double rhp = rh / prpmag;
-	int max_iter = one_over_f * HELIX_MAX_TURNS;
+	G4int max_iter = one_over_f * HELIX_MAX_TURNS;
 //  Take up to a user-settable number of turns along the Helix,
 //  groping for an intersection point.
-	for ( int k = 1; k < max_iter; k++ ) {
+	for ( G4int k = 1; k < max_iter; k++ ) {
 		turn_angle = 2.0 * M_PI * k / one_over_f;
 		dist_along = turn_angle * fabs( rhp );
 		d_new = HowNear( hx->position( dist_along ) );
@@ -856,7 +859,7 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 //  Old and new points are on opposite sides of the G4CylindricalSurface, therefore
 //  a solution lies in between, use a binary search to pin the point down
 //  to the surface precision, but don't do more than 50 iterations.
-			int itr = 0;
+			G4int itr = 0;
 			while ( fabs( d_new / scal ) > SURFACE_PRECISION ) {
 				itr++;
 				if ( itr > 50 )
@@ -878,10 +881,3 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 	return -1.0;
 }
 */
-
-
-
-
-
-
-

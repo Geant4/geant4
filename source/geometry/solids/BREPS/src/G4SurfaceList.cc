@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceList.cc,v 1.3 2000-02-14 17:49:32 gcosmo Exp $
+// $Id: G4SurfaceList.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4SurfaceList.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4SurfaceList.hh"
 
 G4SurfaceList::G4SurfaceList()
@@ -17,7 +24,10 @@ G4SurfaceList::G4SurfaceList()
 }
 
 
-G4SurfaceList::~G4SurfaceList() { EmptyList(); }
+G4SurfaceList::~G4SurfaceList()
+{
+  EmptyList();
+}
 
 void G4SurfaceList::MoveToFirst(G4Surface* srf)
 {
@@ -59,10 +69,10 @@ G4Surface* G4SurfaceList::GetSurface()
 }
 
 
-G4Surface* G4SurfaceList::GetSurface(int number)
+G4Surface* G4SurfaceList::GetSurface(G4int number)
 {
   index = first;
-  for(int a=0;a<number;a++)
+  for(G4int a=0;a<number;a++)
     Step();
     
   return index;
@@ -167,7 +177,7 @@ void G4SurfaceList::G4SortList()
   // First create a vector of the surface distances
   // to the ray origin
   G4Surface** distances = new G4Surface*[number_of_elements];
-  int x = 0;
+  G4int x = 0;
   MoveToFirst();
 
   // Copy surface pointers to vector
@@ -207,20 +217,20 @@ void G4SurfaceList::G4SortList()
 }
 
 
-void G4SurfaceList::QuickG4Sort(G4Surface** Dist, int left, int right)
+void G4SurfaceList::QuickG4Sort(G4Surface** Dist, G4int left, G4int right)
 {
-  register int i=left;
-  register int j=right;
+  register G4int i=left;
+  register G4int j=right;
   
   G4Surface* elem1;
   G4Surface* elem2 = Dist[(left+right)/2];
   
   do
   {
-    while ( (Dist[i]->Distance() < elem2->Distance())  &&  (i < right) ) 
+    while ( (Dist[i]->GetDistance() < elem2->GetDistance())  &&  (i < right) ) 
       i++;
     
-    while ( (elem2->Distance() < Dist[j]->Distance())  &&  (j > left))
+    while ( (elem2->GetDistance() < Dist[j]->GetDistance())  &&  (j > left))
       j--;
 
     if(i<=j)

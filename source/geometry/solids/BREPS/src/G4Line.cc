@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.cc,v 1.4 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4Line.cc,v 1.5 2000-08-28 08:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Line.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Line.hh"
 
 G4Line::G4Line (){}
@@ -49,4 +56,3 @@ G4bool G4Line::Tangent(G4CurvePoint& cp, G4Vector3D& vec)
 
   return true;
 }
-

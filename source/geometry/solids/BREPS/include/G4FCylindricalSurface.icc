@@ -1,0 +1,50 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4FCylindricalSurface.icc,v 1.1 2000-08-28 08:57:46 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4FCylindricalSurface.icc
+//
+// Implementation of inline methods of G4FCylindricalSurface
+// --------------------------------------------------------------------
+
+inline
+G4int G4FCylindricalSurface::operator==( const G4FCylindricalSurface& c )
+{
+  return ( origin == c.origin && 
+	   Position == c.Position   && 
+	   radius == c.radius && 
+	   length == c.length    );
+}
+
+inline
+G4String G4FCylindricalSurface::GetEntityType() 
+{
+  return G4String("Cylindrical_Surface");
+}
+
+inline
+G4double G4FCylindricalSurface::GetLength() const
+{ 
+  return length; 
+}
+
+inline
+G4Vector3D G4FCylindricalSurface::GetAxis() const
+{
+  return Position.GetAxis();
+}
+  
+inline
+G4double G4FCylindricalSurface::GetRadius() const
+{
+  return radius;
+}

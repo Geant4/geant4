@@ -5,27 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sort.hh,v 1.2 1999-12-15 14:49:57 gunter Exp $
+// $Id: G4Sort.hh,v 1.3 2000-08-28 08:57:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  File: G4Sort.h
-//  Author:  Alan Breakstone
+// ----------------------------------------------------------------------
 //
-//  Description
-//
-//	Routines to G4Sort arG4Rays of various kinds of numbers
-//
+// Global functions for sorting and swaping arrays of various
+// kinds of numbers.
 
+// Author:  Alan Breakstone
+// ----------------------------------------------------------------------
 #ifndef __SORT_H
 #define __SORT_H
+
 #include "globals.hh"
 
-void G4Sort_double( G4double [], int, int );
+void sort_double( G4double [], G4int, G4int );
 
-void swap_double(   G4double [], int, int );
-
-void G4Sort_float( float [], int, int );
-
-void swap_float(   float [], int, int );
+void swap_double( G4double [], G4int, G4int );
 
 #endif

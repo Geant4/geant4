@@ -5,18 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ControlPoints.hh,v 1.3 2000-01-21 13:47:40 gcosmo Exp $
+// $Id: G4ControlPoints.hh,v 1.4 2000-08-28 08:57:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4ControlPoints
 //
-// Modif 8 oct 98 : A.Floquet
-//      G4PointRat datas are made of
-// 	  . a point 3D
-//	  . a additional value : the scale factor which is set to 1 by default
+// Class Description:
 //
-//      G4ControlPoints includes only G4PointRat which in turn are made 
-//      of G4Point3D
+// G4ControlPoints defines an array of G4PointRat which in turn
+// are made of G4Point3D.
 
+// Author: J.Sulkimo, P.Urban.
+// Revisions by: A.Floquet, L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __G4ControlPoints_h
 #define __G4ControlPoints_h 1
 
@@ -24,19 +26,16 @@
 
 class G4ControlPoints 
 {
-public:
+public:  // with description
 
-  // Constructors
   G4ControlPoints();
+  G4ControlPoints( G4int, G4int);
+  G4ControlPoints( G4int, G4int, G4int );
+  G4ControlPoints( const G4ControlPoints& );
+    // Constructors.
 
-  G4ControlPoints( int, int);
-
-  G4ControlPoints( int , int , int );
-
-  G4ControlPoints(const G4ControlPoints&);
-  
-  // Destructor
   ~G4ControlPoints();
+    // Destructor.
 
   void SetWeights(G4double*);
    
@@ -45,49 +44,33 @@ public:
   void CalcValues(G4double k1, G4double param, G4PointRat& pts1,
 		  G4double k2, G4PointRat& pts2);
   
-  inline int GetRows() const {return nr;}
-  inline int GetCols() const {return nc;}
+  inline G4int GetRows() const;
+  inline G4int GetCols() const;
   
-  // Puts control point into matrix location (i,j)
-  inline void put(const int i, const int j, const G4Point3D &tmp)
-  {
-    *data[i*nc+j]=tmp;	// tmp is converted to a PointRat
-			// by the member affectation function
-			// of the G4PointRat class
-  }
-  
-  
-  inline void put(const int i, const int j, const G4PointRat& tmp)
-  {
-    *data[i*nc+j]=tmp;
-  }
+  inline void put(G4int i, G4int j, const G4Point3D &tmp);
+  inline void put(G4int i, G4int j, const G4PointRat& tmp);
+    // Put control point into matrix location (i,j).
 
-  
-  // Retrieves control point from matrix location (i,j)
-  inline G4Point3D Get3D(const int i, const int j) const
-  {
-    return (data[i*nc+j])->pt();
-  }
-  
-  inline G4PointRat& GetRat(const int i, const int j) const
-  {
-    return *data[i*nc+j];
-  }        
-      
+  inline G4Point3D Get3D(G4int i, G4int j) const;
+  inline G4PointRat& GetRat(G4int i, G4int j) const;
+    // Retrieve control point from matrix location (i,j);
+
   G4double ClosestDistanceToPoint(const G4Point3D&);
 
 
 private:				      
     
-  inline G4double Calc(const G4double k1, const G4double par, 
-		       const G4double old_val, const G4double k2, 
-		       const G4double new_val                     ) 
-  {
-    return (((k1 - par) * old_val +(par - k2) * new_val) / (k1-k2)); 
-  }
+  inline G4double Calc(G4double k1, G4double par, G4double old_val,
+                       G4double k2, G4double new_val );
 
   G4PointRat** data;
-  int nr, nc;
+    // G4PointRat datas are made of
+    // - a point 3D
+    // - an additional value: the scale factor which is set to 1 by default.
+
+  G4int nr, nc;
 };
+
+#include "G4ControlPoints.icc"
 
 #endif

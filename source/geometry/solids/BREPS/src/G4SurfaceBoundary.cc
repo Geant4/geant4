@@ -1,9 +1,32 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SurfaceBoundary.cc,v 1.5 2000-08-28 08:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4SurfaceBoundary.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4SurfaceBoundary.hh"
 #include "geomdefs.hh"
 #include "G4CompositeCurve.hh"
 
 
-G4SurfaceBoundary::G4SurfaceBoundary(){}
+G4SurfaceBoundary::G4SurfaceBoundary()
+{
+}
+
+G4SurfaceBoundary::~G4SurfaceBoundary()
+{
+}
 
 void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
 {
@@ -69,9 +92,6 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
     }
   }
 }
-
-
-G4SurfaceBoundary::~G4SurfaceBoundary() {}
 
 
 G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
@@ -150,12 +170,17 @@ G4bool G4SurfaceBoundary::Tangent(G4CurvePoint& cp, G4Vector3D& v)
 }
 
 
-void G4SurfaceBoundary::SplitWithPlane(const G4Point3D& p0,
-				       const G4Vector3D& n,
-				       G4SurfaceBoundary*& new1,
-				       G4SurfaceBoundary*& new2)
+void G4SurfaceBoundary::SplitWithPlane(const G4Point3D&,
+				       const G4Vector3D&,
+				       G4SurfaceBoundary*&,
+				       G4SurfaceBoundary*&)
 {
   G4Exception("To be implemented");
 }
 
-
+void G4SurfaceBoundary::SplitWithCylinder(const G4CylindricalSurface&,
+                                          G4SurfaceBoundary*&, 
+                                          G4SurfaceBoundary*&)
+{
+  G4Exception("To be implemented");
+}

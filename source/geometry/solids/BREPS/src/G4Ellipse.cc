@@ -5,14 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ellipse.cc,v 1.3 2000-05-15 14:16:43 gcosmo Exp $
+// $Id: G4Ellipse.cc,v 1.4 2000-08-28 08:57:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Ellipse.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4Ellipse.hh"
 
-// G4Ellipse
-G4Ellipse::G4Ellipse(){}
+G4Ellipse::G4Ellipse()
+{
+}
+
+G4Ellipse::~G4Ellipse()
+{
+}
 
 G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
 {
@@ -73,10 +84,6 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
 
   return r;
 }
-
-
-G4Ellipse::~G4Ellipse(){}
-
 
 void G4Ellipse::InitBounded()
 {

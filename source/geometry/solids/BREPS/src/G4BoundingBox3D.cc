@@ -1,3 +1,20 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BoundingBox3D.cc,v 1.4 2000-08-28 08:57:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BoundingBox3D.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BoundingBox3D.hh"
 #include "geomdefs.hh"
 
@@ -84,7 +101,7 @@ void G4BoundingBox3D::Extend(const G4Point3D& p)
 ////////////////////////////////////////////////////////////////////////////
 
 
-int G4BoundingBox3D::Test(const G4Ray& rayref)
+G4int G4BoundingBox3D::Test(const G4Ray& rayref)
 {
   const G4Point3D&  tmp_ray_start = rayref.GetStart();
   const G4Vector3D& tmp_ray_dir   = rayref.GetDir();
@@ -136,9 +153,9 @@ int G4BoundingBox3D::Test(const G4Ray& rayref)
 // the box (ie. there is a possiblity of an intersection)
 
 
-int G4BoundingBox3D::BoxIntersect(const G4Point3D&  gbox, 
-				  const G4Point3D&  p   , 
-				  const G4Vector3D& v    ) const
+G4int G4BoundingBox3D::BoxIntersect(const G4Point3D&  gbox, 
+				    const G4Point3D&  p   , 
+				    const G4Vector3D& v    ) const
 {
   G4double safx, safy, safz;
   G4double  fdx,  fdy,  fdz;
@@ -322,16 +339,3 @@ G4int G4BoundingBox3D::Inside(const G4Point3D& Pt)
   else
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

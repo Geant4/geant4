@@ -1,3 +1,8 @@
+//////////////////////////////////////////////////////////////////////////
+// $Id: G4BREPSolidTorusTest.cc,v 1.4 2000-08-28 08:58:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//////////////////////////////////////////////////////////////////////////
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -22,7 +27,7 @@
 
 
 
-int main(int argc, char **argv)
+G4int main(G4int argc, char **argv)
 {
   G4Timer timer;
 
@@ -66,4 +71,3 @@ int main(int argc, char **argv)
 
   return EXIT_SUCCESS;
 }
-
