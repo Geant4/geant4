@@ -1,0 +1,99 @@
+?RCS:
+?MAKE:g4make g4_gmake_version g4_gmake g4_make_version g4_make:\
+	 Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4make:
+?S:	This variable contains the value of the 'g4make' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+
+case "$g4make" in
+'')
+	g4make=gmake
+	;;
+esac
+
+echo ""
+
+	g4_gmake_version=`(gmake -v)`
+				case $g4_gmake_version in
+				GNU*) 
+				g4_gmake=y				
+				;;
+				*) 
+				g4_gmake=n
+				;;
+				esac				
+
+	g4_make_version=`(make -v)`
+				case $g4_make_version in
+				GNU*) 
+				g4_make=y				
+				;;
+				*) 
+				g4_make=n
+				;;
+				esac				
+
+if  [ $g4_gmake = y ] ; then
+
+g4make=gmake
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = y ] ; then
+
+g4make=make
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = n ] ; then
+
+g4make=none
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have NO GNU make which could be used to build GEANT4.
+Please select your own 'make' program compatible with GNU make.
+EOM`
+
+fi
+
+dflt=$g4make
+rp=$g4message
+
+
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	'') 
+		g4make=$dflt
+		;;
+	*) 
+		g4make=$gans
+		;;
+	esac
+
+
