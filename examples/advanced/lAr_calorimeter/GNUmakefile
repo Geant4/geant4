@@ -1,33 +1,34 @@
-# --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.1 2002-09-30 13:07:55 pia Exp $
+# $Id: GNUmakefile,v 1.2 2002-10-01 14:01:33 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := Brachy
-
+name := lArCal
 G4TARGET := $(name)
 G4EXLIB := true
 
-
-G4ANALYSIS_USE = 1
-
-
 ifndef G4INSTALL
-  G4INSTALL = ../../../
+  G4INSTALL = ../../..
 endif
 
-CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/cpp
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
 
+
+include $(G4INSTALL)/config/architecture.gmk
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config --useHBook --include`
+  LDFLAGS += `aida-config --useHBook --lib`
+endif
 
 .PHONY: all
 all: lib bin
 
-
 include $(G4INSTALL)/config/binmake.gmk
-# From lowenergy/test/GNUmakefile
-CPPFLAGS += `aida-config --useHBook --include`
-LDFLAGS  += `aida-config --useHBook --lib`
-LOADLIBS  += `aida-config --useHBook --lib`
 
+visclean:
+	rm -f g4*.prim g4*.eps g4*.wrl
+	rm -f .DAWN_*
 
