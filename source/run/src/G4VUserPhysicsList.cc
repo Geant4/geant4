@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.34 2003-03-11 04:29:56 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.35 2003-03-11 07:21:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,10 +46,9 @@
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Material.hh"
 #include "G4UserPhysicsListMessenger.hh"
