@@ -30,7 +30,7 @@ G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4
 {
   //count the radiuses, densities and fermi momenta with A and Z
   G4double oneThird = 1.0/3.0;
-  G4double r = radius0*pow(A, oneThird);
+  G4double r = radius0*pow(G4double(A), G4double(oneThird));
 
   if(numberOfLayers==1){ 
     radius.push_back(r);
