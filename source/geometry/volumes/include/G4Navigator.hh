@@ -21,10 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.8 2001-07-11 10:00:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4Navigator.hh,v 1.9 2001-11-05 22:13:12 radoone Exp $
 //
-// 
 // class G4Navigator
 //
 // Class description:
@@ -100,7 +98,7 @@
 
 #include "G4GRSVolume.hh"
 #include "G4GRSSolid.hh"
-#include "G4TouchableHistory.hh"
+#include "G4TouchableHandle.hh"
 #include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
@@ -169,11 +167,10 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  // inline
-  G4TouchableHistoryHandle LocateGlobalPointAndReturnTouchableHandle(
+  inline void LocateGlobalPointAndUpdateTouchableHandle(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
-				G4TouchableHistoryHandle& oldTouchableToUpdate,
+				G4TouchableHandle&         oldTouchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // First, search the geometrical hierarchy like the above method
     // LocateGlobalPointAndSetup(). Then use the volume found and its
@@ -182,7 +179,7 @@ class G4Navigator
   inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
-				G4VTouchable*        touchableToUpdate,
+				G4VTouchable*              touchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // First, search the geometrical hierarchy like the above method
     // LocateGlobalPointAndSetup(). Then use the volume found and its
@@ -190,7 +187,7 @@ class G4Navigator
 
   inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
-				G4VTouchable*        touchableToUpdate,
+				G4VTouchable*              touchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // Old version (missing direction).
     // Not recommended replace with newer version above.

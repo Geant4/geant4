@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.15 2001-07-11 10:00:32 gunter Exp $
+// $Id: G4Navigator.cc,v 1.16 2001-11-05 22:13:37 radoone Exp $
 // GEANT4 tag $ Name:  $
-//
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
 
@@ -1003,27 +1002,39 @@ void  G4Navigator::SetVerboseLevel(G4int level)
    fVerbose=level;
 }
 
-
-G4TouchableHistoryHandle
-G4Navigator::LocateGlobalPointAndReturnTouchableHandle(
-			  const G4ThreeVector&       position,
-			  const G4ThreeVector&       direction,
-				G4TouchableHistoryHandle& oldTouchableToUpdate,
-			  const G4bool               RelativeSearch  =true)
+void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
+                          const G4ThreeVector&       position,
+                          const G4ThreeVector&       direction,
+                                G4TouchableHandle&   oldTouchableToUpdate,
+                          const G4bool               RelativeSearch )
 {
-  G4TouchableHistoryHandle nextTouchableHandle= oldTouchableToUpdate;
+  //G4TouchableHandle nextTouchableHandle= oldTouchableToUpdate;
   G4VPhysicalVolume* pPhysVol;
   pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);
 
-  // touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  //nextTouchableHandle->UpdateYourself( pPhysVol, &fHistory );
 
-  if( fEntering | fExiting )  // fEnteredDaughter | fExitedMother
-     nextTouchableHandle= CreateTouchableHistoryHandle();
+  if( fEnteredDaughter | fExitedMother )
+  {
+     //nextTouchableHandle = CreateTouchableHistoryHandle();
+     //nextTouchableHandle = CreateTouchableHistory();
+     oldTouchableToUpdate = CreateTouchableHistory();
+  }
+  // else{
+  //    oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  // }
+  if( pPhysVol == 0 ){
+        // We want to ensure that the touchable is correct in this case.
+              //  The method below should do this and recalculate a lot more ....
+        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  }
 
-  return nextTouchableHandle;
+  return;
+    //return nextTouchableHandle;
 }
 
 G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
 {
   return G4TouchableHistoryHandle( CreateTouchableHistory() );
 }
+
