@@ -1,4 +1,4 @@
-$Id: History,v 1.199 2002-10-30 16:04:46 gcosmo Exp $
+$Id: History,v 1.200 2002-11-08 08:52:01 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th November 2002  Gabriele Cosmo (config-V04-01-04)
+- Darwin-g++.gmk:
+  o Updated setup to support MacOS 10.2 (H.Burkhardt).
 
 30th October 2002  Gabriele Cosmo (config-V04-01-03)
 - architecture.gmk:
