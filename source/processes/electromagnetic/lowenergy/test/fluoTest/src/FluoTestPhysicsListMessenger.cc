@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsListMessenger.cc,v 1.3 2001-10-12 08:10:47 guardi Exp $
+// $Id: FluoTestPhysicsListMessenger.cc,v 1.4 2001-10-12 14:25:16 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,6 @@ void FluoTestPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String new
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 
 

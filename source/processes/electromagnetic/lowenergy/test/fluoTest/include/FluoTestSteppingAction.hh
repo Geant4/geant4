@@ -25,10 +25,7 @@ class FluoTestSteppingAction : public G4UserSteppingAction
 
     void UserSteppingAction(const G4Step*);
  private:
-  G4int nElectrons;
-  G4int nDepElec;
-  G4int nElecCreated;
-
+  G4int gamma;
   //FluoTestDetectorConstruction* detector;
 #ifdef G4ANALYSIS_USE   
     FluoTestAnalysisManager* analysisManager;

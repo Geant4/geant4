@@ -1,11 +1,16 @@
-#/tracking/verbose 6
+/tracking/verbose 6
+
+/lowenergy/lowlimGE 250 eV
+/lowenergy/cutG 1.5 mum
+/lowenergy/cutE 1.5 mum
+
 
 /gps/type Beam
 #/gps/centre -10 5.1 0
 /gps/centre -10 0 0
 /gps/particle gamma
 
-/gps/monoenergy 5 keV
+/gps/monoenergy 3.5 keV
 #/gps/monoenergy 400 keV
 
 /gps/shape Circle
@@ -32,6 +37,7 @@
 #/run/beamOn 100
 
 /run/beamOn 1000000
+
 
 
 

@@ -88,7 +88,7 @@ void FluoTestSteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)

@@ -18,6 +18,7 @@ FluoTestSteppingAction::FluoTestSteppingAction(
   //detector(DET),
     analysisManager(aMgr)
 {
+  gamma=0;
  }
 
 #else
@@ -34,7 +35,11 @@ FluoTestSteppingAction::~FluoTestSteppingAction()
 
 void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  //G4double gammaAtTheDetPre=0;
+  G4double gammaAtTheDetPre=0;
+  G4double gammaTheta = 0;
+G4double gammatheta = 0;
+ G4double gammaPhi = 0;
+G4double gammaphi = 0;
   //G4double gammaAtTheDetPost=0;
   G4double gammaLeavingSample=0;
   G4double eleLeavingSample=0;
@@ -53,11 +58,21 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
       { 
 	if ((aStep->GetTrack()->GetDynamicParticle()
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
-	  {
+	  { gammaPhi = aStep->GetTrack()->GetMomentumDirection().phi();
+	    gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	    if ((gammaTheta>1.48668)&&(gammaTheta<1.64074))
+	      {if ((gammaPhi>2.28549)&&(gammaPhi<2.41396))
+		{gamma++;
+		G4cout<<"il numero di gamma e' "<<gamma<<G4endl;
+		}
+	      }
+	    
 	    gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
+	    analysisManager->InsGamLS(gammaTheta);
+	    analysisManager->InsGamLSP(gammaPhi);
 #endif; 
 	  }
       }
@@ -121,8 +136,30 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	 }
        }
      }
-    
-/*
+
+ if(aStep->GetTrack()->GetNextVolume()){
+ 
+  if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
+     
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
+      
+      { 
+	if ((aStep->GetTrack()->GetDynamicParticle()
+	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
+	  {gammaphi = aStep->GetTrack()->GetMomentumDirection().phi();
+	  gammatheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	  G4cout<<"il phi e' "<<gammaphi<<", il theta e' "<< gammatheta<<G4endl;
+	    gammaAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    
+#ifdef G4ANALYSIS_USE
+	    analysisManager->InsGamDetPre(gammaAtTheDetPre/keV);  
+#endif; 
+	  }
+      }
+  }
+ }
+
+  /*
      {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
        
        {if(0 != aStep->GetTrack()->GetParentID())

@@ -17,7 +17,9 @@
 #include "FluoTestSteppingAction.hh"
 #include "FluoTestSteppingVerbose.hh"
 
-
+#ifdef G4ANALYSIS_USE
+#include "FluoTestAnalysisManager.hh"
+#endif
 
 int main(int argc,char** argv) {
 
@@ -56,13 +58,27 @@ int main(int argc,char** argv) {
    G4VisManager* visManager = new FluoTestVisManager;
   visManager->Initialize();
 #endif
-
+  
+#ifdef G4ANALYSIS_USE
+  // Creation of the analysis manager
+  FluoTestAnalysisManager* analysisMgr = new FluoTestAnalysisManager(detector);
+#endif
+  
  // Set optional user action classes
-
+#ifdef G4ANALYSIS_USE
+  FluoTestEventAction* eventAction = 
+    new FluoTestEventAction(analysisMgr);
+  FluoTestRunAction* runAction =
+    new FluoTestRunAction(analysisMgr);
+  // FluoTestSteppingAction* stepAction = 
+  // new FluoTestSteppingAction(detector,analysisMgr);
+ FluoTestSteppingAction* stepAction = 
+  new FluoTestSteppingAction(analysisMgr);
+ #else 
  FluoTestEventAction* eventAction = new FluoTestEventAction();
   FluoTestRunAction* runAction = new FluoTestRunAction();
   FluoTestSteppingAction* stepAction = new FluoTestSteppingAction();
-
+#endif 
 
 // set user action classes
   runManager->SetUserAction(new FluoTestPrimaryGeneratorAction(detector));
@@ -96,12 +112,14 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-  
+  /*
 #ifdef G4VIS_USE
    delete visManager;
-# endif
-  
-
+  #endif
+  */
+#ifdef G4ANALYSIS_USE
+  delete analysisMgr;  
+ #endif
 delete runManager;
   return 0;
 }

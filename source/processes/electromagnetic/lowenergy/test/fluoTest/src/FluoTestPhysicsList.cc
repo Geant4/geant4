@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsList.cc,v 1.7 2001-10-12 08:10:46 guardi Exp $
+// $Id: FluoTestPhysicsList.cc,v 1.8 2001-10-12 14:25:15 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -240,6 +240,7 @@ void FluoTestPhysicsList::SetLowEnSecElecCut(G4double cut){
   //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
 }
+
 
 
 

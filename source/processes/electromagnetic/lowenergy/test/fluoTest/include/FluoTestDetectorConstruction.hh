@@ -24,13 +24,13 @@ class FluoTestDetectorConstruction : public G4VUserDetectorConstruction
    ~FluoTestDetectorConstruction();
 
   public:
-    
+  /*  
      void SetSampleMaterial (G4String);     
      void SetSampleThickness(G4double);     
-  /*
+
      void SetSiMaterial (G4String);     
      void SetSiThickness(G4double);
-     
+   
   // void SetHPGeMaterial (G4String);     
   // void SetHPGeThickness(G4double);
   void SetPixelMaterial (G4String);
@@ -198,7 +198,7 @@ private:
      G4double           Dia3SizeYZ;
      G4double           DiaInnerSize;
      G4double           Dia3InnerSize;
-     G4double           DistSi;
+ G4double           DistSi;
 public: 
      
      G4double GetSiThickness()       {return SiThickness;}; 
@@ -306,5 +306,9 @@ inline void FluoTestDetectorConstruction::ComputeApparateParameters()
 }
 
 #endif
+
+
+
+
 
 

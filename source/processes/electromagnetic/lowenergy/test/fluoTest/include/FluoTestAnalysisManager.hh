@@ -29,15 +29,16 @@ public:
  
   void Store(IHistogram* = 0, const G4String& = "");
   void Plot(IHistogram* = 0);
-  //void InsGamBornSample(double gBs);
-  //void InsEleBornSample(double eBs);
-  // void InsGamLSBackw(double gSb);
+  void InsGamBornSample(double gBs);
+  void InsEleBornSample(double eBs);
+   void InsGamLS(double gS);
+ void InsGamLSP(double gSP);
   void InsGamLeavSam(double gLs);
-  //void InsEleLeavSam(double eLs);
-  // void InsGamDetPre(double gDpr);
+  void InsEleLeavSam(double eLs);
+   void InsGamDetPre(double gDpr);
   // void InsGamDetPost(double gDps);
   //  void InsOtherPart(double oP);
-  //void InsDetETot(double dEt);
+  void InsDetETot(double dEt);
   void InsGamDet(double gD);
   
   void BeginOfRun();
@@ -53,13 +54,14 @@ private:
   IVectorFactory* fVectorFactory;
   IHistogramFactory* histoFactory;
 
-  //IHistogram1D*  histoGamDetPre;
+  IHistogram1D*  histoGamDetPre;
   // IHistogram1D* histoGamDetPost;
   IHistogram1D*  histoGamLeavSam;
-  //IHistogram1D*  histoEleLeavSam;
-  //IHistogram1D* histoGamLSBack;
-  //IHistogram1D*  histoGamBornSam;
-  //IHistogram1D*  histoEleBornSam;
+  IHistogram1D*  histoEleLeavSam;
+  IHistogram1D* histoGamLS;
+ IHistogram1D* histoGamLSP;
+  IHistogram1D*  histoGamBornSam;
+  IHistogram1D*  histoEleBornSam;
   //IHistogram1D*  histoOtherPartDet;
   //IHistogram1D*  histoDetETot;
   IHistogram1D* histoGamDet;

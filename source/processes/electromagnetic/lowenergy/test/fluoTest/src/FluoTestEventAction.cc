@@ -1,4 +1,3 @@
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "FluoTestEventAction.hh"
@@ -65,18 +64,14 @@ FluoTestEventAction::~FluoTestEventAction()
 
 void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  /* long a[2];
-  a[0] = 355790433;
-  a[1] = 694618692;
-  HepRandom::setTheSeeds(a);
-  */
+  
   G4int evtNb = evt->GetEventID(); // Returns the event ID
-     if (evtNb%printModulo == 0)
+  /*   if (evtNb%printModulo == 0)
    { 
   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
   HepRandom::showEngineStatus();
       }
- 
+  */
   if (HPGeCollID==-1)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -108,18 +103,17 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 	for (G4int i=0;i<n_hit;i++)
 	  {
 	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
-	    /*    
+	    /*
 #ifdef G4ANALYSIS_USE
 	    fAnalysisManager->InsGamDet((*HPGeHC)[i]->GetEdepTot()/keV);  
 #endif;
-	    */
-	    energyD = (*HPGeHC)[i]->RandomCut();
-	   
+	    */ 
+	    energyD    = (*HPGeHC)[i]->RandomCut();
+	    totEnergyDetect += energyD;
+	 
 #ifdef G4ANALYSIS_USE
 	    fAnalysisManager->InsGamDet(energyD/keV);  
 #endif
-
-	    totEnergyDetect += energyD;
 	  }
       }
     // print this information event by event (modulo n)  	
@@ -167,8 +161,6 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
 
 
 

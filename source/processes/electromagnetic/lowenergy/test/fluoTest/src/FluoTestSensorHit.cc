@@ -5,6 +5,7 @@
 #include "FluoTestDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 
+
 G4Allocator<FluoTestSensorHit> FluoTestSensorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -26,7 +27,7 @@ FluoTestSensorHit::FluoTestSensorHit(const FluoTestSensorHit& right)
    EdepTot = right.EdepTot ; 
   EdepDetect = right.EdepDetect;
   Efficiency = right.Efficiency;
-  F = right.F;
+   F = right.F;
   epsilon = right.epsilon;
   deltaE = right.deltaE;
 }
@@ -44,6 +45,9 @@ const FluoTestSensorHit& FluoTestSensorHit::operator=(const FluoTestSensorHit& r
   EdepTot = right.EdepTot ; 
   EdepDetect = right.EdepDetect;
   Efficiency = right.Efficiency;
+ F = right.F;
+  epsilon = right.epsilon;
+  deltaE = right.deltaE;
   return *this;
 }
 
@@ -64,24 +68,7 @@ void FluoTestSensorHit::Print()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-G4double FluoTestSensorHit::RandomCut()
-{
- Efficiency = 0.9;
-  G4double  Random = G4UniformRand(); 
 
-    if ( Random<Efficiency )
-      {
-	G4double sigma = sqrt(F*epsilon*EdepTot+pow(deltaE/2355,2));
-	RandEngine FluoTestEngine;
-	EdepDetect = RandGaussQ::shoot(&FluoTestEngine, EdepTot, sigma );
-  }
-    else EdepDetect = 0.;
-    return   EdepDetect;
-    
-};
-
-*/
 G4double FluoTestSensorHit::RandomCut()
 { 
 
@@ -108,6 +95,15 @@ G4double FluoTestSensorHit::RandomCut()
     return   EdepDetect;
     
 };
+
+
+
+
+
+
+
+
+
 
 
 

@@ -26,11 +26,11 @@ public:
 
   void Draw();
   void Print();
-  G4double GetEdepTot()      { return EdepTot;};
+     G4double GetEdepTot()      { return EdepTot;};
   G4double GetEdepDetect()   { return EdepDetect;};
-  // G4double RandomCut (G4double energy);
-  G4double RandomCut ();
-  
+  G4double RandomCut ();  
+
+
 private:
 
    G4double EdepTot;
@@ -39,6 +39,7 @@ private:
   G4double F;
   G4double deltaE;
   G4double epsilon;
+ 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -10,7 +10,7 @@
 /gps/type Beam
 /gps/centre -10 0 0
 /gps/particle gamma
-/gps/monoenergy 5 keV
+/gps/monoenergy 3.5 keV
 /gps/shape Circle
 /gps/sigmaposr  0.5 mm
 /gps/posrot1 0 0 1
@@ -19,4 +19,4 @@
 /gps/sigmaangr 0 deg
 /gps/angrot1 0 0 1
 /gps/angrot2 0 1 0
-/run/beamOn 5000
+/run/beamOn 1000000
