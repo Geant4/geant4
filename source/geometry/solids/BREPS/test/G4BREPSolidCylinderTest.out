@@ -1,0 +1,39 @@
+
+ ============   Cylinder test   ================
+
+Cylinder created ! 
+
+----------------------------
+
+x=1  y=1  z=100 is inside
+
+Distance to out is :1
+
+Dir   : x=1 y=0 z=0
+Distance to out is :98.995
+
+----------------------------
+
+x=1000  y=0  z=5000 is outside
+
+Distance to in is :0
+
+Dir   : x=0 y=1 z=0
+Distance to in is :9e+99
+----------------------------
+
+x=-50  y=-50  z=-5000 is outside
+
+Distance to in is :50
+
+Dir   : x=0 y=0 z=1
+Distance to in is :9e+99
+----------------------------
+
+x=0  y=0  z=200 is inside
+
+Distance to out is :0
+
+Dir   : x=1 y=1 z=-1
+Distance to out is :122.474
+
