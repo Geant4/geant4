@@ -38,19 +38,19 @@
 /run/beamOn 1
 /gun/energy    0.10 MeV
 /run/beamOn 1
-/target/setMaxStep 0.0001 cm
-/gun/energy    1.  MeV
-/run/beamOn 1
-/gun/energy    5.  MeV
-/run/beamOn 1
-/gun/energy    10.  MeV
-/run/beamOn 1
-/target/setMaxStep 0.001 cm
-/gun/energy    100.  MeV
-/run/beamOn 1
-/gun/energy    500.  MeV
-/run/beamOn 1
-/target/setMaxStep 0.01 cm
-/gun/energy    1000.  MeV
-/run/beamOn 1
+#/target/setMaxStep 0.0001 cm
+#/gun/energy    1.  MeV
+#/run/beamOn 1
+#/gun/energy    5.  MeV
+#/run/beamOn 1
+#/gun/energy    10.  MeV
+#/run/beamOn 1
+#/target/setMaxStep 0.001 cm
+#/gun/energy    100.  MeV
+#/run/beamOn 1
+#/gun/energy    500.  MeV
+#/run/beamOn 1
+#/target/setMaxStep 0.01 cm
+#/gun/energy    1000.  MeV
+#/run/beamOn 1
 

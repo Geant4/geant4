@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.23 2003-05-17 12:31:48 guatelli Exp $
+// $Id: test50.cc,v 1.24 2003-05-17 13:07:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,9 +43,7 @@
 #include "Tst50EventAction.hh"
 #include "Tst50SteppingAction.hh"
 #include "Tst50SteppingVerbose.hh"
-#ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
-#endif
 #ifdef G4VIS_USE
 #include "Tst50VisManager.hh"
 #endif
@@ -89,10 +87,10 @@ int main(int argc,char** argv) {
   Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,Tst50detector);
   runManager->SetUserAction(steppingaction);
 
-#ifdef G4ANALYSIS_USE 
+
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
   analysis->book();
-#endif    
+
 
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
@@ -121,10 +119,8 @@ int main(int argc,char** argv) {
       G4cout <<"macro --> "<< fileName << G4endl;
       UI->ApplyCommand(command+fileName);
     }
- 
-#ifdef G4ANALYSIS_USE
+
   analysis->finish();
-#endif
 
 #ifdef G4VIS_USE
   delete visManager;

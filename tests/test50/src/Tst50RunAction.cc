@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.16 2003-05-17 11:59:53 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.17 2003-05-17 13:07:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,9 +36,8 @@
 #include "Tst50RunMessenger.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50DetectorConstruction.hh"
-#ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
-#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 Tst50RunAction::Tst50RunAction()
 {
@@ -113,6 +112,7 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
       G4double trans_coeff= -(log(trans))/(thickness*density);
       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       analysis -> attenuation_coeffiecient(runID,energy/MeV,trans_coeff/(cm2/g),trans_error/(cm2/g));
+
     }
  
   if(flag)

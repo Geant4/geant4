@@ -30,11 +30,8 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.17 2003-05-17 11:59:43 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.18 2003-05-17 13:07:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-
-
-#ifdef  G4ANALYSIS_USE
 
 #include <stdlib.h>
 #include "g4std/fstream"
@@ -150,7 +147,7 @@ void Tst50AnalysisManager::finish()
   theTree->commit();
   theTree->close();
 }
-#endif
+
 
 
 

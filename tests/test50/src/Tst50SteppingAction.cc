@@ -21,14 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.31 2003-05-17 11:32:54 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.32 2003-05-17 13:07:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
 #include <math.h> // standard c math library
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
@@ -59,10 +57,8 @@ Tst50SteppingAction::~Tst50SteppingAction()
 
 void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
 {
-#ifdef G4ANALYSIS_USE
-Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-#endif
-  
+  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+
   G4int evno = eventaction->GetEventno() ;
   G4int run_ID= runaction-> GetRun_ID();
   G4bool flag=runaction-> Get_flag();
@@ -129,10 +125,10 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
             if(stepLength!=0) 
              {
               G4double TotalStoppingPower=(energyLost/stepLength);
-              G4double SP=TotalStoppingPower/(detector->GetDensity());
-              //#ifdef ANALYSIS_USE
-	      analysis->StoppingPower(run_ID,initial_energy/MeV,SP/(MeV*(cm2/g)));
-	      //#endif
+	      // G4double SP=TotalStoppingPower/(detector->GetDensity());
+
+            analysis->StoppingPower(run_ID,initial_energy/MeV,(TotalStoppingPower/(detector->GetDensity()))/(MeV*(cm2/g)));
+
                                    
               }
 	     }
@@ -146,10 +142,9 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
            G4double yend= Step->GetTrack()->GetPosition().y()/mm ;
            G4double  zend= Step->GetTrack()->GetPosition().z()/mm ;
            range=(sqrt(xend*xend+yend*yend+zend*zend)); 
-           G4double range2= range*(detector->GetDensity());
-          
-           analysis->CSDARange(run_ID,initial_energy/MeV,range2/(g/cm2));
-	  }
+	   // G4double range2= range*(detector->GetDensity());     
+           analysis->CSDARange(run_ID,initial_energy/MeV,(range*(detector->GetDensity()))/(g/cm2));
+         }
        }
      }
    }
