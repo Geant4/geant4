@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.32 2004-11-10 08:54:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.33 2004-11-17 11:18:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,8 +101,6 @@ public:
                          G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VEnergyLossProcess();
-
-  //  void Initialise();
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
@@ -411,7 +409,6 @@ private:
 
   G4bool   lossFluctuationFlag;
   G4bool   rndmStepFlag;
-  G4bool   hasRestProcess;
   G4bool   tablesAreBuilt;
   G4bool   integral;
   G4bool   meanFreePath;
