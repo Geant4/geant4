@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.5 2000-04-19 17:56:24 davidw Exp $
+// $Id: G4EllipticalTube.hh,v 1.6 2000-04-19 19:08:58 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -57,6 +57,9 @@ class G4EllipticalTube : public G4VSolid {
         virtual G4Polyhedron* CreatePolyhedron() const;
 
 	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+	
+	virtual G4VisExtent GetExtent() const;
+
 
 	//
 	// Parameter access

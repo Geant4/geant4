@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.cc,v 1.6 2000-04-19 17:56:42 davidw Exp $
+// $Id: G4EllipticalTube.cc,v 1.7 2000-04-19 19:09:07 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4VisExtent.hh"
 
 //
 // Constructor
@@ -637,6 +638,15 @@ G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
  	scene.AddThis (*this);
+}
+
+
+//
+// GetExtent
+//
+G4VisExtent G4EllipticalTube::GetExtent() const
+{
+	return G4VisExtent( -dx, dx, -dy, dy, -dz, dz );
 }
 
 
