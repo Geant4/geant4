@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.cc,v 1.7 2000-02-25 13:37:07 kurasige Exp $
+// $Id: ExN03PhysicsList.cc,v 1.8 2000-05-24 09:53:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,42 +154,104 @@ void ExN03PhysicsList::ConstructEM()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      //gamma      
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
-      pmanager->AddDiscreteProcess(new G4ComptonScattering());
+    // gamma
       pmanager->AddDiscreteProcess(new G4GammaConversion());
-      
+      pmanager->AddDiscreteProcess(new G4ComptonScattering());      
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+
     } else if (particleName == "e-") {
-      //electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);      
+    //electron
+      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeminusIonisation         = new G4eIonisation();
+      G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
+      //
+      // add processes
+      pmanager->AddProcess(theeminusMultipleScattering);
+      pmanager->AddProcess(theeminusIonisation);
+      pmanager->AddProcess(theeminusBremsstrahlung);
+      //      
+      // set ordering for AlongStepDoIt
+      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,1);
+      pmanager->SetProcessOrdering(theeminusIonisation,         idxAlongStep,2);
+      //
+      // set ordering for PostStepDoIt
+      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
+      pmanager->SetProcessOrdering(theeminusIonisation,         idxPostStep,2);
+      pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxPostStep,3);
 
     } else if (particleName == "e+") {
-      //positron      
-      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);      
+    //positron
+      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeplusIonisation         = new G4eIonisation();
+      G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
+      G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
+      //
+      // add processes
+      pmanager->AddProcess(theeplusMultipleScattering);
+      pmanager->AddProcess(theeplusIonisation);
+      pmanager->AddProcess(theeplusBremsstrahlung);
+      pmanager->AddProcess(theeplusAnnihilation);
+      //
+      // set ordering for AtRestDoIt
+      pmanager->SetProcessOrderingToFirst(theeplusAnnihilation, idxAtRest);
+      //
+      // set ordering for AlongStepDoIt
+      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
+      pmanager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
+      //
+      // set ordering for PostStepDoIt
+      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);
+      pmanager->SetProcessOrdering(theeplusIonisation,         idxPostStep,2);
+      pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxPostStep,3);
+      pmanager->SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-     //muon  
-     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-     pmanager->AddProcess(new G4MuIonisation(),      -1, 2,2);
-     pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);       
-     
-    } else if ((!particle->IsShortLived()) &&
+    //muon  
+      G4VProcess* aMultipleScattering = new G4MultipleScattering();
+      G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
+      G4VProcess* aPairProduction     = new G4MuPairProduction();
+      G4VProcess* anIonisation        = new G4MuIonisation();
+      //
+      // add processes
+      pmanager->AddProcess(anIonisation);
+      pmanager->AddProcess(aMultipleScattering);
+      pmanager->AddProcess(aBremsstrahlung);
+      pmanager->AddProcess(aPairProduction);
+      //
+      // set ordering for AlongStepDoIt
+      pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
+      pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
+      //
+      // set ordering for PostStepDoIt
+      pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
+      pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
+      pmanager->SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
+      pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
+
+     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
-      //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
+     // all others charged particles except geantino     
+     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* anIonisation        = new G4hIonisation();
+     //
+     // add processes
+     pmanager->AddProcess(anIonisation);
+     pmanager->AddProcess(aMultipleScattering);
+     //
+     // set ordering for AlongStepDoIt
+     pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
+     pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
+     //
+     // set ordering for PostStepDoIt
+     pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
+     pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
     }
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4Decay.hh"
 
@@ -247,39 +309,40 @@ void ExN03PhysicsList::SetCuts()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void      ExN03PhysicsList::SetCutForGamma(G4double cut)
+void ExN03PhysicsList::SetCutForGamma(G4double cut)
 {
   ResetCuts();
   cutForGamma = cut;
 }
 
-void      ExN03PhysicsList::SetCutForElectron(G4double cut)
+void ExN03PhysicsList::SetCutForElectron(G4double cut)
 {
   ResetCuts();
   cutForElectron = cut;
 }
 
-void      ExN03PhysicsList::SetCutForProton(G4double cut)
+void ExN03PhysicsList::SetCutForProton(G4double cut)
 {
   ResetCuts();
   cutForProton = cut;
 }
 
-G4double  ExN03PhysicsList::GetCutForGamma() const
+G4double ExN03PhysicsList::GetCutForGamma() const
 {
   return cutForGamma;
 }
 
-G4double  ExN03PhysicsList::GetCutForElectron() const
+G4double ExN03PhysicsList::GetCutForElectron() const
 {
   return cutForElectron;
 }
 
-G4double  ExN03PhysicsList::GetCutForProton() const
+G4double ExN03PhysicsList::GetCutForProton() const
 {
   return cutForGamma;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 
