@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.25 2005-03-04 16:23:00 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.26 2005-03-09 16:05:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4Orb.hh"
 #include "G4Trap.hh"
 #include "G4EllipticalTube.hh"
+#include "G4Polyhedra.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4UnionSolid.hh"
@@ -394,7 +395,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   //-------------------------------------------- Sphere
 
   G4Sphere* PD_vol_crystal
-      = new G4Sphere("Test",
+      = new G4Sphere("Test_Sphere",
                      100.*cm,           // inner radius
                      200.*cm,           // outer radius
                      0.,                // start phi
@@ -405,7 +406,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
 
   G4LogicalVolume* PD_log_crystal
-    = new G4LogicalVolume(PD_vol_crystal,Ar,"Test");
+    = new G4LogicalVolume(PD_vol_crystal,Ar,"Test_Sphere");
 
   G4VisAttributes * PD_att_crystal
     = new G4VisAttributes(G4Colour(1.,0.,1.));
@@ -418,13 +419,39 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 		    "PD_physical", PD_log_crystal,
 		    experimentalHall_phys,false,0);
 
+//-------------------------------------------- Polyhedra(!)
+
+  const G4int numRZ = 10;
+  G4double polyhedra_r[numRZ] = {1,5,3,4,7,9,3,4,3,2};
+  G4double polyhedra_z[numRZ] = {0,1,2,3,4,5,4,3,2,1};
+  for (int i = 0; i < numRZ; ++i) {
+    polyhedra_r[i] *= 10*cm;
+    polyhedra_z[i] *= 10.*cm;
+  }
+
+  G4Polyhedra* polyhedra_solid
+      = new G4Polyhedra("Polyhedra_Test",
+			0.,270.*deg,6,numRZ,polyhedra_r,polyhedra_z);
+  G4cout << polyhedra_solid->StreamInfo(G4cout) << G4endl;
+
+  G4LogicalVolume* polyhedra_log
+    = new G4LogicalVolume(polyhedra_solid,Ar,"Polyhedra_Test");
+
+  G4VisAttributes * polyhedra_atts
+    = new G4VisAttributes(G4Colour(0.,1.,1.));
+  polyhedra_log->SetVisAttributes(polyhedra_atts);
+
+  new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,100.*cm,0)),
+		    "Polyhedra_Test", polyhedra_log,
+		    experimentalHall_phys,false,0);
+
   //-------------------------------------------- Orb
 
   G4Orb* orb 
     = new G4Orb("Test orb", 100.*cm);
 
   G4LogicalVolume* orb_log
-    = new G4LogicalVolume(orb, Ar,"Test orb");
+    = new G4LogicalVolume(orb, Ar,"Test_orb");
 
   G4VisAttributes * orb_att
     = new G4VisAttributes(G4Colour(1.,0.,1.));
