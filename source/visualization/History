@@ -1,4 +1,4 @@
-$Id: History,v 1.214 2003-01-24 21:18:39 perl Exp $
+$Id: History,v 1.215 2003-02-17 07:00:49 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+17th February 2003 Satoshi Tanaka
+- A Small bug fixing of VRML2 driver
+ (Explicit cast from G4String to char*).
 
 24th January 2003  Joseph Perl
 - Fixes to HepRep - see History file.
