@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-05-18 12:50:51 johna Exp $
+$Id: History,v 1.7 1999-05-18 12:51:43 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-interfaces-01-00-01  18th April 1999  John Allison
+interfaces-01-00-02  18th April 1999  John Allison
 - Tagged.
 
 head 11th Mai 1999  Guy Barrand
