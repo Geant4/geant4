@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25DetectorMessenger.cc,v 1.2 2002-12-08 22:31:55 stesting Exp $
+// $Id: Tst25DetectorMessenger.cc,v 1.3 2004-03-19 13:57:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,10 +44,10 @@ Tst25DetectorMessenger::Tst25DetectorMessenger(Tst25DetectorConstruction * myDC)
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
-  selMatCmd->SetGuidance("  Choice : H, Si, Cu, U (default)");
+  selMatCmd->SetGuidance("  Choice : H, Si, Cu, Pb, U (default)");
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("U");
-  selMatCmd->SetCandidates("H Si Cu U");
+  selMatCmd->SetCandidates("H Si Cu Pb U");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="U");

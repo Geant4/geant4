@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25DetectorConstruction.hh,v 1.2 2004-03-16 16:20:21 gcosmo Exp $
+// $Id: Tst25DetectorConstruction.hh,v 1.3 2004-03-19 13:57:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@ class Tst25DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* theH;
      G4Material* theSi;
      G4Material* theCu;
+     G4Material* thePb;
      G4Material* theU;
      G4String materialChoice;
      Tst25DetectorMessenger * detectorMessenger;

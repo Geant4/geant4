@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25DetectorConstruction.cc,v 1.2 2004-03-16 16:20:21 gcosmo Exp $
+// $Id: Tst25DetectorConstruction.cc,v 1.3 2004-03-19 13:57:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,10 +41,10 @@
 #include "G4ios.hh"
 
 Tst25DetectorConstruction::Tst25DetectorConstruction()
-:simpleBoxLog(0),selectedMaterial(0),theH(0),theSi(0),theCu(0),theU(0)
+:simpleBoxLog(0),selectedMaterial(0),theH(0),theSi(0),theCu(0),thePb(0),theU(0)
 {
   detectorMessenger = new Tst25DetectorMessenger(this);
-  materialChoice = "Pb";
+  materialChoice = "U";
 }
 
 Tst25DetectorConstruction::~Tst25DetectorConstruction()
@@ -90,14 +90,18 @@ void Tst25DetectorConstruction::SelectMaterialPointer()
     theCu = new G4Material(name="Copper", z=29., a, density);
   }
 
+  if(!thePb)
+  {
+    a = 207.2*g/mole;
+    density = 11.35*g/cm3;
+    thePb = new G4Material(name="Lead", z=82., a, density);
+  }
+
   if(!theU)
   {
     a = 238.0289*g/mole;
     density = 18.95*g/cm3;
     theU = new G4Material(name="Uranium", z=92., a, density);
-//    a = 207.2*g/mole;
-//    density = 11.35*g/cm3;
-//    theU = new G4Material(name="Uranium", z=82., a, density);
   }
 
   if(materialChoice=="H")
@@ -106,6 +110,8 @@ void Tst25DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = theSi; }
   else if(materialChoice=="Cu")
   { selectedMaterial = theCu; }
+  else if(materialChoice=="Pb")
+  { selectedMaterial = thePb; }
   else
   { selectedMaterial = theU; }
 
