@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 1.5 1999-12-15 14:49:56 gunter Exp $
+// $Id: G4FPlane.hh,v 1.6 2000-01-21 13:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Broglia
@@ -104,7 +104,7 @@ public:
       return NormalX->GetDir();
   }
   
-  virtual char *Name() const { return "G4FPlane"; }
+  virtual char *Name() const { return (char*)("G4FPlane"); }
 
   G4double ClosestDistanceToPoint(const G4Point3D& Pt);
 

@@ -5,27 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.3 1999-12-15 14:49:56 gunter Exp $
+// $Id: G4BSplineSurface.hh,v 1.4 2000-01-21 13:47:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINESURFACE_H
 #define __BSPLINESURFACE_H
 
-
 #include "G4Point3D.hh"
 #include "G4PointRat.hh"
 #include "G4Surface.hh"
 #include "G4ProjectedSurface.hh"
-
-
-
-//#ifdef WIN32
-//#  include "G4ios.hh"
-//#else
-//#  include <stream.h>
-//#endif
-
-
 
 class G4BSplineSurface : public G4Surface
 {
@@ -110,14 +99,3 @@ private:
 }; 
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

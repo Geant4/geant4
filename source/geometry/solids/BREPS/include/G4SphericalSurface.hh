@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.hh,v 1.2 1999-12-15 14:49:57 gunter Exp $
+// $Id: G4SphericalSurface.hh,v 1.3 2000-01-21 13:47:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __G4SpheShell_H
@@ -83,7 +83,7 @@ public:
     if(v.z() < min.z()) min.setZ(v.z());
   }
 
-  virtual char *NameOf() const { return "G4SphericalSurface"; }
+  virtual char *NameOf() const { return (char*)("G4SphericalSurface"); }
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   int operator==( const G4SphericalSurface& s )

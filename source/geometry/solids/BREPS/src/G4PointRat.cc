@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4PointRat.cc,v 1.3 2000-01-21 13:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,11 +34,3 @@ void G4PointRat::operator=(const G4Point3D& a)
 {   pt3d = a;
     s=1;
 }
-
-void G4PointRat::CopyRationalValue(const RealNode& RNode)
-{
-  s = RNode.value;
-}
-
-
-

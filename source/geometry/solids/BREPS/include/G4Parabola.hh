@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.hh,v 1.3 1999-12-15 14:49:57 gunter Exp $
+// $Id: G4Parabola.hh,v 1.4 2000-01-21 13:47:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,10 +30,6 @@ public:
   virtual G4double  GetPMax();
   virtual G4Point3D GetPoint(G4double param);
   virtual G4double  GetPPoint(const G4Point3D& p);
-
-  // STEP
-  G4Parabola(STEPentity& Ent);
-  G4Parabola(STEPentity& Ent, InstMgr&);      
 
   //G4Parabola(G4Point3d, G4Point3d, G4double );
   //G4Point3d EvaluateByParameterValue(const G4double u);
@@ -62,4 +58,3 @@ private:
 #include "G4Parabola.icc"
 
 #endif
-

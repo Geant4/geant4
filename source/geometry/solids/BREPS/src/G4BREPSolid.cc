@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.10 1999-12-15 14:49:58 gunter Exp $
+// $Id: G4BREPSolid.cc,v 1.11 2000-01-21 13:47:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4BREPSolid.hh"
@@ -19,13 +19,10 @@
 #include "G4BSplineSurface.hh"
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
-#include "instmgr.h"
 
 G4Ray G4BREPSolid::Track;
 G4double G4BREPSolid::ShortestDistance= kInfinity;
 int G4BREPSolid::NumberOfSolids=0;
-InstMgr G4BREPSolid::InstanceList;
-
 
 G4BREPSolid::G4BREPSolid(const G4String name) : G4VSolid(name)
 {
@@ -1047,27 +1044,6 @@ G4NURBS* G4BREPSolid::CreateNURBS () const
 }
 
 
-int G4BREPSolid::CreateSTEPData()
-{
-  // create the solid entity
-  //STEPentity* ent = new STEPentity();
-  //stateEnum *sEnu = new stateEnum("newSE");
-  //MgrNode *mnode = new MgrNode(ent, sEnu);
-
-  // create the attributelist & attributes for this solid
-  //    STEPattributeList *aList = new STEPattributeList();
-  //AttrDescriptor *aDesc = new AttrDescriptor();
-  //  STEPattribute *name_attr = new STEPattribute(aDesc, name);
-  
-  // create the mgrnode neede by the instance List
-
-  // append node to instance List
-  
-  // call entoity creation routines for child entities.
-  return 0; // to shut up compilers
-}
-
-
 void G4BREPSolid::CalcBBoxes()
 {
   // First initialization
@@ -1488,20 +1464,3 @@ G4Point3D G4BREPSolid::Scope()
   
   return scope;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

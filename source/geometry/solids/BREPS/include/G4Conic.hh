@@ -9,7 +9,6 @@ class G4Conic: public G4Curve
 public:
  
   G4Conic();
-  G4Conic(STEPentity& Ent);    
   ~G4Conic();
 
   // Get/Set to geometric data

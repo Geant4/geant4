@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ControlPoints.hh,v 1.2 1999-12-15 14:49:56 gunter Exp $
+// $Id: G4ControlPoints.hh,v 1.3 2000-01-21 13:47:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,8 +28,6 @@ public:
 
   // Constructors
   G4ControlPoints();
-
-  G4ControlPoints(const STEPaggregate& Aggr, const int Rational);
 
   G4ControlPoints( int, int);
 
@@ -93,13 +91,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

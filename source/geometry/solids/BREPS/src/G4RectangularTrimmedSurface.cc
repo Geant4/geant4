@@ -5,10 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4RectangularTrimmedSurface.cc,v 1.3 2000-01-21 13:47:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "SdaiCONFIG_CONTROL_DESIGN.h"
+
 #include "G4RectangularTrimmedSurface.hh"
 #include "G4FPlane.hh"
 #include "G4BSplineSurface.hh"
@@ -45,5 +45,3 @@ int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
   
   return 0;
 }
-
-

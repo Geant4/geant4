@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ControlPoints.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4ControlPoints.cc,v 1.3 2000-01-21 13:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -125,17 +125,3 @@ G4double G4ControlPoints::ClosestDistanceToPoint( const G4Point3D& Pt)
   
   return PointDist;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
