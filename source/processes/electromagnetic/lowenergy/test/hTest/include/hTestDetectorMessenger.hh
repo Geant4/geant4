@@ -69,6 +69,8 @@ public: // Without description
     G4UIcmdWithAnInteger*      verbCmd;
     G4UIcmdWithAnInteger*      intCmd;
     G4UIcmdWithAnInteger*      nhistCmd;
+    G4UIcmdWithAnInteger*      nDebugSCmd;
+    G4UIcmdWithAnInteger*      nDebugECmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -134,7 +134,17 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   nhistCmd = new G4UIcmdWithAnInteger("/hTest/HistoNumber",this);
   nhistCmd->SetGuidance("Set number of histograms to fill"); 
   nhistCmd->SetParameterName("HistoNumber",false);
-  nhistCmd->AvailableForStates(PreInit);
+  nhistCmd->AvailableForStates(PreInit,Idle);
+
+  nDebugSCmd = new G4UIcmdWithAnInteger("/hTest/nFirstEventToDebug",this);
+  nDebugSCmd->SetGuidance("Set number of the first event to debug"); 
+  nDebugSCmd->SetParameterName("nFirstEventToDebug",false);
+  nDebugSCmd->AvailableForStates(PreInit,Idle);
+
+  nDebugECmd = new G4UIcmdWithAnInteger("/hTest/nLastEventToDebug",this);
+  nDebugECmd->SetGuidance("Set number of the last event to debug"); 
+  nDebugECmd->SetParameterName("nLastEventToDebug",false);
+  nDebugECmd->AvailableForStates(PreInit,Idle);
   
 }
 
@@ -157,6 +167,8 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete verbCmd;
   delete intCmd;
   delete nhistCmd;
+  delete nDebugSCmd;
+  delete nDebugECmd;
   delete hTestdetDir;
   delete hTestdetDir1;
   delete hTestdetDir2;
@@ -214,6 +226,12 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == nhistCmd )
    { hDet->SetHistoNumber(nhistCmd->GetNewIntValue(newValue));}
+
+  if( command == nDebugSCmd )
+   { hDet->SetFirstEventToDebug(nDebugSCmd->GetNewIntValue(newValue));}
+
+  if( command == nDebugECmd )
+   { hDet->SetLastEventToDebug(nDebugECmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

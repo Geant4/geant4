@@ -8,12 +8,13 @@
 /tracking/verbose          0
 /stepping/verbose          0
 /event/verbose             0
-/hTest/verbose             1
+/hTest/verbose             0
 #
 /hTest/physics/cutGamma    1.0 cm
 /hTest/physics/cutElectron 1.0 mm
 /hTest/physics/MaxStep     1.0 mm
 /hTest/physics/EMList      LowEnergy
+#/hTest/physics/EMList      Standard
 /hTest/physics/HadronList  LowEnergy
 /hTest/AbsorberMaterial    Water
 /hTest/AbsorberThick       1.0 mm
@@ -22,7 +23,9 @@
 /hTest/WorldMaterial       Vacuum
 /hTest/numberAbsToSave     0
 /hTest/HistoName           water.paw 
-/hTest/NumberOfEvents      100
+/hTest/NumberOfEvents      1000
+/hTest/nFirstEventToDebug -1
+/hTest/nLastEventToDebug  -1
 /hTest/gun/sigmaE          0.9 MeV
 #
 /gun/particle              proton

@@ -66,8 +66,8 @@ void hTestPhysicsList::InitializeMe()
   cutForElectron  = 1.0*mm;
   cutForProton    = 1.0*mm;
   maxChargedStep  = DBL_MAX; 
-  lowEnergyLimit  = 250.0*eV;
-  highEnergyLimit  = 10.0*GeV;
+  lowEnergyLimit  = 10.0*eV;
+  highEnergyLimit  = 100.0*GeV;
 
   theMessenger = new hTestPhysicsListMessenger(this);
 
@@ -94,16 +94,16 @@ void hTestPhysicsList::ConstructParticle()
   // This ensures that objects of these particle types will be
   // created in the program. 
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructBarions();
-  ConstructMesons();
-  ConstructIons();
+  ConstructMyBosons();
+  ConstructMyLeptons();
+  ConstructMyBarions();
+  ConstructMyMesons();
+  ConstructMyIons();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::ConstructBosons()
+void hTestPhysicsList::ConstructMyBosons()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
@@ -114,7 +114,7 @@ void hTestPhysicsList::ConstructBosons()
 }
  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::ConstructLeptons()
+void hTestPhysicsList::ConstructMyLeptons()
 {
   // leptons
   G4Electron::ElectronDefinition();
@@ -130,7 +130,7 @@ void hTestPhysicsList::ConstructLeptons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::ConstructMesons()
+void hTestPhysicsList::ConstructMyMesons()
 {
  //  mesons
   G4PionPlus::PionPlusDefinition();
@@ -148,7 +148,7 @@ void hTestPhysicsList::ConstructMesons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::ConstructBarions()
+void hTestPhysicsList::ConstructMyBarions()
 {
 //  barions
   G4Proton::ProtonDefinition();
@@ -159,12 +159,11 @@ void hTestPhysicsList::ConstructBarions()
   G4SigmaZero::SigmaZeroDefinition();
   G4SigmaPlus::SigmaPlusDefinition();
   G4SigmaMinus::SigmaMinusDefinition();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::ConstructIons()
+void hTestPhysicsList::ConstructMyIons()
 {
 //  Ions
   G4Deuteron::DeuteronDefinition();

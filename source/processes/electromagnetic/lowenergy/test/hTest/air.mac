@@ -13,7 +13,8 @@
 /hTest/physics/cutGamma    1.0 cm
 /hTest/physics/cutElectron 0.1 mm
 /hTest/physics/MaxStep     0.1 mm
-/hTest/physics/EMList      LowEnergy
+#/hTest/physics/EMList      LowEnergy
+/hTest/physics/EMList      Standard
 /hTest/physics/HadronList  LowEnergy
 /hTest/AbsorberMaterial    Air
 /hTest/WorldMaterial       Vacuum

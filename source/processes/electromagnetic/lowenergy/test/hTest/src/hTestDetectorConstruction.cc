@@ -60,7 +60,9 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   nEvents(1),
   detIsConstructed(false),
   nAbsSaved(0),
-  nHisto(1)
+  nHisto(1),
+  nFirstEvtToDebug(-1),
+  nLastEvtToDebug(-1)
 {
   // Default parameter values of the calorimeter
   // corresponds to water test

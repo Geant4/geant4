@@ -31,6 +31,8 @@
 
 #include "G4MultipleScattering.hh"
 
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -69,33 +71,39 @@ void hTestLowEPhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+
+    if(0 < verbose) G4cout << "LowE EM processes for " << particleName << G4endl; 
      
     if (particleName == "gamma") {
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);    
+      if(0 < verbose) G4cout << "LowE gamma" << G4endl; 
+      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
+      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
+      pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
+      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());    
       
     } else if (particleName == "e-") {
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4LowEnergyIonisation,  -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1,3);   
+      if(0 < verbose) G4cout << "LowE e-" << G4endl; 
+      pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
+      pmanager->AddProcess(new G4LowEnergyIonisation(),  -1, 2,2);
+      pmanager->AddProcess(new G4LowEnergyBremsstrahlung(), -1,-1,3);   
       pmanager->AddProcess(theStepCut, -1,-1,4);
 
     } else if (particleName == "e+") {
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4LowEnergyIonisation,  -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1,3);   
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+      if(0 < verbose) G4cout << "LowE e+" << G4endl; 
+      pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation(),   0,-1,4);
       pmanager->AddProcess(theStepCut, -1,-1,5);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
-      pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
+      if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
+      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation(),      -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
+      pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);       	       
+      pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
       pmanager->AddProcess(theStepCut, -1,-1,5);
 
     } else if (
@@ -105,14 +113,12 @@ void hTestLowEPhysicsList::ConstructProcess()
                || particleName == "pi-"  
                || particleName == "kaon+"  
                || particleName == "kaon-"  
+               || particleName == "sigma+"  
+               || particleName == "sigma-"  
               )
     {
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-
-      if(0 < verbose) {
-        G4cout << "Hadronic EM processes for " << particleName << G4endl; 
-      }
-
+      if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
 
       if(nuclStop) hIon->SetNuclearStoppingOn();
@@ -142,14 +148,12 @@ void hTestLowEPhysicsList::ConstructProcess()
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
+               || particleName == "He3"  
+               || particleName == "GenericIon"  
               )
     {
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-
-      if(0 < verbose) {
-        G4cout << "Ionic EM processes for " << particleName << G4endl; 
-      }
-
+      if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
 
       if(nuclStop) iIon->SetNuclearStoppingOn();
@@ -168,6 +172,7 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(iIon,-1,2,2);
       pmanager->AddProcess(theStepCut, -1,-1,3);
     }
+    if(2 < verbose) pmanager->DumpInfo();
   }
 }
 

@@ -56,11 +56,11 @@ private:
     void SetCuts();
 
     // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
-    void ConstructIons();
+    void ConstructMyBosons();
+    void ConstructMyLeptons();
+    void ConstructMyMesons();
+    void ConstructMyBarions();
+    void ConstructMyIons();
 
   // these methods Construct physics processes and register them
     void ConstructDecay();

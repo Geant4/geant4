@@ -55,16 +55,34 @@ hTestEventAction::~hTestEventAction()
 
 void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 {  
-  if(verbose > 1) G4cout << "hTestEventAction: BeginOfEventAction" << G4endl;
-  verbose = theRun->GetVerbose();
+  // New event
   nEvt++;
-  if(verbose > 0) {
-    G4cout << "hTestEventAction: Event #" 
-           << evt->GetEventID() << " started; nEvt = " 
-           << nEvt << G4endl;
+  verbose = theRun->GetVerbose();
+  if(verbose > 1) G4cout << "hTestEventAction: BeginOfEventAction" << G4endl;
+
+  // Switch on verbose mode
+  if(theDet->GetFirstEventToDebug() == nEvt) {
+    verbose = 2;
+    theDet->SetVerbose(2);
+    theRun->SetVerbose(2);
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 2");
+  }
+    
+  // Switch off verbose mode
+  if(theDet->GetLastEventToDebug() == nEvt-1) {
+    verbose = 0;
+    theDet->SetVerbose(0);
+    theRun->SetVerbose(0);
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 0");
   }
 
-  //theRun->InitializeTuples();
+  // Initialize user actions
+  if(verbose > 0) {
+    G4cout << "hTestEventAction: Event #" 
+           << nEvt << " started" << G4endl;
+  }
 
   numAbs = theDet->GetNumberOfAbsorbers();
   energy.resize(numAbs);
@@ -137,7 +155,7 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
     if (trjc) n_trajectories = trjc->entries();  
 
     for(i=0; i<n_trajectories; i++) {
-      G4Trajectory* t = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+      G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
       if (drawFlag == "all") t->DrawTrajectory(50);
       else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
                              t->DrawTrajectory(50); 
@@ -147,7 +165,7 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
 
   if(verbose > 0) {
     G4cout << "hTestEventAction: Event #" 
-           << evt->GetEventID() << " ended" << G4endl;
+           << nEvt << " ended" << G4endl;
   }
 }
 

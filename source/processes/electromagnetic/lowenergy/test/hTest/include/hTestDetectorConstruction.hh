@@ -74,6 +74,10 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
     inline G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
     inline void SetHistoNumber(G4int val) {nHisto = val;};
     inline G4int GetHistoNumber() const {return nHisto;};
+    inline void SetFirstEventToDebug(G4int val) {nFirstEvtToDebug = val;};
+    inline G4int GetFirstEventToDebug() const {return nFirstEvtToDebug;};
+    inline void SetLastEventToDebug(G4int val) {nLastEvtToDebug = val;};
+    inline G4int GetLastEventToDebug() const {return nLastEvtToDebug;};
 
     inline const G4VPhysicalVolume* GetPhysWorld() const {return physWorld;};
     inline const G4LogicalVolume*   GetAbsorber()  const {return logicAbs;};
@@ -130,6 +134,8 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      G4bool detIsConstructed;
      G4int nAbsSaved;
      G4int nHisto;
+     G4int nFirstEvtToDebug;
+     G4int nLastEvtToDebug;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
