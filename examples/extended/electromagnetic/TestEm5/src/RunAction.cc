@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2004-02-19 18:18:54 maire Exp $
+// $Id: RunAction.cc,v 1.3 2004-03-08 11:25:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,7 +192,7 @@ G4double RunAction::ComputeMscHighland()
   G4ParticleGun* particle = primary->GetParticleGun(); 
   G4double T = particle->GetParticleEnergy();
   G4double M = particle->GetParticleDefinition()->GetPDGMass();
-  G4double z = particle->GetParticleDefinition()->GetPDGCharge()/eplus;
+  G4double z = abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);
   
   G4double bpc = T*(T+2*M)/(T+M);
   G4double teta0 = 13.6*MeV*z*sqrt(t)*(1.+0.038*log(t))/bpc;
