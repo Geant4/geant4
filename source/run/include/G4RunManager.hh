@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.34 2003-06-16 17:12:49 gunter Exp $
+// $Id: G4RunManager.hh,v 1.35 2003-07-31 20:17:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,13 +81,12 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
-class G4ExceptionHandler;
 
+#include "G4RunManagerKernel.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
-////////#include <signal.h>
 
 class G4RunManager
 {
@@ -95,11 +94,6 @@ class G4RunManager
     static G4RunManager* GetRunManager();
     //  Static method which returns the singleton pointer of G4RunManager or
     // its derived class.
-  public:
-////////    static G4int RegisterInteruption(int interuptionSignal = SIGQUIT);
-    //  Static method to define the interuption key
-////////    static void ReceiveInteruption(int sig);
-    //  Static method to accept interuption signal
 
   private:
     static G4RunManager* fRunManager;
@@ -214,12 +208,13 @@ class G4RunManager
     void StackPreviousEvent(G4Event* anEvent);
 
   protected:
+    G4RunManagerKernel * kernel;
     G4EventManager * eventManager;
+
     G4VUserDetectorConstruction * userDetector;
     G4VUserPhysicsList * physicsList;
     G4UserRunAction * userRunAction;
     G4VUserPrimaryGeneratorAction * userPrimaryGeneratorAction;
-
     G4UserEventAction * userEventAction;
     G4UserStackingAction * userStackingAction;
     G4UserTrackingAction * userTrackingAction;
@@ -227,7 +222,6 @@ class G4RunManager
 
   private:
     G4RunMessenger* runMessenger;
-    G4ExceptionHandler* defaultExceptionHandler;
 
   protected:
     G4bool geometryInitialized;
@@ -251,10 +245,8 @@ class G4RunManager
 
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
-    G4String versionString;
 
     G4VPhysicalVolume* currentWorld;
-    G4Region* defaultRegion;
 
   public:
     virtual void rndmSaveThisRun();
@@ -317,7 +309,7 @@ class G4RunManager
       // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
 
     inline G4String GetVersionString() const
-    { return versionString; }
+    { return kernel->GetVersionString(); }
 
   public:
     inline void SetRandomNumberStore(G4bool flag)
@@ -345,7 +337,8 @@ class G4RunManager
 
   public:
     inline void SetVerboseLevel(G4int vl)
-    { verboseLevel = vl; }
+    { verboseLevel = vl; 
+      kernel->SetVerboseLevel(vl); }
     inline G4int GetVerboseLevel() const
     { return verboseLevel; }
 
@@ -355,6 +348,7 @@ class G4RunManager
       {
         geometryToBeOptimized = vl;
         geometryNeedsToBeClosed = true;
+        kernel->SetGeometryToBeOptimized(vl);
       }
     }
     inline G4bool GetGeometryToBeOptimized()
