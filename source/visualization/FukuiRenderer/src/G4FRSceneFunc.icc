@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.5 1999-11-01 02:40:47 stanaka Exp $
+// $Id: G4FRSceneFunc.icc,v 1.6 1999-11-04 02:12:17 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,6 +65,9 @@ void G4FRSCENE::AddPrimitive (const G4NURBS& nurb)
 	G4cerr << "***** AddPrimitive( G4NURBS )\n";
 #endif
 
+		//----- Initialize DAWN IF NECESSARY
+	FRBeginModeling();
+	
 	///////////////////////////////////////////////
 	// DAWN does not support NUBS visualizaition //
 	///////////////////////////////////////////////
