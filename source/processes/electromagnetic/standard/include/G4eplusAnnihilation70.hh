@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.hh,v 1.3 2004-11-10 08:53:19 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.hh,v 1.4 2005-03-14 18:38:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,8 @@ public:
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
+                             const G4DynamicParticle*, 
+                                   G4double&);
 
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
@@ -130,10 +131,11 @@ inline G4double G4eplusAnnihilation70::AtRestGetPhysicalInteractionLength(
 inline std::vector<G4DynamicParticle*>* G4eplusAnnihilation70::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp)
+                                            const G4DynamicParticle* dp,
+                                                  G4double&)
 {
   fParticleChange.ProposeTrackStatus(fStopAndKill);
-  return model->SampleSecondaries(couple, dp, 0.0, 0.0);
+  return model->SampleSecondaries(couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

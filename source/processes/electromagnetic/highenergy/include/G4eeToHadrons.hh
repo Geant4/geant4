@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.1 2004-11-19 18:44:04 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.2 2005-03-14 18:38:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,11 +67,6 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
-
   G4double CrossSection(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
@@ -93,6 +88,12 @@ protected:
   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*);
 
   virtual void ResetNumberOfInteractionLengthLeft();
+
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
@@ -153,11 +154,15 @@ inline G4double G4eeToHadrons::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 inline std::vector<G4DynamicParticle*>* G4eeToHadrons::SecondariesPostStep(
                                                   G4VEmModel*,
                                             const G4MaterialCutsCouple*,
-                                            const G4DynamicParticle* dp)
+                                            const G4DynamicParticle* dp,
+                                                  G4double&)
 {
   std::vector<G4DynamicParticle*>* newp = 0;
   G4double kinEnergy = dp->GetKineticEnergy();
-  if (kinEnergy > thKineticEnergy) newp = GenerateSecondaries(dp);
+  if (kinEnergy > thKineticEnergy) {
+    newp = GenerateSecondaries(dp);
+    fParticleChange.ProposeTrackStatus(fStopAndKill);
+  }
   return newp;
 }
 
