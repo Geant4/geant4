@@ -38,4 +38,7 @@
 /tracking/storeTrajectory 1
 /event/drawTracks all
 #
+# Flush visualization
+/vis/viewer/update
+#
 /run/verbose 2
