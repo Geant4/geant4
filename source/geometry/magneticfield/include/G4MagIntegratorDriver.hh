@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.2 1999-07-23 14:11:14 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.3 1999-07-27 20:33:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Provides Driver that talks to Integrator Stepper, and insures that 
@@ -123,6 +123,9 @@ class G4MagInt_Driver
 			  G4double  errMaxNorm,    // normalised error
 			  G4double  hstepCurrent); // current step size
 
+      G4int    GetMaxNoSteps();
+      void     SetMaxNoSteps( G4int val); 
+
 protected:
       //  Issue warnings for undesirable situations
       void WarnSmallStepSize( G4double hnext, G4double hstep, 
@@ -140,6 +143,8 @@ private:
       const G4int nvar;
 
       G4MagIntegratorStepper *pIntStepper;
+      G4int   fMaxNoSteps;
+      static const G4int  fMaxStepBase;  
 
       //  Parameters used to grow and shrink trial stepsize
       G4double safety;
