@@ -40,6 +40,11 @@ geometry/navigation                              geomnav-V06-00-02
   when in G4VERBOSE mode and verbosity level selected.
   Fixed output formatting when entering/exiting verbose blocks.
 
+geometry/solids/CSG                              geom-csg-V06-00-01
+-------------------
+- G4Torus: fixed bug in Inside(p), fixing warnings of 'point p is outside'
+  observed when running in debug-mode.
+
 geometry/solids/Boolean                          geom-bool-V06-00-00
 -----------------------
 - G4UnionSolid, G4SubtractionSolid: fix in debug printout for SurfaceNomal().
