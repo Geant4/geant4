@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-08 16:35:48 gunter Exp $
+$Id: README,v 1.2 2000-05-26 13:21:20 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,7 @@ $Id: README,v 1.1 1999-01-08 16:35:48 gunter Exp $
   Examples ; for G4UIXm :
 
    UNIX> cd $G4INSTALL/tests/tools/bin
+   UNIX> edit the specific.csh file for your environment.
     csh> source setup.csh
    ( sh> . ./setup.sh)
     csh> setenv XENVIRONMENT $G4INSTALL/tests/test201/test201.xrm
@@ -30,6 +31,7 @@ $Id: README,v 1.1 1999-01-08 16:35:48 gunter Exp $
 
  and for G4UIWo :
    UNIX> cd $G4INSTALL/tests/tools/bin
+   UNIX> edit the specific.csh file for your environment.
     csh> source setup.csh
     csh> setenv XENVIRONMENT $G4INSTALL/tests/test201/test201.xrm
    ( sh> XENVIRONMENT=$G4INSTALL/tests/test201/test201.xrm;export XENVIRONMENT)
