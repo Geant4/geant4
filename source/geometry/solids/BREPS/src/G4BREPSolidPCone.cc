@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.26 2002-03-11 19:09:37 radoone Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.27 2002-10-16 14:40:19 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -361,11 +361,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     G4Point3D ArcStart1a = G4Point3D( Origin + (RMIN[0]*PlaneDir) );
     G4Point3D ArcStart1b = G4Point3D( Origin + (RMAX[0]*PlaneDir) );
  
-    tmp = new G4CircularCurve;
-    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
-    tmp->SetBounds(ArcStart1a, ArcStart1a);
-    tmp->SetSameSense(0);
-    cv.push_back(tmp);
+    if( RMIN[0] > 0.0 ) {
+      tmp = new G4CircularCurve;
+      tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
+      tmp->SetBounds(ArcStart1a, ArcStart1a);
+      tmp->SetSameSense(0);
+      cv.push_back(tmp);
+    }
   
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMAX[0]);
@@ -389,12 +391,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   
     cv.clear();
 
-    tmp = new G4CircularCurve;
-    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
-	      RMIN[sections]);
-    tmp->SetBounds(ArcStart2a, ArcStart2a);
-    tmp->SetSameSense(0);
-    cv.push_back(tmp);
+    if( RMIN[sections] > 0.0 ) {
+      tmp = new G4CircularCurve;
+      tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), RMIN[sections]);
+      tmp->SetBounds(ArcStart2a, ArcStart2a);
+      tmp->SetSameSense(0);
+      cv.push_back(tmp);
+    }
     
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
