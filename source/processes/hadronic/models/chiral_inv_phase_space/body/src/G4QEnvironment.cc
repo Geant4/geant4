@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.40 2001-11-26 14:11:46 hpw Exp $
+// $Id: G4QEnvironment.cc,v 1.41 2001-11-27 10:12:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1899,9 +1899,57 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   theQHadrons.push_back(H2);       // (delete equivalent)
                   break;
 			    }
-                else totM=100000.;              // => "Continue reversion" case
+                else totM=250000.;              // => "Continue reversion" case
 			  }
-              else totM=200000.;                // => "Continue reversion" case
+              else if(totS==-2)                 // => "Try to decay in 2(K+/aK0) and finish" case
+			  {
+                G4double m1=mK;         
+                G4int  PDG1=321;
+                G4double m2=mK0;         
+                G4int  PDG2=311;
+                G4QNucleus  newNp0(totQC-KpQC-K0QC);
+                G4int  PDG3=newNp0.GetPDG();
+                G4double m3=newNp0.GetMZNS();     // M-K^0-K^+
+                G4QNucleus  newN00(totQC-K0QC-K0QC);
+                G4double m4=newN00.GetMZNS();     // M-2*K^0
+                G4QNucleus  newNpp(totQC-KpQC-KpQC);
+                G4double m5=newNpp.GetMZNS();     // M-2*K^+
+                if (m4+mK0+mK0<m3+mK+mK0 && m4+mK0+mK0<=m5+mK+mK) //=> "2K0+ResA is the best" case
+	            {
+                  m1  =mK0;
+                  PDG1=311;
+                  m3  =m4;
+                  PDG3=newN00.GetPDG();
+	            }
+                else if(m5+mK+mK<m3+mK+mK0 && m5+mK+mK<=m4+mK0+mK0) //=> "2Kp+ResA is the best" case
+	            {
+                  m2  =mK;
+                  PDG1=321;
+                  m3  =m5;
+                  PDG3=newNpp.GetPDG();
+	            }
+                if(totMass>m1+m2+m3)               // => "can decay" case
+                {
+                  G4LorentzVector k14M(0.,0.,0.,m1);
+                  G4LorentzVector k24M(0.,0.,0.,m2);
+                  G4LorentzVector ra4M(0.,0.,0.,m3);
+                  if(!G4QHadron(tot4M).DecayIn3(k14M,k24M,ra4M))
+			      {
+                    G4cerr<<"***G4QEnv::HadQEnv: tM="<<tot4M.m()<<"-> aK="<<PDG1<<"(M="<<m1
+                          <<") + K2="<<PDG2<<"(M="<<m2<<") + ResA="<<PDG3<<"(M="<<m3<<")"<<G4endl;
+				    G4Exception("G4QEnv::HadrQEnv: 2K+ResA DecayIn3 did not succeed");
+			      }
+                  G4QHadron* H1 = new G4QHadron(PDG1,k14M);
+                  theQHadrons.push_back(H1);       // (delete equivalent)
+                  G4QHadron* H2 = new G4QHadron(PDG2,k24M);
+                  theQHadrons.push_back(H2);       // (delete equivalent)
+                  G4QHadron* H3 = new G4QHadron(PDG3,ra4M);
+                  theQHadrons.push_back(H3);       // (delete equivalent)
+                  break;
+			    }
+                else totM=270000.;              // => "Continue reversion" case
+			  }
+              else totM=300000.;                // => "Continue reversion" case
 			}
             else
 			{
@@ -1944,7 +1992,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   theQHadrons.push_back(H2);        // (delete equivalent)
                   break;
 				}
-                else totM=300000.;
+                else totM=350000.;
 			  }
 			  else if(totPDG) totM=G4QPDGCode(totPDG).GetMass();
               else totM=400000.;
@@ -1970,7 +2018,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  if(!nOfOUT)
 		  {
 		    G4cerr<<"***G4QEnv::HadrQE:M="<<totMass<<"<gsM="<<totM<<",dM="<<dM
-                  <<", tPFG="<<totPDG<<", t4M="<<tot4M<<G4endl;
+                  <<", tPDG="<<totPDG<<", t4M="<<tot4M<<G4endl;
             //G4Exception("G4QEnvironment::HadronizeQEnvironment: Exhosted but can't decay QEnv");
             G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for Residual Nucleus
             if(totS<0&&totBN>0)DecayAntiStrange(evH);
