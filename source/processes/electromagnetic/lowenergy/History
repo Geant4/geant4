@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2000-10-23 16:10:17 vnivanch Exp $
+$Id: History,v 1.44 2000-10-31 18:32:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.10.2000 - MGP, tag emlowen-V02-00-12
+             Including modifications by V. Ivanchenko since emlowen-V02-00-11
+             listed below
 
 23.10.2000 - 
              Clean up and update comments
