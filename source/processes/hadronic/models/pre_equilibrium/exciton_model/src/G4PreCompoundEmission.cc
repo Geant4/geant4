@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.8 2003-11-26 00:26:23 lara Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
 

@@ -102,6 +102,7 @@ G4BinaryCascade::~G4BinaryCascade()
   delete thePropagator;
   delete theCollisionMgr;
   std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
+  delete theExcitationHandler;
 }
 
 //----------------------------------------------------------------------------
