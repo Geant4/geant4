@@ -21,47 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.cc,v 1.3 2002-05-24 08:17:19 dressel Exp $
+// $Id: G4ParallelScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4MassScoreManager.cc
+// G4ParallelScoreSampler.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4MassScoreManager.hh"
-#include "G4MScoreProcess.hh"
+#include "G4ParallelScoreSampler.hh"
+#include "G4PScoreProcess.hh"
 #include "G4ProcessPlacer.hh"
+#include "G4ParallelWorld.hh"
+#include "G4ParallelTransport.hh"
 
-
-G4MassScoreManager::G4MassScoreManager(G4VPScorer &ascorer,
-                                       const G4String &particlename)
- : fScorer(ascorer),
-   fParticleName(particlename),
-   fMScoreProcess(0)
+G4ParallelScoreSampler::
+G4ParallelScoreSampler(G4VPhysicalVolume &worldvolume,
+		       const G4String &particlename,
+		       G4VPScorer &scorer) : 
+  fParticleName(particlename),
+  fParallelWorld(*(new G4ParallelWorld(worldvolume))),
+  fPScorer(scorer),
+  fPScorerProcess(0)
 {}
 
-G4MassScoreManager::~G4MassScoreManager()
+G4ParallelScoreSampler::~G4ParallelScoreSampler()
 {
-  if (fMScoreProcess) {
+  if (fPScorerProcess) {
     G4ProcessPlacer placer(fParticleName);
-    placer.RemoveProcess(fMScoreProcess);
-    delete fMScoreProcess;
+    placer.RemoveProcess(fPScorerProcess);
+    delete  fPScorerProcess;
   }
+  delete &fParallelWorld;
 }
 
-G4MScoreProcess *G4MassScoreManager::CreateMassScoreProcess()
+
+G4PScoreProcess *G4ParallelScoreSampler::CreateParallelScoreProcess()
 {
-  if (!fMScoreProcess) {
-    fMScoreProcess = new G4MScoreProcess(fScorer);
+  if (!fPScorerProcess) {
+    fPScorerProcess = 
+      new G4PScoreProcess(fParallelWorld.GetParallelStepper(), 
+			  fPScorer);
   }
-  return fMScoreProcess;
+  return fPScorerProcess;
 }
 
-void G4MassScoreManager::Initialize()
+G4ParallelTransport *G4ParallelScoreSampler::CreateParallelTransport()
+{
+  if (!fParallelTransport) {
+    fParallelTransport = new G4ParallelTransport(fParallelWorld.
+						 GetGeoDriver(), 
+						 fParallelWorld.
+						 GetParallelStepper());
+  }
+  return fParallelTransport;
+}
+
+void G4ParallelScoreSampler::Initialize()
 {
   G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsSecondDoIt(CreateMassScoreProcess());
+  placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
+  placer.AddProcessAsSecondDoIt(CreateParallelTransport());
 }

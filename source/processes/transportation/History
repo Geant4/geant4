@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2002-05-30 15:57:26 dressel Exp $
+$Id: History,v 1.36 2002-05-31 10:17:41 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May   31, 2002  M.Dressel transport-V04-00-06
+--------------------------------------------------------
+- renaming of the Manager classes to Sampler classes 
+- substitution of G4ParallelManager inside the Sampler classes
+
 May   30, 2002  M.Dressel 
 --------------------------------------------------------
 - chamged G4VImportanceScoreConstructor to G4VSampler

@@ -21,58 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.hh,v 1.5 2002-05-30 15:57:26 dressel Exp $
+// $Id: G4MassScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MassScoreManager
+// GEANT 4 class source file
 //
-// Class description:
+// G4MassScoreSampler.cc
 //
-// A user should use this class to set up scoring in the "mass" geometry.
-// The user must create an object of this kind and initialise it.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4MassScoreManager_hh
-#define G4MassScoreManager_hh G4MassScoreManager_hh
 
-#include "globals.hh"
-#include "G4VSampler.hh"
+#include "G4MassScoreSampler.hh"
+#include "G4MScoreProcess.hh"
+#include "G4ProcessPlacer.hh"
 
-class G4VProcess;
-class G4VPScorer;
-class G4MScoreProcess;
 
-class G4MassScoreManager : public G4VSampler
+G4MassScoreSampler::G4MassScoreSampler(G4VPScorer &ascorer,
+                                       const G4String &particlename)
+ : fScorer(ascorer),
+   fParticleName(particlename),
+   fMScoreProcess(0)
+{}
+
+G4MassScoreSampler::~G4MassScoreSampler()
 {
+  if (fMScoreProcess) {
+    G4ProcessPlacer placer(fParticleName);
+    placer.RemoveProcess(fMScoreProcess);
+    delete fMScoreProcess;
+  }
+}
 
-public:  // with description
+G4MScoreProcess *G4MassScoreSampler::CreateMassScoreProcess()
+{
+  if (!fMScoreProcess) {
+    fMScoreProcess = new G4MScoreProcess(fScorer);
+  }
+  return fMScoreProcess;
+}
 
-  G4MassScoreManager(G4VPScorer &ascorer, const G4String &particlename);
-    // a G4MassScoreManager for a particle type
-
-  ~G4MassScoreManager();
-    // delete G4MScoreProcess if constructed
-
-  G4MScoreProcess *CreateMassScoreProcess();
-    // create the mass score process 
-    // don't use it if you use Initialize()
-
-  void Initialize();
-    // the G4MassScoreManager has to be initialised after
-    // the initialisation of the G4RunManager !
-
-private:
-
-  G4MassScoreManager(const G4MassScoreManager &);
-  G4MassScoreManager &operator=(const G4MassScoreManager &);
-
-private:
-
-  G4VPScorer &fScorer;
-  G4String fParticleName;
-  G4MScoreProcess *fMScoreProcess;
-};
-
-#endif
+void G4MassScoreSampler::Initialize()
+{
+  G4ProcessPlacer placer(fParticleName);
+  placer.AddProcessAsSecondDoIt(CreateMassScoreProcess());
+}

@@ -21,72 +21,69 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.hh,v 1.7 2002-05-30 15:57:26 dressel Exp $
+// $Id: G4MassImportanceSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ParallelImportanceScoreManager
+// Class G4MassImportanceSampler
 //
 // Class description:
 //
-// A user should use this class to set up importance sampling and scoring
-// in a "parallel" geometry.
+// A user should use this class to set up importance sampling
+// in the "mass" geometry.
 // The user must create an object of this kind and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ParallelImportanceScoreManager_hh
-#define G4ParallelImportanceScoreManager_hh G4ParallelImportanceScoreManager_hh
+#ifndef G4MassImportanceSampler_hh
+#define G4MassImportanceSampler_hh G4MassImportanceSampler_hh
 
 #include "globals.hh"
 #include "G4VSampler.hh"
 
 class G4VIStore;
-class G4VPScorer;
+class G4MassImportanceProcess;
 class G4VImportanceAlgorithm;
-class G4PScoreProcess;
-class G4ParallelManager;
-class G4ParallelImportanceManager;
+class G4VProcess;
 
-class G4ParallelImportanceScoreManager : 
-  public G4VSampler
+class G4MassImportanceSampler : public G4VSampler
 {
 
 public:  // with description
 
- 
-  G4ParallelImportanceScoreManager(G4VIStore &iw, 
-				   G4VPScorer &ascorer,
-				   const G4String &particlename,
-				   const G4VImportanceAlgorithm *ialg = 0);
-    // if *ialg = 0: use G4ImportanceAlgorithm,
-    // use a customised  importance algorithm derived from
+  G4MassImportanceSampler(G4VIStore &aIstore,
+			  const G4String &particlename,
+			  const G4VImportanceAlgorithm *algorithm = 0);
+    // if *algorithm = 0: use the G4ImportanceAlgorithm 
+    // else: use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm
+
+  ~G4MassImportanceSampler();
+    // delete G4MassImportanceProcess and G4VImportanceAlgorithm
+    // if constructed by this object
+
+  G4MassImportanceProcess *CreateMassImportanceProcess();
+    // create the mass importance process 
+    // don't use it if you use Initialize()
+  
+  void Initialize();
+    // the G4MassImportanceSampler has to be initialised after
+    // the initialisation of the G4RunManager !
   
 
-  ~G4ParallelImportanceScoreManager();
-    // delete constructed objects
+private:
 
-  G4PScoreProcess *CreateParallelScoreProcess();
-    // create the parallel score process 
-    // don't use it if you use Initialize()
-
-  void Initialize();
-    // the G4MassImportanceScoreManager has to be initialised after
-    // the initialisation of the G4RunManager !
+  G4MassImportanceSampler(const G4MassImportanceSampler &);
+  G4MassImportanceSampler &operator=(const G4MassImportanceSampler &);
 
 private:
 
-  G4ParallelImportanceScoreManager(const G4ParallelImportanceScoreManager &);
-  G4ParallelImportanceScoreManager &
-  operator=(const G4ParallelImportanceScoreManager &);
-
-private:
-
-  G4ParallelManager &fParallelManager;
-  G4ParallelImportanceManager &fParallelImportanceManager;
-  G4VPScorer &fPScorer;
-  G4PScoreProcess *fPScoreProcess;
+  G4VIStore &fIStore;
+  G4String fParticleName;
+  G4MassImportanceProcess *fMassImportanceProcess;
+  G4bool fCreatedAlgorithm;
+  const G4VImportanceAlgorithm *fAlgorithm;
 };
 
 #endif

@@ -21,56 +21,66 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceManager.cc,v 1.6 2002-05-30 12:55:42 dressel Exp $
+// $Id: G4ParallelImportanceScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4MassImportanceManager.cc
+// G4ParallelImportanceScoreSampler.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4MassImportanceManager.hh"
-#include "G4MassImportanceProcess.hh"
+#include "G4ParallelWorld.hh"
+#include "G4ParallelImportanceScoreSampler.hh"
+#include "G4ParallelImportanceSampler.hh"
+#include "G4ParallelWorld.hh"
 #include "G4ProcessPlacer.hh"
-#include "G4ImportanceAlgorithm.hh"
+#include "G4VIStore.hh"
+#include "G4VPScorer.hh"
+#include "G4PScoreProcess.hh"
 
-
-G4MassImportanceManager::
-G4MassImportanceManager(G4VIStore &aIstore,
-			const G4String &particlename,
-			const G4VImportanceAlgorithm *algorithm)
- : fIStore(aIstore),
-   fParticleName(particlename),
-   fMassImportanceProcess(0),
-   fCreatedAlgorithm( ( ! algorithm) ),
-   fAlgorithm(( (fCreatedAlgorithm) ? 
-		new G4ImportanceAlgorithm : algorithm))
+G4ParallelImportanceScoreSampler::
+G4ParallelImportanceScoreSampler(G4VIStore &is, 
+				 G4VPScorer &ascorer,
+				 const G4String &particlename,
+				 const G4VImportanceAlgorithm *ialg) : 
+  fParticleName(particlename),
+  fParallelWorld(*(new G4ParallelWorld(is.GetWorldVolume()))),
+  fParallelImportanceSampler(*(new 
+			       G4ParallelImportanceSampler(is,
+							   fParticleName,
+							   fParallelWorld,
+							   ialg))),
+  fPScorer(ascorer),
+  fPScoreProcess(0)
 {}
 
-G4MassImportanceManager::~G4MassImportanceManager()
+G4ParallelImportanceScoreSampler::~G4ParallelImportanceScoreSampler()
 {
-  if (fMassImportanceProcess) {
+  if (fPScoreProcess) {
     G4ProcessPlacer placer(fParticleName);
-    placer.RemoveProcess(fMassImportanceProcess);
-    delete fMassImportanceProcess;
+    placer.RemoveProcess(fPScoreProcess);
+    delete  fPScoreProcess;
   }
-  if (fCreatedAlgorithm) delete fAlgorithm;
+  delete &fParallelImportanceSampler;
+  delete &fParallelWorld;
 }
 
-
-G4MassImportanceProcess *G4MassImportanceManager::CreateMassImportanceProcess()
+G4PScoreProcess *
+G4ParallelImportanceScoreSampler::CreateParallelScoreProcess()
 {
-  if (!fMassImportanceProcess) {
-    fMassImportanceProcess =
-      new G4MassImportanceProcess(*fAlgorithm, fIStore);
+  if (!fPScoreProcess) {
+    fPScoreProcess = 
+      new G4PScoreProcess(fParallelWorld.
+			  GetParallelStepper(), fPScorer);
   }
-  return fMassImportanceProcess;
+  return fPScoreProcess;
 }
 
-void G4MassImportanceManager::Initialize()
+void G4ParallelImportanceScoreSampler::Initialize()
 {
   G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsSecondDoIt(CreateMassImportanceProcess());
+  placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
+  fParallelImportanceSampler.Initialize();
 }

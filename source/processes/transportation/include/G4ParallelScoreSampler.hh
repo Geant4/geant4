@@ -21,79 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreManager.hh,v 1.4 2002-05-30 15:57:26 dressel Exp $
+// $Id: G4ParallelScoreSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4PImportanceWWindowScoreManager
+// Class G4ParallelScoreSampler
 //
 // Class description:
 //
-// This class manages the importance sampling and importance weight window
-// sampling together with scoring in a parallel geometry.
+// A user should use this class to set up scoring in a "parallel" 
+// geometry.
 // The user must create an object of this kind and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4PImportanceWWindowScoreManager_hh
-#define G4PImportanceWWindowScoreManager_hh G4PImportanceWWindowScoreManager_hh
+#ifndef G4ParallelScoreSampler_hh
+#define G4ParallelScoreSampler_hh G4ParallelScoreSampler_hh
 
 #include "globals.hh"
 #include "G4VSampler.hh"
 
-class G4VIStore;
+class G4ParallelWorld;
+class G4VPhysicalVolume;
+class G4ParallelTransport;
 class G4VPScorer;
-class G4VImportanceAlgorithm;
 class G4PScoreProcess;
-class G4ParallelManager;
-class G4ParallelImportanceManager;
-class G4VProcess;
-class G4VWeightWindowAlgorithm;
 
-class G4PImportanceWWindowScoreManager : 
-  public G4VSampler
+class G4ParallelScoreSampler : public G4VSampler
 {
 
 public:  // with description
 
-  G4PImportanceWWindowScoreManager(G4VIStore &iw, 
-				   G4VPScorer &ascorer,
-				   const G4String &particlename,
-				   G4VWeightWindowAlgorithm &wwalg,
-				   const G4VImportanceAlgorithm *ialg = 0);
-    // if *ialg = 0: use G4ImportanceAlgorithm
-    // use a customised  importance algorithm derived from
-    // G4VImportanceAlgorithm
-  
+  G4ParallelScoreSampler(G4VPhysicalVolume &worldvolume,
+			 const G4String &particlename,
+			 G4VPScorer &scorer);
+    // create and initalise members 
 
-  ~G4PImportanceWWindowScoreManager();
-    // delete constructed objects
+  ~G4ParallelScoreSampler();
+    // delete constructed members
 
   G4PScoreProcess *CreateParallelScoreProcess();
     // create the parallel score process 
     // don't use it if you use Initialize()
-
-  G4VProcess *CreateWeightWindowProcess();
-
+  G4ParallelTransport *CreateParallelTransport();
+    // get the G4ParallelTransport
+ 
   void Initialize();
-    // the G4MassImportanceScoreManager has to be initialised after
+    // the G4ParallelScoreSampler has to be initialised after
     // the initialisation of the G4RunManager !
 
 private:
 
-  G4PImportanceWWindowScoreManager(const G4PImportanceWWindowScoreManager &);
-  G4PImportanceWWindowScoreManager &
-  operator=(const G4PImportanceWWindowScoreManager &);
+  G4ParallelScoreSampler(const G4ParallelScoreSampler &);
+  G4ParallelScoreSampler &operator=(const G4ParallelScoreSampler&);
 
 private:
-
-  G4ParallelManager &fParallelManager;
-  G4ParallelImportanceManager &fParallelImportanceManager;
+  G4String fParticleName;
+  G4ParallelWorld &fParallelWorld;
   G4VPScorer &fPScorer;
-  G4VIStore &fIstore;
-  G4PScoreProcess *fPScoreProcess;
-  G4VProcess *fPWeightWindowProcess;
-  G4VWeightWindowAlgorithm &fWWAlgorithm;
+  G4PScoreProcess *fPScorerProcess;
+  G4ParallelTransport *fParallelTransport;
 };
 
 #endif

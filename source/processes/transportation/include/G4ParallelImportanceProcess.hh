@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.4 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ParallelImportanceProcess.hh,v 1.5 2002-05-31 10:16:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
 //
 // Class description:
 //
-// Usd internally by importance sampling in a "parallel" geometry.
+// Used internally by importance sampling in a "parallel" geometry.
 // This is a G4ParallelTransport that also does importance
 // sampling in the "parallel" geometry.
 

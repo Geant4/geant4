@@ -21,59 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelManager.cc,v 1.2 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4MassImportanceSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4ParallelManager.cc
+// G4MassImportanceSampler.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4ParallelManager.hh"
-#include "G4ParallelStepper.hh"
-#include "G4ParallelWorld.hh"
-#include "G4ParallelNavigator.hh"
-#include "G4ParallelTransport.hh"
+#include "G4MassImportanceSampler.hh"
+#include "G4MassImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4ImportanceAlgorithm.hh"
 
-G4ParallelManager::G4ParallelManager(G4VPhysicalVolume &worldvolume,
-				     const G4String &particlename)
- : fPworld(new G4ParallelWorld(worldvolume)),
+
+G4MassImportanceSampler::
+G4MassImportanceSampler(G4VIStore &aIstore,
+			const G4String &particlename,
+			const G4VImportanceAlgorithm *algorithm)
+ : fIStore(aIstore),
    fParticleName(particlename),
-   fParallelTransport(0)
+   fMassImportanceProcess(0),
+   fCreatedAlgorithm( ( ! algorithm) ),
+   fAlgorithm(( (fCreatedAlgorithm) ? 
+		new G4ImportanceAlgorithm : algorithm))
 {}
 
-  
-G4ParallelManager::~G4ParallelManager()
+G4MassImportanceSampler::~G4MassImportanceSampler()
 {
-  delete fPworld;
-  if (fParallelTransport) delete fParallelTransport;
-}
-
-G4ParallelWorld &G4ParallelManager::GetParallelWorld()
-{
-  return *fPworld;
-}
-
-G4String G4ParallelManager::GetParticleName()
-{
-  return fParticleName;
-}
-
-G4ParallelTransport *G4ParallelManager::CreateParallelTransport()
-{
-  if (!fParallelTransport) {
-    fParallelTransport = new G4ParallelTransport(fPworld->GetGeoDriver(), 
-				       fPworld->GetParallelStepper());
+  if (fMassImportanceProcess) {
+    G4ProcessPlacer placer(fParticleName);
+    placer.RemoveProcess(fMassImportanceProcess);
+    delete fMassImportanceProcess;
   }
-  return fParallelTransport;
+  if (fCreatedAlgorithm) delete fAlgorithm;
 }
 
-void G4ParallelManager::Initialize()
+
+G4MassImportanceProcess *G4MassImportanceSampler::CreateMassImportanceProcess()
+{
+  if (!fMassImportanceProcess) {
+    fMassImportanceProcess =
+      new G4MassImportanceProcess(*fAlgorithm, fIStore);
+  }
+  return fMassImportanceProcess;
+}
+
+void G4MassImportanceSampler::Initialize()
 {
   G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsSecondDoIt(CreateParallelTransport());
+  placer.AddProcessAsSecondDoIt(CreateMassImportanceProcess());
 }

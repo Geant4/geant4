@@ -21,64 +21,91 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
+// $Id: G4PImportanceWWindowScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4ParallelImportanceScoreManager.cc
+// G4PImportanceWWindowScoreSampler.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4ParallelManager.hh"
-#include "G4ParallelImportanceScoreManager.hh"
-#include "G4ParallelImportanceManager.hh"
+#include "G4ParallelWorld.hh"
+#include "G4PImportanceWWindowScoreSampler.hh"
+#include "G4ParallelImportanceSampler.hh"
 #include "G4ParallelWorld.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4VIStore.hh"
 #include "G4VPScorer.hh"
 #include "G4PScoreProcess.hh"
+#include "G4ParallelWeightWindowProcess.hh"
+#include "G4WeightWindowAlgorithm.hh"
 
-G4ParallelImportanceScoreManager::
-G4ParallelImportanceScoreManager(G4VIStore &is, 
+G4PImportanceWWindowScoreSampler::
+G4PImportanceWWindowScoreSampler(G4VIStore &is, 
 				 G4VPScorer &ascorer,
 				 const G4String &particlename,
-				 const G4VImportanceAlgorithm *ialg)
- : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
-   fParallelImportanceManager(*(new 
-			       G4ParallelImportanceManager(is,
-							   fParallelManager,
+				 G4VWeightWindowAlgorithm &wwalg,
+				 const G4VImportanceAlgorithm *ialg) : 
+  fParticleName(particlename),
+  fParallelWorld(*(new G4ParallelWorld(is.GetWorldVolume()))),
+  fParallelImportanceSampler(*(new 
+			       G4ParallelImportanceSampler(is,
+							   fParticleName,
+							   fParallelWorld,
 							   ialg))),
    fPScorer(ascorer),
-   fPScoreProcess(0)
+   fIstore(is),
+   fPScoreProcess(0),
+   fPWeightWindowProcess(0),
+   fWWAlgorithm(wwalg)
 {}
 
-G4ParallelImportanceScoreManager::~G4ParallelImportanceScoreManager()
+G4PImportanceWWindowScoreSampler::~G4PImportanceWWindowScoreSampler()
 {
   if (fPScoreProcess) {
-    G4ProcessPlacer placer(fParallelManager.GetParticleName());
+    G4ProcessPlacer placer(fParticleName);
     placer.RemoveProcess(fPScoreProcess);
     delete  fPScoreProcess;
   }
-  delete &fParallelImportanceManager;
-  delete &fParallelManager;
+  if (fPWeightWindowProcess) {
+    G4ProcessPlacer placer(fParticleName);
+    placer.RemoveProcess(fPWeightWindowProcess);
+    delete fPWeightWindowProcess;
+  }
+  delete &fParallelImportanceSampler;
+  delete &fParallelWorld;
 }
 
 G4PScoreProcess *
-G4ParallelImportanceScoreManager::CreateParallelScoreProcess()
+G4PImportanceWWindowScoreSampler::CreateParallelScoreProcess()
 {
   if (!fPScoreProcess) {
     fPScoreProcess = 
-      new G4PScoreProcess(fParallelManager.GetParallelWorld().
-			  GetParallelStepper(), fPScorer);
+      new G4PScoreProcess(fParallelWorld.GetParallelStepper(), 
+			  fPScorer);
   }
   return fPScoreProcess;
 }
 
-void G4ParallelImportanceScoreManager::Initialize()
+G4VProcess *
+G4PImportanceWWindowScoreSampler::CreateWeightWindowProcess()
 {
-  G4ProcessPlacer placer(fParallelManager.GetParticleName());
+  if (!fPWeightWindowProcess) {
+    fPWeightWindowProcess = 
+      new G4ParallelWeightWindowProcess(fIstore,
+					fParallelWorld.
+					GetParallelStepper(),
+					fWWAlgorithm);
+  }
+  return fPWeightWindowProcess;
+}
+
+void G4PImportanceWWindowScoreSampler::Initialize()
+{
+  G4ProcessPlacer placer(fParticleName);
   placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
-  fParallelImportanceManager.Initialize();
+  fParallelImportanceSampler.Initialize();
+  placer.AddProcessAsSecondDoIt(CreateWeightWindowProcess());
 }

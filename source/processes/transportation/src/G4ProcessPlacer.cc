@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.5 2002-05-24 08:17:20 dressel Exp $
+// $Id: G4ProcessPlacer.cc,v 1.6 2002-05-31 10:16:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -138,7 +138,7 @@ G4ProcessManager &G4ProcessPlacer::GetProcessManager()
     }
   }
   // ---------------------------------------------------------
-  if (!processmanager) G4Exception(" G4ProcessPlacer::GetProcessManager: no ProcessManager");
+  if (!processmanager) G4Exception(" G4ProcessPlacer::GetProcessManager: no ProcessSampler");
   return *processmanager;
 }
 

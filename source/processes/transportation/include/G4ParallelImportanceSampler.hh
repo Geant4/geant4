@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.hh,v 1.9 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ParallelImportanceSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ParallelImportanceManager
+// Class G4ParallelImportanceSampler
 //
 // Class description:
 //
@@ -36,40 +36,40 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ParallelImportanceManager_hh
-#define G4ParallelImportanceManager_hh G4ParallelImportanceManager_hh 
+#ifndef G4ParallelImportanceSampler_hh
+#define G4ParallelImportanceSampler_hh G4ParallelImportanceSampler_hh 
 
 #include "globals.hh"
 #include "G4VSampler.hh"
 
-class G4ParallelManager;
+class G4ParallelWorld;
 class G4VIStore;
 class G4VImportanceAlgorithm;
 class G4VImportanceSplitExaminer;
 class G4ParallelImportanceProcess;
 
-class G4ParallelImportanceManager : public G4VSampler
+class G4ParallelImportanceSampler : public G4VSampler
 {
 
 public:  // with description
 
-  G4ParallelImportanceManager(G4VIStore &is, 
+  G4ParallelImportanceSampler(G4VIStore &is, 
 			      const G4String &particlename,
 			      const G4VImportanceAlgorithm *ialg = 0);
     // if *ialg = 0: use the G4ImportanceAlgorithm 
     // use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm  
-    // create G4ParallelManager andG4ImportanceSplitExaminer
+    // create G4ParallelWorld and G4ImportanceSplitExaminer
 
 public: // used internally by importance sampling 
 
-  G4ParallelImportanceManager(G4VIStore &is, 
-			      G4ParallelManager &pmanager,
+  G4ParallelImportanceSampler(G4VIStore &is, 
+			      const G4String &particlename,
+			      G4ParallelWorld &pworld,
 			      const G4VImportanceAlgorithm *ialg = 0);
-    // create G4ParallelManager and G4ImportanceSplitExaminer
   
-  ~G4ParallelImportanceManager();
-    // delete G4ParallelManager and G4ImportanceSplitExaminer
+  ~G4ParallelImportanceSampler();
+    // delete G4ParallelWorld and G4ImportanceSplitExaminer
     // and G4ImportanceAgorithm and G4ParallelImportanceProcess
     // if created
 
@@ -80,18 +80,19 @@ public:  // with description
     // don't use it if you use Initialize()
 
    void Initialize();
-    // the G4ParallelImportanceManager has to be initialised after
+    // the G4ParallelImportanceSampler has to be initialised after
     // the initialisation of the G4RunManager !
   
 private:
 
-  G4ParallelImportanceManager(const G4ParallelImportanceManager &);
-  G4ParallelImportanceManager &operator=(const G4ParallelImportanceManager &);
+  G4ParallelImportanceSampler(const G4ParallelImportanceSampler &);
+  G4ParallelImportanceSampler &operator=(const G4ParallelImportanceSampler &);
 
 private:
 
-  G4ParallelManager &fParallelManager;
-  G4bool fCreatedPM;
+  G4String fParticleName;
+  G4ParallelWorld &fParallelWorld;
+  G4bool fCreatedPW;
 
   G4bool fDeleteAlg;
   const G4VImportanceAlgorithm *fIalgorithm;

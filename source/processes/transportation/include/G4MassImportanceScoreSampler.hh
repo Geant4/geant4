@@ -21,62 +21,65 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelManager.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4MassImportanceScoreSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ParallelManager
+// Class G4MassImportanceScoreSampler
 //
 // Class description:
 //
-// Used internally by importance sampling and scoring in a "parallel"
-// geometry.
-// It relates G4ParallelTransport, G4ParallelWorld to one "parallel"
-// geometry and one particle type.
+// A user should use this class to set up importance sampling and scoring
+// in the "mass" geometry.
+// The user must create an object of this kind and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ParallelManager_hh
-#define G4ParallelManager_hh G4ParallelManager_hh 
+#ifndef G4MassImportanceScoreSampler_hh
+#define G4MassImportanceScoreSampler_hh G4MassImportanceScoreSampler_hh
 
 #include "globals.hh"
+#include "G4VSampler.hh"
 
-class G4ParallelTransport;
-class G4ParallelWorld;
-class G4VPhysicalVolume;
+class G4VIStore;
+class G4VPScorer;
+class G4VImportanceAlgorithm;
+class G4MassImportanceSampler;
+class G4MassScoreSampler;
 
-class G4ParallelManager
+class G4MassImportanceScoreSampler : public G4VSampler
 {
 
 public:  // with description
 
-  G4ParallelManager(G4VPhysicalVolume &worldvolume, 
-		    const G4String &particlename);
-    // One G4ParallelManager for each particle type
-    // and each "patallel" geometry. Create a 
-    // G4ParallelWorld.
+  G4MassImportanceScoreSampler(G4VIStore &aIstore,
+			       G4VPScorer &ascorer,
+			       const G4String &particlename,
+			       const G4VImportanceAlgorithm 
+			       *algorithm = 0);
+    // if *algorithm = 0: use the G4ImportanceAlgorithm
+    // else : use a customised  importance algorithm derived from
+    // G4VImportanceAlgorithm  
+  
 
-  virtual ~G4ParallelManager();
-    // delete G4ParallelWorld and G4ParallelTransport if created.
+  ~G4MassImportanceScoreSampler();
+    // delete G4MassScoreSampler and G4MassImportanceSampler if created
 
-  G4ParallelWorld &GetParallelWorld();
-    // get the G4ParallelWorld
-  G4String GetParticleName();
-    // get the particle name this G4ParallelManager is responsible for
-  G4ParallelTransport *CreateParallelTransport();
-    // get the G4ParallelTransport
   void Initialize();
-    // initialisation
-private:
-
-  G4ParallelManager(const G4ParallelManager &);
-  G4ParallelManager &operator=(const G4ParallelManager &);
+    // the G4MassImportanceScoreSampler has to be initialised after
+    // the initialisation of the G4RunManager !
 
 private:
 
-  G4ParallelWorld *fPworld;
-  G4String fParticleName;
-  G4ParallelTransport *fParallelTransport;
+  G4MassImportanceScoreSampler(const G4MassImportanceScoreSampler &);
+  G4MassImportanceScoreSampler &
+  operator=(const G4MassImportanceScoreSampler &);
+
+private:
+
+  G4MassImportanceSampler *fMassImportanceSampler;
+  G4MassScoreSampler *fMassScoreSampler;
 };
 
 #endif
