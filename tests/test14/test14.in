@@ -26,9 +26,6 @@
 #=========================
 /gun/particle gamma
 #------------------
-/gun/energy 2 MeV
-/tracking/verbose 0
-/run/beamOn 50
 # 
 /gun/energy 10 keV
 /tracking/verbose 2
@@ -85,9 +82,6 @@
 #
 /gun/particle gamma
 #------------------
-/gun/energy 2 MeV
-/tracking/verbose 0
-/run/beamOn 50
 #
 /gun/energy 10 keV
 /tracking/verbose 2
@@ -145,9 +139,6 @@
 #
 /gun/particle gamma
 #------------------
-/gun/energy 2 MeV
-/tracking/verbose 0
-/run/beamOn 50
 #
 /gun/energy 10 keV
 /tracking/verbose 2
@@ -199,5 +190,37 @@
 /tracking/verbose 0
 /run/beamOn 1000
 #
+/gun/particle gamma
+#------------------
+/process/inactivate LowEnRayleigh
+/process/inactivate LowEnCompton
+/process/inactivate LowEnPhotoElec
+/process/inactivate eIoni
+/process/inactivate LowEnergyIoni
+/process/inactivate msc
+/process/inactivate eBrem
+/process/inactivate LowEnBrem
+
+/calor/setAbsMat Aluminium
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
+/calor/setAbsMat Lead
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
+/calor/setAbsMat Water
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
 
 exit
