@@ -1,4 +1,4 @@
-# $Id: common_objy.gmk,v 1.1 2001-05-30 15:04:14 gunter Exp $
+# $Id: common_objy.gmk,v 1.2 2001-06-19 15:13:35 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -102,20 +102,4 @@ $(G4SCHEMA_BOOT):
 	@echo Copying schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
 	  $(G4SCHEMA_BOOT) $(G4SCHEMA_FDID)
-
-$(G4EXAMPLE_BOOT):
-	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
-	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
-	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
-
-$(G4EXAMPLE_FD):
-	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
-	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
-	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
-	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
-	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
-	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
 
