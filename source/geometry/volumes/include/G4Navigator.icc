@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.6 2001-11-27 16:24:09 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.7 2001-12-04 15:30:20 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,17 +93,33 @@ void G4Navigator::SetGeometricallyLimitedStep()
 // Reset stack and minimum of navigator state `machine'
 //
 inline
-void G4Navigator::ResetStackAndState()
+void G4Navigator::ResetState()
 {
-    fHistory.Reset();
-
     fWasLimitedByGeometry=false;
     fEntering=false;
     fExiting=false;
+    fLocatedOnEdge = false;
     fLastStepWasZero= false;
+    fEnteredDaughter = false;
+    fExitedMother = false;
+  
+    fValidExitNormal = false;
+    fExitNormal = G4ThreeVector(0,0,0);
 
+    fPreviousSftOrigin = G4ThreeVector(0,0,0);
+    fPreviousSafety = 0.0; 
+    
     fBlockedPhysicalVolume=0;
     fBlockedReplicaNo=-1;
+}
+
+// Reset stack and minimum of navigator state `machine'
+//
+inline
+void G4Navigator::ResetStackAndState()
+{
+    fHistory.Reset();
+    ResetState();
 }
 
 inline
@@ -263,6 +279,7 @@ G4VPhysicalVolume*
 G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
 				       const G4TouchableHistory &h)
 {
+  ResetState();
   fHistory=*h.GetHistory();
   SetupHierarchy();
   return LocateGlobalPointAndSetup(p, 0);
@@ -298,7 +315,8 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
                                 G4TouchableHandle&   oldTouchableToUpdate,
                           const G4bool               RelativeSearch )
 {
-  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, 0, RelativeSearch);
+//  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, 0, RelativeSearch);
+  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, &direction, RelativeSearch);
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();

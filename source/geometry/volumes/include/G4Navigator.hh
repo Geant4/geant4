@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.12 2001-11-26 11:18:22 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.13 2001-12-04 15:30:20 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -294,6 +294,7 @@ class G4Navigator
 
  protected:  // with description
 
+  inline void ResetState();
   inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.
