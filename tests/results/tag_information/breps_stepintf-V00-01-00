@@ -1,0 +1,22 @@
+ I made available new tags for testing of geometry/solids/BREPS and
+ geometry/solids/STEPinterface. These new tags include changes for
+ decoupling BREPS from the STEP (STEP reader) module. A dependency
+ which needs to be evaluated carefully is still present and documented
+ in the History file. Please, see below the extract from the History
+ files. Tested on SUN-CC.
+
++++ BREPS +++ breps-V00-01-00
+
+- First step for decoupling BREPS from NIST STEP reader:
+   - Moved G4NISTStepReader[.hh.cc] and G4StepFileReader[.hh] to
+     STEPinterface.
+   - Removed unused references to STEP in G4KnotVector and G4PointRat.
+   >> Still remaining: reference to STEPaggregate in G4PointRat;
+                       reference to instMgr in G4BREPSolid.cc.
+
++++ STEPinterface +++ stepinterface-V00-01-00
+
+- Added files G4NISTStepReader[.hh.cc] and G4StepFileReader[.hh]
+  from BREPS.
+- Added inclusion of STEPcomplex.h in G4BoundedSurfaceCreator.cc,
+  G4GeometryCreator.cc and G4RepresentationRelationshipCreator.cc.
