@@ -57,10 +57,10 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
   
   ///////////////////////////////////////////////////////////////
   // Open the file
-  G4String pathName = getenv("OSCAR_CONFPATH");
-  G4String fileenv  = getenv("OSCAR_SENSITIVECONF");
+  G4String pathName = getenv("CCAL_CONFPATH");
+  G4String fileenv  = getenv("CCAL_SENSITIVECONF");
   if (!pathName || !fileenv) {
-    cerr << "ERROR: OSCAR_SENSITIVECONF and/or OSCAR_CONFPATH not set" << endl
+    cerr << "ERROR: CCAL_SENSITIVECONF and/or CCAL_CONFPATH not set" << endl
 	 << "       Set them to the sensitive configuration file/path" << endl;
     exit(-2);
   }

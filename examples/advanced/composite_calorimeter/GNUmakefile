@@ -1,10 +1,10 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.2 2002-10-01 14:38:51 arce Exp $
+# $Id: GNUmakefile,v 1.3 2002-10-09 09:54:05 sunanda Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := HcalTestBeam96
+name := CompositeCalorimeter
 
 G4TARGET := $(name)
 G4EXLIB := true

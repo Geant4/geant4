@@ -190,7 +190,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
 
 CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   
-  G4String path = getenv("OSCARGLOBALPATH");
+  G4String path = getenv("CCAL_GLOBALPATH");
   cout << " ==> Opening file " << file << "..." << endl;
   ifstream is;
   bool ok = openGeomFile(is, path, file);

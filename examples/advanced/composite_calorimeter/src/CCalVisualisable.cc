@@ -10,7 +10,7 @@
 //Comment/Uncomment next line to unset/set debug information printing
 //#define debug
 
-const char* visEnvName = "OSCARVISPATH";
+const char* visEnvName = "CCAL_VISPATH";
 const char* CCalVisualisable::pathName=0;
 
 CCalVisualisable::CCalVisualisable(G4String file):visFile(file) {

@@ -150,7 +150,7 @@ G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
 
 void CCalMaterialFactory::readElements(const G4String& matfile) {
 
-  G4String path = getenv("OSCARGLOBALPATH");
+  G4String path = getenv("CCAL_GLOBALPATH");
   cout << " ==> Opening file " << matfile << " to read elements..." << endl;
   ifstream is;
   bool ok = openGeomFile(is, path, matfile);
@@ -169,7 +169,7 @@ void CCalMaterialFactory::readElements(const G4String& matfile) {
 
 void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
-  G4String path = getenv("OSCARGLOBALPATH");
+  G4String path = getenv("CCAL_GLOBALPATH");
   cout << " ==> Opening file " << matfile << " to read materials..." << endl;
   ifstream is;
   bool ok = openGeomFile(is, path, matfile);

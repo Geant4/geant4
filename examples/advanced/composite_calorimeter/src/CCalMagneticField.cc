@@ -18,7 +18,7 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
   //Let's open the file
   cout << " ==> Opening file " << filename << " to read magnetic field..."
        << endl;
-  G4String pathName = getenv("OSCARGLOBALPATH");
+  G4String pathName = getenv("CCAL_GLOBALPATH");
   ifstream is;
   bool ok = openGeomFile(is, pathName, filename);
 

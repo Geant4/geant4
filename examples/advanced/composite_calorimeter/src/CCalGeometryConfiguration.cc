@@ -55,10 +55,10 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
 
   ///////////////////////////////////////////////////////////////
   // Open the file
-  G4String pathName = getenv("OSCAR_CONFPATH");
-  G4String fileenv  = getenv("OSCAR_GEOMETRYCONF");
+  G4String pathName = getenv("CCAL_CONFPATH");
+  G4String fileenv  = getenv("CCAL_GEOMETRYCONF");
   if (!pathName || !fileenv) {
-    cerr << "ERROR: OSCAR_GEOMETRYCONF and/or OSCAR_CONFPATH not set" << endl
+    cerr << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << endl
 	 << "       Set them to the geometry configuration file/path" << endl;
     exit(-2);
   }

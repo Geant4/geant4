@@ -14,12 +14,12 @@
 //Comment/Uncomment to hide/show some more debug information
 //#define ddebug
 
-G4String CCalDetector::pathName = getenv("OSCARGEOMPATH");
+G4String CCalDetector::pathName = getenv("CCAL_GEOMPATH");
 
 CCalDetector::CCalDetector(const G4String &name):
   detectorName(name) {
 #ifdef ddebug
-    cout << "OSCARGEOMPATH=" << pathName << endl;
+    cout << "CCAL_GEOMPATH=" << pathName << endl;
 #endif
     fileName      = 
       CCalGeometryConfiguration::getInstance()->getFileName(name);

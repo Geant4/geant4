@@ -42,8 +42,8 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0),
     if (treeFactory) {
       // Tree in memory :
       // Create a "tree" associated to an hbook
-      const char* opFileptr = getenv("OSCAR_FILENAME");
-      G4String opFilestr = "hcaltb96.his";
+      const char* opFileptr = getenv("CCAL_FILENAME");
+      G4String opFilestr = "ccal.his";
       if (opFileptr) opFilestr = opFileptr;
       cout << "********************************************" << endl
 	   << "* o/p file on " << opFilestr << endl

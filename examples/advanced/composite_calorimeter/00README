@@ -46,10 +46,10 @@ source $LHCXXTOP/share/LHCXX/4.0.4/install/sharedstart.csh
 
  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/asis.local/i386_redhat61/usr.local/gcc-alt-2.95.2/lib/:${G4LIB}:${CLHEP_BASE_DIR}/lib
 
-setenv OSCAR_CONFPATH ./dataconf
-setenv OSCAR_SENSITIVECONF g4testbeamhcal96.conf
-setenv OSCAR_GEOMETRYCONF testbeamhcal96.conf
-setenv OSCARGLOBALPATH ./dataglobal
-setenv OSCARGEOMPATH ./datageom
-setenv OSCARVISPATH ./datavis
+setenv CCAL_CONFPATH ./dataconf
+setenv CCAL_SENSITIVECONF g4testbeamhcal96.conf
+setenv CCAL_GEOMETRYCONF testbeamhcal96.conf
+setenv CCAL_GLOBALPATH ./dataglobal
+setenv CCAL_GEOMPATH ./datageom
+setenv CCAL_VISPATH ./datavis
 

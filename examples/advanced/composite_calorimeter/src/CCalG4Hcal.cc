@@ -174,6 +174,9 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
   }
 
   delete [] logb;
+
+  cout << "<<== End of CCalG4Hcal construction ..." << endl;
+
   return hcal;
 }
 
