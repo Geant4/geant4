@@ -5,14 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAVisManager.cc,v 1.2 2001-02-01 21:27:22 radoone Exp $
+// $Id: TstVAVisManager.cc,v 1.3 2001-02-07 17:31:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// John Allison 24th January 1998.
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #ifdef G4VIS_USE
 
@@ -70,11 +66,7 @@
 #include "G4VRML2File.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 TstVAVisManager::TstVAVisManager () {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TstVAVisManager::RegisterGraphicsSystems () {
 
@@ -137,5 +129,3 @@ void TstVAVisManager::RegisterGraphicsSystems () {
 }
 
 #endif
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

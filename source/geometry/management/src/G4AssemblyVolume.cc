@@ -1,14 +1,30 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4AssemblyVolume.cc,v 1.4 2001-02-07 17:30:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// Class G4AssemblyVolume - implementation
+//
+// ----------------------------------------------------------------------
+
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 #include "G4AffineTransform.hh"
 #include "G4AssemblyVolume.hh"
 
-#include <strstream>
+#include "g4std/strstream"
 
 unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
 // Default constructor
+//
 G4AssemblyVolume::G4AssemblyVolume()
 {
   InstanceCountPlus();
@@ -16,6 +32,7 @@ G4AssemblyVolume::G4AssemblyVolume()
 }
 
 // Destructor
+//
 G4AssemblyVolume::~G4AssemblyVolume()
 {
   fTriplets.clear();
@@ -35,29 +52,25 @@ G4AssemblyVolume::~G4AssemblyVolume()
   InstanceCountMinus();
 }
 
-/**
- * Add and place the given volume accordig to the specified
- * translation and rotation.
- */
-void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume
-                                       ,G4ThreeVector&    translation
-                                       ,G4RotationMatrix* pRotation
-                                      )
+// Add and place the given volume according to the specified
+// translation and rotation.
+//
+void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
+                                        G4ThreeVector&    translation,
+                                        G4RotationMatrix* pRotation )
 {
   G4AssemblyTriplet toAdd( pVolume, translation, pRotation );
   fTriplets.push_back( toAdd );
 }
 
-/**
- * Add and place the given volume accordig to the specified transformation
- */
-void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume
-                                       ,G4Transform3D&    transformation
-                                      )
+// Add and place the given volume according to the specified transformation
+//
+void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
+                                        G4Transform3D&    transformation )
 {
   G4ThreeVector v   = transformation.getTranslation();
-  G4RotationMatrix* r; *r = transformation.getRotation();
-  G4AssemblyTriplet toAdd( pVolume, v, r );
+  G4RotationMatrix r = transformation.getRotation();
+  G4AssemblyTriplet toAdd( pVolume, v, &r );
   fTriplets.push_back( toAdd );
 }
 
@@ -87,10 +100,9 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume
  * The order of multiplication is reversed when comparing to CLHEP 3D
  * transformation matrix(G4Transform3D class).
  */
-void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
-                                   ,G4ThreeVector&    translationInMother
-                                   ,G4RotationMatrix* pRotationInMother
-                                  )
+void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
+                                    G4ThreeVector&    translationInMother,
+                                    G4RotationMatrix* pRotationInMother )
 {
   unsigned int        numberOfDaughters = pMotherLV->GetNoDaughters();
 
@@ -109,7 +121,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
     // XXXX - the actual number of daughters incremented by one
     // YYYY - the name of a log. volume we want to make a placement of
     // ZZZZ - the physical volume index inside a mother
-    std::strstream pvName;
+    G4std::strstream pvName;
     pvName << "av_"
            << GetInstanceCount()
            << "_impr_"
@@ -118,7 +130,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
            << fTriplets[i].GetVolume()->GetName().c_str()
            << "_pv_"
            << i
-           << std::ends;
+           << G4std::ends;
 
     // Create the transformation in this assembly volume
     G4AffineTransform  Ta( fTriplets[i].GetRotation()->inverse(),
@@ -152,9 +164,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
   }
 }
 
-void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
-                                   ,G4Transform3D&    transformation
-                                  )
+void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
+                                    G4Transform3D&    transformation )
 {
   unsigned int        numberOfDaughters = pMotherLV->GetNoDaughters();
 
@@ -171,7 +182,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
     // XXXX - the actual number of daughters incremented by one
     // YYYY - the name of a log. volume we want to make a placement of
     // ZZZZ - the physical volume index inside a mother
-    std::strstream pvName;
+    G4std::strstream pvName;
     pvName << "av_"
            << GetInstanceCount()
            << "_impr_"
@@ -180,13 +191,13 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
            << fTriplets[i].GetVolume()->GetName().c_str()
            << "_pv_"
            << i
-           << std::ends;
+           << G4std::ends;
 /*
    pvName << "pv"
            << numberOfDaughters
            << fTriplets[i].GetVolume()->GetName().c_str()
            << numberOfDaughters + i
-           << std::ends;
+           << G4std::ends;
 */
 
     G4Transform3D Ta( *(fTriplets[i].GetRotation()),
@@ -195,20 +206,17 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
 
     G4Transform3D Tfinal = transformation * Ta;
     
-    G4RotationMatrix* pFinalRotation = new G4RotationMatrix(
-                                                Tfinal.getRotation().inverse()
-                                                           );
-    G4ThreeVector     finalTranslation = Tfinal.getTranslation();
+//  G4RotationMatrix* pFinalRotation =
+//                    new G4RotationMatrix( Tfinal.getRotation().inverse() );
+//  G4ThreeVector     finalTranslation = Tfinal.getTranslation();
 
     // Generate a new physical volume instance inside a mother
-    G4VPhysicalVolume* pPlaced = new G4PVPlacement(
-                                 Tfinal
-                                ,fTriplets[i].GetVolume()
-                                ,pvName.str()
-                                ,pMotherLV
-                                ,false
-                                ,numberOfDaughters + i
-                              );
+    G4VPhysicalVolume* pPlaced = new G4PVPlacement( Tfinal,
+                                                    fTriplets[i].GetVolume(),
+                                                    pvName.str(),
+                                                    pMotherLV,
+                                                    false,
+                                                    numberOfDaughters + i );
 
     // Register the physical volume created by us so we can delete it later
     fPVStore.push_back( pPlaced );
@@ -234,4 +242,3 @@ void         G4AssemblyVolume::InstanceCountMinus()
 {
   G4AssemblyVolume::fsInstanceCounter--;
 }
-

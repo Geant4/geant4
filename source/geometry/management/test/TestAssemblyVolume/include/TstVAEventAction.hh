@@ -5,23 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAEventAction.hh,v 1.2 2001-02-01 21:25:34 radoone Exp $
+// $Id: TstVAEventAction.hh,v 1.3 2001-02-07 17:30:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #ifndef TstVAEventAction_h
 #define TstVAEventAction_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UserEventAction.hh"
 
 class TstVAEventActionMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class TstVAEventAction : public G4UserEventAction
 {

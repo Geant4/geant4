@@ -5,26 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVASteppingAction.cc,v 1.2 2001-02-01 21:27:20 radoone Exp $
+// $Id: TstVASteppingAction.cc,v 1.3 2001-02-07 17:31:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #include "TstVASteppingAction.hh"
 #include "G4SteppingManager.hh"
-#include "math.h"
 #include "g4std/fstream"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TstVASteppingAction::TstVASteppingAction() : Steplength(100,0.,100.),
 SteplengthProfile(100,0.,2*M_PI)
 { }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TstVASteppingAction::~TstVASteppingAction()
 {
@@ -37,8 +29,6 @@ TstVASteppingAction::~TstVASteppingAction()
  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void TstVASteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   Steplength.accumulate(aStep->GetStepLength());
@@ -48,20 +38,3 @@ void TstVASteppingAction::UserSteppingAction(const G4Step* aStep)
   SteplengthProfile.accumulate(phi,aStep->GetStepLength());
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,17 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAEventAction.cc,v 1.2 2001-02-01 21:27:13 radoone Exp $
+// $Id: TstVAEventAction.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #include "TstVAEventAction.hh"
 
-//#include "ExN03CalorHit.hh"
 #include "TstVAEventActionMessenger.hh"
 
 #include "g4rw/tvordvec.h"
@@ -32,23 +28,17 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 TstVAEventAction::TstVAEventAction()
-:calorimeterCollID(-1),drawFlag("all"),eventMessenger(NULL),
- printModulo(1)
+ : calorimeterCollID(-1), drawFlag("all"),
+   printModulo(1), eventMessenger(NULL)
 {
   eventMessenger = new TstVAEventActionMessenger(this);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TstVAEventAction::~TstVAEventAction()
 {
   delete eventMessenger;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TstVAEventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -67,8 +57,6 @@ void TstVAEventAction::BeginOfEventAction(const G4Event* evt)
    } 
 */
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TstVAEventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -152,5 +140,3 @@ void TstVAEventAction::EndOfEventAction(const G4Event* evt)
   }             
 */
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

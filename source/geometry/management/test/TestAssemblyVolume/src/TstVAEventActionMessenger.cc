@@ -5,22 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAEventActionMessenger.cc,v 1.2 2001-02-01 21:27:14 radoone Exp $
+// $Id: TstVAEventActionMessenger.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// --------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "globals.hh"
 
 #include "TstVAEventActionMessenger.hh"
 
 #include "TstVAEventAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TstVAEventActionMessenger::TstVAEventActionMessenger(TstVAEventAction* EvAct)
 :eventAction(EvAct)
@@ -40,15 +36,11 @@ TstVAEventActionMessenger::TstVAEventActionMessenger(TstVAEventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 TstVAEventActionMessenger::~TstVAEventActionMessenger()
 {
   delete DrawCmd;
   delete PrintCmd;   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TstVAEventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 { 
@@ -58,5 +50,3 @@ void TstVAEventActionMessenger::SetNewValue(G4UIcommand * command,G4String newVa
   if(command == PrintCmd)
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}              
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

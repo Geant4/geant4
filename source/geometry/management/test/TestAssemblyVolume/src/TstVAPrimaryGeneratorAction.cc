@@ -1,3 +1,17 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: TstVAPrimaryGeneratorAction.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
+
+#include "globals.hh"
+#include "Randomize.hh"
 
 #include "TstVAPrimaryGeneratorAction.hh"
 
@@ -7,8 +21,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4TransportationManager.hh"
-#include "globals.hh"
-#include "CLHEP/Random/RandFlat.h"
 
 TstVAPrimaryGeneratorAction::TstVAPrimaryGeneratorAction():
   generatorAction (standardGun),

@@ -1,3 +1,17 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: TstVAPrimaryGeneratorMessenger.cc,v 1.3 2001-02-07 17:31:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
+
+#include "globals.hh"
+#include "G4ios.hh"
 
 #include "TstVAPrimaryGeneratorMessenger.hh"
 
@@ -5,8 +19,6 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
-#include "globals.hh"
-#include "G4ios.hh"
 
 TstVAPrimaryGeneratorMessenger::TstVAPrimaryGeneratorMessenger(TstVAPrimaryGeneratorAction * myPGA)
 :myPGAction(myPGA)

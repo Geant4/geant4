@@ -5,22 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVASteppingAction.hh,v 1.2 2001-02-01 21:25:40 radoone Exp $
+// $Id: TstVASteppingAction.hh,v 1.3 2001-02-07 17:31:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #ifndef TstVASteppingAction_h
 #define TstVASteppingAction_h 1
 
-#include "math.h"
+#include "globals.hh"
 #include "G4UserSteppingAction.hh"
 #include "Histo.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class TstVASteppingAction : public G4UserSteppingAction
 {

@@ -1,13 +1,15 @@
-// $Id: TstVAPhysicsList.hh,v 1.2 2001-02-01 21:25:36 radoone Exp $
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
 //
-//      This class is a class derived from G4VUserPhysicsList
-//      for constructing all particles and processes.
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//	History
-//        first version              10  Jan. 1998 by H.Kurashige
-// ------------------------------------------------------------
+// $Id: TstVAPhysicsList.hh,v 1.3 2001-02-07 17:30:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
+
 #ifndef TstVAPhysicsList_h
 #define TstVAPhysicsList_h 1
 
@@ -46,6 +48,3 @@ class TstVAPhysicsList: public G4VUserPhysicsList
 };
 
 #endif
-
-
-

@@ -1,7 +1,21 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: TstVADetectorConstruction.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
 
 #include "TstVADetectorConstruction.hh"
 #include "TstVADetectorMessenger.hh"
 
+#include "g4std/strstream"
+
+#include "G4ios.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -18,16 +32,13 @@
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
 #include "G4TransportationManager.hh"
 #include "G4AssemblyVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4RunManager.hh"
 
-#include <strstream>
-
 TstVADetectorConstruction::TstVADetectorConstruction()
-:worldVol(0),Air(0),Al(0),Pb(0),detectorChoice(0),selectedMaterial(0), plateLV(0)
+:worldVol(0),Air(0),Al(0),Pb(0),selectedMaterial(0),detectorChoice(0),plateLV(0)
 {
   classicDetector.caloLV      = 0;
   classicDetector.PVs.clear()    ;
@@ -243,9 +254,9 @@ void TstVADetectorConstruction::ConstructClassic()
     // Create layers of quazi calorimeter
     for( unsigned int i = 0; i < layers; i++ )
     {
-      std::strstream pvName;
+      G4std::strstream pvName;
 
-      pvName << "CaloPV_" << i << std::ends;
+      pvName << "CaloPV_" << i << G4std::ends;
       
       // Place each layer
       G4VPhysicalVolume* caloPV = new G4PVPlacement( 0

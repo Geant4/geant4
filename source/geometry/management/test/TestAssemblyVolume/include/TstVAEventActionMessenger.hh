@@ -5,13 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAEventActionMessenger.hh,v 1.2 2001-02-01 21:25:35 radoone Exp $
+// $Id: TstVAEventActionMessenger.hh,v 1.3 2001-02-07 17:30:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
 #ifndef TstVAEventActionMessenger_h 
 #define TstVAEventActionMessenger_h 1
@@ -22,8 +19,6 @@
 class TstVAEventAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class TstVAEventActionMessenger: public G4UImessenger
 {

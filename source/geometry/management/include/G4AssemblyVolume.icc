@@ -1,3 +1,17 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4AssemblyVolume.icc,v 1.2 2001-02-07 17:30:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// Class G4AssemblyVolume - inline implementation
+//
+// ----------------------------------------------------------------------
 
 inline 
 unsigned int G4AssemblyVolume::GetImprintsCount() const
@@ -23,5 +37,3 @@ void         G4AssemblyVolume::ImprintsCountMinus()
 {
   fImprintsCounter--;
 }
-
-

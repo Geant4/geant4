@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-12-04 09:38:47 gcosmo Exp $
+$Id: History,v 1.17 2001-02-07 17:30:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 07, 2001  G. Cosmo                geommng-V03-00-00
+- Introduced first implementation of G4AssemblyVolume, a helper class to
+  combine several volumes together in an arbitrary way in the 3D space.
+  Added files: G4AssemblyVolume[.hh.icc.cc], G4AssemblyTriplet[.hh.icc]
+  (by R.Chytracek).
+- Added unit test suite for G4AssemblyVolume class: TestAssemblyVolume
+  (by R.Chytracek).
 
 December 04, 2000  G. Cosmo
 - Minor fix to private assignment operator.

@@ -1,12 +1,23 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: TstVADetectorMessenger.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
+
+#include "globals.hh"
+#include "G4ios.hh"
 
 #include "TstVADetectorMessenger.hh"
 
 #include "TstVADetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "globals.hh"
-
-#include "G4ios.hh"
 
 TstVADetectorMessenger::TstVADetectorMessenger(TstVADetectorConstruction * myDC)
 :myDetector(myDC)

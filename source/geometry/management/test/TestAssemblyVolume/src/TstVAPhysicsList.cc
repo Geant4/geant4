@@ -1,14 +1,19 @@
-// $Id: TstVAPhysicsList.cc,v 1.2 2001-02-01 21:27:16 radoone Exp $
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
 //
-//      This is a version for maximum particle set
-//	History
-//        first version              10  Jan. 1998 by H.Kurashige
-//        add decay at rest          26  Feb. 1998 by H.Kurashige
-// ------------------------------------------------------------
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: TstVAPhysicsList.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------
 
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/iomanip"                
+
 #include "TstVAPhysicsList.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -23,8 +28,6 @@
 #include "G4IonConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"                
 
 
 TstVAPhysicsList::TstVAPhysicsList():  G4VUserPhysicsList()
