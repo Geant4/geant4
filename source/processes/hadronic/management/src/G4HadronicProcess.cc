@@ -74,10 +74,10 @@
  G4HadronicProcess::~G4HadronicProcess()
  { 
    delete theTotalResult;
-   for_each(theProductionModels.begin(), 
+   std::for_each(theProductionModels.begin(), 
             theProductionModels.end(), 
 	    Delete<G4VIsotopeProduction>());
-   for_each(theBias.begin(), 
+   std::for_each(theBias.begin(), 
             theBias.end(), 
 	    Delete<G4VLeadingParticleBiasing>());
  }
