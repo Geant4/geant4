@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2001-02-13 16:09:58 gcosmo Exp $
+$Id: History,v 1.132 2001-03-06 07:46:12 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06th March 2001 Gabriele Cosmo (config-V03-00-02)
+- binmake.gmk: added include path for processes/electromagnetic/integral
+  the new subcategory introduced with tag em-V03-00-04.
+
 13th February 2001 Gabriele Cosmo (config-V03-00-01)
-- binmake.gmk: added include path for processes/photolepton_hadron/include
+- binmake.gmk: added include path for processes/photolepton_hadron
   which was missing!
 
 08th January 2001 Gabriele Cosmo (config-V03-00-00)
