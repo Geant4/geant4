@@ -207,7 +207,6 @@ void HistoManager::SaveToTuple(const G4String& parname,G4double val, G4double)
 
 void HistoManager::bookHisto()
 {
-
 #ifdef G4ANALYSIS_USE
   G4cout << "### HistoManager books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
@@ -217,7 +216,8 @@ void HistoManager::bookHisto()
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(histName,"hbook",false,false);
+    tree = tf->create(histName,"hbook",false,false);
+  //  tree = tf->create(histName,"XML",false,false,"uncompress");
   G4cout << "Tree store : " << tree->storeName() << G4endl;
 
   histo.resize(nHisto);

@@ -1,7 +1,7 @@
-# $Id: TestEm9.in,v 1.6 2003-10-13 16:31:49 vnivanch Exp $
+# $Id: TestEm9.in,v 1.7 2003-10-29 10:02:05 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 #
-# Macro file for "test26.cc"
+# Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
 #
 #
