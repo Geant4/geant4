@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.5 2001-11-12 18:22:11 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.6 2001-11-16 10:50:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,7 @@ G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
 
 G4XXXSceneHandler::~G4XXXSceneHandler() {}
 
+#ifdef G4XXXDEBUG
 void G4XXXSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
@@ -76,144 +77,177 @@ void G4XXXSceneHandler::PrintThings() {
   }
   G4cout << G4endl;
 }
+#endif
 
 void G4XXXSceneHandler::AddThis(const G4Box& box) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Box& box) called for "
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(box);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Cons& cons) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Cons& cons) called for "
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(cons);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Tubs& tubs) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Tubs& tubs) called for "
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(tubs);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Trd& trd) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Trd& trd) called for "
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(trd);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Trap& trap) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Trap& trap) called for "
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(trap);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Sphere& sphere) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Sphere& sphere) called for "
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(sphere);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Para& para) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Para& para) called for "
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(para);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Torus& torus) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Torus& torus) called for "
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(torus);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Polycone& polycone) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Polycone& polycone) called for "
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(polycone);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) called for "
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddThis(const G4VSolid& solid) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddThis(const G4Solid& solid) called for "
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) called:"
     "\n  polyline: " << polyline
 	 << G4endl;
   PrintThings();
+#endif
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Text& text) called:"
     "\n  text: " << text.GetText()
 	 << G4endl;
   PrintThings();
+#endif
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:"
     "\n  radius: " << circle.GetWorldRadius()
 	 << G4endl;
   PrintThings();
+#endif
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:"
     "\n  side: " << square.GetWorldRadius()
 	 << G4endl;
   PrintThings();
+#endif
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called."
 	 << G4endl;
   PrintThings();
+#endif
 
   if (polyhedron.GetNoFacets() == 0) return;
 
@@ -289,10 +323,12 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+#ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
 	 << G4endl;
   PrintThings();
+#endif
 }
 
 void G4XXXSceneHandler::EstablishSpecials

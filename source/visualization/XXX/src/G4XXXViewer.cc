@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.cc,v 1.3 2001-08-25 00:22:24 johna Exp $
+// $Id: G4XXXViewer.cc,v 1.4 2001-11-16 10:50:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4XXXViewer.hh"
@@ -38,15 +38,21 @@ G4XXXViewer::G4XXXViewer
 G4XXXViewer::~G4XXXViewer() {}
 
 void G4XXXViewer::SetView() {
+#ifdef G4XXXDEBUG
   G4cout << "G4XXXViewer::SetView() called." << G4endl;
+#endif
 }
 
 void G4XXXViewer::ClearView() {
+#ifdef G4XXXDEBUG
   G4cout << "G4XXXViewer::ClearView() called." << G4endl;
+#endif
 }
 
 void G4XXXViewer::DrawView() {
+#ifdef G4XXXDEBUG
   G4cout << "G4XXXViewer::DrawView() called." << G4endl;
+#endif
   NeedKernelVisit ();  // Always need to visit G4 kernel.
   ProcessView ();
 }

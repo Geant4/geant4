@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.4 2001-08-25 00:22:08 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.5 2001-11-16 10:48:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 
 #ifndef G4XXXSCENEHANDLER_HH
 #define G4XXXSCENEHANDLER_HH
+
+#define G4XXXDEBUG  // Comment this out to suppress printing.
 
 #include "G4VSceneHandler.hh"
 #include "G4Box.hh"
@@ -122,7 +124,9 @@ protected:
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
+#ifdef G4XXXDEBUG
   void PrintThings();
+#endif
 };
 
 #endif

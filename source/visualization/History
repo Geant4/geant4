@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2001-11-15 14:52:14 johna Exp $
+$Id: History,v 1.168 2001-11-16 10:52:28 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16th November 2001  John Allison
+- Added G4XXXDEBUG to XXX dummy system.
 
 14th November 2001  John Allison
 - Fixed bug in G4VisManager::EndOfEvent.
