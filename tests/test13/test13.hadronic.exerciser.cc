@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test13.hadronic.exerciser.cc,v 1.3 1999-11-11 15:41:16 gunter Exp $
+// $Id: test13.hadronic.exerciser.cc,v 1.4 1999-11-18 14:23:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ static void OutputCases
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
 	  <<"\n/mydet/SelectMaterial " << materialNameList [iMaterial]
-	  << "\n/run/beamOn 1";
+	  << "\n/run/beamOn 10";
 
       }
     }
@@ -61,48 +61,19 @@ int main (int argc, char** argv) {
 
   G4RWTValOrderedVector <G4String> particleNameList;
   particleNameList.append ("proton");
-  particleNameList.append ("neutron");
-  particleNameList.append ("pi+");
-  particleNameList.append ("pi-");
-  particleNameList.append ("kaon+");
-  particleNameList.append ("kaon-");
-  particleNameList.append ("kaon0S");
-  particleNameList.append ("kaon0L");
+//  particleNameList.append ("neutron");
+//  particleNameList.append ("pi+");
+//  particleNameList.append ("pi-");
+//  particleNameList.append ("kaon+");
+//  particleNameList.append ("kaon-");
+//  particleNameList.append ("kaon0S");
+//  particleNameList.append ("kaon0L");
 
   G4RWTValOrderedVector <G4double> energyList;
   energyList.append (100 * GeV);
+  energyList.append (400 * GeV);
 
   G4RWTValOrderedVector <G4String> materialNameList;
-  materialNameList.append ("Pb");
-  materialNameList.append ("Al");
-  materialNameList.append ("Air");
-
-  OutputCases (particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.append ("proton");
-  particleNameList.append ("neutron");
-
-  energyList.clear ();
-  energyList.append (500 * MeV);
-
-  materialNameList.clear ();
-  materialNameList.append ("Pb");
-  materialNameList.append ("Al");
-  materialNameList.append ("Air");
-
-  OutputCases (particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.append ("neutron");
-  particleNameList.append ("triton");
-  particleNameList.append ("deuteron");
-  particleNameList.append ("alpha");
-
-  energyList.clear ();
-  energyList.append (100 * MeV);
-
-  materialNameList.clear ();
   materialNameList.append ("Pb");
   materialNameList.append ("Al");
   materialNameList.append ("Air");
