@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.18 2003-11-17 16:58:40 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.19 2003-11-24 10:15:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -67,18 +67,18 @@ public:
   G4double   GetMass();                                // GS Mass for the QHadron
   G4double   GetMass2();                               // Squared GS Mass for the QHadron
   G4double   GetWidth();                               // Width for the QHadron
-  G4double   GetNuclMass(G4int Z, G4int N, G4int S);   // Wrapper for nuclear mass calculation
-  G4double   GetNuclMass(G4int PDGCode);               // Wrapper for nuclear mass calculation
+  G4double   GetNuclMass(G4int Z, G4int N, G4int S);   // Wrapper forNuclearMassCalculation
+  G4double   GetNuclMass(G4int PDGCode);               // Wrapper forNuclearMassCalculation
   G4QContent GetQuarkContent()                  const; // Get QC for the particle
   G4int      GetBaryNum()                       const; // Get Baryon Number of the Hadron
-  G4int      GetSpin()                          const; // Returns 2s+1 for hadrons or 1 for nuclei
+  G4int      GetSpin()                          const; // Returns 2s+1 for hadrons, 1 for A
   G4int      GetCharge()                        const; // Get Charge of the Hadron
   G4int      GetPDGCode()                       const; // Get PDG code of the Hadron
   G4int      GetQCode()                         const; // Get Q code of the Hadron
-  G4QContent GetExQContent(G4int i, G4int o)    const; // Get Q Content for the Quark Exchange  
+  G4QContent GetExQContent(G4int i, G4int o)    const; // Get Q Content for Quark Exchange
   G4int      GetRelCrossIndex(G4int i, G4int o) const; // Relative Cross Index for q_i->q_o
-  G4int      GetNumOfComb(G4int i, G4int o)     const; // Get number of Combinations for q_i->q_o
-  G4int      GetTotNumOfComb(G4int i)           const; // Get a total # of Combinations for q_i 
+  G4int      GetNumOfComb(G4int i, G4int o)     const; // Get #ofCombinations for q_i->q_o
+  G4int      GetTotNumOfComb(G4int i)           const; // Get total#ofCombinations for q_i 
 
   // Modifiers
   void  SetPDGCode(G4int newPDGCode);               // Set PDG code of the Hadron
@@ -213,14 +213,14 @@ inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
   }
   return 0.;
 }
-inline G4int    G4QPDGCode::GetPDGCode() const {return thePDGCode;}
-inline G4int    G4QPDGCode::GetQCode()   const {return theQCode;}
-inline G4int    G4QPDGCode::GetCharge()  const {return GetQuarkContent().GetCharge();}
-inline G4int    G4QPDGCode::GetBaryNum() const {return GetQuarkContent().GetBaryonNumber();}
-inline G4int    G4QPDGCode::GetSpin()    const 
+inline G4int   G4QPDGCode::GetPDGCode() const {return thePDGCode;}
+inline G4int   G4QPDGCode::GetQCode()   const {return theQCode;}
+inline G4int   G4QPDGCode::GetCharge()  const {return GetQuarkContent().GetCharge();}
+inline G4int   G4QPDGCode::GetBaryNum() const {return GetQuarkContent().GetBaryonNumber();}
+inline G4int   G4QPDGCode::GetSpin()    const 
 {
   if(thePDGCode<80000000)               return thePDGCode%10;
-  else if(GetQuarkContent().GetTot()%2) return 3; // @@ Take into account higher resonances (?)
+  else if(GetQuarkContent().GetTot()%2) return 3; // @@ Take into account higher resonances
   else                                  return 1;
 }
 inline void     G4QPDGCode::NegPDGCode()     {thePDGCode=-thePDGCode;}

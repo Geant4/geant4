@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.39 2003-11-21 15:05:19 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.40 2003-11-24 10:15:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------

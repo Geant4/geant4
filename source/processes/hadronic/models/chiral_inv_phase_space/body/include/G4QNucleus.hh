@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.20 2003-11-17 16:58:40 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.21 2003-11-24 10:15:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -52,48 +52,51 @@ public:
   G4bool operator==(const G4QNucleus &right) const;
   G4bool operator!=(const G4QNucleus &right) const;
   // Specific Selectors
-  G4int      GetPDG()      const;                          // Get a PDG Code of the nucleus
-  G4int      GetZ()        const;                          // Get a#of protons
-  G4int      GetN()        const;                          // Get a#of neutrons
-  G4int      GetS()        const;                          // Get a#of lambdas
-  G4int      GetA()        const;                          // Get A of the nucleus
-  G4int      GetDZ()       const;                          // Get a#of protons in dense region
-  G4int      GetDN()       const;                          // Get a#of neutrons in dense region
-  G4int      GetDS()       const;                          // Get a#of lambdas in dense region
-  G4int      GetDA()       const;                          // Get A of the dense part of nucleus
-  G4int      GetMaxClust() const;                          // Get Max BarNum of Clusters
-  G4double   GetProbability(G4int bn=0) const;             // probab. for the cluster with BarN
-  G4double   GetMZNS()     const;                          // Get GS mass of Nucleus(not H || Q)
-  G4double   GetGSMass()   const;                          // Get GS mass of Nucleus(not Hadron)
-  G4QContent GetQCZNS()    const;                          // Get ZNS quark content of Nucleus
+  G4int      GetPDG()      const;                   // Get a PDG Code of the nucleus
+  G4int      GetZ()        const;                   // Get a#of protons
+  G4int      GetN()        const;                   // Get a#of neutrons
+  G4int      GetS()        const;                   // Get a#of lambdas
+  G4int      GetA()        const;                   // Get A of the nucleus
+  G4int      GetDZ()       const;                   // Get a#of protons in dense region
+  G4int      GetDN()       const;                   // Get a#of neutrons in dense region
+  G4int      GetDS()       const;                   // Get a#of lambdas in dense region
+  G4int      GetDA()       const;                   // Get A of the dense part of nucleus
+  G4int      GetMaxClust() const;                   // Get Max BarNum of Clusters
+  G4double   GetProbability(G4int bn=0) const;      // probab. for the cluster with BarN
+  G4double   GetMZNS()     const;                   // Get GS mass of Nucleus(not H || Q)
+  G4double   GetGSMass()   const;                   // Get GS mass of Nucleus(not Hadron)
+  G4QContent GetQCZNS()    const;                   // Get ZNS quark content of Nucleus
 
   // Specific Modifiers
-  G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate one Baryon from Nucleus
-  G4int      SplitBaryon();                                // Is it possible to split a baryon/alpha
-  G4int      HadrToNucPDG(G4int hPDG);                     // Converts hadronic PDGCode to nuclear
-  G4int      NucToHadrPDG(G4int nPDG);                     // Converts nuclear PDGCode to hadronic
-  G4bool     Split2Baryons();                              // Is it possible to split two baryons?
-  void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDG
-  void       InitByQC(G4QContent newQC);                   // Init existing nucleus by new QCont
-  void       IncProbability(G4int bn);                     // Add one cluster to probability
+  G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
+  G4int      SplitBaryon();                         // Is it possible to split baryon/alpha
+  G4int      HadrToNucPDG(G4int hPDG);              // Converts hadronic PDGCode to nuclear
+  G4int      NucToHadrPDG(G4int nPDG);              // Converts nuclear PDGCode to hadronic
+  G4bool     Split2Baryons();                       // Is it possible to split two baryons?
+  void       InitByPDG(G4int newPDG);               // Init existing nucleus by new PDG
+  void       InitByQC(G4QContent newQC);            // Init existing nucleus by new QCont
+  void       IncProbability(G4int bn);              // Add one cluster to probability
   void       Increase(G4int PDG, G4LorentzVector LV = G4LorentzVector(0.,0.,0.,0.));
   void       Increase(G4QContent QC, G4LorentzVector LV = G4LorentzVector(0.,0.,0.,0.));
-  void       Reduce(G4int PDG);                            // Reduce Nucleus by PDG fragment
-  void       CalculateMass();                              // Recalculate (calculate) the mass
-  void       SetMaxClust(G4int maxC);                      // Set Max BarNum of Clusters
-  void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF=false,
-                               G4bool gaF=false, G4LorentzVector LV=G4LorentzVector(0.,0.,0.,0.));
-  G4int      UpdateClusters(G4bool din);                   // Return a#of clusters & calc. probab's
-  G4QNucleus operator+=(const G4QNucleus& rhs);            // Add a cluster to the  nucleus
-  G4QNucleus operator-=(const G4QNucleus& rhs);            // Subtract a cluster from a nucleus
-  G4QNucleus operator*=(const G4int& rhs);                 // Multiplication of the Nucleus
+  void       Reduce(G4int PDG);                     // Reduce Nucleus by PDG fragment
+  void       CalculateMass();                       // Recalculate (calculate) the mass
+  void       SetMaxClust(G4int maxC);               // Set Max BarNum of Clusters
+  void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF=false, G4bool
+                               gaF=false, G4LorentzVector LV=G4LorentzVector(0.,0.,0.,0.));
+  G4int      UpdateClusters(G4bool din);            // Return a#of clusters & calc.probab's
+  G4QNucleus operator+=(const G4QNucleus& rhs);     // Add a cluster to the  nucleus
+  G4QNucleus operator-=(const G4QNucleus& rhs);     // Subtract a cluster from a nucleus
+  G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   // Static functions
   static void SetParameters(G4double fN, G4double fD, G4double cP, G4double mR=1.);
   // Specific General Functions
-  G4int RandomizeBinom(G4double p,G4int N);                // Randomize according to Binomial Law
-  G4double CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0., G4double dA=0.);
-  G4double BindingEnergy(const G4double& cZ, const G4double& cA, G4double dZ=0., G4double dA=0.);
-  G4double CoulBarPenProb(const G4double& CB, const G4double& E, const G4int& C, const G4int& B);
+  G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law
+  G4double CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0.,
+                          G4double dA=0.);
+  G4double BindingEnergy(const G4double& cZ, const G4double& cA, G4double dZ=0.,
+                         G4double dA=0.);
+  G4double CoulBarPenProb(const G4double& CB, const G4double& E, const G4int& C,
+                          const G4int& B);
 
 private:  
   // Specific Encapsulated Functions
@@ -257,7 +260,3 @@ inline G4int G4QNucleus::NucToHadrPDG(G4int nPDG)
 inline G4QNucleus G4QNucleus::GetThis()const{return G4QNucleus(Z,N,S);}
 
 #endif
-
-
-
-

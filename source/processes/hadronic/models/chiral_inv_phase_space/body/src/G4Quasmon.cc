@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.60 2003-11-21 16:30:35 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.61 2003-11-24 10:15:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2399,11 +2399,39 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       {
         G4cerr<<"***G4Q::HQ:M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass<<")+sPDG="
               <<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
-        if((sPDG==221 || sPDG==331) && tmM>mPi0+reMass)
+
+        if(sPDG==311 && tmpQPDG.GetCharge()>0)     // Can switch from K0 to K+
+        {
+          G4QContent crQC=tmpQPDG.GetQuarkContent()-KpQC+K0QC; // new hadrr's QC
+          G4QNucleus nNuc(crQC);                   // New neucleus for the hadron/fragment
+          G4double nreM=nNuc.GetGSMass();          // Mass of the new isotope
+          if(tmM>mK+nreM)
+		  {
+            sMass=mK;
+            sPDG=321;
+            s4Mom=G4LorentzVector(0.,0.,0.,sMass); // Switch to K+ mass
+            reMass=nreM;
+            rPDG=nNuc.GetPDG();
+            r4Mom=G4LorentzVector(0.,0.,0.,reMass);// Switch to other isotope mass
+            sum=reMass+sMass;
+            if(fabs(tmM-sum)<eps)
+            {
+              r4Mom=q4Mom*(reMass/sum);
+              s4Mom=q4Mom*(sMass/sum);
+            }
+            else if(tmM<sum || !G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
+            {
+              G4cerr<<"***G4Q::HQ: KCor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass
+                    <<")+sPDG="<<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
+              throw G4QException("***G4Quasmon::HadronizeQuasmon: Hadron+K DecayIn2");
+            }
+          }
+        }
+        else if((sPDG==221 || sPDG==331) && tmM>mPi0+reMass)
 		{
           sMass=mPi0;
           sPDG=111;
-          G4LorentzVector s4Mom(0.,0.,0.,sMass); // Switch to pi0 mass
+          s4Mom=G4LorentzVector(0.,0.,0.,sMass); // Switch to pi0 mass
           sum=reMass+sMass;
           if(fabs(tmM-sum)<eps)
           {
@@ -2414,14 +2442,14 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           {
             G4cerr<<"***G4Q::HQ: PiCor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass<<")+sPDG="
                   <<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
+            throw G4QException("***G4Quasmon::HadronizeQuasmon: Hadron+Pi0 DecayIn2");
           }
-    	  else throw G4QException("***G4Quasmon::HadronizeQuasmon: Hadron+Pi0 DecayIn2");
         }
         else if((sPDG==111 || sPDG==221 || sPDG==331) && tmM>reMass)
 		{
           sMass=0.;
           sPDG=22;
-          G4LorentzVector s4Mom(0.,0.,0.,sMass); // Switch to gamma
+          s4Mom=G4LorentzVector(0.,0.,0.,sMass); // Switch to gamma
           if(fabs(tmM-reMass)<eps)
           {
             r4Mom=q4Mom*(reMass/sum);
@@ -2431,8 +2459,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           {
             G4cerr<<"***G4Q::HQ: PiCor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass<<")+sPDG="
                   <<sPDG<<"(sM="<<sMass<<")="<<reMass<<G4endl;
+            throw G4QException("***G4Quasmon::HadronizeQuasmon:QHadron+Gamma DecayIn2");
           }
-    	  else throw G4QException("***G4Quasmon::HadronizeQuasmon:QHadron+Gamma DecayIn2");
         }
     	else throw G4QException("***G4Quasmon::HadronizeQuasmon:QHadron+SHadron DecayIn2");
       }
