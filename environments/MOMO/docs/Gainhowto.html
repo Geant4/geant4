@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>Gain;  how to use it with Geant4</title>
+</head>
+<body>
+<h1> How to use Gain</h1>
+<hr>
+<h3>What is Gain?</h3><p>
+Gain(Geant4 adaptive interface for network) is a networked GUI tool based on GAG. 
+It inherits almost all features of GAG and has new features to
+make use of Geant4 running at (a) remote machine(s).
+<p>
+Gain runs on a client machine (Windows or Linux),
+while Geant4 runs on a remote or local server (Linux or Solaris).
+<p> 
+
+It provides two ways to connect to the remote server; SSH mode and Gain socket mode.
+
+<dl>
+<dt> <strong>Gain SSH mode</strong>
+<dl> Gain has a SSH client fuction and use it to connect to a remote server. Geant4 compiled with G4UIGAG class
+     can be connected to Gain client. When a SSH connection is established after the authentication, 
+     Gain displays the
+     remote file browser with which user can choose a Geant4 executable and make it run.
+     Data  are encrypted during their transfer and are decripted at both side. So, some CPU
+     power is required for a client machine, if a large amount of data are transfered from
+     the running Geant4 to Gain. <br> Output from the remote Geant4 are
+     displayed <a href="./Gainjpeg/gainconsole.jpg">on the Gain console.</a>
+      This console can be used as a normal
+     SSH console and you can type in command directly.<br>
+     Pluriel remote sessions can be accepted, each displayed in a separate 
+     tabbed pane. A console is attached to each pane/session.
+<dt> <strong>Gain socket mode</strong>
+<dl> Gain uses its own way of connecting to a remote server. Remote Geant4 must be compiled with
+G4UIGainServer class which is distributed in the standard Geant4 package. In this mode, user has to
+make a Geant4 executable run on the remote server, after having logged in to the remote
+machine. G4UIGainServer acts as a network server
+and tells the number of port available for the Gain client. Gain client, after specifying the server and port
+number, is allowed to connect to the Geant4. Geant4 output 
+</dl>
+
+<hr>
+<h3>How to use Gain</h3>
+<p>
+The figure shows a scene when Gain is running in
+<a href="./Gainjpeg/GainSnap.jpg">Gain socket mode</a>.
+<p>
+In this example, 
+two tabbed panes are displayed to run remote Geant4s running on different servers.
+
+
+<ol>
+<li>
+   Gain is started on the <a href="./Gainjpeg/cygwin.jpg">Cygwin console</a>. Gain can be started with
+   Java Web Start. 
+
+<li>
+   <a href="./Gainjpeg/gainInit.jpg">Top menu</a>   to connect to a server or close (kill) the running G4ant4 or finish Gain.
+
+
+<li> The window to
+    <a href="./Gainjpeg/selectInterface.jpg">choose SSh or Gain socket</a>; now SSHINTERFACE is focused    
+
+<li>After typing in the remote host name, 
+   <a href="./Gainjpeg/sshlogin.jpg">SSH login window</a> is shown.
+
+<li>
+When SSH login is accepted, Gain shows the
+ <a href="./Gainjpeg/filechooser.jpg"> remore File Chooser</a>. Geant4 with G4UIGAG interface can be started
+from this chooser.   
+
+<li> When Geant4 is started, 
+        <a href="./Gainjpeg/startup.jpg">Geant4 initialisation output are shown on the cygwin console</a>. 
+
+
+
+
+<li> After the initialisation phase, 
+ <a href="./Gainjpeg/startuptree.jpg"> command tree window</a> is available on Gain.   
+
+<li> Then, the Gain console is shown below the command tree window.
+See <a href="./Gainjpeg/gainconsole.jpg"> the hardcopy </a>
+of the whole Gain window.
+This console is the SSH console, so that you can type in Geant4 commands
+in stead of selecting them in the above command panel.
+<br>
+You can shrink the console by single click on the triangle at the left
+border.
+
+<li> 
+<a href="./Gainjpeg/exit.jpg">Two ways of ending Geant4 execution are provided. </a>   
+The command tree provides "exit" command which is just the "exit" of Geant4. On the top
+menu, "Close one" menu is to send CTRL + C to the running Geant4 process. It can be sent at any
+moment.
+
+</ol>
+<hr>
+<h3>Notices on Gain console</h3><br>
+<ul>
+<li> At present, Gain's console displays ecerything G4cout from Geant4
+with G4UIGAG interface. So, strings employed for Gain protocols are
+displayed. Please ignore lines starting with @@.
+<li> Gain console demands heavy Windows (X or Windows) power.
+So, with old graphic accelerators like S3 etc. which are yet common
+on Linux platforms, speed of console may be very slow. In such cases,
+shrinking the console pane is a good way to speed up the execution.
+<li> We have tested Gain over the Internet for a session of more than 24 hours.
+On Windows XP, We observed some curious deformed tree icons during the session,
+but the functions were correct and they became normal after some elapsed time.
+<br>
+Here is the <a href="./Gainjpeg/gainconsoleAday.jpg">copy of the long run.</a>
+<li> The console provides a session of G4UIterminal, and NOT G4UItcsh, at present.
+<li>If you type "exit" on the console, the execution of Geant4 is stopped.
+The console is yet a usual ssh console, while the upper windows for
+the command tree is losing connection to Geant4. If you type in "exit" on the
+console, it end the ssh session and the whole Gain will be destroyed.
+</ul>
+<hr>
+<h3> <a href="./techManual/index.html">Inside Gain</a></h3><br>
+In this manual, Gain and RGAG are described. But in the final
+form, they were merged and Gain is the name for it. 
+"RGAG" represents the SSH mode of Gain now, while "Gain"
+in the avobe manual represents the
+own socket mode of the present Gain.
+<address>
+<a href="mailto:yoshidah@naruto-u.ac.jp">yoshida</a>
+</address>
+</body>
+</html>
