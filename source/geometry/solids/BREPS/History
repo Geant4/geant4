@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2002-01-29 08:14:45 gcosmo Exp $
+$Id: History,v 1.36 2002-02-12 18:36:13 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12/02/2002 : R. Chytracek
+- Bug fixes of G4BREPSolidPolyhedra:
+  o Added enhancement allowing to define RMIN and RMAX to be zero with the
+    exception of forbidden two consecutive zero RMAX values.
+  o Refactoring in constructor gained two new private methods for creation of
+    trapezoidal and triangular side planes of G4BREPSolidPolyhedra.
+  o Rewritten code for delta phi >= 2*PI case with full classification of
+    possible cases.
+  o Fixed sense of end planes.
+  o Fixed delta phi < 2*PI case where some old code remained after bug fix #266.
 
 28/01/2002 : R. Chytracek	breps-V04-00-01
 - G4BREPSolidPCone::Inside() method restored back due to the fixes
