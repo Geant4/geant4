@@ -49,11 +49,14 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+//#include "G4LowEnergyIonisation.hh"
+//#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyIonisationIV.hh"
+#include "G4LowEnergyBremsstrahlungIV.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
+//#include "G4LowEnergyPhotoElectricMG.hh"
 #include "G4LowEnergyRayleigh.hh"
 #include "G4hLowEnergyIonisation.hh"
 
@@ -64,8 +67,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eplusAnnihilation.hh"
-
-//#include "G4VeLowEnergyLoss.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -96,6 +97,10 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
+
+typedef G4LowEnergyIonisationIV G4LowEnergyIonisation;
+typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
+//typedef G4LowEnergyPhotoElectricMG G4LowEnergyPhotoElectric;
 
 HepTupleManager* hbookManager;
 

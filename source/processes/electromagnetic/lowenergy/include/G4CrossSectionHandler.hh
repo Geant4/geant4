@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.1 2001-08-20 16:36:00 pia Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.2 2001-08-31 15:41:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,6 +29,8 @@
 // History:
 // -----------
 //  1 Aug 2001   MGP        Created
+//
+//  Modified: 30.08.01 V.Ivanchenko add G4VEMSecondaryGenerator
 //
 // -------------------------------------------------------------------
 
@@ -51,6 +53,7 @@ class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 class G4Material;
 class G4Element;
+class G4VEMSecondaryGenerator;
 
 class G4CrossSectionHandler {
  
@@ -74,7 +77,9 @@ public:
 
   G4int SelectRandomShell(G4int Z, G4double e) const;
 
-  G4VEMDataSet* BuildMeanFreePathForMaterials(G4double energyThreshold = 0.);
+  G4VEMDataSet* BuildMeanFreePathForMaterials(
+                const G4DataVector& minEnergy = 0,
+                const G4DataVector& maxEnergy = 0);
  
   void LoadData(const G4String& dataFile);
 
@@ -83,6 +88,8 @@ public:
   void PrintData() const;
   
   void Clear();
+
+  void SetSecondaryGenerator(G4VEMSecondaryGenerator* p) {theGenerator = p;};
    
 private:
  
@@ -90,7 +97,8 @@ private:
 
   void BuildCrossSectionsForMaterials(const G4DataVector& energyVector);
 
-  void BuildCrossSectionsWithCut(G4double energyCut, const G4DataVector& energyVector);
+  void BuildCrossSectionsWithCut(const G4DataVector& energyThresholds, 
+                                 const G4DataVector& energyVector);
 
   void ActiveElements();
 
@@ -111,6 +119,9 @@ private:
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataMap;
   
   G4std::vector<G4VEMDataSet*> crossSections;
+
+  G4VEMSecondaryGenerator* theGenerator;
+
 };
  
 #endif

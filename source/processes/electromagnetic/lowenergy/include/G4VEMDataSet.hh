@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4VEMDataSet.hh,v 1.2 2001-08-31 15:43:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -72,6 +72,10 @@ public:
 protected:
 
 private:
+
+  // hide assignment operator 
+  G4VEMDataSet(const  G4VEMDataSet&);
+  G4VEMDataSet & operator=(const G4VEMDataSet &right);
 
 };
  
