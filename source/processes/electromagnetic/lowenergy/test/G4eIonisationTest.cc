@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationTest.cc,v 1.11 2001-10-24 18:08:22 elena Exp $
+// $Id: G4eIonisationTest.cc,v 1.12 2001-10-25 09:48:26 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,17 +111,23 @@ int main()
   assert (ntuple2 != 0);
    
   // ---- secondaries histos ----
-  IHistogram* hEKin;
+  IHistogram1D* hEKin;
   hEKin = hbookManager->create1D("10","Kinetic Energy", 100,0.,10.);
  
-  IHistogram* hP;
+  IHistogram1D* hP;
   hP = hbookManager->create1D("20","Momentum", 100,0.,10.);
  
-  IHistogram* hNSec;
+  IHistogram1D* hNSec;
   hNSec = hbookManager->create1D("30","Number of secondaries", 10,0.,10.);
   
-  IHistogram* hDebug;
+  IHistogram1D* hDebug;
   hDebug = hbookManager->create1D("40","Debug", 100,0.,200.);
+
+  IHistogram1D* hTheta;
+ hTheta = hbookManager->create1D("50","Theta", 100,0.,pi);
+
+ IHistogram1D* hPhi;
+  hPhi = hbookManager->create1D("60","Phi", 100,-pi,pi);
   
   //  declare and bind "Quantities" to the Ntuple:
 
@@ -426,8 +432,8 @@ int main()
 
       // Secondaries physical quantities 
       
-      //hNSec->fill(particleChange->GetNumberOfSecondaries());
-      //hDebug->fill(particleChange->GetLocalEnergyDeposit());
+      hNSec->fill(particleChange->GetNumberOfSecondaries());
+      hDebug->fill(particleChange->GetLocalEnergyDeposit());
 
       nElectrons = 0;
       nPositrons = 0;
@@ -468,10 +474,10 @@ int main()
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
 	  
-	  //hEKin->fill(eKin);
-	  //hP->fill(p);
-	  //hTheta->fill(theta);
-	  //hPhi->fill(phi);
+	  hEKin->fill(eKin);
+	  hP->fill(p);
+	  hTheta->fill(theta);
+	  hPhi->fill(phi);
 
 	  partType = 0;
 	  if (particleName == "e-") 
