@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh,v 1.2 2003-10-28 18:29:54 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.3 2003-11-03 12:58:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,11 +32,11 @@
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
+#ifdef G4ANALYSIS_USE
+
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//#ifdef G4ANALYSIS_USE
 
 namespace AIDA {
  class ITree;
@@ -44,11 +44,9 @@ namespace AIDA {
  class IHistogram1D;
 } 
 
-//#endif
-
 class HistoMessenger;
 
-const G4int MaxHisto = 17;
+  const G4int MaxHisto = 17;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,12 +55,10 @@ class HistoManager
   public:
     HistoManager();
    ~HistoManager();
-
-#ifdef G4ANALYSIS_USE
    
     void SetFactory(G4String);
     void SetHisto  (G4int, G4int, G4double, G4double, G4String unit="none");
-
+    
     AIDA::ITree*             GetTree()              {return tree;}
     AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}        
     AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
@@ -74,15 +70,12 @@ class HistoManager
     AIDA::IHistogram1D*      histo[MaxHisto];
     G4double                 histoUnit[MaxHisto];
     G4double                 binWidth[MaxHisto];
-
-    HistoMessenger*          histoMessenger;
-
-#endif
-
     G4bool                   factoryOn;        
+    HistoMessenger*          histoMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif
 #endif
 
