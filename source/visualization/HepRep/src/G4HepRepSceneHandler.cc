@@ -271,6 +271,14 @@ bool G4HepRepSceneHandler::closeHepRep() {
         getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
     }
     
+    // force inclusion of all subtypes of event
+    if (_eventInstanceTree != NULL) {
+        getEventType();
+        getTrajectoryType();
+        getHitType();
+        getCalHitType();
+    }
+    
     // Give this HepRep all of the layer order info for both geometry and event,
     // since these will both end up in a single HepRep.
     if (_geometryRootType    != NULL) _heprep->addLayer(geometryLayer);
@@ -969,14 +977,9 @@ HepRepTypeTree* G4HepRepSceneHandler::getEventTypeTree() {
         // Create the Event TypeTree.
         HepRepTreeID* eventTreeID = factory->createHepRepTreeID("G4EventTypes", "1.0");
         _eventTypeTree = factory->createHepRepTypeTree(eventTreeID);
-        getHepRep()->addTypeTree(_eventTypeTree);
-        
-        // force inclusion of all subtypes
-        getEventType();
-        getTrajectoryType();
-        getHitType();
-        getCalHitType();
+        getHepRep()->addTypeTree(_eventTypeTree);    
     }
+    
     return _eventTypeTree;
 }
 
@@ -997,6 +1000,7 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
             
         getEventTypeTree()->addType(_eventType);
     }
+    
     return _eventType;
 }
 

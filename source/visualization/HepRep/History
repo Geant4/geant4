@@ -1,4 +1,4 @@
-.$Id: History,v 1.44 2003-11-13 01:11:27 perl Exp $
+.$Id: History,v 1.45 2003-11-13 19:38:32 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,13 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+13 November 2003 Mark Donszelmann
+- Fixed GEANT-29
+  see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
+
 12 November 2003 Joseph Perl
 - Added G4HepRepFileSceneHandler::ClearTransientStore to make geometry
   be properly included with each event of a /run/beamOn n.
 
 12 November 2003 Mark Donszelmann
 - Fixed GEANT-18, GEANT-19, GEANT-28
-  see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
 
 11 November 2003 Mark Donszelmann
 - Fixed GEANT-23, GEANT-26, GEANT-27
