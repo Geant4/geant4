@@ -741,7 +741,7 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
    *condition = NotForced ;
 
    G4double kineticEnergy = (aParticle->GetKineticEnergy())*initialMass/(aParticle->GetMass());
-   charge = aParticle->GetCharge();
+   charge = aParticle->GetCharge()/eplus;
    chargeSquare = theIonEffChargeModel->TheValue(aParticle, material);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
@@ -791,10 +791,10 @@ G4double G4hLowEnergyIonisation::GetConstraints(
           * chargeSquare ;
 
         // Correction for positive ions
-    if(theBarkas) 
+    if(theBarkas && tscaled > highEnergy) { 
         fBarkas = BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare
                 + BlochTerm(material,tscaled,chargeSquare);
-
+    }
     // Antiprotons and negative hadrons
   } else {
 
@@ -804,11 +804,22 @@ G4double G4hLowEnergyIonisation::GetConstraints(
     fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, couple)
           * chargeSquare ;
 
-    if(theBarkas) 
+    if(theBarkas && tscaled > highEnergy) { 
         fBarkas = -BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare;
                 + BlochTerm(material,tscaled,chargeSquare);
+    }
   }
-
+  /*
+  const G4Material* mat = couple->GetMaterial();
+  G4double fac = gram/(MeV*cm2*mat->GetDensity());
+  G4cout << particle->GetDefinition()->GetParticleName()
+         << " in " << mat->GetName()
+         << " E(MeV)= " << kineticEnergy/MeV
+	 << " dedx(MeV*cm^2/g)= " << fdEdx*fac
+	 << " barcas(MeV*cm^2/gram)= " << fBarkas*fac
+	 << " Q^2= " << chargeSquare
+	 << G4endl;
+  */
   // scaling back
   fRangeNow /= (chargeSquare*massRatio) ;
   dx        /= (chargeSquare*massRatio) ;

@@ -370,6 +370,14 @@ void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
 G4double G4hLowEnergyIonisationMA::GetContinuousStepLimit(const G4Track& track,
                          G4double r1, G4double r2, G4double& r3)
 {
+  /*
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  const G4Material* mat = couple->GetMaterial();
+  G4double fac = gram/(MeV*cm2*mat->GetDensity());
+  G4double e = track.GetKineticEnergy();
+  G4double dedx = GetDEDX(e, couple);
+  G4cout << "E(MeV)= " << e/MeV << " dedx(MeV*cm^2/g)= " << dedx*fac << G4endl;
+  */		   
   G4double x = G4VEnergyLossProcess::GetContinuousStepLimit(track,r1,r2,r3);
   G4double rangeLim = GetRange(highEnergy, track.GetMaterialCutsCouple());
   G4double r = GetCurrentRange() - 0.9*rangeLim;
