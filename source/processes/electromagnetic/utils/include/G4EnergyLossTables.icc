@@ -5,23 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 1.6 1999-04-15 07:46:13 urban Exp $
+// $Id: G4EnergyLossTables.icc,v 1.7 1999-11-12 14:10:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
 // Inline members of the G4EnergyLossTables class
 //
+// -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998
 // modified by L.Urban , 27/05/98
 // cache mechanism , L.Urban , 11/02/99
 // bug fixed , L.Urban , 12/04/99
+// 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
 //
+// -------------------------------------------------------------------
 
-inline unsigned G4EnergyLossTables::HashFun(
-  const G4EnergyLossTables::K& particle)
-{
-  return particle->GetParticleName().hash();
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4EnergyLossTablesHelper::G4EnergyLossTablesHelper(
   const G4PhysicsTable* aDEDXTable,
@@ -45,66 +44,76 @@ inline G4EnergyLossTablesHelper::G4EnergyLossTablesHelper(
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4EnergyLossTablesHelper::G4EnergyLossTablesHelper()
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4PhysicsTable* G4EnergyLossTables::GetDEDXTable(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper v;
-  G4bool found= dict.findValue(p, v);
-  return found ? v.theDEDXTable : 0;
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) return 0;
+  return (*it).second.theDEDXTable;  
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4PhysicsTable* G4EnergyLossTables::GetRangeTable(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper v;
-  G4bool found= dict.findValue(p, v);
-  return found ? v.theRangeTable : 0;
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) return 0;
+  return (*it).second.theRangeTable;  
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4PhysicsTable* G4EnergyLossTables::GetInverseRangeTable(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper v;
-  G4bool found= dict.findValue(p, v);
-  return found ? v.theInverseRangeTable : 0;
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) return 0;
+  return (*it).second.theInverseRangeTable;  
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4PhysicsTable* G4EnergyLossTables::GetLabTimeTable(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper v;
-  G4bool found= dict.findValue(p, v);
-  return found ? v.theLabTimeTable : 0;
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) return 0;
+  return (*it).second.theLabTimeTable;  
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4PhysicsTable* G4EnergyLossTables::GetProperTimeTable(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper v;
-  G4bool found= dict.findValue(p, v);
-  return found ? v.theProperTimeTable : 0;
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) return 0;
+  return (*it).second.theProperTimeTable;  
 }
 
-///////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
   const G4ParticleDefinition* p)
 {
-  G4EnergyLossTablesHelper r;
-  if (! dict.findValue(p, r)) {
+  helper_map::iterator it;
+  if((it=dict.find(p))==dict.end()) {
     G4Exception("G4EnergyLossTables::GetTables: table not found!");
     exit(1);
   }
-  return r;
+  return (*it).second;
 }
 
-///////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4EnergyLossTables::GetDEDX(
     const G4ParticleDefinition *aParticle,
@@ -147,6 +156,8 @@ inline G4double G4EnergyLossTables::GetDEDX(
   return dEdx*Chargesquare;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4EnergyLossTables::GetLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
@@ -186,6 +197,8 @@ inline G4double G4EnergyLossTables::GetLabTime(
 
   return time/t.theMassRatio ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4EnergyLossTables::GetDeltaLabTime(
     const G4ParticleDefinition *aParticle,
@@ -261,6 +274,7 @@ inline G4double G4EnergyLossTables::GetDeltaLabTime(
   return deltatime/t.theMassRatio ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4EnergyLossTables::GetProperTime(
     const G4ParticleDefinition *aParticle,
@@ -302,6 +316,7 @@ inline G4double G4EnergyLossTables::GetProperTime(
   return time/t.theMassRatio ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4EnergyLossTables::GetDeltaProperTime(
     const G4ParticleDefinition *aParticle,
@@ -377,6 +392,8 @@ inline G4double G4EnergyLossTables::GetDeltaProperTime(
   return deltatime/t.theMassRatio ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4EnergyLossTables::GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
@@ -421,6 +438,9 @@ inline G4double G4EnergyLossTables::GetRange(
 
   return Range/(Chargesquare*t.theMassRatio);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                                      const G4ParticleDefinition *aParticle,
                                            G4double range,
@@ -481,6 +501,7 @@ inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   return scaledKineticEnergy/t.theMassRatio ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

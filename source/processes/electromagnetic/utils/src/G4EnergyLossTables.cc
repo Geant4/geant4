@@ -5,17 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.8 1999-11-11 15:37:08 gunter Exp $
+// $Id: G4EnergyLossTables.cc,v 1.9 1999-11-12 14:10:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// ------------------------------------------------------------------- 
 // first version created by P.Urban , 06/04/1998
 // modifications + "precise" functions added by L.Urban , 27/05/98
 // modifications , TOF functions , 26/10/98, L.Urban
 // cache mechanism in order to gain time, 11/02/99, L.Urban
 // bug fixed , 12/04/99 , L.Urban
+// 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
+// -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
 const G4ParticleDefinition* G4EnergyLossTables::lastParticle = NULL ; 
@@ -26,8 +30,9 @@ G4double G4EnergyLossTables::rmin = 0. ;
 G4double G4EnergyLossTables::rmax = 0. ;
 G4double G4EnergyLossTables::Thigh = 0. ;
 
-G4RWTValHashDictionary<const G4ParticleDefinition*, G4EnergyLossTablesHelper>
-G4EnergyLossTables::dict(G4EnergyLossTables::HashFun);
+G4EnergyLossTables::helper_map G4EnergyLossTables::dict;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EnergyLossTables::Register(
   const G4ParticleDefinition* p,
@@ -51,7 +56,7 @@ void G4EnergyLossTables::Register(
                   QQPositron ;
 }
 
-///////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
  G4double G4EnergyLossTables::GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
@@ -92,6 +97,8 @@ void G4EnergyLossTables::Register(
 
   return dEdx*Chargesquare;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
  G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
@@ -142,6 +149,8 @@ void G4EnergyLossTables::Register(
 
   return Range/(Chargesquare*t.theMassRatio);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 
