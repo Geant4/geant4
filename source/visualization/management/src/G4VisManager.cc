@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.23 2001-05-18 14:14:32 johna Exp $
+// $Id: G4VisManager.cc,v 1.24 2001-05-21 14:04:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,6 +318,7 @@ void G4VisManager::ClearView () {
 void G4VisManager::Draw () {
   if (IsValidView ()) {
     fpViewer -> SetViewParameters (fVP);
+    fpViewer -> SetView ();
     fpViewer -> DrawView ();
   }
 }
@@ -621,7 +622,7 @@ void G4VisManager::GeometryHasChanged () {
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   if (!pWorld) {
-    G4cout << "  The world has ended!!!  (Is this serious?)" << G4endl;
+    G4cout << "  There is no world volume!" << G4endl;
   }
 
   // Check scenes.
