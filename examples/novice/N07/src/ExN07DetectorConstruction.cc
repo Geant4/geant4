@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07DetectorConstruction.cc,v 1.2 2003-03-11 06:33:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -177,7 +177,7 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
   G4int i;
   for(i=0;i<3;i++)
   {
-    calorLogical[i] = new G4LogicalVolume(calorSolid,worldMaterial,"Cal");
+    calorLogical[i] = new G4LogicalVolume(calorSolid,absorberMaterial,"Cal");
     if(serial)
     {
       calorPhysical[i] = new G4PVPlacement(0,
@@ -198,7 +198,7 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
   gapSolid = new G4Box("Gap",0.5*m,0.5*m,1.*m/G4double(2*numberOfLayers));
   for(i=0;i<3;i++)
   {
-    layerLogical[i] = new G4LogicalVolume(gapSolid,gapMaterial,"Layer");
+    layerLogical[i] = new G4LogicalVolume(gapSolid,absorberMaterial,"Layer");
     layerPhysical[i] = 
        new G4PVParameterised("Layer",layerLogical[i],calorLogical[i],kZAxis,
                           2*numberOfLayers,gapParam);
@@ -263,6 +263,11 @@ void ExN07DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
   {
     absorberMaterial = pttoMaterial;
     gapParam->SetAbsorberMaterial(pttoMaterial);
+    for(size_t i=0;i<3;i++)
+    {
+      calorLogical[i]->SetMaterial(absorberMaterial);
+      layerLogical[i]->SetMaterial(absorberMaterial);
+    }
   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
