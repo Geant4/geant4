@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunAction.cc,v 1.7 2001-02-21 10:14:39 maire Exp $
+// $Id: Em4RunAction.cc,v 1.8 2001-03-26 17:34:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,9 @@ Em4RunAction::~Em4RunAction()
 {
   delete runMessenger;
   
-#ifndef G4NOHIST 
+#ifndef G4NOHIST
+ // Write histogram file 
+  hbookManager->write();
  // Delete HBOOK stuff
   delete [] histo;
   delete hbookManager;
@@ -57,7 +59,7 @@ void Em4RunAction::bookHisto()
 {
 #ifndef G4NOHIST 
   // init hbook
-  hbookManager = new HBookFile("TestEm4.histo", 68);
+  hbookManager = new HBookFile("TestEm4.paw", 68);
 
   // book histograms
   histo[0] = hbookManager->histogram("total energy deposit in C6F6 (MeV)"
@@ -98,13 +100,7 @@ void Em4RunAction::EndOfRunAction(const G4Run* aRun)
   if (saveRndm > 0)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");      
-    }
-    
-#ifndef G4NOHIST     
-  // Write histogram file 
-  hbookManager->write();
-#endif
-                
+    }                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
