@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.cc,v 1.3 2001-07-11 10:00:42 gunter Exp $
+// $Id: G4VGaussianQuadrature.cc,v 1.4 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
@@ -84,7 +84,7 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
-  register HepInt j;
+  register G4int j;
   G4double x = xx - 1.0;
   G4double tmp = x + 5.5;
   tmp -= (x + 0.5) * log(tmp);

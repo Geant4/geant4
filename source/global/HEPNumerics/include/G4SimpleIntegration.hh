@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.hh,v 1.3 2001-07-11 10:00:40 gunter Exp $
+// $Id: G4SimpleIntegration.hh,v 1.4 2004-11-12 16:25:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -55,7 +55,7 @@
 #ifndef G4SIMPLEINTEGRATION_HH
 #define G4SIMPLEINTEGRATION_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 typedef G4double (*function)(G4double) ;
 

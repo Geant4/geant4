@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.9 2004-06-09 07:30:01 gcosmo Exp $
+// $Id: G4Types.hh,v 1.10 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,6 @@
   #undef __DEPRECATED
 #endif
   
-#include <CLHEP/config/CLHEP.h>
 #include <complex>
 
 // Typedefs to decouple from library classes

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh,v 1.1 2004-05-26 14:38:06 gcosmo Exp $
+// $Id: G4AllocatorPool.hh,v 1.2 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,13 +45,11 @@
 #ifndef G4AllocatorPool_h
 #define G4AllocatorPool_h 1
 
-#include <stdlib.h>
-
 class G4AllocatorPool
 {
   public:
 
-    G4AllocatorPool( size_t n );
+    G4AllocatorPool( unsigned int n );
       // Create a pool of elements of size n
     ~G4AllocatorPool();
       // Destructor. Return storage to the free store
@@ -64,7 +62,7 @@ class G4AllocatorPool
     inline void  Free( void* b );
       // Return an element back to the pool
 
-    inline size_t  Size() const;
+    inline unsigned int  Size() const;
       // Return storage size
     void  Reset();
       // Return storage to the free store
@@ -81,10 +79,10 @@ class G4AllocatorPool
     class G4PoolChunk
     {
       public:
-        G4PoolChunk(size_t sz)
+        G4PoolChunk(unsigned int sz)
           : size(sz), mem(new char[size]), next(0) {;}
         ~G4PoolChunk() { delete [] mem; }
-        const size_t size;
+        const unsigned int size;
         char* mem;
         G4PoolChunk* next;
     };
@@ -95,8 +93,8 @@ class G4AllocatorPool
   private:
 
     G4PoolChunk* chunks;
-    const size_t esize;
-    const size_t csize;
+    const unsigned int esize;
+    const unsigned int csize;
     G4PoolLink* head;
     int nchunks;
 };
@@ -134,7 +132,7 @@ G4AllocatorPool::Free( void* b )
 // Size
 // ************************************************************
 //
-inline size_t
+inline unsigned int
 G4AllocatorPool::Size() const
 {
   return nchunks*csize;

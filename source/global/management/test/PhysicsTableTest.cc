@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsTableTest.cc,v 1.3 2001-07-11 10:01:00 gunter Exp $
+// $Id: PhysicsTableTest.cc,v 1.4 2004-11-12 16:25:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLinearVector.hh"
 #include "G4PhysicsLogVector.hh"
+#include <cmath>
 
 static const size_t PhysicsTableSize = 10;
 static const size_t PhysicsVectorSize = 10;
@@ -58,11 +59,11 @@ int main()
     pVector->PutComment("PhysicsLinearVector");
 
     // put values in PhysicsVector 
-    //   value = sin(factor*energy)
+    //   value = std::sin(factor*energy)
     G4double factor = 0.1*G4double(i+1);
     for (size_t k=0; k<n_bin; k++){
       G4double eVal = pVector->GetLowEdgeEnergy(k);
-      pVector->PutValue(k, sin(factor*eVal));
+      pVector->PutValue(k, std::sin(factor*eVal));
     }
     
     // put PhysicsVector in PhysicsTable
@@ -111,7 +112,7 @@ int main()
     G4double factor = 0.1*G4double(j+1);
     for (size_t k=0; k<n_bin; k++){
       G4double eVal = pVector->GetLowEdgeEnergy(k);
-      pVector->PutValue(k, log10(factor*eVal));
+      pVector->PutValue(k, std::log10(factor*eVal));
     }
     
     // put PhysicsVector in PhysicsTable

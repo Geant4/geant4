@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.6 2001-07-11 10:00:55 gunter Exp $
+// $Id: templates.hh,v 1.7 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,5 +119,29 @@ inline void G4SwapObj(T* a, T* b) {
 }
 
 //-----------------------------
+
+#ifndef G4_SQR_DEFINED
+  #define G4_SQR_DEFINED
+  #ifdef sqr
+    #undef sqr
+  #endif
+
+template <class T>
+inline T sqr(const T& x)
+{
+  return x*x;
+}
+#endif
+
+#ifdef G4_ABS_DEFINED
+  #ifdef abs
+    #undef abs
+  #endif
+template <class T>
+inline T abs(const T& a)
+{
+  return a < 0 ? -a : a;
+}
+#endif
 
 #endif // templates_h

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegratorTest.cc,v 1.6 2002-12-05 15:38:31 gcosmo Exp $
+// $Id: G4IntegratorTest.cc,v 1.7 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4Integrator class. The function exp(-x)*cos(x) is
@@ -38,12 +38,11 @@
 #include "G4SimpleIntegration.hh"
 #include "G4Integrator.hh"
 
+G4double GlobalFunction( G4double x ){  return std::exp(-x)*std::cos(x) ; }
 
-G4double GlobalFunction( G4double x ){  return exp(-x)*cos(x) ; }
+G4double GlobalCos( G4double x ){  return std::cos(x) ; }
 
-G4double GlobalCos( G4double x ){  return cos(x) ; }
-
-G4double GlobalHermite(G4double x){  return x*x*cos(x) ; }
+G4double GlobalHermite(G4double x){  return x*x*std::cos(x) ; }
 
 
 class B
@@ -56,11 +55,11 @@ public:
 
  ~B(){;}
 
-  G4double TestFunction(G4double x){  return exp(-x)*cos(x) ; }
+  G4double TestFunction(G4double x){  return std::exp(-x)*std::cos(x) ; }
 
-  G4double CosFunction(G4double x) {  return cos(x) ; }
+  G4double CosFunction(G4double x) {  return std::cos(x) ; }
 
-  G4double TestHermite(G4double x){  return x*x*cos(x) ; }
+  G4double TestHermite(G4double x){  return x*x*std::cos(x) ; }
 
   void Integrand() ;
 
@@ -195,7 +194,7 @@ int main()
    for(i=1;i<20;i++)
    {
       n = 1*i ;
-      G4double exactH = 2*0.125*sqrt(pi)*exp(-0.25) ;
+      G4double exactH = 2*0.125*std::sqrt(pi)*std::exp(-0.25) ;
       G4double hermite = iii.Hermite(GlobalHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
             <<"  and n-point Hermite =  "

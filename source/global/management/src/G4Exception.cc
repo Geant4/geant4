@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.17 2003-10-31 17:44:47 asaim Exp $
+// $Id: G4Exception.cc,v 1.18 2004-11-12 16:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 // 30.06.95 P.Kent
 
 #include "G4ios.hh"
-#include <stdlib.h>
 #include "G4String.hh"
 #include "G4StateManager.hh"
 
@@ -55,9 +54,9 @@ void G4Exception(const char* s)
 }
 
 void G4Exception(const char* originOfException,
-                        const char* exceptionCode,
-                        G4ExceptionSeverity severity,
-                        const char* description)
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 const char* description)
 {
   G4VExceptionHandler* exceptionHandler
     = G4StateManager::GetStateManager()->GetExceptionHandler();
