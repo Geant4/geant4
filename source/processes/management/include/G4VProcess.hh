@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.4 1999-10-06 10:10:56 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.5 1999-11-07 17:11:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,12 @@
 //	CERN, CN Division, ASD group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
+//
+// Class Description
+//  This class is the virtual class for physics process objects. 
+//   It defines public methods which describe the behavior of 
+//   a physics process.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -55,7 +61,7 @@ class G4VProcess
   //  G4VProcess G4VProcess();  
       G4VProcess & operator=(const G4VProcess &right);
 
-  public:
+  public: // with description
   //  constructor requires the process name and type
       G4VProcess(const G4String& aName =  "NoName",
 		 G4ProcessType   aType = fNotDefined );
@@ -64,6 +70,7 @@ class G4VProcess
   //  physics table (0 pointer is assigned)
       G4VProcess(G4VProcess &right);
 
+  public: 
   //  destructor 
       virtual ~G4VProcess();
 
@@ -71,6 +78,7 @@ class G4VProcess
       G4int operator==(const G4VProcess &right) const;
       G4int operator!=(const G4VProcess &right) const;
 
+  public: // with description
   ////////////////////////////
   // DoIt    /////////////////
   ///////////////////////////
@@ -200,11 +208,11 @@ class G4VProcess
       G4double          currentInteractionLength;
      // The InteractionLength in the current material
 
- public:
+ public: // with description
       virtual void      ResetNumberOfInteractionLengthLeft();
      // reset (determine the value of)NumberOfInteractionLengthLeft
  
- protected: 
+ protected:  // with description
      virtual void      SubtractNumberOfInteractionLengthLeft(
 				  G4double previousStepSize
                                 );
@@ -223,11 +231,11 @@ class G4VProcess
       G4ProcessType theProcessType;
       //  The type of the process
 
- public:
+ public: // with description
    virtual void  DumpInfo() const;
    // dump out process information    
 
- public:
+ public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
    // set/get controle flag for output message

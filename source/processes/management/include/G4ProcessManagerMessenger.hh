@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManagerMessenger.hh,v 1.3 1999-10-06 10:10:52 kurasige Exp $
+// $Id: G4ProcessManagerMessenger.hh,v 1.4 1999-11-07 17:11:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,10 +13,10 @@
 //
 //  G4ProcessManagerMessenger.hh
 //
-//  Description:
+// Class Description:
 //    This is a messenger class to interface to exchange information
 //    between ProcessManager and UI.
-//
+//-
 //  /particle/process/   Process Manager control commands.
 //   Commands : 
 //     dump * dump process manager information.
@@ -57,7 +57,8 @@ class G4ProcessManagerMessenger: public G4UImessenger
     virtual ~G4ProcessManagerMessenger();
     // destructor 
  
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+public: // with description
+     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
     // set new value for command string
 
     virtual G4String GetCurrentValue(G4UIcommand * command);

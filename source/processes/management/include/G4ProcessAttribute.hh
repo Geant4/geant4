@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessAttribute.hh,v 1.2 1999-04-13 09:44:57 kurasige Exp $
+// $Id: G4ProcessAttribute.hh,v 1.3 1999-11-07 17:11:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,9 @@
 //	History: first implementation, based on object model of
 //	2nd December 1997, H.Kurashige
 //   ----------------  G4ProcessAttribute -----------------
+// Class Description
+//  This class is used by G4ProcessManager ONLY for booking !!!
+//
 // History:
 //   adds copy constructor            27 June 1998 H.Kurashige
 // ------------------------------------------------------------

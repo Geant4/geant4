@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the  GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.2 1999-04-13 09:45:14 kurasige Exp $
+// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.3 1999-11-07 17:11:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,11 @@
 //
 //	For information related to this code contact:
 //	CERN, CN Division, ASD group
+//
+// Class Description  
+//  Abstract class which defines the public behavior of
+//  continuous and discrete physics interactions.
+//
 // ------------------------------------------------------------
 //   New Physics scheme            8  Mar. 1997  H.Kurahige
 // ------------------------------------------------------------
@@ -44,6 +49,8 @@ class G4VRestContinuousDiscreteProcess : public G4VProcess
 
       virtual  ~G4VRestContinuousDiscreteProcess();
 
+
+  public :// with description
       virtual  G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
@@ -78,7 +85,7 @@ class G4VRestContinuousDiscreteProcess : public G4VProcess
 			     const G4Step&
 			    );
 
-   protected:
+  protected: // with description
       virtual G4double GetMeanLifeTime(const G4Track& aTrack,G4ForceCondition* condition)=0;
       //  Calculates the mean life-time (i.e. for decays) of the
       //  particle at rest due to the occurence of the given process,
@@ -96,15 +103,14 @@ class G4VRestContinuousDiscreteProcess : public G4VProcess
     // the arguments of AlongStepGPIL()
     G4GPILSelection  valueGPILSelection;
 
-  protected:
+  protected: // with description
     // these two methods are set/get methods for valueGPILSelection
-    // these two methods are set/get methods for valueGPILSelection
-    void SetGPILSelection(G4GPILSelection selection)
+     void SetGPILSelection(G4GPILSelection selection)
     { valueGPILSelection = selection;};
 
     G4GPILSelection GetGPILSelection() const{return valueGPILSelection;};
 
-  protected:
+  protected: // with description
      virtual G4double GetMeanFreePath(const G4Track& aTrack,
                              G4double   previousStepSize,
                              G4ForceCondition* condition

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the Geant4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.4 1999-04-30 08:01:53 urban Exp $
+// $Id: G4IVContinuousDiscreteProcess.hh,v 1.5 1999-11-07 17:11:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -14,6 +14,11 @@
 //
 //	For information related to this code contact:
 //	CERN, CN Division, ASD group
+// 
+// Class Description 
+//  Abstract class which defines the public behavior of
+//  discrete physics interactions using integral approach
+//
 // ------------------------------------------------------------
 //   New Physics scheme            8  Mar. 1997  H.Kurahige
 // ------------------------------------------------------------
@@ -43,7 +48,8 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
 
       virtual ~G4IVContinuousDiscreteProcess();
 
-      virtual G4double PostStepGetPhysicalInteractionLength(
+  public:   //  with description
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
 			     G4ForceCondition* condition
@@ -79,7 +85,7 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
 			     const G4Step&
 			    ) {return 0;};
 
-  protected:
+  protected: //  with description
     virtual G4double GetContinuousStepLimit(const G4Track& aTrack,
                              G4double  previousStepSize,
                              G4double  currentMinimumStep,
@@ -90,7 +96,7 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
     // the arguments of AlongStepGPIL()
     G4GPILSelection  valueGPILSelection;
 
-  protected:
+  protected: //  with description
     //------------------------------------------------------
     virtual void SubtractNumberOfInteractionLengthLeft(
                                    G4double previousStepSize) ;  

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTypes.hh,v 1.2 1999-04-13 09:44:52 kurasige Exp $
+// $Id: G4ParticleTypes.hh,v 1.3 1999-11-07 17:11:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,9 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 //     ----------------- G4ParticleTypes.hh -----------------
-// Files including all existing particle definitions GEANT4 classes 
+// Class Description
+//  Files including all existing particle definitions GEANT4 classes 
+//
 // ****************************************************************
 // Created, G.Cosmo, 19 September 1996
 // Modified H.Kurashige 8 Mar. 1997

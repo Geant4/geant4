@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the  GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestProcess.hh,v 1.2 1999-04-13 09:45:17 kurasige Exp $
+// $Id: G4VRestProcess.hh,v 1.3 1999-11-07 17:11:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,11 @@
 //	CERN, CN Division, ASD group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
+// 
+// Class Description 
+//  Abstract class which defines the public behavior of
+//  physics interactions at rest.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -48,6 +53,7 @@ class G4VRestProcess : public G4VProcess
 
       virtual ~G4VRestProcess();
 
+  public:   //  with description
       virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4ForceCondition* condition
@@ -84,7 +90,7 @@ class G4VRestProcess : public G4VProcess
 			     const G4Step& 
 			    ) {return 0;};
  
-  protected:
+  protected: //  with description
 
       virtual G4double GetMeanLifeTime(const G4Track& aTrack,G4ForceCondition* condition)=0;
       //  Calculates the mean life-time (i.e. for decays) of the

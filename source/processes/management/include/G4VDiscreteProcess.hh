@@ -1,12 +1,12 @@
 
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDiscreteProcess.hh,v 1.2 1999-04-13 09:45:11 kurasige Exp $
+// $Id: G4VDiscreteProcess.hh,v 1.3 1999-11-07 17:11:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,11 @@
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //	add G4VDiscreteProcess(const G4String&) 24 Jul 1996, Hisaya kurashige
+//
+// Class Description  
+//  Abstract class which defines the public behavior of
+//  discrete physics interactions.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -48,6 +53,7 @@ class G4VDiscreteProcess : public G4VProcess
 
       virtual ~G4VDiscreteProcess();
 
+  public :// with description
       virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
@@ -84,7 +90,7 @@ class G4VDiscreteProcess : public G4VProcess
 			     const G4Step& 
 			    ) {return 0;};
  
-  protected:
+  protected:// with description
      virtual G4double GetMeanFreePath(const G4Track& aTrack,
                              G4double   previousStepSize,
                              G4ForceCondition* condition

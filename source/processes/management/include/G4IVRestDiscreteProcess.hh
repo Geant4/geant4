@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.hh,v 1.4 1999-04-30 08:01:55 urban Exp $
+// $Id: G4IVRestDiscreteProcess.hh,v 1.5 1999-11-07 17:11:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -14,6 +14,11 @@
 //
 //	For information related to this code contact:
 //	CERN, CN Division, ASD group
+//
+// Class Description  
+//  Abstract class which defines the public behavior of
+//  rest + discrete physics interactions.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           8  Mar. 1997  H.Kurahige
 // ------------------------------------------------------------
@@ -32,14 +37,19 @@ class G4IVRestDiscreteProcess : public G4VProcess
 {
   //  Abstract class which defines the public behavior of
   //  rest + discrete physics interactions.
-  public:     
 
+  public: // with description    
+
+    // constructors 
      G4IVRestDiscreteProcess(const G4String& ,
 			    G4ProcessType   aType = fNotDefined );
      G4IVRestDiscreteProcess(G4IVRestDiscreteProcess &);
 
+  public:
      virtual ~G4IVRestDiscreteProcess();
 
+  public: // with description    
+     // GPIL and DoIt methods derived from G4VProcess
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
@@ -76,7 +86,7 @@ class G4IVRestDiscreteProcess : public G4VProcess
 			     const G4Step& 
 			    ) {return 0;}
  
-  protected:
+  protected:// with description    
      virtual void SubtractNumberOfInteractionLengthLeft(
                              G4double previousStepSize) ;
 

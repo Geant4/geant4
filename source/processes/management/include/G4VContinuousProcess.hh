@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VContinuousProcess.hh,v 1.2 1999-04-13 09:45:10 kurasige Exp $
+// $Id: G4VContinuousProcess.hh,v 1.3 1999-11-07 17:11:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //	add G4VContinuousProcess(const G4String&) 24 Jul 1996, Hisaya kurashige
+//
+// Class Description
+//  Abstract class which defines the public behavior of
+//  Continuous physics interactions.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -48,6 +53,7 @@ class G4VContinuousProcess : public G4VProcess
 
       virtual ~G4VContinuousProcess();
 
+  public:  // with description   
       virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double  previousStepSize,
@@ -84,20 +90,21 @@ class G4VContinuousProcess : public G4VProcess
 			     const G4Step& 
 			    ) {return 0;};
  
-  protected:
+  protected: // with description   
     virtual G4double GetContinuousStepLimit(const G4Track& aTrack,
                              G4double  previousStepSize,
                              G4double  currentMinimumStep,
 			     G4double& currentSafety
                                                              )=0;
+    // This pure virtual function is used to calculate step limit
+    // for AlongStep in the derived processes  
 
   private:
     // this is the returnd value of  G4GPILSelection in 
     // the arguments of AlongStepGPIL()
     G4GPILSelection  valueGPILSelection;
 
-  protected:
-    // these two methods are set/get methods for valueGPILSelection
+  protected: // with description 
     // these two methods are set/get methods for valueGPILSelection
     void SetGPILSelection(G4GPILSelection selection)
     { valueGPILSelection = selection;};

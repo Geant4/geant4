@@ -1,12 +1,12 @@
 
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.hh,v 1.3 1999-10-06 10:10:54 kurasige Exp $
+// $Id: G4ProcessTable.hh,v 1.4 1999-11-07 17:11:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,10 @@
 //	CERN, IT Division, ASD group
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
+//
+// Class Description
+//  This class is used for "book keeping" of all processes 
+//  which are registered in all particles
 //
 //  History:
 //      Added G4ProcessTableMesseneger      16 Aug. 1998, H.Kurashige
@@ -37,7 +41,6 @@ class G4ProcessTableMessenger;
 
 class G4ProcessTable
 {
- // this class is used by G4ProcessTable ONLY for booking !!!
  public:
   G4ProcessTable();
   //  Constructors
@@ -53,7 +56,8 @@ class G4ProcessTable
   G4int operator!=(const G4ProcessTable &right) const;
   // equal / unequal operator
   
- public:
+ 
+ public: // with description
   static G4ProcessTable* GetProcessTable();
   // return the pointer to G4ProcessTable object
   //   G4ProcessTable is a "singleton" and can get its pointer by this function
@@ -111,6 +115,7 @@ class G4ProcessTable
   typedef RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
   typedef RWTValOrderedVector<G4String> G4ProcNameVector;
 
+ public: // with description
   G4ProcNameVector*  GetNameList();
   // return pointer of the list of process name
 
@@ -128,18 +133,18 @@ class G4ProcessTable
   G4ProcessVector*   ExtractProcesses( G4ProcTableVector* procTableVector);
   // extract all process objects from the process table 
  
- public: 
+ public: // with description
   void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=0);
   // dump out information of the process table
   //  second argument is used to specify processes designated by a particle 
   
- public:
+ public: // with description
    G4UImessenger* CreateMessenger();
    void           DeleteMessenger();
    // These methods are used by RunManager to let the process table
    // know the timing of creation/destructuion of  messengers
   
- public:
+ public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
    // Set/Get controle flag for output message

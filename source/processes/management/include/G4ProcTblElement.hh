@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.3 1999-06-01 14:52:35 gcosmo Exp $
+// $Id: G4ProcTblElement.hh,v 1.4 1999-11-07 17:11:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,9 @@
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
 // ------------------------------------------------------------
+// Class Description  
+//  This class is used by G4ProcessTable ONLY for booking !!!
+//
 
 #ifndef G4ProcTblElement_h
 #define G4ProcTblElement_h 1

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.4 1999-10-06 10:10:47 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.5 1999-11-07 17:11:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,26 @@
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //   ----------------  G4ProcessManager  -----------------
+// Class Description 
+//  It collects all physics a particle can undertake as seven vectors.
+//  These vectors are 
+//   one vector for all processes (called as "process List")
+//   two vectors for processes with AtRestGetPhysicalInteractionLength
+//                                    and AtRestDoIt
+//   two vectors for processes with AlongStepGetPhysicalInteractionLength
+//                                    and AlongStepDoIt
+//   two vectors for processes with PostStepGetPhysicalInteractionLength
+//                                    and PostStepDoIt
+//  The tracking will message three types of GetPhysicalInteractionLength
+//  in order to limit the Step and select the occurence of processes. 
+//  It will message the corresponding DoIt() to apply the selected 
+//  processes. In addition, the Tracking will limit the Step
+//  and select the occurence of the processes according to
+//  the shortest physical interaction length computed (except for
+//  processes at rest, for which the Tracking will select the
+//  occurence of the process which returns the shortest mean
+//  life-time from the GetPhysicalInteractionLength()).
+//
 // History:
 // revised by G.Cosmo, 06 May 1996
 //    Added vector of processes at rest, 06 May 1996
@@ -65,25 +85,7 @@ enum G4ProcessVectorOrdering
 
 class G4ProcessManager 
 {
-  //  It collects all physics a particle can undertake as seven vectors.
-  //  These vectors are 
-  //   one vector for all processes (called as "process List")
-  //   two vectors for processes with AtRestGetPhysicalInteractionLength
-  //                                    and AtRestDoIt
-  //   two vectors for processes with AlongStepGetPhysicalInteractionLength
-  //                                    and AlongStepDoIt
-  //   two vectors for processes with PostStepGetPhysicalInteractionLength
-  //                                    and PostStepDoIt
-  //  The tracking will message three types of GetPhysicalInteractionLength
-  //  in order to limit the Step and select the occurence of processes. 
-  //  It will message the corresponding DoIt() to apply the selected 
-  //  processes. In addition, the Tracking will limit the Step
-  //  and select the occurence of the processes according to
-  //  the shortest physical interaction length computed (except for
-  //  processes at rest, for which the Tracking will select the
-  //  occurence of the process which returns the shortest mean
-  //  life-time from the GetPhysicalInteractionLength()).
-
+ 
   public: 
       // copy constructor
       G4ProcessManager(G4ProcessManager &right);
@@ -105,6 +107,7 @@ class G4ProcessManager
       G4int operator==(const G4ProcessManager &right) const;
       G4int operator!=(const G4ProcessManager &right) const;
 
+ public: //  with description
       G4ProcessVector* GetProcessList() const;
       //  Returns the address of the vector of all processes 
 
@@ -259,7 +262,7 @@ class G4ProcessManager
       G4ProcessAttrVector*  theAttrVector;
       // vector for process attribute  
 
-  protected:
+  protected: // with description
       G4int InsertAt(G4int position, G4VProcess* process, G4int ivec);
       // insert process at position in theProcVector[ivec]
 
@@ -295,18 +298,19 @@ class G4ProcessManager
       void    CreateGPILvectors();
       void    SetIndexToProcessVector(G4int ivec);
 
- public:
+ public: // with description
    void  DumpInfo();
+
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
-
- protected:
-   G4int verboseLevel;
    // controle flag for output message
    //  0: Silent
    //  1: Warning message
    //  2: More
- 
+
+ protected:
+   G4int verboseLevel;
+  
  private:
    static G4ProcessManagerMessenger* fProcessManagerMessenger;
    static G4int                      counterOfObjects;
