@@ -40,6 +40,8 @@
 #include "Analysis/src/VFilter.h"
 #include "Analysis/src/DoubleBandFilter.h"
 
+using namespace std;
+
 class ANAParticleInfo
 {
   public:

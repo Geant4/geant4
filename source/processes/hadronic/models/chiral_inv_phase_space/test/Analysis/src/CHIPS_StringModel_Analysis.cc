@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.10 2001-10-26 14:44:32 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.11 2001-11-12 16:12:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
     
+using namespace std;
+
 #include "Analysis/src/ParticleInfo.h"
 
 #include "G4ios.hh"
@@ -80,6 +82,7 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QGSParticipants.hh"
 
 #include "G4HEProtonInelastic.hh"
 
@@ -906,7 +909,7 @@ class KtoPi
           for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
           {
             second = aFinalState->GetSecondary(isec);
-            aSec = second->GetDynamicParticle();
+            aSec = const_cast<G4DynamicParticle *>(second->GetDynamicParticle());
             theKtoPi.push_back(aSec);
 	    G4cout << "SECONDARIES info";
             G4cout << aSec->GetDefinition()->GetPDGCharge()<<" ";
