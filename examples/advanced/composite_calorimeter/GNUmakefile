@@ -1,6 +1,4 @@
 # --------------------------------------------------------------
-# GNUmakefile for physics list user.  
-# JPW. Fri Jul 25 10:39:58 CEST 2003
 # --------------------------------------------------------------
 
 name := CompositeCalorimeter
@@ -20,11 +18,11 @@ ifndef LISTS_BASE
 endif
 
 ifndef G4WORKDIR
-  G4WORKDIR = $(LISTS_BASE)/lists/.build
+  G4WORKDIR = $(LISTS_BASE)/lists/.lists_build
 endif
 
 EXTRALIBS += -L$(LISTS_BASE)/../.lists_build/lib/$(G4SYSTEM)
-EXTRALIBS += -L$(LISTS_BASE)/.build/lib/$(G4SYSTEM)
+# EXTRALIBS += -L$(LISTS_BASE)/.lists_build/lib/$(G4SYSTEM)
 # EXTRALIBS += -lFTFC
 EXTRALIBS += -lFTFP
 # EXTRALIBS += -lLBE
