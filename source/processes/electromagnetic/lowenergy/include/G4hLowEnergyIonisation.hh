@@ -68,22 +68,17 @@ protected:
 						  const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
 						  G4double AtomicNumber);
-  
 public:
   
   void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
-  //  void BuildLossTableZiegler(const G4ParticleDefinition& aParticleType);
-  
-  //  void BuildLossTableICRU(const G4ParticleDefinition& aParticleType);
-  
   void SetStoppingPowerTableName(const G4String& dedxTable);
   
   void SetNuclearStoppingOn();
   
   void SetNuclearStoppingOff();
   
-  G4double GetParametrizedLoss(const G4Material* material, const G4double KinEnergy, 
+  G4double GetParametrisedLoss(const G4Material* material, const G4double KinEnergy, 
 			       const G4double DeltaRayCutNow);
 
   G4double GetMolecICRU_R49Loss(const G4Material* material, const G4double KinEnergy, 
@@ -123,7 +118,14 @@ public:
   
   G4int MolecIsInICRU_R49p(const G4Material*  material);
 
+  G4int MolecIsInICRU_R49PowersHe(const G4Material*  material);
+
   G4double MolecIsInZiegler1988(const G4Material*  material);
+
+  G4double GetHeEffChargeSquare(const G4int iz, const G4double HeKinEnergy);
+
+  G4double GetIonEffChargeSquare(const G4Material* material, const G4double KinEnergy,
+                                 const G4double IonCharge);
 
   void PrintInfoDefinition();
   
@@ -135,6 +137,9 @@ private:
   
 private:
   //  private data members ...............................
+
+protected:
+  //  protected data members ...............................
   
   G4PhysicsTable* theMeanFreePathTable;
   
@@ -152,7 +157,8 @@ private:
   const G4double Factor;
   const G4double bg2lim;
   const G4double taulim;          // energy to start to switch off shell corrections
-  const G4double RateMass;
+  G4double RateMass;
+  G4double MassRatio;
   
   // particles , cuts in kinetic energy ........
   const G4Electron* theElectron;
@@ -164,6 +170,7 @@ private:
   G4double DeltaCutInKineticEnergyNow ;
   
   G4double ProtonMassAMU;
+  G4double HeMassAMU;
   G4double ZieglerFactor; // Factor to convert the Stopping Power 
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
