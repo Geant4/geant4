@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2001-04-06 03:07:28 kurasige Exp $
+$Id: History,v 1.52 2001-04-06 06:20:12 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 ------- partman-V03-00-04
 - Fixed bugs in G4ParticleDefinition::GetPDGIsospin()
 - Fixed element name in G4IonTable
+- Added special treatment for Lamdas in G4PDGCodeChecker
 ------- shortlived-V03-00-01
 - Added a0(980),f0(400-1200), f0(980)
 - Fixed PDG encoding for excited Lambdas
