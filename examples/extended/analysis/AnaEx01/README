@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
+$Id: README,v 1.9 2001-11-19 14:05:07 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ $Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
 
   To use an AIDA compliant analysis system with this example the environment 
  variables :
-    G4ANALYSIS_USE_AIDA  
+    G4ANALYSIS_USE
     G4ANALYSIS_AIDA_CONFIG_CFLAGS
     G4ANALYSIS_AIDA_CONFIG_LIBS
  must be properly set.
@@ -28,7 +28,7 @@ $Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
  UNIX csh flavour :
     csh> source <your Geant4 setup script>.csh
     csh> source <AIDA_SYSTEM setup>.csh     (or some equivalent)
-    csh> setenv G4ANALYSIS_USE_AIDA 1
+    csh> setenv G4ANALYSIS_USE 1
     csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
     csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
     csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
@@ -48,7 +48,7 @@ $Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
  package (assuming that it is installed !), do :
    csh> source <your Geant4 setup script>.csh
    csh> source <some directory>/Falsetto/<version>/cmt/setup.csh
-   csh> setenv G4ANALYSIS_USE_AIDA 1
+   csh> setenv G4ANALYSIS_USE 1
    csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
    csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
@@ -68,7 +68,7 @@ $Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
  package (assuming that OpenScientist is installed ! ) do :
    csh> source <some directory>/Lab/<version>/cmt/setup.csh
    csh> source <your Geant4 setup script>.csh
-   csh> setenv G4ANALYSIS_USE_AIDA 1
+   csh> setenv G4ANALYSIS_USE 1
    csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
    csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
