@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.cc,v 1.5 2000-11-20 18:15:01 gcosmo Exp $  */ 
+/* $Id: dirobj.cc,v 1.6 2000-11-21 07:54:50 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -41,6 +41,18 @@
 
 #include <dirobj.h>
 
+
+#ifndef MAXNAMLEN
+#  define MAXNAMLEN 255
+#endif
+
+#ifndef S_IFMT
+#  define S_IFMT __S_IFMT
+#endif
+
+#ifndef S_IFDIR
+#  define S_IFDIR __S_IFDIR
+#endif
 
 // to help ObjectCenter
 #ifndef HAVE_MEMMOVE

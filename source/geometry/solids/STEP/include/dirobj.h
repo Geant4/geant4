@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.h,v 1.5 2000-11-20 18:14:55 gcosmo Exp $  */ 
+/* $Id: dirobj.h,v 1.6 2000-11-21 07:54:49 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -64,16 +64,10 @@
 #include <sysent.h>
 #endif
 
-#ifndef MAXNAMLEN
-#  define MAXNAMLEN 255
-#endif
-
-#ifndef S_IFMT
-#  define S_IFMT __S_IFMT
-#endif
-
-#ifndef S_IFDIR
-#  define S_IFDIR __S_IFDIR
+#ifdef WIN32
+#  ifndef MAXNAMLEN
+#    define MAXNAMLEN 255
+#  endif
 #endif
 
 // sys/stat.h is apparently needed for ObjectCenter and Sun C++ ?
