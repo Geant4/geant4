@@ -5283,7 +5283,7 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
      G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) 
             << G4endl;
 
-   G4double phi = G4UniformRand()*2.*M_PI;
+   G4double phi = G4UniformRand()*twopi;
    rr = 0.5*t/sqr(incidentTotalMomentum);
    if (rr > 1.) rr = 0.;
    if (verboseLevel > 1)
@@ -5676,11 +5676,11 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
        for (i=2;i<npart;i++) rm += pv[i].getMass();
        G4double rm1 = pvcms.getMass() - rm;
        rm -= pv[2].getMass();
-       wps = (npart-3)*std::pow(rm1/sqr(twopi), npart-4)/(4*M_PI*pvcms.getMass());
+       wps = (npart-3)*std::pow(rm1/sqr(twopi), npart-4)/(4*pi*pvcms.getMass());
        for (i=3; (i=npart-1);i++) wps /= i-2; // @@@@@@@@@@ bug @@@@@@@@@
        G4double xxx = rm1/sqr(twopi);
        for (i=1; (i=npart-4); i++) wps /= xxx/i; // @@@@@@@@@@ bug @@@@@@@@@
-       wps /= (4*M_PI*pvcms.getMass());
+       wps /= (4*pi*pvcms.getMass());
        G4double p2,cost,sint,phi;
        j = 1;
        while (j)

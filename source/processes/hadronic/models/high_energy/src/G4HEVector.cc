@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.16 2004-12-08 16:05:26 gcosmo Exp $
+// $Id: G4HEVector.cc,v 1.17 2004-12-10 22:04:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -746,8 +746,8 @@ G4HEVector::Defs1( const G4HEVector & p1, const G4HEVector & p2)
           G4double a     = std::sqrt(p2.px*p2.px + p2.py*p2.py + p2.pz*p2.pz);
           G4double cost  = p2.pz/a; 
           G4double sint  = 0.5 * (std::sqrt(std::fabs((1.-cost)*(1.+cost))) + std::sqrt(pt2)/a);
-          if(p2.py < 0.) ph = 1.5*M_PI;
-          else ph = 0.5*M_PI;
+          if(p2.py < 0.) ph = 1.5*pi;
+          else ph = halfpi;
           if( p2.px != 0.0) 
              ph = std::atan2(p2.py,p2.px);             
           qx =   cost*std::cos(ph)*p1.px - std::sin(ph)*p1.py

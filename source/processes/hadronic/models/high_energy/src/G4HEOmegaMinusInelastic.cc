@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEOmegaMinusInelastic.cc,v 1.11 2004-12-07 13:48:28 gunter Exp $
+// $Id: G4HEOmegaMinusInelastic.cc,v 1.12 2004-12-10 22:04:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -377,8 +377,8 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus( G4bool &inElastic,
 
    for( nt=1; nt<=numSec; nt++ ) 
      {
-       test = std::exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-       dum = M_PI*nt/(2.0*n*n);
+       test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+       dum = pi*nt/(2.0*n*n);
        if( std::fabs(dum) < 1.0 )
          if( test >= 1.0e-10 )anpn += dum*test;
        else 
@@ -401,8 +401,8 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus( G4bool &inElastic,
                           nt = np+nm+nz;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                              test = std::exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                              dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                              test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                              dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                               if( std::fabs(dum) < 1.0 ) 
                                     if( test >= 1.0e-10 )excs += dum*test;
                               else 
@@ -432,8 +432,8 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus( G4bool &inElastic,
                           nt = np+nm+nz;
                           if( (nt>=1) && (nt<=numSec) ) 
                             {
-                              test = std::exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                              dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                              test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                              dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                               if( std::fabs(dum) < 1.0 ) 
                                   if( test >= 1.0e-10 )excs += dum*test;
                               else 
