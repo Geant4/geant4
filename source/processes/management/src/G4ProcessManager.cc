@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.14 2000-03-02 02:05:35 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.15 2000-03-11 00:58:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -557,23 +557,12 @@ G4int G4ProcessManager::GetProcessOrdering(
 {
   // get Process Vector Id
   G4int ivec = GetProcessVectorId(idDoIt, typeDoIt);
-  if (ivec <0 ) {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cout << "G4ProcessManager::SetProcessOrdering: ";
-      G4cout << " illegal DoIt Index [= " << idDoIt << "]";
-      G4cout << G4endl;
+  if (ivec >=0 ) {
+    // get attribute
+    G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
+    if (pAttr != 0) { 
+      return pAttr->ordProcVector[ivec];
     }
-#endif
-    return -1;
-  }
-  
-  // get attribute
-  G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
-  if (pAttr != 0) { 
-    return pAttr->ordProcVector[ivec];
-  } else {
-    return -1;
   }
   return -1;
 }
