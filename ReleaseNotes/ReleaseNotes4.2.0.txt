@@ -201,11 +201,11 @@ Notes:
 
 The code and some binary libraries are available through our "Source
 Code" Web page:
-- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+- see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
 Updates to the documentation for Geant4 2.0 are expected to be published as
 usual within three weeks from the release date.
 
@@ -253,8 +253,7 @@ Platforms configured but not tested and not supported:
 
 Geant4 2.0 requires the installation of CLHEP 1.5. 
 
-See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
-CLHEP 1.5</A>.  
+See CLHEP 1.5 (http://cern.ch/clhep/INSTALLATION/clhep.html).
 
 By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
 if the compiler is capable. You need to explicitly disable CLHEP settings in
@@ -269,9 +268,6 @@ Geant4 2.0 coworks with LHC++ 2.0.0 and components included therein:
   ObjectSpace 2.1
   HepODBMS 0.3.1.3 
   CLHEP 1.5.0.0
-
-For more information about LHC++ 2.0.0, see:
-  <A href="http://wwwinfo.cern.ch/asd/lhc++/may2000.html">LHC++ 2.0.0</A>
  
 3. The Standard Template Library
 --------------------------------
@@ -281,7 +277,7 @@ The following versions of STL have been tested:
    ObjectSpace STL on
           DEC, HP and SUN.
 
-          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+          See ObjectSpace (http://www.objectspace.com).
 
    "Native" STL on: Linux, HP, DEC and SUN.
 

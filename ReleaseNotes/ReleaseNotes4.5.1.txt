@@ -51,7 +51,7 @@ Platforms configured but not tested and not supported:
 -----------------
 
 Geant4 5.1 requires the installation of CLHEP
-(href="http://cern.ch/clhep/INSTALLATION/clhep.html).
+(http://cern.ch/clhep/INSTALLATION/clhep.html).
 Tests have been performed with CLHEP 1.8.0.0.
 
 Geant4 5.1 examples with histogramming cowork with AIDA 3.0 implementations.
@@ -107,7 +107,7 @@ For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
 Geant4 Problem Reporting System, available on the Web at this address:
 
-    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+    http://cern.ch/geant4/problemreport
 
 
 6. Compilation Warnings
