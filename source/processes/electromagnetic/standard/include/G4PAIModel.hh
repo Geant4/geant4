@@ -122,13 +122,13 @@ public:
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();
-  void     BuildPAIonisationTable(); 
+  void     BuildPAIonisationTable();
   void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
   G4double GetdEdxCut( G4int iPlace, G4double transferCut);
   G4double GetPostStepTransfer( G4double scaledTkin );
-  G4double GetEnergyTransfer( G4int iPlace, 
-                                          G4double position, 
+  G4double GetEnergyTransfer( G4int iPlace,
+                                          G4double position,
 					  G4int iTransfer );
 
 
@@ -148,15 +148,15 @@ private:
 
   // The vector over proton kinetic energies: the range of gammas
 
-  static const G4double      fLowestKineticEnergy;
-  static const G4double      fHighestKineticEnergy;
-  static G4int               fTotBin;
-  static G4int               fMeanNumber;
-  static G4PhysicsLogVector* fProtonEnergyVector ;
+  G4double             fLowestKineticEnergy;
+  G4double             fHighestKineticEnergy;
+  G4int                fTotBin;
+  G4int                fMeanNumber;
+  G4PhysicsLogVector*  fProtonEnergyVector ;
 
 
 
-  // vectors 
+  // vectors
   G4PhysicsTable*                    fPAItransferBank;
   std::vector<G4PhysicsTable*>       fPAIxscBank;
   G4PhysicsTable*                    fPAIdEdxTable;
