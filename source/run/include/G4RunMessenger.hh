@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.8 2001-11-23 16:20:30 maire Exp $
+// $Id: G4RunMessenger.hh,v 1.9 2002-08-08 17:29:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithABool *          optCmd;
     G4UIcmdWithABool *          brkBoECmd;
     G4UIcmdWithABool *          brkEoECmd;
-    G4UIcmdWithoutParameter *   abortCmd;
+    G4UIcmdWithABool *          abortCmd;
+    G4UIcmdWithoutParameter *   abortEventCmd;
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   cutCmd;

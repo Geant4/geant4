@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.22 2001-11-23 16:20:30 maire Exp $
+// $Id: G4RunManager.hh,v 1.23 2002-08-08 17:29:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,10 +129,16 @@ class G4RunManager
     //  Usually, this method is invoked from InitializeGeometry() protected method
     // of this class. But, in case all of geometry has already created and kept in
     // the ODBMS, the pointer to the world physical volume can be set by this method.
-    virtual void AbortRun();
+    virtual void AbortRun(G4bool softAbort=false);
     //  This method safely aborts the current event loop even if an event is in progress.
     // This method is available for Geant4 states of GeomClosed and EventProc. The state
     // will be changed to Idle, so that another event loop can be done.
+    //  If softAbort is true, the event loop is aborted after processing the current
+    // event, while the current event is aborted if it is false.
+    virtual void AbortEvent();
+    //  This method aborts the currently processing event, remaining events in the
+    // current event loop will be processed. This method is available only for
+    // EventProc state.
 
   protected: // with description
 

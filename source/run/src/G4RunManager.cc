@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.46 2002-07-30 12:59:14 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.47 2002-08-08 17:29:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -393,7 +393,7 @@ void G4RunManager::InitializeCutOff()
   cutoffInitialized = true;
 }
   
-void G4RunManager::AbortRun()
+void G4RunManager::AbortRun(G4bool softAbort)
 {
   // This method is valid only for GeomClosed or EventProc state
   G4ApplicationState currentState = 
@@ -401,11 +401,26 @@ void G4RunManager::AbortRun()
   if(currentState==GeomClosed || currentState==EventProc)
   {
     runAborted = true;
-    if(currentState==EventProc) eventManager->AbortCurrentEvent();
+    if(currentState==EventProc && !softAbort) eventManager->AbortCurrentEvent();
   }
   else
   {
     G4cerr << "Run is not in progress. AbortRun() ignored." << G4endl;
+  }
+}
+
+void G4RunManager::AbortEvent()
+{
+  // This method is valid only for EventProc state
+  G4ApplicationState currentState = 
+    G4StateManager::GetStateManager()->GetCurrentState();
+  if(currentState==EventProc)
+  {
+    eventManager->AbortCurrentEvent();
+  }
+  else
+  {
+    G4cerr << "Event is not in progress. AbortEevnt() ignored." << G4endl;
   }
 }
 

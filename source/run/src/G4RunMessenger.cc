@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.10 2001-11-23 16:20:30 maire Exp $
+// $Id: G4RunMessenger.cc,v 1.11 2002-08-08 17:29:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -102,9 +102,17 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   brkEoECmd->SetParameterName("flag",true);
   brkEoECmd->SetDefaultValue(true);
   
-  abortCmd = new G4UIcmdWithoutParameter("/run/abort",this);
+  abortCmd = new G4UIcmdWithABool("/run/abort",this);
   abortCmd->SetGuidance("Abort current run processing.");
+  abortCmd->SetGuidance("If softAbort is false (default), currently processing event will be immediately aborted,");
+  abortCmd->SetGuidance("while softAbort is true, abortion occurs after processing the current event.");
   abortCmd->AvailableForStates(GeomClosed,EventProc);
+  abortCmd->SetParameterName("softAbort",true);
+  abortCmd->SetDefaultValue(false);
+
+  abortEventCmd = new G4UIcmdWithoutParameter("/run/abortCurrentEvent",this);
+  abortEventCmd->SetGuidance("Abort currently processing event.");
+  abortEventCmd->AvailableForStates(EventProc);
 
   geomCmd = new G4UIcmdWithoutParameter("/run/geometryModified",this);
   geomCmd->SetGuidance("Force geometry to be closed again.");
@@ -191,6 +199,7 @@ G4RunMessenger::~G4RunMessenger()
   delete brkBoECmd;
   delete brkEoECmd;
   delete abortCmd;
+  delete abortEventCmd;
   delete initCmd;
   delete geomCmd;
   delete cutCmd;
@@ -228,7 +237,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==brkEoECmd )
   { G4UImanager::GetUIpointer()->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
   else if( command==abortCmd )
-  { runManager->AbortRun(); }
+  { runManager->AbortRun(abortCmd->GetNewBoolValue(newValue)); }
+  else if( command==abortEventCmd )
+  { runManager->AbortEvent(); }
   else if( command==initCmd )
   { runManager->Initialize(); }
   else if( command==geomCmd )
