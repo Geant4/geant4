@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.9 2004-02-10 18:07:23 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.hh,v 1.10 2004-10-25 13:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,7 @@ public:
 
   G4MuBetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBetheBloch");
 
-  ~G4MuBetheBlochModel();
+  virtual ~G4MuBetheBlochModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

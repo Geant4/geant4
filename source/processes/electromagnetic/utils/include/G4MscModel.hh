@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.12 2004-08-17 12:40:08 urban Exp $
+// $Id: G4MscModel.hh,v 1.13 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,7 +70,7 @@ public:
   G4MscModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
                const G4String& nam = "MscUni");
 
-  ~G4MscModel();
+  virtual ~G4MscModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.12 2004-05-11 15:35:07 vnivanch Exp $
+// $Id: G4UniversalFluctuation.hh,v 1.13 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
 
   G4UniversalFluctuation(const G4String& nam = "UniFluc");
 
-  ~G4UniversalFluctuation();
+  virtual ~G4UniversalFluctuation();
 
   G4double SampleFluctuations(const G4Material*,
                           const G4DynamicParticle*,

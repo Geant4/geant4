@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.22 2004-08-17 18:19:13 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.23 2004-10-25 13:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,7 +75,7 @@ public:
 
   G4MuBremsstrahlung(const G4String& processName = "muBrems");
 
-  ~G4MuBremsstrahlung();
+  virtual ~G4MuBremsstrahlung();
 
   G4bool IsApplicable(const G4ParticleDefinition& p)
             {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};

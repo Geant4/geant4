@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.1 2004-05-03 13:13:07 vnivanch Exp $
+// $Id: G4EmMultiModel.hh,v 1.2 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,7 @@ public:
 
   G4EmMultiModel(const G4String& nam = "MultiModel");
 
-  ~G4EmMultiModel();
+  virtual ~G4EmMultiModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

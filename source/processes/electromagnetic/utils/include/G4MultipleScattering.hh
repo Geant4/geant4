@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.18 2004-08-17 12:39:56 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.19 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.18 2004-08-17 12:39:56 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.19 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -77,7 +77,7 @@ public:    // with description
 
   G4MultipleScattering(const G4String& processName="msc");
 
-  ~G4MultipleScattering();
+  virtual ~G4MultipleScattering();
 
   G4bool IsApplicable (const G4ParticleDefinition& p)
              {return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());};

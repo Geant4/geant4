@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh,v 1.6 2004-05-11 15:35:06 vnivanch Exp $
+// $Id: G4BohrFluctuations.hh,v 1.7 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,7 +60,7 @@ public:
 
   G4BohrFluctuations(const G4String& nam = "BohrFluc");
 
-  ~G4BohrFluctuations();
+  virtual ~G4BohrFluctuations();
 
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,

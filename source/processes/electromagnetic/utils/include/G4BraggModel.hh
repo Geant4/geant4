@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.12 2004-09-13 09:18:45 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.13 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
 
   G4BraggModel(const G4ParticleDefinition* p = 0, const G4String& nam = "Bragg");
 
-  ~G4BraggModel();
+  virtual ~G4BraggModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.6 2003-10-16 13:06:40 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.7 2004-10-25 13:34:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,7 @@ public:
 
   G4IonFluctuations(const G4String& nam = "IonFluc");
 
-  ~G4IonFluctuations();
+  virtual ~G4IonFluctuations();
 
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,

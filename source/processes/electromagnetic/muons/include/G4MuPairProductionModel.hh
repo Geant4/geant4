@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.12 2004-04-28 14:39:43 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.13 2004-10-25 13:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,7 +67,7 @@ public:
 
   G4MuPairProductionModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuPairProd");
 
-  ~G4MuPairProductionModel();
+  virtual ~G4MuPairProductionModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
