@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.11 2002-12-16 11:15:42 gcosmo Exp $
+// $Id: G4NeutrinoMu.cc,v 1.12 2002-12-16 14:06:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-/
+//
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
