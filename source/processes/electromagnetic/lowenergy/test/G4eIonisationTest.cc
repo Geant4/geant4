@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationTest.cc,v 1.12 2001-10-25 09:48:26 elena Exp $
+// $Id: G4eIonisationTest.cc,v 1.13 2001-10-25 22:55:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,7 @@ int main()
 
   IHistoManager *hbookManager = createIHistoManager();
   assert (hbookManager != 0);
-   hbookManager->selectStore("comptonhisto.hbook");
+   hbookManager->selectStore("ioni.hbook");
 
    // Create a nTuple factory:
   NTupleFactory* factory = createNTupleFactory();
@@ -101,13 +101,13 @@ int main()
   // ---- primary ntuple ------
  
  // ntuple-name is composition of <fileName>:<dirName>:<ntupleID>
-  NTuple* ntuple1 = factory->createC( "comptonhisto1.hbook::1" );
+  NTuple* ntuple1 = factory->createC( "ioni1.hbook::1" );
   // Check if successful
  assert (ntuple1 != 0);
   
   // ---- secondary ntuple ------
   
- NTuple* ntuple2 = factory->createC( "comptonhisto2.hbook::2" );
+ NTuple* ntuple2 = factory->createC( "ioni2.hbook::2" );
   assert (ntuple2 != 0);
    
   // ---- secondaries histos ----
@@ -376,10 +376,10 @@ int main()
     {
       step->SetStepLength(1*micrometer);
 
-      G4cout  <<  "Iteration = "  <<  iter 
-	      << "  -  Step Length = " 
-	      << step->GetStepLength()/mm << " mm "
-	      << G4endl;
+      G4cout  <<  "Iteration = "  <<  iter << G4endl;
+      //	      << "  -  Step Length = " 
+      //	      << step->GetStepLength()/mm << " mm "
+      //	      << G4endl;
 
       eTrack->SetStep(step); 
  
@@ -411,7 +411,7 @@ int main()
       G4double yChange = particleChange->GetPositionChange()->y();
       G4double zChange = particleChange->GetPositionChange()->z();
 
-      G4cout << "---- Primary after the step ---- " << G4endl;
+      //  G4cout << "---- Primary after the step ---- " << G4endl;
  
       //      G4cout << "Position (x,y,z) = " 
       //	     << xChange << "  " 
@@ -419,14 +419,14 @@ int main()
       //	     << zChange << "   " 
       //	     << G4endl;
 
-      G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
-	     << "(px,py,pz): ("
-	     << pxChange/MeV << ","
-	     << pyChange/MeV << "," 
-	     << pzChange/MeV << ") MeV"
-	     << G4endl;
+      //  G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
+      //     << "(px,py,pz): ("
+      //     << pxChange/MeV << ","
+      //     << pyChange/MeV << "," 
+      //     << pzChange/MeV << ") MeV"
+      //     << G4endl;
 
-      G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
+      // G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
       
       // Primary
 
@@ -464,6 +464,7 @@ int main()
 	    }
 	  
 	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
+	  
 	  G4cout  << "==== Final " 
 		  <<  particleName  <<  " "  
 		  << "energy: " <<  e/MeV  <<  " MeV,  " 
@@ -494,6 +495,7 @@ int main()
 	    {
 	      partType = 3;
 	      nPhotons++;
+	      G4cout << "Fluorescence photon: e = " << e/keV << " keV" << G4endl; 
 	    }
 	  // NEW: Values of attributes are prepared; store them to the nTuple:
           ntuple2->addRow(); // check for returning true ...
