@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.16 2001-07-13 15:57:06 gcosmo Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.17 2001-07-15 04:52:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -803,7 +803,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
     for ( j=0; j < pVector->entries(); ++j) {
-      if (!(*pVector)[j]->StorePhysicsTable(directoryPhysicsTable,ascii)){   
+      if (!(*pVector)[j]->StorePhysicsTable(particle,directoryPhysicsTable,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
 	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
@@ -1038,7 +1038,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
   for ( j=0; j < pVector->entries(); ++j) {
     success[j] = 
-       (*pVector)[j]->RetrievePhysicsTable(directory,ascii);
+       (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
     if (!success[j]) {
 #ifdef G4VERBOSE  
