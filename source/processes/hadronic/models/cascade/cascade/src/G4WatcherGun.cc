@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
+//#define PB
+
+#include "G4WatcherGun.hh"
+
 G4WatcherGun::G4WatcherGun()
   : verboseLevel(2) {
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4RegionModel.hh"
+
+const G4double G4RegionModel::radius0 = 1.0E-15; 
 const G4double G4RegionModel::BE = 7;
 
 G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)

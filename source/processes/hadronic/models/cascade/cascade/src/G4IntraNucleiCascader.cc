@@ -19,13 +19,16 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#define RUN
+
+#include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
 #include "G4CascadParticle.hh"
-#include "algorithm"
+#include "g4std/algorithm"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 

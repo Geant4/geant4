@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
+#include "G4BertiniNucleiModel.hh"
+#include "G4LorentzConvertor.hh"
+#include "G4CollisionOutput.hh"
+
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4BertiniNucleiModel::G4BertiniNucleiModel()

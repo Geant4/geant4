@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#include "G4Analyser.hh"
+#include <math.h>
+
 G4Analyser::G4Analyser()
   :verboseLevel(1)  {
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4CascadParticle.hh"
+
+G4CascadParticle::G4CascadParticle()
   : verboseLevel(2) {
 
   if (verboseLevel > 3) {

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4CascadeInterface.hh"
+#include "globals.hh"
+#include "G4DynamicParticleVector.hh"
 #include "G4IonTable.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+//#define CHC_CHECK
+
+#include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4Fissioner.hh"
+#include "G4InuclNuclei.hh"
+#include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
 
 G4Fissioner::G4Fissioner()

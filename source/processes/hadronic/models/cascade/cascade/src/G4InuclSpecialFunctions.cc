@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4InuclSpecialFunctions.hh"
+#include "Randomize.hh"
+
 G4double G4InuclSpecialFunctions::getAL(G4double A) {
   G4int verboseLevel = 2;
 

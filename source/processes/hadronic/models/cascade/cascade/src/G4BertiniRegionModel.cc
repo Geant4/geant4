@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4BertiniRegionModel.hh"
+
+const G4double G4BertiniRegionModel::radius0 = 1.0E-15; 
 const G4double G4BertiniRegionModel::BE = 7;
 
 G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)

@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#include "globals.hh"
+#include "G4BertiniData.hh"
+
 //#include "G4Cascade.hh"
 
 // Initialize static pointer for singleton instance

@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#define RUN
+
+#include <math.h>
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"

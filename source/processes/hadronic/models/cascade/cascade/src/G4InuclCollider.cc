@@ -19,8 +19,12 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4InuclCollider.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "algorithm"
+#include "g4std/algorithm"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;

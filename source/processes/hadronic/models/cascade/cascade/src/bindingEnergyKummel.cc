@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
+#include "G4InuclSpecialFunctions.hh"
+
 G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A, 
 						      G4double Z) {
   G4int verboseLevel = 2;

@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#define RUN
+
+#include "G4EquilibriumEvaporator.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
 

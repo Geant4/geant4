@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4LorentzConvertor.hh"
+
+G4LorentzConvertor::G4LorentzConvertor() 
   : verboseLevel(2), degenerated(false) {
 
   if (verboseLevel > 3) {

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4FissionStore.hh"
+#include <math.h>
+
 G4FissionStore::G4FissionStore()
   : verboseLevel(2){
 

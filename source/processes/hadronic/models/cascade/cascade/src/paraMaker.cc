@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+#include "G4InuclSpecialFunctions.hh"
+
+G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
   G4int verboseLevel = 1;
 
   if (verboseLevel > 3) {

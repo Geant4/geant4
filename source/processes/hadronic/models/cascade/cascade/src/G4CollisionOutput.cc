@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
+#include "G4CollisionOutput.hh"
+#include "G4ParticleLargerEkin.hh"
+#include "g4std/algorithm"
+
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4CollisionOutput::G4CollisionOutput()
