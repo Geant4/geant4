@@ -44,7 +44,7 @@
 G4VParticleChange*
 G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 {
-   G4cout << "entering elastic scattering"<<G4endl; 
+   // G4cout << "entering elastic scattering"<<G4endl; 
    if(getenv("debug_LElastic")) verboseLevel = 5;
    theParticleChange.Initialize(aTrack);
 
