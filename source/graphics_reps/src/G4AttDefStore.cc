@@ -21,23 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc,v 1.1 2002-10-24 14:28:39 johna Exp $
+// $Id: G4AttDefStore.cc,v 1.2 2002-10-28 11:13:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttDefStore.hh"
 
 #include "G4AttDef.hh"
 
-G4std::map<G4String,G4std::vector<G4AttDef>*> G4AttDefStore::m_stores;
+G4std::map<G4String,G4std::map<G4String,G4AttDef>*> G4AttDefStore::m_stores;
 
-G4std::vector<G4AttDef>*
-G4AttDefStore::GetIntance(G4String storeName,bool& isNew) {
-  if (m_stores.find(storeName) == m_stores.end()) {
+G4std::map<G4String,G4AttDef>*
+G4AttDefStore::GetInstance(G4String storeName,bool& isNew) {
+  G4std::map<G4String,G4AttDef>* store;
+  G4std::map<G4String,G4std::map<G4String,G4AttDef>*>::iterator iStore =
+    m_stores.find(storeName);
+  if (iStore == m_stores.end()) {
     isNew = true;
-    m_stores[storeName] = new G4std::vector<G4AttDef>;
+    store = new G4std::map<G4String,G4AttDef>;
+    m_stores[storeName] = store;
   }
   else {
     isNew = false;
+    store = iStore->second;
   }
-  return m_stores[storeName];
+  return store;
 }

@@ -21,28 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.1 2002-10-24 14:28:08 johna Exp $
+// $Id: G4AttDefStore.hh,v 1.2 2002-10-28 11:13:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH
 
 #include "globals.hh"
-#include "g4std/vector"
 #include "g4std/map"
 
 class G4AttDef;
 
 class G4AttDefStore{
 public:
-  static G4std::vector<G4AttDef>* GetIntance(G4String storeName,bool& isNew);
+  static G4std::map<G4String,G4AttDef>*
+  GetInstance(G4String storeName,bool& isNew);
   // Returns a pointer to the named store and isNew is true if store is new.
 private:
   G4AttDefStore();
   ~G4AttDefStore();
   G4AttDefStore(const G4AttDefStore&);
   G4AttDefStore& operator=(const G4AttDefStore&);
-  static G4std::map<G4String,G4std::vector<G4AttDef>*> m_stores;
+  static G4std::map<G4String,G4std::map<G4String,G4AttDef>*> m_stores;
 };
 
 #endif //G4ATTDEFSTORE_H
