@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.13 2003-11-02 16:17:21 gcosmo Exp $
+// $Id: testPropagateSpin.cc,v 1.14 2003-11-17 14:48:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -264,6 +264,7 @@ G4FieldManager* SetupField(G4int type)
     pChordFinder = new G4ChordFinder( &myMagField,
 				      1.0e-2 * mm,
 				      pStepper);
+    pChordFinder->SetVerbose(1);  // ity();
 
     pFieldMgr->SetChordFinder( pChordFinder );
 
@@ -305,10 +306,12 @@ void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4doub
                       Mass );
 }
 
+G4PropagatorInField *pMagFieldPropagator;
 //
 // Test Stepping
 //
-G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
+G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode, 
+			       G4int             )     // type)
 {
     void report_endPV(G4ThreeVector    Position, 
                   G4ThreeVector UnitVelocity,
@@ -325,13 +328,14 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
     G4UniformMagField MagField(10.*tesla, 0., 0.);  // Tesla Defined ? 
     G4Navigator   *pNavig= G4TransportationManager::
                     GetTransportationManager()-> GetNavigatorForTracking();
-    G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
+
+    // pMagFieldPropagator= SetupPropagator(type);
 
     pMagFieldPropagator->SetChargeMomentumMass(  
 			    +1.,                    // charge in e+ units
 			    0.1*GeV,                // Momentum in Mev/c ?
 			    0.105658387*GeV );
-    pNavig->SetWorldVolume(pTopNode);
+    // pNavig->SetWorldVolume(pTopNode);
 
 
     G4VPhysicalVolume *located;
@@ -418,11 +422,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
 	  step_len=pMagFieldPropagator->ComputeStep( stateVec, 
 						     physStep, safety
-#ifdef G4MAG_CHECK_VOLUME
 						     ,located);
-#else
-	                                             );
-#endif
 	  //       --------------------
 	  EndPosition=     pMagFieldPropagator->EndPosition();
 	  EndUnitMomentum= pMagFieldPropagator->EndMomentumDir();
@@ -442,9 +442,11 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
           // In this case spin should be parallel (equal) to momentum
 	  G4double magdiff= (EndUnitMomentum - EndSpin).mag();
-	  if( magdiff > 1.e-8 )
+	  if( magdiff > 1.e-8 ){
+	    G4cout.precision(4); 
 	    G4cout << " Spin is not equal to Momentum " 
 		   << " Diff = " << magdiff << G4endl;
+	  }
 
 	  G4ThreeVector MoveVec = EndPosition - Position;
 	  assert( MoveVec.mag() < physStep*(1.+1.e-9) );
@@ -457,8 +459,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  pNavig->SetGeometricallyLimitedStep();
 	  // pMagFieldPropagator->SetGeometricallyLimitedStep();
 
-	  Position=     EndPosition;
-          // Velocity=     EndVelocity;
+	  Position= EndPosition;
 	  UnitMomentum= EndUnitMomentum;
 	  initialSpin = EndSpin;
           
@@ -468,32 +469,6 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
     return(1);
 }
-
-// int main(int argc, char** argv)
-int main(int argc, char **argv)
-{
-    G4VPhysicalVolume *myTopNode;
-    G4int type;
-    myTopNode=BuildGeometry();	// Build the geometry
-    G4GeometryManager::GetInstance()->CloseGeometry(false);
-
-    type = 8 ;
-
-    if( argc == 2 )
-      type = atoi(argv[1]);
-
-    testG4PropagatorInField(myTopNode, type);
-
-// Repeat tests but with full voxels
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4GeometryManager::GetInstance()->CloseGeometry(true);
-
-    testG4PropagatorInField(myTopNode, type);
-
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    return 0;
-}
-
 
 void report_endPV(G4ThreeVector    Position, 
                   G4ThreeVector, // UnitVelocity,
@@ -509,21 +484,24 @@ void report_endPV(G4ThreeVector    Position,
 		  //   G4VPhysicalVolume* endVolume)
 {
     const G4int verboseLevel=1;
-    
+    G4int oldPrec= G4cout.precision(4); 
+  
     if( Step == 0 && verboseLevel <= 3 )
     {
-       G4cout.precision(3);
+       // G4cout.precision(6);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-       G4cout << std::setw( 5) << "Step#" << " "
-            << std::setw( 9) << "X(mm)" << " "
-            << std::setw( 9) << "Y(mm)" << " "  
-            << std::setw( 9) << "Z(mm)" << " "
+       G4cout << std::setw( 3) << "Stp#" << " "
+            << std::setw( 8) << "X(mm)" << " "
+            << std::setw( 8) << "Y(mm)" << " "  
+            << std::setw( 8) << "Z(mm)" << " "
             << std::setw( 7) << " N_x " << " "
             << std::setw( 7) << " N_y " << " "
             << std::setw( 7) << " N_z " << " "
             << std::setw( 7) << " S_x " << " "
             << std::setw( 7) << " S_y " << " "
             << std::setw( 7) << " S_z " << " "
+            << std::setw( 9) << " |S-N|" << " "
+            << std::setw( 9) << " (S_z-N_z) " << " "
 	   // << std::setw( 9) << "KinE(MeV)" << " "
 	   // << std::setw( 9) << "dE(MeV)" << " "  
             << std::setw( 9) << "StepLen" << " "  
@@ -547,22 +525,27 @@ void report_endPV(G4ThreeVector    Position,
     }
     else // if( verboseLevel > 0 )
     {
-       G4cout.precision(3);
-       G4cout << std::setw( 5) << Step << " "
-	    << std::setw( 9) << Position.x() << " "
-	    << std::setw( 9) << Position.y() << " "
-	    << std::setw( 9) << Position.z() << " "
-	    << std::setw( 7) << EndUnitVelocity.x() << " "
-	    << std::setw( 7) << EndUnitVelocity.y() << " "
-	    << std::setw( 7) << EndUnitVelocity.z() << " "
-	    << std::setw( 7) << EndSpin.x() << " "
-	    << std::setw( 7) << EndSpin.y() << " "
-	    << std::setw( 7) << EndSpin.z() << " "
+       G4cout.precision(3);  // 4  ?
+       G4cout << std::setw( 3) << Step << " "
+	      << std::setw( 7) << Position.x() << " "
+	      << std::setw( 7) << Position.y() << " "
+	      << std::setw( 7) << Position.z() << " "
+	      << std::setw( 7) << EndUnitVelocity.x() << " "
+	      << std::setw( 7) << EndUnitVelocity.y() << " "
+	      << std::setw( 7) << EndUnitVelocity.z() << " "
+	      << std::setw( 7) << EndSpin.x() << " "
+	      << std::setw( 7) << EndSpin.y() << " "
+	      << std::setw( 7) << EndSpin.z() << " ";
+       G4cout.precision(2); 
+       G4cout << std::setw( 8) << (EndSpin-EndUnitVelocity).mag() << " "
+	      << std::setw( 8) << EndSpin.z() - EndUnitVelocity.z() << " ";
 	 //    << std::setw( 9) << KineticEnergy << " "
 	 //    << std::setw( 9) << EnergyDifference << " "
-	    << std::setw( 9) << step_len << " "
-	    << std::setw( 9) << physStep << " "
-	    << std::setw( 9) << safety << " ";
+       G4cout.precision(6);
+       G4cout << std::setw( 9) << step_len << " "
+	      << std::setw( 9) << physStep << " "; 
+       G4cout.precision(3);  // could be 4 ?
+       G4cout << std::setw( 9) << safety << " ";
        if( startVolume != 0) {
 	 G4cout << std::setw(12) << startVolume->GetName() << " ";
        } else {
@@ -570,64 +553,109 @@ void report_endPV(G4ThreeVector    Position,
        }
 
 #if 0
-       if( endVolume != 0) 
-       {
+       if( endVolume != 0) {
 	 G4cout << std::setw(12) << endVolume()->GetName() << " ";
-       } 
-       else 
-       {
+       } else {
 	 G4cout << std::setw(12) << "OutOfWorld" << " ";
        }
 #endif
        G4cout << G4endl;
     }
+
+    G4cout.precision(oldPrec);
 }
 
-int readin_particle( )
+// Main program
+// -------------------------------
+int main(int argc, char **argv)
 {
- static const
- double pmass[5] = {
-                    0.00051099906 ,         //  electron
-                    0.105658389   ,         //  muon
-                    0.13956995    ,         //  pion
-                    0.493677      ,         //  kaon
-                    0.93827231              //  proton
-                   } ;
- const double cSpeed = 299792458.0 ; // light speed in m/s
- const double pi = 3.141592653589793238 ;
- int pCharge, i ;
- double pMomentum, pTeta, pPhi, h ;
- G4cout<<"Enter particle type: 0 - electron, 1 - muon, 2 - pion, \n"
-     <<"3 - kaon, 4 - proton "<< G4endl ;
- G4cin>>i ;
- double pMass = pmass[i] ;
- G4cout<<"Enter particle charge in units of the positron charge "<< G4endl ;
- G4cin>>pCharge ;
- G4cout<<"Enter particle momentum in GeV/c"<<G4endl ;
- G4cin>>pMomentum ;
- G4cout<<"Enter particle teta & phi in degrees"<<G4endl ;
- G4cin>>pTeta ;
- G4cin>>pPhi ;
- G4cout<<"Enter particle Step in centimeters"<<G4endl ;
- G4cin>>h ;
+    G4VPhysicalVolume *myTopNode;
+    G4int type, optim;
+    G4bool optimise=true;
 
- h *=  10.; // G4 units are in millimeters.
+    type = 8 ;
 
- double betaGamma = pMomentum/pMass ;
- double pSpeed = betaGamma*cSpeed/sqrt(1 + betaGamma*betaGamma) ;
- double pEnergy = pMomentum*cSpeed/pSpeed ;
-        pEnergy *= 1.60217733e-10  ; // energy in J (SI units)
- pTeta *= pi/180 ;
- pPhi  *= pi/180 ;
+    if( argc >= 2 )
+      type = atoi(argv[1]);
 
-#if 0
- for(i=0;i<3;i++) ystart[i] = 0 ;            // initial coordinates
- ystart[3] = pSpeed*sin(pTeta)*cos(pPhi) ;   // and speeds
- ystart[4] = pSpeed*sin(pTeta)*sin(pPhi) ;
- ystart[5] = pSpeed*cos(pTeta) ;
-#endif
+    if( argc >=3 ){
+      optim= atoi(argv[2]);
+      if( optim == 0 ) { optimise = false; }
+    }
 
- return 1;
+    G4cout << " Testing with stepper number " << type; 
+    G4cout << " and PiF safety optimisation " ; 
+    if (optimise)   G4cout << "on"; 
+    else            G4cout << "off"; 
+    G4cout << G4endl;
+
+    // Create the geometry & field 
+    myTopNode=BuildGeometry();	// Build the geometry
+ 
+    G4Navigator *pNavig= G4TransportationManager::
+                    GetTransportationManager()-> GetNavigatorForTracking();
+    pNavig->SetWorldVolume(myTopNode);
+
+    G4GeometryManager::GetInstance()->CloseGeometry(false);
+
+    // Setup the propagator (will be overwritten by testG4Propagator ...)
+    pMagFieldPropagator= SetupPropagator(type);
+    G4cout << " Using default values for " 
+	   << " Min Eps = "  <<   pMagFieldPropagator->GetMinimumEpsilonStep()
+           << " and "
+	   << " MaxEps = " <<  pMagFieldPropagator->GetMaximumEpsilonStep()
+	   << G4endl; 
+
+// Do the tests without voxels
+    G4cout << " Test with no voxels" << G4endl; 
+    testG4PropagatorInField(myTopNode, type);
+
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
+
+// Repeat tests but with full voxels
+    G4cout << " Test with full voxels" << G4endl; 
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4GeometryManager::GetInstance()->CloseGeometry(true);
+
+    testG4PropagatorInField(myTopNode, type);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+
+    G4cout << G4endl
+	   << "----------------------------------------------------------"
+	   << G4endl; 
+
+// Repeat tests with full voxels and modified parameters
+    G4cout << "Test with more accurate parameters " << G4endl; 
+
+    G4double  maxEpsStep= 0.001;
+    G4double  minEpsStep= 2.5e-8;
+    G4cout << " Setting values for Min Eps = " << minEpsStep 
+           << " and MaxEps = " << maxEpsStep << G4endl; 
+
+    pMagFieldPropagator->SetMaximumEpsilonStep(maxEpsStep);
+    pMagFieldPropagator->SetMinimumEpsilonStep(minEpsStep);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4GeometryManager::GetInstance()->CloseGeometry(true);
+
+    testG4PropagatorInField(myTopNode, type);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+
+    optimise = ! optimise;
+// Repeat tests but with the opposite optimisation choice
+    G4cout << " Now test with safety optimisation " ; 
+    if (optimise)   G4cout << "on"; 
+    else            G4cout << "off"; 
+    G4cout << G4endl;
+
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
+    testG4PropagatorInField(myTopNode, type);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+
+    return 0;
 }
 
-  
