@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.55 2003-11-12 17:19:59 sadilov Exp $
+# $Id: GNUmakefile,v 1.56 2003-11-12 17:50:08 sadilov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -35,8 +35,8 @@ FIELD += 01 02 03
 
 # Symbolic links to extended BIAS examples using test801, etc...
 BIAS += 01 
-BIAS_AIDA += 02
-BIAS_PYTHON += 03
+#temp BIAS_AIDA += 02
+#temp BIAS_PYTHON += 03
 
 #02 03 04 05 06 07
 
@@ -112,11 +112,12 @@ ifdef G4USE_HEPODBMS
 	done;:
 endif
 
+#temp 
 # G3TOG4
-	@$(ECHO) Making G3toG4 Tests...
-	@for nn in $(G3TOG4); do \
-	  (cd test6$$nn && $(MAKE)); \
-	done;:
+#	@$(ECHO) Making G3toG4 Tests...
+#	@for nn in $(G3TOG4); do \
+#	  (cd test6$$nn && $(MAKE)); \
+#	done;:
 
 # Field
 	@$(ECHO) Making Field Tests...
@@ -143,12 +144,14 @@ endif
 #
 #endif
 
+#temp
 # GDML
-	@$(ECHO) Making GDML Tests...
-	@for nn in $(GDML); do \
-	  (cd test9$$nn && $(MAKE) XERCESCROOT=$(XERCESCROOT)); \
-	done;:
+#	@$(ECHO) Making GDML Tests...
+#	@for nn in $(GDML); do \
+#	  (cd test9$$nn && $(MAKE) XERCESCROOT=$(XERCESCROOT)); \
+#	done;:
 
+#temp
 # OLAP
 	@$(ECHO) Making OLAP Tests...
 	@for nn in $(OLAP); do \
@@ -354,7 +357,7 @@ examples_links_source:
 examples_links_binaries:
 
 # Clean up!
-	@$(MAKE) clean_examples_links_binaries
+#	@$(MAKE) clean_examples_links_binaries
 
 # Novice
 	@for nn in $(EXAMPLES); do \
@@ -366,12 +369,13 @@ examples_links_binaries:
 	  ln -s TestEm$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test50$$nn; \
 	done;:
 
+#temp
 # Persistency
-	@for nn in $(PERSISTENCY); do \
-	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
-	  ln -s $$exdir/PersistentEx$${nn}run \
-	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
-	done;:
+#	@for nn in $(PERSISTENCY); do \
+#	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
+#	  ln -s $$exdir/PersistentEx$${nn}run \
+#	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
+#	done;:
 
 # Field
 	@for nn in $(FIELD); do \
@@ -383,25 +387,30 @@ examples_links_binaries:
 	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
 	done;:
 
+#temp
 # BIAS_AIDA
-	@for nn in $(BIAS_AIDA); do \
-	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
-	done;:
+#	@for nn in $(BIAS_AIDA); do \
+#	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
+#	done;:
 
+#temp
 # BIAS_PYTHON
-	@for nn in $(BIAS_PYTHON); do \
-	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
-	done;:
+#	@for nn in $(BIAS_PYTHON); do \
+#	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
+#	done;:
 
+#temp
 # G3TOG4
-	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
-	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+#	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
+#	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
 
+#temp
 # OLAP
-	ln -s olapex    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001; \
+#	ln -s olapex    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001; \
 
+#temp
 # GDML
-	ln -s gogdml    $(G4WORKDIR)/bin/$(G4SYSTEM)/test901; \
+#	ln -s gogdml    $(G4WORKDIR)/bin/$(G4SYSTEM)/test901; \
 
 # Truc for test33/test34
 	ln -s test33    $(G4WORKDIR)/bin/$(G4SYSTEM)/test34; \
@@ -409,6 +418,7 @@ examples_links_binaries:
 
 ###########################################################################
 clean_examples_links_source:
+
 # GDML
 	@rm -f test901
 
