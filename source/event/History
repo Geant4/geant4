@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2005-01-26 14:09:30 flei Exp $
+$Id: History,v 1.86 2005-03-25 00:34:55 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 24, 2005, M.Asai (event-V07-00-01)
+- Move G4PrimaryParticle, G4PrimaryVertex, G4VUserPrimaryParticleInformation and
+  G4VUserPrimaryVertexInformation to particles/management.
+- Modify G4PrimaryTransformer to take care of a mass defined in G4PrimaryParticle
+  if it is defined.
+
 Jan 26, 2005, F.Lei  (event-V07-00-00)
 - bug (typo) fix in G4SPSRandomGenerator.cc (lines 608,709)
 - restored the inheritance to G4VPrimaryGenerator for G4GeneralParticleSource

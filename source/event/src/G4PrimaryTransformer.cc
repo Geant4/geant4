@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.20 2004-08-10 23:59:37 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.21 2005-03-25 00:34:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -144,8 +144,9 @@ void G4PrimaryTransformer::GenerateSingleTrack
       DP->SetCharge(primaryParticle->GetCharge());
     } 
     // Set Mass if it is specified
-    if(partDef==unknown)
-    { DP->SetMass(primaryParticle->GetMass()); }
+    G4double pmas = primaryParticle->GetMass();
+    if(pmas>=0.)
+    { DP->SetMass(pmas); }
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
