@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.6 2003-06-04 13:51:05 gcosmo Exp $
+// $Id: G4UItokenNum.hh,v 1.7 2003-06-07 16:40:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UItokenNum.hh
@@ -73,6 +73,7 @@ typedef struct yystype
       I = right.I;
       C = right.C;
       S = right.S;
+      return *this;
     }
     yystype(const yystype& right)
     {
