@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.7 2003-08-05 12:49:18 gunter Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.8 2003-10-14 13:38:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -158,8 +158,8 @@ extern "C" int ecpt();
    theIon->SetProcessManager(theIonProcessManager);
    G4IonInelasticProcess theInelasticProcess; 
    G4BinaryLightIonReaction theIonModel;
-   G4TripathiCrossSection theXSec;
-   theInelasticProcess.GetCrossSectionDataStore()->AddDataSet(&theXSec);
+//   G4TripathiCrossSection theXSec;
+//   theInelasticProcess.GetCrossSectionDataStore()->AddDataSet(&theXSec);
 
 //   theInelasticProcess.RegisterMe(theTheoModel);
    theInelasticProcess.RegisterMe(&theIonModel);
@@ -182,9 +182,9 @@ extern "C" int ecpt();
    
    // --------- Test the GetMeanFreePath
    
-   G4StepPoint aStepPoint;
+   G4StepPoint * aPreStepPoint, * aPostStepPoint;
    G4Step aStep;
-   aStep.SetPreStepPoint(&aStepPoint);
+   aPreStepPoint= aStep.GetPreStepPoint();
    G4double meanFreePath;
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
@@ -224,10 +224,14 @@ int j = 0;
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
            aTrack->SetTouchableHandle(theTouchableHandle);
            aStep.SetTrack( aTrack );
-           aStepPoint.SetTouchableHandle(theTouchableHandle);
-	   aStepPoint.SetMaterial(theMaterials[0]);
-           aStep.SetPreStepPoint(&aStepPoint);
-	   aStep.SetPostStepPoint(&aStepPoint);
+	   aPreStepPoint = aStep.GetPreStepPoint();
+	   aPostStepPoint = aStep.GetPostStepPoint();
+           aPreStepPoint->SetTouchableHandle(theTouchableHandle);
+	   aPreStepPoint->SetMaterial(theMaterials[0]);
+           aPostStepPoint->SetTouchableHandle(theTouchableHandle);
+	   aPostStepPoint->SetMaterial(theMaterials[0]);
+//          aStep.SetPreStepPoint(aPreStepPoint);
+//	    aStep.SetPostStepPoint(aPostStepPoint);
 	   aTrack->SetStep(&aStep);
            ++hpw;
            if(hpw == 1*(hpw/1))
@@ -288,7 +292,7 @@ int j = 0;
  	         if(isec!=0) QValueM1 += aSec->GetDefinition()->GetPDGMass();
 	         if(isec>1) QValueM2 += aSec->GetTotalEnergy();
 	         if(isec>1) QValueM2 += aSec->GetDefinition()->GetPDGMass();
-	         G4cout << "found an anti !!!" <<G4endl;
+//	         G4cout << "found an anti !!!" <<G4endl;
 	       }
 	       else
 	       {
@@ -306,20 +310,20 @@ int j = 0;
 	         QValue += ss;
 	         if(isec!=0) QValueM1 += ss;
 	         if(isec>1) QValueM2 += ss;
-	         G4cout << "found a Baryon !!!" <<G4endl;
+//	         G4cout << "found a Baryon !!!" <<G4endl;
 	       }
 	     }
 	     else if(aSec->GetDefinition()->GetPDGEncoding() == 0)
 	     {
 	       QValue += aSec->GetKineticEnergy();
-	       G4cout << "found a ion !!!" <<G4endl;
+//	       G4cout << "found a ion !!!" <<G4endl;
 	     }
 	     else
 	     {
                QValue += aSec->GetTotalEnergy();
 	       if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
 	       if(isec>1) QValueM2 += aSec->GetKineticEnergy();
-	       G4cout << "found a Meson !!!" <<G4endl;
+//	       G4cout << "found a Meson !!!" <<G4endl;
 	     }
 	     delete second;
            }
