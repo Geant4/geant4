@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.8 2005-02-14 13:55:52 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.9 2005-03-02 15:39:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -741,7 +741,7 @@ G4int G4TwistedBoxSide::GetAreaCode(const G4ThreeVector &xx,
 
          } else if (yprime > fAxisMax[yaxis] - ctol) {
             areacode |= (sAxis0 & (sAxisY | sAxisMax)) | sBoundary;
-            if (yprime >= fAxisMin[yaxis] + ctol)  isoutside = true;
+            if (yprime >= fAxisMax[yaxis] + ctol)  isoutside = true;
          }
 
          // test boundary of z-axis
