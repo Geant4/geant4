@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerViewer.cc,v 1.2 2000-02-24 12:21:16 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.3 2000-02-24 14:33:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -53,7 +53,7 @@ void G4RayTracerViewer::SetView() {
     SetViewSpan(200. * frontHalfAngle / theTracer->GetNColumn());
   theTracer->SetTargetPosition(targetPoint);
   theTracer->SetEyePosition(cameraPosition);
-  theTracer->SetHeadAngle(0.);  // Still to be figured out?????????
+  theTracer->SetHeadAngle(fVP.GetViewpointDirection().phi());
   theTracer->SetLightDirection(-fVP.GetActualLightpointDirection());
 }
 
