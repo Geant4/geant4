@@ -12,13 +12,13 @@
   <expression name="WorldSizeX">1.2*CalorThickness</expression>
   <expression name="WorldSizeYZ">1.2*CalorSizeYZ</expression>
   <!-- Positions & Rotations -->
-  <position name="GapPosition"      x="AbsorberThickness/2"/>
-  <position name="AbsorberPosition" x="-GapThickness/2"/>
+  <position name="GapPosition"      x="AbsorberThickness/2."/>
+  <position name="AbsorberPosition" x="-1*GapThickness/2."/>
   <position name="center"                        />
-  <position name="shiftx"   x="1*LayerThickness"   />
-  <position name="shift2x"  x="2*LayerThickness" />
-  <position name="shift-1x"  x="-1*LayerThickness" />
-  <position name="shift-2x"  x="-2*LayerThickness" />
+  <position name="shiftx"   x="1.*LayerThickness"   />
+  <position name="shift2x"  x="2.*LayerThickness" />
+  <position name="shift-1x"  x="-1.*LayerThickness" />
+  <position name="shift-2x"  x="-2.*LayerThickness" />
   <rotation name="identity"                      />
  </define>
  <materials>
