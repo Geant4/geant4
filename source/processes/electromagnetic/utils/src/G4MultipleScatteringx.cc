@@ -5,20 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.cc,v 1.2 2001-05-16 10:22:50 urban Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.3 2001-05-16 14:28:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
 // --------------------------------------------------------------
-//    GEANT 4 class implementation file
-//
-//    For information related to this code contact:
-//    CERN, IT Division, ASD Group
-//    History: based on object model of
-//    2nd December 1995, G.Cosmo
-//   -------- G4MultipleScatteringx physics process ------------
-//             by Laszlo Urban, March 2001   
-// **************************************************************
 // 16/05/01  value of cparm changed , L.Urban
 // --------------------------------------------------------------
 
@@ -507,7 +497,7 @@
           if(G4UniformRand() <= prob)
           {
             w1 = 1.-a*b ;
-            w2 = max(w1/am1,w1/ap1)+b ;
+            w2 = G4std::max(w1/am1,w1/ap1)+b ;
 
             do
             {
