@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.10 2001-09-28 15:38:14 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.11 2001-10-24 16:27:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -198,8 +198,8 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4int CounterOfpbarProcess ;
 
     // cut in range
-    static G4double ptableElectronCutInRange;
-    static G4double pbartableElectronCutInRange;
+    static G4double* ptableElectronCutInRange;
+    static G4double* pbartableElectronCutInRange;
 
     static G4double Charge ;
 

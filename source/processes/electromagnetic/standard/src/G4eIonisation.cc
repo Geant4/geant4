@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.19 2001-09-28 15:38:15 maire Exp $
+// $Id: G4eIonisation.cc,v 1.20 2001-10-24 16:27:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process -----------------------
@@ -161,7 +161,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   // The electron cuts needed in the case of the positron , too!
   // This is the reason why SetCut has to be called for electron first !!
 
-  if ((G4Electron::Electron()->GetCutsInEnergy() == 0) &&
+  if((G4Electron::Electron()->GetEnergyCuts() == 0) &&
       (&aParticleType == G4Positron::Positron()))
   {
      G4cout << " The ELECTRON energy cuts needed to compute energy loss"
@@ -169,7 +169,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      G4Exception(" Call SetCut for e- first !!");
   }
    
-  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy();
+  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts() ;
  
   // loop for materials 
 
@@ -358,7 +358,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
   // get kinetic energy cut for the electron
-  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy();
+  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts() ;
   G4double DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
 
   // some kinematics

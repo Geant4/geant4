@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.20 2001-10-11 17:05:40 maire Exp $
+// $Id: G4hIonisation.cc,v 1.21 2001-10-24 16:27:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process ---------------------
@@ -89,11 +89,11 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   ParticleMass = aParticleType.GetPDGMass();
   Charge = (aParticleType.GetPDGCharge())/eplus;
 
-  G4double ElectronCutInRange = G4Electron::Electron()->GetCuts(); 
+  G4double* ElectronCutInRange = G4Electron::Electron()->GetLengthCuts(); 
 
   if (Charge > 0.)
    {
-    if ((ptableElectronCutInRange != ElectronCutInRange)  
+    if( !EqualCutVectors(ptableElectronCutInRange,ElectronCutInRange)  
                        || (theDEDXpTable == NULL))
     {
       BuildLossTable(aParticleType);
@@ -103,7 +103,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
    }
   else
    {
-    if( (pbartableElectronCutInRange != ElectronCutInRange)  
+    if( !EqualCutVectors(pbartableElectronCutInRange,ElectronCutInRange)  
                         || (theDEDXpbarTable == NULL))
     {
       BuildLossTable(aParticleType) ;
@@ -135,7 +135,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
  theLossTable = new G4PhysicsTable(numOfMaterials);
   
  // get delta cut in energy 
- G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
   
  //  loop for materials
  //
@@ -185,7 +185,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
  // get electron cut in kinetic energy
- G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
  
  // loop for materials 
 
@@ -402,7 +402,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
  
  // get electron cut in kinetic energy
- G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
  G4double DeltaThreshold =
 	G4std::max(DeltaCutInKinEnergy[aMaterial->GetIndex()],Tmincut);
 

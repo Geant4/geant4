@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.17 2001-09-17 17:07:13 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.18 2001-10-24 16:27:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -124,8 +124,10 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
   //set physically consistent value for finalRange 
   //  and parameters for en.loss step limit
-  if(finalRange > G4Electron::Electron()->GetCuts())
-    finalRange = G4Electron::Electron()->GetCuts() ;
+  for (size_t idxMate=0; idxMate<G4Material::GetNumberOfMaterials(); idxMate++){
+    if(finalRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
+      finalRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
+  }
   c1lim = dRoverRange ;
   c2lim = 2.*(1.-dRoverRange)*finalRange ;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
@@ -305,9 +307,6 @@ void G4VeEnergyLoss::BuildDEDXTable(
      // create array for the min. delta cuts in kinetic energy 
      G4double absLowerLimit = 1.*keV ;
 
-     // set default MinDeltaCutInRange to rcut/100.
-     if(!setMinDeltaCutInRange )
-     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/100. ;
 
 //     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
 //     {
@@ -320,12 +319,15 @@ void G4VeEnergyLoss::BuildDEDXTable(
 //       G4cout << G4endl;
 //     }
 
-       if(MinDeltaEnergy) delete MinDeltaEnergy ;
-       MinDeltaEnergy = new G4double [numOfMaterials] ; 
-       if(LowerLimitForced) delete LowerLimitForced ;
-       LowerLimitForced = new G4bool [numOfMaterials] ;
+       if(MinDeltaEnergy) {delete [] MinDeltaEnergy; MinDeltaEnergy=0;}
+       MinDeltaEnergy = new G4double [numOfMaterials]; 
+       if(LowerLimitForced) {delete [] LowerLimitForced; LowerLimitForced=0;}
+       LowerLimitForced = new G4bool [numOfMaterials];
        for(G4int mat=0; mat<numOfMaterials; mat++)
        {
+	 // set default MinDeltaCutInRange to rcut/10.
+	 if(!setMinDeltaCutInRange )
+	   MinDeltaCutInRange = (G4Electron::Electron()->GetEnergyCuts())[mat]/10. ;
          LowerLimitForced[mat] = false ;
          
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
@@ -335,8 +337,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
          if(MinDeltaEnergy[mat]<absLowerLimit)
            MinDeltaEnergy[mat] = absLowerLimit ; 
 
-	 if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
-	     MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
+	 if(MinDeltaEnergy[mat]>(G4Electron::Electron()->GetEnergyCuts())[mat])
+	   MinDeltaEnergy[mat]=(G4Electron::Electron()->GetEnergyCuts())[mat] ;
 
 //	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
 //         {
@@ -421,15 +423,15 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
     if(Charge < 0.)
     {
-      rcut=G4Electron::Electron()->GetCuts();
-      Tc=G4Electron::Electron()->GetCutsInEnergy()[index];
+      rcut=(G4Electron::Electron()->GetLengthCuts())[index];
+      Tc=(G4Electron::Electron()->GetEnergyCuts())[index];   
       // threshold !
       if(Tc > 0.5*E) Tc=0.5*E ;
     }
     else
     {
-      rcut=G4Positron::Positron()->GetCuts();
-      Tc=G4Positron::Positron()->GetCutsInEnergy()[index];
+      rcut=(G4Positron::Positron()->GetLengthCuts())[index];
+      Tc=(G4Positron::Positron()->GetEnergyCuts())[index];   
       // threshold !
       if(Tc > E) Tc=E ;
     }

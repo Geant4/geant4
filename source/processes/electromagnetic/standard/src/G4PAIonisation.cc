@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.19 2001-09-17 17:07:12 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.20 2001-10-24 16:27:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,7 +68,7 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
 {
   G4int  iMat ;
   theMeanFreePathTable  = NULL; 
-  lastCutInRange = 0. ;
+  lastCutInRange = 0 ;
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numberOfMat = G4Material::GetNumberOfMaterials() ;
   for(iMat=0;iMat<numberOfMat;iMat++)
@@ -196,9 +196,9 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
        RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable ;
        CounterOfpbarProcess++;
     }
-    if(CutInRange != lastCutInRange)
+    if( !EqualCutVectors(CutInRange, lastCutInRange))
     {
-       lastCutInRange = CutInRange ;
+       lastCutInRange =  CopyCutVectors(lastCutInRange,CutInRange) ;
        BuildLambdaTable(aParticleType) ;
     }
     //  G4VPAIenergyLoss::BuildDEDXTable(aParticleType) ;
@@ -334,7 +334,7 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
     // get electron and particle cuts in kinetic energy
 
-    DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+    DeltaCutInKineticEnergy = theElectron->GetEnergyCuts() ;
     ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
 
     for (G4int J=0 ; J < numOfMaterials; J++)  // loop for materials 

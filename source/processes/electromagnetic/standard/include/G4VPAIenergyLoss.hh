@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.4 2001-10-11 15:16:16 gcosmo Exp $
+// $Id: G4VPAIenergyLoss.hh,v 1.5 2001-10-24 16:27:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -254,7 +254,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
 
 
     // cut in range
-    static G4double CutInRange;
+    static G4double* CutInRange;
 
     //  cuts in kinetic energy ........ 
     G4double* ParticleCutInKineticEnergy ;

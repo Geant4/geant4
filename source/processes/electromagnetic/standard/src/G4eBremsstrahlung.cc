@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.21 2001-09-28 15:38:15 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.22 2001-10-24 16:27:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -442,7 +442,7 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
 {
   const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+  G4double GammaEnergyCut = G4Gamma::Gamma()->GetEnergyThreshold(aMaterial);
   if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
      
   G4double SIGMA = 0;
@@ -646,7 +646,7 @@ void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Parti
    G4int NbOfElements = aMaterial->GetNumberOfElements();
    const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
+   G4double GammaEnergyCut = G4Gamma::Gamma()->GetEnergyThreshold(aMaterial);
 
 
    PartialSumSigma[Imate] = new G4DataVector();
@@ -723,7 +723,7 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
    G4ParticleMomentum ParticleDirection = aDynamicParticle->GetMomentumDirection();
 
    // Gamma production cut in this material
-   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+   G4double GammaEnergyCut = G4Gamma::Gamma()->GetEnergyThreshold(aMaterial);
    if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
   
    // check against insufficient energy

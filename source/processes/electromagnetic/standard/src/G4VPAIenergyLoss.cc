@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.cc,v 1.3 2001-09-17 17:07:12 maire Exp $
+// $Id: G4VPAIenergyLoss.cc,v 1.4 2001-10-24 16:27:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -85,7 +85,7 @@ G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
 
 G4PhysicsTable* G4VPAIenergyLoss::theDEDXTable = NULL ;
 
-G4double G4VPAIenergyLoss::CutInRange = 0;
+G4double* G4VPAIenergyLoss::CutInRange = 0;
 
 G4double G4VPAIenergyLoss::LowerBoundEloss= 1.00*keV ;
 G4double G4VPAIenergyLoss::UpperBoundEloss= 100.*TeV ;
@@ -131,7 +131,7 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 
   G4bool MakeTable = false ;
      
-  G4double newCutInRange = aParticleType.GetLengthCuts();
+  G4double* newCutInRange = aParticleType.GetLengthCuts();
 
 // Create tables only if there is a new cut value !
 
@@ -147,10 +147,10 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
     theDEDXTable= theDEDXpbarTable;
   }
 
-  if ((CutInRange != newCutInRange) || (theDEDXTable==NULL)) 
+  if (!EqualCutVectors(CutInRange,newCutInRange) || (theDEDXTable==NULL)) 
   {
     MakeTable = true ;
-    CutInRange = newCutInRange ;
+    CutInRange = CopyCutVectors(CutInRange,newCutInRange) ;
   }
   
   if( MakeTable )
