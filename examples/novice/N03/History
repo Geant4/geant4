@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2003-01-27 17:55:47 maire Exp $
+$Id: History,v 1.55 2003-01-30 14:35:29 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,8 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27-01-03 mma
-- commit rndmSeed.mac to show how to save and reset random number seed
+30-01-03 mma (exampleN03-V05-00-02)
+- save random number seed. In README explain the rndm handling.
+  commit rndmSeed.mac to show how to save and reset rndm seed
       
 18-12-02 mma (exampleN03-V05-00-01)
 - code for smooth trajectory put in DetectorContruction::SetMagField()
