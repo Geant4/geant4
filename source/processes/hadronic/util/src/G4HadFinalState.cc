@@ -1,7 +1,8 @@
 #include "G4HadFinalState.hh"
 
    G4HadFinalState::G4HadFinalState()
-   : theDirection(0,0,1), theEnergy(-1), theStat(isAlive), theW(1.), hasStaleSecondaries(false){}
+   : theDirection(0,0,1), theEnergy(-1), theStat(isAlive), 
+     theW(1.), theEDep(0.), hasStaleSecondaries(false){}
 
    G4int G4HadFinalState::GetNumberOfSecondaries() {return theSecs.size();}
 
