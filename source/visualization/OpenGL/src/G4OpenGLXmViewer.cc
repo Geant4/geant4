@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.4 2000-05-22 08:14:00 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.5 2001-03-07 15:17:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ void G4OpenGLXmViewer::GetXmConnection () {
   }
 
   // Better to put this in an X11 resource file !!!
-  interactorManager->PutStringInResourceDatabase ("\
+  interactorManager->PutStringInResourceDatabase ((char*)"\
 *glxarea*width: 500\n\
 *glxarea*height: 500\n\
 *frame*x: 10\n\
@@ -140,10 +140,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				      NULL);
 
   //*********Create a menu bar for the window********
-  style_str = XmStringCreateLocalized ("Style");
-  actions_str = XmStringCreateLocalized ("Actions");
-  misc_str = XmStringCreateLocalized ("Miscellany");
-  spec_str = XmStringCreateLocalized ("Special");
+  style_str = XmStringCreateLocalized ((char*)"Style");
+  actions_str = XmStringCreateLocalized ((char*)"Actions");
+  misc_str = XmStringCreateLocalized ((char*)"Miscellany");
+  spec_str = XmStringCreateLocalized ((char*)"Special");
 
   menubar = XmVaCreateSimpleMenuBar (main_win,
 				     "menubar",
@@ -167,9 +167,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
 
   //*********Create style pulldown menu on menubar*********
-  rep_str = XmStringCreateLocalized ("Representation");
-  draw_str = XmStringCreateLocalized ("Drawing");
-  bgnd_str = XmStringCreateLocalized ("Background color");
+  rep_str = XmStringCreateLocalized ((char*)"Representation");
+  draw_str = XmStringCreateLocalized ((char*)"Drawing");
+  bgnd_str = XmStringCreateLocalized ((char*)"Background color");
 
   style_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
@@ -193,8 +193,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Style pulldown menu" << G4endl;
 
   //Add Representation pullright menu to style cascade...
-  polyhedron_str = XmStringCreateLocalized ("Polyhedron");
-  nurbs_str = XmStringCreateLocalized ("NURBS");
+  polyhedron_str = XmStringCreateLocalized ((char*)"Polyhedron");
+  nurbs_str = XmStringCreateLocalized ((char*)"NURBS");
 
   rep_style_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
@@ -235,10 +235,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Representation pulldown menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
-  wireframe_str = XmStringCreateLocalized ("Wireframe");
-  hlr_str = XmStringCreateLocalized ("Hidden line removal");
-  hsr_str = XmStringCreateLocalized ("Hidden surface removal");
-  hlhsr_str = XmStringCreateLocalized ("Hidden line and surface removal");
+  wireframe_str = XmStringCreateLocalized ((char*)"Wireframe");
+  hlr_str = XmStringCreateLocalized ((char*)"Hidden line removal");
+  hsr_str = XmStringCreateLocalized ((char*)"Hidden surface removal");
+  hlhsr_str = XmStringCreateLocalized ((char*)"Hidden line and surface removal");
 
   drawing_style_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
@@ -290,8 +290,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Drawing pullright menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
-  white_str = XmStringCreateLocalized ("White");
-  black_str = XmStringCreateLocalized ("Black");
+  white_str = XmStringCreateLocalized ((char*)"White");
+  black_str = XmStringCreateLocalized ((char*)"Black");
 
   background_color_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
@@ -330,9 +330,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Background color pullright menu" << G4endl;
 
   //*********Create actions pulldown menu on menubar*********
-  rot_str = XmStringCreateLocalized ("Rotation control panel");
-  pan_str = XmStringCreateLocalized ("Panning control panel");
-  set_str = XmStringCreateLocalized ("Set control panel limits");
+  rot_str = XmStringCreateLocalized ((char*)"Rotation control panel");
+  pan_str = XmStringCreateLocalized ((char*)"Panning control panel");
+  set_str = XmStringCreateLocalized ((char*)"Set control panel limits");
 
   actions_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
@@ -355,9 +355,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (set_str);
   G4cout << "Created Actions pulldown menu" << G4endl;
 
-  misc_str = XmStringCreateLocalized ("Miscellany control panel");
-  exit_str = XmStringCreateLocalized ("Exit to G4Vis>");
-  print_str = XmStringCreateLocalized ("Create .eps file");
+  misc_str = XmStringCreateLocalized ((char*)"Miscellany control panel");
+  exit_str = XmStringCreateLocalized ((char*)"Exit to G4Vis>");
+  print_str = XmStringCreateLocalized ((char*)"Create .eps file");
 
   //*********Create miscellany pulldown menu on menubar*********
   misc_cascade = XmVaCreateSimplePulldownMenu
@@ -381,9 +381,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (print_str);
   G4cout << "Created Miscellany pulldown menu" << G4endl;
 
-  trans_str = XmStringCreateLocalized ("Transparency");
-  anti_str = XmStringCreateLocalized ("Antialiasing");
-  halo_str = XmStringCreateLocalized ("Haloing");
+  trans_str = XmStringCreateLocalized ((char*)"Transparency");
+  anti_str = XmStringCreateLocalized ((char*)"Antialiasing");
+  halo_str = XmStringCreateLocalized ((char*)"Haloing");
 
   //*********Create special pulldown menu on menubar*********
   spec_cascade = XmVaCreateSimplePulldownMenu
@@ -408,8 +408,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Special pulldown menu" << G4endl;
 
   //Add Transparency pullright menu to special cascade...
-  off_str = XmStringCreateLocalized ("Off");
-  on_str = XmStringCreateLocalized ("On");
+  off_str = XmStringCreateLocalized ((char*)"Off");
+  on_str = XmStringCreateLocalized ((char*)"On");
 
   transparency_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
@@ -507,7 +507,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   }
 
   XtManageChild (menubar);
-  frame = XtVaCreateManagedWidget ("frame", xmFrameWidgetClass, main_win,
+  frame = XtVaCreateManagedWidget ((char*)"frame",
+				   xmFrameWidgetClass, main_win,
 				   XtNvisual, vi -> visual, 
 				   XtNdepth, vi -> depth, 
 				   XtNcolormap, cmap, 
@@ -515,7 +516,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				   XtNbackground, bgnd,
 				   NULL);
 
-  glxarea = XtVaCreateManagedWidget ("glxarea", 
+  glxarea = XtVaCreateManagedWidget ((char*)"glxarea", 
 				     xmDrawingAreaWidgetClass,
 				     frame,
 				     XtNvisual, vi -> visual, 
