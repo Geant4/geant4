@@ -68,7 +68,7 @@ void RichTbSteppingAction::UserSteppingAction(const G4Step* aStep){
   RichTbGenericHisto(aStep);
 
 }
-void RichTbSteppingAction:: RichTbDebugHisto(const G4Step* aStep){
+void RichTbSteppingAction:: RichTbDebugHisto(const G4Step*){
 
 }
 void RichTbSteppingAction::RichTbGenericHisto(const G4Step* aStep) {

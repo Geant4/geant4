@@ -32,6 +32,7 @@
 #include "PadHpdPhotoElectricEffect.hh"
 #include "RichTbGeometryParameters.hh"
 #include "G4TransportationManager.hh"
+#include "G4TouchableHandle.hh"
 #include "Randomize.hh"
 #include "RichTbAnalysisManager.hh"
 #include "RichTbRunConfig.hh"
@@ -43,11 +44,11 @@
 PadHpdPhotoElectricEffect::PadHpdPhotoElectricEffect(const G4String& processName ,
    RichTbRunConfig* RConfig)
   :G4VDiscreteProcess(processName),
-   HpdQE(NumHpdTot, vector<G4double>( NumQEbins)),
-   HpdWabin(NumHpdTot, vector<G4double>( NumQEbins)),
    DemagnificationFactor(vector<G4double>(NumHpdTot)),
-   DemagnificationQuadFactor(vector<G4double>(NumHpdTot)) { 
-
+   DemagnificationQuadFactor(vector<G4double>(NumHpdTot)),
+   HpdQE(NumHpdTot, vector<G4double>( NumQEbins)),
+   HpdWabin(NumHpdTot, vector<G4double>( NumQEbins))
+{
   rConfig=RConfig;
   PrePhotoElectricVolName="PadHpdWindowQuartz";
   PostPhotoElectricVolName="BiAlkaliPhCathode";
@@ -83,7 +84,7 @@ PadHpdPhotoElectricEffect::PadHpdPhotoElectricEffect(const G4String& processName
       G4cout<<"Wrong size for Hpd QE "<<ihpdq<<" "<<qeCurHpd.size()
 	    <<"  "<< waCurHpd.size()<<G4endl;
     } 
-    for(G4int iqbin=0; iqbin < qeCurHpd.size(); iqbin++){
+    for(size_t iqbin=0; iqbin < qeCurHpd.size(); iqbin++){
       HpdQE[ihpdq][iqbin]=qeCurHpd[iqbin]/100;
       HpdWabin[ihpdq][iqbin]=waCurHpd[iqbin];
     }
@@ -164,8 +165,8 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
   //Now use the QE for the current HPD to determine if a
   // photoelectron should be produced or not.
 
-  G4int currentHpdNumber= pPreStepPoint->GetPhysicalVolume() 
-    -> GetMother() -> GetCopyNo();
+  G4int currentHpdNumber= pPreStepPoint->GetTouchableHandle() 
+    -> GetReplicaNumber(1);
   if(currentHpdNumber >= NumHpdTot ){
 
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -196,7 +197,7 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
   // coord system.
     G4double GLx=GlobalElectronOrigin.x();
     G4double GLy=GlobalElectronOrigin.y();
-    G4double PhotCkvRad = pow((pow(GLx,2)+pow(GLy,2)),0.5);
+    // G4double PhotCkvRad = pow((pow(GLx,2)+pow(GLy,2)),0.5);
     G4double PhotCkvPhi = atan2(GLy,GLx)*180.0/pi;
 
     if( PhotCkvPhi < - 180.0 )PhotCkvPhi+= 360.0;

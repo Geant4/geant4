@@ -123,7 +123,7 @@ RichTbSiDet::RichTbSiDet(RichTbMaterial* RMaterial,
            new G4PVPlacement(SiSectCoatingTransform,"HpdSectCoat", 
                 HpdSectCoatLog,MotherOfSiDet,false,SectNum);
 
-     G4LogicalBorderSurface* HpdSectCoatSurface =
+//     G4LogicalBorderSurface* HpdSectCoatSurface =
        new G4LogicalBorderSurface("HpdSectCoatSurface",MotherOfSiDet ,
                                HpdSectCoatPhys ,
                  RMaterial-> getHpdSiCoatSurface());

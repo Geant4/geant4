@@ -135,7 +135,7 @@ void RichTbAnalysisManager::finish()
 }
 
 
-void RichTbAnalysisManager::BeginOfEventAnalysis(const G4Event* evt){
+void RichTbAnalysisManager::BeginOfEventAnalysis(const G4Event*){
 
   //RichCollId is already defined in LHCbRichSimEventAction.cc
   // Hence its extraction is not repeated here.
@@ -161,7 +161,7 @@ void RichTbAnalysisManager::EndOfEventAnalysis(const G4Event* evt){
 
 
   iTimer->Stop();
-  G4double TimeforThisEvent= iTimer->GetRealElapsed();
+  // G4double TimeforThisEvent= iTimer->GetRealElapsed();
 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
 

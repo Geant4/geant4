@@ -330,9 +330,9 @@ static const   G4double HpdPhCathodePosZ= HpdQuartzWPosZ;
 static const G4int NumberOfPadHpdSiPixels=128;
 static const G4int MaxNumberOfPixRow=24;
 static const G4int MaxNumberOfPixCol=10;
-static G4double PixRowNumSect[NumberOfPadHpdSiPixels];
-static G4double PixColNumSect[NumberOfPadHpdSiPixels];
-static G4bool PixelAtSectEdge[NumberOfPadHpdSiPixels];
+extern G4double PixRowNumSect[NumberOfPadHpdSiPixels];
+extern G4double PixColNumSect[NumberOfPadHpdSiPixels];
+extern G4bool PixelAtSectEdge[NumberOfPadHpdSiPixels];
 // the following is for the rows after the central big pixel.
 // the central pixel is at row 0. 
 // the others start from row number start at 1.

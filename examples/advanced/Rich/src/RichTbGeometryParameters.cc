@@ -28,6 +28,11 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "globals.hh"
 #include "RichTbGeometryParameters.hh"
+
+G4double PixRowNumSect[NumberOfPadHpdSiPixels];
+G4double PixColNumSect[NumberOfPadHpdSiPixels];
+G4bool PixelAtSectEdge[NumberOfPadHpdSiPixels];
+
 G4double GetCurAerogelLength(G4int Aerognum ) {
   return 2.0*AgelHalfZ[Aerognum];
 }

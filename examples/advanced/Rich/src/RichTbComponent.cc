@@ -104,7 +104,7 @@ RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial,
 
 
   G4int FilterNum = RConfig->GetFilterTNumber();
-  G4Box * FilterBox;
+  G4Box * FilterBox=0;
   if(FilterNum >= 0 ) {
   G4double FilterHalfZ= FilterHalfZArray[FilterNum];
   FilterBox 
@@ -296,8 +296,8 @@ RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial,
 
   //  FilterType CurFil= RConfig->GetFilterType();
   G4int Filnum=  RConfig->GetFilterTNumber() ;
-  G4LogicalVolume* FilterLog;
-  G4VPhysicalVolume* FilterPhys;
+  G4LogicalVolume* FilterLog=0;
+  G4VPhysicalVolume* FilterPhys=0;
   if(Filnum >= 0 ) {
 
   G4double FilterHalfZCur= FilterHalfZArray[Filnum];
@@ -321,12 +321,12 @@ RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial,
     new G4PVPlacement(FilterTransform,"FilterBox",FilterLog,
                      RadFramePhys,false,0);
 
- G4LogicalBorderSurface* FilterInnerSurface =
+//  G4LogicalBorderSurface* FilterInnerSurface =
     new G4LogicalBorderSurface("RichTbFilterInnerSurface",
 			       FilterPhys,VesselEnclosurePhys,
                                RMaterial->getOpticalFilterSurface());
 
-  G4LogicalBorderSurface* FilterOuterSurface =
+//  G4LogicalBorderSurface* FilterOuterSurface =
     new G4LogicalBorderSurface("RichTbFilterOuterSurface",
 			       VesselEnclosurePhys,FilterPhys,
                                RMaterial->getOpticalFilterSurface());

@@ -116,7 +116,7 @@ void RichTbPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     y0 = 0. ;
     z0 = 0. ; // -0.5*(RichTbDetector->GetWorldSizeZ()) ;
   }
-  G4double r0,phi0 ;
+  // G4double r0,phi0 ;
 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
 

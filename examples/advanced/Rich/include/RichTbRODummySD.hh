@@ -37,9 +37,9 @@ public:
   RichTbRODummySD();
   ~RichTbRODummySD() {};
 
-  void Initialize(G4HCofThisEvent*HCE) {};
-  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {return false;}
-  void EndOfEvent(G4HCofThisEvent*HCE) {};
+  void Initialize(G4HCofThisEvent*) {};
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
+  void EndOfEvent(G4HCofThisEvent*) {};
   void clear() {};
   void DrawAll() {};
   void PrintAll() {};

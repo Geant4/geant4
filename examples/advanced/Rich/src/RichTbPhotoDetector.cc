@@ -41,7 +41,7 @@
 
 RichTbPhotoDetector::RichTbPhotoDetector() {;}
 RichTbPhotoDetector::RichTbPhotoDetector(RichTbMaterial* RMaterial,
-  RichTbComponent* RTbComponent, RichTbRunConfig* rConfig, 
+  RichTbComponent* RTbComponent, RichTbRunConfig*, 
   G4bool ConstructTrackingSwitch){ 
 
     ConstructTrackingGeometrySwitch=ConstructTrackingSwitch;

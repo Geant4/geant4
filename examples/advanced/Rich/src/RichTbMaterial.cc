@@ -55,23 +55,22 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
   G4double a,z,density;  //a=mass of a mole;
   // z=mean number of protons;
   G4String name,symbol;
-  G4int isz,isn;    //isz= number of protons in an isotope;
+  //G4int isz,isn;    //isz= number of protons in an isotope;
   //isn= number of nucleons in an isotope;
   
   
   G4int numel,natoms;  //numel=Number of elements constituting a material.                     
-  G4double abundance,fractionmass;
+  G4double fractionmass;
   G4double temperature, pressure;
-  G4State kStateGas;
-  G4double FactorOne=1.0;
+  // G4double FactorOne=1.0;
   G4UnitDefinition::BuildUnitsTable();
   
  //PhotonEnergy
-
+  G4int ibin=0;
   G4double PhotonEnergyStep=(PhotonMaxEnergy-PhotonMinEnergy)/
                             NumPhotWaveLengthBins;
   G4double* PhotonMomentum=new G4double[NumPhotWaveLengthBins];
-  for (G4int ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
+  for (ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
     PhotonMomentum[ibin]=PhotonMinEnergy+PhotonEnergyStep*ibin;
   }
 
@@ -127,9 +126,9 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
 
  //Cesium
 
- a=132.91*g/mole; 
- G4Element* elCs = new G4Element(name="Cesium",
-                                symbol="Cs",z=55.,a);  
+ // a=132.91*g/mole; 
+ // G4Element* elCs = new G4Element(name="Cesium",
+ //                                symbol="Cs",z=55.,a);  
 
  //Antimony
 
@@ -411,13 +410,13 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
     GlassD263MomValue[ibin]= PhotMomWaveConv*eV/GlassD263TransWL[ibina];
     }
      if(GlassD263Transmis[ibina] >0.0 ) {
-       G4double currentfilterRefIndex= GlassD263Rindex[ibin];
+       // G4double currentfilterRefIndex= GlassD263Rindex[ibin];
        G4double currentAdjacentMediumRefIndex=NitrogenNominalRefIndex;
        // the following needs to be improved in the future 
        // to have a binary search and
        // interpolation between the adjacent  
        // array elements etc. SE 15-11-2002.
-       for(G4int ibinr=0; ibinr<N2RefPhotW.size()-1 ; ibinr++){
+       for(size_t ibinr=0; ibinr<N2RefPhotW.size()-1 ; ibinr++){
 	 G4double currMomA=GlassD263MomValue[ibin];
          if(currMomA >= N2RefPhotW[ibinr] && currMomA <= N2RefPhotW[ibinr+1]){
 	   currentAdjacentMediumRefIndex=N2RefInd[ibinr];
@@ -519,7 +518,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
  for (ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
    AerogTypeARindex[ibin]= ConvertAgelRIndex(PhotonMomentum[ibin],0);
    AerogTypeARScatLength[ibin]=AerogelTypeASLength[ibin];
-   G4double photwl = PhotMomWaveConv/ (PhotonMomentum[ibin]/eV);
+   // G4double photwl = PhotMomWaveConv/ (PhotonMomentum[ibin]/eV);
 
    G4double currentAgelRefIndex=  AerogTypeARindex[ibin];
    G4double currentNeighbourRefIndex= N2RefInd[ibin];
@@ -773,7 +772,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
   SiliconCoating->AddElement(elO,natoms=2);
 
   G4double* SiliconCoatingAbsorpLength=new G4double[NumPhotWaveLengthBins];
-  G4double* SiliconCoatingRindex=new G4double[NumPhotWaveLengthBins];
+  // G4double* SiliconCoatingRindex=new G4double[NumPhotWaveLengthBins];
 
    for (ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
     SiliconCoatingAbsorpLength[ibin]=0.0001*mm;
@@ -1124,8 +1123,8 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
         FilterEff[ibinf]= RichTbFilterSurfaceEfficiency[ibinf];
         FilterPhotMom[ibinf]= RichTbFilterSurfacePhotMom[ibinf];
 
-       G4MaterialPropertiesTable* OpRichTbFilterSurfaceMPT = 
-                         new G4MaterialPropertiesTable();
+//       G4MaterialPropertiesTable* OpRichTbFilterSurfaceMPT = 
+//                         new G4MaterialPropertiesTable();
 
      }
    RichTbOpticalFilterSurface=OpRichTbFilterSurface;
@@ -1149,7 +1148,7 @@ G4double RichTbMaterial::ConvertAgelRIndex(G4double phmom, G4int AgelTnum ) {
   AerogelRefData* AgData= rConfig -> GetAerogelRefdata();
   //Now to convert and interpolate to get the same binning
   // as the other property vectors.
-  G4double Refind;
+  G4double Refind=0.;
   G4int Numphbin=AgData-> GetNumberOfRefIndBins();
   G4double phm1,phm2;
   if(phmom < AgData->GetAerogelRefphotE(0) ){

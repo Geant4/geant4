@@ -45,6 +45,7 @@ RichTbHit::~RichTbHit()
 {;}
 
 RichTbHit::RichTbHit(const RichTbHit &right)
+  : G4VHit(right)
 {
   edep = right.edep;
   posAtSilicon = right.posAtSilicon;
@@ -68,7 +69,7 @@ const RichTbHit& RichTbHit::operator=(const RichTbHit &right)
 
 int RichTbHit::operator==(const RichTbHit &right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 void RichTbHit::Draw()
