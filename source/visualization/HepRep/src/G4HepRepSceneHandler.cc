@@ -145,7 +145,7 @@ void G4HepRepSceneHandler::open(G4String name) {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
-        const int numberOfExtensions = 4;
+        const unsigned int numberOfExtensions = 4;
         string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
         unsigned int i=0;
         while (i < numberOfExtensions) {
