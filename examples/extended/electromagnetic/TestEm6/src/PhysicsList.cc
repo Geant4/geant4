@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2003-01-30 16:32:48 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2003-02-20 11:24:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,9 +200,7 @@ void PhysicsList::SetCuts()
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
-  
-  SetCutValueForOthers(defaultCutValue);
-  
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
