@@ -8,9 +8,12 @@ do
   $G4WORKDIR/bin/$G4SYSTEM/testPropagateMagField $n   > testPropagateMagField.newout$n \
                                                      2> testPropagateMagField.newerr$n
   $ECHO  ".. difference from expected output: "
-  diff $target.out$n $target.newout$n
+  diff -wb $target.out$n $target.newout$n
+  sleep 1; 
+
   $ECHO  ".. difference from expected error: "
-  diff $target.err$n $target.newerr$n 
+  diff -wb $target.err$n $target.newerr$n 
+  sleep 1; 
   $ECHO  " "
 
 done 
