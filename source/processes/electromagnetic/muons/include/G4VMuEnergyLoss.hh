@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.6 2001-10-24 16:36:40 maire Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.7 2001-10-29 13:53:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -46,6 +46,7 @@
 // 10-02-00 corrections due to new e.m. structure L.Urban 
 // 10-09-01 loss+ mechanism has been implemented (subcutoff delta rays), L.Urban
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma)
 // ------------------------------------------------------------
  
 #ifndef G4VMuEnergyLoss_h
@@ -151,51 +152,51 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
   //    static part of the class
   public:  // With description
 
-    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    static void  SetNbOfProcesses(G4int nb);
     // Sets number of processes giving contribution to the energy loss
 
-    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    static void  PlusNbOfProcesses();
     // Increases number of processes giving contribution to the energy loss
 
-    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    static void  MinusNbOfProcesses();
     // Decreases number of processes giving contribution to the energy loss
 
-    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 3)
 
-    static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
-    static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
-    static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
+    static void SetLowerBoundEloss(G4double val);
+    static void SetUpperBoundEloss(G4double val);
+    static void SetNbinEloss(G4int nb);
 
-    static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
-    static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
-    static G4int    GetNbinEloss()       {return NbinEloss;};
+    static G4double GetLowerBoundEloss();
+    static G4double GetUpperBoundEloss();
+    static G4int    GetNbinEloss();
 
   protected:
 
-    static G4PhysicsTable* theDEDXmuplusTable ;
-    static G4PhysicsTable* theDEDXmuminusTable ;
-    static G4PhysicsTable* theRangemuplusTable ;
-    static G4PhysicsTable* theRangemuminusTable ;
+    static G4PhysicsTable* theDEDXmuplusTable;
+    static G4PhysicsTable* theDEDXmuminusTable;
+    static G4PhysicsTable* theRangemuplusTable;
+    static G4PhysicsTable* theRangemuminusTable;
 
-    static G4PhysicsTable* theInverseRangemuplusTable ;
-    static G4PhysicsTable* theInverseRangemuminusTable ;
+    static G4PhysicsTable* theInverseRangemuplusTable;
+    static G4PhysicsTable* theInverseRangemuminusTable; 
 
-    static G4PhysicsTable* theLabTimemuplusTable ;
-    static G4PhysicsTable* theLabTimemuminusTable ;
+    static G4PhysicsTable* theLabTimemuplusTable;
+    static G4PhysicsTable* theLabTimemuminusTable; 
     
-    static G4PhysicsTable* theProperTimemuplusTable ;
-    static G4PhysicsTable* theProperTimemuminusTable ;
+    static G4PhysicsTable* theProperTimemuplusTable;
+    static G4PhysicsTable* theProperTimemuminusTable;
 
 
   //  processes inherited from G4muEnergyLoss 
   //   register themselves  in the static array Recorder
-    static G4int NbOfProcesses  ;
+    static G4int NbOfProcesses;
     static G4PhysicsTable** RecorderOfmuplusProcess;
     static G4PhysicsTable** RecorderOfmuminusProcess;
-    static G4int CounterOfmuplusProcess ;
-    static G4int CounterOfmuminusProcess ;
+    static G4int CounterOfmuplusProcess;
+    static G4int CounterOfmuminusProcess;
 
   private:
 
@@ -215,8 +216,8 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
 
     static G4EnergyLossMessenger* eLossMessenger;
 
-    static G4double cN ;    // coeff to compute nb of deltas
-    static G4int Ndeltamax ;             // upper limit for nb of subcutoff
+    static G4double cN;    // coeff to compute nb of deltas
+    static G4int Ndeltamax;              // upper limit for nb of subcutoff
                                          // delta rays in one step
 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.20 2001-10-24 16:36:40 maire Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.21 2001-10-29 13:53:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -35,7 +35,8 @@
 // 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 17-09-01 migration of Materials to pure STL (mma)
 // 26-09-01 completion of store/retrieve PhysicsTable (mma)
-// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)   
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma)  
 //------------------------------------------------------------------------------
 
 #include "G4MuBremsstrahlung.hh"
@@ -82,6 +83,36 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuBremsstrahlung::SetLowerBoundLambda(G4double val)
+     {LowerBoundLambda = val;}
+     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuBremsstrahlung::SetUpperBoundLambda(G4double val)
+     {UpperBoundLambda = val;}
+     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuBremsstrahlung::SetNbinLambda(G4int n)
+     {NbinLambda = n;}
+     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuBremsstrahlung::GetLowerBoundLambda()
+     { return LowerBoundLambda;}
+     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuBremsstrahlung::GetUpperBoundLambda()
+     { return UpperBoundLambda;}
+     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4int G4MuBremsstrahlung::GetNbinLambda()
+     {return NbinLambda;}
+     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4MuBremsstrahlung::BuildPhysicsTable(

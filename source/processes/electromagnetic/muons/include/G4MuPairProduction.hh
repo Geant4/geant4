@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.hh,v 1.11 2001-09-28 15:44:20 maire Exp $
+// $Id: G4MuPairProduction.hh,v 1.12 2001-10-29 13:53:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ------------------
 //                by Laszlo Urban, May 1998      
 //------------------------------------------------------------------------------
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 10-08-01: new methods Store/Retrieve PhysicsTable (mma) 
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 29-10-01 all static functions no more inlined (mma) 
 //------------------------------------------------------------------------------
 
 #ifndef G4MuPairproduction_h
@@ -159,12 +160,12 @@ class G4MuPairProduction : public G4VMuEnergyLoss
 
   public:
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
 
 };
 

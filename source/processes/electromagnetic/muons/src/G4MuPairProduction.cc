@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.24 2001-10-24 16:36:41 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.25 2001-10-29 13:53:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ------------------
@@ -38,7 +38,8 @@
 // 20-09-01 (L.Urban) in ComputeMicroscopicCrossSection, remove:
 //          if(MaxPairEnergy<CutInPairEnergy) MaxPairEnergy=CutInPairEnergy
 // 26-09-01 completion of store/retrieve PhysicsTable
-// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)     
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma)      
 //------------------------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
@@ -82,6 +83,36 @@ G4MuPairProduction::~G4MuPairProduction()
       PartialSumSigma.clearAndDestroy();
    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuPairProduction::SetLowerBoundLambda(G4double val)
+     {LowerBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuPairProduction::SetUpperBoundLambda(G4double val)
+     {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuPairProduction::SetNbinLambda(G4int n)
+     {NbinLambda = n;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuPairProduction::GetLowerBoundLambda()
+     { return LowerBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuPairProduction::GetUpperBoundLambda()
+     { return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+ G4int G4MuPairProduction::GetNbinLambda()
+     {return NbinLambda;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.16 2001-10-24 16:36:41 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.17 2001-10-29 13:53:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -43,7 +43,8 @@
 // 10/09/01 L.Urban : loss+ mechanism (subcutoff delta rays) implemented
 // 12/09/01 min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // 17-09-01 migration of Materials to pure STL (mma)
-// 28-09-01 suppression of theMuonPlus ..etc..data members (mma) 
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma) 
 // --------------------------------------------------------------
  
 
@@ -115,8 +116,29 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
      }
 
 }
+
+void  G4VMuEnergyLoss::SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;}
+    // Sets number of processes giving contribution to the energy loss
+
+void  G4VMuEnergyLoss::PlusNbOfProcesses()        {NbOfProcesses++ ;}
+    // Increases number of processes giving contribution to the energy loss
+
+void  G4VMuEnergyLoss::MinusNbOfProcesses()       {NbOfProcesses-- ;}
+    // Decreases number of processes giving contribution to the energy loss
+
+G4int G4VMuEnergyLoss::GetNbOfProcesses()         {return NbOfProcesses;}
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 3)
+
+void G4VMuEnergyLoss::SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;}
+void G4VMuEnergyLoss::SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;}
+void G4VMuEnergyLoss::SetNbinEloss(G4int nb)           {NbinEloss=nb;}
+
+G4double G4VMuEnergyLoss::GetLowerBoundEloss() {return LowerBoundEloss;}
+G4double G4VMuEnergyLoss::GetUpperBoundEloss() {return UpperBoundEloss;}
+G4int    G4VMuEnergyLoss::GetNbinEloss()       {return NbinEloss;}
  
-   void G4VMuEnergyLoss::BuildDEDXTable(
+void G4VMuEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
 

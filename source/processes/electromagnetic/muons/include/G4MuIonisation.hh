@@ -21,19 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.hh,v 1.12 2001-09-19 12:30:35 maire Exp $
+// $Id: G4MuIonisation.hh,v 1.13 2001-10-29 13:53:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- G4MuIonisation physics process -----------
+// --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997 
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 29-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
-// 19-09-01 come back to the old process name 'MuIoni' 
+// 19-09-01 come back to the old process name 'MuIoni'
+// 29-10-01 all static functions no more inlined (mma)
 //
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Class description
 //
@@ -42,15 +43,15 @@
 //
 // Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef G4MuIonisation_h
 #define G4MuIonisation_h 1
  
 #include "G4VMuEnergyLoss.hh"
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4MuIonisation : public G4VMuEnergyLoss 
  
@@ -154,16 +155,18 @@ class G4MuIonisation : public G4VMuEnergyLoss
 
   public:  // with description
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
         // set the parameters of the mean free path table.
 	    
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
       // get the parameters of the mean free path table.
 };
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "G4MuIonisation.icc"
  

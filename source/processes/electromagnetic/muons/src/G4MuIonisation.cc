@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.19 2001-10-24 16:36:41 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.20 2001-10-29 13:53:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- G4MuIonisation physics process -----------
+// --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997 
-//  --------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
 // 08-04-98 remove 'tracking cut' of the ionizing particle (mma)
 // 26-10-98 new stuff from R.Kokoulin + cleanup , L.Urban
@@ -36,30 +36,31 @@
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma) 
 // 28-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
 // 17-09-01 migration of Materials to pure STL (mma)
-// 26-09-01 completion of RetrievePhysicsTable (mma)  
+// 26-09-01 completion of RetrievePhysicsTable (mma)
+// 29-10-01 all static functions no more inlined (mma)  
 //
-// --------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4MuIonisation.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuIonisation::LowerBoundLambda = 1.*keV;
 G4double G4MuIonisation::UpperBoundLambda = 1000000.*TeV;
 G4int	 G4MuIonisation::NbinLambda = 150;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4MuIonisation::G4MuIonisation(const G4String& processName)
    : G4VMuEnergyLoss(processName),
      theMeanFreePathTable(0)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
 G4MuIonisation::~G4MuIonisation() 
 {
@@ -67,7 +68,37 @@ G4MuIonisation::~G4MuIonisation()
       theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuIonisation::SetLowerBoundLambda(G4double val)
+ {LowerBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuIonisation::SetUpperBoundLambda(G4double val)
+ {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuIonisation::SetNbinLambda(G4int n)
+ {NbinLambda = n;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+	    
+G4double G4MuIonisation::GetLowerBoundLambda()
+ { return LowerBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuIonisation::GetUpperBoundLambda()
+ { return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4MuIonisation::GetNbinLambda()
+ {return NbinLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 // just call BuildLossTable+BuildLambdaTable
@@ -143,7 +174,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
@@ -205,7 +236,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuIonisation::ComputeRestrictedMeandEdx (
                                  const G4ParticleDefinition& aParticleType,
@@ -318,7 +349,7 @@ G4double G4MuIonisation::ComputeRestrictedMeandEdx (
  return dEdx;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuIonisation::ComputeCrossSectionPerAtom(
                                  const G4ParticleDefinition& aParticleType,
@@ -368,7 +399,7 @@ G4double G4MuIonisation::ComputeCrossSectionPerAtom(
  return TotalCrossSection;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
                                  const G4ParticleDefinition& ParticleType,
@@ -397,7 +428,7 @@ G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
   return DifCrossSection;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,   
                                                const G4Step&  stepData)         
