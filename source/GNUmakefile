@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.44 2004-06-02 07:13:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.45 2004-06-02 07:15:15 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -28,7 +28,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap win32def includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global libmap dll win32def includes clean_libs clean clean_lists clean_all
 
 all:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
@@ -92,20 +92,20 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
-win32def : $(G4INSTALL)/config/win32def.c
-ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-	@echo "Compiling win32def.c ..."
-	$(CXX) /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
-else
-	@echo ""
-endif
-
 dll : win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Verifying existance of global libraries ..."
 	@$(MAKE) global
 	@echo "Building Windows DLL libraries ..."
 	@$(MAKE) global G4LIB_BUILD_SHARED=1
+else
+	@echo ""
+endif
+
+win32def : $(G4INSTALL)/config/win32def.c
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+	@echo "Compiling win32def.c ..."
+	$(CXX) /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
 else
 	@echo ""
 endif
