@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.16 2002-10-16 11:38:38 johna Exp $
+// $Id: G4Trajectory.cc,v 1.17 2002-10-24 14:21:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,11 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UnitsTable.hh"
+#include "g4std/strstream"
 
 G4Allocator<G4Trajectory> aTrajectoryAllocator;
 
@@ -161,10 +166,34 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 }
 
 const G4std::vector<G4AttDef>* G4Trajectory::GetAttDefs() const
-{ return 0; }  // Empty for now.
+{
+  G4bool isNew;
+  G4std::vector<G4AttDef>* store
+    = G4AttDefStore::GetIntance("G4Trajectory",isNew);
+  if (isNew) {
+    store->push_back
+      (G4AttDef("Particle Name","Particle Name","","","G4String"));
+    store->push_back
+      (G4AttDef("Initial Momentum",
+		"Momentum of track at start of trajectory",
+		"","","G4ThreeVector"));
+  }
+  return store;
+}
 
 G4std::vector<G4AttValue>* G4Trajectory::GetAttValues() const
-{ return 0; }  // Empty for now.
+{
+  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+
+  values->push_back(G4AttValue("Particle Name",ParticleName,""));
+
+  char c[100];
+  G4std::ostrstream s(c,100);
+  s << G4BestUnit(initialMomentum,"Energy") << G4std::ends;
+  values->push_back(G4AttValue("Initial Momentum",c,""));
+
+  return values;
+}
 
 void G4Trajectory::AppendStep(const G4Step* aStep)
 {

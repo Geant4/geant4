@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2002-10-16 11:38:35 johna Exp $
+$Id: History,v 1.39 2002-10-24 14:21:05 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 24, 02 J.Allison (traj02)
+- Implemented simple versions of G4Trajectory::GetAttDefs/Values.
 
 Oct 16, 02 J.Allison (traj01)
 - Added GetAttDefs to G4VTrajectory, etc., and small corrections.
