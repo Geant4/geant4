@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.15 2003-05-09 09:39:21 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.16 2003-05-09 09:39:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -129,7 +129,7 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 
 void BrachyDetectorConstruction::SwitchDetector()
 {
-//factoryIr->CleanSource();
+factoryIr->CleanSource();
 switch(detectorChoice)
 { 
 case 1:
