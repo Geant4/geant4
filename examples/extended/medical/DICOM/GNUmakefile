@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2003-05-26 16:05:47 guatelli Exp $
+# $Id: GNUmakefile,v 1.2 2003-06-11 14:18:18 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := DicomG4
+name := dicom
 G4TARGET := $(name)
 G4EXLIB := true
 
