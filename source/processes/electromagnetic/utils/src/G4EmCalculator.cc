@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.7 2004-08-26 10:47:04 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.8 2004-09-13 09:18:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 28.06.2004
 //
 // Modifications:
+// 12.09.2004 Add verbosity (V.Ivanchenko) 
 //
 // Class Description:
 //
@@ -63,6 +64,7 @@ G4EmCalculator::G4EmCalculator()
 {
   manager = G4LossTableManager::Instance();
   nLocalMaterials    = 0;
+  verbose            = 0;
   currentCoupleIndex = 0;
   currentCouple      = 0;
   currentMaterial    = 0;
@@ -95,10 +97,15 @@ G4double G4EmCalculator::GetDEDX(const G4ParticleDefinition* p, const G4Material
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat);
   if(couple && UpdateParticle(p, kinEnergy) ) {
-    //    G4cout << "G4EmCalculator::GetDEDX: " << p->GetParticleName()
-    //       << " e= " << kinEnergy << " in " << currentCouple 
-    //       << " idx= " << currentCoupleIndex << G4endl; 
     res = manager->GetDEDX(p, kinEnergy, couple);
+    if(verbose>0) {
+      G4cout << "E(MeV)= " << kinEnergy/MeV 
+	     << " DEDX(MeV/mm)= " << res*mm/MeV 
+	     << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+	     << "  " <<  p->GetParticleName() 
+	     << " in " <<  mat->GetName()
+	     << G4endl;
+    }
   }
   return res;
 }
@@ -118,8 +125,16 @@ G4double G4EmCalculator::GetRange(const G4ParticleDefinition* p, const G4Materia
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat);
-  if(couple && UpdateParticle(p, kinEnergy)) 
+  if(couple && UpdateParticle(p, kinEnergy)) {
     res = manager->GetRange(p, kinEnergy, couple);
+    if(verbose>0) {
+      G4cout << "E(MeV)= " << kinEnergy/MeV 
+	     << " range(mm)= " << res/mm 
+	     << "  " <<  p->GetParticleName() 
+	     << " in " <<  mat->GetName()
+	     << G4endl;
+    }
+  }
   return res;
 }
 
@@ -139,8 +154,16 @@ G4double G4EmCalculator::GetKinEnergy(const G4ParticleDefinition* p,
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat);
-  if(couple && UpdateParticle(p, 1.0*GeV)) 
+  if(couple && UpdateParticle(p, 1.0*GeV)) {
     res = manager->GetEnergy(p, range, couple);
+    if(verbose>0) {
+      G4cout << "Range(mm)= " << range/mm 
+	     << " KinE(MeV)= " << res/MeV 
+	     << "  " <<  p->GetParticleName() 
+	     << " in " <<  mat->GetName()
+	     << G4endl;
+    }
+  }
   return res;
 }
 
@@ -169,6 +192,13 @@ G4double G4EmCalculator::GetCrossSection(const G4ParticleDefinition* p,
       G4double e = kinEnergy*massRatio;
       res = (((*currentLambda)[idx])->GetValue(e,b))*chargeSquare;
       res /= mat->GetTotNbOfAtomsPerVolume();
+      if(verbose>0) {
+	G4cout << "E(MeV)= " << kinEnergy/MeV 
+	       << " cross(barn)= " << res/barn 
+	       << "  " <<  p->GetParticleName() 
+	       << " in " <<  mat->GetName()
+	       << G4endl;
+      }
     }
   }
   return res;
@@ -193,6 +223,13 @@ G4double G4EmCalculator::GetMeanFreePath(const G4ParticleDefinition* p,
   G4double res = DBL_MAX;
   G4double x = GetCrossSection(p, mat, processName, kinEnergy);
   if(x > 0.0) res = 1.0/(x*(mat->GetTotNbOfAtomsPerVolume()));
+  if(verbose>1) {
+    G4cout << "E(MeV)= " << kinEnergy/MeV 
+	   << " MFP(mm)= " << res/mm 
+	   << "  " <<  p->GetParticleName() 
+	   << " in " <<  mat->GetName()
+	   << G4endl;
+  }
   return res;
 }
 
@@ -242,19 +279,38 @@ G4double G4EmCalculator::ComputeDEDX(const G4ParticleDefinition* p,
                                            size_t idxRegion)
 {
   G4double res = 0.0;
-  //  G4cout << "DEDX: " << currentParticleName 
-  //       << " in " << currentMaterialName << "  cut= " << cut << G4endl;
+  if(verbose > 1) {
+    G4cout << "ComputeDEDX: " << p->GetParticleName() 
+           << " in " << mat->GetName() 
+           << " e(MeV)= " << kinEnergy/MeV << "  cut(MeV)= " << cut/MeV << G4endl;
+  }
   if(UpdateCouple(mat, cut)) {
     FindEmModel(p, processName, kinEnergy, idxRegion);
+    //    G4cout << "currentModel= " << currentModel << G4endl;
     if(currentModel && UpdateParticle(p, kinEnergy)) {
       if(baseParticle) {
         G4double e = kinEnergy*massRatio;
-        res = currentModel->ComputeDEDX(currentCouple, baseParticle, e, cut)*chargeSquare;
+        res = currentModel->ComputeDEDX(currentCouple, baseParticle, e, cut);
+        if(verbose > 1) {
+          G4cout <<  baseParticle->GetParticleName() << " E(MeV)= " << e 
+                 << " DEDX(MeV/mm)= " << res*mm/MeV 
+                 << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+                 << G4endl;
+	}
+        res *= chargeSquare;
       } else { 
         res = currentModel->ComputeDEDX(currentCouple, p, kinEnergy, cut);
       }
-    //  G4cout << "### G4EmCalculator:E(MeV)= " << e/MeV << " DEDX(MeV/mm)= " 
-    //           << res*mm/MeV << G4endl;
+      if(verbose > 0) {
+        G4cout << "E(MeV)= " << kinEnergy/MeV 
+               << " DEDX(MeV/mm)= " << res*mm/MeV 
+               << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+               << " cut(MeV)= " << cut/MeV
+               << "  " <<  p->GetParticleName() 
+               << " in " <<  mat->GetName()
+               << " Zi^2= " << chargeSquare
+               << G4endl;
+      }
     }
   }
   return res;
@@ -283,11 +339,20 @@ G4double G4EmCalculator::ComputeCrossSection(const G4ParticleDefinition* p,
   if(UpdateCouple(mat, cut)) {
     FindEmModel(p, processName, kinEnergy, idxRegion);
     if(currentModel && UpdateParticle(p, kinEnergy)) {
-      G4double e = kinEnergy*massRatio;
-      if(baseParticle)
+      G4double e = kinEnergy;
+      if(baseParticle) {
+        e *= kinEnergy*massRatio;
         res = currentModel->CrossSection(currentCouple, baseParticle, e, cut, e)*chargeSquare;
-      else 
-        res = currentModel->CrossSection(currentCouple, p, e, cut, e)*chargeSquare;
+      } else { 
+        res = currentModel->CrossSection(currentCouple, p, e, cut, e);
+      }
+    }
+    if(verbose>0) {
+      G4cout << "E(MeV)= " << kinEnergy/MeV 
+	     << " cross(barn)= " << res/barn 
+	     << "  " <<  p->GetParticleName() 
+	     << " in " <<  mat->GetName()
+	     << G4endl;
     }
   }
   return res;
@@ -315,6 +380,13 @@ G4double G4EmCalculator::ComputeMeanFreePath(const G4ParticleDefinition* p,
   G4double mfp = DBL_MAX;
   G4double x = ComputeCrossSection(p, mat, processName, kinEnergy, cut, idxRegion);
   if(x > 0.0) mfp = 1.0/(x*(currentMaterial->GetTotNbOfAtomsPerVolume()));
+  if(verbose>1) {
+    G4cout << "E(MeV)= " << kinEnergy/MeV 
+	   << " MFP(mm)= " << mfp/mm 
+	   << "  " <<  p->GetParticleName() 
+	   << " in " <<  mat->GetName()
+	   << G4endl;
+  }
   return mfp;
 }
 
@@ -485,6 +557,11 @@ void G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
                                  const G4String& processName,
 				       G4double kinEnergy, size_t idxRegion)
 {
+  if(verbose > 1) {
+    G4cout << "G4EmCalculator::FindEmModel for " << p->GetParticleName()
+           << " and " << processName << " at e(MeV)= " << kinEnergy
+           << " in region idx= " << idxRegion << G4endl;
+  }
   // Search for the process
   currentName = processName;
   currentModel = 0;
@@ -494,6 +571,7 @@ void G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   for(G4int i=0; i<n; i++) {
     if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == p) {
       const G4ParticleDefinition* bp = (vel[i])->BaseParticle();
+      //      G4cout << "i= " << i << " bp= " << bp << G4endl;
       if(!bp) { 
         currentModel = (vel[i])->SelectModelForMaterial(kinEnergy, idxRegion);
       } else {
@@ -549,6 +627,13 @@ const G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
     }
   }
   return elp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmCalculator::SetVerbose(G4int verb)
+{
+  verbose = verb;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

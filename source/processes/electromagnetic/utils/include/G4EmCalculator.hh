@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.5 2004-08-26 10:47:03 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.6 2004-09-13 09:18:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,6 +134,8 @@ public:
 
   const G4MaterialCutsCouple* FindCouple(const G4Material*);
 
+  void SetVerbose(G4int val);
+
 private:
 
   G4bool UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
@@ -156,6 +158,8 @@ private:
   G4LossTableManager*          manager;
   G4DataVector                 localCuts;
   G4int                        nLocalMaterials;
+
+  G4int                        verbose;
 
   // cash
   G4int                        currentCoupleIndex;
