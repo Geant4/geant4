@@ -67,10 +67,10 @@ G4PAIwithPhotons::G4PAIwithPhotons(const G4ParticleDefinition* p, const G4String
   if(p) SetParticle(p);
   fProtonEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
 							   fHighestKineticEnergy,
-							   fTotBin);
+ 							   fTotBin);
+  fInitXscPAI        = 0;
   fPAItransferBank   = 0;
   fPAIdEdxTable      = 0;
-  fSandiaPhotoAbsCof = 0;
   fdEdxVector        = 0;
   fLambdaVector      = 0;
   fdNdxCutVector     = 0;
@@ -81,6 +81,7 @@ G4PAIwithPhotons::G4PAIwithPhotons(const G4ParticleDefinition* p, const G4String
 G4PAIwithPhotons::~G4PAIwithPhotons()
 {
   if(fProtonEnergyVector) delete fProtonEnergyVector;
+  if(fInitXscPAI)         delete fInitXscPAI;
   if(fdEdxVector)         delete fdEdxVector ;
   if ( fLambdaVector)     delete fLambdaVector;
   if ( fdNdxCutVector)    delete fdNdxCutVector;
@@ -88,14 +89,6 @@ G4PAIwithPhotons::~G4PAIwithPhotons()
   {
         fPAItransferBank->clearAndDestroy();
         delete fPAItransferBank ;
-  }
-  if(fSandiaPhotoAbsCof)
-  {
-    for(G4int i=0;i<fSandiaIntervalNumber;i++)
-    {
-        delete[] fSandiaPhotoAbsCof[i];
-    }
-    delete[] fSandiaPhotoAbsCof;
   }
 }
 
@@ -165,9 +158,6 @@ void G4PAIwithPhotons::Initialise(const G4ParticleDefinition* p,
     size_t jMat; 
     size_t numOfMat = curReg->GetNumberOfMaterials();
 
-    //  for(size_t jMat = 0; jMat < curReg->GetNumberOfMaterials();++jMat){}
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    size_t numberOfMat = G4Material::GetNumberOfMaterials();
 
     for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
     {
@@ -175,17 +165,11 @@ void G4PAIwithPhotons::Initialise(const G4ParticleDefinition* p,
       GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
       fMaterialCutsCoupleVector.push_back(matCouple);
 
-      size_t iMatGlob;
-      for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
-      {
-        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;
-      }
-      fMatIndex = iMatGlob;
-
-      ComputeSandiaPhotoAbsCof();
+      fInitXscPAI = new G4InitXscPAI(matCouple);
+     
       BuildPAIonisationTable();
       fPAIxscBank.push_back(fPAItransferBank);
-      fPAIdEdxBank.push_back(fPAIdEdxTable);
+      //   fPAIdEdxBank.push_back(fPAIdEdxTable);
       fdEdxTable.push_back(fdEdxVector);
 
       BuildLambdaVector(matCouple);
@@ -196,49 +180,6 @@ void G4PAIwithPhotons::Initialise(const G4ParticleDefinition* p,
       matIter++;
     }
   }
-}
-
-//////////////////////////////////////////////////////////////////
-
-void G4PAIwithPhotons::ComputeSandiaPhotoAbsCof()
-{
-  G4int i, j, numberOfElements ;
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-
-  G4SandiaTable thisMaterialSandiaTable(fMatIndex) ;
-  numberOfElements = (*theMaterialTable)[fMatIndex]->
-                                              GetNumberOfElements();
-  G4int* thisMaterialZ = new G4int[numberOfElements] ;
-
-  for(i=0;i<numberOfElements;i++)  
-  {
-    thisMaterialZ[i] = 
-    (G4int)(*theMaterialTable)[fMatIndex]->GetElement(i)->GetZ() ;
-  }  
-  fSandiaIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
-                           (thisMaterialZ,numberOfElements) ;
-
-  fSandiaIntervalNumber = thisMaterialSandiaTable.SandiaMixing
-                           ( thisMaterialZ ,
-                             (*theMaterialTable)[fMatIndex]->GetFractionVector() ,
-        		     numberOfElements,fSandiaIntervalNumber) ;
-   
-  fSandiaPhotoAbsCof = new G4double*[fSandiaIntervalNumber] ;
-
-  for(i=0;i<fSandiaIntervalNumber;i++)  fSandiaPhotoAbsCof[i] = new G4double[5] ;
-   
-  for( i = 0 ; i < fSandiaIntervalNumber ; i++ )
-  {
-    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0) ; 
-
-    for( j = 1; j < 5 ; j++ )
-    {
-      fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.
-	                              GetPhotoAbsorpCof(i+1,j)*
-                 (*theMaterialTable)[fMatIndex]->GetDensity() ;
-    }
-  }
-  // delete[] thisMaterialZ ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -273,7 +214,7 @@ G4PAIwithPhotons::BuildPAIonisationTable()
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy,
 					 fHighestKineticEnergy,
 					 fTotBin               ) ;
-  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+  Tmin     = fInitXscPAI->GetMatSandiaMatrix(0,0) ;      // low energy Sandia interval
   deltaLow = 0.5*eV ;
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
@@ -298,11 +239,8 @@ G4PAIwithPhotons::BuildPAIonisationTable()
     {
       Tkin = Tmin + deltaLow ;
     }
-    G4PAIxSection protonPAI( fMatIndex,
-                             Tkin,
-                             bg2,
-                             fSandiaPhotoAbsCof,
-                             fSandiaIntervalNumber  ) ;
+    fInitXscPAI->IntegralPAIxSection(bg2,Tkin);
+    fInitXscPAI->IntegralCherenkov(bg2,Tkin);
 
 
     // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
@@ -310,26 +248,15 @@ G4PAIwithPhotons::BuildPAIonisationTable()
     // G4cout<<"protonPAI.GetSplineSize() = "<<
     //    protonPAI.GetSplineSize()<<G4endl<<G4endl ;
 
-    G4PhysicsFreeVector* transferVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
-    G4PhysicsFreeVector* dEdxVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
+    G4PhysicsLogVector* transferVector = fInitXscPAI->GetPAIxscVector(); 
 
-    for( G4int k = 0 ; k < protonPAI.GetSplineSize() ; k++ )
-    {
-      transferVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIxSection(k+1) ) ;
-      dEdxVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIdEdx(k+1) ) ;
-    }
-    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
-    if ( ionloss <= 0.)  ionloss = DBL_MIN ;
+    ionloss = fInitXscPAI->IntegralPAIdEdx(Tmin,bg2,Tkin);   //  total <dE/dx>
+    if ( ionloss <= 0.)  ionloss = DBL_MIN;
+
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferBank->insertAt(i,transferVector) ;
-    fPAIdEdxTable->insertAt(i,dEdxVector) ;
+    // fPAIdEdxTable->insertAt(i,dEdxVector) ;
 
     // delete[] transferVector ;
     }                                        // end of Tkin loop

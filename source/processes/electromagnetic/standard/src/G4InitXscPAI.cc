@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.4 2004-04-26 09:18:47 grichine Exp $
+// $Id: G4InitXscPAI.cc,v 1.5 2004-05-05 16:09:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 // Constructor
 //
 
-G4InitXscPAI::G4InitXscPAI(G4MaterialCutsCouple* matCC)
+G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
   : fPAIxscVector(NULL),
     fPAIphotonVector(NULL),
     fPAIelectronVector(NULL),

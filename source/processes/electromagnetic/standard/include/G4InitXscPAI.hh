@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.4 2004-04-26 09:18:45 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.5 2004-05-05 16:09:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ class G4InitXscPAI
 {
 public:
 	  // Constructors
-  G4InitXscPAI( G4MaterialCutsCouple* matCC);
+  G4InitXscPAI( const G4MaterialCutsCouple* matCC);
 	  
 	  
 	  
@@ -104,6 +104,7 @@ public:
 
 	  
   G4int GetIntervalNumber() const { return fIntervalNumber ; }
+  G4int GetBinPAI() const { return fPAIbin ; }
 
   G4double GetNormalizationCof() const { return fNormalizationCof ; }
           

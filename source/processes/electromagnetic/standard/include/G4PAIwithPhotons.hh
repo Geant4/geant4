@@ -50,6 +50,7 @@
 #include "G4VEmModel.hh"
 #include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4InitXscPAI.hh"
 
 class G4PhysicsLogVector;
 class G4PhysicsTable;
@@ -121,7 +122,6 @@ public:
                                 G4double&);
 
   void     DefineForRegion(const G4Region* r) ;
-  void     ComputeSandiaPhotoAbsCof();
   void     BuildPAIonisationTable();
   void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
@@ -153,7 +153,7 @@ private:
   G4int                fTotBin;
   G4int                fMeanNumber;
   G4PhysicsLogVector*  fProtonEnergyVector ;
-
+  G4InitXscPAI*         fInitXscPAI;
 
 
   // vectors
@@ -164,7 +164,6 @@ private:
   std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>       fPAIRegionVector;
   size_t                             fMatIndex ;  
-  G4double**                         fSandiaPhotoAbsCof ;
   G4int                              fSandiaIntervalNumber ;
 
   G4PhysicsLogVector*              fdEdxVector ;
