@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.84 2002-12-04 14:44:23 gcosmo Exp $
+# $Id: architecture.gmk,v 1.85 2003-01-22 18:02:02 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -124,7 +124,7 @@ ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
 endif
 ifndef CLHEP_LIB
-  ifeq ($(G4SYSTEM),WIN32-VC)
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     CLHEP_LIB         := CLHEP.lib
   else
     CLHEP_LIB         := CLHEP
@@ -145,7 +145,7 @@ endif
 
 # Toggle variables (positional qualifiers) between WIN32-VC and UNIX...
 #
-ifeq ($(G4SYSTEM),WIN32-VC)
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   OUT_OBJ := -TP '-Fo'
   FOR_OBJ := '-Fo'
   OUT_LIB := '-out:'
@@ -180,7 +180,7 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 
 # Positional qualifiers in action...
 #
-ifeq ($(G4SYSTEM),WIN32-VC)
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
   LOADLIBS  := $(CLHEP_LIB)
 else

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.85 2002-12-04 14:44:23 gcosmo Exp $
+# $Id: binmake.gmk,v 1.86 2003-01-22 18:02:03 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -224,7 +224,7 @@ else
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
 
-ifeq ($(G4SYSTEM),WIN32-VC)
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
@@ -327,7 +327,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@set -e;\
-	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
+	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
 	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
