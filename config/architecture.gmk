@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.57 1999-12-05 22:41:56 morita Exp $
+# $Id: architecture.gmk,v 1.58 1999-12-06 08:17:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -94,7 +94,7 @@ ifndef G4BIN
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
-####################### schema directories for G4ODBMS #######################
+#################### schema directories & setup for G4ODBMS ###################
 #
 ifdef G4ODBMS
 # If not specified, the default path for G4 schema G4SCHEMA_DIR is
@@ -143,6 +143,7 @@ ifndef G4EXAMPLE_FD_DIR
 endif
 
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_FD_DIR) ] && mkdir -p $(G4EXAMPLE_FD_DIR) )
+G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
 
 ifndef G4EXAMPLE_FD
   G4EXAMPLE_FD = $(G4EXAMPLE_FD_DIR)/$(name)
@@ -150,7 +151,7 @@ endif
 
 endif
 #
-##################### end schema directories for G4ODBMS ######################
+########################### end setup for G4ODBMS #############################
 
 # If G4DEBUG not specified, the default compilation is optimised ...
 #
@@ -451,9 +452,6 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CXXFLAGS += -compat
     endif
   endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
-  endif
 endif
 
 # -------- HP ---------
@@ -502,9 +500,6 @@ ifeq ($(G4SYSTEM),HP-aCC)
       CPPFLAGS += -DG4USE_STD_NAMESPACE
     endif
   endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
-  endif
 endif
 
 # -------- SGI ---------   !!! not supported !!!
@@ -538,9 +533,6 @@ ifeq ($(G4SYSTEM),SGI-CC)
     CPPFLAGS += -DOS_IRIX_6_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-  endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -576,9 +568,6 @@ ifeq ($(G4SYSTEM),AIX-xlC)
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-  endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -618,9 +607,6 @@ ifeq ($(G4SYSTEM),DEC-cxx)
       CXXFLAGS += -std strict_ansi
       CPPFLAGS += -DG4USE_STD_NAMESPACE
     endif
-  endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -665,8 +651,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
   endif
   ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD \
-                      -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+    G4OODDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
 endif
 
@@ -713,9 +698,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -lGLU  -lGL
-  endif
-  ifdef G4ODBMS
-    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 

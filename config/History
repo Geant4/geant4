@@ -1,4 +1,4 @@
-$Id: History,v 1.90 1999-12-05 22:42:18 morita Exp $
+$Id: History,v 1.91 1999-12-06 08:17:12 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th December 1999  Youhei Morita
+5th December 1999  Youhei Morita (config-V00-01-18) 
 - architecture.gmk: defined G4OODDLX_FLAGS
 - common.gmk: use G4OODDLX_FLAGS
 
