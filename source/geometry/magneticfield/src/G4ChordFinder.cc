@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.1 1999-01-07 16:07:08 gunter Exp $
+// $Id: G4ChordFinder.cc,v 1.2 1999-02-12 12:37:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,8 +48,9 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   {
      fAllocatedStepper= false; 
   }
-  fIntgrDriver = new G4MagInt_Driver(stepMinimum, pItsStepper);
-			    
+  fIntgrDriver = new G4MagInt_Driver(stepMinimum, 
+				     pItsStepper, 
+				     pItsStepper->GetNumberOfVariables() );
 }
 
 // ......................................................................
