@@ -38,73 +38,44 @@
 // the bindingenergy of the subshell u r creating, and the table of the 
 // transition datas
 
-G4AtomicShell::G4AtomicShell(G4int shellIdentifier, 
-			     G4double theBindingEnergy,
-			     G4std::vector<G4int> finalTransitionSubShellIdVect,
-			     G4std::vector<G4double> transitionProbabilities,
-			     G4std::vector<G4double> transitionEnergies) 
+G4AtomicShell::G4AtomicShell(G4int id, G4double energy, 
+			     const G4DataVector& prob,
+			     const G4DataVector& energies,
+			     const G4DataVector& shells)
 {
-  // here u fill the variables of the subshell: the binding eneregy and 
-  // the shell he belongs to
+  shellId = id;
+  bindingEnergy = energy;
+  transProbabilities = prob;
+  transEnergies = energies;
+  finalTranShellId = shells;
 
-  bindingEnergy=theBindingEnergy;
-  shellId=shellIdentifier;
+} 
 
-  // these r vectors containing  datas about the transition
-  // the user can see and use them thru the functions below
-
-  finTranSubShellId = finalTransitionSubShellIdVect; 
-  transProbabilities = transitionProbabilities; 
-  transEnergies = transitionEnergies;
-}
-
-G4AtomicShell::G4AtomicShell()
-{ }
-
-//destructor
-
-G4AtomicShell::~G4AtomicShell() {
-
-
-  if (bindingEnergy) {
-    bindingEnergy=0.0;
-  }
-
-  transProbabilities.erase(transProbabilities.begin(),transProbabilities.end());
-
-  transEnergies.erase(transEnergies.begin(),transEnergies.end());
-
-  finTranSubShellId.erase(finTranSubShellId.begin(),finTranSubShellId.end());
-
-
-  if (shellId) {
-    shellId = 0;
-  }
-}
-
-
+G4AtomicShell::~G4AtomicShell()
+{;}
 
 G4double G4AtomicShell::BindingEnergy() const {
 
   return bindingEnergy;
 }
 
-const G4std::vector<G4double>& G4AtomicShell::TransitionProbabilities() const{
-
+//const G4std::vector<G4double>& G4AtomicShell::TransitionProbabilities() const{
+const G4DataVector& G4AtomicShell::TransitionProbabilities() const{
+ 
   return transProbabilities;
 }
 
-const G4std::vector<G4double>& G4AtomicShell::TransitionEnergies() const {
+const G4DataVector& G4AtomicShell::TransitionEnergies() const {
 
   return transEnergies;
 }
 
-const G4std::vector<G4int>& G4AtomicShell::TransSubShellIdentifiers() const{
+const G4DataVector& G4AtomicShell::TransFinalShellIdentifiers() const{
 
-  return finTranSubShellId;
+  return finalTranShellId;
 }
 
-G4int G4AtomicShell::ShellId() {
+G4int G4AtomicShell::ShellId() const{
 
   return shellId;
 }
@@ -116,20 +87,13 @@ G4double G4AtomicShell::TransitionEnergy(G4int index) const {
 
 G4int G4AtomicShell::TransitionIdentifier(G4int index) const {
 
-  return finTranSubShellId[index];
+  return (G4int)finalTranShellId[index];
 }
 
 G4double G4AtomicShell::TransitionProbability(G4int index) const {
 
   return transProbabilities[index];
 }
-
-
-
-
-
-
-
 
 
 
