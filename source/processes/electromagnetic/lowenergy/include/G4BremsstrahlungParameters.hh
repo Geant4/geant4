@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.1 2001-08-20 16:36:00 pia Exp $
+// $Id: G4BremsstrahlungParameters.hh,v 1.2 2001-09-16 14:13:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -30,6 +30,7 @@
 // -----------
 // 31 Jul 2001   MGP        Created
 //                          Values of the parameters from A. Forti's fit
+// 12.09.01 V.Ivanchenko    Add activeZ and paramA
 //
 // -------------------------------------------------------------------
 
@@ -46,8 +47,10 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "g4std/map"
+#include "g4std/vector"
 
 class G4VEMDataSet;
+class G4VDataSetAlgorithm;
 
 class G4BremsstrahlungParameters {
  
@@ -67,10 +70,14 @@ private:
 
   void LoadData();
 
-  G4VEMDataSet* paramA;
+  // The interpolation algorithm
+  const G4VDataSetAlgorithm* interpolation;
+
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > paramA;
 
   G4DataVector paramB0;   
   G4DataVector paramB1;
+  G4DataVector activeZ;
   
   G4int zMin;
   G4int zMax;

@@ -21,15 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4eIonisationParameters.hh,v 1.2 2001-09-16 14:13:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//                          Values of the parameters from A. Forti's fit
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-//                          Values of the parameters from A. Forti's fit
+// 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
 //
 // -------------------------------------------------------------------
 
@@ -44,21 +45,25 @@
 #define G4IONISATIONPARAMETERS_HH 1
 
 #include "globals.hh"
+#include "G4DataVector.hh"
+#include "g4std/map"
 
-class G4DataVector;
+class G4VDataSetAlgorithm;
+class G4VEMDataSet;
 
-class G4IonisationParameters {
+class G4eIonisationParameters {
  
 public:
   // To be completed
 
-  G4IonisationParameters(G4int minZ = 1, G4int maxZ = 99);
+  G4eIonisationParameters(G4int minZ = 1, G4int maxZ = 99);
 
-  ~G4IonisationParameters();
+  ~G4eIonisationParameters();
  
-  const G4DataVector& Parameters(G4int Z, G4int shellIndex) const;
+  const G4DataVector& Parameters(G4int Z, G4int shellIndex, G4double e) const;
 
-  G4double Parameter(G4int Z, G4int shellIndex, G4int parameterIndex) const;
+  G4double Parameter(G4int Z, G4int shellIndex, G4int parameterIndex,
+                     G4double e) const;
   
   void PrintData() const;
 
@@ -70,6 +75,17 @@ private:
 
   G4int zMin;
   G4int zMax;
+
+  // Parameters of the energy spectra
+  G4DataVector activeZ;
+
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
+
+  size_t length;
+
+  // The interpolation algorithm
+  const G4VDataSetAlgorithm* interpolation;
+
 };
  
 #endif
