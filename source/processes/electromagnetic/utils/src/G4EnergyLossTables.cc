@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.28 2003-07-23 11:36:26 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.29 2003-09-09 09:26:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@ G4double G4EnergyLossTables::rmin = 0. ;
 G4double G4EnergyLossTables::rmax = 0. ;
 G4double G4EnergyLossTables::Thigh = 0. ;
 G4int    G4EnergyLossTables::let_counter = 0;
-G4int    G4EnergyLossTables::let_max_num_warnings = 2;
+G4int    G4EnergyLossTables::let_max_num_warnings = 100;
 G4bool   G4EnergyLossTables::first_loss = true;
 
 G4EnergyLossTables::helper_map G4EnergyLossTables::dict;
@@ -389,7 +389,7 @@ G4double G4EnergyLossTables::GetProperTime(
               t.theHighestKineticEnergy,isOut);
 
   } else {
-   
+
     time = (*propertimeTable)(materialIndex)->GetValue(
                scaledKineticEnergy,isOut);
 
@@ -969,24 +969,25 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
 
 void G4EnergyLossTables::CPRWarning()
 {
-//  if (let_counter <  let_max_num_warnings) {
+  if (let_counter <  let_max_num_warnings) {
 
-//    G4cout << G4endl;
-//    G4cout << "##### G4EnergyLossTable WARNING: The obsolete interface is used" << G4endl;
-//    G4cout << "##### Please, substitute G4Material by G4MaterialCutsCouple" << G4endl;
-//    G4cout << "##### Obsolete interface will be removed soon" << G4endl;
-//    G4cout << G4endl;
-//    let_counter++;
-  if ((G4RegionStore::GetInstance())->size() > 1) {
-     G4Exception("G4EnergyLossTables:: More than 1 region - table can't be accessed with obsolete interface");
-     exit(1);
-  }
-
-//  } else if (let_counter == let_max_num_warnings) {
-
-//    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
-//    let_counter++;
+    G4cout << G4endl;
+    G4cout << "##### G4EnergyLossTable WARNING: The obsolete interface is used!" << G4endl;
+    G4cout << "##### RESULTS ARE NOT GARANTEED!" << G4endl;
+    G4cout << "##### Please, substitute G4Material by G4MaterialCutsCouple" << G4endl;
+    G4cout << "##### Obsolete interface will be removed soon" << G4endl;
+    G4cout << G4endl;
+    let_counter++;
+//  if ((G4RegionStore::GetInstance())->size() > 1) {
+//     G4Exception("G4EnergyLossTables:: More than 1 region - table can't be accessed with obsolete interface");
+//     exit(1);
 //  }
+
+  } else if (let_counter == let_max_num_warnings) {
+
+    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
+    let_counter++;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
