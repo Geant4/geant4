@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-11-03 18:56:11 pia Exp $
+# $Id: GNUmakefile,v 1.6 2001-11-06 01:38:24 pia Exp $
 # --------------------------------------------------------------
 
 ifndef G4TARGET
@@ -20,7 +20,7 @@ include $(G4INSTALL)/config/architecture.gmk
 # NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
 # see the first lines in G4ComptonTest.cc
 #
-C_FLAGS += -I$(LHCXX_REL_DIR)/include
+CPPFLAGS += -I$(LHCXX_REL_DIR)/include
 LDFLAGS  += -L$(LHCXX_REL_DIR)/lib
 # general stuff:
 LOADLIBS += -lHepUtilities -lAIDA_Annotation

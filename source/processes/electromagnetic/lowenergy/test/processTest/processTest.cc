@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.8 2001-11-03 18:56:11 pia Exp $
+// $Id: processTest.cc,v 1.9 2001-11-06 01:38:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,31 +52,25 @@
 #include "G4ParticleDefinition.hh"
 #include "G4TestFactory.hh"
 
-#include "G4Analyser.hh"
-#include "G4TestAnalyser.hh"
-#include "G4AnalyserFactory.hh"
-#include "G4TestAnalyserFactory.hh"
-#include "G4AnalyserHandler.hh"
-
+#include "G4ProcessTestAnalysis.hh"
 
 #include "G4TestUI.hh"
 
 int main()
 {
 
-  // Initialise the analysis
-  G4AnalyserFactory* analysisFactory = new G4TestAnalyserFactory();
-  G4Analyser* analyser = G4AnalyserHandler::getInstance(analysisFactory);
-  analyser->book("test");
-  //  G4Analyser* analyser2 = new G4TestAnalyser;
-
-  // Configuration of the test set-up
+ // Configuration of the test set-up
 
   G4MaterialSetup materialSetup;
   materialSetup.makeMaterials();
 
   G4TestUI ui;
   ui.configure();
+
+  // Initialise the analysis
+  G4ProcessTestAnalysis* analyser = G4ProcessTestAnalysis::getInstance();
+  G4String store = ui.getProcessCategory() + "_" + ui.getProcessType();
+  analyser->book(store);
 
   const G4Material* material = ui.getSelectedMaterial();
   const G4ParticleDefinition* definition = ui.getParticleDefinition();
@@ -95,14 +89,17 @@ int main()
   test->buildTables(category,polarised);
 
   // Testing
-
+  
+  const G4String topic = ui.getTestTopic();
   G4int nIterations = ui.getNumberOfIterations();
+
   for (G4int iter=0; iter<nIterations; iter++)
     {
       G4cout << "---- Iteration " << iter << G4endl;
       const G4Track* track = setup.makeTrack();
       const G4Step* step = setup.makeStep();
-      test->postStepTest(*track,*step);
+      if (topic == "post") test->postStepTest(*track,*step);
+      else if (topic == "along") test->alongStepTest(*track,*step);
     }
 
   analyser->finish();
