@@ -83,9 +83,9 @@ Fragment: A = 11, Z = 8, U = 1.063e+02 MeV
           P = (-3.876e+02,1.401e+02,1.395e+02) MeV   E = 1.043e+04 MeV
           #Particles = 4, #Holes = 5, #Charged = 3
 
+Vladimir: Check pn_be_585 to make sure the data are ok.
 
-
-
+Vladimir: pn_zr_800 to make sure the data are ok.
 
 
 
