@@ -70,12 +70,14 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 0
 /run/beamOn 10000
 #
+lowenergy/angular 2bn
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
+lowenergy/angular 2bs
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.21 2003-09-29 01:25:55 kurasige Exp $
+// $Id: Tst14PhysicsList.cc,v 1.22 2003-11-06 12:14:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -458,10 +458,39 @@ void Tst14PhysicsList::ActivateAuger(G4bool value)
     }
 }
 
+void Tst14PhysicsList::SetAngularDistribution(const G4String& angularName)
+{
 
+  G4cout << "Setting angular distribution to " << angularName << G4endl;
 
+  // Get the ProcessManager for electrons and the list of electron processes
+  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
+  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
+  G4int nElectronProcesses = electronProcesses->size();
 
+  // Loop over electron processes until one retrieves LowEnergyIonisation
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
+    {
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
+      G4String nameBrems("LowEnBrem");
 
+      if (name == nameBrems)
+	{
+	  // The only way to get access to the cut setting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
+	  if (lowEProcess != 0) 
+	    {
+              lowEProcess->SetAngularGenerator(angularName);
+	      G4cout << "Low energy Bremsstrahlung angular distribution is set to: "
+		     << angularName
+		     << G4endl;
+	    }
+	}
+    }
+
+}
 
 
 

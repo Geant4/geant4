@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.10 2003-02-23 17:22:08 pia Exp $
+// $Id: Tst14PhysicsListMessenger.hh,v 1.11 2003-11-06 12:14:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,7 @@ class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 
 class Tst14PhysicsListMessenger: public G4UImessenger {
+
 public:
   
   Tst14PhysicsListMessenger(Tst14PhysicsList* physList);
@@ -81,6 +82,9 @@ private:
   G4UIcmdWithABool*          augerCmd;
 
   G4UIcmdWithAString*        physicsListCmd;
+
+  G4UIcmdWithAString*        angularDistributionCmd;
+
 };
 
 #endif

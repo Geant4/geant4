@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.10 2003-02-23 17:22:15 pia Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.11 2003-11-06 12:14:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -112,6 +112,13 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * physList
   physicsListCmd->SetParameterName("physList",false);
   physicsListCmd->AvailableForStates(G4State_PreInit);  
 
+  // Select angular distribution
+  
+  angularDistributionCmd = new G4UIcmdWithAString("/lowenergy/angular",this);  
+  angularDistributionCmd->SetGuidance("Select angular distribution: tsai or 2bn or 2bs");
+  angularDistributionCmd->SetParameterName("angularDistribution",false);
+  angularDistributionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
 }
 
 Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
@@ -126,6 +133,7 @@ Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
   delete cutECmd;
   delete augerCmd;
   delete physicsListCmd;
+  delete angularDistributionCmd;
   delete lowEnDir;
 }
 
@@ -133,31 +141,33 @@ void Tst14PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 {
   if (command == cutGLowLimCmd)
     { physicsList->SetGammaLowLimit(cutGLowLimCmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == cutELowLimCmd)
     { physicsList->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == cutGELowLimCmd)
     { physicsList->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == cutSecPhotCmd)
     { physicsList->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue)); }
 
   if (command == cutSecElecCmd)
     { physicsList->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == cutGCmd)
     { physicsList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == cutECmd)
     { physicsList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue)); }
-
+  
   if (command == augerCmd)
     { physicsList->ActivateAuger(augerCmd->GetNewBoolValue(newValue)); }
-
+  
   if (command == physicsListCmd)
-   { physicsList->AddPhysicsList(newValue); }
-
+    { physicsList->AddPhysicsList(newValue); }
+  
+  if (command == angularDistributionCmd)
+    { physicsList->SetAngularDistribution(newValue); }
 }
 
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.12 2003-02-23 17:22:07 pia Exp $
+// $Id: Tst14PhysicsList.hh,v 1.13 2003-11-06 12:14:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -28,6 +28,7 @@
 // History:
 // -----------
 // 22 Feb 2003 MGP          Redesigned for modular PhysicsList
+// 06 Nov 2003 MGP          Introduced test of Bremsstrahlung angular distributions
 //
 // -------------------------------------------------------------------
 
@@ -72,6 +73,9 @@ public:
  
   // Activation of Auger effect in electron ionisation and photoelectric effect
   void ActivateAuger(G4bool flag);
+
+  // Select angular distribution
+  void SetAngularDistribution(const G4String& name);
 
 private:
 

@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorMessenger.cc,v 1.6 2002-12-05 02:19:05 asaim Exp $
+// $Id: Tst14DetectorMessenger.cc,v 1.7 2003-11-06 12:14:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst14DetectorMessenger.hh"
 
@@ -38,7 +35,6 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst14DetectorMessenger::Tst14DetectorMessenger(Tst14DetectorConstruction * Tst14Det)
 :Tst14Detector(Tst14Det)
@@ -107,7 +103,6 @@ Tst14DetectorMessenger::Tst14DetectorMessenger(Tst14DetectorConstruction * Tst14
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst14DetectorMessenger::~Tst14DetectorMessenger()
 {
@@ -123,7 +118,6 @@ Tst14DetectorMessenger::~Tst14DetectorMessenger()
   delete Tst14detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -155,5 +149,3 @@ void Tst14DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Tst14Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

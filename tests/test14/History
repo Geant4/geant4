@@ -1,4 +1,4 @@
--n $Id: History,v 1.25 2003-10-03 17:04:51 vnivanch Exp $
+-n $Id: History,v 1.26 2003-11-06 12:14:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 Nov 2003 - MGP, test14-V05-02-01
+              Introduced test of Bremsstrahlung angular distributions
+
 03 Oct 2003 - V.Ivanchenko, tag test14-V05-02-00
-              obsolete interface to energy limits of cuts is substituted 
+              Obsolete interface to energy limits of cuts is substituted 
 
 16 May 2003 - G.Cosmo, tag test14-V05-01-01
               Corrected order of deletion of volumes/solids and adopt volumes and
