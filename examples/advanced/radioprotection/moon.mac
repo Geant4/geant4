@@ -21,7 +21,7 @@
 /event/verbose 0
 #/tracking/verbose 1
 /run/initialize
-/gun/particle p
+/gun/particle proton
 #/gun/generator Moon
 /gun/energy 1. GeV
 /configuration/choose moon
