@@ -472,12 +472,6 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
 #  setenv G4VIS_BUILD_VRML_DRIVER     1
 #  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-#  setenv G4ANALYSIS_BUILD_LAB        1
-#  setenv G4ANALYSIS_BUILD_JAS        1
-#  setenv G4ANALYSIS_BUILD_LIZARD     1
-  #setenv G4ANALYSIS_TUPLE 1
-  #setenv G4ANALYSIS_CLOUD 1
-  setenv G4ANALYSIS_LAB_VISUALIZATION 1
   # G4 use flags :
 #  setenv G4UI_USE_XM                 1
 #  setenv G4VIS_USE_OPENGLXM          1
@@ -487,17 +481,13 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  setenv G4VIS_USE_DAWNFILE          1
 #  setenv G4VIS_USE_VRML              1
 #  setenv G4VIS_USE_VRMLFILE          1
-#  setenv G4ANALYSIS_USE_LAB          1
 #  setenv G4ANALYSIS_USE_JAS          1
 #  setenv G4ANALYSIS_USE_LIZARD       1
-#  setenv G4ANALYSIS_SYSTEM           Lab
-  # AIDA : 
-#  setenv G4ANALYSIS_AIDA /projects/AIDA/v2r2/AIDA
-  # Lab :
-#  setenv CMTPATH /archos/OSC/v6r1
-#  source /archos/OSC/v6r1/Lab/v4r1/cmt/setup.csh
   # CLHEP :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
+  # Lab :
+  setenv G4ANALYSIS_USE_LAB          1
+  source /projects/Lab/v6/cmt/setup.csh
   # Things needed by the Geant4/vis/drivers :
   #setenv OGLHOME        /usr/X11R6
 #  setenv OGLHOME        /lal/Mesa/3.2/Linux
@@ -522,10 +512,10 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   # Else :
   #setenv XENVIRONMENT   g4Xt.xrm
 #  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
-#  alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
-#  alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
-#  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/lib/${G4SYSTEM}
-#  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
+  alias g4AnaEx01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
+  alias AnaEx01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/lib/${G4SYSTEM}
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
 #  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
   set prompt='g4-pc-gbp> ' 
 endif
