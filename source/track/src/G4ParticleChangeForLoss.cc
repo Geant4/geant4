@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.12 2004-06-14 11:23:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.13 2004-06-15 08:17:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(
       currentTrack = right.currentTrack;
       proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
-      theProposedWeight = right.theProposedWeight;
+      //theProposedWeight = right.theProposedWeight;
       proposedMomentumDirection = right.proposedMomentumDirection;
 }
 
@@ -95,7 +95,7 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
       currentTrack = right.currentTrack;
       proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
-      theProposedWeight = right.theProposedWeight;
+      //theProposedWeight = right.theProposedWeight;
       proposedMomentumDirection = right.proposedMomentumDirection;
    }
    return *this;
@@ -130,9 +130,11 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetKineticEnergy( kinEnergy );
   pPostStepPoint->SetCharge( currentCharge );
 
-  // update weight
-  G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
-  pPostStepPoint->SetWeight( newWeight );
+  // update weight 
+  // this feature is commented out, it should be overwritten in case
+  // if energy loss processes will use biasing
+  // G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  // pPostStepPoint->SetWeight( newWeight );
 
 
 // Not necessary to check now
@@ -161,7 +163,9 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
 
   // update weight
-  pPostStepPoint->SetWeight( theProposedWeight );
+  // this feature is commented out, it should be overwritten in case
+  // if energy loss processes will use biasing
+  // pPostStepPoint->SetWeight( theProposedWeight );
 
 // Not necessary to check now
 //#ifdef G4VERBOSE

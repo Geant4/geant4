@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.11 2004-06-14 12:48:10 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.12 2004-06-15 08:17:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,10 +97,6 @@ public:
   void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
   // Get/Propose the MomentumDirection vector: it is the final momentum direction.
 
-  G4double GetWeight() const;
-  void ProposeWeight(G4double finalWeight);
-  //   Get/Propose the final Weight of the current particle
-
   virtual void DumpInfo() const;
 
   // for Debug
@@ -121,9 +117,6 @@ private:
 
   G4double currentCharge;
   //  The final charge of the current particle.
-
-  G4double theProposedWeight;
-  //  The parent and final weight of a given track
 
   G4ThreeVector proposedMomentumDirection;
   //  The final momentum direction of the current particle.
@@ -157,17 +150,6 @@ inline void G4ParticleChangeForLoss::SetProposedCharge(G4double theCharge)
 inline void G4ParticleChangeForLoss::ProposeCharge(G4double theCharge)
 {
   currentCharge = theCharge;
-}
-
-inline G4double G4ParticleChangeForLoss::GetWeight() const
-{
-  return theProposedWeight;
-}
-
-inline void G4ParticleChangeForLoss::ProposeWeight(G4double w)
-{
-  theProposedWeight = w;
-  theParentWeight   = w;
 }
 
 inline
@@ -207,10 +189,9 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
   InitializeSecondaries(track);
+  theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
-  theParentWeight   = track.GetWeight();
-  theProposedWeight = theParentWeight;
 }
 
 inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
@@ -218,10 +199,9 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
   InitializeSecondaries(track);
+  theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
-  theParentWeight   = track.GetWeight();
-  theProposedWeight = theParentWeight;
   proposedMomentumDirection = track.GetMomentumDirection();
   currentTrack = &track;
 }
