@@ -49,8 +49,14 @@ G4VDataFile::~G4VDataFile()
 void G4VDataFile::OpenFile(){
   
  // open the stream
-  G4String dir("./data/");
-  G4String dir_file = dir + _filename;
+  char* path = getenv("G4LEDATA");
+  if(!path){ 
+
+    G4Exception("G4LEDATA environment variable not set");
+  }
+
+  G4String path_string(path);
+  G4String dir_file = path_string + "/" + _filename;
   _istr.open(dir_file.data(), ios::in | ios::nocreate);
   
   //  if(!_istr.is_open()){
