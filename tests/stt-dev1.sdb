@@ -1,4 +1,4 @@
-# $Id: stt-dev1.sdb,v 1.6 2000-02-22 18:05:58 stesting Exp $
+# $Id: stt-dev1.sdb,v 1.7 2000-02-25 09:37:58 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -22,18 +22,19 @@ geant4/source/geometry/management    geant4-01-00-ref-05
 geant4/source/geometry/solids        geant4-01-00-ref-05
 geant4/source/geometry/volumes       geant4-01-00-ref-05
 geant4/source/global           global-V01-00-04
-geant4/source/graphics_reps    geant4-01-00-ref-05
+geant4/source/graphics_reps    greps-V01-00-03
 geant4/source/intercoms        intercoms-V01-00-00
 geant4/source/interfaces       geant4-01-00-ref-05
 geant4/source/materials        geant4-01-00-ref-05
 geant4/source/particles        geant4-01-00-ref-05
-geant4/source/persistency      geant4-01-00-ref-05
+geant4/source/persistency      persistency-V01-00-00
 geant4/source/processes/GNUmakefile         geant4-01-00-ref-05
 geant4/source/processes/History             geant4-01-00-ref-05
 geant4/source/processes/decay	            geant4-01-00-ref-05
 geant4/source/processes/electromagnetic	    geant4-01-00-ref-05
-geant4/source/processes/electromagnetic/lowenergy  emlowen-V01-00-10
+geant4/source/processes/electromagnetic/lowenergy  emlowen-V01-00-11
 geant4/source/processes/hadronic            geant4-01-00-ref-05
+geant4/source/processes/hadronic/models/neutron_hp  neu-V01-00-01a
 geant4/source/processes/management          geant4-01-00-ref-05
 geant4/source/processes/optical	            geant4-01-00-ref-05
 geant4/source/processes/parameterisation    geant4-01-00-ref-05
@@ -44,3 +45,4 @@ geant4/source/run              geant4-01-00-ref-05
 geant4/source/track            geant4-01-00-ref-05
 geant4/source/tracking         geant4-01-00-ref-05
 geant4/source/visualization    vis-V01-00-04a
+geant4/source/visualization/RayTracer raytracer-V01-00-01a
