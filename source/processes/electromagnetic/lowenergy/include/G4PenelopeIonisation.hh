@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PenelopeIonisation.hh,v 1.3 2003-07-01 14:01:35 pandola Exp $
+// $Id: G4PenelopeIonisation.hh,v 1.4 2003-07-09 12:36:46 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -30,6 +30,8 @@
 // -----------
 // 20 Mar 2003  L. Pandola        1st implementation
 // 30 Jun 2003  L. Pandola        methods for positrons added
+// 04 Jul 2003  L. Pandola        added methods for interfacing
+//                                with the cross section handler
 // -------------------------------------------------------------------
 //
 // Class description:
@@ -50,10 +52,9 @@ class G4ParticleDefinition;
 class G4VParticleChange;
 class G4VDataSetAlgorithm;
 class G4ParticleChange;
-class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 class G4VEMDataSet;
-class G4RangeTest;
+
 
 class G4PenelopeIonisation : public G4eLowEnergyLoss
 { 
@@ -77,6 +78,11 @@ public:
   void SetCutForLowEnSecElectrons(G4double cut);
 
   void ActivateAuger(G4bool val);
+
+  G4double CalculateCrossSectionsRatio(G4double,G4double,
+				       G4int, G4double,
+				       const G4ParticleDefinition&);
+
 
   // For testing purpose only
   G4double DumpMeanFreePath(const G4Track& aTrack,
@@ -107,9 +113,15 @@ private:
 					      G4double,G4double,G4double);
   G4double CalculateStoppingPowerForPositrons(G4double,
 					      G4double,G4double,G4double);
+  
+  G4double CrossSectionsRatioForElectrons(G4double,G4double,
+					  G4double,G4double,
+					  G4int);
+  G4double CrossSectionsRatioForPositrons(G4double,G4double,
+					  G4double,G4double,
+					  G4int);
   G4VCrossSectionHandler* crossSectionHandler;
   G4VEMDataSet* theMeanFreePath;
-  G4VEnergySpectrum* energySpectrum;
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForDelta;
