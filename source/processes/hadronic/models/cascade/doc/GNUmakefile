@@ -4,6 +4,6 @@ all:
 	dvips cascade.dvi
 	gv cascade.ps
 html:
-	latex2html cascade.html
+	latex2html cascade.tex
 clean:
 	rm *.dvi *.*~ #*# *.log *.aux
