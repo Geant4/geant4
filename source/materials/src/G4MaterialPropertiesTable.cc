@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.14 2004-05-13 21:27:32 gum Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.15 2004-05-17 13:39:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,6 +131,7 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
 {
 //      Return true if a const property 'key' exists
+
         MPTCiterator j;
         j = MPTC.find(G4String(key));
         if ( j != MPTC.end() ) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.14 2004-05-17 13:39:25 gcosmo Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.15 2004-05-17 13:42:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,6 +114,7 @@ public: // With description
 
         G4double GetConstProperty(const char *key);
         // Get the constant property from the table corresponding to the key-name
+
         G4bool ConstPropertyExists(const char *key);
         // Return true if a const property 'key' exists.
 
