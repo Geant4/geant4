@@ -1,8 +1,9 @@
-# $Id: stt-prod.sdb,v 1.11 2000-02-29 17:03:20 stesting Exp $
+# $Id: stt-prod.sdb,v 1.12 2000-03-30 10:15:29 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
+geant4/ReleaseNotes     geant4-01-01-cand-01
 geant4/config           config-V01-00-02
 geant4/data             geant4-01-00-ref-06
 # geant4/documents - not currently part of reference versions
