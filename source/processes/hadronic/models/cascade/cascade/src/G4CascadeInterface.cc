@@ -50,8 +50,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   theResult.Initialize(aTrack);
 
-  G4double sumBaryon = 0;
-  G4double sumEnergy = 0;
+  G4double eInit     = 0.0;
+  G4double eTot      = 0.0;
+  G4double sumBaryon = 0.0;
+  G4double sumEnergy = 0.0;
 
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
@@ -90,11 +92,18 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4double theNucleusA = theNucleus.GetN();
 
+
+
   if ( !(G4int(theNucleusA) == 1) ) {
     target  = new G4InuclNuclei(targetMomentum, 
 				theNucleusA, 
 				theNucleus.GetZ());
     target->setEnergy();
+
+    G4std::vector<G4double>  bmom = bullet->getMomentum();
+    eInit = sqrt(bmom[0] * bmom[0]);
+    G4std::vector<G4double> tmom = target->getMomentum();
+    eInit += sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
 
@@ -123,17 +132,21 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   if (G4int(theNucleusA) == 1) 
     { 
-      sumBaryon += 1;
-
       do
 	{
-	  // Get momentum from H model
-	  G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
 	  targetH = new G4InuclElementaryParticle(targetMomentum, 1); 
 
 	  output = collider->collide(bullet, targetH); 
 	} 
       while(output.getOutgoingParticles().size() < 2.5);
+
+      sumBaryon += 1;
+
+    G4std::vector<G4double>  bmom = bullet->getMomentum();
+    eInit = sqrt(bmom[0] * bmom[0]);
+    G4std::vector<G4double> tmom = targetH->getMomentum();
+    eInit += sqrt(tmom[0] * tmom[0]);
+
       if (verboseLevel > 2) {
 	G4cout << "Target:  " << G4endl;  
 	targetH->printParticle();
@@ -167,6 +180,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
       G4std::vector<G4double> mom = ipart->getMomentum();
+      eTot   += sqrt(mom[0] * mom[0]);
+
       G4double ekin = ipart->getKineticEnergy() * GeV;
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
       aMom = aMom.unit();
@@ -248,6 +263,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
 	G4std::vector<G4double> mom = ifrag->getMomentum();
+        eTot   += sqrt(mom[0] * mom[0]);
+
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	aMom = aMom.unit();
 
@@ -279,8 +296,11 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
     if (verboseLevel > 2) {
       if (sumEnergy > 0.01 ) {
-	cout << "ERROR: energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+	cout << "Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
       }
+     
+	cout << "Total energy conservation at level ~" << (eInit - eTot) * GeV << " MeV" << G4endl;
+     
     }
 
     if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
