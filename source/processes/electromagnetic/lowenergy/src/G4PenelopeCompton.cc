@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.14 2003-05-20 21:57:15 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.15 2003-05-24 16:42:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -36,6 +36,7 @@
 // 13 Mar 2003 L.Pandola      Code "cleaned"  
 // 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
 // 26 Mar 2003 L.Pandola      Added fluorescence
+// 24 May 2003 MGP            Removed memory leak
 //
 // -------------------------------------------------------------------
 
@@ -108,9 +109,24 @@ G4PenelopeCompton::~G4PenelopeCompton()
   delete meanFreePathTable;
   delete rangeTest;
   delete matCrossSections;
+
+   for (size_t i=0; i<ionizationEnergy->size(); i++)
+    {
+      delete (*ionizationEnergy)[i];
+    }
   delete ionizationEnergy;
+
+  for (size_t j=0; j<hartreeFunction->size(); j++)
+    {
+      delete (*hartreeFunction)[j];
+    }
   delete hartreeFunction;
-  delete occupationNumber;
+
+  for (size_t k=0; k<occupationNumber->size(); k++)
+    {
+      delete (*occupationNumber)[k];
+    }
+   delete occupationNumber;
 }
 
 void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
