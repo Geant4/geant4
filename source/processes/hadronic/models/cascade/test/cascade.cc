@@ -20,11 +20,89 @@
 
 #include "vector"
 
-G4int test();
+G4int testINC();
+G4int testINCEvap();
+G4int testINCAll();
 
 int main() {
 
-  test(); 
+  testINC(); // only INC model
+  testINCAll(); // INC, pre-eq, evap, fission 
+
+  return 0;       
+};
+
+G4int testINCEvap() {
+
+return 0;
+};
+
+G4int testINC() {
+  G4int verboseLevel = 2;
+
+  G4CollisionOutput TRFoutput;
+
+  typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+  G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
+
+  G4cout << " ::: testing interface" << G4endl;
+  // 0.8 GeV proton with momentum along Z axis
+  G4InuclParticle* bullet = new G4InuclElementaryParticle(0.1,1); // momentumBullet, bulletType 
+
+  // Set target
+  G4std::vector<G4double> targetMomentum(4, 0.0);
+
+  G4InuclNuclei * target = new G4InuclNuclei(0.,197.,79.); //Au197  momentum = 0
+  target->setEnergy();
+
+  // Resigister collider
+  G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
+  G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
+ 
+  cascader->setElementaryParticleCollider(collider);
+  cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
+
+  G4int nCollisions = 2;
+
+  for (G4int i = 1; i <= nCollisions; i++){
+    // Make INC
+    G4cout << "collision " << i << G4endl; 
+    G4CollisionOutput output =  cascader->collide(bullet, target); 
+
+    if (verboseLevel > 1) {
+      G4cout << " After Cascade " << G4endl;
+
+      output.printCollisionOutput();
+
+      G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << 
+	G4endl;
+    }
+	  
+
+
+    // Convert Bertini data to Geant4 format
+    G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+
+    if(!particles.empty()) 
+      { 
+	particleIterator ipart;
+
+	for(ipart = particles.begin(); ipart != particles.end(); ipart++) 
+	  {
+	    G4std::vector<G4double> mom = ipart->getMomentum();
+	    G4double ekin = ipart->getKineticEnergy() * GeV;
+	    G4int type = ipart->type();
+
+	    G4cout << type << " " << ekin << " " << mom[1] * GeV << " " << mom[2] * GeV << " " << mom[3] * GeV << G4endl;
+	  }
+      }
+    
+  }
+  return 0;
+};
+
+
+G4int testINCAll()  {
 
   // Set the default random engine to RanecuEngine
   //  RanecuEngine defaultEngine;
@@ -150,54 +228,6 @@ int main() {
     analyser->printResultsNtuple();
   }
 
-  return 0;       
-};
-
-G4int test() {
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-  G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
-
-  G4cout << " ::: testing interface" << G4endl;
-// 0.8 GeV proton with momentum along Z axis
-  G4InuclParticle* bullet = new G4InuclElementaryParticle(0.1,1); // momentumBullet, bulletType 
-
-    // Set target
-    G4std::vector<G4double> targetMomentum(4, 0.0);
-
-    G4InuclNuclei * target = new G4InuclNuclei(0.,197.,79.); //Au197  momentum = 0
-    target->setEnergy();
-
-    // Resigister collider
-    G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
-    G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
- 
-    cascader->setElementaryParticleCollider(collider);
-    cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
-
-    G4int nCollisions = 2;
-
-    for (G4int i = 1; i <= nCollisions; i++){
-    // Make INC
-      G4cout << "collision " << i << G4endl; 
-    G4CollisionOutput output =  cascader->collide(bullet, target); 
-
-  // Convert Bertini data to Geant4 format
-    G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
-
-    if(!particles.empty()) 
-    { 
-      particleIterator ipart;
-
-      for(ipart = particles.begin(); ipart != particles.end(); ipart++) 
-      {
-G4std::vector<G4double> mom = ipart->getMomentum();
-	G4double ekin = ipart->getKineticEnergy() * GeV;
-	G4int type = ipart->type();
-
-	G4cout << type << " " << ekin << " " << mom[1] * GeV << " " << mom[2] * GeV << " " << mom[3] * GeV << G4endl;
-      }
-    }
-    
-    }
   return 0;
 };
+
