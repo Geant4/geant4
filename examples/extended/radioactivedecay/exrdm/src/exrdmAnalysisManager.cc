@@ -127,7 +127,7 @@ void exrdmAnalysisManager::EndOfEvent()
       TarW = 0.;
     }
     for (size_t i = 1; i < Edepo.size(); i++) {
-      if (fabs((Edepo[i].GetTime()- Time)/second) <= pulseWidth) {
+      if (std::fabs((Edepo[i].GetTime()- Time)/second) <= pulseWidth) {
 	if ( Edepo[i].GetEnergy() > 0. ) {
 	  TarE += Edepo[i].GetEnergy();
 	  TarW += Edepo[i].GetEnergy()*Edepo[i].GetWeight();
