@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.22 2001-01-12 09:03:24 medernac Exp $
+// $Id: G4Torus.cc,v 1.23 2001-01-29 13:12:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2201,15 +2201,10 @@ G4NURBS* G4Torus::CreateNURBS () const
 
 /** Important : the precision could be tuned by TORUSPRECISION **/
 
-#define EPSILON 1e-12
-#define INFINITY 1e+12
 #define TORUSPRECISION 1.0  // or whatever you want for precision
                             // (it is TorusEquation related)
 #define HOLEBVM 0
 #define NBPOINT 6
-#define ITERATION 12 // 20 But 8 is really enough for Newton with a good guess
-#define NOINTERSECTION kInfinity
-
 
 /*
   Torus implementation with Newton Method and Bounding volume
@@ -2267,7 +2262,7 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,
            << " Rtor = " << GetRtor()
 	   << " Rmax = " << GetRmax() << G4endl ;
 #endif
-    if (fabs(GetRmin()) > EPSILON) {
+    if (fabs(GetRmin()) > POLEPSILON) {
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    Testing interior torus .." << G4endl ;
 #endif
@@ -2432,10 +2427,10 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,
   /** Now check Phi .. **/
 
   /* Eliminate the case of point (0,0,0) */
-  //  if ((p.x()*p.x() + p.y()*p.y() + p.z()*p.z()) > EPSILON)
+  //  if ((p.x()*p.x() + p.y()*p.y() + p.z()*p.z()) > POLEPSILON)
   if (((p.x()+ lambda*v.x())*(p.x()+ lambda*v.x()) +
        (p.y()+ lambda*v.y())*(p.y()+ lambda*v.y()) +
-       (p.z()+ lambda*v.z())*(p.z()+ lambda*v.z())) > EPSILON)
+       (p.z()+ lambda*v.z())*(p.z()+ lambda*v.z())) > POLEPSILON)
   {
     G4double theta ;
 
@@ -2596,9 +2591,9 @@ void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
       NewL[2] = (d - b)/(2*a);
       NewL[3] = (-d - b)/(2*a);
       if (NewL[2] < 0.0) valid[2] = 0;
-      if (fabs(z + NewL[2]*dz) - Rmin > EPSILON) valid[2] = 0;
+      if (fabs(z + NewL[2]*dz) - Rmin > POLEPSILON) valid[2] = 0;
       if (NewL[3] < 0.0) valid[3] = 0;
-      if (fabs(z + NewL[3]*dz) - Rmin > EPSILON) valid[3] = 0;
+      if (fabs(z + NewL[3]*dz) - Rmin > POLEPSILON) valid[3] = 0;
     }
   } else
     {
@@ -2668,9 +2663,9 @@ void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
       NewL[4] = (d - b)/(2*a);
       NewL[5] = (-d - b)/(2*a);
       if (NewL[4] < 0.0) valid[4] = 0;
-      if (fabs(z + NewL[4]*dz) - Rmin > EPSILON) valid[4] = 0;
+      if (fabs(z + NewL[4]*dz) - Rmin > POLEPSILON) valid[4] = 0;
       if (NewL[5] < 0.0) valid[5] = 0;
-      if (fabs(z + NewL[5]*dz) - Rmin > EPSILON) valid[5] = 0;
+      if (fabs(z + NewL[5]*dz) - Rmin > POLEPSILON) valid[5] = 0;
     }
   } else
 #endif            
@@ -2691,7 +2686,7 @@ void G4Torus::SortIntervals (G4double *SortL, G4double *NewL,
   G4double swap;
 	
   (*NbIntersection) = 0;
-  SortL[0] = -INFINITY;
+  SortL[0] = -kInfinity;
 	
   for (i=0;i<6;i++) {
     if (valid[i] != 0) {
@@ -2710,7 +2705,7 @@ void G4Torus::SortIntervals (G4double *SortL, G4double *NewL,
   /* Delete double values */
   /* When the ray hits a corner we have a double value */
   for (i=0;i<(*NbIntersection)-1;i++) {
-    if (SortL[i+1] - SortL[i] < EPSILON) {
+    if (SortL[i+1] - SortL[i] < POLEPSILON) {
       if (((*NbIntersection) & (1)) == 1) {
 	/* If the NbIntersection is odd then we keep one value */
 	for (j=i+1;j<(*NbIntersection);j++) {
@@ -2737,7 +2732,8 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 				   G4double dx,G4double dy,G4double dz,
 				   G4double Rmax,G4double Rmin) const
 {
-  G4double Lmin,Lmax;
+  G4double Lmin=0.;
+  G4double Lmax=0.;
   G4double guess;
   G4double SortL[4];
    
@@ -2769,11 +2765,11 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 				
     switch(NbIntersection) {
     case 1:
-      if (SortL[0] < EPSILON) {
+      if (SortL[0] < POLEPSILON) {
 	if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
 	  return 0.0;
 	} else {
-	  return NOINTERSECTION;
+	  return kInfinity;
 	}
       }
       break;
@@ -2781,7 +2777,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
       if ((SortL[1] - SortL[0]) < LengthMin) NbIntersection = 0;
       break;
     case 3:
-      if (SortL[0] < EPSILON) {
+      if (SortL[0] < POLEPSILON) {
 	if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
 	  return 0.0;
 	} else {
@@ -2818,7 +2814,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 
   switch (NbIntersection) {
   case 0:
-    return NOINTERSECTION ;				
+    return kInfinity ;				
     break;
   case 1:
     Lmin = 0.0 ;
@@ -2845,7 +2841,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 
     guess = PolySolver.solve(Lmin,Lmax);
 
-    if ((guess >= (Lmin - EPSILON)) && (guess <= (Lmax + EPSILON))) {
+    if ((guess >= (Lmin - POLEPSILON)) && (guess <= (Lmax + POLEPSILON))) {
       return guess ;
     } else {
       Lmin = SortL[1] ;
@@ -2868,7 +2864,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 
     guess = PolySolver.solve(Lmin,Lmax);
 
-    if ((guess >= (Lmin - EPSILON)) && (guess <= (Lmax + EPSILON))) {
+    if ((guess >= (Lmin - POLEPSILON)) && (guess <= (Lmax + POLEPSILON))) {
       return guess ;
     } else {
       Lmin = SortL[2] ;
@@ -2894,15 +2890,15 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 
   guess = PolySolver.solve(Lmin,Lmax);
 
-  if ((guess >= (Lmin - EPSILON)) && (guess <= (Lmax + EPSILON))) {
+  if ((guess >= (Lmin - POLEPSILON)) && (guess <= (Lmax + POLEPSILON))) {
 #if DEBUGTORUS
     G4cout << "G4Torus::DistanceToTorus    distance = " << guess << G4endl ;    
 #endif
     return guess ;
   } else {
 #if DEBUGTORUS
-    G4cout << "G4Torus::DistanceToTorus    NOINTERSECTION" << G4endl ;    
+    G4cout << "G4Torus::DistanceToTorus  :  kInfinity" << G4endl ;    
 #endif
-    return NOINTERSECTION;
+    return kInfinity;
   }
 }
