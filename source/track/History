@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2001-12-12 11:27:03 kurasige Exp $
+$Id: History,v 1.42 2001-12-13 15:39:13 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec. 13 ,01   H.Kurashige
+- Remove event biasing mechanism from track category
+  ( it is moved to hadronic/models )
+- Add G4Track::CopyTrackInfo 
+
 Dec. 12, 01  H.Kurashige (track-V04-00-00)
 - Added initialization of fStepLength in constructors.
 - Fixed a bug that fStepLength is not copied in assginment operator 
