@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewHandler.cc,v 1.2 1999-01-11 00:47:55 allison Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.1 1999-04-08 15:31:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
