@@ -258,18 +258,18 @@ else
 G4VIS_BUILD_OPACS_DRIVER=""
 fi 
 
-#?
-if [ X$g4vis_build_opengl_driver = Xy ] ; then
-G4VIS_BUILD_OPENGL_DRIVER=1
-else
-G4VIS_BUILD_OPENGL_DRIVER=""
-fi 
-
 #+
-if [ X$g4vis_build_OPENGLX_driver = Xy ] ; then
+if [ X$g4vis_build_openglx_driver = Xy ] ; then
 G4VIS_BUILD_OPENGLX_DRIVER=1
 else
 G4VIS_BUILD_OPENGLX_DRIVER=""
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver = Xy ] ; then
+G4VIS_BUILD_OPENGLXM_DRIVER=1
+else
+G4VIS_BUILD_OPENGLXM_DRIVER=""
 fi 
 
 #+
