@@ -1,0 +1,23 @@
+                       geant4-01-00-ref-06
+                       ===================
+
+geant4-01-00-ref-06 is a new reference tag.  It is geant4-01-00-ref-05 plus:
+
+global-V01-00-04       - G4UserLimits[.hh.icc]: added string identifier -
+                         new member fType, SetType/GetType methods and
+                         new constructor. (H.Kurasige).
+vis-V01-00-04a         - Introduced G4RayTracer (Makoto Asai).
+intercoms-V01-00-00    - Fixed const char* problem.
+examples-V01-00-01a    - Changed cout to G4cout in
+                         TestEm2/src/Em2DetectorConstruction.cc
+                         (Michel Maire).
+emlowen-V01-00-10      - Various bug fixes to electron and photon low
+                         energy processes.
+raytracer-V01-00-01a   - const char* fixes to vis-V01-00-04a. 
+                       - Added G4std:: in places to make ISO compliant.
+greps-V01-00-02        - Added HepPolyhedron (Evgeni Chernaev). 
+                       - Re-implemented G4Polyhedron. 
+greps-V01-00-03        - Re-instated edge flags for "invisible" edges.
+emlowen-V01-00-11      - Fix to emlowen-V01-00-10 for ISO compliance.
+persistency-V01-00-00  - Fixed a minor typo in G4PersistentGeomMan.cc.
+neu-V01-00-01a         - Small fix for NT (Gonzalo Gracia).

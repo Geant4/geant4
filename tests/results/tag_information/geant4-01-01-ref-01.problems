@@ -1,0 +1,117 @@
+                 Problems with geant4-01-01-ref-01
+                 =================================
+
+The existing problems still remain.
+
+Problems with geant4-01-00-ref-08
+---------------------------------
+There is one new problem since geant4-01-00-ref-07 on DEC in optimised
+mode.  It came in with tags set 14, mainly em.
+
+DEC: optim: NON-ISO: T02.hadron, T11:
+  G4VParticleChange::CheckIt    : the energy deposit  is negative  !!
+  Difference:  2.50381e+06[MeV] 
+ G4VParticleChange::CheckIt 
+ pointer : 0x14064d708
+      -----------------------------------------------
+        G4ParticleChange Information                     
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):             -2.5e+06
+        Track Status        :                Alive
+        True Path Length (mm) :                  472
+        Stepping Control     :                    0
+        Event Biasing        :  not used 
+        Mass (GeV)   :                0.106
+        Charge (eplus)   :                   -1
+        Position - x (mm)   :              1.2e+03
+        Position - y (mm)   :                -30.9
+        Position - z (mm)   :                -5.48
+        Time (ns)           :                 4.01
+        Proper Time (ns)    :                    0
+        Momentum Direct - x :                0.991
+        Momentum Direct - y :              0.00497
+        Momentum Direct - z :                0.131
+        Kinetic Energy (MeV):              2.5e+06
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    1
+
+Problems with geant4-01-00-ref-07
+---------------------------------
+The situation has changed little since geant4-01-00-ref-06.
+
+The following problems are fixed:
+
+  DEC: optim: T05 STEP reader crash.
+
+Problems still with us:
+
+  Everywhere: N02: G4ParticleChangeForMSC::CheckIt.
+  NON-ISO:    Linux: optim: N04.EMtest: 10000 steps warnings.
+              SUN: optim: T14 differences.
+  ISO:        T11, T15: problem reading neutron data.
+              DEC: optim: T02.hadron loop/crash.
+  Large N:    See below.
+
+The following new problem arose:
+
+  Linux debug N04: G4PropagatorInField::LocateIntersectionPoint.
+
+
+Summary
+=======
+
+NON-ISO
+-------
+
+DEC: debug: NON-ISO: N02: G4ParticleChangeForMSC::CheckIt.
+     optim: NON-ISO: N02: G4ParticleChangeForMSC::CheckIt.
+
+HP: debug: N02: G4ParticleChangeForMSC::CheckIt.
+    optim: ditto.
+
+Linux: debug: N02: G4ParticleChangeForMSC::CheckIt.
+              N04: G4PropagatorInField::LocateIntersectionPoint (see below).
+       optim: N02: G4ParticleChangeForMSC::CheckIt.
+              N04.EMtest: 10000 steps warnings.
+
+SUN: debug: NON-ISO: N02: G4ParticleChangeForMSC::CheckIt.
+     optim: NON-ISO: N02: G4ParticleChangeForMSC::CheckIt.
+                     T14 differences (the only case where optim differs
+                     from debug!).
+
+ISO
+---
+
+DEC: debug:     ISO: N02: G4ParticleChangeForMSC::CheckIt.
+                     T11, T15: problem reading neutron data.
+     optim:     ISO: N02: G4ParticleChangeForMSC::CheckIt.
+                     T02.hadron loop/crash.
+                     T11, T15: problem reading neutron data.
+
+NT: debug: ISO: T11, T15: problem reading neutron data.
+              
+SUN: debug:     ISO: Compiles, unresolved template references at linking. 
+     optim:     ISO: Loops during compilation of G4ChargedGeantino.cc.
+
+
+Previous "large-N" problems still remaining
+===========================================
+
+1) test15: grows large (memory leak?)
+
+2) (probably) N04.EMtest: loop on Linux in optimised mode with large
+    number of events.
+
+
+Details of new problem
+----------------------
+
+Linux debug N04:
+G4PropagatorInField::LocateIntersectionPoint:   Warning: Integration inaccuracy requires 
+ an adjustment in the step's endpoint 
+   Two mid-points are further apart than their curve length difference
+   Dist = 9.70332 curve length = 9.70332

@@ -1,0 +1,17 @@
+                       geant4-01-00-ref-08
+                       ===================
+
+geant4-01-00-ref-08 is a new reference tag.  The main feature is new
+electromagnetic code (expect your output to change in detail).  The
+problems reported with geant4-01-00-ref-07 still remain.
+
+geant4-01-00-ref-08 is geant4-01-00-ref-07 plus:
+
+em-V01-00-01              - New em code (details to come).
+materials-V01-00-00       - const char* everywhere in
+                            G4MaterialPropertiesTable.
+geom-solids-csg-V01-00-05 - Trivial fixes (e.g., added explicit casts).
+g3tog4-V01-00-00a         - Improvements and fixes by Bill, Ivana and Gabriele.
+examples-V01-00-05        - Small fixes to extended/electromagnetic.
+                          - Updated all .out files, novice and extended.
+                          - Small fix for NT in TestEm4.cc.

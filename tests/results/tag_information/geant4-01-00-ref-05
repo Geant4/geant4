@@ -1,0 +1,60 @@
+                       geant4-01-00-ref-05
+                       ===================
+
+geant4-01-00-ref-05 is a new reference tag.  It is geant4-01-00-ref-04 plus:
+
+tracking-V01-00-00  - GetCurrentValue() in G4TrackingMessenger.cc have
+                      a return value.
+                    - SetUserAction in G4SteppingManager.hh: protected
+                      null pointers.
+neu-V01-00-01       - Fix the 'no data' problem seen in the neutron
+                      transport tests.
+event-V01-00-01     - Corrections for trajectories of suspended tracks.
+tracking-V01-00-01  - SetUserAction methods in G4SteppingManager.hh and
+                      G4TrackingManger.hh is changed for the ray
+                      tracer by Makoto.
+track-V01-00-00     - Bugs related track weight in G4VParticleChange have
+                      been fixed.
+partman-V01-00-00   - Some modification and bug fixes for implementation
+                      of IsotopeTable classes.
+config-V01-00-01    - Introduces G4NO_OPTIMISE. 
+                    - G4DEBUG and G4OPTIMISE have been added to CPPFLAGS.
+global-V01-00-03    - global-V01-00-02: Fixes to STLInterface.
+                    - Correct bounds overflow in G4String::toLower()
+                      and toUpper().
+                    - Added resize(size_t) to G4RWTPtrVector.
+examples-V01-00-01  - Includes testem-V01-00-00 above.
+                    - Introduced large_N files.
+                    - Updated N03 and N04.EMtest.out.
+config-V01-00-02    - architecture.gmk: added option '+W823' to HP-aCC. 
+                    - binmake.gmk: moved $EXTRALIBS.
+
+Further details:
+
+--- config-V01-00-01
+- Added control for the Ray-tracer driver. Introduced
+  G4VIS_USE_RAYTRACER in G4VIS_USE.gmk and
+  G4VIS_BUILD_RAYTRACER_DRIVER in G4VIS_BUILD.gmk (M.Asai).
+- binmake.gmk: fixed dependency order for compound libraries.
+  Moved -lG4particles and -lG4materials downstream in the list.
+- architecture.gmk: added G4NO_OPTIMISE for allowing compilation
+  without any level of optimisation or debug. G4DEBUG if defined
+  takes precedence. G4DEBUG and G4OPTIMISE are now defined also as
+  CPPFLAGS.
+
+--- global-V01-00-02
+- STLInterface: several fixes.
+  o Fixed bug in G4String::toUpper().
+    (bug was introduced inadvertently on 20-Oct-1999).
+  o Added checks for bound-overflows in G4RWTPtrSortedVector::find().
+  o Fixed bound-check for operators () and [] in most collections:
+    () access operators DO NOT perform bound-checking (except if
+       G4DEBUG set);
+    [] access operators DO perform bound-checking.
+  o tpvector[.h.icc]: changed 'unsigned int' to 'size_t' in
+    constructors. Added 'rwsize' and bound-checking for operator[].
+  o tvvector.icc: added call to std_vector() in default constructor.
+  o tpordvec.icc: added std_pvector:: scope for calls to [] operator,
+    where missing.
+  o tvordvec.icc: added std_vector:: scope for calls to [] operator,
+    where missing.

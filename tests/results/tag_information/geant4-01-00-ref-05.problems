@@ -1,0 +1,38 @@
+                 Problems with geant4-01-00-ref-05
+                 =================================
+
+DEC: debug:     ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T11, T15: problem reading neutron data.
+                     T14 compilation (G4std::less)
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+     optim:     ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T02.hadron loop/crash.
+                     T05 STEP reader crash.
+                     T11, T15: problem reading neutron data.
+                     T14 compilation (G4std::less)
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T05 STEP reader crash.
+
+HP: debug: N02 G4ParticleChangeForMSC::CheckIt.
+    optim: ditto.
+
+Linux: debug: N02 G4ParticleChangeForMSC::CheckIt.
+       optim: N02 G4ParticleChangeForMSC::CheckIt.
+              N04.EMtest: 10000 steps warnings.
+              
+SUN: debug:     ISO: Compiles, unresolved template references at linking. 
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+     optim:     ISO: Loops during compilation of G4ChargedGeantino.cc.
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T14 differences (the only case where optim differs
+                     from debug!).
+
+Previous "large-N" problems still remaining, probably:
+======================================================
+
+1) Warning in N04.EMtest on Linux:
+
+   loop on Linux in optimised mode with large number of events.
+
+2) T15 (Isotope Production) gives segmentation violation after 6000
+   events and 4 hours on pcg4speed and other problems under investigation.

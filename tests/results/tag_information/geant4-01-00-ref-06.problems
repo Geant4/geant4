@@ -1,0 +1,191 @@
+                 Problems with geant4-01-00-ref-06
+                 =================================
+
+The situation has changed little since geant4-01-00-ref-05.
+
+The following problems have been fixed:
+  T14 ISO compliance.
+
+The "large N" problem in test15 on Sun cannot be reproduced, but, as
+on Linux, it grows large.
+
+On Windows NT, TestEm4 did not compile and other TestEmx jobs crashed.
+
+
+Summary
+=======
+
+DEC: debug:     ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T11, T15: problem reading neutron data.
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+     optim:     ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T02.hadron loop/crash.
+                     T05 STEP reader crash.
+                     T11, T15: problem reading neutron data.
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T05 STEP reader crash.
+
+HP: debug: N02 G4ParticleChangeForMSC::CheckIt.
+    optim: ditto.
+
+Linux: debug: N02 G4ParticleChangeForMSC::CheckIt.
+       optim: N02 G4ParticleChangeForMSC::CheckIt.
+              N04.EMtest: 10000 steps warnings.
+
+NT: debug: ISO: T11, T15: problem reading neutron data.
+              
+SUN: debug:     ISO: Compiles, unresolved template references at linking. 
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+     optim:     ISO: Loops during compilation of G4ChargedGeantino.cc.
+            NON-ISO: N02 G4ParticleChangeForMSC::CheckIt.
+                     T14 differences (the only case where optim differs
+                     from debug!).
+
+
+Previous "large-N" problems still remaining, probably:
+======================================================
+
+1) N04.EMtest: loop on Linux in optimised mode with large number of events.
+
+2) test15: grows large (memory leak?)
+
+
+Report from Gonzalo Gracia on Tests on Windows NT
+================================================
+
+SUMMARY
+=======
+
+  COMPILING LIBRARIES: -------------------------------------------------------
+
+    No errors.
+    Some warnings which were already there for the release:
+
+    Too long symbols for debugger
+    Warning C4786: "_________________" identifier was truncated to '255' characters in the debug information
+
+    warning: `MAXNAMLEN' redefined
+
+ COMPILING/LINKING EXAMPLES & TEST ---------------------------------------------
+
+    Additional Warning when linking some tests:
+    warning: `_SC_CLK_TCK' redefined
+
+  RUNNING EXAMPLES  -----------------------------------------------------------
+
+    They all run normally
+
+
+  RUNNING TESTS  -------------------------------------------------------------
+
+    Most of them run normally and giving the reference output
+
+    EXAMPLES 11 and 15 stop with ABNORMAL TERMINATION  (as in cand03)
+
+
+
+
+DETAILS
+=======
+
+
+ExN01 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+No differences
+
+ExN02 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+Numerical differences everywhere
+
+ExN03 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+few numerical differences
+
+ExN04 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+few numerical differences
+
+ExN04 EM  = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+Numberical differences
+
+ExN05 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+small numerical differences
+
+ExN06 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  OK
+small numerical differences
+
+
+Tests
+
+
+TEST01 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST02 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST02 had = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST03 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = NOT THERE ANYMORE
+
+TEST04 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = NOT TESTED
+
+TEST05 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST06 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST07 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST08 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = NOT THERE ANYMORE
+
+TEST09 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST10 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST11 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =      NO    ************
+Stops after the following message:
+ionIoni:    Knock-on electron cross sections .
+         MeanFreePath is computed at tracking time.
+         delta ray energy sampled from  differential Xsection.
+G4NeutronHPNames: Sorry, this material does not come near to any data.
+G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the
+                  directory, the neutron scattering data are located in.
+G4NeutronHPNames: The material was: A=14, Z=7
+In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch
+
+*** G4Exception: Aborting execution ***
+
+abnormal program termination
+
+
+TEST12 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST13 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences
+
+TEST14 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+Few differences
+
+TEST15 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =      NO    ************
+Stops after the following message:
+
+ionIoni:    Knock-on electron cross sections .
+         MeanFreePath is computed at tracking time.
+         delta ray energy sampled from  differential Xsection.
+G4NeutronHPNames: Sorry, this material does not come near to any data.
+G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the
+                  directory, the neutron scattering data are located in.
+G4NeutronHPNames: The material was: A=27, Z=13
+In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch
+
+*** G4Exception: Aborting execution ***
+
+abnormal program termination
+
+
+
+TEST16 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = OK
+No differences

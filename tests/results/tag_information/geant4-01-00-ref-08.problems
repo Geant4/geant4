@@ -1,0 +1,36 @@
+                 Problems with geant4-01-00-ref-08
+                 =================================
+
+There is one new problem since geant4-01-00-ref-07 on DEC in optimised
+mode.  It came in with tags set 14, mainly em.
+
+DEC: optim: NON-ISO: T02.hadron:
+  G4VParticleChange::CheckIt    : the energy deposit  is negative  !!
+  Difference:  2.50381e+06[MeV] 
+ G4VParticleChange::CheckIt 
+ pointer : 0x14064d708
+      -----------------------------------------------
+        G4ParticleChange Information                     
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):             -2.5e+06
+        Track Status        :                Alive
+        True Path Length (mm) :                  472
+        Stepping Control     :                    0
+        Event Biasing        :  not used 
+        Mass (GeV)   :                0.106
+        Charge (eplus)   :                   -1
+        Position - x (mm)   :              1.2e+03
+        Position - y (mm)   :                -30.9
+        Position - z (mm)   :                -5.48
+        Time (ns)           :                 4.01
+        Proper Time (ns)    :                    0
+        Momentum Direct - x :                0.991
+        Momentum Direct - y :              0.00497
+        Momentum Direct - z :                0.131
+        Kinetic Energy (MeV):              2.5e+06
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    1
