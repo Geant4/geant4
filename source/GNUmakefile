@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2001-06-25 11:26:48 morita Exp $
+# $Id: GNUmakefile,v 1.28 2001-06-26 02:14:39 morita Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -111,12 +111,14 @@ includes:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 
 clean_libs:
 	@echo Removing all libraries ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) clean_libs); done
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@ cleandb); done
 	@rm -rf $(G4LIBDIR)/libname.map
 
 clean:
