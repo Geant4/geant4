@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.8 2004-11-10 13:25:23 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.9 2004-11-10 13:29:19 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -244,7 +244,7 @@ void G4OpenInventorWinViewer::SetView () {
 }
 
 void G4OpenInventorWinViewer::DrawView () {
-  G4cout << "debug Iv::DrawViewer " <<G4endl;
+  //G4cout << "debug Iv::DrawViewer " <<G4endl;
   KernelVisitDecision();
   ProcessView();
   FinishView();
@@ -264,7 +264,6 @@ void G4OpenInventorWinViewer::WritePostScript(const G4String& aFile) {
   action->enableFileWriting();
   fViewer->render();
   action->disableFileWriting();
-  //fViewer->render();
 }
 //////////////////////////////////////////////////////////////////////////////
 LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc ( 
@@ -305,10 +304,10 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
       (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     if(This) {
       if(aWParam==ID_ESCAPE) {
-        printf("debug : escape...\n");
+        //printf("debug : escape...\n");
         This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
       } else if(aWParam==ID_POSTSCRIPT) {
-        printf("debug : PS...\n");
+        //printf("debug : PS...\n");
         This->WritePostScript();
       }
     }
