@@ -119,7 +119,7 @@ G4OutBitStream::SetWord(u_int dat)
 }
 
 void
-G4OutBitStream::CopyByte(char* src, int n)
+G4OutBitStream::CopyByte(const char* src, int n)
 {
   if( mBuf+n < mEndOfBuf ){
         FullBit();

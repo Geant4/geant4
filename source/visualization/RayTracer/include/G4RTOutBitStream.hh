@@ -12,7 +12,7 @@ class G4OutBitStream
         void SetBits(int v, int numBits);
         void SetByte(u_char dat);
         void SetWord(u_int dat);
-        void CopyByte(char* src, int n);
+        void CopyByte(const char* src, int n);
 
         u_char* GetStreamAddress(void){return mHeadOfBuf;};
         int GetStreamSize(void){return mBuf - mHeadOfBuf;};
