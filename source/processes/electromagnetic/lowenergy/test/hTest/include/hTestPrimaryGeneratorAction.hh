@@ -74,8 +74,8 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetBeamSigmaX(G4double val) {sigmaX = val;};
     void SetBeamSigmaY(G4double val) {sigmaY = val;};
     void SetBeamSigmaZ(G4double val) {sigmaY = val;};
-    void SetBeamSigmaE(G4double val) {sigmaE = val;};
-    void SetBeamEnergy(G4double val) {energy = val;};
+    void SetBeamSigmaE(G4double val); 
+    void SetBeamEnergy(G4double val); 
     void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
     void SetVerbose(G4int val) {verbose = val;};
     G4ThreeVector GetBeamPosition() const {return position;}; 
@@ -84,10 +84,7 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4int GetVerbose() const {return verbose;};
     void SetBeamBeta(G4double val);
     void SetSigmaBeta(G4double val);
-    void SetRandom(const G4String& type) {
-                    if(type == "gauss") m_gauss = true;
-                    if(type == "flat")  m_gauss = false; }; 
-
+    void SetRandom(const G4String& type) {m_gauss = type;};
 
   private:
 
@@ -103,10 +100,11 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double sigmaX, sigmaY, sigmaZ;
     G4double sigmaE;
     G4double energy;
+    G4double minE, maxE, minBeta, maxBeta;
     G4double minCosTheta;
     G4ThreeVector position;
     G4ThreeVector direction;
-    G4bool m_gauss;
+    G4String m_gauss;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

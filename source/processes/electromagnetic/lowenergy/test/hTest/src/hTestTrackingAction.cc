@@ -77,6 +77,8 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   if(0 == aTrack->GetParentID()) {
 
+    //    theHisto->StartEvent();      
+
     G4double kinE = aTrack->GetKineticEnergy();
     theHisto->SaveToTuple("TKIN", kinE/MeV);      
 
@@ -85,14 +87,21 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       mass = particle->GetPDGMass();
       theHisto->SaveToTuple("MASS", mass/MeV);      
       theHisto->SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);      
+      G4double beta = 1.;
+	if(mass > 0.) {
+          G4double gamma = kinE/mass + 1.;
+          beta = sqrt(1. - 1./(gamma*gamma));
+	}
+      theHisto->SaveToTuple("BETA", beta);            
     }
 
     G4ThreeVector pos = aTrack->GetPosition();
     G4ThreeVector dir = aTrack->GetMomentumDirection();
+    /*
     theHisto->SaveToTuple("X0",(pos.x())/mm);
     theHisto->SaveToTuple("Y0",(pos.y())/mm);
     theHisto->SaveToTuple("Z0",(pos.z())/mm);
-  
+    */
     if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestTrackingAction: Primary kinE(MeV)= " << kinE/MeV
            << "; m(MeV)= " << mass/MeV   
@@ -105,6 +114,12 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       G4cout << "hTestTrackingAction: Secondary electron " << G4endl;
     }
     theHisto->AddDeltaElectron(aTrack->GetDynamicParticle());
+
+  } else if ("e+" == name) {
+    if(1 < theHisto->GetVerbose()) {
+      G4cout << "hTestTrackingAction: Secondary positron " << G4endl;
+    }
+    //    theHisto->AddPositron(aTrack->GetDynamicParticle());
 
   } else if ("gamma" == name) {
     if(1 < theHisto->GetVerbose()) {

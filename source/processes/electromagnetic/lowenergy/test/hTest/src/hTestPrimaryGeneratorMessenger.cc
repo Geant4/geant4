@@ -107,7 +107,7 @@ hTestPrimaryGeneratorMessenger::hTestPrimaryGeneratorMessenger(
   sigmaBetaCmd->AvailableForStates(PreInit,Idle);
 
   randCmd = new G4UIcmdWithAString("/hTest/gun/random",this);
-  randCmd->SetGuidance("Set the name of the random distribution (gauss,flat)");
+  randCmd->SetGuidance("Set the name of the random distribution (gauss,flatE,flatBeta)");
   randCmd->SetParameterName("rand",false);
   randCmd->AvailableForStates(PreInit,Idle);
 

@@ -90,6 +90,7 @@ void hTestPhysicsList::InitializeMe()
 
   emPhysics = G4String("");
   hadronPhysics = G4String("");
+  decayPhysics = G4String("");
   SetEMPhysicsList(G4String("LowEnergy"));  
   SetHadronPhysicsList(G4String("none"));
 
@@ -216,7 +217,7 @@ void hTestPhysicsList::ConstructDecay()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (theDecayProcess->IsApplicable(*particle)) { 
+    if (theDecayProcess->IsApplicable(*particle) && decayPhysics != "none") { 
       pmanager ->AddProcess(theDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt

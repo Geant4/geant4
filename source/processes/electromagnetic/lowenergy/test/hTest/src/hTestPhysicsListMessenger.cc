@@ -108,6 +108,11 @@ hTestPhysicsListMessenger::hTestPhysicsListMessenger(hTestPhysicsList* list)
   HadPhysicsCmd->SetParameterName("HadronList",false);
   HadPhysicsCmd->AvailableForStates(PreInit,Idle);
 
+  decayCmd = new G4UIcmdWithAString("/hTest/physics/decay",this);
+  decayCmd->SetGuidance("Set the name of the decayList");
+  decayCmd->SetParameterName("decay",false);
+  decayCmd->AvailableForStates(PreInit,Idle);
+
   verbCmd = new G4UIcmdWithAnInteger("/hTest/physics/verbose",this);
   verbCmd->SetGuidance("Set verbose for hTest");
   verbCmd->SetParameterName("verb",false);
@@ -128,6 +133,7 @@ hTestPhysicsListMessenger::~hTestPhysicsListMessenger()
   delete setMaxStepCmd;
   delete EMPhysicsCmd;
   delete HadPhysicsCmd;
+  delete decayCmd;
   delete verbCmd;
 }
 
@@ -157,6 +163,8 @@ void hTestPhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue)
     { hTestList->SetEMPhysicsList(newValue);}
   if(com == HadPhysicsCmd)
     { hTestList->SetHadronPhysicsList(newValue);}
+  if(com == decayCmd)
+    { hTestList->SetDecay(newValue);}
   if( com == verbCmd )
    { hTestList->SetVerbose(verbCmd->GetNewIntValue(newValue));}
 }

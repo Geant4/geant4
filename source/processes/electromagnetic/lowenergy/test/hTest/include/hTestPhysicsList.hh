@@ -65,6 +65,7 @@ public: // Without description
     void SetMaxStep(G4double);
     void SetEMPhysicsList(const G4String&);  
     void SetHadronPhysicsList(const G4String&);  
+    void SetDecay(const G4String& name) {decayPhysics = name;};  
     inline void SetVerbose(G4int val) {verbose = val;};    
     inline G4int GetVerbose() const {return verbose;};    
     inline G4double GetMaxChargedStep() const {return maxChargedStep;};    
@@ -104,6 +105,7 @@ private:
 
     G4String emPhysics;
     G4String hadronPhysics;
+    G4String decayPhysics;
 
     G4int    verbose;
     G4bool   physicsIsDefined;

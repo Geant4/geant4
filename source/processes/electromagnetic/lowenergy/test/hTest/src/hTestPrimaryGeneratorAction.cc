@@ -68,7 +68,7 @@ void hTestPrimaryGeneratorAction::InitializeMe()
   sigmaZ = 0.0;
   sigmaE = 0.0;
   minCosTheta = 1.0;
-  energy = 10.0*MeV;
+  SetBeamEnergy(10.0*MeV);
   position  = G4ThreeVector(x0,y0,z0);
   direction = G4ThreeVector(0.0,0.0,1.0);
   m_gauss = true;
@@ -116,20 +116,24 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
  
   particleGun->SetParticleMomentumDirection(direction.unit());
+  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  G4double mass = particle->GetPDGMass();
 
   // Simulation of beam kinetic energy
   G4double kinEnergy = energy;
 
-  if(0.0 < sigmaE) {
+  if(m_gauss == "flatE") kinEnergy  = minE + (maxE-minE)*G4UniformRand();
 
-    if(m_gauss) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
-    else        kinEnergy += (2.*G4UniformRand()-1.)*sigmaE;
-  } 
+  else if(m_gauss == "flatBeta") {
+         G4double beta = minBeta + (maxBeta-minBeta)*G4UniformRand();
+         kinEnergy = mass*(1./sqrt(1. - beta*beta) - 1.);
+  }
+  else if(0.0 < sigmaE) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
+   
 
   if(0.0 > kinEnergy) kinEnergy = 0.0;
   particleGun->SetParticleEnergy(kinEnergy);
 
-  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4String particleName = particle->GetParticleName() ;
 
   if(verbose > 0) {
@@ -162,25 +166,70 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SetBeamBeta(G4double val);
+void hTestPrimaryGeneratorAction::SetBeamBeta(G4double val)
 {
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
-  if(val > 0. && val < 1.) energy = mass(1./sqrt(1.-val*val) - 1.);
+  if(val > 0. && val < 1.) energy = mass*(1./sqrt(1.-val*val) - 1.);
+  G4cout << "hTestPrimaryGeneratorAction: KinEnergy(MeV)= " 
+         << energy/MeV << G4endl;
+  minE = energy;
+  maxE = energy;
+  minBeta = val;
+  maxBeta = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SetSigmaBeta(G4double val)
+void hTestPrimaryGeneratorAction::SetSigmaBeta(G4double val)
 {
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
-  if(val > 0. && val < 1.) sigmaE = mass(1./sqrt(1.-val*val) - 1.);
+  if(val > 0. && val < 1.) {
+    sigmaE = mass*(1./sqrt(1.-val*val) - 1.);
+    G4double gamma = energy/mass + 1.;
+    G4double beta0 = sqrt(1. - 1./(gamma*gamma));
+    G4double beta  = beta0 + val;
+    if (beta >= 1.) beta = 0.9999;
+    maxBeta = beta;
+    maxE = mass*(1./sqrt(1.-beta*beta) - 1.);
+    beta  = beta0 - val;
+    if (beta <= 0.) beta = 0.0001;
+    minBeta = beta;
+    minE = mass*(1./sqrt(1.-beta*beta) - 1.);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void hTestPrimaryGeneratorAction::SetBeamSigmaE(G4double val) 
+{
+  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  G4double mass = particle->GetPDGMass();
+  sigmaE = val; 
+  minE = energy - sigmaE;
+  G4double gamma = minE/mass + 1.;
+  minBeta = sqrt(1. - 1./(gamma*gamma));
+  maxE = energy + sigmaE;
+  gamma = maxE/mass + 1.;
+  maxBeta = sqrt(1. - 1./(gamma*gamma));
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void hTestPrimaryGeneratorAction::SetBeamEnergy(G4double val) 
+{
+  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  G4double mass = particle->GetPDGMass();
+  energy = val;
+  minE = energy - sigmaE;
+  G4double gamma = minE/mass + 1.;
+  minBeta = sqrt(1. - 1./(gamma*gamma));
+  maxE = energy + sigmaE;
+  gamma = maxE/mass + 1.;
+  maxBeta = sqrt(1. - 1./(gamma*gamma));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

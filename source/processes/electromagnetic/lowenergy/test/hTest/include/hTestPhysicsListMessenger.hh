@@ -72,6 +72,7 @@ class hTestPhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
     G4UIcmdWithAString*        EMPhysicsCmd;
     G4UIcmdWithAString*        HadPhysicsCmd;
+    G4UIcmdWithAString*        decayCmd;
     G4UIcmdWithAnInteger*      verbCmd;
 
 };

@@ -103,51 +103,55 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  G4int trIDnow  = aStep->GetTrack()->GetTrackID();
-  G4double tkin  = aStep->GetTrack()->GetKineticEnergy(); 
-  G4double theta = (aStep->GetTrack()->GetMomentumDirection()).theta();
+  const G4Track* track = aStep->GetTrack();
+  G4int trIDnow  = track->GetTrackID();
+  G4double tkin  = track->GetKineticEnergy(); 
+  G4double theta = (track->GetMomentumDirection()).theta();
   G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
   G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
 
   G4bool stop = false;
   G4bool primary = false;
-  G4bool outAbs  = false;
+  G4bool outAbs = false;
+  if(track->GetNextVolume()->GetName() == "World") outAbs = true;
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
-  G4double del = 1.e-13*mm;
-  if(zend <= del || zend >= zmax - del) outAbs = true;
 
   // new particle
   if(trIDnow != trIDold || evno != evnOld) {
     trIDold = trIDnow;
-    evnOld = evno;
+    evnOld  = evno;
+    tkinold = aStep->GetPreStepPoint()->GetKineticEnergy();
   }
 
-
   // Primary particle stop 
-  if(primary && (stop || outAbs) && theHisto->GetTrackInAbsorber()) {
+   
+  if(primary && (stop || outAbs)) {
 
-    G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
-    G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
-    theHisto->SaveToTuple("XEND",xend/mm);      
-    theHisto->SaveToTuple("YEND",yend/mm);      
-    theHisto->SaveToTuple("ZEND",zend/mm);      
-    theHisto->SaveToTuple("LTRK",(theHisto->GetTrackLength())/mm);      
-    theHisto->SaveToTuple("TEND",0.0);
-    theHisto->SaveToTuple("TETA",0.0);      
+      G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
+      G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
+      theHisto->SaveToTuple("XEND",xend/mm);      
+      theHisto->SaveToTuple("YEND",yend/mm);      
+      theHisto->SaveToTuple("ZEND",zend/mm);      
+      theHisto->SaveToTuple("LTRK",(theHisto->GetTrackLength())/mm);      
+      theHisto->SaveToTuple("TEND",0.0);
+      theHisto->SaveToTuple("TETA",0.0);      
+      theHisto->SaveToTuple("LOSS",(tkinold-tkin)/MeV);      
+      theHisto->SaveToTuple("DEDX",(tkinold-tkin)*mm/(zmax*MeV));      
 
     // exclude cases when track return back
-    if(theHisto->GetTrackLength() < 2.0*zend) theHisto->AddEndPoint(zend);
+
+      if(theHisto->GetTrackLength() < 2.0*zend) theHisto->AddEndPoint(zend);
+
   }
 
   // After step in absorber
-  if(outAbs && theHisto->GetTrackInAbsorber()) {
-    theHisto->SetTrackOutAbsorber();
-    if(zend >= zmax) leakEnergy += tkin;
-    else             backEnergy += tkin;
-  }
 
+  if(outAbs) {
+      if(zend >= zmax) leakEnergy += tkin;
+      else             backEnergy += tkin;
+  }
   return true;
 }
 
