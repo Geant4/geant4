@@ -1,4 +1,4 @@
-# $Id: run16.mac,v 1.1 2001-04-13 13:17:30 maire Exp $
+# $Id: run16.mac,v 1.2 2001-04-13 14:22:27 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -31,6 +31,6 @@
 /gun/particle e-
 /gun/energy 1 MeV
 #
-/tracking/setMax 5 mum
+/tracking/stepMax 5 mum
 /gun/rndm 0.8
 /run/beamOn 10
