@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.6 2000-11-03 06:15:33 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.7 2000-11-08 00:47:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 //   Add process trype            27 Mar. 1998  H.Kurashige
 //   Remove thePhysicsTable       2 Aug. 1998   H.Kurashige
 //   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
-
+//   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
 
@@ -195,6 +195,17 @@ class G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
 
+
+      virtual G4bool StorePhysicsTable(const G4String& directory){return true;}
+      // Store PhysicsTable in a file. 
+      // (return false in caase of failure at I/O ) 
+ 
+      virtual G4bool RetrievePhysicsTable(const G4String& directory){return false;}
+      // Retrieve Physics from a file. 
+      // (return true if the Physics Table can be build by using file)
+      // (return false if the process has no functionality or in case of failure)
+      // File name should be defined by each process 
+      // and the file should be placed under the directory specifed by the argument. 
  
   ////////////////////////////
       const G4String& GetProcessName() const;
