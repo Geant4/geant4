@@ -64,8 +64,8 @@ rp=$g4message
 #		rp="Where is CLHEP installed?"
 		. ./getfile
 		g4clhep_base_dir=$ans
-		g4clhep_base_include=$ans/include
-		g4clhep_base_lib=$ans/lib
+		g4clhep_include_dir=$ans/include
+		g4clhep_lib_dir=$ans/lib
 #		;;
 #	2) 
 #		dflt=$g4clhep_include_dir
