@@ -1,7 +1,12 @@
-$Id: History,v 1.1 1999-01-07 16:06:41 gunter Exp $
+$Id: History,v 1.2 1999-02-20 23:39:49 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+g3tog4-01-00-01 20-Feb-1999 Bill Lockman
+- G4makevol.cc: use G4Polycone, G4Polyhedra classes instead of BREP equivalents
+- clGeometry.cc: protect vis code; removed templates stuff
+- cltog4.cc: removed templates stuff
+
 g3tog4-00-03-04 12-Nov-1998 Bill Lockman
 - G3medtable: dynamically instantiate a G4FieldManager(field*) object and
   pass it to G4LogicalVolume by pointer.

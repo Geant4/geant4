@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.1 1999-01-07 16:06:52 gunter Exp $
+// $Id: G4makevol.cc,v 1.2 1999-02-20 23:39:51 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -22,8 +22,8 @@
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G3MedTable.hh"
-#include "G4BREPSolidPCone.hh"
-#include "G4BREPSolidPolyhedra.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4Para.hh"
 
 G4double G3Bound(const G4String& s, const G4double& low,
@@ -276,8 +276,8 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);
         }
-        solid = new G4BREPSolidPolyhedra(vname, pPhi1, dPhi, npdv, nz,
-                                         DzArray[0], DzArray, Rmin, Rmax);
+        solid = new G4Polyhedra(vname, pPhi1, dPhi, npdv, nz, DzArray, Rmin, 
+				Rmax);
 
         rangehi[1] = pPhi1 + dPhi;
         rangelo[1] = pPhi1;
@@ -328,8 +328,7 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);
         }
-        solid = new G4BREPSolidPCone(vname, pPhi1, dPhi, nz,
-                                     DzArray[0], DzArray, Rmin, Rmax);
+        solid = new G4Polycone(vname, pPhi1, dPhi, nz, DzArray, Rmin, Rmax);
         rangehi[1] = pPhi1 + dPhi;
         rangelo[1] = pPhi1;
         axis = kRho;
