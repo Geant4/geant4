@@ -56,20 +56,31 @@
 class MoveRot_andMaterial : public G4VPVParameterisation
 {
  public:
-  MoveNRotate(G4double twistAngle)
+     
+  MoveRot_andMaterial(G4double twistAngle)
   { 
     fTwistAngle= twistAngle;
     fRotationVec= new G4RotationMatrix();
   }
 
-  ~MoveNRotate() { delete fRotationVec; }
+  virtual ~MoveRot_andMaterial()
+  {
+    delete fRotationVec;
+  }
 
-  G4double GetTwistAngle() { return fTwistAngle; }
-  void     SetTwistAngle(G4double newAngle ) { fTwistAngle= newAngle; }
+  G4double GetTwistAngle()
+  {
+    return fTwistAngle;
+  }
+  
+  void SetTwistAngle(G4double newAngle )
+  {
+    fTwistAngle= newAngle;
+  }
 
 private:
-  virtual void ComputeTransformation(const G4int n,
-				     G4VPhysicalVolume* pRep) const
+    
+  virtual void ComputeTransformation(const G4int n, G4VPhysicalVolume* pRep) const
   {
     pRep->SetTranslation(G4ThreeVector(0,n*100,0));
     *fRotationVec = G4RotationMatrix();             // Unit matrix
@@ -77,21 +88,22 @@ private:
     pRep->SetRotation( fRotationVec );
   }
   
-  virtual void ComputeDimensions(G4Box &pBox,
-				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+  virtual void ComputeDimensions( G4Box &pBox,
+                                  const G4int n,
+                                  const G4VPhysicalVolume* pRep) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(10);
     pBox.SetZHalfLength(10);
   }
+  
  private:
     G4RotationMatrix *fRotationVec;
     G4double fTwistAngle;
 };
 
 G4double    angle1= 15.0*M_PI/180.;
-MoveNRotate myParam(angle1);
+MoveRot_andMaterial myParam(angle1);
 
 
 // Build simple geometry:
@@ -119,7 +131,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4LogicalVolume *boxLog=new G4LogicalVolume(myBox,0,
 						"Rotating Box",0,0,0);
 
-    G4PVParameterised *paramP=new G4PVParameterised("Rotating Blocks",
+    //G4PVParameterised *paramP=
+        new G4PVParameterised("Rotating Blocks",
 						    boxLog,
 						    worldPhys, //OR worldLog,
 						    kYAxis,
