@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTableTest.cc,v 1.2 1999-12-15 14:50:52 gunter Exp $
+// $Id: G4SandiaTableTest.cc,v 1.3 2001-02-16 16:55:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,16 +21,11 @@
 //
 
 #include "G4ios.hh"
-#include "g4std/fstream"
 #include "g4std/iomanip"
-// #include "g4templates.hh"
 #include "globals.hh"
-#include "G4Timer.hh"
-
-#include "G4Isotope.hh"
-#include "G4Element.hh"
-#include "G4Material.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4Material.hh"
 #include "G4SandiaTable.hh"
 
 int main() 
@@ -38,11 +33,6 @@ int main()
   // set output format
 
   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
-
-  // write results to the file  sandia.out
-
-   G4std::ofstream outFile("sandia.out", G4std::ios::out ) ;
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4String name, symbol;             // a=mass of a mole;
   G4double a, z, density;            // z=mean number of protons;  
@@ -247,12 +237,15 @@ int main()
 
 // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
-
+//
+////////////////////////////////////////////////////////////////////////
+//
 //
 // Checking Sandia table coefficients
 //
-  G4int numberOfMat, iMat, matIndex, nbOfElements, sanIndex, row, iSan ;
-  G4String materialName = "Air" ;
+  G4int numberOfMat, iMat, matIndex, nbOfElements, sanIndex, row, iSan;
+  G4double unit;
+  G4String materialName = "Air";
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   numberOfMat = theMaterialTable->length() ;
 
@@ -264,78 +257,75 @@ int main()
       break ;
     }
   }
-
+  
+//
+////////////////////////////////////////////////////////////////////////
+//
+// Sandia cof according old PAI stuff
+//
   for(iMat=0;iMat<numberOfMat;iMat++)
   {
-     G4String matName = (*theMaterialTable)[iMat]->GetName() ;
-     matIndex = (*theMaterialTable)[iMat]->GetIndex() ;
-     nbOfElements = (*theMaterialTable)[iMat]->GetNumberOfElements() ;
+     G4String matName = (*theMaterialTable)[iMat]->GetName();
+     matIndex = (*theMaterialTable)[iMat]->GetIndex();
+     nbOfElements = (*theMaterialTable)[iMat]->GetNumberOfElements();
+     density = (*theMaterialTable)[iMat]->GetDensity();
+     
+     G4cout<<matIndex<<"\t"<<matName<<G4endl<<G4endl;
+     
+     G4cout<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl;
 
-     G4cout<<matIndex<<"\t"<<matName<<G4endl<<G4endl ;
-     outFile<<matIndex<<"\t"<<matName<<G4endl<<G4endl ;
-     G4cout<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
-     outFile<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
-
-     G4int* thisMaterialZ = new G4int[nbOfElements] ;
+     G4int* thisMaterialZ = new G4int[nbOfElements];
      for(iSan=0;iSan<nbOfElements;iSan++)
      {
         thisMaterialZ[iSan] = (G4int)(*theMaterialTable)[iMat]->
-                                      GetElement(iSan)->GetZ() ;
-     }
+                                      GetElement(iSan)->GetZ();
+     }     
      G4SandiaTable sandia(matIndex) ;
-     sanIndex = sandia.SandiaIntervals(thisMaterialZ,nbOfElements) ;    
+     sanIndex = sandia.SandiaIntervals(thisMaterialZ,nbOfElements);    
      sanIndex = sandia.SandiaMixing( thisMaterialZ ,
                              (*theMaterialTable)[iMat]->GetFractionVector() ,
 				     nbOfElements,sanIndex) ;
 
      for(row=0;row<sanIndex-1;row++)
      {
-       G4cout<<row+1<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,0)/keV ;
-       outFile<<row+1<<"  "<<sandia.GetPhotoAbsorpCof(row+1,0)/keV ;
-
+       G4cout<<row+1<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,0)/keV;
+       
+       unit = cm2/g;
        for(iSan=1;iSan<5;iSan++)
        {
-         G4cout<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,iSan) ;
-	 // *(*theMaterialTable)[iMat]->GetDensity() ;
-
-         outFile<<"  "<<sandia.GetPhotoAbsorpCof(row+1,iSan) ;
-	 // *(*theMaterialTable)[iMat]->GetDensity() ;
+         unit *= keV;         
+         G4cout<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,iSan)/unit;
        }
        G4cout<<G4endl ;
-       outFile<<G4endl ;
      }
      G4cout<<G4endl ;
-     outFile<<G4endl ;
-
+     
+//
+////////////////////////////////////////////////////////////////////////
+//
+// Sandia cof according ComputeMatSandiaMatrix()
+//
      G4SandiaTable* sanMatrix = G4Material::GetMaterial(matName)->
                                 GetSandiaTable() ;
      sanIndex = sanMatrix->GetMatNbOfIntervals() ;
       
-     G4cout<<"Sandia cof according ComputeMixSandiaMatrix()"<<G4endl<<G4endl ;
-     outFile<<"Sandia cof according ComputeMixSandiaMatrix()"<<G4endl<<G4endl ;
+     G4cout<<"Sandia cof according ComputeMatSandiaMatrix()"<<G4endl<<G4endl;
 
      for(row=0;row<sanIndex;row++)
      {
-       G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV ;
-       outFile<<row+1<<"  "<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV ;
-
+       G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV;
+       
+       unit = cm2/g;
        for(iSan=1;iSan<5;iSan++)
        {
-         G4cout<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,iSan) ;
-	 // *(*theMaterialTable)[iMat]->GetDensity() ;
-         outFile<<"  "<<sanMatrix->GetSandiaCofForMaterial(row,iSan) ;
-	 // *(*theMaterialTable)[iMat]->GetDensity() ;
+         unit *= keV; 
+         G4cout<<"\t"<<(sanMatrix->GetSandiaCofForMaterial(row,iSan))
+	                                                    /(density*unit);
        }
-       G4cout<<G4endl ;
-       outFile<<G4endl ;
+       G4cout<<G4endl;
      }      
-     G4cout<<G4endl ;
-     outFile<<G4endl ;
+     G4cout<<G4endl;     
   }
-
-
-
-
   return EXIT_SUCCESS;
 }
 
