@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-11-11 13:13:01 johna Exp $
+$Id: History,v 1.54 2002-11-18 21:41:33 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 18, 2002, M.Asai (tracking-V04-01-10)
+- Tagged.
 
 Nov 11, 2002, J.Allison
 - Restored G4SmoothTrajectory::DrawTrajectory.
