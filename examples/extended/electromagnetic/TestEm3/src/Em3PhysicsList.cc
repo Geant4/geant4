@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PhysicsList.cc,v 1.1 1999-10-11 16:55:53 maire Exp $
+// $Id: Em3PhysicsList.cc,v 1.2 1999-11-10 15:47:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,7 +161,7 @@ void Em3PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
-
+      
     } else if (particleName == "e+") {
       //positron      
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
@@ -182,7 +182,7 @@ void Em3PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation    ,   -1,2,2);      
+      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
     }
   }
 }
