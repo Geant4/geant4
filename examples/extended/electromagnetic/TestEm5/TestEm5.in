@@ -5,6 +5,7 @@
 #
 /control/verbose 2
 /run/verbose 2
+/tracking/verbose 0
 #
 /testem/phys/setGCut 2.13 mm    
 /testem/phys/setECut 7.0  mum
