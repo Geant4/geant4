@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.10 2001-08-28 14:05:04 maire Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.11 2001-09-03 15:46:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -32,6 +32,7 @@
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 27-08-01 in BuildPhysicsTable:aParticleType.GetParticleName()=="mu+" (mma)
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved from .icc file (mma)
+// 03/09-01  value of data member factlim changed, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,7 +60,7 @@ G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       factlim(0.25),
+       factlim(0.75),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        palfa(0.9698),pbeta(0.4138),pgamma(2.0001),
