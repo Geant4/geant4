@@ -1,8 +1,19 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 
 ***** Table : Nb of materials = 18 *****
 
@@ -83,59 +94,59 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range                  1 mm            1 mm 
@@ -159,11 +170,6 @@ Cut in energy
  XenonMethanePropane         250 eV         1.55 keV
            Galactic         250 eV          250 eV 
 ===================================================
-#
-# Macro file for the initialization phase of "TestEm5.cc"
-#
-# It creates the default geometry (simple absorber box )        
-#
 /run/verbose 2
 #
 /calor/setAbsMat Silicon   
@@ -175,8 +181,8 @@ Cut in energy
 /calor/setAbsYZ    10 cm
 /calor/update
 
- The  WORLD   is made of 31 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 20 mum of Silicon. The transverse size (YZ) is 10 cm 
+ The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
  X position of the middle of the absorber 0 fm 
 /gun/setDefault
 #
@@ -203,59 +209,59 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range               2.13 mm            7 mum
@@ -282,7 +288,6 @@ Cut in energy
 #
 /gun/particle pi+ 
 /gun/energy 5. GeV
-
 /event/printModulo 10000
 #
 /run/beamOn 100000
@@ -317,102 +322,103 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.1e+02s Real=1.1e+02s Sys=7.7s
+  User=103.23s Real=110.77s Sys=7.5s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209499 +- 1.40951e-05  mm  
+    mean charged track length   in absorber=0.0209597 +- 1.45396e-05  mm  
 
-            mean energy deposit in absorber=0.0066794 +- 2.04118e-05  MeV 
+            mean energy deposit in absorber=0.00668563 +- 2.06508e-05  MeV 
 
- mean number of steps in absorber (charged) =0.05601 +- 0.00112913      
+ mean number of steps in absorber (charged) =0.08731 +- 0.00240954      
  mean number of steps in absorber (neutral) =5e-05 +- 2.23601e-05      
 
-   mean number of charged secondaries = 0.03743 +- 0.000629674
+   mean number of charged secondaries = 0.04523 +- 0.000925874
 
    mean number of neutral secondaries = 5e-05 +- 2.23601e-05
 
-   mean number of e-s =0.03743  and e+s =0
+   mean number of e-s =0.04523  and e+s =0
 
-(number) transmission coeff=0.99999  reflection coeff=0.49967
+(number) transmission coeff=1  reflection coeff=0
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5748
+#entries=100000    #underflows=0    #overflows=5711
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
     2    0.0004           0           0
     3    0.0006           0           0
-    4    0.0008           1        0.05
+    4    0.0008           0           0
     5     0.001           2         0.1
-    6    0.0012           5        0.25
-    7    0.0014           9        0.45
-    8    0.0016          39        1.95
-    9    0.0018          74         3.7
-   10     0.002         229       11.45
-   11    0.0022         401       20.05
-   12    0.0024         783       39.15
-   13    0.0026        1202        60.1
-   14    0.0028        1762        88.1
-   15     0.003        2571      128.55
-   16    0.0032        3372       168.6
-   17    0.0034        3992       199.6
-   18    0.0036        4598       229.9
-   19    0.0038        4723      236.15
-   20     0.004        5070       253.5
-   21    0.0042        4878       243.9
-   22    0.0044        4688       234.4
-   23    0.0046        4477      223.85
-   24    0.0048        4170       208.5
-   25     0.005        3674       183.7
-   26    0.0052        3501      175.05
-   27    0.0054        3191      159.55
-   28    0.0056        2842       142.1
-   29    0.0058        2686       134.3
-   30     0.006        2486       124.3
-   31    0.0062        2293      114.65
-   32    0.0064        2113      105.65
-   33    0.0066        1994        99.7
-   34    0.0068        1869       93.45
-   35     0.007        1695       84.75
-   36    0.0072        1610        80.5
-   37    0.0074        1412        70.6
-   38    0.0076        1389       69.45
-   39    0.0078        1257       62.85
-   40     0.008        1154        57.7
-   41    0.0082        1060          53
-   42    0.0084         988        49.4
-   43    0.0086         919       45.95
-   44    0.0088         816        40.8
-   45     0.009         724        36.2
-   46    0.0092         726        36.3
-   47    0.0094         598        29.9
-   48    0.0096         601       30.05
-   49    0.0098         536        26.8
-   50      0.01         545       27.25
-   51    0.0102         462        23.1
-   52    0.0104         451       22.55
-   53    0.0106         436        21.8
+    6    0.0012           3        0.15
+    7    0.0014          10         0.5
+    8    0.0016          32         1.6
+    9    0.0018         100           5
+   10     0.002         206        10.3
+   11    0.0022         422        21.1
+   12    0.0024         780          39
+   13    0.0026        1263       63.15
+   14    0.0028        1846        92.3
+   15     0.003        2614       130.7
+   16    0.0032        3336       166.8
+   17    0.0034        4118       205.9
+   18    0.0036        4673      233.65
+   19    0.0038        4806       240.3
+   20     0.004        4747      237.35
+   21    0.0042        4903      245.15
+   22    0.0044        4694       234.7
+   23    0.0046        4447      222.35
+   24    0.0048        4139      206.95
+   25     0.005        3758       187.9
+   26    0.0052        3410       170.5
+   27    0.0054        3144       157.2
+   28    0.0056        2860         143
+   29    0.0058        2760         138
+   30     0.006        2408       120.4
+   31    0.0062        2266       113.3
+   32    0.0064        2034       101.7
+   33    0.0066        1973       98.65
+   34    0.0068        1834        91.7
+   35     0.007        1685       84.25
+   36    0.0072        1593       79.65
+   37    0.0074        1524        76.2
+   38    0.0076        1343       67.15
+   39    0.0078        1287       64.35
+   40     0.008        1213       60.65
+   41    0.0082        1063       53.15
+   42    0.0084         945       47.25
+   43    0.0086         931       46.55
+   44    0.0088         830        41.5
+   45     0.009         779       38.95
+   46    0.0092         750        37.5
+   47    0.0094         653       32.65
+   48    0.0096         610        30.5
+   49    0.0098         552        27.6
+   50      0.01         492        24.6
+   51    0.0102         495       24.75
+   52    0.0104         467       23.35
+   53    0.0106         399       19.95
    54    0.0108         393       19.65
-   55     0.011         380          19
-   56    0.0112         352        17.6
-   57    0.0114         330        16.5
-   58    0.0116         291       14.55
+   55     0.011         379       18.95
+   56    0.0112         346        17.3
+   57    0.0114         288        14.4
+   58    0.0116         269       13.45
    59    0.0118         253       12.65
-   60     0.012         240          12
-   61    0.0122         269       13.45
+   60     0.012         262        13.1
+   61    0.0122         254        12.7
    62    0.0124         237       11.85
-   63    0.0126         239       11.95
-   64    0.0128         194         9.7
+   63    0.0126         199        9.95
+   64    0.0128         210        10.5
 
- Emp =           0.004   width=         0.0028  MeV 
+ Emp =          0.0042   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 301564722, 909059154
+ Current couple of seeds = 772116847, 1675844465
 ----------------------------------------
 #
-
+Graphics systems deleted.
+Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

@@ -61,10 +61,8 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
+G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -77,8 +75,6 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
-G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 G4VUserPhysicsList::SetCutValue       :Set cuts for e-
 
 msc:   Tables of transport mean free paths.
@@ -96,6 +92,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for e+
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for proton
 
 msc:   Tables of transport mean free paths.
@@ -171,9 +171,6 @@ Cut in energy
  VACUUM                       990 eV          990 eV 
 ===================================================
 /control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test601/test601.in
-#
-# Initialize GEANT4
-#
 /gun/position   0. -1.5 0. mm
 /gun/direction  0.  1.   0.
 /gun/energy 1 GeV
@@ -196,7 +193,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 1 start.
@@ -216,7 +213,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle e-
 /run/beamOn 1
 ### Run 2 start.
@@ -257,7 +254,6 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-#
 /gun/position   0. 1.5 0. mm
 /gun/direction  1.  0.   0.
 /gun/energy 1 GeV
@@ -280,7 +276,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 5 start.
@@ -300,7 +296,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle e-
 /run/beamOn 1
 ### Run 6 start.
@@ -320,7 +316,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 ### Run 7 start.
@@ -341,9 +337,6 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-#
-# Termination
-#
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -8,10 +8,6 @@ Daughter CSG/Boolean will be made of Pb
 Now CGS is Box
 Now Boolean is Intersection
 fSize = 0
-#
-# Macro file test01.in
-# for geometry/tracking performance test
-#
 # /run/verbose 2
 #
 # SimpleBox geometry made by Pb

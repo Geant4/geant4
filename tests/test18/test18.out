@@ -11,10 +11,6 @@ You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   VRML1FILE (VRML1FILE)
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
  RDM Applies to all Volumes
          RDM Applies to Volume universe_L
          RDM Applies to Volume aSphere_L1
@@ -49,6 +45,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
@@ -76,24 +76,6 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-################################################################################
-#                                                                              #
-# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
-# VALIDATION TEST NUMBER 01                                                    #
-#                                                                              #
-# THIS TEST GENERATES NUCLEI OF NA-24 (GND-STATE), NE-24, F-24, AL-24          #
-# NA-24 (METASTABLE), CR-46, AND PO-215 AND DECAYS THEM.  THE NUCLEAR LIMITS   #
-# ARE RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.  THE GEOMETRY COMPRISES    #
-# A SPHERE OF RADIUS 125,000. KM, WITHIN A BOX OF SIDE 500,000. KM WITHIN A    #
-# BOX OF SIDE 10,000,000. KM.  ALL VOLUMES ARE CENTRED ON THE COORDINATE       #
-# ORIGIN AND CONTAIN A VACUUM.  PARTICLES ARE STARTED OFF FROM THE ORIGIN WITH #
-# AN ENERGY OF 1 EV.                                                           #
-#                                                                              #
-# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        #
-#                                                                              #
-################################################################################
-#
-#
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0

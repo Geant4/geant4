@@ -73,10 +73,16 @@ Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
 Ionic processes for deuteron
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Hadronic processes for kaon+
+Hadronic processes for kaon-
+MuonMinusCaptureAtRest is created 
+MuonMinusCaptureAtRest is created 
+Hadronic processes for pi+
+Hadronic processes for pi-
+Hadronic processes for proton
+Test17PhysicsList::SetCuts:CutLength : 1 mm 
+Set cuts for all particles! 
+G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -89,16 +95,6 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-Hadronic processes for kaon+
-Hadronic processes for kaon-
-MuonMinusCaptureAtRest is created 
-MuonMinusCaptureAtRest is created 
-Hadronic processes for pi+
-Hadronic processes for pi-
-Hadronic processes for proton
-Test17PhysicsList::SetCuts:CutLength : 1 mm 
-Set cuts for all particles! 
-G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 G4VUserPhysicsList::SetCutValue       :Set cuts for e-
 
 msc:   Tables of transport mean free paths.
@@ -116,6 +112,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for e+
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for mu-
 G4VUserPhysicsList::SetCutValue       :Set cuts for mu+
 
@@ -191,11 +191,6 @@ Cut in energy
            Graphite        3.33 keV         570 keV
                 Air           1 eV          181 eV 
 ===================================================
-#
-# Macro file for the initialization phase of "test17" based on "TestEm6.cc"
-#
-# It creates the default geometry (simple absorber box )        
-#
 /event/setverbose 0
 #
 /run/initialize
@@ -208,7 +203,7 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00922228 +- 6.93837e-06  mm  
+    Range in absorber = 0.00922148 +- 6.91834e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -233,7 +228,7 @@ Cut in energy
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00907275 +- 9.25221e-06  mm  
+    Range in absorber = 0.00907273 +- 9.25313e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 

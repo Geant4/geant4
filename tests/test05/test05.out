@@ -37,10 +37,7 @@ Finished reading file.
 
 Creating assembly of G4 solids ...
 Now placing 3 logical volumes... Done !
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Tst05PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -53,7 +50,6 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-Tst05PhysicsList::SetCuts:CutLength : 1 (mm)
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -69,6 +65,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 

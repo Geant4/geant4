@@ -1,8 +1,19 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 
 ***** Table : Nb of materials = 12 *****
 
@@ -54,18 +65,20 @@
 
 
 
- The  WORLD   is made of 8e+02mm of Air, the transverse size (R) of the world is 2e+02 mm. 
- The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 1e+02 mm. 
- Z position of the (middle of the) absorber 3.6e+02  mm.
+ The  WORLD   is made of 800mm of Air, the transverse size (R) of the world is 200 mm. 
+ The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 100 mm. 
+ Z position of the (middle of the) absorber 360  mm.
 
-zRad = 1.5e+02 mm
-radThick = 3.5e+02 mm
-zModule = 10 mm
+zRad = 153.85 mm
+radThick = 345.24 mm
+zModule = 10.025 mm
 i = 0	
-10 mm	12 mm	13 mm	15 mm	16 mm	18 mm	19 mm	21 mm	22 mm	24 mm	25 mm	27 mm	28 mm	30 mm	31 mm	33 mm	34 mm	36 mm	37 mm	39 mm	41 mm	42 mm	44 mm	45 mm	47 mm	48 mm	50 mm	51 mm	53 mm	54 mm	56 mm	57 mm	59 mm	60 mm	62 mm	63 mm	65 mm	66 mm	68 mm	70 mm	71 mm	73 mm	74 mm	76 mm	77 mm	79 mm	80 mm	82 mm	83 mm	85 mm	86 mm	88 mm	89 mm	91 mm	92 mm	94 mm	95 mm	97 mm	98 mm	1e+02 mm	1e+02 mm	1e+02 mm	1e+02 mm	1.1e+02 mm	1.1e+02 mm	1.1e+02 mm	1.1e+02 mm	1.1e+02 mm	1.1e+02 mm	1.2e+02 mm	1.2e+02 mm	1.2e+02 mm	1.2e+02 mm	1.2e+02 mm	1.2e+02 mm	1.2e+02 mm	1.3e+02 mm	1.3e+02 mm	1.3e+02 mm	1.3e+02 mm	1.3e+02 mm	1.3e+02 mm	1.4e+02 mm	1.4e+02 mm	1.4e+02 mm	1.4e+02 mm	1.4e+02 mm	1.4e+02 mm	1.4e+02 mm	1.5e+02 mm	1.5e+02 mm	1.5e+02 mm	1.5e+02 mm	1.5e+02 mm	1.5e+02 mm	1.5e+02 mm	1.6e+02 mm	1.6e+02 mm	1.6e+02 mm	1.6e+02 mm	1.6e+02 mm	1.6e+02 mm	1.7e+02 mm	1.7e+02 mm	1.7e+02 mm	1.7e+02 mm	1.7e+02 mm	1.7e+02 mm	1.7e+02 mm	1.8e+02 mm	1.8e+02 mm	1.8e+02 mm	1.8e+02 mm	1.8e+02 mm	1.8e+02 mm	1.9e+02 mm	1.9e+02 mm	1.9e+02 mm	1.9e+02 mm	1.9e+02 mm	1.9e+02 mm	1.9e+02 mm	2e+02 mm	2e+02 mm	2e+02 mm	2e+02 mm	2e+02 mm	2e+02 mm	2.1e+02 mm	2.1e+02 mm	2.1e+02 mm	2.1e+02 mm	2.1e+02 mm	2.1e+02 mm	2.1e+02 mm	2.2e+02 mm	2.2e+02 mm	2.2e+02 mm	2.2e+02 mm	2.2e+02 mm	2.2e+02 mm	2.3e+02 mm	2.3e+02 mm	2.3e+02 mm	2.3e+02 mm	2.3e+02 mm	2.3e+02 mm	2.3e+02 mm	2.4e+02 mm	2.4e+02 mm	2.4e+02 mm	2.4e+02 mm	2.4e+02 mm	2.4e+02 mm	2.4e+02 mm	2.5e+02 mm	2.5e+02 mm	2.5e+02 mm	2.5e+02 mm	2.5e+02 mm	2.5e+02 mm	2.6e+02 mm	2.6e+02 mm	2.6e+02 mm	2.6e+02 mm	2.6e+02 mm	2.6e+02 mm	2.6e+02 mm	2.7e+02 mm	2.7e+02 mm	2.7e+02 mm	2.7e+02 mm	2.7e+02 mm	2.7e+02 mm	2.8e+02 mm	2.8e+02 mm	2.8e+02 mm	2.8e+02 mm	2.8e+02 mm	2.8e+02 mm	2.8e+02 mm	2.9e+02 mm	2.9e+02 mm	2.9e+02 mm	2.9e+02 mm	2.9e+02 mm	2.9e+02 mm	3e+02 mm	
+10.025 mm	11.55 mm	13.075 mm	14.6 mm	16.125 mm	17.65 mm	19.175 mm	20.7 mm	22.225 mm	23.75 mm	25.275 mm	26.8 mm	28.325 mm	29.85 mm	31.375 mm	32.9 mm	34.425 mm	35.95 mm	37.475 mm	39 mm	40.525 mm	42.05 mm	43.575 mm	45.1 mm	46.625 mm	48.15 mm	49.675 mm	51.2 mm	52.725 mm	54.25 mm	55.775 mm	57.3 mm	58.825 mm	60.35 mm	61.875 mm	63.4 mm	64.925 mm	66.45 mm	67.975 mm	69.5 mm	71.025 mm	72.55 mm	74.075 mm	75.6 mm	77.125 mm	78.65 mm	80.175 mm	81.7 mm	83.225 mm	84.75 mm	86.275 mm	87.8 mm	89.325 mm	90.85 mm	92.375 mm	93.9 mm	95.425 mm	96.95 mm	98.475 mm	100 mm	101.525 mm	103.05 mm	104.575 mm	106.1 mm	107.625 mm	109.15 mm	110.675 mm	112.2 mm	113.725 mm	115.25 mm	116.775 mm	118.3 mm	119.825 mm	121.35 mm	122.875 mm	124.4 mm	125.925 mm	127.45 mm	128.975 mm	130.5 mm	132.025 mm	133.55 mm	135.075 mm	136.6 mm	138.125 mm	139.65 mm	141.175 mm	142.7 mm	144.225 mm	145.75 mm	147.275 mm	148.8 mm	150.325 mm	151.85 mm	153.375 mm	154.9 mm	156.425 mm	157.95 mm	159.475 mm	161 mm	162.525 mm	164.05 mm	165.575 mm	167.1 mm	168.625 mm	170.15 mm	171.675 mm	173.2 mm	174.725 mm	176.25 mm	177.775 mm	179.3 mm	180.825 mm	182.35 mm	183.875 mm	185.4 mm	186.925 mm	188.45 mm	189.975 mm	191.5 mm	193.025 mm	194.55 mm	196.075 mm	197.6 mm	199.125 mm	200.65 mm	202.175 mm	203.7 mm	205.225 mm	206.75 mm	208.275 mm	209.8 mm	211.325 mm	212.85 mm	214.375 mm	215.9 mm	217.425 mm	218.95 mm	220.475 mm	222 mm	223.525 mm	225.05 mm	226.575 mm	228.1 mm	229.625 mm	231.15 mm	232.675 mm	234.2 mm	235.725 mm	237.25 mm	238.775 mm	240.3 mm	241.825 mm	243.35 mm	244.875 mm	246.4 mm	247.925 mm	249.45 mm	250.975 mm	252.5 mm	254.025 mm	255.55 mm	257.075 mm	258.6 mm	260.125 mm	261.65 mm	263.175 mm	264.7 mm	266.225 mm	267.75 mm	269.275 mm	270.8 mm	272.325 mm	273.85 mm	275.375 mm	276.9 mm	278.425 mm	279.95 mm	281.475 mm	283 mm	284.525 mm	286.05 mm	287.575 mm	289.1 mm	290.625 mm	292.15 mm	293.675 mm	295.2 mm	
 the number of TR radiator plates = 188
-plate plasma energy = 30 eV
-gas plasma energy = 0.73 eV
+plate material = Mylar
+gas material = Air
+plate plasma energy = 29.55 eV
+gas plasma energy = 0.731967 eV
 Irregular X-ray TR model is called
 0	fGamma = 107.6	sumE = 0.002585
 1	fGamma = 123.4	sumE = 0.00372
@@ -118,7 +131,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 12.42 s
+total time for build X-ray TR tables = 11.91 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -126,7 +139,7 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
+       Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -148,12 +161,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=18.24 s 
-#
-# Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
-#
-# It creates the default geometry (simple absorber cylinder )        
-#
+total time(SetCuts)=12.17 s 
 #
 #control/saveHistory
 #
@@ -225,39 +233,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=193.73s Real=194.91s Sys=1.17s
+  User=419.92s Real=421.55s Sys=1.43s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=71.241 +- 0.985414  mm  
+    mean charged track length   in absorber=73.5071 +- 0.990166  mm  
 
-            mean energy deposit in absorber=0.0887952 +- 0.000833776  MeV 
+            mean energy deposit in absorber=0.0999611 +- 0.00102342  MeV 
 
- mean number of steps in absorber (charged) =430.968 +- 2.02252      
- mean number of steps in absorber (neutral) =5.182 +- 0.072958      
+ mean number of steps in absorber (charged) =429.812 +- 1.5025      
+ mean number of steps in absorber (neutral) =5.157 +- 0.0716404      
 
-   mean number of charged secondaries = 1.352 +- 0.0381588
+   mean number of charged secondaries = 1.423 +- 0.0363603
 
-   mean number of neutral secondaries = 0.051 +- 0.00709923
+   mean number of neutral secondaries = 0.02 +- 0.00442719
 
-   mean number of e-s =1.352  and e+s =0
+   mean number of e-s =1.423  and e+s =0
 
-(number) transmission coeff=0.51  reflection coeff=0.004
+(number) transmission coeff=0.776  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 927669596, 1366032175
+ Current couple of seeds = 991446077, 561025836
 ----------------------------------------
 #
 #
-
-
-
-
-
-
-
-
+Graphics systems deleted.
+Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
