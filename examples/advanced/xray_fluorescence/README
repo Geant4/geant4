@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2003-07-17 14:16:05 mantero Exp $
+$Id: README,v 1.6 2003-07-17 14:28:19 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -102,20 +102,35 @@ automatically stored in the corresponding files (hbook or XML)
 The telescope and detector geometry is defined in 
 XrayFluoDetectorConstruction.cc
 
-3. Physics processes
+3. Detector peculiar properties are described in XrayFluoSiLiDetectorType and
+XrayFluoHPGeDetectorType, both derived from XrayFluoVDetectorType. Other 
+detector types can be added, creating other implementations of 
+XrayFluoVDetectorType objects. 
+Detector type selection is made in  XrayFluoDetectorConstruction, and can be 
+modified trough /apparate/detector command of the UI.  
+
+4. Physics processes
 
 The physics processes are in XrayFluoPhysicsList.cc
 The main process in this example is fluorescence emission from the sample.
 
-4. Event generation
+5. Event generation
 
 This is done using the G4ParticleGun with some modifications. See 
 XrayFluoParticleGeneratorAction.cc
 
-5. Analysis
+6. Analysis
 
 At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
 In the example the Anaphe toolkit is used.
+
+AIDA / Anaphe configuration for compilation and link are in GNUmakefile:
+
+ifdef G4ANALYSIS_USE
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib`
+endif
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
