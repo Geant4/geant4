@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2004-06-03 11:40:12 gcosmo Exp $
+# $Id: GNUmakefile,v 1.18 2004-06-04 14:17:54 duns Exp $
 
 name := G4visHepRep
 
@@ -22,16 +22,22 @@ CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/ref
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zipios++
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zlib
 
+CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
+CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
+CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
+CPPFLAGS += -I$(G4BASE)/processes/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
