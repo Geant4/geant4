@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.16 2003-03-16 03:57:12 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.17 2003-03-17 17:46:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,17 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=3");
 
+  // /run/particle/setCut command
+  setPCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
+  setPCutCmd->SetGuidance("Set default cut value ");
+  setPCutCmd->SetGuidance("This command is equivallent to /run/setCut command.");
+  setPCutCmd->SetGuidance("This command is kept for backward compatibility.");
+  setPCutCmd->SetParameterName("cut",false);
+  setPCutCmd->SetDefaultValue(1.0);
+  setPCutCmd->SetRange("cut >0.0");
+  setPCutCmd->SetDefaultUnit("mm");
+  setPCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
   // /run/setCut command
   setCutCmd = new G4UIcmdWithADoubleAndUnit("/run/setCut",this);
   setCutCmd->SetGuidance("Set default cut value ");
@@ -130,10 +141,23 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   asciiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   asciiCmd->SetRange("ascii ==0 || ascii ==1");
 
+  //Commnad    /run/particle/applyCuts command
+  applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
+  applyCutsCmd->SetGuidance("Obsolete command for setting ApplyCuts flag.");
+  applyCutsCmd->SetGuidance("It is harmless to remove this command from UI macro.");
+  applyCutsCmd->SetGuidance("This command does nothing but kept for backward compatibility.");
+  param = new G4UIparameter("Flag",'s',true);
+  param->SetDefaultValue("true");
+  applyCutsCmd->SetParameter(param);
+  param = new G4UIparameter("Particle",'s',true);
+  param->SetDefaultValue("all");
+  applyCutsCmd->SetParameter(param);
+  applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
+  delete setPCutCmd; 
   delete setCutCmd; 
   delete setCutRCmd; 
   delete verboseCmd;
@@ -143,13 +167,13 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete storeCmd;  
   delete retrieveCmd;
   delete asciiCmd;
-//  delete applyCutsCmd;
+  delete applyCutsCmd;
   delete theDirectory;
 }
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==setCutCmd ){
+  if( command==setCutCmd || command==setPCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
     thePhysicsList->SetCutsWithDefault();
@@ -217,7 +241,7 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
   G4String candidates("none");
   G4ParticleTable::G4PTblDicIterator *piter = (G4ParticleTable::GetParticleTable())->GetIterator();
   
-  if( command==setCutCmd ){
+  if( command==setCutCmd || command==setPCutCmd ){
     cv = setCutCmd->ConvertToString( thePhysicsList->GetDefaultCutValue(), "mm" );
     
   } else if( command==verboseCmd ){
