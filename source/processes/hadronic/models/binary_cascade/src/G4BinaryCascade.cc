@@ -451,13 +451,13 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
    G4double ExcitationEnergy=GetExcitationEnergy();
 //  G4cerr <<"mon - all pushed to limit 2"<<G4endl;
 
-//#ifdef HKM_DEBUG
+#ifdef debug_G4BinaryCascade
   G4cout << " Excitation Energy final,  #collisions:, out, captured  "
   << ExcitationEnergy << " "
   << collisionCount << " "
   << theFinalState.size() << " "
   << theCapturedList.size()<<G4endl;
-//#endif
+#endif
 
 
   if ( ExcitationEnergy < 0. )
@@ -1289,14 +1289,22 @@ void G4BinaryCascade::StepParticlesOut()
 void G4BinaryCascade::CorrectFinalPandE()
 //----------------------------------------------------------------------------
 {
+#ifdef debug_G4BinaryCascade
   G4cerr << " -CorrectFinalPandE 1" << G4endl;
-  if ( theFinalState.size() == 0 ) return;
+#endif
+
+ if ( theFinalState.size() == 0 ) return;
+
+#ifdef debug_G4BinaryCascade
   G4cerr << " -CorrectFinalPandE 2" << G4endl;
+#endif
 
   G4KineticTrackVector::iterator i;
   G4LorentzVector pNucleus=GetFinal4Momentum();
   if ( pNucleus.e() == 0 ) return;    // check against explicit 0 from GetNucleus4Momentum()
+#ifdef debug_G4BinaryCascade
   G4cerr << " -CorrectFinalPandE 3" << G4endl;
+#endif
   G4LorentzVector pFinals(0);
   G4int nFinals(0);
   for(i = theFinalState.begin(); i != theFinalState.end(); ++i)
@@ -1316,14 +1324,14 @@ void G4BinaryCascade::CorrectFinalPandE()
   G4LorentzRotation toCMS(-pCM.boostVector());
   pFinals *=toCMS;
 
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
   G4cout << "CorrectFinalPandE pCM, CMS pCM " << pCM << " " <<toCMS*pCM<< G4endl;
   G4cout << "CorrectFinal CMS pN pF " <<toCMS*pNucleus << " "
          <<pFinals << G4endl
          << " nucleus initial mass : " <<GetFinal4Momentum().mag()
 	 <<" massInNucleus m(nucleus) m(finals) sqrt(s): " << massInNucleus << " " <<pNucleus.mag()<< " "
 	 << pFinals.mag() << " " << pCM.mag() << G4endl;
-//#endif
+#endif
 
   G4LorentzRotation toLab = toCMS.inverse();
 
@@ -1333,7 +1341,7 @@ void G4BinaryCascade::CorrectFinalPandE()
   G4double m20 = pFinals.mag();
   if( s-(m10+m20)*(m10+m20) < 0 )
   {
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
      G4cout << "G4BinaryCascade::CorrectFinalPandE() : error! " << G4endl;
 
      G4cout << "not enough mass to correct: mass, A,Z, mass(nucl), mass(finals) " 
@@ -1345,19 +1353,21 @@ void G4BinaryCascade::CorrectFinalPandE()
      
      PrintKTVector(&theFinalState," mass problem");
      
-//#endif
+#endif
       return;
   }
 
   // Three momentum in cm system
   G4double pInCM = sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
   G4cout <<" CorrectFinalPandE pInCM  new, CURRENT, ratio : " << pInCM 
   	   << " " << (pFinals).vect().mag()<< " " <<  pInCM/(pFinals).vect().mag() << G4endl;
-//#endif
+#endif
   if ( pFinals.vect().mag() > pInCM )
   {
+#ifdef debug_G4BinaryCascade
 G4cerr << " -CorrectFinalPandE 5" << G4endl;  
+#endif
     G4ThreeVector p3finals=pInCM*pFinals.vect().unit();
 
 //    G4ThreeVector deltap=(p3finals - pFinals.vect() ) / nFinals;
@@ -1373,14 +1383,17 @@ G4cerr << " -CorrectFinalPandE 5" << G4endl;
 #ifdef debug_G4BinaryCascade
       G4cout << " final p corrected: " << p << G4endl;
 #endif
-//      (*i)->Set4Momentum(p);
+      (*i)->Set4Momentum(p);
     }
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
     G4cout << "CorrectFinalPandE nucleus corrected mass : " << GetFinal4Momentum() << " "
     		<<GetFinal4Momentum().mag() << G4endl
 		<< " CMS pFinals , mag, 3.mag : " << qFinals << " " << qFinals.mag() << " " << qFinals.vect().mag()<< G4endl;
-//#endif
-   } else { G4cerr << " -CorrectFinalPandE 6" << G4endl; }
+#endif
+   }
+#ifdef debug_G4BinaryCascade
+    else { G4cerr << " -CorrectFinalPandE 6" << G4endl; }
+#endif
  
 }
 
