@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.3 2001-07-11 09:59:14 gunter Exp $
+// $Id: testProPerpSpin.cc,v 1.4 2001-11-09 19:28:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -223,7 +223,7 @@ G4FieldManager* SetupField(G4int type)
     G4Mag_SpinEqRhs *fEquation = new G4Mag_SpinEqRhs(&myMagField); 
     G4MagIntegratorStepper *pStepper;
 
-    const int ncompspin=15;
+    const int ncompspin=12;
 
     switch ( type ) 
     {
@@ -259,6 +259,9 @@ G4PropagatorInField*  SetupPropagator( G4int type)
     G4PropagatorInField *thePropagator = 
       G4TransportationManager::GetTransportationManager()->
        GetPropagatorInField ();
+
+    // Let us test the new Minimum Epsilon Step functionality
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-4 ) ; 
 
     return thePropagator;
 }
@@ -332,26 +335,31 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        physStep=  2.5 * mm ;  // millimeters 
        Position = G4ThreeVector(0.,0.,0.) 
 	        + iparticle * G4ThreeVector(0.2, 0.3, 0.4); 
-       // ->GetChordFinder().SetChargeAndMomentum(
+       UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
+		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
 
        G4double momentum_val= (0.5+iparticle*1.0) * 0.1*GeV;  // As energy/c
        G4double rest_mass   = 0.105658387*GeV;                // A muon
                                              
+       G4double kineticEnergy =  momentum_val*momentum_val /
+                  ( sqrt( momentum_val*momentum_val + rest_mass * rest_mass ) 
+		    + rest_mass );
+       G4double labTof= 10.0*ns, properTof= 0.1*ns;
+
        SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
                       momentum_val, 
                       rest_mass);
 
-       UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
-		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
        G4double  beta = momentum_val / sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
-       G4ThreeVector  Velocity = UnitMomentum * beta * c_light;
+       G4double       velocity_magnitude = beta * c_light;
+       // G4ThreeVector  Velocity = UnitMomentum * velocity_magnitude;
 
        G4cout << G4endl;
        G4cout << "Test PropagateMagField: ***********************" << G4endl
             << " Starting New Particle with Position " << Position << G4endl 
 	    << " and UnitVelocity " << UnitMomentum << G4endl;
-       G4cout << " Momentum in MeV/c is "<< (0.5+iparticle*1.0)*0.1*GeV;
+       G4cout << " Momentum in MeV/c is "<< (0.5+iparticle*1.0)*0.1*GeV/MeV;
        G4cout << G4endl;
 
    //  G4ThreeVector initialSpin = UnitMomentum; 
@@ -369,11 +377,26 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  // G4cout << "Starting Step " << istep << " in volume " 
 	       // << located->GetName() << G4endl;
 
-          G4FieldTrack  stateVec( Position, Velocity, 0.0, 0.0,
-                                  0.0, 0.0, &initialSpin ); 
+          // G4FieldTrack  stateVec( Position, Velocity, 0.0, 0.0,
+          //                      0.0, 0.0, &initialSpin ); 
+          //
+	  // step_len=pMagFieldPropagator->ComputeStep( stateVec, 
+	  //					     physStep, safety
 
-	  step_len=pMagFieldPropagator->ComputeStep( stateVec, 
-						     physStep, safety
+          G4FieldTrack  initTrack( Position, 
+				   UnitMomentum,
+				   0.0,            // starting S curve len
+				   kineticEnergy,
+				   rest_mass,
+				   velocity_magnitude,
+				   labTof, 
+				   properTof,
+				   0              // or &Spin
+				   ); 
+
+	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
+						     physStep, 
+						     safety
 #ifdef G4MAG_CHECK_VOLUME
 						     ,located);
 #else
@@ -385,7 +408,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  //       --------
 	  G4FieldTrack  EndFieldTrack= pMagFieldPropagator->GetEndState();
 	  G4ThreeVector EndSpin=         EndFieldTrack.GetSpin();
-          G4ThreeVector EndVelocity    = EndFieldTrack.GetVelocity();
+          G4ThreeVector EndUnitMomentum  = EndFieldTrack.GetMomentumDir();
 
 //          G4cout << " EndPosition " << EndPosition << G4endl;
 //          G4cout << " EndUnitMomentum " << EndUnitMomentum << G4endl;
@@ -399,22 +422,26 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
           // In this case spin should be parallel (equal) to momentum
           G4double endDot= EndSpin.dot(EndUnitMomentum) ;
           G4cout << " dot product of spin and momentum = " << endDot << G4endl;
-	  if( endDot > 1.e-8 )
-	    G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 " << G4endl;
-
+	  if( endDot > 1.e-8 ){
+	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 "<<endl ;
+	     G4cout << " Spin dot UnitMomentum= " << endDot << " ";
+	     G4cout << " Spin magnitude= " << EndSpin.mag() << " ";
+	     G4cout << " UnitMom mag= " << EndUnitMomentum.mag() << " ";
+	     G4cout << G4endl;
+	  }
 	  G4ThreeVector MoveVec = EndPosition - Position;
 	  assert( MoveVec.mag() < physStep*(1.+1.e-9) );
 
 	  // G4cout << " testPropagatorInField: After stepI " << istep  << " : " << G4endl;
-	  report_endPV(Position, Velocity, step_len, physStep, safety,
-		       EndPosition, EndVelocity, istep, located );
+	  report_endPV(Position, UnitMomentum, step_len, physStep, safety,
+		       EndPosition, EndUnitMomentum, istep, located );
 
 	  assert(safety>=0);
 	  pNavig->SetGeometricallyLimitedStep();
 	  // pMagFieldPropagator->SetGeometricallyLimitedStep();
 
 	  Position=     EndPosition;
-          Velocity=     EndVelocity;
+          // Velocity=     EndVelocity;
 	  UnitMomentum= EndUnitMomentum;
 	  initialSpin = EndSpin;
           
