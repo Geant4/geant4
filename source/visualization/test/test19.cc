@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.2 1999-12-15 14:54:32 gunter Exp $
+// $Id: test19.cc,v 1.3 1999-12-16 14:13:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,9 +136,15 @@ int main (int argc, char** argv) {
   // Start an interactive session.
   session -> SessionStart();
 
+  g4cout << "vis_test19: Deleting vis manager..." << endl;
   delete visManager;
+  g4cout << "vis_test19: Vis manager deleted." << endl;
+  g4cout << "vis_test19: Deleting run manager..." << endl;
   delete runManager;
+  g4cout << "vis_test19: Run manager deleted." << endl;
+  g4cout << "vis_test19: Deleting session..." << endl;
   delete session;
+  g4cout << "vis_test19: Session deleted." << endl;
 
   return 0;
 }
