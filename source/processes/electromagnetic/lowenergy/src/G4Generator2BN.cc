@@ -351,7 +351,8 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
   G4double A2;
   G4double A, c;
 
-  G4int trials, index;
+  G4int trials = 0;
+  G4int index;
 
   // find table index
   index = G4int(log10(Ek)*100) - index_min;
