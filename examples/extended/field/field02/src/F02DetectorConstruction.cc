@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.8 2003-06-25 17:33:44 gcosmo Exp $
+// $Id: F02DetectorConstruction.cc,v 1.9 2003-11-12 16:35:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #include "F02DetectorMessenger.hh"
 
 #include "F02CalorimeterSD.hh"
-#include "F02ElectroMagneticField.hh"
+#include "F02ElectricFieldSetup.hh"
 
 #include "G4VClusterModel.hh"
 #include "G4PAIclusterModel.hh"
@@ -58,7 +58,7 @@
 F02DetectorConstruction::F02DetectorConstruction()
  : solidWorld(0), logicWorld(0), physiWorld(0),
    solidAbsorber(0),logicAbsorber(0), physiAbsorber(0),
-   magField(0), fEmField(0), calorimeterSD(0),
+   fEmFieldSetup(0), calorimeterSD(0),
    AbsorberMaterial(0), worldchanged(false), WorldMaterial(0)
 {
   // default parameter values of the calorimeter
@@ -77,7 +77,7 @@ F02DetectorConstruction::F02DetectorConstruction()
   
   DefineMaterials();
 
-  //  fEmField = new F02ElectroMagneticField() ;
+  fEmFieldSetup = new F02ElectricFieldSetup() ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ F02DetectorConstruction::F02DetectorConstruction()
 F02DetectorConstruction::~F02DetectorConstruction()
 { 
   delete detectorMessenger;
-  if (fEmField) delete fEmField ;
+  delete fEmFieldSetup ;
 }
 
 //////////////////////////////////////////////////////////////////////////
