@@ -301,12 +301,12 @@ please refer to the related History files provided in most packages):
         Fixed output formatting when entering/exiting verbose blocks.</LI>
     </UL></LI>
 <LI><B>Solids</B>
+    <UL>
     <LI><I>Boolean solids</I>:
         <UL>
         <LI><TT>G4UnionSolid</TT>, <TT>G4SubtractionSolid</TT>: fix in debug
             printout for <TT>SurfaceNomal()</TT>.</LI>
         </UL></LI>
-    </UL></LI>
     <LI><I>CSG solids</I>:
         <UL>
         <LI><TT>G4Torus</TT>: fixed bug in <TT>Inside(p)</TT>, fixing warnings
@@ -319,15 +319,13 @@ please refer to the related History files provided in most packages):
 <A NAME="glob-notes">
 <H3><I>Global</I></H3></A>
 <UL>
-<LI>Removed obsolete "<TT>includes</TT>" target in
-    <TT>management/GNUmakefile</TT></LI>.
+<LI>Removed obsolete "<TT>includes</TT>" target in <TT>management/GNUmakefile</TT>.</LI>
 <LI>Corrected comments in <TT>G4UserLimits</TT> header.</LI>
 </UL>
 
 <A NAME="had-notes">
 <H3><I>Hadronic Processes</I></H3></A>
 <UL>
-<LI>Transition from the old <TT>G4Pair</TT> to <TT>std::pair</TT>.</LI>
 <LI><B>management & utils</B>
     <UL>
     <LI>Added a white-board functionality to allow for in-core inspection
@@ -341,6 +339,7 @@ please refer to the related History files provided in most packages):
         secondaries.</LI>
     <LI>Fix for suspended particles (only neutron_hp model has these).</LI>
     <LI>Rudimentary verification of consistancy of hadronic physics.</LI>
+    <LI>Transition to <TT>std::pair</TT> in <TT>G4Pair</TT>.</LI>
     </UL></LI>
 <LI><B>models/binary_cascade</B>
     <UL>
