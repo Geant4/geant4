@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.3 2001-10-26 13:12:25 hpw Exp $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.4 2001-11-22 16:15:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,7 +108,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRc1(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={4.2,13.9,13.9,13.6,20.5,28.2,28.7,28.5,29.,28.4,28.15,27.8,25.9};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the A-power of the 1-st GDR maximum
@@ -130,7 +130,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRt1(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={1.4,3.13,3.08,2.9,3.09,3.09,3.09,3.02,2.98,2.9,2.745,2.585,2.42};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the Slope of the 1-st GDR maximum
@@ -141,7 +141,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRs1(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={.12,.12,.12,.12,.06,.03,.03,.06,.05,.065,.06,.059,.061};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the logAmplitude of the 2-nd GDR maximum
@@ -152,7 +152,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRc2(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={1.85,7.5,6.3,8.2,12.35,15.8,16.1,16.2,16.8,17.1,16.1,15.5,16.6};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the A-power of the 2-nd GDR maximum
@@ -174,7 +174,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRt2(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={1.4,3.22,3.11,3.39,3.48,3.34,3.46,3.35,3.4,3.22,3.09,3.05,2.6};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the Slope of the 2-nd GDR maximum
@@ -185,7 +185,7 @@ inline G4double G4PhotoNuclearCrossSection::GetGDRs2(G4int Z, G4int N)
 						 5.472};
   static G4double Y[nN]={.12,.094,.09,.088,.14,.082,.079,.074,.071,.065,.061,.058,.05};
 
-  return LinearFit(log(Z+N), nN, X, Y);
+  return LinearFit(log(G4double(Z+N)), nN, X, Y);
 }
 
 // Calculate the Amplitude of the QuasiDeuteron region [exp/(1+exp)]
