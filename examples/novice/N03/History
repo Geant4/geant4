@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2003-09-15 15:52:29 maire Exp $
+$Id: History,v 1.65 2003-10-24 12:34:14 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+24-10-03 mma (exampleN03-V05-02-01)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
 
 15-09-03 mma (exampleN03-V05-02-00) 
 - suppresion of sensitive detector and hits.

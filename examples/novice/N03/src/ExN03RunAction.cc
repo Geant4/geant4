@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.12 2003-01-30 14:14:19 maire Exp $
+// $Id: ExN03RunAction.cc,v 1.13 2003-10-24 12:34:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //visualization
   if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");    
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");    
   } 
 }
 
@@ -67,7 +67,7 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
 void ExN03RunAction::EndOfRunAction(const G4Run* )
 {
   if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 }
 

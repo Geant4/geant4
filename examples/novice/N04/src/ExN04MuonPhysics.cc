@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04MuonPhysics.cc,v 1.6 2003-09-27 13:27:31 vnivanch Exp $
+// $Id: ExN04MuonPhysics.cc,v 1.7 2003-10-24 12:36:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,8 +82,8 @@ void ExN04MuonPhysics::ConstructProcess()
    
   pManager->AddProcess(&fMuPlusMultipleScattering,-1,  1, 1);
   pManager->AddProcess(&fMuPlusIonisation,        -1,  2, 2);
-  pManager->AddProcess(&fMuPlusBremsstrahlung,    -1, -1, 3);
-  pManager->AddProcess(&fMuPlusPairProduction,    -1, -1, 4);
+  pManager->AddProcess(&fMuPlusBremsstrahlung,    -1,  3, 3);
+  pManager->AddProcess(&fMuPlusPairProduction,    -1,  4, 4);
   fMuPlusIonisation.SetVerboseLevel(2);
 
   // Muon Minus Physics
@@ -91,8 +91,8 @@ void ExN04MuonPhysics::ConstructProcess()
    
   pManager->AddProcess(&fMuMinusMultipleScattering,-1,  1, 1);
   pManager->AddProcess(&fMuMinusIonisation,        -1,  2, 2);
-  pManager->AddProcess(&fMuMinusBremsstrahlung,    -1, -1, 3);
-  pManager->AddProcess(&fMuMinusPairProduction,    -1, -1, 4);
+  pManager->AddProcess(&fMuMinusBremsstrahlung,    -1,  3, 3);
+  pManager->AddProcess(&fMuMinusPairProduction,    -1,  4, 4);
 
 
   pManager->AddRestProcess(&fMuMinusCaptureAtRest);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.3 2003-09-29 04:55:38 kurasige Exp $
+// $Id: ExN07PhysicsList.cc,v 1.4 2003-10-24 12:42:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -156,6 +156,7 @@ void ExN07PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(theeminusIonisation,         idxAlongStep,2);
+      pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxAlongStep,3);      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
@@ -181,6 +182,7 @@ void ExN07PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
+      pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxAlongStep,3);      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);
@@ -205,6 +207,9 @@ void ExN07PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
+      pmanager->SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
+      pmanager->SetProcessOrdering(aPairProduction,     idxAlongStep,4);
+      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04EMPhysics.cc,v 1.5 2003-09-27 13:27:31 vnivanch Exp $
+// $Id: ExN04EMPhysics.cc,v 1.6 2003-10-24 12:36:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void ExN04EMPhysics::ConstructProcess()
 
   pManager->AddProcess(&theElectronMultipleScattering, -1, 1, 1);
   pManager->AddProcess(&theElectronIonisation,         -1, 2, 2);
-  pManager->AddProcess(&theElectronBremsStrahlung,     -1,-1, 3);  
+  pManager->AddProcess(&theElectronBremsStrahlung,     -1, 3, 3);  
 
 
   //Positron Physics
@@ -92,7 +92,7 @@ void ExN04EMPhysics::ConstructProcess()
  
   pManager->AddProcess(&thePositronMultipleScattering, -1, 1, 1);
   pManager->AddProcess(&thePositronIonisation,         -1, 2, 2);
-  pManager->AddProcess(&thePositronBremsStrahlung,     -1,-1, 3);  
+  pManager->AddProcess(&thePositronBremsStrahlung,     -1, 3, 3);  
   pManager->AddProcess(&theAnnihilation,                0,-1, 4);  
 
 }
