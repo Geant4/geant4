@@ -1,9 +1,6 @@
 /tracking/verbose 2
 /tracking/verbose 1
 /run/initialize
----warning from G4Material-- The state conditions of the gas: Vacuum are not consistent.
- density  = 1e-17 mg/cm3	 pressure = 1 atmosphere	 temperature = 273.15 kelvin
- rho*(T/P) would be of the order of: 12.1865 (mg/cm3)*(kelvin/atmosphere).  The energy loss calculation maybe be affected 
 Target is 5 cm of Al 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV

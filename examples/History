@@ -1,4 +1,4 @@
-$Id: History,v 1.18 1999-08-05 12:29:59 stesting Exp $
+$Id: History,v 1.19 1999-08-05 12:43:03 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th August 1999  John Allison (examples-V00-01-01)
+- Updated exampleN02.out for geant4-00-01-ref-01.
 
 5th August 1999  John Allison (examples-V00-01-00)
 - Updated exampleN04.EMtest.out and exampleN04.out for geant4-00-01.
