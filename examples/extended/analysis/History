@@ -1,0 +1,24 @@
+$Id: History,v 1.1 2002-11-27 19:17:54 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     A01 History File
+     =========================================================
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+---------------------------------------------------------------------------
+
+27th November 2002 Makoto Asai (analysisExample-V04-01-01)
+- Tag for release 5.0
+
+26th November 2002 Mark Donszelmann
+- Fixed DrifChamberHit to have a reasonable screensize (2) rather than 0.1
+- Fixed minimum value for EmCalHit color to be visible (0.4).
+
+21st November 2002 Makoto Asai (analysisExample-V04-01-00)
+
+14th November 2002 Mark Donszelmann
+- Added A01 example to repository
