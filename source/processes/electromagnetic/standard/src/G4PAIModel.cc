@@ -615,7 +615,7 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
-  if( costheta >= 0.99 ) costheta = 0.99;
+  if( costheta >= 0.99999 ) costheta = 0.99999;
   G4double sintheta, sin2 = 1. - costheta*costheta;
 
   if( sin2 <= 0.) sintheta = 0.;
