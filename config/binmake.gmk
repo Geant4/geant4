@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.49 2000-10-24 07:02:59 gunter Exp $
+# $Id: binmake.gmk,v 1.50 2000-11-14 17:47:40 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -23,6 +23,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/global/HEPNumerics/include \
               -I$(G4BASE)/run/include \
               -I$(G4BASE)/materials/include \
+              -I$(G4BASE)/parameterisations/include \
               -I$(G4BASE)/particles/management/include \
               -I$(G4BASE)/particles/bosons/include \
               -I$(G4BASE)/particles/leptons/include \
@@ -155,6 +156,7 @@ ifdef GLOBALLIBS
              -lG4event \
              -lG3toG4 \
              -lG4tracking \
+	     -lG4parmodels \
              -lG4processes \
              -lG4digits+hits \
              -lG4track \
