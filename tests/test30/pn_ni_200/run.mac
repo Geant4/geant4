@@ -1,0 +1,63 @@
+//---------------------------------------
+//        Macro file for test30
+//         examine PostStepDoIt 
+//        for hadronic physics
+//      Created: 13.03.2002 V.Ivanchenko
+//--------------------------------------- 
+#verbose
+0
+#events
+100000
+//--------Proton_processes
+#particle
+proton
+//--------
+#material
+Ni
+#energy(MeV)
+201.
+#elim(MeV)
+2.
+#emaxpi(MeV)
+60.
+#emax(MeV)
+200.
+#nbinse
+40
+#nbinsd
+40
+#nbinspi
+12
+#nangle
+5
+#angles
+30. 60. 90. 120. 150.
+#dangle
+10.
+#nanglepi
+5
+#anglespi
+22.  55.  90.  120.  155.
+//--------
+#generator
+LEparametrisation
+#paw
+par.paw
+#run
+//#generator
+//preCompound
+//#paw
+//prec.paw
+//#run
+#generator
+CHIPS
+#paw
+chips.paw
+#run
+#generator
+kinetic
+#paw
+kin.paw
+#run
+//--------Exit
+#exit

@@ -1,0 +1,1243 @@
+TITLE      Reactions Ni-58,64(P,PIP) At 201 MeV.
+AUTHOR     (A.BADALA,R.BARBERA,A.PALMERI,G.S.PAPPALARDO,
+           A.BONASERA,F.RIGGI,A.ADORNO,L.BIMBOT)
+INSTITUTE  (2ITYCAT)
+           (2FR CSN)
+REFERENCE  (J,PR/C,46,604,92)  Double Differential Cross Sections.
+           (J,PR/C,40,1081,89) Total Cross Sections Only.
+HISTORY    (950522C)
+           (970214A) Reaction Lines are Corrected. Lower Case is
+           Included.
+           (970214U) Last checking has been done.
+ADD-RES    (COMP)
+DETECTOR   (MAGSP)
+           The Detection of the Outgoing Charged Pions was Made
+           With the Standard Apparatus 'Mathusalem', Devoted to
+           Pion Production Measurments.
+FACILITY   (SYNCY,2FR CSN)
+METHOD     (BCINT,EDE)
+REL-REF    (R,,A.PALMERI+,J,PR/C,40,1081,89).A Detailed
+           Description of the Experimental Apparatus.
+ENDBIB              20
+COMMON               1          3
+EN
+MEV
+       201.
+ENDCOMMON            3
+ENDSUBENT           27
+
+------------------------------------------------------------------------
+SUBENT        O0108002     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        22.
+ENDCOMMON            3
+DATA                 3         10
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.634      0.019
+        25.      0.896      0.018
+       27.5      0.971      0.025
+        30.      0.988      0.017
+       32.5      1.003      0.022
+        35.      0.955       0.02
+        40.      0.909      0.018
+        45.       0.74      0.015
+        50.      0.578      0.012
+        60.        0.1      0.004
+ENDDATA             12
+ENDSUBENT           29
+------------------------------------------------------------------------
+SUBENT        O0108003     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        35.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.577      0.025
+        25.      0.718      0.023
+        30.      0.797      0.021
+        40.      0.679      0.015
+        50.      0.402       0.01
+        60.       0.06      0.004
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108004     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        55.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.464      0.024
+        25.      0.558      0.021
+        30.      0.558      0.019
+        40.      0.482      0.013
+        50.      0.221      0.007
+        60.      0.027      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108005     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        72.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.392      0.017
+        25.      0.481      0.016
+        30.      0.505      0.014
+        40.      0.344      0.009
+        50.      0.133      0.005
+        60.      0.014      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108006     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        90.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.       0.41       0.02
+        25.      0.444      0.015
+        30.      0.416      0.014
+        40.       0.25      0.008
+        50.      0.092      0.004
+        60.      0.006      0.001
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108007     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       105.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.384      0.021
+        25.      0.473      0.019
+        30.      0.445      0.016
+        40.      0.277       0.01
+        50.      0.103      0.005
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108008     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       120.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.415      0.021
+        25.       0.48      0.019
+        30.      0.446      0.016
+        40.      0.266       0.01
+        50.      0.096      0.005
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108009     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       138.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.469      0.016
+        25.      0.524      0.014
+        30.      0.484      0.016
+        40.      0.286       0.01
+        50.      0.089      0.005
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108010     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       155.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.498      0.019
+        25.      0.492      0.019
+        30.      0.451      0.016
+        40.      0.236      0.011
+        50.      0.063      0.003
+        60.      0.007      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108020     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        22.
+ENDCOMMON            3
+DATA                 3         10
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.631      0.019
+        25.      0.844      0.018
+       27.5      0.917      0.025
+        30.      0.941      0.017
+       32.5      0.938      0.022
+        35.      0.881       0.02
+        40.      0.822      0.017
+        45.      0.622      0.014
+        50.      0.455      0.011
+        60.      0.047      0.003
+ENDDATA             12
+ENDSUBENT           29
+------------------------------------------------------------------------
+SUBENT        O0108021     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        35.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.512      0.024
+        25.      0.657      0.023
+        30.      0.768      0.021
+        40.      0.635      0.015
+        50.      0.306      0.009
+        60.      0.028      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108022     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        55.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.456      0.024
+        25.      0.527       0.02
+        30.      0.547      0.018
+        40.      0.396      0.012
+        50.      0.157      0.006
+        60.      0.016      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108023     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        72.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.371      0.017
+        25.      0.421      0.015
+        30.      0.397      0.012
+        40.      0.261      0.008
+        50.      0.096      0.004
+        60.       0.01      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108024     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        90.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.372      0.017
+        25.      0.373      0.014
+        30.      0.367      0.012
+        40.       0.21      0.008
+        50.      0.063      0.003
+        60.      0.007      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108025     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       105.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.312       0.02
+        25.      0.397      0.019
+        30.      0.372      0.016
+        40.      0.192      0.009
+        50.       0.07      0.005
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108026     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       120.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.359      0.021
+        25.      0.409      0.019
+        30.      0.361      0.015
+        40.        0.2      0.009
+        50.      0.061      0.004
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108027     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       138.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.388      0.016
+        25.       0.42      0.019
+        30.      0.354      0.015
+        40.      0.184      0.009
+        50.      0.044      0.004
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108028     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIP)
+STATUS     (TABLE)
+EN-SEC     (E,PIP)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       155.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.417      0.016
+        25.      0.417      0.019
+        30.      0.365      0.015
+        40.      0.155      0.008
+        50.      0.031      0.002
+        60.      0.005      0.002
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108038     970214
+BIB                  6         10
+REACTION   (28-NI-58(P,PIP+X),SEQ,DA,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ANG-ERR).Data-Point Reader Uncertainty.
+           (DATA-ERR).Data-Point Reader Uncertainty.
+PART-DET   (PIP)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+STATUS     (CURVE).By CAJAD.From Fig.8.
+ENDBIB              10
+COMMON               2          3
+ANG-ERR    DATA-ERR
+ADEG       MU-B/SR
+        0.6    0.7E-01
+ENDCOMMON            3
+DATA                 2          9
+ANG        DATA
+ADEG       MU-B/SR
+       19.6      32.98
+       32.1      25.93
+       52.9      18.25
+       69.6      14.55
+       90.1      12.42
+      103.5      12.92
+      121.5      12.89
+      136.6      14.43
+       155.      13.35
+ENDDATA             11
+ENDSUBENT           30
+------------------------------------------------------------------------
+SUBENT        O0108041     970214
+BIB                  6         10
+REACTION   (28-NI-64(P,PIP+X),SEQ,DA,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+STATUS     (CURVE).By CAJAD.From Fig.10.
+ERR-ANALYS (ANG-ERR).Data-Point Reader Uncertainty.
+           (DATA-ERR).Data-Point Reader Uncertainty.
+PART-DET   (PIP)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+ENDBIB              10
+COMMON               2          3
+ANG-ERR    DATA-ERR
+ADEG       MU-B/SR
+        0.6    0.7E-01
+ENDCOMMON            3
+DATA                 2          9
+ANG        DATA
+ADEG       MU-B/SR
+        21.      29.99
+       33.6      23.14
+       54.7      16.61
+       71.5      12.08
+       88.3      11.03
+      105.1       10.5
+      120.3      10.76
+      137.5       10.8
+      155.6      10.48
+ENDDATA             11
+ENDSUBENT           30
+------------------------------------------------------------------------
+SUBENT        O0108042     970214
+BIB                  6         10
+REACTION   (28-NI-58(P,PIP+X),SEQ,SIG,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+           (INTAD)
+PART-DET   (PIP)
+STATUS     (TABLE)
+ENDBIB              10
+NOCOMMON
+DATA                 2          1
+DATA       ERR-T
+MICRO-B    MICRO-B
+       200.        10.
+ENDDATA              3
+ENDSUBENT           18
+------------------------------------------------------------------------
+SUBENT        O0108044     970214
+BIB                  6         10
+REACTION   (28-NI-64(P,PIP+X),SEQ,SIG,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+PART-DET   (PIP)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+           (INTAD)
+STATUS     (TABLE)
+ENDBIB              10
+NOCOMMON
+DATA                 2          1
+DATA       ERR-T
+MICRO-B    MICRO-B
+       170.         8.
+ENDDATA              3
+ENDSUBENT           18
+
+
+------------------------------------------------------------------------
+SUBENT        O0108011     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        22.
+ENDCOMMON            3
+DATA                 3          8
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.       0.05      0.005
+       22.5      0.057      0.005
+        25.      0.056      0.005
+        30.      0.045      0.004
+        35.      0.034      0.002
+        40.       0.02      0.002
+        45.      0.009      0.001
+        50.      0.003      0.001
+ENDDATA             10
+ENDSUBENT           27
+------------------------------------------------------------------------
+SUBENT        O0108012     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        35.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.051      0.006
+        25.      0.043      0.004
+        30.      0.042      0.003
+        35.      0.028      0.002
+        40.      0.014      0.002
+        50.      0.003      0.001
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108013     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        55.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.047      0.005
+        25.      0.052      0.004
+        30.      0.034      0.003
+        40.      0.015      0.002
+        50.      0.003      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108014     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        72.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.047      0.005
+        25.      0.046      0.004
+        30.      0.025      0.003
+        40.      0.008      0.001
+        50.      0.002      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108015     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        90.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.051      0.007
+        25.      0.035      0.005
+        30.      0.028      0.004
+        40.      0.008      0.002
+        50.      0.001      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108016     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       105.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.052      0.004
+        25.      0.037      0.003
+        30.      0.026      0.002
+        40.      0.007      0.001
+        50.      0.001      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108017     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       120.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.043      0.003
+        25.      0.035      0.003
+        30.      0.025      0.002
+        40.      0.006      0.001
+        50.      0.001      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108018     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       138.
+ENDCOMMON            3
+DATA                 3          4
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.044      0.004
+        25.      0.038      0.004
+        30.       0.02      0.002
+        40.      0.004      0.001
+ENDDATA              6
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0108019     970214
+BIB                  6          8
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       155.
+ENDCOMMON            3
+DATA                 3          4
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.039      0.003
+        25.      0.034      0.003
+        30.      0.019      0.002
+        40.      0.002      0.001
+ENDDATA              6
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0108029     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        22.
+ENDCOMMON            3
+DATA                 3          8
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.        0.1      0.007
+       22.5      0.103      0.007
+        25.      0.114      0.008
+        30.        0.1      0.005
+        35.      0.082      0.004
+        40.      0.057      0.003
+        45.      0.047      0.003
+        50.      0.022      0.002
+ENDDATA             10
+ENDSUBENT           27
+------------------------------------------------------------------------
+SUBENT        O0108030     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        35.
+ENDCOMMON            3
+DATA                 3          6
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.079      0.007
+        25.      0.099      0.007
+        30.      0.098      0.006
+        35.      0.077      0.004
+        40.      0.053      0.003
+        50.      0.024      0.001
+ENDDATA              8
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0108031     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        55.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.105      0.008
+        25.       0.09      0.006
+        30.      0.075      0.005
+        40.      0.047      0.003
+        50.      0.016      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108032     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        72.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.096      0.008
+        25.      0.092      0.006
+        30.      0.074      0.005
+        40.      0.037      0.002
+        50.      0.012      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108033     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+        90.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.101      0.011
+        25.      0.084      0.008
+        30.       0.07      0.006
+        40.      0.031      0.003
+        50.      0.009      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108034     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       105.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.093      0.005
+        25.      0.083      0.004
+        30.      0.067      0.003
+        40.      0.025      0.002
+        50.      0.005      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108035     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       120.
+ENDCOMMON            3
+DATA                 3          4
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.092      0.005
+        25.      0.083      0.005
+        30.      0.065      0.005
+        40.      0.019      0.001
+ENDDATA              6
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0108036     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       138.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.092      0.005
+        25.      0.066      0.005
+        30.      0.062      0.003
+        40.      0.017      0.001
+        50.      0.002      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108037     970214
+BIB                  6          8
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA/DE,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-S).The Statistical Uncertainty is Reported by
+           Authors.
+PART-DET   (PIN)
+STATUS     (TABLE)
+EN-SEC     (E,PIN)
+ENDBIB               8
+COMMON               1          3
+ANG
+ADEG
+       155.
+ENDCOMMON            3
+DATA                 3          5
+E          DATA       ERR-S
+MEV        MUB/SR/MEV MUB/SR/MEV
+        20.      0.089      0.005
+        25.      0.075      0.004
+        30.      0.053      0.002
+        40.      0.013      0.001
+        50.      0.002      0.001
+ENDDATA              7
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0108039     970214
+BIB                  6         10
+REACTION   (28-NI-58(P,PIN+X),SEQ,DA,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ANG-ERR).Data-Point Reader Uncertainty.
+           (DATA-ERR).The Uncertainty is Reported by Authors.
+PART-DET   (PIN)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+STATUS     (CURVE).By CAJAD.From Fig.9.
+ENDBIB              10
+COMMON               1          3
+ANG-ERR
+ADEG
+        0.6
+ENDCOMMON            3
+DATA                 3          9
+ANG        DATA       DATA-ERR
+ADEG       MU-B/SR    MU-B/SR
+       21.5       1.46       0.11
+       34.2       1.32       0.12
+       55.3       1.27       0.11
+       73.9       1.11       0.13
+       90.8        1.1       0.19
+       106.        1.1       0.21
+      120.4       0.94       0.18
+      139.4       0.94       0.15
+      156.7       0.81       0.14
+ENDDATA             11
+ENDSUBENT           30
+------------------------------------------------------------------------
+SUBENT        O0108040     970214
+BIB                  6         10
+REACTION   (28-NI-64(P,PIN+X),SEQ,DA,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ANG-ERR).Data-Point Reader Uncertainty.
+           (DATA-ERR).The Uncertainty is Reported by Authors.
+PART-DET   (PIN)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+STATUS     (CURVE).By CAJAD.From Fig.11.
+ENDBIB              10
+COMMON               1          3
+ANG-ERR
+ADEG
+        0.6
+ENDCOMMON            3
+DATA                 3          9
+ANG        DATA       DATA-ERR
+ADEG       MU-B/SR    MU-B/SR
+       21.6       3.41       0.15
+       34.2       3.01       0.15
+       54.8       2.95        0.2
+        72.       2.72       0.14
+       90.4       2.61       0.18
+      105.5       2.37       0.14
+      119.8       2.25       0.16
+      136.6       2.14       0.24
+      155.9         2.       0.16
+ENDDATA             11
+ENDSUBENT           30
+------------------------------------------------------------------------
+SUBENT        O0108043     970214
+BIB                  6         10
+REACTION   (28-NI-58(P,PIN+X),SEQ,SIG,,,EXP)
+SAMPLE     Ni-58,Thickness 42.7+-0.2 Mg/Cm**2,Enriched to 99.3%
+           Was Used.
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+PART-DET   (PIN)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+           (INTAD)
+STATUS     (TABLE)
+ENDBIB              10
+NOCOMMON
+DATA                 2          1
+DATA       ERR-T
+MICRO-B    MICRO-B
+        16.         2.
+ENDDATA              3
+ENDSUBENT           18
+------------------------------------------------------------------------
+SUBENT        O0108045     970214
+BIB                  6         10
+REACTION   (28-NI-64(P,PIN+X),SEQ,SIG,,,EXP)
+SAMPLE     Ni-64,Thickness 41.0+-0.2 Mg/Cm**2,Enriched to 98.2%
+           Was Used.
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+PART-DET   (PIN)
+ANALYSIS   (INTED) At Each Angle, the Double Differential Cross
+           Section is Integrated in the Energy Range Starting from
+           The Extrapolated Low-Energy Limit.
+           (INTAD)
+STATUS     (TABLE)
+ENDBIB              10
+NOCOMMON
+DATA                 2          1
+DATA       ERR-T
+MICRO-B    MICRO-B
+        34.         3.
+ENDDATA              3
+ENDSUBENT           18

@@ -31,6 +31,12 @@ source run_fast.csh
 setenv TARGET pn_al_090
 source run_fast.csh
 
+setenv TARGET pn_be_113
+source run_fast.csh
+
+setenv TARGET pn_c_113
+source run_fast.csh
+
 setenv TARGET pn_al_113
 source run_fast.csh
 
@@ -53,6 +59,11 @@ source run_fast.csh
 setenv TARGET pn_pb_160
 source run_fast.csh
 
+setenv TARGET pn_ni_200
+source run_fast.csh
+
+setenv TARGET pn_be_256
+source run_fast.csh
 
 setenv TARGET pn_al_256
 source run_fast.csh
@@ -63,8 +74,19 @@ source run_fast.csh
 setenv TARGET pn_zr_256
 source run_fast.csh
 
-
 setenv TARGET pn_pb_256
+source run_fast.csh
+
+setenv TARGET ppi_h_585
+source run_fast.csh
+
+setenv TARGET ppi_d_585
+source run_fast.csh
+
+setenv TARGET pn_be_585
+source run_fast.csh
+
+setenv TARGET pn_c_590
 source run_fast.csh
 
 setenv TARGET pn_al_585
@@ -80,12 +102,17 @@ source run_fast.csh
 setenv TARGET pn_pb_597
 source run_fast.csh
 
+setenv TARGET pn_be_800
+source run_fast.csh
+
+setenv TARGET pn_c_800
+source run_fast.csh
+
 setenv TARGET pn_al_800
 source run_fast.csh
 
 setenv TARGET pn_fe_800
 source run_fast.csh
-
 
 setenv TARGET pn_zr_800
 source run_fast.csh
