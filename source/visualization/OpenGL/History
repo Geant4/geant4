@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2004-11-15 12:11:46 gbarrand Exp $
+$Id: History,v 1.42 2004-11-18 15:19:05 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+18th November 2004  John Allison  (opengl-V06-02-07)
+- Removed redundant fLastVP from G4OpenGLStoredSceneHandler.
 
 15th November 2004  Guy Barrand
 - G4OpenGLWin32Viewer::ShowView : glFlush was not sufficient 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.10 2003-06-10 17:13:33 gcosmo Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.11 2004-11-18 15:19:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,12 +56,10 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
   // of either the scene handler or this viewer, trigger a rebuild.
 
   if (!fG4OpenGLStoredSceneHandler.fTopPODL ||
-      CompareForKernelVisit(fG4OpenGLStoredSceneHandler.fLastVP)  ||
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }      
   fLastVP = fVP;
-  fG4OpenGLStoredSceneHandler.fLastVP = fVP;
 }
 
 G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {

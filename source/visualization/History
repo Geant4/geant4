@@ -1,4 +1,4 @@
-$Id: History,v 1.262 2004-11-11 16:12:24 johna Exp $
+$Id: History,v 1.263 2004-11-18 15:20:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+18th November 2004  John Allison
+- Included opengl-V06-02-07.
 
 11th November 2004  John Allison  (vis-V06-02-05)
 - Made use use of smart method GetPolyhedron for solids.  This greatly

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.14 2003-06-16 17:13:38 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.15 2004-11-18 15:19:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,11 +64,6 @@ private:
   static G4int     fSceneCount;     // No. of extanct scene handlers.
   G4int            fDisplayListId;  // Workspace.
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
-  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
-         // namely the ones which go with the graphical database
-         // (display lists).  A view may interrogate this to decide if
-         // it needs to visit the kernel, i.e., to remake the
-         // graphical database.
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.
