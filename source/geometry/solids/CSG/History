@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-11-19 16:22:52 grichine Exp $
+$Id: History,v 1.9 2000-01-19 19:55:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 19,   00   G. Cosmo			  geom-solids-csg-01-00-04
+
+ - Fixed bug in DistanceToIn(p,v). Modified files: G4Trap.cc and
+   testG4Trap.cc. (V.Grichine)
+ - Syncronized file versions with HEAD (essentially CVS headers changes).
+ - Fixes for missing migration on HEAD related to some files in test/fred
+   and test/SBT.
+ 
 Nov 17,   99   J. Apostolakis             geom-solids-csg-01-00-03
  
  - Tagged
