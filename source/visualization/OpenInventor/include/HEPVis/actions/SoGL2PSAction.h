@@ -19,17 +19,16 @@ public:
   void enableFileWriting();
   void disableFileWriting();
   SbBool fileWritingEnabled() const;
-  SbBool addPixmap(float,float,int,int,float*,SbBool);
   SbBool addBitmap(int,int,float=0,float=0,float=0,float=0);
   void beginViewport();
   void endViewport();
 public: /*SoINTERNAL*/
   static void initClass();
 protected:
-  virtual void beginTraversal(SoNode*);
+  //virtual void beginTraversal(SoNode*);
 private:
   SbString fFileName;
-  SbBool fEnable;
+  FILE* fFile;
 };
 
 #endif
