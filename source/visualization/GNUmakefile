@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2003-10-17 09:21:02 gbarrand Exp $
+# $Id: GNUmakefile,v 1.15 2003-11-06 14:53:11 johna Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -15,9 +15,6 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
-
-G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
-G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 SUBDIRS := modeling
 SUBLIBS := G4modeling
