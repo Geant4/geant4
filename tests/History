@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-01-28 14:30:15 johna Exp $
+$Id: History,v 1.4 1999-02-06 13:15:44 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-tests-01-00-02  January 28th  John Allison
+February 6th 1999  John Allison
+- Commented out troublesome printing:
+  - tracking/verbose in various places.
+  - run/verbose in some .in files to suppress timing information which
+    spoils the diff.
+
+tests-01-00-02  January 28th 1999  John Allison
 - Removed `exit' from setup.sh.
 - Updated some .in files to reduce output.
 - Updated .out files to SUN debug except 05 and 07.
 
-tests-01-00-01  January 20th  John Allison
+tests-01-00-01  January 20th 1999  John Allison
 - First attempt at reworked scripts for new stt structure.
 
 September 10th, 1998 - Gabriele Cosmo
