@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2002-12-05 16:00:44 flongo Exp $
+$Id: README,v 1.18 2002-12-08 18:08:10 flongo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -92,9 +92,13 @@ The main features of this example are
 
  (on a CERN machine with the gcc-2.95 compiler)
 
+  ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/. 
+  (to be done once)
+	
+
   setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.2/bin
   source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh
-  ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/.
+
 
 2. Sample run
 -------------
@@ -191,31 +195,25 @@ The main features of this example are
  Please note that in a multiple run session, the last run always override the 
  hbook file.
 
-
-
 9. Histogramming
 ----------------
 
- Some hits information can be visualized runtime using the Anaphe QPlotter 
- (if it is available on the user platform); two 2D histograms and two
- 1D histograms can be visualized and saved (as PostScript files)
- during the simulation run. 
+ Some hits information can be visualized runtime using the Anaphe Plotter 
+ (if it is available on the user platform); two 1D histograms can be 
+ visualized during the simulation run. 
 
- The 2D histograms contain the hits positions on the TKR projected on
- the XZ plane and the YZ plane; the 1D histograms contain the energy 
- deposition in the last X plane of the TKR and the hits distribution along 
- the X planes of the TKR (note again that this histograms have been chosen more 
- for pedagogical motivation than for physical one).
+ The 1D histograms contain the energy deposition in the last X plane of 
+ the TKR and the hits distribution along the X planes of the TKR 
+ (note again that these histograms have been chosen more for pedagogical 
+ motivation than for physical one).
 
  These histograms are filled and updated at every event and are initialized 
  with each new run; the scale of the histograms is automatically derived from 
  the detector geometry. 
 
  Throught a messenger it is possible to set some options with
- the UI subtree "/analysis/" (use the UI help for more info); in particular
- it is possible to enable or disable the drawing of the 1D and 2D histograms 
- at every event and to enable or disable the saving of PostScript files at the 
- end of each run. If you feel that the simulation is too slow with the
+ the UI subtree "/analysis/" (use the UI help for more info); 
+ If you feel that the simulation is too slow with the
  histograms updated every event, you can disable the drawing and retain 
  the saving. Please note that the updating of the histograms is triggered
  only when there is some hit in an event.
