@@ -161,7 +161,7 @@ private:
   std::vector<G4PhysicsTable*>       fPAIxscBank;
   G4PhysicsTable*                    fPAIdEdxTable;
   std::vector<G4PhysicsTable*>       fPAIdEdxBank;
-  std::vector<G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
+  std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>       fPAIRegionVector;
   size_t                             fMatIndex ;  
   G4double**                         fSandiaPhotoAbsCof ;

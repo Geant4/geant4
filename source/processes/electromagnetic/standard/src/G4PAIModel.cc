@@ -153,7 +153,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 
   for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
   {
-    G4Region* curReg = fPAIRegionVector[iReg];
+    const G4Region* curReg = fPAIRegionVector[iReg];
 
     // (*fPAIRegionVector[iRegion])
 
@@ -164,13 +164,13 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 
     for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
     {
-      G4MaterialCutsCouple* matCouple = theCoupleTable->
+      const G4MaterialCutsCouple* matCouple = theCoupleTable->
       GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
       fMaterialCutsCoupleVector.push_back(matCouple);
 
       static const G4MaterialTable* theMaterialTable = 
                      G4Material::GetMaterialTable();
-      G4int numberOfMat = G4Material::GetNumberOfMaterials();
+      size_t numberOfMat = G4Material::GetNumberOfMaterials();
       size_t iMatGlob;
       for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
       {
