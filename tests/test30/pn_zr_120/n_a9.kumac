@@ -13,7 +13,7 @@ set NDVX 010206
  opt logy
  
  null 0 125 0.00001 10
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 106 deg'
  
  hi/file 1 prec.paw
  set dmod 3
@@ -37,7 +37,7 @@ gr/h/symb X Y 20 21 0.2
 exe ../prf n_a9 eps
  
 null 0 125 0.00001 10
-atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 106 deg'
  
  gr/h/symb X Y 20 21 0.2
 
