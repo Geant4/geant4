@@ -1,0 +1,33 @@
+opt zfl
+opt nfit
+opt sta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 0.6
+set NDVX 010206
+set NDVY 010205
+ zone
+ zone 2 2
+ 
+ hi/file 1 par.paw
+ hi/pl 8 hist
+ itx 30 5000 'LEPAR'
+ close 1
+ 
+ hi/file 1 prec.paw
+ hi/pl 8 hist
+ itx 30 4000 'PREC'
+ close 1
+ 
+ hi/file 1 chips.paw
+ hi/pl 8 hist
+ itx 30 4000 'CHIPS'
+ close 1
+ 
+ hi/file 1 kin.paw
+ hi/pl 8 hist
+ itx 30 2000 'KIN'
+ close 1
+ 
+exe ../prf p_pt eps
