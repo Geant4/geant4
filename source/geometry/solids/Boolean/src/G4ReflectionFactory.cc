@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.1 2001-10-18 10:05:09 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.2 2001-11-08 15:47:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -74,7 +74,7 @@ G4ReflectionFactory* G4ReflectionFactory::Instance()
 
 //_____________________________________________________________________________
 G4ReflectionFactory::G4ReflectionFactory()
-  : fVerboseLevel(1)     
+  : fVerboseLevel(0)     
 {
 // Protected singleton constructor.
 // ---
@@ -315,12 +315,13 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
 
   G4LogicalVolume* refDLV;
   
-  G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  if (fVerboseLevel>0) 
+    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
   
   if (!IsReflected(dLV)) {
 
     if (fVerboseLevel>0) 
-    G4cout << " will be reflected." << G4endl;
+      G4cout << " will be reflected." << G4endl;
 
     // create new daughter solid and logical volume
     refDLV = CreateReflectedLV(dLV); 
@@ -372,12 +373,13 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
 
   G4LogicalVolume* refDLV;
   
-  G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  if (fVerboseLevel>0) 
+    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
   
   if (!IsReflected(dLV)) {
 
     if (fVerboseLevel>0) 
-    G4cout << " will be reflected." << G4endl;
+      G4cout << " will be reflected." << G4endl;
 
     // create new daughter solid and logical volume
     refDLV = CreateReflectedLV(dLV); 
