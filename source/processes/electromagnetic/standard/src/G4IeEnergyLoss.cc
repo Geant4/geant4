@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeEnergyLoss.cc,v 1.4 1999-06-18 10:35:55 urban Exp $
+// $Id: G4IeEnergyLoss.cc,v 1.5 1999-06-18 11:30:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -1013,7 +1013,6 @@ G4VParticleChange* G4IeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
        if (MeanLoss < 0.) { MeanLoss = 0.; finalT = E;}
        
        //now the loss with fluctuation
- //      if ((EnlossFlucFlag) && (MeanLoss > 0.) && (MeanLoss < E))
        if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowestKineticEnergy))
 
          {
@@ -1077,10 +1076,6 @@ G4double G4IeEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
   if (charge<0.) threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   else           threshold =((*G4Positron::Positron()).GetCutsInEnergy())[imat];
-
-  // ************************************************************************
-  if((Tkin < threshold)&&(Tkin < Tlow))  return MeanLoss ;
-  // ************************************************************************
 
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
