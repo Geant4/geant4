@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.7 2000-11-08 10:01:59 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.8 2000-11-14 23:53:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ class G4VUserPhysicsList
     void AddTransportation();
 
   /////////////////////////////////////
-  public:  
+  public: // with description 
    //  "SetCuts" method sets a cut value for all particle types 
    //   in the particle table
    virtual void SetCuts() = 0; 
@@ -253,14 +253,18 @@ class G4VUserPhysicsList
 
 inline void G4VUserPhysicsList::Construct()
 {
+#ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
 
   if (verboseLevel >1) G4cout << "Construct particles " << G4endl;  
+#endif
   ConstructParticle();
 
   InitializeProcessManager();
 
+#ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "Construct processes " << G4endl;  
+#endif
   ConstructProcess();
 }
 
@@ -272,10 +276,12 @@ inline G4double G4VUserPhysicsList::GetDefaultCutValue() const
 inline void G4VUserPhysicsList::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
+#ifdef G4VERBOSE
   if (verboseLevel >1){
     G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
     G4cout << " Verbose level is set to " << verboseLevel << G4endl;
   }
+#endif
 }
 
 inline  G4int G4VUserPhysicsList::GetVerboseLevel() const
