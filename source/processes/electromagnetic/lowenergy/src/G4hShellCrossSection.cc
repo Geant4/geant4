@@ -51,6 +51,16 @@ G4hShellCrossSection::~G4hShellCrossSection()
 { }
 
 
+std::vector<G4double> G4hShellCrossSection::GetCrossSection(G4int Z,
+						G4double incidentEnergy,
+						G4double mass,
+						G4double deltaEnergy,
+						G4bool) const 
+{
+  return Probabilities(Z,incidentEnergy,mass,deltaEnergy);
+}  
+
+
 std::vector<G4double> G4hShellCrossSection::Probabilities(
                                               G4int Z, 
 			                      G4double incidentEnergy, 
