@@ -5,19 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.hh,v 1.2 1999-01-14 15:59:06 broglia Exp $
+// $Id: G4BSplineCurve.hh,v 1.3 1999-01-19 10:12:56 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINECURVE_H
 #define __BSPLINECURVE_H 
 
 #include <rw/tvvector.h>
-#include "G4BoundedCurve.hh"
+#include "G4Curve.hh"
 
 class G4ControlPoints;
 class G4KnotVector;
 
-class G4BSplineCurve : public G4BoundedCurve
+class G4BSplineCurve : public G4Curve
 {
 public:
 
