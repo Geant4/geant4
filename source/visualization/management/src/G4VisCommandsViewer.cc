@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.15 2000-05-02 09:58:11 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.16 2000-05-04 19:17:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -339,7 +339,6 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	   << G4endl;
     viewer -> ClearView ();
-    viewer -> SetViewParameters (fpVisManager -> GetCurrentViewParameters ());
     viewer -> DrawView ();
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
 	   "\n  (You might also need \"/vis/viewer/show\".)" << G4endl;
@@ -459,22 +458,25 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand* command,
   }
 
   if (fpVisManager -> IsValidView ()) {
-    const G4Scene* pScene = fpVisManager -> GetCurrentScene ();
-    G4ViewParameters& vp = fpVisManager -> SetCurrentViewParameters ();
-    vp.SetCurrentTargetPoint (pScene -> GetStandardTargetPoint ());
+    G4ViewParameters vp = viewer->GetViewParameters();
+    const G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+    const G4Scene* scene = sceneHandler->GetScene();
+    vp.SetCurrentTargetPoint (scene->GetStandardTargetPoint ());
     vp.SetZoomFactor (1.);
     vp.SetDolly (0.);
     vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));
     vp.SetUpVector (G4Vector3D (0., 1., 0.));
+    viewer->SetViewParameters(vp);
     G4cout << "Target point reset to centre of scene, "
-           << G4BestUnit (pScene -> GetStandardTargetPoint (), "Length");
+           << G4BestUnit (scene->GetStandardTargetPoint (), "Length");
     G4cout << ".\nZoom factor reset to 1.";
     G4cout << "\nDolly distance reset to 0.";
     G4cout << "\nViewpoint direction reset to +z.";
     G4cout << "\nUp vector reset to +y.";
-    viewer -> SetViewParameters (vp);
     G4cout << "\nViewer \"" << viewer -> GetName () << "\" reset.";
     G4cout << "\nIssue \"/vis/viewer/refresh\" to see effect." << G4endl;
+    // For now...
+    fpVisManager->SetCurrentViewParameters() = vp;
   }
 }
 
