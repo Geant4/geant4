@@ -25,7 +25,9 @@ public:
 public: /*SoINTERNAL*/
   static void initClass();
 protected:
-  //virtual void beginTraversal(SoNode*);
+  virtual void beginTraversal(SoNode*);
+private:
+  void gl2psBegin();
 private:
   SbString fFileName;
   FILE* fFile;
