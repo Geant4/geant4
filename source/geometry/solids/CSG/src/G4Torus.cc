@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.10 2000-10-04 08:13:24 medernac Exp $
+// $Id: G4Torus.cc,v 1.11 2000-10-04 12:50:24 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1234,9 +1234,9 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
               + 4*Rtor2*p.z()*p.z() + (Rtor2-Rmax2)*(Rtor2-Rmax2) ;
    
     //num = SolveBiQuadratic(c,s) ;
-		/* Numerical root research */
-		s[0] = SolveNumeric( p, v, true);
-		num = 1; // There is only one root: the correct one 
+    /* Numerical root research */
+    s[0] = SolveNumeric( p, v, true);
+    num = 1; // There is only one root: the correct one 
 	
 #if DEBUGTORUS
 		G4cout << "G4Torus::DistanceToIn (" << __LINE__ << ") SolveNumeric : " << s[0] << G4endl;
@@ -2399,6 +2399,8 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
     G4cout << "G4Torus::SolveNumeric    theta = " << theta << G4endl;
 #endif 
 
+    if (theta < 0) theta += 2*M_PI;
+    
     
     /*** We have to verify if this root is inside the region between fSPhi and fSPhi + fDPhi ***/
 #if DEBUGTORUS
@@ -2406,7 +2408,7 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	   << " Phi + dPhi = " << fSPhi + fDPhi << G4endl ;
 #endif 
     
-    if ((theta >= fSPhi) && (theta <= (fSPhi + fDPhi))) {
+    if ((theta >= fSPhi - kAngTolerance*0.5) && (theta <= (fSPhi + fDPhi + kAngTolerance*0.5))) {
       /*** If this is the case we return this solution ***/
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    Correct Phi section" << G4endl ;
