@@ -8,7 +8,6 @@
 
 MyRunAction::MyRunAction()
 {
-  runIDcounter = 0;
 }
 
 MyRunAction::~MyRunAction()
@@ -17,8 +16,7 @@ MyRunAction::~MyRunAction()
 
 void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
-  if(runIDcounter==1)
+  if(aRun->GetRunID()==0)
   {
     G4VPersistencyManager* persM 
       = G4VPersistencyManager::GetPersistencyManager();

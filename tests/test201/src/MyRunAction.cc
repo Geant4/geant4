@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyRunAction.cc,v 1.1 1999-01-08 16:35:58 gunter Exp $
+// $Id: MyRunAction.cc,v 1.2 1999-04-22 22:10:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,6 @@ OHistogram MyRunAction::myHisto2D = NULL;
 MyRunAction::MyRunAction()
 {
   timer = new G4Timer;
-  runIDcounter = 0;
 }
 
 MyRunAction::~MyRunAction()
@@ -31,9 +30,8 @@ MyRunAction::~MyRunAction()
   delete timer;
 }
 
-void MyRunAction::BeginOfRunAction(G4Run* aRun)
+void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
   //aRun->transient(true);
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -49,7 +47,7 @@ void MyRunAction::BeginOfRunAction(G4Run* aRun)
   timer->Start();
 }
 
-void MyRunAction::EndOfRunAction(G4Run* aRun)
+void MyRunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 

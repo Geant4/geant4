@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T08RunAction.cc,v 1.2 1999-04-17 07:24:04 kurasige Exp $
+// $Id: T08RunAction.cc,v 1.3 1999-04-22 22:09:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,6 @@
 
 T08RunAction::T08RunAction()
 {
-  runIDcounter = 0;
 }
 
 T08RunAction::~T08RunAction()
@@ -28,8 +27,6 @@ T08RunAction::~T08RunAction()
 
 void T08RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
-   
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
 
   G4UImanager* UI = G4UImanager::GetUIpointer();

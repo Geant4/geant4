@@ -20,7 +20,6 @@ class Tst05RunAction : public G4UserRunAction
 
   private:
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif

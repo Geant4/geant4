@@ -30,7 +30,6 @@ class Tst03RunAction : public G4UserRunAction
   private:
 
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif /*Tst03RunAction_h*/

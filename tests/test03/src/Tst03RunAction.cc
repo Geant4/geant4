@@ -15,7 +15,6 @@
 Tst03RunAction::Tst03RunAction()
 {
   timer = new G4Timer;
-  runIDcounter = 0;
 }
 
 Tst03RunAction::~Tst03RunAction()
@@ -25,8 +24,6 @@ Tst03RunAction::~Tst03RunAction()
 
 void Tst03RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
-
   G4UImanager* UI = G4UImanager::GetUIpointer();
   //UI->ApplyCommand("/event/verbose 1");
   //UI->ApplyCommand("/tracking/verbose 1");

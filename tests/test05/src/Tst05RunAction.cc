@@ -8,7 +8,6 @@
 Tst05RunAction::Tst05RunAction()
 {
   timer = new G4Timer;
-  runIDcounter = 0;
 }
 
 Tst05RunAction::~Tst05RunAction()
@@ -18,8 +17,6 @@ Tst05RunAction::~Tst05RunAction()
 
 void Tst05RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
-
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/event/Verbose 1");
   UI->ApplyCommand("/tracking/Verbose 1");

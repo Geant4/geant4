@@ -1,4 +1,4 @@
-// $Id: Tst10RunAction.cc,v 1.2 1999-04-17 08:01:52 kurasige Exp $
+// $Id: Tst10RunAction.cc,v 1.3 1999-04-22 22:10:05 asaim Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -15,16 +15,14 @@
 
 Tst10RunAction::Tst10RunAction()
 {
-  runIDcounter = 0;
 }
 
 Tst10RunAction::~Tst10RunAction()
 {
 }
 
-void Tst10RunAction::BeginOfRunAction(const G4Run* aRun)
+void Tst10RunAction::BeginOfRunAction(const G4Run* )
 {
-  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
 }
 
 void Tst10RunAction::EndOfRunAction(const G4Run* )
