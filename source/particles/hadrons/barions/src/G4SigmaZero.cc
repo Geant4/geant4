@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaZero.cc,v 1.4 1999-12-15 14:51:00 gunter Exp $
+// $Id: G4SigmaZero.cc,v 1.5 2000-02-27 06:17:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@ G4SigmaZero::G4SigmaZero(
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+   SetParticleSubType("sigma");
  //create Decay Table 
   G4DecayTable*   table = GetDecayTable();
   if (table!=NULL) delete table;
