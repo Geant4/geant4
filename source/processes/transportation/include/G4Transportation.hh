@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.5 2001-11-09 23:16:55 japost Exp $
+// $Id: G4Transportation.hh,v 1.6 2001-11-28 18:27:50 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,6 +124,7 @@ class G4Transportation : public G4VProcess
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
      G4bool               fEnergyChanged;
+     G4bool               fEndGlobalTimeComputed; 
      G4double             fCandidateEndGlobalTime;
 
      G4bool               fParticleIsLooping;
