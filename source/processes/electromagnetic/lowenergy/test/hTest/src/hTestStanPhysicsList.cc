@@ -87,7 +87,9 @@ void hTestStanPhysicsList::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4GammaConversion);    
       
     } else if (particleName == "e-") {
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      G4MultipleScattering* msc = new G4MultipleScattering();
+      msc->SetFacrange(0.1);
+      pmanager->AddProcess(msc, -1, 1,1);
       G4eIonisation* eion = new G4eIonisation();
       eion->SetSubSec(false);
       pmanager->AddProcess(eion,   -1, 2,2);
