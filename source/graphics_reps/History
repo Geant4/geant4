@@ -1,4 +1,4 @@
-$Id: History,v 1.11 1999-10-04 15:18:54 johna Exp $
+$Id: History,v 1.12 1999-11-17 07:45:14 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 1999 Satoshi Tanaka (greps-V00-01-01)
+- Header comments for software reference manual
 
 4th October 1999  John Allison  (greps-V00-01-00)
 - Improved comments in G4Visible.hh.
