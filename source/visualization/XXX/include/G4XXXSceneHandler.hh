@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.9 2002-11-11 18:22:47 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.10 2003-11-12 13:16:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,12 @@ public:
 
   // void BeginModeling();
   // void EndModeling();
+
+  //////////////////////////////////////////////////////////////
+  // Administration functions.
+
+  //void ClearStore ();
+  void ClearTransientStore ();
 
   ////////////////////////////////////////////////////////////////
   // Required...

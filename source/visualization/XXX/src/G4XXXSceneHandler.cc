@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.11 2003-05-30 13:01:26 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.12 2003-11-12 13:16:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -393,4 +393,13 @@ void G4XXXSceneHandler::EstablishSpecials
   pvModel.DefinePointersToWorkingSpace(&fCurrentDepth,
 				       &fpCurrentPV,
 				       &fpCurrentLV);
+}
+
+void G4XXXSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
 }
