@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-05-31 09:16:40 asaim Exp $
+$Id: README,v 1.3 2002-05-02 14:18:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -45,6 +45,25 @@ tracking area and the isolation of the primary muons are examined.
 At the third stage, all particles in the RoI (Region of Interest) along
 the isolated muons are tracked. All these examinations are applied in
 ExN04StackingAction.
-
+  	
+5. How to start
+ 
+- compile and link to generate an executable
+	% cd N04
+	% gmake
+	
+- execute N04 in 'batch' mode from macro files
+	% exampleN04   exampleN04.in
+ 		
+- execute N04 in 'interactive mode' with visualization
+	% exampleN04
+	....
+	Idle> type your commands. For instance:
+	Idle> /run/beamOn 3
+	....
+	Idle> exit
+ 	
+ 	  
+ 	
 
 

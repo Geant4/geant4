@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2001-12-18 17:22:16 gcosmo Exp $
+$Id: History,v 1.21 2002-05-02 14:18:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+May 02, 2002  Michel Maire
+- added tools for interactive session:
+  UItcsh, visualisation of tracks, saving random engine status.
+- the drawing of hits (in EventAction) is temporarilly commented out  
 
 December 18, 2001  Gabriele Cosmo (exampleN04-V04-00-00)
 - ExN04PhysicsList.cc: added call to DumpCutValuesTable().
