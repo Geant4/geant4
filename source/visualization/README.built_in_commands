@@ -97,7 +97,8 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
   default:                                             1
-  Draws a logical volume in its own coordinate system, showing voxels.
+  Draws a logical volume in its own coordinate system, showing voxels and
+  boolean components (if any).
 
 /vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]
   default:                1          m           x       1         0        0        auto          0      0      0     m
@@ -328,7 +329,7 @@ NI /vis/viewer/set/cutawayPlane ...
 /vis/viewer/set/sectionPlane ...
   Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
   e.g., for a y-z plane at x = 1 cm:
-  /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
+  /vis/viewer/set/sectionPlane on 1 0 0 cm 1 0 0
 
 /vis/viewer/set/style w[ireframe]|s[urface]
 
