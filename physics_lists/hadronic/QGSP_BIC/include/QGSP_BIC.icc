@@ -51,23 +51,23 @@ template<class T> TQGSP_BIC<T>::TQGSP_BIC():  T()
   G4cout << "You are using the simulation engine: QGSP_BIC 1.2"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
-  defaultCutValue = 0.7*mm;  
-  SetVerboseLevel(1);
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(1);
 
   // General Physics
-  RegisterPhysics( new GeneralPhysics("general") );
+  this->RegisterPhysics( new GeneralPhysics("general") );
 
   // EM Physics
-  RegisterPhysics( new EMPhysics("standard EM"));
+  this->RegisterPhysics( new EMPhysics("standard EM"));
 
   // Muon Physics
-  RegisterPhysics(  new MuonPhysics("muon"));
+  this->RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron"));
 
   // Ion Physics
-  RegisterPhysics( new IonPhysics("ion"));
+  this->RegisterPhysics( new IonPhysics("ion"));
 
 
 }
@@ -78,13 +78,13 @@ template<class T> TQGSP_BIC<T>::~TQGSP_BIC()
 
 template<class T> void TQGSP_BIC<T>::SetCuts()
 {
-  if (verboseLevel >1){
+  if (this->verboseLevel >1){
     G4cout << "QGSP_BIC::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
 
-  SetCutsWithDefault();   
+  this->SetCutsWithDefault();   
   
   G4VUserPhysicsList::DumpCutValuesTable();  
  

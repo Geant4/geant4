@@ -48,23 +48,23 @@ template<class T> TLHEP_GN<T>::TLHEP_GN():  T()
   G4DataQuestionaire it(photon);
   G4cout << "You are using the simulation engine: LHEP_GN 2.5"<<G4endl;
   G4cout <<G4endl<<G4endl;
-  defaultCutValue = 0.7*mm;  
-  SetVerboseLevel(1);
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(1);
 
   // General Physics
-  RegisterPhysics( new GeneralPhysics("general") );
+  this->RegisterPhysics( new GeneralPhysics("general") );
 
   // EM Physics
-  RegisterPhysics( new EM_GNPhysics("standard EM plus gamma nuclear"));
+  this->RegisterPhysics( new EM_GNPhysics("standard EM plus gamma nuclear"));
 
   // Muon Physics
-  RegisterPhysics(  new MuonPhysics("muon"));
+  this->RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new HadronPhysicsLHEP_GN("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsLHEP_GN("hadron"));
 
   // Ion Physics
-  RegisterPhysics( new IonPhysics("ion"));
+  this->RegisterPhysics( new IonPhysics("ion"));
 
 
 }
@@ -75,13 +75,13 @@ template<class T> TLHEP_GN<T>::~TLHEP_GN()
 
 template<class T> void TLHEP_GN<T>::SetCuts()
 {
-  if (verboseLevel >1){
+  if (this->verboseLevel >1){
     G4cout << "LHEP_GN::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
 
-  SetCutsWithDefault();   
+  this->SetCutsWithDefault();   
  
   G4VUserPhysicsList::DumpCutValuesTable();  
  
