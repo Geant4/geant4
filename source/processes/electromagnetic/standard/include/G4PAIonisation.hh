@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.4 2000-04-25 14:33:02 maire Exp $
+// $Id: G4PAIonisation.hh,v 1.5 2000-07-11 15:11:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,10 +105,13 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
 
-  //    static                                   
     G4double GetLossWithFluct(G4double Step,
                               const G4DynamicParticle *aParticle,
                               G4Material *aMaterial) ;
+
+    G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
+
+  //    static                                   
 
     static G4double GetMaxKineticEnergy() { return HighestKineticEnergy ; } ;
     static G4double GetMinKineticEnergy() { return  LowestKineticEnergy ; } ;
