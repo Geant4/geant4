@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.cc,v 1.12 2000-11-24 09:50:13 gcosmo Exp $
+// $Id: G3toG4BuildTree.cc,v 1.13 2001-01-25 17:41:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
@@ -98,7 +98,8 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 	}
 	
 	// clear this position
-	curVTE->ClearG3PosCopy(i); 
+	curVTE->ClearG3PosCopy(i);
+	i--;
       }
     }
 

@@ -1,7 +1,13 @@
-$Id: History,v 1.38 2000-11-28 12:07:54 gcosmo Exp $
+$Id: History,v 1.39 2001-01-25 17:41:48 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-00-00 25-Jan-2001 G.Cosmo
+- Fixes for report #188:
+  o Fixed bug in G3toG4BuildTree(G3VolTableEntry*, G3VolTableEntry*)
+    when positioning volume copies. Index is now decremented.
+  o Added -DG3G4DEBUG to CPPFLAGS in GNUmakefile.
 
 g3tog4-V02-00-05 28-Nov-2000 G.Cosmo
 - Fixed bug in G3toG4BuildTree::ClearG3PosCopy(G4int). Entry in vector was
