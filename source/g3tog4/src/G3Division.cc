@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.7 2000-11-24 09:50:12 gcosmo Exp $
+// $Id: G3Division.cc,v 1.8 2001-02-14 13:26:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -89,7 +89,7 @@ void G3Division::UpdateVTE()
     
     if (envVTE) {
       // reset mother <-> daughter
-       fMVTE->ReplaceDaughter(fVTE, envVTE);
+      fMVTE->ReplaceDaughter(fVTE, envVTE);
       fVTE->ReplaceMother(fMVTE, envVTE);
       envVTE->AddDaughter(fVTE);
       envVTE->AddMother(fMVTE);
@@ -650,7 +650,23 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
          Rpar[0] = fWidth/2./cm; 
       }
     }
-    else if (shape == "SPHE" || shape == "PARA") {
+    else if (shape == "PARA") {
+      if      ( fIAxis == 1 ) {
+         Rpar[0] = fWidth/2./cm;
+      }	 
+      else if ( Rpar[4] == 0. && Rpar[5] == 0. ) {
+         // only special case for axis 2,3 is supported
+        if ( fIAxis == 2 ) {
+          Rpar[1] = fWidth/2./cm;
+	}  
+  	else if ( fIAxis == 3) {
+          Rpar[2] = fWidth/2./cm;
+	}
+      }	  
+      else    
+         Exception("CreateSolid", shape);
+    }	 
+    else if (shape == "SPHE") {
       Exception("CreateSolid", shape);
     }
     else if ( shape == "PGON" ) {

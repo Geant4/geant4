@@ -1,7 +1,11 @@
-$Id: History,v 1.39 2001-01-25 17:41:48 gcosmo Exp $
+$Id: History,v 1.40 2001-02-14 13:25:57 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-00-01 14-Feb-2001 G.Cosmo
+- Added support for replicated "PARA" shapes in G3Division::CreateSolid(...)
+  (I.Hrivnacova).
 
 g3tog4-V03-00-00 25-Jan-2001 G.Cosmo
 - Fixes for report #188:
