@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.7 2003-02-21 16:04:27 sadilov Exp $
+# $Id: Configure,v 1.8 2003-08-26 20:54:45 sadilov Exp $
 #
-# Generated on Fri Feb 21 17:04:19 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Tue Aug 26 22:48:39 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -234,6 +234,8 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
+g4w_use_step=''
+g4wlib_build_step=''
 lns=''
 c=''
 n=''
@@ -2543,7 +2545,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW1.1
+	g4ledata=$g4install/../G4EMLOW2.2
 	;;
 esac
 
@@ -2620,12 +2622,31 @@ gans=$ans
 	esac
 done
 
-echo " "
+
+clhep_dirs=`find /usr/local/include /usr/include -type d -name CLHEP`
+#echo clhep_dirs=$clhep_dirs
+
+if test "X$clhep_dirs" != "X" ; then
+
+g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
+#echo g4clhep_base_dir_found=$g4clhep_base_dir_found
+
+g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
+#echo g4clhep_base_dir_n=$g4clhep_base_dir_n
+
+n=$[$g4clhep_base_dir_n-2]
+#echo n=$n
+
+g4clhep_base_dir_found=`echo $g4clhep_base_dir_found|cut -d"/" -f1-$n`
+
+	g4clhep_base_dir=$g4clhep_base_dir_found
+else
 case "$g4clhep_base_dir" in
 '')
 	g4clhep_base_dir=/usr/local
 	;;
 esac
+fi
 
 case "$g4clhep_include_dir" in
 '')
@@ -2649,7 +2670,7 @@ esac
 
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed:
+Please, specify where CLHEP is installed (it was found or set by defalt):
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -3536,11 +3557,33 @@ case "$g4vis_none" in
 	;;
 esac
 
+#####################################################################
+ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$ogl_dirs" != "X" ; then
+
+g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+g4ogl_base_dir_n=`echo $g4ogl_base_dir_found |awk -F"/" '{print NF}'`
+#echo g4ogl_base_dir_n=$g4ogl_base_dir_n
+
+n=$[$g4ogl_base_dir_n-2]
+#echo n=$n
+
+g4ogl_base_dir_found=`echo $g4ogl_base_dir_found|cut -d"/" -f1-$n`
+
+	g4vis_oglhome=$g4ogl_base_dir_found
+else
 case "$g4vis_oglhome" in
 '')
-	g4vis_oglhome="/usr"
+	$g4vis_oglhome=/usr
 	;;
 esac
+fi
+
+##########################################################################
 
 case "$g4vis_build_openglwin32_driver" in
 '')
@@ -4110,7 +4153,8 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system:
+Specify the correct path (OGLHOME) where OpenGL is installed in your system
+(it was found or set by defalt):
 EOM`
 
 dflt=$g4vis_oglhome
@@ -4127,7 +4171,7 @@ case "$g4wlib_build_g3tog4" in
 	;;
 esac
 
-case "$g4w_use_g4tog4" in
+case "$g4w_use_g3tog4" in
 '')
 	g4w_use_g3tog4=n
 	;;
@@ -4137,7 +4181,7 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4USE_G3TOG4  
+  G4LIB_BUILD_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
 Do you want to set this variable ?
@@ -4153,11 +4197,53 @@ gans=$ans
 	
 	n*|N*) 
 		g4wlib_build_g3tog4=n
-		g4w_use_g4tog4=n
+		g4w_use_g3tog4=n
 		;;
 	y*|Y*) 
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
+		;;
+	esac
+
+
+echo " "
+case "$g4wlib_build_step" in
+'')
+	g4wlib_build_step=n
+	;;
+esac
+
+case "$g4w_use_step" in
+'')
+	g4w_use_step=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_STEP  
+
+If this variable is set, it will be built STEP module.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4wlib_build_step
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_step=n
+		g4w_use_step=n
+		;;
+	y*|Y*) 
+		g4wlib_build_step=y
+		g4w_use_step=y
 		;;
 	esac
 
@@ -4340,6 +4426,7 @@ g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
+g4w_use_step='$g4w_use_step'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4349,6 +4436,7 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
+g4wlib_build_step='$g4wlib_build_step'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'
