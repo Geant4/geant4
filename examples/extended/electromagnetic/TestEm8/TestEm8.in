@@ -4,46 +4,53 @@
 # It creates the default geometry (simple absorber cylinder )        
 #
 /control/verbose 2
-#
-#control/saveHistory
-#
 /run/verbose 2
+#/tracking/verbose 2
 #
-/run/initialize
 #
-#/calor/setAbsMat Xenon
-#  
-#/calor/setAbsThick  20.0 mm 
-# 
-#/calor/setAbsRad 100.0 mm
+#  select EM PhysicsList
 #
-#/calor/update
+#/testem/phys/addPhysics  g4v52
+#
+/testem/phys/addPhysics  standard
+#
+#/testem/phys/addPhysics model
+#
+/testem/phys/setCuts    1 mm
+#/testem/phys/VertexCuts 0.1 mm
+#/testem/phys/MuonCuts  10.0 mm
+#/testem/stepMax         10 mm
+#
+#/process/eLoss/preciseRange  true
+#/process/eLoss/integral      true
 #
 #  hist file name
 #
-#/plots/sethistName g4.p11
+/plots/sethistName g4.p11
 #
 #  PLOT: energy deposit distribution in absorber
 #
-#/plots/setnbinEn 95
-#/plots/setEnlow 0.0 MeV
-#/plots/setEnhigh 0.1  MeV  
+/plots/setnbinEn 20
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.060  MeV  
 #
-#/calor/cutG 3.0 mm    
-#
-#/calor/cutE 3.0 mm
 #
 /run/initialize
-#/run/dumpCouples
+/run/particle/dumpCutValues
 #
-/gun/particle e-
+#/gun/particle e-
+#
+/gun/particle proton
+#
+#/gun/particle mu-
 # 
-#/gun/energy 200.00 GeV
+/gun/energy 200000.00 MeV
 #
-/gun/energy 9000.0 MeV
+#/gun/energy 200.0 MeV
 #
-/tracking/verbose 0
+#/tracking/verbose 1
 #
+/event/printModulo 100
 /run/beamOn 1000
 #
 #
