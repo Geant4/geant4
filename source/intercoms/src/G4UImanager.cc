@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.26 2002-05-15 06:51:32 asaim Exp $
+// $Id: G4UImanager.cc,v 1.27 2002-12-04 18:30:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -457,14 +457,14 @@ G4bool G4UImanager::Notify(G4ApplicationState requestedState)
   //G4cout << G4StateManager::GetStateManager()->GetStateString(requestedState) << " <--- " << G4StateManager::GetStateManager()->GetStateString(G4StateManager::GetStateManager()->GetPreviousState()) << G4endl;
   if(pauseAtBeginOfEvent)
   {
-    if(requestedState==EventProc &&
-       G4StateManager::GetStateManager()->GetPreviousState()==GeomClosed)
+    if(requestedState==G4State_EventProc &&
+       G4StateManager::GetStateManager()->GetPreviousState()==G4State_GeomClosed)
     { PauseSession("BeginOfEvent"); }
   }
   if(pauseAtEndOfEvent)
   {
-    if(requestedState==GeomClosed &&
-       G4StateManager::GetStateManager()->GetPreviousState()==EventProc)
+    if(requestedState==G4State_GeomClosed &&
+       G4StateManager::GetStateManager()->GetPreviousState()==G4State_EventProc)
     { PauseSession("EndOfEvent"); }
   }
   return true;
