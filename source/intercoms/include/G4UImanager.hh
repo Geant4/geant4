@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.4 1999-12-15 14:50:39 gunter Exp $
+// $Id: G4UImanager.hh,v 1.5 2000-02-14 08:41:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ class G4UImanager
       // command, that particular command cannot be applied.
       void ExecuteMacroFile(G4String fileName);
       //  A macro file defined by the argument will be read by G4UIbatch object.
-      G4int ApplyCommand(char * aCommand);
+      G4int ApplyCommand(const char * aCommand);
       G4int ApplyCommand(G4String aCommand);
       //  These two methods are identical. A command (and parameter(s)) given
       // by the method's argument will be applied. Zero will be returned in 
@@ -88,7 +88,7 @@ class G4UImanager
   public:
   // following three methods will be removed quite soon.
       void Interact();
-      void Interact(char * promptCharacters);
+      void Interact(const char * promptCharacters);
       void Interact(G4String promptCharacters);
 
   private:

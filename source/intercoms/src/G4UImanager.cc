@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.4 1999-12-15 14:50:42 gunter Exp $
+// $Id: G4UImanager.cc,v 1.5 2000-02-14 08:41:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -194,7 +194,7 @@ void G4UImanager::ExecuteMacroFile(G4String fileName)
   session = previousSession;
 }
 
-int G4UImanager::ApplyCommand(char * aCommand)
+int G4UImanager::ApplyCommand(const char * aCommand)
 {
   G4String theCommand = aCommand;
   return ApplyCommand(theCommand);
@@ -293,7 +293,7 @@ void G4UImanager::Interact()
   Interact(G4String("G4> "));
 }
 
-void G4UImanager::Interact(char * pC)
+void G4UImanager::Interact(const char * pC)
 {
   G4String cc = pC;
   Interact(cc);
