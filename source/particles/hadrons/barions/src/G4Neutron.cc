@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Neutron.cc,v 1.4 2000-02-27 06:17:04 kurasige Exp $
+// $Id: G4Neutron.cc,v 1.5 2000-10-17 12:24:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,7 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
+//      add neutron life time    Oct 17 2000 
 // **********************************************************************
 #include "g4std/fstream"
 #include "g4std/iomanip"
@@ -60,7 +61,7 @@ G4Neutron G4Neutron::theNeutron(
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
-		 true,            -1.0,          NULL
+		 true,    886.7*second,          NULL
 );
 
 G4Neutron* G4Neutron::NeutronDefinition(){return &theNeutron;}
