@@ -21,19 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.hh,v 1.1 2005-02-23 10:53:53 japost Exp $
+// $Id: G4VNestedParameterisation.hh,v 1.2 2005-03-03 17:07:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParamterisation
 //
 // Class description:
 //
-// Parameterisation class, that can use parent volume information 
-// eg to compute the transformation and the dimensions of parameterised 
-// volumes, given a replication number and parent volume information.
+// Base class for parameterisations that use information from the parent volume  
+//  to compute the material of a copy/instance of this volume. 
+//  This is in addition to using the current replication number.
+// 
+// Notes:
+//  - Such a volume can be nested inside a placement volume or a parameterised  
+//    volume.
+//  - The user can modify the solid type, size or transformation using only
+//    the replication number of this parameterised volume.
+//    He/she is NOT allowed to change these attributes using information of
+//    parent volumes - otherwise incorrect results will occur.
+//  Also note that the usual restrictions apply: 
+//   - the mother volume, in which these copies are placed, must always be
+//     of the same dimensions
 
 // History:
-// 04 Feb 05 J.Apostolakis Re-enabling the parameterisation using parent info
+// 24 Feb 05 J.Apostolakis First created version.
 // --------------------------------------------------------------------
 #ifndef G4VNESTEDPARAMETERISATION_HH
 #define G4VNESTEDPARAMETERISATION_HH
@@ -64,40 +75,27 @@ class G4Hype;
 class G4VNestedParameterisation: public G4VPVParameterisation
 {
   public:
-    // Key method, required
+    // Mandatory method, required as reason for this class
+    virtual G4Material* ComputeMaterial(const G4int repNo, 
+					G4VPhysicalVolume *currentVol,
+					const G4VTouchable *parentTouch) = 0;
+    // Standard methods 
     virtual void ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currentPV, 
-				       const G4VTouchable* parentTouch) const = 0;
-
-    // Optional methods, possibly to be overridden by concrete parameterisation
-    virtual G4VSolid*   ComputeSolid(const G4int, 
-				     G4VPhysicalVolume  *pvol,  // currentVol
-				     const G4VTouchable *);     // parentTouch
-    virtual G4Material* ComputeMaterial(const G4int, 
-					G4VPhysicalVolume *,     // currentVol
-					const G4VTouchable *);   // parentTouch
-
-    // Implements the following methods, in terms of the above 
-    //  providing 're-interpretation' to add information of parent
-    virtual void ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currPhysTouch ) const;
+                                       G4VPhysicalVolume *currentPV ) const = 0;
 
     virtual G4VSolid*   ComputeSolid(const G4int no, G4VPhysicalVolume *thisVol);
 
+    // Implements the following method, in terms of the above 
+    //  providing 're-interpretation' to add information of parent
+
     virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *);
 
-    virtual void ComputeDimensions(G4Box &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const;
-
-    virtual void ComputeDimensions(G4Box &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *,
-				   const G4VTouchable *     ) const {}
-
-    // Similar 're-interpretation' could be done 
-    //     of the ComputeDimensions methods below
+    // Additional standard Parameterisation methods
 				       
+    virtual void ComputeDimensions(G4Box &,
+                                   const G4int,
+				   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Tubs &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
@@ -143,14 +141,15 @@ class G4VNestedParameterisation: public G4VPVParameterisation
                                    const G4VPhysicalVolume *) const {}
 
   private: 
-    void ReportErrorInTouchable(const G4String method) const; 
+    void ReportErrorInTouchable(const G4String method, 
+				const G4VPhysicalVolume* thisVol) const; 
 
     G4VPhysicalVolume*  ObtainParts( G4VPhysicalVolume* thisVolPlus,  // PhysicalTouchable
 				     const G4String method, 
-				     const G4VTouchable* pTouchableParent) const;
+				     const G4VTouchable** pPtrTouchableParent) const;
     const G4VPhysicalVolume*  ObtainParts( const G4VPhysicalVolume* thisVolPlus,  // PhysicalTouchable
 				     const G4String method, 
-				     const G4VTouchable* pTouchableParent) const;
+				     const G4VTouchable** pPtrTouchableParent) const;
        //  Demux the expected PhysicalTouchable into 
        //    - pointer to this physical volume
        //    - pointer to parent touchable
