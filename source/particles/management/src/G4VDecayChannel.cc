@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.9 2001-05-18 15:16:42 gcosmo Exp $
+// $Id: G4VDecayChannel.cc,v 1.10 2001-07-10 03:18:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -312,7 +312,7 @@ void G4VDecayChannel::FillDaughters()
   if (sumofdaughtermass > parentmass) {
     // !!! illegal mass  !!!
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << "G4VDecayChannel::FillDaughters ";
       G4cout << "    Energy/Momentum conserevation breaks " <<G4endl;
       G4cout << "    parent:" << *parent_name;
@@ -323,9 +323,6 @@ void G4VDecayChannel::FillDaughters()
       }
     }
 #endif
-    if ( sumofdaughtermass > parentmass+parent->GetPDGWidth() ) {
-      G4Exception("G4VDecayChannel::FillDaughters");
-    }
   }
 }
 

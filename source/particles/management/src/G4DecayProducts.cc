@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.7 2001-05-18 15:16:41 gcosmo Exp $
+// $Id: G4DecayProducts.cc,v 1.8 2001-07-10 03:18:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,16 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts &right)
   //copy daughters (Deep Copy)
   for (G4int index=0; index < right.numberOfProducts; index++)
   {
-    PushProducts( new G4DynamicParticle(*right.theProductVector[index]) );
+    G4DynamicParticle* daughter = right.theProductVector[index];
+    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+    G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+
+    if (pPreAssigned) {
+      G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+      pDaughter->SetPreAssignedDecayProducts(pPA);
+    }
+
+    PushProducts( pDaughter );
   }
 }
 
