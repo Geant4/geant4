@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.69 2001-10-26 09:34:33 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.70 2001-10-26 09:49:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -331,16 +331,35 @@ void G4LowEnergyIonisation::BuildLossTable(
 
           G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
+          G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
+                                                             lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
-          eAverage   += e * cs * theAtomicNumDensityVector[iel];
-          cross      += cs * theAtomicNumDensityVector[iel];
+          eAverage   += e * cs * pro * theAtomicNumDensityVector[iel];
+          cross      += cs * pro * theAtomicNumDensityVector[iel];
+          if(verboseLevel > 1) {
+            G4cout << "Z= " << Z
+                   << " shell= " << n
+                   << " E(keV)= " << lowEdgeEnergy/keV
+                   << " Eav(keV)= " << e/keV
+                   << " pro= " << pro
+                   << " cs= " << cs
+                   << G4endl;
+          }
 	}
 
-        if(eAverage > 0.) cross /= eAverage;
-        else              cross  = 0.;
+        G4double coeff = 0.0;
+        if(eAverage > 0.) coeff = cross/eAverage;
+
+        if(verboseLevel > 1) {
+            G4cout << "Ksi Coefficient for Z= " << Z
+                   << " E(keV)= " << lowEdgeEnergy/keV
+                   << " Eav(keV)= " << eAverage/keV
+                   << " coeff= " << coeff
+                   << G4endl;
+        }
 
         energy->push_back(lowEdgeEnergy);
-        ksi->push_back(cross);
+        ksi->push_back(coeff);
       }
       interp = new G4LogLogInterpolation();
       G4VEMDataSet* set = new G4EMDataSet(Z,energy,ksi,interp,1.,1.);
