@@ -27,9 +27,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserEventAction.hh"
-#include "G4Event.hh"
-#include "hTestRunAction.hh"
 #include "hTestDetectorConstruction.hh"
+#include "G4Event.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,32 +37,21 @@ class hTestEventAction : public G4UserEventAction
 {
 public: // Without description
 
-    hTestEventAction(hTestRunAction*, hTestDetectorConstruction*);
+    hTestEventAction(const hTestDetectorConstruction*);
    ~hTestEventAction();
 
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
     inline void SetDrawFlag(G4String val)  {drawFlag = val;};
-    inline G4int GetVerbose() const {return verbose;};
     inline G4int GetEventNo() const {return nEvt;};
-    inline void AddEnergy(G4double, G4int);
-    inline void AddBackEnergy(G4double de) {backEnergy += de;};
-    inline void AddLeakEnergy(G4double de) {leakEnergy += de;};
     
   private:
 
-    G4std::vector<G4double> energy;
-
-    hTestRunAction* theRun;
-    hTestDetectorConstruction* theDet;
-    G4int verbose;
+    const hTestDetectorConstruction* theDet;
     G4int nEvt;
-    G4int numAbs;
-
+    G4int verbose;
     G4String drawFlag;
-    G4double backEnergy;
-    G4double leakEnergy;
 };
 
 #endif

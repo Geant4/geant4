@@ -27,22 +27,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserRunAction.hh"
-#include "hTestDetectorConstruction.hh"
 #include "G4Run.hh"
 #include "globals.hh"
-#include "G4Proton.hh"
-#include "G4Alpha.hh"
-#include "G4IonC12.hh"
-#include "G4IonAr40.hh"
-#include "G4IonFe56.hh"
-#include "G4Electron.hh"
-#include "g4std/iostream"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class HepTupleManager;
-class HepTuple;
-class HepHistogram;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,7 +36,7 @@ class hTestRunAction : public G4UserRunAction
 {
 public: // Without description
 
-    hTestRunAction(hTestDetectorConstruction*);
+    hTestRunAction();
    ~hTestRunAction();
 
 public: // With description
@@ -61,33 +47,6 @@ public: // With description
     void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
-public: // Without description
-
-    void SethistName(G4String name) {histName = name;};
-    void bookHisto();
-    inline HepTuple* GetNtuple() const {return ntup;};
-    void SaveToTuple(G4String, G4double);
-    void SaveToTuple(G4String, G4double, G4double);
-    void SaveEvent();
-    void AddEnergy(G4double, G4double);
-    void AddEndPoint(G4double);
-    inline void SetVerbose(G4int val) {verbose = val;};
-    inline G4int GetVerbose() const {return verbose;};
-    inline void SetHistoNumber(G4int val) {nHisto = val;};
-
-  private:
-
-    hTestDetectorConstruction* theDet;
-
-    G4String histName ;
-    G4std::vector<HepHistogram*> histo;
-    HepTupleManager* hbookManager;
-    HepTuple* ntup;
-    G4int nHisto;
-    G4int verbose; 
-    G4double zend;
-    G4double zend2;
-    G4double zEvt;
 };
 
 #endif

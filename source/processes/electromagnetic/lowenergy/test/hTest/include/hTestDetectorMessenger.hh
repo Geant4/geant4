@@ -48,6 +48,7 @@ public: // Without description
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
+
     hTestDetectorConstruction* hDet;
     
     G4UIdirectory*             hTestdetDir;
@@ -71,6 +72,7 @@ public: // Without description
     G4UIcmdWithAnInteger*      nhistCmd;
     G4UIcmdWithAnInteger*      nDebugSCmd;
     G4UIcmdWithAnInteger*      nDebugECmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

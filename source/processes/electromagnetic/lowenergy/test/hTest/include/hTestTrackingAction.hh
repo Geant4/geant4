@@ -17,7 +17,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "hTestRunAction.hh"
+#include "hTestHisto.hh"
 #include "G4UserTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -26,15 +26,15 @@ class hTestTrackingAction : public G4UserTrackingAction
 {
 
   public:
-    hTestTrackingAction(hTestRunAction*);
+    hTestTrackingAction();
     ~hTestTrackingAction();
 
     void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*) {;};
+    void PostUserTrackingAction(const G4Track*) {};
 
   private:
 
-    hTestRunAction* theRun;
+    hTestHisto* theHisto;
 
 };
 

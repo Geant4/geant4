@@ -24,8 +24,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestTrackingAction::hTestTrackingAction(hTestRunAction* run):
-  theRun(run)
+hTestTrackingAction::hTestTrackingAction():
+  theHisto(hTestHisto::GetPointer())
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,7 +38,7 @@ hTestTrackingAction::~hTestTrackingAction()
 void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
 
-  if(1 < theRun->GetVerbose()) {
+  if(1 < theHisto->GetVerbose()) {
     G4cout << "hTestTrackingAction: Next track #" 
            << aTrack->GetTrackID() << G4endl;
   }
@@ -51,25 +51,25 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   if(primary) {
 
     G4double kinE = aTrack->GetKineticEnergy();
-    theRun->SaveToTuple("TKIN", kinE/MeV);      
+    theHisto->SaveToTuple("TKIN", kinE/MeV);      
 
     G4ParticleDefinition* particle = aTrack->GetDefinition();
 
     G4double mass = 0.0;
     if(particle) {
       mass = particle->GetPDGMass();
-      theRun->SaveToTuple("MASS", mass/MeV);      
-      theRun->SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);      
+      theHisto->SaveToTuple("MASS", mass/MeV);      
+      theHisto->SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);      
     }
 
     G4ThreeVector pos = aTrack->GetPosition();
     G4ThreeVector dir = aTrack->GetMomentumDirection();
-    theRun->SaveToTuple("X0",(pos.x())/mm);
-    theRun->SaveToTuple("Y0",(pos.y())/mm);
-    theRun->SaveToTuple("Z0",(pos.z())/mm);
+    theHisto->SaveToTuple("X0",(pos.x())/mm);
+    theHisto->SaveToTuple("Y0",(pos.y())/mm);
+    theHisto->SaveToTuple("Z0",(pos.z())/mm);
   
 
-    if(1 < theRun->GetVerbose()) {
+    if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestTrackingAction: kinE(MeV)= " << kinE/MeV
            << "; m(MeV)= " << mass/MeV   
            << "; pos= " << pos << ";  dir= " << dir << G4endl;

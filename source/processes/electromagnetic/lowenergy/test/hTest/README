@@ -1,32 +1,51 @@
 ====================================================================== 
-Energy Electromagnetic Physics: hTest (aka TestEm6, TestP)
+Energy Electromagnetic Physics: hTest 
 ======================================================================
 
 Integration and physics test for hadrons and ions
 
-Authors: Vladimir Ivanchenko and Stephane Chauvie
+Authors: Vladimir Ivanchenko 
 
 ======================================================================
 
 ---- Scope
 
 ---- What it does
+     Simulation of energy deposition in absorber which consist
+     from N slices of defined material.
 
 ---- Description of the input
+     Input is done by the UI interface. additional UI commands
+     are defined in the directory "/hTest/". The list of this
+     commands can be accessed, for example, in the interactive 
+     session.
 
 ---- Description of the output
 	Text output
+           The range of particle in absorber and strugling
+           are printed out
 	Histograms
+           Currently the only 1 histoggramm Energy deposition
+           versus coordinate is booked.
 	Ntuples
+           Some information (particle mass, enery, range..) are
+           saved in ntuple.
 	Other
 
 ---- Location of the reference output
+     for 3 standard input files there are 4 reference output files
+     air.out, water.out, gaas.out, mylar.out
 
 ---- Macros
+     air.mac, water.mac, gaas.mac, gaas1, mylar.mac - 3 standard input files
 
 ---- Other files required
 
 ---- How to run it
+     hTest air.mac 
+     hTest water.mac
+     hTest gaas.mac gaas1.mac
+     hTest mylar.mac
 
 ---- Contactperson
 

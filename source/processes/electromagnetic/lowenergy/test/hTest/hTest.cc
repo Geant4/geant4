@@ -33,10 +33,9 @@
 #include "hTestDetectorConstruction.hh"
 #include "hTestPhysicsList.hh"
 #include "hTestPrimaryGeneratorAction.hh"
-#include "hTestRunAction.hh"
 #include "hTestEventAction.hh"
 #include "hTestTrackingAction.hh"
-#include "hTestSteppingAction.hh"
+#include "hTestRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,27 +69,21 @@ int main(int argc,char** argv) {
  
   // set user action classes
   runManager->SetUserAction(new hTestPrimaryGeneratorAction(det));
-  hTestRunAction* run = new hTestRunAction(det);
-  runManager->SetUserAction(run);
-  if(verbose >0) G4cout << "RunAction is defined" << G4endl;
+  if(verbose >0) G4cout << "hTestPrimaryGeneratorAction is defined" << G4endl;
 
-  hTestEventAction* event = new hTestEventAction(run,det);
+  runManager->SetUserAction(new hTestRunAction());
+  if(verbose >0) G4cout << "hTestRunAction is defined" << G4endl;
+
+  hTestEventAction* event = new hTestEventAction(det);
   runManager->SetUserAction(event);
   if(verbose >0) G4cout << "EventAction is defined" << G4endl;
 
-  runManager->SetUserAction(new hTestTrackingAction(run));
+  runManager->SetUserAction(new hTestTrackingAction());
   if(verbose >0) G4cout << "TrackingAction is defined" << G4endl;
-  runManager->SetUserAction(new hTestSteppingAction(run,event,det));
-  if(verbose >0) G4cout << "SteppingAction is defined" << G4endl;
   
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
-  if(1 < verbose) {
-    UI->ListCommands("/run/");
-    UI->ListCommands("/gun/");
-    UI->ListCommands("/hTest/");
-  }
-     
+  if(1 < verbose) UI->ListCommands("/hTest/");
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
@@ -117,11 +110,14 @@ int main(int argc,char** argv) {
        G4cout << "Start event loop for " << det->GetNumberOfEvents() 
               << " events" << G4endl;
      }
+
      runManager->BeamOn(det->GetNumberOfEvents());
 
      // next file
-     if(verbose >0) G4cout << "Second mac file is applied" << G4endl; 
-     if(argc==3) UI->ApplyCommand(command+argv[2]);
+     if(argc==3) {
+       if(verbose >0) G4cout << "Second mac file is applied" << G4endl; 
+       UI->ApplyCommand(command+argv[2]);
+     }
     }
     
   // job termination

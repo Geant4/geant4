@@ -30,7 +30,7 @@ class hTestPhysicsListMessenger;
 class hTestPhysicsList: public G4VUserPhysicsList
 {
 public: // Without description
-    hTestPhysicsList(hTestDetectorConstruction*);
+    hTestPhysicsList(const hTestDetectorConstruction*);
    ~hTestPhysicsList();
 
 public: // Without description
@@ -67,7 +67,7 @@ private:
     
   private:
 
-    hTestDetectorConstruction* pDet;
+    const hTestDetectorConstruction* pDet;
     hTestPhysicsListMessenger* theMessenger;
     hTestVEMPhysicsList* theEMList;
     hTestVHadronPhysicsList* theHadList;

@@ -48,7 +48,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p):
+hTestPhysicsList::hTestPhysicsList(const hTestDetectorConstruction* p):
   pDet(p),
   physicsIsDefined(false)
 {

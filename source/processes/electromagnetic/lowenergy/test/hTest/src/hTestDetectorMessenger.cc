@@ -24,7 +24,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "hTestDetectorMessenger.hh"
-
 #include "hTestDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
@@ -212,7 +211,7 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == ZMagFieldCmd )
    { hDet->SetMagField(ZMagFieldCmd->GetNewDoubleValue(newValue),3);}
 
-  if( command == HistoCmd )
+  if( command == HistoCmd ) 
    { hDet->SetHistoName(newValue);}
 
   if( command == NumOfEvt )

@@ -25,6 +25,7 @@
 #include "hTestDetectorMessenger.hh"
 #include "hTestEventAction.hh"
 #include "hTestCalorimeterSD.hh"
+#include "hTestHisto.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -281,7 +282,7 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   // Sensitive Detectors: Absorber 
   //
 
-  calorimeterSD = new hTestCalorimeterSD("hTest",this);
+  calorimeterSD = new hTestCalorimeterSD("hTest");
   (G4SDManager::GetSDMpointer())->AddNewDetector( calorimeterSD );
   logicAbs->SetSensitiveDetector(calorimeterSD);
 
@@ -409,6 +410,11 @@ void hTestDetectorConstruction::ComputeGeomParameters()
      
   if(WorldSizeZ < AbsorberThickness*NumberOfAbsorbers)
      WorldSizeZ = AbsorberThickness*NumberOfAbsorbers + 1.0*mm;
+
+  (hTestHisto::GetPointer())->SetNumberOfAbsorbers(NumberOfAbsorbers);
+  (hTestHisto::GetPointer())->SetAbsorberThickness(AbsorberThickness);
+  (hTestHisto::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
+  (hTestHisto::GetPointer())->SetHistoName(histoName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

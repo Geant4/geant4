@@ -13,40 +13,44 @@ hTestPrimaryGeneratorAction is defined
 EventAction is defined
 TrackingAction is defined
 UI interface is started
-#=======================================================
-# Macro file "water.mac" for the Water test by hTest.cc
-# 10.04.01 V.Ivanchenko
-#======================================================= 
-/run/verbose               2
-/step/verbose              0
-/tracking/verbose          0
-/stepping/verbose          0
-/event/verbose             0
-/hTest/verbose             0
+#================================================
+# Macro file for the Air test of "hTest.cc"
+#         10.04.01 V.Ivanchneko
+#================================================ 
+/run/verbose 2
+/step/verbose 0
+/tracking/verbose 0
+/stepping/verbose 0
+/event/verbose 0
+/hTest/verbose 0
 #
 /hTest/physics/cutGamma    1.0 cm
 /hTest/physics/cutElectron 1.0 mm
 /hTest/physics/MaxStep     1.0 mm
 hTestPhysicsList: MaxChargedStep = 1 mm
-/hTest/physics/EMList      LowEnergy
-#/hTest/physics/EMList      Standard
+#/hTest/physics/EMList      LowEnergy
+/hTest/physics/EMList      Standard
+HsPhysicsList: <Standard> EMPhysicsList is set
 /hTest/physics/HadronList  LowEnergy
 HsPhysicsList: <LowEnergy> HadronicPhysicsList is set
-/hTest/AbsorberMaterial    Water
-/hTest/AbsorberThick       1.0 mm
-/hTest/AbsorberXY          20.0 cm
-/hTest/NumberOfAbsorbers   300
+/hTest/AbsorberMaterial    Air
 /hTest/WorldMaterial       Vacuum
-/hTest/numberAbsToSave     0
-/hTest/HistoName           water.paw 
+/hTest/HistoName           air.paw 
 /hTest/NumberOfEvents      1000
-/hTest/nFirstEventToDebug -1
-/hTest/nLastEventToDebug  -1
-/hTest/gun/sigmaE          0.9 MeV
-hTestPrimaryGeneratorMessenger: O'K 
 #
-/gun/particle              proton
-/gun/energy                175 MeV
+#/gun/particle e-
+#/gun/particle gamma
+#/gun/particle proton
+/gun/particle alpha
+#/gun/particle triton
+#/gun/particle IonC12
+/gun/energy 5.0 MeV
+#/gun/energy 0.001 MeV
+#/gun/energy 175.0 MeV
+#/gun/energy 360.0 MeV
+#/gun/energy 3240.0 MeV
+#
+#/run/beamOn 10
 
 Start initialisation
 userDetector->Construct() start.
@@ -116,134 +120,42 @@ userDetector->Construct() start.
    --->  Element: Vacuum    Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
-The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 2e+02 mm
-The ABSORBER is made of 300 items of 1 mm of Water. The transverse size (XY) is 2e+02 mm
+The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 1e+02 mm
+The ABSORBER is made of 300 items of 1 mm of Air. The transverse size (XY) is 1e+02 mm
 physicsList->Construct() start.
-LowEnergy Electromagnetic PhysicsList is initilized
-LowE EM processes for GenericIon
-LowE GenericIon
-LowE EM processes for He3
-LowE He3
-LowE EM processes for IonAr40
-LowE IonAr40
-LowE EM processes for IonC12
-LowE IonC12
-LowE EM processes for IonFe56
-LowE IonFe56
-LowE EM processes for alpha
-LowE alpha
-LowE EM processes for anti_kaon0
-LowE EM processes for anti_lambda
-LowE EM processes for anti_neutron
-LowE EM processes for anti_nu_e
-LowE EM processes for anti_nu_mu
-LowE EM processes for anti_omega-
-LowE EM processes for anti_proton
-LowE anti_proton
-LowE EM processes for anti_sigma+
-LowE EM processes for anti_sigma-
-LowE EM processes for anti_sigma0
-LowE EM processes for anti_xi-
-LowE EM processes for anti_xi0
-LowE EM processes for chargedgeantino
-LowE EM processes for deuteron
-LowE deuteron
-LowE EM processes for e+
-LowE e+
-LowE EM processes for e-
-LowE e-
->>>>>>>>> New G4LowEnergyIonisation 0x8932e40
-LowE EM processes for eta
-LowE EM processes for eta_prime
-LowE EM processes for gamma
-LowE gamma
-LowE EM processes for geantino
-LowE EM processes for kaon+
-LowE kaon+
-LowE EM processes for kaon-
-LowE kaon-
-LowE EM processes for kaon0
-LowE EM processes for kaon0L
-LowE EM processes for kaon0S
-LowE EM processes for lambda
-LowE EM processes for mu+
-LowE mu+
+Standard Electromagnetic PhysicsList is initilized
 MuonMinusCaptureAtRest is created 
-LowE EM processes for mu-
-LowE mu-
 MuonMinusCaptureAtRest is created 
-LowE EM processes for neutron
-LowE EM processes for nu_e
-LowE EM processes for nu_mu
-LowE EM processes for omega-
-LowE EM processes for pi+
-LowE pi+
-LowE EM processes for pi-
-LowE pi-
-LowE EM processes for pi0
-LowE EM processes for proton
-LowE proton
-LowE EM processes for sigma+
-LowE sigma+
-LowE EM processes for sigma-
-LowE sigma-
-LowE EM processes for sigma0
-LowE EM processes for triton
-LowE triton
-LowE EM processes for xi-
-LowE EM processes for xi0
 LowEnergy Hadronic PhysicsList is initilized
 physicsList->setCut() start.
 hTestPhysicsList: Set cuts for all particles 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
-*** LEion using Tcut =0.47
-*** LEion using Tcut =0.6
-*** LEion using Tcut =0.52
-*** LEion using Tcut =0.55
-*** LEion using Tcut =0.34
-*** LEion using Tcut =1.3
-*** LEion using Tcut =1.4
-*** LEion using Tcut =2.3
-*** LEion using Tcut =1.4
-*** LEion using Tcut =0.35
-*** LEion using Tcut =0.00012
-*** LEion using Tcut =0.57
-*** LEion using Tcut =0.87
-*** LEion using Tcut =0.22
-*** LEion using Tcut =0.69
-*** LEion using Tcut =0.00028
-*** LEion using Tcut =0.43
-*** LEion using Tcut =1e-05
 
-LowEnergyIoni:  Low energy ionisation code with implementation of the continuous dE/dx part.
- At present it can be used for electrons  in the energy range [250eV,100GeV]
- the process must work with G4LowEnergyBremsstrahlung
-*** LE Bremsstrahlung using Gamma Tcut = 0.0038 for material Beryllium
-*** LE Bremsstrahlung using Gamma Tcut = 0.02 for material Aluminum
-*** LE Bremsstrahlung using Gamma Tcut = 0.0075 for material Carbon
-*** LE Bremsstrahlung using Gamma Tcut = 0.021 for material Silicon
-*** LE Bremsstrahlung using Gamma Tcut = 0.019 for material liquidArgon
-*** LE Bremsstrahlung using Gamma Tcut = 0.061 for material Iron
-*** LE Bremsstrahlung using Gamma Tcut = 0.07 for material Copper
-*** LE Bremsstrahlung using Gamma Tcut = 0.38 for material Gold
-*** LE Bremsstrahlung using Gamma Tcut = 0.28 for material Lead
-*** LE Bremsstrahlung using Gamma Tcut = 0.0077 for material Water
-*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Methane
-*** LE Bremsstrahlung using Gamma Tcut = 0.0079 for material Graphite
-*** LE Bremsstrahlung using Gamma Tcut = 0.064 for material GaAs
-*** LE Bremsstrahlung using Gamma Tcut = 0.0039 for material Ethane
-*** LE Bremsstrahlung using Gamma Tcut = 0.1 for material CsI
-*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Air
-*** LE Bremsstrahlung using Gamma Tcut = 0.0075 for material Mylar
-*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Vacuum
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-LowEnBrem:  Total cross sections from EEDL database,Gamma energy sampled from a parametrised formula.Implementation of the continuous dE/dx part.
- At present it can be used for electrons  in the energy range [250eV,100GeV]
- the process must work with G4LowEnergyIonisation
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -272,20 +184,10 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
 
-hLowEIoni:    Knock-on electron cross sections . 
-        Good description above the mean excitation energy.
-        Delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 1e+02 TeV  in 200 bins.
-        Electronic stopping power model is  ICRU_R49p
-        from 1 keV  to 2 MeV .
-
-        Parametrisation model for antiprotons is  ICRU_R49p
-        from 50 keV  to 2 MeV .
-        Parametrization of the Barkas effect is switched on.
-        Nuclear stopping power model is ICRU_R49
-           material       min.delta energy(keV) 
-
-Vacuum          0.021
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 ============= The cut Energy ==============================
                       gamma            e-           
 Cut in range                  1 cm             1 mm
@@ -310,16 +212,16 @@ Cut in energy
    Vacuum                           10 eV            10 eV
 ===================================================
 Start event loop for 1000 events
-hTestHisto: Histograms will be saved to the file <water.paw>
+hTestHisto: Histograms will be saved to the file <air.paw>
 Start closing geometry.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=23s Real=23s Sys=0.21s
+  User=18s Real=18s Sys=0.14s
 hTestHisto: End of run actions are started
 ========================================================
-Range(mm)= 220.5; Stragling(mm)= 62.36 +- 2
+Range(mm)= 36.17; Stragling(mm)= 0.3345 +- 0.0075
 ========================================================
 Histograms and Ntuples are saved
 runManager will be deleted

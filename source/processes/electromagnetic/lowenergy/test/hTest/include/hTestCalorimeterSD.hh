@@ -27,11 +27,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VSensitiveDetector.hh"
-#include "hTestEventAction.hh"
-#include "hTestDetectorConstruction.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
+#include "hTestHisto.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -40,7 +39,7 @@ class hTestCalorimeterSD : public G4VSensitiveDetector
 {
 public: // Without description
   
-      hTestCalorimeterSD(G4String, hTestDetectorConstruction*);
+      hTestCalorimeterSD(G4String);
      ~hTestCalorimeterSD();
 
       void Initialize(G4HCofThisEvent*);
@@ -51,9 +50,14 @@ public: // Without description
 
   private:
   
-      hTestDetectorConstruction* theDet;
-      hTestEventAction* theEvent;
-      G4int verbose;
+      hTestHisto* theHisto;
+      G4int evno;
+      G4int evnOld;
+      G4int trIDold;
+      G4std::vector<G4double> energy;
+      G4int numAbs;
+      G4double backEnergy;
+      G4double leakEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

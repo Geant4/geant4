@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (06-Apr-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Detector Construction is defined
@@ -9,10 +9,10 @@ HsPhysicsList: <none> HadronicPhysicsList is set
 Physics List is defined
 User actions will be initialized
 hTestPrimaryGeneratorMessenger: Construct 
-RunAction is defined
+hTestPrimaryGeneratorAction is defined
+hTestRunAction is defined
 EventAction is defined
 TrackingAction is defined
-SteppingAction is defined
 UI interface is started
 #=======================================================
 # Macro file "gaas.mac" for the GaAs test by hTest.cc
@@ -115,20 +115,78 @@ The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 1e+
 The ABSORBER is made of 60 items of 0.001 mm of GaAs. The transverse size (XY) is 1e+02 mm
 physicsList->Construct() start.
 LowEnergy Electromagnetic PhysicsList is initilized
-Ionic EM processes for IonAr40
-Ionic EM processes for IonC12
-Ionic EM processes for IonFe56
-Ionic EM processes for alpha
-Hadronic EM processes for anti_proton
-Ionic EM processes for deuteron
-Hadronic EM processes for kaon+
-Hadronic EM processes for kaon-
+LowE EM processes for GenericIon
+LowE GenericIon
+LowE EM processes for He3
+LowE He3
+LowE EM processes for IonAr40
+LowE IonAr40
+LowE EM processes for IonC12
+LowE IonC12
+LowE EM processes for IonFe56
+LowE IonFe56
+LowE EM processes for alpha
+LowE alpha
+LowE EM processes for anti_kaon0
+LowE EM processes for anti_lambda
+LowE EM processes for anti_neutron
+LowE EM processes for anti_nu_e
+LowE EM processes for anti_nu_mu
+LowE EM processes for anti_omega-
+LowE EM processes for anti_proton
+LowE anti_proton
+LowE EM processes for anti_sigma+
+LowE EM processes for anti_sigma-
+LowE EM processes for anti_sigma0
+LowE EM processes for anti_xi-
+LowE EM processes for anti_xi0
+LowE EM processes for chargedgeantino
+LowE EM processes for deuteron
+LowE deuteron
+LowE EM processes for e+
+LowE e+
+LowE EM processes for e-
+LowE e-
+>>>>>>>>> New G4LowEnergyIonisation 0x892ba40
+LowE EM processes for eta
+LowE EM processes for eta_prime
+LowE EM processes for gamma
+LowE gamma
+LowE EM processes for geantino
+LowE EM processes for kaon+
+LowE kaon+
+LowE EM processes for kaon-
+LowE kaon-
+LowE EM processes for kaon0
+LowE EM processes for kaon0L
+LowE EM processes for kaon0S
+LowE EM processes for lambda
+LowE EM processes for mu+
+LowE mu+
 MuonMinusCaptureAtRest is created 
+LowE EM processes for mu-
+LowE mu-
 MuonMinusCaptureAtRest is created 
-Hadronic EM processes for pi+
-Hadronic EM processes for pi-
-Hadronic EM processes for proton
-Ionic EM processes for triton
+LowE EM processes for neutron
+LowE EM processes for nu_e
+LowE EM processes for nu_mu
+LowE EM processes for omega-
+LowE EM processes for pi+
+LowE pi+
+LowE EM processes for pi-
+LowE pi-
+LowE EM processes for pi0
+LowE EM processes for proton
+LowE proton
+LowE EM processes for sigma+
+LowE sigma+
+LowE EM processes for sigma-
+LowE sigma-
+LowE EM processes for sigma0
+LowE EM processes for triton
+LowE triton
+LowE EM processes for xi-
+LowE EM processes for xi0
 physicsList->setCut() start.
 hTestPhysicsList: Set cuts for all particles 
 
@@ -137,45 +195,45 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
 *** LEion using Tcut =0.00048
-*** LEion using Tcut =0.00081
+*** LEion using Tcut =0.00082
 *** LEion using Tcut =0.00057
-*** LEion using Tcut =0.00065
+*** LEion using Tcut =0.00066
 *** LEion using Tcut =0.00026
 *** LEion using Tcut =0.0036
-*** LEion using Tcut =0.0041
+*** LEion using Tcut =0.0042
 *** LEion using Tcut =0.0088
-*** LEion using Tcut =0.0045
-*** LEion using Tcut =0.00025
-*** LEion using Tcut =0.00025
+*** LEion using Tcut =0.0044
+*** LEion using Tcut =0.0002
+*** LEion using Tcut =1e-05
 *** LEion using Tcut =0.00069
 *** LEion using Tcut =0.0019
-*** LEion using Tcut =0.00025
+*** LEion using Tcut =5.5e-05
 *** LEion using Tcut =0.0013
-*** LEion using Tcut =0.00025
+*** LEion using Tcut =1e-05
 *** LEion using Tcut =0.00034
-*** LEion using Tcut =0.00025
+*** LEion using Tcut =1e-05
 
 LowEnergyIoni:  Low energy ionisation code with implementation of the continuous dE/dx part.
  At present it can be used for electrons  in the energy range [250eV,100GeV]
  the process must work with G4LowEnergyBremsstrahlung
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Beryllium
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Aluminum
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Carbon
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Silicon
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material liquidArgon
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Iron
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Copper
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Beryllium
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Aluminum
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Carbon
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Silicon
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material liquidArgon
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Iron
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Copper
 *** LE Bremsstrahlung using Gamma Tcut = 0.0017 for material Gold
 *** LE Bremsstrahlung using Gamma Tcut = 0.0012 for material Lead
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Water
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Methane
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Graphite
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material GaAs
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Ethane
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material CsI
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Air
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Mylar
-*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Vacuum
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Water
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Methane
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Graphite
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material GaAs
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Ethane
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material CsI
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Air
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Mylar
+*** LE Bremsstrahlung using Gamma Tcut = 1e-05 for material Vacuum
 
 LowEnBrem:  Total cross sections from EEDL database,Gamma energy sampled from a parametrised formula.Implementation of the continuous dE/dx part.
  At present it can be used for electrons  in the energy range [250eV,100GeV]
@@ -219,41 +277,49 @@ hLowEIoni:    Knock-on electron cross sections .
         from 50 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
+           material       min.delta energy(keV) 
+
+Methane          0.043
+Air          0.086
+Vacuum          0.021
 ============= The cut Energy ==============================
                       gamma            e-           
 Cut in range                  1 mum             1 mum
 Cut in energy
- Beryllium                          250 eV           483 eV
-   Aluminum                          250 eV           810 eV
-   Carbon                          250 eV           565 eV
-   Silicon                          250 eV           651 eV
-   liquidArgon                          250 eV           258 eV
-   Iron                          250 eV          3.58 keV
-   Copper                          250 eV          4.15 keV
+ Beryllium                           10 eV           484 eV
+   Aluminum                           10 eV           820 eV
+   Carbon                           10 eV           570 eV
+   Silicon                           10 eV           656 eV
+   liquidArgon                           10 eV           259 eV
+   Iron                           10 eV          3.56 keV
+   Copper                           10 eV          4.15 keV
    Gold                         1.72 keV          8.77 keV
-   Lead                         1.22 keV          4.47 keV
-   Water                          250 eV           250 eV
-   Methane                          250 eV           250 eV
-   Graphite                          250 eV           690 eV
-   GaAs                          250 eV          1.91 keV
-   Ethane                          250 eV           250 eV
-   CsI                          250 eV          1.34 keV
-   Air                          250 eV           250 eV
-   Mylar                          250 eV           339 eV
-   Vacuum                          250 eV           250 eV
+   Lead                         1.21 keV          4.44 keV
+   Water                           10 eV           202 eV
+   Methane                           10 eV            10 eV
+   Graphite                           10 eV           691 eV
+   GaAs                           10 eV          1.93 keV
+   Ethane                           10 eV          54.8 eV
+   CsI                           10 eV          1.33 keV
+   Air                           10 eV            10 eV
+   Mylar                           10 eV           339 eV
+   Vacuum                           10 eV            10 eV
 ===================================================
 Start event loop for 1000 events
 ### Run 0 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
 Start closing geometry.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.4s Real=8.4s Sys=0s
+  User=4.7s Real=4.7s Sys=0.02s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.01167; Stragling(mm)= 0.0002396 +- 7.6e-06
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.01169; Stragling(mm)= 0.0002494 +- 7.9e-06
+========================================================
+Histograms and Ntuples are saved
 Second mac file is applied
 /control/execute gaas1.mac
 #=======================================================
@@ -263,93 +329,120 @@ Second mac file is applied
 /gun/energy                1.2 MeV
 /run/beamOn                1000
 ### Run 1 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=12s Real=12s Sys=0s
+  User=6.4s Real=6.5s Sys=0.04s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.01508; Stragling(mm)= 0.0003145 +- 9.9e-06
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.01507; Stragling(mm)= 0.0003613 +- 1.1e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                1.4 MeV
 /run/beamOn                1000
 ### Run 2 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=15s Real=15s Sys=0s
+  User=8.5s Real=8.6s Sys=0.05s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.01874; Stragling(mm)= 0.0005689 +- 1.8e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.01878; Stragling(mm)= 0.0003841 +- 1.2e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                1.6 MeV
 /run/beamOn                1000
 ### Run 3 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=20s Real=20s Sys=0.01s
+  User=11s Real=11s Sys=0.07s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.02281; Stragling(mm)= 0.0004495 +- 1.4e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.02279; Stragling(mm)= 0.0004696 +- 1.5e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                1.8 MeV
 /run/beamOn                1000
 ### Run 4 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=24s Real=24s Sys=0.02s
+  User=13s Real=14s Sys=0.08s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.02708; Stragling(mm)= 0.0005346 +- 1.7e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.02708; Stragling(mm)= 0.0005178 +- 1.6e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                2.0 MeV
 /run/beamOn                1000
 ### Run 5 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=29s Real=29s Sys=0.02s
+  User=16s Real=16s Sys=0.16s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.03166; Stragling(mm)= 0.0009967 +- 3.2e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.03172; Stragling(mm)= 0.0006751 +- 2.1e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                2.2 MeV
 /run/beamOn                1000
 ### Run 6 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=32s Real=32s Sys=0.11s
+  User=18s Real=18s Sys=0.14s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.03663; Stragling(mm)= 0.0007018 +- 2.2e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.03659; Stragling(mm)= 0.0008632 +- 2.7e-05
+========================================================
+Histograms and Ntuples are saved
 /gun/energy                2.4 MeV
 /run/beamOn                1000
 ### Run 7 start
+hTestHisto: Histograms will be saved to the file <gaas.paw>
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=35s Real=35s Sys=0.01s
+  User=20s Real=20s Sys=0.1s
 hTestRunAction: End of run actions are started
-=========================================================
-Range(mm)= 0.04181; Stragling(mm)= 0.000825 +- 2.6e-05
-=========================================================
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 0.04181; Stragling(mm)= 0.000826 +- 2.6e-05
+========================================================
+Histograms and Ntuples are saved
 runManager will be deleted
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
-runMessenger and histograms are deleted
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4SDManager deleted.
