@@ -61,7 +61,7 @@ private:
   G4int bitAllocated;
 
   char  pixelSpacingX[300],pixelSpacingY[300];
-  char sliceThickness[300];
+  char  sliceThickness[300];
   G4double sliceLocation;
 };
 #endif

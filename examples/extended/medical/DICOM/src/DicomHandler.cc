@@ -48,8 +48,11 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
                                          //are not important
   // Reads the "DICOM" letters
   G4std::fread( buffer, 1, 4, dicom );
-  G4int readGroupId;
-  G4int readElementId;
+  G4int readGroupId; //identify the kind of input data 
+  G4int readElementId;//identify a particular type information
+
+  // the elementLength say if a particular information (associated with a
+  //given readGroupId+readElementId) is to be read in 2 or 4 bits
   G4int elementLength;
   G4int elementLength2;
   G4int elementLength3;
@@ -92,47 +95,47 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
         {
 	  G4std::fread(&elementLength2,1,2,dicom);
 	  G4std::fread(&value[i],elementLength2,1,dicom);
-	  tagDictionnary=readGroupId*0x10000 + readElementId;
+	  tagDictionnary = readGroupId*0x10000 + readElementId;
         }
 
       if (tagDictionnary == 0x00280010 ) // Number of Rows
         {
-	  rows=*(G4int*)&value[i];
+	  rows = *(G4int*)&value[i];
 	  G4std::printf("[0x00280010] Rows -> %i\n",rows);
         }
       if (tagDictionnary == 0x00280011 ) // Number of columns
         {
-	  columns=*(G4int*)&value[i];
+	  columns = *(G4int*)&value[i];
 	  G4std::printf("[0x00280011] Columns -> %i\n",columns);
         }
       if (tagDictionnary == 0x00280102 ) // High bits  ( not used )
         {
-	  G4int highBits=*(G4int*)&value[i];
+	  G4int highBits = *(G4int*)&value[i];
 	  G4std::printf("[0x00280102] High bits -> %i\n",highBits);
         }
       if (tagDictionnary == 0x00280100 )  // Bits allocated ( not used )
         {
-	  bitAllocated=*(G4int*)&value[i];
+	  bitAllocated = *(G4int*)&value[i];
 	  G4std::printf("[0x00280100] Bits allocated -> %i\n",bitAllocated);
-	  bitAllocated=(bitAllocated)/8;
+	  bitAllocated = (bitAllocated)/8;
         }
       if (tagDictionnary == 0x00280101 )  //  Bits stored ( not used )
         {
-	  bitStored=*(G4int*)&value[i];
+	  bitStored = *(G4int*)&value[i];
 	  G4std::printf("[0x00280101] Bits stord -> %i\n",bitStored);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00281053)  //  Rescale slope ( not used )
         { 
-	  G4int rescaleSlope= atoi( value[i] );
+	  G4int rescaleSlope =  atoi( value[i] );
 	  G4std::printf("[0x00281053] Rescale Slope -> %i\n",rescaleSlope);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00281052 )  // Rescalse intercept ( not used )
         {
 	  G4int rescaleIntercept = atoi( value[i] );
 	  G4std::printf("[0x00281052] Rescale Intercept -> %i\n", rescaleIntercept );
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00280103 )
         {
@@ -144,90 +147,89 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
 	      G4std::printf("DICOM READING SCAN FOR UNSIGNED VALUE, POSSIBLE ");
 	      G4std::printf("ERROR !!!!!! -> \n");
             }
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00080008 ) //  Image type ( not used )
         {
 	  G4std::printf("[0x00080008] Image Types -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283000 )   //  Modality LUT Sequence ( not used )
         {
 	  G4std::printf("[0x00283000] Modality LUT Sequence SQ 1 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283002 )  // LUT Descriptor ( not used )
         {
 	  G4std::printf("[0x00283002] LUT Descriptor US or SS 3 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283003 )  // LUT Explanation ( not used )
         {
 	  G4std::printf("[0x00283003] LUT Explanation LO 1 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283004 )  // Modality LUT ( not used )
         {
 	  G4std::printf("[0x00283004] Modality LUT Type LO 1 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283006 )  // LUT Data ( not used )
         {
 	  G4std::printf("[0x00283006] LUT Data US or SS -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00283010 )  // VOI LUT ( not used )
         {
 	  G4std::printf("[0x00283010] VOI LUT Sequence SQ 1 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00280120 )  // Pixel Padding Value ( not used )
         {
 	  G4std::printf("[0x00280120] Pixel Padding Value US or SS 1 -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00280030 )  // Pixel Spacing
         {
 	  G4std::printf("[0x00280030] Pixel Spacing (mm) -> %s\n",value[i]);
-	  G4std::printf(pixelSpacing,"%s",value[i]);//pixelSpacing=value[i];
-	  bitStored=(bitStored)/8;
+	  G4std::printf(pixelSpacing,"%s",value[i]);
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00200037 )  // Image Orientation ( not used )
         {
 	  G4std::printf("[0x00200037] Image Orientation (Patient) -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00200032 )  // Image Position ( not used )
         {
 	  G4std::printf("[0x00200032] Image Position (Patient,mm) -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00180050 )  // Slice Tickness
         {
 	  G4std::printf("[0x00180050] Slice Tickness (mm) -> %s\n",value[i]);
 	  G4std::sprintf(sliceThickness,"%s",value[i]);//sliceThickness=value[i];
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
       if (tagDictionnary == 0x00201041 )  // Slice Location
         {
 	  G4std::printf("[0x00201041] Slice Location -> %s\n",value[i]);
-	  sliceLocation=atof(value[i]);
-	  bitStored=(bitStored)/8;
+	  sliceLocation = atof(value[i]);
+	  bitStored = (bitStored)/8;
         }
-      if (tagDictionnary == 0x00280004 )  // Photometric Interpretation ( not used )
+      if (tagDictionnary == 0x00280004 ) 
+      // Photometric Interpretation ( not used )
         {
 	  G4std::printf("[0x00280004] Photometric Interpretation -> %s\n",value[i]);
-	  bitStored=(bitStored)/8;
+	  bitStored = (bitStored)/8;
         }
-
-
     }
 
   // Creating files to store information
   char compressionbuf[100],maxbuf[100];
   char filename[300];
-   compression = 0;
-   max = 0;
+  compression = 0;
+  max = 0;
   FILE* configuration;
 
   configuration = G4std::fopen("Data.dat","r");
@@ -236,7 +238,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
       G4std::fscanf(configuration,"%s",compressionbuf);
       compression = atoi(compressionbuf);
       G4std::fscanf(configuration,"%s",maxbuf);
-      max=atoi(maxbuf);
+      max = atoi(maxbuf);
       G4std::fclose(configuration);
     }
   else
@@ -244,7 +246,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
       G4std::printf("### WARNING, file Data.dat not here !!!\n");
       exit(1);
     }
-   FILE* data;
+  FILE* data;
   G4std::sprintf(filename,"%s.dat",filename2);
   data = G4std::fopen(filename,"w+");
   // Note: the .dat files contain basic information on the images.
@@ -272,7 +274,8 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
     }
 
   G4std::fprintf(data,"Rows,columns(#):      %8i   %8i\n",rows,columns);
-  G4std::fprintf(data,"PixelSpacing_X,Y(mm): %8s   %8s\n",pixelSpacingX,pixelSpacingY);
+  G4std::fprintf(data,"PixelSpacing_X,Y(mm): %8s   %8s\n",
+                 pixelSpacingX,pixelSpacingY);
   G4std::fprintf(data,"SliceTickness(mm):    %8s\n",sliceThickness);
   G4std::fprintf(data,"SliceLocation(mm):    %8f\n",sliceLocation);
   G4std::fclose(data);
@@ -280,34 +283,37 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
   return returnvalue;
 }
 
-G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
+G4int DicomHandler::readData(FILE *dicom,char filename2[300])
 {
-  G4int returnvalue=0;
+  G4int returnvalue = 0;
   char compressionbuf[100],maxbuf[100];
-  G4int compression=0, max=0;
-  G4int intBuffer[1000000];;
+  G4int compression = 0, max = 0;
+  G4int intBuffer[1000000]; 
+  // intBuffer read a part of the header that is not
+  //useful for this application 
+  
   G4int tab[1000][1000];
-  FILE* configuration=G4std::fopen("Data.dat","r");
+  FILE* configuration = G4std::fopen("Data.dat","r");
   G4std::fscanf(configuration,"%s",compressionbuf);
-  compression=atoi(compressionbuf);
+  compression = atoi(compressionbuf);
   G4std::fscanf(configuration,"%s",maxbuf);
-  max=atoi(maxbuf);
+  max = atoi(maxbuf);
   G4std::fclose(configuration);
 
   //  READING THE PIXELS :
-  G4int w=0;
+  G4int w = 0;
   G4int len = 0;
 
   if (bitAllocated == 2) // Case 16 bits :
     {
       len = rows*columns;
-      for (G4int j=1;j<=rows;j++)
+      for ( G4int j = 1; j <= rows; j++)
         {
-	  for (G4int i=1;i<=columns;i++)
+	  for ( G4int i = 1; i <= columns; i++)
             {
 	      w++;
-	      G4std::fread(&intBuffer[w],1,2,dicom);
-	      tab[j][i]=intBuffer[w];
+	      G4std::fread( &intBuffer[w], 1, 2, dicom);
+	      tab[j][i] = intBuffer[w];
             }
         }
     }
@@ -317,16 +323,16 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
       G4std::printf("@@@ Error! Picture != 16 bits...\n"); 
       G4std::printf("@@@ Error! Picture != 16 bits...\n"); 
       len = rows*columns;
-      for (G4int j=1;j<=rows;j++)
+      for (G4int j = 1;j <= rows;j++)
         {
-	  for (G4int i=1;i<=columns;i++)
+	  for (G4int i = 1;i <= columns;i++)
             {
 	      w++;
 	      G4std::fread(&intBuffer[w],1,2,dicom);
-	      tab[j][i]=intBuffer[w];
+	      tab[j][i] = intBuffer[w];
             }
         }
-      returnvalue=1;
+      returnvalue = 1;
     }
 
   // Creation of .g4 files wich contains averaged density data
@@ -345,18 +351,18 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
   G4std::fprintf(processed,"%8i\n",compression);
 
   G4int compSize = 1;
-  compSize=compression;
+  compSize = compression;
   G4int mean;
-  G4bool overflow=false;
+  G4bool overflow = false;
   G4int cpt=1;
 
   if (compSize == 1) // no compression: each pixel has a density value)
     {
-      for (G4int ww =1;ww<=rows; ww++)
+      for ( G4int ww = 1; ww <= rows; ww++)
         {
-	  for(G4int xx =1 ;xx<=columns;xx++)
+	  for( G4int xx = 1; xx <= columns; xx++)
             {
-	      mean=(tab[ww][xx])/1;
+	      mean = (tab[ww][xx])/1;
 	      G4std::fprintf(processed,"%f   ",pixel2density(mean) );
             }
 	  G4std::fprintf(processed,"\n");
@@ -366,26 +372,26 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
     {
       // density value is the average of a square region of
       // compression*compression pixels
-      for (G4int ww =1 ; ww<=rows ; ww=ww+compSize )
+      for (G4int ww = 1 ; ww <= rows ; ww = ww+compSize )
         {
-	  for(G4int xx =1 ; xx<=columns ; xx=xx+compSize )
+	  for(G4int xx = 1 ; xx <= columns ; xx = xx+compSize )
             {
-	      overflow=false;
-	      G4int mean=tab[ww][xx];
-	      G4int sumx=compSize-1;
-	      G4int sumy=compSize-1;
+	      overflow = false;
+	      G4int mean = tab[ww][xx];
+	      G4int sumx = compSize-1;
+	      G4int sumy = compSize-1;
 	      for(  ; sumx>0; sumy--, sumx--)
                 {
 		  if (ww+sumy > rows|| xx+sumx > columns)
                     {
-		      overflow=true;
+		      overflow = true;
 		      break;
                     }
-		  mean=mean+tab[ww+sumy][xx+sumx];
-		  for (G4int m=sumx ; m>0 ; m--)
+		  mean = mean+tab[ww+sumy][xx+sumx];
+		  for (G4int m = sumx ; m>0 ; m--)
                     {
-		      mean=mean+tab[ww+sumy-m][xx+sumx];
-		      mean=mean+tab[ww+sumy][xx+sumx-m];
+		      mean = mean+tab[ww+sumy-m][xx+sumx];
+		      mean = mean+tab[ww+sumy][xx+sumx-m];
                     }
                 }
 	      mean = mean/(compSize*compSize);
@@ -448,7 +454,7 @@ G4double DicomHandler::pixel2density(G4int pixel)
     }
   G4std::fclose(calibration);
 
-  for (G4int j=1;j<nbrequali;j++)
+  for (G4int j = 1;j<nbrequali;j++)
     {
       if ( pixel >= valueCT[j-1] && pixel < valueCT[j])
         {
@@ -522,7 +528,7 @@ void DicomHandler::checkFileFormat()
       FILE* dicom;
       FILE *lecturePref;
       char compressionc[300],maxc[300];
-      char name[300], name_in_file[300];
+      char name[300], inputFile[300];
       lecturePref = G4std::fopen("Data.dat","r");
       G4std::fscanf(lecturePref,"%s",compressionc);
       compression = atoi(compressionc);
@@ -531,8 +537,8 @@ void DicomHandler::checkFileFormat()
 
       for ( G4int i = 1; i <= max; i++ ) // Begin loop on filenames
         {
-	  G4std::fscanf(lecturePref,"%s",name_in_file);
-	  G4std::sprintf(name,"%s.dcm",name_in_file);
+	  G4std::fscanf(lecturePref,"%s",inputFile);
+	  G4std::sprintf(name,"%s.dcm",inputFile);
 	  //  Open input file and give it to gestion_dicom :
 	  G4std::printf("### Opening %s and reading :\n",name);
 	  dicom = G4std::fopen(name,"rb");
@@ -541,8 +547,8 @@ void DicomHandler::checkFileFormat()
 	  //	2. reading the pixel data and store the density in Moyenne.dat
 	  if ( dicom != 0 )
             {
-	      readHeader(dicom,name_in_file);
-	      readData(dicom,name_in_file);
+	      readHeader(dicom,inputFile);
+	      readData(dicom,inputFile);
             }
 	  else 
             {

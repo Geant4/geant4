@@ -40,7 +40,8 @@ public:
   DicomConfiguration() { }
   ~DicomConfiguration() { }
 
-  // This function reads <Data.dat>, return 0/1 if successfull or not
+  // This function reads <Data.dat>, return true or false
+  // if successfull or not
   G4bool ReadDataFile();
 
   G4int ReadG4File(G4String g4File);
@@ -68,9 +69,8 @@ public:
   G4double GetDensityValue(G4int i);
  
 private:
-	
   G4int compressionValue;
-  G4int totalNumberOfFile;
+  G4int totalNumberOfFile;	
   G4std::vector<G4String> listOfFile;
   G4int totalRows;
   G4int totalColumns;
@@ -79,7 +79,6 @@ private:
   G4double sliceTickness;
   G4double sliceLocation; 
   G4int compressionUsed;
-  G4String nameOfFileBuffer;	
   G4std::vector<G4double> densityValue;	
 
 };

@@ -23,16 +23,17 @@
 #include "DicomConfiguration.hh"
 #include "g4std/fstream"
 #include "g4std/vector"
+
 G4bool DicomConfiguration::ReadDataFile()
 {
   G4std::ifstream dataFile( "Data.dat" );
-
+  G4String nameOfFileBuffer;
   if ( dataFile.good() != 1 )
     return 1;
 
   dataFile >> compressionValue;
   dataFile >> totalNumberOfFile;
-
+ 
   for (G4int i=1;i<=totalNumberOfFile;i++)
     {
       dataFile >> nameOfFileBuffer;
