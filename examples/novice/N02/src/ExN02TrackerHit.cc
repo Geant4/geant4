@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02TrackerHit.cc,v 1.3 2000-12-04 16:24:09 maire Exp $
+// $Id: ExN02TrackerHit.cc,v 1.4 2000-12-06 07:54:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -79,7 +79,7 @@ void ExN02TrackerHit::Print()
 {
   G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
          << "  energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "  position: " << G4BestUnit(pos,"Length") << endl;
+	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
