@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2000-11-28 15:44:02 gcosmo Exp $
+$Id: History,v 1.34 2000-12-01 11:49:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec 01,   00   G. Cosmo                  geom-solids-csg-V02-00-13
+- Increased basic number of iterations from 8 to 12 for Newton algorithm
+  in G4Torus.cc to assure root retrivial.
 
 Nov 28,   00   V. Grichine               geom-solids-csg-V02-00-12
-- bug fixed in G4Tubs::Inside(p) for analysis of phi positioning when
+- Bug fixed in G4Tubs::Inside(p) for analysis of phi positioning when
   on +-fDz surface.
 
 Nov 20,   00   G. Cosmo                  geom-solids-csg-V02-00-11
