@@ -45,6 +45,7 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 06-02-03 Add control on tmax in PostStepDoIt (V.Ivanchenko)
 // 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
+// 15-02-03 Lambda table can be scaled (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -91,6 +92,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   theSecondaryRangeTable(0),
   theInverseRangeTable(0),
   theLambdaTable(0),
+  theSubLambdaTable(0),
   particle(0),
   baseParticle(0),
   secondaryParticle(0),
@@ -123,6 +125,7 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
 {
   Clear();
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
+  if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
   delete modelManager;
 
   (G4LossTableManager::Instance())->Clear();
@@ -148,10 +151,20 @@ void G4VEnergyLossSTD::Clear()
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Clear() for " << GetProcessName() << G4endl;
   }
+  if ( !baseParticle ) {
+    if(theDEDXTable) theDEDXTable->clearAndDestroy();
+    if(theRangeTable) theRangeTable->clearAndDestroy();
+    if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
+    if(theLambdaTable) theLambdaTable->clearAndDestroy();
+    if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
+  }
+
   theDEDXTable = 0;
   theRangeTable = 0;
   theInverseRangeTable = 0;
   theSecondaryRangeTable = 0;
+  theLambdaTable = 0;
+  theSubLambdaTable = 0;
   modelManager->Clear();
   tablesAreBuilt = false;
 }
@@ -187,7 +200,7 @@ void G4VEnergyLossSTD::Initialise()
   }
 
   theCuts = modelManager->Initialise(particle, secondaryParticle, minSubRange, verboseLevel);
-  
+
   // Sub Cutoff Regime
 
   idxSCoffRegions.clear();
@@ -249,10 +262,10 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(!baseParticle) baseParticle = DefineBaseParticle(particle);
 
-  if(particle->GetParticleType() == "nucleus" &&
-     particle->GetParticleName() != "GenericIon" &&
-     theLambdaTable) return;
-
+  if(particle->GetParticleName() != "GenericIon" && GetProcessName() == "ionIoni")
+  {
+     return;
+  }
   G4bool cutsWasModified = false;
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -278,15 +291,10 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
     if (finalRange > lengthCut) finalRange = lengthCut;
   }
 
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
+//  if(theLambdaTable) theLambdaTable->clearAndDestroy();
 
-  theLambdaTable = BuildLambdaTable();
+//  theLambdaTable = BuildLambdaTable();
 
-  if (nSCoffRegions) {
-    for (G4int i=0; i<nSCoffRegions; i++) {
-      scoffProcessors[i]->SetLambdaSubTable(BuildLambdaSubTable());
-    }
-  }
   tablesAreBuilt = true;
 
   if(!baseParticle) PrintInfoDefinition();
@@ -711,7 +719,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     G4double postStepScaledEnergy = v->GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
 
-    /*    
+    /*
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -736,7 +744,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
 
     eloss = modelManager->SampleFluctuations(currentMaterial, dynParticle,
-                                       tmax, length, eloss, preStepKinEnergy, 
+                                       tmax, length, eloss, preStepScaledEnergy,
 				       currentMaterialIndex);
   }
 
@@ -746,11 +754,11 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << " currentChargeSquare= " << chargeSquare
            << G4endl;
   }
-  */  
+  */
 
   // Subcutoff and/or deexcitation
   G4std::vector<G4Track*>* newp =
-           SecondariesAlongStep(step, tmax, eloss, preStepKinEnergy);
+           SecondariesAlongStep(step, tmax, eloss, preStepScaledEnergy);
 
   if(newp) {
 
@@ -806,18 +814,19 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
 {
   aParticleChange.Initialize(track);
   G4double finalT = track.GetKineticEnergy();
+  G4double postStepScaledEnergy = finalT*massRatio;
 
   // Integral approach
   if(integral) {
     G4bool b;
-    G4double postStepLambda =
-      (((*theLambdaTable)[currentMaterialIndex])->GetValue(finalT,b))*chargeSqRatio;
+    G4double postStepLambda = chargeSqRatio*
+      (((*theLambdaTable)[currentMaterialIndex])->GetValue(postStepScaledEnergy,b));
 
     if(preStepLambda*G4UniformRand() > postStepLambda)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
-  G4VEmModel* currentModel = SelectModel(finalT);
+  G4VEmModel* currentModel = SelectModel(postStepScaledEnergy);
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = currentModel->MaxSecondaryEnergy(dynParticle);
@@ -832,7 +841,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   }
   */
 
-  if (tcut < tmax)
+  if (tcut < tmax)    
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT < minKinEnergy) {
@@ -869,7 +878,6 @@ void G4VEnergyLossSTD::PrintInfoDefinition() const
 
 void G4VEnergyLossSTD::SetDEDXTable(G4PhysicsTable* p)
 {
-  if(theDEDXTable) delete theDEDXTable;
   theDEDXTable = p;
 }
 
@@ -877,7 +885,6 @@ void G4VEnergyLossSTD::SetDEDXTable(G4PhysicsTable* p)
 
 void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
 {
-  if(theRangeTable) delete theRangeTable;
   theRangeTable = p;
 }
 
@@ -885,7 +892,6 @@ void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossSTD::SetSecondaryRangeTable(G4PhysicsTable* p)
 {
-  if(theSecondaryRangeTable) delete theSecondaryRangeTable;
   theSecondaryRangeTable = p;
 }
 
@@ -893,8 +899,26 @@ void G4VEnergyLossSTD::SetSecondaryRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossSTD::SetInverseRangeTable(G4PhysicsTable* p)
 {
-  if(theInverseRangeTable) delete theInverseRangeTable;
   theInverseRangeTable = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetLambdaTable(G4PhysicsTable* p)
+{
+  theLambdaTable = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetSubLambdaTable(G4PhysicsTable* p)
+{
+  theSubLambdaTable = p;
+  if (nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      scoffProcessors[i]->SetLambdaSubTable(theSubLambdaTable);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -966,6 +990,38 @@ G4double G4VEnergyLossSTD::ContinuousStepLimit(const G4Track& track,
                                                G4double x, G4double y, G4double& z)
 {
   return GetContinuousStepLimit(track, x, y, z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
+{
+  dRoverRange = v1;
+  finalRange = v2;
+  c1lim=dRoverRange;
+  c2lim=2.*(1-dRoverRange)*finalRange;
+  c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
+{
+  particle = p;
+  if(!baseParticle) baseParticle = DefineBaseParticle(particle);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetBaseParticle(const G4ParticleDefinition* p)
+{
+  baseParticle = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetSecondaryParticle(const G4ParticleDefinition* p)
+{
+  secondaryParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

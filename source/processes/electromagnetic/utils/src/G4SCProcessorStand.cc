@@ -68,9 +68,7 @@ G4SCProcessorStand::G4SCProcessorStand(const G4String& nam)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4SCProcessorStand::~G4SCProcessorStand()
-{
-  if(theLambdaSubTable) theLambdaSubTable->clearAndDestroy();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

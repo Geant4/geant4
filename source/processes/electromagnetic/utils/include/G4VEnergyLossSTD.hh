@@ -103,7 +103,7 @@ public:
                                    G4double& tcut,
                                    G4double& kinEnergy) = 0;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -113,6 +113,10 @@ public:
   // Print out of the class parameters
 
   G4PhysicsTable* BuildDEDXTable();
+
+  G4PhysicsTable* BuildLambdaTable();
+
+  G4PhysicsTable* BuildLambdaSubTable();
 
   void SetParticles(const G4ParticleDefinition*,
                     const G4ParticleDefinition*,
@@ -176,7 +180,11 @@ public:
 
   void SetSecondaryRangeTable(G4PhysicsTable* p);
 
-  const G4PhysicsTable* LambdaTable() {return theLambdaTable;};
+  void SetLambdaTable(G4PhysicsTable* p);
+  G4PhysicsTable* LambdaTable() {return theLambdaTable;};
+
+  void SetSubLambdaTable(G4PhysicsTable* p);
+  G4PhysicsTable* SubLambdaTable() {return theSubLambdaTable;};
 
   G4double GetDEDX(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
 
@@ -203,7 +211,9 @@ public:
 
   void SetStepLimits(G4double v1, G4double v2);
 
-  G4bool TablesAreBuilt() {return  tablesAreBuilt;};
+  G4bool TablesAreBuilt() const {return  tablesAreBuilt;};
+
+  G4int NumberOfSubCutoffRegions() const {return nSCoffRegions;};
 
   G4double MeanFreePath(const G4Track& track,
                               G4double previousStepSize,
@@ -259,10 +269,6 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
-  G4PhysicsTable* BuildLambdaTable();
-
-  G4PhysicsTable* BuildLambdaSubTable();
-
   // hide  assignment operator
 
   G4VEnergyLossSTD(G4VEnergyLossSTD &);
@@ -284,6 +290,7 @@ private:
   G4PhysicsTable*  theSecondaryRangeTable;
   G4PhysicsTable*  theInverseRangeTable;
   G4PhysicsTable*  theLambdaTable;
+  G4PhysicsTable*  theSubLambdaTable;
 
   const G4DataVector*    theCuts;
 
@@ -331,13 +338,6 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4VEnergyLossSTD::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
@@ -393,8 +393,9 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
 
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
+  preStepScaledEnergy = preStepKinEnergy*massRatio;
   preStepLambda = (((*theLambdaTable)[currentMaterialIndex])->
-                      GetValue(preStepKinEnergy, b)) * chargeSqRatio;
+                      GetValue(preStepScaledEnergy, b)) * chargeSqRatio;
   G4double x = DBL_MAX;
   if(0.0 < preStepLambda) x = 1.0/preStepLambda;
   return x;
@@ -406,7 +407,6 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
                                                G4double, G4double, G4double&)
 {
   G4double x = DBL_MAX;
-  preStepScaledEnergy = preStepKinEnergy*massRatio;
 
   if(theRangeTable) {
     G4bool b;
@@ -432,28 +432,6 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
 inline G4VEmModel* G4VEnergyLossSTD::SelectModel(G4double& kinEnergy)
 {
   return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  if(!baseParticle) baseParticle = DefineBaseParticle(particle);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetBaseParticle(const G4ParticleDefinition* p)
-{
-  baseParticle = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetSecondaryParticle(const G4ParticleDefinition* p)
-{
-  secondaryParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -543,21 +521,10 @@ inline G4double G4VEnergyLossSTD::GetLambda(G4double kineticEnergy,
   G4bool b;
   if(theLambdaTable) {
     G4double y = (((*theLambdaTable)[currentMaterialIndex])->
-                    GetValue(kineticEnergy, b));
+                    GetValue(kineticEnergy*massRatio, b));
     if(y > 0.0) x = 1.0/y;
   }
   return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
-{
-  dRoverRange = v1;
-  finalRange = v2;
-  c1lim=dRoverRange;
-  c2lim=2.*(1-dRoverRange)*finalRange;
-  c3lim=-(1.-dRoverRange)*finalRange*finalRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -38,6 +38,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 15-02-03 Add control on delta pointer (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -68,14 +69,13 @@ public:
 
   ~G4ionIonisation();
  
-  G4bool IsApplicable(const G4ParticleDefinition& p) 
-    {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double&,
 			           G4double&,
                                    G4double&);
@@ -116,7 +116,14 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetParticleType() == "nucleus");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MinPrimaryEnergy(
           const G4ParticleDefinition* p, const G4Material*, G4double cut)
@@ -193,13 +200,15 @@ inline void G4ionIonisation::SecondariesPostStep(
                                                  G4double& kinEnergy)
 {
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(delta);
-  G4ThreeVector finalP = dp->GetMomentum();
-  kinEnergy -= delta->GetKineticEnergy();
-  finalP -= delta->GetMomentum();
-  finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);
+  if(delta) {
+    aParticleChange.SetNumberOfSecondaries(1);
+    aParticleChange.AddSecondary(delta);
+    G4ThreeVector finalP = dp->GetMomentum();
+    kinEnergy -= delta->GetKineticEnergy();
+    finalP -= delta->GetMomentum();
+    finalP = finalP.unit();
+    aParticleChange.SetMomentumDirectionChange(finalP);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
