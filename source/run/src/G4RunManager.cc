@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.30 2001-08-28 12:07:26 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.31 2001-09-27 15:19:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
