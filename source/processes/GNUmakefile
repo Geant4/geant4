@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2001-11-14 17:24:02 hpw Exp $
+# $Id: GNUmakefile,v 1.14 2001-11-15 17:46:26 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -26,6 +26,7 @@ SUBDIRS += hadronic/models/generator/string_common
 SUBDIRS += hadronic/models/generator/string_fragmentation
 SUBDIRS += hadronic/models/generator/util
 SUBDIRS += hadronic/models/radiative_decay
+SUBDIRS += hadronic/models/coherent_elastic
 SUBDIRS += hadronic/models/chiral_inv_phase_space/body
 SUBDIRS += hadronic/models/chiral_inv_phase_space/interface
 
@@ -43,6 +44,7 @@ SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
 SUBLIBS += G4hadronic_radioactivedecay
 SUBLIBS += G4hadronic_body_ci
 SUBLIBS += G4hadronic_interface_ci
+SUBLIBS += G4hadronic_coherent_elastic
 
 ifndef G4INSTALL
   G4INSTALL = ../..
