@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.16 2001-07-22 01:05:02 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.17 2001-07-24 22:01:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -197,12 +197,15 @@ void G4VSceneHandler::EndPrimitives () {}
 
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
-  const G4double margin = 0.01;  // Fractional margin.
+  const G4double margin(0.01);
+  // Fractional margin - ensures scale is comfortably inside viewing
+  // volume.
   const G4double oneMinusMargin (1. - margin);
   const G4double freeLengthFraction (1. - 2. * margin);
 
   const G4VisExtent& sceneExtent = fpScene->GetExtent();
 
+  // Test scene for real content...
   if (sceneExtent.GetExtentRadius() == 0) {
     G4cout <<
       "G4ScaleModel::DescribeYourselfTo: Scene does not yet have any extent."
@@ -212,6 +215,13 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
     return;
   }
 
+  // Useful constants...
+  const G4double length(scale.GetLength());
+  const G4double halfLength(length / 2.);
+  const G4double tickLength(length / 20.);
+  const G4double piBy2(M_PI / 2.);
+
+  // Get size of scene...
   const G4double xmin = sceneExtent.GetXmin();
   const G4double xmax = sceneExtent.GetXmax();
   const G4double ymin = sceneExtent.GetYmin();
@@ -219,8 +229,8 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   const G4double zmin = sceneExtent.GetZmin();
   const G4double zmax = sceneExtent.GetZmax();
 
+  // Test scene for room...
   G4bool room (true);
-  const G4double length (scale.GetLength());
   switch (scale.GetDirection()) {
   case G4Scale::x:
     if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
@@ -237,83 +247,80 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
     return;
   }
 
-  // From the G4Scale.hh:
-  //   for a margin, of, say 1%, so that it is just inside viewing volume:
-  //   x = xmin + (1 - margin) * (xmax - xmin)
-  //   y = ymin + margin * (ymax - ymin)
-  //   z = zmin + (1 - margin) * (zmax - zmin)
-  //   if direction == "x" then (x - length,y,z) to (x,y,z)
-  //   if direction == "y" then (x,y,z) to (x,y + length,z)
-  //   if direction == "z" then (x,y,z - length) to (x,y,z)
-  G4double x0 = xmin + oneMinusMargin * (xmax - xmin);
-  G4double y0 = ymin + margin * (ymax - ymin);
-  G4double z0 = zmin + oneMinusMargin * (zmax - zmin);
-  G4Point3D corner(x0, y0, z0);
+  // Create (empty) polylines having the same vis attributes...
   G4Polyline scaleLine, tick11, tick12, tick21, tick22;
-  G4double tickLength (length / 20.);
-  G4Point3D r1, r2, tickx, ticky, tickz, textPosition;
+  G4VisAttributes visAtts(*scale.GetVisAttributes());  // Long enough life.
+  scaleLine.SetVisAttributes(&visAtts);
+  tick11.SetVisAttributes(&visAtts);
+  tick12.SetVisAttributes(&visAtts);
+  tick21.SetVisAttributes(&visAtts);
+  tick22.SetVisAttributes(&visAtts);
+
+  // Add points to the polylines to represent an scale parallel to the
+  // x-axis centred on the origin...
+  G4Point3D r1(G4Point3D(-halfLength, 0., 0.));
+  G4Point3D r2(G4Point3D( halfLength, 0., 0.));
+  scaleLine.push_back(r1);
+  scaleLine.push_back(r2);
+  G4Point3D ticky(0., tickLength, 0.);
+  G4Point3D tickz(0., 0., tickLength);
+  tick11.push_back(r1 + ticky);
+  tick11.push_back(r1 - ticky);
+  tick12.push_back(r1 + tickz);
+  tick12.push_back(r1 - tickz);
+  tick21.push_back(r2 + ticky);
+  tick21.push_back(r2 - ticky);
+  tick22.push_back(r2 + tickz);
+  tick22.push_back(r2 - tickz);
+  G4Point3D textPosition(0., tickLength, 0.);
+
+  // Transform appropriately...
+
+  G4Transform3D rotation;
   switch (scale.GetDirection()) {
   case G4Scale::x:
-    r1 = G4Point3D(x0 - length, y0, z0);
-    r2 = G4Point3D(x0, y0, z0);
-    scaleLine.push_back(r1);
-    scaleLine.push_back(r2);
-    ticky = G4Point3D(0., tickLength, 0.);
-    tick11.push_back(r1 + ticky);
-    tick11.push_back(r1 - ticky);
-    tick21.push_back(r2 + ticky);
-    tick21.push_back(r2 - ticky);
-    tickz = G4Point3D(0., 0., tickLength);
-    tick12.push_back(r1 + tickz);
-    tick12.push_back(r1 - tickz);
-    tick22.push_back(r2 + tickz);
-    tick22.push_back(r2 - tickz);
-    textPosition =
-      G4Point3D(x0 - length / 2., y0 + tickLength, z0 - tickLength);
     break;
   case G4Scale::y:
-    r1 = G4Point3D(x0, y0, z0);
-    r2 = G4Point3D(x0, y0 + length, z0);
-    scaleLine.push_back(r1);
-    scaleLine.push_back(r2);
-    tickx = G4Point3D(tickLength, 0., 0.);
-    tick11.push_back(r1 + tickx);
-    tick11.push_back(r1 - tickx);
-    tick21.push_back(r2 + tickx);
-    tick21.push_back(r2 - tickx);
-    tickz = G4Point3D(0., 0., tickLength);
-    tick12.push_back(r1 + tickz);
-    tick12.push_back(r1 - tickz);
-    tick22.push_back(r2 + tickz);
-    tick22.push_back(r2 - tickz);
-    textPosition =
-      G4Point3D(x0 - tickLength, y0 + length / 2., z0 - tickLength);
+    rotation = G4RotateZ3D(piBy2);
     break;
   case G4Scale::z:
-    r1 = G4Point3D(x0, y0, z0 - length);
-    r2 = G4Point3D(x0, y0, z0);
-    scaleLine.push_back(r1);
-    scaleLine.push_back(r2);
-    tickx = G4Point3D(tickLength, 0., 0.);
-    tick11.push_back(r1 + tickx);
-    tick11.push_back(r1 - tickx);
-    tick21.push_back(r2 + tickx);
-    tick21.push_back(r2 - tickx);
-    ticky = G4Point3D(0., tickLength, 0.);
-    tick11.push_back(r1 + ticky);
-    tick11.push_back(r1 - ticky);
-    tick21.push_back(r2 + ticky);
-    tick21.push_back(r2 - ticky);
-    textPosition =
-      G4Point3D(x0 - tickLength, y0 + tickLength, z0 - length / 2.);
+    rotation = G4RotateY3D(piBy2);
     break;
   }
+
+  G4double sxmid(scale.GetXmid());
+  G4double symid(scale.GetYmid());
+  G4double szmid(scale.GetZmid());
+  if (scale.GetAutoPlacing()) {
+    sxmid = xmin + oneMinusMargin * (xmax - xmin);
+    symid = ymin + margin * (ymax - ymin);
+    szmid = zmin + oneMinusMargin * (zmax - zmin);
+    switch (scale.GetDirection()) {
+    case G4Scale::x:
+      sxmid -= halfLength;
+      break;
+    case G4Scale::y:
+      symid += halfLength;
+      break;
+    case G4Scale::z:
+      szmid -= halfLength;
+      break;
+    }
+  }
+
+  G4Translate3D translation(sxmid, symid, szmid);
+
+  G4Transform3D transformation(translation * rotation);
+
+  // Draw...
+  BeginPrimitives(transformation);
   AddPrimitive(scaleLine);
   AddPrimitive(tick11);
   AddPrimitive(tick12);
   AddPrimitive(tick21);
   AddPrimitive(tick22);
   AddPrimitive(G4Text(scale.GetAnnotation(), textPosition));
+  EndPrimitives();
 }
 
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.20 2001-07-22 01:05:03 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.21 2001-07-24 22:02:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -110,7 +110,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
   G4bool succesful = pScene -> AddRunDurationModel (model);
   UpdateVisManagerScene (currentSceneName);
   if (succesful) {
-    G4cout << "Axes have been added to scene \"" << currentSceneName << "\""
+    G4cout << "Axes have been added to scene \"" << currentSceneName << "\"."
 	   << G4endl;
   }
 }
@@ -172,7 +172,8 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
     UpdateVisManagerScene ();
     if (successful) {
-      G4cout << "Ghosts added to the Scene, refresh the view to see it."
+      G4cout << "Ghosts have been added to scene \""
+	     << currentSceneName << "\"."
 	     << G4endl;
     }
     return;
@@ -192,7 +193,8 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
       (new G4FlavoredParallelWorldModel (worldForThis));
     UpdateVisManagerScene (currentSceneName);
     if (successful) {
-      G4cout << "Ghosts added to the Scene, refresh the view to see it."
+      G4cout << "Ghosts have been added to scene \""
+	     << currentSceneName << "\"."
 	     << G4endl;
     }
   }
@@ -306,7 +308,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
     G4cout << "Logical volume \"" << pLV -> GetName ()
 	   << " with requested depth of descent "
 	   << requestedDepthOfDescent
-	   << ",\n  has been added to scene \"" << currentSceneName << "\""
+	   << ",\n  has been added to scene \"" << currentSceneName << "\"."
 	   << G4endl;
   }
 }
@@ -318,9 +320,9 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/scale", this);
   fpCommand -> SetGuidance 
-    ("/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [auto|manual] [<x0> <y0> <z0> <unit>]");
+    ("/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]");
   fpCommand -> SetGuidance 
-    ("Defaults: 1 m x auto 0 0 0 m");
+    ("Defaults: 1 m x 1 1 1 auto 0 0 0 m");
   fpCommand -> SetGuidance 
     ("Adds an annotated scale line to the current scene.");
   fpCommand -> SetGuidance 
@@ -334,6 +336,15 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
   parameter->SetDefaultValue ("x");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
@@ -369,19 +380,17 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4double userLength, x0, y0, z0;
+  G4double userLength, red, green, blue, xmid, ymid, zmid;
   G4String userLengthUnit, direction, auto_manual, positionUnit;
   G4std::istrstream is (newValue);
-  is >> userLength >> userLengthUnit >> direction >> auto_manual
-     >> x0 >> y0 >> z0 >> positionUnit;
+  is >> userLength >> userLengthUnit >> direction
+     >> red >> green >> blue
+     >> auto_manual
+     >> xmid >> ymid >> zmid >> positionUnit;
 
   G4double length = userLength * ValueOf(userLengthUnit);
   G4double unit = ValueOf(positionUnit);
-  x0 *= unit; y0 *= unit; z0 *= unit;
-
-  //G4Text g4text(text, G4Point3D(x,y,z));
-  //g4text.SetScreenSize(font_size);
-  //g4text.SetOffset(x_offset,y_offset);
+  xmid *= unit; ymid *= unit; zmid *= unit;
 
   char tempcharstring [50];
   G4std::ostrstream ost (tempcharstring, 50);
@@ -394,16 +403,102 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 
   G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
 
-  G4VModel* model = new G4ScaleModel
-    (G4Scale(length, annotation, scaleDirection, autoPlacing, x0, y0, x0));
+  // 
 
+  G4Scale scale(length, annotation, scaleDirection,
+		autoPlacing, xmid, ymid, xmid);
+
+  G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
+  // Created of the heap because it needs a long lifetime.  This is a
+  // mess.  The model determines the life but the vis atttributes are
+  // associated with the scale.  There's no way of knowing when to
+  // delete the vis atttributes!!!
+  scale.SetVisAttributes(pVisAttr);
+
+  G4VModel* model = new G4ScaleModel(scale);
+
+  // Now figure out the extent...
+  //
+  // From the G4Scale.hh:
+  //
+  // This creates a representation of annotated line in the specified
+  // direction with tick marks at the end.  If autoPlacing is true it
+  // is required to be centred at the front, right, bottom corner of
+  // the world space, comfortably outside the existing bounding
+  // box/sphere so that existing objects do not obscure it.  Otherwise
+  // it is required to be drawn with mid-point at (xmid, ymid, zmid).
+  //
+  // The auto placing algorithm might be:
+  //   x = xmin + (1 + comfort) * (xmax - xmin)
+  //   y = ymin - comfort * (ymax - ymin)
+  //   z = zmin + (1 + comfort) * (zmax - zmin)
+  //   if direction == x then (x - length,y,z) to (x,y,z)
+  //   if direction == y then (x,y,z) to (x,y + length,z)
+  //   if direction == z then (x,y,z - length) to (x,y,z)
+  //
+  // End of clip from G4Scale.hh:
+  //
+  // Implement this in two parts.  Here, use the scale's extent to
+  // "expand" the scene's extent.  Then rendering - in
+  // G4VSceneHandler::AddPrimitive(const G4Scale&) - simply has to
+  // ensure it's within the new extent.
+  //
   G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  const G4double xmin = sceneExtent.GetXmin();
+  const G4double xmax = sceneExtent.GetXmax();
+  const G4double ymin = sceneExtent.GetYmin();
+  const G4double ymax = sceneExtent.GetYmax();
+  const G4double zmin = sceneExtent.GetZmin();
+  const G4double zmax = sceneExtent.GetZmax();
+  const G4double halfLength(length / 2.);
+  const G4double comfort(0.15);
+  const G4double onePlusComfort(1. + comfort);
+  G4double sxmid(xmid), symid(ymid), szmid(zmid);
+  if (autoPlacing) {
+    sxmid = xmin + onePlusComfort * (xmax - xmin);
+    symid = ymin - comfort * (ymax - ymin);
+    szmid = zmin + onePlusComfort * (zmax - zmin);
+    switch (scaleDirection) {
+    case G4Scale::x:
+      sxmid -= halfLength;
+      break;
+    case G4Scale::y:
+      symid += halfLength;
+      break;
+    case G4Scale::z:
+      szmid -= halfLength;
+      break;
+    }
+  }
+  G4double sxmin(sxmid), sxmax(sxmid);
+  G4double symin(symid), symax(symid);
+  G4double szmin(szmid), szmax(szmid);
+  switch (scaleDirection) {
+  case G4Scale::x:
+    sxmin = sxmid - halfLength;
+    sxmax = sxmid + halfLength;
+    break;
+  case G4Scale::y:
+    symin = symid - halfLength;
+    symax = symid + halfLength;
+    break;
+  case G4Scale::z:
+    szmin = szmid - halfLength;
+    szmax = szmid + halfLength;
+    break;
+  }
+  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+  model->SetExtent(scaleExtent);
+  // This extent gets "added" to existing scene extent in
+  // AddRunDurationModel below.
+
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model);
   UpdateVisManagerScene (currentSceneName);
   if (successful) {
     G4cout << "Scale of " << annotation
-	   << " has been added to scene \"" << currentSceneName << "\""
+	   << " has been added to scene \"" << currentSceneName << "\"."
 	   << G4endl;
   }
 }
@@ -482,7 +577,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
   UpdateVisManagerScene (currentSceneName);
   if (successful) {
     G4cout << "Text \"" << text
-	   << "\" has been added to scene \"" << currentSceneName << "\""
+	   << "\" has been added to scene \"" << currentSceneName << "\"."
 	   << G4endl;
   }
 }
@@ -651,7 +746,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 	G4cout << requestedDepthOfDescent;
       }
       G4cout << " further requested depth of descent"
-	     << ",\n  has been added to scene \"" << currentSceneName << "\""
+	     << ",\n  has been added to scene \"" << currentSceneName << "\"."
 	     << G4endl;
     }
   }

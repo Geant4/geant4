@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.18 2001-07-11 10:09:18 gunter Exp $
+// $Id: G4VisCommandsScene.cc,v 1.19 2001-07-24 22:02:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -66,14 +66,21 @@ void G4VVisCommandScene::UpdateCandidateLists () {
 
 void G4VVisCommandScene::UpdateVisManagerScene
 (const G4String& sceneName) {
+
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == sceneName) break;
   }
+
   G4Scene* pScene = 0;  // Zero unless scene has been found...
-  if (iScene < nScenes) pScene = sceneList [iScene];
+  if (iScene < nScenes) {
+    pScene = sceneList [iScene];
+  }
   fpVisManager -> SetCurrentScene (pScene);
+
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 ////////////// /vis/scene/create ///////////////////////////////////////
@@ -337,6 +344,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     if (aScene) {
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
+	// Clear store and force a rebuild...
 	aSceneHandler -> ClearStore ();
 	aSceneHandler -> ClearTransientStore ();
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();

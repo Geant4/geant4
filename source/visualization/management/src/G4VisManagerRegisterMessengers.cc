@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.33 2001-07-22 01:05:06 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.34 2001-07-24 22:02:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,8 +102,8 @@ NI                      [<copy-no>] [<depth>]
   default:                                             1
   Adds logical volume to current scene.
 
-/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [auto|manual] [<x0> <y0> <z0> <unit>]
-  default:                1          m           x        auto        0     0    0    m
+/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]
+  default:                1          m           x       1         1        1        auto          0      0      0     m
   Adds an annotated scale line to the current scene.  See G4Scale.hh
   for further description.
 
