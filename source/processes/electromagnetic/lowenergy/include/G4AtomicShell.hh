@@ -13,8 +13,9 @@
 //
 //      File name:     G4AtomicShell.hh
 //
-//      Author:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
-// 
+//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
+//                      Elena Guardincerri (elena.guardincerri@ge.infn.it) 
+//
 //      Creation date: 1 May 2001
 //
 // -------------------------------------------------------------------
