@@ -73,10 +73,16 @@ p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history da
 #	rm -r cascade.out; cascade 10000 1 800 207 82 > cascade.out; gmake a;
 
 p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
-	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; make a; 
+	rm -r cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a; 
 
-H:	# ::: (H) solving p8 Ok in hydrogen case A=2 Z=1. Also He is ok.
+H1:	# ::: (H) A = 1 protiun
+	rm -r cascade.out cascade.eps; cascade 1000 1 585 1 1 > cascade.out; make a;
+
+H2:	# ::: (H) A = 2 deuterium
 	rm -r cascade.out cascade.eps; cascade 1000 1 585 2 1 > cascade.out; make a;
+
+H3:	# ::: (H) A = 3 tritium
+	rm -r cascade.out cascade.eps; cascade 1000 1 585 3 1 > cascade.out; make a;
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
 	rm -r cascade.out cascade.eps; cascade 1000 2 800 91 40 > cascade.out; make a;
