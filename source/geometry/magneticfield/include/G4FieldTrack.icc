@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.12 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4FieldTrack.icc,v 1.13 2003-12-09 14:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,12 @@ const G4ThreeVector& G4FieldTrack::GetMomentumDir() const
 } 
 
 inline
+G4ThreeVector G4FieldTrack::GetMomentumDirection() const 
+{
+   return fMomentumDir;
+} 
+
+inline
 G4double  G4FieldTrack::GetCurveLength() const 
 {
      return  fDistanceAlongCurve;  
@@ -135,13 +141,11 @@ void G4FieldTrack::SetCurveLength(G4double nCurve_s)
      fDistanceAlongCurve= nCurve_s;  
 }
 
-// #ifdef ENERGY_OK
 inline
 G4double  G4FieldTrack::GetKineticEnergy() const
 {
    return fKineticEnergy;
 }
-// #endif
 
 inline
 void G4FieldTrack::SetKineticEnergy(G4double newKinEnergy)
@@ -184,20 +188,6 @@ void G4FieldTrack::SetProperTimeOfFlight(G4double nTOF)
 {
    fProperTimeOfFlight=nTOF;
 }
-
-#ifdef  MOMENTUM_MODULUS
-inline
-G4double G4FieldTrack::GetMomentumModulus() const
-{
-   return fMomentumModulus;
-}
-
-inline
-void G4FieldTrack::SetMomentumModulus(G4double nMomentumMod)
-{
-   fMomentumModulus= nMomentumMod;         // does not modify energy
-}
-#endif
 
 inline
 void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
@@ -261,8 +251,19 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
 //   note that momentum direction must-be/is normalised
 
 inline
-void G4FieldTrack::LoadFromArray(const G4double valArr[ncompSVEC])
+void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC], G4int noVarsIntegrated)
 {
+  G4int i;
+
+  // Fill the variables not integrated with zero -- so it's clear !!
+  static G4double valArr[ncompSVEC];
+  for( i=0; i<noVarsIntegrated; i++){
+     valArr[i]= valArrIn[i];
+  }
+  for( i=noVarsIntegrated; i<ncompSVEC; i++) {
+     valArr[i]= 0.0; 
+  }
+
   SixVector[0]=valArr[0];
   SixVector[1]=valArr[1];
   SixVector[2]=valArr[2];
@@ -307,7 +308,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SixVector[5]= rStVec.SixVector[5];
   SetCurveLength( rStVec.GetCurveLength() );
 
-  SetKineticEnergy(  rStVec.fKineticEnergy );
+  fKineticEnergy= rStVec.fKineticEnergy;
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
   SetSpin( rStVec.GetSpin() );
