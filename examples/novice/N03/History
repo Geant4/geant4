@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2004-11-12 11:56:25 gbarrand Exp $
+$Id: History,v 1.80 2004-11-14 10:12:08 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+14-11-04 Guy Barrand
+- ExN03DetectorConstruction.cc : in commented vis attributes ; 
+  have transparency = 0.6 for the logicGap.
+
 12-11-04 Guy Barrand
 - exN03Vis[5,10.mac] : correct comments "an volume" -> "a volume".
 

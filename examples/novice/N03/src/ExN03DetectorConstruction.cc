@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.20 2004-11-12 11:11:32 gbarrand Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.21 2004-11-14 10:12:08 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -348,7 +348,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 
  /*
   // Below are vis attributes that permits someone to test / play 
-  // with the interactive expansion / contraction geoemtry system of the
+  // with the interactive expansion / contraction geometry system of the
   // vis/OpenInventor driver :
  {G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   simpleBoxVisAtt->SetVisibility(true);
@@ -362,7 +362,9 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
   atb->SetForceSolid(true);
   logicAbsorber->SetVisAttributes(atb);}
   
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+ {//Set opacity = 0.2 then transparency = 1 - 0.2 = 0.8
+  G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.2));
+  atb->SetForceSolid(true);
   logicGap->SetVisAttributes(atb);}
   */
 
