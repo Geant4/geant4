@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -82,14 +82,13 @@ Current available graphics systems are:
 /testem/det/setRbin 6 0.111
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.9425 0.0355 3.0
+/testem/run/acceptance  0.9425 0.0355 3.0
 #
 /testem/phys/addPhysics  standard
 ### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
 #
-#/process/eLoss/preciseRange  true
 /run/initialize
 Absorber is 3.60564 m   of Water
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -152,8 +151,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
@@ -162,7 +161,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -180,7 +179,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -219,7 +218,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=20.29s Real=27.04s Sys=0.7s
+  User=18.88s Real=24s Sys=0.79s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 

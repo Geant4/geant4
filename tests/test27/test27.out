@@ -1,11 +1,12 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 SimpleBox is now made of U
 /run/verbose 2
 /run/particle/setCut 1 m
@@ -87,8 +88,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -97,7 +98,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -115,7 +116,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -147,7 +148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.4s Real=9.7s Sys=0.08s
+  User=6.7s Real=8.8s Sys=0.12s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -204,8 +205,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -214,7 +215,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -232,7 +233,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -324,8 +325,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -334,7 +335,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -352,7 +353,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -389,7 +390,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.28s Real=4.34s Sys=0.06s
+  User=3.45s Real=3.55s Sys=0.08s
 #
 #
 # deuteron at 200 MeV in U
@@ -429,7 +430,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.28s Sys=0.01s
+  User=0.15s Real=0.15s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -468,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon 
 #
@@ -507,7 +508,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.3s Sys=0s
+  User=0.13s Real=0.14s Sys=0.01s
 #
 #  .....end deuteron.............
 #
@@ -548,7 +549,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.8s Real=2.86s Sys=0.03s
+  User=2.18s Real=2.29s Sys=0.02s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -587,7 +588,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -626,7 +627,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.74s Real=1.76s Sys=0.02s
+  User=0.98s Real=0.98s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -665,7 +666,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.14s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -704,7 +705,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -743,7 +744,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.02s Sys=0.02s
+  User=0.03s Real=0.03s Sys=0s
 #
 #  .....end alpha............
 #
@@ -785,7 +786,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=13.31s Real=13.73s Sys=0.05s
+  User=11.57s Real=12.04s Sys=0.04s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -865,7 +866,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.95s Real=3.98s Sys=0.01s
+  User=3.61s Real=4.01s Sys=0.08s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -906,7 +907,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.17s Sys=0.01s
+  User=0.14s Real=0.17s Sys=0.02s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -986,7 +987,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.33s Sys=0.01s
+  User=0.23s Real=0.27s Sys=0.03s
 #
 #  .....end C(12,6)++............
 #
@@ -1056,8 +1057,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -1066,7 +1067,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -1084,7 +1085,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -1126,7 +1127,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.13s Sys=0s
+  User=0.11s Real=0.12s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

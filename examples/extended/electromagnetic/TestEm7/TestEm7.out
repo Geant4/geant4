@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -132,8 +132,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +142,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -160,7 +160,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -235,20 +235,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=159.5s Real=375.84s Sys=76.61s
+  User=154.28s Real=375.56s Sys=54.77s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.380475 GeV	0.6487797 % 	0.00020789202 Gy
-tally 1: 	 	7.9443938 GeV	0.49652461 % 	0.0001591041 Gy
-tally 2: 	 	3.6027702 GeV	0.22517314 % 	7.2153459e-05 Gy
-tally 3: 	 	1.8576891 GeV	0.11610557 % 	3.7204342e-05 Gy
+tally 0: 	 	10.400219 GeV	0.65001367 % 	0.00020828743 Gy
+tally 1: 	 	7.9906299 GeV	0.49941437 % 	0.00016003008 Gy
+tally 2: 	 	3.6423712 GeV	0.2276482 % 	7.2946557e-05 Gy
+tally 3: 	 	1.8338852 GeV	0.11461782 % 	3.6727615e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1460856105, 180775363
+ Current couple of seeds = 1800509887, 111688235
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
