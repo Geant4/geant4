@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.icc,v 1.3 1999-12-15 14:54:19 gunter Exp $
+// $Id: G4VViewer.icc,v 1.4 2000-05-02 09:51:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,11 +23,11 @@ inline const G4String& G4VViewer::GetName () const {
   return fName;
 }
 
-inline void G4VViewer::SetName (const G4String& name) {
-  fName = name;
+inline const G4String& G4VViewer::GetShortName () const {
+  return fShortName;
 }
 
-inline G4VSceneHandler* G4VViewer::GetScene () const {
+inline G4VSceneHandler* G4VViewer::GetSceneHandler () const {
   return &fSceneHandler;
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.icc,v 1.7 1999-12-15 14:54:19 gunter Exp $
+// $Id: G4VSceneHandler.icc,v 1.8 2000-05-02 09:49:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,8 +20,8 @@ inline G4VGraphicsSystem* G4VSceneHandler::GetGraphicsSystem () const {
   return &fSystem;
 }
 
-inline G4int G4VSceneHandler::GetSceneId () const {
-  return fSceneId;
+inline G4int G4VSceneHandler::GetSceneHandlerId () const {
+  return fSceneHandlerId;
 }
 
 inline G4int G4VSceneHandler::GetViewCount () const {

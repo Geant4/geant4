@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.9 2000-04-12 13:13:59 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.10 2000-05-02 09:49:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
-  fSceneId               (id),
+  fSceneHandlerId        (id),
   fViewCount             (0),
   fpViewer               (0),
   fReadyForTransients    (false),
@@ -67,7 +67,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   if (name == "") {
     char charname [50];
     G4std::ostrstream ost (charname, 50);
-    ost << fSystem.GetName () << '-' << fSceneId << G4std::ends;
+    ost << fSystem.GetName () << '-' << fSceneHandlerId << G4std::ends;
     fName = charname;
   }
   else {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.6 2000-02-21 16:05:21 johna Exp $
+// $Id: G4VViewer.hh,v 1.7 2000-05-02 09:51:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,9 +64,10 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&         GetName           () const;
+  const G4String&         GetShortName      () const;
   void                    SetName           (const G4String&);
   G4int                   GetViewId         () const;
-        G4VSceneHandler*         GetScene          () const;
+  G4VSceneHandler*        GetSceneHandler   () const;
   const G4ViewParameters& GetViewParameters () const;
   void SetViewParameters  (const G4ViewParameters& vp);
 

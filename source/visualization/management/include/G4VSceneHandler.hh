@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.10 2000-04-12 13:13:52 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.11 2000-05-02 09:49:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,7 +147,7 @@ public: // With description
   // Access functions.
   const G4String&     GetName           () const;
   void                SetName           (const G4String&);
-  G4int               GetSceneId        () const;
+  G4int               GetSceneHandlerId () const;
   G4int               GetViewCount      () const;
   G4VGraphicsSystem*  GetGraphicsSystem () const;
   G4Scene*            GetScene          () const;
@@ -235,13 +235,13 @@ protected:
   //////////////////////////////////////////////////////////////
   // Data members
 
-  G4VGraphicsSystem&     fSystem;      // Graphics system.
-  const G4int            fSceneId;     // Id of this instance.
+  G4VGraphicsSystem&     fSystem;          // Graphics system.
+  const G4int            fSceneHandlerId;  // Id of this instance.
   G4String               fName;
-  G4int                  fViewCount;   // To determine view ids.
-  G4ViewerList           fViewerList;  // Viewers.
-  G4VViewer*             fpViewer;     // Current viewer.
-  G4Scene*               fpScene;      // Scene for this scene handler.
+  G4int                  fViewCount;       // To determine view ids.
+  G4ViewerList           fViewerList;      // Viewers.
+  G4VViewer*             fpViewer;         // Current viewer.
+  G4Scene*               fpScene;          // Scene for this scene handler.
 
   //////////////////////////////////////////////////////////////
   // Workspace...
