@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.20 2004-07-26 11:14:59 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.21 2004-11-17 10:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 //          calculation (V.Ivanchenko)
 // 01-03-04 L.Urban signature changed in SampleCosineTheta 
 // 23-04-04 L.urban signature of SampleCosineTheta changed back 
+// 17-11-04 Add method CrossSectionPerAtom (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -100,6 +101,11 @@ public:
                                       G4double kineticEnergy,
                                       G4double cutEnergy,
                                       G4double maxEnergy) = 0;
+
+  virtual G4double CrossSectionPerAtom(
+                                const G4ParticleDefinition*,
+                                      G4double&, G4double&, G4double&, G4double)
+                                      {return 0.0;};
 
   virtual G4DynamicParticle* SampleSecondary(
                                 const G4MaterialCutsCouple*,

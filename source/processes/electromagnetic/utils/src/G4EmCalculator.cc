@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.9 2004-11-16 12:05:51 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.10 2004-11-17 10:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,7 +35,8 @@
 // Creation date: 28.06.2004
 //
 // Modifications:
-// 12.09.2004 Add verbosity (V.Ivanchenko) 
+// 12.09.2004 Add verbosity (V.Ivanchenko)
+// 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -58,6 +59,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ionEffectiveCharge.hh"
 #include "G4RegionStore.hh"
+#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -92,8 +94,8 @@ G4EmCalculator::~G4EmCalculator()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetDEDX(const G4ParticleDefinition* p, const G4Material* mat,
-                                       G4double kinEnergy, const G4Region* region)
+G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition* p,
+                                 const G4Material* mat, const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat, region);
@@ -113,16 +115,16 @@ G4double G4EmCalculator::GetDEDX(const G4ParticleDefinition* p, const G4Material
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetDEDX(const G4String& particle, const G4String& material,
-                                       G4double kinEnergy, const G4String& reg)
+G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4String& particle,
+                                 const G4String& material, const G4String& reg)
 {
-  return GetDEDX(FindParticle(particle),FindMaterial(material),kinEnergy,FindRegion(reg));
+  return GetDEDX(kinEnergy,FindParticle(particle),FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetRange(const G4ParticleDefinition* p, const G4Material* mat,
-                                        G4double kinEnergy, const G4Region* region)
+G4double G4EmCalculator::GetRange(G4double kinEnergy, const G4ParticleDefinition* p,
+                                  const G4Material* mat, const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
@@ -141,17 +143,16 @@ G4double G4EmCalculator::GetRange(const G4ParticleDefinition* p, const G4Materia
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetRange(const G4String& particle, const G4String& material,
-                                        G4double kinEnergy, const G4String& reg)
+G4double G4EmCalculator::GetRange(G4double kinEnergy, const G4String& particle,
+                                  const G4String& material, const G4String& reg)
 {
-  return GetRange(FindParticle(particle),FindMaterial(material),kinEnergy,FindRegion(reg));
+  return GetRange(kinEnergy,FindParticle(particle),FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetKinEnergy(const G4ParticleDefinition* p,
-                                      const G4Material* mat,
-                                            G4double range, const G4Region* region)
+G4double G4EmCalculator::GetKinEnergy(G4double range, const G4ParticleDefinition* p,
+                                      const G4Material* mat, const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
@@ -170,19 +171,19 @@ G4double G4EmCalculator::GetKinEnergy(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetKinEnergy(const G4String& particle, const G4String& material,
-                                            G4double range, const G4String& reg)
+G4double G4EmCalculator::GetKinEnergy(G4double range, const G4String& particle,
+                                      const G4String& material, const G4String& reg)
 {
-  return GetKinEnergy(FindParticle(particle),FindMaterial(material),range,FindRegion(reg));
+  return GetKinEnergy(range,FindParticle(particle),FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetCrossSectionPerMass(
-                                         const G4ParticleDefinition* p,
-                                         const G4Material* mat,
-                                         const G4String& processName, G4double kinEnergy,
-					 const G4Region* region)
+G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
+                                            const G4ParticleDefinition* p,
+                                            const G4String& processName,
+					    const G4Material* mat,
+					    const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
@@ -197,7 +198,7 @@ G4double G4EmCalculator::GetCrossSectionPerMass(
       res /= mat->GetTotNbOfAtomsPerVolume();
       if(verbose>0) {
 	G4cout << "E(MeV)= " << kinEnergy/MeV
-	       << " cross(barn)= " << res/barn
+	       << " cross(cm^2/g)= " << res*gram/cm2
 	       << "  " <<  p->GetParticleName()
 	       << " in " <<  mat->GetName()
 	       << G4endl;
@@ -209,25 +210,51 @@ G4double G4EmCalculator::GetCrossSectionPerMass(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetCrossSectionPerMass(
-                                         const G4String& particle, const G4String& material,
-                                         const G4String& processName, G4double kinEnergy,
-					 const G4String& reg)
+G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
+                                            const G4String& particle,
+					    const G4String& processName,
+                                            const G4String& material,
+					    const G4String& reg)
 {
-  return GetCrossSectionPerMass(FindParticle(particle),FindMaterial(material),
-                                processName,kinEnergy,FindRegion(reg));
+  return GetCrossSectionPerVolume(kinEnergy,FindParticle(particle),processName,
+                                  FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetMeanFreePath(const G4ParticleDefinition* p,
-                                         const G4Material* mat,
+G4double G4EmCalculator::GetCrossSectionPerAtom(G4double kinEnergy,
+                                          const G4ParticleDefinition* p,
+                                          const G4String& processName,
+					  const G4Material* mat,
+					  const G4Region* region)
+{
+  G4double res = GetCrossSectionPerVolume(kinEnergy,p,processName,mat,region);
+  if(mat) res /= mat->GetTotNbOfAtomsPerVolume();
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::GetCrossSectionPerAtom(  G4double kinEnergy,
+                                            const G4String& particle,
+					    const G4String& processName,
+                                            const G4String& material,
+					    const G4String& reg)
+{
+  return GetCrossSectionPerAtom(kinEnergy,FindParticle(particle),processName,
+                                FindMaterial(material),FindRegion(reg));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::GetMeanFreePath(G4double kinEnergy,
+                                         const G4ParticleDefinition* p,
                                          const G4String& processName,
-                                               G4double kinEnergy,
+					 const G4Material* mat,
                                          const G4Region* region)
 {
   G4double res = DBL_MAX;
-  G4double x = GetCrossSectionPerMass(p, mat, processName, kinEnergy,region);
+  G4double x = GetCrossSectionPerVolume(kinEnergy,p, processName, mat,region);
   if(x > 0.0) res = 1.0/(x*(mat->GetTotNbOfAtomsPerVolume()));
   if(verbose>1) {
     G4cout << "E(MeV)= " << kinEnergy/MeV
@@ -241,12 +268,14 @@ G4double G4EmCalculator::GetMeanFreePath(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetMeanFreePath(const G4String& particle, const G4String& material,
-                                         const G4String& processName, G4double kinEnergy,
+G4double G4EmCalculator::GetMeanFreePath(G4double kinEnergy,
+                                         const G4String& particle,
+					 const G4String& processName,
+                                         const G4String& material,
 					 const G4String& reg)
 {
-  return GetMeanFreePath(FindParticle(particle),FindMaterial(material),
-                         processName,kinEnergy,FindRegion(reg));
+  return GetMeanFreePath(kinEnergy,FindParticle(particle),processName,
+                         FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -278,10 +307,10 @@ void G4EmCalculator::PrintInverseRangeTable(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeDEDX(const G4ParticleDefinition* p,
-                                     const G4Material* mat,
+G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
+                                     const G4ParticleDefinition* p,
                                      const G4String& processName,
-                                           G4double kinEnergy,
+				     const G4Material* mat,
                                            G4double cut)
 {
   G4double res = 0.0;
@@ -323,21 +352,23 @@ G4double G4EmCalculator::ComputeDEDX(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeDEDX(const G4String& particle, const G4String& material,
-                                     const G4String& processName, G4double kinEnergy,
+G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
+                                     const G4String& particle,
+				     const G4String& processName,
+                                     const G4String& material,
                                            G4double cut)
 {
-  return ComputeDEDX(FindParticle(particle),FindMaterial(material),
-                     processName,kinEnergy,cut);
+  return ComputeDEDX(kinEnergy,FindParticle(particle),processName,
+                     FindMaterial(material),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeCrossSectionPerMass(
-                                             const G4ParticleDefinition* p,
-                                             const G4Material* mat,
-                                             const G4String& processName,
+G4double G4EmCalculator::ComputeCrossSectionPerVolume(
                                                    G4double kinEnergy,
+                                             const G4ParticleDefinition* p,
+                                             const G4String& processName,
+					     const G4Material* mat,
                                                    G4double cut)
 {
   G4double res = 0.0;
@@ -353,7 +384,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerMass(
     }
     if(verbose>0) {
       G4cout << "E(MeV)= " << kinEnergy/MeV
-	     << " cross(barn)= " << res/barn
+	     << " cross(cm^2/g)= " << res*gram/cm2
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  mat->GetName()
 	     << G4endl;
@@ -364,25 +395,70 @@ G4double G4EmCalculator::ComputeCrossSectionPerMass(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeCrossSectionPerMass(
-                                             const G4String& particle, const G4String& material,
-                                             const G4String& processName, G4double kinEnergy,
+G4double G4EmCalculator::ComputeCrossSectionPerVolume(
+                                                   G4double kinEnergy,
+                                             const G4String& particle,
+					     const G4String& processName,
+                                             const G4String& material,
                                                    G4double cut)
 {
-  return ComputeCrossSectionPerMass(FindParticle(particle),FindMaterial(material),
-                                    processName,kinEnergy,cut);
+  return ComputeCrossSectionPerVolume(kinEnergy,FindParticle(particle),processName,
+                                      FindMaterial(material),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeMeanFreePath(const G4ParticleDefinition* p,
-                                             const G4Material* mat,
-                                             const G4String& processName,
+G4double G4EmCalculator::ComputeCrossSectionPerAtom(
                                                    G4double kinEnergy,
+					     const G4ParticleDefinition* p,
+                                             const G4String& processName,
+					           G4double Z, G4double A,
+		                                   G4double cut)
+{
+  G4double res = 0.0;
+  if(FindEmModel(p, processName, kinEnergy)) {
+    if(UpdateParticle(p, kinEnergy)) {
+      G4double e = kinEnergy;
+      if(baseParticle) {
+        e *= kinEnergy*massRatio;
+        res = currentModel->CrossSectionPerAtom(baseParticle, e, Z, A, cut)*chargeSquare;
+      } else {
+        res = currentModel->CrossSectionPerAtom(p, e, Z, A, cut);
+      }
+    }
+    if(verbose>0) {
+      G4cout << "E(MeV)= " << kinEnergy/MeV
+	     << " cross(barn)= " << res/barn
+	     << "  " <<  p->GetParticleName()
+	     << " Z= " <<  Z << " A= " << A
+	     << G4endl;
+    }
+  }
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
+                                              const G4String& particle,
+                                              const G4String& processName,
+ 					      const G4Element* elm,
+		                                    G4double cut)
+{
+  return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),processName,
+                                    elm->GetZ(),elm->GetA(),cut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
+                                             const G4ParticleDefinition* p,
+                                             const G4String& processName,
+					     const G4Material* mat,
                                                    G4double cut)
 {
   G4double mfp = DBL_MAX;
-  G4double x = ComputeCrossSectionPerMass(p, mat, processName, kinEnergy, cut);
+  G4double x = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, cut);
   if(x > 0.0) mfp = 1.0/(x*(currentMaterial->GetTotNbOfAtomsPerVolume()));
   if(verbose>1) {
     G4cout << "E(MeV)= " << kinEnergy/MeV
@@ -396,13 +472,14 @@ G4double G4EmCalculator::ComputeMeanFreePath(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeMeanFreePath(const G4String& particle,
+G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
+                                             const G4String& particle,
+                                             const G4String& processName,
                                              const G4String& material,
-                                             const G4String& processName, G4double kinEnergy,
                                                    G4double cut)
 {
-  return ComputeMeanFreePath(FindParticle(particle),FindMaterial(material),
-                             processName,kinEnergy,cut);
+  return ComputeMeanFreePath(kinEnergy,FindParticle(particle),processName,
+                             FindMaterial(material),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
