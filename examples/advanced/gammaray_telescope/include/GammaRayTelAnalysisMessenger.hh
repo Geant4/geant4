@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.hh,v 1.2 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTelAnalysisMessenger.hh,v 1.3 2001-11-23 17:44:54 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 //      ------------ GammaRayTelAnalysysMessenger  ------
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dec 2000)
+//  20.11.01 G.Santin: new analysis management, modified according to GammaRayTelAnalysis
 //
 // ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,7 +43,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class GammaRayTelAnalysisManager;
+class GammaRayTelAnalysis;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
@@ -51,14 +52,14 @@ class G4UIcmdWithAString;
 class GammaRayTelAnalysisMessenger: public G4UImessenger
 {
 public:
-  GammaRayTelAnalysisMessenger(GammaRayTelAnalysisManager* );
+  GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* );
   ~GammaRayTelAnalysisMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  GammaRayTelAnalysisManager* GammaRayTelAnalysis;
-  G4UIdirectory*              GammaRayTelAnalysisDir;
+  GammaRayTelAnalysis*       gammaRayTelAnalysis;
+  G4UIdirectory*             gammaRayTelAnalysisDir;
   
   G4UIcmdWithAString*        Histo1DDrawCmd;
   G4UIcmdWithAString*        Histo2DDrawCmd;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.cc,v 1.3 2001-11-23 17:39:04 santin Exp $
+// $Id: GammaRayTelAnalysisMessenger.cc,v 1.4 2001-11-23 17:40:35 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 //      ------------ GammaRayTelAnalysisMessenger ------
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dic 2000)
-//
+// 20.11.01 G.Santin: modified according to the new GammaRayTelAnalysis.cc
 // ************************************************************
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysisMessenger.hh"

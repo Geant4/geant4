@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: GammaRayTelVisManager.cc,v 1.5 2001-11-15 13:09:35 johna Exp $
+// $Id: GammaRayTelVisManager.cc,v 1.6 2001-11-23 17:39:04 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -44,7 +44,7 @@
 #include "G4ASCIITree.hh"
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
-#include "G4HepRepFile.hh"
+//#include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -100,7 +100,7 @@ void GammaRayTelVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
-  RegisterGraphicsSystem (new G4HepRepFile);
+  //  RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: GammaRayTelDummySD.hh,v 1.2 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTelDummySD.hh,v 1.3 2001-11-23 17:44:54 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -57,7 +57,5 @@ public:
   void DrawAll() {};
   void PrintAll() {};
 };
-GammaRayTelDummySD::GammaRayTelDummySD()
-  : G4VSensitiveDetector("dummySD")
-{}
+
 #endif

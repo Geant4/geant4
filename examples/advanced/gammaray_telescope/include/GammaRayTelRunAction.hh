@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.hh,v 1.4 2001-07-11 09:56:57 gunter Exp $
+// $Id: GammaRayTelRunAction.hh,v 1.5 2001-11-23 17:44:54 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -30,6 +30,7 @@
 //
 //      ------------ GammaRayTelRunAction  ------
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+// 18.11.2001 G.Santin - Modified the analysis management according to the new design
 //
 // ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,10 +42,6 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
@@ -52,11 +49,7 @@ class G4Run;
 class GammaRayTelRunAction : public G4UserRunAction
 {
 public:
-#ifdef G4ANALYSIS_USE
-  GammaRayTelRunAction(GammaRayTelAnalysisManager* analysisMgr);
-#else
   GammaRayTelRunAction();
-#endif
   ~GammaRayTelRunAction();
   
 public:
@@ -64,9 +57,6 @@ public:
   void EndOfRunAction(const G4Run*);
 
 private:
-#ifdef G4ANALYSIS_USE
-    GammaRayTelAnalysisManager* analysisManager;
-#endif  
 };
 
 #endif

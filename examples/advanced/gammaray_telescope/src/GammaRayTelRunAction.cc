@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.4 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelRunAction.cc,v 1.5 2001-11-23 17:39:04 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -30,6 +30,8 @@
 //
 //      ------------ GammaRayTelRunAction  ------
 //           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+// 18.11.2001 G.Santin
+// - Modified the analysis management according to the new design
 //
 // ************************************************************
 
@@ -39,6 +41,10 @@
 
 #include "GammaRayTelRunAction.hh"
 
+#ifdef  G4ANALYSIS_USE
+#include "GammaRayTelAnalysis.hh"
+#endif
+
 #include <stdlib.h>
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -47,16 +53,9 @@
 
 extern ofstream outFile;
 
-#ifdef G4ANALYSIS_USE
-GammaRayTelRunAction::GammaRayTelRunAction(GammaRayTelAnalysisManager* aMgr)
-  :analysisManager(aMgr)
-{
-}
-#else
 GammaRayTelRunAction::GammaRayTelRunAction()
 {
 }
-#endif
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,7 +83,8 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
   // If analysis is used reset the histograms
 #ifdef G4ANALYSIS_USE
-  analysisManager->BeginOfRun();
+  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+  analysis->BeginOfRun();
 #endif
 }
 
@@ -102,7 +102,8 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 
   // If analysis is used, print out the histograms
 #ifdef G4ANALYSIS_USE
-  analysisManager->EndOfRun(aRun->GetRunID());
+  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+  analysis->EndOfRun(aRun->GetRunID());
 #endif
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.6 2001-10-24 13:11:43 flongo Exp $
+// $Id: GammaRayTelEventAction.hh,v 1.7 2001-11-23 17:44:54 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -32,6 +32,7 @@
 //           by R.Giannitrapani, F. Longo & G.Santin (13 nov 2000)
 //
 //- inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
+//  20.11.01 G.Santin: new analysis management, modified according to GammaRayTelAnalysis
 // ************************************************************
 
 
@@ -44,21 +45,13 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class GammaRayTelEventAction : public G4UserEventAction
 {
 public:
 
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
-#else
   GammaRayTelEventAction();
-#endif
   virtual ~GammaRayTelEventAction();
   
 public:
@@ -72,9 +65,6 @@ private:
   G4int       calorimeterCollID;                
   G4int       anticoincidenceCollID;                
   G4String    drawFlag;
-#ifdef G4ANALYSIS_USE
-  GammaRayTelAnalysisManager* analysisManager;
-#endif
 };
 
 #endif
