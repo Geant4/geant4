@@ -1,46 +1,21 @@
-# $Id: common.gmk,v 1.24 2000-12-13 08:31:31 gcosmo Exp $
+# $Id: common.gmk,v 1.25 2001-05-30 15:04:14 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
 # Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
 # Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
 # Introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR. Y.Morita, 16/11/99.
+# Actual targets splitted into common_kernel.gmk and common_objy.gmk,
+#                                                      Y.Morita, 15/3/01.
 
 ifndef G4LIBDIR
   G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
-ifdef G4ODBMS_INSTALLATION
-  G4OODDLX_SCHEMA_NAME := -schema Geant4
-else
-  G4OODDLX_SCHEMA_NAME := 
-endif
-G4SCHEMA_HEADER_DIR := $(G4TMPDIR)
-G4SCHEMA_SRC_DIR    := $(G4TMPDIR)
-
 sources := $(wildcard src/*.cc)
-schema_ddl := $(wildcard include/*.ddl)
-schema_hh := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%.hh,$(schema_ddl))
-schema_ref_hh := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%_ref.hh,$(schema_ddl))
 objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
-
-# output of ooddlx in G4TMPDIR (.hh, _ref.hh, _ddl.cc)
-#
-temporaries := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%.hh,$(schema_ddl))
-
-# output of ooddlx in the current directory (if the process does not finish)
-#
-temporaries2 := $(patsubst include/%.ddl,%.hh,$(schema_ddl))
-
-ifdef G4ODBMS
-  temporaries += $(patsubst include/%.ddl,$(G4SCHEMA_SRC_DIR)/%_ddl.cc,$(schema_ddl)) \
-                 $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%_ref.hh,$(schema_ddl))
-  temporaries2 += $(patsubst include/%.ddl,%_ddl.cc,$(schema_ddl)) \
-                  $(patsubst include/%.ddl,%_ref.hh,$(schema_ddl))
-  objects += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.o,$(schema_ddl))
-endif
 
    g4libraries_to_build :=
 ifneq ($(G4LIB_BUILD_SHARED),)
@@ -50,7 +25,29 @@ ifneq ($(G4LIB_BUILD_STATIC),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
 endif
 
-lib: $(g4libraries_to_build)
+# GPPFLAGS is defined here to make the .d file(s) and include it(them).
+# This variable is actually used in common_kernel.gmk and common_objy.gmk.
+
+ifdef G4ODBMS
+  GPPFLAGS := "-MM"
+else
+  GPPFLAGS := "-M"
+endif
+
+###############################################################################
+#
+# Actual gmake targets.
+#
+
+#
+# Target "lib" requires dependency files.
+# gmake must be recursively called with MAKE_DFILES=1.
+#
+
+lib: 
+	@(MAKE_DFILES=1; export MAKE_DFILES; gmake lib_d)
+
+lib_d: $(g4libraries_to_build)
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
@@ -72,116 +69,45 @@ $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
 endif
 
+###############################################################################
+#
+# Actual targets for .o, .d files and others are defined in
+# common_kernel.gmk and common_objy.gmk.
+#
+ifndef G4ODBMS
+
+  include $(G4INSTALL)/config/common_kernel.gmk
+
+else
+
+  include $(G4INSTALL)/config/common_objy.gmk
+
+endif
+###############################################################################
+
 # Touch the versioning file
-$(G4TMPDIR)/obj.last: $(objects)
+$(G4TMPDIR)/obj.last: $(objects) $(schema_o)
 	@touch $@
-
-# Make the .o files.
-ifdef G4ODBMS
-$(G4TMPDIR)/%.o: src/%.cc $(schema_hh)
-else
-$(G4TMPDIR)/%.o: src/%.cc
-endif
-ifdef CPPVERBOSE
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
-else
-	@echo Compiling $*.cc ...
-	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
-endif
-ifdef G4ODBMS
-$(G4TMPDIR)/%.o: $(G4SCHEMA_SRC_DIR)/%.cc
-ifdef CPPVERBOSE
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4SCHEMA_SRC_DIR)/$*.cc
-else
-	@echo Compiling $*.cc ...
-	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4SCHEMA_SRC_DIR)/$*.cc
-endif
-endif
-# Make the temporary files.
-.PRECIOUS: $(G4SCHEMA_SRC_DIR)/%_ddl.cc $(G4SCHEMA_HEADER_DIR)/%.hh $(G4SCHEMA_HEADER_DIR)/%_ref.hh
-
-ifdef G4ODBMS
-$(G4SCHEMA_SRC_DIR)/%_ddl.cc $(G4SCHEMA_HEADER_DIR)/%.hh $(G4SCHEMA_HEADER_DIR)/%_ref.hh: include/%.ddl
-ifndef G4OODDLX_BOOT
-	@echo G4OODDLX_BOOT is not defined.  Stop.
-	exit 1
-endif
-	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
-	@if [ ! -d $(G4SCHEMA_HEADER_DIR) ] ; then mkdir $(G4SCHEMA_HEADER_DIR) ;fi
-	@if [ ! -d $(G4SCHEMA_SRC_DIR) ] ; then mkdir $(G4SCHEMA_SRC_DIR) ;fi
-ifdef CPPVERBOSE
-	ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
-	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	  $(G4OODDLX_FLAGS) $(CPPFLAGS) $< $(G4OODDLX_BOOT)
-else
-	@echo Preprocessing $< ...
-	@ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
-	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	  $(G4OODDLX_FLAGS) $(CPPFLAGS) $< $(G4OODDLX_BOOT)
-endif
-	@mv -f $*.hh $(G4SCHEMA_HEADER_DIR)/
-	@mv -f $*_ref.hh $(G4SCHEMA_HEADER_DIR)/
-	@mv -f $*_ddl.cc $(G4SCHEMA_SRC_DIR)/
-endif
 
 # Make the .d file(s) and include it(them).
 # g++ -MM (or -M) is good at this, except it forgets the subdirectory
 # (hence the use of $G4TMP/).
+# schema_hh and schema_ref_hh are defined in common_objy.gmk.
 
-# define G4SKIP_DEPEND for simplicity
-ifndef G4ODBMS_DEPEND
-ifdef G4ODBMS
-  G4SKIP_DEPEND := 1
-endif
-endif
-
-ifdef G4ODBMS
-  GPPFLAGS := "-MM"
-else
-  GPPFLAGS := "-M"
-endif
-
-ifdef G4SKIP_DEPEND
-$(G4TMPDIR)/%.d: src/%.cc
-	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
-	@echo Skip dependency file creation for file $< ...
-else
-$(G4TMPDIR)/%.d: src/%.cc
-	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+$(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
 	@echo Making dependency for file $< ...
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+ifdef MAKE_DFILES
 ifneq ($(dependencies),)
 -include $(dependencies)
 endif
 endif
 
-# .PHONY targets are executed regardless of time-stamp of any file of
-# same name.
-ifdef G4ODBMS_DEPEND
-.PHONY: all obj lib clean clean_libs d_files install_schema includes
-else
-.PHONY: all obj lib clean clean_libs includes
-endif
-
-obj: $(G4TMPDIR)/obj.last
-
-ifdef G4ODBMS
-headers: $(schema_hh)
-
-d_files: $(dependencies)
-
-$(schema_hh): $(schema_ddl)
-
-install_schema:
-	@echo installing schema header files ...
-	-@(cp -f $(G4TMPDIR)/*.hh $(G4SCHEMA_INCLUDE)/ || \
-	  echo "  schema header file does not exist, so ignore the error message...")
-endif
-
+#
+# Installation of include files
+#
 installed_includes:=$(foreach file,$(wildcard include/*),$(shell test -f $(file) && echo $(file)))
 installed_includes:=$(patsubst include/%,$(G4INCLUDE)/%,$(installed_includes))
 
@@ -195,12 +121,17 @@ includes::	$(installed_includes)
 $(installed_includes): $(G4INCLUDE)/% : include/%
 	@cp -p $< $@
 
+#
+# Clean up libraries
+#
 ifndef G4EXLIB
 clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
+ifdef schema_hh
 	@rm -f $(schema_hh) $(schema_ref_hh)
+endif
 	@rm -rf $(G4TMPDIR)
 endif
 

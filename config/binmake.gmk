@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.57 2001-03-26 08:34:18 gunter Exp $
+# $Id: binmake.gmk,v 1.58 2001-05-30 15:04:13 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -347,25 +347,10 @@ ifdef G4ODBMS
 
 cleandb: clean newboot
 
-newboot:
-	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
-	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
-	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
+newboot: $(G4EXAMPLE_BOOT)
 
-newfd:
-ifndef G4EXAMPLE_FDID
-	@echo G4EXAMPLE_FDID is not defined.  Stop.
-	exit 1
-endif
-	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
-	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
-	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
-	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
-	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
-	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
+newfd: $(G4EXAMPLE_FD)
+
 endif
 ############################- targets for G4ODBMS -############################
 

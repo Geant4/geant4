@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.70 2000-12-08 09:41:26 gcosmo Exp $
+# $Id: architecture.gmk,v 1.71 2001-05-30 15:04:13 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -123,7 +123,8 @@ ifdef G4ODBMS
 # set to $G4LIB/$G4SYSTEM/schema ...
 #
 ifndef G4SCHEMA_DIR
-  G4SCHEMA_DIR := $(G4LIB)/$(G4SYSTEM)/schema
+  G4SCHEMA_DIR     := $(G4LIB)/$(G4SYSTEM)/schema
+  G4SCHEMA_BOOT    := $(G4SCHEMA_DIR)/G4SCHEMA
   G4SCHEMA_INCLUDE := $(G4SCHEMA_DIR)/include
 endif
 ifndef G4SCHEMA_FDID
@@ -132,16 +133,6 @@ endif
 
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_INCLUDE) ] && mkdir -p $(G4SCHEMA_INCLUDE) )
-
-# If not specified, the default path for G4 temporary schema G4TMPSCHEMA_DIR is
-# set to $G4TMP/$G4SYSTEM/schema (for building persistency library)...
-#
-ifndef G4TMPSCHEMA_DIR
-  G4TMPSCHEMA_DIR := $(G4TMP)/$(G4SYSTEM)/schema
-  G4TMPSCHEMA_BOOT := $(G4TMPSCHEMA_DIR)/G4SCHEMA
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_DIR) ] && mkdir -p $(G4TMPSCHEMA_DIR) )
 
 # If not specified, the default path for G4 example schema G4EXAMPLE_BOOT_DIR is
 # set to $G4WORKDIR/exampleSchema (for persistency examples)...
@@ -165,7 +156,7 @@ ifndef G4EXAMPLE_FD_DIR
 endif
 
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_FD_DIR) ] && mkdir -p $(G4EXAMPLE_FD_DIR) )
-G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
+G4DDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
 
 ifndef G4EXAMPLE_FD
   G4EXAMPLE_FD = $(G4EXAMPLE_FD_DIR)/$(name)
