@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2002-10-28 11:10:45 johna Exp $
+$Id: History,v 1.41 2002-10-29 15:41:55 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 28, 2002, J.Allison
+Oct 28, 2002, J.Allison  (traj03)
 - Changed GetAttDefs return signature to map.
 - Changed GetAttValues to CreateAttValues.
 - Improved descriptions.
