@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.11 2003-04-02 21:56:47 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.12 2003-04-10 00:58:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"                
 #include "g4std/fstream"       
+
 
 
 G4ProductionCutsTable* G4ProductionCutsTable::fG4ProductionCutsTable = 0;
@@ -452,7 +453,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
 						 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL";
+  const G4String key = "MATERIAL-V2.0";
   G4std::ofstream fOut;  
 
   // open output file //
@@ -528,7 +529,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
 						 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL";
+  const G4String key = "MATERIAL-V2.0";
   G4std::ifstream fIn;  
 
   // open input file //
@@ -561,7 +562,8 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
   if (key!=keyword) {
 #ifdef G4VERBOSE  
     G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-    G4cout << " Can not find key word " << keyword << G4endl;
+    G4cout << " Wrong key word " << key ;
+    G4cout <<"( !=  "<< keyword << ")" <<G4endl;
 #endif
     return false;
   }
@@ -636,7 +638,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
 				    G4bool          ascii)
 {  
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE";
+  const G4String key = "COUPLE-V2.0";
   G4std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
 
@@ -757,7 +759,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
 							   G4bool          ascii )
 {
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE";
+  const G4String key = "COUPLE-V2.0";
   G4std::ifstream fIn;  
 
   // open input file //
@@ -790,7 +792,8 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
   if (key!=keyword) {
 #ifdef G4VERBOSE  
     G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-    G4cout << " Can not find key word " << keyword << G4endl;
+    G4cout << " Wrong key word " << key ;
+    G4cout <<"( !=  "<< keyword << ")" <<G4endl;
 #endif
     return false;
   }
@@ -898,7 +901,7 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
 					      G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT";
+  const G4String key = "CUT-V2.0";
   G4std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
   
@@ -972,7 +975,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
 						 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT";
+  const G4String key = "CUT-V2.0";
   G4std::ifstream fIn;  
 
   // open input file //
@@ -1005,7 +1008,8 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   if (key!=keyword) {
 #ifdef G4VERBOSE  
     G4cout << "G4ProductionCutTable::RetreiveCutsInfo ";
-    G4cout << " Can not find key word " << keyword << G4endl;
+    G4cout << " Wrong key word " << key ;
+    G4cout <<"( !=  "<< keyword << ")" <<G4endl;
 #endif
     return false;
   }
@@ -1041,6 +1045,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   return true;
 }
+
 
 
 
