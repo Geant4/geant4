@@ -38,6 +38,9 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   G4cout << "Please enter the fusionToExchange"<<G4endl;
   G4cin >> fusionToExchange;
   //G4double fusionToExchange = 0.000001;
+  G4cout << "Please enter the cut-off for calculating the nuclear radius in percent"<<G4endl;
+  G4cin >> theInnerCoreDensityCut;
+  // theInnerCoreDensityCut = 50.;
 }
 
 G4VParticleChange* G4StringChipsParticleLevelInterface::
@@ -91,8 +94,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double impactY = theImpact.second;
   G4double inpactPar2 = impactX*impactX + impactY*impactY;
   
-  G4double radius2 = theNucleus->GetNuclearRadius(5*perCent);
-  radius2 *= radius2;
+  G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   G4double pathlength = 0;
   if(radius2 - inpactPar2>0) pathlength = 2.*sqrt(radius2 - inpactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
@@ -122,7 +124,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
     if(!inserted)
     {
-      theSorted.push_front(it);
+      theSorted.push_back(it);
     }
   }
   
@@ -151,7 +153,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       runningEnergy-=G4Proton::Proton()->GetPDGMass();
     if(current->second->GetDefinition() == G4Neutron::Neutron())
       runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
-    if(runningEnergy > theEnergyLostInFragmentation) break;
+      G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;  
+    if(runningEnergy > theEnergyLostInFragmentation) continue;
     
      G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
            << current->second->GetDefinition()->GetPDGEncoding()<<" "
@@ -161,7 +164,6 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theHigh = current->second->Get4Momentum(); 
     proj4Mom = current->second->Get4Momentum(); 
     proj4Mom.boost(-1.*targ4Mom.boostVector());  
-//     G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;  
     nD = current->second->GetDefinition()->GetQuarkContent(1);
     nU = current->second->GetDefinition()->GetQuarkContent(2);
     nS = current->second->GetDefinition()->GetQuarkContent(3);
