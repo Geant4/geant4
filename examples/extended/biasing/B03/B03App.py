@@ -33,6 +33,7 @@ class G4RunManager(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, G4RunManager, name)
     def BeamOn(*args): return apply(_B03App.G4RunManager_BeamOn,args)
+    def Initialize(*args): return apply(_B03App.G4RunManager_Initialize,args)
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<C G4RunManager instance at %s>" % (self.this,)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.3 2003-02-19 08:24:36 gcosmo Exp $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.4 2003-03-11 13:54:18 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,7 +86,7 @@ void B03ImportanceDetectorConstruction::Construct()
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
 
-  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
+  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, 0));
 
 
 

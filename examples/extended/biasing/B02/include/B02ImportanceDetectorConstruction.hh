@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh,v 1.1 2002-11-08 14:52:16 dressel Exp $
+// $Id: B02ImportanceDetectorConstruction.hh,v 1.2 2003-03-11 13:54:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

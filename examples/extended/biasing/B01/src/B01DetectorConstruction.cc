@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.8 2003-02-19 08:02:36 gcosmo Exp $
+// $Id: B01DetectorConstruction.cc,v 1.9 2003-03-11 13:54:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -252,22 +252,21 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   fIStore = new G4IStore(*pWorldVolume);
 
-  // for the world volume repnum is -1 !
+  // for the world volume repnum is 0 !
   G4int n = 0;
   G4double imp =1;
+  fIStore->AddImportanceGeometryCell(1, *pWorldVolume);
   for (G4std::vector<G4VPhysicalVolume *>::iterator it =
 	 physvolumes.begin();
        it != physvolumes.end(); it++)
   {
-    imp = pow(2., n++);
-    G4cout << "Going to assign importance: " << imp << ", to volume: " 
-	   << (*it)->GetName() << G4endl;
-    if (*it == pWorldVolume)
+    if (*it != pWorldVolume)
     {
-      // repnum -1 
-      fIStore->AddImportanceGeometryCell(imp, **it, -1); 
+      imp = pow(2., n++);
+      G4cout << "Going to assign importance: " << imp << ", to volume: " 
+	     << (*it)->GetName() << G4endl;
+      fIStore->AddImportanceGeometryCell(imp, **it); 
     }
-    fIStore->AddImportanceGeometryCell(imp, **it);
   }
 
   // the remaining part pf the geometry (rest) gets the same

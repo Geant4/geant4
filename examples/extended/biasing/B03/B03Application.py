@@ -63,6 +63,8 @@ class B03Application:
 
         
         self.CellRest = self.pgeom.GetGeometryCell(19)
+        r = self.base.GetRunManager()
+        r.Initialize()
 
     def createIstoreAndScorer(self):
         if "istore" in dir(self):
@@ -92,7 +94,7 @@ class B03Application:
 
         # set importance of world volume
         self.istore. \
-        AddImportanceGeometryCell(1, G4GeometryCell(self.p_world,-1))
+        AddImportanceGeometryCell(1, G4GeometryCell(self.p_world,0))
         imp_cell_17 = self.istore.GetImportance(self.pgeom.GetGeometryCell(17))
         
         self.istore. \
