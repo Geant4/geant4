@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.3 2003-11-03 17:15:22 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.4 2003-12-05 17:08:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,13 +36,6 @@
 #include "G4GeometryMessenger.hh"
 #include "G4PropagatorInField.hh"
 #include "G4FieldManager.hh"
-
-// Ensures correct order of construction and destruption of static objects.
-//
-#include "G4NavigationLevel.hh"
-
-G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
-G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
 
 G4TransportationManager* G4TransportationManager::fTransportationManager=0;
 
