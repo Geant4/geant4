@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.45 1999-05-25 13:46:12 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.46 1999-05-25 14:55:04 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -22,6 +22,7 @@ geant4/source/geometry/management    geometry-01-00-05
 geant4/source/geometry/solids        geometry-01-00-05
 geant4/source/geometry/volumes       geometry-01-00-05
 geant4/source/global           global-01-00-04
+geant4/source/global/STLInterface/rw/tpordvec.h 1.16
 geant4/source/graphics_reps    greps-01-00-07
 geant4/source/intercoms        geant4-00-ref-09
 geant4/source/interfaces       geant4-00-ref-09
