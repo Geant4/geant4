@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2001-05-31 17:33:20 gcosmo Exp $
+$Id: History,v 1.49 2001-10-18 13:15:25 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-00
+- Corrected the initialisation of fEpsilonMin in G4PropagatorInField 
+   constructor, which was forgotten.
 
 May 31st, 2001       G. Cosmo - geomvol-V03-01-08
 - Fixed usage of 'fabs', which belongs to global scope, NOT in std
