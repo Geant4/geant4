@@ -1,3 +1,13 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BREPSolid.cc,v 1.5 1999-05-21 20:00:33 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+
 #include "G4BREPSolid.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
