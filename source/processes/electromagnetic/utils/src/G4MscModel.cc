@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.21 2004-09-21 11:53:48 urban Exp $
+// $Id: G4MscModel.cc,v 1.22 2004-11-03 14:56:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,10 @@
 //          changes in the numerical values of some other parameters)
 //          ---> approximately step independent distribution (L.Urban)
 // 21-09-04 change in the tail of the angular distribution (L.Urban)
+//
+// 03-11-04 precision problem for very high energy ions and small stepsize
+//          solved in SampleCosineTheta (L.Urban).
+//
 
 // Class Description:
 //
@@ -512,8 +516,6 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy,
-//                                       G4double lambda)
 G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy)
 {
   G4double cth = 1. ;
@@ -614,18 +616,20 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
 
           const G4double fctail = factail*1.0 ;
           c = 2.+fctail*tau ;
-          if(c == 2.) c=2.000001 ;
+          G4double c1 = c-1. ;
+          G4double c2 = c-2. ;
+          if(c2 == 0.) c2 = fctail*tausmall ;            
 
           b = 1.+(c-xsi)/a ;
 
           b1 = b+1. ;
           bx = c/a ;
-          eb1=exp((c-1.)*log(b1)) ;
-          ebx=exp((c-1.)*log(bx)) ;
-          xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+          eb1=exp((c1)*log(b1)) ;
+          ebx=exp((c1)*log(bx)) ;
+          xmean2 = (x0*eb1+ebx-(eb1*bx-b1*ebx)/c2)/(eb1-ebx) ;
 
           f1x0 = a*ea/eaa ;
-          f2x0 = (c-1.)*eb1*ebx/(eb1-ebx)/
+          f2x0 = c1*eb1*ebx/(eb1-ebx)/
                           exp(c*log(bx)) ;
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
