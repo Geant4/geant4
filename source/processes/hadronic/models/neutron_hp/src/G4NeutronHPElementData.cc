@@ -122,19 +122,10 @@
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
-//        G4cout << "Harmoniseing 1: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
         theMerge->SetData(m, active->GetEnergy(a), active->GetXsec(a));
-        // addiere passiv. interpoliert auf demn punkt theMerge.GetLowEdgeEnergy(m)
-//        G4cout << "Harmoniseing 2: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
         G4double x  = theMerge->GetEnergy(m);
-        G4double x1 = passive->GetEnergy(p);
-        G4double x2 = passive->GetEnergy(p+1);
-        G4double y1 = passive->GetXsec(x1);
-        G4double y2 = passive->GetXsec(x2);
         G4double y = passive->GetXsec(x); 
-//        G4cout << "Harmoniseing 3: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
         theMerge->SetData(m, x, theMerge->GetXsec(m)+y);
-//        G4cout << "Harmoniseing 4: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
         m++;
         a++;
       } else {

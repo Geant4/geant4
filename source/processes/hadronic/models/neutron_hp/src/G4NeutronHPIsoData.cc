@@ -37,6 +37,8 @@
   void G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this Isotope
   {
     G4String dirName;
+    if(!getenv("NeutronHPCrossSections")) 
+       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     G4String baseName = getenv("NeutronHPCrossSections");
     dirName = baseName+"/Fission";
     if(Z>89) 
@@ -48,15 +50,19 @@
        theChannelData = new G4NeutronHPVector;
     }
     theFissionData = theChannelData;
+    theChannelData = NULL; // fast fix for double delete; revisit later. @@@@@@@
     dirName = baseName+"/Capture";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theCaptureData = theChannelData;
+    theChannelData = NULL;
     dirName = baseName+"/Elastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theElasticData = theChannelData;
+    theChannelData = NULL;
     dirName = baseName+"/Inelastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theInelasticData = theChannelData;
+    theChannelData = NULL;
     
 //    if(theInelasticData!=NULL) G4cout << "Inelastic Data Statistics: "<<theInelasticData->GetVectorLength()<<endl;
 //    if(theElasticData!=NULL) G4cout << "Elastic Data Statistics: "<<theElasticData->GetVectorLength()<<endl;
