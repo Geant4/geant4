@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.1 2003-11-28 00:28:36 gum Exp $
+// $Id: G4SurfaceProperty.hh,v 1.2 2003-12-01 15:13:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,16 +29,19 @@
 // G4SurfaceProperty Definition
 ////////////////////////////////////////////////////////////////////////
 //
+// Class Description:
+//
+// A base class describing a surface property.
+// Derived classes are G4Opticalsurface, G4Firovsurface, etc.      
+// Contains the enumeration G4SurfaceType.
+
 // File:        G4SurfaceProperty.hh
 // Description: A base class for for descriping surface property such
 //              as G4OpticalSurface, G4FirsovSurface, G4X-raySurface
 // Version:     1.0
 // Created:     13-10-2003
 // Author:      Fan Lei
-// Updated:     27-11-2003: add method and class descriptors
-// mail:        fan.lei@cern.ch
 //
-// Cvs version: 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4SurfaceProperty_h
@@ -48,14 +51,8 @@
 // Includes
 /////////////
 
-#include "globals.hh"
-#include "templates.hh"
-
-// Class Description:
-// A base class for descriping a surface property. Derived classes are G4Opticalsurface,
-// G4Firovsurface, etc.      
-// Contains the enumerations: G4SurfaceType
-// Class Description - End:
+#include "G4Types.hh"
+#include "G4String.hh"
 
 enum G4SurfaceType
 {
@@ -78,7 +75,7 @@ public: // Without description
         // Operators
         //////////////
 
-  //        G4SurfaceProperty(const G4SurfaceProperty &right);
+  //    G4SurfaceProperty(const G4SurfaceProperty &right);
   //	const G4SurfaceProperty & operator=(const G4SurfaceProperty &right);
 
   //	G4int operator==(const G4SurfaceProperty &right) const;
@@ -92,7 +89,7 @@ public: // With description
 
         G4SurfaceProperty(const G4String& name,
 			  G4SurfaceType type = x_ray)
-	  :theName(name), theType(type)
+	  : theName(name), theType(type)
         {
         }
         // Constructor of a X-ray optical surface object.
@@ -125,7 +122,7 @@ protected:
 // Basic data members ( To define surface property)
 // ------------------
 
-	G4String theName;			// Surface name
+	G4String theName;		// Surface name
 
 	G4SurfaceType theType;		// Surface type
 

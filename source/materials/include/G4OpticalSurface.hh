@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.6 2003-11-28 00:28:55 gum Exp $
+// $Id: G4OpticalSurface.hh,v 1.7 2003-12-01 15:13:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,9 +37,6 @@
 // Updated:     1999-10-29 add method and class descriptors
 // mail:        gum@triumf.ca
 //
-//              27-11-2003: Fan Lei
-//                - chnanged to use G4SurfaceProperty as base class
-// Cvs version: 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpticalSurface_h
@@ -49,8 +46,7 @@
 // Includes
 /////////////
 
-#include "globals.hh"
-#include "templates.hh"
+#include "G4Types.hh"
 #include "G4SurfaceProperty.hh"
 
 // Class Description:
@@ -90,8 +86,8 @@ public: // Without description
         // Operators
         //////////////
   
-  //        G4OpticalSurface(const G4OpticalSurface &right);
-  //      const G4OpticalSurface & operator=(const G4OpticalSurface &right);
+	G4OpticalSurface(const G4OpticalSurface &right);
+	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
   
 	G4int operator==(const G4OpticalSurface &right) const;
 	G4int operator!=(const G4OpticalSurface &right) const;

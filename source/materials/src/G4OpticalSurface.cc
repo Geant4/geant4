@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.8 2003-11-28 00:29:59 gum Exp $
+// $Id: G4OpticalSurface.cc,v 1.9 2003-12-01 15:13:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,10 @@
 // Author:      Peter Gumplinger
 // mail:        gum@triumf.ca
 //
-// Cvs version: 
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "globals.hh"
 #include "G4OpticalSurface.hh"
 
 /////////////////////////
@@ -50,21 +50,21 @@
         // Operators
         //////////////
 
-//const G4OpticalSurface& 
-//      G4OpticalSurface::operator=(const G4OpticalSurface& right)
-//{
-//  if (this != &right)
-//    {
-//      theName                    = right.theName;
-//      theModel                   = right.theModel;
-//      theFinish                  = right.theFinish;
-//      theType                    = right.theType;
-//      sigma_alpha                = right.sigma_alpha;
-//      polish                     = right.polish;
-//      theMaterialPropertiesTable = right.theMaterialPropertiesTable;
-//     } 
-//  return *this;
-//}
+const G4OpticalSurface& 
+      G4OpticalSurface::operator=(const G4OpticalSurface& right)
+{
+  if (this != &right)
+    {
+      theName                    = right.GetName();
+      theModel                   = right.theModel;
+      theFinish                  = right.theFinish;
+      theType                    = right.GetType();
+      sigma_alpha                = right.sigma_alpha;
+      polish                     = right.polish;
+      theMaterialPropertiesTable = right.theMaterialPropertiesTable;
+     } 
+  return *this;
+}
 
         /////////////////
         // Constructors
@@ -94,10 +94,11 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 	}
 }
 
-//G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
-//{
-//	*this = right;
-//}
+G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
+  : G4SurfaceProperty(right.GetName())
+{
+	*this = right;
+}
 
 G4OpticalSurface::~G4OpticalSurface(){}
 
