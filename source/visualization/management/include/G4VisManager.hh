@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.8 1999-11-25 15:26:39 johna Exp $
+// $Id: G4VisManager.hh,v 1.9 1999-11-29 15:20:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,9 +52,10 @@
 // of G4ViewParameters for available parameters and also for a
 // description of the concept of a "standard view" and all that).
 //
-// G4VisManager is "state dependent", i.e., it is notified on change
-// of state (G4ApplicationState).  This is used to draw hits and
-// trajectories in the current scene at the end of event, as required.
+// A friend class G4VisStateDependent is "state dependent", i.e., it
+// is notified on change of state (G4ApplicationState).  This is used
+// to message the G4VisManager to draw hits and trajectories in the
+// current scene at the end of event, as required.
 
 #ifndef G4VISMANAGER_HH
 #define G4VISMANAGER_HH
@@ -69,7 +70,6 @@
 #include "G4ViewParameters.hh"
 #include "G4Transform3D.hh"
 #include "G4UImessenger.hh"
-#include "G4VStateDependent.hh"
 
 #include "g4rw/tpordvec.h"
 
@@ -88,7 +88,7 @@ class G4Polymarker;
 class G4Polyhedron;
 class G4NURBS;
 
-class G4VisManager: public G4VVisManager, public G4VStateDependent {
+class G4VisManager: public G4VVisManager {
 
   // Friends - classes and functions which need access to private
   // members of G4VisManager.  This is mainly to obtain access to
@@ -107,6 +107,8 @@ class G4VisManager: public G4VVisManager, public G4VStateDependent {
 
   friend class ostream & operator <<
   (class ostream &, const class G4VSceneHandler &);
+
+  friend class G4VisStateDependent;
 
   // Now classes associated with the old commands...
   friend class G4VisManMessenger;
@@ -207,11 +209,6 @@ public: // With description
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
-  G4bool Notify (G4ApplicationState requestedState);
-  // This is called on change of state (G4ApplicationState).  It is
-  // used to draw hits and trajectories if included in the current
-  // scene at the end of event, as required.
-
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
 
@@ -235,6 +232,13 @@ public: // With description
 
   void RefreshCurrentView  ();
   // Soft clear, then redraw.
+
+private:
+
+  void EndOfEvent ();
+  // This is called on change of state (G4ApplicationState).  It is
+  // used to draw hits and trajectories if included in the current
+  // scene at the end of event, as required.
 
 public:
 
@@ -294,6 +298,8 @@ protected:
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
   G4RWTPtrOrderedVector <G4UImessenger> fMessengerList;
+  G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
+
 };
 
 #include "G4VisManager.icc"

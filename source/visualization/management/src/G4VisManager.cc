@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.11 1999-11-11 15:38:13 gunter Exp $
+// $Id: G4VisManager.cc,v 1.12 1999-11-29 15:20:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,7 @@
 #include "G4VisManager.hh"
 
 #include "G4UImanager.hh"
-#include "G4StateManager.hh"
+#include "G4VisStateDependent.hh"
 #include "G4UIdirectory.hh"
 #include "G4VisFeaturesOfFukuiRenderer.hh"
 #include "G4VisFeaturesOfDAWNFILE.hh"
@@ -57,7 +57,11 @@ G4VisManager::G4VisManager ():
       ("G4VisManager: attempt to Construct more than one VisManager.");
   }
   else {
+
     fpInstance = this;
+
+    fpStateDependent = new G4VisStateDependent (this);
+    // No need to delete this; G4StateManager does this.
 
     G4cout << "Constructing Visualization Manager...." << endl;
     // Note: You might think that we could register graphics systems
@@ -419,28 +423,6 @@ void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
   G4LogicalVolume* pLV  = physicalVol.GetLogicalVolume ();
   G4VSolid*        pSol = pLV -> GetSolid ();
   Draw (*pSol, attribs, objectTransform);
-}
-
-G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
-  G4StateManager* stateManager = G4StateManager::GetStateManager ();
-  if(stateManager -> GetPreviousState () == EventProc &&
-     requestedState == GeomClosed) {
-    if (fpConcreteInstance && IsValidView ()) {
-      G4ModelingParameters* pMP =
-	fpSceneHandler -> CreateModelingParameters ();
-      const G4RWTPtrOrderedVector <G4VModel>& EOEModelList =
-	fpScene -> GetEndOfEventModelList ();
-      fpSceneHandler->ClearTransientStore(); //GB
-      for (int i = 0; i < EOEModelList.entries (); i++) {
-	G4VModel* pModel = EOEModelList [i];
-	pModel -> SetModelingParameters (pMP);
-	pModel -> DescribeYourselfTo (*fpSceneHandler);
-	pModel -> SetModelingParameters (0);
-      }
-      delete pMP;
-    }
-  }
-  return true;
 }
 
 void G4VisManager::CreateSceneHandler (G4String name) {
@@ -895,6 +877,23 @@ void G4VisManager::RefreshCurrentView  () {  // Soft clear, then redraw.
     fpViewer -> ClearView ();  // Soft clear, i.e., clears buffer only.
     Draw ();
     Show ();
+  }
+}
+
+void G4VisManager::EndOfEvent () {
+  if (fpConcreteInstance && IsValidView ()) {
+    G4ModelingParameters* pMP =
+      fpSceneHandler -> CreateModelingParameters ();
+    const G4RWTPtrOrderedVector <G4VModel>& EOEModelList =
+      fpScene -> GetEndOfEventModelList ();
+    fpSceneHandler->ClearTransientStore(); //GB
+    for (int i = 0; i < EOEModelList.entries (); i++) {
+      G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters (pMP);
+      pModel -> DescribeYourselfTo (*fpSceneHandler);
+      pModel -> SetModelingParameters (0);
+    }
+    delete pMP;
   }
 }
 
