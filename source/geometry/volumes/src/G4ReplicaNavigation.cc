@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.cc,v 1.5 2001-02-15 14:34:07 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.6 2001-02-23 08:11:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -517,7 +517,7 @@ G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
       point.setZ(point.z()-val);
       break;
     case kPhi:
-      val=-(offset+width*(replicaNo));
+      val=-(offset+width*(replicaNo+0.5));
       SetPhiTransformation(val,pVol);
       cosv=cos(val);
       sinv=sin(val);
@@ -565,8 +565,8 @@ G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
       pVol->SetTranslation(G4ThreeVector(0,0,val));
       break;
     case kPhi:
-      val=-(offset+width*(replicaNo));
-      SetPhiTransformation(val);
+      val=-(offset+width*(replicaNo+0.5));
+      SetPhiTransformation(val,pvol);
       break;
     case kRho:
       // No setup required for radial case
