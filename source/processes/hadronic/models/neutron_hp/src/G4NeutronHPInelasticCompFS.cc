@@ -320,7 +320,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     }
     if(nothingWasKnownOnHadron)
     {
-      G4double totalPhotonEnergy;
+      G4double totalPhotonEnergy = 0;
       if(thePhotons!=NULL)
       {
         G4int nPhotons = thePhotons->length();
