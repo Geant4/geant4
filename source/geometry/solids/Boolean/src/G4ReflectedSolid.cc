@@ -21,7 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.6 2002-03-26 14:22:20 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.7 2002-04-16 10:14:22 grichine Exp $
+//
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -32,6 +33,7 @@
 #include "G4ReflectedSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
+#include "G4VSolid.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -249,6 +251,7 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
 				         G4double& pMin, 
                                          G4double& pMax           ) const 
 {
+
   G4AffineTransform sumTransform ;
   G4Transform3D sumT, pt3d ;
 
@@ -259,26 +262,111 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   G4bool extentR ;
   G4double minR, maxR ;
 
-  pt3d= G4Transform3D(pTransform.NetRotation().inverse(),
+  pt3d = G4Transform3D(pTransform.NetRotation().inverse(),
                       pTransform.NetTranslation()          );
   sumT = pt3d * (*fDirectTransform3D) ;
   sumT = ((sumT*tX)*tY)*tZ;
-  sumTransform = G4AffineTransform( sumT.getRotation().inverse(),
+  sumTransform = G4AffineTransform( sumT.getRotation(),
+                                    // sumT.getRotation().inverse(),
                                     sumT.getTranslation()         );
 
+
+  //  sumTransform.Product(*fDirectTransform,pTransform) ;
+  //  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,min,max) ;
   extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
                                        minR,maxR) ;
-  /*
+
+  // Additional extension, just in case:
+  /*  
   if( maxR > 0 ) pMax = 2.0*maxR ;
   else           pMax = 0.5*maxR ;
-
   if( minR > 0 ) pMin = 0.5*minR ;
   else           pMin = 2.0*minR ;
+  maxR =  pMax;
+  minR =  pMin;
   */
+  // and John's trick:
   pMin = -maxR ;  // minR ; 
-  pMax = -minR ;  //maxR ; 
+  pMax = -minR ;  // maxR ; 
   return extentR ;
+
+  /* ******************************************
+
+  // General rotated case from G4Tube
+
+  G4int i, noEntries, noBetweenSections4 ;
+  G4bool existsAfterClip = false ;
+  G4Point3D refPoint;
+  G4ThreeVector point; 
+  G4ThreeVectorList* vertices    = new G4ThreeVectorList() ; 
+  G4ThreeVectorList* tmpVertices = fPtrSolid->CreateRotatedVertices(pTransform) ;
+    
+  pMin      = +kInfinity ;
+  pMax      = -kInfinity ;
+  noEntries = tmpVertices->size() ;
+
+  for(i = 0 ; i < noEntries ; i++ )
+  {
+      point = (*tmpVertices)[i];
+      //  G4Point3D refPoint = (*fDirectTransform3D)*G4Point3D(point) ;
+      G4Point3D refPoint = (*fPtrTransform3D)*G4Point3D(point) ;
+      point = G4ThreeVector(refPoint.x(),refPoint.y(),refPoint.z()); 
+      vertices->push_back(point);     
+  }	    
+  noBetweenSections4 = noEntries - 4 ;
+  
+  G4cout<<G4endl;
+  for(i = 0 ; i < noBetweenSections4 ; i++ )
+  {
+    G4cout<<i<<"\t"<<"v.x = "<<((*vertices)[i]).x()<<"\t"
+                   <<"v.y = "<<((*vertices)[i]).y()<<"\t"
+                   <<"v.z = "<<((*vertices)[i]).z()<<"\t"
+          <<G4endl;
+  }	    
+  G4cout<<G4endl;
+  
+  for (i = 0 ; i < noEntries ; i += 4 )
+  {
+    ClipCrossSection(vertices,i,pVoxelLimit,pAxis,pMin,pMax) ;
+  }
+  for (i = 0 ; i < noBetweenSections4 ; i += 4 )
+  {
+    ClipBetweenSections(vertices,i,pVoxelLimit,pAxis,pMin,pMax) ;
+  }
+  if (pMin != kInfinity || pMax != -kInfinity )
+  {
+    existsAfterClip = true ;
+    pMin -= kCarTolerance ; // Add 2*tolerance to avoid precision troubles
+    pMax += kCarTolerance ;
+  }
+  else
+  {
+// Check for case where completely enveloping clipping volume
+// If point inside then we are confident that the solid completely
+// envelopes the clipping volume. Hence set min/max extents according
+// to clipping volume extents along the specified axis.
+
+    G4ThreeVector clipCentre(
+
+    (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+    (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+    (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 ) ;
+		    
+    if ( Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside )
+    {
+      existsAfterClip = true ;
+      pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+      pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+    }
+  }
+  delete vertices;
+  delete tmpVertices;
+
+  return existsAfterClip;
+
+  ****************************************** */
 }
+
  
 /////////////////////////////////////////////////////
 //
@@ -286,9 +374,10 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4ReflectedSolid::Inside(const G4ThreeVector& p) const
 {
-  // G4ThreeVector newPoint = fPtrTransform->TransformPoint(p) ;
 
   G4Point3D newPoint = (*fDirectTransform3D)*G4Point3D(p) ;
+  // G4Point3D newPoint = (*fPtrTransform3D)*G4Point3D(p) ;
+
   return fPtrSolid->Inside(G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z())) ; 
 }
 

@@ -63,6 +63,19 @@
 #include "G4UnionSolid.hh"
 
 #include "G4ReflectedSolid.hh"
+#include "G4DisplacedSolid.hh"
+
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
 
 
 int main()
@@ -94,17 +107,19 @@ int main()
     pgoodNorm=&goodNorm;
 
     G4RotationMatrix identity, xRot ;
-    
+    G4Transform3D moveX50(identity,G4ThreeVector(50.0, 0.0, 0.0));    
+    G4Transform3D moveY50(identity,G4ThreeVector(0.0, 50.0, 0.0)); 
+   
 // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
 
     xRot.rotateZ(-M_PI*0.5) ;
 
-    G4ReflectX3D transformX ;
+    G4ReflectX3D reflectX ;
 
-    G4Point3D newPointN = transformX*G4Normal3D(1,1,1) ;
+    G4Point3D newPointN = reflectX*G4Normal3D(1,1,1) ;
     G4cout<<"x component of normal newPoint = "<<newPointN.x()<<G4endl ;
 
-    G4Point3D newPoint = transformX*G4Point3D(1,1,1) ;
+    G4Point3D newPoint = reflectX*G4Point3D(1,1,1) ;
     G4cout<<"x component of point newPoint = "<<newPoint.x()<<G4endl ;
 
     //  G4Transform3D transfomX = G4ReflectX3D() ;
@@ -113,6 +128,15 @@ int main()
     G4Box b1("Test Box #1",20,30,40);
     G4Box b2("Test Box #2",10,10,10);
     G4Box b3("Test Box #3",10,50,10);
+    G4Box b4("Test Box #4",50,50,50);
+
+    G4DisplacedSolid db4("db4",&b4,moveX50);
+    G4ReflectedSolid rdb4("rdb4",&db4,reflectX);
+
+    G4DisplacedSolid dyb4("db4",&b4,moveY50);
+    G4ReflectedSolid rdyb4("rdb4",&dyb4,reflectX);
+
+
 
     G4Tubs t1("Solid Tube #1",0,50,50,0,360);
     G4Tubs t2("Hole Tube #2",45,50,50,0,360);
@@ -120,6 +144,9 @@ int main()
 
     G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
 	   c2("Full Cone",0,50,0,100,50,0,2*M_PI) ;
+    G4Sphere s1("s1",0.0,50.0,0.0,0.5*M_PI,0.0,M_PI);    
+
+
 
     G4IntersectionSolid b1Ib2("b1Intersectionb2",&b1,&b2),
                         t1Ib2("t1Intersectionb2",&t1,&b2),
@@ -127,7 +154,8 @@ int main()
 
     // passRotT3 should be in 2 octant, while actiRotT3 in 4 one
 
-    G4ReflectedSolid passRotT3("passRotT3",&t3,transformX) ;
+    G4ReflectedSolid passRotT3("passRotT3",&t3,reflectX) ;
+    G4ReflectedSolid rs1("rs1",&s1,reflectX) ;
 
     //    G4ReflectedSolid actiRotT3("actiRotT3",&t3,transform) ;
     //    G4ReflectedSolid actiRotB1("actiRotB3",&b1,transform) ;
@@ -158,8 +186,10 @@ int main()
 
     //    assert(actiRotT3.Inside(ponb2z)==kSurface);
 
+    EInside in = rdb4.Inside(G4ThreeVector(-50.0,0.0,0.0));
+    G4cout<<"rdb4.Inside(G4ThreeVector(-50.0,0.0,0.0) = "<<OutputInside(in)<<G4endl;
 
-
+    
 // Check Surface Normal
 
     G4ThreeVector normal;
@@ -284,17 +314,17 @@ int main()
 
 
 
-
 // CalculateExtent
 
     G4VoxelLimits limit ;		// Unlimited
     G4RotationMatrix noRot ;
     G4AffineTransform origin ;
     G4double min,max;
+    G4bool calcExt;
+    G4cout<<G4endl;
+    G4cout<<"passRotT3.CalculateExtent: X, Y, Z:"<<G4endl<<G4endl;
 
-    G4cout<<"passRotT3.CalculateExtent: X, Y, Z:"<<G4endl;
-
-    assert(passRotT3.CalculateExtent(kXAxis,limit,origin,min,max));
+    calcExt=passRotT3.CalculateExtent(kXAxis,limit,origin,min,max);
     G4cout<<"minX = "<<min<<"\t"<<"maxX = "<<max<<G4endl;
     //  assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
@@ -303,7 +333,7 @@ int main()
     // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
     assert(passRotT3.CalculateExtent(kZAxis,limit,origin,min,max));
-    G4cout<<"minZ = "<<min<<"\t"<<"maxZ = "<<max<<G4endl;
+    G4cout<<"minZ = "<<min<<"\t"<<"maxZ = "<<max<<G4endl<<G4endl;
     // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
 
@@ -311,20 +341,19 @@ int main()
     G4AffineTransform tPosOnly(pmxmymz);
 
     assert(passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    G4cout<<"min of passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
-          <<min<<G4endl ;
-    G4cout<<"max of passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
-          <<max<<G4endl ;
+    G4cout<<"passRotT3.CE(kXAxis,limit,tPosOnly,min = "
+          <<min<<"; max = "<<max<<G4endl ;
     //  assert(ApproxEqual(min,-100)&&ApproxEqual(max,-50));
 
-    assert(passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-300)&&ApproxEqual(max,-25));
-
     assert(passRotT3.CalculateExtent(kYAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-320)&&ApproxEqual(max,-30));
+    G4cout<<"passRotT3.CE(kYAxis,limit,tPosOnly,min = "
+          <<min<<"; max = "<<max<<G4endl ;
+    //assert(ApproxEqual(min,-160)&&ApproxEqual(max,-60));
 
     assert(passRotT3.CalculateExtent(kZAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-340)&&ApproxEqual(max,-35));
+    G4cout<<"passRotT3.CE(kZAxis,limit,tPosOnly,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl ;
+    //  assert(ApproxEqual(min,-170)&&ApproxEqual(max,-70));
 
 
     G4RotationMatrix r90Z;
@@ -332,15 +361,65 @@ int main()
     G4AffineTransform tRotZ(r90Z,pzero);
 
     assert(passRotT3.CalculateExtent(kXAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
+    G4cout<<"passRotT3.CE(kXAxis,limit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl ;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
     assert(passRotT3.CalculateExtent(kYAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
+    G4cout<<"passRotT3.CE(kYAxis,limit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl ;
+    //    assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
     assert(passRotT3.CalculateExtent(kZAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
+    G4cout<<"passRotT3.CE(kZAxis,limit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl ;
+    //  assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
+
+    G4cout<<"rdb4.CalculateExtent: X, Y, Z:"<<G4endl<<G4endl;
+
+    assert(rdb4.CalculateExtent(kXAxis,limit,origin,min,max));
+    G4cout<<"minX = "<<min<<"\t"<<"maxX = "<<max<<G4endl;
+    //  assert(ApproxEqual(min,-50)&&ApproxEqual(max,0));
+
+    assert(rdb4.CalculateExtent(kYAxis,limit,origin,min,max));
+    G4cout<<"minY = "<<min<<"\t"<<"maxY = "<<max<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
+
+    assert(rdb4.CalculateExtent(kZAxis,limit,origin,min,max));
+    G4cout<<"minZ = "<<min<<"\t"<<"maxZ = "<<max<<G4endl<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
+
+
+
+
+
+
+
+
 
     /* *********************************************************
+
+
+
+    G4cout<<"rs1.CalculateExtent: X, Y, Z:"<<G4endl<<G4endl;
+
+    assert(rs1.CalculateExtent(kXAxis,limit,origin,min,max));
+    G4cout<<"minX = "<<min<<"\t"<<"maxX = "<<max<<G4endl;
+    //  assert(ApproxEqual(min,-50)&&ApproxEqual(max,0));
+
+    assert(rs1.CalculateExtent(kYAxis,limit,origin,min,max));
+    G4cout<<"minY = "<<min<<"\t"<<"maxY = "<<max<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
+
+    assert(rs1.CalculateExtent(kZAxis,limit,origin,min,max));
+    G4cout<<"minZ = "<<min<<"\t"<<"maxZ = "<<max<<G4endl<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
+
+
+
+
+
+
 
 // Check that clipped away
 
