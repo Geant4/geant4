@@ -4,12 +4,14 @@
 #
 #set -v
 
+echo "Warning : test, tests directories under source must had been removed."
+
 /bin/rm -R -f $G4INSTALL/include
 mkdir $G4INSTALL/include
 
-find $G4INSTALL/source -name "*.hh" -exec sh ./cpcheck.sh {} \;
-find $G4INSTALL/source -name "*.h" -exec sh ./cpcheck.sh {} \;
-find $G4INSTALL/source -name "*.icc" -exec sh ./cpcheck.sh {} \;
+find $G4INSTALL/source -name "*.hh" -exec sh ./cpcheck {} \;
+find $G4INSTALL/source -name "*.h" -exec sh ./cpcheck {} \;
+find $G4INSTALL/source -name "*.icc" -exec sh ./cpcheck {} \;
 
 cp -R $G4INSTALL/source/global/management/include/g4std $G4INSTALL/include/.
 cp $G4INSTALL/source/geometry/solids/STEPinterface/include/includes $G4INSTALL/include/.
