@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.4 2004-11-08 21:43:50 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.5 2004-11-09 07:36:13 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
- * jck 05 Feb 1997 - Initial Implementation
- * jck 21 Apr 1997 
- *	Mods for SoXtHepViewer
+ * jck : 05 Feb 1997 : Initial Implementation
+ * jck : 21 Apr 1997 : Mods for SoXtHepViewer
  * gb : on Win32 use an SoXtExaminerViewer.
- * gb 05 April 2004 : creation.
+ * gb : 05 April 2004 : creation.
+ * gb : 09 November 2004 : Pulldown menu with the escape menu item.
  */
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
 
@@ -57,9 +57,8 @@ public:
   }
 };
 
-//
-// Global variables 
-//
+#define SIZE 400
+#define ID_ESCAPE 314
 
 //static void SecondaryLoopPostAction ();
 
@@ -152,7 +151,6 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
 
   G4String wName = fName;
 
-#define SIZE 400
   HWND parent = (HWND)fInteractorManager->GetParentInteractor ();
   if(!parent) {
     //Create a shell window :
@@ -175,13 +173,18 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
       ::RegisterClass(&wc);
       done = TRUE;
     }
-    //  Compell window to be created at 0,0 to bypass 
-    // the 'black border' problem. 
+
+    HMENU menuBar = CreateMenu();
+    HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"File");
+    ::AppendMenu(casc,MF_STRING,ID_ESCAPE,"Escape");
+
     fShell = ::CreateWindow(className, shellName.c_str(), 
                             WS_OVERLAPPEDWINDOW |
                             WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-                            //CW_USEDEFAULT, CW_USEDEFAULT, 
-                            0,0,SIZE,SIZE,0, 0,::GetModuleHandle(0),0);
+                            CW_USEDEFAULT, CW_USEDEFAULT, 
+                            SIZE,SIZE,
+                            0,menuBar,::GetModuleHandle(0),0);
     // Retreive window and client sizez :
     RECT wrect,crect;
     GetWindowRect((HWND)fShell,&wrect);
@@ -261,8 +264,9 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
     G4OpenInventorWinViewer* This = 
       (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
-    if(This && This->fViewer) 
+    if(This && This->fViewer) {
       This->fViewer->sizeChanged(SbVec2s(width,height));
+    }
   }return 0;
   case WM_SETFOCUS:{ // Assume one child window !
     HWND hwnd = ::GetFirstChild(aWindow);
@@ -272,6 +276,16 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     //G4OpenInventorWinViewer* This = 
     //  (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     //::PostQuitMessage(0);
+  }return 0;
+  case WM_COMMAND:{
+    if(aWParam==ID_ESCAPE) {
+      G4OpenInventorWinViewer* This = 
+        (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+      if(This) {
+        //printf("debug : escape...\n");
+        This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
+      }
+    }
   }return 0;
   default:
     return (::DefWindowProc(aWindow,aMessage,aWParam,aLParam));
