@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.1 1999-01-07 16:05:56 gunter Exp $
+// $Id: ExN03DetectorMessenger.cc,v 1.2 1999-07-13 12:17:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,37 +32,33 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(ExN03DetectorConstruction * ExN03
       
   AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",true);
-  AbsMaterCmd->SetCandidates("Water Aluminium Copper Lead ");  
-  AbsMaterCmd->SetDefaultValue("Lead");
+  AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(Idle);
   
   GapMaterCmd = new G4UIcmdWithAString("/calor/setGapMat",this);
   GapMaterCmd->SetGuidance("Select Material of the Gap.");
-  GapMaterCmd->SetParameterName("choice",true);
-  GapMaterCmd->SetCandidates("Galactic Air CarbonicGas Aerogel Scintillator liquidArgon");  
-  GapMaterCmd->SetDefaultValue("liquidArgon");
+  GapMaterCmd->SetParameterName("choice",false);
   GapMaterCmd->AvailableForStates(Idle);
     
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  AbsThickCmd->SetParameterName("Size",false,false);
-  AbsThickCmd->SetDefaultUnit("mm");
+  AbsThickCmd->SetParameterName("Size",false);
   AbsThickCmd->SetRange("Size>=0.");
+  AbsThickCmd->SetUnitCategory("Length");
   AbsThickCmd->AvailableForStates(Idle);
   
   GapThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGapThick",this);
   GapThickCmd->SetGuidance("Set Thickness of the Gap");
-  GapThickCmd->SetParameterName("Size",false,false);
-  GapThickCmd->SetDefaultUnit("mm");
+  GapThickCmd->SetParameterName("Size",false);
   GapThickCmd->SetRange("Size>=0.");
+  GapThickCmd->SetUnitCategory("Length");  
   GapThickCmd->AvailableForStates(Idle);
   
   SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
-  SizeYZCmd->SetParameterName("Size",false,false);
-  SizeYZCmd->SetDefaultUnit("mm");
+  SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
+  SizeYZCmd->SetUnitCategory("Length");    
   SizeYZCmd->AvailableForStates(Idle);
   
   NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
@@ -80,8 +76,8 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(ExN03DetectorConstruction * ExN03
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
+  MagFieldCmd->SetParameterName("Bz",false);
+  MagFieldCmd->SetUnitCategory("Magnetic flux density");
   MagFieldCmd->AvailableForStates(Idle);  
 }
 
