@@ -323,20 +323,18 @@ in order to stop (and thus either kill or bring to a rest in an 'alive' state)
 a particle in its <TT>AlongStepDoIt()</TT> method, 
 it is now necessary to propose zero kinetic energy for the particle. 
 Alternatively a process can contribute to the particle arriving at zero energy,
-as a result of the action of two or more processes, eg energy loss and propagation
-in an electric field (in the transportation process).
+as a result of the action of two or more processes, e.g. energy loss and
+propagation in an electric field (in the transportation process).
 
 Once a particle has zero (or less) proposed energy, it is brought to a rest 
 and its energy is set exactly to zero. 
-If the particle can decay, can be annihilated or generally has 
-one or more 'AtRest' actions, 
-then another step will be performed that calls these.  
-Else the particle is killed.
-The discrete component (or 'PostStep' action) of a process will not be performed 
-once the particle has come to a stop.
-
-Note: the case of a particle that comes to a rest in a field, and is then
-reaccelerated is not supported at this time.
+If the particle can decay, can be annihilated or generally has one or more
+'AtRest' actions, then another step will be performed that calls these;
+else, the particle is killed.
+The discrete component (or 'PostStep' action) of a process will not be
+performed once the particle has come to a stop.<BR>
+<I>Note</I>: the case of a particle that comes to a rest in a field and is
+then re-accelerated, is not supported at this time.
 
 <!-- ---------------------------------------------- -->
 <P> </P>
