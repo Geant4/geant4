@@ -7,6 +7,7 @@
 #include <cmath>
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4ParticleDefinition.hh"
 
 // first prototype
 
@@ -77,6 +78,15 @@ GetFinalState(G4KineticTrack * projectile,
   G4LorentzVector theT1 = targets[0]->Get4Momentum();
   G4LorentzVector theT2 = targets[1]->Get4Momentum();
   G4LorentzVector incoming = thePro + theT1 + theT2;
+  G4double energyBalance = incoming.t();
+  G4int chargeBalance = projectile->GetDefinition()->GetPDGCharge()
+                       + targets[0]->GetDefinition()->GetPDGCharge()
+                       + targets[1]->GetDefinition()->GetPDGCharge();
+		       
+  G4int baryonBalance = projectile->GetDefinition()->GetBaryonNumber()
+                       + targets[0]->GetDefinition()->GetBaryonNumber()
+                       + targets[1]->GetDefinition()->GetBaryonNumber();
+   
   
   // boost all to MMS
   G4LorentzRotation toSPS((-1)*(thePro + theT1 + theT2).boostVector());
@@ -96,14 +106,14 @@ GetFinalState(G4KineticTrack * projectile,
   G4LorentzRotation toLab(toZ.inverse());
   
   // Get definitions
-  G4ParticleDefintion * d1 = targets[0]->GetDefinition();
-  G4ParticleDefintion * d2 = targets[1]->GetDefinition();
+  G4ParticleDefinition * d1 = targets[0]->GetDefinition();
+  G4ParticleDefinition * d2 = targets[1]->GetDefinition();
   if(0.5>G4UniformRand())
   {
-    G4ParticleDefintion * temp;
+    G4ParticleDefinition * temp;
     temp=d1;d1=d2;d2=temp;
   }
-  G4ParticleDefintion * dp = projectile->GetDefinition();
+  G4ParticleDefinition * dp = projectile->GetDefinition();
   if(dp->GetPDGCharge()<-.5)
   {
     if(d1->GetPDGCharge()>.5)
@@ -175,6 +185,18 @@ GetFinalState(G4KineticTrack * projectile,
   result->push_back(f1);
   result->push_back(f2);
 
+  for(size_t hpw=0; hpw<result->size(); hpw++)
+  {
+    energyBalance-=result->operator[](hpw)->Get4Momentum().t();
+    chargeBalance-=result->operator[](hpw)->GetDefinition()->GetPDGCharge();
+    baryonBalance-=result->operator[](hpw)->GetDefinition()->GetBaryonNumber();
+  }
+  if(getenv("AbsorptionEnergyBalanceCheck"))
+    std::cout << "DEBUGGING energy balance B: "
+              <<energyBalance<<" "
+	      <<chargeBalance<<" "
+	      <<baryonBalance<<" "
+  	      <<G4endl;
   return result;
 }
 
@@ -245,4 +267,10 @@ GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2)
     }
   }
   return time;
+}
+
+G4double G4MesonAbsorption::
+AbsorptionCrossSection(const G4KineticTrack & trk1, const G4KineticTrack & trk2)
+{
+  return theCross*millibarn;
 }

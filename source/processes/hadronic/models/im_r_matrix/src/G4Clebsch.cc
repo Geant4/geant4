@@ -106,7 +106,7 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
   G4double m2 = iso3In2 / 2.0;
   G4double m3 = - (m1 + m2);
 
-  G4int n = static_cast<G4int>(m3+j1+j2+.1);
+  G4int n = lrint(m3+j1+j2+.1);
   G4double argument = 2. * j3 + 1.;
   if (argument < 0.) 
     G4Exception("G4Clebsch::ClebschGordan - sqrt of negative argument");
@@ -204,7 +204,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     }
 
     const std::vector<G4double> logVector = GetLogs();
-    size_t n1 = static_cast<size_t>(n[0]);
+    size_t n1 = lrint(n[0]);
 
     // Some boundary checks
     G4int logEntries = logVector.size() - 1;
@@ -238,16 +238,16 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     if (sigma1 < 0. || sigma1 > logEntries)
       G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, sigma");
 
-    G4double ls = logVector[static_cast<G4int>(sigma1)];
+    G4double ls = logVector[static_cast<G4int>(sigma1)+.00001];
     G4double hlp1 = (l2 + l3 + l4 +l7 -ls -l1 -l5 -l9 -l6 -l8) / 2.;
-    G4int expon = static_cast<G4int>(r6 + r8);
+    G4int expon = static_cast<G4int>(r6 + r8+.00001);
     G4double sgn = pow(-1., expon);
     G4double coeff = exp(hlp1) * sgn;
 
-    G4int n61 = static_cast<G4int>(r6 - r1);
+    G4int n61 = static_cast<G4int>(r6 - r1+.00001);
     if (n61 < 0. || n61 > logEntries)
       G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, n61");
-    G4int n81 = static_cast<G4int>(r8 - r1);
+    G4int n81 = static_cast<G4int>(r8 - r1+.00001);
     if (n81 < 0. || n81 > logEntries)
       G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, n81");
 
@@ -434,14 +434,14 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    for(j12 = abs(isoA-isoB); j12<=(isoA+isoB); j12+=2)
    {
      m1pos = -1;
-     for (m1pr = static_cast<G4int>(mMin[0]); m1pr <= mMax[0]; m1pr+=2)
+     for (m1pr = static_cast<G4int>(mMin[0]+.00001); m1pr <= mMax[0]; m1pr+=2)
      {
        m1pos++;
        if (m1pos >= size)
 	 G4Exception ("G4Clebsch::GenerateIso3 - m1pos > size");
        m1Out.push_back(m1pr);
        m2pos = -1;
-       for (m2pr = static_cast<G4int>(mMin[1]); m2pr <= mMax[1]; m2pr+=2)
+       for (m2pr = static_cast<G4int>(mMin[1]+.00001); m2pr <= mMax[1]; m2pr+=2)
        {
 	 m2pos++;
 	 if (m2pos >= size)

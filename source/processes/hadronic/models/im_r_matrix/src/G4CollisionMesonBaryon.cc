@@ -43,6 +43,6 @@
 G4CollisionMesonBaryon::G4CollisionMesonBaryon()
 { 
   G4CollisionComposite::AddComponent(new G4CollisionMesonBaryonToResonance()); 
-//  G4CollisionComposite::AddComponent(new G4CollisionMesonBaryonElastic()); 
+  G4CollisionComposite::AddComponent(new G4CollisionMesonBaryonElastic()); 
 }
 
