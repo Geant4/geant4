@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLowenergy.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
+// $Id: PhysListEmLowenergy.cc,v 1.3 2004-09-13 17:31:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hLowEnergyIonisation.hh"
+#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,8 +108,11 @@ void PhysListEmLowenergy::ConstructProcess()
 	       (particle->GetPDGCharge() != 0.0) &&
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
+      G4hLowEnergyIonisation* hion = new G4hLowEnergyIonisation();
+      if(particleName == "GenericIon") 
+        hion->SetElectronicStoppingPowerModel(G4Proton::Proton(),"ICRU_R49He");
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hLowEnergyIonisation,       -1,2,2);
+      pmanager->AddProcess(hion,       -1,2,2);
     }
   }
 }

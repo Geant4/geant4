@@ -292,7 +292,7 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
 void test31Histo::TableControl()
 {
   G4EmCalculator cal;
-  cal.SetVerbose(2);
+  cal.SetVerbose(1);
 // parameters
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
@@ -310,8 +310,8 @@ void test31Histo::TableControl()
    G4String part_name = "alpha";
   G4String mat_name  = "Tangsten";
   //  G4String mat_name  = "Beryllium";
-  G4String proc_name = "ionIoni";
-  //G4String proc_name = "hLowEIoni";
+  // G4String proc_name = "ionIoni";
+  G4String proc_name = "hLowEIoni";
 
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
   const G4Material* mat = cal.FindMaterial(mat_name);
