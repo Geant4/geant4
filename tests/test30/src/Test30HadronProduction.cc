@@ -103,27 +103,29 @@ G4VParticleChange* Test30HadronProduction::PostStepDoIt(
   theChange.Initialize(track);
 
   G4int ns = result->GetNumberOfSecondaries();
-  if(result->GetStatusChange() == isAlive) ns++;
-  theChange.SetNumberOfSecondaries(ns);
+  G4int nb = ns;
+  if(result->GetStatusChange() == isAlive) nb++;
+  
+  theChange.SetStatusChange(fStopAndKill);
+  theChange.SetNumberOfSecondaries(nb);
 
-  for(G4int i=0; i<ns-1; i++) {
-    G4Track tr(result->GetSecondary(i)->GetParticle(),
-               track.GetGlobalTime(),
-	       track.GetPosition());
-    theChange.AddSecondary(&tr);
+  for(G4int i=0; i<ns; i++) {
+    G4Track* tr = new G4Track(result->GetSecondary(i)->GetParticle(),
+                              track.GetGlobalTime(),
+	                      track.GetPosition());
+    theChange.AddSecondary(tr);
   }
 
   if(result->GetStatusChange() == isAlive) {
-    G4DynamicParticle dp(*(track.GetDynamicParticle()));
-    G4Track tr(&dp,track.GetGlobalTime(),track.GetPosition());
-    tr.SetKineticEnergy(result->GetEnergyChange());
-    tr.SetMomentumDirection(result->GetMomentumChange());
-    theChange.AddSecondary(&tr);
-    theChange.SetStatusChange(fStopAndKill);
+    G4DynamicParticle* dp = new G4DynamicParticle(*(track.GetDynamicParticle()));
+    G4Track* tr = new G4Track(dp,track.GetGlobalTime(),track.GetPosition());
+    tr->SetKineticEnergy(result->GetEnergyChange());
+    tr->SetMomentumDirection(result->GetMomentumChange());
+    theChange.AddSecondary(tr);
   }
-  delete result;
+  result->Clear();
 
-  return pParticleChange;
+  return &theChange;
 }
 
 

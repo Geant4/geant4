@@ -697,33 +697,20 @@ int main(int argc, char** argv)
 
       G4int nbar = 0;
 
-      for(G4int j=0; j<n+1; j++) {
+      for(G4int j=0; j<n; j++) {
 
-	if(j<n) {
-	   sec = aChange->GetSecondary(j)->GetDynamicParticle();
-	   pd  = sec->GetDefinition();
-           if(pd->GetPDGMass() > 100.*MeV) nbar++;
-
-	} else {
-	   if(aChange->GetStatusChange() == fStopAndKill) break;
-           nn++;
-	}
+        sec = aChange->GetSecondary(j)->GetDynamicParticle();
+        pd  = sec->GetDefinition();
+        if(pd->GetPDGMass() > 100.*MeV) nbar++;
       }
 
       for(G4int i=0; i<nn; i++) {
 
-	if(i<n) {
-	   sec = aChange->GetSecondary(i)->GetDynamicParticle();
-	   pd  = sec->GetDefinition();
-	   mom = sec->GetMomentumDirection();
-	   e   = sec->GetKineticEnergy();
+        sec = aChange->GetSecondary(i)->GetDynamicParticle();
+        pd  = sec->GetDefinition();
+        mom = sec->GetMomentumDirection();
+        e   = sec->GetKineticEnergy();
 
-	} else {
-	   pd = part;
-	   G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
-	   mom = *(bChange->GetMomentumDirectionChange());
-	   e   = bChange->GetEnergyChange();
-	}
 	if (e < 0.0) {
            e = 0.0;
 	}
@@ -850,7 +837,7 @@ int main(int argc, char** argv)
 	    h[1]->fill(9.0, 1.0);
 	  }
 	}
-        if(i<n) delete aChange->GetSecondary(i);
+//        if(i<n) delete aChange->GetSecondary(i);
       }
 
       if(verbose > 0) {
