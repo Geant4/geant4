@@ -1,4 +1,4 @@
-$Id: History,v 1.51 1999-07-20 15:29:14 stesting Exp $
+$Id: History,v 1.52 1999-07-28 09:26:27 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th July 1999  John Allison
+20th July 1999  John Allison (config-V00-01-00)
 - Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
 
 6th July 1999  John Allison (config-01-00-10)
