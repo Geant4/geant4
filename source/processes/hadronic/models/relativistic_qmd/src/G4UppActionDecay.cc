@@ -27,7 +27,7 @@
 G4UppActionDecay::G4UppActionDecay(const G4double decayTime,
 				   const G4UppTrack& decayingParticle)
 {
-  particlePtr = &decayingParticle;
+  particlePtr = const_cast<G4UppTrack *>(&decayingParticle);
   setActionTime(decayTime);
 }
 

@@ -48,7 +48,7 @@ G4UppTrackChange* G4UppActionCollision::perform(const G4UppTrackVector& allTrack
   G4int arraySize = collPart.size();
   assert(arraySize==2);
 
-  G4KineticTrackVectorSTL* newPart = scattererPtr->Scatter(*collPart[0],*collPart[1]);
+  G4KineticTrackVector* newPart = scattererPtr->Scatter(*collPart[0],*collPart[1]);
   if (newPart==NULL) {
     G4cout << "(debug) no collision" << G4endl;
     return NULL;

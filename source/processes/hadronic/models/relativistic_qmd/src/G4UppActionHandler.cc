@@ -151,7 +151,7 @@ void G4UppActionHandler::addAction(G4VUppAction* a)
 void G4UppActionHandler::dump() const
 {
   G4cout << "actionhandler with " << q.size() << " elements" << G4endl;
-  for (queuetype::iterator i=q.begin(); i!=q.end(); i++) {
+  for (queuetype::const_iterator i=q.begin(); i!=q.end(); i++) {
     (*i)->dump();
   }
 }
