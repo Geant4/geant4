@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.7 2001-10-24 21:30:41 gcosmo Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.8 2003-04-17 07:19:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,7 +137,7 @@ G4double temperature, pressure;
   a = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
-  a = 6.01*g/mole;
+  a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
 
   a = 14.01*g/mole;
