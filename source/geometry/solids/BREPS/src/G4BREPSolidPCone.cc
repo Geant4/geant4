@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.7 1999-01-27 16:15:11 broglia Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.8 1999-02-16 17:16:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,10 +74,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
       G4Exception("RMAX inside the solid  can not be nul");
   
   // RMAX[a] must be greater than RMIN[a] 
-  for(a = 0; a < num_z_planes; a++)
+  for(a = 1; a < num_z_planes-1; a++)
     if (RMIN[a] >= RMAX[a])
-      G4Exception("RMAX must be greater than RMIN");
+      G4Exception("RMAX must be greater that RMIN in the middle Z planes.");
   
+  if( (RMIN[num_z_planes-1] > RMAX[num_z_planes-1] )
+      || (RMIN[0] > RMAX[0]) ) 
+      G4Exception("RMAX must be greater or equal to RMIN at the ends.");
 
   ///////////////////////////////////////////////////
   // Create cylindrical et conical surfaces
