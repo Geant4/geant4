@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.12 2003-11-12 13:16:56 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.13 2004-07-15 15:43:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,10 @@ G4XXXSceneHandler::~G4XXXSceneHandler() {}
 void G4XXXSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
-	 << (void*)fpObjectTransformation;
+	 << (void*)fpObjectTransformation
+	 << " from " << fpModel->GetCurrentDescription()
+	 << " (tag " << fpModel->GetCurrentTag()
+	 << ')';
   if (fpCurrentPV) {
     G4cout <<
       "\n  current physical volume: "
@@ -344,35 +347,29 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
         
     //Loop through the four edges of each G4Facet...
     G4bool notLastEdge;
-    G4Point3D vertex[4];
-    G4int edgeFlag[4], lastEdgeFlag (true);
-    edgeFlag[0] = G4int (true);
+    G4Point3D vertex;
+    G4int edgeFlag;
     G4int edgeCount = 0;
-    // glEdgeFlag (GL_TRUE);
     do {  // loop over edges...
-      notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
-                                              edgeFlag[edgeCount]);
+      notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
       // Check to see if edge is visible or not...
-      if (edgeFlag[edgeCount] != lastEdgeFlag) {
-        lastEdgeFlag = edgeFlag[edgeCount];
-        if (edgeFlag[edgeCount]) {
-          // glEdgeFlag (GL_TRUE);
-        } else {
-          // glEdgeFlag (GL_FALSE);
-        }
+      if (edgeFlag) {
+	// glEdgeFlag (GL_TRUE);
+      } else {
+	// glEdgeFlag (GL_FALSE);
       }
-      // glVertex3d (vertex[edgeCount].x(), 
-      //             vertex[edgeCount].y(),
-      //             vertex[edgeCount].z());
+      // glVertex3d (vertex.x(), 
+      //             vertex.y(),
+      //             vertex.z());
       edgeCount++;
     } while (notLastEdge);
 
     // Duplicate last real vertex if necessary to guarantee quadrilateral....
     while (edgeCount < 4) {
-      vertex[edgeCount] = vertex[edgeCount-1];
-      // glVertex3d (vertex[edgeCount].x(),
-      //             vertex[edgeCount].y(), 
-      //             vertex[edgeCount].z());
+      // glEdgeFlag (GL_FALSE);
+      // glVertex3d (vertex.x(),
+      //             vertex.y(), 
+      //             vertex.z());
       edgeCount++;
     }
 
