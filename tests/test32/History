@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2004-03-16 16:20:39 gcosmo Exp $
+$Id: History,v 1.3 2004-03-18 15:59:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th March 2004  Gabriele Cosmo (test32-V06-00-00)
+- Fixed processing of hits in sensitive detector.
 
 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
