@@ -21,7 +21,8 @@
 // ********************************************************************
 //
 //
-
+// $Id: G4VSolid.cc,v 1.16 2003-01-15 09:37:26 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
 //
@@ -29,17 +30,14 @@
 //
 // History:
 //
-//  06.12.02 V.Grichine, bug fixed in ClipPoligon: clip as P.Kent version
-//                       
-//  10.05.02 V.Grichine, bug fixed in ClipPoligon: clip only other axis and limited
-//                       voxels
-//  15.04.02 V.Grichine, bug fixed in ClipPoligon: clip only one axis
+//  06.12.02 V.Grichine, restored original conditions in ClipPolygon()
+//  10.05.02 V.Grichine, ClipPolygon(): clip only other axis and limited voxels
+//  15.04.02 V.Grichine, bug fixed in ClipPolygon(): clip only one axis
 //  13.03.02 V.Grichine, cosmetics of voxel limit functions  
-//  15.11.00 D.Williams, V.Grichine change in CalculateClippedPolygonExtent:
-//                                  else if(component>pMax) ---> if
+//  15.11.00 D.Williams, V.Grichine fix in CalculateClippedPolygonExtent()
 //  10.07.95 P.Kent Added == operator, solid Store entry
-//  30.06.95 P.Kent
-//                                  
+//  30.06.95 P.Kent Created.
+//
 
 #include "G4VSolid.hh"
 #include "G4SolidStore.hh"
@@ -53,6 +51,7 @@
 // Constructor
 //  - Copies name
 //  - Add ourselves to solid Store
+
 G4VSolid::G4VSolid(const G4String& name)
   : fshapeName(name) 
 {
@@ -63,6 +62,7 @@ G4VSolid::G4VSolid(const G4String& name)
 //
 // Destructor (virtual)
 // - Remove ourselves from solid Store
+
 G4VSolid::~G4VSolid()
 {
     G4SolidStore::GetInstance()->DeRegister(this);
@@ -71,6 +71,7 @@ G4VSolid::~G4VSolid()
 //////////////////////////////////////////////////////////////////////////
 //
 // Streaming operator dumping solid contents
+
 G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e )
 {
     return e.StreamInfo(os);
@@ -84,7 +85,11 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation* p,
 	                         const G4int n,
                                  const G4VPhysicalVolume* pRep)
 {
-    G4Exception("G4VSolid::ComputeDimensions called illegally: not overloaded by derived class");
+    G4cout << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
+           << "        Method not overloaded by derived class !" << G4endl;
+    G4cerr << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
+           << "        Method not overloaded by derived class !" << G4endl;
+    G4Exception("G4VSolid::ComputeDimensions() - Illegal call");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -275,8 +280,8 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
       simpleLimit1.AddLimit(kYAxis,pVoxelLimit.GetMinYExtent(),kInfinity);
       ClipPolygonToSimpleLimits(pPolygon,outputPolygon,simpleLimit1);
 
-// Must always clear pPolygon - for clip to simpleLimit2 and in case of
-// early exit
+      // Must always clear pPolygon - for clip to simpleLimit2 and in case of
+      // early exit
 
       pPolygon.clear();
 
@@ -295,8 +300,8 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
       simpleLimit1.AddLimit(kZAxis,pVoxelLimit.GetMinZExtent(),kInfinity);
       ClipPolygonToSimpleLimits(pPolygon,outputPolygon,simpleLimit1);
 
-// Must always clear pPolygon - for clip to simpleLimit2 and in case of
-// early exit
+      // Must always clear pPolygon - for clip to simpleLimit2 and in case of
+      // early exit
 
       pPolygon.clear();
 
@@ -306,7 +311,7 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
       simpleLimit2.AddLimit(kZAxis,-kInfinity,pVoxelLimit.GetMaxZExtent());
       ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
 
-// Return after final clip - no cleanup
+      // Return after final clip - no cleanup
     }
   }
 }
@@ -327,7 +332,7 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
   for (i = 0 ; i < noVertices ; i++ )
   {
     vStart = pPolygon[i];
-    //  G4cout<<"i = "<<i<<G4endl;
+    // G4cout << "i = " << i << G4endl;
     if ( i == noVertices-1 )    vEnd = pPolygon[0];
     else                        vEnd = pPolygon[i+1];
 		
@@ -335,14 +340,15 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
     {
       if (pVoxelLimit.Inside(vEnd))
       {
-// vStart and vEnd inside -> output end point
-
+        // vStart and vEnd inside -> output end point
+        //
         outputPolygon.push_back(vEnd);
       }
       else
       {
-// vStart inside, vEnd outside -> output crossing point
-	// G4cout<<"vStart inside, vEnd outside"<<G4endl;
+        // vStart inside, vEnd outside -> output crossing point
+        //
+	// G4cout << "vStart inside, vEnd outside" << G4endl;
         pVoxelLimit.ClipToLimits(vStart,vEnd);
 	outputPolygon.push_back(vEnd);
       }	    
@@ -351,9 +357,9 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
     {
       if (pVoxelLimit.Inside(vEnd))
       {
-// vStart outside, vEnd inside -> output inside section
-	//  G4cout<<"vStart outside, vEnd inside"<<G4endl;
-
+        // vStart outside, vEnd inside -> output inside section
+        //
+	// G4cout << "vStart outside, vEnd inside" << G4endl;
         pVoxelLimit.ClipToLimits(vStart,vEnd);
 	outputPolygon.push_back(vStart);
 	outputPolygon.push_back(vEnd);  
