@@ -4,8 +4,8 @@
 #
 /control/verbose 2
 /run/verbose 1
-/test17/cutG 1 micrometer
-/test17/cutE 1 micrometer
+/test17/cutG 10 micrometer
+/test17/cutE 10 micrometer
 /run/initialize
 
 #

@@ -1,4 +1,3 @@
-Unit category <Error tolerance> is not defined.
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
                                 (29-Jun-2001)
@@ -14,8 +13,14 @@ Matrial available: Iron
 Matrial available: Copper
 Matrial available: Gold
 Matrial available: Lead
+---> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
+ Use material->SetChemicalFormula(const G4String&)
 Matrial available: Water
+---> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
+ Use material->SetChemicalFormula(const G4String&)
 Matrial available: Methane
+---> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
+ Use material->SetChemicalFormula(const G4String&)
 Matrial available: Graphite
 
 ***** Table : Nb of materials = 13 *****
@@ -176,7 +181,20 @@ Set cuts for pi0
 Set cuts for triton
 ============= The cut Energy ==============================
                       gamma            e-           
-Cut in range                100 mum           100 mum
+Cut in range       
+ Beryllium                          100 mum           100 mum
+   Aluminum                          100 mum           100 mum
+   Carbon                          100 mum           100 mum
+   Silicon                          100 mum           100 mum
+   liquidArgon                          100 mum           100 mum
+   Iron                          100 mum           100 mum
+   Copper                          100 mum           100 mum
+   Gold                          100 mum           100 mum
+   Lead                          100 mum           100 mum
+   Water                          100 mum           100 mum
+   Methane                          100 mum           100 mum
+   Graphite                          100 mum           100 mum
+   Air                          100 mum           100 mum
 Cut in energy
  Beryllium                          984 eV           108 keV
    Aluminum                         2.33 keV           130 keV
@@ -193,10 +211,10 @@ Cut in energy
    Air                            1 eV          4.02 eV
 ===================================================
 /run/verbose 1
-/test17/cutG 1 micrometer
+/test17/cutG 10 micrometer
 G4VUserPhysicsList::ResetCuts()
   cut values in energy will be calculated later
-/test17/cutE 1 micrometer
+/test17/cutE 10 micrometer
 G4VUserPhysicsList::ResetCuts()
   cut values in energy will be calculated later
 /run/initialize
@@ -295,20 +313,33 @@ Set cuts for pi0
 Set cuts for triton
 ============= The cut Energy ==============================
                       gamma            e-           
-Cut in range                  1 mum             1 mum
+Cut in range       
+ Beryllium                           10 mum            10 mum
+   Aluminum                           10 mum            10 mum
+   Carbon                           10 mum            10 mum
+   Silicon                           10 mum            10 mum
+   liquidArgon                           10 mum            10 mum
+   Iron                           10 mum            10 mum
+   Copper                           10 mum            10 mum
+   Gold                           10 mum            10 mum
+   Lead                           10 mum            10 mum
+   Water                           10 mum            10 mum
+   Methane                           10 mum            10 mum
+   Graphite                           10 mum            10 mum
+   Air                           10 mum            10 mum
 Cut in energy
- Beryllium                            1 eV           479 eV
-   Aluminum                            1 eV           816 eV
-   Carbon                            1 eV           562 eV
-   Silicon                            1 eV           655 eV
-   liquidArgon                            1 eV           260 eV
-   Iron                            1 eV          3.57 keV
-   Copper                            1 eV          4.14 keV
-   Gold                         1.71 keV          8.79 keV
-   Lead                         1.22 keV          4.44 keV
-   Water                            1 eV           202 eV
+ Beryllium                            1 eV          12.3 keV
+   Aluminum                            1 eV            34 keV
+   Carbon                            1 eV          31.2 keV
+   Silicon                            1 eV          31.6 keV
+   liquidArgon                            1 eV          7.71 keV
+   Iron                         1.89 keV          58.5 keV
+   Copper                         2.15 keV          61.4 keV
+   Gold                         8.26 keV          80.5 keV
+   Lead                         5.99 keV          57.8 keV
+   Water                            1 eV          6.48 keV
    Methane                            1 eV             1 eV
-   Graphite                            1 eV           687 eV
+   Graphite                            1 eV          33.6 keV
    Air                            1 eV             1 eV
 ===================================================
 #
@@ -323,20 +354,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=30.32s Real=30.45s Sys=0.01s
+  User=1.19s Real=1.19s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.14511 +- 0.00616933  microns 
-    CSDA  Range  in absorber = 8.97495 +- 0.00615827  microns 
+    Track Length in absorber = 9.21859 +- 0.00658229  microns 
+    CSDA  Range  in absorber = 9.00111 +- 0.00846196  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.0861055 +- 0.00616933 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.105947 +- 0.00615827 microns 
+    Track Length (G4 - ICRU49) = 0.15959 +- 0.00658229 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.13211 +- 0.00846196 microns 
 
-Average Number electrons per event = 319.804
+Average Number electrons per event = 0
 Average Number photons per event   = 0
 
 #
@@ -347,16 +378,16 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=34.07s Real=34.38s Sys=0.01s
+  User=1.4s Real=1.4s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.53216 +- 0.00622776  microns 
-    CSDA  Range  in absorber = 9.28641 +- 0.00860803  microns 
+    Track Length in absorber = 9.5925 +- 0.00667536  microns 
+    CSDA  Range  in absorber = 9.27697 +- 0.00785331  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 334.997
+Average Number electrons per event = 0
 Average Number photons per event   = 0
 
 #scaled energy
@@ -368,16 +399,16 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=375.72s Real=375.97s Sys=0.04s
+  User=1.39s Real=1.4s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.7962 +- 0.00408774  microns 
-    CSDA  Range  in absorber = 8.44776 +- 0.0111134  microns 
+    Track Length in absorber = 8.56319 +- 0.00455615  microns 
+    CSDA  Range  in absorber = 7.72945 +- 0.0195789  microns 
 
     Energy deposit in absorber = 6  MeV 
 
-Average Number electrons per event = 3865.64
+Average Number electrons per event = 0
 Average Number photons per event   = 0
 
 #
@@ -394,21 +425,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=134.02s Real=134.04s Sys=0s
+  User=109.45s Real=109.72s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.12132 +- 0.00620172  microns 
-    CSDA  Range  in absorber = 8.95948 +- 0.00576685  microns 
+    Track Length in absorber = 9.21786 +- 0.00695673  microns 
+    CSDA  Range  in absorber = 9.0069 +- 0.00641099  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.06232 +- 0.00620172 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0904765 +- 0.00576685 microns 
+    Track Length (G4 - ICRU49) = 0.158858 +- 0.00695673 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.137903 +- 0.00641099 microns 
 
-Average Number electrons per event = 431.788
-Average Number photons per event   = 46.299
+Average Number electrons per event = 126.38
+Average Number photons per event   = 51.426
 
 #
 G4 kernel has come to Quit state.
