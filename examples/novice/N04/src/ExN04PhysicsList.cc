@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN04PhysicsList.cc,v 1.7 1999-12-15 14:49:26 gunter Exp $
+// $Id: ExN04PhysicsList.cc,v 1.8 2000-08-16 11:35:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,6 @@ void ExN04PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
 
 void ExN04PhysicsList::ConstructEM()
 {
@@ -167,7 +166,7 @@ void ExN04PhysicsList::ConstructEM()
      pmanager->SetProcessOrdering(aPairProduction, idxPostStep, 4);
      
     } else if( particleName == "GenericIon" ) {
-     G4VProcess* aionIonization = new G4ionIonisation;
+     G4VProcess* aionIonization = new G4hIonisation;
      G4VProcess* aMultipleScattering = new G4MultipleScattering();
      pmanager->AddProcess(aionIonization);
      pmanager->AddProcess(aMultipleScattering);
