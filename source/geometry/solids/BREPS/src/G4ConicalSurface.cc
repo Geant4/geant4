@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4ConicalSurface.cc,v 1.3 2000-02-25 16:00:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4ConicalSurface.cc,v 1.6 1994/08/03 17:15:01 burnett Exp  */
@@ -61,9 +61,9 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D& o,
 */
     axis = a*(1/amag);
   else {
-    G4cerr << "Error in G4ConicalSurface::G4ConicalSurface" 
-	   <<"--axis has zero length\n"
-	   << "\tDefault axis ( 1.0, 0.0, 0.0 ) is used.\n";
+    G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
+	   << "\tAxis has zero length" << G4endl
+	   << "\tDefault axis ( 1.0, 0.0, 0.0 ) is used." << G4endl;
 
     axis = G4Vector3D( 1.0, 0.0, 0.0 );
   }
@@ -72,10 +72,11 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D& o,
   if ( ( e > 0.0 ) && ( e < ( 0.5 * M_PI ) ) )
     angle = e;
   else {
-    G4cerr << "Error in G4ConicalSurface::G4ConicalSurface"
-	   << "--asked for angle out of allowed range of 0 to PI/2\n"
-	   << "\tDefault angle of 1.0 is used.\n";
-    
+    G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
+	   << "\tAsked for angle out of allowed range of 0 to "
+	   << 0.5*M_PI << " (PI/2): " << e << G4endl
+	   << "\tDefault angle of 1.0 is used." << G4endl;    
+
     angle = 1.0;
   }
 }
@@ -538,15 +539,16 @@ void G4ConicalSurface::SetAngle( G4double e )
   //  Reset the angle of the G4ConicalSurface
   //  Require angle to range from 0 to PI/2
   //	if ( ( e > 0.0 ) && ( e < ( 0.5 * M_PI ) ) )
-  if ( (e > 0.0) && (e <= ( 0.5 * M_PI)) )
+  if ( (e > 0.0) && (e <= ( 0.5 * M_PI )) )
     angle = e;
   //  use old value (do not change angle) if out of the range, 
   //but Print message
   else 
   {
-    G4cerr << "Error in G4ConicalSurface::SetAngle"
-	   << "--asked for angle out of allowed range of 0 to PI/2\n"
-	   << "\tDefault angle of " << angle << " is used.\n";
+    G4cerr << "WARNING - G4ConicalSurface::SetAngle" << G4endl
+	   << "\tAsked for angle out of allowed range of 0 to "
+	   << 0.5*M_PI << " (PI/2):" << e << G4endl
+	   << "\tDefault angle of " << angle << " is used." << G4endl;
   }
 }
 
