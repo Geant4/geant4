@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.14 2000-05-13 07:34:11 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.15 2000-05-13 11:00:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -416,11 +416,16 @@ be created and changed and attributed to visualizable objects.
   (Move to scene when implemented.)
 
 
-Global Commands
-===============
+General Commands
+================
 
 * /vis/verbose [<verbosity-integer>]
   default:               0
+
+* /vis/activate [true|false]
+  default:       true
+  Activates/deactivates visualization system.
+  (Should this apply to user code only or all vis commands?)
 
 
 Compound Commands
