@@ -86,6 +86,17 @@ help /vis/sceneHandler/create
 /vis/viewer/refresh
 /vis/viewer/update
 #
+# Now hidden line *and* hidden surface removal.
+/vis/viewer/create
+#
+/vis/viewer/set/viewpointThetaPhi 35 35
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenEdge
+/vis/viewer/set/projection perspective 30
+#
+/vis/viewer/refresh
+/vis/viewer/update
+#
 # Start a run to initialise/optimise geometry.
 /run/beamOn
 #
