@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.5 2004-06-29 13:01:15 japost Exp $
+// $Id: G4NormalNavigation.cc,v 1.6 2004-06-29 16:08:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,20 +128,22 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
     }
 
     // Verification / verbosity
-    // fVerbose= 2; // --> To debug easily can set it here too
-    if ( fVerbose > 1 ){
-      G4int oldprec= G4cout.precision(precVerf);
-      G4cout << " G4NormalNavigation::ComputeStep(): information on mother / key daughters " << G4endl;
+    //
+    if ( fVerbose > 1 )
+    {
+      G4int oldprec = G4cout.precision(precVerf);
+      G4cout << " G4NormalNavigation::ComputeStep()"
+             << " - Information on mother / key daughters ..." << G4endl;
       G4cout << " Type   " << std::setw(12) << "Solid-Name"   << " " 
-             <<  std::setw(3*(6+precVerf))  << " local point" << " "
-             <<  std::setw(4+precVerf)      << "solid-Safety" << " "
-             <<  std::setw(4+precVerf)      << "solid-Step"   << " "
-             <<  std::setw(17)              << "distance Method "
-             <<  std::setw(3*(6+precVerf))  << " local direction" << " "
+             << std::setw(3*(6+precVerf))   << " local point" << " "
+             << std::setw(4+precVerf)       << "solid-Safety" << " "
+             << std::setw(4+precVerf)       << "solid-Step"   << " "
+             << std::setw(17)               << "distance Method "
+             << std::setw(3*(6+precVerf))   << " local direction" << " "
              << G4endl;
       G4cout << " Mother " << std::setw(12) << motherSolid->GetName() << " "
-             <<  std::setw(4+precVerf)      << localPoint   << " "
-             <<  std::setw(4+precVerf)      << motherSafety << " "
+             << std::setw(4+precVerf)       << localPoint   << " "
+             << std::setw(4+precVerf)       << motherSafety << " "
              << G4endl;
       G4cout.precision(oldprec);
     }
@@ -261,14 +263,17 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
           }
 
           // Verification / verbosity
-          if ( fVerbose > 1 ){
-            G4int oldprec= G4cout.precision(precVerf);
-            G4cout << " Daught " << std::setw(12) << sampleSolid->GetName() << " "
-                   << std::setw(4+precVerf)  <<  samplePoint  << " "
-                   << std::setw(4+precVerf)  << sampleSafety << " "
-                   << std::setw(4+precVerf)  << sampleStep   << " "
-                   <<  std::setw(16)         << "distanceToIn" << " "
-                   <<  std::setw(4+precVerf) << localDirection << " "
+          //
+          if ( fVerbose > 1 )
+          {
+            G4int oldprec = G4cout.precision(precVerf);
+            G4cout << " Daught "
+                   << std::setw(12)         << sampleSolid->GetName() << " "
+                   << std::setw(4+precVerf) << samplePoint  << " "
+                   << std::setw(4+precVerf) << sampleSafety << " "
+                   << std::setw(4+precVerf) << sampleStep   << " "
+                   << std::setw(16)         << "distanceToIn" << " "
+                   << std::setw(4+precVerf) << localDirection << " "
                    << G4endl;
             G4cout.precision(oldprec);
           }
@@ -325,15 +330,15 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
       }
       if ( fVerbose > 1 )
       {
-        G4int oldprec= G4cout.precision(precVerf);
+        G4int oldprec = G4cout.precision(precVerf);
         G4cout << " Mother " << std::setw(12) << motherSolid->GetName() << " "
-               <<  std::setw(4+precVerf)      << localPoint   << " "
-               <<  std::setw(4+precVerf)      << motherSafety << " "
-               <<  std::setw(4+precVerf)      << motherStep   << " "
-	       <<  std::setw(16)              << "distanceToOut" << " "
-	       <<  std::setw(4+precVerf)      << localDirection << " "
-	       << G4endl;
-	G4cout.precision(oldprec);      
+               << std::setw(4+precVerf)       << localPoint   << " "
+               << std::setw(4+precVerf)       << motherSafety << " "
+               << std::setw(4+precVerf)       << motherStep   << " "
+               << std::setw(16)               << "distanceToOut" << " "
+               << std::setw(4+precVerf)       << localDirection << " "
+               << G4endl;
+        G4cout.precision(oldprec);      
       }
 #endif
 
