@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.9 2004-01-20 15:29:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.10 2004-05-11 15:20:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,7 +70,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(
     G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << G4endl;
    }
       currentTrack = right.currentTrack;
-      kinEnergy = right.kinEnergy;
+      proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
       proposedMomentumDirection = right.proposedMomentumDirection;
 }
@@ -92,7 +92,7 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
       theSteppingControlFlag = right.theSteppingControlFlag;
 
       currentTrack = right.currentTrack;
-      kinEnergy = right.kinEnergy;
+      proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
       proposedMomentumDirection = right.proposedMomentumDirection;
    }
@@ -115,13 +115,16 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
   // calculate new kinetic energy
-  G4double energy = pPostStepPoint->GetKineticEnergy()
-                    + (kinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+  G4double kinEnergy = pPostStepPoint->GetKineticEnergy()
+                    + (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
 
   // update kinetic energy and momentum direction
-  if (energy < 0.0) energy = 0.0;
+  if (kinEnergy < 0.0) {
+    theLocalEnergyDeposit += kinEnergy;
+    kinEnergy = 0.0;
+  }
 
-  pPostStepPoint->SetKineticEnergy( energy );
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
   pPostStepPoint->SetCharge( currentCharge );
 
 // Not necessary to check now
@@ -145,7 +148,7 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
-  pPostStepPoint->SetKineticEnergy( kinEnergy );
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
   pPostStepPoint->SetCharge( currentCharge );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
 
@@ -173,7 +176,7 @@ void G4ParticleChangeForLoss::DumpInfo() const
        << std::setw(20) << currentCharge/eplus
        << G4endl;
   G4cout << "        Kinetic Energy (MeV): "
-       << std::setw(20) << kinEnergy/MeV
+       << std::setw(20) << proposedKinEnergy/MeV
        << G4endl;
   G4cout << "        Momentum Direct - x : "
        << std::setw(20) << proposedMomentumDirection.x()
@@ -194,7 +197,7 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   G4double  accuracy;
 
   // Energy should not be lager than initial value
-  accuracy = ( kinEnergy - aTrack.GetKineticEnergy())/MeV;
+  accuracy = ( proposedKinEnergy - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "G4ParticleChangeForLoss::CheckIt: ";

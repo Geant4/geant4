@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.7 2004-05-09 15:03:03 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.8 2004-05-11 15:20:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,11 +83,11 @@ public:
   //   Get/Propose the final dynamical Charge in G4DynamicParticle
 
   G4double GetProposedKineticEnergy() const;
-  void SetProposedKineticEnergy(G4double kinEnergy);
+  void SetProposedKineticEnergy(G4double proposedKinEnergy);
   // Get/Set the final kinetic energy of the current particle.
 
-  G4double GetEnergy() const;
-  void ProposeEnergy(G4double finalEnergy);
+//  G4double GetEnergy() const;
+//  void ProposeEnergy(G4double finalEnergy);
   // Get/Propose the final kinetic energy of the current particle.
 
   const G4ThreeVector& GetProposedMomentumDirection() const;
@@ -111,7 +111,7 @@ private:
 
   const G4Track* currentTrack;
   // The pointer to G4Track
-  G4double kinEnergy;
+  G4double proposedKinEnergy;
   //  The final kinetic energy of the current particle.
   G4double currentCharge;
   //  The final charge of the current particle.
@@ -121,23 +121,23 @@ private:
 
 inline G4double G4ParticleChangeForLoss::GetProposedKineticEnergy() const
 {
-  return kinEnergy;
+  return proposedKinEnergy;
 }
 
-inline G4double G4ParticleChangeForLoss::GetEnergy() const
-{
-  return kinEnergy;
-}
+//inline G4double G4ParticleChangeForLoss::GetEnergy() const
+//{
+//  return kinEnergy;
+//}
 
 inline void G4ParticleChangeForLoss::SetProposedKineticEnergy(G4double energy)
 {
-  kinEnergy = energy;
+  proposedKinEnergy = energy;
 }
 
-inline void G4ParticleChangeForLoss::ProposeEnergy(G4double energy)
-{
-  kinEnergy = energy;
-}
+//inline void G4ParticleChangeForLoss::ProposeEnergy(G4double energy)
+//{
+//  kinEnergy = energy;
+//}
 
 inline G4double G4ParticleChangeForLoss::GetProposedCharge() const
 {
@@ -196,7 +196,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
   InitializeSecondaries(track);
-  kinEnergy = track.GetKineticEnergy();
+  proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
 }
 
@@ -205,7 +205,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
   InitializeSecondaries(track);
-  kinEnergy = track.GetKineticEnergy();
+  proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
   proposedMomentumDirection = track.GetMomentumDirection();
   currentTrack = &track;
