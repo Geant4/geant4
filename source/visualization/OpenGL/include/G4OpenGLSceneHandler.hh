@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.5 1999-12-16 17:25:05 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.6 2001-01-16 18:29:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,13 +53,25 @@ public:
 
 protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
-		 G4int id,
-		 const G4String& name = "");
+			G4int id,
+			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
   G4bool initialize_hlr;
 
 private:
+  void AddCircleSquare (const G4VMarker&, G4int nSides);
+  /**************************************************
+  Not needed - but see note on future development in .cc.
+  void DrawXYPolygon (G4double size,
+		      const G4Point3D& centre,
+		      G4int nSides);
+  *********************************/
+  void DrawXYPolygon (G4double size,
+		      const G4Point3D& centre,
+		      const G4Vector3D& normal,
+		      G4int nSides);
   GLdouble clear_colour[4];
+  static const GLubyte fStippleMaskHashed [128];
 };
 
 #include "G4OpenGLSceneHandler.icc"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.5 2000-02-21 16:03:18 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.6 2001-01-16 18:29:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,25 @@ G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
   ClearStore ();
 }
 
+const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
+  0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
+};
+
 //Method for handling G4Polyline objects (from tracking or wireframe).
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
@@ -83,7 +102,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
-  G4cerr
+  G4cout
     << "G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) not implemented yet."
     << "\n  Called with text \"" << text.GetText ()
     << "\" at " << text.GetPosition ()
@@ -94,137 +113,29 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
-
-  const G4Colour& c = GetColour (circle);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-  
-  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
-    glDisable (GL_DEPTH_TEST);
-  else glEnable (GL_DEPTH_TEST);
-  
-  glDisable (GL_LIGHTING);
-  
-  G4VMarker::FillStyle style = circle.GetFillStyle();
-  
-  switch (style) {
-  case G4VMarker::noFill: 
-    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    break;
-    
-  case G4VMarker::hashed:
-    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    glLineStipple (1, 0x0101);
-    break;
-    
-  case G4VMarker::filled:
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    break;
-    
-  default:
-    G4cerr << "Unrecognised fill style for G4Circle in G4OpenGLSceneHandler."
-	 << "\nUsing G4VMarker::filled." << G4endl;
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    break;
-    
-  }
-  
-  G4Point3D centre = circle.GetPosition();
- 
-  G4bool userSpecified = (circle.GetWorldSize() || circle.GetScreenSize());
-  
-  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
-  
-  //Make sure we Draw circles...
   glEnable (GL_POINT_SMOOTH);
-
-  G4double size;
-  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  if (size = scale * // Assignment intentional.
-      userSpecified ? circle.GetWorldSize() : def.GetWorldSize()) {
-
-    // Draw in world coordinates...
-    GLdouble winx, winy, winz;
-    GLdouble* model_matrix = new GLdouble[16];
-    GLdouble* proj_matrix = new GLdouble[16];
-    GLint* v_port = new GLint[4];
-    //    glPointSize (5.0); //Still have to work out correspondance between
-    //                       //world and screen units.
-    glGetDoublev (GL_MODELVIEW_MATRIX, model_matrix);
-    glGetDoublev (GL_PROJECTION_MATRIX, proj_matrix);
-    glGetIntegerv (GL_VIEWPORT, v_port);
-    gluProject (size, size, size,
-		model_matrix,
-		proj_matrix,
-		v_port,
-		&winx, &winy, &winz);
-    glPointSize (winx);
-    glBegin (GL_POINTS);
-    glVertex3d (centre.x(), centre.y(), centre.z());
-    glEnd ();
-    delete[] model_matrix;
-    delete[] proj_matrix;
-    delete[] v_port;
-
-  }
-  else {
-    size = scale *
-      userSpecified ? circle.GetScreenSize() : def.GetScreenSize();
-
-    // Draw in screen coordinates...
-    //    G4double* projection_matrix = new G4double[16];
-    //    glGetDoublev (GL_MODELVIEW_MATRIX, projection_matrix);
-
-    //    HepMatrix proj(4, 4, 1);
-    //    for (col = 1; col < 5; col++) {
-    //      for (row = 1; row < 5; row++) {
-    //	proj (row, col) = projection_matrix[(col-1)*4 + (row-1)];
-    //      }
-    //    }
-
-    //    G4cout << "proj is : \n" << proj << G4endl;
-
-    //    proj.invert(ierr);
-
-    //    G4cout << "ierr is " << ierr << G4endl;
-    //    G4cout << "proj^-1 is : \n" << proj << G4endl;
-    
-    //    for (col = 1; col < 5; col++) {
-    //      for (row = 1; row < 5; row++) {
-    //	projection_matrix[(col-1)*4 + (row-1)] = proj (row, col);
-    //      }
-    //    }
-
-    //    glMultMatrixd (projection_matrix);
-
-    //    glTranslated (centre.x(), centre.y(), centre.z());
-    //    glBegin (GL_LINE_LOOP);
-    glPointSize (size);
-    glBegin (GL_POINTS);
-    //    for (G4int segment = 0; segment < num_sides; segment++) {
-    //      theta = d_theta * segment;
-    //      glVertex3d (sin(theta) * size,
-    //		  cos(theta) * size,
-    //		  0.);
-    //    }
-    glVertex3d (centre.x(), centre.y(), centre.z());
-    glEnd ();
-
-  }
+  AddCircleSquare (circle, 24);
 }
 
+void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
+  glDisable (GL_POINT_SMOOTH);
+  AddCircleSquare (square, 4);
+}
 
-void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
+void G4OpenGLSceneHandler::AddCircleSquare
+(const G4VMarker& marker,
+ G4int nSides) {
 
-  const G4Colour& c = GetColour (Square);
+  const G4Colour& c = GetColour (marker);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-
+  
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else glEnable (GL_DEPTH_TEST);
-
+  
   glDisable (GL_LIGHTING);
   
-  G4VMarker::FillStyle style = Square.GetFillStyle();
+  G4VMarker::FillStyle style = marker.GetFillStyle();
   
   switch (style) {
   case G4VMarker::noFill: 
@@ -232,8 +143,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
     break;
     
   case G4VMarker::hashed:
-    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    glLineStipple (1, 0x0101);
+    /*
+    G4cout << "Hashed fill style in G4OpenGLSceneHandler."
+	   << "\n  Not implemented.  Using G4VMarker::filled."
+	   << G4endl;
+    */
+    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonStipple (fStippleMaskHashed);
+    // See also:
+    //   if (style == G4VMarker::filled || style == G4VMarker::hashed)...
+    // (twice) below.
     break;
     
   case G4VMarker::filled:
@@ -241,77 +160,177 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
     break;
     
   default:
-    G4cerr << "Unrecognised fill style for G4Square in G4OpenGLSceneHandler."
-	 << "\nUsing G4VMarker::filled." << G4endl;
+    G4cout << "Unrecognised fill style in G4OpenGLSceneHandler."
+	   << "\n  Using G4VMarker::filled."
+	   << G4endl;
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     break;
-
+    
   }
 
-  G4Point3D centre = Square.GetPosition();
-  //  glTranslated (centre.x(), centre.y(), centre.z());
-
-  //  G4double a = Square.GetWorldSize ();
-  //  if (a <= 0.0) {
-  //    a = 1000.0;
-  //  }
-
-  //  glBegin (GL_LINE_LOOP);
-
-  //  glVertex3d ( a,  a, 0.);
-  //  glVertex3d (-a,  a, 0.);
-  //  glVertex3d (-a, -a, 0.);
-  //  glVertex3d ( a, -a, 0.);
-
-  //Make sure we Draw squares...
-  glDisable (GL_POINT_SMOOTH);
-
-  G4bool userSpecified = (Square.GetWorldSize() || Square.GetScreenSize());
-  
+  // A few useful quantities...
+  G4Point3D centre = marker.GetPosition();
+  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
   const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
-  
-  G4double size;
+  const G4Vector3D& viewpointDirection =
+    fpViewer -> GetViewParameters().GetViewpointDirection();
   G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  if (size = scale * // Assignment intentional.
-      userSpecified ? Square.GetWorldSize() : def.GetWorldSize()) {
+  G4double size = scale *
+    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
 
-    //Draw in world coordinates...
+  // Find "size" of marker in world space (but see note below)...
+  G4double worldSize;
+  if (size) {  // Size specified in world coordinates.
+
+    worldSize = size;
+
+  }
+  else { // Size specified in screen (window) coordinates.
+
+    // Find window coordinates of centre...
+    GLdouble* modelMatrix = new G4double[16];
+    glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
+    G4double* projectionMatrix = new G4double[16];
+    glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
+    GLint* viewport = new G4int[4];
+    glGetIntegerv(GL_VIEWPORT,viewport);
     GLdouble winx, winy, winz;
-    GLdouble* model_matrix = new GLdouble[16];
-    GLdouble* proj_matrix = new GLdouble[16];
-    GLint* v_port = new GLint[4];
-    //    glPointSize (5.0); //Still have to work out correspondance between
-    //                       //world and screen units.
-    glGetDoublev (GL_MODELVIEW_MATRIX, model_matrix);
-    glGetDoublev (GL_PROJECTION_MATRIX, proj_matrix);
-    glGetIntegerv (GL_VIEWPORT, v_port);
-    gluProject (size, size, size,
-		model_matrix,
-		proj_matrix,
-		v_port,
-		&winx, &winy, &winz);
-    glPointSize (winx);
-    //    glPointSize (5.0); //Still have to work out correspondance between
-    //                       //world units and screen units...
-    glBegin (GL_POINTS);
-    glVertex3d (centre.x(), centre.y(), centre.z());
-    glEnd ();
-    delete[] model_matrix;
-    delete[] proj_matrix;
-    delete[] v_port;
+    gluProject(centre.x(), centre.y(), centre.z(),
+	       modelMatrix, projectionMatrix, viewport,
+	       &winx, &winy, &winz);
 
+    // Determine ratio window:world...
+    const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+    const G4Vector3D inScreen = (up.cross(viewpointDirection)).unit();
+    const G4Vector3D p = centre + inScreen;
+    GLdouble winDx, winDy, winDz;
+    gluProject(p.x(), p.y(), p.z(),
+               modelMatrix, projectionMatrix, viewport,
+               &winDx, &winDy, &winDz);
+    G4double winWorldRatio = sqrt((pow(winx - winDx, 2) +
+				   pow(winy - winDy, 2)) / 2.);
+    G4double winSize = scale *
+      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
+    worldSize = winSize / winWorldRatio;
+
+    delete[] viewport;
+    delete[] projectionMatrix;
+    delete[] modelMatrix;
+  }
+
+  // Draw...
+  DrawXYPolygon (worldSize,
+		 G4Point3D(centre.x(), centre.y(), centre.z()),
+		 viewpointDirection,
+		 nSides);
+}
+
+/***************************************************
+Note: We have to do it this way round so that when a global
+transformation is applied, such as with /vis/viewer/set/viewpoint,
+the markers follow the world coordinates without having to
+recreate the display lists.  The down side is that the markers
+rotate.  The only way to avoid this is to play with the modelview
+and projection matrices of OpenGL - which I need to think about.
+For future reference, here is the code to draw in window
+coordinates; it's down side is tha markers do not follow global
+transformations.  Some clever stuff is needed.
+
+  ...
+  // Find window coordinates of centre...
+  GLdouble* modelMatrix = new G4double[16];
+  glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
+  G4double* projectionMatrix = new G4double[16];
+  glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
+  GLint* viewport = new G4int[4];
+  glGetIntegerv(GL_VIEWPORT,viewport);
+  GLdouble winx, winy, winz;
+  gluProject(centre.x(), centre.y(), centre.z(),
+             modelMatrix, projectionMatrix, viewport,
+             &winx, &winy, &winz);
+
+  // Find window size...
+  G4double winSize;
+  if (size) {  // Size specified in world coordinates.
+    // Determine size in window coordinates...
+    (Note: improve this by using an inScreen vector as above.)
+    GLdouble winx1, winy1, winz1;
+    gluProject(centre.x() + size, centre.y() + size, centre.z() + size,
+               modelMatrix, projectionMatrix, viewport,
+               &winx1, &winy1, &winz1);
+    winSize = sqrt((pow(winx - winx1, 2) +
+                    pow(winy - winy1, 2) +
+                    pow(winz - winz1, 2)) / 3.);
   }
   else {
-    size = scale *
-      userSpecified ? Square.GetScreenSize() : def.GetScreenSize();
-
-    // Draw in screen coordinates...
-    glPointSize (size);
-    glBegin (GL_POINTS);
-    glVertex3d (centre.x(), centre.y(), centre.z());
-    glEnd ();
-
+    winSize = scale *
+      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
   }
+
+  // Prepare to draw in window coordinates...
+  glMatrixMode (GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(GLdouble(viewport[0]),
+             GLdouble(viewport[0] + viewport[2]),
+             GLdouble(viewport[1]),
+             GLdouble(viewport[1] + viewport[3]));
+  glMatrixMode (GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+
+  // Draw in window coordinates...
+  DrawXYPolygon (winSize, G4Point3D(winx, winy, winz), nSides);
+
+  // Re-instate matrices...
+  glMatrixMode (GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode (GL_MODELVIEW);
+  glPopMatrix();
+
+  delete[] viewport;
+  delete[] projectionMatrix;
+  delete[] modelMatrix;
+  ...
+
+void G4OpenGLSceneHandler::DrawXYPolygon
+(G4double size,
+ const G4Point3D& centre,
+ G4int nSides) {
+  glBegin (GL_POLYGON);
+  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double r = size / 2.;
+  G4double phi;
+  G4int i;
+  for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
+    G4double x, y, z;
+    x = centre.x() + r * cos(phi);
+    y = centre.y() + r * sin(phi);
+    z = centre.z();
+    glVertex3d (x, y, z);
+  }
+  glEnd ();
+}
+**********************************************/
+
+void G4OpenGLSceneHandler::DrawXYPolygon
+(G4double size,
+ const G4Point3D& centre,
+ const G4Vector3D& normal,
+ G4int nSides) {
+  const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double radius = size / 2.;
+  G4Vector3D start = radius * (up.cross(normal)).unit();
+  G4double phi;
+  G4int i;
+  glBegin (GL_POLYGON);
+  for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
+    G4Vector3D r = start; r.rotate(phi, normal);
+    G4Vector3D p = centre + r;
+    glVertex3d (p.x(), p.y(), p.z());
+  }
+  glEnd ();
 }
 
 //Method for handling G4Polyhedron objects for drawing solids.
