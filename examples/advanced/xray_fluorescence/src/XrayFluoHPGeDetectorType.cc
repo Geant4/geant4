@@ -68,6 +68,9 @@ XrayFluoHPGeDetectorType::~XrayFluoHPGeDetectorType()
       delete dataSet;
       dataSet = 0;
     }
+
+  delete interpolation4; 
+
 }
 G4String XrayFluoHPGeDetectorType::GetDetectorMaterial()
 {
@@ -333,8 +336,7 @@ void XrayFluoHPGeDetectorType::LoadEfficiencyData(G4String fileName)
     dirFile = pathString + "/" + fileName;
   }
   
-  G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
+  interpolation4 = new G4LogLogInterpolation();
   efficiencySet = new XrayFluoDataSet(1,dirFile,interpolation4,keV,1);
-  delete interpolation4; 
 }
 
