@@ -1,4 +1,4 @@
-$Id: History,v 1.279 2005-03-09 16:49:14 allison Exp $
+$Id: History,v 1.280 2005-03-09 17:01:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-9th March 2005  John Allison  (vis-V07-00-10, needs greps???)
+9th March 2005  John Allison  (vis-V07-00-10, needs greps-V07-00-01)
 - Refined logo and scale.
 - Improved physical volume clipping.
 - G4VisManager: Added default G4Transform3D::Identity to
