@@ -37,6 +37,10 @@
 # Add the world volume to the current scene
 /vis/scene/add/volume
 #/vis/scene/add/volume Layer
+# Name of the absorbers = name of their material (Lead) !
+#/vis/scene/add/volume Lead
+# Name of the gaps = name of their material (liquidArgon) !
+#/vis/scene/add/volume liquidArgon
 #/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 
