@@ -21,81 +21,83 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.1 2001-10-24 10:33:58 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.2 2001-10-26 09:47:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4GammaGiantResonanceDataSet -- header file
-// M.V. Kossov, ITEP(Moscow), 10-SEP-00
+// GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
+// M.V. Kossov, ITEP(Moscow), 24-OCT-01
 //
 
-#ifndef G4GammaGiantResonanceDataSet_h
-#define G4GammaGiantResonanceDataSet_h 1
+#ifndef G4PhotoNuclearCrossSection_h
+#define G4PhotoNuclearCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-#include "G4HadronCrossSections.hh"
+/////////#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
+//#include "G4QPDGCode.hh"
+#include "G4ParticleTable.hh"
+#include "G4NucleiProperties.hh"
+#include "G4NucleiPropertiesTable.hh"
+#include "g4std/vector"
 
-
-class G4GammaGiantResonanceDataSet : public G4VCrossSectionDataSet
+class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4GammaGiantResonanceDataSet()               // Constructor @@??
-   {
+  G4PhotoNuclearCrossSection()               // Constructor @@??
+  {
 	 //theHadronCrossSections = G4HadronCrossSections::Instance();
-   }
+  }
 
-   ~G4GammaGiantResonanceDataSet() {}
+  ~G4PhotoNuclearCrossSection() {}
 
-   G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
-   {
-	 //return theHadronCrossSections->IsApplicable(aParticle, anElement);
-     // Possible prototype
-     G4double targetAtomicNumber = anElement->GetN();
-     //G4double nTargetProtons = anElement->GetZ();
-     //G4double nTargetNeutrons = targetAtomicNumber-nTargetProtons;
-     G4bool result = false;
-     G4double AA=targetAtomicNumber+targetAtomicNumber;
-	 G4int i=6;
-	 if     (AA<ANucl(0)+ANucl(1)) i=0;
-	 else if(AA<ANucl(1)+ANucl(2)) i=1;
-	 else if(AA<ANucl(2)+ANucl(3)) i=2;
-	 else if(AA<ANucl(3)+ANucl(4)) i=3;
-	 else if(AA<ANucl(4)+ANucl(5)) i=4;
-	 else if(AA<ANucl(5)+ANucl(6)) i=5;
-     if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
-         aParticle->GetKineticEnergy()/MeV<ThresholdEnergy(i)
-       ) result = true;
-     return result;
-   }
+  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  {
+	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
+	// Possible prototype
+	G4int targetAtomicNumber = static_cast<int>(anElement->GetN()+.499); //@@ Nat mixture
+	G4int targZ = static_cast<int>(anElement->GetZ());
+	G4int targN = targetAtomicNumber-targZ;
+	G4bool result = false;
+	if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
+		aParticle->GetKineticEnergy()/MeV>ThresholdEnergy(targZ, targN)
+		) result = true;
+	return result;
+  }
 
-   G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement);
-   //{
-	 //return theHadronCrossSections->GetInelasticCrossSection(aParticle,
-     //                                                         anElement);
-   //}
+  G4double GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
+						   G4double temperature=0.);
+  //{
+  //  return theHadronCrossSections->GetInelasticCrossSection(aParticle,
+  //                                                          anElement);
+  //}
 
-   void BuildPhysicsTable(const G4ParticleDefinition&) {}
+  void BuildPhysicsTable(const G4ParticleDefinition&) {}
 
-   void DumpPhysicsTable(const G4ParticleDefinition&) {}
+  void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
 private:
-  G4double AbsorbtionByNucleus(G4int i, G4double E);
-  G4double HighEnergyOld(G4double E);
-  G4double HighEnergyNew(G4double E);
+  G4double GetGDRc1(G4int Z, G4int N);
+  G4double GetGDRp1(G4int Z, G4int N);
+  G4double GetGDRt1(G4int Z, G4int N);
+  G4double GetGDRs1(G4int Z, G4int N);
+  G4double GetGDRc2(G4int Z, G4int N);
+  G4double GetGDRp2(G4int Z, G4int N);
+  G4double GetGDRt2(G4int Z, G4int N);
+  G4double GetGDRs2(G4int Z, G4int N);
+  G4double GetQDAmp(G4int Z, G4int N);
+  G4double GetDelAm(G4int Z, G4int N);
+  G4double GetDelWd(G4int Z, G4int N);
+  G4double GetDelPs(G4int Z, G4int N);
+  G4double GetDelTh(G4int Z, G4int N);
+  G4double GetDelSl(G4int Z, G4int N);
+  G4double GetRopAm(G4int Z, G4int N);
+  G4double GetRopWd(G4int Z, G4int N);
+  G4double GetRopPs(G4int Z, G4int N);
   G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
-  G4double SitSint(G4double E, G4double p1, G4double p2, G4double p3, G4double p4);
-  G4double CorA(G4double E, G4int i);
-  G4double ANucl(G4int i);
-  G4int    ZNucl(G4int i);
-  G4int    NNucl(G4int i);
-  G4double SumQQ(G4int i);
-  G4double ThresholdEnergy(G4int i);
-  G4double PbDataEnergy(G4int i);
+  G4double ThresholdEnergy(G4int Z, G4int N);
 
 // Body
 //private:
@@ -103,72 +105,196 @@ private:
   //G4HadronCrossSections* theHadronCrossSections;
 };
 
-// Working function @@ Move to header
-inline G4double G4GammaGiantResonanceDataSet::SitSint(G4double E, G4double p1,
-                                        G4double p2, G4double p3, G4double p4)
+// Calculate the logAmplitude of the 1-st GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRc1(G4int Z, G4int N)
 {
-  G4double at=atan(pow(E-p2,p4)*p3);
-  return 1.+p1*sin(at+at);
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={4.2,13.9,13.9,13.6,20.5,28.2,28.7,28.5,29.,28.4,28.15,27.8,25.9};
+
+  return LinearFit(log(Z+N), nN, X, Y);
 }
 
-// Correction function for Be,C @@ Move to header
-inline G4double G4GammaGiantResonanceDataSet::CorA(G4double E, G4int i)
+// Calculate the A-power of the 1-st GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRp1(G4int Z, G4int N)
 {
-  static const G4int n = 7;
-  static G4double p1[n] = {0., 0., 0.107630, 0.3149300, 0.3717400, 0.21533, 0.16519};
-  static G4double p2[n] = {0., 0., 0.014351,-0.0028181, 0.0084629, 0.01033, 0.0066295};
-  static G4double p3[n] = {0., 0.,   1425.6,    2250.2,    229.32,  46.911, 389.67};
-  static G4double p4[n] = {0., 0.,   1.7264,    2.6033,    1.6613,  1.1760, 1.7950};
-  if(E<0.16&&E>ThresholdEnergy(i)) return SitSint(E, p1[i], p2[i], p3[i], p4[i]);
-  else                             return 1.;
+  G4double p=8.;
+  G4int A=Z+N;
+  if(A<12) p=6.;
+  if(A< 8) p=4.;
+  if(A< 4) p=2.;
+  return p;
 }
 
-// "A" of measured nuclei @@ Move to header
-inline G4double G4GammaGiantResonanceDataSet::ANucl(G4int i)
+// Calculate the Threshold of the 1-st GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRt1(G4int Z, G4int N)
 {
-  static const G4int n  = 7;
-  static G4double AN[n] = {1.008, 2.01, 9.0122, 12.011, 26.982, 63.546, 207.2};
-  return AN[i];
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={1.4,3.13,3.08,2.9,3.09,3.09,3.09,3.02,2.98,2.9,2.745,2.585,2.42};
+
+  return LinearFit(log(Z+N), nN, X, Y);
 }
 
-// "Z" of measured nuclei @@ Move to header
-inline G4int G4GammaGiantResonanceDataSet::ZNucl(G4int i)
+// Calculate the Slope of the 1-st GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRs1(G4int Z, G4int N)
 {
-  static const G4int n  = 7;
-  static G4int ZN[n] = {1, 1, 4, 6, 13, 29,  82};
-  return ZN[i];
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={.12,.12,.12,.12,.06,.03,.03,.06,.05,.065,.06,.059,.061};
+
+  return LinearFit(log(Z+N), nN, X, Y);
 }
 
-// "N" of measured nuclei @@ Move to header
-inline G4int G4GammaGiantResonanceDataSet::NNucl(G4int i)
+// Calculate the logAmplitude of the 2-nd GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRc2(G4int Z, G4int N)
 {
-  static const G4int n  = 7;
-  static G4int NN[n] = {0, 1, 5, 6, 14, 35, 125};
-  return NN[i];
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={1.85,7.5,6.3,8.2,12.35,15.8,16.1,16.2,16.8,17.1,16.1,15.5,16.6};
+
+  return LinearFit(log(Z+N), nN, X, Y);
 }
 
-// "3*sum(q^2)" for nuclei
-inline G4double G4GammaGiantResonanceDataSet::SumQQ(G4int i)
+// Calculate the A-power of the 2-nd GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRp2(G4int Z, G4int N)
 {
-  static const G4int n  = 7;
-  static G4double QQ[n] = {3., 5., 22., 30., 67., 157., 496.};
-  return QQ[i];
+  G4double p=4.;
+  G4int A=Z+N;
+  if(A<12) p=3.;
+  if(A< 8) p=2.;
+  if(A< 4) p=1.;
+  return p;
 }
 
-// Gives the threshold energy for different nuclei @@ Move to header
-inline G4double G4GammaGiantResonanceDataSet::ThresholdEnergy(G4int i)
+// Calculate the Threshold of the 2-nd GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRt2(G4int Z, G4int N)
 {
-  static const G4int n = 7;
-  static G4double T[n] = {0.200, 0.0022, 0.012, 0.018, 0.013, 0.010, 0.007};
-  return T[i];
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={1.4,3.22,3.11,3.39,3.48,3.34,3.46,3.35,3.4,3.22,3.09,3.05,2.6};
+
+  return LinearFit(log(Z+N), nN, X, Y);
 }
 
-// Gives the threshold energy of Pb data use for different nuclei @@ Move to header
-inline G4double G4GammaGiantResonanceDataSet::PbDataEnergy(G4int i)
+// Calculate the Slope of the 2-nd GDR maximum
+inline G4double G4PhotoNuclearCrossSection::GetGDRs2(G4int Z, G4int N)
 {
-  static const G4int n = 7;
-  static G4double T[n] = {0.227, 0.0022, 0.032, 0.038, 0.035, 0.033, 0.027};
-  return T[i];
+  static const G4int nN=13;
+  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
+						 5.472};
+  static G4double Y[nN]={.12,.094,.09,.088,.14,.082,.079,.074,.071,.065,.061,.058,.05};
+
+  return LinearFit(log(Z+N), nN, X, Y);
+}
+
+// Calculate the Amplitude of the QuasiDeuteron region [exp/(1+exp)]
+inline G4double G4PhotoNuclearCrossSection::GetQDAmp(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  G4double lnA=log(A);
+  return exp(-1.7+lnA*0.84)/(1.+exp(7*(2.38-lnA)));
+}
+
+// Calculate the Amplitude of the Delta Resonance [.41*(Z+N)]
+inline G4double G4PhotoNuclearCrossSection::GetDelAm(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  return .41*A;
+}
+
+// Calculate the Width of the Delta Resonance [11.9-ln(A)*1.24]
+inline G4double G4PhotoNuclearCrossSection::GetDelWd(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  G4double lnA=log(A);
+  return 11.9-lnA*1.24;
+}
+
+// Calculate the Position of the Delta Resonance [5.84-.09/(1+.003*A*A)]
+inline G4double G4PhotoNuclearCrossSection::GetDelPs(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  return 5.84-.09/(1+.003*A*A);
+}
+
+// Calculate the Threshold of the Delta Resonance [5.13-.00075*A]
+inline G4double G4PhotoNuclearCrossSection::GetDelTh(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  return 5.13-0.00075*A;
+}
+
+// Calculate the Threshold of the Delta Resonance [.04->.09]
+inline G4double G4PhotoNuclearCrossSection::GetDelSl(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  if(A<7) return .04;
+  return .09;
+}
+
+// Calculate the Amplitude of the Roper Resonance [-2.+ln(A)*0.84]
+inline G4double G4PhotoNuclearCrossSection::GetRopAm(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  G4double lnA=log(A);
+  return exp(-2.+lnA*0.84);
+}
+
+// Calculate the Width of the Roper Resonance [.1+1.65*ln(A)]
+inline G4double G4PhotoNuclearCrossSection::GetRopWd(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  G4double lnA=log(A);
+  return .1+1.65*lnA;
+}
+
+// Calculate the Position of the Roper Resonance [6.46+.061*ln(A)]
+inline G4double G4PhotoNuclearCrossSection::GetRopPs(G4int Z, G4int N)
+{
+  G4double A=Z+N;
+  G4double lnA=log(A);
+  return 6.46+.061*lnA;
+}
+
+
+// Gives the threshold energy for different nuclei (min of p- and n-threshold)
+inline G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+{
+  // CHIPS - Direct GEANT
+  //static const G4double mNeut = G4QPDGCode(2112).GetMass();
+  //static const G4double mProt = G4QPDGCode(2212).GetMass();
+  static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0);
+  static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1);
+  // ---------
+  static const G4double infEn = 9.e27;
+
+  G4int A=Z+N;
+  if(A<1) return infEn;
+  else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
+  // CHIPS - Direct GEANT
+  //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
+  G4double mT= 0.;
+  if(G4NucleiPropertiesTable::IsInTable(Z,A)) mT=G4NucleiProperties::GetNuclearMass(A,Z);
+  else return 0.;                // If it is not in the Table of Stable Nuclei, then the Threshold=0
+  // ---------
+  G4double mP= infEn;
+  //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
+  if(Z&&G4NucleiPropertiesTable::IsInTable(Z-1,A-1)) mP=G4NucleiProperties::GetNuclearMass(A-1,Z-1);
+  else return infEn;
+  G4double mN= infEn;
+  //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
+  if(N&&G4NucleiPropertiesTable::IsInTable(Z,A-1)) mN=G4NucleiProperties::GetNuclearMass(A-1,Z);
+  else return infEn;
+  G4double dP= mP+mProt-mT;
+  G4double dN= mN+mNeut-mT;
+  if(dP<dN)dN=dP;
+  return dN;
 }
 
 #endif
