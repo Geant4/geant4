@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.1 1999-01-07 16:09:43 gunter Exp $
+// $Id: G4SandiaTable.hh,v 1.2 1999-04-15 14:00:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -31,6 +31,7 @@ class G4SandiaTable
 {
 public:
 
+    G4SandiaTable(G4int);	         
     G4SandiaTable(G4Material*);	         
    ~G4SandiaTable();
    
@@ -43,6 +44,31 @@ public:
            G4int     GetMatNbOfIntervals()  {return fMatNbOfIntervals;};
            G4double  GetSandiaCofForMaterial(G4int,G4int);
            G4double* GetSandiaCofForMaterial(G4double energy);
+
+/////////////////////////////////////////////////////////////////////
+//
+// Methods for PAI model
+
+         inline void SandiaSwap( G4double da[][5],
+                                 G4int i,
+                                 G4int j );
+
+         void SandiaSort( G4double da[][5],
+                          G4int sz );
+
+	 G4int SandiaIntervals( G4int Z[],
+                                G4int el );
+
+         G4int SandiaMixing(       G4int Z[],
+                             const G4double fractionW[],
+                                   G4int el,
+                                   G4int mi );
+
+         inline G4double GetPhotoAbsorpCof(G4int i , G4int j)const ;
+
+         inline G4int GetMaxInterval() const ;
+
+
 
 private:
        
@@ -60,7 +86,20 @@ private:
     
                  G4Material*     fMaterial;
                  G4int           fMatNbOfIntervals;
-                 G4OrderedTable* fMatSandiaMatrix;    
+                 G4OrderedTable* fMatSandiaMatrix;  
+
+//////////////////////////////////////////////////////////////////////////
+//
+// data memebers for PAI model
+
+         static const G4int    fNumberOfElements  ;
+         static const G4int    fIntervalLimit ;
+         static const G4int    fNumberOfIntervals  ;
+		
+	 G4double fPhotoAbsorptionCof[101][5] ;	// SandiaTable  for mixture
+	 G4int fMaxInterval ;
+
+  
 };
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -133,6 +172,55 @@ G4double G4SandiaTable::GetZtoA(G4int Z)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+///////////////////////////////////////////////////////////////////////
+//
+// Inline methods for PAI model
+
+inline
+void
+G4SandiaTable::SandiaSwap( G4double da[][5],
+                           G4int i,
+                           G4int j )
+{
+  G4double tmp = da[i][0] ;
+  da[i][0] = da[j][0] ;
+  da[j][0] = tmp ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline
+G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
+{
+   G4double unitCof ;
+   if(j == 0)
+   {
+      unitCof = keV ;
+   }
+   else
+   {
+      unitCof = (cm2/g)*pow(keV,(G4double)j) ;
+   }
+   return  fPhotoAbsorptionCof[i][j]*unitCof ;
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+//
+
+inline
+G4int G4SandiaTable::GetMaxInterval() const
+{
+   return fMaxInterval ;
+}
+
+//
+//
+////////////////////////////////////////////////////////////////////////////
+
 
 #endif 
 

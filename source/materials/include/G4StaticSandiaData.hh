@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StaticSandiaData.hh,v 1.1 1999-01-07 16:09:43 gunter Exp $
+// $Id: G4StaticSandiaData.hh,v 1.2 1999-04-15 14:00:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // file G4StaticSandiaData.hh
@@ -22,7 +22,6 @@
 #include"G4SandiaTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
 //
 // These are the coefficients from F. Biggs, R. Lighthill 'Analytical
 // Approximation for X-ray Cross Sections III', SAND-0070, May 1990.
@@ -1518,6 +1517,16 @@ const G4double G4SandiaTable::fIonizationPotentials[101] =
   5.99,  6.02,  6.23,  6.30,  6.42,  6.50
 
 };     // ............... end of fIonizationPotentials array
+
+
+
+const G4int G4SandiaTable::fNumberOfElements  = 100 ;
+
+const G4int G4SandiaTable::fIntervalLimit     = 100 ;
+
+const G4int G4SandiaTable::fNumberOfIntervals = 980 ;
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
