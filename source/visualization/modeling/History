@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001-07-18 18:32:40 johna Exp $
+$Id: History,v 1.10 2001-07-22 01:00:58 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+21st July 2001  John Allison  (modeling-V03-02-01)
+- Added G4ScaleModel.
+- Fixed bug in G4BoundingSphereScene::::Accrue().
+- Also a few cosmetic changes.
 
 18th July 2001  John Allison  (modeling-V03-02-00)
 - Ensured rotation and translation of replica is restored.
