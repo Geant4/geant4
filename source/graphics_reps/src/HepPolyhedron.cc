@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.cc,v 1.7 2001-04-11 15:00:54 johna Exp $
+// $Id: HepPolyhedron.cc,v 1.8 2001-05-25 13:06:59 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,9 @@
 //
 // 19.03.00 E.Chernyaev
 // - implemented boolean operations (add, subtract, intersect) on polyhedra;
+//
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
 //
   
 #include "HepPolyhedron.h"
@@ -1174,6 +1177,56 @@ HepBoolean HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
   HepBoolean rep = GetNextNormal(normal);
   normal = normal.unit();
   return rep;
+}
+
+double HepPolyhedron::GetSurfaceArea() const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetSurfaceArea              Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns area of the surface of the polyhedron.            *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double s = 0.;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = abs(pF[iFace].edge[0].v);
+    int i1 = abs(pF[iFace].edge[1].v);
+    int i2 = abs(pF[iFace].edge[2].v);
+    int i3 = abs(pF[iFace].edge[3].v);
+    if (i3 == 0) i3 = i0;
+    s += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).mag();
+  }
+  return s/2.;
+}
+
+double HepPolyhedron::GetVolume() const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetVolume                   Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns volume of the polyhedron.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double v = 0.;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = abs(pF[iFace].edge[0].v);
+    int i1 = abs(pF[iFace].edge[1].v);
+    int i2 = abs(pF[iFace].edge[2].v);
+    int i3 = abs(pF[iFace].edge[3].v);
+    HepPoint3D g;
+    if (i3 == 0) {
+      i3 = i0;
+      g  = (pV[i0]+pV[i1]+pV[i2]) * (1./3.);
+    }else{
+      g  = (pV[i0]+pV[i1]+pV[i2]+pV[i3]) * 0.25;
+    }
+    v += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).dot(g);
+  }
+  return v/6.;
 }
 
 HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,

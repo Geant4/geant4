@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.7 2001-04-11 15:00:00 johna Exp $
+// $Id: HepPolyhedron.h,v 1.8 2001-05-25 13:06:49 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,6 +79,9 @@
 //                            returns false when finished all faces;
 //   GetNextUnitNormal (normal) - get normals of unit length of each face
 //                            in order; returns false when finished all faces;
+//   GetSurfaceArea()       - get surface area of the polyhedron;
+//   GetVolume()            - get volume of the polyhedron;
+//   GetNumberOfRotationSteps()   - get number of steps for whole circle;
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
@@ -125,6 +128,9 @@
 //
 // 19.03.00 E.Chernyaev
 // - added boolean operations (add, subtract, intersect) on polyhedra;
+//
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
 //
 
 #ifndef HEP_POLYHEDRON_HH
@@ -284,6 +290,12 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
+
+  // Get area of the surface of the polyhedron
+  double GetSurfaceArea() const;
+
+  // Get volume of the polyhedron
+  double GetVolume() const;
 
   // Get number of steps for whole circle
   static int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
