@@ -55,6 +55,8 @@
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
+    the15percentBorderCash = -DBL_MAX;
+    the50percentBorderCash = -DBL_MAX;
 
   }
   
@@ -68,6 +70,8 @@
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
+    the15percentBorderCash = -DBL_MAX;
+    the50percentBorderCash = -DBL_MAX;
   }
 
   G4NeutronHPVector::~G4NeutronHPVector()
@@ -101,7 +105,9 @@
     label = right.label;
   
     Verbose = right.Verbose;
-    return *this;
+    the15percentBorderCash = right.the15percentBorderCash;
+    the50percentBorderCash = right.the50percentBorderCash;
+   return *this;
   }
 
   
@@ -267,4 +273,130 @@
     delete [] theData;
     theData = aBuff;
     nEntries = count+1;
+  }
+
+  G4bool G4NeutronHPVector::IsBlocked(G4double aX)
+  {
+    G4bool result = false;
+    G4std::vector<G4double>::iterator i;
+    for(i=theBlocked.begin(); i!=theBlocked.end(); i++)
+    {
+      G4double aBlock = *i;
+      if(abs(aX-aBlock) < 0.1*MeV)
+      {
+        result = true;
+	theBlocked.erase(i);
+	break;
+      }
+    }
+    return result;
+  }
+
+  G4double G4NeutronHPVector::Sample() // Samples X according to distribution Y
+  {
+    G4double result;
+    if(theBuffered.size() !=0 && G4UniformRand()<0.5) 
+    {
+      result = theBuffered[0];
+      theBuffered.erase(theBuffered.begin());
+      if(result < GetX(GetVectorLength()-1) ) return result;
+    }
+    if(GetVectorLength()==1)
+    {
+      result = theData[0].GetX();
+    }
+    else
+    {
+      if(theIntegral==NULL) IntegrateAndNormalise();
+      do
+      {
+        G4int i;
+        G4double value, test, baseline;
+        baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
+        G4double rand;
+        do
+        {
+          value = baseline*G4UniformRand();
+          value += theData[0].GetX();
+          test = GetY(value)/maxValue;
+          rand = G4UniformRand();
+        }
+        while(test<rand);
+        result = value;
+      }
+      while(IsBlocked(result));
+    }
+    return result;
+  }
+
+  G4double G4NeutronHPVector::Get15percentBorder()
+  {    
+    if(the15percentBorderCash>-DBL_MAX/2.) return the15percentBorderCash;
+    G4double result;
+    if(GetVectorLength()==1)
+    {
+      result = theData[0].GetX();
+      the15percentBorderCash = result;
+    }
+    else
+    {
+      if(theIntegral==NULL) IntegrateAndNormalise();
+      G4int i;
+      result = theData[GetVectorLength()-1].GetX();
+      for(i=0;i<GetVectorLength();i++)
+      {
+	if(theIntegral[i]/theIntegral[GetVectorLength()-1]>0.15) 
+	{
+	  result = theData[min(i+1, GetVectorLength()-1)].GetX();
+          the15percentBorderCash = result;
+	  break;
+	}
+      }
+      the15percentBorderCash = result;
+    }
+    return result;
+  }
+
+  G4double G4NeutronHPVector::Get50percentBorder()
+  {    
+    if(the50percentBorderCash>-DBL_MAX/2.) return the50percentBorderCash;
+    G4double result;
+    if(GetVectorLength()==1)
+    {
+      result = theData[0].GetX();
+      the50percentBorderCash = result;
+    }
+    else
+    {
+      if(theIntegral==NULL) IntegrateAndNormalise();
+      G4int i;
+      G4double x = 0.5;
+      result = theData[GetVectorLength()-1].GetX();
+      G4NeutronHPInterpolator theLin;
+      for(i=0;i<GetVectorLength();i++)
+      {
+	if(theIntegral[i]/theIntegral[GetVectorLength()-1]>x) 
+	{
+	  G4int it;
+	  it = i;
+	  if(it == GetVectorLength()-1)
+	  {
+	    result = theData[GetVectorLength()-1].GetX();
+	  }
+	  else
+	  {
+	    G4double x1, x2, y1, y2;
+	    x1 = theIntegral[i-1]/theIntegral[GetVectorLength()-1];
+	    x2 = theIntegral[i]/theIntegral[GetVectorLength()-1];
+	    y1 = theData[i-1].GetX();
+	    y2 = theData[i].GetX();
+	    result = theLin.Lin(x, x1, x2, y1, y2);
+	  }
+          the50percentBorderCash = result;
+	  break;
+	}
+      }
+      the50percentBorderCash = result;
+    }
+    return result;
   }

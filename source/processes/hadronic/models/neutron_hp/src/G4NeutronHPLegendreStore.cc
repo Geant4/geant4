@@ -68,8 +68,8 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
       G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
       v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*legend;
     } 
-    v1 = max(0,v1); // Workaround in case one of the distributions is fully non-physical.
-    v2 = max(0,v2); 
+    v1 = max(0.,v1); // Workaround in case one of the distributions is fully non-physical.
+    v2 = max(0.,v2); 
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();
     if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000

@@ -129,7 +129,7 @@
       {
         theMerge->SetData(m, active->GetEnergy(a), active->GetXsec(a));
         G4double x  = theMerge->GetEnergy(m);
-        G4double y = passive->GetXsec(x); 
+        G4double y = G4std::max(0., passive->GetXsec(x)); 
         theMerge->SetData(m, x, theMerge->GetXsec(m)+y);
         m++;
         a++;

@@ -4,10 +4,11 @@
 //
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
+#include "globals.hh"
 
   G4double G4NeutronHPChannel::GetXsec(G4double energy)
   {
-    return theChannelData->GetXsec(energy);
+    return G4std::max(0., theChannelData->GetXsec(energy));
   }
   
   G4double G4NeutronHPChannel::GetWeightedXsec(G4double energy, G4int isoNumber)
@@ -121,7 +122,7 @@
       if(anActive->GetEnergy(a) <= aPassive->GetEnergy(p))
       {
         G4double xa  = anActive->GetEnergy(a);
-        theMerge->SetData(m, xa, anActive->GetXsec(a)+aPassive->GetXsec(xa));
+        theMerge->SetData(m, xa, anActive->GetXsec(a)+G4std::max(0., aPassive->GetXsec(xa)) );
         m++;
         a++;
         G4double xp = aPassive->GetEnergy(p);

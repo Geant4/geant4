@@ -130,7 +130,7 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
     if(i!=0) running[i]=running[i-1];
     if(theXsection[i] != NULL) 
     {
-      running[i] += theXsection[i]->GetXsec(eKinetic);
+      running[i] += G4std::max(0., theXsection[i]->GetXsec(eKinetic));
     }
   }
   G4double random = G4UniformRand();

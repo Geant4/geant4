@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.6 2000-07-24 14:06:16 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.7 2000-11-09 16:14:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -73,6 +73,7 @@
       while(!theInelastic[i].HasDataInAnyFinalState());
     }
   }
+
   G4NeutronHPInelastic::~G4NeutronHPInelastic()
   {
     delete [] theInelastic;
