@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.16 2002-04-22 13:51:00 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.17 2002-04-22 16:30:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -328,7 +328,7 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
           fmaxExtent = offset+width*nReplicas;
           break;
         default:
-    G4cout << "ERROR - Illegal axis !" << G4endl;
+          G4cout << "ERROR - Illegal axis !" << G4endl;
           G4Exception("ERROR - G4SmartVoxelHeader::BuildReplicaVoxels");
           break;
       }  
@@ -337,7 +337,7 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
       if ( (axis==kXAxis) || (axis==kYAxis) || (axis==kZAxis) )
       {
         // Sanity check on extent
-  //
+        //
         G4double min, max;
         G4VoxelLimits limits;
         G4AffineTransform origin;
@@ -596,7 +596,7 @@ void G4SmartVoxelHeader::BuildEquivalentSliceNos()
 //
 void G4SmartVoxelHeader::CollectEquivalentNodes()
 {
-  G4int sliceNo,maxNo,equivNo;
+  G4int sliceNo, maxNo, equivNo;
   G4int maxNode=fslices.size();
   G4SmartVoxelNode *equivNode;
   G4SmartVoxelProxy *equivProxy;
@@ -888,15 +888,12 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   G4double smartlessComputed = noNodesExactD / nCandidates;
   G4double smartlessUser = pVolume->GetSmartless();
   G4double smartless = (smartlessComputed <= smartlessUser)
-                       ? smartlessComputed
-                       : smartlessUser;
+                       ? smartlessComputed : smartlessUser;
   G4double noNodesSmart = smartless*nCandidates;
   G4int    noNodesExactI = G4int(noNodesSmart);
   G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5)
-                     ? noNodesExactI + 1
-                     : noNodesExactI;
-
-  if( noNodes == 0 ) { noNodes=1;}
+                     ? noNodesExactI+1 : noNodesExactI;
+  if( noNodes == 0 ) { noNodes=1; }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "     Min width = " << minWidth
