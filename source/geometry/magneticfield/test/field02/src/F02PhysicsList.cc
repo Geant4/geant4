@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.1 2001-10-11 07:17:44 grichine Exp $
+// $Id: F02PhysicsList.cc,v 1.2 2001-11-13 17:22:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -308,9 +308,9 @@ void F02PhysicsList::ConstructEM()
       //   G4MultipleScattering* thehMultipleScattering =
       //                  new G4MultipleScattering() ;
 
-        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-                                     pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVolHadr"),-1,2,2);
+	//   pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
+	//                      pDet->GetLogicalAbsorber(),
+	//                  "IonisationByLogVolHadr"),-1,2,2);
 
       //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       //  pmanager->AddProcess(thehIonisation,-1,2,2);
