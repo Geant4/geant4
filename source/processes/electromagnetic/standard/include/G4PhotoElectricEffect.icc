@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.icc,v 1.6 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4PhotoElectricEffect.icc,v 1.7 2001-08-31 12:22:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 12-06-96, update by M.Maire
 // 17-09-96, PartialSumSigma(i)
@@ -36,19 +36,20 @@
 // 06-01-99, use Sandia crossSection, V.Grichine mma
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& particle)
+inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition&
+                                                        particle)
 {
    return ( &particle == G4Gamma::Gamma() ); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PhotoElectricEffect::GetCrossSectionPerAtom(
-                                     const G4DynamicParticle* aDynamicGamma,
-                                           G4Element* anElement)
+                                       const G4DynamicParticle* aDynamicGamma,
+                                             G4Element* anElement)
  
 // gives the microscopic total cross section in GEANT4 internal units
 
@@ -69,7 +70,7 @@ inline G4double G4PhotoElectricEffect::GetCrossSectionPerAtom(
    return crossSection;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
                                                        G4double,
@@ -97,18 +98,18 @@ inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
    return MeanFreePath;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
-                                                           G4Material* aMaterial)
+                                                          G4Material* aMaterial)
 
 // returns the gamma mean free path in GEANT4 internal units
 
 {
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
-  const G4double*      NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
 
-  G4double SIGMA = 0 ;
+  G4double SIGMA = 0;
 
   for ( size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
       {             
@@ -120,7 +121,7 @@ inline G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                                          
 inline 
 G4double G4PhotoElectricEffect::ComputeSandiaMeanFreePath(G4double GammaEnergy,
@@ -138,7 +139,7 @@ G4double G4PhotoElectricEffect::ComputeSandiaMeanFreePath(G4double GammaEnergy,
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 inline G4double G4PhotoElectricEffect::ComputeKBindingEnergy (G4double Z)
  
@@ -152,7 +153,7 @@ inline G4double G4PhotoElectricEffect::ComputeKBindingEnergy (G4double Z)
   return Z*Z*(aK  + Z* (bK + Z* (cK + Z* dK))); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PhotoElectricEffect::ComputeL1BindingEnergy (G4double Z)
  
@@ -166,7 +167,7 @@ inline G4double G4PhotoElectricEffect::ComputeL1BindingEnergy (G4double Z)
   return Z*Z*(aL1 + Z* (bL1 + Z* (cL1 + Z* dL1)));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PhotoElectricEffect::ComputeL2BindingEnergy (G4double Z)
  
@@ -180,6 +181,6 @@ inline G4double G4PhotoElectricEffect::ComputeL2BindingEnergy (G4double Z)
   return Z*Z*(aL2 + Z* (bL2 + Z* (cL2 + Z* dL2)));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
