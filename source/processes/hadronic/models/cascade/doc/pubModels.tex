@@ -1,371 +1,26 @@
-\section{Geant4 Bertini Cascade Models}
+\section{Geant4 cascade model}
 
-\subsection{Nuclei Model}
+%     of an intermediate-energy intranuclear cascade and evaporation models. 
+[outline, and general description, overview]
 
-\subsubsection{Nuclear radius}
+Intranuclear cascade model developed by Bertini \cite{}, 
 
-\subsubsection{Nuclear density}
+Our model is based on re-engineering of INUCL code ~\cite{iljinov94}.
+Models included are Bertini intra-nuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
+fission model, and evaporation model.
+Reactions from 100~MeV to 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
 
-% Nuclear charge densities are usually well described using present-day effective two-body forces; it is also clear that saturation of the charge dencity indeed occurs. 
-% The central density barely varies when the nucleon number changes.
+Range of targets allowed arbitrary.
+%range of projectiles allowed p, n, pi and nuclei.
+%From a few Mev to 10 GeV for n, p, pi and up to about 100 MeV / nucleon for nuclei.
 
-\subsubsection{Mass formula}
-
-% A parametrization of the nuclear binding energy in the groud state,
-% was first discussed by Bethe, Bacher and Weizs\"{a}cker.
-% Parametrization conatains volume, surface, Coulomb and symmetry correction terms (we neglegt here typical shell model correction terms) and reads
-
-% $$B(E, A) = a_{\nu} A - a_{s} A^{2/3} - a_{c} Z(Z-1)A^{-1/3} -$$ 
-% \begin{equation}
-%   a_{A}\frac{(A-2Z)^2}{A}
-% \end{equation}
-
-% Nuclear charge radius turns out to be a rather well-defined quantity.
-
-\subsubsection{Quantum effects treated}
-
-% On the level of the nucleons themselves, invariance of the total nuclear wave functions under the exchange of identical nucleons affects the possible models realized. 
-% The Pauli principle implies antisymmetry for the total fermionic wave function and this has very definite consequences for the types of collective motion that can be set up inside the nucleus.
-
-% \begin{itemize}
-% \item Pauli blocking
-% \item formation time (inelastic)
-% \item coherence length ((quasi)-elastic and charge exchange)
-% \item nucleon antisymmetrization
-% \item hard core nucleon correlations
-% \end{itemize}
-
-\subsubsection{Cross sections}
-
-\subsection{Pre-equilibrium model}
-\subsection{Fission model}
-\subsection{Evaporation model}
-
-% \subsection{INC-Model}
-
-% Widely used semiclassical miscroscopic description of a collision between a particle and a nucleus, 
-% was proposed by Serber \cite{serber47} and Goldberger \cite{goldberger48}.
-
-
-% Originally the INUCL code was published in 1983 \cite{stepanov}.
-% This code, written with Fortran has been used in [:::] \cite{:::}.
-
-% Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
-% YIELDX, and ALICE code are presented in Refs. \cite{titarenko99a}.
-
-% Year 2000 a aroject to implement INUCL into Geant4 hadronic physic
-% module using C++ wal launched. 
-
-% New now  works also as standalone c++ software called INUCL++.
-
-% \subsection{Summary of INUCL model features}
-% \begin{itemize}
-% \item Originally INUCL was designed as a particle - nucleus interaction simulation block for the particle - target interaction simulation program PHOENIX. It produces an exclusive approach to simulating events with reasonable performance.
-% \item INUCL is based on N. Stepanov Ph.D. thesis, ITEP, Moscow, 1990.
-% Also, contribution Vladimir D. Kazaritsky.
-% \item Now we have standalone F77 based INUCL code and INUCL++ written in C++.
-% INUCL++ is now written using Geant4 coding style and integration to hadronic models in in progress. Problem: speed is five times slower.
-% \end{itemize}
-
-% \subsubsection{INUCL models}
-% \begin{itemize}
-% \item Intranuclear cascade
-% \item Precompound decay (exiton master equation) 
-% \item Evaporation (Weisskopf - Ewing) 
-% \item Fission (phenomenological model, incorporating some features of the fission statistical model)
-% \end{itemize}
-
-% \subsubsection{Particles treated}
-% \begin{itemize}
-% \item Range of targets allowed arbitrary.
-% \item Range of projectiles allowed p, n, pi and nuclei.
-% \item From a few Mev to 10 GeV for n, p, pi and up to about 100 MeV / nucleon for nuclei.
-% \end{itemize}
-
-% \subsubsection{Cross sections}
-% \begin{itemize}
-% \item Total inelastic cross section has to be taken from outside to normalize all data. 
-% \item Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulae 
-
-% %$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))$
- 
-% \item Ref.: S. Pearlstein, The Astrophysical Journal, 346: 1049-1060, 1989 November 15
-% \item Fermi energy calculated in a local density approximation.
-% \end{itemize}
-
-% Nuclear density distribution are derived from the Re(Vopt( r)) distribution. In cascade part, nucleus is divided into a finite number of zones with constant density.
-
-
-% %nuclear radius parameterization: By the definition R(A) is derived from eq. Den(R(A)) = 0.01*Den max
-% \subsubsection{Nucleon nucleon cross-sections}
-% \begin{itemize}
-% \item Parametrizations based on the experimental data (ED) are used. 
-% \item They are energy and isospin dependent. 
-% \item The parameterizations described in ([1] Barashenkov V.S., Toneev V.D. High Energy interactions of particles and nuclei with nuclei. Moscow, 1972 
-% %(in Russian, but there is an English translation)) are used.
-
-% \item Pauli exclusion in the INC: Simulated particle-particle interaction is accepted only for secondary nucleons which have $E_n > E_f$.
-
-% \item Nuclear density effects are recalculated after each step
-
-% \item Cascade is stopped when all the particles, which can escape the nucleus, do it. Then conformity with the energy - conservation law is checked and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
-
-% \item For nucleons binding energies are calculated using mass formula. For pions Vopt is taken to be constant (about 7 MeV).
-% \end{itemize}
-
-% %What criteria for p-h excitation? is the next phase precompound or compound'? Only pions. The next phase is precompound. Initial conditions are defined during the cascad phase: p -number of "particles", i.e. nucleons, which can not escape the nucleus and have too small interaction probability; h - number of "holes" = number of nuclear nucleons involved in the cascade; energy - momentum of the exiton system derived from the conservation law.
-
-% \subsubsection{Precompound phase}
-% %, describe the PE model used, parameters, i.e., partial state densities, transition rates? 
-% \begin{itemize}
-
-% \item Main parameters are taken from (Ribansky I. et al, Nucl.Phys.,1973, A205, p.545 (level densities); Kolbach.C., Z.Phys.,1978, A287, p.319 (matrix elements)). 
-% %(Only N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
-% \item The angular distribution is isotropic in the frame of rest of the exiton system.
-% \end{itemize}
-
-% %Describe parameters used: level densities, inverse cross-sections or transmission coefficient, choice of optical model parameters if relevant (or reference to source), range of excitations allowed, inclusive or exclusive results? Weisskopf-Ewing evaporation in competition with fission. Emissions of n,p,d,t,He3,He4,gamma is allowed. Level densities derived from exp.data are used. Angular momentum and spin dependence are not included. Other parameters are the same as in ([1], see 5a.) Fermi breakup is allowed onlyin some extreme cases, i.e. for light nuclei and E(exitation) > 3.*Eb. Only the total nuleus decay into neutrons and protons is treated.
-
-
-% \begin{verbatim}
 % particles p, n, pi, D, T, He3, He4,\gamma
 % (INUCLN with neutrino 31.3.98)
 % pion aborption
-% interaction crosssections
-% (all data for (N, N) and (pi, N) interactions (dn/dsigma, d3sigma/d3p, 
-%             partial multiplicity for npi<=5  error 10-20\%)
 % pre-equilibrium exiton model 
-% \end{verbatim}
 
-% \subsection{Intranuclear cascade model}
-
-% \subsubsection{Nucleon dencity in the atom}
-
-% Halo nucleus such as $^{11}Li$ are not modelled.
-
-% \subsubsection{Impulse distribution}
-
-% \subsubsection{Distribution of potential energy}
-
-% \subsubsection{Quantum effects}
-% Pauli exclusion principle
-
-% \subsubsection{Description of inc}
-
-
-% \subsection{Fission}
-
-% \subsection{Pre-equilibrium}
-
-% \subsection{Evaporation}
-% Exited nuclei cools further trough the emission of gamma radiation.
-% If simulation is detailed,
-% the emitted gamma rays contain information about the cooling route 
-% and region the nucleus is passing trough.
-
-% \subsection{From INUCL to INUCL++}
-
-% \subsubsection{Design and analysis}
-% We desided to make separate INUCL++ implementations one as an stand
-% alone with spesific cross-section data and particle definition, and
-% another iplementation that re-uses Geant4 classes.
-% So, requirements for the INUCL++ came mainly from Geant4.
-% Coding style and organization should follow those used in Geant4.
-
-
-% Interace-classes to Geant4 hadronic models define the separation of
-% cascade, fission, pre-equilibrium, and evaporation. Thus INUCL++
-% implementation in Geant4 consists of four separate modules.
-
-% \subsubsection{Implementation}
-% Implementation of INUCL++ in {\sc Geant4}
-
-% \subsubsection{INUCL++ as a standalone program}
-
-
-% HETC \footnote{Full name in the original 70's manual read as 'Monte Carlo High-Energy Nucleon-Meson Transport Code System'} is a Monte Carlo transport code for computing the properties of high-energy nucleon-meson cascades in matter.
-% %HETC simulates the hadronic cascade by using Monte Carlo techniques
-% %to solve the Boltzman transport equation and to compute the
-% It computes the trajectories of the primary particle ($p$, $n$,
-% $\pi^{\pm}$, or $\mu^{\pm}$) and the secondary particles produced in
-% nuclear collisions. Each particle is followed until it eventually
-% escapes from the geometric boundaries of the system, undergoes nuclear
-% collision or absorption, comes to rest due to energy losses from
-% ionization and excitation of atomic electrons or decays. HETC cannot
-% handle the low-energy neutron transport or electromagnetic
-% interactions, which must be handled with other models.
-
-% % HETC simulates the hadronic cascade
-% % by using Monte Carlo techniques to compute the trajectories of the
-% % primary particle and the secondary particles produced in nuclear
-% % collisions. It was developed on the basis of the existing
-% % Nucleon-Meson Transport Code (NMTC) and the incorporated code for the
-% % neutron transport. The evolution of HETC code is presented in
-% % Table~\ref{taul:hetcHistory}.~\cite{bertini63,ornlhetc}
-
-% HETC was originally developed 
-% %by researchers in the Nuclear Analysis
-% %and Shielding Section of 
-% in Oak Ridge National Laboratory (ORNL), Oak Ridge, Tennessee.
-% %Computational Physics and Engineering Division 
-% in 1972 using FORTRAN IV nad IBM 360/370.  
-% Basically HETC was written as extension to NMTC code.
-
-
-% Major parts of the original Bertini INC code are still present, 
-% making the code extremely difficult to read. 
-% Until nowadays, HETC has undergone several improvements and
-% has been recently extended to treat the very high energies of the LHC.
-% Usually the improvements have been related to the update of
-% experimental cross-sections or to revision of specific collision
-% models such as the multi-chain fragmentation model~\cite{alsmiller90}.
-% HETC has been developed by many different groups, but unfortunately
-% with no coordination.  As a result, many different versions of the
-% code exists.  The basic ideas of HETC have, however, not changed. \cite{bertini68}
-
-% HETC has been included in many multi-purpose codes like HERMES, CALOR
-% and also in the Geant3.21 code, where it was implemented via an
-% interface called GCALOR. HETC has been benchmarked against numerous
-% accelerator-based and space-based experiments with excellent success.
-% It describes energy resolutions in calorimeters with quite good
-% precision, and in Geant3.21, it was the prime candidate for radiation
-% studies when combined to the MICAP (the Monte Carlo Ionization Chamber
-% Analysis Program) transport code~\cite{wellisch}.
-% %which is used to simulate neutrons of low energy ($<20$~MeV)
-% HETC has also been adopted by a number of other organizations than
-% CERN, although it has often been tailored to their specific
-% requirements.
-
-
-% \subsection{Characteristics of HETC98}
-% %\subsection{Summary of  model features}
-% The version of HETC used in our Geant4
-% implementation work is HETC98 from year 1998 as used in BaBar
-% experiment. 
-% It's characteristics are enumerated in Table~\ref{taul:hetcCharacteristics}.
-
-% % \begin{table}[hbt]
-% % \caption{Evolution of the HETC code. Different versions and the
-% % related restrictions. ~\cite{hetc,alsmiller90}} \label{taul:hetcHistory} 
-% % \centering
-% % \begin{tabular}{|l|l|}
-% % %\hline
-% % %\multicolumn{2}{|c|}{HETC (High Energy Transport Code} \\
-% % \hline
-% % Version                 &       Restrictions or improvements\\
-% % \hline
-% % NTC (early 1960's)      &       $E_0 <\  \sim400$~MeV \\
-% % NMTC (1971)     &       $E_0 <\  \sim3$~GeV \\
-% % HETC/RSIC version (1972)        & $E_0$ above 3~GeV, incorporates \\
-% %                         &       MECC-7 and EVAP IV \cite{armstrong72}\\
-% % HETC/ORNL version       &       Nuclear data updated, \\
-% %                         &       multiple scattering updated \\
-% % HETC/Science Applications Inc.  &       Time dependence added,\\        
-% % version                 &       transport extended to ion beams \\
-% %                         &       of deuterons to alpha particles \\
-% % HETC88 (1988)           &       Multi-chain fragmentation model added\\
-% %                         &       for $E<5~{\rm GeV}$ \\
-% % \hline
-% % \end{tabular} 
-% % \end{table}
-
-% \begin{table}[!hbt]
-% \caption{Overview of Characteristics of HETC Code.}
-
-% \label{taul:hetcCharacteristics} %\cite???
-% \centering
-% \begin{tabular}{|l|l|}
-% %\hline
-% %\multicolumn{2}{|c|}{Characteristics of HETC} \\
-% \hline
-% Particles transported   &       Neutrons ($\geq15~\rm MeV$), protons, $\pi^\pm$, $\mu^\pm$ \\
-% %Particle energies allowed& At least $200~\rm TeV$ for protons~\cite{alsmiller90}        \\
-% Particle energies allowed& Up to $20~\rm TeV$ for incident nucleons and pions~\cite{alsmiller90}        \\
-% Mechanisms included     &       - Ionization and excitation \\
-%                         &       - Multiple coulomb scattering \\
-%                         &       - Range straggling, \\
-%                         &       - $\pi^\pm$ and $\mu^\pm$ decay \\
-%                         &       - Nuclear interactions \\
-% Calculational method    &       Monte Carlo\\
-% Nuclear collision model &       - Intranuclear-cascade-evaporation ($E<3$~GeV)\\
-%                         &       - Sternheimer-Lingenfelter isobar model for $\pi$ production ($E < 3~GeV$) \\
-%                         &       - Scaling model ($E > 3~GeV$) \\
-%                         &         (Phenomenological fits \\
-%                         &          to experimental data) \\
-% %Geometry                &       Three dimensional \\
-% Materials allowed       &       Arbitrary\\
-% Restrictions            &       $\pi^0$, $\gamma$ and heavy particles (d, t,:::HET, :::HEF \\
-%                         &        and residual nuclei products) \\
-%                         &       computed but not transported\\
-% Examples of applications&       - Accelerator and spacecraft shielding,\\
-%                         &       - Neutron cosmic ray background in Earth's \\
-%                         &       atmosphere \\
-%                         &       - Doses for biological cell survival,\\
-%                         &       - Transmutation of\\
-%                         &       nuclear waste materials~\cite{hetc}\\
-% Principal shortages     &       Low-energy neutron transport ($E<15$~MeV) \\
-%                         &       electrons and $\gamma$'s\\
-% \hline
-% \end{tabular} 
-% \end{table}
-% %                        &       - Scaling model ($3~{\rm GeV} < E < 5~{\rm GeV}$)\\
-% %                        &       Multi-chain fragmentation ($E>5$~GeV)\\
-
-% %\begin{itemize}
-% %\item history, different versions
-% %\end{itemize}
-
-
-% %\begin{minipage}{\textwidth}
-% Particle transport and generation is handled in HETC98 with three different approaches:
-%  The code takes into account the dacay of charged pions and muons, 
-% nonelastic nucleon- and charged-pion-nucleus collisions.
-% Negative-pion capture at rest is treated via the INC evaporation model.
-
-% \begin{enumerate}
-% \item For energies less than $3~{\rm GeV}$, particles are generated by means
-%     of an intermediate-energy intranuclear cascade and evaporation models. 
-% The maximum allowable source-particle energies is not well defined.
-% The lower limit for the model is 20~MeV.
-% \item From $3~{\rm GeV}$ to approximately $10~{\rm GeV}$, 
-% particle generation is done by means of a scaling model, 
-% which combines the two different models.
-% %\nopagebreak[4]
-% \item Above $10~{\rm GeV}$, particle generation is done by means of a
-%     multi-chain fragmentation model.% (see chapter~\ref{chap:simuHadrCascs}).
-% \end{enumerate}
-% %\end{minipage}
-
-% % Before the implementation of the multi-fragmentation model in HETC88,
-% % the first approach of an INC and evaporation models was used with an
-% % extrapolation model for energies greater than 3~GeV. The extrapolation
-% % model, however, only extrapolated the results from the INC-evaporation
-% % model at 3~GeV enegies, and gave poor results.
-
-% In our implementation, only the approach 1 is implemented.
-% %the approaches 2 and 3 are not implemented.
-% %The multi-fragmentation model has its origin in the transport code
-% %FLUKA87, and, for copyright reasons, it cannot be used in Geant4.
-% %is not available for Geant4 hadronic models.
-
-
-% The functionality of HETC code in the lowest energy region can easily be
-% divided into three different parts, which are: the intranuclear
-% cascade (INC), which treats the interaction of high energy particles
-% with a nucleon; the de-excitation of the resulting nucleus by
-% evaporation of nucleons (in contrast to fission); and the transport of
-% primary and secondary particles in a thick target. In our work, also a
-% pre-equilibrium model, which usually is not part of the HETC, is
-% included in the model, whereas the transport part is left out, 
-% since it is handled by Geant4.
-
-% \subsection{Intranuclear cascade (INC) model}
-
-% In HETC, different nuclear variables are calculated from models.  Only 
-% nucleon-nucleon cross-sections are taken as external variables. 
-% In the following we review the characteristics of the nuclera model in HETC.
-% The main variables are listed int Table :::
-
+Cascade is stopped when all the particles, which can escape the nucleus, do it. 
+Then conformity with the energy - conservation law is checked and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
 
 % Short sketch of the model:
 
@@ -377,15 +32,37 @@
 % \item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
 % \end{itemize}
 
-% \subsection{Cross-sections}
-% Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
-% Cross-sections for production of one or two $\pi$ are included. 
+We give in the following the overview of submodel features.
 
-% Interaction ($\pi$, $N$) is equally
-% \subsection{Nuclear model}
-% We present here the nuclear model used in HETC.
+%Originally the INUCL code was published in 1983 \cite{stepanov}.
+%Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
+%YIELDX, and ALICE code are presented in Refs. \cite{titarenko99a}.
 
-% \subsubsection{Nucleon dencity in the atom}
+\subsection{Nuclei model}
+
+\subsubsection{Layers}
+
+Bertini INC is based on layered nuclei model. Our implementation
+has three layers of :::
+
+[Nuclear radius]
+Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
+
+[Nuclear density]
+Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. In cascade part, nucleus is divided into a finite number of zones with constant density.
+Fermi energy calculated in a local density approximation.
+
+Nuclear density effects are recalculated after each step.
+
+Impulse distribution
+
+Distribution of potential energy
+
+[Mass formula]
+Nucleons binding energies are calculated using mass formula. For pions $V_{opt}$ is taken to be constant (about 7 MeV).
+A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
+experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+%Smooth liquid high energy formula  has  
 
 % Continuous charge dencity
 % \begin{equation}
@@ -428,7 +105,11 @@
 % \subsubsection{Distribution of potential energy}
 % The binding energy is systematically set to be $7~MeV$. 
 % In each region protons and neutrons have different potential energy.  
+
+%\subsubsection{Quantum effects}
 % \subsubsection{Pauli exclusion principle}
+Pauli exclusion principle
+Pauli exclusion in the INC: Simulated particle-particle interaction is accepted only for secondary nucleons which have $E_n > E_f$.
 
 % Constrains imposed by the Pauli exclusion principle 
 % are taken into account 
@@ -530,50 +211,44 @@
 % \subsection{Pre-equilibrium model}
 % \subsubsection{Separtion between INC and evaporation}
 
+\subsubsection{Cross sections}
 
-% The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
-% \begin{list}{\upshape \arabic{list}. }
-%         {\usecounter{list}
-%         \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
-%         \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
-%         \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
-%         \setlength{\itemsep}{0ex plus0.2ex}} %slshape
-%     \item For a given excitation energy $E$, atomic number $A$ and
-%       number of excitons $n$ the equilibrium number of excitons
-%       $n_{eq}=\sqrt{0.5 + 2 g E}$ is calculated ($g$ is the single
-%       particle level density). Now if the current exciton number
-%       $n\geq n_{eq}$ or the excitation energy is below a predefined
-%       level (i.e. 50~MeV), then the pre-equilibrium algorithm is
-%       finished and further emission of fragments is done with an
-%       equilibrium model (here the evaporation model). If $n<n_{eq}$,
-%       the next step is performed.
-% \item   The transition probabilities and emission probabilities for $n$, $p$, 
-%         $d$, $t$, :::HET and :::HEF are calculated for
-%         the current nucleus. The probabilities are normalized, and one
-%         subprocess (emission or transition) is selected.
-% \item   In case of a transition the number of excitons is updated, if
-%         necessary, and the algorithm returns to step~1. Otherwise 
-%         the next step is performed.
-% \item   The kinetic energy of the fragment is selected.
-% \item   Momentum direction angles of the fragment are sampled from an
-%         isotropic distribution in the exciton system rest frame. The
-%         momentum is then boosted to the nucleus rest frame.
-% \item   Characteristics of the residual nucleus ($A$, $Z$, $E$ and 
-%         momentum $P$) are updated. The algorithm returns to step~1.
-% \end{list}             
-% %\end{minipage}
+Cascade model has tabulated cross-sections
 
-% In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
+Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
+%Cross-sections for production of one or two $\pi$ are included. 
 
-% \subsubsection{Model for Hydrogen nonelastic collision}
+%Total inelastic cross section has to be taken from outside to normalize all data. 
+% \item Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulae 
+%$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
+%S. Pearlstein, The Astrophysical Journal, 346: 1049-1060, 1989 November 15
 
-% Nonelastic collisions with hydrogen nuclei are treated using experimental data 
-% and calculational nethod of Gabriel, Santoro and Barish.
+%Nucleon nucleon cross-sections:
+%Parametrizations based on the experimental data (ED) are used. 
+%They are energy and isospin dependent. 
+%The parameterizations described in ([1] Barashenkov V.S., Toneev V.D. High Energy interactions of particles and nuclei with nuclei. Moscow, 1972 
+%(in Russian, but there is an English translation)) are used.
 
-% \subsubsection{Implementation of CEM95 into Geant4.}
-% CEM95 is
+% interaction crosssections
+% (all data for (N, N) and (pi, N) interactions (dn/dsigma, d3sigma/d3p, 
+%             partial multiplicity for npi<=5  error 10-20\%)
 
-% The code CEM95 is intended for  the Monte Carlo calculation of nuclear
+
+
+\subsubsection{Exiton model}
+
+% %What criteria for p-h excitation? is the next phase precompound or compound'? Only pions. The next phase is precompound. 
+%Initial conditions are defined during the cascad phase: 
+%p -number of "particles", i.e. nucleons, which can not escape the nucleus and have too small interaction probability; 
+%h - number of "holes" = number of nuclear nucleons involved in the cascade; energy - momentum of the exiton system derived from the conservation law.
+
+%exiton master equation
+
+
+
+
+
+% the Monte Carlo calculation of nuclear
 % reactions in the framework of the Cascade-Exciton Model (CEM) of
 % nuclear reactions. The CEM assumes that reactions occur in three
 % stages. The first stage is the intranuclear cascade. The excited
@@ -632,6 +307,84 @@
 
 % \end{itemize}
 
+\subsection{Pre-equilibrium model}
+
+Uses target exitation data, exiton configuration for neutron and proton to produce non-equilibrium evaporation.
+Implementaion inclues holes and quasiparticles.
+
+% \subsubsection{Precompound phase}
+% %, describe the PE model used, parameters, i.e., partial state densities, transition rates? 
+
+%Main parameters are taken from (Ribansky I. et al, Nucl.Phys.,1973, A205, p.545 (level densities); 
+%Kolbach.C., Z.Phys.,1978, A287, p.319 (matrix elements)). 
+%N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
+%The angular distribution is isotropic in the frame of rest of the exiton system.
+
+
+
+
+% The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
+% \begin{list}{\upshape \arabic{list}. }
+%         {\usecounter{list}
+%         \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
+%         \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
+%         \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
+%         \setlength{\itemsep}{0ex plus0.2ex}} %slshape
+%     \item For a given excitation energy $E$, atomic number $A$ and
+%       number of excitons $n$ the equilibrium number of excitons
+%       $n_{eq}=\sqrt{0.5 + 2 g E}$ is calculated ($g$ is the single
+%       particle level density). Now if the current exciton number
+%       $n\geq n_{eq}$ or the excitation energy is below a predefined
+%       level (i.e. 50~MeV), then the pre-equilibrium algorithm is
+%       finished and further emission of fragments is done with an
+%       equilibrium model (here the evaporation model). If $n<n_{eq}$,
+%       the next step is performed.
+% \item   The transition probabilities and emission probabilities for $n$, $p$, 
+%         $d$, $t$, :::HET and :::HEF are calculated for
+%         the current nucleus. The probabilities are normalized, and one
+%         subprocess (emission or transition) is selected.
+% \item   In case of a transition the number of excitons is updated, if
+%         necessary, and the algorithm returns to step~1. Otherwise 
+%         the next step is performed.
+% \item   The kinetic energy of the fragment is selected.
+% \item   Momentum direction angles of the fragment are sampled from an
+%         isotropic distribution in the exciton system rest frame. The
+%         momentum is then boosted to the nucleus rest frame.
+% \item   Characteristics of the residual nucleus ($A$, $Z$, $E$ and 
+%         momentum $P$) are updated. The algorithm returns to step~1.
+% \end{list}             
+% %\end{minipage}
+
+% In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
+
+
+\subsection{Nucleus explosion model}
+
+Fermi breakup is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3(a-z) < Z < 6$ ) and $E(exitation) > 3.*Eb$ 
+
+Simple explosion model treating the total nuleus decay into neutrons and protons decreases exotic evaporation processes.
+
+\subsection{Fission model}
+
+Fission model is phenomenological, incorporating some features of the fission statistical model.
+
+\subsection{Evaporation model}
+
+If the light nuclei exitation energy is higher than three times the binding energy, 
+the nuclei expolision is performed. 
+
+The following evaportaion phase implementation is based on Dostrowski model \cite[].
+%Evaporation (Weisskopf - Ewing) 
+%Weisskopf-Ewing evaporation in competition with fission. 
+%Emissions of n,p,d,t,He3,He4,gamma is allowed. 
+%Level densities derived from exp.data are used. 
+%Angular momentum and spin dependence are not included. 
+
+%Parameters used: level densities, inverse cross-sections or transmission coefficient, 
+%choice of optical model parameters if relevant (or reference to source), 
+%range of excitations allowed, inclusive or exclusive results? 
+
+%Other parameters are the same as in ([1], see 5a.) 
 
 % \subsection{Evaporation model}
 
@@ -683,95 +436,10 @@
 % energy, which then goes to zero. This also ends the de-excitation
 % algorithm.
 
-% \subsection{De-exitation model}
-
-% %\begin{itemize}
-% %\item short description of INC, pre-equilibrium and evaporation \& de-excitation models
-% %\end{itemize}
-
-% \subsection{Implementing the HETC models into Geant4 } %:::make
 
 
-% \subsubsection{General architecture}
-
-% Figure \ref{fig:hetcInGeant} describes general architecture used in
-% our HETC implementation. We divide project into three separate
-% architectural elements according to physics models: INC, pre-equilibrium and evaporation part.
-
-% The HETC implementation is treated as a discrete process and it is
-% inherited under {\it G4HadronInelasticProcess}.   
-
-% \subsubsection{Implementation of INC model}
 
 
-% \subsubsection{Implemetaion of pre-equilibrium model}
 
-
-% \subsubsection{Implementation of Evaporation and De-exitation Models}
-
-% %::: lleeter info follows 
-% %Tein koodista sellaista kuin HPW halusi.  Laitoin evaporation-hakemiston
-% %sisallon webbiin (BertiniEvapDx.tar.gz).  Sen doc-hakemisto on tosin viela
-% %kesken, sinne pitaisi laittaa ajan tasalla oleva UML-kuva ja varmaan se
-% %meidan raportti.  Se mun dippani on myos siella, koska vaikka sen UML-kuva
-% %onkin vanhentunut, niin siina on kuitenkin kuvaus teoriasta.
- 
-% %Laitanpa tahan yhteenvedon koodiin tekemistani muutoksista, kun ne kerran
-% %viela tuoreessa muistissa ovat.
- 
-% %Entinen paaluokka G4BertiniEvaporation.hh on nyt jaettu
-% %G4BertiniEvaporation- ja G4BertiniDeexcitation-luokkiin.  Ne on periytetty
-% %G4VEvaporation:sta ja G4VPhotonEvaporation:sta.  Niista on
-% %tarkoitus ulkopuolelta kayttaa seuraavia public-metodeja:
-% %---
-% %G4FragmentVector * BreakItUp( const
-% %G4Fragment & nucleus);  void setVerboseLevel( const G4int verbose );
-% %--- (eli siis samanlaiset metodit molemmissa)
- 
-% %G4LayeredNucleusta en siis kayta enaa ollenkaan.
-% % 
-% %Evaporaatiokanavat ovat ennallaan (6 kpl), sen sijaan
-% %gamma-de-eksitaatio-kanavan nimi on muutettu (G4BEGammaDeexcitation ->
-% %G4BertiniDeexcitationChannel).
-% % 
-% %Muutin nuo muutamat testini yhteensopiviksi tuon uuden interfacen kanssa.
-% %Pikaisten kokeilujen jalkeen testit nayttavat antavan samoja tuloksia kuin
-% %siina raportissa ja dipassani on (en piirtanyt kuvaajia, mutta
-% %numeerisessa muodossa se oli ihan samankaltaista).
-% % 
-% %Muuten, jos meilla on utils-luokkia kaytossa, niin mun luokissa olevat
-% %isotropicCosines-metodit (arpovat isotrooppisesti jakautuneet kosinit)
-% %voisi laittaa utils-luokkiin.  Mutta toimiihan tuo nakojaan nytkin.
-                                              
-% The implementation of the evaporation and de-excitation models in
-% Geant4 are described in Fig.~\ref{fig:bertiniUML}.  The interface to
-% the {\it G4Cascade} is done with the class {\it G4BertiniEvaporation}.
-% It has two methods, one for breaking up the nucleus and one for
-% setting the verbose level, with which Geant4 controls the amount of
-% details printed on the screen.  The method {\it BreakItUp} takes the
-% excited nucleus {\it G4LayeredNucleus} as its parameter.
-
-% As for the internal structure of the evaporation package, {\it
-%   G4BertiniEvaporation} is an aggregate of six evaporation channels
-% corresponding to each type of emission particle, and of one
-% de-excitation channel for photon emission.  Chargeless
-% neutrons have a distinct class for their evaporation
-% channel, whereas charged particles have a class for their common
-% properties ({\it G4BEChargedChannel}), from which the distinct
-% channels are inherited. On the whole, the size of the implementation
-% of evaporation and de-excitation models was about 1800 lines of code.
-% %from which 330 were in the header files.
-
-% The implementation was done in two phases.  In the first
-% implementation, the purpose was to reproduce the results of the HETC98
-% code by using the same algorithms and constants (i.e.\ particle
-% masses and algorithms to calculate the Q values) and thus ensure the
-% same functionality as in the HETC98 code. In the second phase, the
-% model was modified to use Geant4 constants and utility classes as well
-% as the kinetic energy sampling algorithm described
-% in~\cite{dostrovsky59}.  When compared to the simulation results of
-% the original (Fortran-based) HETC98 code, similar results were
-% expected with the first implementation, whereas some differences were
-% expected with the second implementation.
 
 
