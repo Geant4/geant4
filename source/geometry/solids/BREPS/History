@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2001-02-05 18:45:32 gcosmo Exp $
+$Id: History,v 1.22 2001-02-20 08:38:38 japost Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -146,6 +146,11 @@ committal in the CVS repository !
    >> Still remaining: reference to STEPaggregate in G4PointRat;
                        reference to instMgr in G4BREPSolid.cc.
 
+10/06/1999 : J. Apostolakis       breps-01-00-04
+
+G4FPlane.cc:  
+  Rays and planes are now considered parallel if dot product with plane's 
+  normal less than perMillion rather than perThousand (in the Intersect method).
 
 28/05/1999 : J. Apostolakis       breps-01-00-03a
  Tagged.
