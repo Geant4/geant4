@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2004-11-25 09:39:53 hajime Exp $
+$Id: History,v 1.73 2004-11-27 04:22:59 hajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Nov 2004 Hajime Yoshida (interfaces-V06-02-00)
+ -tagged
 
 25 November 2004 Hajime Yoshida (interfaces-V06-01-02)
 - tagged
