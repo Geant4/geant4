@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.cc,v 1.12 2003-06-16 16:57:33 gunter Exp $
+// $Id: G4BsMesonZero.cc,v 1.13 2004-02-13 05:53:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ G4BsMesonZero::G4BsMesonZero(
 
 // In this version, charged pions are set to stable
 G4BsMesonZero G4BsMesonZero::theBsMesonZero(
-	        "Bs0",      5.3692*GeV,   4.27e-10*MeV,          0., 
+	        "Bs0",      5.3692*GeV,   4.51e-10*MeV,          0., 
 		    0,              -1,             0,          
 		    0,               0,             0,             
 	      "meson",               0,             0,         531,
