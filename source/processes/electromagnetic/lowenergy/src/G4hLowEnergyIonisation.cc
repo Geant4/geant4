@@ -59,7 +59,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
     MassRatio = 1.0 ;
-    DeltaCutInKineticEnergy = 0.0; 
+    DeltaCutInKineticEnergy = 0 ; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
