@@ -91,7 +91,11 @@ void test31LowEPhysicsList::ConstructProcess()
     if (particleName == "gamma") {
       if(0 < verbose) G4cout << "LowE gamma" << G4endl; 
       pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
-      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
+      G4LowEnergyPhotoElectric* pe = new G4LowEnergyPhotoElectric();
+      pe->SetCutForLowEnSecPhotons(1.0*keV);
+      pe->SetCutForLowEnSecElectrons(1.0*keV);
+      pe->ActivateAuger(true);
+      pmanager->AddDiscreteProcess(pe);
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
       pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());    
       
@@ -99,8 +103,9 @@ void test31LowEPhysicsList::ConstructProcess()
       if(0 < verbose) G4cout << "LowE e-" << G4endl; 
       pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
       G4LowEnergyIonisation* lei = new G4LowEnergyIonisation();
-      lei->SetCutForLowEnSecPhotons(1000.0*keV);
-      lei->SetCutForLowEnSecElectrons(1000.0*keV);
+      lei->SetCutForLowEnSecPhotons(1.0*keV);
+      lei->SetCutForLowEnSecElectrons(1.0*keV);
+      lei->ActivateAuger(true);
       pmanager->AddProcess(lei,  -1, 2,2);
       pmanager->AddProcess(new G4LowEnergyBremsstrahlung(), -1,-1,3);   
 
