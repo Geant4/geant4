@@ -317,7 +317,7 @@ on reducing them.
 8. Known Run-Time Warnings
 --------------------------
 
-The following messages are written to error output while tracking.  We
+The following messages can be written to error output while tracking.  We
 believe none give rise to incorrect behaviour.
 
   o G4PropagatorInField::LocateIntersectionPoint: Warning: Integration
@@ -326,5 +326,14 @@ believe none give rise to incorrect behaviour.
       Dist = xxx curve length = yyy
   o Warning in G4Navigator::ComputeStep: The Step's starting point has
       moved...
-  o SOME WORDS ABOUT exampleN02 and muons !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field  while a maximum of 10000
+       are allowed. 
 
+For very high energy muons (ex. 1TeV) warnings of this kind might be
+generated:
+
+  o G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+    Difference:  1e-09
+    G4ParticleChange::CheckIt 
