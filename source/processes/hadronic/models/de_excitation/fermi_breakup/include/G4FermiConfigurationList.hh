@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfigurationList.hh,v 1.1 2003-08-26 18:34:15 lara Exp $
+// $Id: G4FermiConfigurationList.hh,v 1.2 2003-11-20 09:46:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -56,6 +56,7 @@ public:
 
   G4FermiConfiguration ChooseConfiguration(void);
 
+  G4FermiFragmentsPool & GetFragmentsPoolInstance();
 
 private:
 
@@ -65,8 +66,6 @@ private:
   std::vector<G4double> NormalizedWeights;
   
   std::vector<G4FermiConfiguration*> Configurations;
-
-  static G4FermiFragmentsPool theFragmentsPool;
 
 };
 

@@ -28,7 +28,11 @@
 #include "G4FermiSplitter.hh"
 #include "G4HadronicException.hh"
 
-G4FermiFragmentsPool G4FermiConfigurationList::theFragmentsPool;
+G4FermiFragmentsPool & G4FermiConfigurationList::GetFragmentsPoolInstance()
+{
+  static G4FermiFragmentsPool theFragmentsPool;
+  return theFragmentsPool;
+}
 
 G4FermiConfigurationList::G4FermiConfigurationList()
 {
@@ -68,7 +72,7 @@ Initialize(const G4int A, const G4int Z, const G4double TotalEnergyRF)
   //
   Configurations.clear();
   NormalizedWeights.clear();
-  G4FermiSplitter aSplitter(&theFragmentsPool);
+  G4FermiSplitter aSplitter(&GetFragmentsPoolInstance());
   G4double NormStatWeight = 0.0;
   for (G4int k = 2; k <= A; k++) 
     {
