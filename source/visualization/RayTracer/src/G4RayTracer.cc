@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.10 2002-12-05 01:37:37 asaim Exp $
+// $Id: G4RayTracer.cc,v 1.11 2002-12-11 16:00:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,6 +84,7 @@ G4RayTracer::~G4RayTracer()
   delete theRayTracerTrackingAction;
   delete theRayTracerSteppingAction;
   delete theMessenger;
+  delete theFigMaker;
 }
 
 void G4RayTracer::Trace(G4String fileName)
