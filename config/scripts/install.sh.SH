@@ -52,7 +52,12 @@ CLHEP_LIB="$g4clhep_lib"
 #
 # g4ospace
 #
-G4USE_OSPACE="$g4use_ospace"
+if [ X$g4use_ospace = Xy ] ; then
+G4USE_OSPACE=1
+else
+G4USE_OSPACE=""
+fi
+
 G4OSPACE_BASE_DIR="$g4ospace_base_dir"
 
 #
@@ -179,6 +184,130 @@ G4UI_USE_TCSH=1
 else
 G4UI_USE_TCSH=""
 fi 
+
+#
+# g4vis
+#
+if [ X$g4vis_build_dawn_driver = Xy ] ; then
+G4VIS_BUILD_DAWN_DRIVER=1
+else
+G4VIS_BUILD_DAWN_DRIVER=""
+fi 
+
+if [ X$g4vis_build_dawnfile_driver = Xy ] ; then
+G4VIS_BUILD_DAWNFILE_DRIVER=1
+else
+G4VIS_BUILD_DAWN_DRIVER=""
+fi 
+
+if [ X$g4vis_build_opacs_driver = Xy ] ; then
+G4VIS_BUILD_OPACS_DRIVER=1
+else
+G4VIS_BUILD_OPACS_DRIVER=""
+fi 
+
+if [ X$g4vis_build_opengl_driver = Xy ] ; then
+G4VIS_BUILD_OPENGL_DRIVER=1
+else
+G4VIS_BUILD_OPENGL_DRIVER=""
+fi 
+
+if [ X$g4vis_build_OPENGLX_driver = Xy ] ; then
+G4VIS_BUILD_OPENGLX_DRIVER=1
+else
+G4VIS_BUILD_OPENGLX_DRIVER=""
+fi 
+
+if [ X$g4vis_build_oix_driver = Xy ] ; then
+G4VIS_BUILD_OIX_DRIVER=1
+else
+G4VIS_BUILD_OIX_DRIVER=""
+fi 
+
+if [ X$g4vis_build_raytracer_driver = Xy ] ; then
+G4VIS_BUILD_RAYTRACER_DRIVER=1
+else
+G4VIS_BUILD_RAYTRACER_DRIVER=""
+fi 
+
+if [ X$g4vis_build_vrml_driver = Xy ] ; then
+G4VIS_BUILD_VRML_DRIVER=1
+else
+G4VIS_BUILD_VRML_DRIVER=""
+fi 
+
+if [ X$g4vis_build_vrmlfile_driver = Xy ] ; then
+G4VIS_BUILD_VRMLFILE_DRIVER=1
+else
+G4VIS_BUILD_VRMLFILE_DRIVER=""
+fi 
+
+if [ X$g4vis_build_asciitree_driver = Xy ] ; then
+G4VIS_BUILD_ASCIITREE_DRIVER=1
+else
+G4VIS_BUILD_ASCIITREE_DRIVER=""
+fi 
+
+if [ X$g4vis_use_dawn = Xy ] ; then
+G4VIS_USE_DAWN=1
+else
+G4VIS_USE_DAWN=""
+fi 
+
+if [ X$g4vis_use_dawnfile = Xy ] ; then
+G4VIS_USE_DAWNFILE=1
+else
+G4VIS_USE_DAWN=""
+fi 
+
+if [ X$g4vis_use_opacs = Xy ] ; then
+G4VIS_USE_OPACS=1
+else
+G4VIS_USE_OPACS=""
+fi 
+
+if [ X$g4vis_use_opengl = Xy ] ; then
+G4VIS_USE_OPENGL=1
+else
+G4VIS_USE_OPENGL=""
+fi 
+
+if [ X$g4vis_use_OPENGLX = Xy ] ; then
+G4VIS_USE_OPENGLX=1
+else
+G4VIS_USE_OPENGLX=""
+fi 
+
+if [ X$g4vis_use_oix = Xy ] ; then
+G4VIS_USE_OIX=1
+else
+G4VIS_USE_OIX=""
+fi 
+
+if [ X$g4vis_use_raytracer = Xy ] ; then
+G4VIS_USE_RAYTRACER=1
+else
+G4VIS_USE_RAYTRACER=""
+fi 
+
+if [ X$g4vis_use_vrml = Xy ] ; then
+G4VIS_USE_VRML=1
+else
+G4VIS_USE_VRML=""
+fi 
+
+if [ X$g4vis_use_vrmlfile = Xy ] ; then
+G4VIS_USE_VRMLFILE=1
+else
+G4VIS_USE_VRMLFILE=""
+fi 
+
+if [ X$g4vis_use_asciitree = Xy ] ; then
+G4VIS_USE_ASCIITREE=1
+else
+G4VIS_USE_ASCIITREE=""
+fi 
+
 #
 # g4shared
 #
@@ -266,6 +395,27 @@ export G4UI_BUILD_WIN32_SESSION
 export G4UI_USE_WIN32
 export G4UI_USE_TCSH
 
+export G4VIS_BUILD_DAWN_DRIVER
+export G4VIS_USE_DAWN
+export G4VIS_BUILD_DAWNFILE_DRIVER
+export G4VIS_USE_DAWNFILE
+export G4VIS_BUILD_OPACS_DRIVER
+export G4VIS_USE_OPACS
+export G4VIS_BUILD_OPENGL_DRIVER
+export G4VIS_USE_OPENGL
+export G4VIS_BUILD_OPENGLX_DRIVER
+export G4VIS_USE_OPENGLX
+export G4VIS_BUILD_OIX_DRIVER
+export G4VIS_USE_OIX
+export G4VIS_BUILD_RAYTRACER_DRIVER
+export G4VIS_USE_RAYTRACER
+export G4VIS_BUILD_VRML_DRIVER
+export G4VIS_USE_VRML
+export G4VIS_BUILD_VRMLFILE_DRIVER
+export G4VIS_USE_VRMLFILE
+export G4VIS_BUILD_ASCIITREE_DRIVER
+export G4VIS_USE_ASCIITREE
+
 export G4LIB_BUILD_SHARED
 export G4LIB_BUILD_STATIC
 export G4LIB_USE_SHARED
@@ -320,6 +470,27 @@ echo "On this machine the G4ANALYSIS_USE_LAB=\$G4ANALYSIS_USE_LAB"
 echo "On this machine the G4ANALYSIS_USE_JAS=\$G4ANALYSIS_USE_JAS"
 echo "On this machine the G4ANALYSIS_USE_LIZARD=\$G4ANALYSIS_USE_LIZARD"
 
+echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
+echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
+echo "On this machine the G4VIS_BUILD_DAWNFILE_DRIVER=\$G4VIS_BUILD_DAWNFILE_DRIVER"
+echo "On this machine the G4VIS_USE_DAWNFILE=\$G4VIS_USE_DAWNFILE"
+echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
+echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
+echo "On this machine the G4VIS_BUILD_OPENGL_DRIVER=\$G4VIS_BUILD_OPENGL_DRIVER"
+echo "On this machine the G4VIS_USE_OPENGL=\$G4VIS_USE_OPENGL"
+echo "On this machine the G4VIS_BUILD_OPENGLX_DRIVER=\$G4VIS_BUILD_OPENGLX_DRIVER"
+echo "On this machine the G4VIS_USE_OPENGLX=\$G4VIS_USE_OPENGLX"
+echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
+echo "On this machine the G4VIS_USE_OIX=\$G4VIS_USE_OIX"
+echo "On this machine the G4VIS_BUILD_RAYTRACER_DRIVER=\$G4VIS_BUILD_RAYTRACER_DRIVER"
+echo "On this machine the G4VIS_USE_RAYTRACER=\$G4VIS_USE_RAYTRACER"
+echo "On this machine the G4VIS_BUILD_VRML_DRIVER=\$G4VIS_BUILD_VRML_DRIVER"
+echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
+echo "On this machine the G4VIS_BUILD_VRMLFILE_DRIVER=\$G4VIS_BUILD_VRMLFILE_DRIVER"
+echo "On this machine the G4VIS_USE_VRMLFILE=\$G4VIS_USE_VRMLFILE"
+echo "On this machine the G4VIS_BUILD_ASCIITREE_DRIVER=\$G4VIS_BUILD_ASCIITREE_DRIVER"
+echo "On this machine the G4VIS_USE_ASCIITREE=\$G4VIS_USE_ASCIITREE"
+
 echo "On this machine the G4LIB_BUILD_SHARED=\$G4LIB_BUILD_SHARED"
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
 echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
@@ -327,7 +498,7 @@ echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
 
 ###############################################################
 echo ""
-echo "OK, going to $g4install/source and start 'gmake'..."
+echo "Starting installation..."
 echo ""
 cd $g4install/source
 echo `pwd`
