@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.hh,v 1.5 2002-05-30 11:14:38 dressel Exp $
+// $Id: G4ParallelImportanceScoreManager.hh,v 1.6 2002-05-30 15:44:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,8 +31,7 @@
 //
 // A user should use this class to set up importance sampling and scoring
 // in a "parallel" geometry.
-// Create an object and initialise it.
-
+// The user must create an object of this kind and initialise it.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
