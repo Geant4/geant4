@@ -72,4 +72,37 @@
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (0.,0.,1.)
+# 1000 events
+#
+/mydet/SwitchDetector Assembly
+/gun/position  600  600 -601 mm
+/gun/direction 0      0    1
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (1.,1.,1.)
+# 1000 events
+#
+/gun/position  0 0 0 mm
+/gun/direction 1 1 1
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (-1.,-1.,-1.)
+# 1000 events
+#
+/gun/direction -1 -1 -1
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
 exit

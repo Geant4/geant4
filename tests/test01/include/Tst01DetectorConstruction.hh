@@ -9,11 +9,10 @@ class G4VSolid ;
 class G4Material;
 class Tst01DetectorMessenger;
 
-#include "G4VUserDetectorConstruction.hh"
-
+#include "g4std/vector"
 #include "globals.hh"
 
-#include <vector>
+#include "G4VUserDetectorConstruction.hh"
 
 class Tst01DetectorConstruction : public G4VUserDetectorConstruction
 {
