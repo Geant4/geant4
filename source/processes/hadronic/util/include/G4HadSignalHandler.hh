@@ -9,7 +9,10 @@
 // semantic-wise totally unsafe signalhandler prototype meant for SEGFAULT.
 // Being rushed into production or various reasons.
 
-typedef void (*sighandler_t)(int);
+extern "C"
+{
+  typedef void (*sighandler_t)(int);
+}
 
 class G4HadSignalHandler
 {
