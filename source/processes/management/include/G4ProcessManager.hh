@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.3 1999-05-03 01:52:36 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.4 1999-10-06 10:10:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -248,22 +248,6 @@ class G4ProcessManager
       // in order to inform Start/End of tracking for each track
       // to the process manager and all physics processes 
 
-  private:     
-      G4ProcessAttribute* GetAttribute(G4int      index) const;
-      G4ProcessAttribute* GetAttribute(G4VProcess *aProcess) const;
-      // get Pointer to ProcessAttribute
-
-      G4VProcess* ActivateProcess(G4int   index);
-      G4VProcess* InActivateProcess(G4int  index);
-      // Activate/InActivateProcess   Process
-      
-  private:     
-      const G4ParticleDefinition*   theParticleType;
-      //  particle which has this process manager object     
-
-      G4int             numberOfProcesses;
-      G4ProcessVector*  theProcessList;
-      // vector for all processes (called as "process List")
 
   public:
       enum {SizeOfProcVectorArray = 6};
@@ -289,7 +273,24 @@ class G4ProcessManager
       G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
 			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
  
-  private:
+  private:     
+      G4ProcessAttribute* GetAttribute(G4int      index) const;
+      G4ProcessAttribute* GetAttribute(G4VProcess *aProcess) const;
+      // get Pointer to ProcessAttribute
+
+      G4VProcess* ActivateProcess(G4int   index);
+      G4VProcess* InActivateProcess(G4int  index);
+      // Activate/InActivateProcess   Process
+      
+  private:     
+      const G4ParticleDefinition*   theParticleType;
+      //  particle which has this process manager object     
+
+      G4int             numberOfProcesses;
+      G4ProcessVector*  theProcessList;
+      // vector for all processes (called as "process List")
+
+ private:
       G4bool  duringTracking;
       void    CreateGPILvectors();
       void    SetIndexToProcessVector(G4int ivec);
@@ -310,153 +311,7 @@ class G4ProcessManager
    static G4ProcessManagerMessenger* fProcessManagerMessenger;
    static G4int                      counterOfObjects;
 };
-#include "G4ProcessAttribute.hh"
-
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-inline  
- void G4ProcessManager::SetParticleType(const G4ParticleDefinition* aParticle)
-{
-  theParticleType = aParticle;
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetProcessList() const
-{
-  return theProcessList;
-}
-
-inline
- G4int  G4ProcessManager::GetProcessListLength() const
-{
-  return numberOfProcesses;
-}
-
-inline 
- G4int  G4ProcessManager::GetProcessIndex(G4VProcess* aProcess) const
-{
-  G4int idx = theProcessList->index(aProcess);
-  if (idx>=numberOfProcesses) idx = -1;
-  return idx;
-}
-
-inline 
- G4int G4ProcessManager::GetProcessVectorId(G4ProcessVectorDoItIndex idx,
-					    G4ProcessVectorTypeIndex typ) const
-{
-  if ( idx == idxAtRest ) {
-    if (typ == typeGPIL) { return 0; }
-    else                 { return 1; }
-  } else if ( idx == idxAlongStep ) {
-    if (typ == typeGPIL) { return 2; }
-    else                 { return 3; }
-  } else if ( idx == idxPostStep ) {
-    if (typ == typeGPIL) { return 4; }
-    else                 { return 5; }
-  } else {
-    return -1;
-  }
-}
- 
-inline  
- G4ProcessVector* G4ProcessManager::GetProcessVector(
-				       G4ProcessVectorDoItIndex idx,  
-				       G4ProcessVectorTypeIndex typ
-                                      ) const
-{
-  G4int ivec = GetProcessVectorId(idx, typ);
-  if ( ivec >=0 ) {
-    return theProcVector[ivec];
-  } else {
-    return 0;
-  }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[0]; }
-  else                { return theProcVector[1]; }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[2]; }
-  else                { return theProcVector[3]; }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[4]; }
-  else                { return theProcVector[5]; }
-}
-
-inline
- G4int G4ProcessManager::GetAtRestIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
-{
-  return GetProcessVectorIndex(aProcess, idxAtRest, typ);
-}
-
-inline 
- G4int G4ProcessManager::GetAlongStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
-{
-  return GetProcessVectorIndex(aProcess, idxAlongStep, typ);
-}
-
-inline
- G4int G4ProcessManager::GetPostStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-                         ) const
-{
-  return GetProcessVectorIndex(aProcess, idxPostStep, typ);
-}
-
-inline 
- G4int G4ProcessManager::AddRestProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ord, ordInActive, ordInActive);
-}
-
-inline 
- G4int G4ProcessManager::AddContinuousProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ordInActive, ord, ordInActive);
-}
-
-inline 
- G4int G4ProcessManager::AddDiscreteProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ordInActive, ordInActive, ord);
-}
-
-inline 
- G4ParticleDefinition* G4ProcessManager::GetParticleType() const
-{ 
-  return (G4ParticleDefinition* )theParticleType; 
-}
-
-
-inline 
- void G4ProcessManager::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline  
- G4int G4ProcessManager::GetVerboseLevel() const
-{
-  return  verboseLevel;
-}
+#include "G4ProcessManager.icc"
 
 #endif
 

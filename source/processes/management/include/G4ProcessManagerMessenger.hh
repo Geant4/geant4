@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManagerMessenger.hh,v 1.2 1999-04-13 09:45:01 kurasige Exp $
+// $Id: G4ProcessManagerMessenger.hh,v 1.3 1999-10-06 10:10:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,17 +52,25 @@ class G4ProcessManagerMessenger: public G4UImessenger
 {
   public:
     G4ProcessManagerMessenger(G4ParticleTable* pTable = 0);
+    // constructor
+
     virtual ~G4ProcessManagerMessenger();
-
+    // destructor 
+ 
     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    // set new value for command string
 
+    virtual G4String GetCurrentValue(G4UIcommand * command);
+    // get current value for command string
+  
   private:
     G4ProcessManagerMessenger(const G4ProcessManagerMessenger&){};
+    // hide copy constructor as private
 
   private:
     G4ParticleDefinition* SetCurrentParticle();
- 
+    // set particle currently concerned 
+    
   private:
     G4ParticleTable* theParticleTable;
     G4ParticleDefinition* currentParticle;
