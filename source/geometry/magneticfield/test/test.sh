@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: test.sh,v 1.5 2002-06-07 18:31:40 japost Exp $
+# $Id: test.sh,v 1.6 2002-11-08 23:32:02 japost Exp $
 # $Name: not supported by cvs2svn $
 #
 
@@ -12,7 +12,7 @@ host=`hostname`
 
 target=testPropagateMagField
 echo  "Compiling $target ... "
-gmake G4TARGET=$target
+gmake G4TARGET=$target   || exit
 echo  "Executing $target ..."
 for n in 1 2 3 4 5 6 7 8
 do
@@ -30,7 +30,7 @@ done
 
 target=testProElectroMagField
 echo  "Compiling $target ... "
-gmake G4TARGET=$target
+gmake G4TARGET=$target  || exit
 echo  "Executing $target ..."
 for n in 1 2 3 4 5
 do
@@ -46,12 +46,11 @@ do
   echo  " "
 done
 
-target=testProPerpSpin
 for i in *Spin.cc
 do
   target=`basename $i .cc`
   echo  "Compiling $target ... "
-  gmake G4TARGET=$target
+  gmake G4TARGET=$target   || exit
   echo  "Executing $target ..."
   for n in 0 1 2 3 4
   do
@@ -74,7 +73,7 @@ for i in *Spin.cc
 do
   target=`basename $i .cc`
   echo  "Compiling $target ... "
-  gmake G4TARGET=$target
+  gmake G4TARGET=$target || exit
   echo  "Executing $target ..."
   $G4WORKDIR/bin/$G4SYSTEM/$target > $target.newout \
                                   2> $target.newerr
