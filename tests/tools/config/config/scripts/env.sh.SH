@@ -283,16 +283,16 @@ else
 G4VIS_USE_OPACS=""
 fi 
 
-if [ X$g4vis_use_opengl = Xy ] ; then
-G4VIS_USE_OPENGL=1
-else
-G4VIS_USE_OPENGL=""
-fi 
-
-if [ X$g4vis_use_OPENGLX = Xy ] ; then
+if [ X$g4vis_use_openglx = Xy ] ; then
 G4VIS_USE_OPENGLX=1
 else
 G4VIS_USE_OPENGLX=""
+fi 
+
+if [ X$g4vis_use_openglxm = Xy ] ; then
+G4VIS_USE_OPENGLXM=1
+else
+G4VIS_USE_OPENGLXM=""
 fi 
 
 if [ X$g4vis_use_oix = Xy ] ; then
@@ -420,10 +420,10 @@ export G4VIS_BUILD_DAWNFILE_DRIVER
 export G4VIS_USE_DAWNFILE
 export G4VIS_BUILD_OPACS_DRIVER
 export G4VIS_USE_OPACS
-export G4VIS_BUILD_OPENGL_DRIVER
-export G4VIS_USE_OPENGL
 export G4VIS_BUILD_OPENGLX_DRIVER
 export G4VIS_USE_OPENGLX
+export G4VIS_BUILD_OPENGLXM_DRIVER
+export G4VIS_USE_OPENGLXM
 export G4VIS_BUILD_OIX_DRIVER
 export G4VIS_USE_OIX
 export G4VIS_BUILD_RAYTRACER_DRIVER
@@ -497,10 +497,10 @@ echo "On this machine the G4VIS_BUILD_DAWNFILE_DRIVER=\$G4VIS_BUILD_DAWNFILE_DRI
 echo "On this machine the G4VIS_USE_DAWNFILE=\$G4VIS_USE_DAWNFILE"
 echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
-echo "On this machine the G4VIS_BUILD_OPENGL_DRIVER=\$G4VIS_BUILD_OPENGL_DRIVER"
-echo "On this machine the G4VIS_USE_OPENGL=\$G4VIS_USE_OPENGL"
 echo "On this machine the G4VIS_BUILD_OPENGLX_DRIVER=\$G4VIS_BUILD_OPENGLX_DRIVER"
 echo "On this machine the G4VIS_USE_OPENGLX=\$G4VIS_USE_OPENGLX"
+echo "On this machine the G4VIS_BUILD_OPENGLXM_DRIVER=\$G4VIS_BUILD_OPENGLXM_DRIVER"
+echo "On this machine the G4VIS_USE_OPENGLXM=\$G4VIS_USE_OPENGLXM"
 echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
 echo "On this machine the G4VIS_USE_OIX=\$G4VIS_USE_OIX"
 echo "On this machine the G4VIS_BUILD_RAYTRACER_DRIVER=\$G4VIS_BUILD_RAYTRACER_DRIVER"
