@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.21 2003-09-15 15:38:18 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.22 2003-11-06 14:46:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 
 #include "G4Event.hh"
 #include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
@@ -95,21 +95,25 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   }
   
   // extract the trajectories and draw them
+
+  // You can get a default drawing without this code by using, e.g.,
+  // /vis/scene/add/trajectories 2000
+  // The code here adds sophistication under control of drawFlag.
   
-  if (G4VVisManager::GetConcreteInstance())
+  G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
+  if (pVisManager)
     {
      G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
      G4int n_trajectories = 0;
      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
      for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                                ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") trj->DrawTrajectory(50);
+        { G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
+          if (drawFlag == "all") pVisManager->Draw(*trj,2000);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50);
+                                  pVisManager->Draw(*trj,2000);
           else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);
+                                  pVisManager->Draw(*trj,2000);
         }
   }
 }  

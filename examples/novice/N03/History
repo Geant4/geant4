@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2003-11-06 14:37:16 johna Exp $
+$Id: History,v 1.67 2003-11-06 14:46:13 johna Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-11-03 J.Allison (exampleN03-V05-02-03)
+- ExN03EventAction:
+  o changed to use G4VVisManager::Draw(const G4VTrajectory&, G4int draw_mode).
+  o increased drawing mode from 50 to 2000.
 
 06-11-03 J.Allison (exampleN03-V05-02-02)
 - Removed OPACS from ExN03VisManager.
