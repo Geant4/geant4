@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst15DetectorConstruction.cc,v 1.4 2001-07-11 10:10:00 gunter Exp $
+// $Id: Tst15DetectorConstruction.cc,v 1.5 2004-03-16 15:25:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 
 Tst15DetectorConstruction::Tst15DetectorConstruction()
-  :simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL),U(NULL)
+  :simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0)
 {
   detectorMessenger = new Tst15DetectorMessenger(this);
   materialChoice = "Pb";
