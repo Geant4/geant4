@@ -14,8 +14,8 @@ include $(G4INSTALL)/config/architecture.gmk
 # point G4LISTS_BASE to the directory, that contains the subdirectory 'lists'.
 #
 ifndef G4LISTS_BASE
-  EXTRALIBS += -L$(G4LIB)/.lists_build/$(G4SYSTEM)
-  G4LISTS_BASE = $(G4INSTALL)/hadronic_lists
+  EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
+  G4LISTS_BASE = $(G4INSTALL)/physics_lists
 else
   EXTRALIBS += -L$(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
 endif
@@ -90,29 +90,29 @@ EXTRALIBS += -lG4hadronic_util
 
 EXTRALIBS += -lG4shortlived
 
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/FTFC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/FTFP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LBE/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_GN/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_LEAD/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_LEAD_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_PRECO/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_PRECO_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/Packaging/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC_LEAD/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC_LEAD_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_GN/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LBE/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_GN/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_LEAD/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_LEAD_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_PRECO/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_PRECO_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/Packaging/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_GN/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
 
 .PHONY: all
  
