@@ -42,6 +42,6 @@
       CALL GPRINT('MATE',0)
 *
 * *** ready for geant3/geant4 comparison
-      call UG3G4      
+      call UG3G4
 *                                                                               
       END                                                                       

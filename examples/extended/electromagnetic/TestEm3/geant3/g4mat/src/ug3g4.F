@@ -7,6 +7,7 @@
 #include "ugmate.inc"
 #include "ggvalues.inc"
 *
+      dimension dum(5)
 *
 * *** fetch Geant3 tables      
       call gftmat(imat,ikine,'LOSS',nekbin,elow,g3value,dum,idum)
@@ -18,10 +19,11 @@
 *
 * *** compute difference
       do i=1,nekbin
+        g3value(i) = 1.
         dif = 100*(g4value(i)-g3value(i))/g3value(i)
 	call hfill (1, elow(i), 0., dif)
 	call hfill (2, elow(i), 0., abs(dif))	
         print *,i,elow(i),g4value(i),g3value(i), 'dif(%)=',dif
-      enddo      
+      enddo 
 *                                                                               
       END                                                                       
