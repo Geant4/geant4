@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.6 2002-06-11 13:31:46 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.7 2002-07-27 04:20:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -244,7 +244,7 @@ G4FieldManager* SetupField(G4int type)
       case 2: pStepper = new G4SimpleRunge( fEquation, ncompspin ); break;
       case 3: pStepper = new G4SimpleHeum( fEquation, ncompspin ); break;
       case 4: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
-      // case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin );    break;
+      case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin ); break;
       default: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
     }
     
@@ -274,7 +274,8 @@ G4PropagatorInField*  SetupPropagator( G4int type)
        GetPropagatorInField ();
 
     // Let us test the new Minimum Epsilon Step functionality
-    thePropagator -> SetMinimumEpsilonStep( 1.0e-4 ) ; 
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-7 ) ; 
+    thePropagator -> SetMaximumEpsilonStep( 1.0e-7 ) ; 
 
     return thePropagator;
 }
@@ -381,6 +382,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
    //  G4ThreeVector initialSpin(UnitMomentum.y(),-UnitMomentum.x(),UnitMomentum.z()); 
        G4ThreeVector initialSpin = (UnitMomentum.cross(G4ThreeVector(1.0,0.,0.))).unit(); 
 
+       G4cout << " Initial spin is set to = " << initialSpin << G4endl;
        G4cout << " Initial dot product of spin and momentum = " 
               << initialSpin.dot(UnitMomentum) << G4endl;
 
@@ -392,6 +394,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  // G4cout << "Starting Step " << istep << " in volume " 
 	       // << located->GetName() << G4endl;
 
+          G4ThreeVector spinValue( initialSpin ); 
+
           G4FieldTrack  initTrack( Position, 
 				   UnitMomentum,
 				   0.0,            // starting S curve len
@@ -400,7 +404,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 				   velocity_magnitude,
 				   labTof, 
 				   properTof,
-				   0              // or &Spin
+				   &spinValue
 				   ); 
 
 	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
@@ -431,11 +435,13 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
           // In this case spin should be parallel (equal) to momentum
           G4double endDot= EndSpin.dot(EndUnitMomentum) ;
           G4cout << " dot product of spin and momentum = " << endDot << G4endl;
-	  if( endDot > 1.e-8 ){
+	  if( fabs(endDot) > 1.e-8 ){
 	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 "<< G4endl ;
 	     G4cout << " Spin dot UnitMomentum= " << endDot << " ";
-	     G4cout << " Spin magnitude= " << EndSpin.mag() << " ";
-	     G4cout << " UnitMom mag= " << EndUnitMomentum.mag() << " ";
+	     G4cout << " Spin magnitude= " << EndSpin.mag() << " "
+		    << "(-1=" << (EndSpin.mag()-1.0) << ") ";
+	     G4cout << " UnitMom mag= " << EndUnitMomentum.mag() << " "
+		    << "(-1=" << (EndUnitMomentum.mag()-1.0) << ") ";
 	     G4cout << G4endl;
 	  }
 	  G4ThreeVector MoveVec = EndPosition - Position;
