@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.11 1999-09-18 15:59:36 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.12 1999-09-30 11:36:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1203,6 +1203,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
       postsafety = stepData.GetPostStepPoint()->GetSafety() ;
 
       safety = min(presafety,postsafety) ;
+
       if(safety < rcut)
      {
 
