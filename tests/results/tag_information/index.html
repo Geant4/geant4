@@ -1,7 +1,9 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV,  3-Mar-2004 -->
+<!--Changed by: Serguei SADILOV,  4-Apr-2004  -->
+<!--Changed by: Serguei SADILOV,  4-Apr-2004  -->
+<!--Changed by: Serguei SADILOV,  4-Apr-2004  -->
 </head>
 
 <body>
@@ -11,7 +13,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-06-00-ref-02</b></blink> development tag.
+<blink><b>geant4-06-01-ref-00</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -19,8 +21,8 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
 <pre>					
 
 
-                                                                                                   collecting
-                                                                                                  |          |
+                                                                                                   
+                                                                                                            
                1        2           3         4        9             10      11         12       13          14         15        16
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
            | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-icc| Linux-icc|WIN32-VC7|WIN32-VC7|
@@ -35,11 +37,11 @@ test05     |         |         |         |         |          |          |      
 test06     |         |         |         |         |          |          |         |         |          |          |         |         |
 test07     |         |         |         |         |          |          |         |         |          |          |         |         |
 test09     |         |         |         |         |          |          |         |         |          |          |         |         |
-test10     |         |         |         |         |          |          |         |         |          |          |         |         |
+test10     |         |         |         |         |          |          |         |         |          |          |         | WE1     |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |         |         |         |         |          |          |         |         |          |          |         |         |
 test12     |         |         |         |         |          |          |         |         |          |          |         |         |
-test13     | WL1     | WL1     |    	 | WL1 	   |  WL1     | WL1      |  WL1    | WL1     |          |          |         | WL1     |
+test13     | WL1     | WL1     |   WL1 	 | WL1 	   |  WL1     | WL1      |  WL1    | WL1     |  WL1     |  WL1     |   WL1   | WL1     |
 test14     |         |         |         |         |          |          |         |         |          |          |         |         |
 test15     |         |         |         |         |          |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -47,8 +49,8 @@ test16     |         |         |         |         |          |          |      
 test17     |         |         |         |         |          |          |         |         |          |          |         |         |
 test18     |         |         |         |         |          |          |         |         |          |          |         |         |
 test20     |         |         |         |         |          |          |         |         |          |          |         |         |
-test21     |         |         | 	 |         |          | WL1      |         |         |          |          |         |         |
-test22     |         |         |         |         |          |          |  EL1    |         |          |          |         |         |
+test21     |         |         | 	 |         |  WL1     |          |         |         |          |          |         | WE2     |
+test22     |         |         |         |         |          |          |         |         |          |          |         |         |
 test24     |         |         |         |         |          |          |         |         |          |          |         |         |
 test25     |         |         |         |         |          |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -58,24 +60,90 @@ test104.Em |         |         |         |         |          |          |      
 test502    |         |         |         |         |          |          |         |         |          |          |         |         |
 test505    |         |         |         |         |          |          |         |         |          |          |         |         |
 test506    |         |         |         |         |          |          |         |         |          |          |         |         |
-test508    |         |         |         |         |          |          |         |         |          |          |         | crash   |
+test508    |         |         |         |         |          |          |         |         |          |          |         | 	       |
 test5010   |         |         |         |         |          |          |         |         |          |          |         |         |
+test801	   |         |         |         |         |          |          |         |         |          |   WE3    |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-       
- abend  - crash without clue				
- Labend - crash in large_N test				
- testing - under testing now				
- ? - last time was!					
+       													      			    
+ abend  - crash without clue										      			    
+ Labend - crash in large_N test										      			    
+ testing - under testing now										      			  
+ ? - last time was!											      			  
  WL - warning in large_N test (the warning in tests is usually a combination: WL23A means WL2 and WL3 and WLA [where A=10, B=11 etc...])
- EL - error in large_N test
+ EL - error in large_N test										      			  
+													      			  
+ It would be really nice to get rid of these warnings, particularly for the Large_N tests.		      			  
+ You can find debug info concerning these cases.							      			  
+													      			  
+WL1													      			  
+--------												      			  
+*** Error in G4HEInelastic::GenerateNBodyEvent								      			  
+    total mass (4.69395) >= total energy (4.51751)							      			  
+													      			  
+													      
+WE1 (loop? - more then 10 hours...)									      
+-------------------------------------									      
+													      
+test10.out (last strings)										      
+---------------------------------------------------------------------------------			      
+ You selected a Polycone detector									      
+													      
+---> Begin of Event: 0											      
+  A 10000 optical photons vertex has been generated at (442.76274,-761.83388,721			      
+.75257)													      
+  A 10000 optical photons vertex has been generated at (298.65196,-390.61206,971			      
+.02602)													      
+  A 10000 optical photons vertex has been generated at (-985.76635,-312.84612,22			      
+4.24232)												      
+  A 10000 optical photons vertex has been generated at (581.787,-345.2201,-9.895			      
+9009)													      
+  A 10000 optical photons vertex has been generated at (-164.50307,211.43494,35.			      
+963688)													      
+  A 10000 optical photons vertex has been generated at (-442.90439,214.60058,-49			      
+0.3913)													      
+  A 10000 optical photons vertex has been generated at (940.77618,-45.384045,147			      
+.67408)													      
+  A 10000 optical photons vertex has been generated at (-907.84141,592.25767,86.			      
+17112)													      
+  A 10000 optical photons vertex has been generated at (730.67585,409.98587,-221			      
+.25773)													      
+  A 10000 optical photons vertex has been generated at (25.597097,-811.74132,395			      
+.19716)													      
+-----------------------------------------------------------------------------------			      
+													      
+WE2 (crash - hard to get debug out currently...)							      
+-------------------------------------------------							      
+test21.out (last strings)										      
+-------------------------------------------------------------------------------				      
+MuIoni:   tables are built for  mu-									      
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.					      
+      Lambda tables from threshold to 100 TeV in 120 bins.						      
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0					      
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 				      
+      radiative corrections for E > 1 GeV								      
+													      
+msc:  Model variant of multiple scattering for pi-							      
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.						      
+      Boundary algorithm is active with facrange= 0.199							      
+Event number 0												      
+--------------------------------------------------------------------------------
 
- It would be really nice to get rid of these warnings, particularly for the Large_N tests.
- You can find debug info concerning these cases.
-
-WL1
---------
-*** Error in G4HEInelastic::GenerateNBodyEvent
-    total mass (4.69395) >= total energy (4.51751)
+WE3(crash)
+-----------------------------------
+debug output
+------------------------------------------------------------------------------------------------------------------------
+(idb) where
+>0  0x4207ad55 in __cfree(...) in /lib/i686/libc.so.6
+#1  0x400d2e80 in _ZdlPv(...) in /afs/cern.ch/sw/lcg/external/icc/8.0.059/rh73_ia32/lib/libcxa.so.5
+#2  0x861d09d in ((G4ParticleDefinition*)0x8de39e0)->G4ParticleDefinition::~G4ParticleDefinition(=<no value>) "src/G4ParticleDefinition.cc":133
+#3  0x861d0ef in ((G4ParticleDefinition*)0x8de39e0)->G4ParticleDefinition::~G4ParticleDefinition() "src/G4ParticleDefinition.cc":133
+#4  0x8609d2c in ((G4IonTable*)0x8e3bef8)->G4IonTable::~G4IonTable(=<no value>) "src/G4IonTable.cc":92
+#5  0x8609dd9 in ((G4IonTable*)0x8e3bef8)->G4IonTable::~G4IonTable() "src/G4IonTable.cc":102
+#6  0x861f63f in ((G4ParticleTable*)0x8e186a0)->G4ParticleTable::~G4ParticleTable(=<no value>) "src/G4ParticleTable.cc":81
+#7  0x861f7ef in ((G4ParticleTable*)0x8e186a0)->G4ParticleTable::~G4ParticleTable() "src/G4ParticleTable.cc":101
+#8  0x4202bc5b in exit(...) in /lib/i686/libc.so.6
+#9  0x42017592 in __libc_start_main(...) in /lib/i686/libc.so.6
+#10 0x804fed1 in _start(...) in /afs/cern.ch/sw/geant4/stt/dev2/Linux-icc/debug_NEWGCC/bin/Linux-icc/test801
 
 
 -------------------------------------------------------------------------------------------------------------------------
