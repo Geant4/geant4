@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002-02-24 01:47:46 johna Exp $
+$Id: History,v 1.17 2002-06-06 09:55:19 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+6th June 2002  John Allison  (opengl-V04-00-02)
+- Cosmetic changes for GNU compiler in G4OpenGLXViewer.cc.
 
 23rd February 2002  John Allison  (opengl-V04-00-01)
 - Changes to encourage compilation on Windows in preparation for

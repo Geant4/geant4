@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.14 2002-02-24 01:48:27 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.15 2002-06-06 09:55:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,11 +97,8 @@ static const char* gouraudtriangleEPS[] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-extern "C"
-{
-  static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
-    return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
-  }
+static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
+  return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
 }
 
 void G4OpenGLXViewer::SetView () {
@@ -736,22 +733,18 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-extern "C"
+static int compare(const void *a, const void *b)
 {
-  static int
-  compare(const void *a, const void *b)
-  {
-    const DepthIndex *p1 = (DepthIndex *) a;
-    const DepthIndex *p2 = (DepthIndex *) b;
-    GLfloat diff = p2->depth - p1->depth;
+  const DepthIndex *p1 = (DepthIndex *) a;
+  const DepthIndex *p2 = (DepthIndex *) b;
+  GLfloat diff = p2->depth - p1->depth;
 
-    if (diff > 0.0) {
-      return 1;
-    } else if (diff < 0.0) {
-      return -1;
-    } else {
-      return 0;
-    }
+  if (diff > 0.0) {
+    return 1;
+  } else if (diff < 0.0) {
+    return -1;
+  } else {
+    return 0;
   }
 }
 
