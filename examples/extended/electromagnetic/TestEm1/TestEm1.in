@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.9 2003-03-26 17:49:54 vnivanch Exp $
+# $Id: TestEm1.in,v 1.10 2003-04-03 18:09:40 asaim Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -10,6 +10,7 @@
 #
 /testem/phys/setGCut 2.20 mm
 /testem/phys/setECut 6.05 mum
+/testem/phys/setPCut 6.05 mum
 #
 /run/initialize
 #
