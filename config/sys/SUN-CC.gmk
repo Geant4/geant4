@@ -44,7 +44,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  LOADLIBS += -L/usr/lib -lsocket -lnsl
+  LOADLIBS += -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
   ifdef G4ODBMS
     G4DDLX_FLAGS += -noline
