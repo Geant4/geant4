@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.4 2003-10-28 14:03:27 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.5 2003-10-28 14:58:19 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -35,7 +35,6 @@
 #include "G4CollisionNN.hh"
 #include "G4CollisionPN.hh"
 #include "G4CollisionMesonBaryon.hh"
-#include "G4CollisionDeltaN.hh"
 
 #include "G4CollisionInitialState.hh"
 
@@ -324,11 +323,11 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
          pFinal +=final->Get4Momentum();
        }
 
-       if ( (pInitial-pFinal).mag() > 0.1*MeV )
+       //if ( (pInitial-pFinal).mag() > 0.1*MeV )
        {
-   	  #ifdef debug_G4Scatterer
+   	//  #ifdef debug_G4Scatterer
           G4cout << "G4Scatterer: momentum imbalance, pInitial= " <<pInitial << " pFinal= " <<pFinal<< G4endl;
-	  #endif
+	//  #endif
        }
        #ifdef debug_G4Scatterer
        G4cout << "Scatterer costh= " << trk1.Get4Momentum().vect().unit() *(products->operator[](0))->Get4Momentum().vect().unit()<< G4endl;
