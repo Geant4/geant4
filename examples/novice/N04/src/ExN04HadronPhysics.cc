@@ -46,7 +46,12 @@ void ExN04HadronPhysics::ConstructParticle()
 void ExN04HadronPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
-  
+  G4cout <<""<<G4endl;
+  G4cout << "You are using the ExN04HadronPhysics"<<G4endl;
+  G4cout <<" - Note that this hadronic physics list is not optimized for any particular usage"<<G4endl;
+  G4cout <<" - If you which to have a starting point tailorer for particular area of work,"<<G4endl;
+  G4cout <<"   please visit the physics list WWW pages available from the geant4 home page."<<G4endl;
+  G4cout <<""<<G4endl;
   // Elastic Process
   theElasticModel = new G4LElastic();
   theElasticProcess.RegisterMe(theElasticModel);
@@ -201,13 +206,13 @@ void ExN04HadronPhysics::ConstructProcess()
   theNeutronInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&theNeutronInelastic);
   
-  //theNeutronFissionModel = new G4LFission();
-  //theNeutronFission.RegisterMe(theNeutronFissionModel);
-  //pManager->AddDiscreteProcess(&NeutronFission);
+  theNeutronFissionModel = new G4LFission();
+  theNeutronFission.RegisterMe(theNeutronFissionModel);
+  pManager->AddDiscreteProcess(&theNeutronFission);
 
-  //theNeutronCaptureModel = new G4LCapture();
-  //theNeutronCapture.RegisterMe(theNeutronCaptureModel);
-  //pManager->AddDiscreteProcess(&theNeutronCapture);
+  theNeutronCaptureModel = new G4LCapture();
+  theNeutronCapture.RegisterMe(theNeutronCaptureModel);
+  pManager->AddDiscreteProcess(&theNeutronCapture);
 
   // AntiNeutron
   pManager = G4AntiNeutron::AntiNeutron()->GetProcessManager();
