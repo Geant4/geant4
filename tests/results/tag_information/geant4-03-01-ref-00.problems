@@ -1,0 +1,165 @@
+          Problems and Fixes with geant4-02-00-ref-05
+          ===========================================
+
+geant4-03-01-ref-00 is geant4-03-00-ref-04 plus:
+
+global							global-V03-00-11 
+materials						materials-V03-00-07 
+visualization						vis-V03-00-09 
+geometry/magneticfield					field-V03-00-05 
+geometry/volumes					geomvol-V03-00-03 
+geometry/solids/specific				geom-solids-specific-V03-00-01 
+processes/transportation				transport-V03-00-01 
+processes/parameterisation				param-V03-00-00 
+processes/electromagnetic/standard			stand-V03-00-05 
+processes/electromagnetic/utils				utils-V03-00-06
+processes/electromagnetic/muons				muons-V03-00-05 
+processes/hadronic/models/generator/de_excitation	de_excitation-V03-00-01
+
+
+Problems Fixed
+==============
+[I'm not shure in which moment - there is no all *.problems files]
+
+1) Fixed:
+
+disable.test601.DEC-cxx.debug_ISO   disable.test601.DEC-cxx.optim_ISO 
+disable.test602.DEC-cxx.debug_ISO   disable.test602.DEC-cxx.optim_ISO
+prompts indefinitely. [how it was?]
+
+2) There is no:
+-------------------------------------------------
+  G4VParticleChange::SetNumberOfSecondaries() 
+    Warning theListOfSecondaries is not empty
+-------------------------------------------------
+  
+SUN: optim: NON-ISO:    T09:
+SUN: debug: NON-ISO:    T09:
+
+
+Outstanding (should have info from which ref[cat] tag).
+=======================================================
+
+1)
+disabled tests (why? it's not neverending cycle...)
+--------------
+
+disable.test11.DEC-cxx.debug_ISO    disable.test11.DEC-cxx.optim_ISO  
+disable.test15.DEC-cxx.debug_ISO    disable.test15.DEC-cxx.optim_ISO  
+
+problem reading neutron data (it looks like):
+test11.out
+------------------------------------------------------------------------
+G4NeutronHPNames: Sorry, this material does not come near to any data.
+G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the
+                  directory, the neutron scattering data are located in.
+G4NeutronHPNames: The material was: A=18, Z=8
+------------------------------------------------------------------------
+test11.err
+------------------------------------------------
+In case the data sets are at present not available in the neutron data library, 
+please contact Hans-Peter.Wellisch@cern.ch
+
+*** G4Exception: Aborting execution ***
+time: command terminated abnormally.
+------------------------------------------------
+
+2) 
+*.err
+-----------------------------------------------------------
+G4CameronTruranHilfShellCorrections: out of table for Z = 1
+-----------------------------------------------------------
+DEC-cxx debug_ISO test16.err
+HP-aCC debug test16.err
+HP-aCC optim test16.err
+SUN-CC debug_NONISO test16.err
+SUN-CC optim_NONISO test16.err
+SUN-CC5 debug_ISO test16.err
+SUN-CC5 optim_ISO test16.err
+
+and large_N
+-----------
+DEC-cxx debug_ISO test16.large_N.err
+SUN-CC debug_NONISO test02.hadron.large_N.err
+SUN-CC debug_NONISO test16.large_N.err
+SUN-CC optim_NONISO test02.hadron.large_N.err
+SUN-CC optim_NONISO test16.large_N.err
+SUN-CC5 debug_ISO test02.hadron.large_N.err
+SUN-CC5 debug_ISO test16.large_N.err
+SUN-CC5 optim_ISO test02.hadron.large_N.err
+SUN-CC5 optim_ISO test16.large_N.err
+
+3) 
+*.err
+-----------------------------------------------------------------------
+G4ExcitationHandler: Warning: Photonevaporation data not exact.
+G4ExcitationHandler: Warning: Found gamma with energy = 2.51823e-11MeV
+-----------------------------------------------------------------------
+large_N:
+--------
+DEC-cxx debug_ISO test12.large_N.err
+DEC-cxx optim_ISO test16.large_N.err
+HP-aCC debug test02.hadron.large_N.err
+HP-aCC debug test13.large_N.err
+HP-aCC optim test02.hadron.large_N.err
+HP-aCC optim test13.large_N.err
+SUN-CC debug_NONISO test12.large_N.err
+SUN-CC optim_NONISO test12.large_N.err
+SUN-CC5 debug_ISO test12.large_N.err
+SUN-CC5 optim_ISO test02.hadron.large_N.err
+SUN-CC5 optim_ISO test12.large_N.err
+
+
+New Problems and Features
+-------------------------
+
+------ Below this line, to be updated -----------------
+
+1) 
+*.err
+-----------------------------------------------------------------------
+eliminating target particle
+-----------------------------------------------------------------------
+large_N:
+--------
+DEC-cxx debug_ISO test02.hadron.large_N.err
+
+2) 
+*.err
+-----------------------------------------------------------------------
+WARNING: LHCXXTOP is not defined! [/afs/cern.ch/sw/lhcxx will be used]
+WARNING: PLATF is not defined! [ @sys will be used]
+WARNING: g4example: Could not find naming root directory: Naming will be disabled
+-----------------------------------------------------------------------
+SUN-CC debug_NONISO test401.err
+SUN-CC debug_NONISO test402.err
+SUN-CC optim_NONISO test401.err
+SUN-CC optim_NONISO test402.err
+
+3) 
+*.err
+-----------------------------------------------------------------------
+time: command terminated abnormally.
+-----------------------------------------------------------------------
+DEC-cxx optim_ISO test13.err
+
+large_N:
+--------
+DEC-cxx debug_ISO test104.EMtest.large_N.err
+DEC-cxx optim_ISO test13.large_N.err
+HP-aCC debug test104.EMtest.large_N.err
+
+4) 
+*.err
+-----------------------------------------------------------------------
+G4PropagatorInField::LocateIntersectionPoint:   Warning: Integration inaccuracy requires 
+ an adjustment in the step's endpoint 
+   Two mid-points are further apart than their curve length difference
+   Dist = 0.166319 curve length = 0.166316
+-----------------------------------------------------------------------
+large_N:
+--------
+SUN-CC debug_NONISO test104.EMtest.large_N.err
+SUN-CC5 debug_ISO test104.EMtest.large_N.err
+
+
