@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.11 2001-08-28 05:35:00 asaim Exp $
+// $Id: G4EventManager.cc,v 1.12 2002-05-15 05:47:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -173,7 +173,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
     {
       if(!trajectoryContainer)
-      { trajectoryContainer = new G4TrajectoryContainer; }
+      { trajectoryContainer = new G4TrajectoryContainer; 
+        currentEvent->SetTrajectoryContainer(trajectoryContainer); }
       trajectoryContainer->insert(aTrajectory);
     }
 #endif
@@ -223,10 +224,6 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
   if(sdManager)
   { sdManager->TerminateCurrentEvent(currentEvent->GetHCofThisEvent()); }
-
-#ifdef G4_STORE_TRAJECTORY
-  currentEvent->SetTrajectoryContainer(trajectoryContainer);
-#endif
 
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
   currentEvent = 0;

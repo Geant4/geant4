@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2002-02-26 16:33:47 gcosmo Exp $
+$Id: History,v 1.38 2002-05-15 05:47:48 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15 2002, M.Asai (event-V04-00-02)
+- Introducing new G4TrajectoryContainer class which aggregates STL vector,
+  instead of deriving from STL vector.
 
 Feb 26 2002, G.Cosmo (event-V04-00-01)
 - Optimised implementation of SetNewValue() in G4ParticleGunMessenger and
