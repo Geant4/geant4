@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.5 2003-11-08 00:40:35 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.6 2003-11-13 18:37:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -44,6 +44,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
+#include "G4ChordFinder.hh"
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -237,7 +238,10 @@ G4PropagatorInField::ComputeStep(
     s_length_taken = GetChordFinder()->AdvanceChordLimited( 
                              CurrentState,    // Position & velocity
                              h_TrialStepSize,
-                             fEpsilonStep);
+                             fEpsilonStep,
+                             fPreviousSftOrigin,
+                             fPreviousSafety
+                             );
 
     fFull_CurveLen_of_LastAttempt = s_length_taken;
 
