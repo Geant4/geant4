@@ -50,7 +50,7 @@ G4int testINCEvap() {
 };
 
 G4int testINC() {
-  G4int verboseLevel = 2; // eguals 1 for data file production, 2 for testing, 3 all
+  G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
 
   if (verboseLevel > 1) {
     G4cout << " >>> testINC" << G4endl;
@@ -76,7 +76,7 @@ G4int testINC() {
   cascader->setElementaryParticleCollider(collider);
   cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
 
-  G4int nCollisions = 10;
+  G4int nCollisions = 1000;
 
     if (verboseLevel > 1) {
   G4cout << setw(6)<< "#ev" << setw(6)  << "part" << setw(11) << "Ekin [GeV]" << setw(11) << "momx" << setw(11) << "momy" << setw(11) << "momz" << G4endl;
