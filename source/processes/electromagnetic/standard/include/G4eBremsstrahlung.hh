@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.21 2004-01-21 18:05:22 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.22 2004-05-07 16:06:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,7 +77,7 @@ class G4eBremsstrahlung : public G4VEnergyLossProcess
 
 public:
 
-  G4eBremsstrahlung(const G4String& name = "eBrem");
+  G4eBremsstrahlung(const G4String& name = "eBrems");
 
   ~G4eBremsstrahlung();
 

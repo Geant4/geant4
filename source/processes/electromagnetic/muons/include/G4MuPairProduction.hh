@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.19 2004-04-28 14:39:43 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.20 2004-05-07 16:05:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,7 @@ class G4MuPairProduction : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuPairProduction(const G4String& processName = "MuPairProd");
+  G4MuPairProduction(const G4String& processName = "muPairProd");
 
   ~G4MuPairProduction();
 
