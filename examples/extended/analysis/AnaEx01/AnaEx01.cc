@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.8 2001-11-16 14:35:10 barrand Exp $
+// $Id: AnaEx01.cc,v 1.9 2003-12-03 10:33:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 #include "AnaEx01SteppingAction.hh"
 #include "AnaEx01SteppingVerbose.hh"
 
-int main(int argc,char** argv) {
+int main(int,char**) {
 
   // choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
