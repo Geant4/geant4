@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder.cc,v 1.1 2004-05-26 11:39:09 vnivanch Exp $
+// $Id: G4EmHadronBuilder.cc,v 1.2 2004-05-26 12:35:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -86,7 +86,11 @@ void G4EmHadronBuilder::ConstructProcess()
       G4String particleName = particle->GetParticleName();
 
 
-      if (particleName == "GenericIon") {
+      if (particleName == "GenericIon" ||
+          particleName == "IonC12" ||
+          particleName == "IonAr40" ||
+          particleName == "IonFe56" ||
+     ) {
 
         pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
         pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
