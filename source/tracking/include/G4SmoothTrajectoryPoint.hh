@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.1 2002-09-04 02:09:37 asaim Exp $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.2 2002-09-14 00:07:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,7 @@ public: // without description
 // Get/Set functions
    inline const G4ThreeVector GetPosition() const
    { return fPosition; }
-   inline const G4std::vector<G4ThreeVector*>* GetAuxiliaryPoints() const
+   inline const G4std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
    { return fAuxiliaryPointVector; }
 
 // Get method for HEPRep style attributes
@@ -78,7 +78,7 @@ public: // without description
 
 // Member data
    G4ThreeVector fPosition;
-   G4std::vector<G4ThreeVector*>* fAuxiliaryPointVector;
+   G4std::vector<G4ThreeVector>* fAuxiliaryPointVector;
 
 
 };
