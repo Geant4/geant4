@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.6 2003-11-13 18:34:48 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.7 2003-11-26 14:45:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -95,6 +95,7 @@ class G4PropagatorInField
    inline G4ChordFinder* GetChordFinder();
 
    inline G4int  SetVerboseLevel( G4int verbose );
+   inline G4int  GetVerboseLevel() const;
    inline G4int  Verbose() const;
 
    inline G4int   GetMaxLoopCount() const;
@@ -176,7 +177,9 @@ class G4PropagatorInField
         const  G4FieldTrack&       curveStartPointTangent,  //  A
         const  G4FieldTrack&       curveEndPointTangent,    //  B
         const  G4ThreeVector&      trialPoint,              //  E
-               G4FieldTrack&       intersectPointTangent);  // Output
+               G4FieldTrack&       intersectPointTangent,   // Output
+               G4bool&             recalculatedEndPoint);   // Out: 
+
      // If such an intersection exists, this function 
      // calculate the intersection point of the true path of the particle 
      // with the surface of the current volume (or of one of its daughters). 
