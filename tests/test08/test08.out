@@ -1,9 +1,6 @@
 PreInit> PreInit> #/tracking/verbose 2
 PreInit> #/tracking/verbose 1
 PreInit> /run/initialize
----warning from G4Material-- The state conditions of the gas: Vacuum are not consistent.
- density  = 1e-17 mg/cm3	 pressure = 1 atmosphere	 temperature = 273.15 kelvin
- rho*(T/P) would be of the order of: 12.1865 (mg/cm3)*(kelvin/atmosphere).  The energy loss calculation maybe be affected 
 Target is 5 cm of Al 
 T08PhysicsList::SetCuts:CutLength : 2 (mm)
 
