@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc,v 1.3 2004-04-08 10:14:36 gbarrand Exp $
+// $Id: G4OpenInventorWin.cc,v 1.4 2004-04-08 10:49:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -38,7 +38,7 @@
 #include "G4Win32.hh"
 
 G4OpenInventorWin::G4OpenInventorWin ()
-:G4OpenInventor("OpenInventorWin","OIWIN32",G4VGraphicsSystem::threeD)
+:G4OpenInventor("OpenInventorWin","OIWin32",G4VGraphicsSystem::threeD)
 {
   SetInteractorManager (G4Win32::getInstance());
   GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  

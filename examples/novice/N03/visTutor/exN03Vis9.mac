@@ -20,13 +20,13 @@
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    G4VIS_BUILD_OPENGLWIN32_DRIVER                                   # 
-#    G4UI_BUILD_WIN32_SESSION                                         # 
+#   (G4UI_BUILD_WIN32_SESSION)                                        # 
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    G4VIS_USE_OPENGLWIN32                                            # 
-#    G4UI_USE_WIN32                                                   # 
+#   (G4UI_USE_WIN32)                                                  # 
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <vis-driver-name>"               #

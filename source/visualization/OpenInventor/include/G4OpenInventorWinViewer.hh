@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.hh,v 1.2 2004-04-08 10:49:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,9 @@
 
 #include "G4VViewer.hh"
 
-class SoWinExaminerView;
+#include <windows.h>
+
+class SoWinExaminerViewer;
 class SoSelection;
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;

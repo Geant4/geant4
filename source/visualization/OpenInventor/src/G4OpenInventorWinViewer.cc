@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.1 2004-04-08 09:41:11 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.2 2004-04-08 10:49:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -45,7 +45,7 @@
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 
-//#include <windowsx.h> //For GetWindowInstance.
+#include <windowsx.h>
 
 //
 // Global variables 
@@ -184,6 +184,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     MoveWindow((HWND)fShell,wrect.left,wrect.top,400+ww-cw,400+wh-ch,TRUE);
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(this));
     ::SetWindowText((HWND)fShell,shellName.c_str());
+    parent = fShell;
+    fInteractorManager->AddShell(fShell);
   } else {
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
