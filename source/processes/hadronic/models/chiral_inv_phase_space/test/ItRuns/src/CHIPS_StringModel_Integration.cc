@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Integration.cc,v 1.2 2000-08-24 10:13:57 hpw Exp $
+// $Id: CHIPS_StringModel_Integration.cc,v 1.3 2000-08-28 09:30:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -673,6 +673,11 @@
             aSec = second->GetDynamicParticle();
             G4cout << "SECONDARIES info";
             G4cout << aSec->GetDefinition()->GetPDGCharge()<<" ";
+	    if(aSec->GetDefinition()->GetPDGEncoding())
+              G4cout << aSec->GetDefinition()->GetPDGEncoding()<<" ";
+	    else
+	      G4cout << aSec->GetDefinition()->GetPDGCharge()*1000+aSec->GetDefinition()->GetBaryonNumber()
+	      <<" ";
             G4cout << aSec->GetTotalEnergy()<<" ";
             G4cout << aSec->GetMomentum();
 	    G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
