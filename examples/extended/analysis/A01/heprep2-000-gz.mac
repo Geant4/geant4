@@ -9,13 +9,16 @@
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create A01Output.heprep.zip
+/vis/scene/create A01Output.heprep.gz
+/vis/heprep/setEventNumberSuffix -000
+
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
 /vis/open HepRepXML
 /vis/viewer/set/culling global false
+#/vis/scene/endOfEventAction accumulate
 #
 # Add volume to scene
 #
