@@ -118,6 +118,12 @@ related History files):
     o Fixes memory leak in G4InelasticInteraction: systematic search
       for leaks - energy scan 50MeV-10GeV. 
   - High energy model:
+    o Energy- OR Momentum- conservation, can be chosen by the user.
+    o Added production of Evaporation particles.
+    o Better description of experimental data, mainly in Strange
+      Particle Production.    
+    o Cleared compilation warnings on Linux-g++.
+    o Minor bug-fix in G4HEPionMinusInelastic.
     o Introduced temporary workaround in G4HEInelastic for high energy
       problem (number of particles created in one event larger than
       allocation).
@@ -128,6 +134,7 @@ related History files):
       and evaporation models.
     o Defined local cbrt() in G4FermiMomentum, to allow porting 
       on gcc-2.95-2 ANSI setup.
+    o De-excitation: interface adjustment in G4ParaFissionModel.
     o Kinetic model: fixed exceptional condition for inelastic scattering
       off Hydrogene. No recoil required. 
   - Radiative-decay model:
@@ -137,7 +144,9 @@ related History files):
     o Includes also an upgrade of the doppler broadening.
       Allows for running on 0K data, and doing exact doppler broadening
       on the fly (according to the temperature specified in G4Material),
-      with good performance up to about 5000K. 
+      with good performance up to about 5000K.
+    o Bug fix in G4NeutronHPInelasticCompFS to get the correct Q-value
+      for Lithium (the bug was introduced in recent development).
   - Utilities:
     o Fixed memory leak in G4ReactionDynamics: systematic search for
       leaks - energy scan verification 50MeV-10GeV.
