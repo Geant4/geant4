@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.6 1999-12-15 14:50:31 gunter Exp $
+// $Id: G4Timer.cc,v 1.7 2000-01-06 14:27:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,13 +18,10 @@
 #include "G4Timer.hh"
 #include "G4ios.hh"
 
-#ifdef G4USE_STL
-  #undef times
-#endif
+#undef times
 
 // Global error function
 void G4Exception(const char* s=0);
-
 
 
 #ifdef WIN32

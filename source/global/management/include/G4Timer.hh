@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.9 1999-12-15 14:50:31 gunter Exp $
+// $Id: G4Timer.hh,v 1.10 2000-01-06 14:27:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,8 @@
 // Class for timer objects, able to measure elasped user/system process time.
 //
 // Note: Uses <sys/times.h> & <unistd.h> - POSIX.1 defined
+//       If used, this header must be included in the source (.cc) file and it
+//       must be the first header file to be included!
 //
 // Member functions:
 //
@@ -125,9 +127,7 @@ inline G4bool G4Timer::IsValid() const
     return fValidTimes;
 }
 
-#ifdef G4USE_STL
-  #define times ostimes
-#endif
+#define times ostimes
 
 #endif
 

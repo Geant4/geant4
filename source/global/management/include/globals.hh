@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.13 2000-01-03 11:39:39 gcosmo Exp $
+// $Id: globals.hh,v 1.14 2000-01-06 14:27:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,22 +32,20 @@
 // Undefine possible existing min/max/sqr/abs macros first
 // (temporary solution)
 #ifdef min
-#undef min
+  #undef min
 #endif
 #ifdef max
-#undef max
+  #undef max
 #endif
 #ifdef sqr
-#undef sqr
+  #undef sqr
 #endif
 #ifdef abs
-#undef abs
+  #undef abs
 #endif
 
-#ifdef G4USE_STL
-  #include "g4std/algorithm"
-  #define CLHEP_MAX_MIN_DEFINED
-#endif
+#include "g4std/algorithm"
+#define CLHEP_MAX_MIN_DEFINED
 
 #if defined(WIN32) && defined(G4USE_STD_NAMESPACE)
 // For NT with Native STL (used in ISO standard mode)
@@ -81,10 +79,8 @@
 
 // Global error function
 void G4Exception(const char* s=0);
-#ifdef G4USE_STL
-  void G4Exception(G4std::string s);
-  void G4Exception(G4String s);
-#endif
+void G4Exception(G4std::string s);
+void G4Exception(G4String s);
 
 #endif /* GLOBALS_HH */
 
