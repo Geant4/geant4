@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.3 2003-10-21 09:52:23 gcosmo Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.4 2003-10-22 12:58:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -96,7 +96,9 @@ ComputeTransformation( const G4int copyNo,
     G4cerr << "ERROR - G4ParameterisationTrdX::ComputeTransformation()"
            << G4endl
            << "        Axis is along " << faxis << " !" << G4endl;
-    G4Exception("G4ParameterisationTrdX - Only axes along X are allowed !");
+    G4Exception("G4ParameterisationTrdX::ComputeTransformation()",
+                "IllegalConstruct", FatalException,
+                "Only axes along X are allowed !");
   }
 
   if( verbose >= -2 )
@@ -151,11 +153,10 @@ void G4ParameterisationTrdX::CheckAxisIsValid()
            << "        It will result in non-equal division solids." << G4endl
            << "        Please run with verbosity on." << G4endl;
     G4Exception("G4ParameterisationTrdX::CheckAxisIsValid()",
-                "InvalidAxis", FatalErrorInArgument,
-                "Invalid construct. NOT supported." );
+                "IllegalConstruct", FatalException,
+                "Invalid solid specification. NOT supported." );
   }
 }
-
 
 
 //--------------------------------------------------------------------------
@@ -211,7 +212,9 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   }
   else
   { 
-    G4Exception("G4ParameterisationTrdY - Only axes along Y are allowed !");
+    G4Exception("G4ParameterisationTrdY::ComputeTransformation()",
+                "IllegalConstruct", FatalException,
+                "Only axes along Y are allowed !");
   }
 
   if( verbose >= 2 )
@@ -267,8 +270,8 @@ void G4ParameterisationTrdY::CheckAxisIsValid()
            << "        It will result in non-equal division solids." << G4endl
            << "        Please run with verbosity on." << G4endl;
     G4Exception("G4ParameterisationTrdY::CheckAxisIsValid()",
-                "InvalidAxis", FatalErrorInArgument,
-                "Invalid construct. NOT supported." );
+                "IllegalConstruct", FatalException,
+                "Invalid solid specification. NOT supported." );
   }
 }
 
@@ -326,7 +329,9 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   }
   else
   { 
-    G4Exception("G4ParameterisationTrdZ - Only axes along Z are allowed !");
+    G4Exception("G4ParameterisationTrdZ::ComputeTransformation()",
+                "IllegalConstruct", FatalException,
+                "Only axes along Z are allowed !");
   }
 
   if( verbose >= 1 )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.3 2003-10-21 09:04:28 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.4 2003-10-22 12:58:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -78,7 +78,9 @@ CheckMotherSolid( const G4VSolid* motherSolid,
            << "        It is: " << motherSolid->GetEntityType()
            << ", while it should be: " << solidType << "." << G4endl;
     motherSolid->DumpInfo();
-    G4Exception("Incorrect solid type for division!");
+    G4Exception("G4VDivisionParameterisation::CheckMotherSolid()",
+                "IllegalConstruct", FatalException,
+                "Incorrect solid type for division !");
   }
 }
 

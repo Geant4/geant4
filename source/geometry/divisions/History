@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2003-10-17 09:43:01 gcosmo Exp $
+$Id: History,v 1.5 2003-10-22 12:58:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,7 @@ Oct 17th, 2003          P.Arce  (geomdiv-V05-02-03)
 - Completed implementation for Para, Trd.
 - Corrections for cons and tubs.
 - First trial implementation for polyhedra.
+- Migrated calls to G4Exception to new scheme.
 
 Sep 30th, 2003          G.Cosmo  (geomdiv-V05-02-02)
 - Removed concrete implementation of Setup() method, according to

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.6 2003-10-21 09:12:25 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.7 2003-10-22 12:58:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -104,7 +104,8 @@ void G4PVDivision::CheckAndSetParameters (const EAxis pAxis,
   }
   if (fnReplicas < 1 )
   {
-    G4Exception("G4PVDivision::G4PVDivision() - Illegal number of replicas!");
+    G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+                FatalException, "Illegal number of replicas!");
   }
 
   if( divType != DivNDIV)
@@ -117,7 +118,8 @@ void G4PVDivision::CheckAndSetParameters (const EAxis pAxis,
   }
   if( fwidth < 0 )
   {
-    G4Exception("G4PVDivision::G4PVDivision() - Width must be positive!");
+    G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+                FatalException, "Width must be positive!");
   }
   
   foffset=offset;
@@ -150,7 +152,8 @@ void G4PVDivision::CheckAndSetParameters (const EAxis pAxis,
     case kZAxis:
       break;
     default:
-      G4Exception("G4PVDivision::G4PVDivision() - Unknown axis.");
+      G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+                  FatalException, "Unknown axis of replication.");
       break;
   }
 }
@@ -378,16 +381,16 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
     G4cerr << "ERROR - G4PVDivision::SetParameterisation()" << G4endl
            << "        Divisions for " << mSolidType
            << " not implemented." << G4endl;
-    G4Exception("G4PVDivision - Solid type not supported.");
+    G4Exception("G4PVDivision::SetParameterisation()", "IllegalConstruct",
+                FatalException, "Solid type not supported.");
   }
 }
 
 //--------------------------------------------------------------------------
 void G4PVDivision::ErrorInAxis( EAxis axis, G4VSolid* solid )
 {
-  G4String error = "G4PVDivision - Error in axis: trying to divide solid "
-                 + solid->GetName() + " of type " + solid->GetEntityType()
-                 + " along axis ";
+  G4String error = "Trying to divide solid " + solid->GetName()
+                 + " of type " + solid->GetEntityType() + " along axis ";
   switch( axis )
   {
     case kXAxis:
@@ -411,5 +414,6 @@ void G4PVDivision::ErrorInAxis( EAxis axis, G4VSolid* solid )
     default:
       break;
   }
-  G4Exception( error );
+  G4Exception("G4PVDivision::ErrorInAxis()", "IllegalConstruct",
+              FatalException, error);
 }

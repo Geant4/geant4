@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.2 2003-10-16 10:42:42 arce Exp $
+// $Id: G4ParameterisationPara.cc,v 1.3 2003-10-22 12:58:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
@@ -91,7 +91,9 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
     G4cerr << "ERROR - G4ParameterisationParaZ::ComputeTransformation()"
            << G4endl
            << "        Axis is along " << faxis << " !" << G4endl;
-    G4Exception("G4ParameterisationParaZ - Only axes along Z are allowed !");
+    G4Exception("G4ParameterisationParaZ::ComputeTransformation()",
+                "IllegalConstruct", FatalException,
+                "Only axes along Z are allowed !");
   }
 
   if( verbose >= -2 )
