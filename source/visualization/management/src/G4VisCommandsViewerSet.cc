@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.1 2000-05-19 05:40:04 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.2 2000-05-19 07:34:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -23,6 +23,16 @@ G4String G4VisCommandsViewerSet::ConvertToString(G4bool blValue)
 {
   G4String vl = "false";
   if(blValue) vl = "true";
+  return vl;
+}
+
+G4bool G4VisCommandsViewerSet::GetNewBoolValue(G4String paramString)
+{
+  G4String v = paramString;
+  v.toUpper();
+  G4bool vl = false;
+  if( v=="Y" || v=="YES" || v=="1" || v=="T" || v=="TRUE" )
+  { vl = true; }
   return vl;
 }
 
@@ -165,7 +175,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (((G4UIcmdWithABool*)command)->GetNewBoolValue(newValue)) {
+    if (GetNewBoolValue(newValue)) {
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	break;
@@ -198,7 +208,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandHiddenEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (((G4UIcmdWithABool*)command)->GetNewBoolValue(newValue)) {
+    if (GetNewBoolValue(newValue)) {
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	vp.SetDrawingStyle(G4ViewParameters::hlr);
@@ -237,7 +247,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4bool boolFlag;
     G4std::istrstream is ((char*)newValue.data());
     is >> cullingOption >> stringFlag >> density >> unit;
-    boolFlag = G4UIcmdWithABool::GetNewBoolValue(stringFlag);
+    boolFlag = GetNewBoolValue(stringFlag);
     if (cullingOption == "global") {
       vp.SetCulling(boolFlag);
       G4cout <<

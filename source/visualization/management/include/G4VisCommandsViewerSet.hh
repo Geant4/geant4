@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.1 2000-05-19 05:39:24 johna Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.2 2000-05-19 07:34:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -30,6 +30,7 @@ public:
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
   G4String ConvertToString(G4bool blValue);
+  G4bool GetNewBoolValue(G4String paramString);
   G4UIcmdWithAString* fpCommandAll;
   G4UIcmdWithAString* fpCommandStyle;
   G4UIcmdWithABool* fpCommandEdge;
