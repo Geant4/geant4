@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunAction.cc,v 1.5 2000-12-07 13:02:11 maire Exp $
+// $Id: Em4RunAction.cc,v 1.6 2001-02-20 16:08:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ void Em4RunAction::EndOfRunAction(const G4Run* aRun)
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
   // save Rndm status
-  if (saveRndm == 1)
+  if (saveRndm > 0)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");      
     }
