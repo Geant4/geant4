@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.5 2003-06-19 14:46:14 gunter Exp $
+// $Id: Em2RunAction.cc,v 1.6 2003-11-27 15:43:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -442,8 +442,12 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   sum2TranEnergy *= 100.;
   err            *= 100.;
 
-  G4double eMean = 95.102;
-  G4double rms   = 0.9456;
+  // G4 5.0
+  // G4double eMean = 95.102;
+  //  G4double rms   = 0.9456;
+  // G4 6.0
+  G4double eMean = 94.59;
+  G4double rms   =  1.33; 
   G4double limit = 3.0;
 
   sumTranEnergy  -= eMean; 

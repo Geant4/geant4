@@ -32,7 +32,9 @@
 #include "Em2PhysListParticles.hh"
 #include "Em2PhysListGeneral.hh"
 #include "Em2PhysListEmStandard.hh"
-#include "Em2PhysListEmModel.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,19 +87,6 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
       emPhysicsListIsRegistered = true;
     }
 
-  } else if(name == "model") {
-
-    if (emPhysicsListIsRegistered) {
-
-      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
-
-      RegisterPhysics( new Em2PhysListEmModel(name) );
-      emPhysicsListIsRegistered = true;
-    }
-
   } else {
 
     G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
@@ -122,13 +111,6 @@ void Em2PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");   
   
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  SetCutValue(currentDefaultCut, "proton");
-  SetCutValue(currentDefaultCut, "anti_proton");
-     
-  SetCutValueForOthers(currentDefaultCut);
-  
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -136,24 +118,24 @@ void Em2PhysicsList::SetCuts()
 
 void Em2PhysicsList::SetCutForGamma(G4double cut)
 {
-  ResetCuts();
   cutForGamma = cut;
+  SetParticleCuts(cut, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCutForElectron(G4double cut)
 {
-  ResetCuts();
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCutForPositron(G4double cut)
 {
-  ResetCuts();
   cutForPositron = cut;
+  SetParticleCuts(cut, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
