@@ -1,5 +1,5 @@
 
- testem1.cra is the geant3 equivalent of TestEm1
+ testem1/src is the geant3 equivalent of TestEm1
  
  % cd geant3
  % gmakeB           to make an executable  (Batch version) 
@@ -16,7 +16,7 @@
  run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
  
  
- testem1 produces several histo saved as testem1.histo if ISWIT(2)=1
+ testem1 produces several histo saved as testem1.paw if ISWIT(2)=1
      
      Content of these histo:
   
