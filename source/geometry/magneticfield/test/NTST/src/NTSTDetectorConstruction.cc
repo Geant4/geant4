@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTDetectorConstruction.cc,v 1.5 2003-11-27 10:46:44 japost Exp $
+// $Id: NTSTDetectorConstruction.cc,v 1.6 2003-11-27 14:06:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -167,6 +167,7 @@ NTSTDetectorConstruction::Construct()
   G4PropagatorInField *
   globalPropagatorInField= G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
 
+  globalPropagatorInField->SetMaxLoopCount( 10000 ); 
   G4cout 
     << "PropagatorInField parameter(s) are: " << G4endl
     << " SetMaxLoopCount=" << globalPropagatorInField->GetMaxLoopCount()
