@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.2 2000-05-19 07:34:34 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.3 2000-05-19 09:18:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -26,7 +26,7 @@ G4String G4VisCommandsViewerSet::ConvertToString(G4bool blValue)
   return vl;
 }
 
-G4bool G4VisCommandsViewerSet::GetNewBoolValue(G4String paramString)
+G4bool G4VisCommandsViewerSet::GetNewBoolValue(const G4String& paramString)
 {
   G4String v = paramString;
   v.toUpper();

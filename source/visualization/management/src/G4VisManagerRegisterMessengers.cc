@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.18 2000-05-19 00:03:46 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.19 2000-05-19 09:18:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,7 +16,7 @@
 #include "G4VisCommandsCompound.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
-#include "G4VisCommandsSceneInclude.hh"
+#include "G4VisCommandsSceneInclude.hh"  // Deprecated
 #include "G4VisCommandsSceneHandler.hh"
 #include "G4VisCommandsViewer.hh"
 #include "G4VisCommandsViewerSet.hh"
@@ -117,18 +117,18 @@ The G4VisManager has a list of scenes.
   default:                     world                0         -1
   Adds to current scene.
 
-/vis/scene/include/hits [<sensitive-volume-name>]
+/vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
   Causes hits, if any, to be drawn at the end of processiing an event.
-  Includes in current scene.
+  Adds to current scene.
 
-/vis/scene/include/trajectories [<sensitive-volume-name>]
+/vis/scene/add/trajectories [<sensitive-volume-name>]
   default:                      (argument not impl'd yet.)
   Causes trajectories, if any, to be drawn at the end of processiing an event.
-  Includes in current scene.
+  Adds to current scene.
 
-* /vis/scene/include/transientObjects
-  Includes in current scene.
+* /vis/scene/add/transientObjects
+  Adds in current scene.
 
 * /vis/scene/set/hitOption accumulate|byEvent
   Affects current scene.
@@ -245,12 +245,7 @@ to know the type of the parameter, so we need separate commands.)
   Copies view parameters from from-viewer to current viewer.
   Affects current viewer.
 
-* /vis/viewer/set/style wireframe|surface
-*or* /vis/viewer/set/surface   ) ( opposites, i.e., one
-*or* /vis/viewer/set/wireframe ) ( negates the other.
-* The first is preferred.  We need parameter name completion.
-* If someone gives a wrong parameter, G4UIparameter should be more informative
-* about possible values.
+/vis/viewer/set/style wireframe|surface
   Affects current viewer.
 
 /vis/viewer/set/edge [true|false]
@@ -261,36 +256,10 @@ to know the type of the parameter, so we need separate commands.)
   default:                       true
   Affects current viewer.
 
-(Here follow some culling commands.  A possible (preferred) syntax is:
-
 /vis/viewer/set/culling global|coveredDaughters|invisible|density [true|false]
+                        [density] [unit]
   default:                                                           true
-  Affects current viewer.
-
-Again, this would benefit from parameter name completion.)
-
-* /vis/viewer/set/cull  [true|false]
-*or* /vis/viewer/cull  [true|false]
-  default:              true
-  Global culling flag.  Does not change specific culling flags.
-  Affects current viewer.
-
-* /vis/viewer/set/cullCoveredDaughters
-*or* /vis/viewer/cullCoveredDaughters  [true|false]
-  default:                                true
-  Cull (i.e., do not Draw) daughters covered by opaque mothers.
-  Affects current viewer.
-
-* /vis/viewer/set/cullInvisibleObjects
-*or* /vis/viewer/cullInvisibleObjects  [true|false]
-  default:                             true
-  Cull (i.e., do not Draw) "invisible" objects.
-  Affects current viewer.
-
-* /vis/viewer/set/cullByDensity
-*or* /vis/viewer/cullByDensity  [true|false]
-  default:                       true
-  Cull (i.e., do not Draw) geometry objects with density less than specified.
+                          0.01    g/cm3
   Affects current viewer.
 
 * /vis/viewer/set/hiddenMarker  [true|false]
@@ -393,8 +362,6 @@ Again, this would benefit from parameter name completion.)
   default:     current viewer name
   This viewer becomes current.
 
-/vis/viewer/update - synonym for /vis/viewer/show.
-
 
 Attributes (nothing implemented yet)
 ==========
@@ -471,12 +438,14 @@ Default:             world             /vis/scene/add/volume $1
 
   command = new G4UIdirectory ("/vis/scene/add/");
   command -> SetGuidance ("Add model to current scene.");
-  fMessengerList.append (new G4VisCommandSceneAddVolume);
   fMessengerList.append (new G4VisCommandSceneAddGhosts);
+  fMessengerList.append (new G4VisCommandSceneAddHits);
   fMessengerList.append (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.append (new G4VisCommandSceneAddTrajectories);
+  fMessengerList.append (new G4VisCommandSceneAddVolume);
 
   command = new G4UIdirectory ("/vis/scene/include/");
-  command -> SetGuidance ("Include drawing option in current scene.");
+  command -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
   fMessengerList.append (new G4VisCommandSceneIncludeHits);
   fMessengerList.append (new G4VisCommandSceneIncludeTrajectories);
 

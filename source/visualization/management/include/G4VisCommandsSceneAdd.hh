@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.4 1999-12-15 14:54:21 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.5 2000-05-19 09:17:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -15,15 +15,26 @@
 
 #include "G4VisCommandsScene.hh"
 
-class G4VisCommandSceneAddVolume: public G4VVisCommandScene {
+class G4VisCommandSceneAddGhosts: public G4VVisCommandScene {
 public:
   // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandSceneAddVolume ();
-  ~G4VisCommandSceneAddVolume ();
+  G4VisCommandSceneAddGhosts ();
+  ~G4VisCommandSceneAddGhosts ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4UIcommand* fpCommand;
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandSceneAddHits: public G4VVisCommandScene {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandSceneAddHits ();
+  ~G4VisCommandSceneAddHits ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithoutParameter* fpCommand;
 };
 
 class G4VisCommandSceneAddLogicalVolume: public G4VVisCommandScene {
@@ -37,15 +48,26 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandSceneAddGhosts: public G4VVisCommandScene {
+class G4VisCommandSceneAddTrajectories: public G4VVisCommandScene {
 public:
   // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandSceneAddGhosts ();
-  ~G4VisCommandSceneAddGhosts ();
+  G4VisCommandSceneAddTrajectories ();
+  ~G4VisCommandSceneAddTrajectories ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4UIcmdWithAString* fpCommand;
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
+class G4VisCommandSceneAddVolume: public G4VVisCommandScene {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandSceneAddVolume ();
+  ~G4VisCommandSceneAddVolume ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcommand* fpCommand;
 };
 
 #endif
