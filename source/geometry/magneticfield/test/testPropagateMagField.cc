@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.13 2002-10-29 10:59:08 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.14 2002-10-29 13:58:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -141,25 +141,31 @@ G4VPhysicalVolume* BuildGeometry()
 //
 //  1) Two big boxes in the world volume
 //
-    G4PVPlacement *BigTg1Phys=new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
+    // G4PVPlacement *BigTg1Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
 						"Big Target 1",BigBoxLog,
 						worldPhys,false,0);
-    G4PVPlacement *BigTg2Phys=new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
+    // G4PVPlacement *BigTg2Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
 						"Big Target 2",BigBoxLog,
 						worldPhys,false,0);
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
-    G4PVPlacement *MedTg3a_Phys=new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
+    // G4PVPlacement *MedTg3a_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3b_Phys=new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
+    // G4PVPlacement *MedTg3b_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
 					      "Target 3b",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3c_Phys=new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
+    // G4PVPlacement *MedTg3c_Phys=
+    new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
 					      "Target 3c",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3d_Phys=new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
+    // G4PVPlacement *MedTg3d_Phys=
+    new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
 					      "Target 3d",smallBoxLog,
 					      worldPhys,false,0);
 
@@ -167,29 +173,37 @@ G4VPhysicalVolume* BuildGeometry()
 //  3) Eight small boxes around the origin of the world volume 
 //        (in +-X, +-Y & +-Z)
 //
-    G4PVPlacement *SmTg4a_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4a_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,0.3*m), "Target 4a",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4b_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4b_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,0.3*m), "Target 4b",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4c_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4c_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,0.3*m), "Target 4c",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4d_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4d_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,0.3*m), "Target 4d",tinyBoxLog,
 					      worldPhys,false,0);
 
-    G4PVPlacement *SmTg4e_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4e_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,-0.3*m), "Target 4e",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4f_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4f_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,-0.3*m), "Target 4f",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4g_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4g_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,-0.3*m), "Target 4g",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4h_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4h_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,-0.3*m), "Target 4h",tinyBoxLog,
 					      worldPhys,false,0);
 
@@ -279,7 +293,6 @@ void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
     pChordFinder= G4TransportationManager::GetTransportationManager()->
 		   GetFieldManager()->GetChordFinder();
 
-    // pMagFieldPropagator->set_magnetic_field();
     pChordFinder->SetChargeMomentumMass(
 		      charge,                    // charge in e+ units
 		      MomentumXc,   // Momentum in Mev/c ?
@@ -361,8 +374,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4cout << "Test PropagateMagField: ***********************" << G4endl
             << " Starting New Particle with Position " << Position << G4endl 
 	    << " and UnitVelocity " << UnitMomentum << G4endl;
-       G4cout << " Momentum in GeV/c is "<< momentum / GeV
-	      << " = " << (0.5+iparticle*10.0)*proton_mass_c2
+       G4cout << " Momentum in GeV/c is " << momentum / GeV
+	      << " = " << (0.5+iparticle*10.0)*proton_mass_c2 / MeV 
               << G4endl;
 
 
