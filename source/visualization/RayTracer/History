@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-02-24 12:23:03 johna Exp $
+$Id: History,v 1.6 2000-03-09 17:41:20 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th March 2000  Makoto Asai
+- Added some comments for copyright notice and for the software reference manual.
 
 24th February 2000  John Allison
 - Added protection for null viewer in G4RTSteppingAction.cc and
