@@ -338,7 +338,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
-	kt->Set4Momentum(new4Mom);
+	kt->SetTrackingMomentum(new4Mom);
         kt->SetState(G4KineticTrack::inside);
 //     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->GetTrackingMomentum().e() << " / "
 //    	   << (*theFieldMap)[encoding]->GetField(kt->GetPosition()) << " / "
@@ -442,7 +442,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	   G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	   G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	   new4Mom*=G4LorentzRotation(boost);
-	   kt->Set4Momentum(new4Mom);
+	   kt->SetTrackingMomentum(new4Mom);
 	}
 	// add the potential barrier
 	// FixMe the Coulomb field is not parallel to mom, this is simple approximation
@@ -465,7 +465,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
-	kt->Set4Momentum(new4Mom);
+	kt->SetTrackingMomentum(new4Mom);
 	kt->SetState(G4KineticTrack::gone_out);
       }
 
@@ -537,7 +537,7 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
     G4LorentzVector mom(track.GetMomentum(),sqrt(track.GetMomentum().mag2() + sqr(kt->GetActualMass())));
     mom *= G4LorentzRotation( boost );
     theMomentumTranfer += kt->GetTrackingMomentum().vect() - track.GetMomentum();
-    kt->Set4Momentum(mom);
+    kt->SetTrackingMomentum(mom);
 //    G4cout <<"Stepper output"<<kt<<" "<<kt->GetTrackingMomentum()<<" "<<kt->GetPosition()<<G4endl;
 /*
  *      G4cout <<" E/Field/Sum aft : " <<mom.e() << " / "
