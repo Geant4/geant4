@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.18 2002-04-22 08:59:05 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.19 2002-04-24 10:45:40 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
+// 24-04-02 some minor changes in boundary algorithm, L.Urban 
 //
 // -----------------------------------------------------------------------------
 //
@@ -70,7 +71,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        zLast (0.0),
        boundary(true),
        volume(0),volumeold(0),
-       facrange(0.10),tlimit(1.e10),tmsc(tlimit),
+       facrange(0.05),tlimit(1.e10),tmsc(tlimit),
        stepno(0),stepnolastmsc(-1000000),stepnodif(3),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
@@ -431,20 +432,20 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
                                        KineticEnergy,aMaterial);
 
-  stepno = track.GetCurrentStepNumber() ;
-  volume = track.GetVolume() ;
-  if(stepno == 1)
-  {
-    stepnolastmsc = -1000000 ;
-    volumeold=volume ;
-    tlimit = 1.e10 ;
-    tmsc = tlimit ;
-  } 
-    
   // special treatment near boundaries ?
   if (boundary)  
   {
     // step limitation at boundary ?
+    stepno = track.GetCurrentStepNumber() ;
+    volume = track.GetVolume() ;
+    if(stepno == 1)
+    {
+      stepnolastmsc = -1000000 ;
+      volumeold=volume ;
+      tlimit = 1.e10 ;
+      tmsc = tlimit ;
+    } 
+
     if(stepno > 1) 
     {
       if(volume != volumeold)
@@ -452,12 +453,16 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
          stepnolastmsc = stepno ;
          tlimit = facrange*range ;
          tmsc = tlimit ;
+         if(tPathLength > tlimit)
+         {
+           tPathLength = tlimit ;
+           valueGPILSelectionMSC = CandidateForSelection;
+         } 
       }
-
-      if((stepno - stepnolastmsc) <= stepnodif)
+      else if((stepno - stepnolastmsc) <= stepnodif)
       {
         tmsc += G4float(stepno-stepnolastmsc)*tlimit ;
-        if(tPathLength > range) tPathLength = range ;
+        if(tmsc > range) tmsc = range ;
         if(tPathLength > tmsc)
         {
           tPathLength = tmsc ;

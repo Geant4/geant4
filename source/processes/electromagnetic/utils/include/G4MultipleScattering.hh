@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.hh,v 1.7 2002-04-22 08:58:56 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.8 2002-04-24 10:45:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //------------- G4MultipleScattering physics process --------------------------
@@ -38,6 +38,7 @@
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
+// 24-04-02 some minor changes in boundary algorithm, L.Urban
 //            
 //------------------------------------------------------------------------------
 
@@ -148,11 +149,11 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void Setdtrl(G4double value)                 {dtrl = value;};
      // to reduce the energy/step dependence
 
-   void SetBoundary(G4bool value)      {boundary = value;};
-   void SetFacrange(G4double val)      {facrange=val;
-                                        // (1+(1+2+...+n))*facrange <= 1. 
-                                        stepnodif =
-                                         G4int((sqrt(8.0/facrange-7.)-1.)/2.);};
+   void SetBoundary(G4bool value)          {boundary = value;};
+   void SetFacrange(G4double val)          {facrange=val;
+                                            // estimated nb of steps at boundary
+                                            stepnodif =
+                                             G4int(exp(log(6./facrange)/3.)-1.);};
      // parameters needed near to boundary
 
    void SetTuning(G4double value)               {tuning = value;};
