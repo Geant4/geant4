@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.hh,v 1.3 2003-11-13 17:26:12 hpw Exp $
+// $Id: G4QException.hh,v 1.4 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QException ----------------
@@ -39,9 +39,9 @@
 class G4QException : public std::exception
 {
   public:
-  G4QException(G4String message);
-  virtual ~G4QException() throw() {}
+  G4QException(G4String message="No message");
   const G4String& GetMessage();
+  virtual ~G4QException() throw();
   private:
   G4String theMessage;
 };

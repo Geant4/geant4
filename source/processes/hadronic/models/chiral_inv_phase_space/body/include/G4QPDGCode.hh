@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.17 2003-11-13 14:40:46 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.18 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -48,7 +48,7 @@ public:
   G4QPDGCode(const G4QPDGCode& rhs);                 // Copy Constructor by value
   G4QPDGCode(G4QPDGCode* rhs);                       // Copy Constructor by pointer
 
-  ~G4QPDGCode();                                     // Destructor
+  ~G4QPDGCode();                                     // Public Destructor
 
   // Operators
   const G4QPDGCode& operator=(const G4QPDGCode& rhs);

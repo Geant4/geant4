@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.hh,v 1.16 2003-11-13 14:40:46 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.17 2003-11-17 16:58:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParentCluster ----------------
@@ -45,7 +45,7 @@ public:
   G4QParentCluster(const G4QParentCluster& rhs);     // Copy Constructor by value
   G4QParentCluster(G4QParentCluster* rhs);           // Copy Constructor by pointer
 
-  ~G4QParentCluster();                               // Destructor
+  ~G4QParentCluster();                               // Public Destructor
 
   // Operators
   const G4QParentCluster& operator=(const G4QParentCluster& rhs);

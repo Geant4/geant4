@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.21 2003-11-13 14:40:45 mkossov Exp $
+// $Id: G4QContent.hh,v 1.22 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -44,7 +44,7 @@ public:
   G4QContent(const G4QContent& rhs);     // Copy constructor by value
   G4QContent(G4QContent* rhs);           // Copy constructor by pointer
 
-  ~G4QContent();
+  ~G4QContent();                         // Public Destructor
 
   // Overloaded operators
   const G4QContent& operator=(const G4QContent& rhs);

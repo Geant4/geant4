@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.16 2003-11-13 14:40:46 mkossov Exp $
+// $Id: G4QParticle.hh,v 1.17 2003-11-17 16:58:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -45,7 +45,7 @@ public:
   G4QParticle(const G4QParticle& right);        // Copy Constructor by value
   G4QParticle(G4QParticle* right);              // Copy Constructor by pointer
 
-  ~G4QParticle();                               // Destructor
+  ~G4QParticle();                               // Public Destructor
 
   // Operators
   const G4QParticle& operator=(const G4QParticle& right);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.cc,v 1.2 2003-11-13 14:40:49 mkossov Exp $
+// $Id: G4QException.cc,v 1.3 2003-11-17 16:58:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QException ----------------
@@ -32,6 +32,8 @@
 #include "G4QException.hh"
 
 G4QException::G4QException(G4String message) {theMessage = message;}
+
+G4QException::~G4QException() throw(){}
 
 const G4String& G4QException::GetMessage() {return theMessage;}
 

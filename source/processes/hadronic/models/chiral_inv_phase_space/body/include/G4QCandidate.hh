@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.20 2003-11-13 14:40:44 mkossov Exp $
+// $Id: G4QCandidate.hh,v 1.21 2003-11-17 16:58:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -43,7 +43,7 @@ public:
   G4QCandidate(G4int PDGcode);                               // Constructor by PDG Code
   G4QCandidate(const G4QCandidate& right);                   // Copy Constructor by value
   G4QCandidate(G4QCandidate* right);                         // Copy Constructor by pointer
-  ~G4QCandidate();                                           // Destructor
+  ~G4QCandidate();                                           // Public Destructor
   // Overloaded Operators
   const G4QCandidate& operator=(const G4QCandidate& right);
   G4bool operator==(const G4QCandidate &right) const;

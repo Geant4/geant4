@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.28 2003-11-13 14:40:46 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.29 2003-11-17 16:58:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -53,7 +53,7 @@ public:
   G4Quasmon(const G4Quasmon& right);                             // Copy Quasmon by object
   G4Quasmon(G4Quasmon* right);                                   // Copy Quasmon by pointer
 
-  ~G4Quasmon();
+  ~G4Quasmon();                                                  // Public Destructor
 
   // Overloaded Operators
   const G4Quasmon& operator=(const G4Quasmon& right);
@@ -76,8 +76,9 @@ public:
   G4int             GetStatus()    const;
 
   //Modifiers
-  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ=0); // Pub-wrapper for "HadronizeQuasmon(,)"
-  G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it is a Resonance or Chipolino
+  // Public wrapper for HadronizeQuasmon(,)
+  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ = 1);
+  G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it is a Res or Chipo
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
@@ -85,7 +86,7 @@ public:
   void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
-  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=0); // Return new neuclear environment
+  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=1); // Returns newNeuclearEnvironment
   G4double         GetRandomMass(G4int PDGCode, G4double maxM);
   void             ModifyInMatterCandidates();
   void             InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.56 2003-11-13 14:40:50 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.57 2003-11-17 16:58:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4799,7 +4799,8 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
 #ifdef pdebug
   G4cout<<"G4Quasmon::Fragment is called theEnviron="<<nucEnviron<<G4endl;
 #endif
-  HadronizeQuasmon(nucEnviron,nQ);
+  G4int nQs=nQ;
+  HadronizeQuasmon(nucEnviron,nQs);
   G4int nHadrs=theQHadrons.size();
 #ifdef pdebug
   G4cout<<"G4Quasmon::Fragment: after HadronizeQuasmon nH="<<nHadrs<<G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.16 2003-11-13 14:40:45 mkossov Exp $
+// $Id: G4QChipolino.hh,v 1.17 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -44,7 +44,7 @@ public:
   G4QChipolino(const G4QChipolino& right);             // Copy constructor by value
   G4QChipolino(G4QChipolino* right);                   // Copy constructor by pointer
 
-  ~G4QChipolino();                                     // Destructor
+  ~G4QChipolino();                                     // Public Destructor
 
   // Operators
   const G4QChipolino& operator=(const G4QChipolino& right);

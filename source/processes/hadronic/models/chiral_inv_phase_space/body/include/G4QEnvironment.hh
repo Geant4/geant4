@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.14 2003-11-13 14:40:45 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.15 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -44,7 +44,7 @@ public:
   G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG);
   G4QEnvironment(const G4QEnvironment& right);         // copy QEnvironment by value
   G4QEnvironment(G4QEnvironment* right);               // copy QEnvironment by pointer
-  ~G4QEnvironment();
+  ~G4QEnvironment();                                   // Public Destructor
 
   // Overloaded operators
   const G4QEnvironment& operator=(const G4QEnvironment& right);

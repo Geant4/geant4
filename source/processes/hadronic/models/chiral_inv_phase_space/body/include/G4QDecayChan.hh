@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.hh,v 1.15 2003-11-13 14:40:45 mkossov Exp $
+// $Id: G4QDecayChan.hh,v 1.16 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -46,7 +46,7 @@ public:
   G4QDecayChan(const G4QDecayChan& right);                           // Copy Constructor by value
   G4QDecayChan(G4QDecayChan* right);                                 // Copy Constructor by pointer
 
-  ~G4QDecayChan();                                                   // Destructor
+  ~G4QDecayChan();                                                   // Public Destructor
 
   // Operators
   const G4QDecayChan& operator=(const G4QDecayChan& right);

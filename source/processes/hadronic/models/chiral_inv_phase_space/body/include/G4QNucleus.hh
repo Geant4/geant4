@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.19 2003-11-13 14:40:45 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.20 2003-11-17 16:58:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -46,7 +46,7 @@ public:
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
   G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
   G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
-  ~G4QNucleus();                                           // Destructor
+  ~G4QNucleus();                                           // Public Destructor
   // Overloaded Operators
   const G4QNucleus& operator=(const G4QNucleus& right);
   G4bool operator==(const G4QNucleus &right) const;
