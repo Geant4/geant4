@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.95 2004-06-01 07:54:24 gcosmo Exp $
+# $Id: architecture.gmk,v 1.96 2004-06-07 15:50:55 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -115,7 +115,9 @@ endif
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := /afs/cern.ch/sw/geant4/dev/CLHEP/$(G4SYSTEM)/pro
+  echo "ERROR - No path to CLHEP software installation defined !"
+  echo "        Please, define CLHEP_BASE_DIR in your environment."
+  exit 1
 endif
 ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
@@ -151,7 +153,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   OUT_LIB := '-out:'
   OUT_EXE := '-Fe'
   LIB_PATH := '-libpath:'
-  CERNLIB_PATH := "z:\p32\cern\new\df\lib"
+  CERNLIB_PATH := "c:\cern\pro\lib"
   PATH_DEL := \\
   #
   # pattern for next substitution
