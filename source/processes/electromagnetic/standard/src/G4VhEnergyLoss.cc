@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.37 2003-01-22 14:03:53 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.38 2003-03-25 13:43:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,6 +53,7 @@
 // 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
 // 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 25-03-03 add finalRangeRequested (mma)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,15 +195,19 @@ void G4VhEnergyLoss::BuildDEDXTable(
 
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
-  for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
+  if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
+  else
+   { 
+    for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
      {
       G4double rcut = theCoupleTable->GetMaterialCutsCouple(idxMate)
                        ->GetProductionCuts()->GetProductionCut(1);
 
       if (finalRange > rcut) finalRange = rcut;
      }
-  c1lim = dRoverRange ;
-  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+   } 
+  c1lim = dRoverRange;
+  c2lim = 2.*(1.-dRoverRange)*finalRange;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // create table if there is no table or there is a new cut value

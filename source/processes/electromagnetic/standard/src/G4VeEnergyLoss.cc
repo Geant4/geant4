@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.28 2003-03-10 12:22:02 vnivanch Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.29 2003-03-25 13:43:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,6 +44,7 @@
 // 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 10-03-03 remove tails of old cuts (V.Ivanchenko)
+// 25-03-03 add finalRangeRequested (mma)
 // -----------------------------------------------------------------------------
 
 
@@ -182,18 +183,19 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
-
-  for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
+  if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
+  else
+   {
+    for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
      {
       G4double rcut = theCoupleTable->GetMaterialCutsCouple(idxMate)
                        ->GetProductionCuts()->GetProductionCut(idxG4ElectronCut);
 
       if (finalRange > rcut) finalRange = rcut;
      }
-
-
-  c1lim = dRoverRange ;
-  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+   }
+  c1lim = dRoverRange;
+  c2lim = 2.*(1.-dRoverRange)*finalRange;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // Build energy loss table as a sum of the energy loss due to the
