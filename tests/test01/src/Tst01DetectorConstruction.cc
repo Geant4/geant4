@@ -27,6 +27,7 @@
 #include "G4VoxelLimits.hh"
 
 #include "G4LogicalVolume.hh"
+#include "G4AssemblyVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
@@ -38,6 +39,8 @@
 #include "G4ios.hh"
 #include "G4TransportationManager.hh"
 
+#include <strstream>
+
 //////////////////////////////////////////////////////////////////
 //
 // Constructor/Destructor
@@ -46,7 +49,8 @@ Tst01DetectorConstruction::Tst01DetectorConstruction()
 :simpleBoxLog(NULL),simpleBoxDetector(NULL),honeycombDetector(NULL),
  detectorChoice(0),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL),
  fChoiceCSG(0),fChoiceBool(0),fWorldPhysVol(NULL),
- fTestCSG(NULL),fTestLog(NULL),fTestVol(NULL)
+ fTestCSG(NULL),fTestLog(NULL),fTestVol(NULL),
+ AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),AssemblyCellLog(0)
 {
   detectorMessenger = new Tst01DetectorMessenger(this);
   materialChoice = "Pb";
@@ -55,6 +59,9 @@ Tst01DetectorConstruction::Tst01DetectorConstruction()
 Tst01DetectorConstruction::~Tst01DetectorConstruction()
 {
   delete detectorMessenger;
+
+  // Clean up Assembly setup
+  if( AssemblyCalo != 0 ) delete +AssemblyCalo;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -63,13 +70,18 @@ Tst01DetectorConstruction::~Tst01DetectorConstruction()
 
 G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 {
-  if((!simpleBoxDetector)&&(!honeycombDetector))
-  { ConstructDetectors(); }
+  if((!simpleBoxDetector)&&(!honeycombDetector)&&(!AssemblyDetector))
+  {
+    ConstructDetectors();
+  }
 
   switch(detectorChoice)
   { 
     case 1:
       fWorldPhysVol = honeycombDetector; 
+      break;
+    case 2:
+      fWorldPhysVol = AssemblyDetector; 
       break;
     default:
       fWorldPhysVol = simpleBoxDetector;
@@ -83,24 +95,42 @@ G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 
 void Tst01DetectorConstruction::SwitchDetector()
 {
-  if( (!simpleBoxDetector) && (!honeycombDetector) ) ConstructDetectors();
+  if((!simpleBoxDetector)&&(!honeycombDetector)&&(!AssemblyDetector))
+  {
+    ConstructDetectors();
+  }
   
   switch(detectorChoice)
   { 
     case 1:
     {
       G4TransportationManager::GetTransportationManager()->
-	GetNavigatorForTracking()->SetWorldVolume(honeycombDetector);
+                               GetNavigatorForTracking()->
+                               SetWorldVolume(honeycombDetector);
       fWorldPhysVol = honeycombDetector ;
+      break;
+    }
+    case 2:
+    {
+      G4TransportationManager::GetTransportationManager()->
+                               GetNavigatorForTracking()->
+                               SetWorldVolume(AssemblyDetector);
+      fWorldPhysVol = AssemblyDetector ;
       break;
     }
     default:
     {
       G4TransportationManager::GetTransportationManager()->
-	GetNavigatorForTracking()->SetWorldVolume(simpleBoxDetector);
+                               GetNavigatorForTracking()->
+                               SetWorldVolume(simpleBoxDetector);
       fWorldPhysVol = simpleBoxDetector ;
     }
   }
+  
+  G4ThreeVector center(0,0,0);
+  G4TransportationManager::GetTransportationManager()->
+                           GetNavigatorForTracking()->
+                           LocateGlobalPointAndSetup(center,0,false);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -109,8 +139,12 @@ void Tst01DetectorConstruction::SwitchDetector()
 
 void Tst01DetectorConstruction::SelectDetector(G4String val)
 {
-  if(val == "Honeycomb")  detectorChoice = 1 ; 
-  else                    detectorChoice = 0 ;
+  if(val == "Honeycomb")
+    detectorChoice = 1 ;
+  else if(val == "Assembly") 
+    detectorChoice = 2 ;
+  else
+    detectorChoice = 0 ;
 
   G4cout << "Now Detector is " << val << G4endl ;
 }
@@ -381,6 +415,65 @@ void Tst01DetectorConstruction::ConstructDetectors()
 						 "WPhys",
 						 myWorldLog,
 						 0,false,0);
+
+  const double worldX              = 2000*mm;
+  const double worldY              = 2000*mm;
+  const double worldZ              = 2000*mm;
+
+  const double caloX               = 1600*mm;
+  const double caloY               = 1600*mm;
+  const double caloZ               =  200*mm;
+
+  const double plateX              =  700*mm;
+  const double plateY              =  700*mm;
+  const double plateZ              =  100*mm;
+
+  const unsigned int layers        =    5;
+
+  const double firstCaloPos        =  500*mm;
+  const double caloCaloOffset      =   50*mm;
+  const double plateCaloOffset     =    1*mm;
+  const double platePlateOffset    =    2*mm;
+
+  // Define world volume for Assembly detector
+  G4Box* AssemblyBox                   = new G4Box( "AssemblyBox", worldX/2., worldY/2., worldZ/2. );
+  G4LogicalVolume* AssemblyDetectorLog = new G4LogicalVolume( AssemblyBox, selectedMaterial, "AssemblyDetectorLog", 0, 0, 0);
+  AssemblyDetector                     = new G4PVPlacement(0, G4ThreeVector(), "AssemblyDetector", AssemblyDetectorLog, 0, false, 0);
+
+  // Define a calorimeter plate
+  G4Box* AssemblyCellBox = new G4Box( "AssemblyCellBox", plateX/2., plateY/2., plateZ/2. );
+  AssemblyCellLog        = new G4LogicalVolume( AssemblyCellBox, Pb, "AssemblyCellLog", 0, 0, 0 );
+  
+  // Define one calorimeter layer as one assembly volume
+  AssemblyCalo = new G4AssemblyVolume();
+
+  // Rotation and translation of a plate inside the assembly
+  G4RotationMatrix        Ra;
+  G4ThreeVector           Ta;
+
+  // Rotation of the assembly inside the world
+  G4RotationMatrix        Rm;
+
+  // Fill the assembly by the plates  
+  Ta.setX( caloX/4. );  Ta.setY( caloY/4. );  Ta.setZ( 0. );
+  AssemblyCalo->AddPlacedVolume( AssemblyCellLog, Ta, &Ra );
+  
+  Ta.setX( -1*caloX/4. );  Ta.setY( caloY/4. );  Ta.setZ( 0. );
+  AssemblyCalo->AddPlacedVolume( AssemblyCellLog, Ta, &Ra );
+  
+  Ta.setX( -1*caloX/4. );  Ta.setY( -1*caloY/4. );  Ta.setZ( 0. );
+  AssemblyCalo->AddPlacedVolume( AssemblyCellLog, Ta, &Ra );
+
+  Ta.setX( caloX/4. );  Ta.setY( -1*caloY/4. );  Ta.setZ( 0. );
+  AssemblyCalo->AddPlacedVolume( AssemblyCellLog, Ta, &Ra );
+  
+  // Now instantiate the layers of calorimeter
+  for( i = 0; i < layers; i++ )
+  {
+    // Translation of the assembly inside the world
+    G4ThreeVector Tm( 0,0,i*(caloZ + caloCaloOffset) - firstCaloPos );
+    AssemblyCalo->MakeImprint( AssemblyDetectorLog, Tm, &Rm );
+  }
 
   /*  *****************************************************
 
