@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.14 2004-07-23 15:39:14 maire Exp $
+# $Id: TestEm1.in,v 1.15 2004-09-15 13:17:16 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -21,9 +21,15 @@
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/histo/setFileName testem1.paw
+/testem/histo/setFileName run0.paw
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100 0 50 cm
 /testem/histo/setHisto 2 100 0 100
 /testem/histo/setHisto 3 100 0 10 mm
 # 
 /run/beamOn 100
+#
+/testem/histo/setFileName run1.paw
+/testem/histo/setFileType hbook
+# 
+/run/beamOn 200

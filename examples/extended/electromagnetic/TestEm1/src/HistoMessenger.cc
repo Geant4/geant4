@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.1 2004-07-23 15:39:39 maire Exp $
+// $Id: HistoMessenger.cc,v 1.2 2004-09-15 13:17:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,8 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   factoryCmd->SetGuidance("set name for the histograms file");
 
   typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
-  typeCmd->SetGuidance("set histograms file type");
+  typeCmd->SetGuidance("set histograms file type: hbook, root, XML");
+  typeCmd->SetCandidates("hbook root XML");
 
   histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");

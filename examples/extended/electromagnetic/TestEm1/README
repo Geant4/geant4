@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2004-08-03 11:31:39 maire Exp $
+$Id: README,v 1.14 2004-09-15 13:17:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -95,7 +95,7 @@ $Id: README,v 1.13 2004-08-03 11:31:39 maire Exp $
  	
  7- HISTOGRAMS
  
-   Testem1 produces several histo which are saved as testem1.paw
+   Testem1 produces several histo which are saved as testem1.aida by default.
      
      Content of these histo:
   

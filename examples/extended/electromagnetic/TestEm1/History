@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2004-08-03 11:31:39 maire Exp $
+$Id: History,v 1.49 2004-09-15 13:17:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-09-04 mma(testem1-V06-02-02)
+- define correctly all UI subdirectories.
+- modifs in HistoManager and Messenger for hbook,root,XML
      
 03-08-04 mma (testem1-V06-02-01)
 - compute and print CSDA range from G4EmCalculator.
