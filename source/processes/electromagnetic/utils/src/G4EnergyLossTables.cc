@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.15 2001-07-11 10:03:41 gunter Exp $
+// $Id: G4EnergyLossTables.cc,v 1.16 2001-09-27 06:35:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------- 
@@ -31,6 +31,7 @@
 // cache mechanism in order to gain time, 11/02/99, L.Urban
 // bug fixed , 12/04/99 , L.Urban
 // 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
+// 27/09/01 L.Urban , bug fixed (negative energy deposit)
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
@@ -79,6 +80,7 @@ void G4EnergyLossTables::Register(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+
   if( aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -86,6 +88,7 @@ void G4EnergyLossTables::Register(
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
@@ -129,6 +132,7 @@ void G4EnergyLossTables::Register(
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;

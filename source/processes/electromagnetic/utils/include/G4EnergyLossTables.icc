@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.icc,v 1.14 2001-07-11 10:03:40 gunter Exp $
+// $Id: G4EnergyLossTables.icc,v 1.15 2001-09-27 06:35:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -34,6 +34,7 @@
 // bug fixed , L.Urban , 12/04/99
 // 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
 // 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
+// 27/09/01 L.Urban , bug fixed (negative energy deposit)
 //
 // -------------------------------------------------------------------
 
@@ -144,6 +145,7 @@ inline G4double G4EnergyLossTables::GetDEDX(
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                    QQPositron ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
@@ -170,7 +172,6 @@ inline G4double G4EnergyLossTables::GetDEDX(
 
   }
 
-
   return dEdx*Chargesquare;
 }
 
@@ -185,6 +186,7 @@ inline G4double G4EnergyLossTables::GetLabTime(
   {
     t= GetTables(aParticle);
     lastParticle = aParticle ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
 
@@ -228,6 +230,7 @@ inline G4double G4EnergyLossTables::GetDeltaLabTime(
   {
     t= GetTables(aParticle);
     lastParticle = aParticle ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
 
@@ -303,6 +306,7 @@ inline G4double G4EnergyLossTables::GetProperTime(
   {
     t= GetTables(aParticle);
     lastParticle = aParticle ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
 
@@ -346,6 +350,7 @@ inline G4double G4EnergyLossTables::GetDeltaProperTime(
   {
     t= GetTables(aParticle);
     lastParticle = aParticle ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
 
@@ -424,6 +429,7 @@ inline G4double G4EnergyLossTables::GetRange(
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
