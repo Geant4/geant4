@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-02-20 16:08:36 maire Exp $
+$Id: History,v 1.8 2001-02-21 10:14:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+21-02-01  mma (testem4-V03-00-03)
+          - hbook histograms restored
+	       
 20-02-01  mma (testem4-V03-00-02)
           - verbose stepping adapted for STL
 	  - save rndm at begin of event     
