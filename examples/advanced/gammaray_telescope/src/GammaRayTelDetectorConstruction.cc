@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.4 2000-12-06 16:53:13 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.5 2001-03-05 13:58:23 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -24,8 +24,11 @@
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelDetectorMessenger.hh"
 
-#include "GammaRayTelPayloadSD.hh"
-#include "GammaRayTelPayloadROGeometry.hh"
+#include "GammaRayTelTrackerSD.hh"
+#include "GammaRayTelTrackerROGeometry.hh"
+
+#include "GammaRayTelAnticoincidenceSD.hh"
+#include "GammaRayTelCalorimeterSD.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -57,8 +60,10 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidTKRDetectorX(0),logicTKRDetectorX(0),
    solidTKRDetectorY(0),logicTKRDetectorY(0),
    physiTKRDetectorX(0),physiTKRDetectorY(0),
-   solidCALDetector(0),logicCALDetector(0),
-   physiCALDetectorX(0),physiCALDetectorY(0),
+   solidCALDetectorX(0),logicCALDetectorX(0),physiCALDetectorX(0),
+   solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
+   solidCALLayerX(0),logicCALLayerX(0),physiCALLayerX(0),
+   solidCALLayerY(0),logicCALLayerY(0),physiCALLayerY(0),
    solidPlane(0),logicPlane(0),physiPlane(0)
 
 {
@@ -77,6 +82,8 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
   NbOfCALBars = 12;
   NbOfCALLayers = 5;
   ACDThickness = 1.*cm;
+  NbOfACDTopTiles = 1;
+  NbOfACDLateralTiles = 2;
 
   TilesSeparation = 100.*micrometer;
   ACDTKRDistance = 5.*cm;
@@ -246,427 +253,514 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   solidTKRDetectorX=0;logicTKRDetectorX=0;
   solidTKRDetectorY=0;logicTKRDetectorY=0;
   physiTKRDetectorX=0;physiTKRDetectorY=0;
-  solidCALDetector=0;logicCALDetector=0;
-  physiCALDetectorX=0;physiCALDetectorY=0;
+  solidCALDetectorX=0;logicCALDetectorX=0;physiCALDetectorX=0;
+  solidCALDetectorY=0;logicCALDetectorY=0;physiCALDetectorY=0;
   solidPlane=0;logicPlane=0;physiPlane=0;
   
-  //  if (PayloadSizeZ > 0.) 
-  //  { 
-
+  //
+  // Payload
+  //
+  
+  solidPayload = new G4Box("Payload",		
+			   PayloadSizeXY/2,
+			   PayloadSizeXY/2,
+			   PayloadSizeZ/2);
+  
+  logicPayload = new G4LogicalVolume(solidPayload,	
+				     defaultMaterial,	
+				     "Payload");  
+  
+  physiPayload = new G4PVPlacement(0,		
+				   G4ThreeVector(),	
+				   "Payload",	
+				   logicPayload,	
+				   physiWorld,	
+				   false,		
+				   0);		
+  //                                 
+  // Calorimeter (CAL)
+  //
+  
+  solidCAL = new G4Box("CAL",			
+		       CALSizeXY/2,CALSizeXY/2,CALSizeZ/2); 
+  
+  logicCAL = new G4LogicalVolume(solidCAL,
+				 defaultMaterial,
+				 "CAL");	
+  physiCAL = new G4PVPlacement(0,		
+			       G4ThreeVector(0,0,
+					     -PayloadSizeZ/2+CALSizeZ/2),
+			       "CAL",		
+			       logicCAL,
+			       physiPayload,
+			       false,	
+			       0);	
+  //                                 
+  // Tracker (TKR)
       //
-      // Payload
-      //
-      
-      solidPayload = new G4Box("Payload",		
-			       PayloadSizeXY/2,
-			       PayloadSizeXY/2,
-			       PayloadSizeZ/2);
-      
-      logicPayload = new G4LogicalVolume(solidPayload,	
-					 defaultMaterial,	
-					 "Payload");  
-      
-      physiPayload = new G4PVPlacement(0,		
-				       G4ThreeVector(),	
-				       "Payload",	
-				       logicPayload,	
-				       physiWorld,	
-				       false,		
-				       0);		
-      //                                 
-      // Calorimeter (CAL)
-      //
-
-      solidCAL = new G4Box("CAL",			
-			   CALSizeXY/2,CALSizeXY/2,CALSizeZ/2); 
-      
-      logicCAL = new G4LogicalVolume(solidCAL,
-				     defaultMaterial,
-				     "CAL");	
-      physiCAL = new G4PVPlacement(0,		
-				   G4ThreeVector(0,0,
-						 -PayloadSizeZ/2+CALSizeZ/2),
-				   "CAL",		
-				   logicCAL,
-				   physiPayload,
-				   false,	
-				   0);	
-      //                                 
-      // Tracker (TKR)
-      //
-
-      solidTKR = new G4Box("TKR",			
+  
+  solidTKR = new G4Box("TKR",			
 			   TKRSizeXY/2,TKRSizeXY/2,TKRSizeZ/2); 
+  
+  logicTKR = new G4LogicalVolume(solidTKR,
+				 defaultMaterial,
+				 "TKR");	
+  physiTKR = new G4PVPlacement(0,		
+			       G4ThreeVector(0,0,
+					     -PayloadSizeZ/2+CALSizeZ+
+					     CALTKRDistance+TKRSizeZ/2),
+			       "TKR",		
+			       logicTKR,
+			       physiPayload,
+			       false,	
+			       0);	
+  
+  
+  //                               
+  // Anticoincidence Top (ACT)
+  //
+  
+  solidACT = new G4Box("ACT",			
+		       ACTSizeXY/2,ACTSizeXY/2,ACTSizeZ/2); 
+  
+  logicACT = new G4LogicalVolume(solidACT,ACDMaterial,"ACT");
+  
+  physiACT = new G4PVPlacement(0,		
+			       G4ThreeVector(0,0,
+					     -PayloadSizeZ/2+CALSizeZ+
+					     CALTKRDistance+TKRSizeZ+
+					     ACDTKRDistance+ACTSizeZ/2),
+			       "ACT",		
+			       logicACT,
+			       physiPayload,
+			       false,	
+			       0);	
+  
+  //                               
+  // Anticoincidence Lateral Side (ACL)
+  //
+  
+  solidACL1 = new G4Box("ACL1",			
+			ACL1SizeX/2,ACL1SizeY/2,ACL1SizeZ/2); 
+  
+  logicACL1 = new G4LogicalVolume(solidACL1,ACDMaterial,"ACL");	
+  
+  physiACL1 = new G4PVPlacement(0, 
+				G4ThreeVector(-PayloadSizeXY/2+ACL1SizeX/2,
+					      -PayloadSizeXY/2+ACL1SizeY/2,
+					      -PayloadSizeZ/2+ACL1SizeZ/2),
+				"ACL1",		
+				logicACL1,
+				physiPayload,
+				false,	
+				0);	
+  
+  physiACL1 = new G4PVPlacement(0,
+				G4ThreeVector(PayloadSizeXY/2-ACL1SizeX/2,
+					      PayloadSizeXY/2-ACL1SizeY/2,
+					      -PayloadSizeZ/2+ACL1SizeZ/2),
+				"ACL1",		
+				logicACL1,
+				physiPayload,
+				false,	
+				1);	
+  
+  solidACL2 = new G4Box("ACL2",			
+			ACL2SizeX/2,ACL2SizeY/2,ACL2SizeZ/2); 
+  
+  logicACL2 = new G4LogicalVolume(solidACL2,
+				  ACDMaterial,
+				  "ACL2");	
+  
+  
+  physiACL2 = new G4PVPlacement(0, 
+				G4ThreeVector(-PayloadSizeXY/2+ACL2SizeX/2,
+					      PayloadSizeXY/2-ACL2SizeY/2,
+					      -PayloadSizeZ/2+ACL2SizeZ/2),
+				"ACL2",		
+				logicACL2,
+				physiPayload,
+				false,	
+				0);	
+  
+  physiACL2 = new G4PVPlacement(0, 
+				G4ThreeVector(PayloadSizeXY/2-ACL2SizeX/2,
+					      -PayloadSizeXY/2+ACL2SizeY/2,
+					      -PayloadSizeZ/2+ACL2SizeZ/2),
+				"ACL2",		
+				logicACL2,
+				physiPayload,
+				false,	
+				1);	
+  
+  
+  // Tracker Structure (Plane + Converter + TKRDetectorX + TKRDetectorY)
+  
+  solidPlane = new G4Box("Plane",			
+			 TKRSizeXY/2,TKRSizeXY/2,TKRSupportThickness/2); 
+  
+  logicPlane = new G4LogicalVolume(solidPlane,
+				   defaultMaterial, 
+				   "Plane");	
+  
+  solidTKRDetectorY = new G4Box
+    ("TKRDetectorY",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
+  
+  logicTKRDetectorY = new G4LogicalVolume(solidTKRDetectorY,
+					  TKRMaterial, 
+					  "TKRDetector Y");	
+  
+  
+  solidTKRDetectorX = new G4Box
+    ("TKRDetectorX",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
+  
+  logicTKRDetectorX = new G4LogicalVolume(solidTKRDetectorX,
+					  TKRMaterial, 
+					  "TKRDetector X");	
+  
+  
+  solidConverter = new G4Box
+    ("Converter",TKRSizeXY/2,TKRSizeXY/2,ConverterThickness/2); 
+  
+  logicConverter = new G4LogicalVolume(solidConverter,
+				       ConverterMaterial, 
+				       "Converter");	
+  
+  G4int i=0;
+  
+  for (i = 0; i < NbOfTKRLayers; i++)
+    {
       
-      logicTKR = new G4LogicalVolume(solidTKR,
-				     defaultMaterial,
-				     "TKR");	
-      physiTKR = new G4PVPlacement(0,		
-				   G4ThreeVector(0,0,
-						 -PayloadSizeZ/2+CALSizeZ+
-                                                 CALTKRDistance+TKRSizeZ/2),
-				   "TKR",		
-				   logicTKR,
-				   physiPayload,
-				   false,	
-				   0);	
+      physiTKRDetectorY = 
+	new G4PVPlacement(0,G4ThreeVector(0.,0.,-TKRSizeZ/2
+					  +TKRSiliconThickness/2 
+					  +(i)*TKRLayerDistance),
+			  "TKRDetectorY",		
+			  logicTKRDetectorY,
+			  physiTKR,
+			  false,	
+			  i);
+      
+      physiTKRDetectorX = 
+	new G4PVPlacement(0,G4ThreeVector(0.,0.,
+					  -TKRSizeZ/2+
+					  TKRSiliconThickness/2 +
+					  TKRViewsDistance+
+					  TKRSiliconThickness+
+					  (i)*TKRLayerDistance),
+			  "TKRDetectorX",		
+			  logicTKRDetectorX,
+			  physiTKR,
+			  false,	
+			  i);
+      
+      
+      physiConverter = 
+	new G4PVPlacement(0,G4ThreeVector(0.,0.,
+					  -TKRSizeZ/2+
+					  2*TKRSiliconThickness +
+					  TKRViewsDistance+
+					  ConverterThickness/2+
+					  (i)*TKRLayerDistance),
+			  "Converter",		
+			  logicConverter,
+			  physiTKR,
+			  false,	
+			  i);
+      
 
-
-      //                               
-      // Anticoincidence Top (ACT)
-      //
-      
-      solidACT = new G4Box("ACT",			
-			   ACTSizeXY/2,ACTSizeXY/2,ACTSizeZ/2); 
-      
-      logicACT = new G4LogicalVolume(solidACT,ACDMaterial,"ACT");
-      
-      physiACT = new G4PVPlacement(0,		
-				   G4ThreeVector(0,0,
-						 -PayloadSizeZ/2+CALSizeZ+
-                                                 CALTKRDistance+TKRSizeZ+
-                                                 ACDTKRDistance+ACTSizeZ/2),
-				   "ACT",		
-				   logicACT,
-				   physiPayload,
-				   false,	
-				   0);	
-
-      //                               
-      // Anticoincidence Lateral Side (ACL)
-      //
-      
-      solidACL1 = new G4Box("ACL1",			
-			    ACL1SizeX/2,ACL1SizeY/2,ACL1SizeZ/2); 
-      
-      logicACL1 = new G4LogicalVolume(solidACL1,ACDMaterial,"ACL");	
-
-      physiACL1 = new G4PVPlacement(0, 
-				    G4ThreeVector(-PayloadSizeXY/2+ACL1SizeX/2,
-						  -PayloadSizeXY/2+ACL1SizeY/2,
-						  -PayloadSizeZ/2+ACL1SizeZ/2),
-				    "ACL1",		
-				    logicACL1,
-				    physiPayload,
-				    false,	
-				    0);	
-
-      physiACL1 = new G4PVPlacement(0,
-				    G4ThreeVector(PayloadSizeXY/2-ACL1SizeX/2,
-						  PayloadSizeXY/2-ACL1SizeY/2,
-						  -PayloadSizeZ/2+ACL1SizeZ/2),
-				    "ACL1",		
-				    logicACL1,
-				    physiPayload,
-				    false,	
-				    1);	
-      
-      solidACL2 = new G4Box("ACL2",			
-			    ACL2SizeX/2,ACL2SizeY/2,ACL2SizeZ/2); 
-      
-      logicACL2 = new G4LogicalVolume(solidACL2,
-				      ACDMaterial,
-				      "ACL2");	
- 
-
-      physiACL2 = new G4PVPlacement(0, 
-				    G4ThreeVector(-PayloadSizeXY/2+ACL2SizeX/2,
-						  PayloadSizeXY/2-ACL2SizeY/2,
-						  -PayloadSizeZ/2+ACL2SizeZ/2),
-				    "ACL2",		
-				    logicACL2,
-				    physiPayload,
-				    false,	
-				    0);	
-      
-      physiACL2 = new G4PVPlacement(0, 
-				    G4ThreeVector(PayloadSizeXY/2-ACL2SizeX/2,
-						  -PayloadSizeXY/2+ACL2SizeY/2,
-						  -PayloadSizeZ/2+ACL2SizeZ/2),
-				    "ACL2",		
-				    logicACL2,
-				    physiPayload,
-				    false,	
-				    1);	
+      physiPlane =
+	new G4PVPlacement(0,G4ThreeVector(0.,0.,
+					  -TKRSizeZ/2+
+					  2*TKRSiliconThickness +
+					  TKRViewsDistance+
+					  ConverterThickness+
+					  TKRSupportThickness/2),
+			  "Plane",		
+			  logicPlane,
+			  physiTKR,
+			  false,	
+			  i);	
       
       
-      // Tracker Structure (Plane + Converter + TKRDetectorX + TKRDetectorY)
-      
-      solidPlane = new G4Box("Plane",			
-			     TKRSizeXY/2,TKRSizeXY/2,TKRSupportThickness/2); 
-      
-      logicPlane = new G4LogicalVolume(solidPlane,
-				       defaultMaterial, 
-				       "Plane");	
-
-      solidTKRDetectorY = new G4Box
-	("TKRDetectorY",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
-      
-      logicTKRDetectorY = new G4LogicalVolume(solidTKRDetectorY,
-					     TKRMaterial, 
-					     "TKRDetector Y");	
-
-
-      solidTKRDetectorX = new G4Box
-	("TKRDetectorX",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
-      
-      logicTKRDetectorX = new G4LogicalVolume(solidTKRDetectorX,
-					     TKRMaterial, 
-					     "TKRDetector X");	
-      
-      
-      solidConverter = new G4Box
-	("Converter",TKRSizeXY/2,TKRSizeXY/2,ConverterThickness/2); 
-      
-      logicConverter = new G4LogicalVolume(solidConverter,
-					     ConverterMaterial, 
-					     "Converter");	
-
-      G4int i=0;
-      
-      for (i = 0; i < NbOfTKRLayers; i++)
+    }
+  
+  
+  
+  G4VSolid * solidTKRActiveTileX = new
+    G4Box("Active Tile X", TKRActiveTileXY/2,
+	  TKRActiveTileXY/2,TKRActiveTileZ/2);
+  
+  
+  G4VSolid * solidTKRActiveTileY = new
+    G4Box("Active Tile Y", TKRActiveTileXY/2,
+	  TKRActiveTileXY/2,TKRActiveTileZ/2);
+  
+  
+  G4LogicalVolume* logicTKRActiveTileX = 
+    new G4LogicalVolume(solidTKRActiveTileX, TKRMaterial,
+			"Active Tile X",0,0,0);
+  
+  
+  G4LogicalVolume* logicTKRActiveTileY = 
+    new G4LogicalVolume(solidTKRActiveTileY, TKRMaterial,
+			"Active Tile Y",0,0,0);
+  
+  
+  G4int j=0;
+  G4int k=0;
+  
+  G4VPhysicalVolume* physiTKRActiveTileX = 0;
+  G4VPhysicalVolume* physiTKRActiveTileY = 0;
+  
+  G4double x=0.;
+  G4double y=0.;
+  G4double z=0.;
+  
+  for (i=0;i< NbOfTKRTiles; i++)
+    { 
+      for (j=0;j< NbOfTKRTiles; j++)
 	{
+	  k = i*NbOfTKRTiles + j;
 	  
-          physiTKRDetectorY = 
-	    new G4PVPlacement(0,G4ThreeVector(0.,0.,-TKRSizeZ/2
-					      +TKRSiliconThickness/2 
-					      +(i)*TKRLayerDistance),
-			      "TKRDetectorY",		
-			      logicTKRDetectorY,
-			      physiTKR,
+	  
+	  x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
+	    TKRActiveTileXY/2+(i)*((2*SiliconGuardRing)+
+				   TilesSeparation+TKRActiveTileXY);
+	  y = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
+	    TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+TilesSeparation+
+				   TKRActiveTileXY);
+	  z = 0.;
+	  
+	  physiTKRActiveTileY =
+	    new G4PVPlacement(0,
+			      G4ThreeVector(x,y,z),
+			      "Active Tile Y",		
+			      logicTKRActiveTileY,
+			      physiTKRDetectorY,
 			      false,	
-			      i);
-	
-	  physiTKRDetectorX = 
-	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
-					      -TKRSizeZ/2+
-					      TKRSiliconThickness/2 +
-					      TKRViewsDistance+
-					      TKRSiliconThickness+
-					      (i)*TKRLayerDistance),
-			      "TKRDetectorX",		
-			      logicTKRDetectorX,
-			      physiTKR,
-			      false,	
-			      i);
-
-
-          physiConverter = 
-	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
-					      -TKRSizeZ/2+
-					      2*TKRSiliconThickness +
-					      TKRViewsDistance+
-					      ConverterThickness/2+
-					      (i)*TKRLayerDistance),
-			      "Converter",		
-			      logicConverter,
-			      physiTKR,
-			      false,	
-			      i);
+			      k);
 	  
 
-	  physiPlane =
-	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
-					      -TKRSizeZ/2+
-					      2*TKRSiliconThickness +
-					      TKRViewsDistance+
-					      ConverterThickness+
-                                              TKRSupportThickness/2),
-			      "Plane",		
-			      logicPlane,
-			      physiTKR,
+	  x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
+	    TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+
+				   TilesSeparation+TKRActiveTileXY);
+	  y = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
+	    TKRActiveTileXY/2+(i)*((2*SiliconGuardRing)+
+				   TilesSeparation+TKRActiveTileXY);
+	  z = 0.;
+	      
+	  physiTKRActiveTileX =
+	    new G4PVPlacement(0,
+			      G4ThreeVector(x,y,z),
+			      "Active Tile X",		
+			      logicTKRActiveTileX,
+			      physiTKRDetectorX,
 			      false,	
-			      i);	
-	  
+			      k);	
 	  
 	}
- 
+    }
+  
 
-
-      G4VSolid * solidTKRActiveTileX = new
-	G4Box("Active Tile X", TKRActiveTileXY/2,TKRActiveTileXY/2,TKRActiveTileZ/2);
-
-
-      G4VSolid * solidTKRActiveTileY = new
-	G4Box("Active Tile Y", TKRActiveTileXY/2,TKRActiveTileXY/2,TKRActiveTileZ/2);
+  // Calorimeter Structure (CALLayerX + CALLayerY)
   
   
-      G4LogicalVolume* logicTKRActiveTileX = 
-	new G4LogicalVolume(solidTKRActiveTileX, TKRMaterial,
-			    "Active Tile X",0,0,0);
-
-
-      G4LogicalVolume* logicTKRActiveTileY = 
-	new G4LogicalVolume(solidTKRActiveTileY, TKRMaterial,
-			    "Active Tile Y",0,0,0);
-
-      
-      G4int j=0;
-      G4int k=0;
-      
-      G4VPhysicalVolume* physiTKRActiveTileX = 0;
-      G4VPhysicalVolume* physiTKRActiveTileY = 0;
-      
-      G4double x=0.;
-      G4double y=0.;
-      G4double z=0.;
-
-      for (i=0;i< NbOfTKRTiles; i++)
-	{ 
-	  for (j=0;j< NbOfTKRTiles; j++)
-	    {
-	      k = i*NbOfTKRTiles + j;
-	      
-	     
-	      x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
-		TKRActiveTileXY/2+(i)*((2*SiliconGuardRing)+
-				       TilesSeparation+TKRActiveTileXY);
-	      y = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
-		TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+TilesSeparation+
-				       TKRActiveTileXY);
-	      z = 0.;
-	      
-	      physiTKRActiveTileY =
-		new G4PVPlacement(0,
-				  G4ThreeVector(x,y,z),
-				  "Active Tile Y",		
-				  logicTKRActiveTileY,
-				  physiTKRDetectorY,
-				  false,	
-				  k);
-	  	
-
-	      x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
-		TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+
-				       TilesSeparation+TKRActiveTileXY);
-	      y = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
-		TKRActiveTileXY/2+(i)*((2*SiliconGuardRing)+
-				       TilesSeparation+TKRActiveTileXY);
-	      z = 0.;
-	      
-	      physiTKRActiveTileX =
-		new G4PVPlacement(0,
-				  G4ThreeVector(x,y,z),
-				  "Active Tile X",		
-				  logicTKRActiveTileX,
-				  physiTKRDetectorX,
-				  false,	
-				  k);	
-	      
-	    }
-	}
-
-
-      // Calorimeter Structure (CALDetectorX + CALDetectorY)
-      
-      
-      solidCALDetector = new G4Box("CALDetector",			
+  solidCALLayerX = new G4Box("CALLayerX",			
 			     CALSizeXY/2,CALSizeXY/2,CALBarThickness/2); 
-      
-      logicCALDetector = new G4LogicalVolume(solidCALDetector,
-					     CALMaterial, 
-					     "CALDetector");	
-      
-      for (i = 0; i < NbOfCALLayers; i++)
-	{
-	  
-	  physiCALDetectorY = 
-	    new G4PVPlacement(0,G4ThreeVector(0,0,
-					      -CALSizeZ/2+
-					      CALBarThickness/2 +
-					      (i)*2*CALBarThickness),
-			      "CALDetectorY",		
-			      logicCALDetector,
-			      physiCAL,
-			      false,	
-			      i);	
-	  
-          physiCALDetectorX = 
-	    new G4PVPlacement(0,G4ThreeVector(0,0,
-					      -CALSizeZ/2+
-                                              CALBarThickness/2 + 
-                                              CALBarThickness +
-					      (i)*2*CALBarThickness),
-			      "CALDetectorX",		
-			      logicCALDetector,
-			      physiCAL,
-			      false,	
-			      i);	
-
-	}
-      
-      
-      //}
-      
-      
-      //                               
-      // Sensitive Detectors: TKRDetector
-      //
-
-      G4SDManager* SDman = G4SDManager::GetSDMpointer();
-      if(!payloadSD)
-	{
-	  payloadSD = new GammaRayTelPayloadSD("PayloadSD",this);
-	  SDman->AddNewDetector( payloadSD );		
-	}
-      
-      G4String ROgeometryName = "PayloadROGeom";
-      G4VReadOutGeometry* payloadRO = 
-	payloadRO = new GammaRayTelPayloadROGeometry(ROgeometryName, this);
-
-      payloadRO->BuildROGeometry();
-      payloadSD->SetROgeometry(payloadRO);
-
-
-      //  if (logicTKRDetector)
-      //  logicTKRDetector->SetSensitiveDetector(payloadSD); // sensitive planes  
-      
-      if (logicTKRActiveTileX)
-	logicTKRActiveTileX->SetSensitiveDetector(payloadSD); // sensitive tile
-      if (logicTKRActiveTileY)
-	logicTKRActiveTileY->SetSensitiveDetector(payloadSD); // sensitive tile
-            
-      //                                        
-      // Visualization attributes
-      //
   
-      // Invisible Volume
-      logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-      logicPayload->SetVisAttributes (G4VisAttributes::Invisible);
-      logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
-      logicTKRActiveTileX->SetVisAttributes(G4VisAttributes::Invisible);  
-      logicTKRActiveTileY->SetVisAttributes(G4VisAttributes::Invisible);  
-      logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
-      logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
+  logicCALLayerX = new G4LogicalVolume(solidCALLayerX,
+				       CALMaterial, 
+				       "CALLayerX");	
   
-      // Some visualization styles
-      G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
-      VisAtt1->SetVisibility(true);
-      VisAtt1->SetForceSolid(TRUE);
-
-      G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.2,0.3,0.8));
-      VisAtt2->SetVisibility(true);
-      VisAtt2->SetForceSolid(FALSE);
-
-      G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.8,0.2,0.3));
-      VisAtt3->SetVisibility(true);
-      VisAtt3->SetForceWireframe(TRUE);
-
-      // Visible Volumes
-      logicCAL->SetVisAttributes(VisAtt1);
-      logicTKRDetectorX->SetVisAttributes(VisAtt2);
-      logicTKRDetectorY->SetVisAttributes(VisAtt2);
-      logicACT->SetVisAttributes(VisAtt3);  
-      logicACL1->SetVisAttributes(VisAtt3);  
-      logicACL2->SetVisAttributes(VisAtt3);
+  solidCALLayerY = new G4Box("CALLayerY",			
+			     CALSizeXY/2,CALSizeXY/2,CALBarThickness/2); 
   
+  logicCALLayerY = new G4LogicalVolume(solidCALLayerY,
+				       CALMaterial, 
+				       "CALLayerY");	
+  
+  for (i = 0; i < NbOfCALLayers; i++)
+    {
+      
+      physiCALLayerY = 
+	new G4PVPlacement(0,G4ThreeVector(0,0,
+					  -CALSizeZ/2+
+					  CALBarThickness/2 +
+					  (i)*2*CALBarThickness),
+			  "CALLayerY",		
+			  logicCALLayerY,
+			  physiCAL,
+			  false,	
+			  i);	
+      
+      physiCALLayerX = 
+	new G4PVPlacement(0,G4ThreeVector(0,0,
+					  -CALSizeZ/2+
+					  CALBarThickness/2 + 
+					  CALBarThickness +
+					  (i)*2*CALBarThickness),
+			  "CALLayerX",		
+			  logicCALLayerX,
+			  physiCAL,
+			  false,	
+			  i);	
+      
+    }
+  
+  // Calorimeter Structure (CALDetectorX + CALDetectorY)
+  
+  solidCALDetectorX = new G4Box("CALDetectorX",			
+				CALBarX/2,CALBarY/2,CALBarThickness/2); 
+  
+  logicCALDetectorX = new G4LogicalVolume(solidCALDetectorX,
+					  CALMaterial, 
+					  "CALDetectorX");	
+  
+  solidCALDetectorY = new G4Box("CALDetectorY",			
+				CALBarY/2,CALBarX/2,CALBarThickness/2); 
+  
+  logicCALDetectorY = new G4LogicalVolume(solidCALDetectorY,
+					  CALMaterial, 
+					  "CALDetectorY");	
+  
+  for (i = 0; i < NbOfCALBars; i++)
+    {
+      
+      physiCALDetectorY = 
+	new G4PVPlacement(0,
+			  G4ThreeVector(-CALSizeXY/2+ CALBarY/2 +
+					(i)*CALBarY, 0, 0),
+			  "CALDetectorY",		
+			  logicCALDetectorY,
+			  physiCALLayerY,
+			  false,	
+			  i);	
+      
+      physiCALDetectorX = 
+	new G4PVPlacement(0,
+			  G4ThreeVector(0,-CALSizeXY/2+ CALBarY/2 +
+					(i)*CALBarY, 0),
+			  "CALDetectorX",		
+			  logicCALDetectorX,
+			  physiCALLayerX,
+			  false,	
+			  i);	
+      
+    }
+  
+  
+  
+  // Sensitive Detector Manager
+  
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  
+  //
+  // Sensitive Detectors - Tracker
+  // 
+                               
+  
+  if(!trackerSD)
+    {
+      trackerSD = new GammaRayTelTrackerSD("TrackerSD",this);
+      SDman->AddNewDetector( trackerSD );		
+    }
+  
+  G4String ROgeometryName = "TrackerROGeom";
+  G4VReadOutGeometry* trackerRO = 
+    new GammaRayTelTrackerROGeometry(ROgeometryName, this);
+  
+  trackerRO->BuildROGeometry();
+  trackerSD->SetROgeometry(trackerRO);
+
+  if (logicTKRActiveTileX)
+    logicTKRActiveTileX->SetSensitiveDetector(trackerSD); // ActiveTileX
+  if (logicTKRActiveTileY)
+    logicTKRActiveTileY->SetSensitiveDetector(trackerSD); // ActiveTileY
+
+  //
+  // Sensitive Detectors: Calorimeter
+  // 
+
+
+
+  if(!calorimeterSD)
+    {
+      calorimeterSD = new GammaRayTelCalorimeterSD("CalorimeterSD",this);
+      SDman->AddNewDetector( calorimeterSD );		
+    }
+  
+  if (logicCALDetectorX)
+    logicCALDetectorX->SetSensitiveDetector(calorimeterSD); // BarX
+  if (logicCALDetectorY)
+    logicCALDetectorY->SetSensitiveDetector(calorimeterSD); // BarY
+
+  //
+  // Sensitive Detectors: Anticoincidence
+  //
+
+  if(!anticoincidenceSD)
+    {
+      anticoincidenceSD = new GammaRayTelAnticoincidenceSD
+	("AnticoincidenceSD",this);
+      SDman->AddNewDetector( anticoincidenceSD );		
+    }
+  
+  if (logicACT)
+    logicACT->SetSensitiveDetector(anticoincidenceSD); // ACD top
+  if (logicACL1)
+    logicACL1->SetSensitiveDetector(anticoincidenceSD); // ACD lateral side
+  if (logicACL2)
+    logicACL2->SetSensitiveDetector(anticoincidenceSD); // ACD lateral side
+
+  //                                        
+  // Visualization attributes
+  //
+  
+  // Invisible Volume
+  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  logicPayload->SetVisAttributes (G4VisAttributes::Invisible);
+  logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicTKRActiveTileX->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicTKRActiveTileY->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
+  logicCAL->SetVisAttributes(G4VisAttributes::Invisible);
+  logicCALLayerX->SetVisAttributes(G4VisAttributes::Invisible);
+  logicCALLayerY->SetVisAttributes(G4VisAttributes::Invisible);
+  
+  // Some visualization styles
+
+  G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
+  VisAtt1->SetVisibility(true);
+  VisAtt1->SetForceSolid(TRUE);
+
+  G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.2,0.3,0.8));
+  VisAtt2->SetVisibility(true);
+  VisAtt2->SetForceSolid(FALSE);
+
+  G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.8,0.2,0.3));
+  VisAtt3->SetVisibility(true);
+  VisAtt3->SetForceWireframe(TRUE);
+  
+  // Visible Volumes
+
+  logicCALDetectorX->SetVisAttributes(VisAtt1);
+  logicCALDetectorY->SetVisAttributes(VisAtt1);
+  logicTKRDetectorX->SetVisAttributes(VisAtt2);
+  logicTKRDetectorY->SetVisAttributes(VisAtt2);
+  logicACT->SetVisAttributes(VisAtt3);  
+  logicACL1->SetVisAttributes(VisAtt3);  
+  logicACL2->SetVisAttributes(VisAtt3);
+
+
   //
   //always return the physical World
   //
   PrintPayloadParameters();
   return physiWorld;
 }
-  
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelDetectorConstruction::PrintPayloadParameters()

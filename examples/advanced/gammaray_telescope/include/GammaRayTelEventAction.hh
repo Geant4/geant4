@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelEventAction.hh,v 1.3 2000-12-06 16:53:13 flongo Exp $
+// $Id: GammaRayTelEventAction.hh,v 1.4 2001-03-05 13:58:20 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -37,25 +37,28 @@
 
 class GammaRayTelEventAction : public G4UserEventAction
 {
-  public:
+public:
+
 #ifdef G4ANALYSIS_USE
   GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
 #else
   GammaRayTelEventAction();
 #endif
   virtual ~GammaRayTelEventAction();
-
-  public:
+  
+public:
   virtual void   BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
   
   void SetDrawFlag   (G4String val)  {drawFlag = val;};
-
-  private:
-    G4int       trackerCollID;                
-    G4String    drawFlag;
+  
+private:
+  G4int       trackerCollID;                
+  G4int       calorimeterCollID;                
+  G4int       anticoincidenceCollID;                
+  G4String    drawFlag;
 #ifdef G4ANALYSIS_USE
-    GammaRayTelAnalysisManager* analysisManager;
+  GammaRayTelAnalysisManager* analysisManager;
 #endif
 };
 

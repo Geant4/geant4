@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelAnalysisManager.hh,v 1.1 2000-12-06 16:53:12 flongo Exp $
+// $Id: GammaRayTelAnalysisManager.hh,v 1.2 2001-03-05 13:58:19 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -91,6 +91,9 @@ private:
 
 #endif
 #endif
+
+
+
 
 
 

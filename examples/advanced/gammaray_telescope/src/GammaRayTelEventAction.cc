@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelEventAction.cc,v 1.4 2000-12-06 16:53:14 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.5 2001-03-05 13:58:23 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -20,7 +20,10 @@
 // ************************************************************
 
 #include "GammaRayTelEventAction.hh"
-#include "GammaRayTelPayloadHit.hh"
+#include "GammaRayTelTrackerHit.hh"
+#include "GammaRayTelAnticoincidenceHit.hh"
+#include "GammaRayTelCalorimeterHit.hh"
+
 #include "g4rw/tvordvec.h"
 
 #ifdef G4ANALYSIS_USE
@@ -48,12 +51,14 @@ extern G4std::ofstream outFile;
 
 #ifdef G4ANALYSIS_USE
 GammaRayTelEventAction::GammaRayTelEventAction(GammaRayTelAnalysisManager* aMgr)
-  :drawFlag("all"),trackerCollID(-1),analysisManager(aMgr)
+  :drawFlag("all"),trackerCollID(-1),  calorimeterCollID(-1),                
+  anticoincidenceCollID(-1), analysisManager(aMgr)
 {
 }
 #else
 GammaRayTelEventAction::GammaRayTelEventAction()
-  :drawFlag("all"), trackerCollID(-1)
+  :drawFlag("all"), trackerCollID(-1),calorimeterCollID(-1),                
+  anticoincidenceCollID(-1)
 {
 }
 #endif
@@ -71,13 +76,22 @@ void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 
   G4int evtNb = evt->GetEventID();
   G4cout << "Event: " << evtNb << G4endl;
-  
+
+  G4SDManager * SDman = G4SDManager::GetSDMpointer();  
   if (trackerCollID==-1)
     {
-      G4SDManager * SDman = G4SDManager::GetSDMpointer();
-      trackerCollID = SDman->GetCollectionID("PayloadCollection");
+      trackerCollID = SDman->GetCollectionID("TrackerCollection");
     }
-
+  if(anticoincidenceCollID==-1)
+    {
+      anticoincidenceCollID =
+	SDman->GetCollectionID("AnticoincidenceCollection");
+    }
+  if(calorimeterCollID==-1)
+    {
+      calorimeterCollID =
+	SDman->GetCollectionID("CalorimeterCollection");
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,39 +100,50 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
 
-  
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   
   
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  GammaRayTelPayloadHitsCollection* CHC = NULL;
+  GammaRayTelTrackerHitsCollection* THC = 0;
+  GammaRayTelCalorimeterHitsCollection* CHC = 0;
+  GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
+
+
   if (HCE)
-    CHC = (GammaRayTelPayloadHitsCollection*)(HCE->GetHC(trackerCollID));
-  
-  if (CHC)
     {
-      int n_hit = CHC->entries();
-      G4cout << "Number of hits in this event =  " << n_hit << G4endl;
+      THC = (GammaRayTelTrackerHitsCollection*)(HCE->GetHC(trackerCollID));
+      CHC = (GammaRayTelCalorimeterHitsCollection*)
+	(HCE->GetHC(calorimeterCollID));
+      AHC = (GammaRayTelAnticoincidenceHitsCollection*)
+	(HCE->GetHC(anticoincidenceCollID));
+    }
+  
+  if (THC)
+    {
+      int n_hit = THC->entries();
+      G4cout << "Number of tracker hits in this event =  " << n_hit << G4endl;
       G4double ESil=0;
       G4int NStrip, NPlane, IsX;
-      // This is a cycle on all the hits of this event
+      
+      // This is a cycle on all the tracker hits of this event
+
       for (int i=0;i<n_hit;i++)
 	{
 	  // Here we put the hit data in a an ASCII file for 
 	  // later analysis 
-	  ESil = (*CHC)[i]->GetEdepSil();
-	  NStrip = (*CHC)[i]->GetNStrip();
-	  NPlane = (*CHC)[i]->GetNSilPlane();
-	  IsX = (*CHC)[i]->GetPlaneType();
-
+	  ESil = (*THC)[i]->GetEdepSil();
+	  NStrip = (*THC)[i]->GetNStrip();
+	  NPlane = (*THC)[i]->GetNSilPlane();
+	  IsX = (*THC)[i]->GetPlaneType();
+	  
 	  outFile << G4std::setw(7) << event_id << " " << 
 	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
-	    (*CHC)[i]->GetPos().x()/mm <<" "<<
-	    (*CHC)[i]->GetPos().y()/mm <<" "<<
-	    (*CHC)[i]->GetPos().z()/mm <<" "<<
+	    (*THC)[i]->GetPos().x()/mm <<" "<<
+	    (*THC)[i]->GetPos().y()/mm <<" "<<
+	    (*THC)[i]->GetPos().z()/mm <<" "<<
 	    G4endl;
 	  
 #ifdef G4ANALYSIS_USE

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.4 2000-12-06 16:53:13 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.5 2001-03-05 13:58:20 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -31,8 +31,10 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
 class GammaRayTelDetectorMessenger;
-class GammaRayTelPayloadSD;
-class GammaRayTelPayloadROGeometry;
+class GammaRayTelTrackerSD;
+class GammaRayTelAnticoincidenceSD;
+class GammaRayTelCalorimeterSD;
+class GammaRayTelTrackerROGeometry;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -108,7 +110,8 @@ public:
   G4int GetNbOfCALBars()               {return NbOfCALBars;}; 
   
   G4double GetACDThickness()           {return ACDThickness;};
-  
+  G4int GetNbOfACDTopTiles()           {return NbOfACDTopTiles;}; 
+  G4int GetNbOfACDLateralTiles()       {return NbOfACDLateralTiles;};
               
 private:
   
@@ -134,7 +137,11 @@ private:
   G4int NbOfCALBars; 
   G4double CALSizeXY; 
   G4double CALSizeZ;
-  
+
+  G4double CALBarX;
+  G4double CALBarY;
+  G4double CALBarZ;
+
   G4double ACDThickness;
   G4double ACTSizeXY; 
   G4double ACTSizeZ; 
@@ -146,6 +153,10 @@ private:
   G4double ACL2SizeX; 
   G4double ACL2SizeY;
   G4double ACL2SizeZ;  
+
+
+  G4int NbOfACDLateralTiles;
+  G4int NbOfACDTopTiles;
 
   G4double TilesSeparation;
   G4double ACDTKRDistance;
@@ -208,10 +219,20 @@ private:
   G4LogicalVolume*   logicTKRDetectorY;
   G4VPhysicalVolume* physiTKRDetectorY;    
 
-  G4Box*             solidCALDetector;  // Calorimeter PLANE 
-  G4LogicalVolume*   logicCALDetector;
+  G4Box*             solidCALLayerX;  // Calorimeter PLANE X 
+  G4LogicalVolume*   logicCALLayerX;
+  G4VPhysicalVolume* physiCALLayerX;    
 
+  G4Box*             solidCALLayerY;  // Calorimeter PLANE Y
+  G4LogicalVolume*   logicCALLayerY;
+  G4VPhysicalVolume* physiCALLayerY;    
+
+  G4Box*             solidCALDetectorX;  // Calorimeter DETECTOR X
+  G4LogicalVolume*   logicCALDetectorX;
   G4VPhysicalVolume* physiCALDetectorX;    
+
+  G4Box*             solidCALDetectorY;  // Calorimeter DETECTOR Y
+  G4LogicalVolume*   logicCALDetectorY;
   G4VPhysicalVolume* physiCALDetectorY;    
 
   G4Box*             solidPlane;  // Support Plane 
@@ -225,7 +246,10 @@ private:
   G4UniformMagField* magField;      //pointer to the magnetic field
   
   GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  GammaRayTelPayloadSD* payloadSD;  //pointer to the sensitive detector
+  GammaRayTelTrackerSD* trackerSD;  //pointer to the sensitive detector
+  GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+  GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
+
 
 private:
     
@@ -241,7 +265,7 @@ inline void GammaRayTelDetectorConstruction::ComputePayloadParameters()
   // Compute derived parameters of the payload
 
   TKRSupportThickness =TKRLayerDistance -2.*TKRSiliconThickness 
-    - TKRViewsDistance;
+    - TKRViewsDistance - ConverterThickness;
   TKRSizeXY = NbOfTKRTiles*TKRSiliconTileXY + (NbOfTKRTiles+1)*TilesSeparation;
   TKRSizeZ = NbOfTKRLayers*TKRLayerDistance; 
   
@@ -259,6 +283,10 @@ inline void GammaRayTelDetectorConstruction::ComputePayloadParameters()
   CALSizeXY = TKRSizeXY;
   CALSizeZ = 2.*NbOfCALLayers*CALBarThickness;
  
+  CALBarX = CALSizeXY;
+  CALBarY = CALSizeXY/(NbOfCALBars);
+  CALBarZ = CALBarThickness;
+  
   ACTSizeXY = TKRSizeXY + 2*ACDTKRDistance + 2*ACDThickness;
   ACTSizeZ = ACDThickness;
 
