@@ -144,7 +144,10 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv OGLHOME /usr/local
+  setenv OGLFLAGS "-I$OGLHOME/include"
+  setenv OGLLIBS "-L$OGLHOME/LIB -lMesaGLU -lMesaGL"
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
   setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1

@@ -43,8 +43,8 @@ if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
 #  export G4UI_BUILD_GAG_SESSION=1
   #####export G4UI_BUILD_XM_SESSION=1
   #####export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export OGLHOME=/afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export OGLHOME=/afs/cern.ch/sw/geant4/dev/Mesa/Mesa-2.5
   #####export G4VIS_BUILD_OIX_DRIVER=1
   export G4VIS_BUILD_DAWN_DRIVER=1
 #  export DAWN_BSD_UNIX_DOMAIN=1
@@ -116,7 +116,10 @@ if [ `uname -n | grep sungeant` ]; then
 #  export G4UI_BUILD_GAG_SESSION=1
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
-  #######export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export OGLHOME=/usr/local
+  export OGLFLAGS="-I$OGLHOME/include"
+  export OGLLIBS="-L$OGLHOME/LIB -lMesaGLU -lMesaGL"
   #######export G4VIS_BUILD_OIX_DRIVER=1
   export G4VIS_BUILD_DAWN_DRIVER=1
   export G4VIS_BUILD_DAWNFILE_DRIVER=1
