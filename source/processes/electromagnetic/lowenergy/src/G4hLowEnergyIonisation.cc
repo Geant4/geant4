@@ -453,11 +453,24 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
 
 G4double G4hLowEnergyIonisation::GetConstraints(
                                  const G4DynamicParticle* particle,
-				 const G4Material* material) 
+				 const G4Material* constMaterial) 
 {
   // returns the Step limit
   // dEdx is calculated as well as the range  
   // based on Effective Charge Approach
+ 
+  // MGP - Temporary modification 
+  // -------------------------------------------------------------------
+  // const cast to make the code palatable to G4EnergyLossTables,
+  // that requires non-const pointers G4Material* in the arguments 
+  // of several member functions
+  // This is BAD OOP!!!!!
+  // Hopefully to be removed as soon as possible, after agreeing with 
+  // G4EnergyLossTables author 
+  G4Material* material = (G4Material*) constMaterial;
+  // MGP - End of temporary modification 
+  // -------------------------------------------------------------------
+
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
@@ -929,9 +942,21 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
 G4double G4hLowEnergyIonisation::ComputeDEDX(
                                  const G4ParticleDefinition* aParticle,
-                                 const G4Material* material, 
+                                 const G4Material* constMaterial, 
 				       G4double kineticEnergy) 
 {  
+  // MGP - Temporary modification 
+  // -------------------------------------------------------------------
+  // const cast to make the code palatable to G4EnergyLossTables,
+  // that requires non-const pointers G4Material* in the arguments 
+  // of several member functions
+  // This is BAD OOP!!!!!
+  // Hopefully to be removed as soon as possible, after agreeing with 
+  // G4EnergyLossTables author 
+  G4Material* material = (G4Material*) constMaterial;
+  // MGP - End of temporary modification 
+  // -------------------------------------------------------------------
+
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double dedx = 0.0 ;
