@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.7 1999-10-13 11:04:20 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.8 1999-10-28 23:24:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ public:
   ~G4NucleiProperties() { };
 
 
-public:
+public:  // With Description
 
 	// Calculate Mass Excess of nucleus A,Z
 	static G4double GetMassExcess(const G4int A, const G4int Z);

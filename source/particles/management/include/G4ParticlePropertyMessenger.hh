@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticlePropertyMessenger.hh,v 1.2 1999-04-13 07:58:32 kurasige Exp $
+// $Id: G4ParticlePropertyMessenger.hh,v 1.3 1999-10-28 23:24:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 //  G4ParticlePropertyMessenger.hh
 //
-//  Description:
+//  Class Description:
 //    This is a messenger class to interface to exchange information
 //    between ParticleDefinition and UI.
 //
@@ -54,6 +54,7 @@ class G4ParticlePropertyMessenger: public G4UImessenger
     G4ParticlePropertyMessenger(G4ParticleTable* pTable = 0);
     virtual ~G4ParticlePropertyMessenger();
 
+  public: // With Description
     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
     virtual G4String GetCurrentValue(G4UIcommand * command);
 

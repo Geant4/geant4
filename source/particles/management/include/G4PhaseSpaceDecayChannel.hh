@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.hh,v 1.1 1999-01-07 16:10:31 gunter Exp $
+// $Id: G4PhaseSpaceDecayChannel.hh,v 1.2 1999-10-28 23:24:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -27,7 +27,7 @@
 
 class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 {
-  public:
+  public:  // With Description
     //Constructors 
       G4PhaseSpaceDecayChannel(G4int Verbose = 1);
       G4PhaseSpaceDecayChannel(const G4String& theParentName,
@@ -38,11 +38,14 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 			       const G4String& theDaughterName3 = "",
 			       const G4String& theDaughterName4 = ""   );
 
-    //  Destructor
+  public: 
+   //  Destructor
       virtual ~G4PhaseSpaceDecayChannel();
 
-  public:
+  public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);   
+
+  public: 
      static G4double Pmx(G4double e, G4double p1, G4double p2);
 
   private: 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDGCodeChecker.hh,v 1.3 1999-10-20 10:37:32 kurasige Exp $
+// $Id: G4PDGCodeChecker.hh,v 1.4 1999-10-28 23:24:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@ class G4PDGCodeChecker
   G4PDGCodeChecker();
   ~G4PDGCodeChecker(){};
 
+ public: // With Description
   G4int  CheckPDGCode(G4int code, G4String type);
 
   G4int  GetQuarkContent(G4int flavor) const ;
@@ -41,6 +42,7 @@ class G4PDGCodeChecker
 
   G4int  GetQuarkFlavor(G4int idx) const;
 
+ public:
   G4int  GetSpin() const;
   G4int  GetExotic() const;
   G4int  GetRadial() const;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronOccupancy.hh,v 1.2 1999-08-30 08:27:30 kurasige Exp $
+// $Id: G4ElectronOccupancy.hh,v 1.3 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,17 +17,19 @@
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 17 Aug 1999
 // ----------------------------------------------------------------
+// Class Description
 //     This class has information of occupation of electrons 
 //     in atomic orbits
-//  
+// -  
 //     GetOccupancy(N) gives the number of electron
 //     in N-th orbit
 //       For example : Carbon atom should be 
 //          GetOccupancy(0)      --> 2
 //          GetOccupancy(1)      --> 4
 //          GetOccupancy(2..7)   --> 0
-//
+// -
 //     GetTotalOccupancy() gives the total number of electrons
+//
 // --------------------------------------------------------------- 
 
 
@@ -44,9 +46,11 @@ class G4ElectronOccupancy
  public:
    enum { MaxSizeOfOrbit = 7};
 
+ public: // With Description
    G4ElectronOccupancy( G4int sizeOrbit = MaxSizeOfOrbit   );
    G4ElectronOccupancy( const G4ElectronOccupancy& right );
 
+ public:
    virtual    	       ~G4ElectronOccupancy();
 
   //  new/delete operators are oberloded to use G4Allocator
@@ -59,6 +63,7 @@ class G4ElectronOccupancy
      G4int operator==(const G4ElectronOccupancy &right) const;
      G4int operator!=(const G4ElectronOccupancy &right) const;
    
+ public: // With Description
    // The following methods returns
    //     0:  if the orbit(atom) is vacant 
    //    >0:  number of electrons in orbit

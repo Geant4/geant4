@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIsotopeTable.hh,v 1.1 1999-10-05 06:45:12 kurasige Exp $
+// $Id: G4VIsotopeTable.hh,v 1.2 1999-10-28 23:24:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,8 +24,10 @@
 #include "G4IsotopeProperty.hh"
 class G4VIsotopeTable
 {
+ // Class Description
  //  G4VIsotopeTable is the virtual class for acsess to an isotpe table
  //  which contains "stable" isotopes with their properties.
+ //
 
  public:
   // constructor
@@ -35,6 +37,7 @@ class G4VIsotopeTable
   // destructor
   virtual ~G4VIsotopeTable();
 
+ public: // With Description
   // pure virtual method
   virtual G4bool FindIsotope(G4IsotopeProperty* property) = 0;  
   // Search the isotope in the G4VIsotopeTable. 

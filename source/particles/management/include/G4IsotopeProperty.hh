@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IsotopeProperty.hh,v 1.1 1999-10-05 06:45:10 kurasige Exp $
+// $Id: G4IsotopeProperty.hh,v 1.2 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,12 +24,14 @@
 class    G4DecayTable;
 class G4IsotopeProperty
 {
+ // Class Description
  //   G4IsotopeProperty contains properties of an isotope
+ //
 
  public:
   G4IsotopeProperty();
 
-  // copy construictor as protected 
+  // copy construictor  
   G4IsotopeProperty(const  G4IsotopeProperty& right);
 
   // Assignment operator
@@ -43,7 +45,7 @@ class G4IsotopeProperty
   virtual ~G4IsotopeProperty();
 
 
- public:
+ public:  // With Description
   // Set/Get Atomic Number
   G4int         GetAtomicNumber() const;
   void          SetAtomicNumber(G4int Z);

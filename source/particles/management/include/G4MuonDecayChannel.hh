@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.hh,v 1.1 1999-01-07 16:10:29 gunter Exp $
+// $Id: G4MuonDecayChannel.hh,v 1.2 1999-10-28 23:24:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,14 +26,14 @@
 
 class G4MuonDecayChannel :public G4VDecayChannel
 {
-  public:
+  public:  // With Description
     //Constructors 
       G4MuonDecayChannel(const G4String& theParentName,
 			 G4double        theBR);
     //  Destructor
       virtual ~G4MuonDecayChannel();
 
-  public:
+  public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
   
 };  

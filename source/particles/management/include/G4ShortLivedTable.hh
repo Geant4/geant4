@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.hh,v 1.1 1999-01-07 16:10:31 gunter Exp $
+// $Id: G4ShortLivedTable.hh,v 1.2 1999-10-28 23:24:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,20 +23,34 @@
 #define G4ShortLivedTable_h 1
 
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include <rw/cstring.h>
+
+#define G4Ptbl_USE_MAP
+
+#ifdef G4Ptbl_USE_MAP
+#include "g4std/vector"
+#else
+#include <rw/tpordvec.h>
+#endif 
 
 class G4ParticleTable;
 
 class G4ShortLivedTable
 {
+ // Class Description
  //   G4ShortLivedTable is the table of pointer to G4ParticleDefinition
  //   In G4ShortLivedTable, each G4ParticleDefinition pointer is stored
+ //
 
  public:
+#ifdef G4Ptbl_USE_MAP
+   // Use STL Vector as list of shortlives
+   typedef vector<G4ParticleDefinition*>  G4ShortLivedList;
+#else
+   // Use  RWTPtrOrderedVector as list of shortlives
    typedef RWTPtrOrderedVector<G4ParticleDefinition> G4ShortLivedList;
+#endif
 
  public:
    G4ShortLivedTable();
@@ -69,18 +83,34 @@ class G4ShortLivedTable
 
 inline G4bool  G4ShortLivedTable::Contains(const G4ParticleDefinition* particle) const
 {
+#ifdef G4Ptbl_USE_MAP
+  G4ShortLivedList::iterator i;
+  for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
+    if (**i==*particle) return true;
+  }
+  return false;
+#else
   return fShortLivedList->contains(particle);
+#endif
 }
 
 inline G4int G4ShortLivedTable::Entries() const
 {
+#ifdef G4Ptbl_USE_MAP
+  return fShortLivedList->size();
+#else
   return fShortLivedList->entries();
+#endif
 }
 
 
 inline G4ParticleDefinition*  G4ShortLivedTable::GetParticle(G4int index) const
 {
-  return (*fShortLivedList)[index];
+  if ( (index >=0 ) && (index < Entries()) ) {
+    return (*fShortLivedList)[index];
+  } else {
+    return 0; 
+  } 
 }
 
 

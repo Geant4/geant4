@@ -1,0 +1,162 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ParticleTable.icc,v 1.1 1999-10-28 23:24:12 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------
+//      implement new version for using STL map instaed of RW PtrHashedDictionary
+//                                       28 ct., 99  H.Kurashige
+
+inline 
+ const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
+{
+  return fShortLivedTable;
+}
+
+inline 
+ const G4IonTable*  G4ParticleTable::GetIonTable()
+{
+  return fIonTable;
+}
+
+inline  
+ void G4ParticleTable::SetVerboseLevel(G4int value )
+{ 
+  verboseLevel = value; 
+}
+
+inline 
+ G4int G4ParticleTable::GetVerboseLevel() const 
+{ 
+  return verboseLevel; 
+}
+
+inline 
+ G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
+{
+  return fDictionary;
+}
+
+inline 
+ G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
+{
+  return fIterator;
+}
+
+inline 
+ const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
+{
+  return fEncodingDictionary;
+}
+
+inline 
+ const G4String& G4ParticleTable::GetKey(const G4ParticleDefinition *particle) const
+{
+  return particle->GetParticleName();
+}
+
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
+{
+#ifdef G4Ptbl_USE_MAP
+  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
+  if (it != fDictionary->end()) {
+    return it->second;
+  }else {
+    return 0;
+  }
+#else
+  return fDictionary -> findValue(&particle_name);
+#endif
+}
+
+
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
+{
+  return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
+}
+
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) 
+{
+  G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
+  return FindParticle(pcode);
+}
+
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle)
+{
+  G4int pcode = particle -> GetAntiPDGEncoding();
+  return FindParticle(pcode);
+}
+
+inline 
+ G4bool  G4ParticleTable::contains(const G4String& particle_name)
+{
+#ifdef G4Ptbl_USE_MAP
+  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
+  return (it != fDictionary->end());
+#else
+  return fDictionary -> contains(&particle_name);
+#endif
+}
+
+inline 
+ G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
+{
+ return contains(GetKey(particle));
+}
+
+inline 
+ const G4String& G4ParticleTable::GetParticleName(G4int index)
+{
+  G4ParticleDefinition* aParticle =GetParticle(index);
+  if (aParticle != 0) {
+    return aParticle->GetParticleName();
+  } else {
+    return noName;
+  }
+}
+
+inline 
+ G4int G4ParticleTable::entries() const
+{
+#ifdef G4Ptbl_USE_MAP
+  return fDictionary->size();
+#else
+  return fDictionary -> entries();
+#endif
+}
+
+inline 
+ G4int G4ParticleTable::size() const
+{
+#ifdef G4Ptbl_USE_MAP
+  return fDictionary->size();
+#else
+  return fDictionary -> entries();
+#endif
+}
+
+#ifndef G4Ptbl_USE_MAP
+inline unsigned G4ParticleTable::HashFun(const G4String& particle_name)
+{
+  return particle_name.hash(); 
+}
+
+inline 
+ unsigned G4ParticleTable::EncodingHashFun(const G4int& aEncoding)
+{
+  G4int temp = aEncoding;
+  if (aEncoding <0) temp *= -1;
+  G4int value = ( temp & 0x0FFF)*( temp & 0x0FFF)/2;
+  return value; 
+}
+#endif

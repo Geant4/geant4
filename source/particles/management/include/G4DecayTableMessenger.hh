@@ -5,18 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.hh,v 1.2 1999-04-13 07:58:24 kurasige Exp $
+// $Id: G4DecayTableMessenger.hh,v 1.3 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
 //
+//
 //  G4DecayTableMessenger.hh
 //
-//  Description:
+// Class Description:
 //    This is a messenger class to interface to exchange information
-//    between Decay Table/Decay Channel and UI.
-//
+//    between Decay Table/Decay Channel and UI.  
 // G4DecayTableMessenger
 //  /particle/property/decay/   Decay Table control commands.
 //   Commands : 
@@ -48,7 +48,7 @@ class G4UIcmdWithADouble;
 
 class G4DecayTableMessenger: public G4UImessenger
 {
-  public:
+  public: // With Description
     G4DecayTableMessenger(G4ParticleTable* pTable = 0);
     virtual ~G4DecayTableMessenger();
 

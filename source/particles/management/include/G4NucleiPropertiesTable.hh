@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.6 1999-08-20 14:25:04 larazb Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.7 1999-10-28 23:24:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 #ifndef G4NucleiPropertiesTable_h
 #define G4NucleiPropertiesTable_h 1
 
+// Class Description
 // Class: G4NucleiPropertiesTable
 //	Encapsulates Data from G. Audi and A.H. Wapstra, Nucl.
 //	Physics,A595 vol 4 p 409-480,
@@ -64,13 +65,13 @@ public:
   enum  {nEntries = 2931,MaxA = 273}; // for SUN 
 
   // Other Operations 
+ public: // With Description
 
   // Operation: GetMassExcess
   static G4double GetMassExcess(G4int Z, G4int A); 
 
-
-	// Operation: GetNuclearMass
-	static G4double GetNuclearMass(G4int Z, G4int A);
+  // Operation: GetNuclearMass
+  static G4double GetNuclearMass(G4int Z, G4int A);
 
   // Operation: GetBindingEnergy
   static G4double GetBindingEnergy(G4int Z, G4int A);

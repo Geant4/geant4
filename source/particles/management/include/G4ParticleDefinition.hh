@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.4 1999-10-05 06:45:11 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.5 1999-10-28 23:24:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,11 +43,13 @@ class G4Material;
 
 class G4ParticleDefinition 
 {
+  // Class Description
   //  This class containes all the static data of a particle.
   //  It also has uses a process manager in order to collect
   //  all the processes this kind of particle can undertake.
+  //
 
-  public:
+ public: // With Description
   //  Only one type of constructor can be used for G4ParticleDefinition.
   //  If you want to create new particle, you must set name of the particle 
   //  at construction. Most of members seen as arguments of the constructor 
@@ -78,7 +80,7 @@ class G4ParticleDefinition
 
        virtual ~G4ParticleDefinition();
       
-  public:
+  public: // With Description
       // These methods concerning cut values are provided 
       // to invoke corresponding methods for each particle type.
       // Actual implementation can be seen in the class 
@@ -94,7 +96,7 @@ class G4ParticleDefinition
       G4bool                GetApplyCutsFlag() const;
       void                  SetApplyCutsFlag(G4bool flag);
       
-  public:
+  public: // With Description
   // By these following Getxxxx methods, you can get values 
   // for members which can not be changed
   //  
@@ -129,7 +131,7 @@ class G4ParticleDefinition
       //  The value of flavor is assigned as follows 
       // 1:d, 2:u, 3:s, 4:c, 5:b, 6:t, 7:l(down type quark) 8:h(up type quark) 
  
-  public:
+  public: // With Description
       // ShortLived flag
       G4bool   IsShortLived() const { return fShortLivedFlag; }
 
@@ -138,13 +140,14 @@ class G4ParticleDefinition
 
       G4double GetPDGLifeTime() const { return thePDGLifeTime; }
       void     SetPDGLifeTime(G4double aLifeTime) { thePDGLifeTime = aLifeTime; }
-   public:
+
+  public:// With Description
       G4DecayTable* GetDecayTable();
       void          SetDecayTable(G4DecayTable* aDecayTable); 
       // Set/Get Decay Table
       //   !! Decay Table can be modified !!  
 
-  public:
+  public: // With Description
       G4ProcessManager* GetProcessManager() const; 
       void SetProcessManager(G4ProcessManager* aProcessManager); 
       // Set/Get Process Manager

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.4 1999-08-18 09:15:08 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.5 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,12 +51,14 @@ class  G4DecayProducts;
 
 class G4DynamicParticle 
 {
+  // Class Description
   //  The dynamic particle is a class which contains the purely
   //  dynamic aspects of a moving particle. It also has a
   //  pointer to a G4ParticleDefinition object, which holds
   //  all the static information.
+  //
 
-  public:
+  public: // With Description
   //- constructors 
      G4DynamicParticle();
 
@@ -189,14 +191,14 @@ class G4DynamicParticle
 
  private:
    G4int verboseLevel;
-   // controle flag for output message
+ 
+ public:  // With Description
+   void  SetVerboseLevel(G4int value);
+   G4int GetVerboseLevel() const;
+   // Set/Get controle flag for output message
    //  0: Silent
    //  1: Warning message
    //  2: More
-
- public:
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
 
 
 };

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 1.4 1999-10-05 06:45:09 kurasige Exp $
+// $Id: G4Ions.hh,v 1.5 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,11 +34,16 @@
 
 class G4Ions : public G4ParticleWithCuts
 {
+ // Class Description
+ //  All nuclei/ions created on the fly are objects of this class
+ //  This class has Excitation Energy in addition to the normal particle
+ //
+
  private:
    G4double  theIonsLengthCut;
    G4double* theIonsKineticEnergyCuts;
 
- public:
+ public: //With Description
    G4Ions(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -50,17 +55,20 @@ class G4Ions : public G4ParticleWithCuts
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+
+ public:
    virtual    			~G4Ions(){};
    G4Ions*    			IonsDefinition();
    G4Ions*    			Ions();
 
+ public: //With Description
    virtual G4double 	   	GetCuts() {return theIonsLengthCut;}   
    virtual const G4double* 	GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
 
    virtual void 		SetCuts(G4double aCut); 
 
 
-  public: 
+ public:  //With Description
    G4int    GetAtomicNumber() const;
    G4int    GetAtomicMass() const;
 

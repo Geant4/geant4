@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.3 1999-08-30 08:27:52 kurasige Exp $
+// $Id: G4VDecayChannel.hh,v 1.4 1999-10-28 23:24:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,10 @@ class    G4ParticleTable;
 
 class G4VDecayChannel
 {
-  // This class is a abstract class
+ // Class Description
+ // This class is a abstract class to describe decay kinematics
+ //
+
   public:
     //Constructors 
       G4VDecayChannel(const G4String &aName, G4int Verbose = 1);
@@ -59,10 +62,10 @@ class G4VDecayChannel
     // less-than operator is defined for G4DecayTable
     G4int operator<(const G4VDecayChannel &right) const;
 
-  public:
+  public: // With Description
    virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
 
-  public:    
+  public: // With Description
      //get kinematics name
      G4String  GetKinematicsName() const;
      //get branching ratio
@@ -131,7 +134,7 @@ class G4VDecayChannel
     // fill parent
     void FillParent();
 
-  public:
+  public:  // With Description
     void  SetVerboseLevel(G4int value);
     G4int GetVerboseLevel()  const;
     void  DumpInfo();

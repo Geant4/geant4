@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.6 1999-10-06 09:40:10 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.7 1999-10-28 23:24:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,15 +25,25 @@
 //         --------------------------------
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
+//      implement new version for using STL map instaed of RW PtrHashedDictionary
+//                                       28 ct., 99  H.Kurashige
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
 
 #include "G4ios.hh"
-#include <rw/tphdict.h>
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include <rw/cstring.h>
+
+#define G4Ptbl_USE_MAP
+
+#ifdef G4Ptbl_USE_MAP
+#include "g4std/map"
+#include "G4ParticleTableIterator.hh"
+#else
+#include <rw/tphdict.h>
+#endif 
+
 class G4UImessenger;
 class G4ParticleMessenger;
 class G4IonTable;
@@ -41,6 +51,7 @@ class G4ShortLivedTable;
 
 class G4ParticleTable
 {
+ // Class Description
  //   G4ParticleTable is the table of pointer to G4ParticleDefinition
  //   G4ParticleTable is a "singleton" (only one and staic object)
  //   In G4ParticleTable, each G4ParticleDefinition pointer is stored
@@ -49,10 +60,17 @@ class G4ParticleTable
  //   
 
  public:
+#ifdef G4Ptbl_USE_MAP
+   typedef G4std::map<G4String, G4ParticleDefinition* > G4PTblDictionary;
+   typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*> G4PTblDicIterator;
+   typedef G4std::map<G4int, G4ParticleDefinition*> G4PTblEncodingDictionary;
+   typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
+#else
    typedef RWTPtrHashDictionary<G4String,G4ParticleDefinition> G4PTblDictionary;
    typedef RWTPtrHashDictionaryIterator<G4String,G4ParticleDefinition> G4PTblDicIterator;
    typedef RWTPtrHashDictionary<G4int,G4ParticleDefinition> G4PTblEncodingDictionary;
    typedef RWTPtrHashDictionaryIterator<G4int,G4ParticleDefinition> G4PTblEncodingDicIterator;
+#endif
 
  protected:
    G4ParticleTable();
@@ -61,6 +79,7 @@ class G4ParticleTable
  public:
    virtual ~G4ParticleTable();
   
+ public: // With Description
    static G4ParticleTable* GetParticleTable();
    // return the pointer to G4ParticleTable object
    //   G4ParticleTable is a "singleton" and can get its pointer by this function
@@ -72,6 +91,7 @@ class G4ParticleTable
    // returns TRUE if the ParticleTable contains 
 
    G4int    entries() const;
+   G4int    size() const;
    // returns the number of Particles in the ParticleTable
    
    G4ParticleDefinition* GetParticle(G4int index);
@@ -112,26 +132,33 @@ class G4ParticleTable
    //  !! The third and fourth arguments are meaningless
    //  !! This routine is provided for compatibility to old version
 
-   G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
-   // insert the particle into ParticleTable 
-   // return value is same as particle if successfully inserted
-   //              or pointer to another G4ParticleDefinition object which has same name of particle
-   //              or 0 if fail to insert by another reason
-
-   G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
-   // Remove Particle
-
+   G4PTblDicIterator* GetIterator();
+   // return the pointer of Iterator (RW compatible)
+   
    void DumpTable(const G4String &particle_name = "ALL");
    // dump information of particles specified by name 
 
- public:
-   const G4String& GetKey(const G4ParticleDefinition *particle) const;
+ public: 
+   G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
+   // insert the particle into ParticleTable 
+   // return value is same as particle if successfully inserted
+   //              or pointer to another G4ParticleDefinition object 
+   //                   which has same name of particle
+   //              or 0 if fail to insert by another reason
+
+ protected:
+   G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
+   // Remove Particle
 
    G4PTblDictionary* GetDictionary();
-   G4PTblDicIterator* GetIterator();
+
+   const G4String& GetKey(const G4ParticleDefinition *particle) const;
+   // return key value of the particle (i.e. particle name)
 
    const G4PTblEncodingDictionary* GetEncodingDictionary();
    // return the pointer to EncodingDictionary
+
+ public: //With Description
 
    const G4IonTable* GetIonTable();
    // return the pointer to G4IonTable object
@@ -149,10 +176,12 @@ class G4ParticleTable
    // remove all particles from G4ParticleTable and 
    // delete them if they were created dynamically  (i.e. not static objects) 
 
+#ifndef G4Ptbl_USE_MAP
  protected:
    static unsigned HashFun(const G4String& particle_name);
    static unsigned EncodingHashFun(const G4int& aEndcoding);
   // hash functions  
+#endif
 
  private:
    G4int verboseLevel;
@@ -179,130 +208,8 @@ class G4ParticleTable
 
    G4String               noName;
 };
+#include "G4ParticleTable.icc"
 
-inline 
- const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
-{
-  return fShortLivedTable;
-}
-
-inline 
- const G4IonTable*  G4ParticleTable::GetIonTable()
-{
-  return fIonTable;
-}
-
-inline  
- void G4ParticleTable::SetVerboseLevel(G4int value )
-{ 
-  verboseLevel = value; 
-}
-
-inline 
- G4int G4ParticleTable::GetVerboseLevel() const 
-{ 
-  return verboseLevel; 
-}
-
-inline 
- G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
-{
-  return fDictionary;
-}
-
-inline 
- G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
-{
-  return fIterator;
-}
-
-inline 
- const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
-{
-  return fEncodingDictionary;
-}
-
-inline 
- const G4String& G4ParticleTable::GetKey(const G4ParticleDefinition *particle) const
-{
-  return particle->GetParticleName();
-}
-
-inline 
- G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
-{
-  return fDictionary -> findValue(&particle_name);
-}
-
-inline 
- G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
-{
-  G4String key = GetKey(particle);
-  return fDictionary -> findValue( &key );
-}
-
-inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
-{
-  return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
-}
-
-inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) 
-{
-  G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
-  return FindParticle(pcode);
-}
-
-inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle)
-{
-  G4int pcode = particle -> GetAntiPDGEncoding();
-  return FindParticle(pcode);
-}
-
-inline 
- G4bool  G4ParticleTable::contains(const G4String& particle_name)
-{
-   return fDictionary -> contains(&particle_name);
-}
-
-inline G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
-{
- G4String key = GetKey(particle);
- return fDictionary -> contains(&key);
-}
-
-inline 
- const G4String& G4ParticleTable::GetParticleName(G4int index)
-{
-  G4ParticleDefinition* aParticle =GetParticle(index);
-  if (aParticle != 0) {
-    return aParticle->GetParticleName();
-  } else {
-    return noName;
-  }
-}
-
-inline G4int G4ParticleTable::entries() const
-{
-  return fDictionary -> entries();
-}
-
-
-inline unsigned G4ParticleTable::HashFun(const G4String& particle_name)
-{
-  return particle_name.hash(); 
-}
-
-inline 
- unsigned G4ParticleTable::EncodingHashFun(const G4int& aEncoding)
-{
-  G4int temp = aEncoding;
-  if (aEncoding <0) temp *= -1;
-  G4int value = ( temp & 0x0FFF)*( temp & 0x0FFF)/2;
-  return value; 
-}
 #endif
 
 

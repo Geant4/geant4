@@ -5,7 +5,7 @@
 #ifndef G4NucleiPropertiesTheoreticalTable_h
 #define G4NucleiPropertiesTheoreticalTable_h 1
 
-
+// Class Description
 //	Encapsulates Data from W.D. Myers, W.J. Swiatecki, P. Moller and J.R. Nix, 
 //	1. Jan. 1995.
 //	Atomic Mass Excess
@@ -30,24 +30,21 @@ public:
 
   // Other Operations 
 
+ public: // With Description
   // Operation: GetMassExcess
   static G4double GetMassExcess(G4int Z, G4int A); 
 
+  // Operation: GetNuclearMass
+  static G4double GetNuclearMass(G4int Z, G4int A);
 
-	// Operation: GetNuclearMass
-	static G4double GetNuclearMass(G4int Z, G4int A);
+  // Operation: GetAtomicMass 
+  static G4double GetAtomicMass(G4int Z, G4int A);
 
+  // Operation: GetBindingEnergy
+  static G4double GetBindingEnergy(G4int Z, G4int A);
 
-	// Operation: GetAtomicMass 
-	static G4double GetAtomicMass(G4int Z, G4int A);
-
-	// Operation: GetBindingEnergy
-	static G4double GetBindingEnergy(G4int Z, G4int A);
-
-
-	// Is the nucleus (Z,A) in table?
-	static G4bool IsInTable(G4int Z, G4int A);
-
+  // Is the nucleus (Z,A) in table?
+  static G4bool IsInTable(G4int Z, G4int A);
 
 
 private:

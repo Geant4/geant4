@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.7 1999-10-05 06:44:37 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.8 1999-10-28 23:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,9 +28,16 @@
 #define G4IonTable_h 1
 
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+
+#define G4Ptbl_USE_MAP
+
+#ifdef G4Ptbl_USE_MAP
+#include "g4std/vector"
+#else
+#include <rw/tpordvec.h>
+#endif 
 
 class G4ParticleTable;
 class G4VIsotopeTable; 
@@ -38,12 +45,19 @@ class G4IsotopeProperty;
 
 class G4IonTable
 {
+ // Class Description
  //   G4IonTable is the table of pointer to G4ParticleDefinition
  //   In G4IonTable, each G4ParticleDefinition pointer is stored
+ //
 
  public:
+#ifdef G4Ptbl_USE_MAP
+   // Use STL Vector as list of ions
+   typedef vector<G4ParticleDefinition*> G4IonList;
+#else
    // Use  RWTPtrOrderedVector as list of ions
    typedef RWTPtrOrderedVector<G4ParticleDefinition> G4IonList;
+#endif
 
  public:
   // constructor
@@ -57,8 +71,7 @@ class G4IonTable
   // destructor
    virtual ~G4IonTable();
 
-
- public: 
+ public: // With Description
    // Register Isotope table
    void RegisterIsotopeTable(G4VIsotopeTable* table);
    G4VIsotopeTable* GetIsotopeTable() const;
@@ -158,18 +171,33 @@ class G4IonTable
 
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
+#ifdef G4Ptbl_USE_MAP
+  G4IonList::iterator i;
+  for (i = fIonList->begin(); i!= fIonList->end(); ++i) {
+    if (**i==*particle) return true;
+  }
+  return false;
+#else
   return fIonList->contains(particle);
+#endif
 }
 
 inline G4int G4IonTable::Entries() const
 {
+#ifdef G4Ptbl_USE_MAP
+  return fIonList->size();
+#else
   return fIonList->entries();
+#endif
 }
-
 
 inline G4ParticleDefinition*  G4IonTable::GetParticle(G4int index) const
 {
-  return (*fIonList)[index];
+  if ( (index >=0 ) && (index < Entries()) ){
+    return (*fIonList)[index];
+  } else {
+    return 0; 
+  } 
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.9 1999-10-06 09:40:41 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.10 1999-10-28 23:24:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -25,6 +25,9 @@
 //      modified destructor for STL interface 18 May 1999
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
+//      implement new version for using STL map instaed of RW PtrHashedDictionary
+//                                       28 ct., 99  H.Kurashige
+
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -34,16 +37,24 @@
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
 
+#ifndef G4Ptbl_USE_MAP
 const G4int G4ParticleTableDefaultBucket = 32;
 const G4int G4ParticleTableMaxInABucket = 64;
+#endif
 
 ////////////////////
 G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" ")
 {
+#ifdef G4Ptbl_USE_MAP
+  fDictionary = new G4PTblDictionary();
+  fIterator   = new G4PTblDicIterator( *fDictionary );
+  fEncodingDictionary = new G4PTblEncodingDictionary();
+#else
   DictionaryBucketSize = G4ParticleTableDefaultBucket;
   fDictionary = new G4PTblDictionary(G4ParticleTable::HashFun,DictionaryBucketSize);
   fIterator   = new G4PTblDicIterator( *fDictionary );
   fEncodingDictionary = new G4PTblEncodingDictionary(G4ParticleTable::EncodingHashFun,DictionaryBucketSize);
+#endif
 
  // Ion Table
   fIonTable = new G4IonTable();
@@ -60,8 +71,9 @@ G4ParticleTable::~G4ParticleTable()
     {
       fDictionary->clear();
       delete fDictionary;
-    }
-  delete fIterator;
+	  if (fIterator!=0 )delete fIterator;
+  }
+
   if (fParticleMessenger!=0) delete fParticleMessenger;  
 
   // delete dictionary for encoding
@@ -152,9 +164,11 @@ void G4ParticleTable::RemoveAllParticles()
       fEncodingDictionary = 0;
     }
 
-  // delete G4String objects for key
+  // delete dictionary
   if (fDictionary)
     {
+	  if (fIterator!=0 )delete fIterator;
+      fIterator =0;
       fDictionary->clear();
       delete fDictionary;
       fDictionary = 0;
@@ -185,26 +199,35 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 #endif
       return  FindParticle(particle);
     } else {
-      G4PTblDictionary *pdic = GetDictionary();
+      G4PTblDictionary *pdic =  fDictionary;
+	  G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
+
+#ifdef G4Ptbl_USE_MAP
+      (*pdic)[GetKey(particle)] = particle;
+      // insert into EncodingDictionary
+      G4int code = particle->GetPDGEncoding();
+      if (code !=0 ) {
+       (*pedic)[code] = particle;
+      }       
+#else
       pdic -> insertKeyAndValue(new G4String(GetKey(particle)), particle);
       // if HashDictionary get too big, rehash all of the key
       if (pdic -> entries() > G4ParticleTableMaxInABucket*DictionaryBucketSize) {
-	DictionaryBucketSize *= 2;
-	pdic -> resize(DictionaryBucketSize);
-	G4PTblDicIterator *piter = fIterator; 
-	piter -> reset();
+	    DictionaryBucketSize *= 2;
+	    pdic -> resize(DictionaryBucketSize);
+	    G4PTblDicIterator *piter = fIterator; 
+	    piter -> reset();
       }
 
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
       if (code !=0 ) {
-	G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
-	pedic -> insertKeyAndValue(new G4int(code), particle);
+	    pedic -> insertKeyAndValue(new G4int(code), particle);
       }       
- 
+#endif 
       // insert it in IonTable if "nucleus"
       if (fIonTable->IsIon(particle) ){
-	fIonTable->Insert(particle);
+        fIonTable->Insert(particle);
       }
 
       // insert it in SHortLivedTable if "shortlived"
@@ -221,6 +244,20 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
+#ifdef G4Ptbl_USE_MAP
+  
+  G4PTblDictionary::iterator it =  fDictionary->find(GetKey(particle));
+  if (it != fDictionary->end()) {
+    fDictionary->erase(it);
+    // remove from EncodingDictionary
+    G4int code = particle->GetPDGEncoding();
+    if (code !=0 ) {
+      fEncodingDictionary->erase(fEncodingDictionary->find(code)); 
+    }
+  } else {
+    return 0;
+  }
+#else
   if (! contains(particle) ) return 0;
 
   G4String particle_name = GetKey(particle);
@@ -231,7 +268,8 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   if (code !=0 ) {
     G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
     pedic -> remove(&code);
-  }       
+  }
+#endif
   
   // remove it from IonTable if "nucleus"
   if (fIonTable->IsIon(particle) ){
@@ -293,6 +331,13 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 }
 
 ////////////////////
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
+{
+  G4String key = GetKey(particle);
+  return FindParticle(key);
+}
+
+////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 {
     // check aPDGEncoding is valid
@@ -305,8 +350,16 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
       return 0;
     }
 
-    G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
-    G4ParticleDefinition* particle = pedic -> findValue( &aPDGEncoding );
+    G4PTblEncodingDictionary *pedic =  fEncodingDictionary;
+    G4ParticleDefinition* particle =0;  
+#ifdef G4Ptbl_USE_MAP
+    G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
+    if (it != pedic->end()) {
+      particle = it->second;
+    }
+#else
+    particle = pedic -> findValue( &aPDGEncoding );
+#endif
 
 #ifdef G4VERBOSE
     if ((particle == 0) && (verboseLevel>0) ){

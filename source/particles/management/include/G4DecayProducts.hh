@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.hh,v 1.3 1999-04-13 07:58:22 kurasige Exp $
+// $Id: G4DecayProducts.hh,v 1.4 1999-10-28 23:24:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,12 +28,13 @@
 
 class G4DecayProducts
 {
-  public:
+  public: // With Description
 
     // constructors
     G4DecayProducts();
     G4DecayProducts(const G4DynamicParticle &aParticle);
 
+  public: 
     // copy constructor and assignment operator 
     //   Deep    copy: for G4DynamicParticle pointer
     G4DecayProducts(const G4DecayProducts &right);
@@ -50,7 +51,7 @@ class G4DecayProducts
     G4int operator==(const G4DecayProducts &right) const;
     G4int operator!=(const G4DecayProducts &right) const;
 
-  public:
+  public: // With Description
    //  set-get methods for the parent particle   
    //    theParentPaticle is used to get information of parent particle 
    //    when decay products are filled 

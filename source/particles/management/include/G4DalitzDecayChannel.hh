@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.hh,v 1.1 1999-01-07 16:10:27 gunter Exp $
+// $Id: G4DalitzDecayChannel.hh,v 1.2 1999-10-28 23:24:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,7 +26,12 @@
 
 class G4DalitzDecayChannel :public G4VDecayChannel
 {
-  public:
+ // Class Description
+ //   This class describes kinematics in Dalitz decay
+ //       parent -> lepton + anti_lepton   
+ //
+
+ public: // With Description
     //Constructors 
       G4DalitzDecayChannel(const G4String& theParentName,
 			   G4double        theBR,
@@ -35,7 +40,7 @@ class G4DalitzDecayChannel :public G4VDecayChannel
     //  Destructor
       virtual ~G4DalitzDecayChannel();
 
-  public:
+  public: // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
 
   private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.16 1999-10-14 04:17:55 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.17 1999-10-28 23:24:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,21 +61,29 @@ G4IonTable::~G4IonTable()
   if (fIsotopeTable != 0) delete fIsotopeTable;
 
   // delete ion objects
+  G4ParticleDefinition* particle;
+#ifdef G4Ptbl_USE_MAP
+  G4IonList::reverse_iterator i;
+  for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
+    particle = *i;
+#else
   G4int idx;
   for (idx=(fIonList->entries()-1); idx >=0 ; idx--) {
-    G4ParticleDefinition* particle = (*fIonList)(idx);
+    particle = (*fIonList)(idx);
+#endif
 
     if ( !IsLightIon(particle) ) {
       // delete if not static objects
 #ifdef G4VERBOSE
       G4String name;
       if (GetVerboseLevel()>1) {
-	G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
+        G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
         G4cout << particle->GetParticleName() << endl;
       }
 #endif
       delete particle;
     }
+
   }
 
   // remove all contents in the Ion List 
@@ -201,9 +209,15 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
+#ifdef G4Ptbl_USE_MAP
+  G4IonList::iterator idx;
+  for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
+    ion = *idx;
+#else
   G4int idx;
-  for (idx= 0; idx < fIonList->entries() ; idx++) {
+  for (idx= 0; idx < fIonList->entries() ; ++idx) {
     ion = (*fIonList)(idx);
+#endif
 
     // Z = Atomic Number 
     G4int anAtomicNumber = 0;
@@ -359,7 +373,11 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
+#ifdef G4Ptbl_USE_MAP
+    fIonList->push_back(particle);
+#else
     fIonList->insert(particle);
+#endif
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
@@ -374,7 +392,17 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
 void G4IonTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
+#ifdef G4Ptbl_USE_MAP
+    G4IonList::iterator idx;
+    for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
+      if ( particle == *idx) {
+        fIonList->erase(idx);
+      }
+    }
+#else
     fIonList->remove(particle);
+#endif
+
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
@@ -383,6 +411,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
     }
 #endif
   }
+
 }
 
 
@@ -392,11 +421,19 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 /////////////////
 void G4IonTable::DumpTable(const G4String &particle_name) const
 {
+  G4ParticleDefinition* ion;
+#ifdef G4Ptbl_USE_MAP
+  G4IonList::iterator idx;
+  for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
+    ion = *idx;
+#else
   for (G4int idx= 0; idx < fIonList->entries() ; idx++) {
+    ion = (*fIonList)(idx);
+#endif 
     if (( particle_name == "ALL" ) || (particle_name == "all")){
-      ((*fIonList)(idx))->DumpTable();
-    } else if ( particle_name == ((*fIonList)(idx))->GetParticleName() ) {
-      ((*fIonList)(idx))->DumpTable();
+      ion->DumpTable();
+    } else if ( particle_name == ion->GetParticleName() ) {
+      ion->DumpTable();
     }
   }
 }

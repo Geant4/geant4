@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMomentum.hh,v 1.2 1999-02-06 10:10:08 kurasige Exp $
+// $Id: G4ParticleMomentum.hh,v 1.3 1999-10-28 23:24:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,11 +18,13 @@
 //	2nd December 1995, G.Cosmo
 // ------------------------------------------------------------
 //
+// Class Description
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  G4ParticleMomentum is "momentum direction" not "momentum vector"
 //  The name is miss-leading so you should not use G4ParticleMomentum
 //  and you are recommended to use G4ThreeVector instead
 //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
 
 #ifndef G4ParticleMomentum_h
 #define G4ParticleMomentum_h 1
