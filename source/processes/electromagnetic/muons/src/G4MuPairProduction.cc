@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.34 2003-05-09 09:35:28 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.35 2003-05-12 09:05:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -302,9 +302,11 @@ G4double G4MuPairProduction::ComputePairLoss(
 void G4MuPairProduction::BuildLambdaTable(
                                    const G4ParticleDefinition& aParticleType)
 {
+  /*
   G4cout << "G4MuPairProduction::BuildLambdaTable= " << theMeanFreePathTable
         << " for " << aParticleType.GetParticleName()
-        << G4endl;  
+        << G4endl;
+  */  
   G4double LowEdgeEnergy , Value;
   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2. ;
 
@@ -344,9 +346,11 @@ void G4MuPairProduction::BuildLambdaTable(
      // Compute the PartialSumSigma table at a given fixed energy
     ComputePartialSumSigma( &aParticleType, FixedEnergy, couple) ;
   }
+  /*
   G4cout << "Is done theTable= " << theMeanFreePathTable
         << " for " << aParticleType.GetParticleName()
         << G4endl;  
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
