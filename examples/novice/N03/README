@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2003-12-01 21:09:23 perl Exp $
+$Id: README,v 1.15 2003-12-02 14:22:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,23 +58,25 @@ $Id: README,v 1.14 2003-12-01 21:09:23 perl Exp $
         in the macro vis.mac. This macro is automatically read from 
  	the main in case of interactive running mode.
 
-        By default, vis.mac opens a DAWNFILE, suitable for viewing in DAWN.
+        By default, vis.mac opens a DAWNFILE, suitable for viewing in DAWN,
+	and an OGLX for OpenGl.
         You can switch to other graphics systems by commenting out this line
         and instead uncommenting one of the other /vis/open statements, such as
-        OGLIX, HepRepFile or HepRepXML.
+        HepRepFile or HepRepXML.
 	
-	The DAWNFILE, HepRepFile and HepRepXML drivers are always available (since
-	they require no external libraries), but the OGLIX driver requires:
+	The DAWNFILE, HepRepFile and HepRepXML drivers are always available 
+	(since they require no external libraries), but the OGLIX driver 
+	requires:
 	    1- the visualisation & interfaces categories have been compiled
 	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
 	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.
 
-	The HepRepXML driver outputs a zip file that can be unzipped into several
-        individual HepRep files, each viewable in WIRED.
+	The HepRepXML driver outputs a zip file that can be unzipped into 
+	several individual HepRep files, each viewable in WIRED.
 
 	For more information on visualization, including information on how to
-	install and run DAWN, OpenGL and WIRED, see the visualization tutorials on
-	the Geant4 Workshop Tutorial CD available at:
+	install and run DAWN, OpenGL and WIRED, see the visualization tutorials
+	on the Geant4 Workshop Tutorial CD available at:
 	http://geant4.slac.stanford.edu/g4cd/Welcome.html
  	
  	The detector has a default view which is a longitudinal view of the 
