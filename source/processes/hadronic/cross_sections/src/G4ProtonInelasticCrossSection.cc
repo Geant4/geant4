@@ -8,8 +8,14 @@
    {
       G4double atomicNumber = anEle->GetN();
       G4double nOfProtons = anEle->GetZ();
+      return GetCrossSection(aPart->GetKineticEnergy(), atomicNumber, nOfProtons);
+   }
+   
+   G4double G4ProtonInelasticCrossSection::
+   GetCrossSection(G4double kineticEnergy, G4double atomicNumber, G4double nOfProtons)
+   {
       G4double nOfNeutrons = atomicNumber-nOfProtons;
-      G4double kineticEnergy = aPart->GetKineticEnergy()/GeV;
+      kineticEnergy /=GeV;
       G4double a = atomicNumber;
       const G4double nuleonRadius=1.36E-15;
       const G4double pi=3.14159265;
