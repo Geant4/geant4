@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.4 2003-04-11 11:48:39 asaim Exp $
+// $Id: G4ParticleDefinition.icc,v 1.5 2003-06-11 07:20:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,29 +71,33 @@ inline
 inline
  G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
 { 
-  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
     return theQuarkContent[flavor-1];
   }else {
+#ifdef G4VERBOSE
     if (verboseLevel >0) {
       G4cout << "Invalid Quark Flavor for G4ParticleDefinition::GetQuarkContent";
       G4cout << ": flavor=" << flavor <<G4endl;
-    }
+    }	
     return 0;
+#endif	
   }  
 }
 
 inline
  G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
 { 
-  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
     return theAntiQuarkContent[flavor-1];
   }else {
+#ifdef G4VERBOSE
     if (verboseLevel >0) {
       G4cout <<"Invalid Quark Flavor for G4ParticleDefinition::GetAntiQuarkContent";
       G4cout << ": flavor=" << flavor <<G4endl;
     }
     return 0;
   }  
+#endif
 }
 
 inline 
@@ -113,5 +117,9 @@ G4bool G4ParticleDefinition::GetApplyCutsFlag() const
 {
   return fApplyCutsFlag;
 }
+
+
+
+
 
 
