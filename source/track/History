@@ -1,4 +1,4 @@
-$Id: History,v 1.9 1999-05-06 11:42:48 kurasige Exp $
+$Id: History,v 1.10 1999-07-14 01:43:44 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 14 1999 H.Kurashige (track-01-00-07)
+-  Fixed bugs in G4Mars5GeVMechanism::CreatePion()
+
 May 6, 1999 H.Kurashige (track-01-00-06)
 -  Modified CheckIt methods of G4VParticleChange and derived classes 
 
