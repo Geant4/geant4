@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.3 2001-07-10 07:17:16 elena Exp $
+# $Id: GNUmakefile,v 1.4 2001-09-16 17:30:36 elena Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := esperimento
+name := fluoTest
 G4TARGET := $(name)
 G4EXLIB := true
 
