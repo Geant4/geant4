@@ -165,7 +165,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
  G4Element * G4HadronicProcess::ChooseAandZ(
   const G4DynamicParticle *aParticle, const G4Material *aMaterial )
   {
-    static G4bool isotopeWiseCrossSections=getenv("GHAD_USE_ISOTOPE_WISE_CROSS_SECTIONS");
+    static G4bool noIsotopeWiseCrossSections=getenv("GHAD_DISABLE_ISOTOPE_WISE_CROSS_SECTIONS");
     static G4StableIsotopes theIso;
     currentZ = 0;
     currentN = 0;
@@ -176,7 +176,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     {
       currentZ = G4double( ((*theElementVector)[0])->GetZ());
       G4int localZ = G4lrint(currentZ);
-      if(!isotopeWiseCrossSections)
+      if(noIsotopeWiseCrossSections)
       {
         currentN = (*theElementVector)[0]->GetN();
       }
