@@ -1,0 +1,20 @@
+                      geant4-02-00-ref-01
+                      ===================
+
+geant4-02-00-ref-01 is geant4-02-00-cand-00 plus:
+
+./config		config-V02-00-00
+./examples/extended/electromagnetic/TestEm2		testem2-V02-00-00
+./examples/extended/electromagnetic/TestEm8		TestEm8-V02-00-01
+./examples/extended/g3tog4		g3tog4Tests-V02-00-00
+./examples/novice/N05		exampleN05-V02-00-01
+./source/event		event-V02-00-00
+./source/g3tog4		g3tog4-V02-00-02
+./source/global		global-V02-00-01
+./source/intercoms		intercoms-V02-00-01
+./source/interfaces		interfaces-V02-00-00
+./source/processes/electromagnetic/lowenergy		emlowen-V02-00-01
+./source/processes/hadronic/models/high_energy		high_energy-V02-00-00
+./source/run		run-V02-00-00
+./tests/GNUmakefile		testtool-V02-00-01
+./tests/test01		test01-V02-00-00
