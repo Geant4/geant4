@@ -24,6 +24,8 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
 
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*);
+   
+   G4double GetCrossSection(G4double anEnergy, G4double anA, G4double aZ);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)

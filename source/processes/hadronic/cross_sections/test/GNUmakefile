@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:33:10 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-10-06 13:40:38 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -62,22 +62,17 @@ INCFLAGS := \
             -I$(G4BASE)/intercoms/include
 
 LDLIBS   := \
-            -lG4hadronic \
-	    -lG4hadronic_proc \
-	    -lG4hadronic_mgt \
 	    -lG4hadronic_xsect \
+            -lG4processes \
             -lG4track \
             -lG4tracking \
             -lG4particles \
             -lG4materials \
-            -lG4procman \
             -lG4geometry \
             -lG4graphics_reps \
             -lG4intercoms \
             -lG4event \
             -lG4digits+hits \
             -lG4global \
-            -lG4procman \
-            -lG4global
 
 include $(G4INSTALL)/config/binmake.gmk
