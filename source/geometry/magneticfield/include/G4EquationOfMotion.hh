@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh,v 1.5 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4EquationOfMotion.hh,v 1.6 2002-06-11 08:11:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,6 +86,8 @@ class G4EquationOfMotion
      void           SetFieldObj(G4Field* pField);
 
   private:
+     // static const int G4maximum_number_of_field_components = 16;
+     enum { G4maximum_number_of_field_components = 16 } ;
 
      G4Field *itsField;
 
