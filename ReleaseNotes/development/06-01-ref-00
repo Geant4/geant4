@@ -81,7 +81,7 @@ processes/electromagnetic/muons                  muons-V06-00-02
 
 processes/electromagnetic/standard               stand-V06-00-04
 ----------------------------------
-- Fixes in constructor of discrete processes for setting of name and type.
+- Fixes in constructor of discrete processes for setting of process type.
 
 processes/electromagnetic/utils                  utils-V06-00-08
 -------------------------------
@@ -189,6 +189,9 @@ examples                                         examples-V06-00-02
       compiler/system configurations.
   o Rich (Rich-V06-00-00)
     + Fixed compilation errors and warnings for gcc-3.2.
+- extended/field (fieldex-V06-00-00)
+  o Fixed methods that change the field to update the equation and
+    field-manager in field01 & field03.
 - extended/medical:
   o DICOM (DICOM-V06-00-01)
     + Added History file, changed README.

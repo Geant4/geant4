@@ -258,8 +258,8 @@ please refer to the related History files provided in most packages):
 <LI>Updated radiative corrections for <TT>G4MuBetheBlochModel</TT>.</LI>
 <LI>Fixed problem of ionisation in air with low pressure
     <TT>10<SUP>-4</SUP> Atm</TT>.</LI>
-<LI>Fixes in constructor of discrete processes for setting of name
-    and type.</LI>
+<LI>Fixes in constructor of discrete processes for setting of process
+    type.</LI>
 </UL>
 
 <A NAME="gen-notes">
@@ -479,6 +479,12 @@ please refer to the related History files provided in most packages):
         <LI>RunAction: removed UI commands for visualisation,
             added a function <TT>ComputeMscHighland()</TT>.</LI>
         </UL></LI>
+    <LI><I>field</I>
+        <UL>
+        <LI>Fixed methods that change the field to update the equation and
+            field-manager in field01 and field03.</LI>
+        </UL></LI>
+    </UL></LI>
     <LI><I>medical/DICOM</I>
         <UL>
         <LI>Added History file, changed README.</LI>
