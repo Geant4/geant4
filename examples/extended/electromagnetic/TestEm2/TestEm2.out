@@ -88,78 +88,54 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
-      Boundary algorithm is active with facrange= 0.199
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-eIoni:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-eBrem:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-
-eIoni:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-
-eBrem:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
-      Boundary algorithm is active with facrange= 0.199
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-hIoni:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
-      Boundary algorithm is active with facrange= 0.199
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-MuIoni:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-MuBrems:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-MuPairProd:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuIoni:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
-
-MuBrems:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuPairProd:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 ========= Table of registered couples ==============================
 
@@ -192,20 +168,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.37s Real=20.33s Sys=0.81s
+  User=24.11s Real=92.46s Sys=2.84s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.38%       5.73%             0-> 1.11 radl:   14.38%     5.73% 
-    1.11-> 2.22 radl:   26.98%      10.28%             0-> 2.22 radl:   41.36%    13.58% 
-    2.22-> 3.33 radl:   21.55%       8.59%             0-> 3.33 radl:   62.91%    16.03% 
-    3.33-> 4.44 radl:   12.60%       7.92%             0-> 4.44 radl:   75.52%    14.14% 
-    4.44-> 5.55 radl:    8.21%       6.89%             0-> 5.55 radl:   83.73%    12.45% 
-    5.55-> 6.66 radl:    4.82%       4.79%             0-> 6.66 radl:   88.55%    10.63% 
-    6.66-> 7.77 radl:    2.78%       4.00%             0-> 7.77 radl:   91.33%     9.05% 
-    7.77-> 8.88 radl:    1.08%       2.20%             0-> 8.88 radl:   92.41%     8.55% 
-    8.88-> 9.99 radl:    0.58%       1.57%             0-> 9.99 radl:   92.99%     8.33% 
+    0.00-> 1.11 radl:   14.59%       6.17%             0-> 1.11 radl:   14.59%     6.17% 
+    1.11-> 2.22 radl:   23.22%      10.06%             0-> 2.22 radl:   37.82%    12.90% 
+    2.22-> 3.33 radl:   21.18%      10.07%             0-> 3.33 radl:   59.00%    16.67% 
+    3.33-> 4.44 radl:   15.27%       7.88%             0-> 4.44 radl:   74.27%    15.55% 
+    4.44-> 5.55 radl:   10.03%       6.62%             0-> 5.55 radl:   84.30%    13.02% 
+    5.55-> 6.66 radl:    5.16%       5.60%             0-> 6.66 radl:   89.46%    10.50% 
+    6.66-> 7.77 radl:    2.44%       4.09%             0-> 7.77 radl:   91.89%     8.64% 
+    7.77-> 8.88 radl:    1.33%       3.36%             0-> 8.88 radl:   93.23%     6.18% 
+    8.88-> 9.99 radl:    0.88%       2.56%             0-> 9.99 radl:   94.10%     4.76% 
 
 
 
@@ -213,21 +189,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   60.90%      12.29%             0-> 0.11 radl:   60.90%    12.29% 
-    0.11-> 0.22 radl:   17.95%       6.60%             0-> 0.22 radl:   78.84%    11.16% 
-    0.22-> 0.33 radl:    7.51%       5.56%             0-> 0.33 radl:   86.35%     9.54% 
-    0.33-> 0.44 radl:    3.21%       2.35%             0-> 0.44 radl:   89.56%     9.11% 
-    0.44-> 0.56 radl:    2.05%       1.90%             0-> 0.56 radl:   91.61%     8.76% 
-    0.56-> 0.67 radl:    1.37%       1.55%             0-> 0.67 radl:   92.99%     8.33% 
+    0.00-> 0.11 radl:   67.07%      10.66%             0-> 0.11 radl:   67.07%    10.66% 
+    0.11-> 0.22 radl:   15.01%       6.21%             0-> 0.22 radl:   82.07%     8.48% 
+    0.22-> 0.33 radl:    5.96%       4.27%             0-> 0.33 radl:   88.04%     6.95% 
+    0.33-> 0.44 radl:    3.02%       2.50%             0-> 0.44 radl:   91.06%     5.77% 
+    0.44-> 0.56 radl:    1.99%       1.99%             0-> 0.56 radl:   93.05%     5.04% 
+    0.56-> 0.67 radl:    1.05%       0.87%             0-> 0.67 radl:   94.10%     4.76% 
 
                               SUMMARY
-                         energy deposit :   92.99 % E0 +-    8.33 % E0
-                         charged traklen:   13.51 radl +-    1.22 radl
-                         neutral traklen:  195.53 radl +-   25.31 radl
+                         energy deposit :   94.10 % E0 +-    4.76 % E0
+                         charged traklen:   13.74 radl +-    0.70 radl
+                         neutral traklen:  201.02 radl +-   21.34 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1188869014, 995042385
+ Current couple of seeds = 252860250, 1878946438
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
