@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.15 2001-05-25 08:51:39 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.16 2001-05-28 09:45:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -223,7 +223,9 @@ G4PAIonisation::BuildPAIonisationTable()
    DeltaCutInKineticEnergyNow = 100*keV ; // From gas detector experience
 
    Tmin = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
-   G4cout<<"Tmin = "<<Tmin/eV<<" eV"<<G4endl<<G4endl ;
+
+   //   G4cout<<"Tmin = "<<Tmin/eV<<" eV"<<G4endl<<G4endl ;
+
    deltaLow = 0.5*eV ;                    // shift from Tmin for stability
 
    for (G4int i = 0 ; i < TotBin ; i++)  //The loop for the kinetic energy 
@@ -439,16 +441,16 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
     energyTransfer = GetRandomEnergyTransfer(scaledTkin) ;
     if( energyTransfer < 0.0 )
     {
-      G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
+      //  G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
       energyTransfer = 0.0 ;
     }
     finalTkin = kinE - energyTransfer ;
 
     //  kill the particle if the kinetic energy <= 0  
 
-    if (finalTkin <= 0. )
+    if (finalTkin < 0.0 )
     {
-      finalTkin = 0.;
+      finalTkin = 0.0;
       if (aParticle->GetDefinition()->GetParticleName() == "proton")
       {
                aParticleChange.SetStatusChange( fStopAndKill ) ;
@@ -527,12 +529,12 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
    delta  = GetLossWithFluct(Step,aParticle,aMaterial) ;
    if ( delta < 0.0 )
    {
-     G4cout<<"PAI::delta = "<<delta/keV<<" keV"<<G4endl ;
+     //     G4cout<<"PAI::delta = "<<delta/keV<<" keV"<<G4endl ;
      delta = 0.0 ;
    }
    finalT = E - delta ;
 
-   if (finalT<0.) finalT = 0. ;
+   if (finalT < 0.0) finalT = 0. ;
 
    fMeanLoss *= Chargesquare ;
     
