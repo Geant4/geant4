@@ -46,7 +46,7 @@ Test17EventAction::Test17EventAction(Test17RunAction* Test17RA)
   evtNo(-1),
   good(false)
 {
-  verbose = 1;
+  verbose = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,16 +66,17 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
 
   if(verbose>0)
     G4cout << "<<< Event  " << evtNo << " started." << G4endl;
-  
+
+  /*  
   if(14 == evtNo) {
-    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 5");
-    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 5");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 2");
   }
   if(16 == evtNo) {
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
     (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 0");
   }
-  
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

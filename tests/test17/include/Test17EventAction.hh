@@ -51,6 +51,7 @@ public: // Without description
 
     G4int GetEventNo() const {return evtNo;};
     void  setEventVerbose(G4int level) {verbose = level;};
+    G4int EventVerbose() {return verbose;};
     
     void CountStepsCharged(G4double step) {totLength += step;};
     G4double TrackLength() const {return totLength;} ;
