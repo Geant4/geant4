@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.10 2000-05-22 07:38:01 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.11 2000-05-29 09:59:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,14 +156,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
   // local variables to preserve re-entrancy.
   G4LogicalVolume* pLV  = pVPV -> GetLogicalVolume ();
 
-  // Maintain data members and store in working space (via pointers to
-  // working space).
-  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
-  fpCurrentPV = pVPV;
-  fpCurrentLV = pLV;
-  if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
-  if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
-
   G4VSolid* pSol;
   G4Material* pMaterial;
 
@@ -268,6 +260,14 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  const G4Material* pMaterial,
  const G4Transform3D& theAT,
  G4VGraphicsScene& sceneHandler) {
+
+  // Maintain data members and store in working space (via pointers to
+  // working space).
+  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+  fpCurrentPV = pVPV;
+  fpCurrentLV = pLV;
+  if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
+  if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
 
   const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
   const Hep3Vector&  translation     = pVPV -> GetTranslation ();

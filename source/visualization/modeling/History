@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-05-22 08:42:31 johna Exp $
+$Id: History,v 1.7 2000-05-29 09:59:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+29th May 2000  John Allison
+- Moved code for maintaining depth, physical and logical volume
+  pointers from VisitGeometryAndGetVisReps to DescribeAndDescend to
+  handle daughters of replicas correctly (Guy Barrand).
 
 22nd May 2000  John Allison  (modeling-V01-01-00)
 - Added G4VTreeGraphicsScene (DTREE).
