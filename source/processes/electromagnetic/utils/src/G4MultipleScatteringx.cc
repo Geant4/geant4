@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.cc,v 1.1 2001-05-15 10:21:17 urban Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.2 2001-05-16 10:22:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -19,6 +19,7 @@
 //   -------- G4MultipleScatteringx physics process ------------
 //             by Laszlo Urban, March 2001   
 // **************************************************************
+// 16/05/01  value of cparm changed , L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScatteringx.hh"
@@ -48,7 +49,7 @@
        scatteringparameter2(5.0),
        scatteringparameter3(1.0),
        tuning (1.00),
-       cparm (0.0),
+       cparm (1.5),
        NuclCorrPar (0.0615),FactPar(0.40),
        fLatDisplFlag(true),boundary(false) 
   { }
