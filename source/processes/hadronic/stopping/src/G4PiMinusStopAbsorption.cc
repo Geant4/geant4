@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.2 1999-05-26 18:44:50 pia Exp $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.3 1999-05-27 09:59:47 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
     }
 
   G4double binding = G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ,_nucleusA) / _nucleusA;
-  G4double mass = G4NucleiProperties::GetNuclearMass(newZ,newA);
+  G4double mass = G4NucleiProperties::GetNuclearMass(newA,newZ);
 
 
   RWTPtrOrderedVector<G4LorentzVector>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
@@ -180,7 +180,7 @@ G4double G4PiMinusStopAbsorption::Energy()
     }
 
   G4double productBinding = (G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ,_nucleusA) / _nucleusA) * nAbsorptionProducts;
-  G4double mass = G4NucleiProperties::GetNuclearMass(_nucleusZ - nP,_nucleusA - (nP + nN));
+  G4double mass = G4NucleiProperties::GetNuclearMass(_nucleusA - (nP + nN),_nucleusZ - nP);
   G4double pNucleus = pProducts.mag();
   G4double eNucleus = sqrt(pNucleus*pNucleus + mass*mass);
   G4double tNucleus = eNucleus - mass;
