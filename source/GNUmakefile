@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.42 2004-01-30 09:56:00 gbarrand Exp $
+# $Id: GNUmakefile,v 1.43 2004-06-01 15:34:09 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -56,12 +56,12 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "         To do this it needs a complete set of dependency"
 	@echo "         files, e.g., after gmake in the source/ directory."
 	@echo "Searching $(G4INSTALL)/source"
-	@echo '  for GNUmakefiles containing "name" and sorting...'
+	@echo '  for GNUmakefiles containing "name" and sorting ...'
 	@find $(G4INSTALL)/source \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc..."
+	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc ..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
 	  echo $$i | $(GREP) -q '/tests\?/' || \
@@ -69,7 +69,7 @@ libmap: $(G4LIBDIR)/liblist
 	  $(GREP) -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
-	@echo "Making libname.map starter file..."
+	@echo "Making libname.map starter file ..."
 	@touch /tmp/G4libname.map.starter.$(unique);
 	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
@@ -77,7 +77,7 @@ libmap: $(G4LIBDIR)/liblist
 	  >> /tmp/G4libname.map.starter.$(unique); \
 	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
-	@echo "Making libname.map..."
+	@echo "Making libname.map ..."
 	@rm -f $(G4LIBDIR)/libname.map;
 	@G4TMP=$(G4TMP); export G4TMP; \
 	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
@@ -88,14 +88,14 @@ libmap: $(G4LIBDIR)/liblist
 	@rm -f /tmp/G4libname.map.starter.$(unique);
 
 $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
-	@echo "Compiling liblist.c..."
+	@echo "Compiling liblist.c ..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 win32def : $(G4INSTALL)/config/win32def.c
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-	@echo "Building win32def program that helps building WIN32 DLLs"
-	CL /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
+	@echo "Compiling win32def.c ..."
+	$(CXX) /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
 else
 	@echo ""
 endif
