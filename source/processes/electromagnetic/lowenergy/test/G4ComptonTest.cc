@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonTest.cc,v 1.1 2001-05-02 15:50:01 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.2 2001-05-07 12:45:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -292,6 +292,7 @@ G4int main()
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
+  step->SetPostStepPoint(aPoint);
   
   // Check applicability
   
