@@ -55,7 +55,7 @@ if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered"<<G4endl;
     G4int myA = A;
     G4int myZ = Z;
     G4cerr << "Please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
-    if(Z>92.5&&!getenv("AllowForHeavyElements") G4Exception("G4NeutronHPNames::GetName - data with Z>92 are not provided");
+    if(Z>92.5&&!getenv("AllowForHeavyElements") ) G4Exception("G4NeutronHPNames::GetName - data with Z>92 are not provided");
     G4String * theName = NULL;
     G4String theFileName("");
     G4int inc = 1;
