@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.2 1999-03-24 04:42:21 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.3 1999-04-16 02:14:50 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,6 +93,7 @@ class G4SteppingManager
    void SetUserAction(G4UserSteppingAction* apAction);
    G4Track* GetTrack() const;
    void SetVerboseLevel(G4int vLevel);
+   void SetVerbose(G4VSteppingVerbose*);
    G4Step* GetStep() const;
 
 
@@ -486,6 +487,10 @@ class G4SteppingManager
 
   inline void G4SteppingManager::SetVerboseLevel(G4int vLevel){
     verboseLevel = vLevel; 
+  }
+
+  inline void G4SteppingManager::SetVerbose(G4VSteppingVerbose* yourVerbose){
+     fVerbose = yourVerbose;
   }
 
   inline G4Step* G4SteppingManager::GetStep() const {
