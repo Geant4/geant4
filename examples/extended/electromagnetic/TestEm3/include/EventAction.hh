@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.hh,v 1.6 2004-04-28 16:58:47 maire Exp $
+// $Id: EventAction.hh,v 1.7 2004-06-15 11:39:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,13 +38,14 @@
 
 class RunAction;
 class EventActionMessenger;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*);
+    EventAction(DetectorConstruction*, RunAction*, HistoManager*);
    ~EventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -69,6 +70,7 @@ class EventAction : public G4UserEventAction
     G4String              drawFlag; 
     G4int                 printModulo;         
     EventActionMessenger* eventMessenger;
+    HistoManager*         histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

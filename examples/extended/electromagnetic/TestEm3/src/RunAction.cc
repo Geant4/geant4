@@ -20,16 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.17 2004-06-09 14:18:47 maire Exp $
+// $Id: RunAction.cc,v 1.18 2004-06-15 11:39:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunActionMessenger.hh"
+#include "HistoManager.hh"
 #include "EmAcceptance.hh"
 
 #include "G4Run.hh"
@@ -38,24 +39,14 @@
 
 #include "Randomize.hh"
 
-#ifdef USE_AIDA
- #include "AIDA/AIDA.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TFile.h"
- #include "TH1F.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-:Detector(det), Primary(prim)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
+                     HistoManager* hist)
+:Detector(det), Primary(prim), histoManager(hist)
 {
   runMessenger = new RunActionMessenger(this);
 
-  fileName = "testem3.paw";
-  for (G4int k=0; k<MaxAbsor; k++) {hbins[k] = 0; histoUnit[k] = 1.;}
   for (G4int k=0; k<MaxAbsor; k++) { edeptrue[k] = rmstrue[k] = 1.;
                                     limittrue[k] = DBL_MAX;
   }
@@ -66,33 +57,6 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 RunAction::~RunAction()
 {
   delete runMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::SetHisto(G4int k,
-               G4int nbins, G4double valmin, G4double valmax, G4String unit)
-{
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
-  G4String title = "Edep in absorber " + id[k] + " (" + unit + ")";
-  G4double valunit = G4UnitDefinition::GetValueOf(unit);
-
-  hid[k]    = id[k+1];
-  htitle[k] = title;
-  hbins[k]  = nbins;
-  hmin[k]   = valmin/valunit;
-  hmax[k]   = valmax/valunit;
-  histoUnit[k] = valunit;
-  
-#ifdef USE_AIDA  
-  G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
-         << hmin[k] << " " + unit << " to " << hmax[k] << " " + unit  << G4endl;  
-#endif
-
-#ifdef USE_ROOT  
-  G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
-         << hmin[k] << " " + unit << " to " << hmax[k] << " " + unit  << G4endl;  
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,44 +77,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
       sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] =
       sumEleav[k]= sum2Eleav[k] = 0.;
   }
-
+  
   //histograms
   //
-#ifdef USE_AIDA
-  // Creating the analysis factory
-  std::auto_ptr<AIDA::IAnalysisFactory> af(AIDA_createAnalysisFactory());
-
-  // Creating the tree factory
-  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
-
-  // Creating a tree mapped to an hbook file.
-  G4bool readOnly  = false;
-  G4bool createNew = true;
-  tree = tf->create(fileName, "hbook", readOnly, createNew);
-  
-  // Creating a histogram factory, whose histograms will be handled by the tree
-  hf = af->createHistogramFactory(*tree);
-
-  // histograms
-  for (G4int k=0; k<MaxAbsor; k++) {
-   if (hbins[k] > 0)
-    histo[k] = hf->createHistogram1D(hid[k],htitle[k],hbins[k],hmin[k],hmax[k]);
-   else histo[k] = 0;
-  }
-#endif
-
-#ifdef USE_ROOT
- // Create a ROOT file
- tree = new TFile(fileName,"recreate");
- 
- // histograms
- for (G4int k=0; k<MaxAbsor; k++) {
-  if (hbins[k] > 0)
-   histo[k] = new TH1F(hid[k],htitle[k],hbins[k],hmin[k],hmax[k]);
-  else histo[k] = 0;
- }
+#ifdef G4ANALYSIS_USE
+  histoManager->SetFactory();
 #endif 
-
+   
   //example of print dEdx tables
   //
   ////PrintDedxTables();
@@ -247,19 +180,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //save histograms and delete factory
   //
-#ifdef USE_AIDA
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  G4cout << "---> Histograms are saved" << G4endl;
-  delete hf;
-  delete tree;
-#endif
-
-#ifdef USE_ROOT
-  tree->Write();        // Writing the histograms to the file
-  tree->Close();        // and closing the file
-  G4cout << "---> Histograms are saved" << G4endl;
-  delete tree;
+#ifdef G4ANALYSIS_USE
+  histoManager->SaveFactory();
 #endif
 
   // show Rndm status

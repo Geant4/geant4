@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.6 2004-03-16 18:06:17 maire Exp $
+// $Id: EventAction.cc,v 1.7 2004-06-15 11:39:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 
 #include "RunAction.hh"
 #include "EventActionMessenger.hh"
+#include "HistoManager.hh"
 
 #include "G4Event.hh"
 #include "G4TrajectoryContainer.hh"
@@ -49,9 +50,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det, RunAction* run)
-:detector(det),runAct(run),drawFlag("none"),printModulo(10000),eventMessenger(0)
+EventAction::EventAction(DetectorConstruction* det, RunAction* run,
+                         HistoManager* hist)
+:detector(det), runAct(run), histoManager(hist)
 {
+  drawFlag = "none";
+  printModulo = 10000;
   eventMessenger = new EventActionMessenger(this);
 }
 
@@ -86,16 +90,16 @@ void EventAction::EndOfEventAction(const G4Event* evt)
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
                        energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
 #ifdef USE_AIDA
-      if (runAct->GetHisto(k)) {
-	G4double unit = runAct->GetHistoUnit(k); 
-	runAct->GetHisto(k)->fill(energyDeposit[k]/unit);
+      if (histoManager->GetHisto(k)) {
+	G4double unit = histoManager->GetHistoUnit(k); 
+	histoManager->GetHisto(k)->fill(energyDeposit[k]/unit);
       }  
 #endif
 
 #ifdef USE_ROOT
-      if (runAct->GetHisto(k)) {
-	G4double unit = runAct->GetHistoUnit(k); 
-	runAct->GetHisto(k)->Fill(energyDeposit[k]/unit);
+      if (histoManager->GetHisto(k)) {
+	G4double unit = histoManager->GetHistoUnit(k); 
+	histoManager->GetHisto(k)->Fill(energyDeposit[k]/unit);
       }  
 #endif
   }

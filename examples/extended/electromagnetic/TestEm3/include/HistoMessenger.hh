@@ -20,37 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.7 2004-06-15 11:39:58 maire Exp $
+// $Id: HistoMessenger.hh,v 1.1 2004-06-15 11:39:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunActionMessenger_h
-#define RunActionMessenger_h 1
+#ifndef HistoMessenger_h
+#define HistoMessenger_h 1
 
-#include "globals.hh"
+#ifdef G4ANALYSIS_USE
+
 #include "G4UImessenger.hh"
-
-class RunAction;
-class G4UIcmdWith3Vector;
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunActionMessenger: public G4UImessenger
+class HistoManager;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoMessenger: public G4UImessenger
 {
   public:
-    RunActionMessenger(RunAction*);
-   ~RunActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+
+   HistoMessenger(HistoManager* );
+  ~HistoMessenger();
+
+   void SetNewValue(G4UIcommand* ,G4String );
+
   private:
-    RunAction*          Run;
-    G4UIcmdWith3Vector* accCmd1;
-    G4UIcmdWith3Vector* accCmd2;             
+
+   HistoManager*           histoManager;
+   
+   G4UIdirectory*          histoDir;   
+   G4UIcmdWithAString*     factoryCmd;
+   G4UIcommand*            histoCmd;
+   G4UIcmdWithAnInteger*   rmhistoCmd;    
+ 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif
 #endif

@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.14 2004-05-25 20:24:09 vnivanch Exp $
+# $Id: TestEm3.in,v 1.15 2004-06-15 11:39:55 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -17,8 +17,8 @@
 /gun/energy 1 GeV
 #
 /testem/run/setFileName testem3.paw
-/testem/run/setHisto 0 100 700. 1000. MeV
-/testem/run/setHisto 1 100   0.  300. MeV
+/testem/histo/setHisto 0 100 700. 1000. MeV
+/testem/histo/setHisto 1 100   0.  300. MeV
 #
 /testem/event/printModulo 50
 #

@@ -20,68 +20,97 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.13 2004-06-15 11:39:57 maire Exp $
+// $Id: HistoManager.hh,v 1.1 2004-06-15 11:39:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#include "DetectorConstruction.hh"
+#ifdef G4ANALYSIS_USE
 
-#include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction;
-class RunActionMessenger;
-class HistoManager;
+#ifdef USE_AIDA
+namespace AIDA {
+ class ITree;
+ class IHistogramFactory;
+ class IHistogram1D;
+} 
+#endif
 
-class G4Run;
+#ifdef USE_ROOT
+ class TFile;
+ class TH1F;
+#endif
+
+class HistoMessenger;
+
+#include "DetectorConstruction.hh"
+  const G4int MaxHisto = MaxAbsor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class HistoManager
 {
   public:
-
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
-
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
-
-    void fillPerEvent(G4int,G4double,G4double,G4double);
+  
+    HistoManager();
+   ~HistoManager();
+   
+    void SetFileName (G4String name) { fileName = name;};
+    void SetFactory  ();
+    void SaveFactory ();    
+    void SetHisto (G4int, G4int, G4double, G4double, G4String unit="none");
+    void RemoveHisto (G4int);
     
-    void PrintDedxTables();
+#ifdef USE_AIDA    
+    AIDA::ITree*             GetTree()              {return tree;}
+    AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}        
+    AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
+#endif
+
+#ifdef USE_ROOT
+    TFile* GetTree()           {return tree;}     
+    TH1F*  GetHisto(G4int id)  {return histo[id];}
+#endif
     
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4int, G4ThreeVector);
-     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
-     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
-     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
-         
+    G4double                 GetHistoUnit(G4int id) {return Unit[id];}
+    G4double                 GetBinWidth (G4int id) {return Width[id];}
+    
   private:
+  
+    G4String                 fileName;
+    
+#ifdef USE_AIDA    
+    AIDA::ITree*             tree;
+    AIDA::IHistogramFactory* hf;    
+    AIDA::IHistogram1D*      histo[MaxHisto];
+#endif
 
-    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
-    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
-    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];           
-
-    DetectorConstruction*   Detector;
-    PrimaryGeneratorAction* Primary;    
-    RunActionMessenger*     runMessenger;
-    HistoManager*           histoManager;
-
-    G4double edeptrue [MaxAbsor];
-    G4double rmstrue  [MaxAbsor];
-    G4double limittrue[MaxAbsor];                
+#ifdef USE_ROOT    
+    TFile* tree;
+    TH1F*  histo[MaxHisto];
+#endif
+    
+    G4bool                   exist[MaxHisto];
+    G4String                 Label[MaxHisto];
+    G4String                 Title[MaxHisto];
+    G4int                    Nbins[MaxHisto];
+    G4double                 Vmin [MaxHisto];
+    G4double                 Vmax [MaxHisto];        
+    G4double                 Unit [MaxHisto];
+    G4double                 Width[MaxHisto];
+    G4bool                   factoryOn;        
+    HistoMessenger*          histoMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif     //G4ANALYSIS_USE
 #endif
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2004-03-31 10:30:59 maire Exp $
+$Id: README,v 1.16 2004-06-15 11:39:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -115,12 +115,12 @@ $Id: README,v 1.15 2004-03-31 10:30:59 maire Exp $
   ...etc...........
   
  One can control the binning of the histo with the command:
-  /testem/run/setHisto   idAbsor  nbin  Emin  Emax  unit 
+  /testem/histo/setHisto   idAbsor  nbin  Emin  Emax  unit 
   ...etc...........  
   where unit is the desired energy unit for that histo (see TestEm3.in).
 
  One can control the name of the histograms file with the command:
- /testem/run/setFileName  name  (default testem3.paw)
+ /testem/histo/setFileName  name  (default testem3.paw)
  
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile.
