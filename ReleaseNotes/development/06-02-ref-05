@@ -1,0 +1,233 @@
+
+                       geant4-06-02-ref-05
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added GetMass() method to G4LogicalVolume, returning the value in
+    absolute units of the mass of a logical volume tree.
+  o Introducing new G4TwistedBox and G4TwistedTrap specific shapes.
+  o Implemented migration to new G4VParticleChange interface for electro-
+    magnetic and generic processes.
+  o Fixed precision problem for very high energy ions in gases (or with
+    small step-size) in multiple-scattering.
+  o Paul&Sacher PIXE low-energy electromagnetic model becomes the default.
+  o Removed setup for Windows/VC++6 compiler. Now WIN32-VC refers to
+    .NET VC++7.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V06-02-00
+------
+- Archived setup for Windows/VC++6 and removed WIN32-VC7 G4SYSTEM tag,
+  now replaced by WIN32-VC, setup for VC++ .NET.
+- Relaxed compilation options for SUN-CC.
+- Darwin-g++.gmk:
+  o Added -lXi to X11LIBS.
+  o Corrected options to build granular shared libs.
+    Have "-undefined define_a_way" instead of "-undefined error"
+    since granular libs are not linked for the moment.
+
+digits_hits                                      digits_hits-V06-02-01
+-----------
+- G4VDigi: added methods to store and retrieve HepRep attributes in same
+  manner that we currently have for trajectories and hits.
+
+event                                            event-V06-02-03
+-----
+- G4GeneralParticleSource: added new features, focused beam and
+  multiple verteces.
+
+geometry/magneticfield                           field-V06-02-00
+----------------------
+- Added Set/GetAnomaly() methods in G4Mag_SpinEqRhs equation of motion.
+
+geometry/management                              geommng-V06-02-07
+-------------------
+- G4LogicalVolume:
+  o Added method GetMass() to G4LogicalVolume, returning the value in absolute
+    units of the mass of the logical volume tree. The mass is computed from the
+    estimated geometrical volume of each solid and material's density associated
+    to the logical volume and its daughters.
+    The returned value is cached and can be used for successive calls (default),
+    unless recomputation is forced by providing 'true' as the first boolean
+    argument in input. Computation should be forced if the geometry setup has
+    changed after the previous call. An optional argument to specify a material
+    is provided; it is implicitely used for geometrical parameterisations by
+    material.
+  o Added method TotalVolumeEntities() to G4LogicalVolume, returning the
+    total number of physical volumes (placed or replicated/parameterised)
+    included in the tree represented by the current logical volume.
+  o Fix in UpdateMaterial() for checking the existance of root-region pointer
+    for logical-volume. Fixes report #684.
+- G4VTouchable: added GetCopyNumber() method, clone of GetReplicaNumber().
+
+geometry/navigation                              geomnav-V06-02-07
+-------------------
+- G4Navigator:
+  o Added new access method SeverityOfZeroStepping().
+  o Allow consecutive corrections for stuck tracks in ComputeStep()
+    up to 10 times before aborting the event.
+- G4ReplicaNavigation: fix in DistanceToOutPhi() for the case of phi
+  sections on convex surfaces. Fixes problem report #651.
+
+geometry/solids/CSG                              geom-csg-V06-02-06
+-------------------
+- G4Trap: added check for X-centering in constructor by verteces.
+  Fixes problem report #687.
+- New unit test for surface-normal and updated unit tests for sphere and trap.
+
+geometry/solids/specific
+------------------------
+- Added new G4TwistedBox shape: a twisted box with twist angle alpha,
+  length a/2,b/2,L/2.
+- Added new G4TwistedTrap shape: a twisted trapezoid with twist angle alpha
+  and same trapezoidal caps.
+- Fixes in G4VSurface:
+  o GetNeighbours(): corrected axiscode (was returning the wrong neighbours)
+  o SetNeighbours(): fixed problem #685 (index out of range).
+- Added unit tests for G4TwistedBox and G4TwistedTrap.
+- Fix in G4PolyconeSide::Inside for points at radius = 0 for phi slides
+  solids with an inner radius. Addresses problem report #598.
+
+global                                           global-V06-02-03
+------
+- G4PhysicsTable: code cleanup and added Push_back() method.
+- Added global function G4RandomDirection() providing a random 3-vector
+  normalised in 4pi.
+- Cleared obsolete setup for min/max macros required for Windows/VC++6.
+
+graphics_reps                                    greps-V06-02-01
+-------------
+- Removed G4Polymarker::line. Use G4Polyline instead.
+- Reviewed comments in G4AttDef.
+
+processes/cuts                                   procuts-V06-02-02
+--------------
+- Added G4PhysicsTableHelper class in order to assist implementation of
+  new scheme of Store/RetrievePhysicsTable() for processes.
+- Added G4MCCIndexConversionTable class and modified G4ProductionCutsTable
+  in order to extend functionality of Store/RetrievePhysicsTable().
+
+processes/electromagnetic/lowenergy              emlowen-V06-02-07
+-----------------------------------
+- Fixes to tables manipulation, effective charge, graphite problem and
+  Bremsstrhalung low energy edge of the spectrum.
+- Revision of G4LowEnergyPhotoelectric to allow for new development of
+  precise angular distributions.
+- Paul&Sacher PIXE model becomes the default one.
+- Software improvement in G4PenelopeCompton.
+- Implemented migration of processes to new G4VParticleChange schema.
+- Fix trivial compilation error on G4hShellCrossSectionDoubleExp for
+  porting on Linux-icc, WIN32-VC, SUN-CC.
+
+processes/electromagnetic/muons                  muons-V06-02-04
+-------------------------------
+- Implemented migration to new algorithm to Store/Retrieve tables.
+- Fixed bug in expression inside ComputeDMicroscopicCrossSection().
+
+processes/electromagnetic/standard               stand-V06-02-07
+----------------------------------
+- Implemented migration to new algorithm to Store/Retrieve tables.
+- Add energy threshold for gamma of G4eBremsstrahlung which will be used
+  to kill e- and start new track in case of hard photon emmision.
+- Modified fluctuation model for G4PAIPhotonModel.
+
+processes/electromagnetic/utils                  utils-V06-02-16
+-------------------------------
+- Updated signature for G4EmCalculator.
+- Added method CrossSectionPerAtom() to G4VEmModel class.
+- Improved printout for G4VEnergyLossProcess.
+- Fixed bug at initialisation for ions.
+- Fixed bug at initialisation of map for particle/processes in case
+  of external access to dE/dx tables.
+- Implemented migration to new algorithm to Store/Retrieve tables.
+- Fixed precision problem for very high energy ions in gases (or with
+  small step-size) in G4MscModel.
+
+processes/hadronic/models/radioactive_decay      readioactive_decay-V06-02-01
+-------------------------------------------
+- Added G4MshellECDecay class and changed G4RadioactiveDecay accordingly. 
+
+processes/management                             procman-V06-02-02
+--------------------
+- Added PreparePhysicsTable() method in G4VProcess.
+- Added const cast for arguments in Store/Retrieve PhysicsTable.
+
+processes/transportation                         transport-V06-02-04
+------------------------
+- Migrated processes to new G4VParticleChange interface.
+- Added threshold energy for not abandoning stuck particles quickly in
+  G4Transportation.
+- G4UserSpecialCuts: apply tracking cut only if Rmin or Emin > DBL_MIN.
+
+run                                              run-V06-02-03
+---
+- Modified BuildPhysicsTable() for new scheme of Store/RetrievePhysicsTable().
+- Added PreparePhysicsTable() for nucleus process initialization.
+
+tracking                                         tracking-V06-02-07
+--------
+- Made G4SteppingVerbose a singleton.
+- G4SteppingManager2:
+  o Fix on interactive on/off for AtRest processes
+  o Change the track status to StopAndKill when a track looses all kinetic
+    energy cumulatively while the AlongStep loop.
+- G4SteppingManager:
+  o No more issue G4Exception also if no atRestDoit processes exit.
+  o Now changing the track status to StopButAlive if the kinetic energy
+    becomes below zero while AlongStep loop.
+- G4Trajectory, G4SmoothTrajectory: added HepRep attribute for magnitude
+  of momentum
+
+visualization                                    vis-V06-02-05
+-------------
+- Utilise smart method GetPolyhedron() for solids; greatly speeds 2nd and
+  subsequent drawings when kernel access is required.
+- Rationalised use of EstablishSpecials: functionality moved to base class.
+- Removed use of obsolete G4Polymarker::line.
+
+examples                                         examples-V06-02-05
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/MuonProcesses (muonprocesses-V06-02-07)
+    + Avoid deletion of Analysisfactory (for JAIDA).
+  o electromagnetic/TestEm1 (testem1-V06-02-05)
+    + Migrated to new interface for G4VParticleChange in G4eBremsstrahlungCMS.
+    + Modified call to G4EmCalculator.
+  o electromagnetic/TestEm5 (testem5-V06-02-05)
+    + Modified call to G4EmCalculator.
+  o eventgenerator/exgps (exgps-V06-02-00)
+    + New example showing the usage of G4GeneralParticleSource for generating
+      primary incident particle according to user defined distributions.
+      These range from simple monocromatic point source to complicated mutiple
+      sources with various biasing schemes.
+  o medical/GammaTherapy (gtherapy-V06-02-02)
+    + Some code cleanup.
+  o radioactivedecay/exrdm (exrdm-V06-02-00)
+    + New example for showing the usage of the G4RadioactiveDecay process to
+      simulate the decays of radioactive isotopes as well as the induced
+      radioactivity resulted from nuclear interactions.
+- novice
+  o N03 (exampleN03-V06-02-00)
+    + visTutor/exN03Vis[5,10].mac : added commented examples
+      on how to request the visualization of a particular volume.
+    + visTutor/exN03Vis9.mac: added visualization with OGLIWin32 to verify
+      visualization of geometry and trajectories.
+    + ExN03DetectorConstruction: added commented vis attributes in order to
+      verify interactive expansion/contraction geometry system of the
+      OpenInventor driver.
+    + gui.mac: gun pulldown menu.
+  o N07 (exampleN07-V06-02-00)
+    + Modified to comply to new cut-per-region scheme.
+
+tests                                            tests-V06-02-05
+-----
+- Updated reference outputs.
+- test32 (test32-V06-02-00)
+  o Migrated Tst32EminCut to new G4VParticleChange interface.
+- test33 (test33-V06-02-00)
+  o Migrated processes to new G4VParticleChange interface.
