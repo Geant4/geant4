@@ -234,9 +234,10 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 
     if(verboseLevel > 1) {
       G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
+     
       G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
              << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
-             << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
+	//        << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
              << G4endl;
       G4cout << "ionModel= " << theIonEffChargeModel
              << " MFPtable= " << theMeanFreePathTable
@@ -246,7 +247,8 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   }
 
   if(aParticleType.GetParticleType() == "nucleus" && 
-     aParticleType.GetParticleName() != "GenericIon") {
+     aParticleType.GetParticleName() != "GenericIon" &&
+     theMeanFreePathTable) {
 
      G4EnergyLossTables::Register(&aParticleType,  
               theDEDXpTable,
