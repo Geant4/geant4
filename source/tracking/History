@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-06-02 05:26:25 asaim Exp $
+$Id: History,v 1.12 2000-06-02 10:23:31 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 2, 00 M.Asai
+June 2, 00 M.Asai (tracking-01-01-01)
 - Add SetUserTrackInformation(G4VUserTrackInformation*) to
  G4TrackingManager
+- Fix problems in deleteing Touchable in G4SteppingManager (Hisaya) 
 
 Hune 1, 00 H.Kurashige
 - Add "const" to all G4VTouchable pointer
