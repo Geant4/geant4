@@ -5,29 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.11 2000-07-13 08:34:56 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.12 2000-08-11 10:26:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// -------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4PAIonisation physics process -----------
-//                 modified by V.Grichine 27.11.97 
-// **************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.
-// It calculates the ionisation of charged hadrons.
 // **************************************************************
 //
+// 12.07.00, V.Grichine - modifications in BuildPAIonisationTable 
+// 11.07.00, V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
+//                        modifications
+// 03.07.00, V.Grichine - modifications in AlongStepDoIt
 // 08-04-98: remove 'traking cut' of the ionizing particle, MMa
 // 30-11-97: V. Grichine
-// 03.07.00, V.Grichine - modifications in AlongStepDoIt
-// 11.07.00, V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt modifications
-// 12.07.00, V.Grichine - modifications in BuildPAIonisationTable 
+//
+// **************************************************************
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
@@ -200,9 +191,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  the tables are built for MATERIALS
 //                           *********
 
-void 
-G4PAIonisation::
-//BuildLossTable(const G4ParticleDefinition& aParticleType)
+void
 G4PAIonisation::BuildPAIonisationTable()
 {
    G4double LowEdgeEnergy , ionloss ;
