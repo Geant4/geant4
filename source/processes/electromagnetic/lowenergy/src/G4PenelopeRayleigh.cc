@@ -22,14 +22,13 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.1 2002-12-06 16:23:16 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.2 2002-12-10 11:08:08 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
 // History:
 // -------- 
-
 #include "G4PenelopeRayleigh.hh"
 #include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
@@ -146,8 +145,7 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	    G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
 	    cs = 
 	      theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,-1.0,0.90,1e-06); 
-	    cs=cs+
-	      theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
+	    cs += theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
 	    cs = cs*pow((ec/energyVector[bin]),2)*pi*pow(classic_electr_radius,2); 
 	    const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	    const G4int* stechiometric = material->GetAtomsVector();
@@ -329,7 +327,7 @@ void G4PenelopeRayleigh::InizialiseSampling()
  G4double fact = pow((1e06/Xhigh),(1/240.0));
  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
  sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
-			       Xlow,Xhigh,1e-10); 
+				Xlow,Xhigh,1e-10); 
  samplingFunction_x->push_back(Xhigh);
  samplingFunction_y->push_back(sum);
  for (G4int i=1;i<points;i++){
@@ -337,7 +335,7 @@ void G4PenelopeRayleigh::InizialiseSampling()
    Xhigh=Xhigh*fact;
    sum = theIntegrator.Calculate(this,
 				  &G4PenelopeRayleigh::MolecularFormFactor,
-				  Xlow,Xhigh,1e-10);
+				 Xlow,Xhigh,1e-10);
    samplingFunction_x->push_back(Xhigh);
    samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
  }
