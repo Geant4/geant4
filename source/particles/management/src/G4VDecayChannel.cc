@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.13 2002-11-19 02:00:47 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.14 2002-11-20 00:32:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -275,7 +275,8 @@ void G4VDecayChannel::FillDaughters()
   if ((numberOfDaughters <=0) || (daughters_name == 0) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cout << "G4VDecayChannel::FillDaughters    ";
+      G4cout << "G4VDecayChannel::FillDaughters   ";
+      G4cout << "[ " << parent->GetParticleName() << " ]";
       G4cout << "numberOfDaughters is not defined yet";
     }
 #endif
@@ -294,6 +295,7 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
 	G4cout << "G4VDecayChannel::FillDaughters  ";
+	G4cout << "[ " << parent->GetParticleName() << " ]";
 	G4cout << index << "-th daughter is not defined yet" << G4endl;
       }
 #endif
@@ -307,6 +309,7 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
 	G4cout << "G4VDecayChannel::FillDaughters  ";
+	G4cout << "[ " << parent->GetParticleName() << " ]";
 	G4cout << index << ":" << *daughters_name[index];
 	G4cout << " is not defined !!" << G4endl;
         G4cout << " The BR of this decay mode is set to zero " << G4endl;
@@ -326,15 +329,14 @@ void G4VDecayChannel::FillDaughters()
   }  // end loop over all daughters
 
   // check sum of daghter mass
-  const G4double AllowanceOfMassDifference = 1.0 * MeV;
- if ( (sumofdaughtermass > parentmass + AllowanceOfMassDifference) ||
-      ( ( (parent->GetParticleType() != "nucleus")|| 
-          (parent->IsShortLived())                   )&&
-        (sumofdaughtermass > parentmass )           )            ){
+  G4double widthMass = parent->GetPDGWidth();
+  if ( (parent->GetParticleType() != "nucleus") &&
+       (sumofdaughtermass > parentmass + 5*widthMass) ){
    // !!! illegal mass  !!!
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>0) {
      G4cout << "G4VDecayChannel::FillDaughters ";
+     G4cout << "[ " << parent->GetParticleName() << " ]";
      G4cout << "    Energy/Momentum conserevation breaks " <<G4endl;
      if (GetVerboseLevel()>1) {
        G4cout << "    parent:" << *parent_name;
