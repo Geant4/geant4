@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.76 1999-07-01 18:47:59 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.77 1999-07-01 19:09:07 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -17,11 +17,11 @@ geant4/source/event            geant4-00-cand-15
 geant4/source/g3tog4           geant4-00-cand-15
 geant4/source/geometry/GNUmakefile   geant4-00-cand-15
 geant4/source/geometry/History       geant4-00-cand-15
-geant4/source/geometry/magneticfield geant4-00-cand-15
+geant4/source/geometry/magneticfield field-01-00-06a
 geant4/source/geometry/management    geant4-00-cand-15
 geant4/source/geometry/solids        geant4-00-cand-15
 geant4/source/geometry/solids/BREPS  geant4-00-cand-15
-geant4/source/geometry/volumes       geant4-00-cand-15
+geant4/source/geometry/volumes       geomvol-01-00-04
 geant4/source/global           geant4-00-cand-15
 geant4/source/global/STLInterface geant4-00-cand-15
 geant4/source/graphics_reps    geant4-00-cand-15
@@ -34,6 +34,7 @@ geant4/source/processes/GNUmakefile         geant4-00-cand-15
 geant4/source/processes/History             geant4-00-cand-15
 geant4/source/processes/decay	            geant4-00-cand-15
 geant4/source/processes/electromagnetic	    geant4-00-cand-15
+geant4/source/processes/electromagnetic/lowenergy emlowen-01-00-06
 geant4/source/processes/hadronic            geant4-00-cand-15
 geant4/source/processes/management          geant4-00-cand-15
 geant4/source/processes/optical	            geant4-00-cand-15
