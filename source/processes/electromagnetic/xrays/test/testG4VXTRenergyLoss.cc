@@ -36,6 +36,10 @@
 #include <math.h>
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4UnitsTable.hh"
+
+
+#include <iomanip>
 
 #include "G4Isotope.hh"
 #include "G4Element.hh"
@@ -79,24 +83,24 @@ int main()
   // Geometry 
 
 
-  G4double fRadThickness = 0.0127*mm ; // 25*micrometer ;     
-  G4double fGasGap       = 0.762*mm ;          //  1500*micrometer  ;   
-  G4double foilGasRatio = fRadThickness/(fRadThickness+fGasGap) ;
-  G4int fFoilNumber   = 100 ;             //  188 ;
-  G4double fDetGap       =   0.01*mm ;
+  G4double radThickness = 0.0127*mm ; // 25*micrometer ;     
+  G4double gasGap       = 0.762*mm ;          //  1500*micrometer  ;   
+  G4double foilGasRatio = radThickness/(radThickness+gasGap) ;
+  G4int    foilNumber   = 100 ;             //  188 ;
+  G4double detGap       =   0.01*mm ;
 
 
-  G4double fAlphaPlate   = 160.0 ;
-  G4double fAlphaGas     = 160.0 ;
-  G4int fModelNumber  = 0 ;
+  G4double alphaPlate   = 2.0 ;
+  G4double alphaGas     = 10.0 ;
+  G4int    modelNumber  = 0 ;
 
 // TR radiator envelope
 
-  G4double radThick = fFoilNumber*(fRadThickness + fGasGap) - fGasGap + fDetGap;
+  G4double radThick = foilNumber*(radThickness + gasGap) - gasGap + detGap;
 
-  G4double AbsorberRadius   = 10.*cm;
+  G4double absorberRadius   = 10.*cm;
 
-  G4double AbsorberThickness = 15.0*mm ;   // 40.0*mm ;
+  G4double absorberThickness = 15.0*mm ;   // 40.0*mm ;
  
 
   /////////////////////////////////////////////////////////////////
@@ -430,8 +434,8 @@ int main()
   // default materials of the calorimeter and TR radiator
 
   G4Material* fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
-  G4Material* fFoilMat     = Mylar ; // Li ; // CH2 ;  
-  G4Material* fGasMat      = Air ; // He ;// CO2 ; 
+  G4Material* foilMat     = Mylar ; // Li ; // CH2 ;  
+  G4Material* gasMat      = Air ; // He ;// CO2 ; 
   
   // fWindowMat = Mylar ;
   // fElectrodeMat = Al ;
@@ -453,7 +457,16 @@ int main()
 
   numOfMaterials = theMaterialTable->size();
 
-  G4String testName ;
+  G4String testName;
+
+  for( k = 0; k < numOfMaterials; k++ )
+  {
+    //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
+
+    // outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+    G4cout <<k<<"\t"<< "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+  }
+
   //  G4cout<<"Enter material name for test : "<<std::flush ;
   //  G4cin>>testName ;
 
@@ -475,16 +488,16 @@ int main()
   //                                  (*theMaterialTable)[k], cuts);
 
   G4cout<<"radThick = "     <<radThick/mm<<" mm"<<G4endl ;
-  G4cout<<"fFoilNumber = "  <<fFoilNumber<<G4endl ;
-  G4cout<<"fRadiatorMat = " <<fRadiatorMat->GetName()<<G4endl ;
+  G4cout<<"foilNumber = "  <<foilNumber<<G4endl ;
+  G4cout<<"radiatorMat = " <<radiatorMat->GetName()<<G4endl ;
  
 
-  G4Box* solidRadiator = new G4Box("Radiator",1.1*AbsorberRadius , 
-                                              1.1*AbsorberRadius, 
+  G4Box* solidRadiator = new G4Box("Radiator",1.1*absorberRadius , 
+                                              1.1*absorberRadius, 
                                               0.5*radThick             ) ; 
                          
   G4LogicalVolume* logicRadiator = new G4LogicalVolume(solidRadiator,    
-                                                       fRadiatorMat,      
+                                                       radiatorMat,      
                                                        "Radiator");            
      
 
@@ -517,14 +530,69 @@ int main()
 
   G4GammaXTRadiator* gammaXTRprocess =
                  new G4GammaXTRadiator(logicRadiator,
-                                       2.,
-                                       10.,
-                                       fFoilMat,
-                                       fGasMat,
-                                       fRadThickness,
-                                       fGasGap,
-                                       fFoilNumber,
+                                       alphaPlate,
+                                       alphaGas,
+                                       foilMat,
+                                       gasMat,
+                                       radThickness,
+                                       gasGap,
+                                       foilNumber,
                                        "GammaXTRadiator");
+
+  static G4int totBin = gammaXTRprocess->GetTotBin();
+
+  G4cout<<"totBin = "<<totBin<<G4endl;
+
+  // test of XTR table step do-it
+
+
+  G4double energyTR;
+  G4double charge = 1.0;
+  G4double chargeSq  = charge*charge ;
+  G4double gamma     = 900.0;
+  G4int iTkin;
+  G4cout<<"gamma = "<<gamma<<G4endl ;
+
+  G4double TkinScaled = (gamma - 1.)*proton_mass_c2;
+
+
+  for(iTkin=0;iTkin<totBin;iTkin++)
+  {
+    if(TkinScaled < gammaXTRprocess->GetProtonVector()->
+                                        GetLowEdgeEnergy(iTkin)) break;    
+  }
+
+  G4double xtrEnergy[100];
+  G4int spectrum[100];
+
+
+  for( k = 0; k < 100; k++ )
+  {
+    xtrEnergy[k] = (1.0+ 1.0*k)*keV;
+    spectrum[k]  = 0;
+  }
+
+
+  for(i = 0; i < 1000000; i++ )
+  {
+    energyTR = gammaXTRprocess->GetXTRrandomEnergy(TkinScaled,iTkin);
+
+    for( k = 0; k < 100; k++ )
+    {
+      if( energyTR <= xtrEnergy[k] ) break;    
+    }
+    spectrum[k] += 1;
+  }
+
+  // output 
+
+  for( k = 0; k < 100; k++ )
+  {    
+    G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+  }
+
+
+
 
 
   return 1 ;
