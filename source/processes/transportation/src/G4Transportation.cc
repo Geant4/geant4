@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.20 2001-08-17 00:07:44 japost Exp $
+// $Id: G4Transportation.cc,v 1.21 2001-08-17 17:30:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -257,8 +257,8 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 				  track.GetKineticEnergy(),
 				  restMass,
 				  track.GetVelocity(),
-				  track.GetLocalTime(),    // tof lab ?
-				  track.GetProperTime(),   // tof proper
+				  track.GetGlobalTime(),   // Laboratory fr.
+				  track.GetProperTime(),   // Particle rest fr.
 				  &spin                   ) ;
 
      if( currentMinimumStep > 0 ) 
