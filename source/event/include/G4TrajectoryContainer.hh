@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.9 2002-05-15 05:47:49 asaim Exp $
+// $Id: G4TrajectoryContainer.hh,v 1.10 2002-06-08 20:36:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,8 +66,6 @@ class G4TrajectoryContainer
       for(size_t i=0;i<size();i++) delete (*vect)[i];
       vect->clear();
     }
-    inline G4VTrajectory** begin() const { return vect->begin(); }
-    inline G4VTrajectory** end() const { return vect->end(); }
     inline G4VTrajectory* operator[](size_t n) { return (*vect)[n]; }
     inline TrajectoryVector* GetVector() const { return vect; }
 
