@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: volumeSubscriber.cc,v 1.4 2002-07-25 09:42:26 radoone Exp $
+// $Id: volumeSubscriber.cc,v 1.5 2002-08-19 07:39:29 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,7 +184,7 @@ public:
                   }
                   // At this point we should have everything ready to create a child
                   if( doAssemblyInprint ) {
-                    std::cout << "Imprinting assembly volume: " << vr->get_ref() << std::endl;
+                    //std::cout << "Imprinting assembly volume: " << vr->get_ref() << std::endl;
                     alog->MakeImprint( vnew, *ppos, prot );
                   } else {
                     std::strstream pvname;
