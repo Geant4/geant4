@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.26 2004-08-03 15:55:23 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.27 2004-09-22 20:06:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,9 @@
 #include "G4VMarker.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisAttributes.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
@@ -441,7 +444,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
       edgeCount++;
-    } while (notLastEdge);
+    } while (notLastEdge && edgeCount < 4);
     // HEPPolyhedron produces triangles too; in that case add an extra vertex..
     while (edgeCount < 4) {
       vertex[edgeCount] = vertex[edgeCount-1];
@@ -451,6 +454,19 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
       edgeCount++;
+    }
+    // Trap situation where number of edges is > 4...
+    while (notLastEdge) {
+      notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
+      edgeCount++;
+    }
+    if (edgeCount > 4) {
+      G4cerr <<
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING"
+	"\n  Volume " << fpCurrentPV->GetName() <<
+	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
+	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
+	"\n   G4Polyhedron facet with " << edgeCount << " edges";	
     }
 
     // Do it all over again (twice) for hlr...
