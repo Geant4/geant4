@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-06-17 15:24:43 mdressel Exp $
+# $Id: GNUmakefile,v 1.5 2003-06-20 12:41:06 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -21,7 +21,8 @@ SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(TIARA_BASE)/source/tiara/include \
 	-I$(TIARA_BASE)/source/tiaraPhysicsLists/include \
 	-I$(TIARA_BASE)/source/CLHEPWrapper/include \
-	-I$(TIARA_BASE)/source/G4KernelWrapper/include 
+	-I$(TIARA_BASE)/source/G4KernelWrapper/include \
+	-I${CLHEP_BASE_DIR}/include 
 
 
 

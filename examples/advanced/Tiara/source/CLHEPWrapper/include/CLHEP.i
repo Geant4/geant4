@@ -1,4 +1,4 @@
-# $Id: CLHEP.i,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: CLHEP.i,v 1.3 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -7,8 +7,10 @@
 %module CLHEP
 %{
 #include <CLHEP/Vector/ThreeVector.h>
+#include <CLHEP/Units/SystemOfUnits.h>
 %}
 
+%include CLHEP/Units/SystemOfUnits.h
 
 class Hep3Vector {
 

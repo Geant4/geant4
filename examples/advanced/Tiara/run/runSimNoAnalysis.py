@@ -1,13 +1,14 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSimNoAnalysis.py,v 1.2 2003-06-16 17:06:43 dressel Exp $
+# $Id: runSimNoAnalysis.py,v 1.3 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
 
 
-import Tiara
+import CLHEP
 import G4Kernel
+import Tiara
 import tiaraApplication
 import tiaraGenerators
 import tiaraDetectors
@@ -36,15 +37,15 @@ Tiara.setRandomSeed(891011);
 ##########################################################################
 # experiment and simulation specific data 
 ##########################################################################
-particleCut = {"neutron" : 3 * G4Kernel.MeV,
-               "gamma"   : 1 * G4Kernel.MeV,
-               "proton"  : 1 * G4Kernel.MeV,
-               "deuteron": 1 * G4Kernel.MeV,
-               "triton"  : 1 * G4Kernel.MeV,
-               "alpha"   : 1 * G4Kernel.MeV}
+particleCut = {"neutron" : 3 * CLHEP.MeV,
+               "gamma"   : 1 * CLHEP.MeV,
+               "proton"  : 1 * CLHEP.MeV,
+               "deuteron": 1 * CLHEP.MeV,
+               "triton"  : 1 * CLHEP.MeV,
+               "alpha"   : 1 * CLHEP.MeV}
 
 beamEnergy = 43
-shieldWidth = 150 * G4Kernel.cm
+shieldWidth = 150 * CLHEP.cm
 
 totalTime = 3 * myUtils.min
 timeForOneRun = 1 * myUtils.min
@@ -97,15 +98,15 @@ tiaraSpecs = tiaraSpecifications.Specifications(Tiara.TiaraDimensions(),
 ##########################################################################
 impGeo = variableGeometry.VariableImpSlabGeometry(tiaraSpecs)
 
-impGeo.addCellImportance(width=15.0 * G4Kernel.cm, faktor=1)
+impGeo.addCellImportance(width=15.0 * CLHEP.cm, faktor=1)
 for i in range(9):
-    impGeo.addCellImportance(width=15.0 * G4Kernel.cm, faktor=2)
+    impGeo.addCellImportance(width=15.0 * CLHEP.cm, faktor=2)
 
 impGeo.construct()
 
 # an alternative
 #impGeo = slabGeometry.SlabedImportanceGeometry(tiaraSpecs,
-#                                               10.0 * G4Kernel.cm,
+#                                               10.0 * CLHEP.cm,
 #                                               1.5)
 
 

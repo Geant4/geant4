@@ -1,4 +1,4 @@
-# $Id: G4Kernel.i,v 1.4 2003-06-18 16:40:20 gunter Exp $
+# $Id: G4Kernel.i,v 1.5 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -42,7 +42,6 @@
 #include "G4IStore.hh"
 #include "G4UserSteppingAction.hh"
 #include <strstream>
-#include "G4Dimensions.hh"
 #include "G4VisManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 %}
@@ -56,13 +55,6 @@
   typedef double G4double;
   typedef int G4int;
 %}
-
-
-namespace G4Dimensions {
-  const G4double cm;
-  const G4double MeV;
-  const G4double eV;
-}
 
 
 %include G4VIStore.hh

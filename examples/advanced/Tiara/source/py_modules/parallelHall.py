@@ -1,4 +1,4 @@
-# $Id: parallelHall.py,v 1.3 2003-06-16 17:06:44 dressel Exp $
+# $Id: parallelHall.py,v 1.4 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -10,9 +10,9 @@ import string
 class ParallelHall(object):
     def __init__(self, tiaraSpecs):
         self.halfWidth = tiaraSpecs.dimensions.worldHalfWidth + \
-                     10*G4Kernel.cm
+                     10*CLHEP.cm
         self.halfLength = tiaraSpecs.dimensions.worldHalfLength + \
-                      10*G4Kernel.cm
+                      10*CLHEP.cm
         self.hallSolid = G4Kernel.G4Box("parallelBox", 
                                         self.halfWidth,
                                         self.halfWidth,

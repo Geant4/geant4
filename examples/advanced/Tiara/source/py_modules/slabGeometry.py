@@ -1,4 +1,4 @@
-# $Id: slabGeometry.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: slabGeometry.py,v 1.3 2003-06-20 12:41:07 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -80,7 +80,7 @@ class SlabedImportanceGeometry(object):
         self.iStore = None
         self.geometryCells = []
         self.base = impBase
-        cellwidth_cm = cellWidth / G4Kernel.cm
+        cellwidth_cm = cellWidth / CLHEP.cm
         self.nameExt = "-cellWidth_%(cellwidth_cm)d" %vars()
         self.buildParallelGeometry()
         self.setImportances()

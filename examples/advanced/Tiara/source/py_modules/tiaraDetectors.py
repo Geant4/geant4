@@ -1,8 +1,9 @@
-# $Id: tiaraDetectors.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: tiaraDetectors.py,v 1.3 2003-06-20 12:41:07 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
 #
+import CLHEP
 import G4Kernel
 
 class ScoreDetector(object):
@@ -36,6 +37,6 @@ class ThreeZylindricDetectors(object):
                                                              det.name)
             else:
                 det.phys = tiaraHall.AddPhysicalDetector(dist, det.name)
-            dist += 20*G4Kernel.cm
+            dist += 20*CLHEP.cm
         print "+++ ThreeZylindricDetectors: created 3 zylindric detectors"
         return scoreDets

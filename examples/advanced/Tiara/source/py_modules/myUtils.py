@@ -1,8 +1,9 @@
-# $Id: myUtils.py,v 1.3 2003-06-16 17:06:44 dressel Exp $
+# $Id: myUtils.py,v 1.4 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
 #
+import CLHEP
 import G4Kernel
 
 import string
@@ -120,7 +121,7 @@ def getConfigurationInfo(impGeo, experiment, physicsList, totalTime,
     configInfo["shieldMaterial"] = experiment.shieldMaterial
 
 
-    width = experiment.shieldWidth / G4Kernel.cm
+    width = experiment.shieldWidth / CLHEP.cm
     s_width = "%(width)d" % vars()
     configInfo["shieldWidth"] = s_width 
     

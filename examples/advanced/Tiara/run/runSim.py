@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSim.py,v 1.6 2003-06-16 17:06:43 dressel Exp $
+# $Id: runSim.py,v 1.7 2003-06-20 12:41:06 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -10,8 +10,9 @@ import os
 
 # importing wrapper modules (see the source/*Wrapper directories)
 # created by swig (from the source/*Wrapper/*.i files).
-import Tiara
+import CLHEP
 import G4Kernel
+import Tiara
 
 # importing python modules specific to this example 
 # (see source/py_modules)
@@ -43,17 +44,17 @@ Tiara.setRandomSeed(891011);
 # experiment and simulation specific data 
 ##########################################################################
 # create a list of particles and give a lower energy cut
-particleCut = {"neutron" : 3 * G4Kernel.MeV,
-               "gamma"   : 1 * G4Kernel.MeV,
-               "proton"  : 1 * G4Kernel.MeV,
-               "deuteron": 1 * G4Kernel.MeV,
-               "triton"  : 1 * G4Kernel.MeV,
-               "alpha"   : 1 * G4Kernel.MeV}
+particleCut = {"neutron" : 3 * CLHEP.MeV,
+               "gamma"   : 1 * CLHEP.MeV,
+               "proton"  : 1 * CLHEP.MeV,
+               "deuteron": 1 * CLHEP.MeV,
+               "triton"  : 1 * CLHEP.MeV,
+               "alpha"   : 1 * CLHEP.MeV}
 
 # specify if the source neutrons shoul be form the 43 or 68 MeV protons
-beamEnergy = 68 * G4Kernel.MeV
+beamEnergy = 68 * CLHEP.MeV
 # specify the shieldwidth [25, 50, 100, 150, (200 for 68 MeV case only)]
-shieldWidth = 100 * G4Kernel.cm
+shieldWidth = 100 * CLHEP.cm
 
 # set the total running time and the time for one run
 # followed by a printout
@@ -125,10 +126,10 @@ impGeo = variableGeometry.VariableImpSlabGeometry(tiaraSpecs)
 # In this case the width of all the shields in the shielding region
 # are equal and the importance staring from one doubles
 # from cell to cell in the beam direction.
-impGeo.addCellImportance(width=20.0 * G4Kernel.cm, faktor=1)
+impGeo.addCellImportance(width=20.0 * CLHEP.cm, faktor=1)
 for i in range(4):
     # to run unbiased set: faktor=1     in the next line
-    impGeo.addCellImportance(width=20.0 * G4Kernel.cm, faktor=2)
+    impGeo.addCellImportance(width=20.0 * CLHEP.cm, faktor=2)
 
 impGeo.construct()
 
@@ -140,7 +141,7 @@ impGeo.construct()
 
 # an alternative
 #impGeo = slabGeometry.SlabedImportanceGeometry(tiaraSpecs,
-#                                               10.0 * G4Kernel.cm,
+#                                               10.0 * CLHEP.cm,
 #                                               1.5)
 
 

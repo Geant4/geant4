@@ -1,11 +1,13 @@
-# $Id: tiaraSpecifications.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: tiaraSpecifications.py,v 1.3 2003-06-20 12:41:07 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
 #
+import CLHEP
 import G4Kernel
-ColWidth = {"43":40*G4Kernel.cm,
-            "68":80*G4Kernel.cm}
+
+ColWidth = {"43":40*CLHEP.cm,
+            "68":80*CLHEP.cm}
 
 BinEdgesScinti = {"43":range(4,45),
                   "68":range(6,45) + range(46,71,2)}
@@ -86,7 +88,7 @@ class Experiment(object):
         self.binEdgesBonner = BinEdgesBonner[self.energy]
         self.binEdgesScinti = BinEdgesScinti[self.energy]
         self.colWidth = 0
-        if self.shieldWidth <= 50.0*G4Kernel.cm:
+        if self.shieldWidth <= 50.0*CLHEP.cm:
             self.colWidth = ColWidth[self.energy]
 
 
