@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2001-04-20 20:31:06 gcosmo Exp $
+$Id: History,v 1.19 2001-07-11 16:07:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 11, 2001   Gabriele Cosmo               geometry-V03-02-00
+-----------------------------
+- Includes same code contents as in "geant4-03-02-ref-00" except that
+  CVS file revision is now synchronized with HEAD, after the update for
+  the disclaimer of warranty.
+- Includes tag "breps-V03-02-00".
 
 Apr 20, 2001   Gabriele Cosmo               geometry-V03-01-00
 -----------------------------
