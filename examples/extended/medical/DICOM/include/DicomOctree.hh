@@ -3,7 +3,7 @@
 
 #include "globals.hh"
 #include "DicomOctreeNode.hh"
-
+#include "DicomOctreeMiddleNode.hh"
 //---------------------------------------------------------------------------
 ///  Octree encapsulates a volumetric compressed representation of the
 /// vector field used for the reconstruction of a 3D model from multiple
@@ -15,7 +15,7 @@
 /// denotes the number of voxels along each axis such
 /// that the resolution = 2^mNoLevels.
 
-
+class DicomOctreeMiddleNode;
 class Octree
 {
 

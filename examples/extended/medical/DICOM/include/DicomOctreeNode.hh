@@ -36,24 +36,24 @@ private:
   G4double  mDensity;
 };
 
-//---------------------------------------------------------------------------
-class MiddleNode : public OctreeNode
-{
-    friend class Octree;
+// //---------------------------------------------------------------------------
+// class MiddleNode : public OctreeNode
+// {
+//     friend class Octree;
 
-public:
-    OctreeNode*  mChildren[8];
+// public:
+//     OctreeNode*  mChildren[8];
 
-    void ResetFamily();
-    MiddleNode();
-    MiddleNode( OctreeNode* pParent );
-    ~MiddleNode();
+//     void ResetFamily();
+//     MiddleNode();
+//     MiddleNode( OctreeNode* pParent );
+//     ~MiddleNode();
 
-    OctreeNode*& operator []( G4int index );
-    OctreeNodeType Type();
-    G4int FindChild( const OctreeNode* pNode );
-    G4int MemSize();
-};
+//     OctreeNode*& operator []( G4int index );
+//     OctreeNodeType Type();
+//     G4int FindChild( const OctreeNode* pNode );
+//     G4int MemSize();
+// };
 //---------------------------------------------------------------------------
 class TerminalNode : public OctreeNode
 {
@@ -77,4 +77,4 @@ private:
 };
 //---------------------------------------------------------------------------
 
-#endif // __OCTREE_NODE_H__
+#endif 
