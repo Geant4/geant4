@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.10 2001-08-28 06:01:25 asaim Exp $
+// $Id: G4UImanager.cc,v 1.11 2001-09-30 04:12:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 #include "G4StateManager.hh"
+#include "G4UIaliasList.hh"
 
 #include "g4std/strstream"
 
@@ -61,6 +62,7 @@ G4UImanager::G4UImanager()
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
+  aliasList = new G4UIaliasList;
   G4String nullString;
   savedParameters = nullString;
   verboseLevel = 0;
@@ -85,6 +87,7 @@ G4UImanager::~G4UImanager()
   delete UImessenger;
   delete UnitsMessenger;
   delete treeTop;
+  delete aliasList;
   fUImanagerHasBeenKilled = true;
   fUImanager = NULL;
 }
@@ -226,6 +229,32 @@ int G4UImanager::ApplyCommand(G4String aCommand)
 
   G4String commandString;
   G4String commandParameter;
+  int ia = aCommand.index("[");
+  while( ia != int(G4std::string::npos) )
+  {
+    int ib = aCommand.index("]");
+    if( ib == int(G4std::string::npos) )
+    {
+      G4cerr << aCommand << G4endl;
+      for(int iz=0;iz<ia;iz++) G4cerr << " ";
+      G4cerr << "^" << G4endl;
+      G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
+      return fCommandNotFound;
+    }
+    G4String subs;
+    if(ia>0) subs = aCommand(0,ia);
+    G4String alis = aCommand(ia+1,ib-ia-1);
+    G4String rems = aCommand(ib+1,aCommand.length()-(ia+ib));
+    G4String* alVal = aliasList->FindAlias(alis);
+    if(!alVal)
+    {
+      G4cerr << "Alias <" << alis << "> not found -- command ignored" << G4endl;
+      return fCommandNotFound;
+    }
+    aCommand = subs+(*alVal)+rems;
+    ia = aCommand.index("[");
+  }
+
   int i = aCommand.index(" ");
   if( i != int(G4std::string::npos) )
   {
@@ -354,6 +383,20 @@ void G4UImanager::Interact(G4String pC)
 {
     G4coutbuf.SetDestination(value);
     G4cerrbuf.SetDestination(value);
+}
+
+void G4UImanager::SetAlias(G4String aliasLine)
+{
+  int i = aliasLine.index(" ");
+  G4String aliasName = aliasLine(0,i);
+  G4String aliasValue = aliasLine(i+1,aliasLine.length()-(i+1));
+  aliasList->ChangeAlias(aliasName,aliasValue);
+}
+
+void G4UImanager::RemoveAlias(G4String aliasName)
+{
+  G4String targetAlias = aliasName.strip(G4String::both);
+  aliasList->RemoveAlias(targetAlias);
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.4 2001-07-18 17:59:05 asaim Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.5 2001-09-30 04:12:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,6 +31,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIaliasList.hh"
 #include "G4StateManager.hh"
 #include "G4ios.hh"
 
@@ -79,6 +80,19 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ManualCommand->SetGuidance("Directory path should be given by FULL-PATH.");
   ManualCommand->SetParameterName("dirPath",true);
   ManualCommand->SetDefaultValue("/");
+
+  aliasCommand = new G4UIicmdWithAString("/control/alias",this);
+  aliasCommand->SetGuidance("Set an alias.");
+  aliasCommand->SetGuidance("String can be aliased bby this command.");
+  aliasCommand->SetGuidance("The string may contain one or more spaces,");
+  aliasCommand->SetGuidance("the string must NOT be enclosed by double quarts (\").");
+  aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
+  aliasCommand->SetGuidance("parenthis \"[\" and \"]\".");
+  aliasCOmmand->SetParameterName("aliasName aliasString",false);
+
+  unaliasCommand = new G4UIcmsWithAString("/control/unalias",this);
+  unaliasCommand->SetGuidance("Remove an alias.");
+  unaliasCommand->SetParameterName("aliasName",false);
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -89,6 +103,8 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete historyCommand;
   delete stopStoreHistoryCommand;
   delete ManualCommand;
+  delete aliasCommand;
+  delete unaliasCommand;
   
   delete controlDirectory;
 }
@@ -121,6 +137,15 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   {
     UI->ListCommands(newValue);
   }
+  if(command==aliasCommand)
+  {
+    UI->SetAlias(newValue);
+  }
+  if(command==unaliasCommand)
+  {
+    UI->RemoveAlias(newValue);
+  }
+
 }
 
 G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)

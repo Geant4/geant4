@@ -21,52 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.6 2001-09-30 04:12:53 asaim Exp $
+// $Id: G4UIaliasList.hh,v 1.1 2001-09-30 04:12:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4UIcontrolMessenger_h
-#define G4UIcontrolMessenger_h 1
+#ifndef G4UIaliasList_h
+#define G4UIaliasList_h 1
 
-#include "G4UImessenger.hh"
 
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithoutParameter;
+#include "globals.hh"
+#include "g4std/vector"
 
 // class description:
-//  This class is a concrete class of G4UImessenger which defines
-// commands affecting to the G4UImanager. Commands defined by
-// this messenger are
-//   /control/ 
-//   /control/execute
-//   /control/suppressAbortion
-//   /control/verbose
-//   /control/saveHistory
-//   /control/stopSavingHistory
-//   /control/manual
-//   /control/alias
-//   /control/unalias
+//
+//  This class is exclusively used by G4UImanager for handling the
+// alias list.
+// 
 
-class G4UIcontrolMessenger : public G4UImessenger 
+class G4UIaliasList 
 {
   public:
-      G4UIcontrolMessenger();
-      ~G4UIcontrolMessenger();
-      void SetNewValue(G4UIcommand * command,G4String newValue);
-      G4String GetCurrentValue(G4UIcommand * command);
+      G4UIaliasList();
+      ~G4UIaliasList();
 
   private:
-      G4UIdirectory * controlDirectory;
-      G4UIcmdWithAString * ExecuteCommand;
-      G4UIcmdWithAnInteger * suppressAbortionCommand;
-      G4UIcmdWithAnInteger * verboseCommand;
-      G4UIcmdWithAString * historyCommand;
-      G4UIcmdWithoutParameter * stopStoreHistoryCommand;
-      G4UIcmdWithAString * ManualCommand;
-      G4UIcmdWithAString * aliasCommand;
-      G4UIcmdWithAString * unaliasCommand;
+      int operator==(const G4UIaliasList &right) const;
+      int operator!=(const G4UIaliasList &right) const;
+
+  public:
+      void AddNewAlias(G4String aliasName, G4String aliasValue);
+      void RemoveAlias(G4String aliasName);
+      void ChangeAlias(G4String aliasName, G4String aliasValue);
+      G4String* FindAlias(G4String aliasName);
+      void List();
+
+  private:
+      G4int FindAliasID(G4String aliasName);
+
+  private:
+      G4std::vector<G4String*> alias;
+      G4std::vector<G4String*> value;
+
 };
 
 #endif

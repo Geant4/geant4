@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.10 2001-08-28 06:01:24 asaim Exp $
+// $Id: G4UImanager.hh,v 1.11 2001-09-30 04:12:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +40,7 @@ class G4UIcommand;
 class G4UIsession;
 class G4UIcontrolMessenger;
 class G4UnitsMessenger;
+class G4UIaliasList;
 
 // class description:
 //
@@ -96,6 +97,12 @@ class G4UImanager : public G4VStateDependent
       void ListCommands(G4String direc);
       //  All commands registored under the given directory will be listed to
       // G4cout.
+      void SetAlias(G4String aliasLine);
+      //  Define an alias. The first word of "aliasLine" string is the
+      // alias name and the remaining word(s) is(are) string value
+      // to be aliased.
+      void RemoveAlias(G4String aliasName);
+      //  Remove the defined alias.
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.
@@ -124,6 +131,7 @@ class G4UImanager : public G4VStateDependent
       G4std::ofstream historyFile;
       G4bool saveHistory;
       G4std::vector<G4String> histVec;
+      G4UIaliasList* aliasList;
       
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
@@ -166,12 +174,12 @@ class G4UImanager : public G4VStateDependent
 
   public:
       inline G4UIcommandTree * GetTree() const
-      { return treeTop; };
+      { return treeTop; }
       inline G4UIsession * GetSession() const
-      { return session; };
+      { return session; }
   public: // with description
       inline void SetSession(G4UIsession *const value)
-      { session = value; };
+      { session = value; }
       //  This method defines the active (G)UI session.
      void SetCoutDestination(G4UIsession *const value);
      //  This method defines the destination of G4cout/G4cerr stream.
@@ -181,11 +189,11 @@ class G4UImanager : public G4VStateDependent
 
   public:
       inline void SetVerboseLevel(G4int val)
-      { verboseLevel = val; };
+      { verboseLevel = val; }
       inline G4int GetVerboseLevel() const
-      { return verboseLevel; };
+      { return verboseLevel; }
       inline G4int GetNumberOfHistory() const
-      { return histVec.size(); };
+      { return histVec.size(); }
       inline G4String GetPreviousCommand(G4int i) const
       { 
         G4String st;
