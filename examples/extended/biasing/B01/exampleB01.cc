@@ -12,7 +12,7 @@
 #include "B01PrimaryGeneratorAction.hh"
 
 // Files specific for scoring 
-#include "G4PScorer.hh"
+#include "B01Scorer.hh"
 #include "G4Sigma.hh"
 #include "G4MassScoreManager.hh"
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   runManager->Initialize();
 
   // create scorer and manager to score neutrons in the detector
-  G4PScorer mScorer;
+  B01Scorer mScorer;
   G4MassScoreManager msm(mScorer, "neutron"); // to be don after 
   msm.Initialize();                           // runManager->Initialize()
 
@@ -61,13 +61,11 @@ int main(int argc, char **argv) {
   int FieldValue = 12;
   std::string vname = FillString("Volume name", ' ', FieldName+1);
   *myout << vname << '|';
-  vname = FillString(" AV weight ", ' ', FieldValue+1, false);
-  *myout << vname << '|';
-  vname = FillString(" sigma", ' ', FieldValue+1);
-  *myout << vname << '|';
   vname = FillString(" AV E/Track ", ' ', FieldValue+1, false);
   *myout << vname << '|';
   vname = FillString(" sigma", ' ', FieldValue+1);
+  *myout << vname << '|';
+  vname = FillString("Coll_Ent.Tr", ' ', FieldValue+1, false);
   *myout << vname << '|';
   *myout << G4endl;
 
@@ -79,18 +77,26 @@ int main(int argc, char **argv) {
     G4PTouchableKey ptk = mit->first; // get a key identifying a volume
     G4PMapNameTally mtallies = mit->second; // get tallies of the volume
     G4String name(ptk.fVPhysiclaVolume->GetName()); // print volume name
-    G4double avweight = 0, avsig = 0;
+    G4int nEnteringTracks = 0;
+    G4double colli_EnteringTrack = 0;
     G4double meanTrackEnergy = 0, sigmaTrackEnergy = 0;
     for (G4PMapNameTally::iterator mt = mtallies.begin();
 	 mt != mtallies.end(); mt++) {
       G4String tmp(mt->first);
-      if (tmp == "WeighteOfHistorysEntering") {
-	avweight =  mt->second.GetMean();
-	avsig = mt->second.GetSigma();
+      if (tmp == "HistorysEntering") {
+	nEnteringTracks = mt->second.GetXsum();
       }
-      if (tmp == "WeightedEnergyEnteringHistory") {
+      if (tmp == "EnergyEnteringHistory") {
 	meanTrackEnergy =  mt->second.GetMean();
 	sigmaTrackEnergy = mt->second.GetSigma();
+      }
+      if (tmp == "Collisions") {
+	if (!nEnteringTracks) {
+	  G4cout << "exampleB01: Error nEnteringTracks=0" <<G4endl;
+	}
+	else {
+	  colli_EnteringTrack =  mt->second.GetXsum() / nEnteringTracks;
+	}
       }
     }
 
@@ -99,10 +105,9 @@ int main(int argc, char **argv) {
 
     std::string fname = FillString(name, '.', FieldName);
     *myout << fname << " |";
-    *myout << std::setw(FieldValue) << avweight << " |"; 
-    *myout << std::setw(FieldValue) << avsig << " |";
-    *myout << std::setw(FieldValue) << meanTrackEnergy << " |";
-    *myout << std::setw(FieldValue) << sigmaTrackEnergy << " |"; 
+    *myout << std::setw(FieldValue) << meanTrackEnergy << " |"; 
+    *myout << std::setw(FieldValue) << sigmaTrackEnergy << " |";
+    *myout << std::setw(FieldValue) << colli_EnteringTrack << " |";
     *myout << G4endl;
   }
 

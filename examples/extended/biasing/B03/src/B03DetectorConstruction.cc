@@ -114,8 +114,8 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
 
    
-  G4Material *WorldMaterial = Galactic; // tracks entering this are 
-                                      // killed immediately
+  G4Material *WorldMaterial = Galactic; 
+
 
   /////////////////////////////
   // world cylinder volume
@@ -169,7 +169,7 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
 
   ///////////////////////////////////////////////
-  // shield cylinder for (cells 1-2)
+  // shield cylinder for (cells 2-4)
   ////////////////////////////////////////////////
 
   G4double innerRadiusShield = 0*cm;

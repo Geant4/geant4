@@ -18,6 +18,19 @@ can not expected to describe a real experiment.
 The examples given here only demonstrate how to use the tools technically. They
 don't intend to produce physical correct results.
 
+General remark to scoring
+-------------------------
+A interface G4VPScorer is provided for the user. The user may create his own
+class to perform the desired scoring. The user defined class therefore  
+should inherit from the interface G4VPScorer. 
+There are two example scorers G4PScorer and G4PIScorer provided. 
+When scoring is done in a "scoring" or in a "importance" geometry
+special action has to be taken to preferred counting of
+"collisions" with boundaries of the tracking geometry as interactions.
+This is different handled when scoring is done in the tracking geometry.
+The scorers B01Scorer and B02Scorer show the difference in that case.
+The Scorer B06Scorer checks for consistency of importance and weight.
+
 Known problems
 --------------
 In the following scenario it can happen that a particle is not
@@ -67,6 +80,8 @@ II. 2. Example B04
 ------------------
 This example shows how to use biasing according to a "parallel" 
 or "importance" geometry.
+
+
 
 III. Examples for biasing and scoring
 =====================================

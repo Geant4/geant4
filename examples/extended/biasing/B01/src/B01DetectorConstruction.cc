@@ -112,8 +112,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
 
    
-  G4Material *WorldMaterial = Galactic; // tracks entering this are 
-                                      // killed immediately
+  G4Material *WorldMaterial = Galactic; 
 
   /////////////////////////////
   // world cylinder volume
@@ -125,7 +124,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   G4double outerRadiusCylinder = 100*cm;
   G4double hightCylinder       = 15.001*cm;
   G4double startAngleCylinder  = 0*deg;
-  G4double spanningAngleCylinder    = 360*cm;
+  G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
 				     innerRadiusCylinder,
@@ -165,14 +164,14 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
 
   ///////////////////////////////////////////////
-  // shield cylinder for (cells 1-2)
+  // shield cylinder for (cells 2-4)
   ////////////////////////////////////////////////
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
   G4double hightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
-  G4double spanningAngleShield    = 360*cm;
+  G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
 			       innerRadiusShield,

@@ -16,7 +16,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
 
   G4String name;
 
-  double density     = universe_mean_density;            //from PhysicalConstants.h
+  double density     = universe_mean_density;   //from PhysicalConstants.h
   double pressure    = 3.e-18*pascal;
   double temperature = 2.73*kelvin;
   double z,A;
@@ -31,7 +31,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
   double outerRadiusCylinder = 101*cm;
   double hightCylinder       = 16*cm;
   double startAngleCylinder  = 0*deg;
-  double spanningAngleCylinder    = 360*cm;
+  double spanningAngleCylinder    = 360*deg;
 
 
   G4Tubs *score_worldCylinder = new G4Tubs("score_worldCylinder",
@@ -64,7 +64,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
   double outerRadiusShield = 101*cm;
   double MhightShield       = 7.5002*cm;
   double startAngleShield  = 0*deg;
-  double spanningAngleShield    = 360*cm;
+  double spanningAngleShield    = 360*deg;
 
   G4Tubs *tube_M = new G4Tubs("tube_M",
 			      innerRadiusShield,
@@ -92,7 +92,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
   outerRadiusShield = 101*cm;
   G4double DhightShield       = 2*cm;
   startAngleShield  = 0*deg;
-  spanningAngleShield    = 360*cm;
+  spanningAngleShield    = 360*deg;
   
 
   G4Tubs *tube_D = new G4Tubs("tube_D",
