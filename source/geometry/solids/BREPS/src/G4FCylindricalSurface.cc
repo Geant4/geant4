@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.7 1999-05-19 16:57:48 magni Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.8 1999-05-27 10:44:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -238,12 +238,9 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
     hownear = fabs( radius - xd.x() );
-    return hownear;
   } else {
     hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
-    return hownear;
   }
-
 
   return hownear;
 }
