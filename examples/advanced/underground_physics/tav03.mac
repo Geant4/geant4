@@ -1,0 +1,31 @@
+#################################################################################
+#                                                                              	#
+# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     	#
+# VALIDATION TEST NUMBER 3                                                  	#	
+# 									      	#
+# THIS TEST SHOWS THE DECAY of U238						#
+#                                                                              	#
+# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        	#
+#                                                                              	#
+#################################################################################
+#
+# NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
+# NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
+#
+/run/filename tav03.log
+
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/grdm/analogueMC 1
+/grdm/verbose 0
+
+/gps/particle ion
+#/grdm/ion 238 92  0
+/gps/ion 92 238 0 0
+/gun/energy 0. MeV
+/run/beamOn 10
+
+
+
