@@ -20,31 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//
-// from: geant4/source/processes/electromagnetic/lowenergy/test/
-//
-// execute the following lines _before_ gmake, 
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe
-//
-// or, for [t]csh fans:
-//
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
-//
-// both assume that you have the correct PATH to the compiler
-//
-// [gmake and run your simulation]
-//
-// to start Lizard:
-// /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/lizard
-//
-// see also: http://cern.ch/Anaphe 
-//
-//
-// ********************************************************************
-// ********************************************************************
-//
-// $Id: G4ComptonTest.cc,v 1.20 2002-12-12 19:16:48 gunter Exp $
+// $Id: G4ComptonTest.cc,v 1.21 2002-12-13 12:26:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +41,26 @@
 //      16 Sep 2001  AP  Moved ntuples to Lizard 
 //
 // -------------------------------------------------------------------
+//
+// from: geant4/source/processes/electromagnetic/lowenergy/test/
+//
+// execute the following lines _before_ gmake, 
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe
+//
+// or, for [t]csh fans:
+//
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+//
+// both assume that you have the correct PATH to the compiler
+//
+// [gmake and run your simulation]
+//
+// to start Lizard:
+// /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/lizard
+//
+// see also: http://cern.ch/Anaphe 
+//
+// ********************************************************************
 
 #include "globals.hh"
 #include "G4ios.hh"

@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef DummyModel_hh
+#define DummyModel_hh
+
 #include "G4VFastSimulationModel.hh"
 
 class DummyModel : public G4VFastSimulationModel {
