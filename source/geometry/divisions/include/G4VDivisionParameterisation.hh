@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.3 2003-10-30 10:19:19 arce Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.4 2003-11-04 17:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -35,12 +35,11 @@
 
 // History:
 // 09.05.01 - P.Arce Initial version
-// ********************************************************************
-
+//---------------------------------------------------------------------
 #ifndef G4VDivisionParameterisation_H
 #define G4VDivisionParameterisation_H 1
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
 
@@ -83,7 +82,7 @@ protected:  // with description
 			   G4double offset ) const;
   
 private: 
-  virtual void CheckAxisIsValid(){ };
+  virtual void CheckAxisIsValid(){};
   
 protected:
   
