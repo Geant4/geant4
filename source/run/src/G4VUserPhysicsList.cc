@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.45 2003-06-19 13:20:28 gcosmo Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.46 2003-09-09 15:57:48 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -356,7 +356,7 @@ void G4VUserPhysicsList::BuildPhysicsTable()
   if(ProtonP) BuildPhysicsTable(ProtonP);
   G4ParticleDefinition* AntiProtonP = theParticleTable->FindParticle(particleName="anti_proton");
   if(AntiProtonP) BuildPhysicsTable(AntiProtonP);
-  G4ParticleDefinition* NeutronP = theParticleTable->FindParticle(particleName="newtron");
+  G4ParticleDefinition* NeutronP = theParticleTable->FindParticle(particleName="neutron");
   if(NeutronP) BuildPhysicsTable(NeutronP);
   G4ParticleDefinition* AntiNeutronP = theParticleTable->FindParticle(particleName="anti_neutron");
   if(AntiNeutronP) BuildPhysicsTable(AntiNeutronP);
