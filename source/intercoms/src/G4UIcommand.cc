@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.1 1999-01-07 16:09:26 gunter Exp $
+// $Id: G4UIcommand.cc,v 1.2 1999-05-19 17:33:00 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         correctParameters.append(" ");
       }
       aToken = parameterToken();
-      if( aToken(0)=='"' )
+      if( aToken.length()>0 && aToken(0)=='"' )
       {
         while( aToken(aToken.length()-1) != '"' )
         {

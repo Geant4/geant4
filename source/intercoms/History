@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-19 08:50:18 johna Exp $
+$Id: History,v 1.6 1999-05-19 17:32:59 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19th, 99 J.Allison (tag intercoms-01-00-05)
+- Protected G4UIcommand.cc with if (aToken.length()>0...
 
 May 19th, 99 J.Allison (tag intercoms-01-00-04)
 - Improvements suggested by Code Wizard in G4VVisManager.
