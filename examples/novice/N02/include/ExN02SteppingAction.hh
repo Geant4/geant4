@@ -5,31 +5,26 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02SteppingAction.hh,v 1.3 1999-12-15 14:49:20 gunter Exp $
+// $Id: ExN02SteppingAction.hh,v 1.4 2000-12-04 16:24:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #ifndef ExN02SteppingAction_h
 #define ExN02SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
-#include "globals.hh"
 
-class ExN02DetectorConstruction;
-class ExN02EventAction;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class ExN02SteppingAction : public G4UserSteppingAction
 {
   public:
-    ExN02SteppingAction(ExN02DetectorConstruction* myDC,ExN02EventAction* myEA);
-    virtual ~ExN02SteppingAction(){};
+    ExN02SteppingAction();
+   ~ExN02SteppingAction(){};
 
-    virtual void UserSteppingAction(const G4Step*);
-    
-  private:
-    ExN02DetectorConstruction* myDetector;
-    ExN02EventAction* eventAction;
+    void UserSteppingAction(const G4Step*);
 };
 
 #endif

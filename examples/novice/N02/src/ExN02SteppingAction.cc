@@ -5,35 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02SteppingAction.cc,v 1.3 1999-12-15 14:49:22 gunter Exp $
+// $Id: ExN02SteppingAction.cc,v 1.4 2000-12-04 16:24:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02SteppingAction.hh"
-#include "ExN02DetectorConstruction.hh"
-#include "ExN02EventAction.hh"
 #include "G4SteppingManager.hh"
 
-ExN02SteppingAction::ExN02SteppingAction(ExN02DetectorConstruction* myDC, ExN02EventAction* myEA)
-:myDetector(myDC), eventAction(myEA)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+ExN02SteppingAction::ExN02SteppingAction()
 { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
-{
-  // collect the energy deposited in the absorber
-  
-  const G4VPhysicalVolume* currentVolume = aStep->GetPreStepPoint()-> GetPhysicalVolume();
-
-#if 0
-  const G4VPhysicalVolume* absorber = myDetector->getAbsorber();
-
-  if (currentVolume == absorber)
-   {
-    G4double EdepStep = aStep->GetTotalEnergyDeposit();
-    eventAction->addEdep(EdepStep);
-   } 
-#endif
+{ 
+  const G4VPhysicalVolume* currentVolume =
+                           aStep->GetPreStepPoint()->GetPhysicalVolume();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

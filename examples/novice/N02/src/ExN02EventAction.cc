@@ -5,31 +5,37 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02EventAction.cc,v 1.4 2000-01-24 14:45:51 stesting Exp $
+// $Id: ExN02EventAction.cc,v 1.5 2000-12-04 16:24:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+ 
 #include "ExN02EventAction.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4UImanager.hh"
 #include "G4ios.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+ 
 ExN02EventAction::ExN02EventAction()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+ 
 ExN02EventAction::~ExN02EventAction()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+ 
 void ExN02EventAction::BeginOfEventAction(const G4Event*)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+ 
 void ExN02EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
@@ -45,12 +51,6 @@ void ExN02EventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "    " << n_trajectories 
 	   << " trajectories stored in this event." << G4endl;
   }
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    for(G4int i=0; i<n_trajectories; i++)
-    { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
-  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 

@@ -5,10 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02RunAction.cc,v 1.3 1999-12-15 14:49:22 gunter Exp $
+// $Id: ExN02RunAction.cc,v 1.4 2000-12-04 16:24:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02RunAction.hh"
 
@@ -17,45 +18,42 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02RunAction::ExN02RunAction()
-{
-  runIDcounter = 0;
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 ExN02RunAction::~ExN02RunAction()
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  ((G4Run *)(aRun))->SetRunID(runIDcounter++);
-   
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/tracking/storeTrajectory 1"); 
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis~/clear/view");
-    UI->ApplyCommand("/vis~/draw/current");
-  } 
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4UImanager* UI = G4UImanager::GetUIpointer();
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
+    } 
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02RunAction::EndOfRunAction(const G4Run*)
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   
-  if(pVVisManager)
+  if(G4VVisManager::GetConcreteInstance())
   {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 
 

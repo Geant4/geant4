@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-11-24 08:53:36 stesting Exp $
+$Id: History,v 1.12 2000-12-04 16:24:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-12-00 M.Maire (exampleN02-V02-00-02)
+-README updated
+-prerun.g4mac updated for new vis commands, and renamed initInter.mac
+-new examples of macro: run1.mac, run2.mac
+-G4UItcsh in the main, under the control of G4UI_USE_TCSH (for Linux)
+-visualisation on interactive mode
+-DetectorConstruction: tracker region in the centre of the world.
+ default target material: Pb, chamber material: Xenon
+-interactive commands to change the materials and to setup a magnetic field
+-the magnetic field is transverse to the beam (i.e. along x)
+-PhysicsList: copy of N03. defaultCut = 1 cm
+-PrimaryGenerator: default momentum direction corrected: along z.
+ Suppress the possibility of random impact and the associated messenger.
+-RunAction and EventAction updated for vis commands
+-SteppingAction: cleanup because no specific actions
+-SteppingVerbose: see README
+-TrackerHit: a Hit = 4 informations: trackID, chamberNb, edep, position.
+ Draw and Print
+-TrackerSD: ProcessHits.
+ Print HitsCollection at end of event 
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut

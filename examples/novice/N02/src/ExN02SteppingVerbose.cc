@@ -5,39 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02SteppingVerbose.cc,v 1.3 2000-02-28 17:58:50 maire Exp $
+// $Id: ExN02SteppingVerbose.cc,v 1.4 2000-12-04 16:24:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//---------------------------------------------------------------
-//
-// ExN02SteppingVerbose.cc
-//
-// Description:
-//    Implementation of  the ExN02SteppingVerbose class
-//
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02SteppingVerbose.hh"
-#include "G4SteppingManager.hh"
 
+#include "G4SteppingManager.hh"
 #include "G4UnitsTable.hh"
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02SteppingVerbose::ExN02SteppingVerbose()
-////////////////////////////////////////////////
-{
-}
+{}
 
-//////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02SteppingVerbose::~ExN02SteppingVerbose()
-//////////////////////////////////////////////////
-{
-}
+{}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-/////////////////////////////////////////
 void ExN02SteppingVerbose::StepInfo()
-/////////////////////////////////////////
 {
   CopyState();
   
@@ -126,9 +117,9 @@ void ExN02SteppingVerbose::StepInfo()
   G4cout.precision(prec);
 }
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void ExN02SteppingVerbose::TrackingStarted()
-////////////////////////////////////////////////
 {
 
   CopyState();
@@ -164,3 +155,5 @@ G4int prec = G4cout.precision(3);
   }
   G4cout.precision(prec);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

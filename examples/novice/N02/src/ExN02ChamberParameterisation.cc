@@ -5,15 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.2 1999-12-15 14:49:21 gunter Exp $
+// $Id: ExN02ChamberParameterisation.cc,v 1.3 2000-12-04 16:24:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02ChamberParameterisation.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 ExN02ChamberParameterisation::ExN02ChamberParameterisation(  
         G4int    NoChambers, 
@@ -23,14 +27,14 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
         G4double lengthInitial, 
         G4double lengthFinal )
 {
-   fNoChambers=  NoChambers; 
-   fStartZ=      startZ; 
-   fHalfWidth=   widthChamber*0.5;
-   fSpacing=     spacingZ;
-   fHalfLengthFirst= 0.5 * lengthInitial; 
-   // fHalfLengthLast=  lengthFinal;
+   fNoChambers =  NoChambers; 
+   fStartZ     =  startZ; 
+   fHalfWidth  =  widthChamber*0.5;
+   fSpacing    =  spacingZ;
+   fHalfLengthFirst = 0.5 * lengthInitial; 
+   // fHalfLengthLast = lengthFinal;
    if( NoChambers > 1 ){
-      fHalfLengthIncr=  0.5 * (lengthFinal-lengthInitial)/(NoChambers-1);
+      fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/(NoChambers-1);
 
       if( spacingZ < widthChamber ) {
          G4Exception( "ExN02ChamberParameterisation construction: Width > Spacing" );
@@ -39,8 +43,12 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
    
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02ChamberParameterisation::~ExN02ChamberParameterisation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02ChamberParameterisation::ComputeTransformation
 (const G4int copyNo,G4VPhysicalVolume *physVol) const
@@ -51,6 +59,8 @@ void ExN02ChamberParameterisation::ComputeTransformation
   physVol->SetRotation(0);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void ExN02ChamberParameterisation::ComputeDimensions
 (G4Box & trackerChamber, const G4int copyNo,
  const G4VPhysicalVolume * physVol) const
@@ -60,3 +70,5 @@ void ExN02ChamberParameterisation::ComputeDimensions
   trackerChamber.SetYHalfLength(halfLength);
   trackerChamber.SetZHalfLength(fHalfWidth);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

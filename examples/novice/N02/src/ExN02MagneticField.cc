@@ -5,16 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02MagneticField.cc,v 1.3 2000-11-09 16:22:04 grichine Exp $
+// $Id: ExN02MagneticField.cc,v 1.4 2000-12-04 16:24:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //  
 //   User Field class implementation.
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 #include "ExN02MagneticField.hh"
 #include "G4FieldManager.hh"
 
-//  Constructors:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 ExN02MagneticField::ExN02MagneticField()
   : G4UniformMagField(G4ThreeVector())
@@ -23,6 +25,8 @@ ExN02MagneticField::ExN02MagneticField()
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02MagneticField::ExN02MagneticField(G4ThreeVector fieldVector)
   : G4UniformMagField(fieldVector)
 {
@@ -30,12 +34,16 @@ ExN02MagneticField::ExN02MagneticField(G4ThreeVector fieldVector)
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
-// Set the value of the Global Field to fieldValue along Z
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+// Set the value of the Global Field to fieldValue along X
 //
 void ExN02MagneticField::SetFieldValue(G4double fieldValue)
 {
-   G4UniformMagField::SetFieldValue(G4ThreeVector(0,0,fieldValue));
+   G4UniformMagField::SetFieldValue(G4ThreeVector(fieldValue,0,0));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 // Set the value of the Global Field
 //
@@ -56,17 +64,19 @@ void ExN02MagneticField::SetFieldValue(G4ThreeVector fieldVector)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 ExN02MagneticField::~ExN02MagneticField()
 {
   // GetGlobalFieldManager()->SetDetectorField(0);
 }
 
-//  Utility method
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 #include "G4TransportationManager.hh"
 
 G4FieldManager*  ExN02MagneticField::GetGlobalFieldManager()
 {
-  return G4TransportationManager::GetTransportationManager()
-	     ->GetFieldManager();
+  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
 }
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....    

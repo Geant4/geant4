@@ -1,7 +1,3 @@
-/run/initialize
-/gun/position 0 0 -100
-/gun/direction 0 0 1
-
 /tracking/verbose 1
 
 /gun/energy    200 MeV

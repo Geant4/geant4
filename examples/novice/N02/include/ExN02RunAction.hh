@@ -5,10 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02RunAction.hh,v 1.3 1999-12-15 14:49:20 gunter Exp $
+// $Id: ExN02RunAction.hh,v 1.4 2000-12-04 16:24:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #ifndef ExN02RunAction_h
 #define ExN02RunAction_h 1
@@ -16,20 +17,19 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 class G4Run;
 
 class ExN02RunAction : public G4UserRunAction
 {
   public:
     ExN02RunAction();
-    virtual ~ExN02RunAction();
+   ~ExN02RunAction();
 
   public:
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
-
-  private:
-    G4int runIDcounter;
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 };
 
 #endif

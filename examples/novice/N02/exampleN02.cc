@@ -5,41 +5,33 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN02.cc,v 1.3 1999-12-15 14:49:19 gunter Exp $
+// $Id: exampleN02.cc,v 1.4 2000-12-04 16:24:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// --------------------------------------------------------------
-//      GEANT 4 - exampleN03
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
-// --------------------------------------------------------------
-// Comments
-//
-// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02DetectorConstruction.hh"
 #include "ExN02PhysicsList.hh"
-#include "ExN02RunAction.hh"
 #include "ExN02PrimaryGeneratorAction.hh"
+#include "ExN02RunAction.hh"
 #include "ExN02EventAction.hh"
 #include "ExN02SteppingAction.hh"
 #include "ExN02SteppingVerbose.hh"
 
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
-#include "G4RunManager.hh"
 #ifdef G4VIS_USE
 #include "ExN02VisManager.hh"
 #endif
 
-#include "G4ios.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-
-int
-main(int argc,char** argv) {
+int main(int argc,char** argv) {
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
@@ -47,7 +39,7 @@ main(int argc,char** argv) {
   // Run manager
   G4RunManager * runManager = new G4RunManager;
 
-  // UserInitialization classes
+  // UserInitialization classes (mandatory)
   ExN02DetectorConstruction* ExN02detector = new ExN02DetectorConstruction;
   runManager->SetUserInitialization(ExN02detector);
   runManager->SetUserInitialization(new ExN02PhysicsList);
@@ -59,22 +51,29 @@ main(int argc,char** argv) {
 #endif
    
   // UserAction classes
-  runManager->SetUserAction(new ExN02RunAction);
   runManager->SetUserAction(new ExN02PrimaryGeneratorAction(ExN02detector));
-  
-  ExN02EventAction* eventAction = new ExN02EventAction;
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction(new ExN02SteppingAction(ExN02detector,eventAction));
-    
-  // User interactions
-    G4UImanager * UI = G4UImanager::GetUIpointer();  
+  runManager->SetUserAction(new ExN02RunAction);  
+  runManager->SetUserAction(new ExN02EventAction);
+  runManager->SetUserAction(new ExN02SteppingAction);
+
+  //Initialize G4 kernel
+  runManager->Initialize();
+      
+  //get the pointer to the User Interface manager 
+  G4UImanager * UI = G4UImanager::GetUIpointer();  
 
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
   { 
     // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = new G4UIterminal;
-    UI->ApplyCommand("/control/execute prerun.g4mac");    
+    G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif    
+
+    UI->ApplyCommand("/control/execute initInter.mac");    
     session->SessionStart();
     delete session;
   }
@@ -94,4 +93,5 @@ main(int argc,char** argv) {
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
