@@ -21,18 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: EnergyHists.hh,v 1.2 2003-05-27 14:35:04 hpw Exp $
+// $Id: EnergyHists.hh,v 1.3 2003-05-29 15:33:03 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef EnergyHists_h
 #define EnergyHists_h 1
 
-#ifdef USE_AIDA
-#include "AIDA/AIDA.h"
 #include "globals.hh"
-
-using namespace AIDA;
+#include "g4std/vector"
 
 class RunAction;
 
@@ -43,24 +40,28 @@ class EnergyHists
     EnergyHists(G4double lo, G4double hi, G4double size);
     ~EnergyHists();
 
-    void CreateHists(IHistogramFactory*);
+    void CreateHists();
     void FillHists(G4double q, G4double ke, G4double weight, G4int spectrum);
     void ScaleHists(G4double factor, G4int spectrum);
     
   private:
 
-    IHistogramFactory* hFactory;
-
     // energy distribution histograms
 
-    G4std::vector<IHistogram1D*> hists;
+    G4std::vector<G4double> hist5deg;
+    G4std::vector<G4double> hist11deg;
+    G4std::vector<G4double> hist15deg;
+    G4std::vector<G4double> hist20deg;
+    G4std::vector<G4double> hist30deg;
+
+    G4std::vector<G4std::vector<G4double>* > hists;
 
     G4double loBinEdge;
     G4double hiBinEdge;
     G4double binSize;
 
 };
-#endif
+
 #endif
 
     

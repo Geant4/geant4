@@ -21,19 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2003-05-27 13:44:45 hpw Exp $
+// $Id: RunAction.hh,v 1.2 2003-05-29 15:32:39 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "AIDA/AIDA.h"
 #include "G4UserRunAction.hh"
 #include "EnergyHists.hh"
-#include "DataHists.hh"
-
-using namespace AIDA;
 
 class G4Run;
 class G4Material;
@@ -54,14 +50,11 @@ class RunAction : public G4UserRunAction
 
   private:
 
-    ITree* tree;
-
     G4double loBinEdge;
     G4double hiBinEdge;
     G4double binSize;
 
     EnergyHists ehists;
-    DataHists edatahists;
 
     TargetConstruction* target;
 

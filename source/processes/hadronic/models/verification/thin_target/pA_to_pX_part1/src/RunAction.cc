@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003-05-27 13:44:49 hpw Exp $
+// $Id: RunAction.cc,v 1.2 2003-05-29 15:31:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,21 +37,10 @@
 RunAction::RunAction(TargetConstruction* targ)
   : loBinEdge(0.), hiBinEdge(800.), binSize(10.), 
     ehists(loBinEdge,hiBinEdge,binSize), 
-    edatahists(loBinEdge,hiBinEdge,binSize), 
     target(targ), theData(0), material(0), twopi(6.283185)
-{ 
-  IAnalysisFactory* analysisFact = AIDA_createAnalysisFactory();
-  ITreeFactory* treeFact = analysisFact->createTreeFactory();
-
-  // Create a tree mapped to an hbook file
-  tree = treeFact->create("PP.aida","xml",false,true,"compress=yes");
-
-  // Create histogram factory whose histograms will be handled by the tree
-  IHistogramFactory* histFact = analysisFact->createHistogramFactory(*tree);
-
+{
   // Create histograms
-  ehists.CreateHists(histFact);
-  edatahists.CreateHists(histFact);
+  ehists.CreateHists();
 }
 
 
@@ -99,8 +88,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  edatahists.PlotData(theData);
-
   G4double thick = target->GetTargetThickness()/cm;
   G4double Natoms = material->GetTotNbOfAtomsPerVolume()*cm3;
   G4double Nevents = aRun->GetNumberOfEvent();
@@ -111,9 +98,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4double Weight = 1./(scale_factor*dOmega);
     ehists.ScaleHists(Weight,i);
   }
-
-  tree->commit();          // Write histograms to file
-  tree->close();           // Close the tree and the file
 }
 
 
