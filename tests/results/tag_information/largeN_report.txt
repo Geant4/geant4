@@ -1,14 +1,20 @@
-          Problems with geant4-04-00-cand-00
-          ===========================================
+<html>
+<head>
+<title>System Testing report on large-N tests</title>
+</head>
 
+<body>
 
+<div align="center"> 
+<h2>Outstanding Problems in latest development tag</h2>
+</div>
 
-
-Report on Errors and Warnings arising from system testing on the geant4-04-00-cand-01 tag.
-
-The complete set of tests has not been run, with Large_N(umbers of events), for all platforms. 
-It is hoped to extend the coverage and speed up the problem reporting in the next reference tag.
- 
+Report on Errors and Warnings arising from system testing on the
+<b><blink>geant4-04-00-cand-01</blink></b> development tag.
+<p>
+NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
+      for all platforms. 
+<pre>
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
            |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
@@ -358,3 +364,8 @@ w/o (touch+cut_per_mat) 120     161     240     120     240     240     60   30
 touch                   289     -       600     240     240     240     240 120
 cut                     293     93      600     240     >3600   >3600   240 120
 (touch+cut_per_mat)     3000    87      720     240     >3600   >3600   240 120
+
+</pre>
+
+</body>
+</html>
