@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.63 2004-07-23 14:35:21 johna Exp $
+# $Id: GNUmakefile,v 1.64 2004-07-26 11:04:59 stesting Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -78,7 +78,7 @@ libmap: $(G4LIBDIR)/liblist
 	do \
 	  $(GREP) '^ *name *:=' $$i | cut -d \  -f 3 \
 	  >> /tmp/G4libname.map.starter.$(unique); \
-	  echo $$i | sed s/^\\./source/ \
+	  echo $$i | sed "s/^\\./source/" \
 	  >> /tmp/G4libname.map.starter.$(unique); \
 	done
 	@echo "Making libname.map ..."
