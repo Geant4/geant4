@@ -6,16 +6,12 @@
 
 #include "G4UIcmdPargInteger.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 //
 // Fetch argument value from input stream
 //
-istream &G4UIcmdPargInteger::FetchValue( istream &istr )
+G4std::istream &G4UIcmdPargInteger::FetchValue( G4std::istream &istr )
 {
 	G4int newValue;
 	istr >> newValue;
@@ -32,7 +28,7 @@ istream &G4UIcmdPargInteger::FetchValue( istream &istr )
 G4String G4UIcmdPargInteger::ConvertToString()
 {
 	char buff[20];
-	ostrstream os(buff,20);
+	G4std::ostrstream os(buff,20);
 	
 	os << value << '\0';
 	

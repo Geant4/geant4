@@ -120,7 +120,7 @@ void SBTVisManager::RegisterGraphicsSystems () {
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-         << endl;
+         << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }
@@ -160,7 +160,7 @@ G4int SBTVisManager::BuildFakeWorld() const
 	SBTFakeModel *fakeModel = new SBTFakeModel(model);
 	
 	if (!fpScene) {
-		G4cerr << "Please create a view first" << endl;
+		G4cerr << "Please create a view first" << G4endl;
 		return 1;
 	}
 	

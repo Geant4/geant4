@@ -7,11 +7,7 @@
 
 #include "G4UIcmdPargListDouble.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 //
 // Constructor
@@ -42,10 +38,10 @@ G4UIcmdPargListDouble::~G4UIcmdPargListDouble()
 //
 G4bool G4UIcmdPargListDouble::FetchItem( const char *string, const G4int item )
 {
-	istrstream is( (char *)string );
+	G4std::istrstream is( (char *)string );
 	is >> storage[item];
 	if (is.fail()) {
-		G4cerr << "Error interpreting '" << string << "' as a double value" << endl;
+		G4cerr << "Error interpreting '" << string << "' as a double value" << G4endl;
 		return false;
 	}
 	storage[item] *= units;
@@ -57,7 +53,7 @@ G4bool G4UIcmdPargListDouble::FetchItem( const char *string, const G4int item )
 //
 // WriteItem
 //
-ostream &G4UIcmdPargListDouble::WriteItem( ostream &ios, const G4int item )
+G4std::ostream &G4UIcmdPargListDouble::WriteItem( G4std::ostream &ios, const G4int item )
 {
 	ios << storage[item];
 	return ios;

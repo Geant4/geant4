@@ -8,8 +8,7 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-
-class ifstream;
+#include "g4std/fstream"
 
 class SBTrun;
 class SBTVisManager;
@@ -45,7 +44,7 @@ class SBTMessenger : public G4UImessenger
 					{ testSolid = aSolid; tester = aTester; }
 		virtual ~Debugger() {;}
 
-		virtual G4int DebugMe( ifstream &logFile, const G4int errorIndex ) = 0;
+		virtual G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex ) = 0;
 
 		protected:
 		const G4VSolid *testSolid;
@@ -57,7 +56,7 @@ class SBTMessenger : public G4UImessenger
 		public:
 		DrawError( const G4VSolid *aSolid, const SBTrun *aTester, SBTVisManager *theVisManager )
 				 : Debugger(aSolid,aTester) { visManager = theVisManager;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 		
 		protected:
 		SBTVisManager *visManager;
@@ -65,27 +64,27 @@ class SBTMessenger : public G4UImessenger
 	class DebugInside : public SBTMessenger::Debugger {
 		public:
 		DebugInside( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToInP : public SBTMessenger::Debugger {
 		public:
 		DebugToInP( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToInPV : public SBTMessenger::Debugger {
 		public:
 		DebugToInPV( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToOutP : public SBTMessenger::Debugger {
 		public:
 		DebugToOutP( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToOutPV : public SBTMessenger::Debugger  {
 		public:
 		DebugToOutPV( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
-		G4int DebugMe( ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
 	};
 	
         void InvokeTest3();

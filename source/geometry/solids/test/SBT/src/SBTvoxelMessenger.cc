@@ -25,7 +25,7 @@
 #include "G4UIcmdPargDouble.hh"
 #include "G4UIcmdPargInteger.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 
 //
 // Constructor
@@ -60,52 +60,52 @@ SBTvoxelMessenger::SBTvoxelMessenger( const G4String prefix,
 	//
 	// Target command
 	//
-	G4String command = prefix+"target";
-	targetCmd = new G4UIcmdWith3VectorAndUnit( command, this );
+	G4String com = prefix+"target";
+	targetCmd = new G4UIcmdWith3VectorAndUnit( com, this );
 	targetCmd->SetGuidance( "Center of distribution of random points" );
 	targetCmd->SetParameterName( "X", "Y", "Z", true, true );
 	
 	//
 	// Widths command
 	//
-	command = prefix+"widths";
-	widthsCmd = new G4UIcmdWith3VectorAndUnit( command, this );
+	com = prefix+"widths";
+	widthsCmd = new G4UIcmdWith3VectorAndUnit( com, this );
 	widthsCmd->SetGuidance( "Widths of distribution of random points" );
 	widthsCmd->SetParameterName( "Dx", "Dy", "Dz", true, true );
 
 	//
 	// Max Voxels command
 	//
-	command = prefix+"maxVoxels";
-	maxVoxelsCmd = new G4UIcmdWithAnInteger( command, this );
+	com = prefix+"maxVoxels";
+	maxVoxelsCmd = new G4UIcmdWithAnInteger( com, this );
 	maxVoxelsCmd->SetGuidance( "Maximum number of Voxels before test ends" );
 
 	//
 	// Max Errors command
 	//	
-	command = prefix+"maxErrors";
-	maxErrorsCmd = new G4UIcmdWithAnInteger( command, this );
+	com = prefix+"maxErrors";
+	maxErrorsCmd = new G4UIcmdWithAnInteger( com, this );
 	maxErrorsCmd->SetGuidance( "Maximum number of errors before test ends" );
 	
 	//
 	// Error filename command
 	//
-	command = prefix+"errorFileName";
-	errorFileCmd = new G4UIcmdWithAString( command, this );
+	com = prefix+"errorFileName";
+	errorFileCmd = new G4UIcmdWithAString( com, this );
 	errorFileCmd->SetGuidance( "Filename in which to send error listings" );
 	
 	//
 	// Run command
 	//
-	command = prefix+"run";
-	runCmd = new G4UIcmdWithoutParameter( command, this );
+	com = prefix+"run";
+	runCmd = new G4UIcmdWithoutParameter( com, this );
 	runCmd->SetGuidance( "Execute voxel test" );
 	
 	//
 	// Picture directory
 	//
-	command = prefix+"picture/";
-	pictDirectory = new G4UIdirectory( command );
+	com = prefix+"picture/";
+	pictDirectory = new G4UIdirectory( com );
 	pictDirectory->SetGuidance( "Controls for drawing CSG voxel tests" );
 	
 	//
@@ -117,15 +117,15 @@ SBTvoxelMessenger::SBTvoxelMessenger( const G4String prefix,
 	pictVoxelArgs[3] = new G4UIcmdPargDouble( "ymax", 1.0, mm );
 	pictVoxelArgs[4] = new G4UIcmdPargDouble( "zmin", 1.0, mm );
 	pictVoxelArgs[5] = new G4UIcmdPargDouble( "zmax", 1.0, mm );
-	command = prefix+"picture/voxel";
-	pictVoxelCmd = new G4UIcmdWithPargs( command, this, pictVoxelArgs, 6 );
+	com = prefix+"picture/voxel";
+	pictVoxelCmd = new G4UIcmdWithPargs( com, this, pictVoxelArgs, 6 );
 	pictVoxelCmd->SetGuidance( "Specifies the voxel to draw" );
 
 	//
 	// picture/translate command
 	//
-	command = prefix+"picture/translate";
-	pictTranCmd = new G4UIcmdWith3Vector( command, this );
+	com = prefix+"picture/translate";
+	pictTranCmd = new G4UIcmdWith3Vector( com, this );
 	pictTranCmd->SetGuidance( "Specifies the voxel translation" );
 	
 	//
@@ -135,15 +135,15 @@ SBTvoxelMessenger::SBTvoxelMessenger( const G4String prefix,
 	pictRotArgs[1] = new G4UIcmdPargDouble( "yaxis", 1.0, 1 );
 	pictRotArgs[2] = new G4UIcmdPargDouble( "zaxis", 1.0, 1 );
 	pictRotArgs[3] = new G4UIcmdPargDouble( "amount", 1.0, 1 );
-	command = prefix+"picture/rotate";
-	pictRotCmd = new G4UIcmdWithPargs( command, this, pictRotArgs, 4 );
+	com = prefix+"picture/rotate";
+	pictRotCmd = new G4UIcmdWithPargs( com, this, pictRotArgs, 4 );
 	pictRotCmd->SetGuidance( "Specifies rotation matrix" );
 
 	//
 	// picture/point command
 	//
-	command = prefix+"picture/point";
-	pictPointCmd = new G4UIcmdWith3Vector( command, this );
+	com = prefix+"picture/point";
+	pictPointCmd = new G4UIcmdWith3Vector( com, this );
 	pictPointCmd->SetGuidance( "Specifies one point to include in the picture" );
 	
 	//
@@ -152,22 +152,22 @@ SBTvoxelMessenger::SBTvoxelMessenger( const G4String prefix,
 	pictLimitArgs[0] = new G4UIcmdPargInteger( "axis", 1 );
 	pictLimitArgs[1] = new G4UIcmdPargDouble( "min", 1.0, mm );
 	pictLimitArgs[2] = new G4UIcmdPargDouble( "max", 1.0, mm );
-	command = prefix+"picture/limit";
-	pictLimitCmd = new G4UIcmdWithPargs( command, this, pictLimitArgs, 3 );
+	com = prefix+"picture/limit";
+	pictLimitCmd = new G4UIcmdWithPargs( com, this, pictLimitArgs, 3 );
 	pictLimitCmd->SetGuidance( "Specifies voxel limits" );
 	
 	//
 	// picture/draw command
 	//
-	command = prefix+"picture/draw";
-	pictDrawCmd = new G4UIcmdWithoutParameter( command, this );
+	com = prefix+"picture/draw";
+	pictDrawCmd = new G4UIcmdWithoutParameter( com, this );
 	pictDrawCmd->SetGuidance( "Draw the picture" );
 
 	//
 	// picture/debug command
 	//
-	command = prefix+"picture/debug";
-	pictDebugCmd = new G4UIcmdWithoutParameter( command, this );
+	com = prefix+"picture/debug";
+	pictDebugCmd = new G4UIcmdWithoutParameter( com, this );
 	pictDebugCmd->SetGuidance( "Call CalculateExtent for the picture" );
 }
 
@@ -204,15 +204,15 @@ void SBTvoxelMessenger::InvokeTest()
 	//
 	G4VSolid *testSolid = solidQuery->GetSolid();
 	if (testSolid == 0) {
-		G4cerr << "Please initialize geometry before running test" << endl;
-		G4cerr << "Test ABORTED" << endl;
+		G4cerr << "Please initialize geometry before running test" << G4endl;
+		G4cerr << "Test ABORTED" << G4endl;
 		return;
 	}
 
 	//
 	// Open output file
 	//
-	ofstream logFile( errorFile );
+	G4std::ofstream logFile( errorFile );
 	
 	//
 	// Run the test
@@ -224,14 +224,14 @@ void SBTvoxelMessenger::InvokeTest()
 void SBTvoxelMessenger::Draw()
 {
 	if (!visManager) 
-		G4cerr << "Visualization is not available in this executable" << endl;
+		G4cerr << "Visualization is not available in this executable" << G4endl;
 
 	//
 	// Is there a Solid to test?
 	//
 	G4VSolid *testSolid = solidQuery->GetSolid();
 	if (testSolid == 0) {
-		G4cerr << "Please initialize geometry before running test" << endl;
+		G4cerr << "Please initialize geometry before running test" << G4endl;
 		return;
 	}
 	
@@ -239,7 +239,7 @@ void SBTvoxelMessenger::Draw()
 	// Is there a voxel to test?
 	//
 	if (voxel == 0) {
-		G4cerr << "Please specify a voxel to draw using /pict/voxel command" << endl;
+		G4cerr << "Please specify a voxel to draw using /pict/voxel command" << G4endl;
 		return;
 	}
 
@@ -261,7 +261,7 @@ void SBTvoxelMessenger::Debug()
 	//
 	G4VSolid *testSolid = solidQuery->GetSolid();
 	if (testSolid == 0) {
-		G4cerr << "Please initialize geometry before running test" << endl;
+		G4cerr << "Please initialize geometry before running test" << G4endl;
 		return;
 	}
 	
@@ -269,7 +269,7 @@ void SBTvoxelMessenger::Debug()
 	// Is there a voxel to test?
 	//
 	if (voxel == 0) {
-		G4cerr << "Please specify a voxel to debug using /pict/voxel command" << endl;
+		G4cerr << "Please specify a voxel to debug using /pict/voxel command" << G4endl;
 		return;
 	}
 
@@ -328,7 +328,7 @@ void SBTvoxelMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 				voxel->AddLimit( kZAxis, minZ->GetValue(), maxZ->GetValue() );
 		}
 		else
-			G4cerr << "Syntax error" << endl;
+			G4cerr << "Syntax error" << G4endl;
 	}
 	else if (command == pictTranCmd) {
 		*translate = pictTranCmd->GetNew3VectorValue( newValues );
@@ -347,7 +347,7 @@ void SBTvoxelMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 			rotate->rotate( amount->GetValue(), &rotAxis );
 		}
 		else
-			G4cerr << "Syntax error" << endl;
+			G4cerr << "Syntax error" << G4endl;
 	}
 	else if (command == pictPointCmd) {
 		if (point) delete point;
@@ -364,7 +364,7 @@ void SBTvoxelMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 			
 			G4int axisIndex = axisArg->GetValue();	  
 			if (axisIndex < 0 || axisIndex > 2) {
-				G4cerr << "Axis value must be from 0 to 2" << endl;
+				G4cerr << "Axis value must be from 0 to 2" << G4endl;
 			}
 			else {
 				axis = axes[axisIndex];
@@ -373,7 +373,7 @@ void SBTvoxelMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 			}
 		}
 		else
-			G4cerr << "Syntax error" << endl;
+			G4cerr << "Syntax error" << G4endl;
 	}
 	else if (command == pictDrawCmd) {
 		Draw();

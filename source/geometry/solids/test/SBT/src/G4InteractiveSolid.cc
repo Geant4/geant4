@@ -303,7 +303,7 @@ void G4InteractiveSolid::MakeMeABox( G4String values )
 					  	     dzArg->GetValue() );
 	}
 	else
-		G4cerr << "G4Box not created" << endl;
+		G4cerr << "G4Box not created" << G4endl;
 }
 
 
@@ -330,7 +330,7 @@ void G4InteractiveSolid::MakeMeAPara( G4String values )
 					  	       phiArg->GetValue()    );
 	}
 	else
-		G4cerr << "G4Para not created" << endl;
+		G4cerr << "G4Para not created" << G4endl;
 }
 
 
@@ -357,7 +357,7 @@ void G4InteractiveSolid::MakeMeATrap( G4String values )
 						       dArg[10]->GetValue() );
 	}
 	else
-		G4cerr << "G4Trap not created" << endl;
+		G4cerr << "G4Trap not created" << G4endl;
 }
 
 
@@ -382,7 +382,7 @@ void G4InteractiveSolid::MakeMeATrd( G4String values )
 					  	      dzArg->GetValue() );
 	}
 	else
-		G4cerr << "G4Trd not created" << endl;
+		G4cerr << "G4Trd not created" << G4endl;
 }
 
 
@@ -404,7 +404,7 @@ void G4InteractiveSolid::MakeMeASphere( G4String values )
 						           dArg[5]->GetValue() );
 	}
 	else
-		G4cerr << "G4Sphere not created" << endl;
+		G4cerr << "G4Sphere not created" << G4endl;
 }
 
 
@@ -425,7 +425,7 @@ void G4InteractiveSolid::MakeMeATorus( G4String values )
 						         dArg[4]->GetValue() );
 	}
 	else
-		G4cerr << "G4Torus not created" << endl;
+		G4cerr << "G4Torus not created" << G4endl;
 }
 
 
@@ -446,7 +446,7 @@ void G4InteractiveSolid::MakeMeATubs( G4String values )
 						       dArg[4]->GetValue() );
 	}
 	else
-		G4cerr << "G4Tubs not created" << endl;
+		G4cerr << "G4Tubs not created" << G4endl;
 }
 
 
@@ -469,7 +469,7 @@ void G4InteractiveSolid::MakeMeACons( G4String values )
 						       dArg[6]->GetValue() );
 	}
 	else
-		G4cerr << "G4Cons not created" << endl;
+		G4cerr << "G4Cons not created" << G4endl;
 }
 
 
@@ -490,7 +490,7 @@ void G4InteractiveSolid::MakeMeAHype( G4String values )
 						       dArg[4]->GetValue()  );
 	}
 	else
-		G4cerr << "G4Hype not created" << endl;
+		G4cerr << "G4Hype not created" << G4endl;
 }
 
 
@@ -512,8 +512,8 @@ void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 		G4int numRZ = numRZArg->GetValue();
 		if (numRZ != rArg->GetNItem() ||
 		    numRZ != zArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polycone arguments" << endl;
-			G4cerr << "G4Polycone not created" << endl;
+		    	G4cerr << "numRZ inconsistent among polycone arguments" << G4endl;
+			G4cerr << "G4Polycone not created" << G4endl;
 			return;
 		}
 		
@@ -526,7 +526,7 @@ void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 					zArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polycone not created" << endl;
+		G4cerr << "G4Polycone not created" << G4endl;
 }
 
 
@@ -550,8 +550,8 @@ void G4InteractiveSolid::MakeMeAPolycone2( G4String values )
 		if (numRZ != zArg->GetNItem() ||
 		    numRZ != rInArg->GetNItem() ||
 		    numRZ != rOutArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polycone arguments" << endl;
-			G4cerr << "G4Polycone not created" << endl;
+		    	G4cerr << "numRZ inconsistent among polycone arguments" << G4endl;
+			G4cerr << "G4Polycone not created" << G4endl;
 			return;
 		}
 		
@@ -565,7 +565,7 @@ void G4InteractiveSolid::MakeMeAPolycone2( G4String values )
 					rOutArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polycone not created" << endl;
+		G4cerr << "G4Polycone not created" << G4endl;
 }
 
 
@@ -588,8 +588,8 @@ void G4InteractiveSolid::MakeMeAPolyhedra( G4String values )
 		G4int numRZ = numRZArg->GetValue();
 		if (numRZ != rArg->GetNItem() ||
 		    numRZ != zArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << endl;
-			G4cerr << "G4Polyhedra not created" << endl;
+		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << G4endl;
+			G4cerr << "G4Polyhedra not created" << G4endl;
 			return;
 		}
 		
@@ -603,7 +603,7 @@ void G4InteractiveSolid::MakeMeAPolyhedra( G4String values )
 					zArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polyhedra not created" << endl;
+		G4cerr << "G4Polyhedra not created" << G4endl;
 }
 
 
@@ -628,8 +628,8 @@ void G4InteractiveSolid::MakeMeAPolyhedra2( G4String values )
 		if (numRZ != zArg->GetNItem() ||
 		    numRZ != rinArg->GetNItem()  ||
 		    numRZ != routArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << endl;
-			G4cerr << "G4Polyhedra not created" << endl;
+		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << G4endl;
+			G4cerr << "G4Polyhedra not created" << G4endl;
 			return;
 		}
 		
@@ -644,7 +644,7 @@ void G4InteractiveSolid::MakeMeAPolyhedra2( G4String values )
 					routArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polyhedra not created" << endl;
+		G4cerr << "G4Polyhedra not created" << G4endl;
 }
 
 
@@ -665,7 +665,7 @@ void G4InteractiveSolid::MakeMeAnEllipticalTube( G4String values )
 					  	                dzArg->GetValue() );
 	}
 	else
-		G4cerr << "G4EllipticalTube not created" << endl;
+		G4cerr << "G4EllipticalTube not created" << G4endl;
 }
 
 
