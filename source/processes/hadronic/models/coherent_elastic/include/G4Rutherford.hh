@@ -4,11 +4,12 @@
 // J.P. Wellisch, X-mas 2002.
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleChange.hh"
+#include "G4VCrossSectionDataSet.hh"
 
-class G4Rutherford : public G4HadronicInteraction
+class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
 {
    public:
-   G4Rutherford(G4double cut=0.9999) 
+   G4Rutherford(G4double cut=0.99) 
    {
      game = false;
      theMaxCosTh=cut;
@@ -17,6 +18,42 @@ class G4Rutherford : public G4HadronicInteraction
                                     G4Nucleus& targetNucleus);
 				    
    G4double Apply(const G4ParticleDefinition * aP, G4Nucleus& targetNucleus);
+   virtual G4bool IsApplicable(const G4DynamicParticle* aP, const G4Element*aE)
+   {
+     G4bool result=false;
+     if(aP->GetDefinition()->GetBaryonNumber()>1.5)
+     {
+       result = true;
+     }
+     return result;
+   }
+
+   virtual G4double GetCrossSection(const G4DynamicParticle* aP,
+                                   const G4Element* aE,
+                                   G4double aTemperature = 0.)
+   {
+     G4Nucleus aNuc(aE->GetN(), aE->GetZ());
+     return XSec(aP->GetKineticEnergy(), aP->GetDefinition(), aNuc);
+   }
+   
+   virtual
+   void BuildPhysicsTable(const G4ParticleDefinition&aP){}
+
+   virtual
+   void DumpPhysicsTable(const G4ParticleDefinition&aP){};
+   G4double XSec(G4double eLab, const G4ParticleDefinition * aP, G4Nucleus& targetNucleus)
+   {
+     prepare(aP, targetNucleus);
+     G4double z1=targetNucleus.GetZ();
+     G4double z2=aP->GetPDGCharge();
+     G4double result = z1*z2*electron_charge*electron_charge;
+     result /= 16.*pi*epsilon0*eLab;
+     result *= result;
+     result *= 2.*pi;
+     result *= -total;
+     G4cout << "total = "<<total<<G4endl;
+     return result;
+   }
    private:
 
    double Ruther(double r, double cth)
@@ -36,10 +73,19 @@ class G4Rutherford : public G4HadronicInteraction
      result /= fac;
      return result;
    }
+   
+   void prepare(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus);
 
    G4ParticleChange theResult;
    G4bool game;
    G4double theMaxCosTh;
+   
+   vector<G4double> theRuther;
+   vector<G4double> theValue;
+   vector<G4double> integral;
+   G4double total;
+
+   
 };
 
 #endif

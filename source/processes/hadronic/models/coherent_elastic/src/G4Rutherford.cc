@@ -54,8 +54,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       it=theMom.vect();
       G4DynamicParticle * aSec = 
 	  new G4DynamicParticle(aParticle->GetDefinition(), it.unit(), it.mag2()/(2.*m1));
-      G4cout << "Energy conservation check "<< p<<" "<<p1/p<<" "<<m1<<" "<<m1<<" "
-             <<a <<" "<<b<<" "<<c<<" "<<aParticle->GetKineticEnergy()<<" "
+      G4cout << "Energy conservation check "<<aParticle->GetKineticEnergy()<<" "
              << p1<<" "<<aSec->GetKineticEnergy();
       theResult.AddSecondary(aSec);
       G4ThreeVector it1(-cache.x(), -cache.y(), p-cache.z());
@@ -103,15 +102,14 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
   return &theResult;
 }
 
-G4double G4Rutherford::
-Apply(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus)
+void G4Rutherford::prepare(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus)
 {
+  theRuther.clear();
+  theValue.clear();
   G4double m1=aP->GetPDGMass();
   G4double z2=targetNucleus.GetZ();
   G4double a2=targetNucleus.GetN();
   G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2,a2);
-  vector<G4double> theRuther;
-  vector<G4double> theValue;
   G4double start = theMaxCosTh;
   G4double eps = 0.0001;
   G4double r=m1/m2;
@@ -131,7 +129,7 @@ Apply(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus)
   theRuther.push_back(ruth);
   theValue.push_back(-1);
 
-  vector<G4double> integral;
+  integral.clear();
   double inte = 0;
   integral.push_back(0);
   size_t i=0;
@@ -146,12 +144,19 @@ Apply(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus)
 //    cout << theValue[i+1] <<" "<<integral[i+1]<<endl;
   }
 //  cout << integral.size()<<" "<<theRuther.size()<<endl;
-  for(i=0; i<integral.size(); i++)
+  total = inte;
+}
+
+G4double G4Rutherford::
+Apply(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus)
+{
+  prepare(aP, targetNucleus);
+  for(size_t i=0; i<integral.size(); i++)
   {
-    integral[i]/=inte;
+    integral[i]/=total;
 //    cout << theValue[i] <<" "<<integral[i]<<endl;
   }
-  // fill particle change
+  // fill result
   G4double cth=0;
 //  for (i=0; i<1000000; i++)
 //  {
