@@ -1,0 +1,21 @@
+October 6th, 99 G.Cosmo (global-V00-01-01)
+- STLInterface: Changed tolower/toupper to old implementation in
+  cstring.h (by F.Behner)
+ 
+September 14, 99 G.Cosmo
+- STLInterface: renamed classes HashPtr and Hash to G4HashPtr and
+  G4Hash in tphdict and tvhdict to make them compliant with G4 coding
+  standards and avoid clashes with external software in global scope.
+- STLInterface: removed useless tests over size_t < 0 in files
+  tvordvec.h, tvvector.h, tpsrtvec.h and tpordvec.h.
+- STLInterface: casted pointers to long in rwstlhash.h instead of
+  unsigned.
+
+September 13, 99 V.Grichine
+- Added new class G4Integrator (.hh/.icc) and test file
+  G4IntegratorTest.cc in HEPNumerics for integration of generic
+  functions.
+
+September 10, 99 G.Cosmo
+- Added inline keyword to G4Poisson function in HEPRandom/include
+  which was missing.
