@@ -1,4 +1,4 @@
-$Id: History,v 1.274 2005-02-19 22:07:21 allison Exp $
+$Id: History,v 1.275 2005-02-23 11:49:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,36 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+23rd February 2005  John Allison  (vis-V07-00-07)
+- Protected scene handlers for the case of the drawing of solids NOT
+  from a physical volume tree:
+    G4FRSceneFunc.icc
+    G4OpenGLSceneHandler.cc
+    G4OpenGLStoredSceneHandler.cc
+    G4ASCIITreeSceneHandler.cc
+    G4GAGTreeSceneHandler.cc
+- Fixed a problem with ClearTransientStore.  ClearTransientStore
+  should restrict itself to its job.  In the following files,
+  ClearTransientStore also redraws the view.  In other places, a draw
+  command often follows, so it is not needed here.  In fact it can
+  cause a double recursive descent into DrawView, so the existing code
+  has been commented out (JA - 23/Jan/05):
+    G4FRSceneFunc.icc
+    G4HepRepFileSceneHandler.cc
+    G4OpenGLImmediateSceneHandler.cc
+    G4OpenGLStoredSceneHandler.cc
+    G4VRML1SceneHandlerFunc.icc
+    G4VRML2SceneHandlerFunc.icc
+    G4XXXSceneHandler.cc
+- Removed (commented out) some code that forced extra kernel visits,
+  purportedly to overcome a problem in OpenGLStored methods.  Let's
+  fix OpenGL if necessary:
+    G4VSceneHandler.cc
+    G4VViewer.cc
+- Commented out SetView and ClearView in /vis/viewer/refresh:
+    G4VisCommandsViewer.cc
+- Changed signature of G4VViewer::SetNeedKernelVisit(G4bool) for compatibility.
 
 19th February 2005  John Allison  (vis-V07-00-06 with greps-V07-00-00)
 - Added G4VUserVisAction and G4CallbackModel.
