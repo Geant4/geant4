@@ -123,13 +123,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    emPhysicsList = new PhysListEmModel(name);
 
   } else if (name == "model") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "modelP") {
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2003-07-14 17:10:16 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-08-29 16:38:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,8 +66,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:ecalLength(20.*cm),
- ecalWidth(4.*cm),
+:ecalLength(36.*cm),
+ ecalWidth(6.*cm),
  vertexLength(10.*cm),
  padLength(0.1*mm),
  padWidth(0.02*mm),
@@ -177,6 +177,7 @@ void DetectorConstruction::DefineMaterials()
     ma->AddElement(Cs,1);
     ma->AddElement(I,1);
     ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
+    calMaterial = ma;
 
 
   //BGO
@@ -206,7 +207,6 @@ void DetectorConstruction::DefineMaterials()
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //choose material
-  calMaterial = PbWO;
   worldMaterial = Air;
 }
 
