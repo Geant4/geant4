@@ -18,8 +18,10 @@
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
-    G4int a2=static_cast<G4int>(targetNucleus.GetN()+.1);
-    G4int z2=static_cast<G4int>(targetNucleus.GetZ());
+//    G4int a2=static_cast<G4int>(targetNucleus.GetN()+.1);
+//    G4int z2=static_cast<G4int>(targetNucleus.GetZ());
+    G4double a2=targetNucleus.GetN();
+    G4double z2=targetNucleus.GetZ();
     G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2, a2);
     debug.push_back(a1);
     debug.push_back(z1);
@@ -35,8 +37,9 @@
     G4bool swapped = false;
     if(a2<a1)
     {
+      debug.push_back("swapping....");
       swapped = true;
-      G4int tmp(0);
+      G4double tmp(0);
       tmp = a2; a2=a1; a1=tmp;
       tmp = z2; z2=z1; z1=tmp;
       tmp = m2; m2=m1; m1=tmp;
@@ -91,7 +94,9 @@
       }
       debug.push_back(tmpV);
       debug.dump();
+
       result=theModel.Propagate(initalState, fancyNucleus);
+
       debug.push_back("################# Result size");
       debug.push_back(result->size());
       debug.dump();
@@ -147,14 +152,16 @@
       if( (*result)[i]->GetNewlyAdded() ) 
       {
         fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
-        G4cout <<" secondary ... " << (*result)[i]<< " "<< (*result)[i]->GetMomentum()<< " " <<
-	                            (*result)[i]->GetTotalEnergy() << G4endl;
-        
+        G4cout <<" secondary ... ";
       }
       else {
-        G4cout <<" spectator ... " << (*result)[i]<< " "<< (*result)[i]->GetMomentum()<< " " <<
-	                            (*result)[i]->GetTotalEnergy() << G4endl;
+        G4cout <<" spectator ... "; 
       }
+	
+       G4cout << (*result)[i]<< " "
+		<< (*result)[i]->GetDefinition()->GetParticleName() << " " 
+		<< (*result)[i]->GetMomentum()<< " " 
+		<< (*result)[i]->GetTotalEnergy() << G4endl;
     }
     G4LorentzVector momentum(iState-fState);
     debug.push_back("the momentum balance");
@@ -172,19 +179,14 @@
     aProRes.SetNumberOfHoles(a1-resA);
     aProRes.SetMomentum(momentum);
     G4ParticleDefinition * resDef(0);
-    if( resZ>0 || resA>1)
-    {
-       resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0.0,resZ);  
-    }
-    else if(resA!=0)
-    {
-      resDef=G4Neutron::NeutronDefinition();
-    }
-
+    G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
+           << resA << " " << resZ << G4endl;
+    
     // call precompound model
     G4ReactionProductVector * proFrag(0);
-    if(resA>1.1) 
+    if(resZ>0 && resA>1) 
     {
+      resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0.0,resZ);  
       aProRes.SetParticleDefinition(resDef);
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
     }
@@ -192,12 +194,23 @@
     {
       proFrag=new G4ReactionProductVector;
       G4ReactionProduct * it(0);
-      if(0==resZ) it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
-      if(1==resZ) it = new G4ReactionProduct(G4Proton::ProtonDefinition());
-      it->SetTotalEnergy(momentum.t());
-      it->SetMomentum(momentum.vect());
-      it->SetNewlyAdded(true);
-      proFrag->push_back(it);
+      while ( resA > 0 ) 
+      {
+	 if(1==resZ) 
+	 {
+            it = new G4ReactionProduct(G4Proton::ProtonDefinition());
+	    resZ--;resA--;
+	 } else
+	 {
+	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
+	    resA--;
+	 }
+// @@GF  fix.... momentum is wrong if more than one neutron @@
+	 it->SetTotalEnergy(momentum.t());
+	 it->SetMomentum(momentum.vect());
+	 it->SetNewlyAdded(true);
+	 proFrag->push_back(it);
+      }
     }
     // collect the evaporation part
     debug.push_back("the nucleon count balance");
