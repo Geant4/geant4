@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.8 1999-10-27 14:14:25 stesting Exp $ */
+/* $Id: liblist.c,v 1.9 1999-11-19 18:01:40 morita Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -52,6 +52,8 @@ char** parsedir(char *directory,int *argc)
 
   /*Open the actual directory*/
   actualdir=opendir(directory);
+
+  if(!actualdir) return targv;
 
   /*Loop over all entries */
   for(entry=readdir(actualdir);entry!=NULL;entry=readdir(actualdir))
