@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationElectronSpectrum.cc,v 1.3 2001-10-10 16:46:06 pia Exp $
+// $Id: G4eIonisationElectronSpectrum.cc,v 1.4 2001-10-10 16:49:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,8 @@
 // Creation date: 29 September 2001
 //
 // Modifications: 
+// 10.10.2001 MGP           Revision to improve code quality and 
+//                          consistency with design
 //
 // -------------------------------------------------------------------
 //

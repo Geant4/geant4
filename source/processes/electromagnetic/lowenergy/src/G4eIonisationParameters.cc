@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.5 2001-10-10 09:49:57 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.6 2001-10-10 16:46:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -44,7 +44,6 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),
@@ -54,7 +53,6 @@ G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
   LoadData();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationParameters::~G4eIonisationParameters()
 { 
@@ -72,7 +70,6 @@ G4eIonisationParameters::~G4eIonisationParameters()
   delete interpolation;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex, 
                                                      G4int parameterIndex, 
@@ -85,7 +82,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
   pos = param.find(id);
   if (pos!= param.end()) {
     G4VEMDataSet* dataSet = (*pos).second;
-    size_t nShells = dataSet->NumberOfComponents();
+    G4int nShells = dataSet->NumberOfComponents();
 
     if(shellIndex < nShells) { 
       const G4VEMDataSet* comp = dataSet->GetComponent(shellIndex);
@@ -108,10 +105,13 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
   return value;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eIonisationParameters::LoadData()
 {
+  // ---------------------------------------
+  // Please document what are the parameters 
+  // ---------------------------------------
+
   if(!interpolation)  interpolation  = new G4SemiLogInterpolation();
 
   // define active elements
@@ -126,13 +126,13 @@ void G4eIonisationParameters::LoadData()
 
     const G4Material* material= (*materialTable)[m];        
     const G4ElementVector* elementVector = material->GetElementVector();
-    const G4int nElements = material->GetNumberOfElements();
+    const size_t nElements = material->GetNumberOfElements();
       
     for (size_t iEl=0; iEl<nElements; iEl++) {
       G4Element* element = (*elementVector)[iEl];
       G4double Z = element->GetZ();
       if (!(activeZ.contains(Z)) && Z > 0 && Z < zMax) {
-	 activeZ.push_back(Z);
+	activeZ.push_back(Z);
       }
     }
   }
@@ -144,7 +144,7 @@ void G4eIonisationParameters::LoadData()
     }
   G4String pathString(path);
   pathString += "/ioni/io-co-";  
-
+  
   G4double energy;
   G4DataVector* e;
   G4DataVector  q;
@@ -154,17 +154,17 @@ void G4eIonisationParameters::LoadData()
   a.resize(length);
   p.resize(length);
   q.resize(length);
-
+  
   size_t nZ = activeZ.size();
-
-  for (G4int i=0; i<nZ; i++) {
-
+  
+  for (size_t i=0; i<nZ; i++) {
+    
     G4int Z = (G4int)activeZ[i];
     char nameChar[100] = {""};
     G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
     ost << pathString << Z << ".dat";
     G4String name(nameChar);  
-
+    
     G4std::ifstream file(name);
     G4std::filebuf* lsdp = file.rdbuf();
   
@@ -211,8 +211,7 @@ void G4eIonisationParameters::LoadData()
       // fill map
       if(energy < 0) {
 
-        G4int id;
-        for(G4int k=0; k<length; k++) {
+        for(size_t k=0; k<length; k++) {
             G4int id = Z*20 + k;
             set = new G4EMDataSet(id, e, a[k], interpolation, 1., 1.);
             p[k]->AddComponent(set);
@@ -244,7 +243,6 @@ void G4eIonisationParameters::LoadData()
   p.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eIonisationParameters::PrintData() const
 {
@@ -255,19 +253,19 @@ void G4eIonisationParameters::PrintData() const
   size_t nZ = activeZ.size();
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
 
-  for (G4int i=0; i<nZ; i++) {
+  for (size_t i=0; i<nZ; i++) {
     G4int Z = (G4int)activeZ[i];      
 
-    for (G4int j=0; j<length; j++) {
+    for (size_t j=0; j<length; j++) {
     
       G4int index = Z*20 + j;
 
       pos = param.find(index);
       if (pos!= param.end()) {
-        G4VEMDataSet* dataSet = pos->second;
+        G4VEMDataSet* dataSet = (*pos).second;
         size_t nShells = dataSet->NumberOfComponents();
 
-        for (G4int k=0; k<nShells; k++) {
+        for (size_t k=0; k<nShells; k++) {
 
           G4cout << "===== Z= " << Z << " shell= " << k 
                  << " parameter[" << j << "]  =====" 
@@ -281,4 +279,4 @@ void G4eIonisationParameters::PrintData() const
   G4cout << "====================================" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
