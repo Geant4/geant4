@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.17 2003-08-08 11:31:24 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.18 2004-08-17 12:39:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,10 +45,12 @@
 // 28-03-03 Move to model design (V.Ivanchenko)
 // 18-04-03 Change name (V.Ivanchenko)
 // 16-06-03: ShortLived are not applicable any more (V.Ivanchenko)
+// 17-08-04 name of data member facxsi changed to factail together
+//          with the corresponding set function (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.17 2003-08-08 11:31:24 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.18 2004-08-17 12:39:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -97,7 +99,7 @@ public:    // with description
   void Setdtrl(G4double value)                {dtrl = value;};
      // to reduce the energy/step dependence
 
-  void Setfacxsi(G4double value)              {facxsi = value;}
+  void Setfactail(G4double value)              {factail = value;}
   void SetFacrange(G4double val)              {facrange=val;
         nsmallstep = G4int(log((cf+facrange-1.)/facrange)/log(cf))+1;}
       // Steplimit after boundary crossing = facrange*range
@@ -126,7 +128,7 @@ private:        // data members
   G4double dtrl;
   G4double NuclCorrPar;
   G4double FactPar;
-  G4double facxsi;
+  G4double factail;
   G4double cf;
 
   G4int    stepnolastmsc;

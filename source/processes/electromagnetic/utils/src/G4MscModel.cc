@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.19 2004-07-19 13:46:41 urban Exp $
+// $Id: G4MscModel.cc,v 1.20 2004-08-17 12:40:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,10 @@
 //          rewritten, changes in the angular distribution (L.Urban)
 // 19-07-04 correction in SampleCosineTheta in order to avoid
 //          num. precision problems at high energy/small step(L.Urban) 
+// 17-08-04 changes in the angle distribution (slightly modified
+//          Highland formula for the width of the central part,
+//          changes in the numerical values of some other parameters)
+//          ---> approximately step independent distribution (L.Urban)
 
 // Class Description:
 //
@@ -82,7 +86,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
-                           G4double& m_FactPar, G4double& m_facxsi,
+                           G4double& m_FactPar, G4double& m_factail,
 			   G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
@@ -91,7 +95,7 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   dtrl(m_dtrl),
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
-  facxsi(m_facxsi),
+  factail(m_factail),
   samplez(m_samplez)
 {
   highKinEnergy = 100.0*TeV;
@@ -123,11 +127,7 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
   mass = particle->GetPDGMass();
   charge = particle->GetPDGCharge()/eplus;
   b = 1. ;
-
-  if(mass <= electron_mass_c2)   
-    xsi = facxsi*2.22 ;
-  else
-    xsi = facxsi*2.70 ;
+  xsi = 3.00 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -536,52 +536,16 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
         G4double a ;
 
         // for all particles take the width of the central part
-        //  from the Highland formula
-        // (Particle Physics Booklet, July 2002, eq. 26.10)
-        const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
+        //  from a  parametrization similar to the Highland formula
+        // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
+        // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
+        const G4double c_highland = 13.6*MeV, corr_highland=0.555 ;
         G4double Q = abs(charge) ;
         G4double xx0 = trueStepLength/currentRadLength;
         G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                                KineticEnergy*(KineticEnergy+2.*mass)/
                                ((currentKinEnergy+mass)*(KineticEnergy+mass))) ;
-        G4double theta0 = c_highland*Q*sqrt(xx0)/betacp ;
-
-        // correction term
-        G4double y ;
-        // for muons/hadron as in Highland's formula
-        if(mass > electron_mass_c2)
-        {
-          y = log(xx0) ;
-          theta0 *= (1.+corr_highland*y) ;
-        }
-        // for e+/e- 
-        else                            
-        {
-          // corr. factor has been modified between xx0low and xx0high
-          // and below xx0low for e+/e- only ************************ 
-          const G4double xx0high = 1., xx0low = 1.e-3 ;
-          // quadratic corr.factor from Hanson's msc data (Au, 15.7 MeV e)
-          const G4double corrq1 = 0.01273, corrq2 = -0.006840 ;
-          const G4double corrlow = 0.05   ;  // from some backscattering data
-          const G4double fach = 1.+corr_highland*log(xx0high),
-                         facl = fach*(1.+log(xx0low/xx0high)*
-                                (corrq1+log(xx0low/xx0high)*corrq2)) ;
-          if(xx0 >= xx0high)
-          {
-            y = log(xx0) ;
-            theta0 *= (1.+corr_highland*y) ;
-          }
-          else if(xx0 >= xx0low)
-          {
-            y = log(xx0/xx0high) ;
-            theta0 *= fach*(1.+y*(corrq1+y*corrq2)) ;
-          }
-          else 
-          {
-            y = log(xx0/xx0low) ;
-            theta0 *= facl*(1.+corrlow*y) ;
-          }
-        }
+        G4double theta0 = c_highland*Q*exp(corr_highland*log(xx0))/betacp ;
 
         if(theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
         else                a = 1.0/(theta0*theta0) ;
@@ -602,7 +566,19 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
       	G4double oneminusx0=xsi/a ;
 	G4double oneplusx0=2.+xsi/a ;
 
-        if (x0 <= -1.)
+        G4double f1x0=1., f2x0=1. ;
+        const G4double tau0 = 0.10 ;
+        if(tau > tau0)
+        {
+         // 1 model function
+          a = 1./xmeanth1 ;
+          ea = exp(-2.*a) ;
+          eaa= 1.-ea ;
+          xmean1 = 1.-1./a+2.*ea/eaa ;
+          prob = 1. ;
+          qprob = 1. ;
+        }
+        else if (x0 <= -1.)
         {
           // 2 model fuctions only
           // in order to have xmean1 > xmeanth -> qprob < 1
@@ -635,34 +611,26 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
           eaa = 1.-ea ;
           xmean1 = 1.-x1fac2/a ;
 
-          // from continuity of the 1st derivatives
-          //   c = a*(b-x0) ;
-          c = xsi ;
-
-          if(c == 1.) c=1.000001 ;
+          const G4double fctail = factail*1.0 ;
+          c = 2.+fctail*xx0 ;
           if(c == 2.) c=2.000001 ;
 
-          b1 = 2.   ;
-	  //  bx = b-x0 ;
-	  bx = xsi/a ;
+          b = 1.+(c-xsi)/a ;
+
+          b1 = b+1. ;
+          bx = c/a ;
           eb1=exp((c-1.)*log(b1)) ;
           ebx=exp((c-1.)*log(bx)) ;
           xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
 
-	  G4double f1x0 = a*ea/eaa ;
-	  G4double f2x0 = (c-1.)*eb1*ebx/(eb1-ebx)/
+          f1x0 = a*ea/eaa ;
+          f2x0 = (c-1.)*eb1*ebx/(eb1-ebx)/
                           exp(c*log(bx)) ;
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
           // from xmean = xmeanth
           qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
-        }
 
-        // protection against qprob > 1
-        if(qprob > 1.) 
-        {
-          qprob = 1. ;
-          prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
         }
 
         // sampling of costheta

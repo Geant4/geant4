@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.11 2004-04-29 18:40:52 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.12 2004-08-17 12:40:08 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 11-03-04 changes in data members (L.Urban)
 // 23-04-04 changes in data members and in signature of SampleCosineTheta
 //          (L.Urban)
+// 17-08-04 name of data member facxsi changed to factail (L.Urban)
 
 //
 // Class Description:
@@ -156,7 +157,7 @@ private:
   G4double dtrl;
   G4double NuclCorrPar;
   G4double FactPar;
-  G4double facxsi;
+  G4double factail ;
 
   G4double sigmafactor;
   G4double b;

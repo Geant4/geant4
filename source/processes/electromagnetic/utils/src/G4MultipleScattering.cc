@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.47 2004-04-23 05:52:08 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.48 2004-08-17 12:40:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -61,6 +61,7 @@
 // 28-03-03 Move to model design (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 23-04-04 value of data member dtrl changed from 0.15 to 0.05 (L.Urban)
+// 17-08-04 name of facxsi changed to factail (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -79,7 +80,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        dtrl(0.05),
        NuclCorrPar (0.0615),
        FactPar(0.40),
-       facxsi(1.0),
+       factail(1.0),
        cf(1.001),
        stepnolastmsc(-1000000),
        nsmallstep(5)
@@ -115,7 +116,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition& particl
     SetBuildLambdaTable(true);
     Setsamplez(true) ;
   }
-  G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
+  G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,factail,samplez);
   em->SetLowEnergyLimit(lowKineticEnergy);
   em->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1, em);
