@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.19 2001-09-28 15:38:15 maire Exp $
+// $Id: G4hIonisation.cc,v 1.20 2001-10-11 17:05:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process ---------------------
@@ -583,7 +583,7 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
 	 
-  /////BuildDEDXTable(*particle);
+  BuildDEDXTable(*particle);
   	 
   return true;
 }
