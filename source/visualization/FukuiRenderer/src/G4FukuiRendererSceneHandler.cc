@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.6 2001-07-11 10:08:46 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.7 2001-09-17 07:39:44 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,9 +192,9 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4FukuiRendererSceneHandler
+#define  G4FRSCENEHANDLER  G4FukuiRendererSceneHandler
 #include "G4FRSceneFunc.icc"
-#undef   G4FRSCENE 
+#undef   G4FRSCENEHANDLER
 
 //////////////////////
 // static variables //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.8 2001-07-27 22:33:00 johna Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.9 2001-09-17 07:39:43 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -269,9 +269,9 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4DAWNFILESceneHandler
+#define  G4FRSCENEHANDLER  G4DAWNFILESceneHandler
 #include "G4FRSceneFunc.icc"
-#undef   G4FRSCENE 
+#undef   G4FRSCENEHANDLER 
 
 //////////////////////
 // static variables //

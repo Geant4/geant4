@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.14 2001-07-11 10:08:45 gunter Exp $
+// $Id: G4FRSceneFunc.icc,v 1.15 2001-09-17 07:39:43 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 
 //========== AddPrimitive() functions ==========//
 
-	//----- G4FRSCENE::AddPrimitive (polyline) 
-void G4FRSCENE::AddPrimitive (const G4Polyline& polyline) 
+//----- Add polyline 
+void G4FRSCENEHANDLER::AddPrimitive (const G4Polyline& polyline) 
 {
 #if defined DEBUG_FR_SCENE
       G4cerr << "***** AddPrimitive\n";
@@ -70,11 +70,11 @@ void G4FRSCENE::AddPrimitive (const G4Polyline& polyline)
 	//----- send ending of polyline
      SendStr( FR_END_POLYLINE );
 
-} // G4FRSCENE::AddPrimitive (polyline)
+} // G4FRSCENEHANDLER::AddPrimitive (polyline)
 
 
-        //----- G4FRSCENE::AddPrimitive (nurbs)
-void G4FRSCENE::AddPrimitive (const G4NURBS& nurb)
+//----- Add nurbes
+void G4FRSCENEHANDLER::AddPrimitive (const G4NURBS& nurb)
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -91,8 +91,8 @@ void G4FRSCENE::AddPrimitive (const G4NURBS& nurb)
 
 
 
-	//----- G4FRSCENE::AddPrimitive ( text )
-void G4FRSCENE::AddPrimitive ( const G4Text& text )
+//----- Add text
+void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -161,11 +161,11 @@ void G4FRSCENE::AddPrimitive ( const G4Text& text )
 		//----- delete buffer
 	delete [] buf ;
 
-} // G4FRSCENE::AddPrimitive ( text )
+} // G4FRSCENEHANDLER::AddPrimitive ( text )
 
 
-	//----- G4FRSCENE::AddPrimitive ( mark_circle )
-void G4FRSCENE::AddPrimitive ( const G4Circle& mark_circle )
+//----- Add circle
+void G4FRSCENEHANDLER::AddPrimitive ( const G4Circle& mark_circle )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -204,11 +204,11 @@ void G4FRSCENE::AddPrimitive ( const G4Circle& mark_circle )
 		break;
 	}
 
-} // G4FRSCENE::AddPrimitive ( mark_circle )
+} // G4FRSCENEHANDLER::AddPrimitive ( mark_circle )
 
 
-	//----- G4FRSCENE::AddPrimitive ( mark_square )
-void G4FRSCENE::AddPrimitive (const G4Square& mark_square )
+//----- Add square
+void G4FRSCENEHANDLER::AddPrimitive (const G4Square& mark_square )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -247,11 +247,11 @@ void G4FRSCENE::AddPrimitive (const G4Square& mark_square )
 		break;
 	}
 
-} // G4FRSCENE::AddPrimitive ( mark_square )
+} // G4FRSCENEHANDLER::AddPrimitive ( mark_square )
 
 
-	//----- G4FRSCENE::AddPrimitive (polyhedron) 
-void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron ) 
+//----- Add polyhedron
+void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron ) 
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -304,18 +304,18 @@ void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron )
 			SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3] );
 			break;
 		default:
-			G4cerr << "ERROR G4FRSCENE::AddPrimitive(G4Polyhedron)\n";
+			G4cerr << "ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
 		}
 	}
 
 		//---------- (4) Declare ending of Brep data
 	SendStr(FR_END_POLYHEDRON);
 
-} // G4FRSCENE::AddPrimitive (polyhedron) 
+} // G4FRSCENEHANDLER::AddPrimitive (polyhedron) 
 
 
-	//----- G4FRSCENE::SendNdiv ()
-void G4FRSCENE::SendNdiv ( void )
+//----- 
+void G4FRSCENEHANDLER::SendNdiv ( void )
 {
 //////////////////////////////////////////////////
 //#if defined DEBUG_FR_SCENE
@@ -352,8 +352,8 @@ void G4FRSCENE::SendNdiv ( void )
 
 }
 
-	//----- G4FRSCENE::FREndModeling ()
-void G4FRSCENE::FREndModeling ()
+//----- 
+void G4FRSCENEHANDLER::FREndModeling ()
 {
 		//----- 		
 #if defined DEBUG_FR_SCENE
@@ -385,8 +385,9 @@ void G4FRSCENE::FREndModeling ()
 	}
 }
 
-	//----- G4FRSCENE::BeginPrimitives (const G4Transform3D&)
-void G4FRSCENE::BeginPrimitives (const G4Transform3D& objectTransformation)
+
+//----- 
+void G4FRSCENEHANDLER::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** BeginPrimitives \n";
@@ -399,8 +400,9 @@ void G4FRSCENE::BeginPrimitives (const G4Transform3D& objectTransformation)
 
 }
 
-	//----- G4FRSCENE::EndPrimitives ()
-void G4FRSCENE::EndPrimitives ()
+
+//----- 
+void G4FRSCENEHANDLER::EndPrimitives ()
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** EndPrimitives \n";
@@ -408,16 +410,17 @@ void G4FRSCENE::EndPrimitives ()
   G4VSceneHandler::EndPrimitives ();
 }
 
-	//----- G4FRSCENE::GetSceneCount ()
-G4int G4FRSCENE::GetSceneCount () 
+
+//----- 
+G4int G4FRSCENEHANDLER::GetSceneCount () 
 {
 	return fSceneCount;
 }
 
 //========== AddThis() functions ==========//
 
-	//----- G4FRSCENE::AddThis( box )
-void G4FRSCENE::AddThis( const G4Box& box )
+//----- Add box
+void G4FRSCENEHANDLER::AddThis( const G4Box& box )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( box )\n";
@@ -451,12 +454,12 @@ void G4FRSCENE::AddThis( const G4Box& box )
 		//----- send box to Fukui Renderer
 	SendStrDouble3( FR_BOX, dx, dy, dz );
 
-} // void G4FRSCENE::AddThis( const G4Box& box )
+} // void G4FRSCENEHANDLER::AddThis( const G4Box& box )
 
 
-	//----- G4FRSCENE::AddThis( tubes )
+//----- Add tubes
 void 
-G4FRSCENE::AddThis( const G4Tubs& tubes )
+G4FRSCENEHANDLER::AddThis( const G4Tubs& tubes )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( tubes )\n";
@@ -492,13 +495,13 @@ G4FRSCENE::AddThis( const G4Tubs& tubes )
 		//----- send tubes to Fukui Renderer
 	SendStrDouble5( FR_TUBS, r, R, dz , sphi, dphi );
 
-} // void G4FRSCENE::AddThis( const G4Tubs& )
+} // void G4FRSCENEHANDLER::AddThis( const G4Tubs& )
 
 
 
-	//----- G4FRSCENE::AddThis( cons )
+//----- Add cons
 void 
-G4FRSCENE::AddThis( const G4Cons& cons )
+G4FRSCENEHANDLER::AddThis( const G4Cons& cons )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( cons )\n";
@@ -536,11 +539,11 @@ G4FRSCENE::AddThis( const G4Cons& cons )
 		//----- send cons to Fukui Renderer
 	SendStrDouble7( FR_CONS, r1, R1, r2, R2, dz , sphi, dphi );
 
-}// G4FRSCENE::AddThis( cons )
+}// G4FRSCENEHANDLER::AddThis( cons )
 
 
-	//----- G4FRSCENE::AddThis ( trd )
-void G4FRSCENE::AddThis ( const G4Trd& trd )
+//----- Add trd
+void G4FRSCENEHANDLER::AddThis ( const G4Trd& trd )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( trd )\n";
@@ -577,11 +580,11 @@ void G4FRSCENE::AddThis ( const G4Trd& trd )
 		//----- send trd to Fukui Renderer
 	SendStrDouble5( FR_TRD, dx1, dx2, dy1, dy2, dz );
 
-} // G4FRSCENE::AddThis ( trd )
+} // G4FRSCENEHANDLER::AddThis ( trd )
 
 
-	//----- G4FRSCENE::AddThis ( sphere )
-void G4FRSCENE::AddThis ( const G4Sphere& sphere )
+//----- Add sphere
+void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( sphere )\n";
@@ -637,11 +640,11 @@ void G4FRSCENE::AddThis ( const G4Sphere& sphere )
 		
 	}
 
-} // G4FRSCENE::AddThis ( sphere )
+} // G4FRSCENEHANDLER::AddThis ( sphere )
 
 
-	//----- G4FRSCENE::AddThis ( para )
-void G4FRSCENE::AddThis (const G4Para& para)
+//----- Add para
+void G4FRSCENEHANDLER::AddThis (const G4Para& para)
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( para )\n";
@@ -693,11 +696,11 @@ void G4FRSCENE::AddThis (const G4Para& para)
 		//----- send data to Fukui Renderer
 	SendStrDouble6  ( FR_PARA, dx, dy, dz, tanAlpha, tanTheta_cosPhi, tanTheta_sinPhi );
 
-} // G4FRSCENE::AddThis ( para )
+} // G4FRSCENEHANDLER::AddThis ( para )
 
 
-	//----- G4FRSCENE::AddThis (const G4Trap& trap)
-void G4FRSCENE::AddThis (const G4Trap& trap)
+//----- Add trap
+void G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( trap )\n";
@@ -783,12 +786,12 @@ void G4FRSCENE::AddThis (const G4Trap& trap)
 				tl2     ,
 				alpha2   );
 
-} // G4FRSCENE::AddThis (const G4Trap& trap)
+} // G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
 
 
-	//----- G4FRSCENE::AddThis( torus )
+//----- Add torus
 void 
-G4FRSCENE::AddThis( const G4Torus& torus )
+G4FRSCENEHANDLER::AddThis( const G4Torus& torus )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** AddThis ( torus )\n";
@@ -824,12 +827,12 @@ G4FRSCENE::AddThis( const G4Torus& torus )
 		//----- send torus to Fukui Renderer
 	SendStrDouble5( FR_TORUS, r, R, t , sphi, dphi );
 
-} // void G4FRSCENE::AddThis( const G4Torus& )
+} // void G4FRSCENEHANDLER::AddThis( const G4Torus& )
 
 
 
-	//----- G4FRSCENE::AddThis ( const G4VSolid& ) 
-void G4FRSCENE::AddThis ( const G4VSolid& solid  )
+//----- Add a shape which is not treated above
+void G4FRSCENEHANDLER::AddThis ( const G4VSolid& solid  )
 {
 		//----- skip drawing invisible primitive
         if( !IsVisible() ) { return ; }
@@ -846,12 +849,12 @@ void G4FRSCENE::AddThis ( const G4VSolid& solid  )
 		//----- Send a primitive
 	G4VSceneHandler::AddThis( solid ) ; 
 
-} //G4FRSCENE::AddThis ( const G4VSolid& ) 
+} //G4FRSCENEHANDLER::AddThis ( const G4VSolid& ) 
 
 
-	//----- G4FRSCENE::SendVisAttributes ()
+//----- 
 G4bool
-G4FRSCENE::SendVisAttributes ( const G4VisAttributes*  pAV )
+G4FRSCENEHANDLER::SendVisAttributes ( const G4VisAttributes*  pAV )
 {
 
   // Have a look at G4VSceneHandler::GetDrawingStyle (const G4Visible&). (John)
@@ -884,11 +887,11 @@ G4FRSCENE::SendVisAttributes ( const G4VisAttributes*  pAV )
 
   return status ;
 
-} // G4FRSCENE::SendVisAttributes ()
+} // G4FRSCENEHANDLER::SendVisAttributes ()
 
 
-	//----- G4FRSCENE::IsVisible()
-G4bool G4FRSCENE::IsVisible()
+//----- 
+G4bool G4FRSCENEHANDLER::IsVisible()
 {
 	//----- 
 	G4bool  visibility  = true ;
@@ -908,11 +911,11 @@ G4bool G4FRSCENE::IsVisible()
 	//----- 
 	return visibility ;
 
-} // G4FRSCENE::IsVisible()
+} // G4FRSCENEHANDLER::IsVisible()
 
 
-	//----- G4FRSCENE::SendBoundingBox()
-void G4FRSCENE::SendBoundingBox( void )
+//----- 
+void G4FRSCENEHANDLER::SendBoundingBox( void )
 {
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** SendBoundingBox ()  (/BoundingBox)" << G4endl;
@@ -945,12 +948,12 @@ void G4FRSCENE::SendBoundingBox( void )
 			xmin, ymin, zmin,
 			xmax, ymax, zmax ); 
 
-} // G4FRSCENE::SendBoundingBox()
+} // G4FRSCENEHANDLER::SendBoundingBox()
 
 
-	//----- G4FRSCENE::SendTransformedCoordinates()
+//----- 
 void 
-G4FRSCENE::SendTransformedCoordinates()
+G4FRSCENEHANDLER::SendTransformedCoordinates()
 {
 		//----- coord info
 	G4Point3D  zero ( 0.0 , 0.0 , 0.0 ); 	
@@ -976,11 +979,11 @@ G4FRSCENE::SendTransformedCoordinates()
 				(x_unit_vec.x()), (x_unit_vec.y()), (x_unit_vec.z()) , \
 				(y_unit_vec.x()), (y_unit_vec.y()), (y_unit_vec.z())     ) ; 
 
-} // G4FRSCENE::SendTransformedCoordinates()
+} // G4FRSCENEHANDLER::SendTransformedCoordinates()
 
 
-	//----- G4FRSCENE::SendPhysVolName ()
-void  G4FRSCENE::SendPhysVolName ( void )
+//----- 
+void  G4FRSCENEHANDLER::SendPhysVolName ( void )
 {
 	// Local 
 	G4int i ;
@@ -1010,18 +1013,18 @@ void  G4FRSCENE::SendPhysVolName ( void )
 	SendStr ( "#--------------------" );
 	SendStr ( name_comment );
 
-} // G4FRSCENE::SendPhysVolName ()
+} // G4FRSCENEHANDLER::SendPhysVolName ()
 
 
-	//----- G4FRSCENE::SendStr()
-void G4FRSCENE::SendStr( const char* char_string )
+//----- 
+void G4FRSCENEHANDLER::SendStr( const char* char_string )
 {
 	fPrimDest.SendLine( char_string );
 } 
 
 
-	//----- G4FRSCENE::SendStrInt()
-void G4FRSCENE::SendStrInt(	const char*	char_string ,
+//----- 
+void G4FRSCENEHANDLER::SendStrInt(	const char*	char_string ,
 					G4int		ival    )
 {
 		//----- make command char_string and send 
@@ -1030,16 +1033,16 @@ void G4FRSCENE::SendStrInt(	const char*	char_string ,
 
 	num_char  = sprintf( command, "%s  %d", char_string , ival ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrInt(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
-} // G4FRSCENE::SendStrInt()
+} // G4FRSCENEHANDLER::SendStrInt()
 
 
-	//----- G4FRSCENE::SendStrInt3()
+//----- 
 void 
-G4FRSCENE::SendStrInt3(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrInt3(	const char*	char_string ,
 					G4int		ival1  ,
 					G4int		ival2  ,
 					G4int		ival3   )
@@ -1052,17 +1055,17 @@ G4FRSCENE::SendStrInt3(	const char*	char_string ,
 	 sprintf( command, "%s  %d  %d  %d", char_string , ival1, ival2, ival3 ) ; 
 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrInt3(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt3(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrInt3()
+} // G4FRSCENEHANDLER::SendStrInt3()
 
 
-	//----- G4FRSCENE::SendStrInt3()
+//----- 
 void 
-G4FRSCENE::SendStrInt4(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrInt4(	const char*	char_string ,
 					G4int		ival1  ,
 					G4int		ival2  ,
 					G4int		ival3  ,
@@ -1076,15 +1079,15 @@ G4FRSCENE::SendStrInt4(	const char*	char_string ,
 	 sprintf( command, "%s  %d  %d  %d  %d", char_string , ival1, ival2, ival3, ival4 ) ; 
 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrInt4(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt4(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrInt4()
+} // G4FRSCENEHANDLER::SendStrInt4()
 
-	//----- G4FRSCENE::SendStrDouble()
-void G4FRSCENE::SendStrDouble(	const char*	char_string ,
+//----- 
+void G4FRSCENEHANDLER::SendStrDouble(	const char*	char_string ,
 						G4double	dval    )
 {
 		//----- make command char_string and send 
@@ -1093,17 +1096,17 @@ void G4FRSCENE::SendStrDouble(	const char*	char_string ,
 
 	num_char  = sprintf( command, "%s  %lg", char_string , dval ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble()
+} // G4FRSCENEHANDLER::SendStrDouble()
 
 
-	//----- G4FRSCENE::SendStrDouble2()
+//----- 
 void 
-G4FRSCENE::SendStrDouble2(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble2(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  )
 {
@@ -1113,17 +1116,17 @@ G4FRSCENE::SendStrDouble2(	const char*	char_string ,
 
 	num_char  = sprintf( command, "%s  %lg  %lg", char_string , dval1, dval2 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble2(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble2(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble2()
+} // G4FRSCENEHANDLER::SendStrDouble2()
 
 
-	//----- G4FRSCENE::SendStrDouble3()
+//----- 
 void 
-G4FRSCENE::SendStrDouble3(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble3(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3   )
@@ -1134,17 +1137,17 @@ G4FRSCENE::SendStrDouble3(	const char*	char_string ,
 
 	num_char  = sprintf( command, "%s  %lg  %lg  %lg", char_string , dval1, dval2, dval3 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble3(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble3(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble3()
+} // G4FRSCENEHANDLER::SendStrDouble3()
 
 
-	//----- G4FRSCENE::SendStrDouble4()
+//----- 
 void 
-G4FRSCENE::SendStrDouble4(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble4(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  ,
@@ -1157,17 +1160,17 @@ G4FRSCENE::SendStrDouble4(	const char*	char_string ,
 	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg", \
                                        char_string , dval1, dval2, dval3, dval4) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble4(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble4(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble4()
+} // G4FRSCENEHANDLER::SendStrDouble4()
 
 
-	//----- G4FRSCENE::SendStrDouble5()
+//----- 
 void 
-G4FRSCENE::SendStrDouble5(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble5(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  ,
@@ -1181,17 +1184,17 @@ G4FRSCENE::SendStrDouble5(	const char*	char_string ,
 	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg  %lg", \
                                        char_string , dval1, dval2, dval3, dval4, dval5 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble5(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble5(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble5()
+} // G4FRSCENEHANDLER::SendStrDouble5()
 
 
-	//----- G4FRSCENE::SendStrDouble6()
+//----- 
 void 
-G4FRSCENE::SendStrDouble6(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble6(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  ,
@@ -1206,17 +1209,17 @@ G4FRSCENE::SendStrDouble6(	const char*	char_string ,
 	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg  %lg  %lg", \
                                        char_string , dval1, dval2, dval3, dval4, dval5, dval6 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble6(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble6(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble6()
+} // G4FRSCENEHANDLER::SendStrDouble6()
 
 
-	//----- G4FRSCENE::SendStrDouble7()
+//----- 
 void 
-G4FRSCENE::SendStrDouble7(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble7(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  ,
@@ -1232,17 +1235,17 @@ G4FRSCENE::SendStrDouble7(	const char*	char_string ,
 	num_char  = sprintf( command, "%s  %lg %lg %lg %lg %lg %lg %lg", \
                              char_string , dval1, dval2, dval3, dval4, dval5, dval6, dval7 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble7(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble7(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble7()
+} // G4FRSCENEHANDLER::SendStrDouble7()
 
 
-	//----- G4FRSCENE::SendStrDouble11()
+//----- 
 void 
-G4FRSCENE::SendStrDouble11(	const char*	char_string ,
+G4FRSCENEHANDLER::SendStrDouble11(	const char*	char_string ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  ,
@@ -1263,18 +1266,17 @@ G4FRSCENE::SendStrDouble11(	const char*	char_string ,
                              char_string ,	dval1, dval2, dval3, dval4, dval5, \
 					dval6, dval7, dval8, dval9, dval10, dval11 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble11(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble11(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 
-} // G4FRSCENE::SendStrDouble11()
+} // G4FRSCENEHANDLER::SendStrDouble11()
 
 
-
-	//----- G4FRSCENE::SendIntDouble3()
+//----- 
 void 
-G4FRSCENE::SendIntDouble3(	G4int		ival   ,
+G4FRSCENEHANDLER::SendIntDouble3(	G4int		ival   ,
 					G4double	dval1  ,
 					G4double	dval2  ,
 					G4double	dval3  )
@@ -1286,15 +1288,15 @@ G4FRSCENE::SendIntDouble3(	G4int		ival   ,
 	num_char  = sprintf( command, "%d  %lg  %lg  %lg", \
                                        ival , dval1, dval2, dval3 ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendIntDouble3(),1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendIntDouble3(),1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 }
 
-	//----- G4FRSCENE::SendInt3Str()
+//----- 
 void 
-G4FRSCENE::SendInt3Str(	G4int		ival1  ,
+G4FRSCENEHANDLER::SendInt3Str(	G4int		ival1  ,
 					G4int		ival2  ,
 					G4int		ival3  ,
 					const char*	char_string )
@@ -1306,15 +1308,15 @@ G4FRSCENE::SendInt3Str(	G4int		ival1  ,
 	num_char  = sprintf( command, "%d %d %d %s", \
                                        ival1, ival2, ival3, char_string ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendInt3Str(),1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendInt3Str(),1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 }
 
-	//----- G4FRSCENE::SendInt4Str()
+//----- 
 void 
-G4FRSCENE::SendInt4Str(	G4int		ival1  ,
+G4FRSCENEHANDLER::SendInt4Str(	G4int		ival1  ,
 					G4int		ival2  ,
 					G4int		ival3  ,
 					G4int		ival4  ,
@@ -1327,15 +1329,15 @@ G4FRSCENE::SendInt4Str(	G4int		ival1  ,
 	num_char  = sprintf( command, "%d %d %d %d %s", \
                                        ival1, ival2, ival3, ival4, char_string ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendInt4Str(),1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendInt4Str(),1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
 }
 
-	//----- G4FRSCENE::SendStrDouble6Str()
+//----- 
 void 
-G4FRSCENE::SendStrDouble6Str(	const char*	char_string1 ,
+G4FRSCENEHANDLER::SendStrDouble6Str(	const char*	char_string1 ,
 						G4double	dval1  ,
 						G4double	dval2  ,
 						G4double	dval3  ,
@@ -1352,7 +1354,7 @@ G4FRSCENE::SendStrDouble6Str(	const char*	char_string1 ,
 				char_string1, dval1, dval2   , dval3, dval4, \
 				dval5  , dval6, char_string2                   );
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrDouble6Str(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
@@ -1360,9 +1362,8 @@ G4FRSCENE::SendStrDouble6Str(	const char*	char_string1 ,
 } 
 
 
-
-	//----- G4FRSCENE::SendStrInt()
-void G4FRSCENE::SendInt( G4int		val    )
+//----- 
+void G4FRSCENEHANDLER::SendInt( G4int		val    )
 {
 		//----- make command char_string and send 
 	G4int	num_char ;
@@ -1370,15 +1371,15 @@ void G4FRSCENE::SendInt( G4int		val    )
 
 	num_char  = sprintf( command, "%d", val ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrInt(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
-} // G4FRSCENE::SendStrInt()
+} // G4FRSCENEHANDLER::SendStrInt()
 
 
-	//----- G4FRSCENE::SendStrInt()
-void G4FRSCENE::SendDouble( G4double	val    )
+//----- 
+void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 {
 		//----- make command char_string and send 
 	G4int	num_char ;
@@ -1386,8 +1387,23 @@ void G4FRSCENE::SendDouble( G4double	val    )
 
 	num_char  = sprintf( command, "%lg", val ) ; 
 	if( num_char < 0 ) { 
-		G4cerr << "ERROR G4FRSCENE::SendStrInt(), 1\n" ;
+		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );
 	delete [] command ;
-} // G4FRSCENE::SendStrInt()
+} // G4FRSCENEHANDLER::SendStrInt()
+
+//----- 
+void G4FRSCENEHANDLER::ClearTransientStore() 
+{
+  G4VSceneHandler::ClearTransientStore ();
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) the detector is redrawn...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+}
+
