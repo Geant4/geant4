@@ -29,7 +29,7 @@ G4LorentzConvertor::G4LorentzConvertor()
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
   }
-};
+}
 
 void G4LorentzConvertor::toTheCenterOfMass() {
    

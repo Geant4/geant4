@@ -32,7 +32,7 @@ G4BertiniNucleiModel::G4BertiniNucleiModel()
   if (verboseLevel > 3) {
     G4cout << " >>> G4BertiniNucleiModel::G4BertiniNucleiModel" << G4endl;
   }
-};
+}
 
 void G4BertiniNucleiModel::generateModel(G4double a, 
 					 G4double z) {
@@ -339,7 +339,7 @@ void G4BertiniNucleiModel::printModel() const {
       getFermiMomentum(2,i) << " VP " << getPotential(2,i) << G4endl
 	   << " pions: VP " << getPotential(3,i) << G4endl;
 
-}; 
+}
 
 G4InuclElementaryParticle G4BertiniNucleiModel::generateNucleon(G4int type, 
 								G4int zone) const {

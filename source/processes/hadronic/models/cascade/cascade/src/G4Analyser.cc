@@ -49,7 +49,7 @@ G4Analyser::G4Analyser()
  
   withNuclei = false;
   fissy_prob = 0.0;
-};
+}
 
 void G4Analyser::setInelCsec(G4double csec, 
 			     G4bool withn) {
@@ -76,7 +76,7 @@ void G4Analyser::setWatchers(const std::vector<G4NuclWatcher>& watchers) {
   if (verboseLevel > 3) {
     G4cout << " watchers set " << watchers.size() << G4endl;
   }
-};
+}
 
 void G4Analyser::try_watchers(G4double a, 
 			      G4double z, 
@@ -95,9 +95,9 @@ void G4Analyser::try_watchers(G4double a,
     } else {
 
       if (!ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
-    }; 
-  };
-};
+    }
+  }
+}
 
 
 void G4Analyser::analyse(const G4CollisionOutput& output) {
@@ -193,15 +193,15 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 	} else {
 	  averageNeutronNumber += 1.0;
 	  averageNeutronKinEnergy += particles[i].getKineticEnergy();
-	};  
+	}
 
       } else if (particles[i].pion()) {
 	averagePionKinEnergy += particles[i].getKineticEnergy();
 	averagePionNumber += 1.0;
-      };
-    };
-  }; 
-};
+      }
+    }
+  }
+}
 
 void G4Analyser::printResultsSimple() {
 
@@ -229,8 +229,8 @@ void G4Analyser::printResultsSimple() {
       << " average num of fragments " << averageNucleiFragments / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
-  };
-};
+  }
+}
 
 void G4Analyser::printResults() {
 
@@ -265,8 +265,8 @@ void G4Analyser::printResults() {
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
     handleWatcherStatistics();
-  };
-};
+  }
+}
 
 void G4Analyser::handleWatcherStatistics() {
 
@@ -347,6 +347,4 @@ void G4Analyser::printResultsNtuple() {
     averageNeutronKinEnergy / (averageNeutronNumber + 1.0e-10) << " " <<
     averagePionNumber / eventNumber << " " <<
     averagePionKinEnergy / (averagePionNumber + 1.0e-10) << G4endl;
-};
-
-
+}
