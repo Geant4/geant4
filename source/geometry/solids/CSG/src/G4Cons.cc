@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.11 2000-08-08 15:20:50 grichine Exp $
+// $Id: G4Cons.cc,v 1.12 2000-08-16 08:01:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 17.08.00 V.Grichine, if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
 // 08.08.00 V.Grichine, more stable roots of 2-equation in DistanceToOut(p,v,...) 
 // 06.03.00 V.Grichine, modifications in DistanceToOut(p,v,...) 
 // 18.11.99 V.Grichine side = kNull initialisation in DistanceToOut(p,v,...)
@@ -79,10 +80,13 @@ G4Cons::G4Cons( const G4String& pName,
 
   if ( pRmin1 < pRmax1 && pRmin2 < pRmax2 && pRmin1 >= 0 && pRmin2 >= 0 )
   {
+
     fRmin1 = pRmin1 ; 
     fRmax1 = pRmax1 ;
     fRmin2 = pRmin2 ; 
     fRmax2 = pRmax2 ;
+    if( (pRmin1 == 0.0 && pRmin2 > 0.0) ) fRmin1 = 1e3*kRadTolerance ; 
+    if( (pRmin2 == 0.0 && pRmin1 > 0.0) ) fRmin2 = 1e3*kRadTolerance ; 
   }
   else  G4Exception("Error in G4Cons::G4Cons - invalid radii") ;
 
@@ -705,16 +709,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       if (v.z() > 0)
       {
-	tolORMin  = fRmin1 - kRadTolerance ;
-	tolORMax2 = (fRmax1 + kRadTolerance)*(fRmax1 + kRadTolerance) ;
+	tolORMin  = fRmin1 - 0.5*kRadTolerance ;
+	tolORMax2 = (fRmax1 + 0.5*kRadTolerance)*(fRmax1 + 0.5*kRadTolerance) ;
       }
       else
       {
-	tolORMin  = fRmin2 - kRadTolerance ;
-	tolORMax2 = (fRmax2+kRadTolerance)*(fRmax2+kRadTolerance) ;
+	tolORMin  = fRmin2 - 0.5*kRadTolerance ;
+	tolORMax2 = (fRmax2 + 0.5*kRadTolerance)*(fRmax2 + 0.5*kRadTolerance) ;
       }
       if ( tolORMin > 0 ) tolORMin2 = tolORMin*tolORMin ;
-      else                tolORMin2 = 0 ;
+      else                tolORMin2 = 0.0 ;
 
       if (tolORMin2 <= rho2 && rho2 <= tolORMax2)
       {
@@ -1920,11 +1924,22 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
 
   if( Inside(p) == kOutside )
   {
-    G4cout << "Position:"  << G4endl << G4endl;
-    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4Exception("Invalid call in G4Cons::DistanceToOut(p), p is outside") ;
+    G4cout.precision(16) ;
+    G4cout << G4endl ;
+    G4cout << "Cons parameters:" << G4endl << G4endl ;
+    G4cout << "fRmin1 = "  << fRmin1/mm << " mm" << G4endl ;
+    G4cout << "fRmax1 = "  << fRmax1/mm << " mm" << G4endl ;
+    G4cout << "fRmin2 = "  << fRmin2/mm << " mm" << G4endl ;
+    G4cout << "fRmax2 = "  << fRmax2/mm << " mm" << G4endl ;
+    G4cout << "fDz = "     << fDz/mm << " mm" << G4endl ;
+    G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl ;
+    G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl << G4endl ;
+    G4cout << "Position:"  << G4endl << G4endl ;
+    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+    //  G4Exception("Invalid call in G4Cons::DistanceToOut(p), p is outside") ;
+    G4cout << "G4Cons::DistanceToOut(p), p is outside ?!" << G4endl ;
   }
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
   safeZ = fDz - fabs(p.z()) ;
