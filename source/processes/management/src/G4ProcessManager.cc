@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.15 2000-03-11 00:58:47 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.16 2000-06-15 15:34:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
    verboseLevel = right.verboseLevel;
 #ifdef G4VERBOSE
    if (GetVerboseLevel() > 2) {
-     G4cout <<  "G4ProcessManagerMessenger:: copy constructor " <<G4endl; 
+     G4cout <<  "G4ProcessManageer:: copy constructor " <<G4endl; 
     }
 #endif
 
