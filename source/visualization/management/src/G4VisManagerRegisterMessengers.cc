@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.38 2001-08-17 23:03:05 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.39 2001-08-24 20:44:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,8 @@ NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
   default:           all             0
   Current scene remains current.
 
-/vis/scene/notifyHandlers
+/vis/scene/notifyHandlers [<scene-name>] 
+  default:             current scene name
   Clears and refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
@@ -410,7 +411,6 @@ default: 0 0 0 0 cm 1 0 cm
 
 /vis/open [<graphics-system-name>] [<[pixels>]
 default:          error                600
-  /vis/scene/create
   /vis/sceneHandler/create $1
   /vis/viewer/create ! ! $2
 
