@@ -48,7 +48,7 @@
 
 G4NuclearStopping::G4NuclearStopping(const G4String& processName, G4ProcessType aType)
   : G4VContinuousProcess(processName,aType),
-    theTable("ICRU_49"),
+    theTable("ICRU_R49"),
     model(0),
     fluctuations(true),
     initialised(false),
