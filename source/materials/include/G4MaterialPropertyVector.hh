@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.7 2002-01-22 13:58:58 mverderi Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.8 2002-01-22 15:23:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,13 +61,14 @@
 /////////////////////
 // Class Definition
 /////////////////////
-struct less_for_G4MPVEntry_pointer : 
-  public binary_function<G4MPVEntry*, G4MPVEntry*, bool>
-{
-  bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
-};
 
 class G4MaterialPropertyVector {
+
+	struct MPVEntry_less
+	  : public G4std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
+	{
+	  G4bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
+	};
 
 public: // Without description
 
@@ -161,7 +162,6 @@ private:
         // Private Data Members
 	/////////////////////////
 
-  //G4RWTPtrSortedVector<G4MPVEntry> MPV;
         G4std::vector<G4MPVEntry*> MPV;
 	G4int NumEntries;
 	G4int CurrentEntry;
