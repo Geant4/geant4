@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHit.hh,v 1.2 1999-12-15 14:54:59 gunter Exp $
+// $Id: MyTrackerHit.hh,v 1.3 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,6 +13,7 @@
 #define MyTrackerHit_h 1
 
 #include "G4VHit.hh"
+#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
@@ -48,6 +49,8 @@ class MyTrackerHit : public G4VHit
       { return pos; };
 
 };
+
+typedef G4THitsCollection<MyTrackerHit> MyTrackerHitsCollection;
 
 extern G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
 

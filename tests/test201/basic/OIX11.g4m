@@ -1,3 +1,5 @@
-/vis/sceneHandler/create OIX oix
-/vis/viewer/create oix viewer_oix
-/vis/sceneHandler/attach scene_1
+/vis/sceneHandler/create OIX
+/vis/viewer/create
+/vis/sceneHandler/attach
+/vis/scene/notifyHandlers
+

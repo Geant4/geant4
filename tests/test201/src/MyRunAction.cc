@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyRunAction.cc,v 1.3 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyRunAction.cc,v 1.4 2000-05-26 13:11:40 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,10 +32,10 @@ MyRunAction::~MyRunAction()
 
 void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  //aRun->transient(true);
+  //G4UImanager* UI = G4UImanager::GetUIpointer(); 
+  //UI->ApplyCommand("/vis/scene/notifyHandlers");
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/tracking/storeTrajectory 1");
+  //aRun->transient(true);
 
 #ifdef G4VIS_USE_OPACS
   // Histo are created in an osh script somewhere (test201.odb).
@@ -49,6 +49,8 @@ void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void MyRunAction::EndOfRunAction(const G4Run* aRun)
 {
+  //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 
        << " " << *timer << G4endl;

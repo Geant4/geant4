@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterHit.hh,v 1.2 1999-12-15 14:54:59 gunter Exp $
+// $Id: MyCalorimeterHit.hh,v 1.3 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,6 +13,7 @@
 #define MyCalorimeterHit_h 1
 
 #include "G4VHit.hh"
+#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
@@ -24,9 +25,9 @@ class MyCalorimeterHit : public G4VHit
   public:
 
       MyCalorimeterHit();
-      MyCalorimeterHit(G4VPhysicalVolume* physVol);
       ~MyCalorimeterHit();
       MyCalorimeterHit(const MyCalorimeterHit &right);
+      MyCalorimeterHit(G4VPhysicalVolume* physVol);
       const MyCalorimeterHit& operator=(const MyCalorimeterHit &right);
       int operator==(const MyCalorimeterHit &right) const;
 
@@ -63,13 +64,13 @@ class MyCalorimeterHit : public G4VHit
 
 };
 
+typedef G4THitsCollection<MyCalorimeterHit> MyCalorimeterHitsCollection;
+
 extern G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;
 
 inline void* MyCalorimeterHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) MyCalorimeterHitAllocator.MallocSingle();
-  return aHit;
+  return (void *) MyCalorimeterHitAllocator.MallocSingle();
 }
 
 inline void MyCalorimeterHit::operator delete(void *aHit)

@@ -5,31 +5,32 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerSD.cc,v 1.2 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyTrackerSD.cc,v 1.3 2000-05-26 13:11:42 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "MyTrackerSD.hh"
-#include "MyTrackerHit.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
+#include "G4SDManager.hh"
+
+#include "MyTrackerSD.hh"
+#include "MyTrackerHit.hh"
 
 MyTrackerSD::MyTrackerSD(G4String name)
 :G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="TrackerCollection");
+  collectionName.insert("TrackerCollection");
 }
 
 MyTrackerSD::~MyTrackerSD(){;}
 
 void MyTrackerSD::Initialize(G4HCofThisEvent*)
 {
-  //TrackerCollection = new MyTrackerHitsCollection(collectionName[0],this); ??
-  TrackerCollection = new MyTrackerHitsCollection(collectionName[0],""); 
+  TrackerCollection = new MyTrackerHitsCollection(SensitiveDetectorName,
+						  collectionName[0]); 
 }
 
 G4bool MyTrackerSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
@@ -42,18 +43,20 @@ G4bool MyTrackerSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   if(verboseLevel>0)
   { G4cout << " New Tracker Hit at " << hitPoint << G4endl; }
 
-  MyTrackerHit newHit;
-  newHit.SetEdep( edep );
-  newHit.SetPos( hitPoint);
-  TrackerCollection->insert( &newHit );
+  MyTrackerHit* newHit = new MyTrackerHit;
+  newHit->SetEdep( edep );
+  newHit->SetPos( hitPoint);
+  TrackerCollection->insert(newHit);
 
   return true;
 }
 
 void MyTrackerSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
-  //HCE->AddHitsCollection( TrackerCollection ); ???????????????????????
-  HCE->AddHitsCollection(0, TrackerCollection );
+  static G4int HCID = -1;
+  if(HCID<0)
+  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  HCE->AddHitsCollection(HCID, TrackerCollection );
 }
 
 void MyTrackerSD::clear()

@@ -20,17 +20,23 @@ HAS_CPPFLAGS = \
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 all   :: mkdir
 
+install ::
+	$(install) $(CONFIG)
 clean ::
 	if exist $(bin)\*.obj del $(bin)\*.obj
 	if exist $(bin)\*.exe del $(bin)\*.exe
 	if exist $(bin)\*.class del $(bin)\*.class
+	if exist $(bin)\*.arc del $(bin)\*.arc
 	if exist $(bin)\*.lib del $(bin)\*.lib
 	if exist $(bin)\*.dll del $(bin)\*.dll
 	if exist $(bin)\*.exp del $(bin)\*.exp
 	if exist $(bin)\*.pdb del $(bin)\*.pdb
 	if exist $(bin)\*.ilk del $(bin)\*.ilk
 rmlib ::
+	if exist $(bin)\*.arc del $(bin)\*.arc
 	if exist $(bin)\*.lib del $(bin)\*.lib
+	if exist $(bin)\*.dll del $(bin)\*.dll
+	if exist $(bin)\*.exp del $(bin)\*.exp
 rmo   ::
 	if exist $(bin)\*.obj del $(bin)\*.obj
 rmexe ::
@@ -40,7 +46,7 @@ rmexe ::
 mkdir :
 	@if not exist $(bin) mkdir $(bin)
 
-libtest201_target = $(bin)\libtest201.$(lib_or_dll)
+libtest201_target = $(bin)\test201.lib
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 all :: mkdir \
 $(libtest201_target) \
@@ -58,8 +64,10 @@ $(bin)\test201.exe
 rmexeo :
 	if exist $(bin)\test201.obj del $(bin)\test201.obj
 #--------------------------------------------
-test201 : $(bin)\test201.exe
+test201 : mkdir $(bin)\test201.exe
 	@echo "test : test201 ok."
+libtest201 : mkdir $(libtest201_target)
+	@echo "test : libtest201 ok."
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #--------------------------------------------
 $(bin)\test201.exe : $(bin)\test201.obj \
@@ -80,97 +88,47 @@ $(bin)\test201.obj   : $(app)\test201.cc
 # libraries 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #--------------------------------------------
-$(bin)\libtest201.dll : \
-$(bin)\BuildCalorimeter.obj \
-$(bin)\BuildGeom_Example1.obj \
-$(bin)\BuildGeom_Example2.obj \
-$(bin)\BuildParametrised.obj \
-$(bin)\BuildShapes.obj \
-$(bin)\MyCalorimeterHit.obj \
-$(bin)\MyCalorimeterHitsCollection.obj \
-$(bin)\MyCalorimeterSD.obj \
-$(bin)\MyDetectorConstruction.obj \
-$(bin)\MyDetectorMessenger.obj \
-$(bin)\MyRunAction.obj \
-$(bin)\MyEventAction.obj \
-$(bin)\MyPhysicsList.obj \
-$(bin)\MyPrimaryGeneratorAction.obj \
-$(bin)\MySteppingAction.obj \
-$(bin)\MyTrackerHit.obj \
-$(bin)\MyTrackerHitsCollection.obj \
-$(bin)\MyTrackerSD.obj \
-$(bin)\ParametrisedBox.obj \
-$(bin)\test201DetectorConstruction.obj \
-$(bin)\test201DetectorMessenger.obj 
-	if exist $(bin)\libtest201.lib del $(bin)\libtest201.lib 
-	if exist $(bin)\libtest201.exp del $(bin)\libtest201.exp 
-	lib.exe $(LIBFLAGS) /def:$(mgr)\libtest201.def /out:$(bin)\libtest201.lib
-	if exist $(bin)\libtest201.dll del $(bin)\libtest201.dll 
-	$(LINK32) $(LINK32FLAGS) /out:$(bin)\libtest201.dll $(bin)\libtest201.exp \
-$(bin)\BuildCalorimeter.obj \
-$(bin)\BuildGeom_Example1.obj \
-$(bin)\BuildGeom_Example2.obj \
-$(bin)\BuildParametrised.obj \
-$(bin)\BuildShapes.obj \
-$(bin)\MyCalorimeterHit.obj \
-$(bin)\MyCalorimeterHitsCollection.obj \
-$(bin)\MyCalorimeterSD.obj \
-$(bin)\MyDetectorConstruction.obj \
-$(bin)\MyDetectorMessenger.obj \
-$(bin)\MyRunAction.obj \
-$(bin)\MyEventAction.obj \
-$(bin)\MyPhysicsList.obj \
-$(bin)\MyPrimaryGeneratorAction.obj \
-$(bin)\MySteppingAction.obj \
-$(bin)\MyTrackerHit.obj \
-$(bin)\MyTrackerHitsCollection.obj \
-$(bin)\MyTrackerSD.obj \
-$(bin)\ParametrisedBox.obj \
-$(bin)\test201DetectorConstruction.obj \
-$(bin)\test201DetectorMessenger.obj 
+$(bin)\test201.lib : $(bin)\test201.arc
+	copy $(bin)\test201.arc $(bin)\test201.lib
 
-$(bin)\libtest201.lib : \
+$(bin)\test201.arc : \
+$(bin)\MyDetectorConstruction.obj \
 $(bin)\BuildCalorimeter.obj \
 $(bin)\BuildGeom_Example1.obj \
 $(bin)\BuildGeom_Example2.obj \
 $(bin)\BuildParametrised.obj \
 $(bin)\BuildShapes.obj \
 $(bin)\MyCalorimeterHit.obj \
-$(bin)\MyCalorimeterHitsCollection.obj \
 $(bin)\MyCalorimeterSD.obj \
-$(bin)\MyDetectorConstruction.obj \
+$(bin)\MyPrimaryGeneratorAction.obj \
 $(bin)\MyDetectorMessenger.obj \
-$(bin)\MyRunAction.obj \
 $(bin)\MyEventAction.obj \
 $(bin)\MyPhysicsList.obj \
-$(bin)\MyPrimaryGeneratorAction.obj \
 $(bin)\MySteppingAction.obj \
+$(bin)\MyRunAction.obj \
 $(bin)\MyTrackerHit.obj \
-$(bin)\MyTrackerHitsCollection.obj \
 $(bin)\MyTrackerSD.obj \
 $(bin)\ParametrisedBox.obj \
 $(bin)\test201DetectorConstruction.obj \
 $(bin)\test201DetectorMessenger.obj 
-	if exist $(bin)\libtest201.lib del $(bin)\libtest201.lib 
+	if exist $(bin)\test201.arc del $(bin)\test201.arc 
 	lib.exe @<<
-/nologo /out:$(bin)\libtest201.lib
+/nologo /out:$(bin)\test201.arc
+$(bin)\MyDetectorConstruction.obj
 $(bin)\BuildCalorimeter.obj
 $(bin)\BuildGeom_Example1.obj
 $(bin)\BuildGeom_Example2.obj
 $(bin)\BuildParametrised.obj
 $(bin)\BuildShapes.obj
 $(bin)\MyCalorimeterHit.obj
-$(bin)\MyCalorimeterHitsCollection.obj
 $(bin)\MyCalorimeterSD.obj
-$(bin)\MyDetectorConstruction.obj
+$(bin)\MyPrimaryGeneratorAction.obj
 $(bin)\MyDetectorMessenger.obj
-$(bin)\MyRunAction.obj
 $(bin)\MyEventAction.obj
 $(bin)\MyPhysicsList.obj
-$(bin)\MyPrimaryGeneratorAction.obj
 $(bin)\MySteppingAction.obj
+$(bin)\MyRunAction.obj
 $(bin)\MyTrackerHit.obj
-$(bin)\MyTrackerHitsCollection.obj
 $(bin)\MyTrackerSD.obj
 $(bin)\ParametrisedBox.obj
 $(bin)\test201DetectorConstruction.obj
@@ -179,67 +137,61 @@ $(bin)\test201DetectorMessenger.obj
 #--------------------------------------------
 # libtest201 dependencies 
 #--------------------------------------------
+$(bin)\MyDetectorConstruction.obj : src\MyDetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyDetectorConstruction.obj /Tpsrc\MyDetectorConstruction.cc
+
 $(bin)\BuildCalorimeter.obj : src\BuildCalorimeter.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildCalorimeter.obj /Tpsrc\BuildCalorimeter.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildCalorimeter.obj /Tpsrc\BuildCalorimeter.cc
 
 $(bin)\BuildGeom_Example1.obj : src\BuildGeom_Example1.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildGeom_Example1.obj /Tpsrc\BuildGeom_Example1.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildGeom_Example1.obj /Tpsrc\BuildGeom_Example1.cc
 
 $(bin)\BuildGeom_Example2.obj : src\BuildGeom_Example2.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildGeom_Example2.obj /Tpsrc\BuildGeom_Example2.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildGeom_Example2.obj /Tpsrc\BuildGeom_Example2.cc
 
 $(bin)\BuildParametrised.obj : src\BuildParametrised.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildParametrised.obj /Tpsrc\BuildParametrised.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildParametrised.obj /Tpsrc\BuildParametrised.cc
 
 $(bin)\BuildShapes.obj : src\BuildShapes.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildShapes.obj /Tpsrc\BuildShapes.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\BuildShapes.obj /Tpsrc\BuildShapes.cc
 
 $(bin)\MyCalorimeterHit.obj : src\MyCalorimeterHit.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyCalorimeterHit.obj /Tpsrc\MyCalorimeterHit.cc
-
-$(bin)\MyCalorimeterHitsCollection.obj : src\MyCalorimeterHitsCollection.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyCalorimeterHitsCollection.obj /Tpsrc\MyCalorimeterHitsCollection.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyCalorimeterHit.obj /Tpsrc\MyCalorimeterHit.cc
 
 $(bin)\MyCalorimeterSD.obj : src\MyCalorimeterSD.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyCalorimeterSD.obj /Tpsrc\MyCalorimeterSD.cc
-
-$(bin)\MyDetectorConstruction.obj : src\MyDetectorConstruction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyDetectorConstruction.obj /Tpsrc\MyDetectorConstruction.cc
-
-$(bin)\MyDetectorMessenger.obj : src\MyDetectorMessenger.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyDetectorMessenger.obj /Tpsrc\MyDetectorMessenger.cc
-
-$(bin)\MyRunAction.obj : src\MyRunAction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyRunAction.obj /Tpsrc\MyRunAction.cc
-
-$(bin)\MyEventAction.obj : src\MyEventAction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyEventAction.obj /Tpsrc\MyEventAction.cc
-
-$(bin)\MyPhysicsList.obj : src\MyPhysicsList.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPhysicsList.obj /Tpsrc\MyPhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyCalorimeterSD.obj /Tpsrc\MyCalorimeterSD.cc
 
 $(bin)\MyPrimaryGeneratorAction.obj : src\MyPrimaryGeneratorAction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPrimaryGeneratorAction.obj /Tpsrc\MyPrimaryGeneratorAction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPrimaryGeneratorAction.obj /Tpsrc\MyPrimaryGeneratorAction.cc
+
+$(bin)\MyDetectorMessenger.obj : src\MyDetectorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyDetectorMessenger.obj /Tpsrc\MyDetectorMessenger.cc
+
+$(bin)\MyEventAction.obj : src\MyEventAction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyEventAction.obj /Tpsrc\MyEventAction.cc
+
+$(bin)\MyPhysicsList.obj : src\MyPhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPhysicsList.obj /Tpsrc\MyPhysicsList.cc
 
 $(bin)\MySteppingAction.obj : src\MySteppingAction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MySteppingAction.obj /Tpsrc\MySteppingAction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MySteppingAction.obj /Tpsrc\MySteppingAction.cc
+
+$(bin)\MyRunAction.obj : src\MyRunAction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyRunAction.obj /Tpsrc\MyRunAction.cc
 
 $(bin)\MyTrackerHit.obj : src\MyTrackerHit.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerHit.obj /Tpsrc\MyTrackerHit.cc
-
-$(bin)\MyTrackerHitsCollection.obj : src\MyTrackerHitsCollection.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerHitsCollection.obj /Tpsrc\MyTrackerHitsCollection.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerHit.obj /Tpsrc\MyTrackerHit.cc
 
 $(bin)\MyTrackerSD.obj : src\MyTrackerSD.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerSD.obj /Tpsrc\MyTrackerSD.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerSD.obj /Tpsrc\MyTrackerSD.cc
 
 $(bin)\ParametrisedBox.obj : src\ParametrisedBox.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\ParametrisedBox.obj /Tpsrc\ParametrisedBox.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\ParametrisedBox.obj /Tpsrc\ParametrisedBox.cc
 
 $(bin)\test201DetectorConstruction.obj : src\test201DetectorConstruction.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test201DetectorConstruction.obj /Tpsrc\test201DetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test201DetectorConstruction.obj /Tpsrc\test201DetectorConstruction.cc
 
 $(bin)\test201DetectorMessenger.obj : src\test201DetectorMessenger.cc
-	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test201DetectorMessenger.obj /Tpsrc\test201DetectorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(CXXLIBFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test201DetectorMessenger.obj /Tpsrc\test201DetectorMessenger.cc
 
 

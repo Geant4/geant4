@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterSD.hh,v 1.2 1999-12-15 14:54:59 gunter Exp $
+// $Id: MyCalorimeterSD.hh,v 1.3 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,20 +13,20 @@
 #define MyCalorimeterSD_h 1
 
 #include "G4VSensitiveDetector.hh"
-#include "MyCalorimeterHitsCollection.hh"
-#include "MyCalorimeterHit.hh"
 #include "G4Step.hh"
+
+#include "MyCalorimeterHit.hh"
 
 class MyCalorimeterSD : public G4VSensitiveDetector
 {
 
   public:
-      MyCalorimeterSD(G4String name);
+      MyCalorimeterSD(G4String);
       ~MyCalorimeterSD();
 
       void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
+      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
       void clear();
       void DrawAll();
       void PrintAll();

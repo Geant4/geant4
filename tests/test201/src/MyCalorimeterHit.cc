@@ -5,22 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterHit.cc,v 1.3 1999-12-15 14:55:01 gunter Exp $
+// $Id: MyCalorimeterHit.cc,v 1.4 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "MyCalorimeterHit.hh"
 #include "G4ios.hh"
+
 #include "G4VVisManager.hh"
+#include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
-
-#ifdef GNU_GCC
-  template class G4Allocator<MyCalorimeterHit>;
-  #include "g4rw/tvvector.h"
-  template class G4RWTValVector<MyCalorimeterHit>;
-#endif
 
 G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;
 
@@ -61,6 +57,8 @@ void MyCalorimeterHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
+    /* In 1.0 drawing physical volumes with the below
+       crashe most of the vis drivers (at least the Inventor one)
     G4Transform3D trans(rot,pos);
     G4VisAttributes attribs;
     G4LogicalVolume* logVol = pPhys->GetLogicalVolume();
@@ -70,6 +68,14 @@ void MyCalorimeterHit::Draw()
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pPhys,attribs,trans);
+    */
+    G4Circle circle(pos);
+    circle.SetScreenSize(0.1);
+    circle.SetFillStyle(G4Circle::filled);
+    G4Colour colour(1.,1.,0.);
+    G4VisAttributes attribs(colour);
+    circle.SetVisAttributes(attribs);
+    pVVisManager->Draw(circle);
   }
 }
 

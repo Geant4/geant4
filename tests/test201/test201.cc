@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201.cc,v 1.4 1999-12-15 14:54:57 gunter Exp $
+// $Id: test201.cc,v 1.5 2000-05-26 13:11:37 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,19 +53,6 @@ G4std::ostream& g4cerr = G4cerr;
 
 #ifdef G4VIS_USE
 #include "MyVisManager.cc"
-#endif
-
-#ifdef __sun
-#include "test201Templates.hh"
-// This :
-#include "MyTrackerHit.hh"
-#include "MyCalorimeterHit.hh"
-template class G4RWTValOrderedVector<MyTrackerHit>;
-template class G4RWTValOrderedVector<MyCalorimeterHit>;
-template class G4RWTValVector<MyTrackerHit>;
-template class G4RWTValVector<MyCalorimeterHit>;
-template class G4Allocator<MyCalorimeterHit>;
-template class G4Allocator<MyTrackerHit>;
 #endif
 
 #ifdef G4UI_USE_WIN32

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201DetectorMessenger.cc,v 1.3 1999-12-15 14:55:03 gunter Exp $
+// $Id: test201DetectorMessenger.cc,v 1.4 2000-05-26 13:11:42 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,14 +30,6 @@
 
 #ifdef ATLAS
 #include "ATLASdetector.hh"
-#ifdef GNU_GCC
-#include "ATLASpixelHit.hh"
-#include "ATLASbarrelSiHit.hh"
-#include "ATLASforwardSiHit.hh"
-template class G4Allocator <ATLASpixelHit>;
-template class G4Allocator <ATLASbarrelSiHit>;
-template class G4Allocator <ATLASforwardSiHit>;
-#endif
 #endif
 
 test201DetectorMessenger::test201DetectorMessenger

@@ -1,38 +1,39 @@
 /control/verbose 2
 #
-/interactor/addMenu file File
-/interactor/addButton file Continue continue
-/interactor/addButton file Exit exit
-/interactor/addMenu test Test
-/interactor/addButton test "Detector 4" "/test201/detector 4"
-/interactor/addButton test "ATLAS" "/test201/detector 5"
-/interactor/addButton test Init /run/initialize
-/interactor/addButton test "Set gun" "/control/execute gun.g4m"
-/interactor/addButton test "Run one event" "/run/beamOn 1"
-/interactor/addMenu vis Vis
-/interactor/addButton vis "Create scene" "/control/execute scene.g4m"
-/interactor/addButton vis "OpenGL X" "/control/execute OGLIX.g4m"
-/interactor/addButton vis "Inventor X11" "/control/execute OIX11.g4m"
-/interactor/addButton vis "Xo" "/control/execute Xo.g4m"
-/interactor/addButton vis "Inventor WIN32" "/control/execute OIWIN32.g4m"
-#/interactor/addButton vis "Inventor WIN32/2" "/control/execute OIWIN322.g4m"
-/interactor/addButton vis "DAWNFILE" "/control/execute DAWNFILE.g4m"
-/interactor/addButton vis "Notify" "/vis/scene/notifyHandlers"
-#/interactor/addButton vis "Inventor ~WIN32" "/vis~/create_view/new_graphics_system OIWIN32"
-#/interactor/addButton vis "Represent" "/vis~/draw/current"
-/interactor/addMenu atlas ATLAS
-/interactor/addButton atlas "inner/all" "/atlas/innerDetector/all 1"
-/interactor/addButton atlas "pixel" "/atlas/innerDetector/pixel 1"
-/interactor/addButton atlas "barrelSilicon" "/atlas/innerDetector/barrelSilicon 1"
-/interactor/addButton atlas "forwardSilicon" "/atlas/innerDetector/forwardSilicon 1"
-/interactor/addButton atlas "trt" "/atlas/innerDetector/trt 1"
-/interactor/addButton atlas "calorimeter/all" "/atlas/calorimeter/all 1"
-/interactor/addButton atlas "barrelEM" "/atlas/calorimeter/barrelEM 1"
-/interactor/addButton atlas "endcap" "/atlas/calorimeter/endcap 1"
-/interactor/addButton atlas "muon/all" "/atlas/muonDetector/all 1"
-/interactor/addButton atlas "mdt" "/atlas/muonDetector/mdt 1"
-/interactor/addButton atlas "rpc" "/atlas/muonDetector/rpc 1"
-/interactor/addButton atlas "tgc" "/atlas/muonDetector/tgc 1"
+/gui/addMenu file File
+/gui/addButton file Continue continue
+/gui/addButton file Exit exit
+/gui/addMenu test Test
+/gui/addButton test "Detector 4" "/test201/detector 4"
+/gui/addButton test "ATLAS" "/test201/detector 5"
+/gui/addButton test Init /run/initialize
+/gui/addButton test "Set gun" "/control/execute gun.g4m"
+/gui/addButton test "Run one event" "/run/beamOn 1"
+/gui/addMenu vis Vis
+/gui/addButton vis "Drivers" "help /vis/sceneHandler/create"
+/gui/addButton vis "Create scene" "/control/execute scene.g4m"
+/gui/addButton vis "OGLIX" "/control/execute OGLIX.g4m"
+/gui/addButton vis "OIX11" "/control/execute OIX11.g4m"
+/gui/addButton vis "Xo" "/control/execute Xo.g4m"
+/gui/addButton vis "OIWIN32" "/control/execute OIWIN32.g4m"
+#/gui/addButton vis "OIWIN32/2" "/control/execute OIWIN322.g4m"
+/gui/addButton vis "DAWNFILE" "/control/execute DAWNFILE.g4m"
+/gui/addButton vis "Notify" "/vis/scene/notifyHandlers"
+#/gui/addButton vis "Inventor ~WIN32" "/vis~/create_view/new_graphics_system OIWIN32"
+#/gui/addButton vis "Represent" "/vis~/draw/current"
+/gui/addMenu atlas ATLAS
+/gui/addButton atlas "inner/all" "/atlas/innerDetector/all 1"
+/gui/addButton atlas "pixel" "/atlas/innerDetector/pixel 1"
+/gui/addButton atlas "barrelSilicon" "/atlas/innerDetector/barrelSilicon 1"
+/gui/addButton atlas "forwardSilicon" "/atlas/innerDetector/forwardSilicon 1"
+/gui/addButton atlas "trt" "/atlas/innerDetector/trt 1"
+/gui/addButton atlas "calorimeter/all" "/atlas/calorimeter/all 1"
+/gui/addButton atlas "barrelEM" "/atlas/calorimeter/barrelEM 1"
+/gui/addButton atlas "endcap" "/atlas/calorimeter/endcap 1"
+/gui/addButton atlas "muon/all" "/atlas/muonDetector/all 1"
+/gui/addButton atlas "mdt" "/atlas/muonDetector/mdt 1"
+/gui/addButton atlas "rpc" "/atlas/muonDetector/rpc 1"
+/gui/addButton atlas "tgc" "/atlas/muonDetector/tgc 1"
 #
 /vis~/set/culling off
 /vis~/set/drawing_style 2

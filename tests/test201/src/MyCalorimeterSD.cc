@@ -5,33 +5,33 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterSD.cc,v 1.2 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyCalorimeterSD.cc,v 1.3 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "MyCalorimeterSD.hh"
-#include "MyCalorimeterHit.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
+#include "G4SDManager.hh"
+
+#include "MyCalorimeterSD.hh"
+#include "MyCalorimeterHit.hh"
 
 MyCalorimeterSD::MyCalorimeterSD(G4String name)
 :G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="CalCollection");
+  collectionName.insert("CalCollection");
 }
 
 MyCalorimeterSD::~MyCalorimeterSD(){;}
 
 void MyCalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  //CalCollection = new MyCalorimeterHitsCollection(collectionName[0],this); ??
-  CalCollection = new MyCalorimeterHitsCollection(collectionName[0],""); 
-  for(int j=0;j<3;j++)
-  {
+  CalCollection = new MyCalorimeterHitsCollection(SensitiveDetectorName,
+						  collectionName[0]); 
+  for(int j=0;j<3;j++) {
     CellID[j] = -1;
   }
 }
@@ -46,20 +46,21 @@ G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 
   if(CellID[copyID]==-1)
   {
-    MyCalorimeterHit calHit((G4VPhysicalVolume*)physVol);
+    MyCalorimeterHit* calHit =
+      new MyCalorimeterHit((G4VPhysicalVolume*)physVol);
     G4RotationMatrix rotM;
     if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
-    calHit.SetEdep( edep );
-    calHit.SetPos( physVol->GetTranslation() );
-    calHit.SetRot( rotM );
-    int icell = CalCollection->insert( &calHit );
+    calHit->SetEdep( edep );
+    calHit->SetPos( physVol->GetTranslation() );
+    calHit->SetRot( rotM );
+    int icell = CalCollection->insert(calHit);
     CellID[copyID] = icell;
     if(verboseLevel>0)
     { G4cout << " New Calorimeter Hit on CellID " << copyID << G4endl; }
   }
   else
   { 
-    CalCollection->AddEdep( CellID[copyID], edep );
+    //CalCollection->AddEdep( CellID[copyID], edep );
     if(verboseLevel>0)
     { G4cout << " Energy added to CellID " << copyID << G4endl; }
   }
@@ -69,8 +70,10 @@ G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 
 void MyCalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
-  // HCE->AddHitsCollection(CalCollection ); ??????????????????????
-  HCE->AddHitsCollection(0, CalCollection );
+  static G4int HCID = -1;
+  if(HCID<0)
+  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  HCE->AddHitsCollection(HCID, CalCollection );
 }
 
 void MyCalorimeterSD::clear()

@@ -1,3 +1,5 @@
-/vis/sceneHandler/create OGLIX oglix
-/vis/viewer/create oglix viewer_oglix
-/vis/sceneHandler/attach scene_1
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+/vis/sceneHandler/attach
+/vis/scene/notifyHandlers
+/vis/viewer/update

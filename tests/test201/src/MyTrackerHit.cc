@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHit.cc,v 1.4 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyTrackerHit.cc,v 1.5 2000-05-26 13:11:41 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,12 +15,6 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
-
-#ifdef GNU_GCC
-  template class G4Allocator<MyTrackerHit>;
-  #include "g4rw/tvvector.h"
-  template class G4RWTValVector<MyTrackerHit>;
-#endif
 
 G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
 
@@ -50,7 +44,6 @@ int MyTrackerHit::operator==(const MyTrackerHit &right) const
 
 void MyTrackerHit::Draw()
 {
-  /*
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
@@ -62,7 +55,6 @@ void MyTrackerHit::Draw()
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
-  */
 }
 
 void MyTrackerHit::Print()

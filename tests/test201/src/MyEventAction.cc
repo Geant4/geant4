@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyEventAction.cc,v 1.5 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyEventAction.cc,v 1.6 2000-05-26 13:11:40 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "MyEventAction.hh"
 
-#include "MyTrackerHitsCollection.hh"
-#include "MyCalorimeterHitsCollection.hh"
+//#include "MyTrackerHitsCollection.hh"
+//#include "MyCalorimeterHitsCollection.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -25,17 +25,15 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-MyEventAction::MyEventAction()
-{;}
+MyEventAction::MyEventAction(){}
 
-MyEventAction::~MyEventAction()
-{;}
+MyEventAction::~MyEventAction(){}
 
-void MyEventAction::BeginOfEventAction(const G4Event*)
-{;}
+void MyEventAction::BeginOfEventAction(const G4Event*){
+}
 
-void MyEventAction::EndOfEventAction(const G4Event* aEvent)
-{
+void MyEventAction::EndOfEventAction(const G4Event* aEvent){
+
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
   G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");

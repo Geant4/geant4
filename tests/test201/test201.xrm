@@ -10,6 +10,9 @@
 ! G4UIXm :
 *text.background   :white
 *text.fontList     :*courier*-r-*--14-*
+! Xo :
+*XoCamera.width    :600
+*XoCamera.height   :600
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! OpenInventor resources, copied from file :
 !  OpenInventor2.4.1/app-defaults/Inventor

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.3 1999-12-15 14:55:02 gunter Exp $
+// $Id: MyDetectorConstruction.cc,v 1.4 2000-05-26 13:11:39 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,8 +16,6 @@
 #include "MyTrackerSD.hh"
 #include "MyCalorimeterHit.hh"
 #include "MyTrackerHit.hh"
-#include "MyCalorimeterHitsCollection.hh"
-#include "MyTrackerHitsCollection.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
