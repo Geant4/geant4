@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2002-03-28 07:58:29 gcosmo Exp $
+$Id: History,v 1.13 2002-05-09 19:33:41 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 may 02: P. Gumplinger (xrays-V04-00-02)
+- changed method 'IsApplicable' for G4Scintillation to return .false. when it 
+  is called for an optical photon.
 
 28 mar 02: G. Cosmo (xrays-V04-00-01)
 - fixed endl/G4endl compilation problem in G4VXTRenergyLoss.cc ...
