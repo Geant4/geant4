@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.cc,v 1.4 2002-12-13 11:34:34 gunter Exp $
+// $Id: A01EmCalorimeterHit.cc,v 1.5 2003-07-11 21:32:02 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -51,7 +51,7 @@ A01EmCalorimeterHit::~A01EmCalorimeterHit()
 {;}
 
 A01EmCalorimeterHit::A01EmCalorimeterHit(const A01EmCalorimeterHit &right)
-{
+    : G4VHit() {
   cellID = right.cellID;
   edep = right.edep;
   pos = right.pos;

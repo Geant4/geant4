@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.cc,v 1.3 2002-12-13 11:34:34 gunter Exp $
+// $Id: A01HodoscopeHit.cc,v 1.4 2003-07-11 21:32:02 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01HodoscopeHit.hh"
@@ -43,7 +43,7 @@ A01HodoscopeHit::~A01HodoscopeHit()
 {;}
 
 A01HodoscopeHit::A01HodoscopeHit(const A01HodoscopeHit &right)
-{
+    : G4VHit() {
   id = right.id;
   time = right.time;
   pos = right.pos;
@@ -61,7 +61,7 @@ const A01HodoscopeHit& A01HodoscopeHit::operator=(const A01HodoscopeHit &right)
   return *this;
 }
 
-int A01HodoscopeHit::operator==(const A01HodoscopeHit &right) const
+int A01HodoscopeHit::operator==(const A01HodoscopeHit &/*right*/) const
 {
   return 0;
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003-04-04 17:29:39 duns Exp $
+$Id: History,v 1.6 2003-07-11 21:32:02 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,9 @@ $Id: History,v 1.5 2003-04-04 17:29:39 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------
+11th July 2003 Mark Donszelmann
+- Fixed all warnings under g++ 2.95.3.
+
 3rd April 2003 Mark Donszelmann (examples-analysis-A01-V05-00-00)
 - Added 2 more histograms to the example
 - Fixed NullPointerException by letting SDManager delete the detectors created in
