@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.3 2001-12-15 07:07:21 kurasige Exp $
+// $Id: G4Mars5GeV.cc,v 1.4 2002-11-14 08:41:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
   if(pProton) ProtonMass = pProton->GetPDGMass();
 
   // set some constants
-  selec3.Eth = 1.0*MeV;
+  selec3.Eth = 0.001*MeV;
 }
 
 G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
@@ -201,7 +201,7 @@ void G4Mars5GeV::GetTargetNuclei(const G4Material* material)
 void G4Mars5GeV::Treem5()
 {
   
-  G4double pMass = incidentParticle->GetDefinition()->GetPDGMass();
+  // G4double pMass = incidentParticle->GetDefinition()->GetPDGMass();
   G4double pE    = incidentParticle->GetKineticEnergy();
   G4int    pType = incidentMarsEncoding;
   
@@ -785,9 +785,9 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
   if(i==4) i = 1;
   G4bool condA = a<2. && i==2;
   G4bool condB = a<2.;
-  G4double az;
+  G4double az(0);
   G4double pn;
-  G4double pr;
+  G4double pr(0);
   if(!condB)
   {
     if(i==2)
