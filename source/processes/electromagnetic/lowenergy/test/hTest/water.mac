@@ -13,8 +13,8 @@
 /hTest/physics/MaxStep     1.0 mm
 /hTest/physics/verbose     2
 #/hTest/physics/EMList      LowEnergy
-/hTest/physics/EMList      Standard
-#/hTest/physics/EMList      StandardNew
+#/hTest/physics/EMList      Standard
+/hTest/physics/EMList      StandardNew
 /hTest/physics/HadronList  LowEnergy
 #/hTest/physics/HadronList  none
 /hTest/AbsorberMaterial    Water
@@ -23,7 +23,7 @@
 /hTest/NumberOfAbsorbers   300
 /hTest/WorldMaterial       Vacuum
 /hTest/numberAbsToSave     0
-/hTest/HistoName           waterst.paw 
+/hTest/HistoName           waterstn.paw 
 /hTest/NumberOfEvents      1000
 /hTest/nFirstEventToDebug -1
 /hTest/nLastEventToDebug  -1

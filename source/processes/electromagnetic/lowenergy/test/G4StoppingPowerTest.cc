@@ -476,14 +476,14 @@ int main(int argc,char** argv)
 
     } else {
 
-      elecManager = new G4ProcessManager(electron);
-      electron->SetProcessManager(elecManager);
-      eionst = new G4eIonisation();
-      eionst->SetEnlossFluc(false);
-      elecManager->AddProcess(eionst);
-      ebrst = new G4eBremsstrahlung();
-      ebrst->SetEnlossFluc(false);
-      elecManager->AddProcess(ebrst);
+        elecManager = new G4ProcessManager(electron);
+        electron->SetProcessManager(elecManager);
+        eionst = new G4eIonisation();
+        eionst->SetEnlossFluc(false);
+        elecManager->AddProcess(eionst);
+        ebrst = new G4eBremsstrahlung();
+        ebrst->SetEnlossFluc(false);
+        elecManager->AddProcess(ebrst);
       eionst->BuildPhysicsTable(*electron);
       ebrst->BuildPhysicsTable(*electron);
       if(nPart == 1) {
@@ -523,7 +523,7 @@ int main(int argc,char** argv)
         hionst = new G4hIonisation();
         hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
-        hionst->SetVerboseLevel(verbose);
+	//        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*proton);
         success = true;
 
@@ -543,7 +543,7 @@ int main(int argc,char** argv)
         hionst = new G4hIonisation();
         hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
-        hionst->SetVerboseLevel(verbose);
+	//        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*proton);
         ionManager = new G4ProcessManager(part);
         part->SetProcessManager(ionManager);
@@ -730,15 +730,3 @@ int main(int argc,char** argv)
 
 #include "hTest/src/G4IonC12.cc"
 #include "hTest/src/G4IonAr40.cc"
-
-
-
-
-
-
-
-
-
-
-
-
