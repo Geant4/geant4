@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:08:50 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2000-11-03 16:40:30 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------
@@ -13,3 +13,8 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/globlib.gmk
+
+includes::
+	@for dir in STLInterface HEPGeometry HEPRandom; do \
+	    (cd $$dir && $(MAKE) $@); \
+	 done   

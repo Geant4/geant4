@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2000-11-02 13:51:12 gunter Exp $
+# $Id: GNUmakefile,v 1.7 2000-11-03 16:41:10 gunter Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -75,6 +75,9 @@ endif
 
 granular:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+
+includes:
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
 
 glob global:
 	@echo "ERROR: The global target not relevant for the visualization category."
