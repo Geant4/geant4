@@ -36,7 +36,7 @@ Init(G4int A, G4int Z, G4double frac)
   G4String rest = "/CrossSection/";
   G4String base = getenv("NeutronHPCrossSections");
   G4String base1 = base + "/Inelastic/";
-  G4bool hasInelasticData;
+  G4bool hasInelasticData = false;
   dataUsed = theNames.GetName(A, Z, base1, rest, hasInelasticData);
   G4String aName = dataUsed.GetName();
   G4NeutronHPVector inelasticData;
@@ -48,7 +48,28 @@ Init(G4int A, G4int Z, G4double frac)
     aDataSet >> dummy >> dummy >> total;
     inelasticData.Init(aDataSet, total, eV);
   }
-  rest = "/CrossSection/";
+  base1 = base + "/Capture/";
+  G4bool hasCaptureData = false;
+  dataUsed = theNames.GetName(A, Z, base1, rest, hasCaptureData);
+  aName = dataUsed.GetName();
+  G4NeutronHPVector captureData;
+  if(hasCaptureData)
+  {
+    ifstream aDataSet(aName, ios::in);
+    aDataSet >> dummy >> dummy >> total;
+    captureData.Init(aDataSet, total, eV);
+  }
+  base1 = base + "/Elastic/";
+  G4bool hasElasticData = false;
+  dataUsed = theNames.GetName(A, Z, base1, rest, hasElasticData);
+  aName = dataUsed.GetName();
+  G4NeutronHPVector elasticData;
+  if(hasElasticData)
+  {
+    ifstream aDataSet(aName, ios::in);
+    aDataSet >> dummy >> dummy >> total;
+    elasticData.Init(aDataSet, total, eV);
+  }
   base1 = base + "/Fission/";
   G4bool hasFissionData = false;
   if(Z>=91)
@@ -63,23 +84,53 @@ Init(G4int A, G4int Z, G4double frac)
     aDataSet >> dummy >> dummy >> total;
     fissionData.Init(aDataSet, total, eV);
   }
-  hasData = hasFissionData||hasInelasticData;
+  hasData = hasFissionData||hasInelasticData||hasElasticData||hasCaptureData;
+  G4NeutronHPVector merged, merged1;
   if(hasData)
   {
-    if(hasFissionData&&hasInelasticData)
+    if(hasFissionData&&hasInelasticData) 
     {
-      theCrossSection.Merge(&fissionData, &inelasticData);
+      merged = fissionData + inelasticData;
     }
     else if(hasFissionData)
     {
-      theCrossSection = fissionData;
+      merged = fissionData;
     }
     else if(hasInelasticData)
     {
-      theCrossSection = inelasticData;
+      merged = inelasticData;
+    }
+    
+    if(hasElasticData&&hasCaptureData)
+    {
+      merged1=elasticData + captureData;
+    }
+    else if(hasCaptureData)
+    {
+      merged1 = captureData;
+    }
+    else if(hasElasticData)
+    {
+      merged1 = elasticData;
+    }
+    
+    if((hasElasticData||hasCaptureData)&&(hasFissionData||hasInelasticData))
+    {
+      theCrossSection = merged + merged1;
+    }
+    else if(hasElasticData||hasCaptureData)
+    {
+      theCrossSection = merged1;
+    }
+    else if(hasFissionData||hasInelasticData)
+    {
+      theCrossSection = merged;
     }
     theCrossSection.Times(frac);
+    theInelasticCrossSection = inelasticData;
+    theInelasticCrossSection.Times(frac);
   }
+  theCrossSection.Dump();
   
   // now the n -> n' cross-sections
   rest = "/F01/";
@@ -137,9 +188,10 @@ GetProductIsotope(G4double anEnergy)
   
   // first check for the n->n' reactions and return empty string
   G4double nnpXsec = theNNprimeCrossSection.GetY(anEnergy);
-  G4double nonelXsec = theCrossSection.GetY(anEnergy);
+  G4double totalXSec = theCrossSection.GetY(anEnergy);
+  G4double nonelXsec = theInelasticCrossSection.GetY(anEnergy);
   G4double rand = G4UniformRand();
-  if(rand < nnpXsec/nonelXsec) return result;
+  if(rand > (nonelXsec-nnpXsec)/totalXSec) return result;
   
   // now do the isotope changing reactions
   G4double * xSec = new G4double[theNumberOfProducts];

@@ -24,6 +24,7 @@ private:
   G4int theNumberOfProducts;
   G4NeutronIsoProdCrossSections ** theProductionData;
   G4NeutronHPVector theCrossSection;
+  G4NeutronHPVector theInelasticCrossSection;
   G4NeutronHPVector theNNprimeCrossSection;
   G4NeutronHPNames theNames;
   G4bool hasData;
