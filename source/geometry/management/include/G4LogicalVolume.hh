@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.15 2003-11-02 14:01:21 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.16 2003-11-04 15:11:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,7 @@
 #include "G4Region.hh"           // Required by inline methods
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
 #include <vector>
+#include <assert.h>
 
 // Forward declarations
 //
