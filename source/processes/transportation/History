@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2002-04-08 08:26:52 gcosmo Exp $
+$Id: History,v 1.26 2002-04-09 17:40:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 9, 2002 G.Cosmo
+-------------------
+- Added liability disclaimer to scorer classes and minor cosmetics.
 
 Apr 8, 2002 M.Dressel - transport-V04-00-03
 ---------------------

@@ -1,17 +1,51 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4ProcessPlacer.cc,v 1.2 2002-04-09 17:40:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4ProcessPlacer.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4ProcessPlacer.hh"
 #include "G4ProcessManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTable.hh"
 
-G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename):
-  G4VProcessPlacer(particlename),
-  fParticleName(particlename){
-  G4cout << "+++ G4ProcessPlacer::G4ProcessPlacer: for: " <<  particlename 
-	 << G4endl;
+G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
+ : G4VProcessPlacer(particlename),
+   fParticleName(particlename)
+{
+   G4cout << "+++ G4ProcessPlacer::G4ProcessPlacer: for: " <<  particlename 
+	  << G4endl;
 }
 
-void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol) {
-
+void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
+{
   G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
   
   G4ProcessVector* processGPILVec = 
@@ -46,16 +80,21 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol) {
   G4cout << "================================================" << G4endl;
   
 }
-void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process) {
+
+void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
+{
   G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt ===" << G4endl;
   AddProcessAs(process, eSecond);
 }
 
-void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process) {
+void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
+{
   G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt ===" << G4endl;
   AddProcessAs(process, eLast);
 }
-G4ProcessManager &G4ProcessPlacer::GetProcessManager() { 
+
+G4ProcessManager &G4ProcessPlacer::GetProcessManager()
+{ 
   // get particle iterator to add processes ---------------------
   G4ParticleTable* theParticleTable;
   G4ParticleTable::G4PTblDicIterator* theParticleIterator;
@@ -77,8 +116,8 @@ G4ProcessManager &G4ProcessPlacer::GetProcessManager() {
   return *processmanager;
 }
 
-
-void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec) {
+void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
+{
   if (!processVec) G4Exception("G4ProcessPlacer::G4ProcessPlacer: no processVec");
   G4int len = processVec->length();
   if (len==0) G4Exception("G4ProcessPlacer::G4ProcessPlacer:processVec len = 0");
