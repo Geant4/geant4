@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedBox.cc,v 1.1 2004-11-10 18:05:47 link Exp $
+// $Id: testG4TwistedBox.cc,v 1.2 2004-11-12 14:32:57 link Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -279,7 +279,6 @@ G4bool testG4TwistedBox()
     G4cout << "should be = " << a*b*L / cm / cm / cm << " cm^3" << G4endl ;
     G4cout << "test ended" << G4endl ;
 
-    
     return true;
 }
 
