@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.55 2005-03-11 12:28:46 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.56 2005-03-11 15:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -396,7 +396,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
       proc->SetLambdaTable(base_proc->LambdaTable());
       proc->SetSubLambdaTable(base_proc->SubLambdaTable());
       loss_map[part_vector[j]] = proc;
-      if (0 < verbose) {
+      if (1 < verbose) {
          G4cout << "For " << proc->GetProcessName()
                 << " for " << part_vector[j]->GetParticleName()
                 << " base_part= " << part->GetParticleName()
