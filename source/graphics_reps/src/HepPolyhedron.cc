@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.15 2004-12-10 17:48:53 gcosmo Exp $
+// $Id: HepPolyhedron.cc,v 1.16 2004-12-10 23:28:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@
 //
   
 #include "HepPolyhedron.h"
-#include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include <cmath>
 
