@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.7 2000-05-22 08:21:02 johna Exp $
+// $Id: test19.cc,v 1.8 2000-07-03 10:32:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,7 +120,7 @@ int main (int argc, char** argv) {
     G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking()->GetWorldVolume();
   G4PhysicalVolumeModel worldModel(world);
-  G4ModelingParameters modelingParams;  // Default modeling parameters.
+  const G4ModelingParameters modelingParams;  // Default modeling parameters.
   worldModel.SetModelingParameters(&modelingParams);
   worldModel.DescribeYourselfTo(treeDump);
 
