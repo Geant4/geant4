@@ -77,14 +77,23 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4InuclParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
+
   // Set target
+  G4InuclNuclei*   target  = NULL;
+  G4InuclParticle* targetH = NULL;
+
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
   G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
-  G4InuclNuclei * target = new G4InuclNuclei(targetMomentum, 
-					     theNucleusA, 
-					     theNucleus.GetZ());
-  target->setEnergy();
+
+  if ( theNucleusA == 1 ) {
+    targetH = new G4InuclElementaryParticle(targetMomentum, 1); // Special treatment for hydrogen
+  } else {
+    target  = new G4InuclNuclei(targetMomentum, 
+				theNucleusA, 
+				theNucleus.GetZ());
+    target->setEnergy();
+  }
 
   G4CollisionOutput output;
 
@@ -115,12 +124,17 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
     G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-    output = collider->collide(bullet, target); 
-  }
 
-  if (verboseLevel > 1) {
-    G4cout << " Cascade output: " << G4endl;
-    output.printCollisionOutput();
+    if ( theNucleusA == 1 ) {
+      output = collider->collide(bullet, targetH); 
+    } else {
+      output = collider->collide(bullet, target ); 
+    };
+
+    if (verboseLevel > 1) {
+      G4cout << " Cascade output: " << G4endl;
+      output.printCollisionOutput();
+    };
   };
 
   // Convert cascade data to use hadronics interface
@@ -200,7 +214,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << G4endl;
-        ifrag->printParticle();
+	ifrag->printParticle();
       }
 
       G4FragmentVector * theFragments = new G4FragmentVector;
