@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4ChordFinder.hh,v 1.4 2000-05-11 14:47:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ class G4ChordFinder
 
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
                                     const  G4double     stepInitial,
-                                    const  G4double     epsStep  );
+                                    const  G4double     epsStep_Relative  );
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
@@ -73,7 +73,8 @@ class G4ChordFinder
       G4bool AcceptableMissDist(G4double dChordStep);
 
       G4double NewStep( const G4double stepTrialOld, 
-		        const G4double dChordStep ) ;  // Current dchord 
+		        const G4double dChordStep,                // Current dchord estimate
+                              G4double& stepEstimate_Unconstrained ) ;  
       
       G4double FindNextChord( const  G4FieldTrack  yStart,
 		              const  G4double     stepMax,
@@ -85,7 +86,9 @@ class G4ChordFinder
                                             // G4int    nOK, nBAD;
       G4MagInt_Driver* fIntgrDriver;
 
-      G4double fDeltaChord;    
+      G4double fDeltaChord;                        //  Maximum miss distance 
+
+      G4double    fLastStepEstimate_Unconstrained; //  State information for efficiency
 
       static const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 3 mm
 
