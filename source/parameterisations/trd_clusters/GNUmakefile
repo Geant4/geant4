@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004-11-27 17:17:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004-12-13 18:25:14 gcosmo Exp $
 # ---------------------------------------------------------------
 # GNUmakefile for parameterisations library.  G.Cosmo, 14/11/2000
 # ---------------------------------------------------------------
@@ -34,7 +34,3 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/digits_hits/hits/include
 
 include $(G4INSTALL)/config/common.gmk
-
-.PHONY: global
-
-global: lib
