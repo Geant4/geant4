@@ -1,4 +1,4 @@
-$Id: History,v 1.49 1999-07-06 15:23:54 gunter Exp $
+$Id: History,v 1.50 1999-07-06 17:54:47 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-6th July 1999  Gunter Folger
+
+6th July 1999  John Allison (config-01-00-10)
+- Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.
+
+6th July 1999  Gunter Folger (config-01-00-09)
 - Adapt architecture.gmk for use of STL with WIN32-VC
   Remove NICE from G4SYSTEM name WIN32-VC in architecture, globlib and 
   binmake.gmk

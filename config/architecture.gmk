@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.35 1999-07-06 15:18:35 gunter Exp $
+# $Id: architecture.gmk,v 1.36 1999-07-06 17:54:49 johna Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -605,7 +605,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   FCLIBS := -lf2c
   ECHO    := /bin/echo
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   XMFLAGS   := -I/usr/X11R6/include
   XMLIBS    := -lXm -lXpm
   ifndef OGLFLAGS
