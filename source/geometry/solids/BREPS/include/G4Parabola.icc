@@ -34,6 +34,7 @@ inline G4double G4Parabola::GetPPoint(const G4Point3D& pt) {
 
 #include "G4CurveRayIntersection.hh"
 
+/*
 inline void G4Parabola::IntersectRay2D(const G4Ray& ray,
 				       G4CurveRayIntersection& is)
 {
@@ -68,3 +69,39 @@ inline void G4Parabola::IntersectRay2D(const G4Ray& ray,
 
   }
 }
+*/
+
+inline G4int G4Parabola::IntersectRay2D(const G4Ray& ray)
+{
+  // NOT VERIFIED
+
+  const G4Point3D&  S= ray.GetStart();
+  const G4Vector3D& d= ray.GetDir();
+  const G4Vector3D& l= position.GetPY();
+
+  // a == 1
+  G4Vector3D SMinusF= S-F;
+  G4double bHalf= SMinusF*d - (d.x()*l.y()-d.y()*l.x());
+  G4double c= SMinusF.mag2() + ( (S.x()-L0.x())*l.y() - (S.y()-L0.y())*l.x() );
+
+  G4int nbinter = 0;
+
+  G4double discr= bHalf*bHalf-c;
+  if (discr >= 0) 
+  {
+    // 2 intersections (maybe 1, but this case is rare)
+    G4double sqrtdiscr= sqrt(discr);
+    
+    G4double i= -bHalf-sqrtdiscr;
+    if (i>kCarTolerance) 
+      nbinter++;  
+     
+    i= -bHalf+sqrtdiscr;
+    if (i>kCarTolerance) 
+      nbinter++; 	
+  }
+
+  return nbinter++; 
+}
+
+
