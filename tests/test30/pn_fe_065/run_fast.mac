@@ -27,7 +27,7 @@ Fe
 #dangle
 4.
 //--------
-generator
+#generator
 binary
 #paw
 kin.paw
