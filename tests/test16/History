@@ -1,0 +1,28 @@
+$Id: History,v 1.1 1999-11-18 14:58:15 stesting Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 02 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+16 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in Tst02PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in Tst02RunAction
+- Modify UserSteppingAction() in Tst02SteppingAction
+
+
+9th August 1998  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+June 27, 98 G. Cosmo
+- Created.
+

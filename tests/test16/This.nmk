@@ -1,0 +1,151 @@
+!include $(G4INSTALL)\tests\tools\NT\HeadT.nmk
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  File produced by the Co/omake tool
+# using file Make.odb.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  The soft linked packages has been taken
+# from the property 'has' of the 
+# 'Make' object of file Make.odb.
+# It had the value :
+#    Win rogue CLHEP G4 GL Inventor
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+HAS_CPPFLAGS = \
+ $(test_CPPFLAGS)\
+ $(Win_CPPFLAGS)\
+ $(rogue_CPPFLAGS)\
+ $(CLHEP_CPPFLAGS)\
+ $(G4_CPPFLAGS)\
+ $(GL_CPPFLAGS)\
+ $(Inventor_CPPFLAGS)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all   :: mkdir
+
+clean ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+	if exist $(bin)\*.exe del $(bin)\*.exe
+	if exist $(bin)\*.lib del $(bin)\*.lib
+	if exist $(bin)\*.dll del $(bin)\*.dll
+	if exist $(bin)\*.exp del $(bin)\*.exp
+	if exist $(bin)\*.pdb del $(bin)\*.pdb
+rmlib ::
+	if exist $(bin)\*.lib del $(bin)\*.lib
+rmo   ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+rmexe ::
+	if exist $(bin)\*.exe del $(bin)\*.exe
+
+mkdir :
+	@if not exist $(bin) mkdir $(bin)
+
+libtest16_target = $(bin)\libtest16.$(lib_or_dll)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all :: mkdir \
+$(libtest16_target) \
+$(bin)\test16.exe 
+	@echo "test : all ok." 
+
+libs :: mkdir \
+$(libtest16_target) 
+	@echo "test : libs ok." 
+
+apps :: mkdir \
+$(bin)\test16.exe 
+	@echo "test : apps ok." 
+#--------------------------------------------
+rmexeo :
+	if exist $(bin)\test16.obj del $(bin)\test16.obj
+#--------------------------------------------
+test16 : $(bin)\test16.exe
+	@echo "test : test16 ok."
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\test16.exe : $(bin)\test16.obj \
+$(libtest16_target) 
+	$(CXXLD) $(CXXLDFLAGS) $(CCLDO)$(bin)\test16.exe $(bin)\test16.obj \
+$(libtest16) \
+$(libG4visualization) \
+$(libG4run) \
+$(libG4interfaces) \
+$(libG4tracking) \
+$(libG4track) \
+$(libG4processes) \
+$(libG4particles) \
+$(libG4event) \
+$(libG4materials) \
+$(libG4digits_hits) \
+$(libG4geometry) \
+$(libG4graphics_reps) \
+$(libG4intercoms) \
+$(libG4global) \
+$(libInventor) \
+$(libGLU) \
+$(libGL) \
+$(librwtool) \
+$(libCLHEP) \
+$(libWin) \
+$(CXXLDEND) 
+
+$(bin)\test16.obj   : $(app)\test16.cc
+	$(CXX) $(CXXFLAGS) $(APP_CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test16.obj /Tp$(app)\test16.cc
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# libraries 
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\libtest16.dll : \
+$(bin)\Tst15DetectorConstruction.obj \
+$(bin)\Tst15DetectorMessenger.obj \
+$(bin)\Tst15PhysicsList.obj \
+$(bin)\Tst15PrimaryGeneratorAction.obj \
+$(bin)\Tst15RunAction.obj \
+$(bin)\Tst15SteppingAction.obj 
+	if exist $(bin)\libtest16.lib del $(bin)\libtest16.lib 
+	if exist $(bin)\libtest16.exp del $(bin)\libtest16.exp 
+	lib.exe $(LIBFLAGS) /def:$(mgr)\libtest16.def /out:$(bin)\libtest16.lib
+	if exist $(bin)\libtest16.dll del $(bin)\libtest16.dll 
+	$(LINK32) $(LINK32FLAGS) /out:$(bin)\libtest16.dll $(bin)\libtest16.exp \
+$(bin)\Tst15DetectorConstruction.obj \
+$(bin)\Tst15DetectorMessenger.obj \
+$(bin)\Tst15PhysicsList.obj \
+$(bin)\Tst15PrimaryGeneratorAction.obj \
+$(bin)\Tst15RunAction.obj \
+$(bin)\Tst15SteppingAction.obj 
+
+$(bin)\libtest16.lib : \
+$(bin)\Tst15DetectorConstruction.obj \
+$(bin)\Tst15DetectorMessenger.obj \
+$(bin)\Tst15PhysicsList.obj \
+$(bin)\Tst15PrimaryGeneratorAction.obj \
+$(bin)\Tst15RunAction.obj \
+$(bin)\Tst15SteppingAction.obj 
+	if exist $(bin)\libtest16.lib del $(bin)\libtest16.lib 
+	lib.exe @<<
+/nologo /out:$(bin)\libtest16.lib
+$(bin)\Tst15DetectorConstruction.obj
+$(bin)\Tst15DetectorMessenger.obj
+$(bin)\Tst15PhysicsList.obj
+$(bin)\Tst15PrimaryGeneratorAction.obj
+$(bin)\Tst15RunAction.obj
+$(bin)\Tst15SteppingAction.obj
+<<
+#--------------------------------------------
+# libtest16 dependencies 
+#--------------------------------------------
+$(bin)\Tst15DetectorConstruction.obj : src\Tst15DetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15DetectorConstruction.obj /Tpsrc\Tst15DetectorConstruction.cc
+
+$(bin)\Tst15DetectorMessenger.obj : src\Tst15DetectorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15DetectorMessenger.obj /Tpsrc\Tst15DetectorMessenger.cc
+
+$(bin)\Tst15PhysicsList.obj : src\Tst15PhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15PhysicsList.obj /Tpsrc\Tst15PhysicsList.cc
+
+$(bin)\Tst15PrimaryGeneratorAction.obj : src\Tst15PrimaryGeneratorAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15PrimaryGeneratorAction.obj /Tpsrc\Tst15PrimaryGeneratorAction.cc
+
+$(bin)\Tst15RunAction.obj : src\Tst15RunAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15RunAction.obj /Tpsrc\Tst15RunAction.cc
+
+$(bin)\Tst15SteppingAction.obj : src\Tst15SteppingAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst15SteppingAction.obj /Tpsrc\Tst15SteppingAction.cc
+
+
