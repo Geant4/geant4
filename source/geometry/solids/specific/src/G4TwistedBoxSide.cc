@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.3 2004-11-29 16:26:10 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -690,6 +690,8 @@ void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   // X0 is a point on the surface,  d is the direction ( both for a fixed z = pz)
   
   phi = p.z()/(2*fDz)*fPhiTwist ;
+
+#if 0
   G4ThreeVector  X0 ( fDx * cos(phi), fDx * sin(phi) , p.z() ) ;  // basis with u=0
   G4ThreeVector dvec  ( - sin(phi), cos(phi) ,0. ) ;   // direction vector
   G4ThreeVector xx ;                                   // the intersection point on the line
@@ -697,6 +699,10 @@ void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   DistanceToLine(p ,X0 , dvec , xx) ;
   
   u = ( xx - X0 ).mag() ;  // X0 is choosen such that u = 0
+
+#endif
+
+  u = p.y() * cos(phi) - p.x()*sin(phi) ;
 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.6 2004-11-24 17:03:11 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.7 2004-11-29 16:26:11 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -723,6 +723,7 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction ( both for a fixed z = pz)
   
+#if 0
   phi = p.z()/(2*fDz)*fPhiTwist ;
   G4ThreeVector  X0 ( Xcoef(0.) * cos(phi), Xcoef(0.) * sin(phi) , p.z() ) ;  // basis with u=0
   G4ThreeVector dvec  ( - (fDx1-fDx2)/(2*fDy) * cos(phi) - sin(phi), 
@@ -734,6 +735,21 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   DistanceToLine(p ,X0 , dvec , xx) ;
   
   u = ( xx - X0 ).mag() / dvec.mag() ;  // X0 is choosen such that u = 0
+
+#endif
+
+  // phi is given by the z coordinate of p
+  phi = p.z()/(2*fDz)*fPhiTwist ;
+
+  G4double cphi = cos(phi) ;
+  G4double sphi = sin(phi) ;
+  G4double c0 = (fDx2-fDx1)/(2*fDy) ;
+
+  // this formula is the analytical form of the procedure used above.
+  // this is not faster, but removes some spourious events.
+  u = ( (fDx1*fDx1-fDx2*fDx2)/(4*fDy) + c0*cphi*p.x() + c0*sphi*p.y() + 
+	( p.y() * cphi - p.x() * sphi ) ) / 
+    ( ( c0*cphi - sphi)*(c0*cphi - sphi)  + ( cphi + c0*sphi )*(cphi + c0*sphi ));
 
 }
 
