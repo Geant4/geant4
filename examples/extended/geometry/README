@@ -1,0 +1,11 @@
+
+                         Geometry tools
+			 --------------
+
+This directory includes applications and tools for the geometry setup.
+
+OLAP
+----
+Debugging tool for overlapping geometries.
+See notes included in the package for details on how to use it, known
+limitations and defined commands.
