@@ -67,7 +67,7 @@ int main(int argc,char** argv) {
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   XrayFluoAnalysisManager* analysisMgr = new XrayFluoAnalysisManager(detector);
-  #endif
+#endif
   
  // Set optional user action classes
 #ifdef G4ANALYSIS_USE
@@ -81,14 +81,19 @@ int main(int argc,char** argv) {
 #endif 
 
 // set user action classes
+
+#ifdef G4ANALYSIS_USE
   runManager->SetUserAction(new XrayFluoPrimaryGeneratorAction(detector));
   runManager->SetUserAction(runAction);
   runManager->SetUserAction(eventAction);
-#ifdef G4ANALYSIS_USE 
-runManager->SetUserAction(stepAction);
+  runManager->SetUserAction(stepAction);
 #else
-runManager->SetUserAction(new XrayFluoSteppingAction);  
+  runManager->SetUserAction(new XrayFluoPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new XrayFluoRunAction);
+  runManager->SetUserAction(new XrayFluoEventAction);
+  runManager->SetUserAction(new XrayFluoSteppingAction);  
 #endif
+
  //Initialize G4 kernel
   runManager->Initialize();
     
