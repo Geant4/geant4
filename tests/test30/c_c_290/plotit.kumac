@@ -1,0 +1,52 @@
+*** Begin of history file: Tue Mar 23 18:33:44 2004
+opt logy
+opt zfl on
+hi/fil 0 bin.paw
+v/create e5(30)
+v/create x5(30)
+v/read e5,x5 C-C-290-5deg.data
+hi/pl 28
+hplot/symbols e5 x5 30
+pict/print
+
+v/create e10(30)
+v/create x10(30)
+v/read e10,x10 C-C-290-10deg.data
+hi/pl 29
+hplot/symbols e10 x10 30
+pict/print
+
+v/create e20(30)
+v/create x20(30)
+v/read e20,x20 C-C-290-20deg.data
+hi/pl 30
+hplot/symbols e20 x20 30
+pict/print
+
+v/create e30(30)
+v/create x30(30)
+v/read e30,x30 C-C-290-30deg.data
+hi/pl 31
+hplot/symbols e30 x30 30
+pict/print
+
+v/create e40(30)
+v/create x40(30)
+v/read e40,x40 C-C-290-40deg.data
+hi/pl 32
+hplot/symbols e40 x40 30
+pict/print
+
+v/create e60(30)
+v/create x60(30)
+v/read e60,x60 C-C-290-60deg.data
+hi/pl 33
+hplot/symbols e60 x60 30
+pict/print
+
+v/create e80(30)
+v/create x80(30)
+v/read e80,x80 C-C-290-80deg.data
+hi/pl 34
+hplot/symbols e80 x80 30
+pict/print
