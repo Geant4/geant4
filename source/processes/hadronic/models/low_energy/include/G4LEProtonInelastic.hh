@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEProtonInelastic.hh,v 1.2 1999-12-15 14:53:06 gunter Exp $
+// $Id: G4LEProtonInelastic.hh,v 1.3 2000-12-14 09:12:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
@@ -17,6 +17,13 @@
 #ifndef G4LEProtonInelastic_h
 #define G4LEProtonInelastic_h 1
  
+// Class Description
+// Final state production model for Proton inelastic scattering below 20 GeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #include "G4InelasticInteraction.hh"
  
  class G4LEProtonInelastic : public G4InelasticInteraction

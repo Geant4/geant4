@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEAntiXiZeroInelastic.hh,v 1.2 1999-12-15 14:53:05 gunter Exp $
+// $Id: G4LEAntiXiZeroInelastic.hh,v 1.3 2000-12-14 09:12:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy AntiXiZero Inelastic Process
@@ -15,6 +15,13 @@
 #ifndef G4LEAntiXiZeroInelastic_h
 #define G4LEAntiXiZeroInelastic_h 1
  
+// Class Description
+// Final state production model for AntiXiZero inelastic scattering below 100 MeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #include "G4InelasticInteraction.hh"
  
  class G4LEAntiXiZeroInelastic : public G4InelasticInteraction

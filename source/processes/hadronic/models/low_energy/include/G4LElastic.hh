@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LElastic.hh,v 1.4 1999-12-15 14:53:06 gunter Exp $
+// $Id: G4LElastic.hh,v 1.5 2000-12-14 09:12:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,6 +22,13 @@
 #ifndef G4LElastic_h
 #define G4LElastic_h 1
  
+// Class Description
+// Final state production model for hadron nuclear elastic scattering; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"
