@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.12 2001-10-25 15:12:07 maire Exp $
+// $Id: Em2RunAction.cc,v 1.13 2001-11-28 18:57:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,9 +35,9 @@
 
 #include "Em2DetectorConstruction.hh"
 #include "Em2PrimaryGeneratorAction.hh"
-#include "Em2RunActionMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -75,9 +75,6 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
   sumERadialCumul.resize(nRbin, 0.0);
   sumE2Radial.resize(nRbin, 0.0);
   sumE2RadialCumul.resize(nRbin, 0.0);
-   
-  runMessenger = new Em2RunActionMessenger(this);   
-  saveRndm = 1;
   
 #ifndef G4NOHIST
    hbookManager = NULL;
@@ -90,7 +87,6 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
 Em2RunAction::~Em2RunAction()
 {
   cleanHisto();    
-  delete runMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,11 +163,9 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }    
-  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
+
   //reshape arrays if needed  
   //
   G4bool rebin(false);
@@ -218,10 +212,7 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   //drawing
   // 
   if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -419,11 +410,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
 
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                           
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

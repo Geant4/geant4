@@ -20,12 +20,9 @@
 #
 # Draw scene
 #
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 1.1
-/vis/viewer/viewpointThetaPhi 90 180 deg
-#
-# flush visualisation (mandatory but OpenGL)
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0

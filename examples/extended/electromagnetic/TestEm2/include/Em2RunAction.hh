@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.9 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2RunAction.hh,v 1.10 2001-11-28 18:57:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,6 @@ typedef  G4std::vector<G4double> MyVector;
 
 class Em2DetectorConstruction;
 class Em2PrimaryGeneratorAction;
-class Em2RunActionMessenger;
 
 class G4Run;
 
@@ -74,10 +73,7 @@ class Em2RunAction : public G4UserRunAction
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
-    
-    void  SetRndmFreq(G4int    val) {saveRndm = val;}
-    G4int GetRndmFreq()             {return saveRndm;}    
-    
+ 
   private:
   
     void bookHisto();
@@ -113,9 +109,6 @@ class Em2RunAction : public G4UserRunAction
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-    
-    Em2RunActionMessenger* runMessenger;        
-    G4int saveRndm;
                   
 #ifndef G4NOHIST        
     HepTupleManager* hbookManager;

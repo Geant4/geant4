@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.6 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.7 2001-11-28 18:57:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,11 +52,11 @@
 
 Em2DetectorConstruction::Em2DetectorConstruction()
 :nLtot(20),nRtot(20),dLradl(1.),dRradl(0.25),
- myMaterial(NULL),magField(NULL)  ,
+ myMaterial(0),magField(0)  ,
  EcalLength(0.),EcalRadius(0.)    ,
- solidEcal(NULL) ,logicEcal(NULL) ,physiEcal(NULL),
- solidSlice(NULL),logicSlice(NULL),physiSlice(NULL),
- solidRing(NULL) ,logicRing(NULL) ,physiRing(NULL) 
+ solidEcal(0) ,logicEcal(0) ,physiEcal(0),
+ solidSlice(0),logicSlice(0),physiSlice(0),
+ solidRing(0) ,logicRing(0) ,physiRing(0) 
 {
   detectorMessenger = new Em2DetectorMessenger(this);
 }
@@ -198,6 +198,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
       // Slice
       solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
       logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
+      logicSlice-> SetVisAttributes(G4VisAttributes::Invisible);
       if (nLtot >1)
         physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
                                     kZAxis,nLtot,dL);
@@ -262,7 +263,7 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
-    magField = NULL;
+    magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 }

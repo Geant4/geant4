@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.cc,v 1.4 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2EventActionMessenger.cc,v 1.5 2001-11-28 18:57:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged, all");
   DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("charged");
+  DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
   DrawCmd->AvailableForStates(Idle);
   

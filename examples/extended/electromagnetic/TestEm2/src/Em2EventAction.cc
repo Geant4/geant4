@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventAction.cc,v 1.5 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2EventAction.cc,v 1.6 2001-11-28 18:57:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,12 +40,11 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2EventAction::Em2EventAction(Em2RunAction* run)
-:Em2Run(run),drawFlag("charged"),printModulo(10000)
+:Em2Run(run),drawFlag("none"),printModulo(10000)
 {
   eventMessenger = new Em2EventActionMessenger(this);
 }
@@ -66,14 +65,7 @@ void Em2EventAction::BeginOfEventAction(const G4Event* evt)
  //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
- //save rndm status
- if (Em2Run->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }
- 
+
  //additional initializations 
  Em2Run->initializePerEvent();
 }
