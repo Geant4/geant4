@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.41 2003-04-26 11:38:12 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.42 2003-04-26 19:55:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -677,6 +677,7 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
            << G4endl;
     return false;
   }
+  initialMass = particle->GetPDGMass();
 
 
   G4cout << GetProcessName() << " for " << particleName
