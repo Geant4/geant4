@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.29 2001-04-20 19:49:33 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.30 2001-05-18 08:14:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1551,6 +1551,8 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
   G4double safe, rho, safeR1, safeR2, safeZ ;
   G4double safePhi, phiC, cosPhiC, sinPhiC, ePhi ;
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
+
+#ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
     G4cout.precision(16) ;
@@ -1565,9 +1567,10 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
- // G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
-    G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
+    G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
+    // G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
   }
+#endif
 
   if ( fRMin )
   {

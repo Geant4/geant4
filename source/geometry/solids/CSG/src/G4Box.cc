@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.14 2001-04-20 19:49:32 gcosmo Exp $
+// $Id: G4Box.cc,v 1.15 2001-05-18 08:14:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -696,6 +696,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
 
+#ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
      G4cout.precision(16) ;
@@ -708,9 +709,11 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-  G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
-     //    G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
+     G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     // G4cout << "G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
   }
+#endif
+
   safx1 = fDx - p.x() ;
   safx2 = fDx + p.x() ;
   safy1 = fDy - p.y() ;

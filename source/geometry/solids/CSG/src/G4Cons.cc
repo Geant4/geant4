@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.17 2001-04-20 19:49:32 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.18 2001-05-18 08:14:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -1928,7 +1928,8 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
   G4double tanRMin,secRMin,pRMin ;
   G4double tanRMax,secRMax,pRMax ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi ;
-/*
+
+#ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
     G4cout.precision(16) ;
@@ -1945,10 +1946,11 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    //  G4Exception("Invalid call in G4Cons::DistanceToOut(p), p is outside") ;
-    G4cout << "G4Cons::DistanceToOut(p), p is outside ?!" << G4endl ;
+    G4Exception("Invalid call in G4Cons::DistanceToOut(p), p is outside") ;
+    // G4cout << "G4Cons::DistanceToOut(p), p is outside ?!" << G4endl ;
   }
-*/
+#endif
+
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
   safeZ = fDz - fabs(p.z()) ;
 
