@@ -47,7 +47,7 @@ processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/string_common       Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/"/string_fragmentation Hans-Peter.Wellisch@cern.ch    Hans-Peter Wellisch
 "/"/"/"/util                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/optical                   gum@reg.triumf.ca               Peter Gumplinger
+"/optical                   gum@triumf.ca                   Peter Gumplinger
 "/parameterisation          verderi@polhp6.in2p3.fr         Marc Verderi
 "/transportation            John.Apostolakis@cern.ch        John Apostolakis
 readout                     asai@kekvax.kek.jp              Makoto Asai
@@ -74,7 +74,7 @@ examples/novice/N02         John.Apostolakis@cern.ch        John Apostolakis
 examples/novice/N03         Michel.Maire@cern.ch            Michel Maire
 examples/novice/N04         asai@kekvax.kek.jp              Makoto Asai 
 examples/novice/N05         verderi@polhp6.in2p3.fr         Marc Verderi
-examples/novice/N06         gum@reg.triumf.ca               Peter Gumplinger
+examples/novice/N06         gum@triumf.ca                   Peter Gumplinger
 examples/extended/E01       Evgueni.Tcherniaev@cern.ch      Evgueni Tcherniaev
 examples/extended/E02       Youhei.Morita@cern.ch           Youhei Morita
 examples/extended/E03       ? 
@@ -88,7 +88,7 @@ tests                       asai@kekvax.kek.jp              Makoto Asai
 tests                       gcosmo@slac.stanford.edu        Gabriele Cosmo
 tests/test01                John.Apostolakis@cern.ch        John Apostolakis
 tests/test02                asai@kekvax.kek.jp              Makoto Asai
-tests/test03                gum@reg.triumf.ca               Peter Gumplinger
+tests/test03                gum@triumf.ca                   Peter Gumplinger
 tests/test04                Youhei.Morita@cern.ch           Youhei Morita
 tests/test05                Lionel.Broglia.Patron@cern.ch   Lionel Broglia
 tests/test06                Michel.Maire@cern.ch            Michel Maire
