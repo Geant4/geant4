@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.44 2002-12-09 07:10:09 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.45 2002-12-10 15:55:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -869,26 +869,25 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
             G4double  dM = totQM-gsM;            // Excitation of the Quasmon                    ^
             while(nOfOUT)                        // LOOP over all existing QHadrons              ^
             {
-              G4QHadron*     theLast = theQHadrons[nOfOUT-1];     //                             ^
-              G4LorentzVector last4M = theLast->Get4Momentum();   //                             ^
-              G4QContent      lastQC = theLast->GetQC();          //                             ^
-              G4int           lastS  = lastQC.GetStrangeness();   //                             ^
-              G4int           totS   = totQC.GetStrangeness();    //                             ^
-              G4int           nFr    = theLast->GetNFragments();  //                             ^
-              G4int           gam    = theLast->GetPDGCode();     //                             ^
+              G4QHadron*     theLast = theQHadrons[nOfOUT-1];     //  Remember                   ^
+              G4LorentzVector last4M = theLast->Get4Momentum();   //  all                        ^
+              G4QContent      lastQC = theLast->GetQC();          //  content                    ^
+              G4int           lastS  = lastQC.GetStrangeness();   //  of    // Only              ^
+              G4int           totS   = totQC.GetStrangeness();    //  the   // for               ^
+              G4int           nFr    = theLast->GetNFragments();  //  Last  // if()              ^
+              G4int           gam    = theLast->GetPDGCode();     //        //                   ^
 			  if(gam!=22&&!nFr&&lastS<0&&lastS+totS<0&&nOfOUT>1) // => Skip K-mes, gam & decayed ^ 
 			  {
-                G4QHadron* thePrev = theQHadrons[nOfOUT-2]; // Come back to the previous         ^
+                G4QHadron* thePrev = theQHadrons[nOfOUT-2];// Kill Prev and make Last to be Prev ^
                 theQHadrons.pop_back();          // the last QHadron is excluded from OUTPUT     ^
                 theQHadrons.pop_back();          // the prev QHadron is excluded from OUTPUT     ^
-                theQHadrons.push_back(theLast);  // the Last becomes the previouse               ^
-                G4QHadron* destrP=theLast;       // destruction Pointer for the QHadron          ^
-                delete     destrP;               // the Last QHadron is destructed               ^
-                theLast = thePrev;               // Update parameters (Prev becomes the  Last)   ^
+                theQHadrons.push_back(thePrev);  // thePrev becomes theLast as an object         ^
+                delete     theLast;              // the Last QHadron is destructed               ^
+                theLast = thePrev;               // Update parameters (thePrev* becomes theLast*)^
                 last4M = theLast->Get4Momentum();// 4Mom of the previouse Quasmon                ^
                 lastQC = theLast->GetQC();       // Quark Content of the previouse Quasmon       ^
 			  }
-              else                               // Just Clear and destroy the Last              ^
+              else                               // Just Clear and destroy theLast               ^
               {
                 theQHadrons.pop_back();          // the last QHadron is excluded from OUTPUT     ^
                 delete         theLast;          // the last QHadron is deleated as instance     ^
@@ -1843,13 +1842,17 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
               G4QHadron* thePrev = theQHadrons[nOfOUT-2];
               theQHadrons.pop_back();            // the last QHadron is excluded from OUTPUT
               theQHadrons.pop_back();            // the prev QHadron is excluded from OUTPUT
-              theQHadrons.push_back(theLast);    // the Last becomes the Prev
-              theLast = thePrev;                 // Update parameters (Prev instead of Last)
+              theQHadrons.push_back(thePrev);    // thePast becomes theLast as an instance
+              delete    theLast;                 // theLast QHadron is deleated as an instance
+              theLast = thePrev;                 // Update parameters (thePrev* becomes theLast*)
               last4M = theLast->Get4Momentum();
               lastQC = theLast->GetQC();
 			}
-            else theQHadrons.pop_back();         // the last QHadron is excluded from OUTPUT 
-            delete          theLast;             // the last QHadron is deleated as instance
+            else
+            {
+              theQHadrons.pop_back();            // the last QHadron is excluded from OUTPUT 
+              delete         theLast;            // the last QHadron is deleated as an instance
+            }
             totQC+=lastQC;                       // Update (increase) the total QC
             tot4M+=last4M;                       // Update (increase) the total 4-momentum
             totMass=tot4M.m();                   // Calculate new real total mass
@@ -2222,7 +2225,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
 		{
           if(lastBN<1&&nOfOUT>1)                // => "Skip Meson/Gams & Antibaryons" case @@ A few?
 		  {
-            G4QHadron* thePrev = theQHadrons[nOfOUT-2];
+            G4QHadron* thePrev = theQHadrons[nOfOUT-2];// *** Exchange between theLast & thePrev ***
             theQHadrons.pop_back();             // the last QHadron is excluded from OUTPUT
             theQHadrons.pop_back();             // the prev QHadron is excluded from OUTPUT
             theQHadrons.push_back(theLast);     // the Last becomes the Prev(first part of exchange)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.13 2001-11-26 14:11:45 hpw Exp $
+// $Id: G4QCandidate.hh,v 1.14 2002-12-10 15:55:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -118,8 +118,7 @@ inline void G4QCandidate::ClearParClustVector()
 
 inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)
 {
-  G4QParentCluster* npCl = new G4QParentCluster(pCl);
-  thePClusters.push_back(npCl);                              // Fill new instance of PCl
+  thePClusters.push_back(pCl);                              // Fill new instance of PCl
 }
 inline void G4QCandidate::SetPossibility(G4bool choice)         {possible=choice;}
 inline void G4QCandidate::SetParPossibility(G4bool choice)      {parPossible=choice;}

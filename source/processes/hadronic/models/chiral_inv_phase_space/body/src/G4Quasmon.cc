@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.43 2002-12-10 09:55:33 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.44 2002-12-10 15:55:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3814,8 +3814,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
 #ifdef sdebug
 		 	          G4cout<<"G4Q::CalcHP: FillParentClaster="<<*curParC<<G4endl;
 #endif
-                      curCand->FillPClustVec(curParC);//Fill possible ParentClust to FragmVector
-                      delete curParC;
+                      curCand->FillPClustVec(curParC);//Fill ParentClust to ParClVector (delete eq.)
                       comb += probab;
 #ifdef sdebug
 		 	          G4cout<<"G4Q::CHP:i="<<index<<",cC="<<cPDG<<",pc"<<pc<<parQC<<",E="
@@ -4157,13 +4156,12 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
 	        G4cout<<"G4Quasm::CheckGS: NO, tM="<<totNMa<<" > rp+l="<<resLastM+hadrMa<<" || > rl+p="
                   <<resPrevM+prevMa<<G4endl;
 #endif
-            if      (totNMa>resLastM+hadrMa)             // "Just exclude the Last" case
+            if      (totNMa>resLastM+hadrMa)             // "Just exclude the Prev" case
 		    {
-              theQHadrons.pop_back();                    // the LastH is excluded from OUTPUT HV
-              theQHadrons.pop_back();                    // the PrevH is excluded from OUTPUT HV
-              theQHadrons.push_back(theLast);            // LastH substitute Prev H in OUTPUT HV
-              G4QHadron* destrP=thePrev;                 // destruction Pointer for the QHadron
-              delete     destrP;                         // the Last QHadron is destructed
+              theQHadrons.pop_back();                    // the theLast* is excluded from OUTPUT HV
+              theQHadrons.pop_back();                    // the thePrev* is excluded from OUTPUT HV
+              theQHadrons.push_back(theLast);            // theLast substitutes thePrev in OUTPUT HV
+              delete  thePrev;                           // thePrev QHadron is destructed
               thePrev=theLast;
               resPPDG=resLPDG;
               resPrevM=resLastM;
