@@ -6,9 +6,8 @@
 #if !defined G4GAGTREELIST_HH
 #define G4GAGTREELIST_HH
 
-#include <iostream.h>	
-#include <stdlib.h>	
-#include <string.h>
+#include "g4std/iostream"	
+#include "globals.hh"
 
 /////////////////////////////////
 /////  class G4GAGTreeNode  /////
@@ -60,10 +59,10 @@ template <class Type> class G4GAGTreeList {
 
 
 		//----- Set current node to the head of list.
-	void	ToHead()    { cur = head ; } ;
+	void	ToHead()    { cur = head ; }
 
 		//----- Set current node to the tail of list.
-	void	ToTail()    { cur = tail ; } ;
+	void	ToTail()    { cur = tail ; }
 
 		//----- Increment current node to downward direction by 1 step
 		//.....  Return: NORMAL = 1  (normal)
@@ -352,7 +351,7 @@ inline  int G4GAGTreeList<Type>::Pop( Type& item )
 	int	status ;
 
 		//----- get head->item
-	toHead() ;
+	ToHead() ;
 	status = GetItem( item ) ;
 
 		//----- delete head->item if it exists

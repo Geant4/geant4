@@ -1,6 +1,8 @@
 // Satoshi Tanaka  31th May 2001
 // A scene handler to dump geometry hierarchy to GAG.
 
+#include "g4std/strstream"
+
 #include "G4GAGTreeSceneHandler.hh"
 
 #include "G4GAGTree.hh"
@@ -9,8 +11,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPVParameterisation.hh"
-
-#include<strstream.h>
 
 // #define DEBUG_GAG_TREE
 
@@ -85,17 +85,17 @@ void G4GAGTreeSceneHandler::BeginModeling ()
     "\n  Now printing with verbosity " << verbosity << G4endl;
 
   // Declare to start GAG tree
-  G4cout << GAG_TREE_BEGIN_DTREE << endl;
+  G4cout << GAG_TREE_BEGIN_DTREE << G4endl;
 
 }
 
 void G4GAGTreeSceneHandler::EndModeling () 
 {
   // Dump the last PV node
-  if( fPrevAbsPVName != "" ) { G4cout << fPrevAbsPVName << endl; }
+  if( fPrevAbsPVName != "" ) { G4cout << fPrevAbsPVName << G4endl; }
 
   // Declare to end GAG tree
-  G4cout << GAG_TREE_END_DTREE << endl;
+  G4cout << GAG_TREE_END_DTREE << G4endl;
   G4cout << "G4GAGTreeSceneHandler::EndModeling" << G4endl;
 
   // Clear the sets
