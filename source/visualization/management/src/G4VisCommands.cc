@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.3 2001-08-05 02:29:14 johna Exp $
+// $Id: G4VisCommands.cc,v 1.4 2001-08-11 21:38:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -73,20 +73,7 @@ G4VisCommandVerbose::G4VisCommandVerbose () {
   G4bool omitable;
 
   fpCommand = new G4UIcmdWithAString("/vis/verbose", this);
-  fpCommand -> SetGuidance("/vis/verbose [<verbosity>]");
-  fpCommand -> SetGuidance
-    ("Simple graded message scheme - give first letter or a digit:"
-     "\n  From G4VisManager.hh:"
-     "\n  enum Verbosity {"
-     "\n    quiet,         // Nothing is printed."
-     "\n    startup,       // Startup and endup messages are printed..."
-     "\n    errors,        // ...and errors..."
-     "\n    warnings,      // ...and warnings..."
-     "\n    confirmations, // ...and confirming messages..."
-     "\n    parameters,    // ...and parameters of scenes and views..."
-     "\n    all            // ...and everything available."
-     "\n  };"
-     );
+  fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceString);
   fpCommand -> SetParameterName("verbosity", omitable=true);
   fpCommand -> SetDefaultValue("warnings");
 }
