@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2004-11-26 08:38:51 gbarrand Exp $
+$Id: History,v 1.60 2004-12-02 15:31:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
-26th November 2004  Guy Barrand  (openinventor-V07-00-00)
+26th November 2004  Guy Barrand  (openinventor-V06-02-02)
 - G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h : 
   correct some warnings on g++-3.2.1 (reported by Tom Roberts).
 
