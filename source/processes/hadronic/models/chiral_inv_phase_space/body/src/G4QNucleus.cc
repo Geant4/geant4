@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.38 2003-11-17 16:58:45 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.39 2003-11-21 15:05:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -42,6 +42,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   //Z(z),N(n),S(s),maxClust(0)
 {
   probVect[0]=mediRatio;
+  for(G4int i=1; i<=256; i++) probVect[i] = 0.;
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
@@ -75,6 +76,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),maxClust(0)
 {
   probVect[0]=mediRatio;
+  for(G4int i=1; i<=256; i++) probVect[i] = 0.;
   Set4Momentum(p);
   SetNFragments(0);
   G4int ZNS=Z+N+S;
@@ -90,6 +92,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
   probVect[0]=mediRatio;
+  for(G4int i=1; i<=256; i++) probVect[i] = 0.;
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
   S = nucQC.GetS()-nucQC.GetAS();     // a#of LAMBDA's in the nucleus
@@ -124,6 +127,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p): G4QHadron(nucQC,p),
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
 #endif
   probVect[0]=mediRatio;
+  for(G4int i=1; i<=256; i++) probVect[i] = 0.;
   Set4Momentum(p);
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
@@ -156,6 +160,8 @@ G4QNucleus::G4QNucleus(const G4QNucleus& right) :
   dS            = right.dS;
   maxClust      = right.maxClust;
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
+  probVect[254] = right.probVect[254];
+  probVect[255] = right.probVect[255];
 }
 
 G4QNucleus::G4QNucleus(G4QNucleus* right)
@@ -172,6 +178,8 @@ G4QNucleus::G4QNucleus(G4QNucleus* right)
   dS            = right->dS;
   maxClust      = right->maxClust;
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right->probVect[i];
+  probVect[254] = right->probVect[254];
+  probVect[255] = right->probVect[255];
 }
 
 G4QNucleus::~G4QNucleus() {}
@@ -205,6 +213,8 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
   dS            = right.dS;
   maxClust      = right.maxClust;
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
+  probVect[254] = right.probVect[254];
+  probVect[255] = right.probVect[255];
 
   return *this;
 }
