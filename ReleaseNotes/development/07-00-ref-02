@@ -1,0 +1,137 @@
+
+                       geant4-07-00-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fix in G4IntersectionSolid::DistanceToIn(p,v) to allow for correct
+    simmetrical treatment of the solids' intersection.
+  o Added ability to assign G4UserLimits per detector region.
+  o Introduced new classes to retrieve material properties from NIST
+    database.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+
+geometry/management                              geommng-V07-00-00
+-------------------
+- Added G4UserLimits pointer to G4Region and added access from
+  G4LogicalVolume.
+- Added optional boolean argument 'propagate' to GetMass() to avoid
+  propagation of computation of masses to the daughter volumes.
+  Propagation to daughters is done by default.
+
+geometry/solids/Boolean                          geom-bool-V07-00-01
+-----------------------
+- Fix in G4IntersectionSolid::DistanceToIn(p,v) to allow for correct
+  simmetrical treatment of the solids' intersection. Algorithm reviewed
+  as proposed in problem report #723.
+- Modified Inside(p) G4SubtractionSolid and G4UnionSolid, to fix
+  inconsistency for non-zero sum of surface-normals.
+  Currently available only through activation of G4NEW_SURF_NORMAL
+  compilation flag.
+- Changed AddThis() to AddSolid() in the concrete implementations of
+  DescribeYourselfTo(G4VGraphicsScene&) for all solids. Use the newly
+  available CreatePolyhedron() for components of Boolean solids, instead
+  of GetPolyhedron().
+- New unit test testBoolSurfaceInOut and updates.
+
+geometry/solids/BREPS                            breps-V07-00-00
+---------------------
+- Changed AddThis() with AddSolid() in DescribeYourselfTo()
+  implementation for G4BREPSolid and G4BREPSolidOpenPCone.
+
+geometry/solids/CSG                              geom-csg-V07-00-01
+-------------------
+- New alternative implementation of SurfaceNormal(p) with edges/vertices
+  for G4Box, G4Para, G4Trap, G4Trd. Old implementation is still the default.
+  Currently it can be activated only by setting G4NEW_SURF_NORMAL variable
+  before compilation.
+- Changed AddThis() with AddSolid() for all solids in DescribeYourselfTo()
+  implementation.
+
+geometry/solids/specific                         geom-specific-V07-00-01
+------------------------
+- Fixed compilation warnings on WIN32-VC for G4VSurface.
+
+global                                           global-V07-00-02
+------
+- Migrated calls to G4Exception in HEPNumerics to canonical signature.
+- Q/A cleanup to clear CodeWizard warnings and minor fixes.
+- Moved inline methods to .icc files.
+- Fixed compilation warnings on WIN32-VC for G4JTPolynomialSolver;
+  removed unnecessary inclusion of <cfloat>.
+- Minor cosmetics.
+
+graphics_reps                                    greps-V07-00-01
+-------------
+- HepPolyhedron: added IsErrorBooleanProcess().
+- BooleanProcessor: added get_processor_error().
+- G4Visible: moved SetVisAttributes() to non-inline and added warning
+  message.
+- Added G4VisExtent::NullExtent.
+
+materials                                        materials-V07-00-01
+---------
+- New classes to retrieve material properties from NIST database:
+  G4NistManager, G4NistMessenger, G4NistElementBuilder,
+  G4NistMaterialBuilder, G4NistMaterialManager
+- New unit tests G4NistMaterialTest1 and G4NistMaterialTest2.
+
+processes/electromagnetic/standard               stand-V07-00-02
+----------------------------------
+- Added new development classes G4hIonisation70 and G4ionIonisation70.
+
+processes/electromagnetic/utils                  utils-V07-00-02
+-------------------------------
+- Fixed bug in the initialisation of G4VEmProcess.
+- Shifted verbose level: set default value to 1.
+- Add flags "ApplyCuts" and "KillPrimary" to G4VEmProcess.
+- Added new class G4EmCorrections for the calculation of EM corrections
+  to ionisation.
+
+processes/hadronic/models/readioactive_decay     radioactive_decay-V07-00-00  
+--------------------------------------------
+- Minor correction to G4NuclearDeceyChannel to fix bug #711.
+
+processes/transportation                         transport-V07-00-00
+------------------------
+- Added virtual to destructors of G4StepLimiter and G4UserSpecialCuts.
+
+examples                                         examples-V07-00-01
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm2 (testem2-V07-00-00)
+    + HistoManager: added protection for the creation of the
+      analysis factory.
+  o electromagnetic/TestEm3 (testem3-V07-00-04)
+    + HistoManager: added protection for the creation of the
+      analysis factory; file extension is fileType.
+    + HistoMessenger: new command setFileOption.
+  o electromagnetic/TestEm4 (testem4-V07-00-00)
+    + RunAction: added protection for the creation of the
+      analysis factory.
+  o electromagnetic/TestEm5 (testem5-V07-00-00)
+    + HistoManager: added protection for the creation of the
+      analysis factory; file extension is fileType.
+    + HistoMessenger: new command setFileOption.
+  o electromagnetic/TestEm6 (testem6-V07-00-00)
+    + RunAction: added protection for the creation of the
+      analysis factory.
+  o electromagnetic/TestEm7 (testem7-V07-00-00)
+    + RunAction: added protection for the creation of the
+      analysis factory.
+  o electromagnetic/MuonProcesses (muonprocesses-V07-00-00)
+    + HistoManager: added protection for the creation of the
+      analysis factory; file extension is fileType.
+  o electromagnetic/PhotonProcesses (photonprocesses-V07-00-00)
+    + HistoManager: added protection for the creation of the
+      analysis factory; file extension is fileType.
+    + HistoMessenger: new command setFileOption.
+
+tests                                            tests-V07-00-01
+-----
+- Updated reference outputs.
