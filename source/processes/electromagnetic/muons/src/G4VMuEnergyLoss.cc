@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.11 2001-09-10 13:48:29 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.12 2001-09-11 07:32:03 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -597,8 +597,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
         // approximate value based on Bethe-Bloch and   
         //   assuming an 1/E**2 delta spectrum 
         G4double deldedx=cN*aMaterial->GetDensity()*
-                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))-
-                          0.5*(Tc-T0)/Tmax) ; 
+                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))) ;
         G4double delToverTc=1.-T0/Tc ;
         G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
         if(N > Ndeltamax) N = Ndeltamax ;
