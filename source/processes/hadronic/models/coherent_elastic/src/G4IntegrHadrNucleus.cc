@@ -1,16 +1,30 @@
 // IntegrHadrNucleus.cc
 
+#include "globals.hh"
 #include "G4IntegrHadrNucleus.hh"
 
- void  G4IntegrHadrNucleus::GetIntegralCrSec(G4Nucleus *  aNucleus)
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ void  G4IntegrHadrNucleus::
+           GetIntegralCrSec(G4Nucleus *  aNucleus)
  {
     G4int      i, k, l, m;
     G4double   N, N1, N2, N3, N4, Delta, Inel1, Inel3;
-    G4double   Tot0, Inel0, Inel2, Prod0, Prod1, ak, Delt, Delt2, Delt3;
+    G4double   Tot0, Inel0, Inel2, Prod0, Prod1, 
+                ak, Delt, Delt2, Delt3;
     G4double   Rnucl, R0, Stot, Bhad, Asq, MbToB, Pi1;
     G4double   Dtot, Dinel, Dprod, Rnuc2, RB, R2B, bk, bd;
 
       G4int  Anucleus = (int) aNucleus->GetN();
+
+ if(Anucleus<11)
+         {
+  G4Exception(" This nucleus is very light for this model !!!");
+         }
+
+  if(Anucleus>208)
+         {
+  G4Exception(" This nucleus is very heavy for this model !!!");
+         }
 
           MbToB   = 2.568;
           Pi1     = 3.1416;
@@ -21,7 +35,8 @@
 
           R0      = sqrt(0.99);                        //{ This is fermi}
           if (Anucleus >10)  R0 = sqrt(0.84);          
-          if (Anucleus >20)  R0 = sqrt((35.34+0.5*Anucleus)/(40.97+Anucleus));
+          if (Anucleus >20)  R0 = sqrt((35.34+0.5*Anucleus)
+                                  /(40.97+Anucleus));
 
           Rnucl   = R0*pow(Anucleus,0.3333);            //{In Fermi }
           Rnuc2   = Rnucl*Rnucl*MbToB*10;               //{ In GeV-2}
@@ -60,7 +75,7 @@
 
 //                 Inel2      = Inel2+Inel1*N3;
                  Prod0    = Prod0+Prod1*N3;
-          if(N1/i/Inel0<0.0001)  break;
+          if(abs(N1/i/Inel0) < 0.0001)  break;
               }  // i
 
              Tot0         = Tot0*HadrTot;
@@ -69,14 +84,17 @@
              Prod0        = Prod0*HadrTot;
 
              ak           = (Rnuc2*2*Pi1/Stot);
-    G4double DDSect1      = (DDSect2+
-                              DDSect3*log(1.06*2*HadrEnergy/Rnucl/sqrt(25.68)/4));
-             Dtot         =  8*Pi1*ak/HadrTot*(1-(1+Anucleus/ak)*exp(-Anucleus/ak))*
-                                    DDSect1/MbToB;
+    G4double DDSect1      = (DDSect2+DDSect3*log(1.06*2*HadrEnergy
+                             /Rnucl/sqrt(25.68)/4));
+
+             Dtot         =  8*Pi1*ak/HadrTot*(1-(1+Anucleus/ak)
+                              *exp(-Anucleus/ak))*DDSect1/MbToB;
 
              bk           = (1-1/ak)/Stot/(1-1/ak/4);
+
              bd           = bk*bk*DDSect1*(1-(1+Anucleus/ak*(1-1/ak/4))*
-                                    exp(-Anucleus/ak*(1-1/4/ak)))*Rnuc2;
+                             exp(-Anucleus/ak*(1-1/4/ak)))*Rnuc2;
+
              Dprod        = bd*4*Pi1*Pi1*MbToB;
 
              TotalCrSec   = Tot0-Dtot;
@@ -87,57 +105,82 @@
              QuasyElasticCrSec = InelCrSec-ProdCrSec;
    }
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   G4double 
   G4IntegrHadrNucleus::GetElasticCrossSection(
                                      const G4DynamicParticle * aHadron,
-                                           G4Nucleus *         aNucleus)
+                                           G4Nucleus         * aNucleus)
 
          {       
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+
+if(HadrEnergy < 2)
+  G4Exception(" The hadron energy is very low for this model !!!");
+
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
                 return(ElasticCrSec);
          }
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   G4double 
   G4IntegrHadrNucleus::GetTotalCrossSection(
                                      const G4DynamicParticle * aHadron,
-                                           G4Nucleus *         aNucleus)
+                                           G4Nucleus         * aNucleus)
         {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+
+if(HadrEnergy < 2)
+  G4Exception(" The hadron energy is very low for this model !!!");
+
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
                 return(TotalCrSec);
         }
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   G4double 
   G4IntegrHadrNucleus::GetInelasticCrossSection(
                                      const G4DynamicParticle * aHadron,
-                                           G4Nucleus *         aNucleus)
+                                           G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+
+if(HadrEnergy < 2)
+  G4Exception(" The hadron energy is very low for this model !!!");
+
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
                 return(InelCrSec);
        }
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   G4double 
   G4IntegrHadrNucleus::GetProductionCrossSection(
                                      const G4DynamicParticle * aHadron,
-                                           G4Nucleus *         aNucleus)
+                                           G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+
+if(HadrEnergy < 2)
+  G4Exception(" The hadron energy is very low for this model !!!");
+
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
                 return(ProdCrSec);
        }
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   G4double 
   G4IntegrHadrNucleus::GetQuasyElasticCrossSection(
                                      const G4DynamicParticle * aHadron,
-                                           G4Nucleus *         aNucleus)
+                                           G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+
+if(HadrEnergy < 2)
+  G4Exception(" The hadron energy is very low for this model !!!");
+
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
                 return(QuasyElasticCrSec);

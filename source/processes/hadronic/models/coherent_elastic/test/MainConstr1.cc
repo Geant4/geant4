@@ -57,10 +57,10 @@
 
 //    G4cout << " Tkin "<< Tkin <<endl;
 
-//***        G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl);
+        G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl);
 
-       G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
-                                  2000., 5000., 5,"test.dat");
+//       G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
+//                                  2000., 5000., 5,"test.dat");
 
 //       G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
 //                   "testnew.dat");
@@ -83,7 +83,7 @@ inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
 
          G4cout  << " Direction Momentum " <<Mom<< endl;
 
-               for(G4int i2=1; i2<5; i2++)
+               for(G4int i2=1; i2<15; i2++)
                   {
 
    G4cout<<" Before Applay "<<endl;
@@ -94,7 +94,7 @@ inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
 //++++                                  aParticle,  pNucl);
    G4cout<<" After Apply "<<endl;
 
-//++++   G4cout << " i2, Q2 "<<i2<<"  "<<Q2<<endl;   // For Random
+   G4cout << " i2, Q2 "<<i2<<"  "<<Q2<<endl;   // For Random
          
                    outVector  =  aTrack.GetMomentum();
 

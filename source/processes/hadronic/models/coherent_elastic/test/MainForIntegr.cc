@@ -55,7 +55,7 @@
                     GetInelasticCrossSection(aParticle, aNucleus);
 
        G4cout << i1  <<" "<<  Energy<<" "  <<  CrossSection << " "
-       << ElasticCrossSec<<" "<<InelasticCrossSec<< " new "<< G4endl;
+       << ElasticCrossSec<<" "<<InelasticCrossSec<< " new "<< endl;
 
             }   //  i2
        }        //  i1

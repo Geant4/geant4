@@ -24,9 +24,10 @@ class G4HadronValues
 
    protected:  
 
-       void GetHadronValues(const G4DynamicParticle* aHadron);
+       void GetHadronValues(const G4DynamicParticle * aHadron);
 
-       G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3;
+       G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3,
+                 MomentumCM;
 
   };
 

@@ -18,25 +18,25 @@
 
        G4double GetElasticCrossSection(
                               const G4DynamicParticle *  aHadron,
-                                    G4Nucleus *          aNucleus); 
+                                    G4Nucleus         * aNucleus); 
 
        G4double GetTotalCrossSection(
                               const G4DynamicParticle *  aHadron,
-                                    G4Nucleus *          aNucleus); 
+                                    G4Nucleus         * aNucleus); 
 
        G4double GetProductionCrossSection(
                               const G4DynamicParticle *  aHadron,
-                                    G4Nucleus *          aNucleus); 
+                                    G4Nucleus         * aNucleus); 
 
 
        G4double GetInelasticCrossSection(
                               const G4DynamicParticle *  aHadron,
-                                    G4Nucleus *          aNucleus); 
+                                    G4Nucleus         * aNucleus); 
 
 
        G4double GetQuasyElasticCrossSection(
                               const G4DynamicParticle *  aHadron,
-                                    G4Nucleus *          aNucleus); 
+                                    G4Nucleus         * aNucleus); 
 
    private:  
 

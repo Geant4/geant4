@@ -1,5 +1,5 @@
-//  pfnhfns
 //  The main program for "G4ElasticHadrNucleusHE" class
+
 
 #include "G4Proton.hh"
 #include "G4DynamicParticle.hh"
@@ -11,6 +11,7 @@
 #include "G4ElasticHadrNucleusHE.hh"
 #include "iostream.h"
 
+
  int main()
 
  {
@@ -21,8 +22,8 @@
                  InelasticCrossSec, Energy, Momentum;
 
         G4double        px = 0;
-        G4double        py = 2500;
-        G4double        pz = 2000;
+        G4double        py = 1500;
+        G4double        pz = 1000;
         G4ThreeVector   inVector(px, py, pz);
         G4ThreeVector   outVector, aPosition(0., 0., 0.);
 
@@ -48,7 +49,7 @@
 
            for(G4int i1=1; i1<=2; i1+=5)
              {
-                 Momentum = i1*2500;
+                 Momentum = i1*5000;
                  Tkin     = sqrt(Momentum*Momentum+938.*938.)-938.;
 
                  inVector.setZ(Momentum);
@@ -57,13 +58,8 @@
 
 //    G4cout << " Tkin "<< Tkin <<endl;
 
-//***        G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl);
-
        G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
-                                  2000., 5000., 5,"test.dat");
-
-//       G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
-//                   "testnew.dat");
+                   "testnew.dat");
 
         G4cout <<  "  inMom befor " <<inVector.x()<<" " << 
 inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
@@ -83,20 +79,16 @@ inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
 
          G4cout  << " Direction Momentum " <<Mom<< endl;
 
-               for(G4int i2=1; i2<5; i2++)
+               for(G4int i2=1; i2<15; i2++)
                   {
 
-   G4cout<<" Before Applay "<<endl;
+//   G4cout<<" Before Applay "<<endl<<endl;
              aChange   = aElasticRandom.ApplyYourself(
                                     aTrack, aNucleus);
 
-//++++          Q2   = aElasticRandom.RandomElastic1(
-//++++                                  aParticle,  pNucl);
-   G4cout<<" After Apply "<<endl;
+//   G4cout<<endl<<" After Apply "<<endl;
 
-//++++   G4cout << " i2, Q2 "<<i2<<"  "<<Q2<<endl;   // For Random
-         
-                   outVector  =  aTrack.GetMomentum();
+/*                   outVector  =  aTrack.GetMomentum();
 
          G4double  outE       =  aTrack.GetTotalEnergy();
          G4double  outP       =  sqrt(outE*outE-938.*938.);
@@ -119,17 +111,17 @@ inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
   " outVector " <<  sqrt(pow(outVector.x()*outP,2)+
                          pow(outVector.y()*outP,2)+
                          pow(outVector.z()*outP,2))/1000
-   <<" Q2 " <<Q2<<endl<<endl;    
+   <<" Q2 " <<Q2<<endl<<endl;    */
 
-      G4cout<<" end cicle of Q2 "<< Q2<<endl;
                    }  //  i2
-      G4cout<<" end cicle of Momentum "<< Q2<<endl;
+       G4cout<<" end cicle of Q2 "<<endl;
+       aTrack.~G4Track();
                }      //  i1
  
-//     delete aParticle;
-//     delete aChange;
-//     delete aElasticRandom; 
-      G4cout<<" end befor return "<<endl;
+     aParticle->~G4DynamicParticle();
+//     ~aChange();
+//     ~aElasticRandom(); 
+
      return 0;
   }           
 

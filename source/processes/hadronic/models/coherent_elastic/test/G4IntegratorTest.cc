@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntegratorTest.cc,v 1.2 1999-12-15 14:52:14 gunter Exp $
+// $Id: G4IntegratorTest.cc,v 1.3 2000-12-11 08:35:44 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4Integrator class. The function exp(-x)*cos(x) is
@@ -70,7 +70,7 @@ void B::Integrand()
        //  <<"\t"<<"Trapezoidal"<<"\t"<<"MidPoint"<<"\t"<<"Gauss"
        //  <<"\t"<<"Simpson"
            <<"\t"<<"Legendre"<<"\t"<<"Legendre"
-           <<"\t"<<"Chebyshev"<<"\t"<<"Chebyshev"<<G4endl ;
+           <<"\t"<<"Chebyshev"<<"\t"<<"Chebyshev"<<endl ;
 
      for(i=1;i<=20;i++)
      {
@@ -92,9 +92,9 @@ void B::Integrand()
 	  //  <<"\t" <<trap<<"\t"<<mid<<"\t"<<gauss
 	  //  <<"\t"<<simp<<"\t"<<simpson1<<"\t"<<simpson2
               <<"\t"<<legendre1<<"\t"<<legendre2
-              <<"\t"<<chebyshev1<<"\t"<<chebyshev2<<G4endl ;
+              <<"\t"<<chebyshev1<<"\t"<<chebyshev2<<endl ;
      }
-     G4cout<<G4endl ;
+     G4cout<<endl ;
 
      for(i=0;i<8;i++)
      {
@@ -103,7 +103,7 @@ void B::Integrand()
        adaptg = integral.AdaptiveGauss(this,&B::TestFunction,a,b,pTolerance) ;
 
  
-       G4cout<<pTolerance<<"\t"<<adaptg<<G4endl;
+       G4cout<<pTolerance<<"\t"<<adaptg<<endl;
      }
    for(i=1;i<20;i++)
    {
@@ -112,7 +112,7 @@ void B::Integrand()
       G4double laguerre2 = integral.Laguerre(this,&B::CosFunction,0.0,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = 0.5 "
             <<"  and n-point GaussLaguerre =  "
-	    <<laguerre1<<"\t"<<laguerre2<<G4endl ;
+	    <<laguerre1<<"\t"<<laguerre2<<endl ;
    }
    for(i=1;i<20;i++)
    {
@@ -122,7 +122,7 @@ void B::Integrand()
       G4double hermite2 = integral.Hermite(this,&B::TestHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
             <<"  and n-point GaussHermite =  "
-	    <<hermite1<<"\t"<<hermite2<<G4endl ;
+	    <<hermite1<<"\t"<<hermite2<<endl ;
    }
    G4double exactJ = pi*0.4400505857 ;
 
@@ -133,7 +133,7 @@ void B::Integrand()
       G4double jacobi2 = integral.Jacobi(this,&B::CosFunction,0.5,0.5,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactJ
             <<"  and n-point Gauss-Jacobi =  "
-	    <<jacobi1<<"\t"<<jacobi2<<G4endl ;
+	    <<jacobi1<<"\t"<<jacobi2<<endl ;
    }
 }
 
@@ -150,9 +150,9 @@ int main()
    G4double b = twopi ;
    G4double simpson3,legendre,legendre10,legendre96,chebyshev ;
 
-   G4cout<<"Global function integration"<<G4endl ;
+   G4cout<<"Global function integration"<<endl ;
    G4cout<<"n = "<<"\t"<<"Simpson"<<"\t"
-                 <<"\t"<<"Legendre""\t"<<"Chebyshev"<<G4endl ;
+                 <<"\t"<<"Legendre""\t"<<"Chebyshev"<<endl ;
    for(i=1;i<=30;i++)
    {
      // n = (G4int)pow(2,i) ;
@@ -160,12 +160,12 @@ int main()
      simpson3 = iii.Simpson(&GlobalFunction,a,b,n) ;
      legendre = iii.Legendre(&GlobalFunction,a,b,n) ;
      chebyshev = iii.Chebyshev(&GlobalFunction,a,b,n) ;
-     G4cout<<n<<"\t"<<simpson3<<"\t"<<legendre<<"\t"<<chebyshev<<G4endl ;
+     G4cout<<n<<"\t"<<simpson3<<"\t"<<legendre<<"\t"<<chebyshev<<endl ;
    }
    legendre10 = iii.Legendre10(&GlobalFunction,a,b) ;
    legendre96 = iii.Legendre96(&GlobalFunction,a,b) ;
-   G4cout<<"Legendre 10 points = "<<"\t"<<legendre10<<G4endl ;
-   G4cout<<"Legendre 96 points = "<<"\t"<<legendre96<<G4endl ;
+   G4cout<<"Legendre 10 points = "<<"\t"<<legendre10<<endl ;
+   G4cout<<"Legendre 96 points = "<<"\t"<<legendre96<<endl ;
 
    for(i=0;i<8;i++)
    {
@@ -173,7 +173,7 @@ int main()
 
      G4double  adaptg = iii.AdaptiveGauss(&GlobalFunction,a,b,pTolerance) ;
 
-     G4cout<<pTolerance<<"\t"<<adaptg<<G4endl;
+     G4cout<<pTolerance<<"\t"<<adaptg<<endl;
    }
    for(i=1;i<20;i++)
    {
@@ -181,7 +181,7 @@ int main()
       G4double laguerre = iii.Laguerre(&GlobalCos,0.0,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = 0.5 "
             <<"  and n-point Laguerre =  "
-	    <<laguerre<<G4endl ;
+	    <<laguerre<<endl ;
    }
    for(i=1;i<20;i++)
    {
@@ -190,7 +190,7 @@ int main()
       G4double hermite = iii.Hermite(&GlobalHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
             <<"  and n-point Hermite =  "
-	    <<hermite<<G4endl ;
+	    <<hermite<<endl ;
    }
    G4double exactJ = pi*0.4400505857 ;
 
@@ -200,7 +200,7 @@ int main()
       G4double jacobi = iii.Jacobi(&GlobalCos,0.5,0.5,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactJ
             <<"  and n-point Jacobi =  "
-	    <<jacobi<<G4endl ;
+	    <<jacobi<<endl ;
    }
 
    return 0;
