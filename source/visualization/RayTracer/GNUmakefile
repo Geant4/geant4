@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2003-11-06 14:56:15 johna Exp $
+# $Id: GNUmakefile,v 1.7 2003-11-12 22:46:00 duns Exp $
 
 name := G4RayTracer
 
@@ -10,6 +10,7 @@ include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
+CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
