@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.39 2004-08-03 15:57:56 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.40 2005-02-19 22:05:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -980,6 +980,29 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String& updateName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
+
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  if (!sceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << updateName << "\"" <<
+	" has no scene handler - report serious bug."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4Scene* scene = sceneHandler->GetScene();
+  if (!scene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+	     << "\", to which viewer \"" << updateName << "\"" <<
+	"\n  is attached, has no scene - \"/vis/scene/create\" and"
+	"\"/vis/sceneHandler/attach\""
+	"\n  (or use compound command \"/vis/drawVolume\")."
+	     << G4endl;
+    }
+    return;
+  }
 
   if (viewer) {
     if (verbosity >= G4VisManager::confirmations) {
