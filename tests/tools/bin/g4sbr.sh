@@ -19,7 +19,12 @@ NONINCREMENTAL=$8
 if [ $ACTION != all -a $ACTION != build -a $ACTION != run ]; then
   export G4LARGE_N=$ACTION
   ACTION=run
+#s  ACTION=all
 fi
+
+#if [ $ACTION = all ]; then
+#export G4LARGE_N=large_N
+#fi
 
 if [ X$REFTREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
@@ -64,6 +69,9 @@ export G4NOHIST=1
 # Setup environment in $REFTREE
 ####################################################################
 echo "STT:SETUPEnvironment Complete"
+# cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
+# so we can use pwd to determine the value of $REFTREE.
+# . ${G4STTDIR}/bin/setup.sh (but this defines G4STTDIR).
 cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
 .  /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin/setup.sh
 
@@ -74,12 +82,12 @@ echo "STT:SETUPEnvironment Complete"
 ##########################
 # Check if INPROGRESS
 ##########################
-if [ -e $G4WORKDIR/inprogress.stat ]; then
+ if [ -e $G4WORKDIR/inprogress.stat ]; then
   echo "STT:ABORT inprogress.stat exists."
   cat $G4WORKDIR/inprogress.stat
   ls -l $G4WORKDIR/inprogress.stat
   exit 
-fi
+ fi
 
 ###########################################
 # Locks and stats
@@ -97,18 +105,9 @@ EOF
 echo "STT:SETUPDirectories Started"
 if [ X$NONINCREMENTAL = X ]
 then
-  cd ${G4WORKDIR}
-  sttlnk=`ls -l stt|cut -d ">" -f 2 | cut -d "." -f2`
-  if [ X${sttlnk} != X${REFTAG} ]; then
-    echo "STT:ABORT Incremental update requested on ${REFTAG} but symlink is to $sttlnk"
-    rm $G4WORKDIR/inprogress.stat  # simplify a re-start with corrected parameters.
-    exit
-  fi
   cd ${G4WORKDIR}/stt/${G4SYSTEM}
-  if [ -r gmake.log ]; then
-    NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
-    mv gmake.log gmake.log.${NEXT_NUMBER}
-  fi
+  NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
+  mv gmake.log gmake.log.${NEXT_NUMBER}
   echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
   echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
 else
@@ -116,7 +115,6 @@ else
   if [ -d stt.${REFTAG} ]
   then
     echo "STT:ABORT stt.${REFTAG} already exists."
-    rm $G4WORKDIR/inprogress.stat  # simplify a re-start with corrected parameters.
     exit
   fi
   echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
@@ -152,22 +150,22 @@ cd ${G4WORKDIR}
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
   . ${G4STTDIR}/bin/tmpenv.sh
-  ${G4STTDIR}/bin/geant4-unix.pl --start
+  ${G4STTDIR}/bin/geant4-unix.pl --start 0
   echo "STT:BUILD Started"
   ${G4STTDIR}/bin/build.sh $ACTARG1 $ACTARG2
   echo "STT:BUILD Finished"
-  ${G4STTDIR}/bin/geant4-unix.pl --end
+  ${G4STTDIR}/bin/geant4-unix.pl --end 0
     sleep 60
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test tests
+#  ${G4STTDIR}/bin/geant4-unix.pl --start-test tests
   echo "STT:RUN Started"
   . ${G4STTDIR}/bin/runlimit.sh
   ${G4STTDIR}/bin/run.sh $ACTARG3
   echo "STT:RUN Finished"
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test tests
+#  ${G4STTDIR}/bin/geant4-unix.pl --end-test tests
 fi
 ####################################################################
 
