@@ -12,7 +12,7 @@ class G4BCDecay : public G4BCAction
   
   virtual const std::vector<G4CollisionInitialState *> &
          GetCollisions(G4KineticTrack * aProjectile, 
-	               std::vector<G4KineticTrack *> & someCandidates,
+	               std::vector<G4KineticTrack *> & ,
 		       G4double theCurrentTime)
   {
     theColl.clear();
@@ -28,7 +28,7 @@ class G4BCDecay : public G4BCAction
   }
 
   virtual G4KineticTrackVector * GetFinalState(G4KineticTrack * aProjectile, 
-	                           std::vector<G4KineticTrack *> & theTargets)
+	                           std::vector<G4KineticTrack *> & )
   {
     return aProjectile->Decay();
   }
