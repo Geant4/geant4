@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.29 1999-07-06 15:19:42 gunter Exp $
+# $Id: binmake.gmk,v 1.30 1999-07-20 15:29:16 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -210,7 +210,7 @@ sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
-LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
+LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
 .PHONY: bin clean clean_bin debug
 

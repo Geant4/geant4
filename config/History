@@ -1,4 +1,4 @@
-$Id: History,v 1.50 1999-07-06 17:54:47 johna Exp $
+$Id: History,v 1.51 1999-07-20 15:29:14 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th July 1999  John Allison
+- Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
 
 6th July 1999  John Allison (config-01-00-10)
 - Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.
