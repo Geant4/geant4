@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.11 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.12 2005-03-03 16:42:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -33,6 +33,9 @@
 
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
+
+#include "G4Transform3D.hh"
+#include "G4VisAttributes.hh"
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -81,6 +84,26 @@ private:
   G4VisCommandSceneAddLogicalVolume (const G4VisCommandSceneAddLogicalVolume&);
   G4VisCommandSceneAddLogicalVolume& operator =
   (const G4VisCommandSceneAddLogicalVolume&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLogo: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLogo ();
+  virtual ~G4VisCommandSceneAddLogo ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLogo (const G4VisCommandSceneAddLogo&);
+  G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
+  class G4Logo {
+  public:
+    G4Logo(G4double height, const G4VisAttributes&);
+    void operator()(const G4Transform3D&);
+  private:
+    G4double fHeight;
+    G4VisAttributes fVisAtts;
+  };
   G4UIcommand* fpCommand;
 };
 

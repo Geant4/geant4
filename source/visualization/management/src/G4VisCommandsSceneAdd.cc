@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.45 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.46 2005-03-03 16:42:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -46,6 +46,8 @@
 #include "G4ApplicationState.hh"
 #include "G4VUserVisAction.hh"
 #include "G4CallbackModel.hh"
+#include "G4UnionSolid.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -116,8 +118,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String unitString;
   G4double x0, y0, z0, length;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
@@ -373,8 +374,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   G4bool booleans, voxels, readout;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> name >> requestedDepthOfDescent >>  booleans >> voxels >> readout;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -417,6 +417,314 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   UpdateVisManagerScene (currentSceneName);
 }
 
+
+////////////// /vis/scene/add/logo //////////////////////////////////
+
+G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/logo", this);
+  fpCommand -> SetGuidance 
+    ("Adds a G4 logo to the current scene.");
+  fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("height", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("direction", 's', omitable = true);
+  parameter->SetDefaultValue ("x");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
+  parameter->SetDefaultValue  ("auto");
+  parameter->SetGuidance
+    ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  fpCommand->SetParameter     (parameter);
+  parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("ymid", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("zmid", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLogo::~G4VisCommandSceneAddLogo () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLogo::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4double userHeight, red, green, blue, xmid, ymid, zmid;
+  G4String userHeightUnit, direction, auto_manual, positionUnit;
+  std::istrstream is (newValue);
+  is >> userHeight >> userHeightUnit >> direction
+     >> red >> green >> blue
+     >> auto_manual
+     >> xmid >> ymid >> zmid >> positionUnit;
+
+  G4double height = userHeight * G4UIcommand::ValueOf(userHeightUnit);
+  G4double unit = G4UIcommand::ValueOf(positionUnit);
+  xmid *= unit; ymid *= unit; zmid *= unit;
+
+  G4Scale::Direction logoDirection (G4Scale::x);
+  if (direction(0) == 'y') logoDirection = G4Scale::y;
+  if (direction(0) == 'z') logoDirection = G4Scale::z;
+
+  G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
+  // Parameters read and interpreted.
+
+  // Useful constants, etc...
+  const G4double halfHeight(height / 2.);
+  const G4double comfort(0.15);
+  const G4double onePlusComfort(1. + comfort);
+  const G4double freeHeightFraction (1. + 2. * comfort);
+
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  const G4double xmin = sceneExtent.GetXmin();
+  const G4double xmax = sceneExtent.GetXmax();
+  const G4double ymin = sceneExtent.GetYmin();
+  const G4double ymax = sceneExtent.GetYmax();
+  const G4double zmin = sceneExtent.GetZmin();
+  const G4double zmax = sceneExtent.GetZmax();
+
+  // Test existing extent and issue warnings...
+  G4bool worried(false);
+  if (sceneExtent.GetExtentRadius() == 0) {
+    worried = true;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: Existing scene does not yet have any extent."
+	"\n  Maybe you have not yet added any geometrical object."
+	     << G4endl;
+    }
+  }
+  // Test existing scene for room...
+  G4bool room (true);
+  switch (logoDirection) {
+  case G4Scale::x:
+    if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
+  case G4Scale::y:
+    if (freeHeightFraction * (ymax - ymin) < height) room = false; break;
+  case G4Scale::z:
+    if (freeHeightFraction * (zmax - zmin) < height) room = false; break;
+  }
+  if (!room) {
+    worried = true;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: Not enough room in existing scene.  Maybe logo is too large."
+	     << G4endl;
+    }
+  }
+  if (worried) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: The logo you have asked for is bigger than the existing"
+	"\n  scene.  Maybe you have added it too soon.  It is recommended that"
+	"\n  you add the logo last so that it can be correctly auto-positioned"
+	"\n  so as not to be obscured by any existing object and so that the"
+	"\n  view parameters can be correctly recalculated."
+	     << G4endl;
+    }
+  }
+
+  G4VisAttributes visAtts(G4Colour(red, green, blue));
+  visAtts.SetForceSolid(true);         // Always solid.
+
+  // Now figure out the extent...
+  //
+  // From the G4Scale.hh:
+  //
+  // This creates a representation of annotated line in the specified
+  // direction with tick marks at the end.  If autoPlacing is true it
+  // is required to be centred at the front, right, bottom corner of
+  // the world space, comfortably outside the existing bounding
+  // box/sphere so that existing objects do not obscure it.  Otherwise
+  // it is required to be drawn with mid-point at (xmid, ymid, zmid).
+  //
+  // The auto placing algorithm might be:
+  //   x = xmin + (1 + comfort) * (xmax - xmin)
+  //   y = ymin - comfort * (ymax - ymin)
+  //   z = zmin + (1 + comfort) * (zmax - zmin)
+  //   if direction == x then (x - length,y,z) to (x,y,z)
+  //   if direction == y then (x,y,z) to (x,y + length,z)
+  //   if direction == z then (x,y,z - length) to (x,y,z)
+  //
+  // End of clip from G4Scale.hh:
+
+  G4double sxmid(xmid), symid(ymid), szmid(zmid);
+  if (autoPlacing) {
+    sxmid = xmin + onePlusComfort * (xmax - xmin);
+    symid = ymin - comfort * (ymax - ymin);
+    szmid = zmin + onePlusComfort * (zmax - zmin);
+    switch (logoDirection) {
+    case G4Scale::x:
+      sxmid -= halfHeight;
+      break;
+    case G4Scale::y:
+      symid += halfHeight;
+      break;
+    case G4Scale::z:
+      szmid -= halfHeight;
+      break;
+    }
+  }
+  G4double sxmin(sxmid), sxmax(sxmid);
+  G4double symin(symid), symax(symid);
+  G4double szmin(szmid), szmax(szmid);
+  G4Transform3D transform;
+  switch (logoDirection) {
+  case G4Scale::x:
+    sxmin = sxmid - halfHeight;
+    sxmax = sxmid + halfHeight;
+    break;
+  case G4Scale::y:
+    symin = symid - halfHeight;
+    symax = symid + halfHeight;
+    transform = G4RotateZ3D(pi/2.);
+    break;
+  case G4Scale::z:
+    szmin = szmid - halfHeight;
+    szmax = szmid + halfHeight;
+    transform = G4RotateY3D(pi/2.);
+    break;
+  }
+  transform = G4Translate3D(sxmid,symid,szmid) * transform;
+
+  G4VModel* model = new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>
+    (new G4VisCommandSceneAddLogo::G4Logo(height,visAtts));
+  model->SetGlobalDescription("G4Logo");
+  model->SetGlobalTag("G4Logo");
+  model->SetTransformation(transform);
+  // Note: it is the responsibility of the model to act upon this, but
+  // the extent is in local coordinates...
+  G4double& h = height;
+  G4double h2 = h/2.;
+  G4VisExtent extent(-h,h,-h2,h2,-h2,h2);
+  model->SetExtent(extent);
+  // This extent gets "added" to existing scene extent in
+  // AddRunDurationModel below.
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "G4 Logo of height " << userHeight << ' ' << userHeightUnit
+	     << ", ";
+      switch (logoDirection) {
+      case G4Scale::x:
+	G4cout << 'x';
+	break;
+      case G4Scale::y:
+	G4cout << 'y';
+	break;
+      case G4Scale::z:
+	G4cout << 'z';
+	break;
+      }
+      G4cout << "-direction, added to scene \"" << currentSceneName << "\"";
+      if (verbosity >= G4VisManager::parameters) {
+	G4cout << "\n  with extent " << extent
+	       << "\n  at " << transform.getRotation()
+	       << transform.getTranslation();
+      }
+      G4cout << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddLogo::G4Logo::G4Logo
+(G4double height,const G4VisAttributes& visAtts):
+  fHeight(height),
+  fVisAtts(visAtts) {}
+
+void G4VisCommandSceneAddLogo::G4Logo::operator()
+  (const G4Transform3D& transform) {
+  const G4double& height = fHeight;
+  const G4double& h =  height;
+  const G4double h2  = 0.5 * h;   // Half height.
+  const G4double ri  = 0.25 * h;  // Inner radius.
+  const G4double ro  = 0.5 * h;   // Outer radius.
+  const G4double ro2 = 0.5 * ro;  // Half outer radius.
+  const G4double w   = ro - ri;   // Width.
+  const G4double w2  = 0.5 * w;   // Half width.
+  const G4double d2  = 0.2 * h;   // Half depth.
+  const G4double f1  = 0.05 * h;  // left edge of stem of "4".
+  const G4double f2  = -0.3 * h;  // bottom edge of cross of "4".
+  const G4double e = 1.e-4 * h;   // epsilon.
+  const G4double xt = f1, yt = h2;      // Top of slope.
+  const G4double xb = -h2, yb = f2 + w; // Bottom of slope.
+  const G4double dx = xt - xb, dy = yt - yb;
+  const G4double angle = atan2(dy,dx);
+  G4RotationMatrix rm;
+  rm.rotateZ(angle*rad);
+  const G4double d = sqrt(dx * dx + dy * dy);
+  const G4double s = h;  // Half height of square subtractor
+  const G4double y8 = s; // Choose y of subtractor for outer slope.
+  const G4double x8 = ((-s * d - dx * (yt - y8)) / dy) + xt;
+  G4double y9 = s; // Choose y of subtractor for inner slope.
+  G4double x9 = ((-(s - w) * d - dx * (yt - y8)) / dy) + xt;
+  // But to get inner, we make a triangle translated by...
+  const G4double xtr = s - f1, ytr = -s - f2 -w;
+  x9 += xtr; y9 += ytr;
+
+  // G...
+  G4Tubs logo1("logo1",ri,ro,d2,0.15*pi,1.85*pi);
+  G4Box  logo2("logo2",w2,ro2,d2);
+  G4UnionSolid logoG("logoG",&logo1,&logo2,G4Translate3D(ri+w2,-ro2,0.));
+  G4Transform3D transformG(transform * G4Translate3D(-1.1*ro,0.,0.));
+  fpVisManager->Draw(logoG,fVisAtts,transformG);
+
+  // 4...
+  G4Box logo3("logo3",h2,h2,d2);
+  G4Box logoS("logoS",s,s,d2+e);  // Subtractor.
+  G4SubtractionSolid logo5("logo5",&logo3,&logoS,
+			   G4Translate3D(f1-s,f2-s,0.));
+  G4SubtractionSolid logo6("logo6",&logo5,&logoS,
+			   G4Translate3D(f1+s+w,f2-s,0.));
+  G4SubtractionSolid logo7("logo7",&logo6,&logoS,
+			   G4Translate3D(f1+s+w,f2+s+w,0.));
+  G4SubtractionSolid logo8("logo8",&logo7,&logoS,
+			   G4Transform3D(rm,G4ThreeVector(x8,y8,0.)));
+  G4SubtractionSolid logo9("logo9",&logoS,&logoS,  // Triangular hole.
+			   G4Transform3D(rm,G4ThreeVector(x9,y9,0.)));
+  G4SubtractionSolid logo4("logo4",&logo8,&logo9,
+			   G4Translate3D(-xtr,-ytr,0.));
+  G4Transform3D transform4(transform * G4Translate3D(1.1*ro,0.,0.));
+  fpVisManager->Draw(logo4,fVisAtts,transform4);
+}
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
 
@@ -716,8 +1024,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String text, unitString;
   G4double x, y, z, font_size, x_offset, y_offset;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
@@ -790,8 +1097,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
 
   G4int drawingMode;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
@@ -875,8 +1181,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 
   G4String unitString;
   G4double xmin, xmax, ymin, ymax, zmin, zmax;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
   G4double unit = G4UIcommand::ValueOf(unitString);
   xmin *= unit; xmax *= unit;
@@ -896,6 +1201,8 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
   }
 
   G4VModel* model = new G4CallbackModel<G4VUserVisAction>(visAction);
+  model->SetGlobalDescription("Vis User Action");
+  model->SetGlobalTag("Vis User Action");
   model->SetExtent(extent);
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddRunDurationModel (model, warn);
@@ -965,8 +1272,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int copyNo;
   G4int requestedDepthOfDescent;
-  const char* s = newValue;
-  std::istrstream is ((char*)s);
+  std::istrstream is (newValue);
   is >> name >> copyNo >> requestedDepthOfDescent;
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
