@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2003-02-19 08:07:21 gcosmo Exp $
+$Id: History,v 1.23 2003-03-11 14:27:29 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 11th, 2003  M. Dressel - exbiasing-V05-00-01
+- changed the replica number of the world volume from -1 to 0
+- Initialze() of the G4RunManager is now called after all Materials
+  and volumes (also in the parallel geometry) are built.
+
 
 Feb 19th, 2003  G.Cosmo - exbiasing-V05-00-00
 - removed redundant inclusion of PhysicalConstants.h.
