@@ -16,13 +16,10 @@
 ################################################################################
 #
 #
-# NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
-# NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
-#
-/run/filename test18.out
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
+/process/verbose 0
 /grdm/verbose 0
 #
 #

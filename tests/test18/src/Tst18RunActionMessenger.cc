@@ -29,19 +29,19 @@
 Tst18RunActionMessenger::Tst18RunActionMessenger(Tst18RunAction* run)
 :Tst18Run(run)
 { 
-  FileCmd = new G4UIcmdWithAString("/run/filename",this);
-  FileCmd->SetGuidance(" The log file name for the run");
-  FileCmd->SetGuidance("   default = rdmex2.log ");
-  FileCmd->SetParameterName(" Input ",true);
-  FileCmd->SetDefaultValue("rdmex2.log");
-  FileCmd->AvailableForStates(Idle);
+  //FileCmd = new G4UIcmdWithAString("/run/filename",this);
+  //FileCmd->SetGuidance(" The log file name for the run");
+  //FileCmd->SetGuidance("   default = rdmex2.log ");
+  //FileCmd->SetParameterName(" Input ",true);
+  //FileCmd->SetDefaultValue("rdmex2.log");
+  //FileCmd->AvailableForStates(Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18RunActionMessenger::~Tst18RunActionMessenger()
 {
-  delete FileCmd;
+  //delete FileCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

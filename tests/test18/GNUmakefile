@@ -1,23 +1,21 @@
-# $Id: GNUmakefile,v 1.1 2000-05-23 06:30:15 stesting Exp $
-# --------------------------------------------------------
-# GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
-# --------------------------------------------------------
+# $Id: GNUmakefile,v 1.2 2000-06-14 12:33:01 flei Exp $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
 
 name := test18
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL = ../../../../../../..
 endif
 
-.PHONY: all tools
-
-tools:
-	cd ../tools/lib; $(MAKE)
-	$(MAKE) all
-
+.PHONY: all
 all: lib bin
+
+CPPFLAGS +=-I$(G4INSTALL)/source/processes/hadronic/models/radiative_decay/include
+EXTRALIBS +=-lG4hadronic_radioactivedecay
 
 include $(G4INSTALL)/config/binmake.gmk
 

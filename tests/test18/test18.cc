@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test18.cc,v 1.3 2000-06-06 12:15:05 flei Exp $
+// $Id: test18.cc,v 1.4 2000-06-14 12:33:01 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,9 @@
 #include "G4UImanager.hh"
 #include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
-#include "G4UIXm.hh" 
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif 
 
 #include "Tst18GeometryConstruction.hh"
 #include "Tst18PhysicsList.hh"
@@ -35,7 +37,7 @@
 #include "Randomize.hh"
 
 #include "g4std/vector"
-//G4String filename;
+
 G4bool drawEvent;
 G4std::vector<G4String> Particles;
 G4std::vector<G4double> Energies;
@@ -48,9 +50,6 @@ G4std::vector<G4double> Times;
 
 int main(int argc,char** argv)
 {
-
-  //  G4cout << " The results file name = "<<G4endl ;
-  //G4cin >> filename;
 
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
@@ -78,9 +77,10 @@ int main(int argc,char** argv)
   // get the pointer to the User Interface manager 
     
       G4UImanager* UI = G4UImanager::GetUIpointer();  
-      UI->ApplyCommand("/run/verbose 1");
-      UI->ApplyCommand("/event/verbose 2");
-      UI->ApplyCommand("/tracking/verbose 1");           
+      UI->ApplyCommand("/run/verbose 0");
+      UI->ApplyCommand("/event/verbose 0");
+      UI->ApplyCommand("/tracking/verbose 0");           
+      UI->ApplyCommand("/process/verbose 0");           
       if (argc==1) {
 	//     	G4UIsession * session = new G4UIGAG;
      	G4UIsession * session = new G4UIterminal;

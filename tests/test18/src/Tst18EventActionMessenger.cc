@@ -17,7 +17,7 @@
 // 16 August 1999, F Lei, DERA UK
 // Adapted from a verson by Bill Lockman, SLAC, to whom all credits go:
 //
-// $Id: Tst18EventActionMessenger.cc,v 1.3 2000-06-06 12:15:08 flei Exp $
+// $Id: Tst18EventActionMessenger.cc,v 1.4 2000-06-14 12:33:20 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18RunAction.cc,v 1.3 2000-06-06 12:15:10 flei Exp $
+// $Id: Tst18RunAction.cc,v 1.4 2000-06-14 12:33:21 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,11 +79,12 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
   
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
-  ofstream outscat(fileName, ios::app);
+  //  ofstream outscat(fileName, ios::app);
 
   for (G4int i=0; i<Particles.size();i++) {
 
-    outscat 
+    //    outscat 
+    G4cout
       << G4std::setiosflags(ios::fixed)
       << G4std::setprecision(3)
       << G4std::setiosflags(ios::right)
@@ -100,8 +101,9 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
       << Particles[i]
       << G4endl ;    
   }
-  outscat << G4endl;
-  outscat.close();
+  G4cout<< G4endl;
+  //  outscat << G4endl;
+  //outscat.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
