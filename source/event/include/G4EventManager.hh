@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.14 2004-05-26 17:08:33 asaim Exp $
+// $Id: G4EventManager.hh,v 1.15 2004-08-10 23:59:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -196,6 +196,12 @@ class G4EventManager
       // Set and get method of G4VUserEventInformation object associating with
       // the current event. Both methods are valid only for G4State_EventProc
       // application state.
+
+      inline G4PrimaryTransformer* GetPrimaryTransformer() const
+      { return transformer; }
+      inline void SetPrimaryTransformer(G4PrimaryTransformer* tf)
+      { transformer = tf; }
+      
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.7 2004-07-07 15:01:15 asaim Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.8 2004-08-10 23:59:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,35 +45,35 @@ class G4PrimaryTransformer
 {
   public:
     G4PrimaryTransformer();
-    ~G4PrimaryTransformer();
+    virtual ~G4PrimaryTransformer();
     
     G4TrackVector* GimmePrimaries(G4Event* anEvent, G4int trackIDCounter=0);
+    void CheckUnknown();
 
-  private:
+  protected:
     G4TrackVector TV;
     G4ParticleTable* particleTable;
     G4int verboseLevel;
     G4int trackID;
 
-    G4bool unknownParticleDefined;
     G4ParticleDefinition* unknown;
+    G4bool unknownParticleDefined;
 
   public:
     inline void SetVerboseLevel(G4int vl)
     { verboseLevel = vl; };
 
-  private:
+  protected:
     void GenerateTracks(G4PrimaryVertex* primaryVertex);
     void GenerateSingleTrack(G4PrimaryParticle* primaryParticle,
               G4double x0,G4double y0,G4double z0,G4double t0,G4double wv);
     void SetDecayProducts(G4PrimaryParticle* mother,
                             G4DynamicParticle* motherDP);
-    inline G4ParticleDefinition* GetDefinition(G4PrimaryParticle*pp)
-    { 
-      G4ParticleDefinition* partDef = pp->GetG4code();
-      if(!partDef) partDef = particleTable->FindParticle(pp->GetPDGcode());
-      return partDef;
-    };
+  protected: //with description
+    virtual G4ParticleDefinition* GetDefinition(G4PrimaryParticle*pp);
+    // virtual method to be overwritten. Return appropriate G4ParticleDefinition
+    // w.r.t. the primary particle. If NULL is return, the particle will not be
+    // treated as a track, but its daughters will be examined.
 };
 
 #endif
