@@ -8,7 +8,13 @@
 //#include <STEPentity.h>
 #include <Registry.h>
 
-class STEPcomplex : public SCLP23(Application_instance) {
+class STEPcomplex : public
+#ifndef WIN32
+ SCLP23(Application_instance)
+#else
+ SDAI::Application_instance
+#endif
+{
   public:
     STEPcomplex * sc;
     STEPcomplex * head;
