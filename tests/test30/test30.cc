@@ -54,6 +54,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
+#include "G4HadronInelasticDataSet.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -499,10 +500,12 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(part == proton) {
+    if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4ProtonInelasticCrossSection();
-    } else if(part == neutron) {
+    } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4NeutronInelasticCrossSection();
+    } else {
+      cs = new G4HadronInelasticDataSet();
     }
 
     if(cs) {
