@@ -53,6 +53,7 @@ public: // Without description
     void setEventVerbose(G4int level);
     
     void CountStepsCharged(G4double step) ;
+    G4double TrackLength() const {return totLAbs;} ;
     void CountStepsNeutral() ;
     void AddCharged() ;
     void AddNeutral() ;

@@ -46,7 +46,7 @@ Test17RunAction::Test17RunAction():
    theElectron (G4Electron::Electron()),
    nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
-   nbinvertexz(0)
+   nbinvertexz(0),part0(0)
 {
   //runMessenger = new Test17RunMessenger(this);
 
@@ -133,6 +133,7 @@ void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
   nStepSumNeutral = 0. ;
   nStepSum2Neutral= 0. ;
   TotNbofEvents = 0. ;
+  TotNbofEvents0 = 0. ;
   SumCharged=0.;
   SumNeutral=0.;
   Sum2Charged=0.;
@@ -280,9 +281,9 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
   else
     sAbs = 0. ;
   
-  EnergySumAbs /= TotNbofEvents ;
-  sigAbs = EnergySquareSumAbs/TotNbofEvents-EnergySumAbs*EnergySumAbs;
-  if(sigAbs>0.) sigAbs = sqrt(sigAbs/TotNbofEvents);
+  EnergySumAbs /= TotNbofEvents0 ;
+  sigAbs = EnergySquareSumAbs/TotNbofEvents0-EnergySumAbs*EnergySumAbs;
+  if(sigAbs>0.) sigAbs = sqrt(sigAbs/TotNbofEvents0);
   else          sigAbs = 0.;
 
   nStepSumCharged /= TotNbofEvents ;
@@ -291,8 +292,8 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
   else           sigstep = 0.;
   
 
-  Transmitted /=TotNbofEvents ;
-  Reflected   /=TotNbofEvents ;
+  Transmitted /=TotNbofEvents0 ;
+  Reflected   /=TotNbofEvents0 ;
 
   G4bool   icru  = false;
   G4double protL, protR;
@@ -303,23 +304,25 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
     protR = 0.008869*mm;
   }
 
-  if(abs(kinEnergy0 - MeV)<0.1*keV && part0 == G4PionMinus::PionMinus()) { 
+  if(abs(kinEnergy0 - MeV)<0.1*keV && part0->GetParticleName() == "pi-") { 
     icru  = true;
-    protL = 0.009158*mm*0.9059/0.8869;
-    protR = 0.009158*mm;
+    protL = 0.009158*cm*0.9059/0.8869;
+    protR = 0.009158*cm;
   }
 
 
   G4cout << " ================== run summary =====================" << G4endl;
+  G4cout << G4endl;
   G4int prec = G4cout.precision(6);
-  G4cout << " end of Run TotNbofEvents = " <<  
-           TotNbofEvents << G4endl ;
+  G4cout << " end of Run TotNbofEvents = " <<  TotNbofEvents 
+         << " for " << part0->GetParticleName() 
+         << " with Ekin = " << kinEnergy0/MeV << " MeV" << G4endl ;
   G4cout << "    Track Length in absorber = " <<
-          tlSumAbs/mm      << " +- " << sAbs/mm    <<
-          "  mm  " << G4endl; 
+          tlSumAbs/micrometer     << " +- " << sAbs/micrometer   <<
+          "  microns " << G4endl; 
   G4cout << "    CSDA  Range  in absorber = " <<
-          nStepSumCharged/mm      << " +- " << sigstep/mm    <<
-          "  mm  " << G4endl; 
+          nStepSumCharged/micrometer     << " +- " << sigstep/micrometer   <<
+          "  microns " << G4endl; 
   G4cout << G4endl;
   G4cout << "    Energy deposit in absorber = " <<
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
@@ -328,14 +331,14 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
 
   if(icru) {
     G4cout << "### Comparison with the ICRU49 data: " << G4endl;
-    G4cout << "    Track Length (G4/ICRU49 - 1) = " 
-           << 100.0*(tlSumAbs/protL - 1.0)
-           << " +- " << 100.0*sAbs/tlSumAbs  
-           << " % " << G4endl; 
-    G4cout << "    CSDA  Range  (G4/ICRU49 - 1) = " 
-           << 100.0*(nStepSumCharged/protR - 1.0) 
-           << " +- " << 100.0*sigstep/nStepSumCharged  
-           << " % " << G4endl;
+    G4cout << "    Track Length (G4 - ICRU49) = " 
+           << (tlSumAbs - protL)/micrometer
+           << " +- " << sAbs/micrometer
+           << " microns " << G4endl; 
+    G4cout << "    CSDA  Range  (G4 - ICRU49) = " 
+           << (nStepSumCharged - protR)/micrometer 
+           << " +- " << sigstep/micrometer
+           << " microns " << G4endl;
     G4cout << G4endl ;
   }
 
@@ -397,7 +400,9 @@ void Test17RunAction::AddTrRef(G4double tr,G4double ref)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::FillNbOfSteps(G4double)
-{}
+{
+  TotNbofEvents0 += 1. ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

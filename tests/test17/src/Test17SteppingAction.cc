@@ -71,12 +71,12 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
           100000000*(aStep->GetTrack()->GetParentID()); 
 
-  Tkin  = aStep->GetTrack()->GetKineticEnergy() ; 
-  Edep  = aStep->GetDeltaEnergy() ;         
-  Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-  xend  = aStep->GetTrack()->GetPosition().x()/mm ;
+  Tkin  = aStep->GetTrack()->GetKineticEnergy(); 
+  Edep  = aStep->GetDeltaEnergy();         
+  Theta = acos(aStep->GetTrack()->GetMomentumDirection().x());
+  xend  = aStep->GetPostStepPoint()->GetPosition().x()/mm;
 
-  eventaction->AddE(abs(Edep)) ;
+  eventaction->AddE(abs(Edep));
 
   // new particle
   if(IDnow != IDold) {
@@ -88,6 +88,7 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
     }
 
     // primary
+    prim = false;
     if(0 == aStep->GetTrack()->GetParentID() ) {
       runaction->SaveToTuple("TKIN",Tsec/MeV);      
       runaction->SaveToTuple("MASS",(aStep->GetTrack()->
@@ -115,32 +116,33 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 
     // Primary 
-  if(0 == aStep->GetTrack()->GetParentID() ) {
+  if( prim ) {
     eventaction->CountStepsCharged(aStep->GetStepLength()) ;
 
     // Stopping or end of track (only once per event)
-    if(prim  && (0.0 == Tkin || 0.0 >= xend || xend >= 100.0)) {
+    if(0.0 == Tkin || 0.0 > xend || xend >= 100.0*mm) {
 
-      if(0.0 >= xend) {
+      if(0.5*(eventaction->TrackLength()) > xend) {
         eventaction->SetRef();
 
       } else {
-        yend= aStep->GetTrack()->GetPosition().y()/mm ;
-        zend= aStep->GetTrack()->GetPosition().z()/mm ;
-        runaction->SaveToTuple("XEND",xend,1000.0);      
-        runaction->SaveToTuple("YEND",yend,1000.0);      
-        runaction->SaveToTuple("ZEND",zend,1000.0);      
-        runaction->SaveToTuple("TEND",Tkin/MeV,1000.0);
-        runaction->SaveToTuple("TET",Theta/deg,1000.0);      
+        runaction->CountEvent() ;
         runaction->AddnStepsCharged(xend) ;
       }
+      yend= aStep->GetPostStepPoint()->GetPosition().y()/mm ;
+      zend= aStep->GetPostStepPoint()->GetPosition().z()/mm ;
+      runaction->SaveToTuple("XEND",xend,1000.0);      
+      runaction->SaveToTuple("YEND",yend,1000.0);      
+      runaction->SaveToTuple("ZEND",zend,1000.0);      
+      runaction->SaveToTuple("TEND",Tkin/MeV,1000.0);
+      runaction->SaveToTuple("TET",Theta/deg,1000.0);      
       prim = false;
     }
 
   //secondary
   } else {
 
-    if (0.0 >= xend || xend >= 100.0) {
+    if (0.0 >= xend || xend >= 100.0*mm) {
 
       // charged secondaries forward
       if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -157,7 +159,6 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   	 // charged secondaries backword
         } else {
-            eventaction->SetRef();
             Thetaback = pi - Theta ;
             runaction->FillThBack(Thetaback) ;
             runaction->FillTb(Tsec) ;

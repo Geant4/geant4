@@ -195,11 +195,12 @@ Cut in energy
    Graphite                         1.38 keV           128 keV
    Air                            1 eV          4.02 eV
 ===================================================
-#
-# Macro file for the initialization phase of "test17" based on "TestEm6.cc"
-#
-# It creates the default geometry (simple absorber cylinder )        
-#
+#====================================================
+# Macro file for the initialization phase of "test17" 
+# It provides the tests of ranges of hadrons 
+#    Created:   
+#    Modified:  13.07.01 V.Ivanchenko
+#====================================================
 /event/setverbose 0
 /tracking/verbose 0
 #
@@ -211,30 +212,32 @@ Cut in energy
 /run/beamOn 10000
 ### Run 0 start.
  ================== run summary =====================
- end of Run TotNbofEvents = 10000
-    Track Length in absorber = 0.0092218 +- 2.11912e-06  mm  
-    CSDA  Range  in absorber = 0.00901288 +- 2.19775e-06  mm  
+
+ end of Run TotNbofEvents = 9999 for proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.2218 +- 0.00211933  microns 
+    CSDA  Range  in absorber = 9.01343 +- 0.00212777  microns 
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4/ICRU49 - 1) = 1.79709 +- 0.0229794 % 
-    CSDA  Range  (G4/ICRU49 - 1) = 1.62228 +- 0.0243846 % 
+    Track Length (G4 - ICRU49) = 0.162796 +- 0.00211933 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.144431 +- 0.00212777 microns 
 
-(number) transmission coeff=0  reflection coeff=0
+(number) transmission coeff=0  reflection coeff=0.0001
 
 #
 /gun/particle anti_proton
 /run/beamOn 10000
 ### Run 1 start.
  ================== run summary =====================
- end of Run TotNbofEvents = 9998
-    Track Length in absorber = 0.00977141 +- 2.36036e-06  mm  
-    CSDA  Range  in absorber = 0.00926065 +- 3.01497e-06  mm  
 
-    Energy deposit in absorber = 0.5 +- 0  MeV 
+ end of Run TotNbofEvents = 9992 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.58595 +- 0.00217148  microns 
+    CSDA  Range  in absorber = 9.26391 +- 0.00270311  microns 
 
-(number) transmission coeff=0  reflection coeff=0
+    Energy deposit in absorber = 0.500052 +- 3.66622e-05  MeV 
+
+(number) transmission coeff=0.0002  reflection coeff=0.0008
 
 
 #scaled energy
@@ -243,11 +246,12 @@ Cut in energy
 /run/beamOn 10000
 ### Run 2 start.
  ================== run summary =====================
- end of Run TotNbofEvents = 10000
-    Track Length in absorber = 0.0090785 +- 2.90282e-06  mm  
-    CSDA  Range  in absorber = 0.00838003 +- 1.81704e-06  mm  
+
+ end of Run TotNbofEvents = 9998 for IonC12 with Ekin = 6 MeV
+    Track Length in absorber = 8.57354 +- 0.00150459  microns 
+    CSDA  Range  in absorber = 8.38128 +- 0.00156116  microns 
 
     Energy deposit in absorber = 6 +- 0  MeV 
 
-(number) transmission coeff=0  reflection coeff=0
+(number) transmission coeff=0  reflection coeff=0.0002
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test17PrimaryGeneratorAction.cc,v 1.2 2001-07-11 10:10:09 gunter Exp $
+// $Id: Test17PrimaryGeneratorAction.cc,v 1.3 2001-07-20 12:37:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test17PrimaryGeneratorAction::Test17PrimaryGeneratorAction(
-                                            Test17DetectorConstruction* Test17DC)
+                              Test17DetectorConstruction* Test17DC)
 :Test17Detector(Test17DC)
 {
   G4int n_particle = 1;

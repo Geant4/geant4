@@ -143,6 +143,7 @@ public: // Without description
     G4double nStepSumCharged,nStepSum2Charged ;
     G4double nStepSumNeutral,nStepSum2Neutral ;
     G4double TotNbofEvents;
+    G4double TotNbofEvents0;
     G4double SumCharged,Sum2Charged,SumNeutral,Sum2Neutral;
     G4double Selectron,Spositron;
 

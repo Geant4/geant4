@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-07-13 12:55:28 vnivanch Exp $
+$Id: History,v 1.18 2001-07-20 12:38:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 July 2001  V.I.  
+20 July 2001  V.I.  
              -update reference output: CSDA ranges + comparison
               proton ranges with the ICRU49 data
 
