@@ -126,17 +126,15 @@ case "$g4vis_use_raytracer" in
 	;;
 esac
 
-# Set by default!
-case "$g4vis_build_vrmlfile_driver" in
+case "$g4vis_build_vrml_driver" in
 '')
-	g4vis_build_vrmlfile_driver=y
+	g4vis_build_vrml_driver=n
 	;;
 esac
 
-# Set by default!
-case "$g4vis_use_vrmlfile" in
+case "$g4vis_use_vrml" in
 '')
-	g4vis_use_vrmlfile=y
+	g4vis_use_vrml=n
 	;;
 esac
 
@@ -566,3 +564,4 @@ gans=y
 
 ;;
 esac
+

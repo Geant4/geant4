@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.6 2001-12-12 21:23:35 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.7 2001-12-13 21:16:39 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.6  2001/12/12 21:23:35  sadilov
+?RCS: Move UU in .config
+?RCS:
 ?RCS: Revision 1.5  2001/12/12 17:16:48  sadilov
 ?RCS: Check existence 'hints' directory before using it.
 ?RCS:
@@ -925,3 +928,4 @@ none)  osvers='' ;;
 esac
 
 @end
+
