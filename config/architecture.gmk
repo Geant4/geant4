@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.14 1999-05-08 01:24:46 gcosmo Exp $
+# $Id: architecture.gmk,v 1.15 1999-05-08 01:52:50 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -534,12 +534,12 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
   ifdef G4USE_STL
-#    CPPFLAGS += -DG4USE_OLDSTL
+    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
     CXXFLAGS += -nostdnew
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers -I$(OSPACEDIR) $(OSPACEINC)
+    CPPFLAGS += -I$(OSPACEDIR) $(OSPACEINC)
   endif
 endif
 
