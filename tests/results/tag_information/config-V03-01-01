@@ -1,7 +1,0 @@
-			config-V03-01-01
-			================
-
-Added options "-Wall -ansi -pedantic" to
-Linux-g++ setup. 
-
-See "problem" part (a lot of warnings!)
