@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.hh,v 1.2 1999-04-13 01:26:25 yhajime Exp $
+// $Id: G4UIterminal.hh,v 1.3 1999-11-08 04:11:12 masayasu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,17 +16,31 @@
 #include "G4UImanager.hh"
 #include <fstream.h>
 
+// class description:
+//
+// This class inherits the class G4UIsession.
+// This is the class to use a character-terminal sesion.
+
 class G4UIterminal : public G4VBasicShell
 {
-  public:
+      public: // with description
       G4UIterminal();
       ~G4UIterminal();
 
       G4UIsession * SessionStart();
+      // A character-terminal session  "terminalSession" is instantiated.
+      // G4cout stream is redirected by default to the constructed instance.
+      // Usage:  G4UIsession * terminalSession = new G4UIterminal;
+      // "terminalSession" is started.
+      // Usage: terminalSession->SessionStart();
+      // "terminalSession"  is deleted.
+      // Usage: delete terminalSession;
+      //
       void PauseSessionStart(G4String);
       G4int ReceiveG4cout(G4String coutString);
       G4int ReceiveG4cerr(G4String cerrString);
-
+      // These methods are implementation of corresponding virtual methods
+      // of G4UIsession class.
   private:
       G4UImanager * UI;
       G4String promptCharacter;
