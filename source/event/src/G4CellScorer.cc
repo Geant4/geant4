@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorer.cc,v 1.2 2002-11-23 12:30:40 dressel Exp $
+// $Id: G4CellScorer.cc,v 1.3 2003-04-29 07:05:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ void G4CellScorer::ScoreAnInVolumeStep(const G4Step &aStep,
 
 }
 
-void G4CellScorer::ScorePopulation(const G4GeometryCell &post_gCell, 
+void G4CellScorer::ScorePopulation(const G4GeometryCell &, 
 				   const G4Step &aStep) {
   //    check for new event
   fTrackLogger.SetEventID(G4EventManager::GetEventManager()->
