@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.19 2003-05-09 17:15:58 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.20 2003-05-09 17:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -256,5 +256,6 @@ void BrachyDetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
     PrintDetectorParameters();
   } 
   else
-    G4cout << "that's not avaiable!" << G4endl;            
+    G4cout << "WARNING: material '" << materialChoice
+           << "' not available!" << G4endl;            
 }
