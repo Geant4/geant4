@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.8 2002-10-24 15:17:55 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.9 2002-11-11 18:22:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,20 +34,6 @@
 #define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4ModelingParameters;
 
 class G4XXXSceneHandler: public G4VSceneHandler {
 
