@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8XrayTRmodel.cc,v 1.2 2000-03-02 10:55:36 grichine Exp $
+// $Id: Em8XrayTRmodel.cc,v 1.3 2000-04-06 14:40:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,13 +23,40 @@
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
 
+// Initialization of local constants
+
+G4double Em8XrayTRmodel::fTheMinEnergyTR   =    1.0*keV  ;
+G4double Em8XrayTRmodel::fTheMaxEnergyTR   =  100.0*keV  ;
+G4double Em8XrayTRmodel::fTheMaxAngle    =      1.0e-3   ;
+G4double Em8XrayTRmodel::fTheMinAngle    =      5.0e-6   ;
+G4int    Em8XrayTRmodel::fBinTR            =   50        ;
+
+G4double Em8XrayTRmodel::fMinProtonTkin = 100.0*GeV  ;
+G4double Em8XrayTRmodel::fMaxProtonTkin = 100.0*TeV  ;
+G4int    Em8XrayTRmodel::fTotBin        =  50        ;
+// Proton energy vector initialization
+
+G4PhysicsLogVector* Em8XrayTRmodel::
+fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+                                             fMaxProtonTkin,
+                                                    fTotBin  ) ;
+
+G4double Em8XrayTRmodel::fPlasmaCof = 4.0*pi*fine_structure_const*
+                                       hbarc*hbarc*hbarc/electron_mass_c2 ;
+
+G4double Em8XrayTRmodel::fCofTR     = fine_structure_const/pi ;
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Constructor, destructor
 
 Em8XrayTRmodel::Em8XrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
-  G4VFastSimulationModel("Em8XrayTRmodel",anEnvelope), 
-  G4ForwardXrayTR("Em8XrayTRmodel")
+  G4VFastSimulationModel("Em8XrayTRmodel",anEnvelope)
+  // ,   G4ForwardXrayTR("Em8XrayTRmodel")
 {
   fPlateNumber = anEnvelope->GetNoDaughters() ;
   G4cout<<"the number of TR radiator plates = "<<fPlateNumber<<G4endl ;
@@ -52,6 +79,7 @@ Em8XrayTRmodel::Em8XrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
 
   fSigma1 = fPlasmaCof*anEnvelope->GetDaughter(0)->GetLogicalVolume()->
                            GetMaterial()->GetElectronDensity()  ;
+  //  fSigma1 = (20.9*eV)*(20.9*eV) ;
   G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
 
   // plasma energy squared for gas material
@@ -605,6 +633,7 @@ Em8XrayTRmodel::OneBoundaryXTRNdensity( G4double energy,G4double gamma,
 void Em8XrayTRmodel::BuildTable() 
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
+  G4double radiatorCof = 0.5 ;
 
   // fAngleDistrTable  = new G4PhysicsTable(fTotBin) ;
   fEnergyDistrTable = new G4PhysicsTable(fTotBin) ;
@@ -630,9 +659,9 @@ void Em8XrayTRmodel::BuildTable()
      fGamma = 1.0 + (fProtonEnergyVector->
                             GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
 
-     fMaxThetaTR = 10000.0/(fGamma*fGamma) ;  // theta^2
+     fMaxThetaTR = 25.0/(fGamma*fGamma) ;  // theta^2
 
-     fTheMinAngle = 1.0e-4 ;
+     fTheMinAngle = 1.0e-6 ; // was 5.e-6, e-5, e-4
  
      if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle ; 
      else
@@ -652,7 +681,7 @@ void Em8XrayTRmodel::BuildTable()
 
      for(iTR=fBinTR-2;iTR>=0;iTR--)
      {
-        energySum += fCofTR*integral.Legendre10(this,
+        energySum += radiatorCof*fCofTR*integral.Legendre10(this,
                      &Em8XrayTRmodel::XTRNSpectralDensity, 
                      energyVector->GetLowEdgeEnergy(iTR),
                      energyVector->GetLowEdgeEnergy(iTR+1) ) ; 

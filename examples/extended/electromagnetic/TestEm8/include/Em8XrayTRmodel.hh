@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8XrayTRmodel.hh,v 1.1 2000-02-09 10:46:42 grichine Exp $
+// $Id: Em8XrayTRmodel.hh,v 1.2 2000-04-06 14:39:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,10 +24,18 @@
 #ifndef Em8XrayTRmodel_h
 #define Em8XrayTRmodel_h 1
 
-#include "G4VFastSimulationModel.hh"
-#include "G4ForwardXrayTR.hh"
 
-class Em8XrayTRmodel : public G4VFastSimulationModel, public G4ForwardXrayTR
+#include "globals.hh"
+#include "templates.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsLogVector.hh"
+#include "G4Gamma.hh"
+
+#include "G4VFastSimulationModel.hh"
+// #include "G4ForwardXrayTR.hh"
+
+class Em8XrayTRmodel : public G4VFastSimulationModel
+// , public G4ForwardXrayTR
 {
 public:
 
@@ -86,6 +94,40 @@ public:
 
 protected:
 
+  G4Gamma* fPtrGamma ;  // pointer to TR photon
+
+  G4double* fGammaCutInKineticEnergy ; // TR photon cut in energy array
+  G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
+
+  G4PhysicsTable* fAngleDistrTable ;
+  G4PhysicsTable* fEnergyDistrTable ;
+
+  static G4PhysicsLogVector* fProtonEnergyVector ;
+
+
+  static G4double fTheMinEnergyTR ;            //  static min TR energy
+  static G4double fTheMaxEnergyTR ;            //  static max TR energy
+         G4double fMinEnergyTR ;               //  min TR energy in material
+         G4double fMaxEnergyTR ;               //  max TR energy in material
+  static G4double  fTheMaxAngle ;               //  max theta of TR quanta
+  static G4double  fTheMinAngle ;               //  max theta of TR quanta
+         G4double  fMaxThetaTR ;               //  max theta of TR quanta
+  static G4int          fBinTR ;               //  number of bins in TR vectors
+
+  static G4double fMinProtonTkin ;             // min Tkin of proton in tables
+  static G4double fMaxProtonTkin ;             // max Tkin of proton in tables
+  static G4int    fTotBin        ;             // number of bins in log scale
+         G4double fGamma         ;             // current Lorentz factor
+         G4double fEnergy ;                    // energy and
+         G4double fVarAngle ;                  // angle squared
+
+  static G4double fPlasmaCof ;               // physical consts for plasma energy
+  static G4double fCofTR ;
+
+  G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
+
+  G4int fMatIndex1, fMatIndex2 ;
+
   G4int fPlateNumber ;
 
   G4double** fPlatePhotoAbsCof ;
@@ -100,3 +142,16 @@ protected:
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
