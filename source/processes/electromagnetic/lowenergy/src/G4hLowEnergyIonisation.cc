@@ -709,7 +709,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
     theModel = theAntiProtonModel ;
   } else { 
     theModel = theProtonModel ;
-    // goldenRule = AntiProtonGoldenRule(kinetic) ;
+    // goldenRule = AntiProtonGoldenRule(kineticEnergy) ;
   }
 
     // Free Electron Gas Model is not used for antiprotons  
@@ -720,9 +720,10 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
     // Parametrisation using golden rule for antiprotons
   } else {
     eloss = theModel->TheValue(theAntiProton, material, kineticEnergy) ;
-    //    eloss = goldenRule 
-    //          * (theModel->TheValue(theAntiProton, material, kineticEnergy) ;
   }
+    
+  // Taken into account golden rule for antiprotons
+  eloss *= goldenRule ;
 
     // Proton model is used
   if(theBarkas && (theModel == theProtonModel)) 
