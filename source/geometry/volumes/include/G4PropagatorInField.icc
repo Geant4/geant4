@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.17 2001-05-23 19:28:57 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.18 2001-05-31 12:31:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,6 @@ G4double  G4PropagatorInField::GetMinimumEpsilonStep() const
 inline 
 void      G4PropagatorInField::SetMinimumEpsilonStep(G4double newEpsMin)
 {
-  if( (newEpsMin > 0.0) && (G4std::fabs(1.0+newEpsMin)>1.0) )
+  if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin)>1.0) )
     fEpsilonMin= newEpsMin;
 }
-
