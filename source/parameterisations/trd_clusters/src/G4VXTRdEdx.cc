@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4VXTRdEdx.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -167,7 +167,7 @@ void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack ,
 
         sumEnergyTR += energyTR ;
 
-        theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
+        theta = std::abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
         if( theta >= 0.1 ) theta = 0.1 ;
 
@@ -175,9 +175,9 @@ void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack ,
 
         phi = twopi*G4UniformRand() ;
 
-        dirX = sin(theta)*cos(phi)  ;
-        dirY = sin(theta)*sin(phi)  ;
-        dirZ = cos(theta)           ;
+        dirX = std::sin(theta)*std::cos(phi)  ;
+        dirY = std::sin(theta)*std::sin(phi)  ;
+        dirZ = std::cos(theta)           ;
 
         G4ThreeVector directionTR(dirX,dirY,dirZ) ;
         directionTR.rotateUz(direction) ;
@@ -316,7 +316,7 @@ void G4VXTRdEdx::BuildAngleTable()
 // charged particle crosses interface between two materials.
 // The high energy small theta approximation is applied.
 // (matter1 -> matter2, or 2->1)
-// varAngle =2* (1 - cos(theta)) or approximately = theta*theta
+// varAngle =2* (1 - std::cos(theta)) or approximately = theta*theta
 //
 
 G4complex G4VXTRdEdx::OneInterfaceXTRdEdx( G4double energy,

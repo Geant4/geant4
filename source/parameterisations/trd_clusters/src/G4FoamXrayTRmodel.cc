@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FoamXrayTRmodel.cc,v 1.1 2004-11-09 09:20:34 hpw Exp $
+// $Id: G4FoamXrayTRmodel.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,9 +92,9 @@ G4FoamXrayTRmodel::GetStackFactor( G4double energy,
 
   G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb/(1.0-H)/(Q-H) ;
 
-  F2          *= pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
+  F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
-  result      = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
   result     *= 2.0*std::real(F1) ;
 

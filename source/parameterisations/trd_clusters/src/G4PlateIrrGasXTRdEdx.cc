@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlateIrrGasXTRdEdx.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4PlateIrrGasXTRdEdx.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,8 +80,8 @@ G4PlateIrrGasXTRdEdx::GetStackFactor( G4double energy,
 
   // G4complex Ca(1.0+0.5*fPlateThick*Ma,fPlateThick/Za) ; 
 
-  G4complex Ha( exp(-0.5*fPlateThick*Ma)*cos(fPlateThick/Za),
-               -exp(-0.5*fPlateThick*Ma)*sin(fPlateThick/Za)   ) ; 
+  G4complex Ha( std::exp(-0.5*fPlateThick*Ma)*std::cos(fPlateThick/Za),
+               -std::exp(-0.5*fPlateThick*Ma)*std::sin(fPlateThick/Za)   ) ; 
  
 
   G4complex R = (1.0 - Ha) ;

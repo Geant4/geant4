@@ -41,7 +41,7 @@
 	 
 	 // Radial Coefficients
 	 // r_C (tau)= z_1 +z_2 tau
-	 // r_t (tau)= k1 (exp (k3(tau -k2 ))+exp (k_4 (tau- k_2))))
+	 // r_t (tau)= k1 (std::exp (k3(tau -k2 ))+std::exp (k_4 (tau- k_2))))
 	 ParRC1 =   thePar->ParRC1();   // z_1 = 0.0251 + 0.00319 ln E
 	 ParRC2 =   thePar->ParRC2();
 	 
@@ -96,7 +96,7 @@
 	 A = GetEffA(material);
 	 density = material->GetDensity()/(g/cm3);
 	 X0  = material->GetRadlen(); 
-	 Ec      = 2.66 * pow((X0 * Z / A),1.1); 
+	 Ec      = 2.66 * std::pow((X0 * Z / A),1.1); 
 	 G4double Es = 21*MeV;
 	 Rm = X0*Es/Ec;
 	 // PrintMaterial(); 
@@ -188,26 +188,26 @@
  
  void GFlashHomoShowerParamterisation::ComputeLongitudinalParameters(G4double y)
  {
-	 AveLogTmaxh  = log(ParAveT1 +log(y)); 	//ok			//<ln T hom>
-	 AveLogAlphah = log(ParAveA1 + (ParAveA2+ParAveA3/Z)*log(y));  //ok    //<ln alpha hom> 
+	 AveLogTmaxh  = std::log(ParAveT1 +std::log(y)); 	//ok			//<ln T hom>
+	 AveLogAlphah = std::log(ParAveA1 + (ParAveA2+ParAveA3/Z)*std::log(y));  //ok    //<ln alpha hom> 
 	 
-	 SigmaLogTmaxh  =  1.00/( ParSigLogT1 + ParSigLogT2*log(y)) ;		//ok sigma (ln T hom)
-	 SigmaLogAlphah =  1.00/( ParSigLogA1 + ParSigLogA2*log(y));		//ok sigma (ln alpha hom)
-	 Rhoh           = ParRho1+ParRho2*log(y);				//ok			       
+	 SigmaLogTmaxh  =  1.00/( ParSigLogT1 + ParSigLogT2*std::log(y)) ;		//ok sigma (ln T hom)
+	 SigmaLogAlphah =  1.00/( ParSigLogA1 + ParSigLogA2*std::log(y));		//ok sigma (ln alpha hom)
+	 Rhoh           = ParRho1+ParRho2*std::log(y);				//ok			       
  }
  
  void GFlashHomoShowerParamterisation::GenerateEnergyProfile(G4double /* y */)
  { 
-	 G4double Correlation1h = sqrt((1+Rhoh)/2);
-	 G4double Correlation2h = sqrt((1-Rhoh)/2);
+	 G4double Correlation1h = std::sqrt((1+Rhoh)/2);
+	 G4double Correlation2h = std::sqrt((1-Rhoh)/2);
 	 
 	 G4double Random1 = RandGauss::shoot();
 	 G4double Random2 = RandGauss::shoot();
 	 
 	 //Parameters for Enenrgy Profile including correaltion and sigmas  
-	 Tmaxh  = exp( AveLogTmaxh  + SigmaLogTmaxh  *
+	 Tmaxh  = std::exp( AveLogTmaxh  + SigmaLogTmaxh  *
 	 (Correlation1h*Random1 + Correlation2h*Random2) );
-	 Alphah = exp( AveLogAlphah + SigmaLogAlphah *
+	 Alphah = std::exp( AveLogAlphah + SigmaLogAlphah *
 	 (Correlation1h*Random1 - Correlation2h*Random2) );
 	 Betah  = (Alphah-1.00)/Tmaxh;
  }
@@ -217,7 +217,7 @@
 	 TNSpot     =    Tmaxh *  (ParSpotT1+ParSpotT2*Z); //ok.
 	 AlphaNSpot =    Alphah * (ParSpotA1+ParSpotA2*Z);   
 	 BetaNSpot  = (AlphaNSpot-1.00)/TNSpot;           // ok 
-	 NSpot     =   ParSpotN1 * log(Z)*pow((y*Ec)/GeV,ParSpotN2 ); //ok
+	 NSpot     =   ParSpotN1 * std::log(Z)*std::pow((y*Ec)/GeV,ParSpotN2 ); //ok
  }
  
  G4double GFlashHomoShowerParamterisation::IntegrateEneLongitudinal(G4double LongitudinalStep)
@@ -263,11 +263,11 @@
 	 
 	 if(Random1  <WeightCore) //WeightCore = p < w_i  
 	 {
-		 Radius = Rm * RadiusCore * sqrt( Random2/(1. - Random2) );
+		 Radius = Rm * RadiusCore * std::sqrt( Random2/(1. - Random2) );
 	 }
 	 else
 	 {
-		 Radius = Rm * RadiusTail * sqrt( Random2/(1. - Random2) );
+		 Radius = Rm * RadiusTail * std::sqrt( Random2/(1. - Random2) );
 	 }
 	 return Radius;
  }
@@ -276,29 +276,29 @@
  {
 	 G4double tau = LongitudinalPosition / Tmaxh / X0     //<t> = T* a /(a - 1) 
 	 * (Alphah-1.00) /Alphah * 
-	 exp(AveLogAlphah)/(exp(AveLogAlphah)-1.);  //ok 
+	 std::exp(AveLogAlphah)/(std::exp(AveLogAlphah)-1.);  //ok 
 	 return tau;
  }
  
  void GFlashHomoShowerParamterisation::ComputeRadialParameters(G4double Energy, G4double Tau)
  {
-	 G4double z1 = ParRC1 + ParRC2* log(Energy/GeV)  ;       //ok
+	 G4double z1 = ParRC1 + ParRC2* std::log(Energy/GeV)  ;       //ok
 	 G4double z2 = ParRC3+ParRC4*Z ;                         //ok
 	 RadiusCore   =  z1 + z2 * Tau  ;                        // ok 
 	 
 	 G4double p1 = ParWC1+ParWC2*Z;                             //ok
 	 G4double p2 = ParWC3+ParWC4*Z;                             //ok
-	 G4double p3 = ParWC5+ParWC6*log(Energy/GeV);               //ok
+	 G4double p3 = ParWC5+ParWC6*std::log(Energy/GeV);               //ok
 	 
-	 WeightCore   =  p1 * exp( (p2-Tau)/p3-  exp( (p2-Tau) /p3) ); //ok
+	 WeightCore   =  p1 * std::exp( (p2-Tau)/p3-  std::exp( (p2-Tau) /p3) ); //ok
 	 
 	 G4double k1 = ParRT1+ParRT2*Z;                   // ok
 	 G4double k2 = ParRT3;                            // ok
 	 G4double k3 = ParRT4;                            // ok
-	 G4double k4 = ParRT5+ParRT6* log(Energy/GeV);    // ok
+	 G4double k4 = ParRT5+ParRT6* std::log(Energy/GeV);    // ok
 	 
-	 RadiusTail   = k1*(exp(k3*(Tau-k2))  +
-	 exp(k4*(Tau-k2)) );            //ok
+	 RadiusTail   = k1*(std::exp(k3*(Tau-k2))  +
+	 std::exp(k4*(Tau-k2)) );            //ok
  }
  
  G4double GFlashHomoShowerParamterisation::GenerateExponential(const G4double /* Energy */ )

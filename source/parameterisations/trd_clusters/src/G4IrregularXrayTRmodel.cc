@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXrayTRmodel.cc,v 1.1 2004-11-09 09:20:34 hpw Exp $
+// $Id: G4IrregularXrayTRmodel.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -162,7 +162,7 @@ void G4IrregularXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 
         sumEnergyTR += energyTR ;
 
-        theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
+        theta = std::abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
         if( theta >= 0.1 ) theta = 0.1 ;
 
@@ -170,9 +170,9 @@ void G4IrregularXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 
         phi = twopi*G4UniformRand() ;
 
-        dirX = sin(theta)*cos(phi)  ;
-        dirY = sin(theta)*sin(phi)  ;
-        dirZ = cos(theta)           ;
+        dirX = std::sin(theta)*std::cos(phi)  ;
+        dirY = std::sin(theta)*std::sin(phi)  ;
+        dirZ = std::cos(theta)           ;
 
         G4ThreeVector directionTR(dirX,dirY,dirZ) ;
         directionTR.rotateUz(particleDir) ;
@@ -223,7 +223,7 @@ G4IrregularXrayTRmodel::GetStackFactor( G4double energy, G4double, G4double )
 
   factor      = plateFactor*gasFactor ;
 
-  result      = ( 1 - pow(factor,G4double(fPlateNumber)) )/( 1 - factor ) ;
+  result      = ( 1 - std::pow(factor,G4double(fPlateNumber)) )/( 1 - factor ) ;
 
   result     *= 1 + plateFactor ;
 

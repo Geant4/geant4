@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRdEdx.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4RegularXTRdEdx.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,22 +77,22 @@ G4RegularXTRdEdx::GetStackFactor( G4double energy,
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy) ;
   bMb = fGasThick*GetGasLinearPhotoAbs(energy) ;
 
-  Qa = exp(-aMa) ;
-  Qb = exp(-bMb) ;
+  Qa = std::exp(-aMa) ;
+  Qb = std::exp(-bMb) ;
   Q  = Qa*Qb ;
 
-  G4complex Ha( exp(-0.5*aMa)*cos(aZa),
-               -exp(-0.5*aMa)*sin(aZa)   ) ; 
+  G4complex Ha( std::exp(-0.5*aMa)*std::cos(aZa),
+               -std::exp(-0.5*aMa)*std::sin(aZa)   ) ; 
  
-  G4complex Hb( exp(-0.5*bMb)*cos(bZb),
-               -exp(-0.5*bMb)*sin(bZb)    ) ;
+  G4complex Hb( std::exp(-0.5*bMb)*std::cos(bZb),
+               -std::exp(-0.5*bMb)*std::sin(bZb)    ) ;
 
   G4complex H  = Ha*Hb ;
 
   G4complex Hs = std::conj(H) ;
 
-  D            = 1.0 /( (1 - sqrt(Q))*(1 - sqrt(Q)) + 
-                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ) ;
+  D            = 1.0 /( (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
+                  4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ) ;
 
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D ;

@@ -15,7 +15,7 @@ class GVFlashHomoShowerTuning
 	
 	// Homogeneous media:
 	// Avarage shower profile
-	// (1/E)(dE(t)/dt) = f(t) = (beta*t)**(alpha-1)*beta*exp(-beta*t)/Gamma(alpha)
+	// (1/E)(dE(t)/dt) = f(t) = (beta*t)**(alpha-1)*beta*std::exp(-beta*t)/Gamma(alpha)
 	// where Gamma: The Gamma function
 	//
 	// <t> = alpha/beta
@@ -28,11 +28,11 @@ class GVFlashHomoShowerTuning
 	virtual G4double ParAveA2(){ return 0.492; } // a2
 	virtual G4double ParAveA3(){ return 2.38;  } // a3
 	
-	// sqrt(var(ln(T))) = 1/(t+t2*ln(y))
+	// std::sqrt(var(ln(T))) = 1/(t+t2*ln(y))
 	virtual G4double ParSigLogT1(){ return -1.4;} // t1
 	virtual G4double ParSigLogT2(){ return 1.26;} // t2
 	
-	// sqrt(var(ln(alpha))) = 1/(a1+a2*ln(y))
+	// std::sqrt(var(ln(alpha))) = 1/(a1+a2*ln(y))
 	virtual G4double ParSigLogA1(){ return -0.58;} // a1
 	virtual G4double ParSigLogA2(){ return 0.86; } // a2
 	
@@ -53,7 +53,7 @@ class GVFlashHomoShowerTuning
 	virtual G4double ParRC3(){ return 0.1162;   } // c3
 	virtual G4double ParRC4(){ return -0.000381;} // c4
 	
-	// Rt (t/T)= k1*(exp(k3*(t/T-k2))+exp(k4*(t/T-k2)))
+	// Rt (t/T)= k1*(std::exp(k3*(t/T-k2))+std::exp(k4*(t/T-k2)))
 	// k1 = t1+t2*Z
 	// k4 = t5+t6*ln(E/GeV)
 	virtual G4double ParRT1(){ return 0.659;   } // t1
@@ -63,7 +63,7 @@ class GVFlashHomoShowerTuning
 	virtual G4double ParRT5(){ return 0.3585;  } // t5
 	virtual G4double ParRT6(){ return 0.0412;  } // t6
 	
-	// p(t/T) = p1*exp((p2-t/T)/p3 - exp((p2-t/T)/p3))
+	// p(t/T) = p1*std::exp((p2-t/T)/p3 - std::exp((p2-t/T)/p3))
 	// p1 = c1+c2*Z
 	// p2 = c3+c4*Z
 	// p3 = c5 + c6*ln(E/GeV)
@@ -81,7 +81,7 @@ class GVFlashHomoShowerTuning
 	virtual G4double ParSpotN2(){ return 0.876;} // n2
 	
 	// The number of spots per longitudinal interval is:
-	// (1/Ns)(dNs(t)/dt) = f(t) = (beta*t)**(alpha-1)*beta*exp(-beta*t)/Gamma(alpha)
+	// (1/Ns)(dNs(t)/dt) = f(t) = (beta*t)**(alpha-1)*beta*std::exp(-beta*t)/Gamma(alpha)
 	// <t> = alpha_s/beta_s
 	// Ts = (alpha_s-1)/beta_s
 	// and

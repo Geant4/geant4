@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlateIrrGasXrayTRmodel.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4PlateIrrGasXrayTRmodel.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,8 +77,8 @@ G4PlateIrrGasXrayTRmodel::GetStackFactor( G4double energy,
   Ma = GetPlateLinearPhotoAbs(energy) ;
   Mb = GetGasLinearPhotoAbs(energy) ;
 
-  Qa = exp(-fPlateThick*Ma) ;
-  Qb = exp(-fGasThick*Mb) ;
+  Qa = std::exp(-fPlateThick*Ma) ;
+  Qb = std::exp(-fGasThick*Mb) ;
   Q  = Qa*Qb ;
 
   /* *****************************************************
@@ -86,20 +86,20 @@ G4PlateIrrGasXrayTRmodel::GetStackFactor( G4double energy,
   //  G4complex Ca(1.0+0.5*fPlateThick*Ma,fPlateThick/Za) ; 
   //  G4complex Cb(1.0+0.5*fGasThick*Mb,fGasThick/Zb) ; 
 
-  G4complex Ha( exp(-0.5*fPlateThick*Ma)*cos(fPlateThick/Za),
-              -exp(-0.5*fPlateThick*Ma)*sin(fPlateThick/Za)   ) ; 
+  G4complex Ha( std::exp(-0.5*fPlateThick*Ma)*std::cos(fPlateThick/Za),
+              -std::exp(-0.5*fPlateThick*Ma)*std::sin(fPlateThick/Za)   ) ; 
  
-  G4complex Hb( exp(-0.5*fGasThick*Mb)*cos(fGasThick/Zb),
-               -exp(-0.5*fGasThick*Mb)*sin(fGasThick/Za)    ) ;
+  G4complex Hb( std::exp(-0.5*fGasThick*Mb)*std::cos(fGasThick/Zb),
+               -std::exp(-0.5*fGasThick*Mb)*std::sin(fGasThick/Za)    ) ;
   G4complex H  = Ha*Hb ;
 
   G4complex F1 = ( 0.5*(1+Qa)*(1+H) - Ha - Qa*Hb )/(1-H) ;
 
   G4complex F2 = (1-Ha)*(Qa-Ha)*Hb/(1-H)/(Q-H) ;
 
-  F2          *= pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
+  F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
-  result      = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
   result     *= 2.0*std::real(F1) ;
 
@@ -107,9 +107,9 @@ G4PlateIrrGasXrayTRmodel::GetStackFactor( G4double energy,
 
   ***************************************************************** */
 
-  result      = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
-  result *= 1 + Qa -2*sqrt(Qa)*cos(fPlateThick/Za) ;
+  result *= 1 + Qa -2*std::sqrt(Qa)*std::cos(fPlateThick/Za) ;
 
   return      result ;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRmodel.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -102,12 +102,12 @@ G4VXrayTRmodel::G4VXrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
   fSigma1 = fPlasmaCof*anEnvelope->GetDaughter(0)->GetLogicalVolume()->
                            GetMaterial()->GetElectronDensity()  ;
   //  fSigma1 = (20.9*eV)*(20.9*eV) ;
-  G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
+  G4cout<<"plate plasma energy = "<<std::sqrt(fSigma1)/eV<<" eV"<<G4endl ;
 
   // plasma energy squared for gas material
 
   fSigma2 = fPlasmaCof*anEnvelope->GetMaterial()->GetElectronDensity()  ;
-  G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
+  G4cout<<"gas plasma energy = "<<std::sqrt(fSigma2)/eV<<" eV"<<G4endl ;
 
   // Compute cofs for preparation of linear photo absorption
 
@@ -543,7 +543,7 @@ void G4VXrayTRmodel::GetGasZmuProduct()
 // charged particle crosses interface between two materials.
 // The high energy small theta approximation is applied.
 // (matter1 -> matter2, or 2->1)
-// varAngle =2* (1 - cos(theta)) or approximately = theta*theta
+// varAngle =2* (1 - std::cos(theta)) or approximately = theta*theta
 //
 
 G4double

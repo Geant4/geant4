@@ -222,13 +222,13 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 			DEne             = std::min( EnergyNow, (EneIntegral-LastEneIntegral)*Energy);
 			LastNspIntegral  = NspIntegral;
 			NspIntegral      = Parametrisation->IntegrateNspLongitudinal(ZEndStep);
-			DNsp             = std::max(1., floor( (NspIntegral-LastNspIntegral)*Parametrisation->GetNspot() ) );
+			DNsp             = std::max(1., std::floor( (NspIntegral-LastNspIntegral)*Parametrisation->GetNspot() ) );
 		}
 		// end of the shower
 		else
 		{    
 			DEne             = EnergyNow;
-			DNsp             = std::max(1., floor( (1.- NspIntegral)*Parametrisation->GetNspot() ));
+			DNsp             = std::max(1., std::floor( (1.- NspIntegral)*Parametrisation->GetNspot() ));
 		} 
 		EnergyNow  = EnergyNow - DEne;
 		
@@ -256,8 +256,8 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 			
 			G4ThreeVector SpotPosition = NewPositionShower                         +
 			Dz/DNsp*DirectionShower*(i+1/2.-DNsp/2.)  +
-			RSpot*cos(PhiSpot)*OrthoShower            +  
-			RSpot*sin(PhiSpot)*CrossShower;      
+			RSpot*std::cos(PhiSpot)*OrthoShower            +  
+			RSpot*std::sin(PhiSpot)*CrossShower;      
 			Spot.SetPosition(SpotPosition);
 			
 			//Generate Hits of this spot      

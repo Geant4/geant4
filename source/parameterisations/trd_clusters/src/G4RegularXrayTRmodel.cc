@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXrayTRmodel.cc,v 1.1 2004-11-09 09:20:35 hpw Exp $
+// $Id: G4RegularXrayTRmodel.cc,v 1.2 2004-12-07 09:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,18 +77,18 @@ G4RegularXrayTRmodel::GetStackFactor( G4double energy,
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy) ;
   bMb = fGasThick*GetGasLinearPhotoAbs(energy) ;
 
-  Qa = exp(-aMa) ;
-  Qb = exp(-bMb) ;
+  Qa = std::exp(-aMa) ;
+  Qb = std::exp(-bMb) ;
   Q  = Qa*Qb ;
 
   //  G4complex Ca(1.0+0.5*fPlateThick*Ma,fPlateThick/Za) ; 
   //  G4complex Cb(1.0+0.5*fGasThick*Mb,fGasThick/Zb) ; 
 
-  G4complex Ha( exp(-0.5*aMa)*cos(aZa),
-               -exp(-0.5*aMa)*sin(aZa)   ) ; 
+  G4complex Ha( std::exp(-0.5*aMa)*std::cos(aZa),
+               -std::exp(-0.5*aMa)*std::sin(aZa)   ) ; 
  
-  G4complex Hb( exp(-0.5*bMb)*cos(bZb),
-               -exp(-0.5*bMb)*sin(bZb)    ) ;
+  G4complex Hb( std::exp(-0.5*bMb)*std::cos(bZb),
+               -std::exp(-0.5*bMb)*std::sin(bZb)    ) ;
 
   G4complex H  = Ha*Hb ;
 
@@ -98,22 +98,22 @@ G4RegularXrayTRmodel::GetStackFactor( G4double energy,
 
   G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb*(1.0-Hs)*(Q-Hs) ;
 
-  F2          *= pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
+  F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
-  result       = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result       = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
-  result      *= (1 - Qa)*(1 + Qa - 2*sqrt(Qa)*cos(aZa)) ;
+  result      *= (1 - Qa)*(1 + Qa - 2*std::sqrt(Qa)*std::cos(aZa)) ;
 
-  result      /= (1 - sqrt(Q))*(1 - sqrt(Q)) + 
-                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ;
+  result      /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
+                  4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
 
   I2           = 2.0*std::real(F2) ;
 
-  I2           /= (1 - sqrt(Q))*(1 - sqrt(Q)) + 
-                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ;
+  I2           /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
+                  4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
 
-  I2           /= Q*( (sqrt(Q)-cos(aZa+bZb))*(sqrt(Q)-cos(aZa+bZb)) + 
-                      sin(aZa+bZb)*sin(aZa+bZb)   ) ;
+  I2           /= Q*( (std::sqrt(Q)-std::cos(aZa+bZb))*(std::sqrt(Q)-std::cos(aZa+bZb)) + 
+                      std::sin(aZa+bZb)*std::sin(aZa+bZb)   ) ;
 
   result       += I2 ;
 

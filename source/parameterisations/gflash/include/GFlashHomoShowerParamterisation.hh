@@ -29,9 +29,9 @@ class  GFlashHomoShowerParamterisation
 	inline   G4double  GetAveR99() {return (3.5 * Rm);}
 	inline   G4double  GetAveR90() {return (1.5 * Rm);} //ok
 	//T
-	inline   G4double  GetAveTmx() {return (X0 *  exp(AveLogTmaxh));}  //exp ?
+	inline   G4double  GetAveTmx() {return (X0 *  std::exp(AveLogTmaxh));}  //exp ?
 	inline   G4double  GetAveT99() {return (X0 *  AveLogTmaxh/(AveLogAlphah-1.00));}
-	inline   G4double  GetAveT90() {return (2.5 * X0 * exp( AveLogTmaxh) );}
+	inline   G4double  GetAveT90() {return (2.5 * X0 * std::exp( AveLogTmaxh) );}
 	// 
 	inline   G4double GetNspot(){ return NSpot;}
 	G4double GetEffZ(const G4Material * material);

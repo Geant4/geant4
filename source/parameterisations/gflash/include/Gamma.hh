@@ -21,8 +21,8 @@ class MyGamma {
 	static float  Abs(float d){ return (d > 0) ? d : -d; }
 	static double Abs(double d)   { return (d > 0) ? d : -d; }
 	static double LnGamma(double z); 
-	static double Log(double x){ return log(x); }
-	static double Exp(double x){ return exp(x); }
+	static double Log(double x){ return std::log(x); }
+	static double Exp(double x){ return std::exp(x); }
 	
 	
 };

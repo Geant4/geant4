@@ -24,7 +24,7 @@ double MyGamma::Gamma(double z)
 	if (z<=0) return 0;
 	
 	double v = LnGamma(z);
-	return exp(v);
+	return std::exp(v);
 }
 
 //______________________________________________________________________________

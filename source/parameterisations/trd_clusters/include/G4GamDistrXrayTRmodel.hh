@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GamDistrXrayTRmodel.hh,v 1.1 2004-11-09 09:20:32 hpw Exp $
+// $Id: G4GamDistrXrayTRmodel.hh,v 1.2 2004-12-07 09:00:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 // Thicknesses of plates and gas gaps are distributed according to gamma 
 // distribution. x are thicknesses of plates or gas gaps:
 //
-// p(x) = (alpha/<x>)^alpha * x^(alpha-1) * exp(-alpha*x/<x>) / G(alpha)
+// p(x) = (alpha/<x>)^alpha * x^(alpha-1) * std::exp(-alpha*x/<x>) / G(alpha)
 //
 // G(alpha) is Euler's gamma function.
 // Plates have mean <x> = fPlateThick > 0 and power alpha = fAlphaPlate > 0 :
