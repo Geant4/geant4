@@ -86,12 +86,13 @@ tiaraSpecs = tiaraSpecifications.Specifications(Tiara.TiaraDimensions(),
 
 
 ##########################################################################
-# definition of the importance geometry and a scorer 
+# definition of the importance geometry importance values and a scorer 
 ##########################################################################
 impGeo = variableGeometry.VariableImpSlabGeometry(tiaraSpecs)
 
 impGeo.addCellImportance(width=15.0 * G4Kernel.cm, faktor=1)
 for i in range(9):
+    # to run unbiased set: faktor=1     in the next line
     impGeo.addCellImportance(width=15.0 * G4Kernel.cm, faktor=2)
 
 impGeo.construct()

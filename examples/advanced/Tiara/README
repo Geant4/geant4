@@ -1,13 +1,29 @@
 Simulation of the TIARA experiment using importance sampling
 ============================================================
+This example is a simulation of the neutron shielding experiment TIARA
+see http://idsun1.kek.jp/nakao/research/tiara/tiara.htm.
+The example is ment to provide a realistic example for
+applying geometrical importance sampling (geometrical splitting and 
+Russian roulette).
+In the TIARA experiment neutrons of two different energy distributions 
+created by 43 MeV and 68 MeV protons bombarding a 7Li target are measured
+behind several shields. In this example the interactions of the 
+neutrons with the (concrete) shields are simulated and 
+energy dependent neutron fluxes are measured behind the shields. 
+Users may chose to run the simulation for different shielding
+configuration with or without importance sampling.
+The simulated neutron fluxes are compared to the published 
+experimental data. The efficiency of applying importance sampling
+depends strongly on the shied thickness and importance configuration.
+The efficiency of the simulations may be obtained as FOM values.
+
 
 The example has been tested on CERN RH 7.3 with the
 gcc-3.2 compiler.
 
-Information about the Tiara experiment may be found at:
-http://idsun1.kek.jp/nakao/research/tiara/tiara.htm
-
 Note for system testing: see points 1, 1.3 and 3.2.
+
+
 
 
 1) Setting the environment
@@ -110,22 +126,36 @@ screen.
 It also prints out the relative path of a ".shelve" file.
 This file can be used to access results of the simulation.
 
-Results may be viewed e.g. using lizard and the script:
+In case the example eas build using analysis
+results may be viewed e.g. using lizard and scripts:
 1) Start python2.2 or lizard
 2) type: import dataAcess
-3) type: p = dataAcess.ExpMcPlot (shelveFileName,"00")
-         where shelveFileName is the name (enclosed in quotes) of the
+3) type: p = dataAcess.ExpMcPlot (shelveFileName,detectorposition)
+         where "shelveFileName" is the name (enclosed in quotes) of the
          shelve file created during the execution of anaSim.py. 
          The name is printed on the screen during execution of runSim.py.
+         "detectorposition" may be "00, "20" or "40" and stand for the 
+         dtectors 00, 20, 40 cm off beam axis respectively. 
 4) type: p.display ()
+5) type: import extractShelve
+6) type: extractShelve.getFluxes (p.she)
+         p.she is the shelve object containg simulation results.
+         This prints the FOM values for the used detectors
+         for two energy regions below and in the peak region.
+         The FOM are should be compared to unbiased simulations. To run 
+         an unbiased simulation set the importance values to one (see  
+         runSim.py)
+  
 
 Since the simulation time used by "runSim.py" is only 5 minutes the
 calculated results have large errors. If you want to see a better result
 do the following changes in "naSim.py".
-Extend the total run time to 30 minutes by setting:
-"totalTime = 30 * myUtils.min", 
-set the print out period to 10 minutes by setting:
-"timeForOneRun = 10 * myUtils.min".
+Extend the total run time to e,g, 2 hours by setting:
+"totalTime = 2 * myUtils.hour", 
+set the print out period to 30 minutes by setting:
+"timeForOneRun = 30 * myUtils.min".
+
+
 
 
 3.2) Not using Anaphe (mainly for system testing)

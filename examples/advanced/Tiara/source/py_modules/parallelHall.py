@@ -1,5 +1,6 @@
 import G4Kernel
 import CLHEP
+import string
 
 class ParallelHall(object):
     def __init__(self, tiaraSpecs):
@@ -34,8 +35,12 @@ class ParallelHall(object):
     def placeOneCell(self, pLog, name = ""):
         rot = G4Kernel.G4RotationMatrix()
         z = int(pLog.pos)
+        zstr = "%(z)d" % vars()
+        zstr = string.rjust(zstr, 5)
+        zstr = string.replace(zstr,' ','0')
+
         if not name:
-            name = "cell_z_" + "%(z)d" % vars()
+            name = "cell_z_" + zstr
         vPhys = G4Kernel.\
                 G4PVPlacement(rot,
                               CLHEP.Hep3Vector(0, 0, pLog.pos),
