@@ -13,6 +13,28 @@ phot:  Total cross sections from Sandia parametrisation.
 physicsList->setCut() start.
 Tst06PhysicsList::SetCuts:CutLength : 1 (mm)
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
@@ -24,7 +46,7 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -43,7 +65,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -53,7 +75,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -76,6 +98,28 @@ SimpleBox is now made of Al
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+
+====================================================================
+
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -85,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=13s Sys=1.6s
+  User=4.8s Real=4.9s Sys=0s
 #
 # electron 500 MeV in Air
 #
@@ -94,11 +138,33 @@ SimpleBox is now made of Air
 /gun/particle e-
 /gun/energy 500 MeV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 9.9e+02 eV    e- 9.9e+02 eV    e+ 9.9e+02 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 6.9 keV    e- 6e+02 keV    e+ 5.7e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 1e+02 keV    e- 1.4 MeV    e+ 1.3 MeV
+
+====================================================================
+
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.33s Real=0.42s Sys=0.07s
+  User=0.2s Real=0.2s Sys=0s
 #
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst06PhysicsList.cc,v 1.8 2001-10-16 14:25:25 maire Exp $
+// $Id: Tst06PhysicsList.cc,v 1.9 2003-02-19 17:26:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -196,7 +196,7 @@ void Tst06PhysicsList::ConstructEM()
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-      //muon  
+      //muon
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
@@ -249,13 +249,7 @@ void Tst06PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
   
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-   
-  SetCutValueForOthers(cut);
-  
+
   if (verboseLevel>1) DumpCutValuesTable();
 }
 
