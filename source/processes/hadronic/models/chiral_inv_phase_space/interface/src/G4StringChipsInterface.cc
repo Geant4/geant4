@@ -35,7 +35,7 @@ G4StringChipsInterface::G4StringChipsInterface()
   G4cin >> theEnergyLossPerFermi;
 #endif
 
-  theEnergyLossPerFermi *= GeV;
+  theEnergyLossPerFermi = 0.5*GeV;
   // theEnergyLossPerFermi = 1.*GeV;
 }
 
@@ -283,9 +283,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   if (particleCount!=0)
   {
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+    output = pan->Fragment();
     G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
-    output = pan->Fragment();
     delete pan;
   }
   else 
