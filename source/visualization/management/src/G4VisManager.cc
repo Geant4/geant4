@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.13 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManager.cc,v 1.14 2000-01-29 00:43:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,6 +127,9 @@ void G4VisManager::Initialise () {
 #endif
 #ifdef G4VIS_BUILD_VRMLFILE_DRIVER
       "\n    G4VIS_USE_VRMLFILE"
+#endif
+#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+      "\n    G4VIS_USE_RAYTRACER"
 #endif
       "\n  Thus, in your main() you have something like:"
       "\n    G4VisManager* visManager = new MyVisManager;"
@@ -796,9 +799,10 @@ void G4VisManager::PrintAllGraphicsSystems () const {
        << "\n\n  Open Inventor"
        << G4VisFeaturesOfOpenInventor ()
        << "\n\n  VRML1     (produces VRML 1 file over network)"
-       << "\n\n  VRML1File (produces VRML 1 file locally    )"
-       << "\n\n  VRML2     (produces VRML 2 file over network), in preparation"
-       << "\n\n  VRML2File (produces VRML 2 file locally    ), in preparation"
+       << "\n\n  VRML1FILE (produces VRML 1 file locally    )"
+       << "\n\n  VRML2     (produces VRML 2 file over network)"
+       << "\n\n  VRML2FILE (produces VRML 2 file locally    )"
+       << "\n\n  RayTracer (produces JPEG file)"
        << G4endl;
 }
 
@@ -830,11 +834,14 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #endif
 #ifdef G4VIS_BUILD_VRML_DRIVER
        << "\n  VRML1 (produces VRML 1 file over network)"
-       << "\n  VRML2 (produces VRML 2 file over network), in preparation"
+       << "\n  VRML2 (produces VRML 2 file over network)"
 #endif
 #ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-       << "\n  VRML1File (produces VRML 1 file locally)"
-       << "\n  VRML2File (produces VRML 2 file locally), in preparation"
+       << "\n  VRML1FILE (produces VRML 1 file locally)"
+       << "\n  VRML2FILE (produces VRML 2 file locally)"
+#endif
+#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+       << "\n  RayTracer (produces JPEG file)"
 #endif
        << G4endl;
 }
@@ -1008,6 +1015,19 @@ public:
 G4DAWNFILE::G4DAWNFILE ():
   G4VGraphicsSystem ("FukuiRendererFile",
                      "DAWNFILE",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_RAYTRACER_DRIVER
+
+class G4RayTracer: public G4VGraphicsSystem {
+public:
+  G4RayTracer ();
+};
+G4RayTracer::G4RayTracer ():
+  G4VGraphicsSystem ("RayTracer",
+                     "RayTracer",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.2 1999-06-19 15:20:38 johna Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.3 2000-01-29 00:41:49 asaim Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -16,6 +16,11 @@ ifdef G4VIS_BUILD_DAWNFILE_DRIVER
   CPPFLAGS += -DG4VIS_BUILD_DAWNFILE_DRIVER
 endif
 # End of DAWN and DAWNFILE drivers 
+
+ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+  G4VIS_BUILD = 1
+  CPPFLAGS += -DG4VIS_BUILD_RAYTRACER_DRIVER
+endif
 
 ifdef G4VIS_BUILD_OPACS_DRIVER
   G4VIS_BUILD = 1

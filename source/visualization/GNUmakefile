@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 1999-09-15 16:49:59 johna Exp $
+# $Id: GNUmakefile,v 1.5 2000-01-29 00:42:44 asaim Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -39,6 +39,11 @@ ifdef G4VIS_BUILD_DAWNFILE_DRIVER
   endif
 endif
 # End of DAWN and DAWNFILE drivers 
+
+ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+  SUBDIRS += RayTracer
+  SUBLIBS += G4RayTracer
+endif
 
 ifdef G4VIS_BUILD_OPACS_DRIVER
   SUBDIRS += OPACS
