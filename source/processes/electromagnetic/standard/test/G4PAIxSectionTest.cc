@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.8 2002-05-17 09:18:16 grichine Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.9 2002-10-14 17:36:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -419,7 +419,7 @@ int main()
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
-  numOfMaterials = theMaterialTable->size();
+  numOfMaterials = theMaterialTable->length();
 
   G4cout<<"Available materials under test : "<< G4endl<<G4endl ;
   outFile<<"Available materials under test : "<< G4endl<<G4endl ;
