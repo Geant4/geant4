@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.1 2003-11-14 14:46:16 gcosmo Exp $
+// $Id: G4VSurface.icc,v 1.2 2004-05-28 13:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,7 +154,7 @@ G4double G4VSurface::DistanceToLine(const G4ThreeVector &p,
 inline
 G4bool G4VSurface::IsAxis0(G4int areacode) const 
 {
-   if (areacode & kAxis0) return true;
+   if (areacode & sAxis0) return true;
    return false;
 }
 
@@ -164,7 +164,7 @@ G4bool G4VSurface::IsAxis0(G4int areacode) const
 inline
 G4bool G4VSurface::IsAxis1(G4int areacode) const 
 {
-   if (areacode & kAxis1) return true;
+   if (areacode & sAxis1) return true;
    return false;
 }
 
@@ -174,7 +174,7 @@ G4bool G4VSurface::IsAxis1(G4int areacode) const
 inline
 G4bool G4VSurface::IsOutside(G4int areacode) const 
 {
-   if (areacode & kInside) return false;
+   if (areacode & sInside) return false;
    return true;
 }
 
@@ -184,11 +184,11 @@ G4bool G4VSurface::IsOutside(G4int areacode) const
 inline
 G4bool G4VSurface::IsInside(G4int areacode, G4bool testbitmode) const 
 {
-   if (areacode & kInside) {
+   if (areacode & sInside) {
       if (testbitmode) {
          return true;
       } else {
-       if (!((areacode & kBoundary) || (areacode & kCorner))) return true;
+       if (!((areacode & sBoundary) || (areacode & sCorner))) return true;
       }
    }
    return false;
@@ -200,11 +200,11 @@ G4bool G4VSurface::IsInside(G4int areacode, G4bool testbitmode) const
 inline
 G4bool G4VSurface::IsBoundary(G4int areacode, G4bool testbitmode) const 
 {
-   if ((areacode & kBoundary) == kBoundary) {
+   if ((areacode & sBoundary) == sBoundary) {
       if (testbitmode) {
          return true; 
       } else {
-         if ((areacode & kInside) == kInside) return true;
+         if ((areacode & sInside) == sInside) return true;
       }
    }
    return false;
@@ -216,11 +216,11 @@ G4bool G4VSurface::IsBoundary(G4int areacode, G4bool testbitmode) const
 inline
 G4bool G4VSurface::IsCorner(G4int areacode, G4bool testbitmode) const 
 {
-   if ((areacode & kCorner) == kCorner) {
+   if ((areacode & sCorner) == sCorner) {
       if (testbitmode) {
          return true;
       } else {
-         if ((areacode & kInside) == kInside) return true;
+         if ((areacode & sInside) == sInside) return true;
       }
    }
    return false;
@@ -232,23 +232,23 @@ G4bool G4VSurface::IsCorner(G4int areacode, G4bool testbitmode) const
 inline
 G4int G4VSurface::GetAxisType(G4int areacode, G4int whichaxis) const
 {
-   G4int axiscode = areacode & kAxisMask & whichaxis;
+   G4int axiscode = areacode & sAxisMask & whichaxis;
    
-   if (axiscode == (kAxisX & kAxis0) ||
-       axiscode == (kAxisX & kAxis1)) {
-      return kAxisX;
-   } else if (axiscode == (kAxisY & kAxis0) ||
-              axiscode == (kAxisY & kAxis1)) {
-      return kAxisY;
-   } else if (axiscode == (kAxisZ & kAxis0) ||
-              axiscode == (kAxisZ & kAxis1)) {
-      return kAxisZ;
-   } else if (axiscode == (kAxisRho & kAxis0) ||
-              axiscode == (kAxisRho & kAxis1)) {
-      return kAxisRho;
-   } else if (axiscode == (kAxisPhi & kAxis0) ||
-              axiscode == (kAxisPhi & kAxis1)) {
-      return kAxisPhi;
+   if (axiscode == (sAxisX & sAxis0) ||
+       axiscode == (sAxisX & sAxis1)) {
+      return sAxisX;
+   } else if (axiscode == (sAxisY & sAxis0) ||
+              axiscode == (sAxisY & sAxis1)) {
+      return sAxisY;
+   } else if (axiscode == (sAxisZ & sAxis0) ||
+              axiscode == (sAxisZ & sAxis1)) {
+      return sAxisZ;
+   } else if (axiscode == (sAxisRho & sAxis0) ||
+              axiscode == (sAxisRho & sAxis1)) {
+      return sAxisRho;
+   } else if (axiscode == (sAxisPhi & sAxis0) ||
+              axiscode == (sAxisPhi & sAxis1)) {
+      return sAxisPhi;
    } else {
       G4cerr << "ERROR - G4VSurface::GetAxisType()" << G4endl
              << "        areacode = " << areacode << G4endl;
@@ -315,21 +315,21 @@ G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces)
 {
    G4int i = 0;
    
-   if (areacode & (kAxis0 | kAxisMin)) {
+   if (areacode & (sAxis0 | sAxisMin)) {
        surfaces[i] = fNeighbours[0];
        i++;
    }
-   if (areacode & (kAxis1 | kAxisMin)) {
+   if (areacode & (sAxis1 | sAxisMin)) {
        surfaces[i] = fNeighbours[1];
        i++;
        if (i == 2) return i;
    }
-   if (areacode & (kAxis0 | kAxisMax)) {
+   if (areacode & (sAxis0 | sAxisMax)) {
        surfaces[i] = fNeighbours[2];
        i++;
        if (i == 2) return i;
    }
-   if (areacode & (kAxis1 | kAxisMax)) {
+   if (areacode & (sAxis1 | sAxisMax)) {
        surfaces[i] = fNeighbours[3];
        i++;
        if (i == 2) return i;
@@ -344,20 +344,20 @@ G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces)
 inline
 G4ThreeVector G4VSurface::GetCorner(G4int areacode) const
 {
-   if (!(areacode & kCorner)){
+   if (!(areacode & sCorner)){
       G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl
              << "        areacode = " << areacode << G4endl;
       G4Exception("G4VSurface::GetCorner()","InvalidSetup",
                   FatalException, "Area code must represent corner.");
    }
    
-   if ((areacode & kCorner0Min1Min) == kCorner0Min1Min) { 
+   if ((areacode & sCMin1Min) == sCMin1Min) { 
       return fCorners[0];
-   } else if ((areacode & kCorner0Max1Min) == kCorner0Max1Min) { 
+   } else if ((areacode & sCMax1Min) == sCMax1Min) { 
       return fCorners[1];
-   } else if ((areacode & kCorner0Max1Max) == kCorner0Max1Max) {
+   } else if ((areacode & sCMax1Max) == sCMax1Max) {
       return fCorners[2];
-   } else if ((areacode & kCorner0Min1Max) == kCorner0Min1Max) { 
+   } else if ((areacode & sCMin1Max) == sCMin1Max) { 
       return fCorners[3];
    } else {
       G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl

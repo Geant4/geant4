@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.5 2004-05-25 12:51:38 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.6 2004-05-28 13:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,13 +181,13 @@ class G4VSurface
                             const G4ThreeVector &x0, 
                             const G4int         &boundarytype);
      // areacode must be one of them:
-     // kAxis0 & kAxisMin, kAxis0 & kAxisMax,
-     // kAxis1 & kAxisMin, kAxis1 & kAxisMax.
+     // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+     // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
      // boundarytype represents the shape of locus
      // from the start point to end point of boundary.
      // ex.
-     // kAxisRho = linear line which start point is fixed at origin.
-     // kAxisPhi = part of circle which center placed at the origin.
+     // sAxisRho = linear line which start point is fixed at origin.
+     // sAxisPhi = part of circle which center placed at the origin.
                             
    void SetCorner(G4int areacode, G4double x, G4double y, G4double z);
 
@@ -200,26 +200,26 @@ class G4VSurface
 
  public:
 
-   static const G4int  kOutside ;
-   static const G4int  kInside  ;
-   static const G4int  kBoundary;
-   static const G4int  kCorner;
-   static const G4int  kCorner0Min1Min;
-   static const G4int  kCorner0Max1Min;
-   static const G4int  kCorner0Max1Max;
-   static const G4int  kCorner0Min1Max;
-   static const G4int  kAxisMin;
-   static const G4int  kAxisMax;
-   static const G4int  kAxisX;
-   static const G4int  kAxisY;
-   static const G4int  kAxisZ;
-   static const G4int  kAxisRho;
-   static const G4int  kAxisPhi;
-   static const G4int  kAxis0;
-   static const G4int  kAxis1;
-   static const G4int  kSizeMask;
-   static const G4int  kAxisMask;
-   static const G4int  kAreaMask;
+   static const G4int sOutside ;
+   static const G4int sInside  ;
+   static const G4int sBoundary;
+   static const G4int sCorner;
+   static const G4int sCMin1Min;
+   static const G4int sCMax1Min;
+   static const G4int sCMax1Max;
+   static const G4int sCMin1Max;
+   static const G4int sAxisMin;
+   static const G4int sAxisMax;
+   static const G4int sAxisX;
+   static const G4int sAxisY;
+   static const G4int sAxisZ;
+   static const G4int sAxisRho;
+   static const G4int sAxisPhi;
+   static const G4int sAxis0;
+   static const G4int sAxis1;
+   static const G4int sSizeMask;
+   static const G4int sAxisMask;
+   static const G4int sAreaMask;
 
  protected:
  
@@ -231,7 +231,7 @@ class G4VSurface
          G4int i;
          for (i=0; i<2; i++) {
             fDistance[i] = kInfinity;
-            fAreacode[i] = kOutside;
+            fAreacode[i] = sOutside;
             fIsValid[i]  = false;
             fXX[i].set(kInfinity, kInfinity, kInfinity);
          }
@@ -294,7 +294,7 @@ class G4VSurface
         G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
         for (i=0; i<2; i++) {
           fDistance[i] = kInfinity;
-          fAreacode[i] = kOutside;
+          fAreacode[i] = sOutside;
           fIsValid[i]  = false;
           fXX[i] = xx[i];
         }
@@ -353,9 +353,9 @@ class G4VSurface
                                          G4int         &boundarytype) const 
       {  
          // areacode must be one of them:
-         // kAxis0 & kAxisMin, kAxis0 & kAxisMax,
-         // kAxis1 & kAxisMin, kAxis1 & kAxisMax
-         if ((areacode & kAxis0) && (areacode & kAxis1)) {
+         // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+         // sAxis1 & sAxisMin, sAxis1 & sAxisMax
+         if ((areacode & sAxis0) && (areacode & sAxis1)) {
             G4cerr << "ERROR - G4VSurface::Boundary::GetBoundaryParameters()"
                    << G4endl
                    << "        Located in the corner area. This function"
@@ -365,7 +365,7 @@ class G4VSurface
                         "InvalidCondition", FatalException,
                         "Located in the corner area.");
          } 
-         if ((areacode & kSizeMask) != (fBoundaryAcode & kSizeMask)) {
+         if ((areacode & sSizeMask) != (fBoundaryAcode & sSizeMask)) {
             return false;
          }
          d  = fBoundaryDirection;
@@ -400,8 +400,8 @@ class G4VSurface
                         
  private:
                      
-   G4VSurface    *fNeighbours[4]; // {0,1,2,3} = kAxis0min, kAxis1min, 
-                                  //             kAxis0max, kAxis1max
+   G4VSurface    *fNeighbours[4]; // {0,1,2,3} = sAxis0min, sAxis1min, 
+                                  //             sAxis0max, sAxis1max
    G4ThreeVector fCorners[4];     // corners of the surface in local coordinate
    Boundary      fBoundaries[4];  // boundaries of the surface.
    G4String      fName;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
+// $Id: G4HyperbolicSurface.cc,v 1.5 2004-05-28 13:13:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
    }
    
    fInside.gp.set(kInfinity, kInfinity, kInfinity);
-   fInside.inside = ::kOutside;
+   fInside.inside = kOutside;
    fIsValidNorm = false;
    
    SetCorners();
@@ -114,7 +114,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
    fIsValidNorm = false;
 
    fInside.gp.set(kInfinity, kInfinity, kInfinity);
-   fInside.inside = ::kOutside;
+   fInside.inside = kOutside;
    
    SetCorners(EndInnerRadius, EndOuterRadius, DPhi, EndPhi, EndZ) ; 
 
@@ -186,7 +186,7 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
   
 
    if (p.mag() < DBL_MIN) {
-      fInside.inside = ::kOutside;
+      fInside.inside = kOutside;
       return fInside.inside;
    }
    
@@ -196,20 +196,20 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
 
    if (distanceToOut < -halftol) {
 
-     fInside.inside = ::kOutside;
+     fInside.inside = kOutside;
 
    } else {
 
       G4int areacode = GetAreaCode(p);
       if (IsOutside(areacode)) {
-         fInside.inside = ::kOutside;
+         fInside.inside = kOutside;
       } else if (IsBoundary(areacode)) {
-         fInside.inside = ::kSurface;
+         fInside.inside = kSurface;
       } else if (IsInside(areacode)) {
          if (distanceToOut <= halftol) {
-            fInside.inside = ::kSurface;
+            fInside.inside = kSurface;
          } else {
-            fInside.inside = ::kInside;
+            fInside.inside = kInside;
          }
       } else {
          G4cout << "WARNING - G4HyperbolicSurface::Inside()" << G4endl
@@ -287,7 +287,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4int i;
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
-         areacode[i] = kOutside;
+         areacode[i] = sOutside;
          isvalid[i]  = false;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
@@ -349,7 +349,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
             if (distance[0] >= 0) isvalid[0] = true;
          }
       } else { // kDontValidate                       
-         areacode[0] = kInside;
+         areacode[0] = sInside;
             if (distance[0] >= 0) isvalid[0] = true;
       }
                  
@@ -385,7 +385,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                if (distance[0] >= 0) isvalid[0] = true;
             }
          } else { // kDontValidate                       
-            areacode[0] = kInside;
+            areacode[0] = sInside;
                if (distance[0] >= 0) isvalid[0] = true;
          }
                  
@@ -410,7 +410,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4double      factor = 0.5/a;
       G4double      tmpdist[2] = {kInfinity, kInfinity};
       G4ThreeVector tmpxx[2] ;
-      G4int         tmpareacode[2] = {kOutside, kOutside};
+      G4int         tmpareacode[2] = {sOutside, sOutside};
       G4bool        tmpisvalid[2]  = {false, false};
       G4int i;
 
@@ -432,7 +432,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                continue;
             }
          } else { // kDontValidate
-            tmpareacode[i] = kInside;
+            tmpareacode[i] = sInside;
                if (tmpdist[i] >= 0) tmpisvalid[i] = true;
             continue;
          }
@@ -513,7 +513,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       // initialize
       for (G4int i=0; i<2; i++) {
          distance[i] = kInfinity;
-         areacode[i] = kOutside;
+         areacode[i] = sOutside;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
    }
@@ -624,7 +624,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    }
        
    gxx[0] = ComputeGlobalPoint(xx);
-   areacode[0]    = kInside;
+   areacode[0]    = sInside;
    G4bool isvalid = true;
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
@@ -638,7 +638,7 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
                                              G4bool         withTol)
 {
    static const G4double ctol = 0.5 * kCarTolerance;
-   G4int areacode = kInside;
+   G4int areacode = sInside;
 
    if ((fAxis[0] == kPhi && fAxis[1] == kZAxis))  {
       //G4int phiaxis = 0;
@@ -652,14 +652,14 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
 
          // test boundary of phiaxis
 
-         if ((phiareacode & kAxisMin) == kAxisMin) {
+         if ((phiareacode & sAxisMin) == sAxisMin) {
 
-            areacode |= (kAxis0 & (kAxisPhi | kAxisMin)) | kBoundary;
+            areacode |= (sAxis0 & (sAxisPhi | sAxisMin)) | sBoundary;
             if (isoutsideinphi) isoutside = true;
 
-         } else if ((phiareacode & kAxisMax)  == kAxisMax) {
+         } else if ((phiareacode & sAxisMax)  == sAxisMax) {
 
-            areacode |= (kAxis0 & (kAxisPhi | kAxisMax)) | kBoundary;
+            areacode |= (sAxis0 & (sAxisPhi | sAxisMax)) | sBoundary;
             if (isoutsideinphi) isoutside = true;
 
          }
@@ -668,29 +668,29 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
 
          if (xx.z() < fAxisMin[zaxis] + ctol) {
 
-            areacode |= (kAxis1 & (kAxisZ | kAxisMin));
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisZ | sAxisMin));
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary;
 
             if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
 
          } else if (xx.z() > fAxisMax[zaxis] - ctol) {
 
-            areacode |= (kAxis1 & (kAxisZ | kAxisMax));
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisZ | sAxisMax));
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary;
 
             if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
          }
 
-         // if isoutside = true, clear kInside bit.
+         // if isoutside = true, clear sInside bit.
          // if not on boundary, add boundary information. 
 
          if (isoutside) {
-            G4int tmpareacode = areacode & (~kInside);
+            G4int tmpareacode = areacode & (~sInside);
             areacode = tmpareacode;
-         } else if ((areacode & kBoundary) != kBoundary) {
-            areacode |= (kAxis0 & kAxisPhi) | (kAxis1 & kAxisZ);
+         } else if ((areacode & sBoundary) != sBoundary) {
+            areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
          }
 
          return areacode;
@@ -703,34 +703,34 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
 
          if (xx.z() < fAxisMin[zaxis]) {
 
-            areacode |= (kAxis1 & (kAxisZ | kAxisMin)) | kBoundary;
+            areacode |= (sAxis1 & (sAxisZ | sAxisMin)) | sBoundary;
 
          } else if (xx.z() > fAxisMax[zaxis]) {
 
-            areacode |= (kAxis1 & (kAxisZ | kAxisMax)) | kBoundary;
+            areacode |= (sAxis1 & (sAxisZ | sAxisMax)) | sBoundary;
 
          }
 
          // boundary of phi-axis
 
-         if (phiareacode == kAxisMin) {
+         if (phiareacode == sAxisMin) {
 
-            areacode |= (kAxis0 & (kAxisPhi | kAxisMin));
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary; 
+            areacode |= (sAxis0 & (sAxisPhi | sAxisMin));
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary; 
              
-         } else if (phiareacode == kAxisMax) {
+         } else if (phiareacode == sAxisMax) {
 
-            areacode |= (kAxis0 & (kAxisPhi | kAxisMax));
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary; 
+            areacode |= (sAxis0 & (sAxisPhi | sAxisMax));
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary; 
            
          }
 
          // if not on boundary, add boundary information. 
 
-         if ((areacode & kBoundary) != kBoundary) {
-            areacode |= (kAxis0 & kAxisPhi) | (kAxis1 & kAxisZ);
+         if ((areacode & sBoundary) != sBoundary) {
+            areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
          }
          return areacode;
       }
@@ -754,27 +754,27 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
    
    G4ThreeVector lowerlimit; // lower phi-boundary limit at z = xx.z()
    G4ThreeVector upperlimit; // upper phi-boundary limit at z = xx.z()
-   lowerlimit = GetBoundaryAtPZ(kAxis0 & kAxisMin, xx);
-   upperlimit = GetBoundaryAtPZ(kAxis0 & kAxisMax, xx);
+   lowerlimit = GetBoundaryAtPZ(sAxis0 & sAxisMin, xx);
+   upperlimit = GetBoundaryAtPZ(sAxis0 & sAxisMax, xx);
 
-   G4int  areacode  = kInside;
+   G4int  areacode  = sInside;
    G4bool isoutside = false; 
    
    if (withTol) {
          
       if (AmIOnLeftSide(xx, lowerlimit) >= 0) {        // xx is on lowerlimit
-         areacode |= (kAxisMin | kBoundary);
+         areacode |= (sAxisMin | sBoundary);
          if (AmIOnLeftSide(xx, lowerlimit) > 0) isoutside = true; 
 
       } else if (AmIOnLeftSide(xx, upperlimit) <= 0) { // xx is on upperlimit
-         areacode |= (kAxisMax | kBoundary);
+         areacode |= (sAxisMax | sBoundary);
          if (AmIOnLeftSide(xx, upperlimit) < 0) isoutside = true; 
       }
 
       // if isoutside = true, clear inside bit.
 
       if (isoutside) {
-         G4int tmpareacode = areacode & (~kInside);
+         G4int tmpareacode = areacode & (~sInside);
          areacode = tmpareacode;
       }
 
@@ -782,9 +782,9 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
    } else {
    
       if (AmIOnLeftSide(xx, lowerlimit, false) >= 0) {
-         areacode |= (kAxisMin | kBoundary);
+         areacode |= (sAxisMin | sBoundary);
       } else if (AmIOnLeftSide(xx, upperlimit, false) <= 0) {
-         areacode |= (kAxisMax | kBoundary);
+         areacode |= (sAxisMax | sBoundary);
       }
    }
 
@@ -825,25 +825,25 @@ void G4HyperbolicSurface::SetCorners(
       x = endRad[zmin]*cos(endPhi[zmin] - halfdphi);
       y = endRad[zmin]*sin(endPhi[zmin] - halfdphi);
       z = endZ[zmin];
-      SetCorner(kCorner0Min1Min, x, y, z);
+      SetCorner(sCMin1Min, x, y, z);
       
       // corner of Axis0max and Axis1min
       x = endRad[zmin]*cos(endPhi[zmin] + halfdphi);
       y = endRad[zmin]*sin(endPhi[zmin] + halfdphi);
       z = endZ[zmin];
-      SetCorner(kCorner0Max1Min, x, y, z);
+      SetCorner(sCMax1Min, x, y, z);
       
       // corner of Axis0max and Axis1max
       x = endRad[zmax]*cos(endPhi[zmax] + halfdphi);
       y = endRad[zmax]*sin(endPhi[zmax] + halfdphi);
       z = endZ[zmax];
-      SetCorner(kCorner0Max1Max, x, y, z);
+      SetCorner(sCMax1Max, x, y, z);
       
       // corner of Axis0min and Axis1max
       x = endRad[zmax]*cos(endPhi[zmax] - halfdphi);
       y = endRad[zmax]*sin(endPhi[zmax] - halfdphi);
       z = endZ[zmax];
-      SetCorner(kCorner0Min1Max, x, y, z);
+      SetCorner(sCMin1Max, x, y, z);
 
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -872,35 +872,35 @@ void G4HyperbolicSurface::SetCorners()
 void G4HyperbolicSurface::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
-   // kAxis0 must be kPhi.
+   // sAxis0 must be kPhi.
    // This fanction set lower phi-boundary and upper phi-boundary.
 
    if (fAxis[0] == kPhi && fAxis[1] == kZAxis) {
 
       G4ThreeVector direction;
-      // kAxis0 & kAxisMin
-      direction = GetCorner(kCorner0Min1Max) - GetCorner(kCorner0Min1Min);
+      // sAxis0 & sAxisMin
+      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
       direction = direction.unit();
-      SetBoundary(kAxis0 & (kAxisPhi | kAxisMin), direction, 
-                   GetCorner(kCorner0Min1Min), kAxisZ);
+      SetBoundary(sAxis0 & (sAxisPhi | sAxisMin), direction, 
+                   GetCorner(sCMin1Min), sAxisZ);
 
-      // kAxis0 & kAxisMax
-      direction = GetCorner(kCorner0Max1Max) - GetCorner(kCorner0Max1Min);
+      // sAxis0 & sAxisMax
+      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
       direction = direction.unit();
-      SetBoundary(kAxis0 & (kAxisPhi | kAxisMax), direction, 
-                  GetCorner(kCorner0Max1Min), kAxisZ);
+      SetBoundary(sAxis0 & (sAxisPhi | sAxisMax), direction, 
+                  GetCorner(sCMax1Min), sAxisZ);
 
-      // kAxis1 & kAxisMin
-      direction = GetCorner(kCorner0Max1Min) - GetCorner(kCorner0Min1Min);
+      // sAxis1 & sAxisMin
+      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
       direction = direction.unit();
-      SetBoundary(kAxis1 & (kAxisZ | kAxisMin), direction, 
-                   GetCorner(kCorner0Min1Min), kAxisPhi);
+      SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
+                   GetCorner(sCMin1Min), sAxisPhi);
 
-      // kAxis1 & kAxisMax
-      direction = GetCorner(kCorner0Max1Max) - GetCorner(kCorner0Min1Max);
+      // sAxis1 & sAxisMax
+      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
       direction = direction.unit();
-      SetBoundary(kAxis1 & (kAxisZ | kAxisMax), direction, 
-                  GetCorner(kCorner0Min1Max), kAxisPhi);
+      SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
+                  GetCorner(sCMin1Max), sAxisPhi);
    } else {
       G4cerr << "ERROR - G4HyperbolicSurface::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl

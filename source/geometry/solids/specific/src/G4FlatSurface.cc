@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
+// $Id: G4FlatSurface.cc,v 1.5 2004-05-28 13:13:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,7 +148,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4int i;
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
-         areacode[i] = kOutside;
+         areacode[i] = sOutside;
          isvalid[i]  = false;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
@@ -178,7 +178,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
             isvalid[0] = true;
          }
       } else { // kDontValidate
-         areacode[0] = kInside;
+         areacode[0] = sInside;
          isvalid[0] = true;
       }
 
@@ -211,7 +211,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
          if (distance[0] >= 0) isvalid[0] = true;
       }
    } else { // kDontValidate
-      areacode[0] = kInside;
+      areacode[0] = sInside;
          if (distance[0] >= 0) isvalid[0] = true;
    }
 
@@ -258,7 +258,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4int i;
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
-         areacode[i] = kOutside;
+         areacode[i] = sOutside;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
    }
@@ -277,7 +277,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    }
 
    gxx[0] = ComputeGlobalPoint(xx);
-   areacode[0] = kInside;
+   areacode[0] = sInside;
    G4bool isvalid = true;
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
@@ -294,7 +294,7 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
 
    static const G4double rtol = 0.5*kRadTolerance;
    
-   G4int areacode = kInside;
+   G4int areacode = sInside;
 
    if (fAxis[0] == kRho && fAxis[1] == kPhi) {
       G4int rhoaxis = 0;
@@ -302,8 +302,8 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
 
       G4ThreeVector dphimin;   // direction of phi-minimum boundary
       G4ThreeVector dphimax;   // direction of phi-maximum boundary
-      dphimin = GetCorner(kCorner0Max1Min);
-      dphimax = GetCorner(kCorner0Max1Max);   
+      dphimin = GetCorner(sCMax1Min);
+      dphimax = GetCorner(sCMax1Max);   
       
       if (withTol) {
 
@@ -313,12 +313,12 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
 
          if (xx.getRho() <= fAxisMin[rhoaxis] + rtol) {
 
-            areacode |= (kAxis0 & (kAxisRho | kAxisMin)) | kBoundary; // rho-min
+            areacode |= (sAxis0 & (sAxisRho | sAxisMin)) | sBoundary; // rho-min
             if (xx.getRho() < fAxisMin[rhoaxis] - rtol) isoutside = true; 
             
          } else if (xx.getRho() >= fAxisMax[rhoaxis] - rtol) {
 
-            areacode |= (kAxis0 & (kAxisRho | kAxisMax)) | kBoundary; // rho-max
+            areacode |= (sAxis0 & (sAxisRho | sAxisMax)) | sBoundary; // rho-max
             if (xx.getRho() > fAxisMax[rhoaxis] + rtol) isoutside = true; 
 
          }         
@@ -327,17 +327,17 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
 
          if (AmIOnLeftSide(xx, dphimin) >= 0) {           // xx is on dphimin
 
-            areacode |= (kAxis1 & (kAxisPhi | kAxisMin)); 
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisPhi | sAxisMin)); 
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary;
 
             if (AmIOnLeftSide(xx, dphimin) > 0) isoutside = true; 
 
          } else if (AmIOnLeftSide(xx, dphimax) <= 0) {    // xx is on dphimax
 
-            areacode |= (kAxis1 & (kAxisPhi | kAxisMax)); 
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); 
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary;
 
             if (AmIOnLeftSide(xx, dphimax) < 0) isoutside = true; 
 
@@ -347,10 +347,10 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
          // if not on boundary, add axis information. 
 
          if (isoutside) {
-            G4int tmpareacode = areacode & (~kInside);
+            G4int tmpareacode = areacode & (~sInside);
             areacode = tmpareacode;
-         } else if ((areacode & kBoundary) != kBoundary) {
-            areacode |= (kAxis0 & kAxisRho) | (kAxis1 & kAxisPhi);
+         } else if ((areacode & sBoundary) != sBoundary) {
+            areacode |= (sAxis0 & sAxisRho) | (sAxis1 & sAxisPhi);
          }
 
       } else {
@@ -358,27 +358,27 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
          // out of boundary of rho-axis
 
          if (xx.getRho() < fAxisMin[rhoaxis]) {
-            areacode |= (kAxis0 & (kAxisRho | kAxisMin)) | kBoundary;
+            areacode |= (sAxis0 & (sAxisRho | sAxisMin)) | sBoundary;
          } else if (xx.getRho() > fAxisMax[rhoaxis]) {
-            areacode |= (kAxis0 & (kAxisRho | kAxisMax)) | kBoundary;
+            areacode |= (sAxis0 & (sAxisRho | sAxisMax)) | sBoundary;
          }
          
          // out of boundary of phi-axis
 
          if (AmIOnLeftSide(xx, dphimin, false) >= 0) {       // xx is leftside or
-            areacode |= (kAxis1 & (kAxisPhi | kAxisMin)) ;   // boundary of dphimin
-            if   (areacode & kBoundary) areacode |= kCorner; // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisPhi | sAxisMin)) ;   // boundary of dphimin
+            if   (areacode & sBoundary) areacode |= sCorner; // xx is on the corner.
+            else                        areacode |= sBoundary;
 
          } else if (AmIOnLeftSide(xx, dphimax, false) <= 0) { // xx is rightside or
-            areacode |= (kAxis1 & (kAxisPhi | kAxisMax)) ;    // boundary of dphimax
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
-            else                        areacode |= kBoundary;
+            areacode |= (sAxis1 & (sAxisPhi | sAxisMax)) ;    // boundary of dphimax
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            else                        areacode |= sBoundary;
            
          }
 
-         if ((areacode & kBoundary) != kBoundary) {
-            areacode |= (kAxis0 & kAxisRho) | (kAxis1 & kAxisPhi);
+         if ((areacode & sBoundary) != sBoundary) {
+            areacode |= (sAxis0 & sAxisRho) | (sAxis1 & sAxisPhi);
          }
 
       }
@@ -412,22 +412,22 @@ void G4FlatSurface::SetCorners()
          x = fAxisMin[rhoaxis]*cos(fAxisMin[phiaxis]);
          y = fAxisMin[rhoaxis]*sin(fAxisMin[phiaxis]);
          z = 0;
-         SetCorner(kCorner0Min1Min, x, y, z);
+         SetCorner(sCMin1Min, x, y, z);
       // corner of Axis0max and Axis1min
          x = fAxisMax[rhoaxis]*cos(fAxisMin[phiaxis]);
          y = fAxisMax[rhoaxis]*sin(fAxisMin[phiaxis]);
          z = 0;
-         SetCorner(kCorner0Max1Min, x, y, z);
+         SetCorner(sCMax1Min, x, y, z);
       // corner of Axis0max and Axis1max
          x = fAxisMax[rhoaxis]*cos(fAxisMax[phiaxis]);
          y = fAxisMax[rhoaxis]*sin(fAxisMax[phiaxis]);
          z = 0;
-         SetCorner(kCorner0Max1Max, x, y, z);
+         SetCorner(sCMax1Max, x, y, z);
       // corner of Axis0min and Axis1max
          x = fAxisMin[rhoaxis]*cos(fAxisMax[phiaxis]);
          y = fAxisMin[rhoaxis]*sin(fAxisMax[phiaxis]);
          z = 0;
-         SetCorner(kCorner0Min1Max, x, y, z);
+         SetCorner(sCMin1Max, x, y, z);
        
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -449,29 +449,29 @@ void G4FlatSurface::SetBoundaries()
    if (fAxis[0] == kRho && fAxis[1] == kPhi) {
    
       G4ThreeVector direction;
-      // kAxis0 & kAxisMin
-      direction = GetCorner(kCorner0Min1Max) - GetCorner(kCorner0Min1Min);
+      // sAxis0 & sAxisMin
+      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
       direction = direction.unit();
-      SetBoundary(kAxis0 & (kAxisPhi | kAxisMin), direction,
-                  GetCorner(kCorner0Min1Min), kAxisPhi);
+      SetBoundary(sAxis0 & (sAxisPhi | sAxisMin), direction,
+                  GetCorner(sCMin1Min), sAxisPhi);
                   
-      // kAxis0 & kAxisMax
-      direction = GetCorner(kCorner0Max1Max) - GetCorner(kCorner0Max1Min);
+      // sAxis0 & sAxisMax
+      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
       direction = direction.unit();
-      SetBoundary(kAxis0 & (kAxisPhi | kAxisMax), direction,
-                  GetCorner(kCorner0Max1Min), kAxisPhi);
+      SetBoundary(sAxis0 & (sAxisPhi | sAxisMax), direction,
+                  GetCorner(sCMax1Min), sAxisPhi);
 
-      // kAxis1 & kAxisMin
-      direction = GetCorner(kCorner0Max1Min) - GetCorner(kCorner0Min1Min);
+      // sAxis1 & sAxisMin
+      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
       direction = direction.unit();
-      SetBoundary(kAxis1 & (kAxisRho | kAxisMin), direction,
-                  GetCorner(kCorner0Min1Min), kAxisRho);
+      SetBoundary(sAxis1 & (sAxisRho | sAxisMin), direction,
+                  GetCorner(sCMin1Min), sAxisRho);
       
-      // kAxis1 & kAxisMax
-      direction = GetCorner(kCorner0Max1Max) - GetCorner(kCorner0Min1Max);
+      // sAxis1 & sAxisMax
+      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
       direction = direction.unit();
-      SetBoundary(kAxis1 & (kAxisRho | kAxisMax), direction,
-                  GetCorner(kCorner0Min1Max), kAxisPhi);
+      SetBoundary(sAxis1 & (sAxisRho | sAxisMax), direction,
+                  GetCorner(sCMin1Max), sAxisPhi);
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl

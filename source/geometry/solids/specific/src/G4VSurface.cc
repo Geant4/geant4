@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.4 2004-05-24 12:09:50 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.5 2004-05-28 13:13:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,28 +41,28 @@
 
 #include "G4VSurface.hh"
 
-const G4int  G4VSurface::kOutside        = 0x00000000;
-const G4int  G4VSurface::kInside         = 0x10000000;
-const G4int  G4VSurface::kBoundary       = 0x20000000;
-const G4int  G4VSurface::kCorner         = 0x40000000;
-const G4int  G4VSurface::kCorner0Min1Min = 0x40000101; 
-const G4int  G4VSurface::kCorner0Max1Min = 0x40000201;
-const G4int  G4VSurface::kCorner0Max1Max = 0x40000202; 
-const G4int  G4VSurface::kCorner0Min1Max = 0x40000102; 
-const G4int  G4VSurface::kAxisMin        = 0x00000101; 
-const G4int  G4VSurface::kAxisMax        = 0x00000202; 
-const G4int  G4VSurface::kAxisX          = 0x00000404;
-const G4int  G4VSurface::kAxisY          = 0x00000808;
-const G4int  G4VSurface::kAxisZ          = 0x00000C0C;
-const G4int  G4VSurface::kAxisRho        = 0x00001010;
-const G4int  G4VSurface::kAxisPhi        = 0x00001414;
+const G4int  G4VSurface::sOutside        = 0x00000000;
+const G4int  G4VSurface::sInside         = 0x10000000;
+const G4int  G4VSurface::sBoundary       = 0x20000000;
+const G4int  G4VSurface::sCorner         = 0x40000000;
+const G4int  G4VSurface::sCMin1Min = 0x40000101; 
+const G4int  G4VSurface::sCMax1Min = 0x40000201;
+const G4int  G4VSurface::sCMax1Max = 0x40000202; 
+const G4int  G4VSurface::sCMin1Max = 0x40000102; 
+const G4int  G4VSurface::sAxisMin        = 0x00000101; 
+const G4int  G4VSurface::sAxisMax        = 0x00000202; 
+const G4int  G4VSurface::sAxisX          = 0x00000404;
+const G4int  G4VSurface::sAxisY          = 0x00000808;
+const G4int  G4VSurface::sAxisZ          = 0x00000C0C;
+const G4int  G4VSurface::sAxisRho        = 0x00001010;
+const G4int  G4VSurface::sAxisPhi        = 0x00001414;
 
 // mask
-const G4int  G4VSurface::kAxis0          = 0x0000FF00;
-const G4int  G4VSurface::kAxis1          = 0x000000FF;
-const G4int  G4VSurface::kSizeMask       = 0x00000303;
-const G4int  G4VSurface::kAxisMask       = 0x0000FCFC;
-const G4int  G4VSurface::kAreaMask       = 0XF0000000;
+const G4int  G4VSurface::sAxis0          = 0x0000FF00;
+const G4int  G4VSurface::sAxis1          = 0x000000FF;
+const G4int  G4VSurface::sSizeMask       = 0x00000303;
+const G4int  G4VSurface::sAxisMask       = 0x0000FCFC;
+const G4int  G4VSurface::sAreaMask       = 0XF0000000;
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -221,8 +221,8 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
    // return distance to nearest boundary from arbitrary point p 
    // in local coodinate.
    // Argument areacode must be one of them:
-   // kAxis0 & kAxisMin, kAxis0 & kAxisMax,
-   // kAxis1 & kAxisMin, kAxis1 & kAxisMax.
+   // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+   // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
    //
 
    G4ThreeVector d;    // direction vector of the boundary
@@ -240,13 +240,13 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
                   FatalException, "Point is in the corner area.");
    } else if (IsAxis0(areacode) || IsAxis1(areacode)) {
       GetBoundaryParameters(areacode, d, x0, boundarytype);
-      if (boundarytype == kAxisPhi) {
+      if (boundarytype == sAxisPhi) {
          G4double t = x0.getRho() / p.getRho();
          xx.set(t*p.x(), t*p.y(), x0.z());
          dist = (xx - p).mag();
       } else { 
          // linear boundary
-         // kAxisX, kAxisY, kAxisZ, kAxisRho
+         // sAxisX, sAxisY, sAxisZ, sAxisRho
          dist = DistanceToLine(p, x0, d, xx);
       }
    } else {
@@ -275,7 +275,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
    
    G4ThreeVector gxx[2];
    G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {kOutside, kOutside};
+   G4int         areacode[2]    = {sOutside, sOutside};
    G4bool        isvalid[2]     = {false, false};
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;  
@@ -291,7 +291,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
       //   - particle goes outword the surface
 
       if (!isvalid[i]) {
-         // xx[i] is kOutside or distance[i] < 0
+         // xx[i] is sOutside or distance[i] < 0
          continue;      
       }
 
@@ -318,7 +318,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
             G4cout << "   G4VSurface::DistanceToIn(p,v): "
-                   << " areacode kInside name, distance = "
+                   << " areacode sInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
 #endif 
          }
@@ -338,7 +338,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             // if on boundary, nneighbours = 1.
             G4ThreeVector tmpgxx[2];
             G4double      tmpdist[2]     = {kInfinity, kInfinity};
-            G4int         tmpareacode[2] = {kOutside, kOutside};
+            G4int         tmpareacode[2] = {sOutside, sOutside};
             G4bool        tmpisvalid[2]  = {false, false};
                   
             G4int tmpnxx = neighbours[j]->DistanceToSurface(
@@ -350,7 +350,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             for (G4int k=0; k< tmpnxx; k++) {
 
                //  
-               // if tmpxx[k] is valid && kInside, the final winner must
+               // if tmpxx[k] is valid && sInside, the final winner must
                // be neighbour surface. return kInfinity. 
                // else , choose tmpxx on same boundary of xx, then check normal 
                //  
@@ -373,7 +373,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                   continue;
 
                //  
-               // if tmpxx[k] is valid && kInside, the final winner must
+               // if tmpxx[k] is valid && sInside, the final winner must
                // be neighbour surface. return .  
                //
 
@@ -402,7 +402,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                 besti   = i;
 #ifdef G4SPECSDEBUG
                G4cout << "   G4VSurface::DistanceToIn(p,v): "
-                      << " areacode kBoundary & kBoundary distance = "
+                      << " areacode sBoundary & sBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
 #endif 
             }
@@ -447,7 +447,7 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
 #endif
 
    G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {kOutside, kOutside};
+   G4int         areacode[2]    = {sOutside, sOutside};
    G4bool        isvalid [2]    = {false, false};
    G4ThreeVector gxx[2];
    G4int         nxx;
@@ -512,7 +512,7 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
    G4double distance[2] = {kInfinity, kInfinity};
-   G4int    areacode[2] = {kOutside, kOutside};
+   G4int    areacode[2] = {sOutside, sOutside};
    G4ThreeVector gxx[2];
    G4int nxx;
 
@@ -594,8 +594,8 @@ void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
                                              G4int         &boundarytype) const
 {
    // areacode must be one of them:
-   // kAxis0 & kAxisMin, kAxis0 & kAxisMax,
-   // kAxis1 & kAxisMin, kAxis1 & kAxisMax.
+   // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+   // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
    
    G4int i;
    for (i=0; i<4; i++) {
@@ -620,10 +620,10 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
                                           const G4ThreeVector &p) const
 {
    // areacode must be one of them:
-   // kAxis0 & kAxisMin, kAxis0 & kAxisMax,
-   // kAxis1 & kAxisMin, kAxis1 & kAxisMax.
+   // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+   // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
 
-   if (areacode & kAxis0 && areacode & kAxis1) {
+   if (areacode & sAxis0 && areacode & sAxis1) {
      G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
             << "        Point is in the corner area. This function returns"
             << G4endl
@@ -654,8 +654,8 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
                  FatalException, "Not registered boundary.");
    }
 
-   if (((boundarytype & kAxisPhi) == kAxisPhi) ||
-       ((boundarytype & kAxisRho) == kAxisRho)) {
+   if (((boundarytype & sAxisPhi) == sAxisPhi) ||
+       ((boundarytype & sAxisRho) == sAxisRho)) {
      G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
             << "        Boundary at areacode " << areacode << G4endl
             << "        is not a z-depended line." << G4endl;
@@ -670,20 +670,20 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
 
 void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 {
-   if ((areacode & kCorner) != kCorner){
+   if ((areacode & sCorner) != sCorner){
      G4cerr << "ERROR - G4VSurface::SetCorner()" << G4endl
             << "        areacode " << areacode << G4endl;
      G4Exception("G4VSurface::SetCorner()", "InvalidSetup",
                  FatalException, "Area code must represents corner.");
    }
 
-   if ((areacode & kCorner0Min1Min) == kCorner0Min1Min) {
+   if ((areacode & sCMin1Min) == sCMin1Min) {
       fCorners[0].set(x, y, z);
-   } else if ((areacode & kCorner0Max1Min) == kCorner0Max1Min) {
+   } else if ((areacode & sCMax1Min) == sCMax1Min) {
       fCorners[1].set(x, y, z);
-   } else if ((areacode & kCorner0Max1Max) == kCorner0Max1Max) {
+   } else if ((areacode & sCMax1Max) == sCMax1Max) {
       fCorners[2].set(x, y, z);
-   } else if ((areacode & kCorner0Min1Max) == kCorner0Min1Max) {
+   } else if ((areacode & sCMin1Max) == sCMin1Max) {
       fCorners[3].set(x, y, z);
    }
 }
@@ -693,7 +693,7 @@ void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 
 void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 {
-   if ((areacode & kBoundary) != kBoundary) {
+   if ((areacode & sBoundary) != sBoundary) {
      G4Exception("G4VSurface::GetBoundaryAxis()", "InvalidCondition",
                  FatalException, "Not located on a boundary!");
    }
@@ -702,23 +702,23 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 
       G4int whichaxis = 0 ;
       if (i == 0) {
-         whichaxis = kAxis0;
+         whichaxis = sAxis0;
       } else if (i == 1) {
-         whichaxis = kAxis1;
+         whichaxis = sAxis1;
       }
       
       // extracted axiscode of whichaxis
-      G4int axiscode = whichaxis & kAxisMask & areacode ; 
+      G4int axiscode = whichaxis & sAxisMask & areacode ; 
       if (axiscode) {
-         if (axiscode == (whichaxis & kAxisX)) {
+         if (axiscode == (whichaxis & sAxisX)) {
             axis[i] = kXAxis;
-         } else if (axiscode == (whichaxis & kAxisY)) {
+         } else if (axiscode == (whichaxis & sAxisY)) {
             axis[i] = kYAxis;
-         } else if (axiscode == (whichaxis & kAxisZ)) {
+         } else if (axiscode == (whichaxis & sAxisZ)) {
             axis[i] = kZAxis;
-         } else if (axiscode == (whichaxis & kAxisRho)) {
+         } else if (axiscode == (whichaxis & sAxisRho)) {
             axis[i] = kRho;
-         } else if (axiscode == (whichaxis & kAxisPhi)) {
+         } else if (axiscode == (whichaxis & sAxisPhi)) {
             axis[i] = kPhi;
          } else {
            G4cerr << "ERROR - G4VSurface::GetBoundaryAxis()" << G4endl
@@ -735,28 +735,28 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 
 void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
-   if (areacode & kCorner) {
-      if (areacode & kCorner0Min1Max) {
+   if (areacode & sCorner) {
+      if (areacode & sCMin1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & kCorner0Max1Min) {
+      } else if (areacode & sCMax1Min) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & kCorner0Max1Max) {
+      } else if (areacode & sCMax1Max) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMax[1];
-      } else if (areacode & kCorner0Min1Max) {
+      } else if (areacode & sCMin1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMax[1];
       }
-   } else if (areacode & kBoundary) {
-      if (areacode & (kAxis0 | kAxisMin)) {
+   } else if (areacode & sBoundary) {
+      if (areacode & (sAxis0 | sAxisMin)) {
          limit[0] = fAxisMin[0];
-      } else if (areacode & (kAxis1 | kAxisMin)) {
+      } else if (areacode & (sAxis1 | sAxisMin)) {
          limit[0] = fAxisMin[1];
-      } else if (areacode & (kAxis0 | kAxisMax)) {
+      } else if (areacode & (sAxis0 | sAxisMax)) {
          limit[0] = fAxisMax[0];
-      } else if (areacode & (kAxis1 | kAxisMax)) {
+      } else if (areacode & (sAxis1 | sAxisMax)) {
          limit[0] = fAxisMax[1];
       }
    } else {
@@ -775,11 +775,11 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
                              const G4ThreeVector &x0,
                              const G4int         &boundarytype)
 {
-   G4int code = (~kAxisMask) & axiscode;
-   if ((code == (kAxis0 & kAxisMin)) ||
-       (code == (kAxis0 & kAxisMax)) ||
-       (code == (kAxis1 & kAxisMin)) ||
-       (code == (kAxis1 & kAxisMax))) {
+   G4int code = (~sAxisMask) & axiscode;
+   if ((code == (sAxis0 & sAxisMin)) ||
+       (code == (sAxis0 & sAxisMax)) ||
+       (code == (sAxis1 & sAxisMin)) ||
+       (code == (sAxis1 & sAxisMax))) {
 
       G4int i;
       G4bool done = false;
@@ -810,10 +810,10 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
 
 void G4VSurface::DebugPrint()
 {
-   G4ThreeVector A = fRot * GetCorner(kCorner0Min1Min) + fTrans;
-   G4ThreeVector B = fRot * GetCorner(kCorner0Max1Min) + fTrans;
-   G4ThreeVector C = fRot * GetCorner(kCorner0Max1Max) + fTrans;
-   G4ThreeVector D = fRot * GetCorner(kCorner0Min1Max) + fTrans;
+   G4ThreeVector A = fRot * GetCorner(sCMin1Min) + fTrans;
+   G4ThreeVector B = fRot * GetCorner(sCMax1Min) + fTrans;
+   G4ThreeVector C = fRot * GetCorner(sCMax1Max) + fTrans;
+   G4ThreeVector D = fRot * GetCorner(sCMin1Max) + fTrans;
   
    G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
           << G4endl;
@@ -826,10 +826,10 @@ void G4VSurface::DebugPrint()
           << ", " << fAxisMax[0] << ")" << G4endl;
    G4cout << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 
           << ", " << fAxisMax[1] << ")" << G4endl;
-   G4cout << "/* Cornar point kCorner0Min1Min = " << A << G4endl;
-   G4cout << "/* Cornar point kCorner0Max1Min = " << B << G4endl;
-   G4cout << "/* Cornar point kCorner0Max1Max = " << C << G4endl;
-   G4cout << "/* Cornar point kCorner0Min1Max = " << D << G4endl;
+   G4cout << "/* Cornar point sCMin1Min = " << A << G4endl;
+   G4cout << "/* Cornar point sCMax1Min = " << B << G4endl;
+   G4cout << "/* Cornar point sCMax1Max = " << C << G4endl;
+   G4cout << "/* Cornar point sCMin1Max = " << D << G4endl;
    G4cout << "/*---------------------------------------------------------"
           << G4endl;
 }

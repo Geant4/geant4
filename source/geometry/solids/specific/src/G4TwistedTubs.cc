@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.4 2004-05-24 12:09:50 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.5 2004-05-28 13:13:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -569,9 +569,9 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == ::kInside) {
+   if (currentside == kInside) {
 
-   } else if (currentside == ::kSurface) {
+   } else if (currentside == kSurface) {
       // particle is just on a boundary.
       // if the particle is entering to the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
@@ -647,16 +647,16 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
 
    switch (currentside) {
 
-      case (::kInside) : {
+      case (kInside) : {
 
       }
 
-      case (::kSurface) : {
+      case (kSurface) : {
          *tmpdist = 0.;
          return fLastDistanceToIn.value;
       }
 
-      case (::kOutside) : {
+      case (kOutside) : {
          // Initialize
          G4double      distance = kInfinity;   
 
@@ -735,9 +735,9 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == ::kOutside) {
+   if (currentside == kOutside) {
 
-   } else if (currentside == ::kSurface) {
+   } else if (currentside == kSurface) {
       // particle is just on a boundary.
       // if the particle is exiting from the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
@@ -825,15 +825,15 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    EInside currentside = Inside(p);
 
    switch (currentside) {
-      case (::kOutside) : {
+      case (kOutside) : {
 
       }
-      case (::kSurface) : {
+      case (kSurface) : {
         *tmpdist = 0.;
          return fLastDistanceToOut.value;
       }
       
-      case (::kInside) : {
+      case (kInside) : {
          // Initialize
          G4double      distance = kInfinity;
    
