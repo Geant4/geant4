@@ -34,6 +34,12 @@ ifdef G4ANALYSIS_BUILD_JAS
   LIB_JAS = 1	
 endif
 
+# ------------- Else ---------------
+
+ifdef G4ANALYSIS_TUPLE
+  CPPFLAGS += -DG4ANALYSIS_TUPLE
+endif
+
 # ------------- Hook packages -----------------
 ANALYSISLIBS := 
 #
