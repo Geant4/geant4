@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.6 2000-02-27 07:48:52 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.7 2000-03-02 00:52:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -641,6 +641,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     2,               0,            +1,             
               "meson",               0,             0,         113,
                 false,          0.0*ns,          NULL );
+  particle->SetAntiPDGEncoding(113);
   // set sub type
   particle->SetMultipletName("rho");
   // create decay table
