@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.4 2004-11-10 18:04:44 link Exp $
+// $Id: G4VSurface.icc,v 1.5 2004-11-13 18:26:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -322,24 +322,24 @@ G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces)
    G4int i = 0;
    
   if ( (areacode & sAxis0Min ) == sAxis0Min ) {
-    surfaces[i] = fNeighbours[0] ;	
+    surfaces[i] = fNeighbours[0] ;
     i++ ;
   }
   
   if ( ( areacode & sAxis1Min ) == sAxis1Min ) {
-     surfaces[i] = fNeighbours[1] ;	
+     surfaces[i] = fNeighbours[1] ;
    i++ ;
     if ( i == 2 ) return i ;
   }
 
   if ( ( areacode & sAxis0Max ) == sAxis0Max ) {
-    surfaces[i] = fNeighbours[2] ;	
+    surfaces[i] = fNeighbours[2] ;
     i++ ;
     if ( i == 2 ) return i ;
   }
   
   if ( ( areacode & sAxis1Max ) == sAxis1Max ) {
-    surfaces[i] = fNeighbours[3] ;	
+    surfaces[i] = fNeighbours[3] ;
     i++ ;
     if ( i == 2 ) return i ;
   }

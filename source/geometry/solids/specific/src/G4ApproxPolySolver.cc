@@ -28,8 +28,9 @@
 //
 // G4ApproxPolySolver.cc
 //
-// Author: 
-//   Oliver Link
+// Author:
+//
+//   Oliver Link (oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4ApproxPolySolver.hh" 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.2 2004-11-13 17:46:04 gcosmo Exp $
+// $Id: G4TwistedTrap.hh,v 1.3 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,11 +57,11 @@ class G4TwistedTrap: public G4VSolid
  public:  // with description
  
   G4TwistedTrap(const G4String &pname,         // Name of instance
-		     G4double  twistedangle,  // Twisted angle
-		     G4double  pDx1,          // half length in x at y=-pDy
-		     G4double  pDx2,          // half length in x at y=+pDy
-		     G4double  pDy,           // half length in y
-		     G4double  pDz)  ;        // half z length 
+                      G4double  twistedangle,  // Twisted angle
+                      G4double  pDx1,          // half length in x at y=-pDy
+                      G4double  pDx2,          // half length in x at y=+pDy
+                      G4double  pDy,           // half length in y
+                      G4double  pDz)  ;        // half z length 
   
   virtual ~G4TwistedTrap();
              

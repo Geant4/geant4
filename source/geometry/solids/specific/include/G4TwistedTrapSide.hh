@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.4 2004-11-10 18:04:41 link Exp $
+// $Id: G4TwistedTrapSide.hh,v 1.5 2004-11-13 18:26:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,10 +33,11 @@
 //
 // Class description:
 //
-//  Class describing a twisted boundary surface for G4VSolid.
+//  Class describing a twisted boundary surface for a trapezoid.
 
-// Author: 
-//   Oliver Link
+// Author:
+//
+//   Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 #ifndef __G4TWISTEDTRAPSIDE__
@@ -48,69 +49,60 @@ class G4TwistedTrapSide : public G4VSurface
 {
   public:  // with description
    
-  G4TwistedTrapSide(const G4String     &name,
-		   G4double      PhiTwist,
-		   G4double      pDx1,
-		   G4double      pDx2,
-		   G4double      pDy,
-		   G4double      pDz,
-		   G4double      AngleSide);
+    G4TwistedTrapSide(const G4String     &name,
+                            G4double      PhiTwist,
+                            G4double      pDx1,
+                            G4double      pDx2,
+                            G4double      pDy,
+                            G4double      pDz,
+                            G4double      AngleSide);
   
-  virtual ~G4TwistedTrapSide();
+    virtual ~G4TwistedTrapSide();
    
-  virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
-                                          G4bool isGlobal = false) ;   
+    virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
+                                           G4bool isGlobal = false) ;   
    
-  virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-				  const G4ThreeVector &gv,
-				  G4ThreeVector  gxx[],
-				  G4double  distance[],
-				  G4int     areacode[],
-				  G4bool    isvalid[],
-				  EValidate validate = kValidateWithTol);
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                    const G4ThreeVector &gv,
+                                          G4ThreeVector  gxx[],
+                                          G4double  distance[],
+                                          G4int     areacode[],
+                                          G4bool    isvalid[],
+                                    EValidate validate = kValidateWithTol);
                                                   
-  virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-				  G4ThreeVector  gxx[],
-				  G4double       distance[],
-				  G4int          areacode[]);
-  
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                          G4ThreeVector  gxx[],
+                                          G4double       distance[],
+                                          G4int          areacode[]);
+  private:
 
-private:
+    virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+                                    G4bool         withTol = true);
+    virtual void SetCorners();
+    virtual void SetBoundaries();
 
-  
-  virtual G4int GetAreaCode(const G4ThreeVector &xx, 
-                                   G4bool         withTol = true);
+    void GetPhiUAtX(G4ThreeVector p, G4double &phi, G4double &u);
+    G4ThreeVector ProjectPoint(const G4ThreeVector &p,
+                                     G4bool isglobal = false);
 
-  virtual void SetCorners();
-  
-  virtual void SetBoundaries();
+    inline G4ThreeVector SurfacePoint(G4double phi, G4double u);
+    inline G4ThreeVector NormAng(G4double phi, G4double u);
+    inline G4double Xcoef(G4double u);    // to calculate the w(u) function
 
-  void GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)  ;
+  private:
 
-  G4ThreeVector ProjectPoint(const G4ThreeVector &p,
-                                            G4bool isglobal = false)  ;
+    G4double fDx1;        // Half-length along x of the side at y=-fDy1
+                          // (d in surface equation)
+    G4double fDx2;        // Half-length along x of the side at y=+fDy1
+                          // (a in surface equation)
+    G4double fDy;         // Half-length along y of the face
+                          // (b in surface equation)
+    G4double fDz;         // Half-length along the z axis
+                          // (L in surface equation)
+    G4double fPhiTwist;   // twist angle ( dphi in surface equation)
 
-
-  inline G4ThreeVector SurfacePoint( G4double phi, G4double u) ;
-
-  inline G4ThreeVector NormAng( G4double phi, G4double u )  ;
-
-  inline G4double Xcoef(G4double u) ;    // to calculate the w(u) function
-
-private:
-
-  G4double       fDx1;  // Half-length along x of the side at y=-fDy1 (d in surface equation)
-  G4double       fDx2;  // Half-length along x of the side at y=+fDy1 (a in surface equation)
-  G4double       fDy;   // Half-length along y of the face  (b in surface equation)
-  G4double       fDz ;  // Half-length along the z axis     (L in surface equation)
-
-  G4double       fPhiTwist ;  // twist angle    ( dphi in surface equation)
-
-  G4double       fAngleSide ;
-
+    G4double fAngleSide;
 };   
-
-
 
 //========================================================
 // inline functions
@@ -127,16 +119,14 @@ G4double G4TwistedTrapSide::Xcoef(G4double u)
   return  fDx2 + ( fDx1-fDx2)/2 - u * (fDx1-fDx2)/(2*fDy) ;
 }
 
-
-
 inline
 G4ThreeVector G4TwistedTrapSide::SurfacePoint( G4double phi, G4double u ) 
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
   G4ThreeVector SurfPoint ( Xcoef(u) * cos(phi) - u * sin(phi),
-			    Xcoef(u) * sin(phi) + u * cos(phi),
-			    2*fDz*phi/fPhiTwist );
+                            Xcoef(u) * sin(phi) + u * cos(phi),
+                            2*fDz*phi/fPhiTwist );
   return SurfPoint ;
 
 }
@@ -155,11 +145,10 @@ G4ThreeVector G4TwistedTrapSide::NormAng( G4double phi, G4double u )
   G4double d2 = d*d ;
   G4double a2 = a*a ;
   G4ThreeVector nvec( ( L * (2*b*cos(phi) + (a-d)*sin(phi)))/2.,
-		      -(L*((a-d)*cos(phi) - 2*b*sin(phi)))/2.,
-		      (dphi*(-b*d2 + 8*b2*u - 4*a*d*u + 2*d2*u + a2*(b + 2*u)))/(8.*b) ) ;
-
-  return nvec.unit() ;
+                      -(L*((a-d)*cos(phi) - 2*b*sin(phi)))/2.,
+                      (dphi*(-b*d2 + 8*b2*u - 4*a*d*u + 2*d2*u + a2*(b + 2*u)))
+                      /(8.*b) ) ;
+  return nvec.unit();
 }
-
 
 #endif

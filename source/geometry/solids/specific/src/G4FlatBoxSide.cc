@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatBoxSide.cc,v 1.1 2004-11-10 18:05:42 link Exp $
+// $Id: G4FlatBoxSide.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,11 +42,11 @@
 //* constructors ------------------------------------------------------
 
 G4FlatBoxSide::G4FlatBoxSide( const G4String        &name,
-			      G4double      PhiTwist,
-			      G4double      pDx,
-			      G4double      pDy,
-			      G4double      pDz,
-			      G4int         handedness) 
+                              G4double      PhiTwist,
+                              G4double      pDx,
+                              G4double      pDy,
+                              G4double      pDz,
+                              G4int         handedness) 
 
   : G4VSurface(name)
 {
@@ -61,8 +61,8 @@ G4FlatBoxSide::G4FlatBoxSide( const G4String        &name,
    fCurrentNormal.normal.set(0, 0, (fHandedness < 0 ? -1 : 1)); 
          // Unit vector, in local coordinate system
    fRot.rotateZ( fHandedness > 0 
-		 ? 0.5 * fPhiTwist
-		 : -0.5 * fPhiTwist );
+                 ? 0.5 * fPhiTwist
+                 : -0.5 * fPhiTwist );
 
    fTrans.set(0, 0, fHandedness > 0 ? fDz : -fDz ) ;
 
@@ -283,39 +283,39 @@ G4int G4FlatBoxSide::GetAreaCode(const G4ThreeVector &xx,
       // test boundary of x-axis
       
       if (xx.x() < fAxisMin[xaxis] + ctol) {
-	areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
-	if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = true;
-	
+        areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
+        if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = true;
+        
       } else if (xx.x() > fAxisMax[xaxis] - ctol) {
-	areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
-	if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = true;
+        areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
+        if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = true;
       }
       
       // test boundary of y-axis
       
       if (xx.y() < fAxisMin[yaxis] + ctol) {
-	areacode |= (sAxis1 & (sAxisY | sAxisMin)); 
-	
-	if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
-	else                        areacode |= sBoundary;
-	if (xx.y() <= fAxisMin[yaxis] - ctol) isoutside = true;
-	
+        areacode |= (sAxis1 & (sAxisY | sAxisMin)); 
+        
+        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+        else                        areacode |= sBoundary;
+        if (xx.y() <= fAxisMin[yaxis] - ctol) isoutside = true;
+        
       } else if (xx.y() > fAxisMax[yaxis] - ctol) {
-	areacode |= (sAxis1 & (sAxisY | sAxisMax));
-	
-	if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
-	else                        areacode |= sBoundary; 
-	if (xx.y() >= fAxisMax[yaxis] + ctol) isoutside = true;
+        areacode |= (sAxis1 & (sAxisY | sAxisMax));
+        
+        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+        else                        areacode |= sBoundary; 
+        if (xx.y() >= fAxisMax[yaxis] + ctol) isoutside = true;
       }
       
       // if isoutside = true, clear inside bit.             
       // if not on boundary, add axis information.             
       
       if (isoutside) {
-	G4int tmpareacode = areacode & (~sInside);
-	areacode = tmpareacode;
+        G4int tmpareacode = areacode & (~sInside);
+        areacode = tmpareacode;
       } else if ((areacode & sBoundary) != sBoundary) {
-	areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisY);
+        areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisY);
       }           
       
     } else {
@@ -323,33 +323,33 @@ G4int G4FlatBoxSide::GetAreaCode(const G4ThreeVector &xx,
       // boundary of x-axis
       
       if (xx.x() < fAxisMin[xaxis] ) {
-	areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
+        areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
       } else if (xx.x() > fAxisMax[xaxis]) {
-	areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
+        areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
       }
       
       // boundary of y-axis
       
       if (xx.y() < fAxisMin[yaxis]) {
-	areacode |= (sAxis1 & (sAxisY | sAxisMin));
-	if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
-	else                        areacode |= sBoundary; 
-	
+        areacode |= (sAxis1 & (sAxisY | sAxisMin));
+        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+        else                        areacode |= sBoundary; 
+        
       } else if (xx.y() > fAxisMax[yaxis]) {
-	areacode |= (sAxis1 & (sAxisY | sAxisMax)) ;
-	if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
-	else                        areacode |= sBoundary; 
+        areacode |= (sAxis1 & (sAxisY | sAxisMax)) ;
+        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+        else                        areacode |= sBoundary; 
       }
       
       if ((areacode & sBoundary) != sBoundary) {
-	areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisY);
+        areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisY);
       }           
     }
     return areacode;
   } else {
     G4Exception("G4FlatBoxSide::GetAreaCode()",
-		"NotImplemented", FatalException,
-		"Feature NOT implemented !");
+                "NotImplemented", FatalException,
+                "Feature NOT implemented !");
   }
   
   return areacode;
@@ -393,11 +393,11 @@ void G4FlatBoxSide::SetCorners()
      
    } else {
      G4cerr << "ERROR - G4FlatBoxSide::SetCorners()" << G4endl
-	    << "        fAxis[0] = " << fAxis[0] << G4endl
-	    << "        fAxis[1] = " << fAxis[1] << G4endl;
+            << "        fAxis[0] = " << fAxis[0] << G4endl
+            << "        fAxis[1] = " << fAxis[1] << G4endl;
      G4Exception("G4FlatBoxSide::SetCorners()",
-		 "NotImplemented", FatalException,
-		 "Feature NOT implemented !");
+                 "NotImplemented", FatalException,
+                 "Feature NOT implemented !");
    }
    
    
@@ -419,33 +419,33 @@ void G4FlatBoxSide::SetBoundaries()
     direction = - ( GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min) ) ;
     direction = direction.unit();
     SetBoundary(sAxis0 & (sAxisX | sAxisMin), direction, 
-		GetCorner(sC0Min1Max), sAxisY) ;
+                GetCorner(sC0Min1Max), sAxisY) ;
     
     // sAxis0 & sAxisMax
     direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min)  ; // inverse
     direction = direction.unit();
     SetBoundary(sAxis0 & (sAxisX | sAxisMax), direction, 
-		GetCorner(sC0Max1Min), sAxisY);
+                GetCorner(sC0Max1Min), sAxisY);
     
     // sAxis1 & sAxisMin
     direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
     direction = direction.unit();
     SetBoundary(sAxis1 & (sAxisY | sAxisMin), direction, 
-		GetCorner(sC0Min1Min), sAxisX);
+                GetCorner(sC0Min1Min), sAxisX);
     
     // sAxis1 & sAxisMax
     direction = - ( GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max) ) ;
     direction = direction.unit();
     SetBoundary(sAxis1 & (sAxisY | sAxisMax), direction, 
-		GetCorner(sC0Max1Max), sAxisX);
+                GetCorner(sC0Max1Max), sAxisX);
     
   } else {
     G4cerr << "ERROR - G4FlatBoxSide::SetBoundaries()" << G4endl
-	   << "        fAxis[0] = " << fAxis[0] << G4endl
-	   << "        fAxis[1] = " << fAxis[1] << G4endl;
+           << "        fAxis[0] = " << fAxis[0] << G4endl
+           << "        fAxis[1] = " << fAxis[1] << G4endl;
     G4Exception("G4FlatBoxSide::SetCorners()",
-		"NotImplemented", FatalException,
-		"Feature NOT implemented !");
+                "NotImplemented", FatalException,
+                "Feature NOT implemented !");
    }
   
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.hh,v 1.2 2004-11-10 18:04:38 link Exp $
+// $Id: G4FlatTrapSide.hh,v 1.3 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,18 +29,17 @@
 // GEANT 4 class header file
 //
 //
-// G4FlatSurface
+// G4FlatTrapSurface
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for G4VSolid.
+//  Class describing a flat boundary surface for a trapezoid.
 
-// Author: 
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+// Author:
 //
-// History:
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+//
 // --------------------------------------------------------------------
-
 #ifndef __G4FLATTRAPSIDE__
 #define __G4FLATTRAPSIDE__
 
@@ -50,16 +49,15 @@ class G4FlatTrapSide : public G4VSurface
 {
   public:  // with description
 
-  G4FlatTrapSide( const G4String        &name,
-		 G4double      PhiTwist,
-		 G4double      pDx1,
-		 G4double      pDx2,
-		 G4double      pDy,
-		 G4double      pDz,
-		 G4int handedness  ) ;
-
-
+   G4FlatTrapSide( const G4String& name,
+                         G4double  PhiTwist,
+                         G4double  pDx1,
+                         G4double  pDx2,
+                         G4double  pDy,
+                         G4double  pDz,
+                         G4int     handedness  );
    virtual ~G4FlatTrapSide();
+
    virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
                                           G4bool isGlobal = false);
    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
@@ -87,12 +85,11 @@ class G4FlatTrapSide : public G4VSurface
 
   private:
   
-  G4double fDx1 ;
-  G4double fDx2 ;
-  G4double fDy ;
-  G4double fDz ;
-  G4double fPhiTwist ;
-   
+   G4double fDx1 ;
+   G4double fDx2 ;
+   G4double fDy ;
+   G4double fDz ;
+   G4double fPhiTwist ;
 };
 
 #endif

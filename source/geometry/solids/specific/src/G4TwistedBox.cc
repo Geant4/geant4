@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.1 2004-11-10 18:05:43 link Exp $
+// $Id: G4TwistedBox.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,10 +31,10 @@
 //
 // G4TwistedBox.cc
 //
-// Author: 
+// Author:
+//
 //   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 //
-// History:
 // --------------------------------------------------------------------
 
 // #define DISTANCETOIN
@@ -60,12 +60,12 @@
 //* constructors ------------------------------------------------------
 
 G4TwistedBox::G4TwistedBox(const G4String &pname,
-			   G4double  twistedangle,
-			   G4double  pDx,
-			   G4double  pDy,
-			   G4double  pDz)
+                           G4double  twistedangle,
+                           G4double  pDx,
+                           G4double  pDy,
+                           G4double  pDz)
   : G4VSolid(pname), 
-     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
+    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
     fSide90(0), fSide180(0), fSide270(0)
 {
 
@@ -84,12 +84,12 @@ G4TwistedBox::G4TwistedBox(const G4String &pname,
   else
     {
       G4cerr << "ERROR - G4TwistedBox()::G4TwistedBox(): " << GetName() << G4endl
-	     << "        Dimensions too small ! - "
-	     << pDx << ", " << pDy << ", " << pDz << G4endl 
-	     << " twistangle " << twistedangle/deg << " deg" << G4endl ;
+             << "        Dimensions too small ! - "
+             << pDx << ", " << pDy << ", " << pDz << G4endl 
+             << " twistangle " << twistedangle/deg << " deg" << G4endl ;
       
       G4Exception("G4TwistedBox::G4TwistedBox()", "InvalidSetup",
-		  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
+                  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
     }
   
 }
@@ -154,78 +154,78 @@ G4bool G4TwistedBox::CalculateExtent( const EAxis        pAxis,
       xMax    = xoffset + maxRad ;
 
       if (pVoxelLimit.IsXLimited())
-	{
-	  if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
-	       xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance  ) return false ;
-	  else
-	    {
-	      if (xMin < pVoxelLimit.GetMinXExtent())
-		{
-		  xMin = pVoxelLimit.GetMinXExtent() ;
-		}
-	      if (xMax > pVoxelLimit.GetMaxXExtent())
-		{
-		  xMax = pVoxelLimit.GetMaxXExtent() ;
-		}
-	    }
-	}
+        {
+          if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
+               xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance  ) return false ;
+          else
+            {
+              if (xMin < pVoxelLimit.GetMinXExtent())
+                {
+                  xMin = pVoxelLimit.GetMinXExtent() ;
+                }
+              if (xMax > pVoxelLimit.GetMaxXExtent())
+                {
+                  xMax = pVoxelLimit.GetMaxXExtent() ;
+                }
+            }
+        }
       yoffset = pTransform.NetTranslation().y() ;
       yMin    = yoffset - maxRad ;
       yMax    = yoffset + maxRad ;
       
       if (pVoxelLimit.IsYLimited())
-	{
-	  if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-	       yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance   ) return false ;
-	  else
-	    {
-	      if (yMin < pVoxelLimit.GetMinYExtent())
-		{
-		  yMin = pVoxelLimit.GetMinYExtent() ;
-		}
-	      if (yMax > pVoxelLimit.GetMaxYExtent())
-		{
-		  yMax = pVoxelLimit.GetMaxYExtent() ;
-		}
-	    }
-	}
+        {
+          if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
+               yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance   ) return false ;
+          else
+            {
+              if (yMin < pVoxelLimit.GetMinYExtent())
+                {
+                  yMin = pVoxelLimit.GetMinYExtent() ;
+                }
+              if (yMax > pVoxelLimit.GetMaxYExtent())
+                {
+                  yMax = pVoxelLimit.GetMaxYExtent() ;
+                }
+            }
+        }
       zoffset = pTransform.NetTranslation().z() ;
       zMin    = zoffset - fDz ;
       zMax    = zoffset + fDz ;
       
       if (pVoxelLimit.IsZLimited())
-	{
-	  if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-	       zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance   ) return false ;
-	  else
-	    {
-	      if (zMin < pVoxelLimit.GetMinZExtent())
-		{
-		  zMin = pVoxelLimit.GetMinZExtent() ;
-		}
-	      if (zMax > pVoxelLimit.GetMaxZExtent())
-		{
+        {
+          if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
+               zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance   ) return false ;
+          else
+            {
+              if (zMin < pVoxelLimit.GetMinZExtent())
+                {
+                  zMin = pVoxelLimit.GetMinZExtent() ;
+                }
+              if (zMax > pVoxelLimit.GetMaxZExtent())
+                {
           zMax = pVoxelLimit.GetMaxZExtent() ;
-		}
-	    }
-	}
+                }
+            }
+        }
       switch (pAxis)
-	{
-	case kXAxis:
-	  pMin = xMin ;
-	  pMax = xMax ;
-	  break ;
-	case kYAxis:
-	  pMin=yMin;
-	  pMax=yMax;
-	  break;
-	case kZAxis:
+        {
+        case kXAxis:
+          pMin = xMin ;
+          pMax = xMax ;
+          break ;
+        case kYAxis:
+          pMin=yMin;
+          pMax=yMax;
+          break;
+        case kZAxis:
         pMin=zMin;
         pMax=zMax;
         break;
-	default:
-	  break;
-	}
+        default:
+          break;
+        }
       pMin -= kCarTolerance ;
       pMax += kCarTolerance ;
       
@@ -247,52 +247,52 @@ G4bool G4TwistedBox::CalculateExtent( const EAxis        pAxis,
       ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
       
       if (pVoxelLimit.IsLimited(pAxis) == false) 
-	{  
-	  if ( pMin != kInfinity || pMax != -kInfinity ) 
-	    {
-	      existsAfterClip = true ;
+        {  
+          if ( pMin != kInfinity || pMax != -kInfinity ) 
+            {
+              existsAfterClip = true ;
 
-	      // Add 2*tolerance to avoid precision troubles
+              // Add 2*tolerance to avoid precision troubles
 
-	      pMin           -= kCarTolerance;
-	      pMax           += kCarTolerance;
-	    }
-	}      
+              pMin           -= kCarTolerance;
+              pMax           += kCarTolerance;
+            }
+        }      
       else
-	{
-	  G4ThreeVector clipCentre(
-				   ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-				   ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+        {
+          G4ThreeVector clipCentre(
+                                   ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+                                   ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
        ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-	  
+          
       if ( pMin != kInfinity || pMax != -kInfinity )
-	{
-	  existsAfterClip = true ;
-	  
+        {
+          existsAfterClip = true ;
+          
 
-	  // Check to see if endpoints are in the solid
-	  
-	  clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
-	  
-	  if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-	    {
-	      pMin = pVoxelLimit.GetMinExtent(pAxis);
-	    }
-	  else
-	    {
-	      pMin -= kCarTolerance;
-	    }
-	  clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
-	  
-	  if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-	    {
-	      pMax = pVoxelLimit.GetMaxExtent(pAxis);
-	    }
-	  else
-	    {
-	      pMax += kCarTolerance;
-	    }
-	}
+          // Check to see if endpoints are in the solid
+          
+          clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
+          
+          if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+            {
+              pMin = pVoxelLimit.GetMinExtent(pAxis);
+            }
+          else
+            {
+              pMin -= kCarTolerance;
+            }
+          clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
+          
+          if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+            {
+              pMax = pVoxelLimit.GetMaxExtent(pAxis);
+            }
+          else
+            {
+              pMax += kCarTolerance;
+            }
+        }
       
       // Check for case where completely enveloping clipping volume
       // If point inside then we are confident that the solid completely
@@ -300,13 +300,13 @@ G4bool G4TwistedBox::CalculateExtent( const EAxis        pAxis,
       // to clipping volume extents along the specified axis.
       
       else if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-	       != kOutside)
-	{
-	  existsAfterClip = true ;
-	  pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-	  pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
-	}
-	} 
+               != kOutside)
+        {
+          existsAfterClip = true ;
+          pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+          pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+        }
+        } 
       delete vertices;
       return existsAfterClip;
     } 
@@ -608,22 +608,22 @@ G4double G4TwistedBox::DistanceToIn (const G4ThreeVector& p) const
       case (kOutside) : {
          // Initialize
 
-	G4double safex, safey, safez, safe = 0.0 ;
-	G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+        G4double safex, safey, safez, safe = 0.0 ;
+        G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
 
-	G4cout << "maxRad = " << maxRad << G4endl ;
+        G4cout << "maxRad = " << maxRad << G4endl ;
 
-	safex = fabs(p.x()) - maxRad ;
-	safey = fabs(p.y()) - maxRad ;
-	safez = fabs(p.z()) - fDz ;
-	
-	if (safex > safe) safe = safex ;
-	if (safey > safe) safe = safey ;
-	if (safez > safe) safe = safez ;
-	
-	*tmpdist = safe;	
-	return fLastDistanceToIn.value;
-	
+        safex = fabs(p.x()) - maxRad ;
+        safey = fabs(p.y()) - maxRad ;
+        safez = fabs(p.z()) - fDz ;
+        
+        if (safex > safe) safe = safex ;
+        if (safey > safe) safe = safey ;
+        if (safez > safe) safe = safez ;
+        
+        *tmpdist = safe;        
+        return fLastDistanceToIn.value;
+        
       }
 
 
@@ -682,12 +682,12 @@ G4double G4TwistedBox::DistanceToIn (const G4ThreeVector& p) const
          // find intersections and choose nearest one.
          G4VSurface *surfaces[6];
 
-	 surfaces[0] = fSide0;
-	 surfaces[1] = fSide90 ;
-	 surfaces[2] = fSide180 ;
-	 surfaces[3] = fSide270 ;
-	 surfaces[4] = fLowerEndcap;
-	 surfaces[5] = fUpperEndcap;
+         surfaces[0] = fSide0;
+         surfaces[1] = fSide90 ;
+         surfaces[2] = fSide180 ;
+         surfaces[3] = fSide270 ;
+         surfaces[4] = fLowerEndcap;
+         surfaces[5] = fUpperEndcap;
 
          G4int i;
          G4int besti = -1;
@@ -856,36 +856,36 @@ G4double G4TwistedBox::DistanceToOut( const G4ThreeVector& p ) const
       case (kInside) : {
          // Initialize
 
-	G4double      rmin = ( fDx < fDy )
-	  ? fDx : fDy  ;
-	G4double safx1,safx2,safy1,safy2,safz1,safz2,safe=0.0;
+        G4double      rmin = ( fDx < fDy )
+          ? fDx : fDy  ;
+        G4double safx1,safx2,safy1,safy2,safz1,safz2,safe=0.0;
 
-	safx1 = rmin - p.x() ;
-	safx2 = rmin + p.x() ;
-	safy1 = rmin - p.y() ;
-	safy2 = rmin + p.y() ;
-	safz1 = fDz - p.z() ;
-	safz2 = fDz + p.z() ;  
-	
+        safx1 = rmin - p.x() ;
+        safx2 = rmin + p.x() ;
+        safy1 = rmin - p.y() ;
+        safy2 = rmin + p.y() ;
+        safz1 = fDz - p.z() ;
+        safz2 = fDz + p.z() ;  
+        
   // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
 
-	if (safx2 < safx1) safe = safx2 ;
-	else               safe = safx1 ;
-	if (safy1 < safe)  safe = safy1 ;
-	if (safy2 < safe)  safe = safy2 ;
-	if (safz1 < safe)  safe = safz1 ;
-	if (safz2 < safe)  safe = safz2 ;
-	
-	if (safe < 0) safe = 0 ;
+        if (safx2 < safx1) safe = safx2 ;
+        else               safe = safx1 ;
+        if (safy1 < safe)  safe = safy1 ;
+        if (safy2 < safe)  safe = safy2 ;
+        if (safz1 < safe)  safe = safz1 ;
+        if (safz2 < safe)  safe = safz2 ;
+        
+        if (safe < 0) safe = 0 ;
 
-	*tmpdist = safe;
+        *tmpdist = safe;
 
-	return fLastDistanceToOut.value;
+        return fLastDistanceToOut.value;
       }
       
       default : {
         G4Exception("G4TwistedBox::DistanceToOut(p)", "InvalidCondition",
-		 FatalException, "Unknown point location!");
+                 FatalException, "Unknown point location!");
       }
 
    } // switch end
@@ -940,12 +940,12 @@ G4double G4TwistedBox::DistanceToOut( const G4ThreeVector& p ) const
          // find intersections and choose nearest one.
          G4VSurface *surfaces[6];
 
-	 surfaces[0] = fSide0;
-	 surfaces[1] = fSide90 ;
-	 surfaces[2] = fSide180 ;
-	 surfaces[3] = fSide270 ;
-	 surfaces[4] = fLowerEndcap;
-	 surfaces[5] = fUpperEndcap;
+         surfaces[0] = fSide0;
+         surfaces[1] = fSide90 ;
+         surfaces[2] = fSide180 ;
+         surfaces[3] = fSide270 ;
+         surfaces[4] = fLowerEndcap;
+         surfaces[5] = fUpperEndcap;
 
          G4int i;
          G4int besti = -1;
@@ -1014,8 +1014,8 @@ G4VisExtent G4TwistedBox::GetExtent() const
   G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
-		     -maxRad, maxRad ,
-		     -fDz, fDz );
+                     -maxRad, maxRad ,
+                     -fDz, fDz );
 }
 
 //=====================================================================

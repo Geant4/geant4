@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.1 2004-11-10 18:05:44 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,8 +31,10 @@
 //
 // G4TwistedBoxSide.cc
 //
-// Author: 
-//   Oliver Link
+// Author:
+//
+//   Oliver Link (Oliver.Link@cern.ch)
+//
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -45,11 +47,11 @@
 //* constructors ------------------------------------------------------
 
 G4TwistedBoxSide::G4TwistedBoxSide(const G4String     &name,
-				   G4double      PhiTwist,
-				   G4double      pDx,
-				   G4double      pDy,
-				   G4double      pDz,
-				   G4double      AngleSide) 
+                                   G4double      PhiTwist,
+                                   G4double      pDx,
+                                   G4double      pDy,
+                                   G4double      pDz,
+                                   G4double      AngleSide) 
   : G4VSurface(name)
 {  
 
@@ -77,10 +79,7 @@ G4TwistedBoxSide::G4TwistedBoxSide(const G4String     &name,
   
   SetCorners() ;
   SetBoundaries() ;
-
 }
-
-
 
 //=====================================================================
 //* destructor --------------------------------------------------------
@@ -194,7 +193,7 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
  
       PhiR = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
       uR = (2*p.y()*v.x() - 2*p.x()*v.y() + a*v.y()*cos(PhiR) - a*v.x()*sin(PhiR) ) /
-	(2*v.x()*cos(PhiR) + 2*v.y()*sin(PhiR)) ;
+        (2*v.x()*cos(PhiR) + 2*v.y()*sin(PhiR)) ;
       //      G4cout  << "solution vz = 0 : "  << PhiR << " , " << uR << G4endl ;
 
     }
@@ -205,8 +204,8 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       gxx[0]      = ComputeGlobalPoint(xx[0]);
       isvalid[0] = false ;
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-				     areacode[0], isvalid[0],
-				     0, validate, &gp, &gv);
+                                     areacode[0], isvalid[0],
+                                     0, validate, &gp, &gv);
       return 0;
 
 
@@ -267,11 +266,11 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       if ( s[i] < 0 && stmp > 0 ) { stmp -= 2*pi ; }
       G4double ztmp = L*s[i]/fPhiTwist ;
       if ( fabs(ztmp)<fDz+ctol ) {
-	PhiR = stmp ;
-	uR = (2*L*PhiR*v.y() - 2*phipzvy + 2*phipyvz - a*phivz * sin(PhiR))/(2.*phivz*cos(PhiR)) ;
-	
+        PhiR = stmp ;
+        uR = (2*L*PhiR*v.y() - 2*phipzvy + 2*phipyvz - a*phivz * sin(PhiR))/(2.*phivz*cos(PhiR)) ;
+        
 #ifdef G4SPECSDEBUG
-	G4cout << "solution " << i << " = " << PhiR << " , " << uR  << G4endl ;
+        G4cout << "solution " << i << " = " << PhiR << " , " << uR  << G4endl ;
 #endif
       }
     }
@@ -282,8 +281,8 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       gxx[0]      = ComputeGlobalPoint(xx[0]);
       isvalid[0] = false ;
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-				     areacode[0], isvalid[0],
-				     0, validate, &gp, &gv);
+                                     areacode[0], isvalid[0],
+                                     0, validate, &gp, &gv);
       return 0;
 
     }
@@ -337,8 +336,8 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       gxx[0]      = ComputeGlobalPoint(xx[0]);
       isvalid[0] = false ;
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-				     areacode[0], isvalid[0],
-				     0, validate, &gp, &gv);
+                                     areacode[0], isvalid[0],
+                                     0, validate, &gp, &gv);
       return 0;
     }
       
@@ -362,8 +361,8 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
     }
   } else { // kDontValidate
     G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-		"NotImplemented kDontValidate", FatalException,
-		"Feature NOT implemented !");
+                "NotImplemented kDontValidate", FatalException,
+                "Feature NOT implemented !");
   }
 
   gxx[0]      = ComputeGlobalPoint(xx[0]);
@@ -481,7 +480,7 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-			    isvalid, 1, kDontValidate, &gp);
+                            isvalid, 1, kDontValidate, &gp);
    return 1;
    
 
@@ -515,9 +514,9 @@ G4int G4TwistedBoxSide::GetAreaCode(const G4ThreeVector &xx,
       
       if (withTol) {
 
-	G4bool isoutside   = false;
-	
-	// test boundary of yaxis
+        G4bool isoutside   = false;
+        
+        // test boundary of yaxis
 
          if (yprime < fAxisMin[yaxis] + ctol) {
             areacode |= (sAxis0 & (sAxisY | sAxisMin)) | sBoundary; 
@@ -634,8 +633,8 @@ void G4TwistedBoxSide::SetCorners()
   } else {
 
     G4Exception("G4TwistedBoxSide::SetCorners()",
-		"NotImplemented", FatalException,
-		"Method NOT implemented !");
+                "NotImplemented", FatalException,
+                "Method NOT implemented !");
   }
 }
 
@@ -655,33 +654,32 @@ void G4TwistedBoxSide::SetBoundaries()
     direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
     direction = direction.unit();
     SetBoundary(sAxis0 & (sAxisY | sAxisMin), direction, 
-		GetCorner(sC0Min1Min), sAxisZ) ;
+                GetCorner(sC0Min1Min), sAxisZ) ;
       
       // sAxis0 & sAxisMax
     direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
     direction = direction.unit();
     SetBoundary(sAxis0 & (sAxisY | sAxisMax), direction, 
-		GetCorner(sC0Max1Min), sAxisZ);
+                GetCorner(sC0Max1Min), sAxisZ);
     
     // sAxis1 & sAxisMin
     direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
     direction = direction.unit();
     SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-		GetCorner(sC0Min1Min), sAxisY);
+                GetCorner(sC0Min1Min), sAxisY);
     
     // sAxis1 & sAxisMax
     direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
     direction = direction.unit();
     SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-		GetCorner(sC0Min1Max), sAxisY);
+                GetCorner(sC0Min1Max), sAxisY);
     
   } else {
     
   G4Exception("G4TwistedBoxSide::SetCorners()",
-	      "NotImplemented", FatalException,
-	      "Feature NOT implemented !");
+              "NotImplemented", FatalException,
+              "Feature NOT implemented !");
   }
-  
 }
 
 

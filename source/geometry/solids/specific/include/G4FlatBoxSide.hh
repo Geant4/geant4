@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatBoxSide.hh,v 1.1 2004-11-10 18:05:38 link Exp $
+// $Id: G4FlatBoxSide.hh,v 1.2 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,12 +33,12 @@
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for G4VSolid.
+//  Class describing a flat boundary surface for a box.
 
-// Author: 
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+// Author:
 //
-// History:
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+//
 // --------------------------------------------------------------------
 
 #ifndef __G4FLATBOXSIDE__
@@ -50,47 +50,45 @@ class G4FlatBoxSide : public G4VSurface
 {
   public:  // with description
 
-  G4FlatBoxSide( const G4String        &name,
-		 G4double      PhiTwist,
-		 G4double      pDx,
-		 G4double      pDy,
-		 G4double      pDz,
-		 G4int handedness  ) ;
+    G4FlatBoxSide( const G4String& name,
+                         G4double  PhiTwist,
+                         G4double  pDx,
+                         G4double  pDy,
+                         G4double  pDz,
+                         G4int     handedness );
+    virtual ~G4FlatBoxSide();
 
+    virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
+                                           G4bool isGlobal = false);
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                    const G4ThreeVector &gv,
+                                          G4ThreeVector  gxx[],
+                                          G4double       distance[],
+                                          G4int          areacode[],
+                                          G4bool         isvalid[],
+                                          EValidate validate=kValidateWithTol);
 
-   virtual ~G4FlatBoxSide();
-   virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
-                                          G4bool isGlobal = false);
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                   const G4ThreeVector &gv,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[],
-                                         G4bool         isvalid[],
-                                         EValidate validate = kValidateWithTol);
-                                                  
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[]);
-                                                  
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                          G4ThreeVector  gxx[],
+                                          G4double       distance[],
+                                          G4int          areacode[]);
+
   protected:  // with description
 
-   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
-                                   G4bool withTol = true) ;
+    virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+                                    G4bool withTol = true) ;
 
   private:
 
-   virtual void SetCorners();
-   virtual void SetBoundaries();
+    virtual void SetCorners();
+    virtual void SetBoundaries();
 
   private:
   
-  G4double fDx ;
-  G4double fDy ;
-  G4double fDz ;
-  G4double fPhiTwist ;
-   
+    G4double fDx ;
+    G4double fDy ;
+    G4double fDz ;
+    G4double fPhiTwist ;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.hh,v 1.1 2004-11-10 18:05:40 link Exp $
+// $Id: G4TwistedBoxSide.hh,v 1.2 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,10 +33,11 @@
 //
 // Class description:
 //
-//  Class describing a twisted boundary surface for G4VSolid.
+//  Class describing a twisted boundary surface for a box.
 
-// Author: 
-//   Oliver Link
+// Author:
+//
+//   Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 #ifndef __G4TWISTEDBOXSIDE__
@@ -48,65 +49,53 @@ class G4TwistedBoxSide : public G4VSurface
 {
   public:  // with description
    
-  G4TwistedBoxSide(const G4String     &name,
-		   G4double      PhiTwist,
-		   G4double      fDx,
-		   G4double      fDy,
-		   G4double      fDz,
-		   G4double      AngleSide);
+    G4TwistedBoxSide(const G4String     &name,
+                           G4double      PhiTwist,
+                           G4double      fDx,
+                           G4double      fDy,
+                           G4double      fDz,
+                           G4double      AngleSide);
   
-  virtual ~G4TwistedBoxSide();
+    virtual ~G4TwistedBoxSide();
    
-  virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
-                                          G4bool isGlobal = false) ;   
+    virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
+                                            G4bool isGlobal = false) ;   
    
-  virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-				  const G4ThreeVector &gv,
-				  G4ThreeVector  gxx[],
-				  G4double  distance[],
-				  G4int     areacode[],
-				  G4bool    isvalid[],
-				  EValidate validate = kValidateWithTol);
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                    const G4ThreeVector &gv,
+                                          G4ThreeVector  gxx[],
+                                          G4double  distance[],
+                                          G4int     areacode[],
+                                          G4bool    isvalid[],
+                                          EValidate validate=kValidateWithTol);
                                                   
-  virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-				  G4ThreeVector  gxx[],
-				  G4double       distance[],
-				  G4int          areacode[]);
-  
+    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                          G4ThreeVector  gxx[],
+                                          G4double       distance[],
+                                          G4int          areacode[]);
 
-private:
+  private:
 
-  
-  virtual G4int GetAreaCode(const G4ThreeVector &xx, 
-                                   G4bool         withTol = true);
+    virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+                                    G4bool         withTol = true);
+    virtual void SetCorners();
+    virtual void SetBoundaries();
 
-  virtual void SetCorners();
-  
-  virtual void SetBoundaries();
+    void GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u);
+    G4ThreeVector ProjectPoint(const G4ThreeVector &p,
+                                     G4bool isglobal = false);
 
-  void GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)  ;
+    inline G4ThreeVector SurfacePoint( G4double phi, G4double u);
+    inline G4ThreeVector NormAng( G4double phi, G4double u );
 
-  G4ThreeVector ProjectPoint(const G4ThreeVector &p,
-                                            G4bool isglobal = false)  ;
+  private:
 
-
-  inline G4ThreeVector SurfacePoint( G4double phi, G4double u) ;
-
-  inline G4ThreeVector NormAng( G4double phi, G4double u )  ;
-
-
-
-private:
-
-  G4double       fDx ;
-  G4double       fDy ;
-  G4double       fDz ;
-  G4double       fPhiTwist ;
-  G4double       fAngleSide ;
-
+    G4double       fDx ;
+    G4double       fDy ;
+    G4double       fDz ;
+    G4double       fPhiTwist ;
+    G4double       fAngleSide ;
 };   
-
-
 
 //========================================================
 // inline functions
@@ -118,8 +107,8 @@ G4ThreeVector G4TwistedBoxSide::SurfacePoint( G4double phi, G4double u )
   // function to calculate a point on the surface, given by parameters phi,u
 
   G4ThreeVector SurfPoint ( fDx * cos(phi) - u * sin(phi),
-			 fDx * sin(phi) + u * cos(phi),
-			 2*fDz*phi/fPhiTwist );
+                            fDx * sin(phi) + u * cos(phi),
+                            2*fDz*phi/fPhiTwist );
   return SurfPoint ;
 }
 
@@ -133,6 +122,5 @@ G4ThreeVector G4TwistedBoxSide::NormAng( G4double phi, G4double u )
 
   return nvec.unit() ;
 }
-
 
 #endif

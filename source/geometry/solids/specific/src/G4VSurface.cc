@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.8 2004-11-10 18:04:54 link Exp $
+// $Id: G4VSurface.cc,v 1.9 2004-11-13 18:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,10 @@ const G4int  G4VSurface::sOutside        = 0x00000000;
 const G4int  G4VSurface::sInside         = 0x10000000;
 const G4int  G4VSurface::sBoundary       = 0x20000000;
 const G4int  G4VSurface::sCorner         = 0x40000000;
-const G4int  G4VSurface::sC0Min1Min       = 0x40000101; 
-const G4int  G4VSurface::sC0Max1Min       = 0x40000201;
-const G4int  G4VSurface::sC0Max1Max       = 0x40000202; 
-const G4int  G4VSurface::sC0Min1Max       = 0x40000102; 
+const G4int  G4VSurface::sC0Min1Min      = 0x40000101; 
+const G4int  G4VSurface::sC0Max1Min      = 0x40000201;
+const G4int  G4VSurface::sC0Max1Max      = 0x40000202; 
+const G4int  G4VSurface::sC0Min1Max      = 0x40000102; 
 const G4int  G4VSurface::sAxisMin        = 0x00000101; 
 const G4int  G4VSurface::sAxisMax        = 0x00000202; 
 const G4int  G4VSurface::sAxisX          = 0x00000404;

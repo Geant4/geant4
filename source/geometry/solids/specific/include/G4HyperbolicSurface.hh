@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.5 2004-11-10 18:04:39 link Exp $
+// $Id: G4HyperbolicSurface.hh,v 1.6 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 //
 // Class description:
 //
-//  Class describing a hyperbolic boundary surface for G4VSolid.
+//  Class describing a hyperbolic boundary surface for a cylinder.
 
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)

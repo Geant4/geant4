@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.hh,v 1.2 2004-11-13 17:46:04 gcosmo Exp $
+// $Id: G4TwistedBox.hh,v 1.3 2004-11-13 18:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,13 +33,12 @@
 //
 // Class description:
 //
-//  G4TwistedBox is box twisted along the Z axis.
+//  G4TwistedBox is a box twisted along the Z axis.
 
 // Author:
 //                 O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
-
 #ifndef __G4TWISTEDBOX__
 #define __G4TWISTEDBOX__
 
@@ -56,10 +55,10 @@ class G4TwistedBox : public G4VSolid
  public:  // with description
  
   G4TwistedBox(const G4String &pname,         // Name of instance
-		     G4double  twistedangle,  // Twisted angle
-		     G4double  pDx,     // half length in x
-		     G4double  pDy,     // half length in y
-		     G4double  pDz)  ;   // half z length 
+                     G4double  twistedangle,  // Twisted angle
+                     G4double  pDx,           // half length in x
+                     G4double  pDy,           // half length in y
+                     G4double  pDz)  ;        // half z length 
   
   virtual ~G4TwistedBox();
              
@@ -117,13 +116,12 @@ class G4TwistedBox : public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
-
  public:  // without description
 
  private:
  
-  inline void  SetFields(G4double phitwist, G4double pDx, G4double pDy, G4double pDz);
-                     
+  inline void  SetFields(G4double phitwist,
+                         G4double pDx, G4double pDy, G4double pDz);
   void         CreateSurfaces();
 
  private:

@@ -30,41 +30,38 @@
 //
 // Class description:
 //
+//   Polynomial solver for equations of the type:
+//   c0 + c1 x + c2 x^2 + c3 x^3 + c4 x^4
+
 // Author: 
-//   Oliver Link
+//   Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 #ifndef __G4APPROXPOLYSOLVER__
 #define __G4APPROXPOLYSOLVER__
 
-
 #include "G4Types.hh"
 #include "G4String.hh"
 #include "geomdefs.hh"
-
 
 class G4ApproxPolySolver 
 {
 
   // c0 + c1 x + c2 x^2 + c3 x^3 + c4 x^4 
 
-public:
+  public:
 
-  G4ApproxPolySolver() {} ;  
+    G4ApproxPolySolver(){}
+    ~G4ApproxPolySolver(){}
 
-  ~G4ApproxPolySolver() {} ;
+  public:
 
-public:
-
-  G4int SolveBiQuadratic( G4double c[], G4double s[]  ) const ;
-  G4int SolveCubic( G4double c[], G4double s[] ) const ;
-  G4int SolveBiQuadraticNew( G4double c[], G4double s[] ) const ;
-  G4int SolveCubicNew( G4double c[], G4double s[],
-		       G4double& cubic_discr ) const ;
-  G4int SolveQuadratic( G4double c[], G4double s[] ) const ;
-
-
+    G4int SolveBiQuadratic( G4double c[], G4double s[]  ) const ;
+    G4int SolveCubic( G4double c[], G4double s[] ) const ;
+    G4int SolveBiQuadraticNew( G4double c[], G4double s[] ) const ;
+    G4int SolveCubicNew( G4double c[], G4double s[],
+                         G4double& cubic_discr ) const ;
+    G4int SolveQuadratic( G4double c[], G4double s[] ) const ;
 };
-
 
 #endif
