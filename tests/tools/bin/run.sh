@@ -119,7 +119,7 @@ else
       < $G4INSTALL/tests/$shortname/$1.in \
       > $dir/$1.out 2> $dir/$1.err
     fi
-    diff $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
+    diff -w $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
     #cat $dir/$1.diff
 
   fi
