@@ -545,10 +545,10 @@ void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& v
         case G4VisAttributes::dotted:
             instance->addAttValue("LineStyle", G4String("Dotted"));
             break;
-        case G4VisAttributes::LineStyle::dashed:
+        case G4VisAttributes::dashed:
             instance->addAttValue("LineStyle", G4String("Dashed"));
             break;
-        case G4VisAttributes::LineStyle::unbroken:
+        case G4VisAttributes::unbroken:
         default:
             instance->addAttValue("LineStyle", G4String("Solid"));
             break;
@@ -560,7 +560,7 @@ void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker&
 	G4double size = GetMarkerRadius( marker , markerType );
     instance->addAttValue("MarkSize", size);
 	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
-    instance->addAttValue("Fill", (marker.GetFillStyle() == G4VMarker::FillStyle::noFill) ? G4String("False") : G4String("True"));
+    instance->addAttValue("Fill", (marker.GetFillStyle() == G4VMarker::noFill) ? G4String("False") : G4String("True"));
 }
 
 HepRepInstance* G4HepRepSceneHandler::CreateInstance(HepRepInstance* p, HepRepType* altType) {
