@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.3 2000-10-18 12:41:25 kurasige Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.4 2000-10-18 14:22:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -124,7 +124,7 @@ void G4PrimaryTransformer::SetDecayProducts
 {
   G4PrimaryParticle* daughter = mother->GetDaughter();
   if(!daughter) return;
-  G4DecayProducts* decayProducts = motherDP->GetPreAssignedDecayProducts();
+  G4DecayProducts* decayProducts = (G4DecayProducts*)(motherDP->GetPreAssignedDecayProducts() );
   if(!decayProducts)
   {
     decayProducts = new G4DecayProducts(*motherDP);
