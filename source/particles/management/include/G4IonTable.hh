@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.11 1999-10-29 08:03:51 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.12 1999-10-30 04:33:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
 #include "g4std/vector"
 #else
 #include <rw/tpordvec.h>
@@ -49,7 +49,7 @@ class G4IonTable
  //
 
  public:
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
    // Use STL Vector as list of ions
    typedef G4std::vector<G4ParticleDefinition*> G4IonList;
 #else
@@ -169,7 +169,7 @@ class G4IonTable
 
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
   G4IonList::iterator i;
   for (i = fIonList->begin(); i!= fIonList->end(); ++i) {
     if (**i==*particle) return true;
@@ -182,7 +182,7 @@ inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 
 inline G4int G4IonTable::Entries() const
 {
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
   return fIonList->size();
 #else
   return fIonList->entries();

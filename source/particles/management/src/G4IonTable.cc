@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.20 1999-10-29 08:03:57 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.21 1999-10-30 04:33:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ G4IonTable::~G4IonTable()
 
   // delete ion objects
   G4ParticleDefinition* particle;
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
   G4IonList::reverse_iterator i;
   for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
     particle = *i;
@@ -213,7 +213,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
     ion = *idx;
@@ -377,7 +377,7 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
     fIonList->push_back(particle);
 #else
     fIonList->insert(particle);
@@ -396,7 +396,7 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
 void G4IonTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
     G4IonList::iterator idx;
     for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
       if ( particle == *idx) {
@@ -426,7 +426,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 void G4IonTable::DumpTable(const G4String &particle_name) const
 {
   G4ParticleDefinition* ion;
-#ifdef G4USE_STL_MAP
+#ifdef G4USE_STL
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
     ion = *idx;
