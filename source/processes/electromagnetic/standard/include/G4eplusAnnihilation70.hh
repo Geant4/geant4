@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.hh,v 1.4 2005-03-14 18:38:36 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.hh,v 1.5 2005-03-16 12:12:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 15-03-05 Update interface according to changings in G4VEmProcess (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -63,12 +64,6 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*, 
-                                   G4double&);
-
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
                              const G4Step& stepData);
@@ -88,7 +83,11 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*, 
+                                   G4double&);
 
 private:
 
@@ -106,13 +105,6 @@ private:
 inline G4bool G4eplusAnnihilation70::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eplusAnnihilation70::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return dp->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

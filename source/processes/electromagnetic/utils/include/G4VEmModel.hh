@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.23 2005-03-14 18:35:56 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.24 2005-03-16 12:14:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4ElementVector.hh"
 #include "G4DataVector.hh"
 
 class G4PhysicsTable;
@@ -121,7 +123,8 @@ public:
                                       G4double& kinEnergy, 
                                       G4double& Z, 
                                       G4double& A, 
-                                      G4double  cut = 0.0);
+                                      G4double  cutEnergy = 0.0,
+                                      G4double  maxEnergy = DBL_MAX);
 
   virtual G4DynamicParticle* SampleSecondary(
                                 const G4MaterialCutsCouple*,
@@ -162,7 +165,7 @@ public:
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy) = 0;
+    				            G4double kineticEnergy);
 
   virtual void SetDeexcitation(G4bool fluo, G4bool auger);
 
@@ -224,13 +227,23 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
 }
 
 inline G4double G4VEmModel::CrossSectionPerVolume(
-                                        const G4Material*,
-					const G4ParticleDefinition*,
-					      G4double,
-					      G4double,
-                                              G4double)
+                                        const G4Material* material,
+					const G4ParticleDefinition* p,
+					      G4double ekin,
+					      G4double emin,
+                                              G4double emax)
 {
-  return 0.0;
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    G4double Z = elm->GetZ(); 
+    G4double A = elm->GetA();
+    cross += theAtomNumDensityVector[i]*ComputeCrossSectionPerAtom(p, ekin, Z, A, emin, emax); 
+  }
+  return cross;
 }
 
 inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
@@ -244,7 +257,7 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double&, G4double&, G4double&, G4double)
+                                      G4double&, G4double&, G4double&, G4double, G4double)
 {
   return 0.0;
 }
@@ -252,6 +265,12 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 inline G4double G4VEmModel::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
   return MaxSecondaryEnergy(dynParticle->GetDefinition(), dynParticle->GetKineticEnergy());
+}
+
+inline G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+    				                     G4double kineticEnergy)
+{
+  return kineticEnergy;
 }
 
 inline const G4String& G4VEmModel::GetName() const 

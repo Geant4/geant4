@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.19 2005-03-14 18:36:25 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.20 2005-03-16 12:14:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -343,7 +343,9 @@ void G4VEmProcess::PrintInfoDefinition()
 {
   if(0 < verboseLevel) {
     G4cout << G4endl << GetProcessName() << ":  " << G4endl
-           << "      Lambda tables from threshold to "
+           << "      Lambda tables from "
+           << G4BestUnit(minKinEnergy,"Energy") 
+           << " to "
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nLambdaBins << " bins."
            << G4endl;

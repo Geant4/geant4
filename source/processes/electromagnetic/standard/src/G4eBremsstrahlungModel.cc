@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.18 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.19 2005-03-16 12:12:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -824,7 +824,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 
   G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
   gammaDirection.rotateUz(direction);
-
+  
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
 
