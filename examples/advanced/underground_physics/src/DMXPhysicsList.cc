@@ -652,11 +652,8 @@ void DMXPhysicsList::ConstructHad()
 	theNeutronElasticProcess->RegisterMe(theElasticModel1);
 	theElasticModel1->SetMinEnergy(19*MeV);
 	theNeutronElasticProcess->RegisterMe(theElasticNeutron);
-	G4CrossSectionDataStore * theStore = 
-	  ((G4HadronElasticProcess*)theNeutronElasticProcess)
-	  ->GetCrossSectionDataStore();
 	G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
-	theStore->AddDataSet(theNeutronData);
+	theNeutronElasticProcess->AddDataSet(theNeutronData);
 	pmanager->AddDiscreteProcess(theNeutronElasticProcess);
 	// inelastic scattering
 	G4NeutronInelasticProcess* theInelasticProcess =
@@ -667,12 +664,9 @@ void DMXPhysicsList::ConstructHad()
 	G4NeutronHPInelastic * theLENeutronInelasticModel =
 	  new G4NeutronHPInelastic;
 	theInelasticProcess->RegisterMe(theLENeutronInelasticModel);
-	G4CrossSectionDataStore * theStore1 = 
-	  ((G4HadronInelasticProcess*)theInelasticProcess)
-	  ->GetCrossSectionDataStore();
 	G4NeutronHPInelasticData * theNeutronData1 = 
 	  new G4NeutronHPInelasticData;
-	theStore1->AddDataSet(theNeutronData1);
+	theInelasticProcess->AddDataSet(theNeutronData1);
 	pmanager->AddDiscreteProcess(theInelasticProcess);
 	// capture
 	G4HadronCaptureProcess* theCaptureProcess =
@@ -682,11 +676,8 @@ void DMXPhysicsList::ConstructHad()
 	theCaptureProcess->RegisterMe(theCaptureModel);
 	G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
 	theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
-	G4CrossSectionDataStore * theStore3 = 
-	  ((G4HadronCaptureProcess*)theCaptureProcess)->
-	  GetCrossSectionDataStore();
 	G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
-	theStore3->AddDataSet(theNeutronData3);
+	theCaptureProcess->AddDataSet(theNeutronData3);
 	pmanager->AddDiscreteProcess(theCaptureProcess);
 	//  G4ProcessManager* pmanager = G4Neutron::Neutron->GetProcessManager();
 	//  pmanager->AddProcess(new G4UserSpecialCuts(),-1,-1,1);
