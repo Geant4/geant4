@@ -1,6 +1,6 @@
-#include "CMSAluminumNonelastic.hh"
+#include "CCalAluminumNonelastic.hh"
 
-  CMSAluminumNonelastic::CMSAluminumNonelastic()
+  CCalAluminumNonelastic::CCalAluminumNonelastic()
   {
   theData.insert(0.100000E+07, 0.135249E-01);
   theData.insert(0.150000E+07, 0.742370E-01);

@@ -1,16 +1,16 @@
-#include "CMSProdIonPhysics.hh"
+#include "CCalProdIonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CMSProdIonPhysics::CMSProdIonPhysics(const G4String& name)
+CCalProdIonPhysics::CCalProdIonPhysics(const G4String& name)
                  :  G4VPhysicsConstructor(name)
 {
 }
 
-CMSProdIonPhysics::~CMSProdIonPhysics()
+CCalProdIonPhysics::~CCalProdIonPhysics()
 {
 }
 
@@ -20,7 +20,7 @@ CMSProdIonPhysics::~CMSProdIonPhysics()
 // Nuclei
 #include "G4IonConstructor.hh"
 
-void CMSProdIonPhysics::ConstructParticle()
+void CCalProdIonPhysics::ConstructParticle()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;
@@ -31,7 +31,7 @@ void CMSProdIonPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void CMSProdIonPhysics::ConstructProcess()
+void CCalProdIonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   

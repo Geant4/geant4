@@ -1,6 +1,6 @@
-#include "CMSCarbonNonelastic.hh"
+#include "CCalCarbonNonelastic.hh"
 
-  CMSCarbonNonelastic::CMSCarbonNonelastic()
+  CCalCarbonNonelastic::CCalCarbonNonelastic()
   {
   theData.insert(.481201E+07, 0.000000E+00);
   theData.insert(.500000E+07, 0.755657E-01);

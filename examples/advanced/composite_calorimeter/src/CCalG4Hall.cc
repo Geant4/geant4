@@ -10,7 +10,7 @@
 #include "CCalG4Hcal.hh"
 #include "CCalG4Ecal.hh"
 
-#include "utils.hh"
+#include "CCalutils.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"

@@ -3,7 +3,7 @@
 // Description: User Field class implementation.
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalMagneticField.hh"
-#include "utils.hh"
+#include "CCalutils.hh"
 #include "G4FieldManager.hh"
 #include <fstream.h>
 

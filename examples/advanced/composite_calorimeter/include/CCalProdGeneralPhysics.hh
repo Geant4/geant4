@@ -1,5 +1,5 @@
-#ifndef CMSProdGeneralPhysics_h
-#define CMSProdGeneralPhysics_h 1
+#ifndef CCalProdGeneralPhysics_h
+#define CCalProdGeneralPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -9,11 +9,11 @@
 
 #include "G4Decay.hh"
 
-class CMSProdGeneralPhysics : public G4VPhysicsConstructor
+class CCalProdGeneralPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CMSProdGeneralPhysics(const G4String& name = "general");
-    virtual ~CMSProdGeneralPhysics();
+    CCalProdGeneralPhysics(const G4String& name = "general");
+    virtual ~CCalProdGeneralPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 

@@ -1,6 +1,6 @@
-#include "CMSSiliconNonElastic.hh"
+#include "CCalSiliconNonElastic.hh"
 
-  CMSSiliconNonElastic::CMSSiliconNonElastic() : 
+  CCalSiliconNonElastic::CCalSiliconNonElastic() : 
   the28Abundance(0.922297), the29Abundance(0.046832), the30Abundance(0.030872)
   {
   the28Data.insert(0.200000E+07, 0.000000E+00);

@@ -1,6 +1,6 @@
-#include "CMSHydrogenNonElastic.hh"
+#include "CCalHydrogenNonElastic.hh"
 
-  CMSHydrogenNonElastic::CMSHydrogenNonElastic() : theH2Abundance(0.000115)
+  CCalHydrogenNonElastic::CCalHydrogenNonElastic() : theH2Abundance(0.000115)
   {
   theH2DissociationData.insert(0.333712E+07, 0.000000E+00);
   theH2DissociationData.insert(0.360000E+07, 0.116830E-05);

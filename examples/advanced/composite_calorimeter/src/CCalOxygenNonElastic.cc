@@ -1,6 +1,6 @@
-#include "CMSOxygenNonElastic.hh"
+#include "CCalOxygenNonElastic.hh"
 
-  CMSOxygenNonElastic::CMSOxygenNonElastic()
+  CCalOxygenNonElastic::CCalOxygenNonElastic()
   {
   theData.insert(0.554748E+07,  0.000000E+00);
   theData.insert(0.600000E+07,  0.000000E+00);

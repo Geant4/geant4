@@ -1,5 +1,5 @@
-#ifndef CMSDataSet_h
-#define CMSDataSet_h
+#ifndef CCalDataSet_h
+#define CCalDataSet_h
 
 #include "G4NeutronHPInterpolator.hh"
 #include <vector>
@@ -7,7 +7,7 @@
 
 // by JPW, working, but to be cleaned up. @@@@
 
-class CMSDataSet 
+class CCalDataSet 
 {
 public:
 

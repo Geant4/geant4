@@ -1,5 +1,5 @@
-#ifndef CMSProdHadronPhysics_h
-#define CMSProdHadronPhysics_h 1
+#ifndef CCalProdHadronPhysics_h
+#define CCalProdHadronPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -104,20 +104,20 @@
 #include "G4KaonMinusAbsorption.hh"
 
 // cross-section data special
-#include "CMSAluminumNonelastic.hh"
-#include "CMSCarbonNonelastic.hh"
-#include "CMSHydrogenNonElastic.hh"
-#include "CMSOxygenNonElastic.hh"
-#include "CMSSiliconNonElastic.hh"
+#include "CCalAluminumNonelastic.hh"
+#include "CCalCarbonNonelastic.hh"
+#include "CCalHydrogenNonElastic.hh"
+#include "CCalOxygenNonElastic.hh"
+#include "CCalSiliconNonElastic.hh"
 
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
-class CMSProdHadronPhysics : public G4VPhysicsConstructor
+class CCalProdHadronPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CMSProdHadronPhysics(const G4String& name ="hadron");
-    virtual ~CMSProdHadronPhysics();
+    CCalProdHadronPhysics(const G4String& name ="hadron");
+    virtual ~CCalProdHadronPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 
@@ -182,11 +182,11 @@ class CMSProdHadronPhysics : public G4VPhysicsConstructor
    G4hIonisation theProtonIonisation;
    
    G4ProtonInelasticCrossSection thePData;
-   CMSAluminumNonelastic thePAlData;
-   CMSCarbonNonelastic  thePCData;
-   CMSHydrogenNonElastic thePHData;
-   CMSOxygenNonElastic  thePOData;
-   CMSSiliconNonElastic thePSiData;
+   CCalAluminumNonelastic thePAlData;
+   CCalCarbonNonelastic  thePCData;
+   CCalHydrogenNonElastic thePHData;
+   CCalOxygenNonElastic  thePOData;
+   CCalSiliconNonElastic thePSiData;
 
    // anti-proton
    G4AntiProtonInelasticProcess theAntiProtonInelastic;

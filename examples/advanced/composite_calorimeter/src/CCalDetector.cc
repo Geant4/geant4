@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include "CCalGeometryConfiguration.hh"
-#include "utils.hh"
+#include "CCalutils.hh"
 
 //Comment/Uncomment to hide/show some debug information
 //#define debug

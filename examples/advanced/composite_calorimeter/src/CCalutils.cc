@@ -1,10 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: utils.cc
-// Date: 03/98 I. Gonzalez
-// Modified: 11/98 I.G. ==> findDO checks for the validity of the stream.
-//           27/03/00 SB In OSCAR
+// File: CCalutils.cc
+// Description: General utilities.
 ///////////////////////////////////////////////////////////////////////////////
-#include "utils.hh"
+#include "CCalutils.hh"
 #include "G4UnitsTable.hh"
 
 #include <strstream>

@@ -1,16 +1,16 @@
-#include "CMSProdHadronPhysics.hh"
+#include "CCalProdHadronPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CMSProdHadronPhysics::CMSProdHadronPhysics(const G4String& name)
+CCalProdHadronPhysics::CCalProdHadronPhysics(const G4String& name)
                     :  G4VPhysicsConstructor(name)
 {
 }
 
-CMSProdHadronPhysics::~CMSProdHadronPhysics()
+CCalProdHadronPhysics::~CCalProdHadronPhysics()
 {
 }
 
@@ -22,7 +22,7 @@ CMSProdHadronPhysics::~CMSProdHadronPhysics()
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-void CMSProdHadronPhysics::ConstructParticle()
+void CCalProdHadronPhysics::ConstructParticle()
 {
   //  Construct all mesons
   G4MesonConstructor pMesonConstructor;
@@ -42,7 +42,7 @@ void CMSProdHadronPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void CMSProdHadronPhysics::ConstructProcess()
+void CCalProdHadronPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   

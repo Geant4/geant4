@@ -1,5 +1,5 @@
-#ifndef CMSProdIonPhysics_h
-#define CMSProdIonPhysics_h 1
+#ifndef CCalProdIonPhysics_h
+#define CCalProdIonPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -21,11 +21,11 @@
 #include "G4hIonisation.hh"
 #include "G4MultipleScattering.hh"
 
-class CMSProdIonPhysics : public G4VPhysicsConstructor
+class CCalProdIonPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CMSProdIonPhysics(const G4String& name="ion");
-    virtual ~CMSProdIonPhysics();
+    CCalProdIonPhysics(const G4String& name="ion");
+    virtual ~CCalProdIonPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 

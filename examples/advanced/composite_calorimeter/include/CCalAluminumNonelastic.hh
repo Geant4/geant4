@@ -1,7 +1,7 @@
-#ifndef CMSSiliconNonElastic_h
-#define CMSSiliconNonElastic_h
-
 // by JPW, working, but to be cleaned up. @@@@
+
+#ifndef CCalAluminumNonelastic_h
+#define CCalAluminumNonelastic_h
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -9,20 +9,20 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4Proton.hh"
 
-#include "CMSDataSet.hh"
+#include "CCalDataSet.hh"
 
-class CMSSiliconNonElastic : public G4VCrossSectionDataSet
+class CCalAluminumNonelastic : public G4VCrossSectionDataSet
 {
    public:
    
-   CMSSiliconNonElastic();
-   virtual ~CMSSiliconNonElastic(){}
+   CCalAluminumNonelastic();
+   virtual ~CCalAluminumNonelastic() {}
    
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*anEle)
    {
      G4bool result = false;
-     if(( 14 == anEle->GetZ()) &&
+     if(( 13 == anEle->GetZ()) &&
         ( aPart->GetKineticEnergy()<150*MeV) &&
 	( G4Proton::Proton() == aPart->GetDefinition() ) ) result = true;
      return result;
@@ -33,9 +33,7 @@ class CMSSiliconNonElastic : public G4VCrossSectionDataSet
    {
       G4double result = 0;
       const G4double kineticEnergy = aPart->GetKineticEnergy()/eV;
-      result += the28Abundance*the28Data.getCrossSection(kineticEnergy);
-      result += the29Abundance*the29Data.getCrossSection(kineticEnergy);
-      result += the30Abundance*the30Data.getCrossSection(kineticEnergy);
+      result = theData.getCrossSection(kineticEnergy);
       return result;
    }
 
@@ -45,20 +43,13 @@ class CMSSiliconNonElastic : public G4VCrossSectionDataSet
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "CMSSiliconNonElastic: uses ADL data"<<endl;}
+   {G4cout << "CCalAluminumNonelastic.h: uses ADL data"<<endl;}
    
    private:
-   // abundances are in atom%
-   // energiesin eV; cross-sections in barns
    
-   const double the28Abundance;
-   CMSDataSet the28Data;
-   const double the29Abundance;
-   CMSDataSet the29Data;
-   const double the30Abundance;
-   CMSDataSet the30Data;
+   CCalDataSet theData;
 
 };
 
-
+  
 #endif

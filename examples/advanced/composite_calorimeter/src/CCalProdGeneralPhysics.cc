@@ -1,15 +1,15 @@
-#include "CMSProdGeneralPhysics.hh"
+#include "CCalProdGeneralPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
-CMSProdGeneralPhysics::CMSProdGeneralPhysics(const G4String& name)
+CCalProdGeneralPhysics::CCalProdGeneralPhysics(const G4String& name)
                      :  G4VPhysicsConstructor(name)
 {
 }
 
-CMSProdGeneralPhysics::~CMSProdGeneralPhysics()
+CCalProdGeneralPhysics::~CCalProdGeneralPhysics()
 {
 }
 
@@ -19,14 +19,14 @@ CMSProdGeneralPhysics::~CMSProdGeneralPhysics()
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 
-void CMSProdGeneralPhysics::ConstructParticle()
+void CCalProdGeneralPhysics::ConstructParticle()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();  
 }
 
-void CMSProdGeneralPhysics::ConstructProcess()
+void CCalProdGeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
   theParticleIterator->reset();

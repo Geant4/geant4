@@ -1,16 +1,16 @@
-#include "CMSProdEMPhysics.hh"
+#include "CCalProdEMPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CMSProdEMPhysics::CMSProdEMPhysics(const G4String& name)
+CCalProdEMPhysics::CCalProdEMPhysics(const G4String& name)
                :  G4VPhysicsConstructor(name)
 {
 }
 
-CMSProdEMPhysics::~CMSProdEMPhysics()
+CCalProdEMPhysics::~CCalProdEMPhysics()
 {
 }
 
@@ -25,7 +25,7 @@ CMSProdEMPhysics::~CMSProdEMPhysics()
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
 
-void CMSProdEMPhysics::ConstructParticle()
+void CCalProdEMPhysics::ConstructParticle()
 {
   // gamma
   G4Gamma::GammaDefinition();
@@ -41,7 +41,7 @@ void CMSProdEMPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void CMSProdEMPhysics::ConstructProcess()
+void CCalProdEMPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   

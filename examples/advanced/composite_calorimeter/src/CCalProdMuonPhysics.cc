@@ -1,16 +1,16 @@
-#include "CMSProdMuonPhysics.hh"
+#include "CCalProdMuonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CMSProdMuonPhysics::CMSProdMuonPhysics(const G4String& name)
+CCalProdMuonPhysics::CCalProdMuonPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name)
 {
 }
 
-CMSProdMuonPhysics::~CMSProdMuonPhysics()
+CCalProdMuonPhysics::~CCalProdMuonPhysics()
 {
 }
 
@@ -26,7 +26,7 @@ CMSProdMuonPhysics::~CMSProdMuonPhysics()
 #include "G4NeutrinoMu.hh"
 #include "G4AntiNeutrinoMu.hh"
 
-void CMSProdMuonPhysics::ConstructParticle()
+void CCalProdMuonPhysics::ConstructParticle()
 {
   // Mu
   G4MuonPlus::MuonPlusDefinition();
@@ -45,7 +45,7 @@ void CMSProdMuonPhysics::ConstructParticle()
 
 #include "G4ProcessManager.hh"
 
-void CMSProdMuonPhysics::ConstructProcess()
+void CCalProdMuonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
 

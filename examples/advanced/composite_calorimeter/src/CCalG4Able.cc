@@ -10,7 +10,7 @@
   #include "G4Timer.hh"
 #endif
 #ifdef debug
-  #include "utils.hh"
+  #include "CCalutils.hh"
 #endif
 
 #include "CCalGeometryConfiguration.hh"

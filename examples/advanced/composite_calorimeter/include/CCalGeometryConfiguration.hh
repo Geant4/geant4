@@ -7,7 +7,7 @@
 #define CCalGeometryConfiguration_h 1
 
 #include "g4std/map"
-#include "utils.hh"
+#include "CCalutils.hh"
 
 class CCalGeometryConfiguration {
 

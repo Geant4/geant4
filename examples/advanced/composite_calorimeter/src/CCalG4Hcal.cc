@@ -9,7 +9,7 @@
 #include "CCalRotationMatrixFactory.hh"
 #include "CCalSensitiveDetectors.hh"
 
-#include "utils.hh"
+#include "CCalutils.hh"
 #include <math.h>
 
 #include "G4ThreeVector.hh"

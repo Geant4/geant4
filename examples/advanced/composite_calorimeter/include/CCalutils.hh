@@ -1,12 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: utils.hh
-// Date: 03/98 I. Gonzalez
-// Modifications: 29/03/98 I.G.
-//                27/03/00 S.B. In OSCAR
+// File: CCalutils.hh
 // Description: General utilities.
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef utils_hh
-#define utils_hh 1
+#ifndef CCalutils_hh
+#define CCalutils_hh 1
 
 #include <iostream>
 #include <fstream>

@@ -1,5 +1,5 @@
-#ifndef CMSOxygenNonElastic_h
-#define CMSOxygenNonElastic_h
+#ifndef CCalOxygenNonElastic_h
+#define CCalOxygenNonElastic_h
 
 // by JPW, working, but to be cleaned up. @@@@
 // note that the data are taken from O16.
@@ -10,14 +10,14 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4Proton.hh"
 
-#include "CMSDataSet.hh"
+#include "CCalDataSet.hh"
 
-class CMSOxygenNonElastic : public G4VCrossSectionDataSet
+class CCalOxygenNonElastic : public G4VCrossSectionDataSet
 {
    public:
    
-   CMSOxygenNonElastic();
-   virtual ~CMSOxygenNonElastic() {}
+   CCalOxygenNonElastic();
+   virtual ~CCalOxygenNonElastic() {}
    
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*anEle)
@@ -44,11 +44,11 @@ class CMSOxygenNonElastic : public G4VCrossSectionDataSet
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "CMSOxygenNonElastic: uses ADL data"<<endl;}
+   {G4cout << "CCalOxygenNonElastic: uses ADL data"<<endl;}
    
    private:
    
-   CMSDataSet theData;
+   CCalDataSet theData;
 
 };
 

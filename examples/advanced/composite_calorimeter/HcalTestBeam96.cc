@@ -10,7 +10,7 @@
 #include "CCalRunAction.hh"
 
 #include "CCalPrimaryGeneratorAction.hh"
-#include "HcalTestBeam99PhysicsList.hh"
+#include "CCalPhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UIterminal.hh"
@@ -28,7 +28,7 @@ int main(int argc,char** argv) {
 
   G4RunManager * runManager = new G4RunManager;
   runManager->SetUserInitialization(new CCalDetectorConstruction);
-  runManager->SetUserInitialization(new HcalTestBeam99PhysicsList);     
+  runManager->SetUserInitialization(new CCalPhysicsList);     
 
   ////////////////////////////
   //  User action classes.  //

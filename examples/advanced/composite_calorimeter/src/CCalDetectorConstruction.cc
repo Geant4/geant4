@@ -16,7 +16,7 @@
 #include "CCalSensAssign.hh"
 #include "CCalMagneticField.hh"
 #include "CCalG4Hall.hh"
-#include "utils.hh"
+#include "CCalutils.hh"
 
 #include "CCalEcalOrganization.hh"
 #include "CCalHcalOrganization.hh"

@@ -1,5 +1,5 @@
-#ifndef CMSProdEMPhysics_h
-#define CMSProdEMPhysics_h 1
+#ifndef CCalProdEMPhysics_h
+#define CCalProdEMPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -14,11 +14,11 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
-class CMSProdEMPhysics : public G4VPhysicsConstructor
+class CCalProdEMPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CMSProdEMPhysics(const G4String& name ="EM");
-    virtual ~CMSProdEMPhysics();
+    CCalProdEMPhysics(const G4String& name ="EM");
+    virtual ~CCalProdEMPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 

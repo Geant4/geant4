@@ -1,7 +1,7 @@
-// by JPW, working, but to be cleaned up. @@@@
+#ifndef CCalHydrogenNonElastic_h
+#define CCalHydrogenNonElastic_h
 
-#ifndef CMSAluminumNonelastic_h
-#define CMSAluminumNonelastic_h
+// by JPW, working, but to be cleaned up. @@@@
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -9,20 +9,20 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4Proton.hh"
 
-#include "CMSDataSet.hh"
+#include "CCalDataSet.hh"
 
-class CMSAluminumNonelastic : public G4VCrossSectionDataSet
+class CCalHydrogenNonElastic : public G4VCrossSectionDataSet
 {
    public:
    
-   CMSAluminumNonelastic();
-   virtual ~CMSAluminumNonelastic() {}
+   CCalHydrogenNonElastic();
+   virtual ~CCalHydrogenNonElastic() {}
    
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*anEle)
    {
      G4bool result = false;
-     if(( 13 == anEle->GetZ()) &&
+     if(( 14 == anEle->GetZ()) &&
         ( aPart->GetKineticEnergy()<150*MeV) &&
 	( G4Proton::Proton() == aPart->GetDefinition() ) ) result = true;
      return result;
@@ -33,7 +33,9 @@ class CMSAluminumNonelastic : public G4VCrossSectionDataSet
    {
       G4double result = 0;
       const G4double kineticEnergy = aPart->GetKineticEnergy()/eV;
-      result = theData.getCrossSection(kineticEnergy);
+      result = theH2CaptureData.getCrossSection(kineticEnergy);
+      result += theH2DissociationData.getCrossSection(kineticEnergy);
+      result *=theH2Abundance;
       return result;
    }
 
@@ -43,13 +45,16 @@ class CMSAluminumNonelastic : public G4VCrossSectionDataSet
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "CMSAluminumNonelastic.h: uses ADL data"<<endl;}
+   {G4cout << "CCalHydrogenNonElastic: uses ADL data"<<endl;}
    
    private:
+   // abundances are in atom%
+   // energies in eV; cross-sections in barns
    
-   CMSDataSet theData;
+   const double theH2Abundance;
+   CCalDataSet theH2CaptureData;
+   CCalDataSet theH2DissociationData;
 
 };
 
-  
 #endif
