@@ -21,61 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06EventAction.hh,v 1.1 2003-01-23 15:34:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#ifndef ExN06EventAction_h
+#define ExN06EventAction_h 1
 
-// Make this appear first!
-#include "G4Timer.hh"
+#include "G4UserEventAction.hh"
 
-#include "ExN06RunAction.hh"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::ExN06RunAction()
+class ExN06EventAction : public G4UserEventAction
 {
-  timer = new G4Timer;
-}
+  public:
+    ExN06EventAction();
+   ~ExN06EventAction();
+
+  public:
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::~ExN06RunAction()
-{
-  delete timer;
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
     
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

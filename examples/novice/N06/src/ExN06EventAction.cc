@@ -21,61 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06EventAction.cc,v 1.1 2003-01-23 15:34:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#include "ExN06EventAction.hh"
 
-// Make this appear first!
-#include "G4Timer.hh"
-
-#include "ExN06RunAction.hh"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06RunAction::ExN06RunAction()
-{
-  timer = new G4Timer;
-}
+ 
+ExN06EventAction::ExN06EventAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06RunAction::~ExN06RunAction()
-{
-  delete timer;
-}
+ 
+ExN06EventAction::~ExN06EventAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
-}
+ 
+void ExN06EventAction::BeginOfEventAction(const G4Event*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
+ 
+void ExN06EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
+  // get number of stored trajectories
+  //
+  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+  G4int n_trajectories = 0;
+  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
     
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
+  // extract the trajectories and draw them
+  //
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     for (G4int i=0; i<n_trajectories; i++) 
+        { G4Trajectory* trj = (G4Trajectory*)
+	                            ((*(evt->GetTrajectoryContainer()))[i]);
+          trj->DrawTrajectory(50);
+        }
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2002-11-21 22:58:25 gum Exp $
+$Id: History,v 1.12 2003-01-23 15:31:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 23, 2003 Michel Maire (exampleN06-V05-00-00)
+- added tools for interactive session : UItcsh, visualisation of tracks.
+- added 2 messenger classes : PhysicsList and PrimaryGenerator
+- exampleN06.in changed --> exampleN06.out reduced
+
 November 21, 2002 Peter Gumplinger (exampleN06-V04-01-02)
 - exampleN06.out output changed because of small change in G4Scintillation
  
@@ -22,11 +27,12 @@ November 14, 2002 Peter Gumplinger (exampleN06-V04-01-01)
 - reduced the scintillation photon yield to reduce the output size
 
 November 12, 2002 Peter Gumplinger (exampleN06-V04-01-00)
-- add ExN06StackingAction, change user interface to new version of G4Scintillation
+- add ExN06StackingAction
+- change user interface to new version of G4Scintillation
 
 May 30, 2002  Gabriele Cosmo (exampleN06-V04-00-02)
-- Renamed file ExN06PrimaryGeneratoraction.cc to ExN06PrimaryGeneratorAction.cc to
-  be consistent with class name.
+- Renamed file ExN06PrimaryGeneratoraction.cc to ExN06PrimaryGeneratorAction.cc
+  to be consistent with class name.
 
 May 16, 2002  Peter Gumplinger (exampleN06-V04-00-01)
 - Add G4Scintillation to the example and update reference output

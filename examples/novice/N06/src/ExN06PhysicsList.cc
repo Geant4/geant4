@@ -21,12 +21,18 @@
 // ********************************************************************
 //
 //
+// $Id: ExN06PhysicsList.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ios.hh"
 #include "g4std/iomanip"
 
 #include "globals.hh"
 #include "ExN06PhysicsList.hh"
+#include "ExN06PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -39,9 +45,31 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 
-ExN06PhysicsList::ExN06PhysicsList() :  G4VUserPhysicsList() {}
+#include "G4Cerenkov.hh"
+#include "G4Scintillation.hh"
+#include "G4OpAbsorption.hh"
+#include "G4OpRayleigh.hh"
+#include "G4OpBoundaryProcess.hh"
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06PhysicsList::~ExN06PhysicsList() {}
+ExN06PhysicsList::ExN06PhysicsList() :  G4VUserPhysicsList()
+{
+  theCerenkovProcess           = 0;
+  theScintillationProcess      = 0;
+  theAbsorptionProcess         = 0;
+  theRayleighScatteringProcess = 0;
+  theBoundaryProcess           = 0;
+  
+  pMessenger = new ExN06PhysicsListMessenger(this);  
+  SetVerboseLevel(0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExN06PhysicsList::~ExN06PhysicsList() { delete pMessenger;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructParticle()
 {
@@ -54,8 +82,9 @@ void ExN06PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructBosons()
 {
@@ -70,6 +99,8 @@ void ExN06PhysicsList::ConstructBosons()
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExN06PhysicsList::ConstructLeptons()
 {
   // leptons
@@ -83,6 +114,8 @@ void ExN06PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExN06PhysicsList::ConstructMesons()
 {
  //  mesons
@@ -90,6 +123,8 @@ void ExN06PhysicsList::ConstructMesons()
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructBaryons()
 {
@@ -100,6 +135,8 @@ void ExN06PhysicsList::ConstructBaryons()
   G4AntiNeutron::AntiNeutronDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExN06PhysicsList::ConstructProcess()
 {
   AddTransportation();
@@ -108,7 +145,11 @@ void ExN06PhysicsList::ConstructProcess()
   ConstructOp();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Decay.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructGeneral()
 {
@@ -122,6 +163,8 @@ void ExN06PhysicsList::ConstructGeneral()
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -138,6 +181,8 @@ void ExN06PhysicsList::ConstructGeneral()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructEM()
 {
@@ -157,70 +202,60 @@ void ExN06PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4eIonisation(),-1,2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
+      pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation(),       -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1, 3);
 
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4eIonisation(),-1,2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation(),0,-1,4);
+      pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation(),       -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1, 4);
 
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
     //muon
      // Construct processes for muon
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-     pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
-     pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
+     pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
+     pmanager->AddProcess(new G4MuIonisation(),      -1, 2, 2);
+     pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1, 3);
+     pmanager->AddProcess(new G4MuPairProduction(),  -1,-1, 4);
 
     } else {
       if ((particle->GetPDGCharge() != 0.0) &&
           (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
        pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-       pmanager->AddProcess(new G4hIonisation(),-1,2,2);
+       pmanager->AddProcess(new G4hIonisation(),       -1,2,2);
      }
     }
   }
 }
 
-#include "G4Cerenkov.hh"
-#include "G4Scintillation.hh"
-#include "G4OpAbsorption.hh"
-#include "G4OpRayleigh.hh"
-#include "G4OpBoundaryProcess.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::ConstructOp()
 {
-  G4Cerenkov*   theCerenkovProcess = new G4Cerenkov("Cerenkov");
-  G4Scintillation* theScintillationProcess = new G4Scintillation("Scintilltion");
-  G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
-  G4OpRayleigh*   theRayleighScatteringProcess = new G4OpRayleigh();
-  G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
+  theCerenkovProcess           = new G4Cerenkov("Cerenkov");
+  theScintillationProcess = new G4Scintillation("Scintillation");
+  theAbsorptionProcess     = new G4OpAbsorption();
+  theRayleighScatteringProcess = new G4OpRayleigh();
+  theBoundaryProcess  = new G4OpBoundaryProcess();
 
 //  theCerenkovProcess->DumpPhysicsTable();
 //  theScintillationProcess->DumpPhysicsTable();
 //  theAbsorptionProcess->DumpPhysicsTable();
 //  theRayleighScatteringProcess->DumpPhysicsTable();
 
-  theCerenkovProcess->SetVerboseLevel(1);
-  theScintillationProcess->SetVerboseLevel(1);
-  theAbsorptionProcess->SetVerboseLevel(1);
-  theRayleighScatteringProcess->SetVerboseLevel(1);
-  theBoundaryProcess->SetVerboseLevel(1);
-
-  G4int MaxNumPhotons = 300;
-
+  SetVerbose(1);
+  
+  theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
-
-  theScintillationProcess->SetTrackSecondariesFirst(true);
+  
   theScintillationProcess->SetScintillationYieldFactor(1.);
+  theScintillationProcess->SetTrackSecondariesFirst(true);
 
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
@@ -245,15 +280,35 @@ void ExN06PhysicsList::ConstructOp()
       pmanager->AddDiscreteProcess(theBoundaryProcess);
     }
   }
-// set ordering for AtRestDoIt
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN06PhysicsList::SetVerbose(G4int verbose)
+{
+  theCerenkovProcess->SetVerboseLevel(verbose);
+  theScintillationProcess->SetVerboseLevel(verbose);
+  theAbsorptionProcess->SetVerboseLevel(verbose);
+  theRayleighScatteringProcess->SetVerboseLevel(verbose);
+  theBoundaryProcess->SetVerboseLevel(verbose);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN06PhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
+{  
+  theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumber);
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06PhysicsList::SetCuts()
 {
-  if (verboseLevel >1){
-    G4cout << "ExN06PhysicsList::SetCuts:";
-  }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
+  //   the default cut value for all particle types
+  // 
+  SetCutsWithDefault();
+  
+  if (verboseLevel>0) DumpCutValuesTable();   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,61 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06SteppingVerbose.hh,v 1.1 2003-01-23 15:34:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Make this appear first!
-#include "G4Timer.hh"
+class ExN06SteppingVerbose;
 
-#include "ExN06RunAction.hh"
+#ifndef ExN06SteppingVerbose_h
+#define ExN06SteppingVerbose_h 1
 
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::ExN06RunAction()
+class ExN06SteppingVerbose : public G4SteppingVerbose
 {
-  timer = new G4Timer;
-}
+ public:   
+
+   ExN06SteppingVerbose();
+  ~ExN06SteppingVerbose();
+
+   void StepInfo();
+   void TrackingStarted();
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::~ExN06RunAction()
-{
-  delete timer;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-    
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

@@ -21,61 +21,54 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06PrimaryGeneratorMessenger.cc,v 1.1 2003-01-23 15:34:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Make this appear first!
-#include "G4Timer.hh"
+#include "ExN06PrimaryGeneratorMessenger.hh"
 
-#include "ExN06RunAction.hh"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
+#include "ExN06PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::ExN06RunAction()
+ExN06PrimaryGeneratorMessenger::ExN06PrimaryGeneratorMessenger(
+                                          ExN06PrimaryGeneratorAction* ExN06Gun)
+:ExN06Action(ExN06Gun)
 {
-  timer = new G4Timer;
+  gunDir = new G4UIdirectory("/N06/gun/");
+  gunDir->SetGuidance("PrimaryGenerator control");
+   
+  polarCmd = new G4UIcmdWithADoubleAndUnit("/N06/gun/optPhotonPolar",this);
+  polarCmd->SetGuidance("Set linear polarization");
+  polarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
+  polarCmd->SetParameterName("angle",true);
+  polarCmd->SetUnitCategory("Angle");  
+  polarCmd->SetDefaultValue(0.);
+  polarCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::~ExN06RunAction()
+ExN06PrimaryGeneratorMessenger::~ExN06PrimaryGeneratorMessenger()
 {
-  delete timer;
+  delete polarCmd;
+  delete gunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
+void ExN06PrimaryGeneratorMessenger::SetNewValue(
+                                        G4UIcommand* command, G4String newValue)
+{ 
+  if( command == polarCmd )
+   { ExN06Action->SetOptPhotonPolar(polarCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-    
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,11 @@
+/control/verbose 2
+#
+/gun/particle opticalphoton
+/gun/energy 3 eV
+/gun/direction 5 -3 0
+/N06/gun/optPhotonPolar 90 deg
+#
+/tracking/verbose 1
+#
+/run/beamOn 1
+

@@ -21,61 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06PrimaryGeneratorMessenger.hh,v 1.1 2003-01-23 15:34:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Make this appear first!
-#include "G4Timer.hh"
-
-#include "ExN06RunAction.hh"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::ExN06RunAction()
+#ifndef ExN06PrimaryGeneratorMessenger_h
+#define ExN06PrimaryGeneratorMessenger_h 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
+
+class ExN06PrimaryGeneratorAction;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class ExN06PrimaryGeneratorMessenger: public G4UImessenger
 {
-  timer = new G4Timer;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06RunAction::~ExN06RunAction()
-{
-  delete timer;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
+  public:
+    ExN06PrimaryGeneratorMessenger(ExN06PrimaryGeneratorAction*);
+   ~ExN06PrimaryGeneratorMessenger();
     
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
-}
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    ExN06PrimaryGeneratorAction* ExN06Action;
+    G4UIdirectory*               gunDir; 
+    G4UIcmdWithADoubleAndUnit*   polarCmd;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

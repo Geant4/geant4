@@ -21,61 +21,65 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06RunAction.cc,v 1.8 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06PhysicsListMessenger.cc,v 1.1 2003-01-23 15:34:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Make this appear first!
-#include "G4Timer.hh"
+#include "ExN06PhysicsListMessenger.hh"
 
-#include "ExN06RunAction.hh"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
+#include "ExN06PhysicsList.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06RunAction::ExN06RunAction()
+ExN06PhysicsListMessenger::ExN06PhysicsListMessenger(ExN06PhysicsList* pPhys)
+:pPhysicsList(pPhys)
 {
-  timer = new G4Timer;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06RunAction::~ExN06RunAction()
-{
-  delete timer;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
-  timer->Start();
+  N06Dir = new G4UIdirectory("/N06/");
+  N06Dir->SetGuidance("UI commands of this example");
   
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-    }   
+  physDir = new G4UIdirectory("/N06/phys/");
+  physDir->SetGuidance("PhysicsList control");
+ 
+  verboseCmd = new G4UIcmdWithAnInteger("/N06/phys/verbose",this);  
+  verboseCmd->SetGuidance("set verbose for physics processes");
+  verboseCmd->SetParameterName("verbose",true);
+  verboseCmd->SetDefaultValue(1);
+  verboseCmd->SetRange("verbose>=0");
+  verboseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  cerenkovCmd = new G4UIcmdWithAnInteger("/N06/phys/cerenkovMaxPhotons",this);  
+  cerenkovCmd->SetGuidance("set max nb of photons per step");
+  cerenkovCmd->SetParameterName("MaxNumber",false);
+  cerenkovCmd->SetRange("MaxNumber>=0");
+  cerenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
+ExN06PhysicsListMessenger::~ExN06PhysicsListMessenger()
 {
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-    
-  timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-         << " " << *timer << G4endl;
+  delete verboseCmd;
+  delete cerenkovCmd;
+  delete physDir;
+  delete N06Dir;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN06PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{       
+  if( command == verboseCmd )
+   { pPhysicsList->SetVerbose(verboseCmd->GetNewIntValue(newValue));}
+   
+  if( command == cerenkovCmd )
+   {pPhysicsList->SetNbOfPhotonsCerenkov(cerenkovCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
