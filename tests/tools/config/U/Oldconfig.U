@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.13 2002-12-13 13:40:34 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.14 2003-02-20 17:01:04 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.13  2002/12/13 13:40:34  sadilov
+?RCS: Add -libs -cppflags -cxxflags -incflags
+?RCS:
 ?RCS: Revision 1.12  2002/12/12 22:53:17  sadilov
 ?RCS: Introduce -libs.
 ?RCS:
@@ -786,7 +789,7 @@ if [ X$install = X ] ; then
 
 	# create not_display flag
 
-if [ X$g4liblist != X -o X$g4cxxflags != X -o X$g4cppflags != X -o X$g4incflags != X ] ; then
+if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags != X -o X$g4incflags != X ] ; then
 	g4non_display=yes
 #	echo g4non_display=$g4non_display
 fi
@@ -795,7 +798,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo CPPFLAGS=$CPPFLAGS
 	echo $CPPFLAGS
@@ -833,7 +836,21 @@ fi
 
 	fi #end of incflags
 
-	if [ X$g4liblist = Xyes ] ; then
+	if [ X$g4ldflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo LDFLAGS=$LDFLAGS
+	echo $LDFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of ldflags
+
+	if [ X$g4ldlibs = Xyes ] ; then
 
 #	cat >&2 <<EOM
 #---------------------------------------------------
@@ -843,19 +860,16 @@ fi
 	
 	. $src/.config/bin/$g4system/env.sh
 
-	echo TEST
+#	echo TEST
 
-	ls -l $G4INSTALL/config/scripts/GNUmakefile
-	ls -l $G4LIB/$G4SYSTEM/GNUmakefile.db
+#	ls -l $G4INSTALL/config/scripts/GNUmakefile
+#	ls -l $G4LIB/$G4SYSTEM/GNUmakefile.db
 
-	LOADLIBS=`grep 'LOADLIBS :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+#	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+#	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
-	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
-
-	echo LOADLIBS=$LOADLIBS
-	echo LDLIBS_2=$LDLIBS_2
-	echo TEST
+#	echo LDLIBS_2=$LDLIBS_2
+#	echo $LDLIBS_2
 
 	if [ X$G4LIB_USE_GRANULAR = X ] ; then
 	
@@ -866,7 +880,7 @@ fi
 
 	echo "$LDLIBS_2 $c"
 
-	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
+#	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
 
 	$rm -rf .config/UU
 	exit 1
@@ -875,7 +889,19 @@ fi
 
 # Granular libs
 
-	echo $n "-L$G4WORKDIR/lib/$G4SYSTEM $c" ; $G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+#	echo $n "-L$G4WORKDIR/lib/$G4SYSTEM $c" ; $G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+
+#	echo G4LIB=$G4LIB/$G4SYSTEM
+
+	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
+
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
+
+	echo $LDLIBS	
+	
 	$rm -rf .config/UU
 
 	exit 1
