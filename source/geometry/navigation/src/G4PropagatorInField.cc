@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.6 2003-11-13 18:37:24 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.7 2003-11-26 17:00:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -268,24 +268,27 @@ G4PropagatorInField::ComputeStep(
 
        // Find the intersection point of AB true path with the surface
        //   of vol(A), if it exists. Start with point E as first "estimate".
+       G4bool recalculatedEndPt= false;
        G4bool found_intersection = 
          LocateIntersectionPoint( SubStepStartState, CurrentState, 
-                                  InterSectionPointE, IntersectPointVelct_G );
-       // intersects = intersects & found_intersection;
+                                  InterSectionPointE, IntersectPointVelct_G,
+				  recalculatedEndPt);
+       intersects = intersects && found_intersection;
        if( found_intersection ) {        
           End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
           StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
                                       - OriginalState.GetCurveLength();
        } else {
-          intersects= false;  // "Minor" chords do not intersect
+	  // intersects= false;          // "Minor" chords do not intersect
+	  if( recalculatedEndPt ){
+	     CurrentState= IntersectPointVelct_G; 
+	  }
        }
     }
     if( !intersects )
     {
       StepTaken += s_length_taken; 
-      // Introducing smooth trajectory display (jacek 01/11/2002)
-      // The filter pointer holds a valid filter if and only if
-      // intermediate points should be stored.
+      // For smooth trajectory display (jacek 01/11/2002)
       if (fpTrajectoryFilter) {
         fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
       }
@@ -395,7 +398,8 @@ G4PropagatorInField::ComputeStep(
 //   const G4FieldTrack&       CurveStartPointVelocity,   //  A
 //   const G4FieldTrack&       CurveEndPointVelocity,     //  B
 //   const G4ThreeVector&      TrialPoint,                //  E
-//         G4FieldTrack&       IntersectPointVelocity)    // Output
+//         G4FieldTrack&       IntersectedOrRecalculated  // Output
+//         G4bool&             recalculated)              // Out
 // --------------------------------------------------------------------------
 //
 // Function that returns the intersection of the true path with the surface
@@ -413,8 +417,11 @@ G4PropagatorInField::ComputeStep(
 // Convention of Use :
 //     i) If it returns "true", then IntersectionPointVelocity is set
 //       to the approximate intersection point.
-//    ii) If it returns "false", no intersection was found and 
-//       IntersectionPointVelocity is invalid.
+//    ii) If it returns "false", no intersection was found.
+//          The validity of IntersectedOrRecalculated depends on 'recalculated'
+//        a) if latter is false, then IntersectedOrRecalculated is invalid. 
+//        b) if latter is true,  then IntersectedOrRecalculated is
+//             the new endpoint, due to a re-integration.
 // --------------------------------------------------------------------------
 
 G4bool 
@@ -422,7 +429,8 @@ G4PropagatorInField::LocateIntersectionPoint(
   const   G4FieldTrack&       CurveStartPointVelocity,   //  A
   const   G4FieldTrack&       CurveEndPointVelocity,     //  B
   const   G4ThreeVector&      TrialPoint,                //  E
-          G4FieldTrack&       IntersectPointVelocity)    // Output
+          G4FieldTrack&       IntersectedOrRecalculatedFT,    // Out: point found
+          G4bool&             recalculatedEndPoint)      // Out: 
 {
   // Find Intersection Point ( A, B, E )  of true path AB - start at E.
 
@@ -434,9 +442,13 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4ThreeVector CurrentE_Point = TrialPoint;
 
   G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
-  G4double    NewSafety;   
+  G4double    NewSafety= -0.0;   
   G4bool      first_step = true;
+
+  recalculatedEndPoint= false; 
+
   G4int       substep_no = 0;
+  const G4int max_substeps= 100;
 
   do{                // REPEAT
 
@@ -450,9 +462,8 @@ G4PropagatorInField::LocateIntersectionPoint(
                                            CurrentB_PointVelocity, 
                                            CurrentE_Point,
                                            fEpsilonStep );
+    //  The above method is the key & most intuitive part ...
 
-    //  The above function is the most difficult part ...
-    //        
     G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
 
     // First check whether EF is small - then F is a good approx. point 
@@ -466,8 +477,8 @@ G4PropagatorInField::LocateIntersectionPoint(
 
       // Create the "point" return value
       //
-      IntersectPointVelocity = ApproxIntersecPointV;
-      IntersectPointVelocity.SetPosition( CurrentE_Point );
+      IntersectedOrRecalculatedFT = ApproxIntersecPointV;
+      IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
 
       // Note: in order to return a point on the boundary, 
       //       we must return E. But it is F on the curve.
@@ -543,7 +554,7 @@ G4PropagatorInField::LocateIntersectionPoint(
            // This means that somehow a volume intersected the original 
            // chord but misses the chord (or series of chords) 
            // we have used.
-           // The value of IntersectPointVelocity returned is not valid 
+           // The value of IntersectedOrRecalculatedFT returned is not valid 
            //
            there_is_no_intersection = true;
 
@@ -562,12 +573,18 @@ G4PropagatorInField::LocateIntersectionPoint(
        {
           // Re-integrate to obtain a new B
           //
-          G4FieldTrack newEndPoint=
+          G4FieldTrack newEndPointFT=
                   ReEstimateEndpoint( CurrentA_PointVelocity,
                                       CurrentB_PointVelocity,
                                       linDistSq,    // to avoid recalculation
                                       curveDist );
-           CurrentB_PointVelocity = newEndPoint;
+	  G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
+	  CurrentB_PointVelocity = newEndPointFT;
+
+	  recalculatedEndPoint= true;
+	  IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
+	                                           //  if it is the endpoint!
+	  // G4cout <<"Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
        }
        if( curveDist < 0.0 )
        {
@@ -590,10 +607,22 @@ G4PropagatorInField::LocateIntersectionPoint(
                      -1.0, NewSafety,  substep_no, 0);
 #endif
 
-     substep_no++;
+  } while (  ( ! found_approximate_intersection )
+	     && ( ! there_is_no_intersection )     
+	     && ( substep_no++ < max_substeps) ); // UNTIL found or failed
 
-   } while (  ( ! found_approximate_intersection )
-           && ( ! there_is_no_intersection )     ); // UNTIL found or failed
+#ifdef G4VERBOSE
+  if( substep_no >= max_substeps ) {
+    G4cerr << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
+	   << " Convergence is requiring too many substeps: " << substep_no;
+    G4cerr << " Will abandon effort to intersect. " << G4endl;
+    G4cerr << " Information on start & current step follows in cout: " << G4endl;
+    printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
+		 -1.0, NewSafety,  0,          0);
+    printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
+		 -1.0, NewSafety,  substep_no, 0);
+  }
+#endif
 
    return  !there_is_no_intersection; //  Success or failure
 }
@@ -610,7 +639,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
                                         G4int                stepNo, 
                                         G4VPhysicalVolume*   startVolume)
 {
-  const G4int verboseLevel=1;
+  const G4int verboseLevel= fVerboseLevel;
   const G4ThreeVector StartPosition       = StartFT.GetPosition();
   const G4ThreeVector StartUnitVelocity   = StartFT.GetMomentumDir();
   const G4ThreeVector CurrentPosition     = CurrentFT.GetPosition();
