@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gstpar.cc,v 1.6 2001-07-11 09:59:02 gunter Exp $
+// $Id: G4gstpar.cc,v 1.7 2003-04-03 11:30:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -40,7 +40,7 @@ void PG4gstpar(G4String tokens[])
     G4gstpar(itmed,chpar,parval);
 }
 
-void G4gstpar(G4int itmed, G4String chpar, G4double parval)
+void G4gstpar(G4int, G4String, G4double)
 {
     // set special tracking medium parameter. Apply to all logical
     // volumes making use of the specified tracking medium.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmate.cc,v 1.8 2001-07-11 09:59:01 gunter Exp $
+// $Id: G4gsmate.cc,v 1.9 2003-04-03 11:30:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -99,7 +99,7 @@ G4Element* CreateElement(G4double zeff, G4double aeff, G4String matName)
 */
 
 void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
-              G4double densin, G4double radl, G4int nwbf, G4double* ubuf)
+              G4double densin, G4double, G4int, G4double*)
 {
   G4double G3_minimum_density = 1.e-10*g/cm3;
 

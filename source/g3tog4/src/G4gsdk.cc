@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdk.cc,v 1.5 2001-07-11 09:59:00 gunter Exp $
+// $Id: G4gsdk.cc,v 1.6 2003-04-03 11:30:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Decay.hh"
@@ -41,7 +41,7 @@ void PG4gsdk(G4String tokens[])
     G4gsdk(ipart,bratio,mode);
 }
 
-void G4gsdk(G4int ipart, G4double bratio[], G4int mode[])
+void G4gsdk(G4int, G4double*, G4int*)
 {
 /*
     // create decay object for the particle
