@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.35 2003-06-19 15:21:42 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.36 2003-06-19 15:25:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -757,20 +757,20 @@ void G4MagInt_Driver::PrintStat_Aux(
     else
        G4cout << std::setw( 5) << "Start" << " ";
     G4double curveLen= aFieldTrack.GetCurveLength();
-    G4cout << G4std::setw( 7) << curveLen;
-    G4cout << G4std::setw( 9) << Position.x() << " "
-	   << G4std::setw( 9) << Position.y() << " "
-	   << G4std::setw( 9) << Position.z() << " "
-	   << G4std::setw( 8) << UnitVelocity.x() << " "
-	   << G4std::setw( 8) << UnitVelocity.y() << " "
-	   << G4std::setw( 8) << UnitVelocity.z() << " ";
+    G4cout << std::setw( 7) << curveLen;
+    G4cout << std::setw( 9) << Position.x() << " "
+	   << std::setw( 9) << Position.y() << " "
+	   << std::setw( 9) << Position.z() << " "
+	   << std::setw( 8) << UnitVelocity.x() << " "
+	   << std::setw( 8) << UnitVelocity.y() << " "
+	   << std::setw( 8) << UnitVelocity.z() << " ";
     G4int oldprec= G4cout.precision(3);
-    G4cout << G4std::setw( 7) << UnitVelocity.mag2()-1.0 << " ";
+    G4cout << std::setw( 7) << UnitVelocity.mag2()-1.0 << " ";
     G4cout.precision(6);
-    G4cout << G4std::setw(10) << dotVeloc_StartCurr << " ";
+    G4cout << std::setw(10) << dotVeloc_StartCurr << " ";
     G4cout.precision(oldprec);
-    G4cout << G4std::setw( 7) << aFieldTrack.GetKineticEnergy();
-    G4cout << G4std::setw(12) << step_len << " ";
+    G4cout << std::setw( 7) << aFieldTrack.GetKineticEnergy();
+    G4cout << std::setw(12) << step_len << " ";
 
     static G4double oldCurveLength= 0.0;
     static G4double oldSubStepLength= 0.0;
@@ -785,13 +785,13 @@ void G4MagInt_Driver::PrintStat_Aux(
     oldCurveLength= curveLen;
     oldSubStepLength= subStep_len;
 
-    G4cout << G4std::setw(12) << subStep_len << " "; 
-    G4cout << G4std::setw(12) << subStepSize << " "; 
+    G4cout << std::setw(12) << subStep_len << " "; 
+    G4cout << std::setw(12) << subStepSize << " "; 
     if( requestStep != -1.0 ) 
-       G4cout << G4std::setw( 9) << requestStep << " ";
+       G4cout << std::setw( 9) << requestStep << " ";
     else
-       G4cout << G4std::setw( 9) << " InitialStep " << " "; 
-    // G4cout << G4std::setw(12) << safety << " ";
+       G4cout << std::setw( 9) << " InitialStep " << " "; 
+    // G4cout << std::setw(12) << safety << " ";
     G4cout << G4endl;
 }
 
