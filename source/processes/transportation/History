@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2002-06-13 07:14:06 dressel Exp $
+$Id: History,v 1.41 2002-07-10 15:51:03 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 10th, 2002 M.Dressel internal-1-transport-V04-01-01
+--------------------------------------------------------
+- add classes for standard scoreing. Remove G4ScorePrinter and G4Scorer.
+  G4StandardScorer and G4StandardScoreTable may be used as replacement.
 
 Jun   13, 2002 M.Dressel transport-V04-00-09 
 ---------------------------------------------
