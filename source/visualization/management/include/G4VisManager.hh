@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.21 2001-07-30 23:34:24 johna Exp $
+// $Id: G4VisManager.hh,v 1.22 2001-07-30 23:43:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,6 @@ class G4VisManager: public G4VVisManager {
   // non-zero.
 
   // Odd friends that need access to various methods of the G4VisManager...
-  friend void G4OpenGLXmViewerSecondaryLoopPostAction ();  // Mmmm!
   friend class G4RTSteppingAction;
   friend class G4RayTrajectory;
 
