@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2000-10-05 12:57:55 gcosmo Exp $
+$Id: History,v 1.24 2000-10-18 15:46:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 18,   00   V. Grichine               geom-solids-csg-V02-00-04
+- G4Cons.cc, G4Tubs.cc:
+  added check against negative distance returned by DistanceToIn/DistanceToOut.
+- G4Cons.cc:
+  added correction for thickness of conical surfaces, remarkable for big
+  opening angles, in DistanceToIn/DistanceToOut functions.
 
 Oct 05,   00   V. Grichine               geom-solids-csg-V02-00-03
 - G4Cons.cc:

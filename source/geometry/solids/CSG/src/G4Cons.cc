@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.13 2000-10-05 09:01:33 grichine Exp $
+// $Id: G4Cons.cc,v 1.14 2000-10-18 15:46:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -710,13 +710,13 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       if (v.z() > 0)
       {
-	tolORMin  = fRmin1 - 0.5*kRadTolerance ;
-	tolORMax2 = (fRmax1 + 0.5*kRadTolerance)*(fRmax1 + 0.5*kRadTolerance) ;
+	tolORMin  = fRmin1 - 0.5*kRadTolerance*secRMin ;
+	tolORMax2 = (fRmax1 + 0.5*kRadTolerance*secRMax)*(fRmax1 + 0.5*kRadTolerance*secRMax) ;
       }
       else
       {
-	tolORMin  = fRmin2 - 0.5*kRadTolerance ;
-	tolORMax2 = (fRmax2 + 0.5*kRadTolerance)*(fRmax2 + 0.5*kRadTolerance) ;
+	tolORMin  = fRmin2 - 0.5*kRadTolerance*secRMin ;
+	tolORMax2 = (fRmax2 + 0.5*kRadTolerance*secRMax)*(fRmax2 + 0.5*kRadTolerance*secRMax) ;
       }
       if ( tolORMin > 0 ) tolORMin2 = tolORMin*tolORMin ;
       else                tolORMin2 = 0.0 ;
@@ -1163,6 +1163,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
+  if (snxt < kCarTolerance*0.5) snxt = 0.;
   return snxt ;
 }
 
@@ -1349,11 +1350,11 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
   if (v.z() > 0.0)
   {
-    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax2*(fRmax2 + kRadTolerance);
+    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax2*(fRmax2 + kRadTolerance*secRMax);
   }
   else if ( v.z() < 0.0 )
   {
-    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax1*(fRmax1 + kRadTolerance);
+    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax1*(fRmax1 + kRadTolerance*secRMax);
   }
   else deltaRoi2 = 1.0 ;
 
@@ -1910,7 +1911,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 	  break ;
     }
   }
-    return snxt ;
+  if (snxt < kCarTolerance*0.5) snxt = 0.;
+  return snxt ;
 }
 
 //////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.18 2000-08-16 09:44:34 grichine Exp $
+// $Id: G4Tubs.cc,v 1.19 2000-10-18 15:46:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -677,6 +677,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
      }
      else
      {
+        if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
 	return snxt ;	// On/outside extent, and heading away
 					// -> cannot intersect
      }
@@ -900,6 +901,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	  }
        }         //  Comp < 0
     }            //  seg != 0
+    if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
     return snxt ;
 }
  
@@ -1503,6 +1505,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	break ;
     }
   }
+  if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
   return snxt ;
 }
 
