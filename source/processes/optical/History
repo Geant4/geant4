@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th February 2004 Peter Gumplinger (op-V06-00-01)
+                Add process status: NotAtBoundary, SameMaterial, 
+                                    StepTooSmall, NoRINDEX
+                Allow for a skin-surface between mother and daughter
+                volumes, with the daughter skin taking precedence.
 2nd February 2004 Peter Gumplinger (op-V06-00-00)
                 Set theStatus = Undefined at start of DoIt
                 Replace usage of 0 with NULL.
