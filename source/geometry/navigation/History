@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2004-03-11 13:17:42 gcosmo Exp $
+$Id: History,v 1.23 2004-05-17 13:30:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 17th, 2004 - G.Cosmo  (geomnav-V06-01-00)
+------------------------
+- Added more verbosity on solids response for navigators (optimised/not
+  optimised) if "check_mode" state is combined with verbose level-1.
 
 Mar 11th, 2004 - G.Cosmo  (geomnav-V06-00-02)
 ------------------------
