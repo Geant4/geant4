@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.16 2004-11-07 01:41:10 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.17 2004-11-10 08:48:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//	GEANT 4 class header file
 //
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
@@ -224,22 +224,22 @@ class G4VProcess
 
 
       virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-				       const G4String&, 
+				       const G4String&,
 				       G4bool          ascii = false)
                                       {ascii=false; return true;}
-      // Store PhysicsTable in a file. 
-      // (return false in case of failure at I/O ) 
- 
+      // Store PhysicsTable in a file.
+      // (return false in case of failure at I/O )
+
       virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
-					   const G4String&, 
+					   const G4String&,
 				           G4bool          ascii = false)
                                       {ascii=false; return false;}
-      // Retrieve Physics from a file. 
+      // Retrieve Physics from a file.
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
-      // File name should be defined by each process 
-      // and the file should be placed under the directory specifed by the argument. 
-      const G4String& GetPhysicsTableFileName(G4ParticleDefinition* ,
+      // File name should be defined by each process
+      // and the file should be placed under the directory specifed by the argument.
+      const G4String& GetPhysicsTableFileName(const G4ParticleDefinition* ,
 					      const G4String& directory,
 					      const G4String& tableName,
 					      G4bool ascii =false);
