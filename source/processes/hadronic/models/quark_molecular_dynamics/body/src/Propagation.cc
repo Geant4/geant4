@@ -130,7 +130,7 @@ ColorString::ColorString(const double& E,const Vektor3& ptot,const Vektor3& rtot
     H->SetMomentum(Ptot);
     H->SetCoordinates(Rtot);
     H->SetMass(Etot);
-    (*Output::fileout) << H->Time() << "  " << length(H->Coordinates()) << G4endl;
+    // (*Output::fileout) << H->Time() << "  " << length(H->Coordinates()) << G4endl;
     G4cerr << H->Name() << G4endl;
   }
   else {
@@ -244,10 +244,13 @@ Colour::Colour(double h)
   //  vector<ParticleType*> D=TypeContainer::ParticleTypes->findType(AnyDiquark());
   
   InverseFunction::reducePrecision = false;
+  G4cout << "first try"<<endl;
   if ( Quarks.empty() )
-    throw "Quarks not initialized...";
+    G4cerr << "Quarks not initialized...";
+  G4cout << "second try"<<endl;
   if ( !Pot )
-    throw "No Potential defined...";
+    G4cerr << "No Potential defined...";
+  G4cout << "third try"<<endl;
   FlavorFission = NEW double[Quarks.size()];
   FissionRate = Schwinger(kappa);
   double u = B/(2*kappa*a)*(1+sqrt(1-4*kappa*a/B))-1.0;
@@ -484,8 +487,6 @@ void Colour::decomposeAll()
   }
 }
 
-extern int N_c;
-
 void Colour::decomposition(int i) 
 {
   for (int j=0; j<Nquark; j++) {
@@ -669,7 +670,6 @@ void Colour::one_step()
       	  reverse(eraseList.begin(),eraseList.end());
       	  for (int X=0; X<eraseList.size(); X++){
       	    --Nquark;
-      	    if ( List[eraseList[X]]->Charm() != 0 ) --N_c;
       	    delete List[eraseList[X]];
       	  }
       	}
