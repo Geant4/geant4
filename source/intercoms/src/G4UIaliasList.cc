@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.cc,v 1.2 2001-10-02 00:32:07 asaim Exp $
+// $Id: G4UIaliasList.cc,v 1.3 2001-10-05 00:50:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -107,6 +107,20 @@ G4int G4UIaliasList::FindAliasID(G4String aliasName)
 void G4UIaliasList::List() 
 {
   G4int i_entry = alias.size();
+  for(G4int i1=0;i1<i_entry-1;i1++)
+  for(G4int i2=i1+1;i2<i_entry;i2++)
+  {
+    if(*(alias[i1])>*(alias[i2]))
+    {
+      G4String* tmp = alias[i1];
+      alias[i1] = alias[i2];
+      alias[i2] = tmp;
+      tmp = value[i1];
+      value[i1] = value[i2];
+      value[i2] = tmp;
+    }
+  }
+
   for(G4int i=0;i<i_entry;i++)
   { G4cout << "  " << *(alias[i]) << " : " << *(value[i]) << G4endl; }
 }
