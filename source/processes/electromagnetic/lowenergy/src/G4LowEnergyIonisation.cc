@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.68 2001-10-26 00:30:23 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.69 2001-10-26 09:34:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -80,6 +80,7 @@
 // 18.10.01 MGP             Revision to improve code quality and 
 //                          consistency with design
 // 19.10.01 V.Ivanchenko    update according to new design, V.Ivanchenko
+// 26.10.01 V.Ivanchenko    clean up deexcitation
 //
 // --------------------------------------------------------------
 
@@ -562,109 +563,78 @@ G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
   G4std::vector<G4DynamicParticle*>* partVector = 
                                  new G4std::vector<G4DynamicParticle*>;
  
-  if(eLoss > cutForPhotons && eLoss > cutForElectrons) 
+  if(eLoss > cutForPhotons && eLoss > cutForElectrons) {
 
-    {
-      G4AtomicTransitionManager* transitionManager = 
-	G4AtomicTransitionManager::Instance();
+    G4AtomicTransitionManager* transitionManager = 
+                               G4AtomicTransitionManager::Instance();
       
-      size_t nElements = material->GetNumberOfElements();
-      const G4ElementVector* theElementVector = material->GetElementVector();
+    size_t nElements = material->GetNumberOfElements();
+    const G4ElementVector* theElementVector = material->GetElementVector();
       
-      G4DynamicParticle* aSecondary = 0;
-      G4ParticleDefinition* type = 0;
-      G4double e;
-      G4ThreeVector position;
-      G4int shell, shellId;
+    G4std::vector<G4DynamicParticle*>* secVector = 0; 
+    G4DynamicParticle* aSecondary = 0;
+    G4ParticleDefinition* type = 0;
+    G4double e;
+    G4ThreeVector position;
+    G4int shell, shellId;
       
-      // sample secondaries
+    // sample secondaries
       
-      G4double eTot = 0.0; 
-      G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
-									 incidentEnergy,eLoss);
-     
-      /*
-      G4std::vector<size_t> counters; 
-      size_t totCounters = 0;
-      size_t totVacancies = 0;
-      for (size_t i=0; i<nElements; i++) {
-	counters.push_back(0);
-      }
-      for (size_t k = 0; k<n.size();k++)
-	{
-	  totVacancies += n[k];
-	
-	}
-      G4cout << "totVacancies = " << totVacancies <<G4endl;
-      while (totCounters < totVacancies){
-	G4double random = G4UniformRand() * nElements;
+    G4double eTot = 0.0; 
+    G4std::vector<G4int> n = 
+           shellVacancy->GenerateNumberOfIonisations(material,
+                                                     incidentEnergy,eLoss);
+    for (size_t i=0; i<nElements; i++) {
 
-	size_t intRandom = (size_t) random;
-	if (intRandom == nElements)
-	  {
-	    intRandom -= 1;
-	  }
-	G4cout << "intRandom =" << intRandom << G4endl;
-	size_t nVacancies = n[intRandom];
-	if (counters[intRandom] < nVacancies)
-	  {
-	    G4cout << " counters[ " << intRandom << "]=" << counters[intRandom] << G4endl;
-	    counters[intRandom]++;
-	    G4cout << "totCounters =" << totCounters << G4endl;
-	    totCounters++;
-	    */
-
-      for (size_t i=0; i<nElements; i++) {
-
-	//	    G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
-	    G4int Z = (G4int)((*theElementVector)[i]->GetZ());
-    	    size_t nVacancies = n[i];
+      G4int Z = (G4int)((*theElementVector)[i]->GetZ());
+      size_t nVacancies = n[i];
 	 
-	    G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
+      G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 	    
-	    if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) && nVacancies!=0 ) 
-	      {
-		for (size_t j=0; j<nVacancies; j++) {
+      if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) 
+              && nVacancies > 0 ) {
+
+	for (size_t j=0; j<nVacancies; j++) {
 		  
-		  shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
-		  shellId = transitionManager->Shell(Z, shell)->ShellId();
-		  G4double maxEShell = transitionManager->Shell(Z, shell)->BindingEnergy();
+	  shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
+          shellId = transitionManager->Shell(Z, shell)->ShellId();
+	  G4double maxEShell = 
+                     transitionManager->Shell(Z, shell)->BindingEnergy();
 		  
-		  if (maxEShell>cutForPhotons || maxEShell>cutForElectrons ) {
-		    partVector = deexcitationManager.GenerateParticles(Z, shellId);
-		  }
-		  if (partVector != 0) {	
+          if (maxEShell>cutForPhotons || maxEShell>cutForElectrons ) {
+
+	    secVector = deexcitationManager.GenerateParticles(Z, shellId);
+		  
+	    if (secVector != 0) {	
 		    
-		    for (size_t l = 0; l<partVector->size(); l++) {
+	      for (size_t l = 0; l<secVector->size(); l++) {
 		      
-		      aSecondary = (*partVector)[l];
-		      if (aSecondary != 0) {
+	        aSecondary = (*secVector)[l];
+	        if (aSecondary != 0) {
 			
-			e = aSecondary->GetKineticEnergy();
-			type = aSecondary->GetDefinition();
-			if ( eTot + e <= eLoss &&
-			     (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
-			     (type == G4Electron::Electron() && e > cutForElectrons) ) {
+	          e = aSecondary->GetKineticEnergy();
+	          type = aSecondary->GetDefinition();
+	          if ( eTot + e <= eLoss &&
+	             (type == G4Gamma::Gamma() && e>cutForPhotons ) || 
+	             (type == G4Electron::Electron() && e>cutForElectrons)) {
 			  
 			  eTot += e;  
+                          partVector->push_back(aSecondary);
 			  
-			} else {
-			  delete aSecondary;
-			  (*(partVector))[l] =0;
+		  } else {
+		       
+                           delete aSecondary;
 			  
-			}
-		      }
-		    }
-		  } 
+	          }
+	        }
 	      }
-	      
-	 } else {
-
-           delete partVector;
-           partVector = 0;
-	 }
+              delete secVector;
+	    } 
+	  }      
+	} 
       }
     }
+  }
   return partVector;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.21 2001-10-26 00:30:24 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.22 2001-10-26 09:34:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -51,7 +51,8 @@
 // 18/10/01  add fluorescence AlongStepDoIt V.Ivanchenko
 // 18/10/01  Revision to improve code quality and consistency with design, MGP
 // 19/10/01  update according to new design, V.Ivanchenko
-// 24/10/01  MGP - Added protection against negative energy loss in AlongStepDoIt
+// 24/10/01  MGP - Protection against negative energy loss in AlongStepDoIt
+// 26/10/01  VI Clean up access to deexcitation 
 //
 // --------------------------------------------------------------
  
@@ -393,22 +394,17 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
   G4double edep = E - finalT;
 
-  aParticleChange.SetEnergyChange(finalT);
-  size_t nSecondaries = 0;  
-
+  aParticleChange.SetEnergyChange(finalT);  
   
   // Deexcitation of ionised atoms
   G4std::vector<G4DynamicParticle*>* deexcitationProducts = 
                                      DeexciteAtom(aMaterial,E,edep);
 
+
+  size_t nSecondaries = deexcitationProducts->size();
+  aParticleChange.SetNumberOfSecondaries(nSecondaries);
   
-  if (deexcitationProducts == 0) {
-    aParticleChange.SetNumberOfSecondaries(nSecondaries);
-
-  } else {
-
-    nSecondaries = deexcitationProducts->size();
-    aParticleChange.SetNumberOfSecondaries(nSecondaries);
+  if (nSecondaries > 0) {
 
     const G4StepPoint* preStep = stepData.GetPreStepPoint();
     const G4StepPoint* postStep = stepData.GetPostStepPoint();
@@ -444,9 +440,9 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 	  }
       }
     }
-    delete deexcitationProducts;   
   } 
- 
+  delete deexcitationProducts;   
+  
   aParticleChange.SetLocalEnergyDeposit(edep);
   
   return &aParticleChange;
