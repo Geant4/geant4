@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.9 2004-12-14 16:01:09 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.10 2005-02-04 08:53:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -378,12 +378,12 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cout<<"====>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
           <<EnMomConservation<<G4endl;
 #endif
-    G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---------+
+    G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---->----+
     G4QHadronVector projHV;                                 //                           |
     projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
     G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // ----------------+-+-+
-    projHV.clear(); // --------------------------------------------------------------+-+
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
+    projHV.clear(); // <------------<---------------<-------------------<------------+-+
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt: pPDG="<<projPDG<<", m="<<mp<<G4endl; //   |
 #endif
@@ -399,7 +399,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 	     //#endif
       G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
     }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ------+
+    delete pan;                              // Delete the Nuclear Environment <--<--+
   }
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
@@ -454,6 +454,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
     else if(PDGCode==90001000) theDefinition = G4Proton::Proton();//While it can be in ions
     else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
+    else if(PDGCode==311 || PDGCode==-311)
+    {
+      if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
+						else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
+    }
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();

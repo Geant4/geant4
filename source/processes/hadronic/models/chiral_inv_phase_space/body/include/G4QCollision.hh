@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.1 2004-12-14 16:01:07 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.2 2005-02-04 08:53:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -123,6 +123,11 @@ public:
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
+
+  G4LorentzVector GetEnegryMomentumConservation();
+
+  G4int GetNumberOfNeutronsInTarget();
+
 protected:                         
 
 private:
@@ -135,6 +140,8 @@ private:
 
 		// Body
   G4VQCrossSection* theCS;
+  G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
+  G4int nOfNeutrons;                                  // #of neutrons in the target nucleus
 };
 #endif
 

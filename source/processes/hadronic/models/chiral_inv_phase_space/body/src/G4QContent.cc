@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.36 2004-11-09 11:11:09 mkossov Exp $
+// $Id: G4QContent.cc,v 1.37 2005-02-04 08:53:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -1038,7 +1038,7 @@ G4int G4QContent::GetBaryonNumber() const
 {//   ===================================
   G4int b=nU+nD+nS-nAU-nAD-nAS;
   //#ifdef erdebug
-  if(b%3) G4cerr<<"***G4Content: BaryonNumber="<<b<<"/3 is not an integer value"<<G4endl;
+  if(b%3) G4cerr<<"-Warn-G4QContent:BaryonNumber="<<b<<"/3 isn't an integer value"<<G4endl;
   //#endif
   return b/3;
 }

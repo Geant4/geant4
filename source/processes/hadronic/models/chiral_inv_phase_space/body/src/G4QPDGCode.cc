@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.46 2004-12-14 16:01:16 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.47 2005-02-04 08:53:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -954,7 +954,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #ifdef debug
         G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
 #endif
-        return 0.;            // @@ Antiparticles aren't implemented @@
+        return 0.;                          // @@ Antiparticles aren't implemented @@
 	     }
 	   }
     else if(N>=bH)
@@ -1003,7 +1003,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 	   }
     else // Must not be here
 	   {
-      return 0.;                   // @@ Antiparticles aren't implemented @@
+      return 0.;                            // @@ Antiparticles aren't implemented @@
 #ifdef debug
         G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
 #endif
@@ -1023,19 +1023,19 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
     Z=0;
   }
   A=Z+N;
-  if (!A) return k+S*mL+S*eps;     // @@ multy LAMBDA states are not implemented
-  G4double m=k+A*um;                 // Expected mass in atomic units
-  //G4double D=N-Z;                    // Isotopic shift of the nucleus
-  if(A+S<1&&k==0.||Z<0||N<0)         // @@ Can be generalized to anti-nuclei
+  if (!A) return k+S*mL+S*eps;              // @@ multy LAMBDA states are not implemented
+  G4double m=k+A*um;                        // Expected mass in atomic units
+  //G4double D=N-Z;                         // Isotopic shift of the nucleus
+  if(A+S<1&&k==0.||Z<0||N<0)                // @@ Can be generalized to anti-nuclei
   {
 #ifdef debug
     G4cout<<"***G4QPDGCode::GetNuclMass:A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@throw G4QException("***G4QPDGCode::GetNuclMass: Impossible nucleus");
 #endif
-    return 0.;                       // @@ Temporary
+    return 0.;                              // @@ Temporary
   }
-  if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
-  else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
+  if     (!Z) return k+N*(mN+.1)+S*(mL+.1); // @@ n+LAMBDA states are not implemented
+  else if(!N) return k+Z*(mP+1.)+S*(mL+.1); // @@ p+LAMBDA states are not implemented
   //else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];// Geant4 Comp.now
   else 
   {
@@ -1043,13 +1043,13 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
     if(G4NucleiPropertiesTable::IsInTable(Z,A))m=k+G4NucleiProperties::GetNuclearMass(A,Z);
     else if(A==256 && Z==128) m=256000.;
     else
-						m=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
-		  //m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
+						m=k+G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+		 //m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
   }
-  G4double maxM= k+Z*mP+N*mN+S*mL+eps;       // @@ eps -- Wings of the Mass parabola
-  if(m>maxM) m=maxM;
+  //@@//G4double maxM= k+Z*mP+N*mN+S*mL+eps;      // @@ eps -- Wings of the Mass parabola
+  //@@//if(m>maxM) m=maxM;
   G4double mm=m;
-  if(Sm<0)                           // For the new algorithm of calculation 
+  if(Sm<0)                                  // For the new algorithm of calculation 
   {
     if(Nm<0)
     {
@@ -1065,9 +1065,9 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
     }
     G4int Am=Zm+Nm;
     if(!Am) return km+eps;
-    mm=km+Am*um;                     // Expected mass in atomic units
-    //G4double Dm=Nm-Zm;               // Isotopic shift of the nucleus
-    if(Am<1&&km==0.||Zm<0||Nm<0)     // @@ Can be generalized to anti-nuclei
+    mm=km+Am*um;                            // Expected mass in atomic units
+    //G4double Dm=Nm-Zm;                    // Isotopic shift of the nucleus
+    if(Am<1&&km==0.||Zm<0||Nm<0)            // @@ Can be generalized to anti-nuclei
     {
 #ifdef debug
       G4cerr<<"**G4QPDGCode::GetNucM:A="<<Am<<"<1 || Z="<<Zm<<"<0 || N="<<Nm<<"<0"<<G4endl;
@@ -1086,13 +1086,8 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 						  //mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))
         //    +Zm*Zm*(b5*pow(fA,b9)+b6/Am);
     }
-    G4double mM= km+Zm*mP+Nm*mN+eps;
-    if(mm>mM)
-    {
-      //if(Z==8&&N==9&&!S)
-      //G4cout<<"G4QPDG::GNM:"<<mm<<">"<<mM<<",k="<<km<<",Z="<<Zm*mP<<",N="<<Nm*mN<<G4endl;
-      mm=mM;
-    }
+    //@@//G4double mM= km+Zm*mP+Nm*mN+eps;
+    //@@//if(mm>mM) mm=mM;
   }
   if(m>mm) m=mm;
   if(S>0)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.28 2004-03-25 10:44:40 gunter Exp $
+// $Id: G4QHadron.hh,v 1.29 2005-02-04 08:53:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -77,7 +77,7 @@ public:
   void Set4Momentum(const G4LorentzVector& aMom);   // Set 4-mom of the Hadron
   void SetQC(const G4QContent& newQC);              // Set new private quark content
   void SetNFragments(const G4int& nf);              // Set a#of Fragments of this Hadron
-  void   NegPDGCode();
+  void NegPDGCode();
   void MakeAntiHadron();                            // Make AntiHadron of this Hadron
   // General
   G4double RandomizeMass(G4QParticle* pPart, G4double maxM); // Randomize a mass value

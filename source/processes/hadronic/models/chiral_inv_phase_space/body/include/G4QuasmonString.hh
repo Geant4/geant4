@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonString.hh,v 1.1 2004-12-14 16:01:08 mkossov Exp $
+// $Id: G4QuasmonString.hh,v 1.2 2005-02-04 08:53:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonString ----------------
@@ -41,8 +41,8 @@ class G4QuasmonString
 public:
   G4QuasmonString(G4QHadron projHadron, const G4bool projEnvFlag, const G4int targPDG,
             const G4bool targEnvFlag);
-  G4QuasmonString(const G4QuasmonString& right);         // copy QString by value
-  G4QuasmonString(G4QuasmonString* right);               // copy QString by pointer
+  G4QuasmonString(const G4QuasmonString& right);   // copy QString by value
+  G4QuasmonString(G4QuasmonString* right);         // copy QString by pointer
   ~G4QuasmonString();                              // Public Destructor
 
   // Overloaded operators
@@ -51,20 +51,23 @@ public:
   G4bool operator!=(const G4QuasmonString &right) const;
 
   //Selectors
-  G4bool           GetProjEnvFlag() const;
-  G4bool           GetTargEnvFlag() const;
-  G4QuasmonVector* GetQuasmons();  // Get the current set of the not yet decayed Quasmons
-  G4QHadronVector* GetHadrons();   // Get current output hadrons
-
+  G4bool           GetProjEnvFlag();
+  G4bool           GetTargEnvFlag();
+  G4QuasmonVector* GetQuasmons();    // Get not decayed Quasmons (User must ClearAndDestr)
+  G4QHadronVector* GetHadrons();     // Get current outputHadrons (User must ClearAndDestr)
+  G4double         GetWeight();      // Get weight of the event
+  G4int            GetNOfHadrons();  // Get the number of created G4QHadrons
+  G4int            GetNOfQuasmons(); // Get the number of created G4Quasmons
   // Modifiers (Output: a Vector of Quasmons for fragmentation, some Quasms can be Hadrons)
-  G4QHadronVector* Fragment();     // User must clear and destroy the G4HadronVector
+  G4QHadronVector* Fragment();       // User must clear and destroy the G4QHadronVector
 
   // Static functions
   //static void SetParameters(G4double StParName=0., G4bool stFlag=false);
 
 private:  
   G4QHadronVector HadronizeQString();     // Main HadronizationFunction used in Fragment()
-  G4double RandomizeMomentumFraction(G4int nPart); // Randomize Mom.Frac. for nPart partons 
+  G4double RandomizeMomFractionFree(G4int nPart); // RandomMomFrac for nPart free partons
+  G4double RandomizeMomFractionString(G4int nPart); // RandomMomFrac for nPart free partons
 
 // Body
 private:
@@ -88,6 +91,7 @@ private:
   G4LorentzVector    tot4Mom;        // Total 4-momentum in the reaction
   G4int              totCharge;      // Total charge in the reaction (for current control)
   G4int              totBaryNum;     // Total baryon number in the reaction (for cur.cont.)
+  G4double           theWeight;      // Weight of the event
 };
 
 //General function makes Random Unit 3D-Vector
@@ -98,4 +102,5 @@ inline G4bool G4QuasmonString::operator==(const G4QuasmonString &rhs) const
   {return this == &rhs;}
 inline G4bool G4QuasmonString::operator!=(const G4QuasmonString &rhs) const
   {return this != &rhs;}
+
 #endif

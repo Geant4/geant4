@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.74 2004-12-14 16:01:17 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.75 2005-02-04 08:53:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3632,8 +3632,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
 } // End of "GetQPartonMomentum"
 
 // For the given quasmon mass calculate a number of quark-partons in the system
-void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
-//   =====================================================
+G4int G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
+//    ====================================================
 {
   static const G4double mK0  = G4QPDGCode(311).GetMass();
   // @@ Temporary here. To have 3 quarks in Nucleon Temperature should be < M_N/4 (234 MeV)
@@ -3676,7 +3676,7 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
   G4int absb = abs(valQ.GetBaryonNumber());
   G4int tabn = 0;
   if(absb)tabn=3*absb;      // Minimal QC for baryonic system fragmentation
-  else if(tabn<4) tabn=4;   // Minimal QC for mesonic system fragmentation
+  else    tabn=4;           // Minimal QC for mesonic system fragmentation (@@ ?)
   if (nOfQ<tabn) nOfQ=tabn;
   G4int nSeaPairs = (nOfQ-valc)/2;
   G4int stran = abs(valQ.GetS());
@@ -3714,6 +3714,7 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
 #ifdef pdebug
   G4cout<<"G4Quasmon::Calc#ofQP: *** RESULT IN*** nQ="<<nOfQ<<", FinalQC="<<valQ<<G4endl;
 #endif
+  return nOfQ;
 } // End of "CalculateNumberOfQPartons"
 
 // Modify Candidate masses in nuclear matter and set possibilities

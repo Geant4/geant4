@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.1 2004-12-14 16:01:20 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.2 2005-02-04 08:54:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -132,3 +132,34 @@ G4double G4VQCrossSection::GetExchangeQ2(G4double) {return 0.;}
 G4int G4VQCrossSection::GetExchangePDGCode(G4double, G4double) {return 0;}
 
 G4double G4VQCrossSection::GetVirtualFactor(G4double nu, G4double Q2) {return 0.*nu*Q2;}
+
+// This function finds  the linear approximation Y-point for the XN(N), YN(N) table
+G4double G4VQCrossSection::LinearFit(G4double X, G4int N, G4double* XN, G4double* YN)
+{
+  G4double Xj=XN[0];
+  G4double Xh=XN[N-1];
+  if(X<=Xj) return YN[0]; 
+  else if(X>=Xh) return YN[N-1];
+  G4double Xp=0.; G4int j=0; while (X>Xj && j<N) {j++; Xp=Xj; Xj=XN[j];}
+  return YN[j]-(Xj-X)*(YN[j]-YN[j-1])/(Xj-Xp);
+}
+
+// This function finds the linear approximation Y-point for equidistant bins: XI=X0+I*DX
+G4double G4VQCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4double DX,
+                                        G4double* Y)
+{
+  if(DX<=0. || N<2)
+  {
+    G4cout<<"***G4VQCrossSection::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
+    return Y[0];
+  }
+  G4int    N2=N-2;
+  G4double d=(X-X0)/DX;
+  G4int         j=static_cast<int>(d);
+  if     (j<0)  j=0;
+  else if(j>N2) j=N2;
+  d-=j; // excess
+  G4double yi=Y[j];
+  G4double sigma=yi+(Y[j+1]-yi)*d;
+  return sigma;
+}
