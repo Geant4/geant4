@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.cc,v 1.3 2001-07-11 10:09:22 gunter Exp $
+// $Id: G4AxesModel.cc,v 1.4 2001-07-22 00:57:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ G4AxesModel::G4AxesModel
   fGlobalDescription = fGlobalTag;
 }
 
-void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 
   G4Polyline x_axis, y_axis, z_axis;
 
@@ -61,17 +61,17 @@ void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
   x_axis.SetVisAttributes(&ax);
   x_axis.push_back(G4Point3D(fX0,fY0,fZ0));
   x_axis.push_back(G4Point3D((fX0 + fLength),fY0,fZ0));
-  scene.AddPrimitive(x_axis);
+  sceneHandler.AddPrimitive(x_axis);
 
   //----- Draw y-axis
   y_axis.SetVisAttributes(&ay);
   y_axis.push_back(G4Point3D(fX0,fY0,fZ0));
   y_axis.push_back(G4Point3D(fX0,(fY0 + fLength),fZ0));
-  scene.AddPrimitive(y_axis);
+  sceneHandler.AddPrimitive(y_axis);
 
   //----- Draw z-axis
   z_axis.SetVisAttributes(&az);
   z_axis.push_back(G4Point3D(fX0,fY0,fZ0));
   z_axis.push_back(G4Point3D(fX0,fY0,(fZ0 + fLength)));
-  scene.AddPrimitive(z_axis);
+  sceneHandler.AddPrimitive(z_axis);
 }

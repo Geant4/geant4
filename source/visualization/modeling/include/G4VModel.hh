@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.9 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4VModel.hh,v 1.10 2001-07-22 00:57:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ public: // With description
   virtual ~G4VModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;
-  // The main task of a model is to describe itself to the scene.
+  // The main task of a model is to describe itself to the graphics scene.
 
   const G4ModelingParameters* GetModelingParameters () const;
 

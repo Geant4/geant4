@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NullModel.cc,v 1.4 2001-07-11 10:09:23 gunter Exp $
+// $Id: G4NullModel.cc,v 1.5 2001-07-22 00:57:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ G4NullModel::G4NullModel (const G4ModelingParameters* pMP):
 
 G4NullModel::~G4NullModel () {}
 
-void G4NullModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+void G4NullModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   G4Exception ("G4NullModel::DescribeYourselfTo called.");
 }
 

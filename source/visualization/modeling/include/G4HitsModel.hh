@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.hh,v 1.5 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4HitsModel.hh,v 1.6 2001-07-22 00:57:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ public: // With description
   virtual ~G4HitsModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene.
+  // The main task of a model is to describe itself to the graphics scene.
 
   virtual G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.

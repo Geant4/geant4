@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.13 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.14 2001-07-22 00:57:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ public: // With description
   virtual ~G4PhysicalVolumeModel ();
 
   void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene
+  // The main task of a model is to describe itself to the graphics scene
   // handler (a object which inherits G4VSceneHandler, which inherits
   // G4VGraphicsScene).  It can also provide special information
   // through pointers to working space in the scene handler.  These

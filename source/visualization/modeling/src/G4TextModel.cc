@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.2 2001-07-11 10:09:23 gunter Exp $
+// $Id: G4TextModel.cc,v 1.3 2001-07-22 00:57:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,6 @@ G4TextModel::G4TextModel (const G4Text& text): fText(text) {
   fGlobalDescription = fGlobalTag;
 }
 
-void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
-  scene.AddPrimitive (fText);
+void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+  sceneHandler.AddPrimitive (fText);
 }

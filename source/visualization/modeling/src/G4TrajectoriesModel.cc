@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.7 2001-07-11 10:09:23 gunter Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.8 2001-07-22 00:57:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4TrajectoriesModel::G4TrajectoriesModel () {
   fGlobalDescription = fGlobalTag;
 }
 
-void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   G4RunManager* runManager = G4RunManager::GetRunManager ();
   const G4Event* event = runManager -> GetCurrentEvent ();
   if (event) {
