@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.29 2003-06-16 16:53:40 gunter Exp $
+// $Id: G4Torus.cc,v 1.30 2003-10-09 10:39:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1508,7 +1508,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe, safe1, safe2 ;
+  G4double safe=0.0, safe1, safe2 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
   G4double rho2, rho, pt2, pt ;
     
@@ -2094,7 +2094,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,safeR1,safeR2;
+  G4double safe=0.0,safeR1,safeR2;
   G4double rho2,rho,pt2,pt ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi;
   rho2 = p.x()*p.x() + p.y()*p.y() ;

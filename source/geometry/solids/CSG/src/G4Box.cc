@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.20 2003-06-16 16:53:34 gunter Exp $
+// $Id: G4Box.cc,v 1.21 2003-10-09 10:39:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -738,7 +738,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 
 G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
+  G4double safx1,safx2,safy1,safy2,safz1,safz2,safe=0.0;
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )

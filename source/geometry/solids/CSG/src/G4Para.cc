@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.14 2003-06-16 16:53:37 gunter Exp $
+// $Id: G4Para.cc,v 1.15 2003-10-09 10:39:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -706,7 +706,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double distz1,distz2,disty1,disty2,distx1,distx2;
   G4double trany,cosy,tranx,cosx;
 
@@ -997,7 +997,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 
 G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double distz1,distz2,disty1,disty2,distx1,distx2;
   G4double trany,cosy,tranx,cosx;
 

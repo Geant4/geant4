@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.17 2003-06-16 16:53:42 gunter Exp $
+// $Id: G4Trap.cc,v 1.18 2003-10-09 10:39:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1236,7 +1236,7 @@ G4double G4Trap::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Trap::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe,Dist;
+  G4double safe=0.0,Dist;
   G4int i;
   safe=fabs(p.z())-fDz;
   for (i=0;i<4;i++)
@@ -1531,7 +1531,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 
 G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,Dist;
+  G4double safe=0.0,Dist;
   G4int i;
 
 #ifdef G4CSGDEBUG

@@ -380,7 +380,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe, rad  = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double safe=0.0, rad  = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
                  safe = rad - fRmax;
   if( safe < 0 ) safe = 0. ;
   return safe;
@@ -521,7 +521,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,rad = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double safe=0.0,rad = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )

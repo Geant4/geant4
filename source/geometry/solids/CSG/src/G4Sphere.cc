@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.21 2003-08-26 08:13:13 grichine Exp $
+// $Id: G4Sphere.cc,v 1.22 2003-10-09 10:39:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -53,6 +53,7 @@
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
+#include "G4VisExtent.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
@@ -84,6 +85,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pSTheta, G4double pDTheta )
   : G4CSGSolid(pName)
 {
+  fEpsilon = 1.0e-14;
 
   // Check radii
 
@@ -433,12 +435,13 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
 {
   G4double rho,rho2,rad2,tolRMin,tolRMax;
   G4double pPhi,pTheta;
-  EInside in;
+  EInside in=kOutside;
 
   rho2 = p.x()*p.x() + p.y()*p.y() ;
   rad2 = rho2 + p.z()*p.z() ;
 
-  // G4double rad = sqrt(rad2);
+  //  if(rad2 >= 1.369e+19) DBG();
+  //  G4double rad = sqrt(rad2);
   // Check radial surfaces
   // sets `in'
 
@@ -446,8 +449,19 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
   else         tolRMin = 0 ;
   
   tolRMax = fRmax - kRadTolerance*0.5 ;
+  //  const G4double  fractionTolerance = 1.0e-12;
+  const G4double  flexRadMaxTolerance = // kRadTolerance;
+    std::max(kRadTolerance, fEpsilon * fRmax);
+
+  const G4double  Rmax_minus = fRmax - flexRadMaxTolerance*0.5;
+  const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
+                     fEpsilon * fRmin);
+  const G4double  Rmin_plus = (fRmin > 0) ? fRmin + flexRadMinTolerance*0.5 : 0 ;
     
-  if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kInside ;
+if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ; 
+
+// if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kInside ;
+  // if ( rad <= tolRMax && rad >= tolRMin )  in = kInside ;
   else
   {
     tolRMax = fRmax + kRadTolerance*0.5 ;
@@ -455,7 +469,8 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
 
     if ( tolRMin < 0.0 ) tolRMin = 0.0 ;
     
-    if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kSurface ;
+     if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kSurface ;
+    //  if ( rad <= tolRMax && rad >= tolRMin )  in = kSurface ;
     else                                                return in = kOutside ;
   }
 
@@ -550,6 +565,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
       }
     }
   }
+  //  if (in == kInside) DBG();
   return in;
 }
 
@@ -832,8 +848,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 
   c = rad2 - fRmax*fRmax ;
+  const G4double  flexRadMaxTolerance = // kRadTolerance;
+    std::max(kRadTolerance, fEpsilon * fRmax);
 
-  if (c > kRadTolerance*fRmax)
+  //  if (c > kRadTolerance*fRmax)
+  if (c > flexRadMaxTolerance*fRmax)
   {
     // If outside toleranct boundary of outer G4Sphere
     // [should be sqrt(rad2)-fRmax > kRadTolerance*0.5]
@@ -1181,8 +1200,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             zi    = p.z() ;
             rhoi2 = rho2  ;
             radi2 = rad2  ;
-          }
-          if ( (radi2 <= tolORMax2)
+          } if ( (radi2 <= tolORMax2)
             && (radi2 >= tolORMin2)
             && ((yi*cosCPhi-xi*sinCPhi) >= 0) )
           {
@@ -1681,7 +1699,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe,safeRMin,safeRMax,safePhi,safeTheta;
+  G4double safe=0.0,safeRMin,safeRMax,safePhi,safeTheta;
   G4double rho2,rad,rho;
   G4double phiC,cosPhiC,sinPhiC,cosPsi,ePhi;
   G4double pTheta,dTheta1,dTheta2;
@@ -1820,6 +1838,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   rho2=p.x()*p.x()+p.y()*p.y();
   rad2=rho2+p.z()*p.z();
+  //  G4double rad=sqrt(rad2);
+
   pTheta=atan2(sqrt(rho2),p.z());
 
   pDotV2d=p.x()*v.x()+p.y()*v.y();
@@ -1873,19 +1893,19 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
   //
-  const G4double  fractionTolerance = 1.0e-14;
-  const G4double  flexRadMaxTolerance = kRadTolerance;
-    //std::max(kRadTolerance, 
-    //         fractionTolerance * fRmax);
+  // const G4double  fractionTolerance = 1.0e-12;
+  const G4double  flexRadMaxTolerance = // kRadTolerance;
+    std::max(kRadTolerance, fEpsilon * fRmax);
 
   const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
   const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
-                     fractionTolerance * fRmin);
-  const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
+                     fEpsilon * fRmin);
+  const G4double  Rmin_minus= (fRmin > 0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
+    //  if(rad <= Rmax_plus && rad >= Rmin_minus)
   {
-    c=rad2-fRmax*fRmax ;
+    c = rad2 - fRmax*fRmax;
 
     if (c < flexRadMaxTolerance*fRmax) 
     {
@@ -1898,7 +1918,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       // =>  rad2 < fRmax^2 + 2.*0.5*fRmax*kRadTol + 0.25*kRadTol*kRadTol
       // =>  rad2 - fRmax^2    <~    fRmax*kRadTol 
 
-      d2=pDotV3d*pDotV3d-c ;
+      d2 = pDotV3d*pDotV3d - c;
 
       if( (c >- flexRadMaxTolerance*fRmax)       // on tolerant surface
        && ((pDotV3d >=0) || (d2 < 0)) )          // leaving outside from Rmax 
@@ -2479,7 +2499,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   }
   if (snxt == kInfinity)
   {
-    G4cout.precision(20);
+    G4cout.precision(24);
     G4cout << G4endl;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl;
@@ -2495,6 +2515,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
     G4cout<<"G4Sphere::DistanceToOut(p,v,...): snxt = kInfinity    ???"<<G4endl;
+    DBG();
   }
 
   return snxt;
@@ -2506,7 +2527,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,safeRMin,safeRMax,safePhi,safeTheta;
+  G4double safe=0.0,safeRMin,safeRMax,safePhi,safeTheta;
   G4double rho2,rad,rho;
   G4double phiC,cosPhiC,sinPhiC,ePhi;
   G4double pTheta,dTheta1,dTheta2;
@@ -2768,6 +2789,12 @@ std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 /////////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
+
+G4VisExtent G4Sphere::GetExtent() const
+{
+  return G4VisExtent(-fRmax, fRmax,-fRmax, fRmax,-fRmax, fRmax );
+}
+
 
 void G4Sphere::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {

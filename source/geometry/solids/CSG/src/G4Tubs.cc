@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.36 2003-06-16 16:53:44 gunter Exp $
+// $Id: G4Tubs.cc,v 1.37 2003-10-09 10:39:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1037,7 +1037,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe, rho, safe1, safe2, safe3 ;
+  G4double safe=0.0, rho, safe1, safe2, safe3 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
 
   rho   = sqrt(p.x()*p.x() + p.y()*p.y()) ;
@@ -1456,7 +1456,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe, rho, safeR1, safeR2, safeZ ;
+  G4double safe=0.0, rho, safeR1, safeR2, safeZ ;
   G4double safePhi, phiC, cosPhiC, sinPhiC, ePhi ;
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
 

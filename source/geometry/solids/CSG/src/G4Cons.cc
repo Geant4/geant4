@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.25 2003-06-16 16:53:36 gunter Exp $
+// $Id: G4Cons.cc,v 1.26 2003-10-09 10:39:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -1275,7 +1275,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double safe, rho, safeR1, safeR2, safeZ ;
+  G4double safe=0.0, rho, safeR1, safeR2, safeZ ;
   G4double tanRMin, secRMin, pRMin ;
   G4double tanRMax, secRMax, pRMax ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi ;
@@ -2026,7 +2026,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double safe,rho,safeR1,safeR2,safeZ ;
+  G4double safe=0.0,rho,safeR1,safeR2,safeZ ;
   G4double tanRMin,secRMin,pRMin ;
   G4double tanRMax,secRMax,pRMax ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi ;

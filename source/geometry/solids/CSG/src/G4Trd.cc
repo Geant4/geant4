@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.13 2003-06-16 16:53:43 gunter Exp $
+// $Id: G4Trd.cc,v 1.14 2003-10-09 10:39:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -702,7 +702,7 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Trd::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double tanxz,distx,safx;
   G4double tanyz,disty,safy;
   G4double zbase;
@@ -1139,7 +1139,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double tanxz,xdist,saf1;
   G4double tanyz,ydist,saf2;
   G4double zbase;
