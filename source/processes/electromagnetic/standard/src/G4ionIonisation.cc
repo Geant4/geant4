@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.23 2004-05-27 17:22:56 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.24 2004-07-23 09:38:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4IonFluctuations.hh"
+#include "G4UniversalFluctuation.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,6 +87,7 @@ void G4ionIonisation::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   flucModel = new G4IonFluctuations();
+  //flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);

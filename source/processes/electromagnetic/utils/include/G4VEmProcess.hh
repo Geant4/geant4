@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.6 2004-06-30 14:36:50 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.7 2004-07-23 09:38:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -240,9 +240,11 @@ inline G4double G4VEmProcess::GetLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track, G4double,
-                                                    G4ForceCondition*)
+inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track, 
+                                                    G4double,
+                                                    G4ForceCondition* condition)
 {
+  *condition = NotForced;
   G4double kinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
   G4double lambda = GetLambda(kinEnergy);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.25 2004-07-21 11:44:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.26 2004-07-23 09:38:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -583,8 +583,10 @@ inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
-                                                            G4double, G4ForceCondition*)
+                                                            G4double, 
+                                                            G4ForceCondition* condition)
 {
+  *condition = NotForced;
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   DefineMaterial(track.GetMaterialCutsCouple());

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.24 2004-05-10 18:46:48 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.25 2004-07-23 09:38:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -168,7 +168,8 @@ inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dyn
 
 
 inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
-                                                       G4double, G4ForceCondition*)
+                                                       G4double, 
+                                                       G4ForceCondition* cond)
 {
   G4double mRatio    = proton_mass_c2/track.GetDynamicParticle()->GetMass();
   G4double q_2       = EffectiveChargeSquare(track);
@@ -177,7 +178,7 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
-  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, 0);
+  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, cond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
