@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.6 2005-03-18 15:35:50 link Exp $
+// $Id: G4TwistedTrd.cc,v 1.1 2005-03-18 15:36:20 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedBox.cc
+// G4TwistedTrd.cc
 //
 // Author:
 //
@@ -39,22 +39,24 @@
 //
 // --------------------------------------------------------------------
 
-#include "G4TwistedBox.hh"
+#include "G4TwistedTrd.hh"
 
-G4TwistedBox::G4TwistedBox( const G4String& pName,
-			    G4double pPhiTwist,
-			    G4double pDx, 
-			    G4double pDy, 
-			    G4double pDz
+G4TwistedTrd::G4TwistedTrd( const G4String& pName,
+			   G4double pDx1, 
+			   G4double pDx2,
+			   G4double pDy1, 
+			   G4double pDy2,
+			   G4double pDz,
+			   G4double pPhiTwist
 			    ) :
-  G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0., pDy, pDx, pDx, pDy, pDx, pDx,0.)
+  G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0., pDy1, pDx1, pDx1, pDy2, pDx2, pDx2,0.)
 {
 
 }
 
-G4TwistedBox::~G4TwistedBox() {} ;
+G4TwistedTrd::~G4TwistedTrd() {} ;
 
-std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
+std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 {
   //
   // Stream object contents to an output stream
@@ -62,10 +64,12 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
-     << " Solid type: G4TwistedBox\n"
+     << " Solid type: G4TwistedTrd\n"
      << " Parameters: \n"
-     << "    pDx = "  << GetXHalfLength()/cm << " cm" << G4endl
-     << "    pDy = "  << GetYHalfLength()/cm << " cm" << G4endl
+     << "    pDx1 = " << GetX1HalfLength()/cm << " cm" << G4endl
+     << "    pDx2 = " << GetX2HalfLength()/cm << " cm" << G4endl
+     << "    pDy1 = " << GetY1HalfLength()/cm << " cm" << G4endl
+     << "    pDy2 = " << GetY2HalfLength()/cm << " cm" << G4endl
      << "    pDz = "  << GetZHalfLength()/cm << " cm" << G4endl
      << "    pPhiTwist = " << GetPhiTwist()/degree << " deg" << G4endl 
      << "-----------------------------------------------------------\n";
@@ -76,7 +80,7 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 //=====================================================================
 //* CreatePolyhedron --------------------------------------------------
 
-G4Polyhedron* G4TwistedBox::CreatePolyhedron () const 
+G4Polyhedron* G4TwistedTrd::CreatePolyhedron () const 
 {
    return 0;
 }
@@ -84,7 +88,7 @@ G4Polyhedron* G4TwistedBox::CreatePolyhedron () const
 //=====================================================================
 //* GetEntityType -----------------------------------------------------
 
-G4GeometryType G4TwistedBox::GetEntityType() const
+G4GeometryType G4TwistedTrd::GetEntityType() const
 {
-  return G4String("G4TwistedBox");
+  return G4String("G4TwistedTrd");
 }

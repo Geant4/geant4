@@ -61,9 +61,6 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
 					       ) : G4VSurface(name)
 {  
   
-  G4double pDy ;   // temporary
-  G4double pDytmp ;
-                 
   fAxis[0]    = kXAxis; // in local coordinate system
   fAxis[1]    = kZAxis;
   fAxisMin[0] = -kInfinity ;  // X Axis boundary
@@ -758,7 +755,7 @@ G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
    G4int areacode = sInside;
    
    if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-      G4int xaxis = 0;
+
       G4int zaxis = 1;
       
       if (withTol) {
