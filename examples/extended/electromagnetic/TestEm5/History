@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2004-07-30 16:14:36 maire Exp $
+$Id: History,v 1.48 2004-08-02 11:30:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28-07-04 mma
+28-07-04 mma (testem5-V06-02-00)
 - print stopping power.
 - add dedx1.mac and dedx2.mac
      

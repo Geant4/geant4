@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2004-07-29 08:50:07 maire Exp $
+// $Id: RunAction.cc,v 1.9 2004-08-02 11:30:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,10 +134,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n ======================== run summary ======================\n";
 
-  G4int prec = G4cout.precision(4);
-
-  G4cout << "\n Number of Events = " << TotNbofEvents << G4endl;
-
+  G4int prec = G4cout.precision(2);
+  
+  G4Material* material = detector->GetAbsorberMaterial();
+  G4double length  = detector->GetAbsorberThickness();
+  G4double density = material->GetDensity();
+   
+  G4String particle = primary->GetParticleGun()->GetParticleDefinition()
+                      ->GetParticleName();    
+  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  
+  G4cout << "\n The run is of " << TotNbofEvents << " " << particle << " of "
+         << G4BestUnit(energy,"Energy") << " through " 
+	 << G4BestUnit(length,"Length") << " of "
+	 << material->GetName() << " (density: " 
+	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+  
+  G4cout.precision(4);
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") << G4endl;
