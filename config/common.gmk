@@ -1,12 +1,9 @@
-# $Id: common.gmk,v 1.30 2001-06-25 10:58:51 morita Exp $
+# $Id: common.gmk,v 1.31 2002-11-25 12:10:43 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
 # Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
 # Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
-# Introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR. Y.Morita, 16/11/99.
-# Actual targets splitted into common_kernel.gmk and common_objy.gmk,
-#                                                      Y.Morita, 15/3/01.
 
 ifndef G4LIBDIR
   G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
@@ -28,31 +25,14 @@ endif
 # GPPFLAGS is defined here to make the .d file(s) and include it(them).
 # This variable is actually used in common_kernel.gmk and common_objy.gmk.
 
-ifdef G4ODBMS
-  GPPFLAGS := "-MM"
-else
-  GPPFLAGS := "-M"
-endif
+GPPFLAGS := "-M"
 
 ###############################################################################
 #
 # Actual gmake targets.
 #
 
-#
-# Target "lib" requires dependency files when G4ODBMS=1.
-# gmake must be recursively called with MAKE_DFILES=1.
-#
-
-ifdef G4ODBMS
-lib: 
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
-	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) lib_d)
-
-lib_d: $(g4libraries_to_build)
-else
 lib: $(g4libraries_to_build)
-endif
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
@@ -76,19 +56,22 @@ endif
 
 ###############################################################################
 #
-# Actual targets for .o, .d files and others are defined in
-# common_kernel.gmk and common_objy.gmk.
+# Actual targets for .o, .d files
 #
-ifndef G4ODBMS
 
-  include $(G4INSTALL)/config/common_kernel.gmk
-
+$(G4TMPDIR)/%.o: src/%.cc
+ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
 else
-
-  include $(G4INSTALL)/config/common_objy.gmk
-
+	@echo Compiling $*.cc ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
 endif
-###############################################################################
+
+# .PHONY targets are executed regardless of time-stamp of any file of
+# same name.
+.PHONY: all obj lib clean clean_libs includes
+
+obj: $(G4TMPDIR)/obj.last
 
 # Touch the versioning file
 $(G4TMPDIR)/obj.last: $(objects) $(schema_o)
@@ -97,7 +80,6 @@ $(G4TMPDIR)/obj.last: $(objects) $(schema_o)
 # Make the .d file(s) and include it(them).
 # g++ -MM (or -M) is good at this, except it forgets the subdirectory
 # (hence the use of $G4TMP/).
-# schema_hh and schema_ref_hh are defined in common_objy.gmk.
 
 $(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
 	@echo Making dependency for file $< ...
@@ -105,13 +87,7 @@ $(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
 ifneq ($(dependencies),)
-ifndef G4ODBMS
 -include $(dependencies)
-else
-ifdef MAKE_DFILES
--include $(dependencies)
-endif
-endif
 endif
 
 #
@@ -138,9 +114,6 @@ clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
-ifdef schema_hh
-	@rm -f $(schema_hh) $(schema_ref_hh)
-endif
 	@rm -rf $(G4TMPDIR)
 endif
 

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.81 2002-10-30 17:15:45 gcosmo Exp $
+# $Id: architecture.gmk,v 1.82 2002-11-25 12:10:43 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -20,16 +20,6 @@
 #          WIN32-VC    Windows/2000/XP and Microsoft Visual C++ 6.0 - SP5
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
-
-# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS.
-# Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
-#       $(HEP_ODBMS_DIR)/etc/.
-#
-ifdef G4ODBMS
-  # variables LHCXXTOP and PLATF are used in HepODBMS setup
-  include $(HEP_ODBMS_DIR)/etc/$(OS).mk
-  G4ODBMS_LIBS := $(HEP_ODBMS_LIBS) $(OBJY_LIBS) $(OSPACE_LIBS)
-endif
 
 MAKEFLAGS= --no-print-directory
 
@@ -108,56 +98,6 @@ ifndef G4BIN
   G4BIN := $(G4WORKDIR)/bin
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
-
-#################### schema directories & setup for G4ODBMS ###################
-#
-ifdef G4ODBMS
-# If not specified, the default path for G4 schema G4SCHEMA_DIR is
-# set to $G4LIB/$G4SYSTEM/schema ...
-#
-ifndef G4SCHEMA_DIR
-  G4SCHEMA_DIR     := $(G4LIB)/$(G4SYSTEM)/schema
-  G4SCHEMA_BOOT    := $(G4SCHEMA_DIR)/G4SCHEMA
-  G4SCHEMA_INCLUDE := $(G4SCHEMA_DIR)/include
-endif
-ifndef G4SCHEMA_FDID
-  G4SCHEMA_FDID := 207
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_INCLUDE) ] && mkdir -p $(G4SCHEMA_INCLUDE) )
-
-# If not specified, the default path for G4 example schema G4EXAMPLE_BOOT_DIR is
-# set to $G4WORKDIR/exampleSchema (for persistency examples)...
-#
-ifndef G4EXAMPLE_BOOT_DIR
-  G4EXAMPLE_BOOT_DIR := $(G4WORKDIR)/exampleSchema/$(G4SYSTEM)
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_BOOT_DIR) ] && mkdir -p $(G4EXAMPLE_BOOT_DIR) )
-
-ifndef G4EXAMPLE_BOOT
-  G4EXAMPLE_BOOT = $(G4EXAMPLE_BOOT_DIR)/$(name)
-endif
-
-# If not specified, the default path for G4 example runtime federated
-# database directory G4EXAMPLE_FD_DIR is set to $G4WORKDIR/exampleFD
-# (for persistency examples)...
-#
-ifndef G4EXAMPLE_FD_DIR
-  G4EXAMPLE_FD_DIR := $(G4WORKDIR)/exampleFD/$(G4SYSTEM)
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_FD_DIR) ] && mkdir -p $(G4EXAMPLE_FD_DIR) )
-G4DDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
-
-ifndef G4EXAMPLE_FD
-  G4EXAMPLE_FD = $(G4EXAMPLE_FD_DIR)/$(name)
-endif
-
-endif
-#
-########################### end setup for G4ODBMS #############################
 
 # If G4DEBUG or G4NO_OPTIMISE are not specified,
 # the default compilation is optimised ...

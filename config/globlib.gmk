@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.18 2001-06-26 02:16:10 morita Exp $
+# $Id: globlib.gmk,v 1.19 2002-11-25 12:10:44 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -13,15 +13,10 @@ G4LIBDIR = $(G4LIB)/$(G4SYSTEM)
 
 .PHONY : all glob global objs includes clean clean_libs wipe_libs
 
-all: makesub $(G4SCHEMA_BOOT)
+all: makesub
 
 makesub:
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE)); done
-ifdef G4ODBMS
-	@echo Copying tmp schema header from G4TMPDIR to $(G4SCHEMA_INCLUDE)
-	@rm -f $(G4SCHEMA_INCLUDE)/*.hh
-	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) install_schema); done
-endif
 
 g4libraries_to_build:=
 
@@ -100,9 +95,6 @@ objs:
 
 includes::
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
-ifdef G4ODBMS
-	-@cp -p $(G4SCHEMA_INCLUDE)/*.hh $(G4INCLUDE)/
-endif
 	
 wipe_libs:
 	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done

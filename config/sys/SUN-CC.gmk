@@ -46,9 +46,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
-  ifdef G4ODBMS
-    G4DDLX_FLAGS += -noline
-  endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
@@ -58,9 +55,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
     ifndef G4NO_STD_NAMESPACE
       G4USE_STD_NAMESPACE := yes
       CPPFLAGS += -DG4USE_STD_NAMESPACE
-      ifdef G4ODBMS
-        G4DDLX_FLAGS += -DG4std="std"
-      endif
     else
       CXXFLAGS += -compat
     endif
