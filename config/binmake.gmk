@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.58 2001-05-30 15:04:13 gunter Exp $
+# $Id: binmake.gmk,v 1.59 2001-06-19 15:12:58 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -248,13 +248,21 @@ dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
 ifndef G4ODBMS
-.PHONY: bin clean clean_bin debug
+.PHONY: bin bin_d clean clean_bin debug
 else
-.PHONY: bin clean clean_bin debug cleandb newboot newfd
+.PHONY: bin bin_d clean clean_bin debug cleandb newboot newfd
 endif
 
+#
+# Target "bin" requires dependency files.
+# gmake must be recursively called with MAKE_DFILES=1.
+#
+
+bin: 
+	@(MAKE_DFILES=1; export MAKE_DFILES; gmake bin_d)
+
 # Make $(G4TARGET) executable.
-bin: $(G4BINDIR)/$(G4TARGET)
+bin_d: $(G4BINDIR)/$(G4TARGET)
 
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
@@ -313,10 +321,6 @@ else
 endif
 
 # Make the $(G4TARGET).d file and include it.
-ifdef G4SKIP_DEPEND
-$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
-	@echo Skip dependency file creation for file $< ...
-else
 $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
@@ -324,7 +328,10 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+ifdef MAKE_DFILES
+ifneq ($(dependencies),)
 -include $(dependencies)
+endif
 endif
 
 clean:
@@ -347,9 +354,37 @@ ifdef G4ODBMS
 
 cleandb: clean newboot
 
-newboot: $(G4EXAMPLE_BOOT)
+$(G4EXAMPLE_BOOT):
+	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
+	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
 
-newfd: $(G4EXAMPLE_FD)
+newboot:
+	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
+	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
+
+$(G4EXAMPLE_FD):
+	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
+
+newfd:
+	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
 
 endif
 ############################- targets for G4ODBMS -############################
