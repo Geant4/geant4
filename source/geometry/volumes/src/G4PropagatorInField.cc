@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.30 2002-04-19 08:22:09 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.31 2002-06-14 10:21:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -68,7 +68,8 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
     fEpsilonMin(fEpsilonMinDefault),
     fEpsilonMax(fEpsilonMaxDefault),  
     fmax_loop_count(10000),
-    fNoZeroStep(0)
+    fNoZeroStep(0), 
+    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 
@@ -117,7 +118,8 @@ G4double G4PropagatorInField::
      if ( newFieldMgr ) 
         fCurrentFieldMgr = newFieldMgr;
   }
-  
+  GetChordFinder()->SetChargeMomentumMass(fCharge, fMomentum, fMass);  
+
   G4FieldTrack  CurrentState(pFieldTrack);
 
   G4FieldTrack  OriginalState= CurrentState;
@@ -228,7 +230,7 @@ G4double G4PropagatorInField::
      s_length_taken= GetChordFinder()->AdvanceChordLimited( 
 				       CurrentState,    // Position & velocity
 				       h_TrialStepSize,
-                                       GetEpsilonStep() );
+                                       fEpsilonStep);  // = GetEpsilonStep() );
 
      fFull_CurveLen_of_LastAttempt= s_length_taken;
      //    On Exit:
@@ -604,7 +606,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  //  Re-integrate to obtain a new B
 	  G4FieldTrack   newEndpoint= CurrentA_PointVelocity;
 	  GetChordFinder()->GetIntegrationDriver()
-	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
+	    ->AccurateAdvance(newEndpoint, curveDist, fEpsilonStep );
 	  CurrentB_PointVelocity= newEndpoint;
 #ifdef G4DEBUG_FIELD
           static int noInaccuracyWarnings = 0; 

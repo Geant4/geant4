@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.22 2002-04-19 08:22:04 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.23 2002-06-14 10:21:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,6 +222,8 @@ class G4PropagatorInField
    G4double  fFull_CurveLen_of_LastAttempt; 
    G4double  fLast_ProposedStepLength; 
    G4double  fLargestAcceptableStep;
+
+   G4double  fCharge, fInitialMomentumModulus, fMass;
 };
 
 //  Defines the constructor.
