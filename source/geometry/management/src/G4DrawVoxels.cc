@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.7 1999-08-03 10:44:45 graignac Exp $
+// $Id: G4DrawVoxels.cc,v 1.8 1999-11-30 12:10:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,8 +169,8 @@ G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolum
   //Initialisation of the transformation to be computed
   G4AffineTransform transf; //default constructor ie Id
 
-  const G4VPhysicalVolume* current(pv);
-  const G4VPhysicalVolume* mother(pv->GetMother());
+  const G4VPhysicalVolume* current= pv;
+  const G4VPhysicalVolume* mother = pv->GetMother();
 
   //Now we loop up to the world physical volume
   while (mother!=NULL){
