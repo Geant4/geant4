@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.32 2003-03-11 03:11:46 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.33 2003-03-11 03:46:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -380,19 +380,8 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
 void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* particle, G4Region* region)
 {
   if(!region) region = (*(G4RegionStore::GetInstance()))[0];
-  if (fRetrievePhysicsTable && !fIsRestoredCutValues) {
-#ifdef G4VERBOSE  
-    if (verboseLevel>2){
-      G4cout << "G4VUserPhysicsList::SetParticleCuts  ";
-      G4cout << " Retrieve Cut Values for ";
-      G4cout << particle->GetParticleName() << G4endl;
-    }
-#endif
-    fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
-  } else {
-    G4ProductionCuts* pcuts = region->GetProductionCuts();
-    pcuts->SetProductionCut(cut,particle);
-  } 
+  G4ProductionCuts* pcuts = region->GetProductionCuts();
+  pcuts->SetProductionCut(cut,particle);
 }    
 
 ///////////////////////////////////////////////////////////////
@@ -428,6 +417,16 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
   if (fRetrievePhysicsTable) {
+    if (!fIsRestoredCutValues) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	G4cout << "G4VUserPhysicsList::SetParticleCuts  ";
+	G4cout << " Retrieve Cut Values for ";
+	G4cout << particle->GetParticleName() << G4endl;
+      }
+#endif
+      fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
+    }
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
