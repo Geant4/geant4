@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonTest.cc,v 1.2 2001-05-07 12:45:41 vnivanch Exp $
+// $Id: G4ComptonTest.cc,v 1.3 2001-05-07 12:54:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -399,7 +399,7 @@ G4int main()
 	  G4double theta   = (finalParticle->GetMomentum()).theta();
 	  G4double p   = sqrt(px*px+py*py+pz*pz);
 
-	  if (e > initEnergy)
+	  if (eKin > initEnergy)
 	    {
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
 		//	     << e
