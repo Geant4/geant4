@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2002-12-04 18:43:14 asaim Exp $
+$Id: History,v 1.56 2002-12-06 19:17:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 06 2002, G.Cosmo (event-V04-01-11)
+- Corrected tag to include also "event-V04-01-09" !!
+
 Dec 04 2002, M.Asai (event-V04-01-10)
 - Migration to new G4ApplicationState
 
