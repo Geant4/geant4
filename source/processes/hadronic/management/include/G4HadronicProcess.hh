@@ -62,6 +62,11 @@ class G4ParticleChange;
     virtual ~G4HadronicProcess();
 
     void RegisterMe( G4HadronicInteraction *a );
+
+    void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+    {
+       theCrossSectionDataStore->AddDataSet(aDataSet);
+    }
         
     virtual G4VParticleChange *PostStepDoIt( const G4Track &aTrack, 
                                             const G4Step &aStep ) = 0;
@@ -142,11 +147,6 @@ class G4ParticleChange;
        return theCrossSectionDataStore;
     }
    
-    void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-    {
-       theCrossSectionDataStore->AddDataSet(aDataSet);
-    }
-
     G4double GetLastCrossSection() {return theLastCrossSection;}
  private:
     

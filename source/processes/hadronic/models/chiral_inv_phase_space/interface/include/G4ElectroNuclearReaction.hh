@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.16 2003-07-01 16:32:50 hpw Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.17 2003-10-31 13:06:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -151,7 +151,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   // Scatter an electron and make gamma+A reaction
   G4double iniE=theElectronKinEnergy+me; // Initial total energy of electron
   G4double finE=iniE-photonEnergy;       // Final total energy of electron
-  theResult.SetEnergyChange(G4std::max(0.,finE-me));    // Modifies the KINETIC ENERGY (Why not in the name?)
+  theResult.SetEnergyChange(std::max(0.,finE-me));    // Modifies the KINETIC ENERGY (Why not in the name?)
   G4double EEm=iniE*finE-me2;            // Just an intermediate value to avoid "2*"
   G4double iniP=sqrt(iniE*iniE-me2);     // Initial momentum of the electron
   G4double finP=sqrt(finE*finE-me2);     // Final momentum of the electron
