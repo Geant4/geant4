@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.9 2001-09-23 23:08:56 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.10 2001-09-26 20:15:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -64,7 +64,11 @@ G4CrossSectionHandler::~G4CrossSectionHandler()
 
   for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
     {
-      G4VEMDataSet* dataSet = pos->second;
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->second
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
     }
   size_t n = crossSections.size();
@@ -80,9 +84,13 @@ void G4CrossSectionHandler::PrintData() const
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
-      G4int z = pos->first;
-      G4VEMDataSet* dataSet = pos->second;
-      
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->first or pos->second
+      // G4int z = pos->first;
+      G4int z = (*pos).first;
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;     
       G4cout << "---- Data set for Z = "
 	     << z
 	     << G4endl;
@@ -246,7 +254,11 @@ void G4CrossSectionHandler::Clear()
     {
         for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
 	{
-	  G4VEMDataSet* dataSet = pos->second;
+	  // The following is a workaround for STL ObjectSpace implementation, 
+	  // which does not support the standard and does not accept 
+	  // the syntax pos->first or pos->second
+	  //	  G4VEMDataSet* dataSet = pos->second;
+	  G4VEMDataSet* dataSet = (*pos).second;
 	  delete dataSet;
 	  dataSet = 0;
 	}
@@ -278,7 +290,11 @@ G4double G4CrossSectionHandler::FindValue(G4int Z, G4double e) const
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
-      G4VEMDataSet* dataSet = pos->second;
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->first or pos->second
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       value = dataSet->FindValue(e);
     }
   else
@@ -517,7 +533,11 @@ G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   G4VEMDataSet* dataSet = 0;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
-  if (pos != dataMap.end()) dataSet = pos->second;
+  // The following is a workaround for STL ObjectSpace implementation, 
+  // which does not support the standard and does not accept 
+  // the syntax pos->first or pos->second
+  // if (pos != dataMap.end()) dataSet = pos->second;
+  if (pos != dataMap.end()) dataSet = (*pos).second;
 
   size_t nShells = dataSet->NumberOfComponents();
   for (size_t i=0; i<nShells; i++)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.2 2001-09-23 23:08:58 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.3 2001-09-26 20:15:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -53,11 +53,11 @@ G4VCrossSectionHandler::G4VCrossSectionHandler(const G4VDataSetAlgorithm* algori
 					       G4int bins,
 					       G4double unitE, 
 					       G4double unitData,
-					       G4int minZ, G4int maxZ)
+					       G4int minZ, 
+					       G4int maxZ)
   : interpolation(algorithm), eMin(minE), eMax(maxE), nBins(bins),
     unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ)
 {
-  crossSections = 0;
   ActiveElements();
 }
 
@@ -68,15 +68,17 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
 
   for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
     {
-      G4VEMDataSet* dataSet = pos->second;
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->second
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
-      dataSet = 0;
     }
   size_t n = crossSections->size();
   for (size_t i=0; i<n; i++)
     {
       delete (*crossSections)[i];
-      (*crossSections)[i] = 0;
     }
 }
 
@@ -86,9 +88,13 @@ void G4VCrossSectionHandler::PrintData() const
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
-      G4int z = pos->first;
-      G4VEMDataSet* dataSet = pos->second;
-      
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->first or pos->second
+      // G4int z = pos->first;
+      G4int z = (*pos).first;
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;     
       G4cout << "---- Data set for Z = "
 	     << z
 	     << G4endl;
@@ -252,7 +258,11 @@ void G4VCrossSectionHandler::Clear()
     {
         for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
 	{
-	  G4VEMDataSet* dataSet = pos->second;
+	  // The following is a workaround for STL ObjectSpace implementation, 
+	  // which does not support the standard and does not accept 
+	  // the syntax pos->first or pos->second
+	  //	  G4VEMDataSet* dataSet = pos->second;
+	  G4VEMDataSet* dataSet = (*pos).second;
 	  delete dataSet;
 	  dataSet = 0;
 	}
@@ -284,7 +294,11 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double e) const
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
-      G4VEMDataSet* dataSet = pos->second;
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->first or pos->second
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       value = dataSet->FindValue(e);
     }
   else
@@ -321,8 +335,6 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   // Builds a CompositeDataSet containing the mean free path for each material
   // in the material table
 
-  // To be modified and tested to use crossSections
-
   G4DataVector energyVector;
   G4double dBin = log10(eMax/eMin) / nBins;
 
@@ -331,7 +343,17 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
       energyVector.push_back(pow(10., log10(eMin)+i*dBin));
     }
 
-  crossSections = BuildCrossSectionsForMaterials(energyVector,energyCuts);
+
+  //if (energyThreshold > 0.0)
+  //{
+      // For ContinuousDiscrete processes
+      //   BuildCrossSectionsWithCut(energyCuts,energyVector);
+  //}
+  //else
+  // {
+      // For Discrete Processes
+      //  BuildCrossSectionsForMaterials(energyVector);
+  //}
 
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(interpolation);
 
@@ -474,7 +496,11 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   G4VEMDataSet* dataSet = 0;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
-  if (pos != dataMap.end()) dataSet = pos->second;
+  // The following is a workaround for STL ObjectSpace implementation, 
+  // which does not support the standard and does not accept 
+  // the syntax pos->first or pos->second
+  // if (pos != dataMap.end()) dataSet = pos->second;
+  if (pos != dataMap.end()) dataSet = (*pos).second;
 
   size_t nShells = dataSet->NumberOfComponents();
   for (size_t i=0; i<nShells; i++)
