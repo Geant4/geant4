@@ -1,4 +1,4 @@
-// $Id: G4RootTransManager.cc,v 1.1 2002-12-04 02:44:29 morita Exp $
+// $Id: G4RootTransManager.cc,v 1.2 2002-12-04 09:52:28 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4RootTransManager.cc
@@ -16,7 +16,7 @@
 
 // Implementation of Constructor #1
 G4RootTransManager::G4RootTransManager()
- : f_lastreadfile(0), f_lastwritefile(0), f_lastreadtree(0), f_lastwritetree(0), f_treeName("FADS"), f_treeDesc("FADS output tree"), f_bufsize(64000), f_split(1), f_comp(1)
+ : f_lastreadfile(0), f_lastwritefile(0), f_lastreadtree(0), f_lastwritetree(0), f_treeName("Geant4"), f_treeDesc("Geant4 output tree"), f_bufsize(64000), f_split(1), f_comp(1)
 {
   Initialize();
 }
@@ -31,7 +31,7 @@ bool G4RootTransManager::SelectReadFile(std::string obj, std::string file)
   // cd to the file
   tfile->cd();
 
-  // Get the tree "FADS"
+  // Get the tree "Geant4"
   TTree* tree = (TTree*)tfile->Get(f_treeName.c_str());
   if ( tree == 0 ) return false;
 
@@ -52,7 +52,7 @@ bool G4RootTransManager::SelectWriteFile(std::string obj, std::string file)
   // cd to the file
   tfile->cd();
 
-  // Get the tree "FADS"
+  // Get the tree "Geant4"
   TTree* tree = (TTree*)tfile->Get(f_treeName.c_str());
   if ( tree == 0 ) {
     tree = new TTree(f_treeName.c_str(),f_treeDesc.c_str());
