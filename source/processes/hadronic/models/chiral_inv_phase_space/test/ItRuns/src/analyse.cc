@@ -37,7 +37,10 @@ main()
       input >> nevents;
       G4double weight = crossSection/A/nevents;
     G4cout << "IT!!!!!"<<crossSection<<" "<<A<<" "<<nevents<<" "<<weight<< G4endl;
-      ANAParticleInfo theInformation(weight, "../logs/liste");
+      G4String file("../logs/liste.");
+      G4String it;
+      it = file+fileName;
+      ANAParticleInfo theInformation(weight, it);
       theInformation.Analyse(fileName);
     }
     fileName = "";

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.1 2000-08-30 07:16:16 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.2 2000-09-13 07:09:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -62,8 +62,21 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
+#include "G4HEProtonInelastic.hh"
+
+#include "G4ExcitationHandler.hh"
+#include "G4Evaporation.hh"
+#include "G4CompetitiveFission.hh"
+#include "G4FermiBreakUp.hh"
+#include "G4StatMF.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4PreCompoundModel.hh"
+
+#include "G4StringInfoDump.hh"
+
 #include "G4DynamicParticle.hh"
 #include "G4Proton.hh"
+#include "G4DymmyINC.hh"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -272,6 +285,26 @@
     //------ all the particles are Done ----------
     //------ Processes definitions Follow ---------
 
+    // This is a parameterized model
+    G4HEProtonInelastic * theParaModel = new G4HEProtonInelastic;
+
+    // This is the preparation for pre-compound
+    G4Evaporation * theEvaporation = new G4Evaporation;
+    G4FermiBreakUp * theFermiBreakUp = new G4FermiBreakUp;
+    G4StatMF * theMF = new G4StatMF;
+
+    G4ExcitationHandler * theHandler = new G4ExcitationHandler;
+        theHandler->SetEvaporation(theEvaporation);
+        theHandler->SetFermiModel(theFermiBreakUp);
+        theHandler->SetMultiFragmentation(theMF);
+        theHandler->SetMaxAandZForFermiBreakUp(12, 6);
+        theHandler->SetMinEForMultiFrag(3*MeV);
+	
+    G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
+
+    G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
+            theCascade->SetDeExcitation(thePreEquilib);  
+   
     // this will be the model class for high energies
     G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
        
@@ -319,6 +352,7 @@
       //      theProton->GetProcessManager();
     G4ProtonInelasticProcess *theProtonInelasticProcess =
       new G4ProtonInelasticProcess();
+//    theProtonInelasticProcess->RegisterMe( theParaModel );
     theProtonInelasticProcess->RegisterMe( theTheoModel );
     theProtonProcessManager->AddDiscreteProcess( theProtonInelasticProcess );
     theProcesses[0] = theProtonInelasticProcess;
@@ -617,8 +651,12 @@
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV/MeV;
 
-    G4StringChipsInterface * theCascade = new G4StringChipsInterface();
     theTheoModel->SetTransport(theCascade);
+    G4StringChipsInterface * theChipsCascade = new G4StringChipsInterface();
+    theTheoModel->SetTransport(theChipsCascade);
+//    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
+//    G4DymmyINC * theDummyCascade = new G4DymmyINC;
+//    theTheoModel->SetTransport(theDummyCascade);
     
     G4int nEvents;
     G4cout << "Please enter the number of events: "<< G4std::flush;
@@ -697,7 +735,8 @@
             G4cout << aSec->GetMomentum();
 	    G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
 	    G4cout << G4endl;
-            delete second;
+            delete aSec;
+	    delete second;
           }
           delete aTrack;
 	  aFinalState->Clear();

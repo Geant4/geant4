@@ -26,27 +26,34 @@ class ANAParticleInfo
     void Analyse(G4String aPreFix);
     
   private:
-    G4std::vector<ANAParticle> theParicles;
     // pdg, info
     // info = lowBin, xsec/totalXsec
     vector<VANAPlot *> thePlots;
+    G4String theFileName;
 };
 
-ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName)
+ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName) : theFileName(aFileName)
 {
-  ifstream theData(aFileName);
-  for(;;)
-  {
-    ANAParticle aPart;
-    if(!aPart.Init(theData)) break;
-    theParicles.push_back(aPart);
-  }
-    
-  DoubleBandFilter * bin1 = new DoubleBandFilter(0.25,  0.4, ".70degree"); // cos(th)
-  DoubleBandFilter * bin2 = new DoubleBandFilter(-0.25, 0.25, ".90degree"); // cos(th)
-  DoubleBandFilter * bin3 = new DoubleBandFilter(-0.7, -0.25, ".118degree"); // cos(th)
-  DoubleBandFilter * bin4 = new DoubleBandFilter(-1.0,  -0.7, ".160degree"); // cos(th)
-  
+   
+  G4double aMean;
+  G4double halfBin = 0.07; 
+
+//  DoubleBandFilter * bin1 = new DoubleBandFilter(0.25,  0.4, ".70degree"); // cos(th)
+  aMean = cos(3.14159265*70./180.);
+  DoubleBandFilter * bin1 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".70degree"); // cos(th)
+
+//  DoubleBandFilter * bin2 = new DoubleBandFilter(-0.25, 0.25, ".90degree"); // cos(th)
+  aMean = cos(3.14159265*90./180.);
+  DoubleBandFilter * bin2 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".90degree"); // cos(th)
+
+//  DoubleBandFilter * bin3 = new DoubleBandFilter(-0.7, -0.25, ".118degree"); // cos(th)
+  aMean = cos(3.14159265*118./180.);
+  DoubleBandFilter * bin3 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".118degree"); // cos(th)
+
+//  DoubleBandFilter * bin4 = new DoubleBandFilter(-1.0,  -0.7, ".160degree"); // cos(th)
+  aMean = cos(3.14159265*160./180.);
+  DoubleBandFilter * bin4 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".160degree"); // cos(th)
+ 
   ANAPlot<ANADataPoint, TVANAFilter<G4double> > * aNewPlot = 0;
 // ANAPlot<ANADataPoint> ::ANAPlot<DataPoint> (G4int aPDG, G4double aMass, G4double aTotalXsec, G4String fn)
 // pi+
@@ -141,31 +148,31 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName)
                                        xSec, aFileName+G4String(".he3"), bin4); // 1000*Z+A
   thePlots.push_back(aNewPlot);
 // he4
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".he4"), bin1); // 1000*Z+A
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".he4"), bin2); // 1000*Z+A
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".he4"), bin3); // 1000*Z+A
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".he4"), bin4); // 1000*Z+A
-//  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".he4"), bin1); // 1000*Z+A
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".he4"), bin2); // 1000*Z+A
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".he4"), bin3); // 1000*Z+A
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".he4"), bin4); // 1000*Z+A
+  thePlots.push_back(aNewPlot);
 // K-
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".kaonminus"), bin1);
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".kaonminus"), bin2);
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".kaonminus"), bin3);
-//  thePlots.push_back(aNewPlot);
-//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-//                                       xSec, aFileName+G4String(".kaonminus"), bin4);
-//  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".kaonminus"), bin1);
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".kaonminus"), bin2);
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".kaonminus"), bin3);
+  thePlots.push_back(aNewPlot);
+  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+                                       xSec, aFileName+G4String(".kaonminus"), bin4);
+  thePlots.push_back(aNewPlot);
 }
 
 inline
@@ -173,14 +180,21 @@ void ANAParticleInfo::Analyse(G4String aPreFix)
 {
   G4int aParticle;
   G4int aPlot;
-  for(aParticle=0; aParticle<theParicles.size(); aParticle++)
+  ifstream theData(theFileName);
+  G4int counter = 0;
+  for(;;)
   {
-    G4int pdg = theParicles[aParticle].GetPDGCode();
-    G4double energy = theParicles[aParticle].GetEnergy();
-    G4double weight = theParicles[aParticle].GetWeight();
+    counter++;
+    if(counter == 10000*(counter/10000)) 
+       G4cout << "taken care of "<<counter<<" particles." << G4endl;
+    ANAParticle aPart;
+    if(!aPart.Init(theData)) break;
+    G4int pdg = aPart.GetPDGCode();
+    G4double energy = aPart.GetEnergy();
+    G4double weight = aPart.GetWeight();
     for(aPlot = 0; aPlot<thePlots.size(); aPlot++)
     {
-      if(thePlots[aPlot]->Filter( &(theParicles[aParticle]) ))
+      if(thePlots[aPlot]->Filter( &(aPart) ))
       {
         if(thePlots[aPlot]->Insert(pdg, energy, weight)) break;
       }

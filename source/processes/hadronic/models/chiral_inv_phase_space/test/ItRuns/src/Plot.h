@@ -65,7 +65,7 @@ ANAPlot<DataPointType, FilterType>::ANAPlot(G4int aPDG, G4double aMass, G4double
   theDataPoints.push_back(DataPointType(0.125*GeV, 0.025*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.15*GeV, 0.025*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.175*GeV, 0.025*GeV, aMass));
-  theDataPoints.push_back(DataPointType(0.2*GeV, 0.05*GeV, aMass));
+  theDataPoints.push_back(DataPointType(0.2*GeV, 0.025*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.25*GeV, 0.05*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.3*GeV, 0.05*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.35*GeV, 0.05*GeV, aMass));

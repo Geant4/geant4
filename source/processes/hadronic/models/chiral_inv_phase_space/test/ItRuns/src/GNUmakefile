@@ -20,6 +20,9 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/test \
+            -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
             -I$(G4BASE)/digits+hits/include \
             -I$(G4BASE)/events+tracks/include \
             -I$(G4BASE)/geometry/management/include \
