@@ -264,7 +264,8 @@
       for(G4int j=start; j<current; j++)
       {
 	x = theData[j].GetX();
-	y = theInt.Lin(x, x1, x2, y1, y2);
+	if(x1-x2 == 0) y = (y2+y1)/2.;
+	else y = theInt.Lin(x, x1, x2, y1, y2);
 	if (abs(y-theData[j].GetY())>precision*y)
 	{
 	  aBuff[++count] = theData[current-1]; // for this one, everything was fine
