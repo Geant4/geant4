@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm6.cc,v 1.10 2002-05-23 13:30:13 maire Exp $
+// $Id: TestEm6.cc,v 1.11 2002-12-09 13:02:03 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +83,12 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-     G4UIsession* session = new G4UIterminal(new G4UItcsh);      
+     G4UIsession* session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif                      
      session->SessionStart();
      delete session;
     }
