@@ -1,0 +1,21 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4AxesModel.icc,v 1.1 2001-04-11 13:39:31 johna Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+
+inline G4String G4AxesModel::GetCurrentTag () const {
+  return fGlobalTag;
+}
+
+inline G4String G4AxesModel::GetCurrentDescription () const {
+  return fGlobalDescription;
+}
+
+inline G4bool G4AxesModel::Validate () {
+  return true;
+}
