@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.8 1999-04-29 00:39:54 gcosmo Exp $
+# $Id: architecture.gmk,v 1.9 1999-05-05 09:20:24 johna Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -154,21 +154,55 @@ endif
 #
 
 ifdef G4USE_STL
-  RWBASE    := $(G4INSTALL)/source/global/STLInterface
-endif
 
-ifndef RWBASE
-  RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
-endif
-RWINC     := $(RWBASE)
-RWLIBDIR  := $(RWBASE)/lib
-RWLIB     := rwtool
- 
-ifeq ($(G4SYSTEM),HP-aCC)
-  RWBASE    := /opt/aCC
-  RWINC     := $(RWBASE)/include
-  RWLIBDIR  := /usr/lib
-endif
+  RWINC    := $(G4INSTALL)/source/global/STLInterface
+
+else
+
+  ifndef RWBASE
+    RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
+  endif
+  RWINC     := $(RWBASE)
+  RWLIBDIR  := $(RWBASE)/lib
+  RWLIB     := rwtool
+
+  ifeq ($(G4SYSTEM),HP-aCC)
+    RWBASE    := /opt/aCC
+    RWINC     := $(RWBASE)/include
+    RWLIBDIR  := /usr/lib
+  endif
+
+  ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  #
+  # NiceNT policy for letter drive mapping 
+  #
+  ifndef RWBASE
+    RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
+  endif
+    RWINC        := $(RWBASE)
+    RWLIBDIR     := $(RWBASE)"\lib"
+    RWLIB        := mtldmt.lib
+    RWINCGPP     := /rogue
+  endif
+
+  ifeq ($(G4SYSTEM),WIN32-G++-NICE)
+  #
+  # locally installed RogueWave for g++ (mount mapping)
+  #
+    RWBASE       := /rogue
+    RWINC        := $(RWBASE)
+    RWLIBDIR     := $(RWBASE)/lib
+    RWLIB        := rwtool
+  endif
+
+  #
+  # Make dependencies files by g++ then need right RW include
+  #
+  ifdef RWINCGPP
+    RWINCGPP := -I$(RWINCGPP)
+  endif
+
+endif # ifdef G4USE_STL
 
 #
 # Paths for G4 data
@@ -181,29 +215,6 @@ endif
 # Photon evaporation data
 ifndef G4LEVELGAMMADATA
   G4LEVELGAMMADATA := $(G4DATA)/PhotonEvaporation
-endif
-
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-#
-# NiceNT policy for letter drive mapping 
-#
-ifndef RWBASE
-  RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
-endif
-  RWINC        := $(RWBASE)
-  RWLIBDIR     := $(RWBASE)"\lib"
-  RWLIB        := mtldmt.lib
-  RWINCGPP     := /rogue
-endif
-
-ifeq ($(G4SYSTEM),WIN32-G++-NICE)
-#
-# locally installed RogueWave for g++ (mount mapping)
-#
-  RWBASE       := /rogue
-  RWINC        := $(RWBASE)
-  RWLIBDIR     := $(RWBASE)/lib
-  RWLIB        := rwtool
 endif
 
 #
@@ -238,28 +249,37 @@ else
 endif
 
 #
-# Make dependencies files by g++ then need right RW include
-#
-ifdef RWINCGPP
-  RWINCGPP := -I$(RWINCGPP)
-endif
-
-#
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
 
-CPPFLAGS  += -Iinclude -I$(RWINC)
+CPPFLAGS  += -Iinclude
+ifdef RWINC
+  CPPFLAGS  += -I$(RWINC)
+endif
 CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 
 #
 # Positional qualifiers in action...
 #
 ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-  LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR) $(LIB_PATH)$(RWLIBDIR)
-  LOADLIBS  := $(CLHEP_LIB) $(RWLIB)
+  LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
+  ifdef RWLIBDIR
+    LDFLAGS   += $(LIB_PATH)$(RWLIBDIR)
+  endif
+  LOADLIBS  := $(CLHEP_LIB)
+  ifdef RWINC
+    LOADLIBS  += $(RWLIB)
+  endif
 else
-  LDFLAGS   := -L$(CLHEP_LIB_DIR) -L$(RWLIBDIR)
-  LOADLIBS  := -l$(CLHEP_LIB) -l$(RWLIB) -lm
+  LDFLAGS   := -L$(CLHEP_LIB_DIR)
+  ifdef RWLIBDIR
+    LDFLAGS   += -L$(RWLIBDIR)
+  endif
+  LOADLIBS  := -l$(CLHEP_LIB)
+  ifdef RWINC
+    LOADLIBS  += -l$(RWLIB)
+  endif
+  LOADLIBS  += -lm
 endif
 
 #
@@ -596,7 +616,9 @@ ifdef G4_NO_CBRT
 endif
 
 # Standard Template Library (STL) not installed
-CPPFLAGS += -DRW_NO_STL
+ifndef G4USE_STL
+  CPPFLAGS += -DRW_NO_STL
+endif
 
 # Verbosity code can be left out (for better performance)
 # by defining G4_NO_VERBOSE.
