@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.41 2003-10-02 17:57:03 stesting Exp $
+# $Id: Configure,v 1.42 2003-10-02 18:04:36 stesting Exp $
 #
-# Generated on Thu Oct  2 19:52:13 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 20:02:53 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3089,6 +3089,8 @@ esac
 #
 echo ""
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -3210,7 +3212,7 @@ fi
 
 fi
 
-
+fi # if !Win
 echo " "
 
 case "$g4make" in
