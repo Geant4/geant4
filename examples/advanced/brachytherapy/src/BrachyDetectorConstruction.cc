@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.16 2003-05-09 09:39:44 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.17 2003-05-09 16:52:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -79,9 +79,10 @@
 #include "BrachyFactoryI.hh"
 
 BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
-: detectorChoice(0), pPhantomSD(0), pPhantomROGeometry(0),
+: detectorChoice(0), pPhantomSD(0), pPhantomROGeometry(0), factory(0),
   ExpHall(0), ExpHallLog(0), ExpHallPhys(0),
-  Phantom(0), PhantomLog(0), PhantomPhys(0)
+  Phantom(0), PhantomLog(0), PhantomPhys(0),
+  AbsorberMaterial(0)
 {
   m_BoxDimX=30*cm ;
   m_BoxDimY=30*cm;
@@ -100,7 +101,7 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
 
   detectorMessenger = new BrachyDetectorMessenger(this);
 
-  factoryIr=new BrachyFactoryIr();
+  factory = new BrachyFactoryIr();
 
   pMat= new BrachyMaterial();
 }
@@ -109,11 +110,10 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
 BrachyDetectorConstruction::~BrachyDetectorConstruction()
 { 
   delete pMat;
-  delete factoryIr;
+  delete factory;
   delete detectorMessenger;
-
-  if (factoryLeipzig) delete factoryLeipzig;
-  if (factoryI) delete factoryI;
+  if (pPhantomROGeometry) delete pPhantomROGeometry;
+  if (pPhantomSD) delete pPhantomSD;
 }
 
 //....
@@ -121,7 +121,7 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 {
   pMat-> DefineMaterials();
   ConstructPhantom();
-  factoryIr->CreateSource(PhantomPhys);
+  factory->CreateSource(PhantomPhys);
   ConstructSensitiveDetector();
 
   return ExpHallPhys;
@@ -129,27 +129,24 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 
 void BrachyDetectorConstruction::SwitchDetector()
 {
-factoryIr->CleanSource();
-switch(detectorChoice)
-{ 
-case 1:
-  factoryI=new BrachyFactoryI();
-  factoryI->CreateSource(PhantomPhys);
-   break;
-
-case 2:
-  factoryLeipzig=new BrachyFactoryLeipzig();
-  factoryLeipzig->CreateSource(PhantomPhys);
-
-  break;
-
-case 3:
-  factoryIr->CreateSource(PhantomPhys);
-
-  break;   
-default:
-  factoryIr->CreateSource(PhantomPhys);
-}
+  factory->CleanSource();
+  delete factory;
+  switch(detectorChoice)
+  { 
+    case 1:
+      factory = new BrachyFactoryI();
+      break;
+    case 2:
+      factory = new BrachyFactoryLeipzig();
+      break;
+    case 3:
+      factory = new BrachyFactoryIr();
+      break;   
+    default:
+      factory = new BrachyFactoryIr();
+      break;
+  }
+  factory->CreateSource(PhantomPhys);
 
   // Notify run manager that the new geometry has been built
 
@@ -157,25 +154,27 @@ default:
 }
 
 void BrachyDetectorConstruction::SelectDetector(G4String val)
-{ if(val=="Iodium") 
-{ detectorChoice = 1; }
-   else
-     {if(val=="Leipzig") detectorChoice = 2;
-     else { if(val=="Iridium")detectorChoice = 3;}}
-
-   G4cout << "Now Detector is " << val << G4endl;
+{
+  if(val=="Iodium") 
+  {
+   detectorChoice = 1;
+  }
+  else
+  {
+    if(val=="Leipzig")
+    {
+      detectorChoice = 2;
+    }
+    else
+    {
+      if(val=="Iridium")detectorChoice = 3;
+    }
+  }
+  G4cout << "Now Detector is " << val << G4endl;
 }
 
 void BrachyDetectorConstruction::ConstructPhantom()
 {
-  G4Colour  white   (1.0, 1.0, 1.0) ;
-  G4Colour  grey    (0.5, 0.5, 0.5) ;
-  G4Colour  lgrey   (.75, .75, .75) ;
-  G4Colour  red     (1.0, 0.0, 0.0) ;
-  G4Colour  blue    (0.0, 0.0, 1.0) ;
-  G4Colour  cyan    (0.0, 1.0, 1.0) ;
-  G4Colour  magenta (1.0, 0.0, 1.0) ; 
-  G4Colour  yellow  (1.0, 1.0, 0.0) ;
   G4Colour  lblue   (0.0, 0.0, .75);
 
   G4Material* air=pMat->GetMat("Air") ;
@@ -183,7 +182,7 @@ void BrachyDetectorConstruction::ConstructPhantom()
 
   ComputeDimVoxel();
 
-  //World volume
+  // World volume
   ExpHall = new G4Box("ExpHall",ExpHall_x,ExpHall_y,ExpHall_z);
   ExpHallLog = new G4LogicalVolume(ExpHall,air,"ExpHallLog",0,0,0);
   ExpHallPhys = new G4PVPlacement(0,G4ThreeVector(),"ExpHallPhys",ExpHallLog,0,false,0);
@@ -206,71 +205,54 @@ void BrachyDetectorConstruction::ConstructPhantom()
 void  BrachyDetectorConstruction::ConstructSensitiveDetector()
 // Sensitive Detector and ReadOut geometry definition
 { 
-G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
 
-if( pPhantomSD ==0)
- {
-pPhantomSD = new BrachyPhantomSD(m_SDName,NumVoxelX,NumVoxelZ);
-if(pPhantomSD)
-{
-      G4String ROGeometryName = "PhantomROGeometry";
-        pPhantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,m_BoxDimX,m_BoxDimZ,NumVoxelX,NumVoxelZ);
-      
-
-      pPhantomROGeometry->BuildROGeometry();
-      pPhantomSD->SetROgeometry(pPhantomROGeometry);
-      pSDManager->AddNewDetector(pPhantomSD);
-
-      PhantomLog->SetSensitiveDetector(pPhantomSD);
-
-
-}
- }
-
-
+  if(!pPhantomSD)
+  {
+    pPhantomSD = new BrachyPhantomSD(m_SDName,NumVoxelX,NumVoxelZ);
+    G4String ROGeometryName = "PhantomROGeometry";
+    pPhantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,m_BoxDimX,m_BoxDimZ,NumVoxelX,NumVoxelZ);
+    pPhantomROGeometry->BuildROGeometry();
+    pPhantomSD->SetROgeometry(pPhantomROGeometry);
+    pSDManager->AddNewDetector(pPhantomSD);
+    PhantomLog->SetSensitiveDetector(pPhantomSD);
+  }
 }
 
 void BrachyDetectorConstruction::PrintDetectorParameters()
 {
-G4cout << "-----------------------------------------------------------------------"
-     << G4endl
-    <<"the detector is a  box whose size is: " 
-    <<G4endl
-    <<m_BoxDimX/cm
-    << " cm * "
-    <<m_BoxDimY/cm
-    << " cm * "
-    <<m_BoxDimZ/cm
-    << " cm"
-    << G4endl
-    <<"numVoxel: "
-    <<NumVoxelX
-    <<G4endl
-    <<"dim voxel: "
-    <<dimVoxel/mm
-    <<"mm"
-    <<G4endl 
-    <<"material of the box : "
-    <<AbsorberMaterial->GetName() 
-    <<G4endl
-    <<"the source is at the center  of the detector"
-     <<G4endl
-
-
-<<"-------------------------------------------------------------------------"
-     << G4endl;
+  G4cout << "-----------------------------------------------------------------------"
+         << G4endl
+         << "the detector is a  box whose size is: " << G4endl
+         << m_BoxDimX/cm
+         << " cm * "
+         << m_BoxDimY/cm
+         << " cm * "
+         << m_BoxDimZ/cm
+         << " cm" << G4endl
+         << "numVoxel: "
+         << NumVoxelX <<G4endl
+         << "dim voxel: "
+         << dimVoxel/mm
+         << "mm" << G4endl 
+         << "material of the box : "
+         << AbsorberMaterial->GetName() <<G4endl
+         << "the source is at the center  of the detector" << G4endl
+         << "-------------------------------------------------------------------------"
+         << G4endl;
 }
 
 
 void BrachyDetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
-
 {
-// search the material by its name   
-G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-if (pttoMaterial)
- {AbsorberMaterial = pttoMaterial;
-  PhantomLog->SetMaterial(pttoMaterial); 
-  PrintDetectorParameters();
- } 
-else G4cout<<"that's not avaiable!"<<G4endl;            
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial)
+  {
+    AbsorberMaterial = pttoMaterial;
+    PhantomLog->SetMaterial(pttoMaterial); 
+    PrintDetectorParameters();
+  } 
+  else
+    G4cout << "that's not avaiable!" << G4endl;            
 }

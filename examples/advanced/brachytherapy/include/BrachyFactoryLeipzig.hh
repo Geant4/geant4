@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryLeipzig.hh,v 1.2 2002-11-18 15:18:36 guatelli Exp $
+// $Id: BrachyFactoryLeipzig.hh,v 1.3 2003-05-09 16:52:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -33,10 +33,11 @@
 //
 #ifndef BrachyFactoryLeipzig_h
 #define BrachyFactoryLeipzig_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
-#include"BrachyFactory.hh"
+#include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
@@ -45,14 +46,16 @@ class BrachyFactory;
 class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionLeipzig;
 
-class BrachyFactoryLeipzig:public BrachyFactory
+class BrachyFactoryLeipzig : public BrachyFactory
 {
 public:
   BrachyFactoryLeipzig();
  ~BrachyFactoryLeipzig();
+
   G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
+
 private:
   BrachyDetectorConstructionLeipzig* pLeipzig;
 };

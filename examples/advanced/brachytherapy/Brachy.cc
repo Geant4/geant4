@@ -120,25 +120,21 @@ int main(int argc ,char ** argv)
 	  << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
 	  << G4endl;
 #endif
-  /*
+  
 G4UIsession* session=0;
 
 
   if (argc==1)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
-#else           
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
 #endif
-#endif
     }
 
-     */
+ 
  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
     pRunManager->SetUserAction(pEventAction );
 
@@ -158,7 +154,6 @@ BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
 
-  /*
 
  if (session)   // Define UI session for interactive mode.
     {
@@ -177,9 +172,8 @@ BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
-  */
-   int numberOfEvent = 1000;
-   pRunManager->BeamOn(numberOfEvent);
+//   int numberOfEvent = 1000;
+//   pRunManager->BeamOn(numberOfEvent);
 
 
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: BrachyFactoryI.hh,v 1.3 2002-12-13 09:25:32 gcosmo Exp $
+// $Id: BrachyFactoryI.hh,v 1.4 2003-05-09 16:52:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,10 +29,10 @@
 #define BrachyFactoryI_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
-#include"BrachyDetectorConstructionI.hh"
-#include"BrachyFactory.hh"
+#include "BrachyDetectorConstructionI.hh"
+#include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
@@ -40,17 +40,18 @@ class BrachyAnalysisManager;
 class BrachyFactory;
 class BrachyPrimaryGeneratorActionI;
 class BrachyDetectorConstructionI;
+
 class BrachyFactoryI:public BrachyFactory
 {
 public:
   BrachyFactoryI();
  ~BrachyFactoryI();
+
   G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
   void CreateSource(G4VPhysicalVolume*);
- void CleanSource();
+  void CleanSource();
+
 private:
   BrachyDetectorConstructionI* pIodio;
- 
-
 };
 #endif

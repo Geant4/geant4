@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstruction.hh,v 1.13 2002-11-18 15:18:35 guatelli Exp $
+// $Id: BrachyDetectorConstruction.hh,v 1.14 2003-05-09 16:52:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 //    ****************************************
@@ -53,110 +53,70 @@ class BrachyPhantomSD;
 class BrachyPhantomROGeometry;
 class G4VPhysicalVolume;
 class BrachyMaterial;
-class BrachyFactoryIr;
-class BrachyFactoryI;
-class BrachyFactoryLeipzig;
+class BrachyFactory;
 class BrachyVoxelParameterisation;
+
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    BrachyDetectorConstruction(G4String&);
-    ~BrachyDetectorConstruction();
 
+  BrachyDetectorConstruction(G4String&);
+  ~BrachyDetectorConstruction();
 
-private:
-G4int* pVoxel;
-G4double m_BoxDimX;
-G4double m_BoxDimY;
-G4double m_BoxDimZ;
-G4int NumVoxelX;
-G4int NumVoxelZ;
-G4double dimVoxel;
-G4String m_SDName;
-G4int detectorChoice;
-G4double ExpHall_x ;
-G4double ExpHall_y ;
-G4double ExpHall_z ;
+  G4VPhysicalVolume*   Construct();  
 
+  void PrintDetectorParameters(); 
+  void SetAbsorberMaterial(G4String);
 
-BrachyPhantomSD* pPhantomSD;
-BrachyPhantomROGeometry*   pPhantomROGeometry;
+  const G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;}
+  const G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;}
+  const G4int   GetNumVoxelX()  {return NumVoxelX;}
+  const G4int   GetNumVoxelZ()  {return NumVoxelZ;}
+  const G4double GetDimX()      {return m_BoxDimX;}
+  const G4double GetBoxDim_Z()  {return  m_BoxDimZ;}
 
+  void SelectDetector(G4String val);
+  void SwitchDetector();
 
-BrachyFactoryLeipzig* factoryLeipzig;
-BrachyFactoryI* factoryI;
-BrachyFactoryIr* factoryIr;
-BrachyMaterial* pMat;
-
-
-public:
-void PrintDetectorParameters(); 
-void SetAbsorberMaterial(G4String);
-
-const   G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;};//num voxel
-const   G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;};
-const   G4int   GetNumVoxelX(){return NumVoxelX;};
-const   G4int   GetNumVoxelZ(){return NumVoxelZ;};
-const   G4double GetDimX(){return m_BoxDimX;};
-
-const   G4double GetBoxDim_Z() {return  m_BoxDimZ;};
-
-void SwitchDetector();
+  void ConstructPhantom();
+  void ConstructSensitiveDetector();
+  void ComputeDimVoxel() { dimVoxel=m_BoxDimX/NumVoxelX; }
 
 private:
 
-BrachyDetectorMessenger* detectorMessenger; 
+  G4int* pVoxel;
+  G4double m_BoxDimX;
+  G4double m_BoxDimY;
+  G4double m_BoxDimZ;
+  G4int NumVoxelX;
+  G4int NumVoxelZ;
+  G4double dimVoxel;
+  G4String m_SDName;
+  G4int detectorChoice;
+  G4double ExpHall_x ;
+  G4double ExpHall_y ;
+  G4double ExpHall_z ;
 
-G4Box*             ExpHall;    //pointer to the solid World 
-G4LogicalVolume*   ExpHallLog;    //pointer to the logical World
-G4VPhysicalVolume* ExpHallPhys;    //pointer to the physical World
+  BrachyPhantomSD* pPhantomSD;
+  BrachyPhantomROGeometry*   pPhantomROGeometry;
 
-G4Box*             solidVoxel;  
-G4LogicalVolume*   logicVoxel;  
-G4VPhysicalVolume* physiVoxel;  
+  BrachyFactory* factory;
 
-
-G4Box*              Phantom;
-G4LogicalVolume*    PhantomLog;
-G4VPhysicalVolume*   PhantomPhys;
-G4Box* Voxel;
-G4LogicalVolume*  VoxelLog;
-G4VPhysicalVolume* VoxelPhys;
-
-
-G4Material*            AbsorberMaterial;
-
-
-void  ConstructPhantom();
-void ConstructSensitiveDetector();
+  BrachyMaterial* pMat;
 
 private:
-G4VPhysicalVolume*   Construct();  
 
- void ComputeDimVoxel();
+  BrachyDetectorMessenger* detectorMessenger; 
 
+  G4Box*             ExpHall;        //pointer to the solid World 
+  G4LogicalVolume*   ExpHallLog;     //pointer to the logical World
+  G4VPhysicalVolume* ExpHallPhys;    //pointer to the physical World
 
-public:
+  G4Box*              Phantom;
+  G4LogicalVolume*    PhantomLog;
+  G4VPhysicalVolume*  PhantomPhys;
 
- G4VPhysicalVolume* ConstructDetector();
-void SelectDetector(G4String val);
-
-
-
+  G4Material*         AbsorberMaterial;
 };
 
-inline void BrachyDetectorConstruction::ComputeDimVoxel()
-{
-dimVoxel=m_BoxDimX/NumVoxelX; 
-
-}
-
 #endif
-
-
-
-
-
-
-
-

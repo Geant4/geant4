@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactory.hh,v 1.2 2002-11-18 15:18:36 guatelli Exp $
+// $Id: BrachyFactory.hh,v 1.3 2003-05-09 16:52:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -34,37 +34,24 @@
 
 #ifndef BrachyFactory_h
 #define BrachyFactory_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
+class G4VPhysicalVolume;
 class BrachyAnalysisManager;
 
 class BrachyFactory
 {
-public:
-  BrachyFactory();
- virtual ~BrachyFactory();
-  virtual  G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction()=0;
-  virtual void CreateSource(G4VPhysicalVolume*)=0;
-  virtual void CleanSource()=0;
+  public:
+
+    BrachyFactory();
+    virtual ~BrachyFactory();
+
+    virtual G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction()=0;
+    virtual void CreateSource(G4VPhysicalVolume*)=0;
+    virtual void CleanSource()=0;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

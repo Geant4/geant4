@@ -35,9 +35,10 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc,v 1.12 2002-12-12 19:16:19 gunter Exp $
+// $Id: BrachyPrimaryGeneratorAction.cc,v 1.13 2003-05-09 16:52:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "BrachyAnalysisManager.hh"
 #include "G4ParticleTable.hh"
@@ -45,41 +46,20 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4IonTable.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4UImanager.hh"
-#include "globals.hh"
-#include <math.h>
 #include "G4RunManager.hh"
 
 //....
 
 BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
-{
- 
- 
-  ;
-
-}
+{;}
 
 //....
 
 BrachyPrimaryGeneratorAction::~BrachyPrimaryGeneratorAction()
-{
- 
-  ;
-
-}
+{;}
 
 //....
 
 void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  ;
-}
-
-
-
-
-
-
-
+{;}

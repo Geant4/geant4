@@ -36,7 +36,7 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.3 2002-12-12 19:16:18 gunter Exp $
+// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.4 2003-05-09 16:52:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyDetectorConstructionLeipzig.hh"

@@ -29,11 +29,11 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryLeipzig.cc,v 1.2 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyFactoryLeipzig.cc,v 1.3 2003-05-09 16:52:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
+#include "globals.hh"
 #include "BrachyFactoryLeipzig.hh"
 #include"BrachyPrimaryGeneratorActionIr.hh"
 #include "G4ParticleTable.hh"
@@ -41,46 +41,33 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4IonTable.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4UImanager.hh"
-#include "globals.hh"
-#include <math.h>
 #include "G4RunManager.hh" 
-#include"BrachyDetectorMessenger.hh"
-#include"BrachyDetectorConstructionLeipzig.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionLeipzig.hh"
+
 BrachyFactoryLeipzig:: BrachyFactoryLeipzig()
 {
-   pLeipzig=new  BrachyDetectorConstructionLeipzig();
- 
+  pLeipzig=new  BrachyDetectorConstructionLeipzig();
 }
 
 BrachyFactoryLeipzig:: ~BrachyFactoryLeipzig()
 {
   delete pLeipzig;
- 
 }
- 
 
 G4VUserPrimaryGeneratorAction*  BrachyFactoryLeipzig::CreatePrimaryGeneratorAction()
-
-{ 
- 
-   
-  G4VUserPrimaryGeneratorAction*    pIridium =new BrachyPrimaryGeneratorActionIr();
- if(pIridium) return pIridium ;
-
-
+{
+  G4VUserPrimaryGeneratorAction* pIridium =new BrachyPrimaryGeneratorActionIr();
+  return pIridium;
 }
 
 void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
 {
-
   pLeipzig -> ConstructLeipzig(mother);
-
 }
+
 void BrachyFactoryLeipzig::CleanSource()
 {
-
   ;
-
 }

@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.13 2002-11-27 11:11:22 guatelli Exp $
+// $Id: BrachyEventAction.cc,v 1.14 2003-05-09 16:52:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
@@ -79,19 +79,16 @@ BrachyEventAction::BrachyEventAction(G4String &SDName) :
 
 BrachyEventAction::~BrachyEventAction()
 {
- delete pDetector;
- 
+  delete pDetector;
 }
 
 //....
 
-void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
+void BrachyEventAction::BeginOfEventAction(const G4Event*)
 {
-
- G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
- if(m_HitsCollectionID == -1)
- 	m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
-
+  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+  if(m_HitsCollectionID == -1)
+    m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
 }
 
 //....
@@ -169,13 +166,3 @@ if(m_HitsCollectionID < 0)
  
 
 }
-
-
-
-
-
-
-
-
-
-

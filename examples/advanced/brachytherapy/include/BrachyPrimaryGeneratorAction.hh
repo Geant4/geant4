@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorAction.hh,v 1.8 2002-11-18 15:18:36 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorAction.hh,v 1.9 2003-05-09 16:52:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ********************************************
@@ -35,7 +35,6 @@
 #define BrachyPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
 
 class G4ParticleGun;
 class G4Run;
@@ -44,15 +43,11 @@ class BrachyAnalysisManager;
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
-	BrachyPrimaryGeneratorAction();
-       ~BrachyPrimaryGeneratorAction();
+   BrachyPrimaryGeneratorAction();
+   ~BrachyPrimaryGeneratorAction();
 
  public:
-  virtual  void GeneratePrimaries(G4Event* anEvent)=0;
-  
-     
- 
-    
+   virtual  void GeneratePrimaries(G4Event* anEvent)=0; 
 };
 
 #endif

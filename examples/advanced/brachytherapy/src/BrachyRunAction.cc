@@ -36,7 +36,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.10 2002-12-12 19:16:19 gunter Exp $
+// $Id: BrachyRunAction.cc,v 1.11 2003-05-09 16:52:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,7 +71,7 @@ BrachyRunAction::~BrachyRunAction()
   delete pDetector;
   delete pRun;
 }
-void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
+void BrachyRunAction::BeginOfRunAction(const G4Run*)
 { 
 
 #ifdef G4ANALYSIS_USE
