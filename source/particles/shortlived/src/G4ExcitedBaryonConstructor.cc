@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedBaryonConstructor.cc,v 1.3 1999-12-15 14:51:17 gunter Exp $
+// $Id: G4ExcitedBaryonConstructor.cc,v 1.4 2000-02-27 07:48:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,6 +90,7 @@ void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
                  type,    leptonNumber,  baryonNumber, GetEncoding( iIso3,idx),
                 false,             0.0,   NULL
 				    );
+    ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));
     particle->SetDecayTable(CreateDecayTable( name, iIso3, idx, false));
   }
 }
@@ -123,6 +124,8 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 				                   -1*GetEncoding( iIso3,idx),
                 false,         0.0,   NULL
 				    );
+
+    ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));
     particle->SetDecayTable(CreateDecayTable( name, iIso3, idx, true));
   }
    

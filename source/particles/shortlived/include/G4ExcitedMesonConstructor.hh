@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh,v 1.4 1999-12-15 14:51:15 gunter Exp $
+// $Id: G4ExcitedMesonConstructor.hh,v 1.5 2000-02-27 07:48:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,7 +153,7 @@ class G4ExcitedMesonConstructor
 
 
 inline 
- G4String  G4ExcitedMesonConstructor::GetName(G4int iIso3, 
+  G4String G4ExcitedMesonConstructor::GetName(G4int iIso3, 
 					      G4int iState, 
 					      G4int iType)
 {

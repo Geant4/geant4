@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.7 1999-12-15 14:51:17 gunter Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.8 2000-02-27 07:48:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,7 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
   
   
   G4String aName;
-  G4ParticleDefinition* particle;
+  G4ExcitedMesons* particle;
   
   for ( G4int iIso3=(-1)*iIsoSpin[iType]; iIso3<=iIsoSpin[iType]; iIso3+=2) {
     aName= GetName(iIso3, iState, iType);
@@ -118,7 +118,7 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
     // set same encoding for AntiParticle
       particle->SetAntiPDGEncoding(GetEncoding(iIso3, iState, iType));
     }
-
+    particle->SetMultipletName(name[iState][iType]);
     particle->SetDecayTable(CreateDecayTable( aName, iIso3, iState, iType));
   }
 }

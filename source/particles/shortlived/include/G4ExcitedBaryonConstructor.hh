@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedBaryonConstructor.hh,v 1.3 1999-12-15 14:51:15 gunter Exp $
+// $Id: G4ExcitedBaryonConstructor.hh,v 1.4 2000-02-27 07:48:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,7 @@ class G4ExcitedBaryonConstructor
     virtual  G4bool   Exist( G4int ) = 0;
     virtual  G4int    GetQuarkContents(G4int, G4int)=0;
     virtual  G4String GetName(G4int, G4int )=0;
+    virtual  G4String GetMultipletName(G4int)=0;
     virtual  G4double GetMass( G4int )=0;
     virtual  G4double GetWidth( G4int )=0;
     virtual  G4int    GetiSpin( G4int )=0;
