@@ -8,6 +8,7 @@ export G4DEBUG=$1
 echo ">>>>>>>"
 echo ">>>>>>> Now building $1 <<<<<<<"
 echo ">>>>>>>"
+ rm ./$1
  gmake clean
  gmake
 echo ">>>>>>>"
