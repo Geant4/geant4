@@ -1,0 +1,270 @@
+
+*************************************************************
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+Electromagnetic Physics
+Hadronic Physics
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+ElectroNuclear Physics
+G4VisManager::Enable: WARNING: visualization remains disabled for
+  above reasons.  Rectifying with valid vis commands will
+  automatically enable.
+/run/verbose 1
+/event/verbose 0
+/control/suppressAbortion 1
+/random/resetEngineFrom seeds.rndm
+RandomNumberEngineStatus restored from file: ./seeds.rndm
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1142663738, 733398258
+----------------------------------------
+/gps/particle proton
+/gps/energy 1 GeV
+/gps/type Surface
+ Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!
+/gps/shape Sphere
+ Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!
+/gps/radius 1499. mm
+ Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!
+/gps/centre 0. 0. 0. mm
+ Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!
+/gps/angtype cos
+ Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!
+/run/beamOn 100
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.01
+G4AugerData for Element no. 6 are loaded
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 12 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 22 are loaded
+G4AugerData for Element no. 23 are loaded
+G4AugerData for Element no. 26 are loaded
+G4AugerData for Element no. 42 are loaded
+G4AugerData for Element no. 78 are loaded
+G4AugerData for Element no. 79 are loaded
+AugerTransitionTable complete
+
+LowEnergyIoni:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parametrised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyBremsstrahlung.
+
+LowEnBrem:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parameterised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyIonisation.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : vacuum
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Al6061
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 9.61286 keV    e- 1.02044 MeV    e+ 981.911 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : AlHoneycomb
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 1.47519 keV    e- 73.0604 keV    e+ 71.6677 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : CFRP
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.81634 keV    e- 764.561 keV    e+ 735.691 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : MLImat
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.95385 keV    e- 694.417 keV    e+ 668.195 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : foam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 250 eV     e- 85.2216 keV    e+ 84.4054 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Scell
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 17.0843 keV    e- 2.72314 MeV    e+ 2.57036 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : TiAlloy
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 18.105 keV    e- 1.44292 MeV    e+ 1.36196 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : Yes     recalculation needed : No 
+ Material : ULEglass
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 7.83917 keV    e- 909.156 keV    e+ 874.826 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 9     used in the geometry : Yes     recalculation needed : No 
+ Material : SiC
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 9.50746 keV    e- 1.20181 MeV    e+ 1.14535 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : molybdenum
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 64.242 keV    e- 2.83 MeV    e+ 2.62031 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : molybdenum
+ Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    sensor
+
+Index : 12     used in the geometry : Yes     recalculation needed : No 
+ Material : gold
+ Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    sensor
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : vacuum
+ Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    sensor
+
+Index : 14     used in the geometry : Yes     recalculation needed : No 
+ Material : AuPt
+ Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    sensor
+
+Index : 15     used in the geometry : Yes     recalculation needed : No 
+ Material : SHAPAL-M
+ Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    sensor
+
+====================================================================
+
+### Run 0 start.
+Start Run processing.
+
+---> Begin of event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.34s Real=0.4s Sys=0s
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
