@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2001-03-15 12:46:51 johna Exp $
+$Id: History,v 1.110 2001-04-02 10:08:43 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd April 2001  John Allison  (vis-V03-00-09)
+- Fixed some warnings from DEC cxx.
 
 15th March 2001  John Allison  (vis-V03-00-08)
 - Changed rotation of phi-replicas in G4PhysicalVolumeModel.cc to

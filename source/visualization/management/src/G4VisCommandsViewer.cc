@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.24 2001-02-23 15:43:28 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.25 2001-04-02 10:08:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -310,12 +310,14 @@ G4VisCommandViewerDolly::~G4VisCommandViewerDolly () {
 }
 
 G4String G4VisCommandViewerDolly::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
   if (command == fpCommandDolly) {
-    return fpCommandDolly->ConvertToString(fDollyIncrement, "m");
+    currentValue = fpCommandDolly->ConvertToString(fDollyIncrement, "m");
   }
   else if (command == fpCommandDollyTo) {
-    return fpCommandDollyTo->ConvertToString(fDollyTo, "m");
+    currentValue = fpCommandDollyTo->ConvertToString(fDollyTo, "m");
   }
+  return currentValue;
 }
 
 void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
@@ -393,13 +395,15 @@ G4VisCommandViewerLights::~G4VisCommandViewerLights () {
 }
 
 G4String G4VisCommandViewerLights::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
   if (command == fpCommandLightsThetaPhi) {
-    return ConvertToString(fLightsVector.theta(),
+    currentValue = ConvertToString(fLightsVector.theta(),
 			   fLightsVector.phi(), "deg");
   }
   else if (command == fpCommandLightsVector) {
-    return ConvertToString(fLightsVector);
+    currentValue = ConvertToString(fLightsVector);
   }
+  return currentValue;
 }
 
 void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
@@ -588,12 +592,14 @@ G4VisCommandViewerPan::~G4VisCommandViewerPan () {
 }
 
 G4String G4VisCommandViewerPan::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
   if (command == fpCommandPan) {
-    return ConvertToString(fPanIncrementRight, fPanIncrementUp, "m");
+    currentValue = ConvertToString(fPanIncrementRight, fPanIncrementUp, "m");
   }
   else if (command == fpCommandPanTo) {
-    return ConvertToString(fPanToRight, fPanToUp, "m");
+    currentValue = ConvertToString(fPanToRight, fPanToUp, "m");
   }
+  return currentValue;
 }
 
 void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
@@ -972,13 +978,15 @@ G4VisCommandViewerViewpoint::~G4VisCommandViewerViewpoint () {
 }
 
 G4String G4VisCommandViewerViewpoint::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
   if (command == fpCommandViewpointThetaPhi) {
-    return ConvertToString(fViewpointVector.theta(),
+    currentValue = ConvertToString(fViewpointVector.theta(),
 			   fViewpointVector.phi(), "deg");
   }
   else if (command == fpCommandViewpointVector) {
-    return ConvertToString(fViewpointVector);
+    currentValue = ConvertToString(fViewpointVector);
   }
+  return currentValue;
 }
 
 void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
@@ -1052,12 +1060,14 @@ G4VisCommandViewerZoom::~G4VisCommandViewerZoom () {
 }
 
 G4String G4VisCommandViewerZoom::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
   if (command == fpCommandZoom) {
-    return fpCommandZoom->ConvertToString(fZoomMultiplier);
+    currentValue = fpCommandZoom->ConvertToString(fZoomMultiplier);
   }
   else if (command == fpCommandZoomTo) {
-    return fpCommandZoomTo->ConvertToString(fZoomTo);
+    currentValue = fpCommandZoomTo->ConvertToString(fZoomTo);
   }
+  return currentValue;
 }
 
 void G4VisCommandViewerZoom::SetNewValue (G4UIcommand* command,
