@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.35 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VisManager.hh,v 1.36 2005-03-03 16:24:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -313,7 +313,7 @@ public: // With description
   static G4String VerbosityString(Verbosity);
   // Converts the verbosity into a string for suitable for printing.
   
-  static G4String VerbosityGuidanceString;
+  static std::vector<G4String> VerbosityGuidanceStrings;
   // Guidance on the use of visualization verbosity.
 
 protected:
