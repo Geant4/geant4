@@ -357,8 +357,6 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   }
   if (all_tables_are_built) return;
 
-  Initialise(aParticle);
-
   for (G4int i=0; i<n_loss; i++) {
     if ( aParticle == part_vector[i] ) {
       G4VEnergyLossSTD* em = loss_vector[i];

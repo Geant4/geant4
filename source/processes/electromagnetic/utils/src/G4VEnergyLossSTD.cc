@@ -949,7 +949,8 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	        const G4String& directory,
 			  	              G4bool ascii)
 {
-  Initialise();
+  currentCouple = 0;
+  preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
@@ -965,7 +966,9 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
      return res;
   }
 
+  if( !particle ) particle = part;
   if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+  Initialise();
 
   G4bool yes = true;
   if ( !baseParticle ) {
