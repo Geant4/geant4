@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.hh,v 1.5 1999-08-03 09:51:57 graignac Exp $
+// $Id: G4DrawVoxels.hh,v 1.6 1999-08-03 10:42:41 graignac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,8 @@ class G4DrawVoxels{
     ~G4DrawVoxels(){};
     //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
     
-    void DrawVoxels(const G4LogicalVolume* lv);
-    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*);
+    void DrawVoxels(const G4LogicalVolume* lv) const;
+    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*) const;
 
     void SetVoxelsVisAttributes(G4VisAttributes&,G4VisAttributes&,G4VisAttributes&);
     void SetBoundingBoxVisAttributes(G4VisAttributes&);
@@ -61,9 +61,9 @@ class G4DrawVoxels{
     G4VisAttributes fVoxelsVisAttributes[3];
     G4VisAttributes fBoundingBoxVisAttributes;
     
-    void ComputeVoxelPolyhedra(const G4LogicalVolume*,const G4SmartVoxelHeader*,G4VoxelLimits&,G4PlacedPolyhedronList*);
+    void ComputeVoxelPolyhedra(const G4LogicalVolume*,const G4SmartVoxelHeader*,G4VoxelLimits&,G4PlacedPolyhedronList*) const;
     
-    G4AffineTransform GetAbsoluteTransformation(const G4VPhysicalVolume*);
+    G4AffineTransform GetAbsoluteTransformation(const G4VPhysicalVolume*) const;
     
     //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
     G4DrawVoxels(const G4DrawVoxels&);	
