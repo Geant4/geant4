@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.hh,v 1.1 2003-01-15 09:11:44 pandola Exp $
+// $Id: G4PenelopePhotoElectric.hh,v 1.2 2003-02-23 23:42:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -55,7 +55,7 @@ class G4PenelopePhotoElectric : public G4VDiscreteProcess {
   
 public:
   
-  G4PenelopePhotoElectric(const G4String& processName ="LowEnPhotoElec");
+  G4PenelopePhotoElectric(const G4String& processName ="PenPhotoElec");
   
   ~G4PenelopePhotoElectric();
 

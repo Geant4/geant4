@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4PenelopeCompton.hh,v 1.3 2003-02-22 18:06:03 pia Exp $
+// $Id: G4PenelopeCompton.hh,v 1.4 2003-02-23 23:42:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -57,7 +57,7 @@ class G4PenelopeCompton : public G4VDiscreteProcess {
 
 public:
   
-  G4PenelopeCompton(const G4String& processName ="LowEnCompton");
+  G4PenelopeCompton(const G4String& processName ="PenCompton");
   
   ~G4PenelopeCompton();
 
