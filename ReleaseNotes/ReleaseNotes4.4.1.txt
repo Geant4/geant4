@@ -300,14 +300,17 @@ By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
 if the compiler is capable. You need to explicitly disable CLHEP settings in
 case you wish non-ISO/ANSI setup on specific compilers.
 
-Geant4 4.1 coworks with ANAPHE 4.0.4 and components included therein:
-  Objectivity 6.1.3
-  HepODBMS 0.3.3.1
-  CLHEP 1.7.5.0
-  AIDA 2.2
-
-For more information about ANAPHE, see:
-  <A href="http://cern.ch/anaphe">ANAPHE</A>
+Geant4 4.1 examples with histogramming cowork with AIDA 2.2 implementations.
+These include:
+- ANAPHE 4.0.4 and components included therein:
+    Objectivity 6.1.3
+    HepODBMS 0.3.3.1
+    CLHEP 1.7.5.0
+  (see: <A href="http://cern.ch/anaphe">ANAPHE</A>)
+- JAS 2.2.5 
+  (see: <A href="http://jas.freehep.org">JAS</A>)
+- Open Scientist v8
+  (see: <A href="http://www.lal.in2p3.fr/OpenScientist/v8/welcome.html">Open Scientist</A>)
 
 AIDA headers can be downloaded from:
   <A href="http://aida.freehep.org">AIDA</A>
@@ -346,7 +349,7 @@ NOTES:
       initialisation of static data in memory or to bugs in the system
       iostream classes, problems which apparently have all been solved in
       more recent versions of the compiler (3.X series).
-      For seek of knowledge, gcc-2.96 is a compiler that has never been
+      For information, gcc-2.96 is a compiler that has never been
       officially released, nor supported by the GNU team itself and is not
       considered reliable by the authors (for more information, see also
       http://gcc.gnu.org/gcc-2.96.html).
