@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.22 2004-11-17 10:11:25 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.23 2005-03-14 18:35:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 01-03-04 L.Urban signature changed in SampleCosineTheta 
 // 23-04-04 L.urban signature of SampleCosineTheta changed back 
 // 17-11-04 Add method CrossSectionPerAtom (V.Ivanchenko)
+// 14-03-05 Reduce number of pure virtual methods and make inline part separate (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -78,78 +79,92 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
 
-  virtual G4double HighEnergyLimit(const G4ParticleDefinition*) = 0;
+  virtual G4double HighEnergyLimit(const G4ParticleDefinition*);
 
-  virtual G4double LowEnergyLimit(const G4ParticleDefinition*) = 0;
+  virtual G4double LowEnergyLimit(const G4ParticleDefinition*);
 
-  virtual void SetHighEnergyLimit(G4double) = 0;
+  virtual void SetHighEnergyLimit(G4double);
 
-  virtual void SetLowEnergyLimit(G4double) = 0;
+  virtual void SetLowEnergyLimit(G4double);
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-                                const G4MaterialCutsCouple*) = 0;
+                                const G4MaterialCutsCouple*);
 
   virtual G4bool IsInCharge(const G4ParticleDefinition*) = 0;
+
+  virtual G4double ComputeDEDXPerVolume(
+                               const G4Material*,
+			       const G4ParticleDefinition*,
+                                     G4double kineticEnergy,
+                                     G4double cutEnergy = DBL_MAX);
 
   virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
                                const G4ParticleDefinition*,
                                      G4double kineticEnergy,
-                                     G4double cutEnergy) = 0;
+                                     G4double cutEnergy = DBL_MAX);
+
+  virtual G4double CrossSectionPerVolume(
+                               const G4Material*,
+			       const G4ParticleDefinition*,
+                                     G4double kineticEnergy,
+			             G4double cutEnergy = 0.0,
+                                     G4double maxEnergy = DBL_MAX);
 
   virtual G4double CrossSection(const G4MaterialCutsCouple*,
                                 const G4ParticleDefinition*,
                                       G4double kineticEnergy,
-                                      G4double cutEnergy,
-                                      G4double maxEnergy) = 0;
+                                      G4double cutEnergy = 0.0,
+                                      G4double maxEnergy = DBL_MAX);
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double&, G4double&, G4double&, G4double)
-                                      {return 0.0;};
+                                      G4double& kinEnergy, 
+                                      G4double& Z, 
+                                      G4double& A, 
+                                      G4double  cut = 0.0);
 
   virtual G4DynamicParticle* SampleSecondary(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax) = 0;
+                                      G4double tmin = 0.0,
+                                      G4double tmax = DBL_MAX) = 0;
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax) = 0;
+                                      G4double tmin = 0.0,
+                                      G4double tmax = DBL_MAX) = 0;
 
-  virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle) = 0;
+  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
-  const G4String& GetName() const {return name;};
+  const G4String& GetName() const;
 
   // Methods for msc simulation
-  virtual G4double GeomPathLength(G4PhysicsTable*,
+  virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
                             const G4MaterialCutsCouple*,
 		            const G4ParticleDefinition*,
-		                  G4double&,
-			          G4double,
-			          G4double,
-    			          G4double truePathLength) {return truePathLength;};
-  // G4double parameters: kinEnergy, lambda, range,
-  // G4PhysicsTable: theLambdaTable
+		                  G4double& kinEnergy,
+			          G4double  lambda,
+			          G4double  range,
+    			          G4double  truePathLength);
 
-  virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
+  virtual G4double TrueStepLength(G4double geomStepLength);
 
-  virtual G4double SampleCosineTheta(G4double,G4double ) {return 1.0;};
-  //  trueStepLength + Tkin    
+  virtual G4double SampleCosineTheta(G4double trueStepLength,
+                                     G4double kinEnergy);
 
-  virtual G4double SampleDisplacement() {return 0.0;};
+  virtual G4double SampleDisplacement();
 
-  virtual void DefineForRegion(const G4Region*) {};
+  virtual void DefineForRegion(const G4Region*);
 
-  virtual void SetDynamicParticle(const G4DynamicParticle*) {};
+  virtual void SetDynamicParticle(const G4DynamicParticle*);
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
     				            G4double kineticEnergy) = 0;
+
+  virtual void SetDeexcitation(G4bool fluo, G4bool auger);
 
 private:
 
@@ -158,7 +173,129 @@ private:
   G4VEmModel(const  G4VEmModel&);
 
   const G4String  name;
+  G4double        lowLimit;
+  G4double        highLimit;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmModel::HighEnergyLimit(const G4ParticleDefinition*)
+{
+  return highLimit;
+}
+
+inline G4double G4VEmModel::LowEnergyLimit(const G4ParticleDefinition*)
+{
+  return lowLimit;
+}
+
+inline void G4VEmModel::SetHighEnergyLimit(G4double val)
+{
+  highLimit = val;
+}
+
+inline void G4VEmModel::SetLowEnergyLimit(G4double val)
+{
+  lowLimit = val;
+}
+
+inline G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
+                                         const G4MaterialCutsCouple*)
+{
+  return 0.0;
+}
+
+inline G4double G4VEmModel::ComputeDEDXPerVolume(
+                                        const G4Material*,
+					const G4ParticleDefinition*,
+                                              G4double,
+                                              G4double)
+{
+  return 0.0;
+}
+
+inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
+                                        const G4ParticleDefinition* p,
+                                              G4double kinEnergy,
+                                              G4double cutEnergy)
+{
+  return ComputeDEDXPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy);
+}
+
+inline G4double G4VEmModel::CrossSectionPerVolume(
+                                        const G4Material*,
+					const G4ParticleDefinition*,
+					      G4double,
+					      G4double,
+                                              G4double)
+{
+  return 0.0;
+}
+
+inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
+                                         const G4ParticleDefinition* p,
+                                               G4double kinEnergy,
+                                               G4double cutEnergy,
+                                               G4double maxEnergy)
+{
+  return CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
+}
+
+inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
+                                const G4ParticleDefinition*,
+                                      G4double&, G4double&, G4double&, G4double)
+{
+  return 0.0;
+}
+
+inline G4double G4VEmModel::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
+{
+  return MaxSecondaryEnergy(dynParticle->GetDefinition(), dynParticle->GetKineticEnergy());
+}
+
+inline const G4String& G4VEmModel::GetName() const 
+{
+  return name;
+}
+
+inline void G4VEmModel::SetDeexcitation(G4bool, G4bool)
+{}
+
+// Methods for msc simulation
+inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
+                                const G4MaterialCutsCouple*,
+	  	                const G4ParticleDefinition*,
+		                      G4double&,
+			              G4double,
+			              G4double,
+    			              G4double truePathLength) 
+{
+  return truePathLength;
+}
+
+inline G4double G4VEmModel::TrueStepLength(G4double geomStepLength) 
+{
+  return geomStepLength;
+};
+
+inline G4double G4VEmModel::SampleCosineTheta(G4double,G4double ) 
+{
+  return 1.0;
+}
+
+inline G4double G4VEmModel::SampleDisplacement() 
+{
+  return 0.0;
+}
+
+inline void G4VEmModel::DefineForRegion(const G4Region*) 
+{}
+
+inline void G4VEmModel::SetDynamicParticle(const G4DynamicParticle*) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 
