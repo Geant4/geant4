@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.16 2003-02-21 16:53:15 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.17 2003-02-28 07:58:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -754,7 +754,6 @@ int main(int argc,char** argv)
     G4cout << "Average energy deposition(MeV)= "
            << x/MeV << " +- " << y/MeV << G4endl;
 
- 
     timer->Stop();
     G4cout << "  "  << *timer << G4endl;
     delete timer;
