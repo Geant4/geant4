@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8RunAction.cc,v 1.1 2000-01-07 14:50:46 grichine Exp $
+// $Id: Em8RunAction.cc,v 1.2 2000-02-09 10:49:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -402,8 +402,11 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   }
   if(nbinEn > 0)
   {
-    ofstream fileOut("PAIdistribution.out", ios::out ) ;
+    ofstream fileOut("distribution.out", ios::out ) ;
     fileOut.setf( ios::scientific, ios::floatfield );
+
+    ofstream normOut("normDist.out", ios::out ) ;
+    normOut.setf( ios::scientific, ios::floatfield );
 
     G4double E , dnorm, norm,fmax,Emp,width ;
     Emp=-999.999 ;
@@ -413,7 +416,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
     if( entryEn>0.)
     {
       E = Enlow - dEn ;
-      norm = TotNbofEvents*dEn ;
+      norm = TotNbofEvents*1.0 ;   // *dEn ;
       G4cout << " bin nb      Elow      entries     normalized " << endl ;
       fmax = 0. ;
 
@@ -432,7 +435,8 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
                   setw(12) << distEn[ien] <<
                   setw(12) << dnorm << endl ;
 
-        fileOut << E/keV << "\t"<< distEn[ien] << "\t" << dnorm << endl ;
+        fileOut << E/keV << "\t"<< distEn[ien] << endl ;
+        normOut << E/keV << "\t"<< dnorm << endl ;
       }
       G4cout << endl;
       G4int ii ;

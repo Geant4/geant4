@@ -5,18 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8DetectorConstruction.cc,v 1.1 2000-01-07 14:50:44 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.2 2000-02-09 10:49:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Em8DetectorConstruction.hh"
 #include "Em8DetectorMessenger.hh"
 
 #include "Em8CalorimeterSD.hh"
+#include "Em8XrayTRmodel.hh"
+#include "Em8IrregularXrayTRmodel.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -30,7 +29,9 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////
+//
+//
 
 Em8DetectorConstruction::Em8DetectorConstruction()
 :solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
@@ -39,22 +40,28 @@ Em8DetectorConstruction::Em8DetectorConstruction()
  magField(NULL),calorimeterSD(NULL),worldchanged(false)
 {
   // default parameter values of the calorimeter
-  WorldSizeZ = 8.*cm;
-  WorldSizeR = 2.*cm;
 
-  AbsorberThickness = 10.0*mm;
-  AbsorberRadius   = 1.*cm;
-  zAbsorber = 2.*cm ;
+  G4double inch = 2.54*cm ;
+  G4double mil = inch/1000.0 ;
 
-  fRadThickness = 20*micrometer ;
-  fGasGap       = 500*micrometer  ; 
-  fFoilNumber   = 200 ;
+  WorldSizeZ = 30.*cm;
+  WorldSizeR = 20.*cm;
 
-  fDetThickness = 20.0*mm ;
+  AbsorberThickness = 15.0*mm;
+  AbsorberRadius   = 10.*cm;
+  zAbsorber = 12.*cm ;
+
+  fRadThickness = 0.5*mil ;   //20*micrometer ;
+  fGasGap       = 30*mil ;    // 500*micrometer  ; 
+  fFoilNumber   = 100 ;
+
+  fDetThickness = 15.0*mm ;
   fDetLength    = 200.0*cm  ;
   fDetGap       = 1.0*mm ;
+
   fStartR       = 40*cm  ;
-  fStartZ       = 2.0*cm  ;
+  fStartZ       = 10.0*mm  ;
+
   fModuleNumber = 1      ;  
 
   // create commands for interactive definition of the calorimeter  
@@ -173,7 +180,7 @@ H2O->AddElement(elO, natoms=1);
   C2H2->AddElement(elH,2);
   C2H2->AddElement(elC,1);
 
-  // Kapton (polyimide)
+  // Kapton (polyimide) ??? since = Mylar C5H4O2
 
   density = 1.39*g/cm3;
   G4Material* Kapton = new G4Material(name="Kapton", density, nel=3);
@@ -195,32 +202,6 @@ H2O->AddElement(elO, natoms=1);
   CO2->AddElement(elC,1);
   CO2->AddElement(elO,2);
 
-  G4double TRT_Xe_density = 5.485*mg/cm3;
-  G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
-				      kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_Xe->AddElement(elXe,1);
-
-  G4double TRT_CO2_density = 1.842*mg/cm3;
-  G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
-				       kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_CO2->AddElement(elC,1);
-  TRT_CO2->AddElement(elO,2);
-
-  G4double TRT_CF4_density = 3.9*mg/cm3;
-  G4Material* TRT_CF4 = new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
-                                       kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_CF4->AddElement(elC,1);
-  TRT_CF4->AddElement(elF,4);
-
-  // ATLAS TRT straw tube gas mixture (20 C, 1 atm)
-
-  G4double XeCO2CF4_density = 4.76*mg/cm3;
-  G4Material* XeCO2CF4 = new G4Material(name="XeCO2CF4", XeCO2CF4_density,
-					ncomponents=3,
-					kStateGas,293.15*kelvin,1.*atmosphere);
-  XeCO2CF4->AddMaterial(TRT_Xe,0.807);
-  XeCO2CF4->AddMaterial(TRT_CO2,0.039);
-  XeCO2CF4->AddMaterial(TRT_CF4,0.154);
 
   // TRT_CH2
       
@@ -260,13 +241,28 @@ H2O->AddElement(elO, natoms=1);
 
 ************************ */
 
+  // Mylar
+
+  density = 1.39*g/cm3;
+  G4Material* Mylar = new G4Material(name="Mylar", density, nel=3);
+  Mylar->AddElement(elO,2);
+  Mylar->AddElement(elC,5);
+  Mylar->AddElement(elH,4);
+
+
+  // Metane, STP
+
+  density = 0.7174*mg/cm3 ;
+  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
+  metane->AddElement(elC,1) ;
+  metane->AddElement(elH,4) ;
+
+
   // Dry air (average composition)
 
   density = 1.7836*mg/cm3 ;       // STP
   G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
   Argon->AddElement(elAr, 1);
-
-  /* *********************
 
   density = 1.25053*mg/cm3 ;       // STP
   G4Material* Nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
@@ -283,7 +279,43 @@ H2O->AddElement(elO, natoms=1);
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
 
-  *********************************** */
+  // 93% Ar + 7% CH4, STP
+
+  density = 1.709*mg/cm3 ;      
+  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density, 
+                                                             ncomponents=2);
+  Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
+  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
+
+  /* **************
+
+  G4double TRT_Xe_density = 5.485*mg/cm3;
+  G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
+				      kStateGas,293.15*kelvin,1.*atmosphere);
+  TRT_Xe->AddElement(elXe,1);
+
+  G4double TRT_CO2_density = 1.842*mg/cm3;
+  G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
+				       kStateGas,293.15*kelvin,1.*atmosphere);
+  TRT_CO2->AddElement(elC,1);
+  TRT_CO2->AddElement(elO,2);
+
+  G4double TRT_CF4_density = 3.9*mg/cm3;
+  G4Material* TRT_CF4 = new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
+                                       kStateGas,293.15*kelvin,1.*atmosphere);
+  TRT_CF4->AddElement(elC,1);
+  TRT_CF4->AddElement(elF,4);
+
+  // ATLAS TRT straw tube gas mixture (20 C, 1 atm)
+
+  G4double XeCO2CF4_density = 4.76*mg/cm3;
+  G4Material* XeCO2CF4 = new G4Material(name="XeCO2CF4", XeCO2CF4_density,
+					ncomponents=3,
+					kStateGas,293.15*kelvin,1.*atmosphere);
+  XeCO2CF4->AddMaterial(TRT_Xe,0.807);
+  XeCO2CF4->AddMaterial(TRT_CO2,0.039);
+  XeCO2CF4->AddMaterial(TRT_CF4,0.154);
+
 
   // Xenon as detector gas, STP
 
@@ -291,7 +323,6 @@ H2O->AddElement(elO, natoms=1);
   a = 131.29*g/mole ;
   G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
 
-  /* **************
 
   density = 1.977*mg/cm3;
   G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2);
@@ -316,12 +347,11 @@ H2O->AddElement(elO, natoms=1);
 
   G4cout << *(G4Material::GetMaterialTable()) << endl;
 
-  //default materials of the calorimeter
+  //default materials of the calorimeter and TR radiator
 
-  //  fRadiatorMat = CH2 ;
-
-  AbsorberMaterial = Xe ; // Xe_80CO2_20 ; // Argon ;    // Ar_80CO2_20 ;
-  WorldMaterial  = Argon ;
+  fRadiatorMat = Mylar ;
+  AbsorberMaterial = Ar7CH4 ;   // XeCO2CF4  ; 
+  WorldMaterial    = Air ;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -359,39 +389,63 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
                                  false,			//no boolean operation
                                  0);			//copy number
 
-  /* *******************************************************************
+  // TR radiator envelope
 
-    fSolidRadSlice = new G4Tubs("RadSlice",0.0,  //  fStartR,fWorldRadius
+  G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap   ;
+
+  G4double zRad = fStartZ + 0.5*radThick ;
+  G4cout<<"zRad = "<<zRad/mm<<" mm"<<endl ;
+
+  radThick *= 1.2 ;
+  G4cout<<"radThick = "<<radThick/mm<<" mm"<<endl ;
+
+  G4Tubs* solidRadiator = new G4Tubs("Radiator", 0.0, 1.1*AbsorberRadius, 
+                                      0.5*radThick, 0.0, twopi  ) ; 
+                         
+  G4LogicalVolume* logicRadiator = new G4LogicalVolume(solidRadiator,	
+                                                       WorldMaterial,      
+                                                       "Radiator");	       
+                                   
+  G4VPhysicalVolume* physiRadiator = new G4PVPlacement(0,
+                                     G4ThreeVector(0,0,zRad),	        
+                                     "Radiator", logicRadiator,		
+                                     physiWorld, false,	0       );  	
+
+  
+
+    fSolidRadSlice = new G4Tubs("RadSlice",0.0,
                                 AbsorberRadius,0.5*fRadThickness,0.0,360*deg);
 
     fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
                                           "RadSlice",0,0,0);
 
-    fPhysicRadSlice = new G4PVPlacement(0,
-                       G4ThreeVector(0.,0.,fStartZ+1.2*fDetThickness),
-                                         "RadSlice",fLogicRadSlice,
-                                          physiWorld,false,0);
+    //   fPhysicRadSlice = new G4PVPlacement(0,
+    //      G4ThreeVector(0.,0.,fStartZ+1.2*fDetThickness),
+    //             "RadSlice",fLogicRadSlice,
+    //               physiWorld,false,0);
     
-  for(i=1;i<=fModuleNumber;i++)
+  for(i=0;i<fModuleNumber;i++)
   {
     //   rModule = fStartR + fDetThickness + fDetGap + 
     //           (i-1)*(fFoilNumber*(fRadThickness + fGasGap) + 
     //           fDetThickness + fDetGap) ;
 
-    zModule = fStartZ + fDetThickness + fDetGap + 
-                 (i-1)*(fFoilNumber*(fRadThickness + fGasGap) + 
-                 fDetThickness + fDetGap) ;
+    zModule = fStartZ + fRadThickness + 
+              i*( fFoilNumber*(fRadThickness + fGasGap) + 
+              fDetThickness + fDetGap )  ;
+    G4cout<<"zModule = "<<zModule/mm<<" mm"<<endl ;
+    G4cout<<"i = "<<i<<"\t"<<endl ; 
 
-
-    for(j=1;j<=fFoilNumber;j++)
+    for(j=0;j<fFoilNumber;j++)
     {  
       //   rRadiator = rModule + j*(fRadThickness + fGasGap) ;
 
       zRadiator = zModule + j*(fRadThickness + fGasGap) ;
-           
+      G4cout<<zRadiator/mm<<" mm"<<"\t" ;
+      //   G4cout<<"j = "<<j<<"\t" ;         
       // RadRing
 
-      
+            
       // fSolidRadRing = new G4Tubs("RadRing",rRadiator,
       //        rRadiator + fRadThickness,
       //     fDetLength,0.0,360*deg     ) ;
@@ -403,20 +457,18 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
       //       "RadRing",fLogicRadRing,
       //               physiWorld,false,j)  ; 
                                                             
-      // Slice
+      // We put slice relatively of Radiator, so zRadiator-zRad
       
-      fPhysicRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0.,zRadiator),
+      fPhysicRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0.,zRadiator-zRad),
                                          "RadSlice",fLogicRadSlice,
-                                          physiWorld,false,j);
+                                          physiRadiator,false,j);
      }                                 
     //   fPhysicDetSlice = new G4PVPlacement(0,
     //          G4ThreeVector(0.,0.,zRadiator+
     //                        fDetGap +0.5*fDetThickness),"DetSlice",
     //                        fLogicDetSlice,physiWorld,false,i); 
   }                                            
-
-  ****************************************** */
-                               
+  G4cout<<endl ;                             
   // Absorber
 
   if (AbsorberThickness > 0.) 
@@ -453,8 +505,18 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
   }
   if (logicAbsorber)  logicAbsorber->SetSensitiveDetector(calorimeterSD);
 
-  //always return the physical World
+  // Parameterisation
+
+  Em8XrayTRmodel* pTRModel = new Em8IrregularXrayTRmodel(logicRadiator,
+                                                         fRadThickness,fGasGap);
+
+  //  pTRModel->GetPlateZmuProduct() ;
+  //  pTRModel->GetGasZmuProduct() ;
+
+  pTRModel->GetNumberOfPhotons() ;  
   
+  // always return physics world
+
   return physiWorld;
 }
 

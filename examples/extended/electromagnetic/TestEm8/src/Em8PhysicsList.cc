@@ -5,10 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PhysicsList.cc,v 1.1 2000-01-07 14:50:45 grichine Exp $
+// $Id: Em8PhysicsList.cc,v 1.2 2000-02-09 10:49:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
+#include "G4Timer.hh"
    
 #include "Em8PhysicsList.hh"
 #include "Em8DetectorConstruction.hh"
@@ -23,9 +24,11 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
-#include "G4Timer.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include <iomanip.h> 
+               
+#include "G4FastSimulationManagerProcess.hh"
+
 
 /////////////////////////////////////////////////////////////
 //
@@ -134,6 +137,8 @@ void Em8PhysicsList::ConstructBarions()
 void Em8PhysicsList::ConstructProcess()
 {
   AddTransportation();
+  AddParameterisation();
+
   ConstructEM();
   ConstructGeneral();
 }
@@ -167,6 +172,7 @@ void Em8PhysicsList::ConstructProcess()
 void Em8PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -178,8 +184,8 @@ void Em8PhysicsList::ConstructEM()
       // Construct processes for gamma
 
       thePhotoElectricEffect = new G4PhotoElectricEffect();      
-      theComptonScattering = new G4ComptonScattering();
-      theGammaConversion = new G4GammaConversion();
+      theComptonScattering   = new G4ComptonScattering();
+      theGammaConversion     = new G4GammaConversion();
       
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
@@ -273,11 +279,15 @@ void Em8PhysicsList::ConstructEM()
                || particleName == "kaon-"  
               )
     {
-      //  Em8StepCut* thehadronStepCut = new Em8StepCut();
+        Em8StepCut* thehadronStepCut = new Em8StepCut();
 
       //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
       //   G4MultipleScattering* thehMultipleScattering =
       //                  new G4MultipleScattering() ;
+
+        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
+                                     pDet->GetLogicalAbsorber(),
+                                    "IonisationByLogVolHadr"),-1,2,2);
 
       //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       //  pmanager->AddProcess(thehIonisation,-1,2,2);
@@ -285,8 +295,8 @@ void Em8PhysicsList::ConstructEM()
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
       
-      //  pmanager->AddProcess( thehadronStepCut,-1,-1,3);
-      //  thehadronStepCut->SetMaxStep(MaxChargedStep) ;
+        pmanager->AddProcess( thehadronStepCut,-1,-1,3);
+        thehadronStepCut->SetMaxStep(MaxChargedStep) ;
       // thehadronStepCut->SetMaxStep(10*mm) ;
      
     }
@@ -319,6 +329,28 @@ void Em8PhysicsList::ConstructGeneral()
     }
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+void Em8PhysicsList::AddParameterisation()
+{
+  G4FastSimulationManagerProcess* theFastSimulationManagerProcess = 
+                                  new G4FastSimulationManagerProcess() ;
+  theParticleIterator->reset();
+
+  while( (*theParticleIterator)() )
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value() ;
+    G4ProcessManager* pmanager = particle->GetProcessManager() ;
+
+    // both postStep and alongStep action are required: because
+    // of the use of ghost volumes. If no ghost, the postStep is sufficient.
+
+    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
+  }
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 

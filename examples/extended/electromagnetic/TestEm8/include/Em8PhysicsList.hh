@@ -5,12 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PhysicsList.hh,v 1.1 2000-01-07 14:50:21 grichine Exp $
+// $Id: Em8PhysicsList.hh,v 1.2 2000-02-09 10:48:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Em8PhysicsList_h
 #define Em8PhysicsList_h 1
@@ -42,7 +39,6 @@ class Em8StepCut;
 class Em8DetectorConstruction;
 class Em8PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em8PhysicsList: public G4VUserPhysicsList
 {
@@ -65,7 +61,10 @@ class Em8PhysicsList: public G4VUserPhysicsList
     void ConstructBarions();
 
   protected:
-  // these methods Construct physics processes and register them
+
+    // these methods Construct physics processes and register them
+
+    void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
     
