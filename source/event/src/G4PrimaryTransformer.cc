@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.12 2001-11-20 23:21:41 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.13 2001-11-22 18:53:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
@@ -87,9 +88,10 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4Navigator* navi = 
     G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   G4VSolid* theWorldSolid = navi->GetWorldVolume()->GetLogicalVolume()->GetSolid();
-  if(theWorldSolid->Inside(G4ThreeVector(X0,Y0,Z0))!=kInside)
+  if(theWorldSolid->Inside(G4ThreeVector(X0,Y0,Z0))==kOutside)
   {
-    G4cerr << "Primary vertex " << G4ThreeVector(X0,Y0,Z0)
+    G4cerr << "Primary vertex "
+           << G4BestUnit(G4ThreeVector(X0,Y0,Z0),G4String("Length"))
            << " is outside of the world volume." << G4endl;
     G4Exception("G4PrimaryTransformer::Primary vertex outside of the world");
   }
