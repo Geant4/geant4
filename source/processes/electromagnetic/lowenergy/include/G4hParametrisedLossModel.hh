@@ -72,25 +72,27 @@ public:
 
   G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,
                            const G4Material* material) const;
- 
+
   G4double LowEnergyLimit(const G4ParticleDefinition* aParticle,
                           const G4Material* material) const;
 
   G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const;
- 
+
   G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const;
- 
+
   G4bool IsInCharge(const G4DynamicParticle* particle,
 		    const G4Material* material) const;
 
   G4bool IsInCharge(const G4ParticleDefinition* aParticle,
 		    const G4Material* material) const;
 
+  G4String ModelName() const {return modelName;};
+
 protected:
 
 private:
 
-  // hide  assignment operator 
+  // hide  assignment operator
   G4hParametrisedLossModel(G4hParametrisedLossModel &);
   G4hParametrisedLossModel & operator=(const G4hParametrisedLossModel &right);
 
@@ -108,7 +110,7 @@ private:
   // Pointer to the parametrisation class
   G4VhElectronicStoppingPower* eStopingPowerTable;
 
-  G4double theZieglerFactor; // Factor to convert the Stopping Power 
+  G4double theZieglerFactor; // Factor to convert the Stopping Power
                              // unit [ev/(10^15 atoms/cm^2]
                              // into the Geant4 dE/dx unit
   G4String modelName;

@@ -57,7 +57,7 @@
 #include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
 #include "G4hSRIM2000p.hh"
-//#include "G4hSRIM2003p.hh"
+#include "G4hQAOModel.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
@@ -87,6 +87,7 @@ void G4hParametrisedLossModel::InitializeMe()
   G4String ir49He = G4String("ICRU_R49He") ;
   G4String zi85p  = G4String("Ziegler1985p") ;
   G4String zi00p  = G4String("SRIM2000p") ;
+  G4String qao    = G4String("QAO") ;
   if(zi77p == modelName) {
       eStopingPowerTable = new G4hZiegler1977p();
       highEnergyLimit = 100.0*MeV;
@@ -102,7 +103,7 @@ void G4hParametrisedLossModel::InitializeMe()
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*keV;
 
-  } else if(zi00p == modelName) {
+  } else if(zi00p == modelName ) {
       eStopingPowerTable = new G4hSRIM2000p();
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*keV;
@@ -117,103 +118,97 @@ void G4hParametrisedLossModel::InitializeMe()
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
 
+  } else if(qao == modelName) {
+      eStopingPowerTable = new G4hQAOModel();
+      highEnergyLimit = 2.0*MeV;
+      lowEnergyLimit  = 5.0*keV;
+
   } else {
-    G4cout << 
-    "G4hLowEnergyIonisation warning: There is no table with the modelName <" 
- << modelName << ">" << "for electronic stopping, <ICRU_R49p> is applied" 
- << G4endl; 
-    eStopingPowerTable = new G4hICRU49p();
-    highEnergyLimit = 1.0*MeV;
-    lowEnergyLimit  = 1.0*keV;
-  }  
-  //G4cout << "G4hParametrisedLossModel: the model <" << modelName 
-  //       << "> is accepted" << G4endl;
+      modelName = ir49p;
+      eStopingPowerTable = new G4hICRU49p();
+      highEnergyLimit = 2.0*MeV;
+      lowEnergyLimit  = 1.0*keV;
+      G4cout << "G4hLowEnergyIonisation Warning: default model <"
+             << modelName << ">" << " is used for Electronic Stopping"
+             << G4endl;
+  }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hParametrisedLossModel::~G4hParametrisedLossModel() 
+G4hParametrisedLossModel::~G4hParametrisedLossModel()
 {
   delete eStopingPowerTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hParametrisedLossModel::TheValue(
-					    const G4DynamicParticle* particle,
-					    const G4Material* material) 
+G4double G4hParametrisedLossModel::TheValue(const G4DynamicParticle* particle,
+					    const G4Material* material)
 {
   G4double scaledEnergy = (particle->GetKineticEnergy())
                         * proton_mass_c2/(particle->GetMass());
-
-  G4double eloss = StoppingPower(material,scaledEnergy) * theZieglerFactor; 
+  G4double factor = theZieglerFactor;
+  if (scaledEnergy < lowEnergyLimit) {
+    if (modelName != "QAO") factor = sqrt(scaledEnergy/lowEnergyLimit);
+    scaledEnergy = lowEnergyLimit;
+  }
+  G4double eloss = StoppingPower(material,scaledEnergy) * factor;
 
   return eloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hParametrisedLossModel::TheValue(
-					    const G4ParticleDefinition* aParticle,
+G4double G4hParametrisedLossModel::TheValue(const G4ParticleDefinition* aParticle,
 					    const G4Material* material,
-					    G4double kineticEnergy) 
+					          G4double kineticEnergy)
 {
   G4double scaledEnergy = kineticEnergy
                         * proton_mass_c2/(aParticle->GetPDGMass());
 
-  G4double eloss = StoppingPower(material,scaledEnergy) * theZieglerFactor; 
-
-  // G4cout << "G4hParametrisedLossModel: the model <" << modelName 
-  //       << "> return " << eloss*mm/MeV << G4endl;
+  G4double factor = theZieglerFactor;
+  if (scaledEnergy < lowEnergyLimit) {
+    if (modelName != "QAO") factor = sqrt(scaledEnergy/lowEnergyLimit);
+    scaledEnergy = lowEnergyLimit;
+  }
+  G4double eloss = StoppingPower(material,scaledEnergy) * factor;
 
   return eloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4double G4hParametrisedLossModel::LowEnergyLimit(
-						  const G4ParticleDefinition* ,
+
+G4double G4hParametrisedLossModel::LowEnergyLimit(const G4ParticleDefinition* ,
 						  const G4Material*) const
 {
   return lowEnergyLimit;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4double G4hParametrisedLossModel::HighEnergyLimit(
-						   const G4ParticleDefinition* ,
+
+G4double G4hParametrisedLossModel::HighEnergyLimit(const G4ParticleDefinition* ,
 						   const G4Material*) const
 {
   return highEnergyLimit;
-} 
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4double G4hParametrisedLossModel::LowEnergyLimit(
-						  const G4ParticleDefinition* ) const
+
+G4double G4hParametrisedLossModel::LowEnergyLimit(const G4ParticleDefinition* ) const
 {
   return lowEnergyLimit;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4double G4hParametrisedLossModel::HighEnergyLimit(
-						   const G4ParticleDefinition* ) const
+
+G4double G4hParametrisedLossModel::HighEnergyLimit(const G4ParticleDefinition* ) const
 {
   return highEnergyLimit;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4bool G4hParametrisedLossModel::IsInCharge(
-					    const G4DynamicParticle* ,
-					    const G4Material*) const
-{
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4bool G4hParametrisedLossModel::IsInCharge(
-					    const G4ParticleDefinition* ,
+
+G4bool G4hParametrisedLossModel::IsInCharge(const G4DynamicParticle* ,
 					    const G4Material*) const
 {
   return true;
@@ -221,15 +216,22 @@ G4bool G4hParametrisedLossModel::IsInCharge(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hParametrisedLossModel::StoppingPower(
-						 const G4Material* material,
-						 G4double kineticEnergy) 
+G4bool G4hParametrisedLossModel::IsInCharge(const G4ParticleDefinition* ,
+					    const G4Material*) const
+{
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
+						       G4double kineticEnergy)
 {
   G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
     material->GetAtomicNumDensityVector() ;
-  
+
   // pure material
   if(1 == numberOfElements) {
 
@@ -243,7 +245,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
     eloss = eStopingPowerTable->StoppingPower(material, kineticEnergy)
                                * (material->GetTotNbOfAtomsPerVolume()) ;
     G4int nAtoms = 0;
-     
+
     const G4int* theAtomsVector = material->GetAtomsVector() ;
     for (G4int iel=0; iel<numberOfElements; iel++) {
       nAtoms += theAtomsVector[iel];
@@ -251,13 +253,13 @@ G4double G4hParametrisedLossModel::StoppingPower(
     eloss /= nAtoms;
 
   // Experimental data exist only for kinetic energy 125 keV
-  } else if( MolecIsInZiegler1988(material) ) { 
+  } else if( MolecIsInZiegler1988(material) ) {
 
-  // Cycle over elements - calculation based on Bragg's rule 
+  // Cycle over elements - calculation based on Bragg's rule
     G4double eloss125 = 0.0 ;
     const G4ElementVector* theElementVector =
                            material->GetElementVector() ;
-  
+
     //  loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++) {
       const G4Element* element = (*theElementVector)[i] ;
@@ -266,16 +268,16 @@ G4double G4hParametrisedLossModel::StoppingPower(
                                     * theAtomicNumDensityVector[i] ;
       eloss125 +=(eStopingPowerTable->ElectronicStoppingPower(z,125.0*keV))
                                     * theAtomicNumDensityVector[i] ;
-    }      
+    }
 
     // Chemical factor is taken into account
     eloss *= ChemicalFactor(kineticEnergy, eloss125) ;
- 
+
   // Brugg's rule calculation
   } else {
     const G4ElementVector* theElementVector =
                            material->GetElementVector() ;
-  
+
     //  loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++)
     {
@@ -283,7 +285,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
       G4double z = element->GetZ() ;
       eloss   += (eStopingPowerTable->ElectronicStoppingPower(z,kineticEnergy))
                                    * theAtomicNumDensityVector[i];
-    }      
+    }
   }
   return eloss;
 }
@@ -291,12 +293,12 @@ G4double G4hParametrisedLossModel::StoppingPower(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
-                                 const G4Material* material) 
+                                 const G4Material* material)
 {
   // The list of molecules from
   // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
   // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
-  
+
   G4String myFormula = G4String(" ") ;
   const G4String chFormula = material->GetChemicalFormula() ;
   if (myFormula == chFormula ) return false ;
