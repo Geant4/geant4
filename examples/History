@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2000-03-06 16:29:08 stesting Exp $
+$Id: History,v 1.45 2000-03-09 12:58:34 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th March 2000  John Allison  (examples-V01-00-05)
+- Updated all .out files - novice and extended - for Sun debug NONISO.
+- Included minor fix for NT in TestEm4.cc.
 
 6th March 2000  John Allison  (examples-V01-00-04)
 - testem-V01-00-02 for TestEm1-5.
