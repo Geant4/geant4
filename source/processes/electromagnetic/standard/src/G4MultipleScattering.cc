@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.7 1999-06-14 12:51:08 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.8 1999-07-29 08:44:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -21,6 +21,7 @@
 // **************************************************************
 // 24/10/97  correction in PostStepDoIt for tau << 1. L.Urban
 // 09/12/98: charge can be different from +-1 !!!! L.Urban
+// 29/07/99: corr. for low energy , L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -68,9 +69,12 @@
 
   //   tables are built for MATERIALS
   {
+    // parameter for "low energy" msc (not for ions)
     if((&aParticleType == G4Electron::Electron()) ||
        (&aParticleType == G4Positron::Positron())   )
        Tlimit = 100.*keV ;
+    else if(aParticleType.GetPDGMass() < 1.*GeV)
+       Tlimit=100.*keV;
     
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;

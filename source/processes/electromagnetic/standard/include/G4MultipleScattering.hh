@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.2 1999-02-16 13:21:23 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.3 1999-07-29 08:44:15 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
