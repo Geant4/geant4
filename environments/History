@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2002-12-06 16:19:38 gcosmo Exp $
+$Id: History,v 1.8 2003-10-17 09:13:37 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V05-02-01 17 October 2003  Guy Barrand
+- OPACS being deprecated, remove related OPACS things in Geant4.
 
 envs-V04-01-00  06 December 2002 Gabriele Cosmo
 - Synchronized HEAD (disclaimer of liability).
