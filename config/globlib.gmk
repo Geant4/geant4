@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.1 1999-01-07 15:58:33 gunter Exp $
+# $Id: globlib.gmk,v 1.2 1999-07-06 15:19:44 gunter Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -36,7 +36,7 @@ $(G4LIBDIR)/lib$(name).a: \
 #
 #
 #
-	@if [ X$(G4SYSTEM) = XWIN32-VC-NICE ]  ; i=NO; \
+	@if [ X$(G4SYSTEM) = XWIN32-VC ]  ; i=NO; \
 	then  \
 	(( for lib in $(SUBLIBS); \
 	do ( if [ $$i = NO ]; \
