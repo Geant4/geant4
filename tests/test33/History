@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-10-29 15:43:02 dressel Exp $
+$Id: History,v 1.3 2002-10-29 16:37:09 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,3 +20,6 @@ Oct 25, 2002 - G.Cosmo
 
 Oct 29, 2002 - M.Dressel
 - first implementation
+
+Oct 29, 2002 - M.Dressel
+- added DISCLAIMERs
