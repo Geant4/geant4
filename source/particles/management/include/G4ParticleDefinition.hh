@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.25 2004-12-02 08:08:58 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.26 2004-12-30 21:09:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,7 +181,7 @@ class G4ParticleDefinition
       //  1: Warning message
       //  2: More
 
-  private:
+  protected:
   //  !!!  can not use "copy constructor" nor "default constructor" !!!!
        G4ParticleDefinition(const G4ParticleDefinition &right);
        G4ParticleDefinition();
