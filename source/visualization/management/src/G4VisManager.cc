@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.37 2001-08-17 23:01:18 johna Exp $
+// $Id: G4VisManager.cc,v 1.38 2001-08-24 20:45:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -646,35 +646,43 @@ void G4VisManager::GeometryHasChanged () {
     G4Scene* pScene = sceneList [iScene];
     G4std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
 
-    G4bool modelInvalid;
-    do {  // Remove, if required, one at a time.
-      modelInvalid = false;
-      G4std::vector<G4VModel*>::iterator iterModel;
-      for (iterModel = modelList.begin();
-	   iterModel != modelList.end();
-	   ++iterModel) {
-	if (modelInvalid = !((*iterModel) -> Validate ())) {
-	  // Model invalid - remove and break.
-	  if (fVerbosity >= warnings) {
-	    G4cout << "WARNING: Model \""
-		   << (*iterModel) -> GetGlobalDescription ()
-		   <<
-	      "\" is no longer valid - being removed\n  from scene \""
-		   << pScene -> GetName () << "\""
-		   << G4endl;
-	  }
-	  modelList.erase (iterModel);
+    if (modelList.size ()) {
+      G4bool modelInvalid;
+      do {  // Remove, if required, one at a time.
+	modelInvalid = false;
+	G4std::vector<G4VModel*>::iterator iterModel;
+	for (iterModel = modelList.begin();
+	     iterModel != modelList.end();
+	     ++iterModel) {
+	  modelInvalid = !((*iterModel) -> Validate (fVerbosity >= warnings));
+	  if (modelInvalid) {
+	    // Model invalid - remove and break.
+	    if (fVerbosity >= warnings) {
+	      G4cout << "WARNING: Model \""
+		     << (*iterModel) -> GetGlobalDescription ()
+		     <<
+		"\" is no longer valid - being removed\n  from scene \""
+		     << pScene -> GetName () << "\""
+		     << G4endl;
+	    }
+	    modelList.erase (iterModel);
 	    break;
+	  }
+	}
+      } while (modelInvalid);
+
+      if (modelList.size () == 0) {
+	if (fVerbosity >= warnings) {
+	  G4cout << "WARNING: No models left in this scene \""
+		 << pScene -> GetName ()
+		 << "\"."
+		 << G4endl;
 	}
       }
-    } while (modelInvalid);
-
-    if (modelList.size () == 0) {
-      if (fVerbosity >= warnings) {
-	G4cout << "WARNING: No models left in this scene \""
-	       << pScene -> GetName ()
-	       << "\"."
-	       << G4endl;
+      else {
+	pScene->CalculateExtent();
+	G4UImanager::GetUIpointer () ->
+	  ApplyCommand ("/vis/scene/notifyHandlers " + pScene->GetName());
       }
     }
   }
@@ -684,10 +692,11 @@ void G4VisManager::GeometryHasChanged () {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" has no models left."
+	     << "\" has no models."
 	     << G4endl;
     }
   }
+
 }
 
 void G4VisManager::SetCurrentGraphicsSystemAndCreateViewer
