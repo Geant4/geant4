@@ -34,6 +34,7 @@
 // #include <sstream>
 #include <iomanip>
 #include <fstream>
+#include <cmath>
 
 //HepRep
 #include "HEPREP/HepRep.h"
@@ -309,8 +310,9 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
 //            openFile(fileName.str());
 // Use instead:
             char fileName[128];
-            G4String fileFormat = G4String("%s%s%0")+G4String(eventNumberWidth)+G4String("d%s%s");
-            sprintf(fileName, fileFormat.c_str(), baseName.c_str(), eventNumberPrefix.c_str(), eventNumber, eventNumberSuffix.c_str(), extension.c_str());
+            char fileFormat[128];
+            sprintf(fileFormat, "%s%d%s", "%s%s%0", eventNumberWidth, "d%s%s");
+            sprintf(fileName, fileFormat, baseName.c_str(), eventNumberPrefix.c_str(), eventNumber, eventNumberSuffix.c_str(), extension.c_str());
             openFile(G4String(fileName));
         }
             
@@ -321,8 +323,9 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
 //        writer->write(_heprep, eventName.str());
 // Use instead:
         char eventName[128];
-        G4String eventFormat = G4String("event-%0")+G4String(eventNumberWidth)+".heprep";
-        sprintf(eventName, eventFormat.c_str(), eventNumber);
+        char eventFormat[128];
+        sprintf(eventFormat, "%s%d%s", "event-%0", eventNumberWidth, "d.heprep");
+        sprintf(eventName, eventFormat, eventNumber);
         writer->write(_heprep, G4String(eventName));
 
         eventNumber++;
@@ -846,9 +849,65 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
         
         G4String name = attValIterator->GetName();
 
-        if (name == "Pos") {
-            // Preparations for GEANT-34
-//            setAttribute(attribute, G4String("PointUnit"), G4String("cm"));
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if ((name == "Pos") && (point != NULL)) {
+            G4String pos = attValIterator->GetValue();
+//            cout << "Pos* " << pos << endl;
+            int s = 0;
+            int n = 0;
+            int m = 0;
+            G4String unit;
+            for (unsigned int i=0; i<pos.length(); i++) {
+                if (pos[i] == ' ') {
+                    if (n == 0) {
+                        // first coordinate
+                        double factor = atof(pos.substr(s, i-s).c_str())/point->getX();
+                        m = (int)(log10(factor)+((factor < 1) ? -0.5 : 0.5));
+//                        cout << factor << ", " << m << endl;
+                    } else if (n == 3) {
+                        // unit
+                        unit = pos.substr(s, i-s);
+                        if (unit == G4String("mum")) {
+                            m += -6;
+                        } else if (unit == G4String("mm")) {
+                            m += -3;
+                        } else if (unit == G4String("cm")) {
+                            m += -2;
+                        } else if (unit == G4String("m")) {
+                            m += 0;
+                        } else if (unit == G4String("km")) {
+                            m += 3;
+                        } else {
+                            cerr << "HepRepSceneHandler: Unrecognized Unit: '" << unit << "'" << endl;
+                        }
+                    }
+                    s = i+1;
+                    n++;
+                }
+            }
+            switch(m) {
+                case -6:
+                    unit = G4String("mum");
+                    break;
+                case -3:
+                    unit = G4String("mm");
+                    break;
+                case -2:
+                    unit = G4String("cm");
+                    break;
+                case 0:
+                    unit = G4String("m");
+                    break;
+                case 3:
+                    unit = G4String("km");
+                    break;
+                default:
+                    cerr << "HepRepSceneHandler: No valid unit found for m: " << m << endl;
+                    unit = G4String("*m");                        
+                    break;
+            }
+//            cout << "U: " << unit << endl;
+            setAttribute(attribute, G4String("PointUnit"), unit);
             continue;
         }
                 
