@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2001-06-19 15:22:42 morita Exp $
+$Id: History,v 1.139 2001-06-19 16:21:11 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -18,9 +18,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th June 2001  Youhei Morita (config-V03-01-02)
+20th June 2001 Youhei Morita (config-V03-01-02)
 - a few bug fixes in binmake.gmk, common_objy.gmk, sys/SUN-CC5.gmk,
   sys/Linux-g++.gmk, sys/Win32-g++.gmk.
+
+19th June 2001 Gabriele Cosmo
+- Removed G4_NO_CBRT flag from WIN32-VC setup. No more necessary.
 
 30th May 2001 Gunter Folger
 - Do changes for persistency from Youhei: common.gmk is now split in three,

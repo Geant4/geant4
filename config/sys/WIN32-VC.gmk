@@ -4,7 +4,6 @@
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
   G4_HAVE_BOOL := yes
-  G4_NO_CBRT := yes
   ifdef G4OPTIMISE
     CXXFLAGS  += -Ox
   else
