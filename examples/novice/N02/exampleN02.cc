@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.6 2001-10-11 12:32:34 maire Exp $
+// $Id: exampleN02.cc,v 1.7 2001-10-24 12:20:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@ int main(int argc,char** argv) {
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute initInter.mac");    
+    UI->ApplyCommand("/control/execute vis.mac");    
     session->SessionStart();
     delete session;
   }

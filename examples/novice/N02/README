@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2000-12-04 16:24:03 maire Exp $
+$Id: README,v 1.5 2001-10-24 12:20:42 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,11 +98,11 @@ $Id: README,v 1.4 2000-12-04 16:24:03 maire Exp $
  5- VISUALIZATION
  
      The Visualization Manager is set in the main().
-     The initialisation of the drawing is done via a set of /vis commands
-     in the macro initInter.mac. This macro is automatically read from 
-     the main in case of interactive running mode.
+     The initialisation of the drawing is done via a set of /vis/ commands
+     in the macro vis.mac. This macro is automatically read from 
+     the main when running in interactive mode.
  	
-     The tracks are automatically drawn at the end of event, and erased at 
+     The tracks are automatically drawn at the end of event and erased at 
      the beginning of the next run.
 	
      The visualization (with OpenGL driver) assumes two things:
