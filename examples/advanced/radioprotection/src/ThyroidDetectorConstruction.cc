@@ -20,6 +20,7 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4UnionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
@@ -207,7 +208,7 @@ G4PVPlacement(0,G4ThreeVector(),"WaterNeckPhys",WaterNeckLog,0,false,0);
 
  G4double TRmin = 0.3*cm;
  G4double TRmax = 0.5*cm;
- G4double TDz = 8.*cm;
+ G4double TDz = 7.*cm;
  G4double TSPhi = 0.*deg;
  G4double TDPhi = 360.*deg;
 
@@ -221,7 +222,7 @@ G4PVPlacement(0,G4ThreeVector(),"WaterNeckPhys",WaterNeckLog,0,false,0);
 
   G4double ARmin = 0.*cm;
   G4double ARmax = 0.3*cm;
-  G4double ADz = 8.*cm;
+  G4double ADz = 7.*cm;
   G4double ASPhi = 0.*deg;
   G4double ADPhi = 360.*deg;
  //
@@ -244,8 +245,8 @@ G4PVPlacement(0,G4ThreeVector(),"WaterNeckPhys",WaterNeckLog,0,false,0);
   rotD1->rotateX (20.*deg);
  G4LogicalVolume*LeftThyroidLog = new
 G4LogicalVolume(LeftThyroid,matSoftTissue,"LeftThyroidLog",0,0,0); 
-G4VPhysicalVolume* LeftThyroidPhys = new
-G4PVPlacement(rotD1,G4ThreeVector(0,-1.0*cm,0),LeftThyroidLog,"LeftThyroidPhys",WaterNeckLog,false,0);
+ //G4VPhysicalVolume* LeftThyroidPhys = new
+ //G4PVPlacement(rotD1,G4ThreeVector(0,-1.0*cm,0),LeftThyroidLog,"LeftThyroidPhys",WaterNeckLog,false,0);
 
  
 
@@ -264,9 +265,21 @@ printf("\n tiroide\n");
  G4EllipticalTube* RightThyroid  = new G4EllipticalTube("RightThyroid", TrDx, TrDy, TrDz);
  G4LogicalVolume*RightThyroidLog = new
 G4LogicalVolume(RightThyroid,matSoftTissue,"RightThyroidLog",0,0,0); 
-G4VPhysicalVolume* RightThyroidPhys = new
-G4PVPlacement(rotD2,G4ThreeVector(0,1.0*cm,0),RightThyroidLog,"RightThyroidPhys",WaterNeckLog,false,0);
+ //G4VPhysicalVolume* RightThyroidPhys = new
+ //G4PVPlacement(rotD2,G4ThreeVector(0,1.0*cm,0),RightThyroidLog,"RightThyroidPhys",WaterNeckLog,false,0);
 
+// Now make an union of the two
+ G4double deltay = TrDz*sin(40*deg);
+ G4double deltaz = TrDz-(deltay/tan(40*deg));
+ G4ThreeVector moveinunion( 0.0, deltay, deltaz );
+ G4RotationMatrix* rotinunion = new G4RotationMatrix;
+ rotinunion->rotateX(40*deg);
+ G4UnionSolid* thyroidUnion = new G4UnionSolid( "unionThyroidSolid", LeftThyroid, RightThyroid,
+                                                rotinunion, moveinunion ); 
+ G4LogicalVolume* UnionThyroidLog = new G4LogicalVolume(thyroidUnion,matSoftTissue,"unionThyroidLog",0,0,0); 
+ G4VPhysicalVolume* unionThyroidPhysical = new G4PVPlacement( rotD2, G4ThreeVector(0,0,0),UnionThyroidLog,"unionThyroidPhys",WaterNeckLog,false,0);
+ 
+ G4ThreeVector moveinmother(0.7*cm,-0.58*deltay,0.0); 
 
  // Iodine Nodule
 printf("\n nodulo1\n");

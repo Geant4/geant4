@@ -43,7 +43,7 @@
 ThyroidPrimaryGeneratorAction::ThyroidPrimaryGeneratorAction()
 {
  // Generate a gamma particle with energy = I-131 mean energy
- G4int NumParticles = 10;
+ G4int NumParticles = 1;
 
  // G4double Energy=2*MeV;
 
@@ -96,7 +96,7 @@ void ThyroidPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
  a /= n;
  b /= n;
  c /= n;
-  Energy = 0.364*MeV;
+  Energy = 364.0*keV;
  m_pParticleGun->SetParticleEnergy(Energy);
  analysis->Spectrum(Energy);
  G4ThreeVector direction(a,b,c);
@@ -104,3 +104,4 @@ void ThyroidPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
  m_pParticleGun->GeneratePrimaryVertex(anEvent);
 }
+

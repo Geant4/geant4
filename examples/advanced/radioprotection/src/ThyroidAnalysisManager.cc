@@ -74,14 +74,14 @@ void ThyroidAnalysisManager::book()
 
   // histograms and ntuple are managed by theTree
   // h2 e h3 are not necessary  ,useful for:check for non-zero
-  //you could do  histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-15  //0.,150.);
+  //you could do  histFact->create2D("20","Energy, pos",200 ,-0.5,0.5,600,0.,30.);
  
 
- IHistogram2D *h2 = histFact->create2D("20","Energy, pos",200 ,0.,10.,600,0.,30.);
+ IHistogram2D *h2 = histFact->create2D("20","Energy, pos",200 ,-0.5,0.5,600,0.,30.);
  
 // check for non-zero
 
- IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 500,0.00,0.5);
+ IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 500,0.00,500);
  // check for non-zero
 
  //Ntuple management
