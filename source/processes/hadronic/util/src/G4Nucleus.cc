@@ -295,7 +295,7 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
     // - random decay angle
-    G4double theta=RandFlat::shoot((HepDouble)0.,(HepDouble)pi);  // isotropic decay angle theta
+    G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
     G4double phi  =RandFlat::shoot((HepDouble)0.,(HepDouble)2*pi);  // isotropic decay angle phi
     
     // - setup ThreeVector
