@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.1 1999-01-07 16:08:48 gunter Exp $
+// $Id: G4Navigator.cc,v 1.2 1999-01-08 11:23:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "G4Navigator::LocateGlobalPointAndSetup: " << endl; 
+      cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << endl; 
       cout.precision(8);
       cout << " I was called with the following arguments: " << endl
 	   << " Globalpoint = " << globalPoint << endl
@@ -518,6 +518,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     }
   else
     {
+      // In the case of a replica, 
+      //   it must handles the exiting edge/corner problem by itself
+      G4bool exitingReplica= fExitedMother;
       Step=freplicaNav.ComputeStep(pGlobalpoint,
 				   pDirection,
 				   fLastLocatedPointLocal,
@@ -527,10 +530,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				   fHistory,
 				   fValidExitNormal,
 				   fExitNormal,
-				   fExiting,
+				   exitingReplica,
 				   fEntering,
 				   &fBlockedPhysicalVolume,
 				   fBlockedReplicaNo);
+      // still ok to set it ??
+      fExiting= exitingReplica;
      }
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
@@ -816,15 +821,15 @@ void  G4Navigator::PrintState()
     {
       cout.precision(3);
       cout << setw(18) << " ExitNormal "  << " "     
-	   << setw( 9) << " Valid "       << " "     
+	   << setw( 5) << " Valid "       << " "     
 	   << setw( 9) << " Exiting "     << " "      
 	   << setw( 9) << " Entering"     << " " 
 	   << setw(15) << " Blocked:Volume "  << " "   
 	   << setw( 9) << " ReplicaNo"        << " "  
 	   << setw( 8) << " LastStepZero  "   << " "   
 	   << endl;   
-      cout << setw(24)  << fExitNormal       << " "
-	   << setw( 3)  << fValidExitNormal  << " "   
+      cout << setw(18)  << fExitNormal       << " "
+	   << setw( 5)  << fValidExitNormal  << " "   
 	   << setw( 9)  << fExiting          << " "
 	   << setw( 9)  << fEntering         << " "
 	   << setw(15)  << (fBlockedPhysicalVolume==0 ? G4String("None") :

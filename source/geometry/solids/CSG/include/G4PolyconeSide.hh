@@ -54,6 +54,7 @@ class G4PolyconeSide : public G4VCSGface {
 	G4double rNorm, zNorm;	// Normal to surface in r,z space
 	G4double rS, zS;	// Unit vector along surface in r,z space
 	G4double length;	// Length of face in r,z space
+	G4double prevRNorm;  	// Rnorm of previous polyconeSide
 	
 	G4double rNormEdge[2],
 		 zNormEdge[2];	// Normal to edges

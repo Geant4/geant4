@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.1 1999-01-07 16:11:24 gunter Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.2 1999-01-08 11:23:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4eBremsstrahlungPlus::~G4eBremsstrahlungPlus()
 
 void G4eBremsstrahlungPlus::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
 {
-  LowestKineticEnergy = lowE; G4double HighestKineticEnergy = highE; TotBin = nBins;
+  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,7 +113,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
   const G4double Factorhigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5, coef2 = 2./9.;
 
-  G4double  ParticleMass = aParticleType.GetPDGMass() ;
+  ParticleMass = aParticleType.GetPDGMass() ;
   G4double* GammaCutInKineticEnergy = G4Gamma::Gamma()->GetEnergyCuts();
   
   //  create table

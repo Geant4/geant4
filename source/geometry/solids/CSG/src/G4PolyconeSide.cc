@@ -66,6 +66,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 	rAdj /= lAdj;
 	zAdj /= lAdj;
 	
+	prevRNorm = zAdj;
+	
 	rNormEdge[0] = rNorm + zAdj;
 	zNormEdge[0] = zNorm - rAdj;
 	lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
@@ -352,6 +354,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
 }
 
 
+
 //
 // CalculateExtent
 //
@@ -363,11 +366,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 				      G4double &min, G4double &max        )
 {
 	G4ClippablePolygon polygon;
-	
-	//
-	// The following code does not work correctly and needs to be
-	// fixed...   DCW 12/10/98
-	//
 	
 	//
 	// Here we will cheat (ala G4Cons) and divide our conical section
@@ -392,28 +390,71 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	//
 	// Determine radius factor to keep segments outside
 	//
-	G4double rFudge = 1.0/cos(sigPhi);
+	G4double rFudge = 1.0/cos(0.5*sigPhi);
+	
+	//
+	// Decide which radius to use on each end of the side,
+	// and whether a transition mesh is required
+	//
+	G4double r0, r1, r2;
+	
+	if (rNorm < -1/kInfinity) {
+		//
+		// This side faces *inward*
+		//
+		r0 = r[0];
+		r1 = r[1];
+		
+		//
+		// A transition is required if the previous side
+		// faced outward
+		//
+		r2 = (prevRNorm > 1/kInfinity) ? r0*rFudge : -1;
+	}
+	else if (rNorm > 1/kInfinity) {
+		//
+		// This side faces *outward*
+		//
+		r0 = r[0]*rFudge;
+		r1 = r[1]*rFudge;
+		
+		//
+		// A transition is required if the previous side
+		// faced inward
+		//
+		r2 = (prevRNorm < -1/kInfinity) ? r[0] : -1;
+	}
+	else {
+		//
+		// This side is perpendicular to the z axis (is a disk)
+		//
+		r0 = r[0];
+		r1 = r[1];
+		if (r0 > r1) r0 *= rFudge; else r1 *= rFudge;
+	}
 	
 	//
 	// Loop
 	//
 	G4double phi = startPhi, 
-	         cosPhi = rFudge*cos(phi), 
-		 sinPhi = rFudge*sin(phi);
+	         cosPhi = cos(phi), 
+		 sinPhi = sin(phi);
 	
-	G4ThreeVector v0( r[0]*cosPhi, r[0]*sinPhi, z[0] ),
-		      v1( r[1]*cosPhi, r[1]*sinPhi, z[1] ),
-		      w0, w1;
+	G4ThreeVector v0( r0*cosPhi, r0*sinPhi, z[0] ),
+		      v1( r1*cosPhi, r1*sinPhi, z[1] ),
+		      v2( r2*cosPhi, r2*sinPhi, z[0] ),
+		      w0, w1, w2;
 	transform.ApplyPointTransform( v0 );
 	transform.ApplyPointTransform( v1 );
+	transform.ApplyPointTransform( v2 );
 
 	do {
 		phi += sigPhi;
-	        cosPhi = rFudge*cos(phi), 
-		sinPhi = rFudge*sin(phi);
+	        cosPhi = cos(phi), 
+		sinPhi = sin(phi);
 		
-		w0 = G4ThreeVector( r[0]*cosPhi, r[0]*sinPhi, z[0] );
-		w1 = G4ThreeVector( r[1]*cosPhi, r[1]*sinPhi, z[1] );
+		w0 = G4ThreeVector( r0*cosPhi, r0*sinPhi, z[0] );
+		w1 = G4ThreeVector( r1*cosPhi, r1*sinPhi, z[1] );
 		transform.ApplyPointTransform( w0 );
 		transform.ApplyPointTransform( w1 );
 		
@@ -433,7 +474,27 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 		//
 		polygon.Clip( voxelLimit );
 		polygon.GetExtent( axis, min, max );
+		
+		if (r2 >= 0) {
+			//
+			// Repeat, for transition piece
+			//
+			w2 = G4ThreeVector( r2*cosPhi, r2*sinPhi, z[0] );
+			transform.ApplyPointTransform( w2 );
 
+			polygon.ClearAllVertices();
+		
+			polygon.AddVertexInOrder( v2 );
+			polygon.AddVertexInOrder( v0 );
+			polygon.AddVertexInOrder( w0 );
+			polygon.AddVertexInOrder( w2 );
+			
+			polygon.Clip( voxelLimit );
+			polygon.GetExtent( axis, min, max );
+			
+			v2 = w2;
+		}
+		
 		//
 		// Next vertex
 		//		

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.1 1999-01-07 16:07:11 gunter Exp $
+// $Id: G4PropagatorInField.cc,v 1.2 1999-01-08 11:23:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ G4double
 G4PropagatorInField::
   ComputeStep(G4FieldTrack& pFieldTrack,
 	      G4double      CurrentProposedStepLength,
-	      G4double&     currentSafety,                // IN/OUT
+	      G4double&     startPointSafety,                // IN/OUT
 	      G4VPhysicalVolume *pPhysVol)
 
 // Compute the next geometric Step
@@ -69,6 +69,7 @@ G4PropagatorInField::
   G4double      TruePathLength;
   G4double      StepTaken= 0.0; 
   G4double      s_length_taken; 
+  G4ThreeVector LatestSafPoint; 
   G4bool        intersects;
   G4bool        first_substep= true;
 
@@ -149,8 +150,11 @@ G4PropagatorInField::
 					ChordAB_Length, NewSafety);
      if( first_substep )
      {
-	currentSafety= NewSafety;
+	startPointSafety= NewSafety;
      }
+     SetLastSafetyOrigin(SubStartPoint);
+     SetLastSafetyValue(NewSafety);
+
      // It might also be possible to update safety in other steps, but
      //  it must be Done with care.  J.Apostolakis  August 5th, 1997
 
@@ -391,6 +395,8 @@ G4PropagatorInField::LocateIntersectionPoint(
        G4double stepLength = 
 	  fNavigator->ComputeStep( Point_A, ChordAF_Dir,
 				    ChordAF_Length, NewSafety);
+       SetLastSafetyOrigin(Point_A);
+       SetLastSafetyValue(NewSafety);
 
        G4bool Intersects_AF = (stepLength <= ChordAF_Length);
        stepLength = min(stepLength, ChordAF_Length);
@@ -426,6 +432,8 @@ G4PropagatorInField::LocateIntersectionPoint(
 	   G4double stepLength = 
 	           fNavigator->ComputeStep( CurrentF_Point, ChordFB_Dir,
 				       ChordFB_Length, NewSafety);
+	   SetLastSafetyOrigin(CurrentF_Point);
+           SetLastSafetyValue(NewSafety);
 
 	   G4bool Intersects_FB = stepLength <= ChordFB_Length;
 	   stepLength = min(stepLength, ChordFB_Length);
@@ -475,7 +483,6 @@ G4PropagatorInField::LocateIntersectionPoint(
 	    ( ! there_is_no_intersection )     ); // UNTIL found or failed
 
   return  !there_is_no_intersection ; //  Success or failure
-
 }
 
 void G4PropagatorInField::printStatus(

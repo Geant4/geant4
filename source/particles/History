@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:09:46 gunter Exp $
+$Id: History,v 1.2 1999-01-08 11:23:50 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Dec. 15, 98 H.Kurashige(particles-00-04-08)
+- Fixed bugs in destrction of ions  (Hisaya)
+
 - Dec 11, 98  H.Kurashige (particles-00-04-07a)
 - Fixed bugs in G4IonTable::GetIonMass (Hisaya)
 

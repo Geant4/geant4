@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:08:50 gunter Exp $
+$Id: History,v 1.2 1999-01-08 11:23:48 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 17th 1998  J.Allison  (global-00-04-03)
+- Added first version of STL interface.
 
 December 2, 1998 M.Asai (global-00-04-02)
 - Remove the construction of G4UnitsMessenger in G4UnitsTable. This messenger is

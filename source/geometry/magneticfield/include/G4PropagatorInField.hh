@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.1 1999-01-07 16:07:06 gunter Exp $
+// $Id: G4PropagatorInField.hh,v 1.2 1999-01-08 11:23:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,16 @@ class G4PropagatorInField {
    // 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
 
+  // Get the Last point at which the Safety was calculated (the origin) and
+  //  its value 
+   G4ThreeVector GetLastSafetyOrigin();
+   G4double      GetLastSafetyValue();
+
+ protected:
+
+   void SetLastSafetyOrigin(G4ThreeVector origin);
+   void SetLastSafetyValue(G4double safety);
+   
  private:
 
    // The  Field Manager of the whole Detector
@@ -160,6 +170,10 @@ class G4PropagatorInField {
    static const G4double  delta_one_step_val;    //  = 0.25 * mm;
 
    G4int  fmax_loop_count;
+
+   G4ThreeVector fLastSafetyOrigin;
+   G4double      fLastSafetyValue;
+
 }; // End of class G4PropagatorInField {
 
 //  Defines the constructor.

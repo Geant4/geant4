@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.1 1999-01-07 16:10:33 gunter Exp $
+// $Id: G4IonTable.cc,v 1.2 1999-01-08 11:23:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,8 @@ G4IonTable::~G4IonTable()
     } else if (name ==  "triton") {
  
     } else if (name ==   "He3")  {
+
+    } else if (name ==   "GenericIon")  {
  
     } else {
       // delete if not static objects
