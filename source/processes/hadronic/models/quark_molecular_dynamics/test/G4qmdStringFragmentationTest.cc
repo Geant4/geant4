@@ -106,16 +106,18 @@ int main()
 	}
 
 //
-// Start qMD
+// Start qMD and collect produced hadrons
+//
+G4qmdStringFragmentation * theRunB = new G4qmdStringFragmentation();
+theRunB->SetInputFile("Test");
+ResultingHadrons = theRunB->FragmentStrings(qmdInitialState);
+// 
 //
 
-G4qmdStringFragmentation * theRun = new G4qmdStringFragmentation();
-theRun->SetInputFile("Test");
-//
-// collect produced hadrons
-//
-
-// ResultingHadrons = theRun->FragmentStrings(qmdInitialState);
+// 
+// G4qmdStringFragmentation theRun();
+// theRun.SetInputFile("Test");
+// ResultingHadrons = theRun.FragmentStrings(qmdInitialState);
 
 //
 
