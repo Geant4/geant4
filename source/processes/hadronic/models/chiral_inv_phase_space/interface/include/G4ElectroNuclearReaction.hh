@@ -83,7 +83,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   }
   if(xSec<=0)
   {
-    return theResult;
+    return &theResult;
   }
   if(aTrack.GetDynamicParticle()->GetKineticEnergy() - photonEnergy < 0)
   {
