@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.9 2003-08-27 17:25:33 vnivanch Exp $
+// $Id: Em8PhysicsList.cc,v 1.10 2003-08-28 09:29:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -167,17 +167,17 @@ void Em8PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScattering52.hh"
 
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4eIonisation52.hh"
+#include "G4eBremsstrahlung52.hh"
 #include "G4eplusAnnihilation.hh"
 
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
+#include "G4MuIonisation52.hh"
+#include "G4MuBremsstrahlung52.hh"
+#include "G4MuPairProduction52.hh"
 
-#include "G4hIonisation.hh"
+#include "G4hIonisation52.hh"
 #include "G4PAIonisation.hh"
 #include "G4ForwardXrayTR.hh"
 
@@ -194,28 +194,28 @@ void Em8PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") 
+
+    if (particleName == "gamma")
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();      
+      thePhotoElectricEffect = new G4PhotoElectricEffect();
       theComptonScattering   = new G4ComptonScattering();
       theGammaConversion     = new G4GammaConversion();
-      
+
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       pmanager->AddDiscreteProcess(theGammaConversion);
-      
-    } 
-    else if (particleName == "e-") 
+
+    }
+    else if (particleName == "e-")
     {
-      // Construct processes for electron 
+      // Construct processes for electron
 
       // theeminusMultipleScattering = new G4MultipleScattering();
       //   theeminusIonisation = new G4eIonisation();
-      theeminusBremsstrahlung = new G4eBremsstrahlung();
+      theeminusBremsstrahlung = new G4eBremsstrahlung52();
 
      //   fPAIonisation = new G4PAIonisation("Xenon") ;
      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
@@ -230,35 +230,34 @@ void Em8PhysicsList::ConstructEM()
                                      pDet->GetLogicalAbsorber(),
                                     "IonisationByLogVol"),-1,2,-2);
 
-       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
+       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
 
        //   pmanager->AddProcess(fPAIonisation,-1,2,2);
- 
+
        //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
-     
+
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
 
-    } 
-    else if (particleName == "e+") 
+    }
+    else if (particleName == "e+")
     {
-      // Construct processes for positron 
+      // Construct processes for positron
 
-      //   theeplusMultipleScattering = new G4MultipleScattering();
-      theeplusIonisation = new G4eIonisation();
-      theeplusBremsstrahlung = new G4eBremsstrahlung();
+      theeplusIonisation = new G4eIonisation52();
+      theeplusBremsstrahlung = new G4eBremsstrahlung52();
       // theeplusAnnihilation = new G4eplusAnnihilation();
 
       //  fPAIonisation = new G4PAIonisation("Xenon") ;
       // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeplusStepCut = new Em8StepCut();
-      
+
       //  pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
-      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4); 
-     
+      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
+
       //  pmanager->AddProcess(fPAIonisation,-1,2,2);
 
 
@@ -266,12 +265,12 @@ void Em8PhysicsList::ConstructEM()
 
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
       theeplusStepCut->SetMaxStep(MaxChargedStep) ;
-  
-    } 
-    else if( particleName == "mu+" || 
-               particleName == "mu-"    ) 
+
+    }
+    else if( particleName == "mu+" ||
+               particleName == "mu-"    )
     {
-     // Construct processes for muon+ 
+     // Construct processes for muon+
 
       Em8StepCut* muonStepCut = new Em8StepCut();
        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
@@ -279,30 +278,30 @@ void Em8PhysicsList::ConstructEM()
                                     "IonisationByLogVol"),-1,2,-2);
 
       // G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+     pmanager->AddProcess(new G4MultipleScattering52(),-1,1,1);
      //  pmanager->AddProcess(themuIonisation,-1,2,2);
-     pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      
+     pmanager->AddProcess(new G4MuBremsstrahlung52(),-1,-1,3);
+     pmanager->AddProcess(new G4MuPairProduction52(),-1,-1,4);
+
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       pmanager->AddProcess( muonStepCut,-1,-1,3);
      muonStepCut->SetMaxStep(MaxChargedStep) ;
 
-    } 
+    }
     else if (
-                  particleName == "proton"  
-               || particleName == "antiproton"  
-               || particleName == "pi+"  
-               || particleName == "pi-"  
-               || particleName == "kaon+"  
-               || particleName == "kaon-"  
+                  particleName == "proton"
+               || particleName == "antiproton"
+               || particleName == "pi+"
+               || particleName == "pi-"
+               || particleName == "kaon+"
+               || particleName == "kaon-"
             )
     {
         Em8StepCut* thehadronStepCut = new Em8StepCut();
 
-      //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
-      G4MultipleScattering* thehMultipleScattering =
-                     new G4MultipleScattering() ;
+      //  G4hIonisation* thehIonisation = new G4hIonisation() ;
+      G4MultipleScattering52* thehMultipleScattering =
+                     new G4MultipleScattering52() ;
 
         pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
@@ -313,11 +312,11 @@ void Em8PhysicsList::ConstructEM()
 
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
-      
+
         pmanager->AddProcess( thehadronStepCut,-1,-1,3);
         thehadronStepCut->SetMaxStep(MaxChargedStep) ;
       // thehadronStepCut->SetMaxStep(10*mm) ;
-     
+
     }
   }
 }

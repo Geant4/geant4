@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.hh,v 1.5 2003-08-27 17:25:33 vnivanch Exp $
+// $Id: Em8PhysicsList.hh,v 1.6 2003-08-28 09:29:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,20 +35,19 @@ class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4MultipleScattering;
+class G4MultipleScattering52;
 
 class G4PAIonisation ;
 class G4ForwardXrayTR ;
-class G4eIonisation;
-class G4eBremsstrahlung;
+class G4eIonisation52;
+class G4eBremsstrahlung52;
 class G4eplusAnnihilation;
 
-class G4MuIonisation;
-class G4MuBremsstrahlung;
-class G4MuPairProduction;
+class G4MuIonisation52;
+class G4MuBremsstrahlung52;
+class G4MuPairProduction52;
 
-class G4hIonisation;
-class G4hIonisationPlus;
+class G4hIonisation52;
 
 class Em8StepCut;
 
@@ -66,11 +65,11 @@ class Em8PhysicsList: public G4VUserPhysicsList
     // Construct particle and physics
     void ConstructParticle();
     void ConstructProcess();
- 
+
     void SetCuts();
 
   protected:
-    // these methods Construct particles 
+    // these methods Construct particles
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
@@ -101,17 +100,17 @@ class Em8PhysicsList: public G4VUserPhysicsList
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
 
-    G4MultipleScattering*  theeminusMultipleScattering;
-    G4eIonisation*         theeminusIonisation;
-    G4eBremsstrahlung*     theeminusBremsstrahlung;
+    G4MultipleScattering52*  theeminusMultipleScattering;
+    G4eIonisation52*         theeminusIonisation;
+    G4eBremsstrahlung52*     theeminusBremsstrahlung;
 
     G4PAIonisation*        fPAIonisation ;
     G4ForwardXrayTR*       fForwardXrayTR ;
 
-    G4MultipleScattering*  theeplusMultipleScattering;
-    G4eIonisation*         theeplusIonisation;
-    G4eBremsstrahlung*     theeplusBremsstrahlung;
-    G4eplusAnnihilation*   theeplusAnnihilation;
+    G4MultipleScattering52*  theeplusMultipleScattering;
+    G4eIonisation52*         theeplusIonisation;
+    G4eBremsstrahlung52*     theeplusBremsstrahlung;
+    G4eplusAnnihilation*     theeplusAnnihilation;
 
     Em8StepCut* theeminusStepCut ;
     Em8StepCut* theeplusStepCut ;
