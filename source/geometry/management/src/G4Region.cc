@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.7 2003-03-24 10:17:54 gcosmo Exp $
+// $Id: G4Region.cc,v 1.8 2003-05-22 00:50:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,11 +189,11 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
 
   // Scan recursively the tree of daugther volumes and reset regions
   //
-  ScanVolumeTree(lv, false);
+  //ScanVolumeTree(lv, false);
 
   // Update the materials list
   //
-  UpdateMaterialList();
+  //UpdateMaterialList();
 
   // Set region as modified
   //
