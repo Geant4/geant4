@@ -235,6 +235,7 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   cutForDelta.resize(numOfMaterials);
+  gammaCutInEnergy = (G4Gamma::Gamma())->GetCutsInEnergy();
 
   for (G4int j=0; j<numOfMaterials; j++) {
       
@@ -326,10 +327,6 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
   }
 
   theLossTable = new G4PhysicsTable(numOfMaterials);
-
-  // Clean up the vector of cuts
-
-  gammaCutInEnergy = (G4Gamma::Gamma())->GetCutsInEnergy();
   
   //  loop for materials  
   for (G4int j=0; j<numOfMaterials; j++) {
@@ -341,8 +338,6 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
       
     // get material parameters needed for the energy loss calculation  
     const G4Material* material= (*theMaterialTable)[j];
-
-    //    G4double tCut = cutForDelta[j];
 
     // low energy of Bethe-Bloch formula for this material
     G4double highE = G4std::max(highEnergy,theBetheBlochModel->
@@ -1278,10 +1273,10 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 				       G4double hMomentum,
 				       G4double eLoss) 
 {
-  G4cout << "DeexciteAtom Start" << G4endl;
   G4int index = material->GetIndex();
   G4double cutForElectrons = cutForDelta[index];
   G4double cutForPhotons = gammaCutInEnergy[index];
+
   if(eLoss < cutForPhotons && eLoss < cutForElectrons) return 0;
 
   G4AtomicTransitionManager* transitionManager = 
@@ -1302,13 +1297,11 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
     }
   }
 
-  G4cout << "stop= " << stop << G4endl;
-
   if(stop) return 0;
 
   // create vector of tracks of secondary particles
 
-  G4std::vector<G4DynamicParticle*>* partVector = 0;
+  G4std::vector<G4DynamicParticle*>* partVector;
   G4std::vector<G4DynamicParticle*>* secVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
@@ -1322,15 +1315,11 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
   G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
                                          incidentEnergy, eLoss);
 
-  G4cout << "n= " << n.size() << G4endl;
-
   for (size_t i=0; i<nElements; i++) {
 
     size_t nVacancies = n[i];
     G4int Z = (G4int)((*theElementVector)[i]->GetZ());
     G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
-
-  G4cout << "maxE= " << maxE << G4endl;
 
     if (nVacancies && Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) ) {
       for(size_t j=0; j<nVacancies; j++) {
@@ -1372,14 +1361,10 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
     }
   }
 
-  G4cout << "close to end " << G4endl;
-
   if(partVector->size()==0) {
     delete partVector;
     return 0;
   }
-
-  G4cout << "end " << G4endl;
 
   return partVector;
 }
