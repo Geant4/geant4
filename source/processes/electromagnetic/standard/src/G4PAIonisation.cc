@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.27 2002-05-24 11:36:13 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.28 2002-06-19 13:32:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -739,7 +739,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
 	//  for(iTransfer=0;;iTransfer++)
         for( iTransfer = 0;
-       iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
+  iTransfer < G4int((*fPAItransferBank)(iPlace+1)->GetVectorLength()); iTransfer++ )
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
@@ -872,7 +872,7 @@ G4PAIonisation::GetAlongStepDelta( G4double Step,
                    ((*(*fPAItransferBank)(iPlace+1))(0)-dNdxCut2)*G4UniformRand();
    
         for( iTransfer = 0;
-   iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
+   iTransfer < G4int((*fPAItransferBank)(iPlace+1)->GetVectorLength()); iTransfer++ )
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
@@ -973,7 +973,7 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
 
       // for(iTransfer=0;;iTransfer++)
       for( iTransfer = 0;
-    iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
+ iTransfer < G4int((*fPAItransferBank)(iPlace+1)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
       }
@@ -1051,7 +1051,7 @@ G4PAIonisation::GetPostStepTransfer( G4double scaledTkin )
       position = dNdxCut2*G4UniformRand() ;
 
       for( iTransfer = 0;
-  iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
+  iTransfer < G4int((*fPAItransferBank)(iPlace+1)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
       }
