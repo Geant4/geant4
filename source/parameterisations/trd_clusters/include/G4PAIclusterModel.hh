@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.hh,v 1.1 2004-11-09 09:20:32 hpw Exp $
+// $Id: G4PAIclusterModel.hh,v 1.2 2004-11-10 10:03:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 
-#include "G4PAIonisation.hh"
+#include "G4PAIModel.hh"
 #include "G4VClusterModel.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
@@ -67,7 +67,7 @@ public:
 
 private:
 
-  G4PAIonisation* fPAIonisation ;
+  G4PAIModel* fPAIonisation ;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.cc,v 1.1 2004-11-09 09:20:34 hpw Exp $
+// $Id: G4PAIclusterModel.cc,v 1.2 2004-11-10 10:03:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,7 @@
 #include "G4MaterialTable.hh"
 #include "globals.hh"
 
+#include "G4ParticleDefinition.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -48,7 +49,10 @@
 G4PAIclusterModel::G4PAIclusterModel(G4Envelope *anEnvelope) :
   G4VClusterModel("G4PAIclusterModel",anEnvelope)
 {
-  fPAIonisation = new G4PAIonisation(anEnvelope->GetMaterial()->GetName()) ;
+  const G4ParticleDefinition* theElectron = G4Electron::Electron();
+  G4DataVector data;
+  fPAIonisation = new G4PAIModel(theElectron,"PAIclusterModel");
+  fPAIonisation->Initialise(theElectron,data);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -125,7 +129,7 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 
   // Cluster counting loop
 
-  lambda = fPAIonisation->GetFreePath( scaledTkin, charge2 ) ;
+  lambda = 1*mm;// fPAIonisation->GetFreePath( scaledTkin, charge2 ) ;
   step   = RandExponential::shoot(lambda) ;
   //  if (step < 0.0) step = 0.0 ;
   stepSum += step ;
@@ -149,7 +153,7 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
       //                  stepSum*direction ;  
   
       clusterPosition = globalStartPosition  + stepSum*globalDirection ;    
-      energyTransfer  = fPAIonisation->GetRandomEnergyTransfer(scaledTkin) ;
+      energyTransfer  = fPAIonisation->GetPostStepTransfer(scaledTkin) ;
 
       fClusterPositionVector.push_back(clusterPosition) ;      
       fClusterEnergyVector.push_back(energyTransfer) ;
