@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.11 2002-11-20 17:05:14 gcosmo Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.12 2002-12-04 21:29:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -246,8 +246,8 @@ G4bool
 G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
 { 
   G4StateManager * stateManager = G4StateManager::GetStateManager();
-  if((stateManager->GetPreviousState()==Idle) &&
-     (requestedState==GeomClosed) &&
+  if((stateManager->GetPreviousState()==G4State_Idle) &&
+     (requestedState==G4State_GeomClosed) &&
      (!fClosed))
     G4Exception("G4GlobalFastSimulationManager fatal error : \n1) you are using ghost volumes;\n2) In this case the G4GlobalFastSimulationManager MUST be closed BEFORE\n  closing the geometry;\n3) To do this put in your code the call \n  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->\n    CloseFastSimulation();\n  just before closing the geometry.");
   return true;

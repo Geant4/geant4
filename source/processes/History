@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-05-31 17:38:37 stesting Exp $
+$Id: History,v 1.5 2002-12-04 21:32:20 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 4, 2002: Makoto Asai (process-V04-01-00)
+- Tagged for migration to new G4ApplicationState
 
 May 29, 1999: John Allison
 - Added electromagnetic/lowenergy to GNUmakefile and

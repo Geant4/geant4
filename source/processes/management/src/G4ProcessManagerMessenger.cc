@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.cc,v 1.5 2001-07-11 10:08:20 gunter Exp $
+// $Id: G4ProcessManagerMessenger.cc,v 1.6 2002-12-04 21:29:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,7 +88,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   param = new G4UIparameter("index",'i',true);
   param->SetDefaultValue(-1);
   verboseCmd->SetParameter(param);
-  verboseCmd->AvailableForStates(PreInit,Init,Idle,GeomClosed,EventProc);
+  verboseCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   //Commnad   /particle/process/Activate
   activateCmd = new G4UIcmdWithAnInteger("/particle/process/activate",this);
@@ -97,7 +97,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   activateCmd->SetParameterName("index", false);
   activateCmd->SetDefaultValue(0);
   activateCmd->SetRange("index >=0");
-  activateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  activateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   //Commnad   /particle/process/inactivate
   inactivateCmd = new G4UIcmdWithAnInteger("/particle/process/inactivate",this);
@@ -106,7 +106,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   inactivateCmd->SetParameterName("index", false);
   inactivateCmd->SetDefaultValue(0);
   inactivateCmd->SetRange("index >=0");
-  inactivateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  inactivateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
 }
 

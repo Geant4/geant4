@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.20 2001-09-01 02:22:55 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.21 2002-12-04 21:29:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -733,13 +733,13 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 {
   G4ApplicationState currentState 
    = G4StateManager::GetStateManager()->GetCurrentState();
-  if ( (currentState == PreInit) || (currentState == Init) ) {
+  if ( (currentState == G4State_PreInit) || (currentState == G4State_Init) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "G4ProcessManager::InActivateProcess is not valid in ";
-      if (currentState == PreInit ) {
+      if (currentState == G4State_PreInit ) {
 	G4cout << "PreInit ";
-      } else if  (currentState == Init ) {
+      } else if  (currentState == G4State_Init ) {
 	G4cout << "Init ";
       } 
       G4cout << "state !" << G4endl;
@@ -808,13 +808,13 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 {
   G4ApplicationState currentState 
    = G4StateManager::GetStateManager()->GetCurrentState();
-  if ( (currentState == PreInit) || (currentState == Init) ) {
+  if ( (currentState == G4State_PreInit) || (currentState == G4State_Init) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "G4ProcessManager::ActivateProcess is not valid in ";
-      if (currentState == PreInit ) {
+      if (currentState == G4State_PreInit ) {
 	G4cout << "PreInit ";
-      } else  if (currentState == Init ) {
+      } else  if (currentState == G4State_Init ) {
 	G4cout << "Init ";
       } 
       G4cout << "state !" << G4endl;

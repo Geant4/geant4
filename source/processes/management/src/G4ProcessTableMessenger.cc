@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.11 2002-09-17 15:39:57 kurasige Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.12 2002-12-04 21:29:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,7 +97,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   verboseCmd->SetParameterName("verbose", true);
   verboseCmd->SetDefaultValue(1);
   verboseCmd->SetRange("verbose >=0");
-  verboseCmd->AvailableForStates(PreInit,Init,Idle,GeomClosed,EventProc);
+  verboseCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   //Commnad   /particle/process/setVerbose
   procVerboseCmd = new G4UIcommand("/process/setVerbose",this);
@@ -112,7 +112,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("type",'s',true);
   param->SetDefaultValue("all");
   procVerboseCmd->SetParameter(param);
-  procVerboseCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  procVerboseCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
  
   //Commnad   /particle/process/dump
   dumpCmd = new G4UIcommand("/process/dump",this);
@@ -125,7 +125,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   dumpCmd->SetParameter(param);
-  dumpCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
+  dumpCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   //Commnad   /particle/process/activate
   activateCmd = new G4UIcommand("/process/activate",this);
@@ -138,7 +138,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   activateCmd->SetParameter(param);
-  activateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  activateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
   
   //Commnad   /particle/process/inactivate
   inactivateCmd = new G4UIcommand("/process/inactivate",this);
@@ -152,7 +152,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   inactivateCmd->SetParameter(param);
-  inactivateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  inactivateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 }
 
 //////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.4 2001-07-11 10:08:24 gunter Exp $
+// $Id: G4FastSimulationMessenger.cc,v 1.5 2002-12-04 21:29:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
   fListEnvelopesCmd->SetDefaultValue("all");
   fListEnvelopesCmd->SetGuidance("List all the envelope names for a given Particle");
   fListEnvelopesCmd->SetGuidance("(or for all particles if without parameters).");
-  fListEnvelopesCmd->AvailableForStates(PreInit,Idle);
+  fListEnvelopesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   fListModelsCmd = 
     new G4UIcmdWithAString("/param/listModels", this);
@@ -53,7 +53,7 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
   fListModelsCmd->SetDefaultValue("all");
   fListModelsCmd->SetGuidance("List all the Model names for a given Envelope");
   fListModelsCmd->SetGuidance("(or for all envelopes if without parameters).");
-  fListModelsCmd->AvailableForStates(PreInit,Idle);
+  fListModelsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   fListIsApplicableCmd =
     new G4UIcmdWithAString("/param/listIsApplicable", this);
