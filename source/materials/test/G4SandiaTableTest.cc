@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTableTest.cc,v 1.6 2003-06-16 16:56:27 gunter Exp $
+// $Id: G4SandiaTableTest.cc,v 1.7 2004-03-08 16:35:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,18 @@ int main()
 //
 
   a = 1.01*g/mole;
-  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+  G4Element* elHold  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+
+  a = 1.01*g/mole;
+  G4Isotope* ih1 = new G4Isotope("Hydrogen",iz=1,n=1,a);
+
+  a = 2.01*g/mole;
+  G4Isotope* ih2 = new G4Isotope("Deuterium",iz=1,n=2,a);
+
+  G4Element* elH = new G4Element(name="Hydrogen",symbol="H",2);
+  elH->AddIsotope(ih1,.999);
+  elH->AddIsotope(ih2,.001);
+
 
   a = 12.01*g/mole;
   G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
@@ -84,10 +95,21 @@ int main()
   G4Element* elFe = new G4Element(name="Iron"    ,symbol="Fe", z=26., a);
 
   a = 131.29*g/mole;
-  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);  
+  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
+  
+  a = 39.948*g/mole;
+  G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+
 
   a = 19.00*g/mole;
   G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
+
+  a = 69.723*g/mole;
+  G4Element* elGa  = new G4Element(name="Ga", symbol="Ga", z=31., a);
+
+  a = 74.9216*g/mole;
+  G4Element* elAs  = new G4Element(name="As", symbol="As", z=33., a);
+
 
 //
 // define an Element from isotopes, by relative abundance 
@@ -150,9 +172,9 @@ int main()
 //
 
   density = 1.290*mg/cm3;
-  G4Material* Air = new G4Material(name="Air  "  , density, ncomponents=2);
-  Air->AddElement(elN, fractionmass=0.7);
-  Air->AddElement(elO, fractionmass=0.3);
+  G4Material* oldAir = new G4Material(name="Air  "  , density, ncomponents=2);
+  oldAir->AddElement(elN, fractionmass=0.7);
+  oldAir->AddElement(elO, fractionmass=0.3);
 
 //
 // define a material from elements and/or others materials (mixture of mixtures)
@@ -199,13 +221,43 @@ int main()
 
   G4Material* beam = new G4Material(name="Beam ", density, ncomponents=1,
                                       kStateGas,temperature,pressure);
-  beam->AddMaterial(Air, fractionmass=1.);
+  beam->AddMaterial(oldAir, fractionmass=1.);
+
+  // maylar
 
   density = 1.39*g/cm3;
-  G4Material* Kapton = new G4Material(name="Kapton", density, nel=3);
-  Kapton->AddElement(elO,2);
-  Kapton->AddElement(elC,5);
-  Kapton->AddElement(elH,4);
+  G4Material* Maylar = new G4Material(name="Maylar", density, nel=3);
+  Maylar->AddElement(elO,2);
+  Maylar->AddElement(elC,5);
+  Maylar->AddElement(elH,4);
+
+  // Kapton Dupont de Nemur (density: 1.396-1.430, get middle )
+
+  density = 1.413*g/cm3;
+  G4Material* Kapton = new G4Material(name="Kapton", density, nel=4);
+  Kapton->AddElement(elO,5);
+  Kapton->AddElement(elC,22);
+  Kapton->AddElement(elN,2);
+  Kapton->AddElement(elH,10);
+
+  // Germanium as detector material
+
+  density = 5.323*g/cm3;
+  a = 72.59*g/mole;
+  G4Material* Ge = new G4Material(name="Ge", z=32., a, density);
+
+  // GaAs detectors
+
+  density = 5.32*g/cm3;
+  G4Material* GaAs = new G4Material(name="GaAs",density, nel=2);
+  GaAs->AddElement(elGa,1);
+  GaAs->AddElement(elAs,1);
+
+  // Diamond detectors
+
+  density = 3.5*g/cm3;
+  G4Material* Diamond = new G4Material(name="Diamond",density, nel=1);
+  Diamond->AddElement(elC,1);
 
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
@@ -246,6 +298,139 @@ int main()
   density = 0.145*g/cm3;
   G4Material* CarbonFiber = new G4Material(name="CarbonFiber",density, nel=1);
   CarbonFiber->AddElement(elC,1);
+
+  // Dry air (average composition)
+
+
+  density = 1.25053*mg/cm3 ;       // STP
+  G4Material* Nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
+  Nitrogen->AddElement(elN, 2);
+
+  density = 1.4289*mg/cm3 ;       // STP
+  G4Material* Oxygen = new G4Material(name="O2"  , density, ncomponents=1);
+  Oxygen->AddElement(elO, 2);
+
+  density = 1.7836*mg/cm3 ;       // STP
+  G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
+  Argon->AddElement(elAr, 1);
+
+  density = 1.2928*mg/cm3 ;       // STP
+  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
+  Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
+  Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
+  Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
+
+  // Xenon as detector gas, STP
+
+  density = 5.858*mg/cm3 ;
+  a = 131.29*g/mole ;
+  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
+
+  // Helium as detector gas, STP
+
+  density = 0.178*mg/cm3 ;
+  a = 4.0026*g/mole ;
+  G4Material* He  = new G4Material(name="He",z=2., a, density );
+
+  // Neon as detector gas, STP
+
+  density = 0.900*mg/cm3 ;
+  a = 20.179*g/mole ;
+  G4Material* Ne  = new G4Material(name="Ne",z=10., a, density );
+
+  // Krypton as detector gas, STP
+
+  density = 3.700*mg/cm3 ;
+  a = 83.80*g/mole ;
+  G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
+
+  // Carbone dioxide, CO2 STP
+
+  density = 1.977*mg/cm3 ;
+  G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2) ;
+  CarbonDioxide->AddElement(elC,1) ;
+  CarbonDioxide->AddElement(elO,2) ;
+
+  // Metane, STP
+
+  density = 0.7174*mg/cm3 ;
+  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
+  metane->AddElement(elC,1) ;
+  metane->AddElement(elH,4) ;
+
+  // Propane, STP
+
+  density = 2.005*mg/cm3 ;
+  G4Material* propane = new G4Material(name="C3H8",density,nel=2) ;
+  propane->AddElement(elC,3) ;
+  propane->AddElement(elH,8) ;
+
+  // iso-Butane (methylpropane), STP
+
+  density = 2.67*mg/cm3 ;
+  G4Material* isobutane = new G4Material(name="isoC4H10",density,nel=2) ;
+  isobutane->AddElement(elC,4) ;
+  isobutane->AddElement(elH,10) ;
+
+// 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1 atm
+
+  density = 4.9196*mg/cm3 ;
+
+  G4Material* XeCH4C3H8 = new G4Material(name="XeCH4C3H8"  , density,
+                                                             ncomponents=3);
+  XeCH4C3H8->AddMaterial( Xe,       fractionmass = 0.971 ) ;
+  XeCH4C3H8->AddMaterial( metane,   fractionmass = 0.010 ) ;
+  XeCH4C3H8->AddMaterial( propane,  fractionmass = 0.019 ) ;
+
+  // Propane in MWPC, 2 atm, 20 C
+
+  //  density = 3.758*mg/cm3 ;
+  density = 3.736*mg/cm3 ;
+  G4Material* propaneDet = new G4Material(name="detC3H8",density,nel=2) ;
+  propaneDet->AddElement(elC,3) ;
+  propaneDet->AddElement(elH,8) ;
+
+  // 80% Ar + 20% CO2, STP
+
+  density = 1.8223*mg/cm3 ;
+  G4Material* Ar20CO2 = new G4Material(name="Ar20CO2"  , density,
+                                                             ncomponents=2);
+  Ar20CO2->AddMaterial( Argon,           fractionmass = 0.783 ) ;
+  Ar20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
+
+  // 93% Ar + 7% CH4, STP
+
+  density = 1.709*mg/cm3 ;
+  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density,
+                                                             ncomponents=2);
+  Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
+  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
+
+  // 80% Xe + 20% CO2, STP
+
+  density = 5.0818*mg/cm3 ;
+  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , density,
+                                                             ncomponents=2);
+  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
+  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+
+  // 80% Kr + 20% CO2, STP
+
+  density = 3.601*mg/cm3 ;
+  G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density,
+                                                             ncomponents=2);
+  Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
+  Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
+
+  // 80% He + 20% CO2, STP
+
+  density = 0.5378*mg/cm3 ;
+  G4Material* He20CO2 = new G4Material(name="He20CO2"  , density,
+                                                             ncomponents=2);
+  He20CO2->AddMaterial( He,              fractionmass = 0.265 ) ;
+  He20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.735 ) ;
+
+
 
 //
 // Print the table of materials
@@ -297,17 +482,20 @@ int main()
                                       GetElement(iSan)->GetZ();
      }     
      G4SandiaTable sandia(matIndex) ;
-     sanIndex = sandia.SandiaIntervals(thisMaterialZ,nbOfElements);    
-     sanIndex = sandia.SandiaMixing( thisMaterialZ ,
-                             (*theMaterialTable)[iMat]->GetFractionVector() ,
-				     nbOfElements,sanIndex) ;
 
-     for(row=0;row<sanIndex-1;row++)
+     //  sanIndex = sandia.SandiaIntervals(thisMaterialZ,nbOfElements);    
+     //  sanIndex = sandia.SandiaMixing( thisMaterialZ ,
+     //                             (*theMaterialTable)[iMat]->GetFractionVector() ,
+     //			     nbOfElements,sanIndex) ;
+     sanIndex = sandia.GetMaxInterval() ;
+     G4cout<<"fMaxInterval = "<<sanIndex<<G4endl<<G4endl;
+
+     for(row = 0; row < sanIndex - 1 ; row++)
      {
        G4cout<<row+1<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,0)/keV;
        
        unit = cm2/g;
-       for(iSan=1;iSan<5;iSan++)
+       for(iSan = 1; iSan < 5; iSan++)
        {
          unit *= keV;         
          G4cout<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,iSan)/unit;
@@ -321,22 +509,26 @@ int main()
 //
 // Sandia cof according ComputeMatSandiaMatrix()
 //
-     G4SandiaTable* sanMatrix = G4Material::GetMaterial(matName)->
-                                GetSandiaTable() ;
-     sanIndex = sanMatrix->GetMatNbOfIntervals() ;
+     // G4SandiaTable* sanMatrix = G4Material::GetMaterial(matName)->
+     // GetSandiaTable() ;
+     // sanIndex = sanMatrix->GetMatNbOfIntervals() ;
       
-     G4cout<<"Sandia cof according ComputeMatSandiaMatrix()"<<G4endl<<G4endl;
+     // G4cout<<"Sandia cof according ComputeMatSandiaMatrix()"<<G4endl<<G4endl;
+     G4cout<<"Sandia cof according ComputeMatTable()"<<G4endl<<G4endl;
 
-     for(row=0;row<sanIndex;row++)
+     for(row = 0; row < sanIndex; row++)
      {
-       G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV;
+       //   G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV;
+
+       G4cout<<row<<"\t"<<sandia.GetSandiaMatTable(row,0)/keV;
        
        unit = cm2/g;
-       for(iSan=1;iSan<5;iSan++)
+       for(iSan = 1; iSan < 5; iSan++)
        {
          unit *= keV; 
-         G4cout<<"\t"<<(sanMatrix->GetSandiaCofForMaterial(row,iSan))
-	                                                    /(density*unit);
+   // G4cout<<"\t"<<(sanMatrix->GetSandiaCofForMaterial(row,iSan))/unit; // (density*unit);
+
+	 G4cout<<"\t"<<(sandia.GetSandiaMatTable(row,iSan))/unit; // (density*unit);
        }
        G4cout<<G4endl;
      }      
