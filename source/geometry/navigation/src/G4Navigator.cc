@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.5 2003-11-10 08:58:42 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.6 2004-02-27 11:46:05 grichine Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -819,8 +819,9 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // (in order to have it if requested)
       //
       G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
-      finalGlobalPoint = fLastLocatedPointLocal + localDirection*Step;
-      finalLocalPoint  = ComputeLocalPoint(finalGlobalPoint);
+      finalLocalPoint = fLastLocatedPointLocal + localDirection*Step;
+      // finalGlobalPoint = fLastLocatedPointLocal + localDirection*Step;
+      // finalLocalPoint  = ComputeLocalPoint(finalGlobalPoint);
       localExitNormal  = motherLogical->GetSolid()->
                          SurfaceNormal(finalLocalPoint);
       const G4RotationMatrix* mRot = motherPhysical->GetRotation();
