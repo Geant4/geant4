@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.4 2000-09-13 09:25:41 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.5 2000-09-13 09:43:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -406,7 +406,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
         G4double QTemper=fakeQ.GetTemper();        // Temperature defined by user for Quasmons
         G4double QSOverU=fakeQ.GetSOverU();        // S/U defined by user for Quasmons
         G4double QEtaSup=fakeQ.GetEtaSup();        // Eta Suppresion defined by user for Quasmons
-        G4Quasmon::SetParameters(180.,.1,.3);      //@@Hardwired parameters for N-barN annihilation
+        G4double QMedium=1.;        // Eta Suppresion defined by user for Quasmons
+        G4Quasmon::SetParameters(180.,.1,.3,1.);   //@@Hardwired parameters for N-barN annihilation
         G4QEnvironment* muq = new G4QEnvironment(input,theEnvironment.GetPDG());
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: before input.clearAndDestroy()"<<G4endl;
@@ -418,7 +419,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	    G4cout<<"G4QEnvironment::CreateQ: before delete muq"<<G4endl;
 #endif
         delete muq;
-        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup); // Recover user's parameters for Quasmons
+        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup,QMedium); // Recover user's parameters for Quasmons
 	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: after GetQuasmon nMQ="<<nMQ<<G4endl;
