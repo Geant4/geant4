@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.31 2002-10-29 18:36:57 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.32 2003-06-13 09:43:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -239,3 +239,8 @@ G4int G4PropagatorInField::GetThresholdNoZeroSteps( G4int i )
    return t;
 }
 
+inline
+void G4PropagatorInField::SetDetectorFieldManager(G4FieldManager* newDetectorFieldManager)
+{
+   fDetectorFieldMgr = newDetectorFieldManager; 
+}
