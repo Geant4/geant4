@@ -41,7 +41,7 @@ void Tst01RunAction::BeginOfRunAction(const G4Run* aRun)
   ((G4Run*)aRun)->SetRunID(runIDcounter++);
 }
 
-void Tst01RunAction::EndOfRunAction(const G4Run* aRun)
+void Tst01RunAction::EndOfRunAction(const G4Run*)
 {
 }
 
