@@ -74,6 +74,10 @@
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 
+#ifdef G4ANALYSIS_USE
+#include "BrachyAnalysisManager.hh"
+#endif
+
 int main(int argc ,char ** argv)
 
 {
@@ -138,6 +142,10 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
+#ifdef G4ANALYSIS_USE
+  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+  analysis -> finish();
+#endif
   
   // Job termination
 #ifdef G4VIS_USE

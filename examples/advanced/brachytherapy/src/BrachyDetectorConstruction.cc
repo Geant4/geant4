@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.25 2004-05-13 14:47:46 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.26 2004-11-24 09:53:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -169,7 +169,7 @@ void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
       }
     }
   }
-  G4cout << "Now Detector is " << val << G4endl;
+  G4cout << "Now the source is " << val << G4endl;
 }
 
 void BrachyDetectorConstruction::ConstructPhantom()

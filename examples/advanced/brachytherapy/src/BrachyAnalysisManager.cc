@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.14 2004-05-13 14:47:46 guatelli Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.15 2004-11-24 09:53:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -60,16 +60,11 @@ BrachyAnalysisManager::BrachyAnalysisManager() :
   aFact = AIDA_createAnalysisFactory();
 
   AIDA::ITreeFactory *treeFact = aFact->createTreeFactory(); 
- 
-  //parameters for the TreeFactory
- 
-  std::string fileName = "brachytherapy.hbk";
+  
+  G4String fileName = "brachytherapy.hbk";
   theTree = treeFact->create(fileName,"hbook",false, true);
 
   delete treeFact;
- 
-  histFact = aFact->createHistogramFactory( *theTree );
-  tupFact  = aFact->createTupleFactory    ( *theTree ); 
 }
 
 BrachyAnalysisManager::~BrachyAnalysisManager() 
@@ -94,7 +89,9 @@ BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
 }
 
 void BrachyAnalysisManager::book() 
-{
+{ 
+  histFact = aFact->createHistogramFactory( *theTree );
+  tupFact  = aFact->createTupleFactory    ( *theTree ); 
   //creating a 1D histogram ...
   h1 = histFact->createHistogram2D("10","Energy, pos", //histoID,histo name
 				    300 ,-150.,150.,   //bins'number,xmin,xmax 

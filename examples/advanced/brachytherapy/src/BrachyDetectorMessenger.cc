@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.8 2003-05-26 09:20:14 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.9 2004-11-24 09:53:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   detectorDir->SetGuidance(" phantom control.");
       
   phantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
-  phantomMaterialCmd->SetGuidance("Select Material of the detector.");
+  phantomMaterialCmd->SetGuidance("Select Material of the phantom.");
   phantomMaterialCmd->SetParameterName("choice",false);
   phantomMaterialCmd->AvailableForStates(G4State_Idle);
   

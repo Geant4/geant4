@@ -35,7 +35,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.13 2003-12-09 15:30:03 gunter Exp $
+// $Id: BrachyRunAction.cc,v 1.14 2004-11-24 09:53:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,11 +70,19 @@ BrachyRunAction::~BrachyRunAction()
   delete runMessenger;
   delete detector; 
 }
-void BrachyRunAction::BeginOfRunAction(const G4Run*)
+void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
+ G4cout << "### Run " << aRun -> GetRunID() << " start." << G4endl;
+
 #ifdef G4ANALYSIS_USE
-  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-  analysis->book();
+ G4int runNb = aRun -> GetRunID();
+ if (runNb == 0) 
+    {  
+     BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+     analysis->book();
+    }
+ else { G4cout << "The results of Run:"<< runNb << " are summed to the" << 
+        " results of the previous Run in brachytherapy.hbk" << G4endl;} 
 #endif  
   G4RunManager* runManager = G4RunManager::GetRunManager();
 
@@ -103,14 +111,7 @@ void BrachyRunAction::SelectEnergy(G4int choice)
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 {
-#ifdef G4ANALYSIS_USE
-  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-#endif
   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  
-#ifdef G4ANALYSIS_USE      
-  analysis->finish();
-#endif
   delete factory;    
 }
 
