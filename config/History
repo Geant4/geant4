@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2000-11-07 14:35:03 barrand Exp $
+$Id: History,v 1.119 2000-11-14 17:47:58 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,9 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-7 November 2000  Guy Barrand
-- analysis.gmk : rename OpenScientist things to "Lab" ; 
-  Lab is the concreete package where analysis is done.
+14th November 2000  Gabriele Cosmo (config-V02-00-05)
+- Added reference to new "parameterisations" top category.
+  Modified files: binmake.gmk.
+- Removed makeshlib.sh script, now obsolete.
+
+7th November 2000  Guy Barrand
+- analysis.gmk : renamed OpenScientist things to "Lab" ; 
+  Lab is the concrete package where analysis is done.
 
 3rd November 2000  Gunter Folger (config-V02-00-04)
 - common.gmk: fix for shared-library build.
