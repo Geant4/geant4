@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2004-03-24 18:22:09 maire Exp $
+$Id: README,v 1.15 2004-03-31 10:30:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -149,4 +149,5 @@ $Id: README,v 1.14 2004-03-24 18:22:09 maire Exp $
  
  setenv ROOTSYS /???/ROOT/root_v3_10_02
  setenv PATH ${PATH}:${ROOTSYS}/bin
- setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:/usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.
+ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:
+         /usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.
