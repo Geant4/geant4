@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-10-03 10:05:44 gcosmo Exp $
+$Id: History,v 1.2 2003-10-03 10:27:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 04, 2003, G.Cosmo (digits_hits-V05-02-00)
+- Imported files from directory digits+hits.
+- Changed name of global library to G4digits_hits.
+- Added dependency on new module geometry/navigation where needed.
 
 Jun 03, 2003, G.Cosmo (digits_hits-V05-01-01)
 - Fixed trivial warning in G4VHit.cc.
