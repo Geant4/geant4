@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:11:09 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-06-05 12:45:59 stesting Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -31,3 +31,24 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
+
+CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
+ifeq ($(G4SYSTEM),HP-aCC)
+COMPILER := $(shell aCC -V 2>&1)
+ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4IeEnergyLoss.o: src/G4IeEnergyLoss.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4IeEnergyLoss.cc
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4IhEnergyLoss.o: src/G4IhEnergyLoss.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4IhEnergyLoss.cc
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4eEnergyLoss.o: src/G4eEnergyLoss.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4eEnergyLoss.cc
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4eEnergyLossPlus.o: src/G4eEnergyLossPlus.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4eEnergyLossPlus.cc
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4hEnergyLoss.o: src/G4hEnergyLoss.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4hEnergyLoss.cc
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4hEnergyLossPlus.o: src/G4hEnergyLossPlus.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4hEnergyLossPlus.cc
+endif
+endif
