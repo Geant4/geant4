@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.55 2004-06-24 14:27:22 stesting Exp $
+# $Id: Configure,v 1.56 2004-06-24 15:21:22 stesting Exp $
 #
-# Generated on Thu Jun 24 14:09:42 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 24 17:20:19 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2506,11 +2506,11 @@ case "$g4lib" in
 	;;
 esac
 
-case "$g4bin" in
-'')
-	g4bin=$g4workdir/bin
-	;;
-esac
+#case "$g4bin" in
+#'')
+#	g4bin=$g4workdir/bin
+#	;;
+#esac
 
 while test 1 = 1  ; do
 
@@ -2523,8 +2523,6 @@ g4message=`cat << EOM
 1) G4TMP:		$g4tmp
 
 2) G4LIB:		$g4lib
-
-3) G4BIN:		$g4bin
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -2553,13 +2551,13 @@ gans=$ans
 		. ./getfile
 		g4lib=$ans
 		;;
-	3) 
-		dflt=$g4bin
-		fn='d~+'
-		rp="Where will be your Geant4 bin directory?"
-		. ./getfile
-		g4bin=$ans
-		;;
+#	3) 
+#		dflt=$g4bin
+#		fn='d~+'
+#		rp="Where will be your Geant4 bin directory?"
+#		. ./getfile
+#		g4bin=$ans
+#		;;
 
 #	[eE]) 
 #		break
@@ -2924,6 +2922,12 @@ case "$g4lib_build_dll" in
 	;;
 esac
 
+case "$g4lib_build_dyn" in
+'')
+	g4lib_build_dyn=n
+	;;
+esac
+
 #
 # Ask about building of SHARED|STATIC libraries - default STATIC. 
 #
@@ -2955,6 +2959,53 @@ gans=$ans
 		;;
 	y*|Y*) 
 		g4lib_build_dll=y
+		g4lib_build_shared=n
+		g4lib_build_static=n
+
+#		g4lib_build_static=""
+#		g4lib_use_shared=1
+#		g4lib_use_static=""
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+fi
+
+###############################################
+if test "X$g4system" = "Darwin-g++" ; then
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+By default 'static'  libraries are built.
+
+Do you want to build dynamic libraries?
+EOM`
+
+dflt=$g4lib_build_shared
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_build_dyn=n
+		g4lib_build_shared=n
+		g4lib_build_static=y
+		break
+		;;
+	y*|Y*) 
+		g4lib_build_dyn=y
 		g4lib_build_shared=n
 		g4lib_build_static=n
 

@@ -61,6 +61,12 @@ echo "On this machine the G4LIB=\$G4LIB"
 fi
 
 #+
+if [ X$g4lib != X ] ; then 
+G4BIN="$g4lib/../bin"
+export G4BIN
+fi
+
+#+
 if [ X$g4levelgammadata != X ] ; then 
 G4LEVELGAMMADATA="$g4levelgammadata"
 export G4LEVELGAMMADATA
@@ -342,8 +348,6 @@ fi
 
 #####################################################################
 
-echo g4conf=$g4conf
-
 #####################################################################
 # Create GNUmakefile.db to keep ALL GNUmakefile DB :)
 
@@ -384,6 +388,12 @@ rm -rf $g4conf/g4make.log
 $g4make dll 2>&1 | tee $g4conf/g4make.log
 fi
 
+if [ X$g4lib_build_dyn = Xy ] ; then
+echo ""
+rm -rf $g4conf/g4make.log
+$g4make global G4LIB_BUILD_SHARED=1 2>&1 | tee $g4conf/g4make.log
+fi
+
 # Check for errors in log file
 if test -f \$g4conf/g4make.log ; then
 
@@ -400,28 +410,28 @@ int2=\`echo \$int\`
 if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""
 echo "####################################################"
-echo "# Your Geant4 installation seems to be successful! #"
-echo "# To be sure please have a look into the log file: #"
-echo "# $g4conf/g4make.log				 #"
+echo "# Your Geant4 installation seems to be successful!  "
+echo "# To be sure please have a look into the log file:  "
+echo "# $g4conf/g4make.log				  "
 echo "####################################################"
 echo ""
 else
 echo ""
 echo "############################################################"
-echo "# It looks like you had errors during Geant4 installation  #"
-echo "# (or interrupted installation)!				 #"
-echo "# Please check log file:				      	 #"
-echo "# $g4conf/g4make.log					 #"
+echo "# It looks like you had errors during Geant4 installation   "
+echo "# (or interrupted installation)!				  "
+echo "# Please check log file:				      	  "
+echo "# $g4conf/g4make.log					  "
 echo "############################################################"
 echo ""
 fi 
 else
 echo ""
 echo "############################################################"
-echo "# It looks like you had errors during Geant4 installation  #"
-echo "# (or interrupted installation)!				 #"
-echo "# You have no log file:				      	 #"
-echo "# $g4conf/g4make.log					 #"
+echo "# It looks like you had errors during Geant4 installation   "
+echo "# (or interrupted installation)!				  "
+echo "# You have no log file:				      	  "
+echo "# $g4conf/g4make.log					  "
 echo "############################################################"
 echo ""
 fi
