@@ -152,7 +152,8 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/notifyHandlers [<scene-name>] [r[efresh]]|f[lush]]
   default:             current scene name     refresh
-  Clears and refreshes all viewers of current scene.
+  Clears and refreshes all viewers of current scene and forces a
+  reconstruction of any graphical databases.
   The default action "refresh" does not issue "update" (see
   /vis/viewer/update).
   If "flush" is specified, it issues an "update" as well as "refresh".  Useful

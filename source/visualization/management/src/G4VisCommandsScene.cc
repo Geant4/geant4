@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.32 2003-06-16 17:14:22 gunter Exp $
+// $Id: G4VisCommandsScene.cc,v 1.33 2003-09-22 10:34:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -350,7 +350,8 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   fpCommand -> SetGuidance
     ("/vis/scene/notifyHandlers [<scene-name>] [r[efresh]|f[lush]]");
   fpCommand -> SetGuidance
-    ("Notifies scene handlers of possible changes of scene.");
+    ("Notifies scene handlers of possible changes of scene and forces a"
+     "reconstruction of any graphical databases.");
   fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
   fpCommand -> SetGuidance
     ("Clears and refreshes all viewers of current scene."
