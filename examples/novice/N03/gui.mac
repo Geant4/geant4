@@ -23,6 +23,6 @@
 /gui/addButton vis Vis5 "/control/execute exN03Vis5.mac"
 /gui/addButton vis Vis6 "/control/execute exN03Vis6.mac"
 #
-# To limit the output in the "dump" widget :
+# To limit the output flow in the "dump" widget :
 /event/printModulo 100
 #
