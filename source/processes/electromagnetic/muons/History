@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2003-02-13 16:23:46 vnivanch Exp $
+$Id: History,v 1.40 2003-02-20 09:27:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 feb 03: V.Ivant
+13 feb 03: V.Ivant (muons-V05-00-04)
 - add names for all models
 - make the set of model per region available
 - make SubCutoff regime available per region
