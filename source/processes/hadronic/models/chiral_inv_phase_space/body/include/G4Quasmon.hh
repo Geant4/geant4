@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.3 2000-08-16 07:32:45 hpw Exp $
+// $Id: G4Quasmon.hh,v 1.4 2000-08-17 13:53:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,11 +40,9 @@ class G4Quasmon
 {
 public:
   G4Quasmon(const G4QContent projQC, const G4int targPDG, const G4LorentzVector proj4M,
-            const G4LorentzVector targ4Mom, const G4double temp, const G4double ssIn2g,
-            const G4double eep, G4int nOfParts);
+            const G4LorentzVector targ4Mom, G4int nOfParts);
   G4Quasmon(const G4int projPDG, const G4int targPDG, const G4LorentzVector proj4M,
-            const G4LorentzVector targ4Mom, const G4double temp, const G4double ssIn2g,
-            const G4double eep, G4int nOfParts);
+            const G4LorentzVector targ4Momp, G4int nOfParts);
   G4Quasmon(const G4Quasmon &right);                                  // Quasmon duplication
 
   ~G4Quasmon();
@@ -56,6 +54,8 @@ public:
   G4LorentzVector Get4Momentum() const;
   //General
   G4QHadronVector HadronizeQuasmon();
+  // Static functions
+  static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
 
 private:  
   G4QParticleVector* InitQuasmonEnvironment(G4int nOfParts); // nOfParts<0 kills the CHIPS World
@@ -85,12 +85,11 @@ private:
 
 // Body
 private:
-  G4QParticleVector* qWorld;          // Vector of Particles of the CHIPS World 
-  // Parameters
-  G4double           Temperature;     // Quasmon Temperature
-  G4double           SSin2Gluons;     // Percent of ssbar sea in a constituen gluon
-  G4double           EtaEtaprime;     // Part of eta-prime in all etas
-  G4int              nBarClust;       // Maximum barion number of clusters (Calc. @ Interaction)
+  G4QParticleVector* qWorld;          // Pointer to the Vector of Particles of the CHIPS World 
+  // Static Parameters
+  static G4double    Temperature;     // Quasmon Temperature
+  static G4double    SSin2Gluons;     // Percent of ssbar sea in a constituen gluon
+  static G4double    EtaEtaprime;     // Part of eta-prime in all etas
   // Hadronic input
   G4LorentzVector    q4Mom;           // 4-momentum of the Quasmon
   G4QContent         valQ;            // Quark Content of Quasmon
@@ -99,6 +98,7 @@ private:
   // Output hadrons
   G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons
   // Internal working parameters
+  G4int              nBarClust;       // Maximum barion number of clusters (Calc. @ Interaction)
   G4int              qZ;              // a#of "protons" in the Quasmon        (***delete***)
   G4int              qN;              // a#of "neutrons" in the Quasmon
   G4int              qS;              // a#of "lambdas" in the Quasmon

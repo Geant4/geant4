@@ -5,11 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadronVector.hh,v 1.3 2000-08-17 13:53:02 mkossov Exp $
+// $Id: G4QParentClusterVector.hh,v 1.1 2000-08-17 13:55:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
+#ifndef G4QParentClusterVector_h
+#define G4QParentClusterVector_h 1
 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -18,12 +18,14 @@
 //      CERN, CN Division, ASD group
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
+// Type defenition of Parent nuclear cluster Vector in CHIPS model
 // ---------------------------------------------------------------
 
-#include "G4QHadron.hh"
+#include "G4QParentCluster.hh"
 #include "g4rw/tpordvec.h"
 
-typedef G4RWTPtrOrderedVector<G4QHadron> G4QHadronVector;
+typedef G4RWTPtrOrderedVector<G4QParentCluster> G4QParentClusterVector;
 
 #endif
+
+

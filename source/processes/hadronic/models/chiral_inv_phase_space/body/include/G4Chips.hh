@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Chips.hh,v 1.3 2000-08-16 07:32:45 hpw Exp $
+// $Id: G4Chips.hh,v 1.4 2000-08-17 13:53:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
