@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.82 2002-11-25 12:10:43 gcosmo Exp $
+# $Id: binmake.gmk,v 1.83 2002-12-02 15:26:59 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -306,13 +306,34 @@ endif
 GPPFLAGS := "-M"
 
 # Make the $(G4TARGET).d file and include it.
+
+# The ideas for this come from the GNU Make Manual, Section 4.12,
+# Generating Prerequisites Automatically.  The g++ compiler has an
+# option -M or -MM to write to standard output a list of dependencies
+# based on the #include statements.  The "sed" adds the dependency
+# file itself as a second target.  The result is a mini-makefile which
+# specifies the .o and .d files as targets which depend on all the
+# files found through the #include statements.  This file is then
+# included, causing GNU Make to honour these dependencies.
+
+# The "set -e" causes the shell to exit with an error when the "g++"
+# fails (otherwise it would only notice the last command in the
+# pipeline, namely "sed").  GNU Make notices the error and exits
+# sooner than it otherwise would (still not as soon as I expect,
+# though!).  Even then, an empty file is made, so "[ -s $@ ] || rm -f
+# $@" removes it ([ -s filename ] gives zero exit code only if file
+# exists and has a size greater than zero).  This avoids making
+# corrupt .d files which would play havoc with your next build.
+
 $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
-	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	@set -e;\
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
+	sed 's!$*.o!$(G4TMPDIR)/exe/& $@!' >$@\
+	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 -include $(dependencies)
 endif

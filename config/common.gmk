@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.31 2002-11-25 12:10:43 gcosmo Exp $
+# $Id: common.gmk,v 1.32 2002-12-02 15:26:59 johna Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -23,7 +23,6 @@ ifneq ($(G4LIB_BUILD_STATIC),)
 endif
 
 # GPPFLAGS is defined here to make the .d file(s) and include it(them).
-# This variable is actually used in common_kernel.gmk and common_objy.gmk.
 
 GPPFLAGS := "-M"
 
@@ -78,14 +77,34 @@ $(G4TMPDIR)/obj.last: $(objects) $(schema_o)
 	@touch $@
 
 # Make the .d file(s) and include it(them).
-# g++ -MM (or -M) is good at this, except it forgets the subdirectory
-# (hence the use of $G4TMP/).
+
+# The ideas for this come from the GNU Make Manual, Section 4.12,
+# Generating Prerequisites Automatically.  The g++ compiler has an
+# option -M or -MM to write to standard output a list of dependencies
+# based on the #include statements.  The "sed" adds the dependency
+# file itself as a second target.  The result is a mini-makefile which
+# specifies the .o and .d files as targets which depend on all the
+# files found through the #include statements.  This file is then
+# included, causing GNU Make to honour these dependencies.
+
+# The "set -e" causes the shell to exit with an error when the "g++"
+# fails (otherwise it would only notice the last command in the
+# pipeline, namely "sed").  GNU Make notices the error and exits
+# sooner than it otherwise would (still not as soon as I expect,
+# though!).  Even then, an empty file is made, so "[ -s $@ ] || rm -f
+# $@" removes it ([ -s filename ] gives zero exit code only if file
+# exists and has a size greater than zero).  This avoids making
+# corrupt .d files which would play havoc with your next build.
+
+# schema_hh and schema_ref_hh are defined in common_objy.gmk.
 
 $(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
 	@echo Making dependency for file $< ...
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
-	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	@set -e;\
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
+	sed 's!$*.o!$(G4TMPDIR)/& $@!' >$@;\
+	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 -include $(dependencies)
 endif
