@@ -49,11 +49,8 @@
       hasXsec = false;
       return;
     }
-#ifdef G4USE_STD_NAMESPACE
     std::ifstream theData(filename, std::ios::in);
-#else
-    ifstream theData(filename, ios::in|ios::nocreate);
-#endif
+
     // here it comes
     G4int infoType, dataType;
     hasFSData = false; 

@@ -38,11 +38,7 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
    std::ostrstream ost(the, 100, std::ios::out);
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
    G4String * aName = new G4String(the);
-#ifdef G4USE_STD_NAMESPACE
    std::ifstream from(*aName, std::ios::in);
-#else
-   ifstream from(*aName, ios::in|ios::nocreate);
-#endif
    if(!from) return; // no data found for this isotope
    std::ifstream theGammaData(*aName, std::ios::in);
     
@@ -75,13 +71,9 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     hasXsec = false;
     return;
   }
-    theBaseA = A;
-    theBaseZ = G4int(Z+.5);
-#ifdef G4USE_STD_NAMESPACE
+  theBaseA = A;
+  theBaseZ = G4int(Z+.5);
   std::ifstream theData(filename, std::ios::in);
-#else
-  std::ifstream theData(filename, std::ios::in|std::ios::nocreate);
-#endif
   if(!(theData))
   {
     hasAnyData = false;

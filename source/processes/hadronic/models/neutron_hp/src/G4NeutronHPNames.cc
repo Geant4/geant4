@@ -78,11 +78,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
       result.SetA(myA);
       result.SetZ(myZ);
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
-#ifdef G4USE_STD_NAMESPACE
       check = new std::ifstream(*theName);
-#else
-      check = new std::ifstream(*theName,std::ios::in|std::ios::nocreate);
-#endif
       if(!(*check)) 
       {
 	check->close();
@@ -102,11 +98,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
           G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
           result.SetZ(myZ);
-#ifdef G4USE_STD_NAMESPACE
-      check = new std::ifstream(*theName);
-#else
-      check = new std::ifstream(*theName,std::ios::in|std::ios::nocreate);
-#endif
+          check = new std::ifstream(*theName);
           if (!(*check)) 
           {
 	    check->close();

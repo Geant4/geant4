@@ -50,11 +50,7 @@
       hasXsec = false;
       return; // no data for exactly this isotope.
     }
-#ifdef G4USE_STD_NAMESPACE
     std::ifstream theData(filename, std::ios::in);
-#else
-    ifstream theData(filename, ios::in|ios::nocreate);
-#endif
     G4int dummy;
     if(!(theData))
     {
