@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.16 2003-01-14 22:46:33 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.17 2003-02-19 08:42:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -306,10 +306,10 @@ class G4VUserPhysicsList
   protected:
    void SetCutValueForOthers(G4double cutValue)
    {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
-    G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+    G4cout << "WARNING !" << G4endl;
+    G4cout << " SetCutValueForOthers became obsolete." << G4endl;
+    G4cout << " It is harmless to remove this invokation without any side effects." << G4endl;
+    G4cout << " This dummy method implementation will be removed soon." << G4endl;
    }
 
 };
