@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2002-12-16 11:15:36 gcosmo Exp $
+$Id: History,v 1.76 2003-01-08 00:01:11 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jan 7, 2002      (particles-V05-00-01)
+- Instant fixes for new 'cuts-by-region'
+  Corrected files :
+     management/include/G4VRangeToEnergyConverter.hh
+     management/src/G4ProductionCutsTable.cc
+     management/src/G4RToEConvForElectron.cc
+     management/src/G4RToEConvForGamma.cc
+     management/src/G4RToEConvForPositron.cc
+     management/src/G4VRangeToEnergyConverter.cc
 
 - Dec 16, 2002     (particles-V05-00-00)
 - Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
