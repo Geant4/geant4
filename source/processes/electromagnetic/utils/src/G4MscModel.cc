@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.17 2004-04-29 18:40:54 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.18 2004-05-25 08:11:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 //          SampleCosineTheta
 // 23-04-04 true -> geom and geom -> true transformation has been
 //          rewritten, changes in the angular distribution (L.Urban)
+// 25-05-04 corr. in SampleCosineTheta for t ~ range .
 
 // Class Description:
 //
@@ -509,14 +510,18 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, 
-                                       G4double KineticEnergy)
+// G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy,
+//                                       G4double lambda)
+G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy)
 {
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
 
   if(trueStepLength >= currentRange*dtrl)
-    tau = -par2*log(1.-par1*trueStepLength) ;
+    if(par1*trueStepLength < 1.)
+      tau = -par2*log(1.-par1*trueStepLength) ;
+    else
+      tau = taubig ;
 
   currentTau = tau ;
 
@@ -524,7 +529,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength,
     cth = exp(-tau) ;
   else
   {
-    if (tau > taubig) cth = -1.+2.*G4UniformRand();
+    if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
         G4double a ;
