@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.14 2004-09-13 20:57:24 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.15 2004-09-22 19:58:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -264,6 +264,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 		 << G4BestUnit(pPolyhedron->GetVolume(),"Volume")
 		 << ", "
 		 << G4BestUnit(pMaterial->GetDensity(), "Volumic Mass");
+      delete pPolyhedron;
     } else {
       *fpOutFile << " (volume not available)";
     }
