@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.20 2003-06-19 14:38:45 gunter Exp $
+// $Id: G4ParticleDefinition.hh,v 1.21 2003-09-19 19:28:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,6 +116,7 @@ class G4ParticleDefinition
   //    void                  SetApplyCutsFlag(G4bool flag);
   //    virtual void          RestoreCuts(const G4double* cutInLength,
   //					const G4double* cutInEnergy ){}
+  //    static void SetEnergyRange(G4double lowedge, G4double highedge);
       
     
   public: // With Description
@@ -339,8 +340,6 @@ class G4ParticleDefinition
       // Get an array of energy cuts for all materials
       G4double  GetEnergyThreshold(const G4Material* ) const;
       // Get a energy cut for a material
-
-      static void SetEnergyRange(G4double lowedge, G4double highedge);
 };
 
 #include "G4ParticleDefinition.icc"
