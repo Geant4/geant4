@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.39 2001-08-24 20:44:30 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.40 2001-09-10 10:42:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ NI                      [<copy-no>] [<depth>]
   default:                                             1
 
 /vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]
-  default:                1          m           x       1         1        1        auto          0      0      0     m
+  default:                1          m           x       1         0        0        auto          0      0      0     m
   Adds an annotated scale line to the current scene.  See G4Scale.hh
   for further description.
 
@@ -397,7 +397,6 @@ default:             world
   /vis/scene/create
   /vis/scene/add/volume $1
   /vis/sceneHandler/attach
-  /vis/viewer/refresh
 
 /vis/drawView [<theta-deg>] [<phi-deg>]
               [<pan-right>] [<pan-up>] [<pan-unit>]
@@ -419,7 +418,6 @@ default:          error                600
   /vis/scene/create
   /vis/scene/add/logicalVolume $1
   /vis/sceneHandler/attach
-  /vis/viewer/refresh
 
 ******************************************************************/
 
