@@ -343,7 +343,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
     G4int i;
     for(i=1; i<nGammaEnergies; i++)
     {
-      running[i]+=theTransitionProbabilities[i];
+      running[i]=running[i-1]+theTransitionProbabilities[i];
     }
     G4double random = G4UniformRand();
     G4int it=0;

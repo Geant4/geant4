@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.10 2003-02-12 14:21:15 jwellisc Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.11 2003-02-12 17:57:22 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -183,11 +183,11 @@
 // // natural silicon only; swiches to aluminium
 // // copied to 14_28_Silicon
 //   //Init runs 
-//      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
-//      G4Element *elSi  = new G4Element(name="Silicon", symbol="Al", iz=14., a=28.0855*g/mole);
-//      theSi->AddElement( elSi, 1 );
-//      theMaterials[9] = theSi;
-//      
+      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
+      G4Element *elSi  = new G4Element(name="Silicon", symbol="Si", iz=14., a=28.0855*g/mole);
+      theSi->AddElement( elSi, 1 );
+      theMaterials[9] = theSi;
+      
 //      // Init runs
 //      G4Material *theCl = new G4Material(name="Chloron", density=3*g/cm3, nEl=1);
 //      G4Element *elCl  = new G4Element(name="Chloron", symbol="Al", iz=17, a=35.4527*g/mole);
