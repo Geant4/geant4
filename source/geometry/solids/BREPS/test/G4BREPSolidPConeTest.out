@@ -65,23 +65,23 @@ x=0  y=0  z=50 is outside  distance to in=9e+99  closest distance to in=10
 ==================================================
 Pdep is (0, -100, z)
 Dir is (0, 1, 0)
-  z=-30  distance to in=9e+99  distance to in=10
-  z=-25  distance to in=9e+99  distance to in=5
-  z=-20  distance to in=30  distance to in=0
-  z=-15  distance to in=30  distance to in=5
-  z=-10  distance to in=30  distance to in=0
-  z=-5  distance to in=45  distance to in=5
-  z=0  distance to in=60  distance to in=10
-  z=5  distance to in=60  distance to in=15
-  z=10  distance to in=60  distance to in=20
-  z=15  distance to in=40  distance to in=20.6155
-  z=20  distance to in=20  distance to in=20
-  z=25  distance to in=20  distance to in=15
-  z=30  distance to in=20  distance to in=10
-  z=35  distance to in=30  distance to in=5
-  z=40  distance to in=40  distance to in=0
-  z=45  distance to in=9e+99  distance to in=5
-  z=50  distance to in=9e+99  distance to in=10
+  z=-30  distance to in=9e+99  closest distance to in=10
+  z=-25  distance to in=9e+99  closest distance to in=5
+  z=-20  distance to in=30  closest distance to in=0
+  z=-15  distance to in=30  closest distance to in=5
+  z=-10  distance to in=30  closest distance to in=0
+  z=-5  distance to in=45  closest distance to in=5
+  z=0  distance to in=60  closest distance to in=10
+  z=5  distance to in=60  closest distance to in=15
+  z=10  distance to in=60  closest distance to in=20
+  z=15  distance to in=40  closest distance to in=20.6155
+  z=20  distance to in=20  closest distance to in=20
+  z=25  distance to in=20  closest distance to in=15
+  z=30  distance to in=20  closest distance to in=10
+  z=35  distance to in=30  closest distance to in=5
+  z=40  distance to in=40  closest distance to in=0
+  z=45  distance to in=9e+99  closest distance to in=5
+  z=50  distance to in=9e+99  closest distance to in=10
 
 
 ==================================================
