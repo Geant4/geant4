@@ -1,0 +1,133 @@
+
+                       geant4-06-02-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixed bug in G4ProductionCutsTable for the update of materials/cuts
+    couple for dynamic setups where material may vary, like in the case
+    of parameterization of detectors through material.
+  o Added caching mechanism for G4Polyhedron in physical volumes.
+  o Added new standard EM model G4BraggIonModel for ion ionization
+    and new process and model classes for e+ annihilation to pi+pi-.
+  o Particles: removed most intermediate level abstract classes and
+    migrated classes for particles to become 'utility' classes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry                                         geometry-V06-02-00
+--------
+- management (geommng-V06-02-03)
+  o Added map for storage of materials/cuts to G4Region, and added methods
+    for handling registration of couples in the map, finding a couple
+    according to a given material, clearing the map's storage.
+  o Added method UpdateMaterial() to G4LogicalVolume to refresh a material/cut
+    couple in the corresponding region.
+  o Added GetPolyhedron() to G4VPhysicalVolume, a smart access function that
+    creates a G4Polyhedron on request and stores for future access. A null
+    pointer means "not available".
+- navigation (geomnav-V06-02-04)
+  o Invoke G4LogicalVolume::UpdateMaterial() instead of SetMaterial() for
+    parameterised navigation in G4Navigator and G4ParameterisedNavigation
+- solids (geom-bool-V06-02-01, breps-V06-02-02,
+          geom-csg-V06-02-05, geom-specific-V06-02-01)
+  o Added specific GetPolyhedron() to solids, a smart access function that
+    creates a G4Polyhedron on request and stores for future access. A null
+    pointer means "not available".
+
+global                                           global-V06-02-00
+------
+- Added collection of flags and related methods in G4PhysicsTable.
+  The collection of boolean values will be used by physics processes
+  to flag if recomputation will be required or not.
+
+particles                                        particles-V06-02-04
+---------
+- All particles except shortlived become direct instances of
+  G4particleDefinition class.
+- Intermediate level abstract classes except G4VShortLivedParticle
+  are eliminated.
+- Classes with particle names (e.g. G4Gamma) are no longer derived from
+  G4ParticleDefinition nor intermediate level abstract classes (e.g.
+  G4VLepton), they are now utility classes which return corresponding
+  pointer of G4ParticleDefinition. These classes instantiate corresponding
+  G4ParticleDefinition objects at the first access to these classes, if and
+  only if corresponding particles have not yet instantiated elsewhere
+  (typically by the user).
+- Introduced G4MuonDecayChannelWithSpin class.
+
+processes/cuts                                   procuts-V06-02-00
+--------------
+- Fixed bug in G4ProductionCutsTable for the update of materials/cuts
+  couple for dynamic setups where material may vary, like in the case
+  of parameterization of detectors through material.
+
+processes/electromagnetic/muons                  muons-V06-02-02
+-------------------------------
+- Migrated processes to new interface for G4VParticleChange.
+
+processes/electromagnetic/standard               stand-V06-02-07
+----------------------------------
+- Added new model for ion ionization: G4BraggIonModel.
+- Added process and model classes for e+ annihilation to pi+pi-.
+- Fix in PAI models, removed cut dependence of results.
+- Fix in G4ionIonisation, can now use alpha tables.
+- Migrated processes to new interface for G4VParticleChange.
+
+processes/electromagnetic/utils                  utils-V06-02-11
+-------------------------------
+- Bug fix in effective charge sampling.
+- Change in the tail of the angular distribution in G4Mscmodel, to fix
+  problem of step dependence.
+- Migrated processes to new interface for G4VParticleChange.
+
+processes/electromagnetic/xrays                  xrays-V06-02-03
+-------------------------------
+- Migrated processes to new interface for G4VParticleChange.
+
+processes/optical                                op-V06-02-03
+-----------------
+- Fixed bug in G4PlaneVectorRand and resampled theFacetNormal for
+  LobeReflection in DielectricMetal.
+- Fixed bug in DielectricMetal only GetFacetNormal() for LobeReflection.
+- Migrated processes to new interface for G4VParticleChange.
+
+processes/transportation                         transport-V06-02-02
+------------------------
+- Added protection in G4Transportation for specific case of parameterised
+  volume by materials where no EM processes are defined.
+
+run                                              run-V06-02-03
+---
+- Temporarily allow the use of G4ParticleTable before the construction
+  of physics table.
+
+track                                            track-V06-02-01
+-----
+- Modified G4ParticleChangeForDecay: added thePolarizationChange and
+  related methods.
+
+examples                                         examples-V06-02-04
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/PhotonProcesses (photonprocesses-V06-02-02)
+    + Avoid deletion of Analysisfactory (for JAIDA).
+  o electromagnetic/TestEm3 (testem3-V06-02-02)
+    + Avoid deletion of Analysisfactory (for JAIDA).
+    + More histograms: longitudinal energy profile and forward energy flow.
+    + Changed the numering of absorbers: start from 1 instead of 0
+      and modified all macros according to the above.
+    + Define correctly all UI subdirectories.
+  o electromagnetic/TestEm7 (testem7-V06-02-03)
+    + Define correctly all UI subdirectories.
+    + Modifications in RunAction for histograms files.
+- novice
+  o N05 (exampleN05-V06-02-00)
+    + Modified method name for G4VParticleChange in ExN05SpecialCuts.
+
+tests                                            tests-V06-02-04
+-----
+- Updated reference outputs.
