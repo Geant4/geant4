@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.10 2002-10-28 11:10:58 johna Exp $
+// $Id: G4VTrajectory.hh,v 1.11 2002-11-08 18:17:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,11 +82,15 @@ class G4VTrajectory
    // Returns the number of trajectory points
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const = 0;
    // Returns i-th trajectory point.
-   virtual void ShowTrajectory(G4std::ostream& os=G4cout) const = 0;
-   // Convert attributes in trajectory (and trajectory point if needed)
-   // to ostream. If default is used, it will be sent to G4cout.
-   virtual void DrawTrajectory(G4int i_mode=0) const = 0;
-   // Draw the trajectory
+   virtual void ShowTrajectory(G4std::ostream& os=G4cout) const;
+   // Convert attributes in trajectory (and trajectory point if
+   // needed) to ostream.  A default implementation in this base class
+   // may be used or may be overridden in the concrete class.  Note:
+   // the user needs to follow with new-line or end-of-string,
+   // depending on the nature of os.
+   virtual void DrawTrajectory(G4int i_mode=0) const;
+   // Draw the trajectory.  A default implementation in this base
+   // class may be used or may be overridden in the concrete class.
    virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a map of
