@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc,v 1.15 2003-12-04 15:58:08 gcosmo Exp $
+// $Id: G4NavigationLevel.icc,v 1.16 2004-06-07 13:21:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
+G4extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 
 inline
 G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
