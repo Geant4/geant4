@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.21 2001-07-24 22:02:02 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.22 2001-07-25 21:20:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -349,13 +349,13 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
-  parameter =  new G4UIparameter ("x0", 'd', omitable = true);
+  parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("y0", 'd', omitable = true);
+  parameter =  new G4UIparameter ("ymid", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("z0", 'd', omitable = true);
+  parameter =  new G4UIparameter ("zmid", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
@@ -402,19 +402,65 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
   if (direction(0) == 'z') scaleDirection = G4Scale::z;
 
   G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
+  // Parameters read and interpreted.
 
-  // 
+  // Useful constants, etc...
+  const G4double halfLength(length / 2.);
+  const G4double comfort(0.15);
+  const G4double onePlusComfort(1. + comfort);
+  const G4double freeLengthFraction (1. + 2. * comfort);
 
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  const G4double xmin = sceneExtent.GetXmin();
+  const G4double xmax = sceneExtent.GetXmax();
+  const G4double ymin = sceneExtent.GetYmin();
+  const G4double ymax = sceneExtent.GetYmax();
+  const G4double zmin = sceneExtent.GetZmin();
+  const G4double zmax = sceneExtent.GetZmax();
+
+  // Test existing extent and issue warnings...
+  G4bool worried(false);
+  if (sceneExtent.GetExtentRadius() == 0) {
+    worried = true;
+    G4cout <<
+      "Existing scene does not yet have any extent."
+      "\n  Maybe you have not yet added any geometrical object.";
+  }
+  // Test existing scene for room...
+  G4bool room (true);
+  switch (scaleDirection) {
+  case G4Scale::x:
+    if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
+  case G4Scale::y:
+    if (freeLengthFraction * (ymax - ymin) < length) room = false; break;
+  case G4Scale::z:
+    if (freeLengthFraction * (zmax - zmin) < length) room = false; break;
+  }
+  if (!room) {
+    worried = true;
+    G4cout <<
+      "Not enough room in existing scene.  Maybe scale is too long.";
+  }
+  if (worried) {
+    G4cout <<
+      "  WARNING: The scale you have asked for is bigger than the existing"
+      "\n  scene.  Maybe you have added it too soon.  It is recommended that"
+      "\n  you add the scale last so that it can be correctly auto-positioned"
+      "\n  so as not to be obscured by any existing object and so that the"
+      "\n  view parameters can be correctly recalculated."
+	   << G4endl;
+  }
+
+  // Let's go ahead a construct a scale and a scale model...
   G4Scale scale(length, annotation, scaleDirection,
 		autoPlacing, xmid, ymid, xmid);
-
   G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
   // Created of the heap because it needs a long lifetime.  This is a
   // mess.  The model determines the life but the vis atttributes are
   // associated with the scale.  There's no way of knowing when to
   // delete the vis atttributes!!!
   scale.SetVisAttributes(pVisAttr);
-
   G4VModel* model = new G4ScaleModel(scale);
 
   // Now figure out the extent...
@@ -443,17 +489,6 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
   // G4VSceneHandler::AddPrimitive(const G4Scale&) - simply has to
   // ensure it's within the new extent.
   //
-  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
-  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
-  const G4double xmin = sceneExtent.GetXmin();
-  const G4double xmax = sceneExtent.GetXmax();
-  const G4double ymin = sceneExtent.GetYmin();
-  const G4double ymax = sceneExtent.GetYmax();
-  const G4double zmin = sceneExtent.GetZmin();
-  const G4double zmax = sceneExtent.GetZmax();
-  const G4double halfLength(length / 2.);
-  const G4double comfort(0.15);
-  const G4double onePlusComfort(1. + comfort);
   G4double sxmid(xmid), symid(ymid), szmid(zmid);
   if (autoPlacing) {
     sxmid = xmin + onePlusComfort * (xmax - xmin);
