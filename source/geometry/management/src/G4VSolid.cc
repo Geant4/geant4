@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.cc,v 1.5 2000-11-01 15:39:36 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.6 2000-11-16 14:29:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -16,6 +16,8 @@
 // History:
 //  10.07.95 P.Kent Added == operator, solid Store entry
 //  30.06.95 P.Kent
+//  15.11.00 D.Williams, V.Grichine change in CalculateClippedPolygonExtent:
+//                                  else if(component>pMax) ---> if
 
 #include "G4VSolid.hh"
 #include "G4SolidStore.hh"
@@ -59,34 +61,43 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation* p,
     G4Exception("G4VSolid::ComputeDimensions called illegally: not overloaded by derived class");
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
 // Calculate the maximum and minimum extents of the convex polygon pPolygon
 // along the axis pAxis, within the limits pVoxelLimit
+//
+
 void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
 					  const G4VoxelLimits& pVoxelLimit,
 					  const EAxis pAxis, 
 					  G4double& pMin, G4double& pMax) const
 {
-    G4int noLeft,i;
-    G4double component;
-    ClipPolygon(pPolygon,pVoxelLimit);
-    noLeft=pPolygon.entries();
-    if (noLeft)
-	{
-	    for (i=0;i<noLeft;i++)
-		{
-		    component=pPolygon(i).operator()(pAxis);
-		    if (component<pMin)
-			{
-			    pMin=component;
-			}
-		    else if (component>pMax)
-			{
-			    pMax=component;
-			}
-		}
-	}
+  G4int noLeft,i;
+  G4double component;
+  ClipPolygon(pPolygon,pVoxelLimit);
+  noLeft = pPolygon.entries();
+
+  if (noLeft)
+  {
+    for (i=0;i<noLeft;i++)
+    {
+      component = pPolygon(i).operator()(pAxis);
+
+      if (component < pMin)
+      {
+        pMin = component;
+      }
+// else 
+      if (component > pMax)
+      {
+        pMax = component;
+      }
+    }
+  }
 }
- 
+
+///////////////////////////////////////////////////////////////////////////
+// 
 // Calculate the maximum and minimum extents of the polygon described
 // by the vertices: pSectionIndex->pSectionIndex+1->
 //                   pSectionIndex+2->pSectionIndex+3->pSectionIndex
