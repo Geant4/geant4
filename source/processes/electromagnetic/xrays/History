@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-11-08 08:52:07 gcosmo Exp $
+$Id: History,v 1.9 2001-11-12 10:59:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+12 nov 01: mma (xrays-V03-02-02)
+- merge of 00a and 01
+  
 24 oct 01: mma (xrays-V03-02-01)
 - modified G4ForwardXrayTR.cc for cuts per material.
   Does NOT include mods in "xrays-V03-02-00a".
