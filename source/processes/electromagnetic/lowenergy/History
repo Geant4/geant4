@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2002-07-30 16:12:20 vnivanch Exp $
+$Id: History,v 1.153 2002-08-27 10:57:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.08-2002   CG,VI, tag emlowen-V04-01-03
+             A.Mantero fix leakage in G4AtomicTransition.cc
 
 30.07-2002   CG,VI, tag emlowen-V04-01-02
              VI fix to G4LowEnergyIonisation.cc, for restricted energy loss
