@@ -29,11 +29,16 @@
 // History:
 // -----------
 // Based on G4FluoData by Elena Guardincerri
+// 
+// Modified: 30.07.02 VI Add select active Z + clean up against pedantic compiler
 //
 // -------------------------------------------------------------------
 
 #include "G4AugerData.hh"
 #include "G4DataVector.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4ElementVector.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
 
@@ -386,7 +391,7 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	      // if this is the first data of the shell, alla the colums are equal 
 	      // to the shell Id; so we skip the next colums ang go to the next row
 	      
-	      initIds->push_back(a);
+	      initIds->push_back((G4int)a);
 	      file >> a;
 	      file >> a;
 	      file >> a;
@@ -399,11 +404,11 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
 
 		if((initIds->size()) == 1) { 
-		  initIds->push_back(a);
+		  initIds->push_back((G4int)a);
 		}  
 		else {
 
-		  initIds->push_back(a);
+		  initIds->push_back((G4int)a);
 		  G4int augerShellId = *vectorIndex;
 		  
 		  
@@ -446,14 +451,37 @@ void G4AugerData::BuildAugerTransitionTable()
 
   //  trans_Table::iterator pos = augerTransitionTable.begin();
 
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
+
+  G4DataVector activeZ;
+  activeZ.clear();
+  
+  for (G4int m=0; m<nMaterials; m++) {
+
+    const G4Material* material= (*materialTable)[m];        
+    const G4ElementVector* elementVector = material->GetElementVector();
+    const size_t nElements = material->GetNumberOfElements();
+      
+    for (size_t iEl=0; iEl<nElements; iEl++) {
+      G4Element* element = (*elementVector)[iEl];
+      G4double Z = element->GetZ();
+      if (!(activeZ.contains(Z))) {
+	activeZ.push_back(Z);
+      }
+    }
+  }
+
 
   for (G4int element = 6; element < 99; element++)
     { 
-      augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
+      if(nMaterials == 0 || activeZ.contains(element)) {
+        augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
       
-      //G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
-      
-      
+        G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
+      //      PrintData(element);
+      }    
     }
   
   G4cout << "AugerTransitionTable complete"<< G4endl;
