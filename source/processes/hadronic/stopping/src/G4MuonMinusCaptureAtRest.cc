@@ -36,10 +36,11 @@
 // **************************************************************
 //      V.Ivanchenko   7 Apr 2000 Advance model for electromagnetic
 //                                capture and cascade
-//      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition 
+//      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition
 //                                of secondaries
 //      V.Ivanchenko  27 Oct 2002 NeutrinoE->NeutrinoMu
 //      V.Ivanchenko  26 Feb 2003 Fix bug#457
+//      V.Ivanchenko  19 Jun 2003 Fix bug in 2 alpha evaporation
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -222,7 +223,7 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
   }
 
   // Return 0 interaction length to get for this process
-  // the 100% probability 
+  // the 100% probability
 
   return 0.0;
   //  return theNumberOfInteractionLengthLeft * currentInteractionLength;
@@ -231,7 +232,7 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 							const G4Track& track,
-							const G4Step& 
+							const G4Step&
 							)
 //
 // Handles MuonMinuss at rest; a MuonMinus can either create secondaries or
@@ -268,7 +269,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
   // Decay or Capture?
   G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
   G4double lambdad  = pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
-  
+
   if( G4UniformRand()*(lambdac + lambdad) > lambdac) {
 
     // Decay
@@ -279,7 +280,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 
     DoMuCapture();
   }
-    
+
   aParticleChange.SetNumberOfSecondaries( nGkine + nCascade );
 
   // Store nuclear cascade
@@ -1445,8 +1446,9 @@ void G4MuonMinusCaptureAtRest::ResidualNucleusCascade(G4int m2, G4int m3,
   ja = m2;
   jz = m3;
   *u = t1;
+
   rnmass = massResidNucl * 1e3 + *u;
-  // P2res and  Ptres are the squared momentum and the momentum of the
+ // P2res and  Ptres are the squared momentum and the momentum of the
   // residual nucleus (now in relativistic kinematics), Umo the
   // invariant mass of the system!
   umo = rnmass;
@@ -1455,7 +1457,7 @@ void G4MuonMinusCaptureAtRest::ResidualNucleusCascade(G4int m2, G4int m3,
   gamcm = elbtot / rnmass;
   etacm = totMomResidNucl * 1e3 / rnmass;
 L1000:
-  *loppar = false;
+   *loppar = false;
   // Check for starting data inconsistencies
   if (ja - jz < 0) {
     G4cout << " Dres: cascade residual nucleus has mass no. less than Z!!"
@@ -1654,6 +1656,7 @@ L1000:
     z = (G4double) jz;
     q[0] = 0.;
     energ0 = GetIsotopicMass(a, z);
+    G4cout << "energ0= " << energ0 << G4endl;
     //   Note that Q(i) are not the reaction Qs but the remaining
     //   energy after the reaction
     for (k = 1; k <= 6; ++k) {
@@ -2218,7 +2221,7 @@ L76:
   // Store the first alpha!!
   smom1[5] += eps;
   ++nVariousFragm[5];
-  itemp = nVariousFragm[5] - 1 + 499*MXEVAP;
+  itemp = nVariousFragm[5] + 499;
   Evaporates[itemp].SetZero();
   Evaporates[itemp].SetMass( massFragm[5] );
   Evaporates[itemp].SetMomentum( plbpx/phelp, plbpy/phelp, plbpz/phelp );
@@ -2234,7 +2237,7 @@ L76:
   // Store the second alpha !!
   smom1[5] += eps;
   ++nVariousFragm[5];
-  itemp = nVariousFragm[5] - 1 + 499*MXEVAP;
+  itemp = nVariousFragm[5] + 499;
   Evaporates[itemp].SetZero();
   Evaporates[itemp].SetMass( massFragm[5] );
   Evaporates[itemp].SetMomentum( plbpx/phelp, plbpy/phelp, plbpz/phelp );
@@ -2319,7 +2322,8 @@ void G4MuonMinusCaptureAtRest::Erup()
     //  Try evaporation
     m2 = NINT(atMassEvapNucl);
     m3 = NINT(chargeEvapNucl);
-    for (;;) {
+//    for (;;) {
+    do {
       ResidualNucleusCascade(m2, m3, iniExcitEnEvapNucl, &finExcitEnEvapNucl,
 			     &recoilEnEvapNucl, &loppar);
       fpartt = 0.;
@@ -2331,7 +2335,7 @@ void G4MuonMinusCaptureAtRest::Erup()
 	break;
       }
       pairCorrFlag = 1.;
-    }
+    } while (pairCorrFlag > 0.);
     //  No more particles evaporated and pairing corrections accounted for
     pairCorrFlag = 0.;
     chargeEvapNucl =
@@ -3661,8 +3665,9 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
     totMomResidNucl = 0.;
     momXResidNucl = 0.;
     momYResidNucl = 0.;
-    momZResidNucl = 0.;
+    momZResidNucl = 1.;
     totEnResidNucl = 0.;
+    kinEnResidNucl = 0.;
   } else {
     massResidNucl =
       atMassCurrent * AMUAMU +
@@ -3680,13 +3685,17 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
     kinEnResidNucl = recoilEnResidNucl;
   }
   etevap += totEnResidNucl;
-  if ((d__1 = etevap - eotest, abs(d__1)) / eotest > .05) {
+  if (abs(etevap - eotest) > eotest*.05) {
     G4cout << " Evevap: failure in energy conservation!!"
-	 << " " << etevap << " " << eotest << " " << etevap - eotest
-	 << " " << totEnResidNucl << G4endl;
+	   << " " << etevap << " " << eotest << " " << etevap - eotest
+	   << " etotres= " << totEnResidNucl
+	   << " Z= " <<  chargeCurrent
+	   << " A= " <<  atMassCurrent
+	   << G4endl;
+
   }
   //  Check if the deexcitation module have to be called
-  EvaporationDeexcitation();
+  if ( totEnResidNucl>0.0 ) EvaporationDeexcitation();
   return;
 
 } // MuEvaporation
