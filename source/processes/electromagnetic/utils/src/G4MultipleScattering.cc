@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.17 2002-04-17 16:04:31 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.18 2002-04-22 08:59:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -40,8 +40,10 @@
 // 14-09-01 protection in GetContinuousStepLimit, L.Urban
 // 17-09-01 migration of Materials to pure STL (mma)
 // 27-09-01 value of data member factlim changed, L.Urban
-// 31-10-01 bug fixed in PostStepDoIt,L.Urban
+// 31-10-01 big fixed in PostStepDoIt,L.Urban
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
+// 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
+//          (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -67,8 +69,9 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       factlim(1.00),facrange(0.10),stepno(0),stepnolastmsc(-100),
-       msclim(false),
+       volume(0),volumeold(0),
+       facrange(0.10),tlimit(1.e10),tmsc(tlimit),
+       stepno(0),stepnolastmsc(-1000000),stepnodif(3),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
@@ -405,12 +408,10 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
                                    G4double currentMinimumStep,
                                    G4double&)
 {
-  const G4double safetymin = 1.e-6*mm;
-  const G4int stepnodif = 2 ;
   G4double zPathLength,tPathLength;
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
-  G4double KineticEnergy,tau,z0,kz,tlimit,safety;
+  G4double KineticEnergy,tau,z0,kz;
   G4bool isOut;
 
   // this process is not a candidate for selection by default
@@ -431,32 +432,37 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
                                        KineticEnergy,aMaterial);
 
   stepno = track.GetCurrentStepNumber() ;
-  if(stepno == 1) stepnolastmsc = -100 ;
+  volume = track.GetVolume() ;
+  if(stepno == 1)
+  {
+    stepnolastmsc = -1000000 ;
+    volumeold=volume ;
+    tlimit = 1.e10 ;
+    tmsc = tlimit ;
+  } 
     
-  msclim = false ;
-
   // special treatment near boundaries ?
   if (boundary)  
   {
     // step limitation at boundary ?
     if(stepno > 1) 
     {
-      safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
-      if(safety < safetymin)
+      if(volume != volumeold)
       {
-         msclim = true ;
          stepnolastmsc = stepno ;
+         tlimit = facrange*range ;
+         tmsc = tlimit ;
       }
 
-      if(msclim || ((stepno - stepnolastmsc) <= stepnodif))
+      if((stepno - stepnolastmsc) <= stepnodif)
       {
-       tlimit = G4std::min(facrange*range,factlim*fTransportMeanFreePath);
-       
-       if(tPathLength > tlimit)
+        tmsc += G4float(stepno-stepnolastmsc)*tlimit ;
+        if(tPathLength > range) tPathLength = range ;
+        if(tPathLength > tmsc)
         {
-           tPathLength = tlimit ;
-           valueGPILSelectionMSC = CandidateForSelection;
-        }
+          tPathLength = tmsc ;
+          valueGPILSelectionMSC = CandidateForSelection;
+        } 
       }   
     }
   }
@@ -501,6 +507,7 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 
   tLast = tPathLength;
   zLast = zPathLength; 
+  volumeold = volume ;
 
   return zPathLength;
 }

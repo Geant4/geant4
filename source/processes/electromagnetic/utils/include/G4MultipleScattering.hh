@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.hh,v 1.6 2002-04-17 16:04:27 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.7 2002-04-22 08:58:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //------------- G4MultipleScattering physics process --------------------------
@@ -36,6 +36,8 @@
 //          class description (L.Urban)
 // 19-09-01 come back to previous process name msc 
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
+// 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
+//          (L.Urban)
 //            
 //------------------------------------------------------------------------------
 
@@ -55,6 +57,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4GPILSelection.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4UnitsTable.hh"
 
@@ -145,9 +148,11 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void Setdtrl(G4double value)                 {dtrl = value;};
      // to reduce the energy/step dependence
 
-   void SetBoundary(G4bool value)               {boundary = value;};
-   void SetFactlim(G4double val)                {factlim=val;};
-   void SetFacrange(G4double val)               {facrange=val;};
+   void SetBoundary(G4bool value)      {boundary = value;};
+   void SetFacrange(G4double val)      {facrange=val;
+                                        // (1+(1+2+...+n))*facrange <= 1. 
+                                        stepnodif =
+                                         G4int((sqrt(8.0/facrange-7.)-1.)/2.);};
      // parameters needed near to boundary
 
    void SetTuning(G4double value)               {tuning = value;};
@@ -197,9 +202,9 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    // model parameters
    G4bool   boundary;                         // spec. handling near boundaries
-   G4double factlim,facrange;
-   G4int stepno,stepnolastmsc ;
-   G4bool msclim ;
+   G4VPhysicalVolume *volume,*volumeold ;
+   G4double facrange,tlimit,tmsc;
+   G4int stepno,stepnolastmsc,stepnodif ;
    G4GPILSelection  valueGPILSelectionMSC;
 
    G4double pcz,zmean;                        // z(geom.step length)
