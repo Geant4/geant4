@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.hh,v 1.5 2001-07-11 10:08:32 gunter Exp $
+// $Id: G4UserRunAction.hh,v 1.6 2003-03-10 01:50:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,6 +49,7 @@ class G4UserRunAction
     virtual ~G4UserRunAction();
 
   public:
+    virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run* aRun);
     virtual void EndOfRunAction(const G4Run* aRun);
 };

@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2003-02-19 08:42:40 gcosmo Exp $
+$Id: History,v 1.76 2003-03-10 01:50:21 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 10, 2003, M.Asai (run-V05-00-05)
+- Added GenerateRun method in G4UserRunAction.
 
 Feb 19, 2003, G.Cosmo (run-V05-00-04)
 - Moved warning for usage of SetCutValueForOthers() from G4cerr to G4cout.

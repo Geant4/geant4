@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.61 2003-01-31 08:05:31 vnivanch Exp $
+// $Id: G4RunManager.cc,v 1.62 2003-03-10 01:50:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -213,7 +213,9 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 
 void G4RunManager::RunInitialization()
 {
-  currentRun = new G4Run();
+  currentRun = 0;
+  if(userRunAction) currentRun = userRunAction->GenerateRun();
+  if(!currentRun) currentRun = new G4Run();
   currentRun->SetRunID(runIDCounter);
 
   currentRun->SetDCtable(DCtable);
