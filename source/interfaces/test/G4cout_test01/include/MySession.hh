@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySession.hh,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: MySession.hh,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $id$
@@ -31,6 +31,7 @@
 
 #include "globals.hh"
 #include "G4UIsession.hh"
+#include "G4UImanager.hh"
 #include "g4std/fstream"
 
 class MySession : public G4UIsession 
@@ -55,6 +56,10 @@ class MySession : public G4UIsession
       
       G4std::ofstream logFile;
       G4String logFileName;
+  private:
+
+      G4UImanager * UI;
+
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySession.cc,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: MySession.cc,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,19 +31,23 @@
 
 MySession::MySession() : logFileName("Mylog")
 { 
-  G4cout <<"G4cout in MySession constructor" << G4endl;
+  //  G4UImanager * UI = G4UImanager::GetUIpointer();
+  G4cout <<"MySession starts G4cout redirection" << G4endl;
      const char* theFileName = logFileName;
      logFile.open((char*)theFileName);
 }
 
 MySession::~MySession() {// close file for logging;
      logFile.close();
+  G4cout <<"end of MySession" << G4endl;
+  UI->SetCoutDestination(NULL);
 }
 
 MySession * MySession::SessionStart() { return NULL; }
 
 G4int MySession::ReceiveG4cout(G4String coutString)
 {
+  //  G4cout << coutString << G4std::flush;
   logFile << coutString << G4std::flush;
   return 0;
 }

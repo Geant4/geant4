@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.hh,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: ExN01DetectorConstruction.hh,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef ExN01DetectorConstruction_H
 #define ExN01DetectorConstruction_H 1
 
+class G4LogicalVolume;
 class G4VPhysicalVolume;
 
 #include "G4VUserDetectorConstruction.hh"
@@ -35,12 +36,27 @@ class G4VPhysicalVolume;
 class ExN01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
+
     ExN01DetectorConstruction();
     ~ExN01DetectorConstruction();
 
-  public:
-     G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct();
 
+  private:
+    
+    // Logical volumes
+    //
+    G4LogicalVolume* experimentalHall_log;
+    G4LogicalVolume* tracker_log;
+    G4LogicalVolume* calorimeterBlock_log;
+    G4LogicalVolume* calorimeterLayer_log;
+
+    // Physical volumes
+    //
+    G4VPhysicalVolume* experimentalHall_phys;
+    G4VPhysicalVolume* calorimeterLayer_phys;
+    G4VPhysicalVolume* calorimeterBlock_phys;
+    G4VPhysicalVolume* tracker_phys;
 };
 
 #endif

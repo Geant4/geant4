@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01PhysicsList.cc,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: ExN01PhysicsList.cc,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,10 +53,15 @@ void ExN01PhysicsList::ConstructProcess()
   AddTransportation();
 }
 
-void ExN01PhysicsList::SetCuts(G4double cut)
+void ExN01PhysicsList::SetCuts()
 {
-  // set a cut value to all particles
+  // uppress error messages even in case e/gamma/proton do not exist            
+  G4int temp = GetVerboseLevel();                                                SetVerboseLevel(0);                                                           
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 
-  SetCutValueForOthers(cut);
+  // Retrieve verbose level
+  SetVerboseLevel(temp);  
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01PhysicsList.hh,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: ExN01PhysicsList.hh,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,11 +52,15 @@ class ExN01PhysicsList: public G4VUserPhysicsList
     // Construct particle and physics process
     void ConstructParticle();
     void ConstructProcess();
-    void SetCuts(G4double cut);
+    void SetCuts();
 
 };
 
 #endif
+
+
+
+
 
 
 

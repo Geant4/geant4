@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.3 2001-07-11 10:01:24 gunter Exp $
+// $Id: ExN01DetectorConstruction.cc,v 1.4 2002-11-09 07:17:09 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,10 +36,15 @@
 #include "globals.hh"
 
 ExN01DetectorConstruction::ExN01DetectorConstruction()
+ :  experimentalHall_log(0), tracker_log(0),
+    calorimeterBlock_log(0), calorimeterLayer_log(0),
+    experimentalHall_phys(0), calorimeterLayer_phys(0),
+    calorimeterBlock_phys(0), tracker_phys(0)
 {;}
 
 ExN01DetectorConstruction::~ExN01DetectorConstruction()
-{;}
+{
+}
 
 G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
 {
@@ -73,11 +78,10 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double expHall_z = 1.0*m;
   G4Box* experimentalHall_box
     = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
-  G4LogicalVolume* experimentalHall_log
-    = new G4LogicalVolume(experimentalHall_box,Ar,"expHall_log",0,0,0);
-  G4VPhysicalVolume* experimentalHall_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"expHall",
-                        experimentalHall_log,0,false,0);
+  experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
+                                             Ar,"expHall_log",0,0,0);
+  experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),"expHall",
+                                            experimentalHall_log,0,false,0);
 
   //------------------------------ a tracker tube
 
@@ -86,17 +90,14 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double hightOfTheTube = 50.*cm;
   G4double startAngleOfTheTube = 0.*deg;
   G4double spanningAngleOfTheTube = 360.*deg;
-  G4Tubs* tracker_tube
-    = new G4Tubs("tracker_tube",innerRadiusOfTheTube,
-                 outerRadiusOfTheTube,hightOfTheTube,
-                 startAngleOfTheTube,spanningAngleOfTheTube);
-  G4LogicalVolume* tracker_log
-    = new G4LogicalVolume(tracker_tube,Al,"tracker_log",0,0,0);
+  G4Tubs* tracker_tube = new G4Tubs("tracker_tube",innerRadiusOfTheTube,
+                                    outerRadiusOfTheTube,hightOfTheTube,
+                                    startAngleOfTheTube,spanningAngleOfTheTube);
+  tracker_log = new G4LogicalVolume(tracker_tube,Al,"tracker_log",0,0,0);
   G4double trackerPos_x = -1.0*m;
   G4double trackerPos_y = 0.*m;
   G4double trackerPos_z = 0.*m;
-  G4VPhysicalVolume* tracker_phys
-    = new G4PVPlacement(0,
+  tracker_phys = new G4PVPlacement(0,
              G4ThreeVector(trackerPos_x,trackerPos_y,trackerPos_z),
              tracker_log,"tracker",experimentalHall_log,false,0);
 
@@ -105,15 +106,14 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double block_x = 1.0*m;
   G4double block_y = 50.0*cm;
   G4double block_z = 50.0*cm;
-  G4Box* calorimeterBlock_box
-    = new G4Box("calBlock_box",block_x,block_y,block_z);
-  G4LogicalVolume* calorimeterBlock_log
-    = new G4LogicalVolume(calorimeterBlock_box,Pb,"caloBlock_log",0,0,0);
+  G4Box* calorimeterBlock_box = new G4Box("calBlock_box",block_x,
+                                          block_y,block_z);
+  calorimeterBlock_log = new G4LogicalVolume(calorimeterBlock_box,
+                                             Pb,"caloBlock_log",0,0,0);
   G4double blockPos_x = 1.0*m;
   G4double blockPos_y = 0.0*m;
   G4double blockPos_z = 0.0*m;
-  G4VPhysicalVolume* calorimeterBlock_phys
-    = new G4PVPlacement(0,
+  calorimeterBlock_phys = new G4PVPlacement(0,
              G4ThreeVector(blockPos_x,blockPos_y,blockPos_z),
              calorimeterBlock_log,"caloBlock",experimentalHall_log,false,0);
 
@@ -122,17 +122,16 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double calo_x = 1.*cm;
   G4double calo_y = 40.*cm;
   G4double calo_z = 40.*cm;
-  G4Box* calorimeterLayer_box
-    = new G4Box("caloLayer_box",calo_x,calo_y,calo_z);
-  G4LogicalVolume* calorimeterLayer_log
-    = new G4LogicalVolume(calorimeterLayer_box,Al,"caloLayer_log",0,0,0);
+  G4Box* calorimeterLayer_box = new G4Box("caloLayer_box",
+                                          calo_x,calo_y,calo_z);
+  calorimeterLayer_log = new G4LogicalVolume(calorimeterLayer_box,
+                                             Al,"caloLayer_log",0,0,0);
   for(G4int i=0;i<19;i++) // loop for 19 layers
   {
     G4double caloPos_x = (i-9)*10.*cm;
     G4double caloPos_y = 0.0*m;
     G4double caloPos_z = 0.0*m;
-    G4VPhysicalVolume* calorimeterLayer_phys
-      = new G4PVPlacement(0,
+    calorimeterLayer_phys = new G4PVPlacement(0,
                G4ThreeVector(caloPos_x,caloPos_y,caloPos_z),
                calorimeterLayer_log,"caloLayer",calorimeterBlock_log,false,i);
   }
