@@ -150,11 +150,6 @@
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-    if( availableEnergy <= G4PionMinus::PionMinus()->GetPDGMass() )
-    {
-      quasiElastic = true;
-      return;
-    }
     static G4bool first = true;
     const G4int numMul = 1200;
     const G4int numSec = 60;
@@ -243,9 +238,14 @@
           incidentHasChanged = true;
           targetHasChanged = true;
         }
-        else quasiElastic = true;
+      }
+      
+      if( availableEnergy <= G4PionMinus::PionMinus()->GetPDGMass() )
+      {
+        quasiElastic = true;
         return;
       }
+      
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
@@ -279,6 +279,11 @@
     }
     else
     {
+      if( availableEnergy <= G4PionMinus::PionMinus()->GetPDGMass() )
+      {
+        quasiElastic = true;
+        return;
+      }
       G4double n, anpn;
       GetNormalizationConstant( availableEnergy, n, anpn );
       G4double ran = G4UniformRand();

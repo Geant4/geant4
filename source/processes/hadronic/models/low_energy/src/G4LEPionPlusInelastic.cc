@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionPlusInelastic.cc,v 1.6 2001-10-05 16:11:32 hpw Exp $
+// $Id: G4LEPionPlusInelastic.cc,v 1.7 2002-11-16 11:01:02 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: PionPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996
  // Last modified: 27-Mar-1997
  // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+ // fixing charge exchange - HPW Sep 2002.
  
 #include "G4LEPionPlusInelastic.hh"
 #include "Randomize.hh"
@@ -146,16 +147,12 @@
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass();
     const G4double etOriginal = originalIncident->GetTotalEnergy();
+    const G4double pOriginal = originalIncident->GetTotalMomentum();
     const G4double targetMass = targetParticle.GetMass();
     G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-    if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass() )
-    {
-      quasiElastic = true;
-      return;
-    }
     static G4bool first = true;
     const G4int numMul = 1200;
     const G4int numSec = 60;
@@ -218,6 +215,26 @@
     {
       // suppress high multiplicity events at low momentum
       // only one pion will be produced
+      // charge exchange reaction is included in inelastic cross section
+      
+      const G4double cech[] = {1.,0.95,0.79,0.32,0.19,0.16,0.14,0.12,0.10,0.08};
+      G4int iplab = G4int(G4std::min( 9.0, pOriginal/GeV*5.0 ));
+      if( G4UniformRand() <= cech[iplab] )
+      {
+        if( targetParticle.GetDefinition() == aNeutron )
+        {
+          currentParticle.SetDefinitionAndUpdateE( aPiZero );  // charge exchange
+          targetParticle.SetDefinitionAndUpdateE( aProton );
+          incidentHasChanged = true;
+          targetHasChanged = true;
+        }
+      }
+      
+      if( availableEnergy <= G4PionMinus::PionMinus()->GetPDGMass() )
+      {
+        quasiElastic = true;
+        return;
+      }
       
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aProton ) {
@@ -245,6 +262,11 @@
           nm = 1;
       }
     } else {
+      if( availableEnergy <= G4PionMinus::PionMinus()->GetPDGMass() )
+      {
+        quasiElastic = true;
+        return;
+      }
       G4double n, anpn;
       GetNormalizationConstant( availableEnergy, n, anpn );
       G4double ran = G4UniformRand();
