@@ -48,6 +48,21 @@
 #include "G4UnionSolid.hh"
 // #include "G4DisplacedSolid.hh"
 
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
 
 int main()
 {
@@ -135,10 +150,49 @@ int main()
     G4UnionSolid t3Ut3Ut3("t3Ut3Ut3",&t3Ut3,&t3,
                                          &identity,G4ThreeVector(0,0,-10)) ;
 
+  // Vacuum Cross
 
+  G4double startPhi = 0.*deg;
+  G4double deltaPhi = 360.*deg;
+  G4double minRadius = 0.*cm;
+
+
+  //Sample changer (carbon-fiber cross)
+
+  G4double minRadiusTUV = 3.9*cm;   // Vertical carbon fiber tube
+  G4double maxRadiusTUV = 4.1*cm;
+  G4double halfLengthTUV = 47.5*cm;
+  G4double maxRadiusVACTUV = 3.9*cm;
+  G4double halfLengthVACTUV = 47.5*cm;
+
+  G4double minRadiusTUH = 2.5*cm;  // ???  Horizontal carbon fiber tube
+  G4double maxRadiusTUH = 2.7*cm;
+  G4double halfLengthTUH = 44.0*cm;
+  G4double maxRadiusVACTUH = 2.5*cm;
+  G4double halfLengthVACTUH = 44.0*cm;
+
+
+  G4RotationMatrix rmVacCross;
+  rmVacCross.rotateX(90.*deg);
+  G4RotationMatrix rmVACTUV;
+  rmVACTUV.rotateX(90.*deg);
+
+  G4Tubs* solidVACTUH = new G4Tubs("VACTUH",minRadius,maxRadiusVACTUH,
+				 halfLengthVACTUH,startPhi,deltaPhi);
+
+  G4Tubs* solidVACTUV = new G4Tubs("VACTUV",minRadius,maxRadiusVACTUV,
+				 halfLengthVACTUV,startPhi,deltaPhi);
+
+  G4UnionSolid* solidVacCross = new G4UnionSolid("VacCross",solidVACTUH,solidVACTUV,
+						 &rmVacCross,G4ThreeVector());
 
 
 // Check Inside
+    EInside side = solidVacCross->Inside(G4ThreeVector( 2.3391096733692156,
+                                     1.1325145357709736,
+				     -0.85000000000000009));
+    G4cout<<"solidVacCross->Inside(G4ThreeVector( 2.3391... = "
+          <<OutputInside(side)<<G4endl;
 
     assert(b1Ub2.Inside(pzero)==kInside);
     assert(b1Ub2.Inside(pbigz)==kOutside);

@@ -167,6 +167,14 @@ int main()
     G4VSolid* c3Ic4 = new G4SubtractionSolid( "Example", cone3, cone4, tran3 );
 
 
+  G4Torus* insp    = new G4Torus("Isp", 7.5*cm, 8.1*cm, 15.6*cm,  0, 2*M_PI);
+  G4Tubs*  tmptube = new G4Tubs("TMPT", 7.5*cm, 15.6*cm, 8.1*cm, 0, 2*M_PI);
+
+  G4RotationMatrix* rotDz5 = new G4RotationMatrix();
+  rotDz5->rotateZ(M_PI/2.);
+
+  G4SubtractionSolid* inn = new G4SubtractionSolid("Innerpart", insp,
+                                    tmptube, rotDz5, G4ThreeVector(0,0,0));
 
    G4cout.precision(16) ;
 

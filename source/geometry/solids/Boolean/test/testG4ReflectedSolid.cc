@@ -25,7 +25,8 @@
 // Test for G4ReflectedSolid class 
 //
 // 23.07.01 V.Grichine
-// 
+// 10.05.02 V.Grichine, bug fixed in CalculateExtent: box like algorithm proposed by
+//                      J. Apostolakis 
 // 
 
 
