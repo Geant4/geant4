@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-06-10 17:13:12 gcosmo Exp $
+$Id: History,v 1.26 2003-06-23 13:09:21 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+23th June 2003  Guy Barrand :
+- Commit a first implementation of G4OpenGLWin32Viewer.
 
 10th June 2003  Gabriele Cosmo  (opengl-V05-01-01)
 - More fixes for warnings in viewers classes.
