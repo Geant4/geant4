@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002-11-06 15:01:34 miheikki Exp $
+# $Id: GNUmakefile,v 1.4 2002-11-06 18:51:42 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -78,6 +78,7 @@ LDLIBS   +=  \
 	-L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	    -lG4globman \
             -lG4hadronic_bert_cascade \
+#           -lG4hepnumerics \
 #	    -lG4materials \
 #	    -lG4hadronic_diffstring \
 #	    -lG4hadronic_stringfrag \

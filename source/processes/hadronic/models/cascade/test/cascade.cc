@@ -1,6 +1,7 @@
 //#define CHECK_MOMC
 
 #include "globals.hh"
+//#include "Randomize.hh"
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -16,10 +17,12 @@
 #include "G4Analyser.hh"
 #include "G4WatcherGun.hh"
 
+
 #include "vector"
 
 int main() {
  
+  //  G4double init = G4UniformRand();
   G4int verboseLevel = 1;
   
   // General test program for hetc and inucl
