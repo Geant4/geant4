@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.75 2004-05-27 05:55:20 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.76 2004-05-28 04:59:54 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1056,12 +1056,14 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryRootInstance() {
 HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, int depth) {
     HepRepInstance* instance = getGeometryInstance(volume->GetName(), depth);
 
-    setAttribute(instance, "LVol",     volume->GetName());
-    setAttribute(instance, "Solid",    volume->GetSolid()->GetName());
-    setAttribute(instance, "EType",    volume->GetSolid()->GetEntityType());
-    setAttribute(instance, "Material", volume->GetMaterial()->GetName());
-    setAttribute(instance, "Density",  volume->GetMaterial()->GetDensity());
-    setAttribute(instance, "Radlen",   volume->GetMaterial()->GetRadlen());
+    setAttribute(instance, "LVol",       volume->GetName());
+    setAttribute(instance, "Region",     volume->GetRegion()->GetName());
+    setAttribute(instance, "RootRegion", volume->IsRootRegion());
+    setAttribute(instance, "Solid",      volume->GetSolid()->GetName());
+    setAttribute(instance, "EType",      volume->GetSolid()->GetEntityType());
+    setAttribute(instance, "Material",   volume->GetMaterial()->GetName());
+    setAttribute(instance, "Density",    volume->GetMaterial()->GetDensity());
+    setAttribute(instance, "Radlen",     volume->GetMaterial()->GetRadlen());
     
     G4String state = materialState[volume->GetMaterial()->GetState()];
     setAttribute(instance, "State", state);
@@ -1113,6 +1115,10 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         // Add attdefs used by all geometry types.
         _geometryRootType->addAttDef  ("LVol", "Logical Volume", "Physics","");
         _geometryRootType->addAttValue("LVol", G4String(""));
+        _geometryRootType->addAttDef  ("Region", "Cuts Region", "Physics","");
+        _geometryRootType->addAttValue("Region", G4String(""));
+        _geometryRootType->addAttDef  ("RootRegion", "Root Region", "Physics","");
+        _geometryRootType->addAttValue("RootRegion", false);
         _geometryRootType->addAttDef  ("Solid", "Solid Name", "Physics","");
         _geometryRootType->addAttValue("Solid", G4String(""));
         _geometryRootType->addAttDef  ("EType", "Entity Type", "Physics","");
