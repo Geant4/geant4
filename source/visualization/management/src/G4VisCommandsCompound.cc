@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.19 2001-11-06 13:04:06 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.20 2001-11-07 17:09:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -286,11 +286,11 @@ G4VisCommandSpecify::~G4VisCommandSpecify() {
 
 void G4VisCommandSpecify::SetNewValue
 (G4UIcommand* command, G4String newValue) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose(0);
-  if (keepVerbose >= 2 ||
-      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/geometry/print " + newValue);

@@ -1,4 +1,4 @@
-$Id: History,v 1.159 2001-11-06 13:20:29 johna Exp $
+$Id: History,v 1.160 2001-11-07 17:09:57 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th November 2001  John Allison  (vis-V03-02-16 needs config-V03-02-09)
+- Corrected compilation error.
 
 6th November 2001  John Allison  (vis-V03-02-15 needs config-V03-02-09)
 - Added /vis/viewer/flush = refresh + update.
