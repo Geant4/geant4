@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.6 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4Material.cc,v 1.7 2001-01-28 16:58:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 // 18-11-98, new interface to SandiaTable
 // 19-01-99  enlarge tolerance on test of coherence of gas conditions
 // 19-07-99, Constructors with chemicalFormula added by V.Ivanchenko
+// 16-01-01, Nuclear interaction length, M.Maire
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -407,6 +408,7 @@ void G4Material::ComputeDerivedQuantities()
      }
          
    ComputeRadiationLength();
+   ComputeNuclearInterLength();
 
    fIonisation  = new G4IonisParamMat(this);
    fSandiaTable = new G4SandiaTable(this);
@@ -421,6 +423,20 @@ void G4Material::ComputeRadiationLength()
      radinv += VecNbOfAtomsPerVolume[i]*((*theElementVector)[i]->GetfRadTsai()); 
    }
   fRadlen = (radinv <= 0.0 ? DBL_MAX : 1./radinv);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+void G4Material::ComputeNuclearInterLength()
+{
+  const G4double lambda0 = 35*g/cm2;
+  G4double NILinv = 0.0;
+  for (G4int i=0;i<fNumberOfElements;i++) {
+     NILinv +=
+     VecNbOfAtomsPerVolume[i]*pow(((*theElementVector)[i]->GetN()),2./3.); 
+   }
+  NILinv *= amu/lambda0; 
+  fNuclInterLen = (NILinv <= 0.0 ? DBL_MAX : 1./NILinv);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -480,6 +496,7 @@ const G4Material& G4Material::operator=(const G4Material& right)
       TotNbOfAtomsPerVolume    = right.TotNbOfAtomsPerVolume;
       TotNbOfElectPerVolume    = right.TotNbOfElectPerVolume;
       fRadlen                  = right.fRadlen;
+      fNuclInterLen            = right.fNuclInterLen;
       fIonisation              = right.fIonisation;
       fSandiaTable             = right.fSandiaTable;
      } 
@@ -518,7 +535,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
                           << (material->fPressure)/atmosphere << " atm"
     << "  RadLength: "   << G4std::setw(7)  << G4std::setprecision(3)  
                           << G4BestUnit(material->fRadlen,"Length");
-    
+
   for (G4int i=0; i<material->fNumberOfElements; i++)
   flux 
     << "\n   ---> " << (*(material->theElementVector))[i] 

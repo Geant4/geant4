@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialsTest.cc,v 1.2 1999-12-15 14:50:52 gunter Exp $
+// $Id: G4MaterialsTest.cc,v 1.3 2001-01-28 16:58:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,5 +172,20 @@ beam->AddMaterial(Air, fractionmass=1.);
 
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
+//
+// print additional informations
+//
+G4cout << " Nuclear interaction length of Aluminium: " 
+       << Al->GetNuclearInterLength()/cm << " cm" << G4endl;
+       
+G4cout << " Nuclear interaction length of Lead: " 
+       << Pb->GetNuclearInterLength()/cm << " cm" << G4endl;
+              
+G4cout << " Nuclear interaction length of Water: " 
+       << H2O->GetNuclearInterLength()/cm << " cm" << G4endl;
+       
+ G4cout << " Nuclear interaction length of Aerogel: " 
+       << Aerog->GetNuclearInterLength()/cm << " cm" << G4endl;
+             
 return EXIT_SUCCESS;
 }

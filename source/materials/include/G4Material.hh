@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.7 1999-12-16 18:11:09 maire Exp $
+// $Id: G4Material.hh,v 1.8 2001-01-28 16:58:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -190,6 +190,9 @@ public:  // with description
     // Radiation length:     
     G4double         GetRadlen()          const {return fRadlen;};
     
+    // Nuclear interaction length:     
+    G4double GetNuclearInterLength()      const {return fNuclInterLen;};
+        
     // ionisation parameters:
     G4IonisParamMat* GetIonisation()      const {return fIonisation;};
     
@@ -242,7 +245,10 @@ private:
 
     // Compute Radiation length
     void ComputeRadiationLength();
-
+    
+    // Compute Nuclear interaction length
+    void ComputeNuclearInterLength();
+    
 private:
 
 //
@@ -280,7 +286,8 @@ private:
     G4double* VecNbOfAtomsPerVolume;      // vector of nb of atoms per volume
     G4double  TotNbOfAtomsPerVolume;      // total nb of atoms per volume 
     G4double  TotNbOfElectPerVolume;      // total nb of electrons per volume 
-    G4double  fRadlen;                    // Radiation length  
+    G4double  fRadlen;                    // Radiation length
+    G4double  fNuclInterLen;              // Nuclear interaction length  
     
     G4IonisParamMat* fIonisation;          // ionisation parameters
     G4SandiaTable*   fSandiaTable;         // Sandia table         
