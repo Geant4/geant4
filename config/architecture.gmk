@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.34 1999-06-29 18:55:19 gcosmo Exp $
+# $Id: architecture.gmk,v 1.35 1999-07-06 15:18:35 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -25,10 +25,12 @@
 #
 #          Linux-g++   Linux (Red Hat 5.1), egcs 1.1
 #
-#          WIN32-VC-NICE  	NiceNT and Microsoft Visual C++ 5.0 installed
-#				locally as CD-ROM intallation
-#				ex. NiceNT at CERN (but CYGWIN32 installed
-#				locally, because not full installation on NICE)
+#          WIN32-VC    NT and Microsoft Visual C++ 5.0 or Microsoft Visual C++ 6.0
+#                       and using CYGWIN32 tools ( make, g++ as "makedepend", sh...)
+#                       ( Note: you will need to set your environment, see installation
+#                               guide.)
+#
+#          WIN32-VC-NICE  alias for the above, although NICE is not used anymore.
 #
 #	   WIN32-G++-NICE	NiceNT and CYGWIN32 with g++ as base compiler
 #				ex. NiceNT at CERN (but CYGWIN32 and RogueWave
@@ -87,6 +89,7 @@ ifndef G4LIB
   G4LIB := $(G4INSTALL)/lib
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB)/$(G4SYSTEM) ] && mkdir -p $(G4LIB)/$(G4SYSTEM) )
 
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
@@ -138,15 +141,14 @@ ifndef CLHEP_LIB
 endif
 
 ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-#
-# NiceNT policy for letter drive mapping 
-#
-ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := "z:\p32\lhcpp\clhep\1.1"
+G4SYSTEM:=WIN32-VC
 endif
+
+ifeq ($(G4SYSTEM),WIN32-VC)
+#  CLHEP_BASE_DIR    must be defined in the environment
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
-  CLHEP_LIB         := libCLHEP-cl.a
+  CLHEP_LIB         := CLHEP.lib
 endif
 
 #
@@ -154,15 +156,49 @@ endif
 #
 
 ifdef G4USE_OSPACE
+
+#Object Space STL implementation
+
   RWINC      := $(G4BASE)/global/STLInterface
   OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
   OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl
   OSPACELIBS := -L$(OSPACEDIR)/lib -lospace
   CPPFLAGS   += -DG4USE_STL
+
+  ifeq ($(G4SYSTEM),WIN32-VC)
+    OSPACEDIR  := $(OBJECT_SPACE_BASE)
+    OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)
+    OSPACELIBS := '-libpath:c:\dev\ospace\lib std-2.1-vc5.0-mt.lib'
+    CPPFLAGS   += -DG4USE_STL -DG4USE_OLDSTL 
+    CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
+  endif
 else
-  ifdef G4USE_STL
+ifdef G4USE_STL
+
+# Native STL implemetation
+
     RWINC      := $(G4BASE)/global/STLInterface
-  else
+
+else 
+ifdef G4USE_STLPORT
+
+# STLport STL implementation (free) ( derived from SGI implementaion)
+    ifeq ($(G4SYSTEM),WIN32-VC)
+
+    RWINC      := $(G4BASE)/global/STLInterface
+    STLPORTDIR := $(STLPORT_BASE)
+    OSPACEINC  := -I$(STLPORTDIR)/stl
+    CPPFLAGS   += -DG4USE_STL -DG4USE_OLDSTL
+    CPPFLAGS   += -D_NOTHREADS -D__STL_NO_NEW_IOSTREAMS -D__STL_NO_NAMESPACES -D__STL_NO_NEW_STYLE_HEADERS
+
+    endif
+
+endif   #STLport
+endif   #STL
+endif   #OPSPACE
+
+#  default to RW if RWINC is not set...
+ifndef RWINC 
     ifndef RWBASE
       RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
     endif
@@ -176,17 +212,12 @@ else
       RWLIBDIR  := /usr/lib
     endif
 
-    ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-      #
-      # NiceNT policy for letter drive mapping 
-      #
-      ifndef RWBASE
-        RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
-      endif
+    ifeq ($(G4SYSTEM),WIN32-VC)
+#        RWBASE   must be defined in the environment
+
       RWINC        := $(RWBASE)
       RWLIBDIR     := $(RWBASE)"\lib"
-      RWLIB        := mtldmt.lib
-      RWINCGPP     := /rogue
+      RWLIB        := mtlmt.lib
     endif
 
     ifeq ($(G4SYSTEM),WIN32-G++-NICE)
@@ -205,8 +236,7 @@ else
     ifdef RWINCGPP
       RWINCGPP := -I$(RWINCGPP)
     endif
-  endif # ifdef G4USE_STL
-endif # ifdef G4USE_OSPACE
+endif # ifndef RWINC
 
 #
 # Paths for G4 data
@@ -224,7 +254,7 @@ endif
 #
 # Toggle variables (positional qualifiers) between WIN32-VC and UNIX...
 #
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+ifeq ($(G4SYSTEM),WIN32-VC)
   OUT_OBJ := -TP '-Fo'
   FOR_OBJ := '-Fo'
   OUT_LIB := '-out:'
@@ -262,7 +292,7 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 #
 # Positional qualifiers in action...
 #
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+ifeq ($(G4SYSTEM),WIN32-VC)
   LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
   ifdef RWLIBDIR
     LDFLAGS   += $(LIB_PATH)$(RWLIBDIR)
@@ -591,27 +621,35 @@ ifeq ($(G4SYSTEM),Linux-g++)
   endif
 endif
 
-# ------ WIN32/VC/NICE ------
+# ------ WIN32/VC ------
 #
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
   G4_HAVE_BOOL := yes
   G4_NO_CBRT := yes
   ifdef G4OPTIMISE
     CXXFLAGS  += -Ox
   else
-    CXXFLAGS  += -Od
+    CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
   endif
-  CXXFLAGS += -GX -Zm200 -DWIN32 -DG4NOT_ISO_DELETES # -TP
+  CXXFLAGS += -MD -GX -Zm200  -nologo -DWIN32 -D_CONSOLE 
+  CXXFLAGS += -D_WIN32 -DOS -DG4NOT_ISO_DELETES
+  CPPFLAGS += -DWIN32 -DRW_NO_XMSG 
 #
 # Should set $INCLUDE environment, if not set as below
 #
-# CXXFLAGS += -I'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\INCLUDE'
+ifdef G4USE_OSPACE
+ CXXFLAGS += $(OSPACEINC)
+else
+ifdef G4USE_STLPORT
+ CXXFLAGS += $(OSPACEINC)
+endif   #stlport
+endif   #ospace
 
-  LDFLAGS  += -FORCE
+  LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
 
 #
-# Should set $LIB environment, if not set as below
+# Should set $LIB environment to include VC++ Studio lib directories, e.g.
 #
 #	$(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
 #       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
