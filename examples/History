@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2001-12-13 17:49:48 gcosmo Exp $
+$Id: History,v 1.64 2002-12-05 01:20:12 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2002  Makoto Asai (examples-V04-01-03)
+- Migration to new G4ApplicationState
 
 13th December 2001  Gabriele Cosmo (examples-V03-02-05)
 - Updated reference outputs.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorMessenger.cc,v 1.4 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelDetectorMessenger.cc,v 1.5 2002-12-05 01:17:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -57,7 +57,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   ConverterMaterCmd = new G4UIcmdWithAString("/payload/setConvMat",this);
   ConverterMaterCmd->SetGuidance("Select Material of the Converter.");
   ConverterMaterCmd->SetParameterName("choice",false);
-  ConverterMaterCmd->AvailableForStates(Idle);
+  ConverterMaterCmd->AvailableForStates(G4State_Idle);
 
   // converter thickness command
   
@@ -67,7 +67,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   ConverterThickCmd->SetParameterName("Size",false);
   ConverterThickCmd->SetRange("Size>=0.");
   ConverterThickCmd->SetUnitCategory("Length");
-  ConverterThickCmd->AvailableForStates(Idle);
+  ConverterThickCmd->AvailableForStates(G4State_Idle);
 
   // tracker silicon thickness command
 
@@ -77,7 +77,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   SiliconThickCmd->SetParameterName("Size",false);
   SiliconThickCmd->SetRange("Size>=0.");
   SiliconThickCmd->SetUnitCategory("Length");
-  SiliconThickCmd->AvailableForStates(Idle);
+  SiliconThickCmd->AvailableForStates(G4State_Idle);
 
   // tracker silicon pitch command
 
@@ -87,7 +87,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   SiliconPitchCmd->SetParameterName("Size",false);
   SiliconPitchCmd->SetRange("Size>=0."); 
   SiliconPitchCmd->SetUnitCategory("Length");
-  SiliconPitchCmd->AvailableForStates(Idle);
+  SiliconPitchCmd->AvailableForStates(G4State_Idle);
   
   // tracker silicon tile size command
   
@@ -97,7 +97,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   SiliconTileXYCmd->SetParameterName("Size",false);
   SiliconTileXYCmd->SetRange("Size>=0.");
   SiliconTileXYCmd->SetUnitCategory("Length");  
-  SiliconTileXYCmd->AvailableForStates(Idle);
+  SiliconTileXYCmd->AvailableForStates(G4State_Idle);
   
   // tracker number of silicon tiles
 
@@ -105,7 +105,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   NbSiTilesCmd->SetGuidance("Set number of Si Tiles.");
   NbSiTilesCmd->SetParameterName("NbSiTiles",false);
   NbSiTilesCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
-  NbSiTilesCmd->AvailableForStates(Idle);
+  NbSiTilesCmd->AvailableForStates(G4State_Idle);
 
   // tracker number of silicon layers
 
@@ -113,7 +113,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   NbTKRLayersCmd->SetGuidance("Set number of TKR Layers.");
   NbTKRLayersCmd->SetParameterName("NbTKRLayers",false);
   NbTKRLayersCmd->SetRange("NbTKRLayers>0 && NbTKRLayers<30");
-  NbTKRLayersCmd->AvailableForStates(Idle);
+  NbTKRLayersCmd->AvailableForStates(G4State_Idle);
 
   // tracker layer distance
 
@@ -123,7 +123,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   LayerDistanceCmd->SetParameterName("Size",false);
   LayerDistanceCmd->SetRange("Size>=0.");
   LayerDistanceCmd->SetUnitCategory("Length");  
-  LayerDistanceCmd->AvailableForStates(Idle);
+  LayerDistanceCmd->AvailableForStates(G4State_Idle);
 
   // tracker views distance
   
@@ -133,7 +133,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   ViewsDistanceCmd->SetParameterName("Size",false);
   ViewsDistanceCmd->SetRange("Size>=0.");
   ViewsDistanceCmd->SetUnitCategory("Length");  
-  ViewsDistanceCmd->AvailableForStates(Idle);
+  ViewsDistanceCmd->AvailableForStates(G4State_Idle);
 
   // calorimeter detector thickness
 
@@ -143,7 +143,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   CALThickCmd->SetParameterName("Size",false);
   CALThickCmd->SetRange("Size>=0.");
   CALThickCmd->SetUnitCategory("Length");  
-  CALThickCmd->AvailableForStates(Idle);
+  CALThickCmd->AvailableForStates(G4State_Idle);
 
   // number calorimeter detectors 
 
@@ -151,7 +151,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   NbCALBarsCmd->SetGuidance("Set number of CsI Bars.");
   NbCALBarsCmd->SetParameterName("NbSiTiles",false);
   NbCALBarsCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
-  NbCALBarsCmd->AvailableForStates(Idle);
+  NbCALBarsCmd->AvailableForStates(G4State_Idle);
 
   // number calorimeter layers
 
@@ -159,7 +159,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   NbCALLayersCmd->SetGuidance("Set number of CAL Layers.");
   NbCALLayersCmd->SetParameterName("NbCALLayers",false);
   NbCALLayersCmd->SetRange("NbCALLayers>0 && NbCALLayers<16");
-  NbCALLayersCmd->AvailableForStates(Idle);
+  NbCALLayersCmd->AvailableForStates(G4State_Idle);
 
   // calorimeter detector thickness
 
@@ -169,7 +169,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   ACDThickCmd->SetParameterName("Size",false);
   ACDThickCmd->SetRange("Size>=0.");
   ACDThickCmd->SetUnitCategory("Length");  
-  ACDThickCmd->AvailableForStates(Idle);
+  ACDThickCmd->AvailableForStates(G4State_Idle);
   
   // update Payload
 
@@ -177,7 +177,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   UpdateCmd->SetGuidance("Update payload geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   // magnetic field
 
@@ -186,7 +186,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);  
+  MagFieldCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

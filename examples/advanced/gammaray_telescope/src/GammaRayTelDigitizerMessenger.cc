@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizerMessenger.cc,v 1.1 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelDigitizerMessenger.cc,v 1.2 2002-12-05 01:17:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -53,7 +53,7 @@ GammaRayTelDigitizerMessenger::GammaRayTelDigitizerMessenger
   ThresholdCmd->SetDefaultValue((G4double)20.*keV);
   ThresholdCmd->SetRange("Threshold >=0.");
   ThresholdCmd->SetUnitCategory("Energy");  
-  ThresholdCmd->AvailableForStates(PreInit,Idle);
+  ThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

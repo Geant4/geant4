@@ -80,7 +80,7 @@ DMXRunActionMessenger::DMXRunActionMessenger(DMXRunAction* run)
   InteractPlotCmd->SetParameterName("interactplot", false);
   InteractPlotCmd->SetDefaultValue(false);
 
-  //  FileCmd->AvailableForStates(Idle);
+  //  FileCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
