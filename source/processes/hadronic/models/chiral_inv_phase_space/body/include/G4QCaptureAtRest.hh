@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.3 2004-12-08 14:45:57 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.4 2004-12-08 17:48:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -120,6 +120,8 @@ public:
 
   G4VParticleChange* AtRestDoIt(const G4Track& aTrack, const G4Step& aStep); 
 
+  G4LorentzVector GetEnegryMomentumConservation();
+
 protected:                         
 
   // zero mean lifetime
@@ -134,9 +136,9 @@ private:
   void CalculateEnergyDepositionOfTauCapture(G4int Z);// (2p->1s, MeV) @@N-independ,Improve
 
 private:
+  G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
   G4double Time;                                      // Time shift of the capture reaction
   G4double EnergyDeposition;                          // Energy deposited in the reaction
 
 };
 #endif
-

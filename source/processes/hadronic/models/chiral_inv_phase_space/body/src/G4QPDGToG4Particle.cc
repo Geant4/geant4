@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.1 2004-12-08 14:45:57 mkossov Exp $
+// $Id: G4QPDGToG4Particle.cc,v 1.2 2004-12-08 17:48:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
@@ -56,272 +56,269 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
   if(!PDG) return 0;
   else if(PDG>0)     // Positive PDG Code
 		{
-    if(PDG>0)
+    if(PDG<100)
     {
-      if(PDG<100)
+      if(PDG==22) return G4Gamma::Gamma();
+      else if(PDG>10 && PDG<17)
       {
-        if(PDG==22) return G4Gamma::Gamma();
-        else if(PDG>10 && PDG<17)
+        if(PDG<13)
         {
-          if(PDG<13)
-          {
-            if(PDG==11) return G4Electron::Electron();
-            else return G4NeutrinoE::NeutrinoE();
-          }
-          else
-										{
-            if(PDG<15)
-            {
-              if(PDG==13) return G4MuonMinus::MuonMinus();
-              else return G4NeutrinoMu::NeutrinoMu();
-            }
-            else
-            {
-              if(PDG==15) return G4TauMinus::TauMinus();
-              else return G4NeutrinoTau::NeutrinoTau();
-            }
-          }
-        }
-        else return 0; // @@ Warning can be added
-      } // End of the Lepton definition
-      else if(PDG<1000)
-						{
-        if(PDG<420)
-        {
-          if(PDG<320)
-          {
-            if(PDG==211) return G4PionPlus::PionPlus();
-            else if(PDG==111) return G4PionZero::PionZero();
-            else if(PDG==130) return G4KaonZeroLong::KaonZeroLong();
-            else if(PDG==221) return G4Eta::Eta();
-            else if(PDG==311) return G4KaonZero::KaonZero();
-            else return 0; // @@ Warning can be added
-          }
-          else
-          {
-            if(PDG==321) return G4KaonPlus::KaonPlus();
-            else if(PDG==331) return G4EtaPrime::EtaPrime();
-            else if(PDG==310) return G4KaonZeroShort::KaonZeroShort();
-            else if(PDG==411) return G4DMesonPlus::DMesonPlus();
-            else return 0; // @@ Warning can be added
-          }
+          if(PDG==11) return G4Electron::Electron();
+          else return G4NeutrinoE::NeutrinoE();
         }
         else
 								{
-          if(PDG<500)
+          if(PDG<15)
           {
-            if(PDG==421) return G4DMesonZero::DMesonZero();
-            else if(PDG==431) return G4DsMesonPlus::DsMesonPlus();
-            else if(PDG==443) return G4JPsi::JPsi();
-            else return 0; // @@ Warning can be added
+            if(PDG==13) return G4MuonMinus::MuonMinus();
+            else return G4NeutrinoMu::NeutrinoMu();
           }
           else
           {
-            if(PDG==521) return G4BMesonPlus::BMesonPlus();
-            else if(PDG==511) return G4BMesonZero::BMesonZero();
-            else if(PDG==531) return G4BsMesonZero::BsMesonZero();
-            else return 0; // @@ Warning can be added
+            if(PDG==15) return G4TauMinus::TauMinus();
+            else return G4NeutrinoTau::NeutrinoTau();
           }
         }
-      } // Emd of the Meson definition
-      else
-						{
-        if(PDG<3333)
-        {
-          if(PDG<3211)
-          {
-            if(PDG<3111)
-            {
-              if(PDG==2112) return G4Neutron::Neutron();
-								      else if(PDG==2212) return G4Proton::Proton();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(PDG==3112) return G4SigmaMinus::SigmaMinus();
-              else if(PDG==3122) return G4Lambda::Lambda();
-              else return 0; // @@ Warning can be added
-            }
-          }
-          else
-          {
-            if(PDG<3311)
-            {
-              if(PDG==3222) return G4SigmaPlus::SigmaPlus();
-              else if(PDG==3212) return G4SigmaZero::SigmaZero();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(PDG==3312) return G4XiMinus::XiMinus();
-              else if(PDG==3322) return G4XiZero::XiZero();
-              else return 0; // @@ Warning can be added
-            }
-          }
-        }
-        else
-        {
-          if(PDG<4221)
-          {
-            if(PDG<4121)
-            {
-              if(PDG==3334) return G4OmegaMinus::OmegaMinus();
-              else if(PDG==4112) return G4SigmacZero::SigmacZero();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(PDG==4122) return G4LambdacPlus::LambdacPlus();
-              else if(PDG==4212) return G4SigmacPlus::SigmacPlus();
-              else return 0; // @@ Warning can be added
-            }
-          }
-          else
-          {
-            if(PDG<4231)
-            {
-              if(PDG==4222) return G4SigmacPlusPlus::SigmacPlusPlus();
-              else if(PDG==4232) return G4XicPlus::XicPlus();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(PDG==4132) return G4XicZero::XicZero();
-              else if(PDG==4332) return G4OmegacZero::OmegacZero();
-              else return 0; // @@ Warning can be added
-            }
-          }
-        }
-      } // End of Baryon definition
-    } 
-    else               // Negative PDG Code
-		  {
-				  G4int aPDG=-PDG;
-      if(aPDG<100)
+      }
+      else return 0; // @@ Warning can be added
+    } // End of the Lepton definition
+    else if(PDG<1000)
+				{
+      if(PDG<420)
       {
-        if(aPDG>10 && aPDG<17)
+        if(PDG<320)
         {
-          if(aPDG<13)
-          {
-            if(aPDG==11) return G4Positron::Positron();
-            else return G4AntiNeutrinoE::AntiNeutrinoE();
-          }
-          else
-										{
-            if(aPDG<15)
-            {
-              if(aPDG==13) return G4MuonPlus::MuonPlus();
-              else return G4AntiNeutrinoMu::AntiNeutrinoMu();
-            }
-            else
-            {
-              if(aPDG==15) return G4TauPlus::TauPlus();
-              else return G4AntiNeutrinoTau::AntiNeutrinoTau();
-            }
-          }
-        }
-        else return 0; // @@ Warning can be added
-      } // End of the Anti-Lepton definition
-      else if(aPDG<1000)
-						{
-        if(aPDG<420)
-        {
-          if(PDG<320)
-          {
-            if(aPDG==211) return G4PionMinus::PionMinus();
-            else if(aPDG==311) return G4AntiKaonZero::AntiKaonZero();
-            else return 0; // @@ Warning can be added
-          }
-          else
-          {
-            if(aPDG==321) return G4KaonMinus::KaonMinus();
-            else if(aPDG==411) return G4DMesonMinus::DMesonMinus();
-            else return 0; // @@ Warning can be added
-          }
+          if(PDG==211) return G4PionPlus::PionPlus();
+          else if(PDG==111) return G4PionZero::PionZero();
+          else if(PDG==130) return G4KaonZeroLong::KaonZeroLong();
+          else if(PDG==221) return G4Eta::Eta();
+          else if(PDG==311) return G4KaonZero::KaonZero();
+          else return 0; // @@ Warning can be added
         }
         else
         {
-          if(aPDG<500)
-          {
-            if(aPDG==421) return G4AntiDMesonZero::AntiDMesonZero();
-            else if(aPDG==431) return G4DsMesonMinus::DsMesonMinus();
-            else return 0; // @@ Warning can be added
-          }
-          else
-          {
-            if(aPDG==521) return G4BMesonMinus::BMesonMinus();
-            else if(aPDG==511) return G4AntiBMesonZero::AntiBMesonZero();
-            else if(aPDG==531) return G4AntiBsMesonZero::AntiBsMesonZero();
-            else return 0; // @@ Warning can be added
-          }
+          if(PDG==321) return G4KaonPlus::KaonPlus();
+          else if(PDG==331) return G4EtaPrime::EtaPrime();
+          else if(PDG==310) return G4KaonZeroShort::KaonZeroShort();
+          else if(PDG==411) return G4DMesonPlus::DMesonPlus();
+          else return 0; // @@ Warning can be added
         }
-      } // Emd of the Anti-Meson definition
+      }
       else
 						{
-        if(aPDG<3333)
+        if(PDG<500)
         {
-          if(aPDG<3211)
+          if(PDG==421) return G4DMesonZero::DMesonZero();
+          else if(PDG==431) return G4DsMesonPlus::DsMesonPlus();
+          else if(PDG==443) return G4JPsi::JPsi();
+          else return 0; // @@ Warning can be added
+        }
+        else
+        {
+          if(PDG==521) return G4BMesonPlus::BMesonPlus();
+          else if(PDG==511) return G4BMesonZero::BMesonZero();
+          else if(PDG==531) return G4BsMesonZero::BsMesonZero();
+          else return 0; // @@ Warning can be added
+        }
+      }
+    } // Emd of the Meson definition
+    else
+				{
+      if(PDG<3333)
+      {
+        if(PDG<3211)
+        {
+          if(PDG<3111)
           {
-            if(aPDG<3111)
-            {
-              if(aPDG==2112) return G4AntiNeutron::AntiNeutron();
-								      else if(aPDG==2212) return G4AntiProton::AntiProton();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(aPDG==3112) return G4AntiSigmaMinus::AntiSigmaMinus();
-              else if(aPDG==3122) return G4AntiLambda::AntiLambda();
-              else return 0; // @@ Warning can be added
-            }
+            if(PDG==2112) return G4Neutron::Neutron();
+						      else if(PDG==2212) return G4Proton::Proton();
+            else return 0; // @@ Warning can be added
           }
           else
           {
-            if(aPDG<3311)
-            {
-              if(aPDG==3222) return G4AntiSigmaPlus::AntiSigmaPlus();
-              else if(aPDG==3212) return G4AntiSigmaZero::AntiSigmaZero();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(aPDG==3312) return G4AntiXiMinus::AntiXiMinus();
-              else if(aPDG==3322) return G4AntiXiZero::AntiXiZero();
-              else return 0; // @@ Warning can be added
-            }
+            if(PDG==3112) return G4SigmaMinus::SigmaMinus();
+            else if(PDG==3122) return G4Lambda::Lambda();
+            else return 0; // @@ Warning can be added
           }
         }
         else
         {
-          if(aPDG<4221)
+          if(PDG<3311)
           {
-            if(aPDG<4121)
-            {
-              if(aPDG==3334) return G4AntiOmegaMinus::AntiOmegaMinus();
-              else if(aPDG==4112) return G4AntiSigmacZero::AntiSigmacZero();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(aPDG==4122) return G4AntiLambdacPlus::AntiLambdacPlus();
-              else if(aPDG==4212) return G4AntiSigmacPlus::AntiSigmacPlus();
-              else return 0; // @@ Warning can be added
-            }
+            if(PDG==3222) return G4SigmaPlus::SigmaPlus();
+            else if(PDG==3212) return G4SigmaZero::SigmaZero();
+            else return 0; // @@ Warning can be added
           }
           else
           {
-            if(aPDG<4231)
-            {
-              if(aPDG==4222) return G4AntiSigmacPlusPlus::AntiSigmacPlusPlus();
-              else if(aPDG==4232) return G4AntiXicPlus::AntiXicPlus();
-              else return 0; // @@ Warning can be added
-            }
-            else
-            {
-              if(aPDG==4132) return G4AntiXicZero::AntiXicZero();
-              else if(aPDG==4332) return G4AntiOmegacZero::AntiOmegacZero();
-              else return 0; // @@ Warning can be added
-            }
+            if(PDG==3312) return G4XiMinus::XiMinus();
+            else if(PDG==3322) return G4XiZero::XiZero();
+            else return 0; // @@ Warning can be added
+          }
+        }
+      }
+      else
+      {
+        if(PDG<4221)
+        {
+          if(PDG<4121)
+          {
+            if(PDG==3334) return G4OmegaMinus::OmegaMinus();
+            else if(PDG==4112) return G4SigmacZero::SigmacZero();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(PDG==4122) return G4LambdacPlus::LambdacPlus();
+            else if(PDG==4212) return G4SigmacPlus::SigmacPlus();
+            else return 0; // @@ Warning can be added
+          }
+        }
+        else
+        {
+          if(PDG<4231)
+          {
+            if(PDG==4222) return G4SigmacPlusPlus::SigmacPlusPlus();
+            else if(PDG==4232) return G4XicPlus::XicPlus();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(PDG==4132) return G4XicZero::XicZero();
+            else if(PDG==4332) return G4OmegacZero::OmegacZero();
+            else return 0; // @@ Warning can be added
+          }
+        }
+      }
+    } // End of Baryon definition
+  } 
+  else               // Negative PDG Code
+		{
+		  G4int aPDG=-PDG;
+    if(aPDG<100)
+    {
+      if(aPDG>10 && aPDG<17)
+      {
+        if(aPDG<13)
+        {
+          if(aPDG==11) return G4Positron::Positron();
+          else return G4AntiNeutrinoE::AntiNeutrinoE();
+        }
+        else
+								{
+          if(aPDG<15)
+          {
+            if(aPDG==13) return G4MuonPlus::MuonPlus();
+            else return G4AntiNeutrinoMu::AntiNeutrinoMu();
+          }
+          else
+          {
+            if(aPDG==15) return G4TauPlus::TauPlus();
+            else return G4AntiNeutrinoTau::AntiNeutrinoTau();
+          }
+        }
+      }
+      else return 0; // @@ Warning can be added
+    } // End of the Anti-Lepton definition
+    else if(aPDG<1000)
+				{
+      if(aPDG<420)
+      {
+        if(PDG<320)
+        {
+          if(aPDG==211) return G4PionMinus::PionMinus();
+          else if(aPDG==311) return G4AntiKaonZero::AntiKaonZero();
+          else return 0; // @@ Warning can be added
+        }
+        else
+        {
+          if(aPDG==321) return G4KaonMinus::KaonMinus();
+          else if(aPDG==411) return G4DMesonMinus::DMesonMinus();
+          else return 0; // @@ Warning can be added
+        }
+      }
+      else
+      {
+        if(aPDG<500)
+        {
+          if(aPDG==421) return G4AntiDMesonZero::AntiDMesonZero();
+          else if(aPDG==431) return G4DsMesonMinus::DsMesonMinus();
+          else return 0; // @@ Warning can be added
+        }
+        else
+        {
+          if(aPDG==521) return G4BMesonMinus::BMesonMinus();
+          else if(aPDG==511) return G4AntiBMesonZero::AntiBMesonZero();
+          else if(aPDG==531) return G4AntiBsMesonZero::AntiBsMesonZero();
+          else return 0; // @@ Warning can be added
+        }
+      }
+    } // Emd of the Anti-Meson definition
+    else
+				{
+      if(aPDG<3333)
+      {
+        if(aPDG<3211)
+        {
+          if(aPDG<3111)
+          {
+            if(aPDG==2112) return G4AntiNeutron::AntiNeutron();
+						      else if(aPDG==2212) return G4AntiProton::AntiProton();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(aPDG==3112) return G4AntiSigmaMinus::AntiSigmaMinus();
+            else if(aPDG==3122) return G4AntiLambda::AntiLambda();
+            else return 0; // @@ Warning can be added
+          }
+        }
+        else
+        {
+          if(aPDG<3311)
+          {
+            if(aPDG==3222) return G4AntiSigmaPlus::AntiSigmaPlus();
+            else if(aPDG==3212) return G4AntiSigmaZero::AntiSigmaZero();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(aPDG==3312) return G4AntiXiMinus::AntiXiMinus();
+            else if(aPDG==3322) return G4AntiXiZero::AntiXiZero();
+            else return 0; // @@ Warning can be added
+          }
+        }
+      }
+      else
+      {
+        if(aPDG<4221)
+        {
+          if(aPDG<4121)
+          {
+            if(aPDG==3334) return G4AntiOmegaMinus::AntiOmegaMinus();
+            else if(aPDG==4112) return G4AntiSigmacZero::AntiSigmacZero();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(aPDG==4122) return G4AntiLambdacPlus::AntiLambdacPlus();
+            else if(aPDG==4212) return G4AntiSigmacPlus::AntiSigmacPlus();
+            else return 0; // @@ Warning can be added
+          }
+        }
+        else
+        {
+          if(aPDG<4231)
+          {
+            if(aPDG==4222) return G4AntiSigmacPlusPlus::AntiSigmacPlusPlus();
+            else if(aPDG==4232) return G4AntiXicPlus::AntiXicPlus();
+            else return 0; // @@ Warning can be added
+          }
+          else
+          {
+            if(aPDG==4132) return G4AntiXicZero::AntiXicZero();
+            else if(aPDG==4332) return G4AntiOmegacZero::AntiOmegacZero();
+            else return 0; // @@ Warning can be added
           }
         }
       }

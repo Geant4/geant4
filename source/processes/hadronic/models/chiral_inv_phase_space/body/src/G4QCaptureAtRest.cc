@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.7 2004-12-08 14:45:57 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.8 2004-12-08 17:48:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -32,8 +32,8 @@
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
 
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 
 #include "G4QCaptureAtRest.hh"
 
@@ -51,11 +51,15 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   G4QEnvironment::SetParameters(.5);                 // SolAngle (pbar-A secondary capture)
 }
 
-
 // Destructor
 
 G4QCaptureAtRest::~G4QCaptureAtRest()
 {}
+
+G4LorentzVector G4QCaptureAtRest::GetEnegryMomentumConservation()
+{
+  return EnMomConservation;
+}
 
 G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle) 
 {
@@ -359,10 +363,14 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
 	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS decay muMB="<<mp<<G4endl;
 #endif
-    G4QHadron* pH = new G4QHadron(projPDG,G4LorentzVector(0.,0.,0.,mp)); // --DELETED----+
-    G4QHadronVector projHV;                  //                                          |
-    projHV.push_back(pH);                                   // DESTROYED over 1 line --+ |
-    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED ---------+ | |
+    G4LorentzVector projLV(0.,0.,0.,mp);
+    G4QPDGCode targQPDG(targPDG);
+    G4double totMass=mp+targQPDG.GetMass();
+    EnMomConservation=G4LorentzVector(0.,0.,0.,totMass);    // Total 4-momentum of the reac
+    G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---------+
+    G4QHadronVector projHV;                                 //                           |
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
     std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // ----------------+-+-+
     projHV.clear(); // --------------------------------------------------------------+-+
 #ifdef debug
@@ -465,25 +473,17 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     }
     if(!theDefinition)
     {
-      if(!G4ParticleTable::GetParticleTable()->GetReadiness())
-      {
-        G4cout<<"--Worn--G4QCaptureAtRest::AtRestDoIt:G4ParticleTable isn't ready"<<G4endl;
-        G4ParticleTable::GetParticleTable()->SetReadiness();
-        theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
-        if(!theDefinition) G4cout<<"-*W*-G4QCaptureAtRest::AtRestDoIt:PT NotReady"<<G4endl;
-      }
-      if(!theDefinition)
-      {
-        G4cout<<"---Worning---G4QCaptureAtRest::AtRestDoIt: drop PDG="<<PDGCode<<G4endl;
-        delete hadr;
-        continue;
-      }
+      G4cout<<"---Worning---G4QCaptureAtRest::AtRestDoIt: drop PDG="<<PDGCode<<G4endl;
+      delete hadr;
+      continue;
     }
 #ifdef pdebug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
 #endif
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
+    EnMomConservation-=h4M;
+    //G4cout<<"#"<<i<<", 4M="<<h4M<<", m="<<h4M.m()<<G4endl;
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
 #endif
