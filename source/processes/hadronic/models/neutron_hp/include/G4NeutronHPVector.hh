@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.9 2000-07-19 17:26:56 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.10 2000-07-24 14:06:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -101,7 +101,7 @@ class G4NeutronHPVector
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetX();
   }
-  inline G4double GetY(G4int i)  const
+  inline G4double GetY(G4int i)
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.5 2000-07-19 18:22:36 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.6 2000-07-24 14:06:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -85,7 +85,7 @@
     xSec = new G4double[n];
     G4double sum=0;
     G4int i, it, index;
-    G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+    const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
     G4double rWeight;    
     for (i=0; i<n; i++)
     {
