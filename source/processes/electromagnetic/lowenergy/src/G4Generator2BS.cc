@@ -35,8 +35,9 @@
 // Creation date: 2 June 2003
 //
 // Modifications: 
-// 02 Jun 2003                                First implementation acording with new design
-//                5 Nov 2003  MGP             Fixed std namespace
+// 02 Jun 2003                    First implementation acording with new design
+// 05 Nov 2003  MGP               Fixed std namespace
+// 17 Nov 2003  MGP               Fixed compilation problem on Windows                  
 //
 // Class Description: 
 //
@@ -82,7 +83,7 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   EnergyRatio = finalTotalEnergy/initialTotalEnergy;
   G4double gMaxEnergy = (M_PI*initialTotalEnergy)*(M_PI*initialTotalEnergy);
 
-  G4double Zeff = sqrt(Z*(Z+1));
+  G4double Zeff = sqrt( ( (G4double)Z) * ( (G4double)(Z)) + 1.0 ) );
   z = (0.00008116224*(pow(Zeff,0.3333333)));
 
   // Rejection arguments
