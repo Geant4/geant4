@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4.hh,v 1.1 1999-01-07 16:06:44 gunter Exp $
+// $Id: G3toG4.hh,v 1.2 1999-05-15 00:16:53 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef _G3TOG4_
@@ -20,8 +20,8 @@ extern RWCString Spar[1000];
 //extern G4double min(G4double, G4double);
 
 void G3fillParams(RWCString *tokens, char *ptypes);
-G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,
-                  char* routine);
+// G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,
+//               char* routine);
 
 #include "G3G4Interface.hh"
 
