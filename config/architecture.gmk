@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.75 2001-12-10 13:40:44 gcosmo Exp $
+# $Id: architecture.gmk,v 1.76 2001-12-10 13:42:28 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -17,7 +17,7 @@
 #
 #          Linux-egcs  Linux (Red Hat 6.1), egcs-1.1.2
 #
-#          SUN-CC      SunOS 5.7, CC 5.2
+#          SUN-CC      SunOS 5.7, CC 5.2 
 #
 #          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
 #
