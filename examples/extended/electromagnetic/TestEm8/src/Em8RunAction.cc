@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.8 2003-06-16 16:48:02 gunter Exp $
+// $Id: Em8RunAction.cc,v 1.9 2003-11-24 16:34:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -432,7 +432,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
     std::ofstream normOut("normDist.out", std::ios::out ) ;
     normOut.setf( std::ios::scientific, std::ios::floatfield );
 
-    G4double E , dnorm, norm,fmax,Emp,width ;
+    G4double E , dnorm, norm,fmax,Emp; // width ;
     Emp=-999.999 ;
     G4cout << " energy deposit distribution " << G4endl ;
     G4cout << "#entries=" << entryEn << "    #underflows=" << underEn <<

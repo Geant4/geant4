@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.cc,v 1.5 2003-06-16 16:48:03 gunter Exp $
+// $Id: Em8SteppingAction.cc,v 1.6 2003-11-24 16:34:10 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,8 +67,8 @@ Em8SteppingAction::~Em8SteppingAction()
 void Em8SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend ;
+  // G4double Tkin, Edep, xend;
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+

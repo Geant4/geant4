@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.10 2003-10-27 15:25:07 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.11 2003-11-24 16:34:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,15 +57,18 @@
 //
 
 Em8DetectorConstruction::Em8DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
- solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
- AbsorberMaterial(NULL),WorldMaterial(NULL),fRadiatorMat(NULL),
- magField(NULL),calorimeterSD(NULL),worldchanged(false)
+:
+worldchanged(false),
+WorldMaterial(NULL),solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
+AbsorberMaterial(NULL),solidAbsorber(NULL),logicAbsorber(NULL),
+physiAbsorber(NULL),
+fRadiatorMat(NULL),
+ magField(NULL),calorimeterSD(NULL)
 {
   // default parameter values of the calorimeter
 
-  G4double inch = 2.54*cm ;
-  G4double  mil = inch/1000.0 ;
+  //  G4double inch = 2.54*cm ;
+  // G4double  mil = inch/1000.0 ;
 
   WorldSizeZ = 80.*cm;
   WorldSizeR = 20.*cm;
@@ -127,19 +130,22 @@ void Em8DetectorConstruction::DefineMaterials()
  
 G4String name, symbol ;             //a=mass of a mole;
 G4double a, z, density ;            //z=mean number of protons;  
-G4int iz, n, nel ;                       //iz=number of protons  in an isotope; 
+// G4int iz, n; 
+G4int nel ;                       //iz=number of protons  in an isotope; 
                                    // n=number of nucleons in an isotope;
 
-G4int ncomponents, natoms;
-G4double abundance, fractionmass;
-G4double temperature, pressure;
+ G4int ncomponents; 
+  // G4int natoms;
+// G4double abundance; 
+G4double fractionmass;
+//G4double temperature, pressure;
 
 //
 // define Elements
 //
 
-  a = 1.01*g/mole;
-  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+//  a = 1.01*g/mole;
+//  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
@@ -153,11 +159,11 @@ G4double temperature, pressure;
   a = 39.948*g/mole;
   G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
 
-  a = 131.29*g/mole;
-  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
+  //  a = 131.29*g/mole;
+  //  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
   
-  a = 19.00*g/mole;
-  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
+  //  a = 19.00*g/mole;
+  //  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
 
 
 //
@@ -256,7 +262,6 @@ H2O->AddElement(elO, natoms=1);
   anotherN2->AddElement(elN, 1);
   anotherN2->AddElement(elN, 1);
 
-************************ */
 
   // liquid hydrogen for muon cooling target
 
@@ -289,6 +294,7 @@ H2O->AddElement(elO, natoms=1);
   CH2->AddElement(elH,2);
   CH2->AddElement(elC,1);
 
+************************ */
 
 
   // Krypton as detector gas, STP
@@ -375,9 +381,9 @@ H2O->AddElement(elO, natoms=1);
 
   // Xenon as detector gas, STP
 
-  density = 5.858*mg/cm3 ;
-  a = 131.29*g/mole ;
-  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
+  //  density = 5.858*mg/cm3 ;
+  //  a = 131.29*g/mole ;
+  //  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
 
   // Carbon dioxide, STP
 
@@ -396,10 +402,11 @@ H2O->AddElement(elO, natoms=1);
 
   // 80% Xe + 20% CO2, STP
 
-  density = 5.0818*mg/cm3 ;      
-  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , density, ncomponents=2);
-  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
-  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+  //  density = 5.0818*mg/cm3 ;      
+  //  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , 
+  // density, ncomponents=2);
+  //  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
+  //  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
 
   // 80% Kr + 20% CO2, STP
 
@@ -414,10 +421,10 @@ H2O->AddElement(elO, natoms=1);
 
   //default materials of the calorimeter and TR radiator
 
-  fRadiatorMat =  Mylar ; // CH2 ;   // Mylar ; 
+  //  fRadiatorMat =  Mylar ; // CH2 ;   // Mylar ; 
   
-  fWindowMat = Mylar ;
-  fElectrodeMat = Al ;
+  // fWindowMat = Mylar ;
+  // fElectrodeMat = Al ;
 
   AbsorberMaterial = Kr20CO2 ; // lH2 ; // Al; // Be; // XeCO2CF4  ; 
   fGapMat          = Kr20CO2 ;
@@ -431,8 +438,8 @@ H2O->AddElement(elO, natoms=1);
   
 G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 {
-  G4int i, j ; 
-  G4double zModule, zRadiator, rModule, rRadiator ; 
+  //  G4int i, j ; 
+  //  G4double zModule, zRadiator, rModule, rRadiator ; 
 
   // complete the Calor parameters definition and Print 
 
@@ -514,8 +521,8 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
   //   G4VXrayTRmodel* pTRModel = new G4RegularXrayTRmodel(logicRadiator,
   //                                                       fRadThickness,fGasGap);
 
-  G4double alphaPlate = 160.0 ;
-  G4double alphaGas   = 160.0 ;
+  //  G4double alphaPlate = 160.0 ;
+  //  G4double alphaGas   = 160.0 ;
 
   //  G4VXrayTRmodel* pTRModel = new G4GamDistrXrayTRmodel(logicRadiator,
   //					       fRadThickness,alphaPlate,
@@ -650,8 +657,9 @@ void Em8DetectorConstruction::SetAbsorberZpos(G4double val)
 //
 //
 
-void Em8DetectorConstruction::SetMagField(G4double fieldValue)
-{
+//void Em8DetectorConstruction::SetMagField(G4double fieldValue)
+//{
+
   //apply a global uniform magnetic field along X axis
 
   /* *********************************************************
@@ -675,7 +683,7 @@ void Em8DetectorConstruction::SetMagField(G4double fieldValue)
 
   *************************************************************** */
 
-}
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
