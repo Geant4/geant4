@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.10 2004-09-15 13:17:20 maire Exp $
+// $Id: RunAction.cc,v 1.11 2004-11-22 15:07:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,7 +162,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4EmCalculator emCalculator;
  G4double rangeTable = 0.;
  if (particle->GetPDGCharge() != 0.)
-   rangeTable = emCalculator.GetRange(particle,material,energy);
+   rangeTable = emCalculator.GetRange(energy,particle,material);
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
