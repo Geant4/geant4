@@ -1,0 +1,59 @@
+$Id: README,v 1.1 2000-10-04 16:40:41 nartallo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            xray_telescope
+                            --------------
+ xray_telescope is a......
+
+0. Setting up the environment variablesset path = ( $G4INSTALL/bin/$G4SYSTEM $G4WORKDIR/bin/$G4SYSTEM $path )
+
+setenv G4SYSTEM Linux-g++
+setenv G4INSTALL $G4HOME/geant4
+setenv OGLHOME "/usr/local"
+setenv OGLLIBS "-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+
+set path = ( $G4INSTALL/bin/$G4SYSTEM $G4WORKDIR/bin/$G4SYSTEM $path )
+
+setenv G4VIS_BUILD_OPENGLX_DRIVER 1
+setenv G4VIS_BUILD_DAWN_DRIVER         1  # DAWN is the Fukui Renderer
+setenv G4VIS_BUILD_DAWNFILE_DRIVER     1  
+setenv G4VIS_BUILD_RAYX_DRIVER         1  # GEANT4 Ray Tracing
+setenv G4VIS_BUILD_VRML_DRIVER         1  # Spawns VRML viewer
+setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii file
+setenv G4UI_BUILD_GAG_SESSION 1
+
+setenv G4UI_USE_GAG           1
+setenv G4VIS_USE_OPENGLX      1
+setenv G4VIS_USE_DAWN         1
+setenv G4VIS_USE_DAWNFILE     1
+setenv G4VIS_USE_RAYX         1
+setenv G4VIS_USE_VRML         1
+setenv G4VIS_USE_VRMLFILE     1
+
+
+
+
+1. Detector description
+
+ The detector is defined in ....DetectorConstruction.cc
+
+ The experimental hall, which is the world volume, is made of vaccuum
+ and it is a box. ...
+ 
+2. Physics processes
+
+...PhysicsList.cc defines ...
+
+3. Event generation
+
+
+4. main()
+
+XrayTel.cc has the main() method. In the main() method, three
+mandatory user classes described above are constructed and set to
+the G4RunManager object. Then, the "Initialize()" method of G4RunManager
+is invoked. 
