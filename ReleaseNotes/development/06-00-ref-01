@@ -1,0 +1,142 @@
+
+                       geant4-06-00-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Migrated EM standard physics processes to use existing specialised
+    version of particle-change, G4ParticleChangeForLoss. Activated more
+    precise range calculations.
+  o Fixed problems of deep "under mass shell" in CHIPS.
+  o Fixes for memory leaks in Penelope low-energy physics models.
+  o Relaxed exceptions in CSG solids for rare conditions in DistanceToOut().
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V06-00-00
+------
+- Darwin-g++.gmk:
+  o Adopt "g++" as the default as compiler.
+  o Corrected procedure for building .dylib shared libs.
+    Previous default Linux commands do not work on MacOSX.
+
+geometry/solids/CSG                     geom-csg-V06-00-00
+-------------------
+- Converted strong exceptions in warning notifications for rare anomalous
+  conditions in DistanceToOut(p,v,..).
+- G4Cons: bug fix in DistanceToIn(p,v) to resolve situations of calls
+  to DistanceToOut() for points outside.
+
+geometry/solids/specific                geom-specific-V06-00-00
+------------------------
+- G4PolyhedraSide: fixed bug in which particles could "leak" out the
+  center of a face if inner radius = 0. Fixes problem report #547.
+
+geometry/solids/tests                   geom-solids-tests-V06-00-00
+---------------------
+- Added SolidsChecker test suite.
+
+geometry/volumes                        geomvol-V06-00-00
+----------------
+- G4AssemblyVolume: fixed initial value for 'numberOfDaughters' of
+  imprinted volumes copy-numbers. Fixes problem report #566.
+
+global                                  global-V06-00-00
+------
+- G4UnitsTable: corrected signatures to consider 'const G4String&'
+  wherever applicable.
+
+materials                               materials-V06-00-00
+---------
+- G4Material: proper STL handling of 'theElementVector'.
+
+particles                               particles-V06-00-00
+---------
+- Fixed initialization problems in G4NuclearPropertiesTable:
+  o Added initialization of 'indexArray'.
+  o Removed internal static member 'theInstance'.
+
+processes/electromagnetic/lowenergy              emlowen-V06-00-00
+-----------------------------------
+- Fixed memory leaks in G4PenepoleInterpolator and G4PenelopeIonisation.
+
+processes/electromagnetic/muons                  muons-V06-00-00
+-------------------------------
+- Migrated processes to use G4ParticleChangeForLoss.
+
+processes/electromagnetic/standard               stand-V06-00-01
+----------------------------------
+- Migrated processes to use G4ParticleChangeForLoss.
+- Minor fix in G4PAIonisation.
+
+processes/electromagnetic/utils                  utils-V06-00-03
+-------------------------------
+- Activated precise range calculation.
+- Add Set methods to G4LossTablemanager to define: binning,
+  'maxEnergy' for muon tables, 'maxEnergy' for precise range.
+- Migrated processes to use G4ParticleChangeForLoss.
+- Fixed problem in destruction of PAI model.
+
+processes/.../chiral_inv_phase_space/body        ghad-chips-body-V06-00-00
+-----------------------------------------
+- Fixed problems of deep "under mass shell" in CHIPS.
+  This is the last tag before a major change in which the
+  Lepton/HyperFragments nuclear fragments (not only Lambda hyperfragments,
+  but Neutron, Sigma-, Proton, Sigma+ nuclear fragments etc) are going to be
+  added to the CHIPS World. Leptons must be added to CHIPS to simulate the
+  muon capture and the (nu,mu) reactions. If people are using standard CHIPS 
+  Q-codes (instead of the PDG Codes), which are defined in the CHIPS Manual,
+  they must be careful as all Q-codes are going to be changed -after- this tag! 
+
+processes/.../models/parton_string/qgsm          ghad-qgsm-V06-00-00
+---------------------------------------
+- Fixed trivial compilation warning.
+
+processes/parameterisation                       param-V06-00-00
+--------------------------
+- G4FastSimulationVector.icc: use std_pvector:: scope for calls to
+  base class. Fixes compilation problem on Intel-icc compiler.
+
+track                                            track-V06-00-01
+-----
+- Update G4ParticleChangeForLoss for utilisation in G4VEnergyLossProcess.
+- Minor update G4ParticleChangeForMSC for utilisation in model design of msc.
+- Change of volume in G4ParticleChangeForTransportation only if kinEnergy>0.
+- G4VParticleChange: removed unnecessary 'const' qualifier to return value
+  in GetAccuracyForWarning() and GetAccuracyForException() causing noisy
+  compilation warnings on Intel-icc compiler.
+
+tracking                                         tracking-V06-00-00
+--------
+- Removed obsolete action for G4UserLimits in
+  G4SteppingManager::DefinePhysicalStepLength().
+
+
+examples                                         examples-V06-00-00
+--------
+- Updated reference outputs.
+- advanced:
+  o lAr_calorimeter (lAr_calorimeter-V06-00-01)
+    + Clean up. Fixes for gcc-3.2 compiler. New Physics Lists.
+- extended/electromagnetic:
+  o TestEm3 (testem3-V06-00-00)
+    + Added possibility to have one histograms file per run.
+    + RunAction: removed ApplyCommand("/vis/...") statements.
+  o TestEm8 (testem8-V06-00-00)
+    + Fixed a problem in the destruction of the PAI model.
+
+tests                                            tests-V06-00-00
+-----
+- Updated reference outputs.
+- tests/test10 (test10-V06-00-00)
+  o Added G4Orb, G4Polycone, G4Polyhedra as tested solids. 
+  o Now testing all solids in input macros. 
+  o Corrected switching of geometry to clear stores. 
+- tests/test17 (test17-V06-00-00)
+  o Removed mu- capture at rest to avoid connection between the test
+    and hadronic physics.
+- tests/test40 (test40-V06-00-00)
+  o Added new benchmark test derived from EM example testEm2.
