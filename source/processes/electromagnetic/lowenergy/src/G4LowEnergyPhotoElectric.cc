@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.3 1999-04-01 06:40:49 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.4 1999-04-01 07:32:43 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -449,10 +449,12 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   G4double TotalSum = 0; 
   while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
   
-    ShellNum++;
+    cout<<"TransitionTable entries: "<<TransitionTable->entries()
+        <<" ShellNum: "<<ShellNum<<endl;
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
+    ShellNum++;
   }
 
   if(ShellNum != TransitionTable->entries()-1) {
