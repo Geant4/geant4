@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.icc,v 1.3 1999-02-18 04:11:59 kurasige Exp $
+// $Id: G4ParticleChange.icc,v 1.4 1999-10-05 06:48:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,6 +158,30 @@ inline
 }
 
 inline 
+  G4double  G4ParticleChange::GetMassChange() const
+{
+  return  theMassChange;
+}
+
+inline 
+  void G4ParticleChange::SetMassChange(G4double t)
+{
+  theMassChange = t;
+}
+
+inline 
+  G4double  G4ParticleChange::GetChargeChange() const
+{
+  return  theChargeChange;
+}
+
+inline 
+  void G4ParticleChange::SetChargeChange(G4double t)
+{
+  theChargeChange = t;
+}
+
+inline 
   G4double  G4ParticleChange::GetWeightChange() const
 {
   return  theWeightChange;
@@ -189,3 +213,6 @@ inline void G4ParticleChange::SwOffAllEB()
 {
   fUseEBForAll = false;
 }
+
+
+

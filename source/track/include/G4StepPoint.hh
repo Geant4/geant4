@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.hh,v 1.2 1999-04-13 09:43:27 kurasige Exp $
+// $Id: G4StepPoint.hh,v 1.3 1999-10-05 06:48:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -178,6 +178,11 @@ class G4StepPoint
    inline void SetMass(G4double value)
    { fMass = value; }
 
+   inline G4double GetCharge() const
+   { return fCharge; }
+   inline void SetCharge(G4double value)
+   { fCharge = value; }
+
    inline G4Material* GetMaterial()
    { return fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
 
@@ -211,8 +216,11 @@ class G4StepPoint
       // Process which defined the current Step.
    G4double fMass;
       // Dynamical mass of the particle
-  G4double fWeight;
+   G4double fCharge;
+      // Dynamical Charge of the particle
+   G4double fWeight;
 };
 
 
 #endif
+

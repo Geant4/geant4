@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.hh,v 1.3 1999-04-13 09:43:22 kurasige Exp $
+// $Id: G4ParticleChange.hh,v 1.4 1999-10-05 06:48:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,10 @@
 //                                                 8 June 1998 H.Kurashige
 //   Add Track weight                              12 Nov. 1998  H.Kurashige
 //   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
+//   Add get/SetDynamicMass                        5 Oct. 1999 H.Kurashige
+//   Add get/SetDynamicCharge                       5 Oct. 1999 H.Kurashige
 // -------------------------------------------------------------
+ 
 #ifndef G4ParticleChange_h
 #define G4ParticleChange_h 1
 
@@ -135,7 +138,15 @@ class G4ParticleChange: public G4VParticleChange
     G4double GetTimeChange() const;
     void SetTimeChange(G4double t);
     //  Get/Set theTimeChange vector.
+ 
+    G4double GetMassChange() const;
+    void SetMassChange(G4double mass);
+    //   Get/Set theMassChange 
 
+    G4double GetChargeChange() const;
+    void SetChargeChange(G4double mass);
+    //   Get/Set theChargeChange 
+  
     G4double GetWeightChange() const;
     void SetWeightChange(G4double w);
     //   Get/Set theWeightChange 
@@ -205,7 +216,14 @@ class G4ParticleChange: public G4VParticleChange
     //  The changed (final) proper time of a given track
     
     G4double theWeightChange;
-    //  The Chnanged (final) weight of a given track
+    //  The Changed (final) weight of a given track
+
+    G4double theMassChange;
+    //  The Changed (final) mass of a given track
+
+    G4double theChargeChange;
+    //  The Changed (final) charge of a given track
+  
 
   public:
     // these methods is used for switch on/off EB in all ParticleChange objects

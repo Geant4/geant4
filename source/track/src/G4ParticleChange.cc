@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.6 1999-05-06 11:42:54 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.7 1999-10-05 06:48:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,8 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    thePositionChange = right.thePositionChange;
    theTimeChange = right.theTimeChange;
    theEnergyChange = right.theEnergyChange;
+   theMassChange = right.theMassChange;
+   theChargeChange = right.theChargeChange;
    theWeightChange = right.theWeightChange;
 }
 
@@ -90,6 +92,8 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       thePositionChange = right.thePositionChange;
       theTimeChange = right.theTimeChange;
       theEnergyChange = right.theEnergyChange;
+      theMassChange = right.theMassChange;
+      theChargeChange = right.theChargeChange;
       theWeightChange = right.theWeightChange;
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
@@ -185,6 +189,10 @@ void G4ParticleChange::Initialize(const G4Track& track)
   thePolarizationChange    = pParticle->GetPolarization();
   theProperTimeChange      = pParticle->GetProperTime();
 
+  // Set mass/charge of DynamicParticle
+  theMassChange = pParticle->GetMass();
+  theChargeChange = pParticle->GetCharge();
+
   // set Position/Time etc. equal to those of the parent track
   thePositionChange      = track.GetPosition();
   theTimeChange          = track.GetGlobalTime();
@@ -212,7 +220,11 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = theMassChange;
+
+  // Set Mass/Charge
+  pPostStepPoint->SetMass(theMassChange);
+  pPostStepPoint->SetCharge(theChargeChange);  
  
   // calculate new kinetic energy
   G4double energy = pPostStepPoint->GetKineticEnergy() 
@@ -272,7 +284,11 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = theMassChange;
+
+  // Set Mass/Charge
+  pPostStepPoint->SetMass(theMassChange);
+  pPostStepPoint->SetCharge(theChargeChange);  
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
@@ -307,7 +323,11 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = theMassChange;
+
+  // Set Mass/Charge
+  pPostStepPoint->SetMass(theMassChange);
+  pPostStepPoint->SetCharge(theChargeChange);  
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
@@ -344,6 +364,13 @@ void G4ParticleChange::DumpInfo() const
   G4VParticleChange::DumpInfo();
 
   G4cout.precision(3);
+
+  G4cout << "        Mass (GeV)   : " 
+       << setw(20) << theMassChange/GeV
+       << endl; 
+  G4cout << "        Charge (eplus)   : " 
+       << setw(20) << theChargeChange/eplus
+       << endl; 
   G4cout << "        Position - x (mm)   : " 
        << setw(20) << thePositionChange.x()/mm
        << endl; 
@@ -392,7 +419,10 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool    exitWithError = false;
   G4double  accuracy;
 
-  // check     
+  // No check in case of "fStopAndKill" 
+  if (GetStatusChange() ==   fStopAndKill )  {
+    return G4VParticleChange::CheckIt(aTrack);
+  }
 
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
