@@ -203,6 +203,8 @@ void hTestDetectorConstruction::DefineMaterials()
   a = 207.19*g/mole;
   ma = new G4Material(name="Lead"     , z=82., a, density);
 
+  ma = new G4Material("Tantalum", z=73., 180.9479*g/mole, 16.67*g/cm3);
+
   ma = new G4Material("Uranium", z=92., 238.03*g/mole, 18.95*g/cm3);
 
 //

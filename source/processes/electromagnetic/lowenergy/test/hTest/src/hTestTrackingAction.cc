@@ -69,7 +69,7 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   theHisto->ResetTrackLength();
   G4int pid = aTrack->GetParentID(); 
 
-  if(1 < theHisto->GetVerbose() ||
+  if(0 < theHisto->GetVerbose() &&
     (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0)) {
     G4cout << "Track #" 
            << aTrack->GetTrackID() << " of " << name
