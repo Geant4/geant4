@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.hh,v 1.2 1999-05-07 10:50:42 johna Exp $
+// $Id: G4UIcommand.hh,v 1.3 1999-10-29 06:06:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,11 +21,24 @@ class G4UImessenger;
 #include <rw/tvordvec.h>
 #include "G4UItokenNum.hh"
 
+// class description:
+//  
+//  This G4UIcommand is the "concrete" base class which represents a command
+// used by Geant4 (G)UI. The user can use this class in case the parameter
+// arguments of a command are not suitable with respect to the derived command
+// classes.
+//  Some methods defined in this base class are used by the derived classes.
+//
+
 class G4UIcommand 
 {
-  public:
+  public: 
       G4UIcommand();
+  public: // with description
       G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger);
+      //  Constructor. The command string with full path directory
+      // and the pointer to the messenger must be given.
+  public: 
       virtual ~G4UIcommand();
 
       int operator==(const G4UIcommand &right) const;
@@ -33,6 +46,7 @@ class G4UIcommand
 
       G4int DoIt(G4String parameterList);
       G4String GetCurrentValue();
+  public: // with description
       void AvailableForStates(G4ApplicationState s1);
       void AvailableForStates(G4ApplicationState s1,G4ApplicationState s2);
       void AvailableForStates(G4ApplicationState s1,G4ApplicationState s2,
@@ -42,6 +56,10 @@ class G4UIcommand
       void AvailableForStates(G4ApplicationState s1,G4ApplicationState s2,
                               G4ApplicationState s3,G4ApplicationState s4,
                               G4ApplicationState s5);
+      //  These methods define the states where the command is available.
+      // Once one of these commands is invoked, the command application will
+      // be denied when Geant4 is NOT in the assigned states.
+  public:
       G4bool IsAvailable();
       virtual void List();
 
@@ -60,9 +78,15 @@ class G4UIcommand
       RWTValOrderedVector<G4String> commandGuidance;
       RWTValOrderedVector<G4ApplicationState> availabelStateList;
 
-  public:
+  public: // with description
       inline void SetRange(const char* rs)
       { rangeString = rs; }
+      //  Defines the range the command parameter(s) can take.
+      //  The variable name(s) appear in the range expression must be same
+      // as the name(s) of the parameter(s).
+      //  All the C++ syntax of relational operators are allowed for the
+      // range expression.
+  public:
       inline const G4String GetRange() const
       { return rangeString; };
       inline G4int GetGuidanceEntries() const
@@ -77,16 +101,26 @@ class G4UIcommand
       { return parameter.entries(); }
       inline G4UIparameter * GetParameter(int i) const
       { return parameter[i]; }
+  public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {
 	parameter.insert( newParameter );
 	newVal.resize( parameter.entries() );
       }
+      //  Defines a parameter. This method is used by the derived command classes
+      // but the user can directly use this command when he/she defines a command
+      // by hem(her)self without using the derived class. For this case, the order
+      // of the parameters is the order of invoking this method.
       inline void SetGuidance(const char * aGuidance)
       { 
         G4String * theGuidance = new G4String( aGuidance );
         commandGuidance.insert( *theGuidance ); 
       }
+      //  Adds a guidance line. Unlimitted number of invokation of this method is
+      // allowed. The given lines of guidance will appear for the help. The first
+      // line of the guidance will be used as the title of the command, i.e. one
+      // line list of the commands.
+  public:
       inline const G4String GetTitle() const
       {
 	    if(commandGuidance.entries() == 0)

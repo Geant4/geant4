@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.1 1999-01-07 16:09:23 gunter Exp $
+// $Id: G4UIcommandTree.hh,v 1.2 1999-10-29 06:06:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,6 +16,12 @@
 #include "G4UIcommand.hh"
 #include "globals.hh"
 #include <rw/tpordvec.h>
+
+// class description:
+//
+//  This class is exclusively used by G4UImanager for handling the
+// tree structure of the commands. The user MUST NOT construct/use
+// this class object.
 
 class G4UIcommandTree 
 {

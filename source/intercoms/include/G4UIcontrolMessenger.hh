@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.1 1999-01-07 16:09:23 gunter Exp $
+// $Id: G4UIcontrolMessenger.hh,v 1.2 1999-10-29 06:06:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,6 +18,17 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
+
+// class description:
+//  This class is a concrete class of G4UImessenger which defines
+// commands affecting to the G4UImanager. Commands defined by
+// this messenger are
+//   /control/ 
+//   /control/execute
+//   /control/verbose
+//   /control/saveHistory
+//   /control/stopSavingHistory
+//   /control/manual
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {

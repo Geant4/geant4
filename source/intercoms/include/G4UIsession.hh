@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIsession.hh,v 1.1 1999-01-07 16:09:24 gunter Exp $
+// $Id: G4UIsession.hh,v 1.2 1999-10-29 06:06:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $id$
@@ -15,6 +15,12 @@
 
 #include "G4coutDestination.hh"
 #include "globals.hh"
+
+// class description:
+//
+//  This is a base class of all (G)UI session.
+//  SessionStart() method should be called to start the session.
+//
 
 class G4UIsession : public G4coutDestination
 {

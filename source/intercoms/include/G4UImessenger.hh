@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImessenger.hh,v 1.1 1999-01-07 16:09:23 gunter Exp $
+// $Id: G4UImessenger.hh,v 1.2 1999-10-29 06:06:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,14 +17,38 @@
 
 class G4UIcommand;
 
+// class description:
+//
+//  This class is the base class which represents a messenger which maintains
+// the commands. The user who wants to define some commands must create his/her
+// own concrete class derived from this class. The user's concrete messenger
+// must have a responsibility of creating and deleting commands. Also, it must
+// take care the delivering of the command to the destination class and replying
+// the current value(s) of the parameter(s).
+//
+
 class G4UImessenger 
 {
 
-  public:
+  public: // with description
       G4UImessenger();
+      // Constructor. In the implementation of the concrete messenger, all commands
+      // related to the messenger must be constructed.
       virtual ~G4UImessenger();
+      // Destructor. In the implementation of the concrete messenger, all commands
+      // defined in the constructor must be deleted.
       virtual G4String GetCurrentValue(G4UIcommand * command);
+      // The concrete implementation of this method gets the current value(s) of the
+      // parameter(s) of the given command from the destination class, converts the
+      // value(s) to a string, and returns the string. Conversion could be done by
+      // the ConvertToString() method of corresponding G4UIcmdXXX classes if the
+      // the command is an object of these G4UIcmdXXX classes.
       virtual void SetNewValue(G4UIcommand * command,G4String newValue);
+      // The concrete implementation of this method converts the string "newValue"
+      // to value(s) of type(s) of the parameter(s). Convert methods corresponding
+      // to the type of the command can be used if the command is an object of
+      // G4UIcmdXXX classes.
+  public:
       // For RWTPtrOrderedVector...
       G4bool operator == (const G4UImessenger& messenger) const;
 
