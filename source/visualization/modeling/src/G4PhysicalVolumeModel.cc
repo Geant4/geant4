@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.13 2001-01-18 12:22:41 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.14 2001-03-15 12:20:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -231,7 +231,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	       << G4endl;
 	  break;
 	case kPhi:
-	  rotation.rotateZ (-(offset+n*width));
+	  rotation.rotateZ (-(offset+(n+0.5)*width));
 	  // Minus Sign because for the physical volume we need the
 	  // coordinate system rotation.
 	  pRotation = &rotation;
