@@ -1,4 +1,4 @@
-$Id: History,v 1.189 2002-05-01 09:55:27 johna Exp $
+$Id: History,v 1.190 2002-05-08 13:29:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+8th May 2002  John Allison (vis-V04-00-07)
+- Minor changes to warning messages and README.built_in_commands.
+- Added test fro G4EllipticalTube to test/src/MyDetectorConstruction.cc.
 
 1st May 2002  John Allison (vis-V04-00-06)
 - Deprecated /vis/viewer/set/autoRefresh.
