@@ -1,0 +1,71 @@
+#
+# Auto-generated test input file for test21 hadronics.
+#
+/control/verbose 2
+# /run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 100
+#
+# proton at 400 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 100
+#
+# proton at 1 TeV in Pb
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Pb
+/run/beamOn 100
+#
+# proton at 100 GeV in Al
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 100
+#
+# proton at 400 GeV in Al
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 100
+#
+# proton at 1 TeV in Al
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Al
+/run/beamOn 100
+#
+# proton at 100 GeV in Air
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 100
+#
+# proton at 400 GeV in Air
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 100
+#
+# proton at 1 TeV in Air
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Air
+/run/beamOn 100
