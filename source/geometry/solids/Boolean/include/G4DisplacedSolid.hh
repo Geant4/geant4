@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DisplacedSolid.hh,v 1.9 2000-11-22 15:19:31 grichine Exp $
+// $Id: G4DisplacedSolid.hh,v 1.10 2000-11-22 16:09:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,7 +112,7 @@ class G4DisplacedSolid : public G4VSolid
 
     G4ThreeVector            GetObjectTranslation() const; 
     void  SetObjectTranslation(const G4ThreeVector&); 
-      // Getet/S the rotation/translation, as applied to the object.
+      // Get/Set the rotation/translation, as applied to the object.
 
   public:  // without description
 
