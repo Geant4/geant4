@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.4 2004-12-08 17:48:47 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.5 2004-12-14 16:01:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -122,6 +122,8 @@ public:
 
   G4LorentzVector GetEnegryMomentumConservation();
 
+  G4int GetNumberOfNeutronsInTarget();
+
 protected:                         
 
   // zero mean lifetime
@@ -137,6 +139,7 @@ private:
 
 private:
   G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
+  G4int nOfNeutrons;                                  // #of neutrons in the target nucleus
   G4double Time;                                      // Time shift of the capture reaction
   G4double EnergyDeposition;                          // Energy deposited in the reaction
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.8 2004-12-08 17:48:48 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.9 2004-12-14 16:01:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -34,6 +34,7 @@
 
 //#define debug
 //#define pdebug
+//#define tdebug
 
 #include "G4QCaptureAtRest.hh"
 
@@ -59,6 +60,11 @@ G4QCaptureAtRest::~G4QCaptureAtRest()
 G4LorentzVector G4QCaptureAtRest::GetEnegryMomentumConservation()
 {
   return EnMomConservation;
+}
+
+G4int G4QCaptureAtRest::GetNumberOfNeutronsInTarget()
+{
+  return nOfNeutrons;
 }
 
 G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle) 
@@ -163,6 +169,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     if(Z<0) return 0;
   }
   G4int N = G4QIsotope::Get()->GetNeutrons(Z);
+  nOfNeutrons=N;                                       // Remember it for energy-mom. check
   if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); // HeavyNuclei NuclearClusterization
   else       G4QNucleus::SetParameters(0.0,0.0,1.,1.); // LightNuclei NuclearClusterization
 #ifdef debug
@@ -365,8 +372,12 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
     G4LorentzVector projLV(0.,0.,0.,mp);
     G4QPDGCode targQPDG(targPDG);
-    G4double totMass=mp+targQPDG.GetMass();
-    EnMomConservation=G4LorentzVector(0.,0.,0.,totMass);    // Total 4-momentum of the reac
+    G4double tM=mp+targQPDG.GetMass();
+    EnMomConservation=G4LorentzVector(0.,0.,0.,tM);         // Total 4-mom of the reaction
+#ifdef tdebug
+    G4cout<<"====>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
+          <<EnMomConservation<<G4endl;
+#endif
     G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---------+
     G4QHadronVector projHV;                                 //                           |
     projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
@@ -455,11 +466,12 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef pdebug
 						G4cout<<"G4QCaptureAtRest::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
 #endif
-      if      (PDGCode==90001001) theDefinition = G4Deuteron::Deuteron();
-      else if (PDGCode==90001002) theDefinition = G4Triton::Triton();
-      else if (PDGCode==90002001) theDefinition = G4He3::He3();
-      else if (PDGCode==90002001) theDefinition = G4Alpha::Alpha();
-      else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
+      //if      (PDGCode==90001001) theDefinition = G4Deuteron::Deuteron();
+      //else if (PDGCode==90001002) theDefinition = G4Triton::Triton();
+      //else if (PDGCode==90002001) theDefinition = G4He3::He3();
+      //else if (PDGCode==90002002) theDefinition = G4Alpha::Alpha();
+      //else
+        theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
     else
     {
@@ -483,7 +495,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
     EnMomConservation-=h4M;
-    //G4cout<<"#"<<i<<", 4M="<<h4M<<", m="<<h4M.m()<<G4endl;
+#ifdef tdebug
+    G4cout<<"G4QCap:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
+#endif
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
 #endif

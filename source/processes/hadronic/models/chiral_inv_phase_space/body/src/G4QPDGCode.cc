@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.45 2004-12-09 11:09:26 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.46 2004-12-14 16:01:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -630,7 +630,7 @@ G4double G4QPDGCode::GetMass()
   ConvertPDGToZNS(thePDGCode, z, n, s);
   G4double rm=GetNuclMass(z,n,s);
 #ifdef debug
-  G4cout<<"G4QPDGCode::GetMass:GetNucMass="<<rm<<",Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
+  G4cout<<"G4QPDGCode::GetMass:GetNuclMass="<<rm<<",Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
   return rm;
 }
@@ -657,7 +657,7 @@ G4double G4QPDGCode::GetWidth()
 }
 
 // Get a nuclear mass for Z (a#of protons), N (a#of neutrons), & S (a#of lambdas) 
-G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
+G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 //      ===================================================
 {
   //static const G4double bigM= 1000000.;                   // Big Mass
@@ -685,67 +685,70 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double mK0 = G4QPDGCode( 311).GetMass();
   static const G4double mPi = G4QPDGCode( 211).GetMass();
   //////////static const G4double mPi0= G4QPDGCode( 111).GetMass();
-  static const G4int    nSh = 164;
-  static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
-                               -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
-                                13.342524,  15.547586,  22.583129,  23.983480,  30.561036,
-                                33.761971,  41.471027,  45.532156,  53.835880,  58.495514,
-                                65.693445,  69.903344,  76.899581,  81.329361,  88.979438,
-                                92.908703, 100.316636, 105.013393, 113.081686, 118.622601,
-                               126.979113, 132.714435, 141.413182, 146.433488, 153.746754,
-                               158.665225, 165.988967, 170.952395, 178.473011, 183.471531,
-                               191.231310, 196.504414, 204.617158, 210.251108, 218.373984,
-                               223.969281, 232.168660, 237.925619, 246.400505, 252.392471,
-                               260.938644, 267.191321, 276.107788, 282.722682, 291.881502,
-                               296.998590, 304.236025, 309.562296, 316.928655, 322.240263,
-                               329.927236, 335.480630, 343.233705, 348.923475, 356.911659,
-                               362.785757, 370.920926, 376.929998, 385.130316, 391.197741,
-                               399.451554, 405.679971, 414.101869, 420.346260, 428.832412,
-                               435.067445, 443.526983, 449.880034, 458.348602, 464.822352,
-                               473.313779, 479.744524, 488.320887, 495.025069, 503.841579,
-                               510.716379, 519.451976, 525.036156, 532.388151, 537.899017,
-                               545.252264, 550.802469, 558.402181, 564.101100, 571.963429,
-                               577.980340, 586.063802, 592.451334, 600.518525, 606.832027,
-                               614.831626, 621.205330, 629.237413, 635.489106, 643.434167,
-                               649.691284, 657.516479, 663.812101, 671.715021, 678.061128,
-                               686.002970, 692.343712, 700.360477, 706.624091, 714.617848,
-                               721.100390, 729.294717, 735.887170, 744.216084, 751.017094,
-                               759.551764, 766.377807, 775.080204, 781.965673, 790.552795,
-                               797.572494, 806.088030, 813.158751, 821.655631, 828.867137,
-                               836.860955, 842.183292, 849.195302, 854.731798, 861.898839,
-                               867.783606, 875.313342, 881.443441, 889.189065, 895.680189,
-                               903.679729, 910.368085, 918.579876, 925.543547, 933.790028,
-                               940.811396, 949.122548, 956.170201, 964.466810, 971.516490,
-                               979.766905, 986.844659, 995.113552,1002.212760,1010.418770,
-                              1018.302560,1025.781870,1033.263560,1040.747880,1048.234460,
-                              1055.723430,1063.214780,1070.708750,1078.204870,1085.703370,
-                              1093.204260,1100.707530,1108.213070};
-  static const G4double b1=8.09748564; // MeV
-  static const G4double b2=-0.76277387;
-  static const G4double b3=83.487332;  // MeV
-  static const G4double b4=0.090578206;// 2*b4
-  static const G4double b5=0.676377211;// MeV
-  static const G4double b6=5.55231981; // MeV
+  //static const G4int    nSh = 164;
+  //static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
+  //                             -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
+  //                             13.342524,  15.547586,  22.583129,  23.983480,  30.561036,
+  //                             33.761971,  41.471027,  45.532156,  53.835880,  58.495514,
+  //                             65.693445,  69.903344,  76.899581,  81.329361,  88.979438,
+  //                             92.908703, 100.316636, 105.013393, 113.081686, 118.622601,
+  //                            126.979113, 132.714435, 141.413182, 146.433488, 153.746754,
+  //                            158.665225, 165.988967, 170.952395, 178.473011, 183.471531,
+  //                            191.231310, 196.504414, 204.617158, 210.251108, 218.373984,
+  //                            223.969281, 232.168660, 237.925619, 246.400505, 252.392471,
+  //                            260.938644, 267.191321, 276.107788, 282.722682, 291.881502,
+  //                            296.998590, 304.236025, 309.562296, 316.928655, 322.240263,
+  //                            329.927236, 335.480630, 343.233705, 348.923475, 356.911659,
+  //                            362.785757, 370.920926, 376.929998, 385.130316, 391.197741,
+  //                            399.451554, 405.679971, 414.101869, 420.346260, 428.832412,
+  //                            435.067445, 443.526983, 449.880034, 458.348602, 464.822352,
+  //                            473.313779, 479.744524, 488.320887, 495.025069, 503.841579,
+  //                            510.716379, 519.451976, 525.036156, 532.388151, 537.899017,
+  //                            545.252264, 550.802469, 558.402181, 564.101100, 571.963429,
+  //                            577.980340, 586.063802, 592.451334, 600.518525, 606.832027,
+  //                            614.831626, 621.205330, 629.237413, 635.489106, 643.434167,
+  //                            649.691284, 657.516479, 663.812101, 671.715021, 678.061128,
+  //                            686.002970, 692.343712, 700.360477, 706.624091, 714.617848,
+  //                            721.100390, 729.294717, 735.887170, 744.216084, 751.017094,
+  //                            759.551764, 766.377807, 775.080204, 781.965673, 790.552795,
+  //                            797.572494, 806.088030, 813.158751, 821.655631, 828.867137,
+  //                            836.860955, 842.183292, 849.195302, 854.731798, 861.898839,
+  //                            867.783606, 875.313342, 881.443441, 889.189065, 895.680189,
+  //                            903.679729, 910.368085, 918.579876, 925.543547, 933.790028,
+  //                            940.811396, 949.122548, 956.170201, 964.466810, 971.516490,
+  //                            979.766905, 986.844659, 995.113552,1002.212760,1010.418770,
+  //                           1018.302560,1025.781870,1033.263560,1040.747880,1048.234460,
+  //                           1055.723430,1063.214780,1070.708750,1078.204870,1085.703370,
+  //                           1093.204260,1100.707530,1108.213070};
+  //static const G4double b1=8.09748564; // MeV
+  //static const G4double b2=-0.76277387;
+  //static const G4double b3=83.487332;  // MeV
+  //static const G4double b4=0.090578206;// 2*b4
+  //static const G4double b5=0.676377211;// MeV
+  //static const G4double b6=5.55231981; // MeV
   static const G4double b7=25.;        // MeV (Lambda binding energy predexponent)
-  // even-odd difference is 3.7(MeV)/X
-  // S(X>151)=-57.56-5.542*X**1.05
+  // --- even-odd difference is 3.7(MeV)/X
+  // --- S(X>151)=-57.56-5.542*X**1.05
   static const G4double b8=10.5;       // (Lambda binding energy exponent)
-  static const G4double b9=-1./3.;
+  //static const G4double b9=-1./3.;
   static const G4double a2=0.13;       // LambdaBindingEnergy for deutron+LambdaSystem(MeV)
   static const G4double a3=2.2;        // LambdaBindingEnergy for (t/He3)+LambdaSystem(MeV)
   static const G4double um=931.49432;  // Umified atomic mass unit (MeV)
-  static const G4double me =0.511;     // electron mass (MeV) :: n:8.071, p:7.289
+  //static const G4double me =0.511;     // electron mass (MeV) :: n:8.071, p:7.289
   static const G4double eps =0.0001;   // security addition for multybaryons
-  static G4double c[9][9]={// z=1     =2     =3     =4     =5     =6     =7     =8     =9
-                   {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},  //n=1
-				   {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},  //n=2
-				   {25.930,11.390,14.086,15.770,22.921,28.914,39.700,49.000,60.000},  //n=3
-				   {36.830,17.594,14.908, 4.942,12.416,15.699,24.960,32.048,45.000},  //n=4
-				   {41.860,26.110,20.946,11.348,12.051,10.650,17.338,23.111,33.610},  //n=5
-				   {45.000,31.598,24.954,12.607, 8.668, 0.000, 5.345, 8.006,16.780},  //n=6
-				   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},  //n=7
-				   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},  //n=8
-				   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}}; //n=9
+  //static G4double c[9][9]={// z=1     =2     =3     =4     =5     =6     =7     =8     =9
+  //                 {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},//n=1
+		//		   {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},  //n=2
+		//		   {25.930,11.390,14.086,15.770,22.921,28.914,39.700,49.000,60.000},  //n=3
+		//		   {36.830,17.594,14.908, 4.942,12.416,15.699,24.960,32.048,45.000},  //n=4
+		//		   {41.860,26.110,20.946,11.348,12.051,10.650,17.338,23.111,33.610},  //n=5
+		//		   {45.000,31.598,24.954,12.607, 8.668, 0.000, 5.345, 8.006,16.780},  //n=6
+		//		   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},  //n=7
+		//		   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},  //n=8
+		//		   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}}; //n=9
+  G4int Z=z;
+  G4int N=n;
+  G4int S=s;
 #ifdef debug
   G4cout<<"G4QPDGCode::GetNuclMass called with Z="<<Z<<",N="<<N<<", S="<<S<<G4endl;
 #endif
@@ -829,7 +832,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   else if(Bn==2) // => "GS Baryons - decuplet" case (NP,LP, and LN are made below)
   {
     if     (Z== 2 && N== 0 && S== 0) return dmP;
-    else if(Z== 1 && N== 1 && S== 0) return 1875.6134; // Exact deuteron PDG Mass
+    else if(Z== 1 && N== 1 && S== 0) return 1875.61282; // Exact deuteron PDG Mass
     else if(Z== 0 && N== 2 && S== 0) return dmN;
     else if(Z== 2 && N==-1 && S== 1) return dSP;
     else if(Z== 1 && N== 0 && S== 1) return dLP;
@@ -1022,7 +1025,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   A=Z+N;
   if (!A) return k+S*mL+S*eps;     // @@ multy LAMBDA states are not implemented
   G4double m=k+A*um;                 // Expected mass in atomic units
-  G4double D=N-Z;                    // Isotopic shift of the nucleus
+  //G4double D=N-Z;                    // Isotopic shift of the nucleus
   if(A+S<1&&k==0.||Z<0||N<0)         // @@ Can be generalized to anti-nuclei
   {
 #ifdef debug
@@ -1033,13 +1036,15 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   }
   if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
   else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
-  else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
+  //else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];// Geant4 Comp.now
   else 
   {
-    G4double fA=A;
+    //G4double fA=A;
     if(G4NucleiPropertiesTable::IsInTable(Z,A))m=k+G4NucleiProperties::GetNuclearMass(A,Z);
+    else if(A==256 && Z==128) m=256000.;
     else
-     m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
+						m=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+		  //m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+eps;       // @@ eps -- Wings of the Mass parabola
   if(m>maxM) m=maxM;
@@ -1061,7 +1066,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     G4int Am=Zm+Nm;
     if(!Am) return km+eps;
     mm=km+Am*um;                     // Expected mass in atomic units
-    G4double Dm=Nm-Zm;               // Isotopic shift of the nucleus
+    //G4double Dm=Nm-Zm;               // Isotopic shift of the nucleus
     if(Am<1&&km==0.||Zm<0||Nm<0)     // @@ Can be generalized to anti-nuclei
     {
 #ifdef debug
@@ -1070,15 +1075,24 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     }
     if     (!Zm) return km+Nm*(mN+.1);
     else if(!Nm) return km+Zm*(mP+1.);
-    else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];
+    //else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];// Geant4
     else 
     {
-      G4double fA=Am;
-      if(G4NucleiPropertiesTable::IsInTable(Zm,Am)) mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
-      else mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))+Zm*Zm*(b5*pow(fA,b9)+b6/Am);
+      //G4double fA=Am;
+      if(G4NucleiPropertiesTable::IsInTable(Zm,Am))
+        mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
+      else
+						  mm=km+G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm)->GetPDGMass();
+						  //mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))
+        //    +Zm*Zm*(b5*pow(fA,b9)+b6/Am);
     }
     G4double mM= km+Zm*mP+Nm*mN+eps;
-    if(mm>mM) mm=mM;
+    if(mm>mM)
+    {
+      //if(Z==8&&N==9&&!S)
+      //G4cout<<"G4QPDG::GNM:"<<mm<<">"<<mM<<",k="<<km<<",Z="<<Zm*mP<<",N="<<Nm*mN<<G4endl;
+      mm=mM;
+    }
   }
   if(m>mm) m=mm;
   if(S>0)
@@ -1092,6 +1106,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #ifdef debug
   G4cout<<"G4QPDGCode::GetNuclMass: >>>OUT<<< m="<<m<<G4endl;
 #endif
+  //if(z==8&&n==9&&!s) G4cout<<"G4QPDGC::GetNucM:m="<<m<<",mm="<<mm<<G4endl;
   return m;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.2 2004-12-08 17:48:48 mkossov Exp $
+// $Id: G4QPDGToG4Particle.cc,v 1.3 2004-12-14 16:01:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
@@ -31,6 +31,8 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+
+//#define pdebug
 
 #include "G4QPDGToG4Particle.hh"
 
@@ -195,6 +197,9 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
   else               // Negative PDG Code
 		{
 		  G4int aPDG=-PDG;
+#ifdef pdebug
+    G4cout<<"G4QPDGToG4Particle:Antiparticle PDG="<<PDG<<G4endl;
+#endif
     if(aPDG<100)
     {
       if(aPDG>10 && aPDG<17)
@@ -222,17 +227,35 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
     } // End of the Anti-Lepton definition
     else if(aPDG<1000)
 				{
+#ifdef pdebug
+      G4cout<<"G4QPDGToG4Particle:AntiMesons aPDG="<<aPDG<<G4endl;
+#endif
       if(aPDG<420)
       {
-        if(PDG<320)
+#ifdef pdebug
+       G4cout<<"G4QPDGToG4Particle:AntiSU(3)Mesons aPDG="<<aPDG<<G4endl;
+#endif
+        if(aPDG<320)
         {
+#ifdef pdebug
+          G4cout<<"G4QPDGToG4Particle:AntiPi&KMesons aPDG="<<aPDG<<G4endl;
+#endif
           if(aPDG==211) return G4PionMinus::PionMinus();
           else if(aPDG==311) return G4AntiKaonZero::AntiKaonZero();
           else return 0; // @@ Warning can be added
         }
         else
         {
-          if(aPDG==321) return G4KaonMinus::KaonMinus();
+#ifdef pdebug
+          G4cout<<"G4QPDGToG4Particle:AntiK&DMesons aPDG="<<aPDG<<G4endl;
+#endif
+          if(aPDG==321) 
+          {
+#ifdef pdebug
+            G4cout<<"G4QPDGToG4Particle:KaonMinus aPDG="<<aPDG<<G4endl;
+#endif
+            return G4KaonMinus::KaonMinus();
+          }
           else if(aPDG==411) return G4DMesonMinus::DMesonMinus();
           else return 0; // @@ Warning can be added
         }
