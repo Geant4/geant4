@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2000-11-17 12:50:42 japost Exp $
+$Id: History,v 1.16 2000-11-20 19:16:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 20, 2000   Gabriele Cosmo               geometry-V02-00-00
+-----------------------------
+- QA code cleanup from Code-Wizard and warnings issued by
+  "-Wall -ansi -pedantic" g++ compiler options. Includes tags:
+  geom-solids-csg-V02-00-11, breps-V02-00-03, geom-solid-bool-V02-00-02,
+  STEP-V02-00-00, stepinterface-V02-00-02, geom-solids-specific-V02-00-04,
+  field-V02-00-02, geommng-V02-00-04, geomvol-V02-00-01.
 
 May 12, 2000   Gabriele Cosmo               geometry-V01-01-03
 -----------------------------
