@@ -1,50 +1,10 @@
-# $Id: stt-dev2.sdb,v 1.18 2000-04-25 15:25:50 stesting Exp $
-# .sdb files are read by checkout.sh and update.sh
-# Lines beginning "# " are ignored (the space after the '#' is important!
-# Blank lines are not allowed!
-# Super-categories
-geant4/ReleaseNotes                               geant4-01-01-ref-02
-geant4/config                                     geant4-01-01-ref-02
-geant4/data                                       geant4-01-01-ref-02
-#       geant4/documents - not currently part of reference versions
-geant4/environments                               geant4-01-01-ref-02
-geant4/examples                                   examples-V01-01-00
-geant4/examples/extended/electromagnetic/TestEm6  testem6-V01-00-02
-#       geant4/source - split into categories - see below.
-#       geant4/tests - checkout HEAD by hand and use this script, except...
-geant4/tests/test14                               test14-V01-01-00
-# Source categories
-geant4/source/GNUmakefile                         geant4-01-01-ref-02
-geant4/source/digits+hits                         geant4-01-01-ref-02
-geant4/source/event                               geant4-01-01-ref-02
-geant4/source/g3tog4                              geant4-01-01-ref-02
-geant4/source/geometry/GNUmakefile                geant4-01-01-ref-02
-geant4/source/geometry/History                    geant4-01-01-ref-02
-geant4/source/geometry/benchmarks                 geant4-01-01-ref-02
-geant4/source/geometry/magneticfield              field-V01-01-00
-geant4/source/geometry/management                 geant4-01-01-ref-02
-geant4/source/geometry/solids                     geant4-01-01-ref-02
-geant4/source/geometry/volumes                    geant4-01-01-ref-02
-geant4/source/global                              geant4-01-01-ref-02
-geant4/source/graphics_reps                       geant4-01-01-ref-02
-geant4/source/intercoms                           geant4-01-01-ref-02
-geant4/source/interfaces                          geant4-01-01-ref-02
-geant4/source/materials                           geant4-01-01-ref-02
-geant4/source/particles                           geant4-01-01-ref-02
-geant4/source/persistency                         geant4-01-01-ref-02
-geant4/source/processes/GNUmakefile               geant4-01-01-ref-02
-geant4/source/processes/History                   geant4-01-01-ref-02
-geant4/source/processes/decay	                  geant4-01-01-ref-02
-geant4/source/processes/electromagnetic	          geant4-01-01-ref-02
-geant4/source/processes/electromagnetic/lowenergy emlowen-V01-01-09
-geant4/source/processes/hadronic                  geant4-01-01-ref-02
-geant4/source/processes/management                geant4-01-01-ref-02
-geant4/source/processes/optical	                  geant4-01-01-ref-02
-geant4/source/processes/parameterisation          geant4-01-01-ref-02
-geant4/source/processes/photolepton_hadron        geant4-01-01-ref-02
-geant4/source/processes/transportation            geant4-01-01-ref-02
-geant4/source/readout                             geant4-01-01-ref-02
-geant4/source/run                                 geant4-01-01-ref-02
-geant4/source/track                               geant4-01-01-ref-02
-geant4/source/tracking                            geant4-01-01-ref-02
-geant4/source/visualization                       geant4-01-01-ref-02
+.		geant4-01-01-ref-03
+./examples		examples-V01-01-02
+./source/geometry		geometry-V01-01-02
+./source/processes/electromagnetic		em-V01-01-01
+./source/processes/electromagnetic/lowenergy		emlowen-V01-01-09
+./source/processes/hadronic		had-V01-01-01-noiso
+./source/visualization		vis-V01-01-02
+./tests		tests-V01-01-00
+./tests		tests-V01-01-01
+./tests/test14		test14-V01-01-02
