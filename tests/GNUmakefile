@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2000-01-22 11:47:11 stesting Exp $
+# $Id: GNUmakefile,v 1.19 2000-01-25 15:34:09 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -15,8 +15,8 @@ EXAMPLES = 01 02 03 04 05 06
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
 ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes.
-ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
-                     ## ionisation) model.
+# ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
+                       ## ionisation) model.
 
 # Symbolic links to extended persistency examples using test401, etc...
 PERSISTENCY += 01 02
@@ -102,38 +102,42 @@ examples_links_source:
 	@$(MAKE) clean_examples_links_source
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
-	  testin=test1$$nn.in; \
-	  testout=test1$$nn.out; \
 	  exdir=$(G4INSTALL)/examples/novice/N$$nn; \
-	  exin=exampleN$$nn.in; \
-	  exout=exampleN$$nn.out; \
 	  ln -s $$exdir $$testdir; \
-	  ln -s $$exin $$testdir/$$testin; \
-	  ln -s $$exout $$testdir/$$testout; \
+	  for i in $$exdir/*.in; do \
+	    exin=`basename $$i`; \
+	    exout=`basename $$i .in`.out; \
+	    testin=`echo $$exin | sed s/exampleN/test1/`; \
+	    testout=`echo $$exout | sed s/exampleN/test1/`; \
+	    ln -s $$exin $$testdir/$$testin; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
 	done;:
-	@ln -s exampleN04.EMtest.in test104/test104.EMtest.in
-	@ln -s exampleN04.EMtest.out test104/test104.EMtest.out
 	@for nn in $(ELECTROMAGNETIC); do \
 	  testdir=test50$$nn; \
-	  testin=test50$$nn.in; \
-	  testout=test50$$nn.out; \
 	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/TestEm$$nn; \
-	  exin=TestEm$$nn.in; \
-	  exout=TestEm$$nn.out; \
 	  ln -s $$exdir $$testdir; \
-	  ln -s $$exin $$testdir/$$testin; \
-	  ln -s $$exout $$testdir/$$testout; \
+	  for i in $$exdir/*.in; do \
+	    exin=`basename $$i`; \
+	    exout=`basename $$i .in`.out; \
+	    testin=`echo $$exin | sed s/TestEm/test50/`; \
+	    testout=`echo $$exout | sed s/TestEm/test50/`; \
+	    ln -s $$exin $$testdir/$$testin; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
-	  testin=test4$$nn.in; \
-	  testout=test4$$nn.out; \
 	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
-	  exin=PersistentEx$$nn.in; \
-	  exout=PersistentEx$$nn.out; \
 	  ln -s $$exdir $$testdir; \
-	  ln -s $$exin $$testdir/$$testin; \
-	  ln -s $$exout $$testdir/$$testout; \
+	  for i in $$exdir/*.in; do \
+	    exin=`basename $$i`; \
+	    exout=`basename $$i .in`.out; \
+	    testin=`echo $$exin | sed s/PersistentEx/test4/`; \
+	    testout=`echo $$exout | sed s/PersistentEx/test4/`; \
+	    ln -s $$exin $$testdir/$$testin; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
 	done;:
 
 examples_links_binaries:
@@ -155,26 +159,23 @@ clean_examples_links_source:
 	@rm -f test104/test104.EMtest.out
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
-	  testin=test1$$nn.in; \
-	  testout=test1$$nn.out; \
-	  rm -f $$testdir/$$testin; \
-	  rm -f $$testdir/$$testout; \
+	  for i in $$testdir/$$testdir.*; do \
+	    rm -f $$i; \
+	  done; \
 	  rm -f $$testdir; \
 	done;:
 	@for nn in $(ELECTROMAGNETIC); do \
 	  testdir=test50$$nn; \
-	  testin=test50$$nn.in; \
-	  testout=test50$$nn.out; \
-	  rm -f $$testdir/$$testin; \
-	  rm -f $$testdir/$$testout; \
+	  for i in $$testdir/$$testdir.*; do \
+	    rm -f $$i; \
+	  done; \
 	  rm -f $$testdir; \
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
-	  testin=test4$$nn.in; \
-	  testout=test4$$nn.out; \
-	  rm -f $$testdir/$$testin; \
-	  rm -f $$testdir/$$testout; \
+	  for i in $$testdir/$$testdir.*; do \
+	    rm -f $$i; \
+	  done; \
 	  rm -f $$testdir; \
 	done;:
 
