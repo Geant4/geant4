@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2002-10-28 13:35:01 gcosmo Exp $
+$Id: History,v 1.58 2002-10-31 14:44:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct  31st, 2002 M.Dressel transport-V04-01-03
+-----------------------------------------------------
+- bug fix in G4MassGeometrySampler and G4ParallelGeometrySampler
 
 Oct  28th, 2002 M.Dressel transport-V04-01-02
 -----------------------------------------------------
