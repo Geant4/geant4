@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.84 2002-12-02 18:26:46 johna Exp $
+# $Id: binmake.gmk,v 1.85 2002-12-04 14:44:23 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -212,10 +212,6 @@ endif # ifndef USER_DEFINED_LDLIBS
 # LDLIBS4 contains the next set of low level libraries which historically
 # (why?) the user is not supposed to be able to define...
 #
-ifdef G4USE_OSPACE
-  LDLIBS4 += $(OSPACELIBS)
-endif
-
 LDLIBS4 += $(LOADLIBS)
 
 # Finally assemble libraries...

@@ -13,7 +13,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
     endif
   endif
   CXXFLAGS += -features=no%anachronisms -mt -lpthread
-#  CXXFLAGS += -fnonstd
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
     FCFLAGS  += -KPIC
@@ -46,19 +45,8 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-    CXXFLAGS += -compat
-  else
-    ifndef G4NO_STD_NAMESPACE
-      G4USE_STD_NAMESPACE := yes
-      CPPFLAGS += -DG4USE_STD_NAMESPACE
-    else
-      CXXFLAGS += -compat
-    endif
-  endif
+  G4USE_STD_NAMESPACE := yes
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \

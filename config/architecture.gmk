@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.83 2002-11-28 16:30:34 gcosmo Exp $
+# $Id: architecture.gmk,v 1.84 2002-12-04 14:44:23 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -130,23 +130,6 @@ ifndef CLHEP_LIB
     CLHEP_LIB         := CLHEP
   endif
 endif
-
-# Native STL is the default
-#
-CPPFLAGS += -DG4USE_STL
-
-# Path to ObjectSpace STL (NOT supported. Kept for backward compatibility)
-#
-ifdef G4USE_OSPACE
-  #
-  # ObjectSpace STL implementation
-  #
-  ifndef OSPACE_BASE_DIR
-    OSPACE_BASE_DIR := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-  endif
-  OSPACEINC       := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl
-  OSPACELIBS      := -L$(OSPACE_BASE_DIR)/lib -lospace
-endif   #OSPACE
 
 # Paths for G4 data
 #

@@ -1,6 +1,6 @@
 #
 # -------- SGI ---------   !!! not supported !!!
-#                           Irix-6.5.5 CC-7.2.1
+#                             Irix-6.5.5 CC-8
 ifeq ($(G4SYSTEM),SGI-CC)
   CXX       := CC
   ifdef G4OPTIMISE
@@ -26,13 +26,8 @@ ifeq ($(G4SYSTEM),SGI-CC)
   ifndef OGLLIBS
     OGLLIBS   := -L/usr/lib -lGLU -lGL
   endif
-  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_IRIX_6_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-  endif
+  G4USE_STD_NAMESPACE := yes
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @echo "Shared Libraries not supported on $(G4SYSTEM)
