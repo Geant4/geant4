@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.3 2001-10-11 12:53:53 pia Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.4 2001-10-25 09:44:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
 
 G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler() 
 {
-  delete interp;
+  // delete interp;
 }
 
 
