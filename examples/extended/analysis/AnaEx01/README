@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2001-11-19 14:05:07 barrand Exp $
+$Id: README,v 1.10 2001-11-30 16:17:14 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ $Id: README,v 1.9 2001-11-19 14:05:07 barrand Exp $
  (hooking an AIDA implementation, histo booking, filling, etc...) are 
  concentrated in one class : AnaEx01AnalysisManager.
 
-  To use an AIDA compliant analysis system with this example the environment 
+  To use an AIDA compliant analysis system with this example, the environment 
  variables :
     G4ANALYSIS_USE
     G4ANALYSIS_AIDA_CONFIG_CFLAGS
@@ -61,6 +61,7 @@ $Id: README,v 1.9 2001-11-19 14:05:07 barrand Exp $
    AIDA analysis factory not found.
 
  The Falsetto URL is : http://www.lal.in2p3.fr/SI/Falsetto
+ Falsetto is installed at CERN under /afs/cern.ch/sw/contrib.
 
  Working with the OpenScientist/Lab package :
  ------------------------------------------
@@ -96,5 +97,6 @@ $Id: README,v 1.9 2001-11-19 14:05:07 barrand Exp $
      root[0] .X AnaEx01.C
 
   The OpenScientist URL is : http://www.lal.in2p3.fr/OpenScientist
+  OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
 
 
