@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.13 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.14 2003-03-11 05:00:48 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UImanager.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
 
@@ -89,6 +90,10 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   dumpRegCmd->SetParameterName("regionName", true);
   dumpRegCmd->SetDefaultValue("**ALL**");
   dumpRegCmd->AvailableForStates(G4State_Idle);
+
+  dumpCoupleCmd = new G4UIcmdWithoutParameter("/run/dumpCouples",this);
+  dumpCoupleCmd->SetGuidance("Dump material-cuts-couple information.");
+  dumpCoupleCmd->AvailableForStates(G4State_Idle);
 
   optCmd = new G4UIcmdWithABool("/run/optimizeGeometry",this);
   optCmd->SetGuidance("Set the optimization flag for geometry.");
@@ -204,6 +209,7 @@ G4RunMessenger::~G4RunMessenger()
   delete verboseCmd;
   delete optCmd;
   delete dumpRegCmd;
+  delete dumpCoupleCmd;
   delete brkBoECmd;
   delete brkEoECmd;
   delete abortCmd;
@@ -245,6 +251,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else
     { runManager->DumpRegion(newValue); }
   }
+  else if( command==dumpCoupleCmd)
+  { G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples(); }
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )

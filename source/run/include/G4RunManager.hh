@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.28 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4RunManager.hh,v 1.29 2003-03-11 05:00:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -177,6 +177,9 @@ class G4RunManager
     //  RunTermination() method terminates a run processing. For example, a G4Run class
     // object is deleted in this class. If the user uses ODBMS and wants to store the
     // G4Run class object, he/she must override this method.
+
+    virtual void BuildPhysicsTables();
+    //  This method is invoked from RunInitialization() to create physics tables.
 
     virtual G4Event* GenerateEvent(G4int i_event);
     virtual void AnalyzeEvent(G4Event* anEvent);

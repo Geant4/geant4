@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.63 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4RunManager.cc,v 1.64 2003-03-11 05:00:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,23 +198,25 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
     return false;
   }
 
-  if(!geometryInitialized || !physicsInitialized)
+  if(!geometryInitialized || !physicsInitialized || !cutoffInitialized)
   {
     if(verboseLevel>0)
     {
       G4cout << "Start re-initialization because " << G4endl;
       if(!geometryInitialized) G4cout << "  Geometry" << G4endl;
       if(!physicsInitialized)  G4cout << "  Physics processes" << G4endl;
+      if(!cutoffInitialized)  G4cout << "  SetCuts" << G4endl;
       G4cout << "has been modified since last Run." << G4endl;
     }
+    Initialize();
   }
-  Initialize();
-
   return true;
 }
 
 void G4RunManager::RunInitialization()
 {
+  BuildPhysicsTables();
+
   currentRun = 0;
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
@@ -376,7 +378,7 @@ void G4RunManager::Initialize()
   stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
-  InitializeCutOff();
+  if(!cutoffInitialized) InitializeCutOff();
   stateManager->SetNewState(G4State_Idle);
   if(!initializedAtLeastOnce) initializedAtLeastOnce = true;
 }
@@ -410,25 +412,32 @@ void G4RunManager::InitializePhysics()
 
 void G4RunManager::InitializeCutOff()
 {
-  if(!cutoffInitialized && physicsList)
+  if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
     physicsList->SetCuts();
     cutoffInitialized = true;
   }
+  else
+  {
+    G4Exception("G4VUserPhysicsList is not defined");
+  }
+}
 
+void G4RunManager::BuildPhysicsTables()
+{
   // Let G4RegionStore scan materials
   G4RegionStore::GetInstance()->UpdateMaterialList();
   // Let G4ProductionCutsTable update couples
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
-  G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+  /////G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
 
   if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
   {
     physicsList->BuildPhysicsTable();
     G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   }
-  physicsList->DumpCutValuesTableIfRequested();
+  /////physicsList->DumpCutValuesTableIfRequested();
 }
   
 void G4RunManager::AbortRun(G4bool softAbort)
