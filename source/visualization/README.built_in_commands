@@ -307,6 +307,16 @@ NI /vis/viewer/clone
 /vis/viewer/set/auxiliaryEdge [true|false]
   default:                      false
   Auxiliary edges become visible/invisible.
+  Auxiliary edges are not genuine edges of the volume.  They may be in
+  a curved surface made out of polygons, for example, or in plane
+  surface of complicated shape that has to be broken down into simpler
+  polygons.  HepPolyhedron breaks all surfaces into triangles or
+  quadrilaterals.  There will be auxiliary edges for any volumes with
+  a curved surface, such as a tube or a sphere, or a volume resulting
+  from a Boolean operation.  Normally, they are not shown, but
+  sometimes it is useful to see them.  In particular, a sphere,
+  because it has no egdes, will not be seen in wireframe mode in some
+  graphics systems unless this flag is turned on.
 
 /vis/viewer/set/culling
   g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
