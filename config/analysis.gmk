@@ -136,7 +136,7 @@ ifdef INC_LIZARD
 endif
 #
 ifdef LIB_LIZARD
-  ANALYSISLIBS += -L$(LIZARDROOT)/lib -lAIDA_HTL -lAIDA_Annotation -lT_Histoxx -lAIDA_Plotter -lqp -lqpqwt -lqpadapt -lqpview -lqt -lqt-mt -lqutil -lGemini -lminuit
+  ANALYSISLIBS += -L$(LIZARDROOT)/lib -lAIDA_HTL -lT_Histoxx -lVector -lAIDA_Annotation -lAIDA_Plotter -lqp -lqpview -lqpqwt -lqt -lHepUtilities
 endif
 
 
