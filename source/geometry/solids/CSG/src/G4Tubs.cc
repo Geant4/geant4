@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.16 2000-08-02 16:44:52 grichine Exp $
+// $Id: G4Tubs.cc,v 1.17 2000-08-08 10:03:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 // 31.03.00 V.Grichine, bug fixed in Inside(p)
 // 17.05.00 V.Grichine, bugs (#76,#91) fixed in  Distance ToOut(p,v,...)
 // 02.08.00 V.Grichine, poin is outside check in   Distance ToOut(p)
-
+// 08.08.00 V.Grichine, more stable roots of 2-equation in Distance ToOut(p,v,...)
 
 #include "G4Tubs.hh"
 
@@ -207,7 +207,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 	}
 	if ( zMax > pVoxelLimit.GetMaxZExtent() )
 	{
-	  zMax=pVoxelLimit.GetMaxZExtent();
+	  zMax = pVoxelLimit.GetMaxZExtent();
 	}
       }
     }
@@ -227,13 +227,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
         {
 // Y limits don't cross max/min x => compute max delta x, hence new mins/maxs
 
-	  diff1=sqrt(fRMax*fRMax-yoff1*yoff1);
-	  diff2=sqrt(fRMax*fRMax-yoff2*yoff2);
-	  maxDiff=(diff1>diff2) ? diff1:diff2;
-	  newMin=xoffset-maxDiff;
-	  newMax=xoffset+maxDiff;
-	  pMin=(newMin<xMin) ? xMin : newMin;
-	  pMax=(newMax>xMax) ? xMax : newMax;
+	  diff1   = sqrt(fRMax*fRMax - yoff1*yoff1);
+	  diff2   = sqrt(fRMax*fRMax - yoff2*yoff2);
+	  maxDiff = (diff1 > diff2) ? diff1:diff2;
+	  newMin  = xoffset - maxDiff;
+	  newMax  = xoffset + maxDiff;
+	  pMin    = (newMin < xMin) ? xMin : newMin;
+	  pMax    = (newMax > xMax) ? xMax : newMax;
 	}    
 	break;
       }
@@ -436,13 +436,13 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 	{
 	  //  if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
 
-	  if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
-		pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in = kSurface ;
+	  if ( pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5 &&
+	       pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in = kSurface ;
 	}	    
       }
     }
   }
-  return in;
+  return in ;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -502,9 +502,9 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p) const
     }
     else
     {
-	distSPhi=fabs(phi-fSPhi)*rho;
+	distSPhi = fabs(phi - fSPhi)*rho ;
     }
-    distEPhi=fabs(phi-fSPhi-fDPhi)*rho;
+    distEPhi = fabs(phi - fSPhi - fDPhi)*rho ;
                                       
     if (distSPhi < distEPhi) // Find new minimum
     {
@@ -517,7 +517,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p) const
     {
       if ( distEPhi < distMin )
       {
-	   side=kNEPhi;
+	   side = kNEPhi ;
       }
     }
   }		
@@ -525,7 +525,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p) const
   {
     case kNRMin : // Inner radius
     {			                
-      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,0);
+      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,0) ;
       break ;
     }
     case kNRMax : // Outer radius
@@ -614,49 +614,49 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
   if ( fDPhi < 2.0*M_PI )
   {
-     seg=true;
-     hDPhi=0.5*fDPhi;		// half delta phi
-     cPhi=fSPhi+hDPhi;;
-     hDPhiOT=hDPhi+0.5*kAngTolerance;	// outers tol' half delta phi 
-     hDPhiIT=hDPhi-0.5*kAngTolerance;
-     sinCPhi=sin(cPhi);
-     cosCPhi=cos(cPhi);
-     cosHDPhiOT=cos(hDPhiOT);
-     cosHDPhiIT=cos(hDPhiIT);
+     seg        = true ;
+     hDPhi      = 0.5*fDPhi ;		// half delta phi
+     cPhi       = fSPhi + hDPhi ; 
+     hDPhiOT    = hDPhi + 0.5*kAngTolerance ;	// outers tol' half delta phi 
+     hDPhiIT    = hDPhi - 0.5*kAngTolerance ;
+     sinCPhi    = sin(cPhi) ;
+     cosCPhi    = cos(cPhi) ;
+     cosHDPhiOT = cos(hDPhiOT) ;
+     cosHDPhiIT = cos(hDPhiIT) ;
   }
-  else seg = false ;
+  else seg = false  ;
 
 // Calculate tolerant rmin and rmax
 
   if (fRMin > kRadTolerance)
   {
-     tolORMin2=(fRMin-0.5*kRadTolerance)*(fRMin-0.5*kRadTolerance);
-     tolIRMin2=(fRMin+0.5*kRadTolerance)*(fRMin+0.5*kRadTolerance);
+    tolORMin2 = (fRMin - 0.5*kRadTolerance)*(fRMin - 0.5*kRadTolerance) ;
+    tolIRMin2 = (fRMin + 0.5*kRadTolerance)*(fRMin + 0.5*kRadTolerance) ;
   }
   else
   {
-     tolORMin2=0;
-     tolIRMin2=0;
+     tolORMin2 = 0.0 ;
+     tolIRMin2 = 0.0 ;
   }
-  tolORMax2=(fRMax+0.5*kRadTolerance)*(fRMax+0.5*kRadTolerance);
-  tolIRMax2=(fRMax-0.5*kRadTolerance)*(fRMax-0.5*kRadTolerance);
+  tolORMax2 = (fRMax + 0.5*kRadTolerance)*(fRMax + 0.5*kRadTolerance) ;
+  tolIRMax2 = (fRMax - 0.5*kRadTolerance)*(fRMax - 0.5*kRadTolerance) ;
 
 // Intersection with Z surfaces
 
-  tolIDz=fDz-kCarTolerance*0.5;
-  tolODz=fDz+kCarTolerance*0.5;
+  tolIDz = fDz - kCarTolerance*0.5 ;
+  tolODz = fDz + kCarTolerance*0.5 ;
 
   if (fabs(p.z()) >= tolIDz)
   {
      if ( p.z()*v.z() < 0 )	  // at +Z going in -Z or visa versa
      {
-	s=(fabs(p.z())-fDz)/fabs(v.z()) ;     // Z intersect distance
+	s = (fabs(p.z()) - fDz)/fabs(v.z()) ;     // Z intersect distance
 
         if(s < 0.0) s = 0.0 ;
 
-	xi=p.x()+s*v.x();         	     // Intersection coords
-        yi=p.y()+s*v.y();
-	rho2=xi*xi+yi*yi;
+	xi   = p.x() + s*v.x() ;         	     // Intersection coords
+        yi   = p.y() + s*v.y() ;
+	rho2 = xi*xi + yi*yi ;
 
 // Check validity of intersection
 
@@ -666,9 +666,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	   {
 // Psi = angle made with central (average) phi of shape
 
-              inum = xi*cosCPhi+yi*sinCPhi;
-              iden = sqrt(rho2);
-	      cosPsi = inum/iden;
+              inum   = xi*cosCPhi + yi*sinCPhi ;
+              iden   = sqrt(rho2) ;
+	      cosPsi = inum/iden ;
 
 	      if (cosPsi >= cosHDPhiIT) return s ;
 	   }
@@ -693,9 +693,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 // Hence (v.x^2+v.y^2)t^2+ 2t(p.x*v.x+p.y*v.y)+p.x^2+p.y^2-R^2=0
 //            t1                t2                t3
 
-  t1=1.0-v.z()*v.z();
-  t2=p.x()*v.x()+p.y()*v.y();
-  t3=p.x()*p.x()+p.y()*p.y();
+  t1 = 1.0 - v.z()*v.z() ;
+  t2 = p.x()*v.x() + p.y()*v.y() ;
+  t3 = p.x()*p.x() + p.y()*p.y() ;
 
   if ( t1 > 0 )				// Check not || to z axis
   {
@@ -708,16 +708,16 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 //		      c=(t3-fRMax*fRMax)/t1;
 
 	c /= t1 ;
-	d=b*b-c;
+	d = b*b - c ;
 
 	if (d >= 0)	// If real root
 	{
-	   s = -b-sqrt(d) ;
+	   s = -b - sqrt(d) ;
 
 	   if (s >= 0)	// If 'forwards'
 	   {
 // Check z intersection
-	      zi=p.z()+s*v.z();
+	      zi = p.z() + s*v.z() ;
 
 	      if (fabs(zi)<=tolODz)
 	      {
@@ -726,9 +726,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 		  if (!seg) return s ; 
 		  else
 		  {
-		     xi=p.x()+s*v.x();
-		     yi=p.y()+s*v.y();
-		     cosPsi=(xi*cosCPhi+yi*sinCPhi)/fRMax;
+		     xi     = p.x() + s*v.x() ;
+		     yi     = p.y() + s*v.y() ;
+		     cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
 
 		     if (cosPsi >= cosHDPhiIT) return s ;
 		  }
@@ -736,49 +736,24 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	     }   	//  end if (s>=0)
 	  }	        //  end if (d>=0)
        }	        //  end if (r>=fRMax)
-
-/* *************************************************************************
-   // This code is shown here just to make explicit the logic contained
-   // in the condition if (t3>tolIRMin2 && t2<0 && fabs(p.z())<=tolIDz),
-   // which is placed below.
-
-//	    else if (t3>=tolIRMax2 && t2<0 && fabs(p.z())<=tolIDz)
-//	    {                                // Point on Rmax surface
-//	       if (!seg)
-//	       {
-//		  return s = 0 ;   // No Phi cut and move inside
-//	       }
-//	       else
-//	       {
-//		  cosPsi=(p.x()*cosCPhi+
-//	          p.y()*sinCPhi)/fRMax;
-//	          if (cosPsi>=cosHDPhiOT)
-//		  { 
-//		     return s = 0 ;    // On real Rmax surface and move inside
-//		  }
-//	       }
-//	    }
-
-************************************************************************* */ 
-
        else 
        {
           // Inside outer radius :
           // check not inside, and heading through tubs (-> 0 to in)
 
-	  if (t3>tolIRMin2 && t2<0 && fabs(p.z())<=tolIDz)
+	  if (t3 > tolIRMin2 && t2 < 0 && fabs(p.z()) <= tolIDz)
 	  {
 // Inside both radii, delta r -ve, inside z extent
 
 	     if (seg)
 	     {
-                inum = p.x()*cosCPhi+p.y()*sinCPhi;
-                iden = sqrt(t3);
-		cosPsi = inum/iden;
+                inum   = p.x()*cosCPhi + p.y()*sinCPhi ;
+                iden   = sqrt(t3) ;
+		cosPsi = inum/iden ;
 
-		if (cosPsi >= cosHDPhiIT) return 0 ;
+		if (cosPsi >= cosHDPhiIT) return 0.0 ;
 	     }
-	     else return 0 ;
+	     else return 0.0 ;
 	  }
        }	    
        if ( fRMin )    // Try inner cylinder intersection
@@ -786,7 +761,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	  c = (t3 - fRMin*fRMin)/t1 ;
 	  d = b*b - c ;
 
-	  if ( d >= 0 )	// If real root
+	  if ( d >= 0.0 )	// If real root
 	  {
 // Always want 2nd root - we are outside and know rmax Hit was bad
 // - If on surface of rmin also need farthest root
@@ -797,23 +772,24 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	      {
 // Check z intersection
                  if(s < 0.0) s = 0.0 ;
-		 zi=p.z()+s*v.z();
 
-		 if (fabs(zi)<=tolODz)
+		 zi = p.z() + s*v.z() ;
+
+		 if (fabs(zi) <= tolODz)
 		 {
 // Z ok. Check phi 
-		    if (!seg) return s ; 
+		    if ( !seg ) return s ; 
 		    else
 		    {
-		       xi=p.x()+s*v.x();
-		       yi=p.y()+s*v.y();
-		       cosPsi=(xi*cosCPhi+yi*sinCPhi)/fRMin;
+		       xi     = p.x() + s*v.x() ;
+		       yi     = p.y() + s*v.y() ;
+		       cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMin ;
 
 		       if (cosPsi >= cosHDPhiIT)
 		       {
 // Good inner radius isect - but earlier phi isect still possible
 
-			  snxt=s;
+			  snxt = s ;
 		       }
 		    }
 		 }	      //    end if fabs(zi)
@@ -835,13 +811,13 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
     {
 // First phi surface (`S'tarting phi)
 
-       sinSPhi=sin(fSPhi);
-       cosSPhi=cos(fSPhi);
-       Comp=v.x()*sinSPhi-v.y()*cosSPhi;
+       sinSPhi = sin(fSPhi) ;
+       cosSPhi = cos(fSPhi) ;
+       Comp    = v.x()*sinSPhi - v.y()*cosSPhi ;
 	                	
        if ( Comp < 0 )  // Component in outwards normal dirn
        {
-	  Dist=(p.y()*cosSPhi-p.x()*sinSPhi);
+	  Dist = (p.y()*cosSPhi - p.x()*sinSPhi) ;
 
 	  if ( Dist < kCarTolerance*0.5 )
 	  {
@@ -849,14 +825,15 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 	     if (s < snxt)
 	     {
-		if ( s < 0 ) s = 0 ;
-		zi=p.z()+s*v.z();
+		if ( s < 0 ) s = 0.0 ;
+
+		zi = p.z() + s*v.z() ;
 
 		if ( fabs(zi) <= tolODz )
 		{
-		   xi  = p.x() + s*v.x() ;
-		   yi  = p.y() + s*v.y() ;
- 		   rho2= xi*xi + yi*yi ;
+		   xi   = p.x() + s*v.x() ;
+		   yi   = p.y() + s*v.y() ;
+ 		   rho2 = xi*xi + yi*yi ;
 
  		   if (   ( rho2 >= tolIRMin2 && rho2 <= tolIRMax2     )
 
@@ -896,7 +873,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	     {
 		if ( s < 0 ) s = 0 ;
 
-		zi=p.z()+s*v.z();
+		zi = p.z() + s*v.z() ;
 
 		if ( fabs(zi) <= tolODz )
 		{
@@ -923,7 +900,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	  }
        }         //  Comp < 0
     }            //  seg != 0
-    return snxt;
+    return snxt ;
 }
  
 //////////////////////////////////////////////////////////////////
@@ -1008,13 +985,13 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
   G4double snxt, sr, sphi, pdist ;
 
-  G4double deltaR, t1, t2, t3, b, c, d2 ;
+  G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
 
 // Vars for phi intersection:
 
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi ;
   G4double cPhi, sinCPhi, cosCPhi ;
-  G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, vphi ;
+  G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, vphi, roi2 ;
 
 // Z plane intersection
 
@@ -1073,15 +1050,18 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 //
 //            t1                t2                    t3
 
-  t1 = 1.0 - v.z()*v.z() ;			// since v normalised
-  t2 = p.x()*v.x() + p.y()*v.y() ;
-  t3 = p.x()*p.x() + p.y()*p.y() ;
+  t1   = 1.0 - v.z()*v.z() ;			// since v normalised
+  t2   = p.x()*v.x() + p.y()*v.y() ;
+  t3   = p.x()*p.x() + p.y()*p.y() ;
 
-  if ( t1 > 0 )				// Check not parallel
+  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
+
+  if ( t1 > 0 ) // Check not parallel
   {
 // Calculate sr, r exit distance
 	   
-    if (t2 >= 0.0)
+    if ( t2   >= 0.0 && 
+         roi2 > fRMax*(fRMax + kRadTolerance) )
     {
 // Delta r not negative => leaving via rmax
 
@@ -1117,11 +1097,12 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	return snxt = 0 ; // Leaving by rmax immediately
       }
     }             
-    else  // i.e.  t2 < 0
+    else  // i.e.  t2 < 0; Possible rmin intersection
     {
-// Possible rmin intersection
+      roMin2 = t3 + t2*t2*(1.0 - 2.0/t1) ; // min ro2 of the plane of movement 
 
-      if ( fRMin )
+      if ( fRMin    && 
+           roMin2 < fRMin*(fRMin - kRadTolerance) )
       {
 	deltaR = t3 - fRMin*fRMin ;
 	b      = t2/t1 ;
