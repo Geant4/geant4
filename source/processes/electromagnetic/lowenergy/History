@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2003-04-17 16:56:45 pia Exp $
+$Id: History,v 1.178 2003-04-24 12:55:15 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.04-2003   MGP, tag emlowen-V05-00-15
+             Fixes for "final range" and fix in G4VeLowEnergyLoss
+             related to "cuts per region"
 
 17.04-2003   MGP, tag emlowen-V05-00-14
              Bug fix to the Auger effect, in response to user report
