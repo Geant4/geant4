@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-06-09 15:38:20 stanaka Exp $
+$Id: History,v 1.21 2000-06-13 10:30:46 barrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 June 2000 Guy Barrand (exampleN03-V01-01-06)
+- exampleN03.cc, prerunN03.mac : 
+  put execution of the gui.mac in exampleN03.cc
+  with an #ifdef G4UI_USE_XM protection and
+  remove it from preunN03.mac. This will gurantee
+  no effect of the gui.mac on other G4UI sessions.
+- g4Xt.xrm : add a resource to limit contant
+  of XmText widgets (in particular the one used
+  to dump G4cout things).
+- exaN03Vis5.6.mac : remove commands that are
+  in fact not supported by Xo and Invnetor
+  drivers.
 
 09 June 2000 Satoshi Tanaka (exampleN03-V01-01-05) :
 - In  prerunN03, 
