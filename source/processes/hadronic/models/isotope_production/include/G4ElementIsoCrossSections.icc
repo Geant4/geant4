@@ -95,7 +95,7 @@ G4IsoResult * G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
 GetProductIsotope(G4double anEnergy)
 {
   G4double running = 0;
-  G4int index;
+  G4int index(0);
   G4double random = G4UniformRand();
   for(G4int i=0; i<nIsotopes; i++)
   {

@@ -49,7 +49,7 @@
   {
     G4int count = theElement->GetNumberOfIsotopes();
       if(count == 0) count +=
-         theStableOnes.GetNumberOfIsotopes(theElement->GetZ());
+         theStableOnes.GetNumberOfIsotopes(static_cast<G4int>(theElement->GetZ()));
     theIsotopeWiseData = new G4NeutronHPIsoData[count];
     // filename = ein data-set je isotope.
     count = 0;
@@ -70,7 +70,7 @@
       G4int first = theStableOnes.GetFirstIsotope(Z);
 //      G4cout <<"first="<<first<<" "<<theStableOnes.GetNumberOfIsotopes(theElement->GetZ())<<G4endl;
       for(G4int i1=0; 
-        i1<theStableOnes.GetNumberOfIsotopes(theElement->GetZ());
+        i1<theStableOnes.GetNumberOfIsotopes(static_cast<G4int>(theElement->GetZ()) );
         i1++)
       {
 //        G4cout <<" Init: theStableOnes in the loop"<<G4endl;

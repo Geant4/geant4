@@ -228,7 +228,7 @@ GetProductIsotope(G4double anEnergy)
   }
   G4double random = G4UniformRand();
   G4double running = 0;
-  G4int index;
+  G4int index(0);
   {
   for(G4int i=0; i<theNumberOfProducts; i++)
   {

@@ -71,7 +71,7 @@
       running[i]+=theGammas[i]->GetWeight();
     }
     sum = running[nGammas-1];
-    G4int it;
+    G4int it(0);
     G4double random = G4UniformRand();
     for(i=0; i<nGammas; i++)
     {

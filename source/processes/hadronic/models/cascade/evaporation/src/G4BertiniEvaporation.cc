@@ -380,10 +380,10 @@ void G4BertiniEvaporation::fillResult( G4std::vector<G4DynamicParticle *> second
 				      G4FragmentVector * aResult )
 {
   // Fill the vector pParticleChange with secondary particles stored in vector.
-  for ( G4int i = 0 ; i < secondaryParticleVector.size() ; i++ )
+  for ( size_t i = 0 ; i < secondaryParticleVector.size() ; i++ )
   {
     G4int aZ = static_cast<G4int> (secondaryParticleVector[i]->GetDefinition()->GetPDGCharge() );
-    G4int aA = secondaryParticleVector[i]->GetDefinition()->GetBaryonNumber();
+    G4int aA = static_cast<G4int> (secondaryParticleVector[i]->GetDefinition()->GetBaryonNumber());
     G4LorentzVector aMomentum = secondaryParticleVector[i]->Get4Momentum();
     if(aA>0) 
     {

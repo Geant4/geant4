@@ -233,7 +233,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
     // Rotate according to the direction of the incident particle
     if (px*px + py*py > 0) {
-      G4double cost, sint, ph, cosp, sinp, a, b, c;
+      G4double cost, sint, ph, cosp, sinp;
       cost = pz/p;
       sint = (sqrt(abs((1-cost)*(1+cost))) + sqrt(px*px+py*py)/p)/2;
       py < 0 ? ph = 3*halfpi : ph = halfpi;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.cc,v 1.7 2001-10-05 16:08:35 hpw Exp $
+// $Id: G4HadronCrossSections.cc,v 1.8 2002-06-07 15:30:53 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1225,6 +1225,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
 {
    G4double sigel, sigin, sigtot;
    G4double xsecel, xsecin;
+   xsecel = 0;
    G4double dx, dy, rc, rca, b;
    G4double crel, crin;
    G4double xspiel, xspiin;
@@ -1242,7 +1243,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
 
    if (ipart >= 30 && ipart <= 32) {
 
-      G4double apart;
+      G4double apart=0;
       if (ipart == 30) apart = pow(2., 1./3.);
       else if (ipart == 31) apart = pow(3., 1./3.);
       else if (ipart == 32) apart = pow(4., 1./3.);

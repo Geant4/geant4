@@ -39,7 +39,7 @@
   {
     G4String tString = dirName;
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, tString, bit, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, bit, dbool);
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();

@@ -50,7 +50,7 @@
     G4Nucleus aNucleus;
     G4double eps = 0.0001;
     if(targetMass<500*MeV)
-      targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
+      targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
                        theBaseZ* G4Electron::Electron()->GetPDGMass() ) /
                      G4Neutron::Neutron()->GetPDGMass();
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
@@ -72,7 +72,7 @@
     {
       G4ThreeVector aCMSMomentum = theNeutron.GetMomentum()+theTarget.GetMomentum();
       G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy());
-      G4Fragment nucleus(theBaseA+1, theBaseZ ,p4);
+      G4Fragment nucleus(static_cast<G4int>(theBaseA+1), static_cast<G4int>(theBaseZ) ,p4);
       G4PhotonEvaporation photonEvaporation;
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
       G4FragmentVector::iterator i;
@@ -84,7 +84,7 @@
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
         if((*i)->GetMomentum().mag() > 10*MeV) 
                  theOne->SetDefinition( 
-                 theTable->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ) );
+                 theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
         theOne->SetMomentum( (*i)->GetMomentum().vect() ) ;
         theOne->SetTotalEnergy( (*i)->GetMomentum().t() );
         thePhotons->push_back(theOne);
@@ -112,7 +112,7 @@
     {
        G4DynamicParticle * theOne = new G4DynamicParticle;
        G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                        ->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ);
+                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
        theOne->SetDefinition(aRecoil);
        // Now energy; 
        // Can be done slightly better @
@@ -151,7 +151,7 @@
   {
     G4String tString = "/FS/";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
     G4String filename = aFile.GetName();
     theBaseA = A;
     theBaseZ = G4int(Z+.5);

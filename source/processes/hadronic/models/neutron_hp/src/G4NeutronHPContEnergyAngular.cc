@@ -29,8 +29,8 @@
 G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4double massCode, G4double mass)
 {
    G4ReactionProduct * result;
-   G4int i;
-   G4int it;
+   G4int i(0);
+   G4int it(0);
    for(i=0;i<nEnergy;i++)
    {
      it = i;
@@ -68,7 +68,7 @@ G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4do
 G4double G4NeutronHPContEnergyAngular::
 MeanEnergyOfThisInteraction()
 {
-   G4double result;
+   G4double result(0);
    if(currentMeanEnergy<-1)
    {
      G4Exception("G4NeutronHPContEnergyAngular: Logical error in Product class");

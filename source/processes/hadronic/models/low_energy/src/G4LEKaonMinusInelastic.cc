@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonMinusInelastic.cc,v 1.7 2001-10-05 16:11:31 hpw Exp $
+// $Id: G4LEKaonMinusInelastic.cc,v 1.8 2002-06-07 15:30:55 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonMinus Inelastic Process
@@ -158,7 +158,7 @@
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
     // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int nt, np, nm, nz;
+    G4int nt(0), np(0), nm(0), nz(0);
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.70 };
     if( first )       // compute normalization constants, this will only be Done once

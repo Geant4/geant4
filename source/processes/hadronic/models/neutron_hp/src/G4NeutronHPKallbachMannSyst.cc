@@ -93,7 +93,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     G4double R3 = G4std::min(ea, Et3);
   G4double X3 = R3*eb/ea;
   G4double Ma = 1;
-  G4double mb;
+  G4double mb(0);
   G4int productA = theTargetA+1-theResidualA;
   G4int productZ = theTargetZ-theResidualZ;
   if(productZ==0)
@@ -129,7 +129,7 @@ G4double G4NeutronHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int
   result +=  33.22*((Nc-Zc)*(Nc-Zc)/pow(Ac, 4./3.) - (NA-ZA)*(NA-ZA)/pow(AA, 4./3.));
   result += -0.717*(Zc*Zc/pow(Ac,1./3.)-ZA*ZA/pow(AA,1./3.));
   result +=  1.211*(Zc*Zc/Ac-ZA*ZA/AA);
-  G4double totalBinding;
+  G4double totalBinding(0);
   G4int productA = theTargetA+1-theResidualA;
   G4int productZ = theTargetZ-theResidualZ;
   if(productZ==0&&productA==1) totalBinding=0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.7 2001-07-26 09:28:06 hpw Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.8 2002-06-07 15:30:56 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -79,7 +79,7 @@ inline G4double G4NeutronHPInterpolator::
 Interpolate(G4InterpolationScheme aScheme,
             G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
-  G4double result;
+  G4double result(0);
   G4int theScheme = aScheme;
   theScheme = theScheme%CSTART;
   switch(theScheme)

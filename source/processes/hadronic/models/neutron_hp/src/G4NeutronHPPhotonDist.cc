@@ -296,7 +296,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	else if(tabulationType==1)
 	{
           // legendre polynomials
-          G4int it;
+          G4int it(0);
           for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
           {
             it = iii;
@@ -317,7 +317,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	else
 	{
           // tabulation of probabilities.
-          G4int it;
+          G4int it(0);
           for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
           {
             it = iii;
@@ -392,7 +392,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       else if(tabulationType==1)
       {
         // legendre polynomials
-        G4int it;
+        G4int it(0);
         for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
         {
           it = iii;
@@ -413,7 +413,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       else
       {
         // tabulation of probabilities.
-        G4int it;
+        G4int it(0);
         for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
         {
           it = iii;

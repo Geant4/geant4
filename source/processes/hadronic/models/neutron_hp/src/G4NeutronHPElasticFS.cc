@@ -40,7 +40,7 @@
   {
     G4String tString = "/FS/";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();
@@ -274,7 +274,8 @@
     }
     else
     {
-      theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()->FindIon(theBaseZ, theBaseA, 0, theBaseZ));
+      theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
+                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
     }
     theRecoil->SetMomentum(theTarget.GetMomentum());
     theResult.SetNumberOfSecondaries(1);

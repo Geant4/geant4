@@ -34,7 +34,7 @@
     {
       if(anEnergy<theDistFunc[i].GetLabel()) break; // that is the energy we need
     }
-    G4int low, high;
+    G4int low(0), high(0);
     if(i==nDistFunc) 
     {
       low = i-2;

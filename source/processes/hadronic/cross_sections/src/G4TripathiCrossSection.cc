@@ -45,7 +45,7 @@ GetCrossSection(const G4DynamicParticle* aPart,
   // needs target mass
   G4double targetMass = G4ParticleTable::GetParticleTable()
                                        ->GetIonTable()
-				       ->GetIonMass(nTargetProtons, targetAtomicNumber);
+				       ->GetIonMass(static_cast<G4int>(nTargetProtons), static_cast<G4int>(targetAtomicNumber));
   G4LorentzVector pTarget(0,0,0,targetMass); 
   G4LorentzVector pProjectile(aPart->Get4Momentum());
   pTarget = pTarget+pProjectile;

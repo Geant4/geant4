@@ -36,7 +36,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
   G4double result;
   
   G4int i0;
-  G4int low, high;
+  G4int low(0), high(0);
   G4NeutronHPFastLegendre theLeg;
   for (i0=0; i0<nEnergy; i0++)
   {
@@ -165,7 +165,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
 G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpolation; do not use
 {
   G4int i0;
-  G4int low, high;
+  G4int low(0), high(0);
 //  G4cout << "G4NeutronHPLegendreStore::Sample "<<energy<<" "<<energy<<" "<<nEnergy<<G4endl;
   for (i0=0; i0<nEnergy; i0++)
   {

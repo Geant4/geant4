@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StopTheoDeexcitation.cc,v 1.7 2001-10-04 20:00:43 hpw Exp $
+// $Id: G4StopTheoDeexcitation.cc,v 1.8 2002-06-07 15:30:58 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,11 +79,11 @@ G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
 
   // Deexcite the nucleus 
 
-  G4double atomicMass = G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+  G4double atomicMass = G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(Z),static_cast<G4int>(A));
   G4double m = atomicMass + excitation;
   G4double pMag = p.mag();
   G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),sqrt(pMag*pMag + m*m));
-  G4Fragment theExcitedNucleus(A,Z,initialMomentum);
+  G4Fragment theExcitedNucleus(static_cast<G4int>(A),static_cast<G4int>(Z),initialMomentum);
 
   //  theExcitedNucleus.SetA(A);
   //  theExcitedNucleus.SetZ(Z);

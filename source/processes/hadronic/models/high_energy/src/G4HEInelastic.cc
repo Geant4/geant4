@@ -55,7 +55,7 @@ void  G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
   for (G4int i=0; i<aVecLength; i++)
   {
     G4int pdgCode = pv[i].getCode();
-    G4ParticleDefinition * aDefinition;
+    G4ParticleDefinition * aDefinition=NULL;
     if(pdgCode == 0)
     {
       G4int bNumber = pv[i].getBaryonNumber();
@@ -817,7 +817,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4double xshhmf = Amax(0.01,xtarg - xpnhmf);
    G4double rshhmf = 0.25*xshhmf;
    G4double rpnhmf = 0.81*xpnhmf;
-   G4double xhmf;
+   G4double xhmf=0;
    if(verboseLevel > 1)
      { G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << G4endl;
      }
@@ -1039,7 +1039,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                                  // process the secondary particles in reverse order
    G4double dndl[20];
    G4double binl[20];
-   G4double pvMass, pvEnergy;
+   G4double pvMass(0), pvEnergy(0);
    G4int    pvCode; 
    G4double aspar, pt, phi, et, xval;
    G4double ekin  = 0.;
@@ -1360,7 +1360,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
       }
    if ( targ <1) targ = 1;
 
-   G4bool dum;
+   G4bool dum=0;
    if( lead ) 
      {
        for( i=0; i<vecLen; i++ ) 
@@ -1586,7 +1586,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      {
 
        G4double cost, sint, pp, eka;
-       G4int spall, nbl;
+       G4int spall(0), nbl(0);
                                      //  first add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
@@ -2589,7 +2589,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
 
-   G4bool dum;
+   G4bool dum(0);
    G4double ekin, teta;
 
    if( lead ) 
@@ -2811,7 +2811,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
      {
 
        G4double cost, sint, ekin2, ran, pp, eka;
-       G4int spall, nbl;
+       G4int spall(0), nbl(0);
                                      //  first add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
@@ -4523,7 +4523,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
 
-   G4bool dum;
+   G4bool dum(0);
    G4double ekin, teta;
 
    if( lead ) 
@@ -4733,7 +4733,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
      {
 
        G4double sprob, cost, sint, ekin2, ran, pp, eka;
-       G4int spall, nbl;
+       G4int spall(0), nbl(0);
                                      //  sprob is the probability of self-absorption in heavy molecules
 
        if( incidentKineticEnergy < 5.0 )
@@ -5040,7 +5040,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
 
        G4double sprob, cost, sint, ekin2, ran, pp, eka;
        G4double ekin, cfa, ekin1, phi, pvMass, pvEnergy;
-       G4int spall, nbl;
+       G4int spall(0), nbl(0);
                                      //  sprob is the probability of self-absorption in heavy molecules
 
        sprob = 0.;
@@ -5644,7 +5644,7 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
                                      G4double wmax, G4double wfcn, 
                                      G4int maxtrial, G4int ntrial)
  { ntrial = 0;
-   G4double wps;
+   G4double wps(0);
    while ( ntrial < maxtrial)
      { ntrial++;
        G4int i, j;
