@@ -1,4 +1,4 @@
-# $Id: test26.model.store.in,v 1.2 2003-04-26 20:10:07 vnivanch Exp $
+# $Id: test26.restore.in,v 1.1 2003-04-26 20:10:07 vnivanch Exp $
 #
 # Macro file for "test26.cc"
 # V.Ivanchenko
@@ -10,18 +10,20 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  model
-#/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 /testem/phys/WorldCuts  5.0 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
-/run/initialize
 #
 /gun/particle mu-
 /gun/energy 1 GeV
+#
+/run/particle/retrievePhysicsTable physdata
+#/random/resetEngineFrom currentRun.rndm
+/run/initialize
 /run/beamOn 100
-/run/particle/storePhysicsTable physdata.model
 #
 /gun/particle pi+
 /gun/energy 1 GeV
@@ -32,5 +34,4 @@
 /gun/energy 1 GeV
 /run/beamOn 100
 #
-
 

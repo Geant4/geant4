@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26TrackingAction.cc,v 1.4 2003-02-19 17:07:55 vnivanch Exp $
+// $Id: Tst26TrackingAction.cc,v 1.5 2003-04-26 20:10:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,18 +63,23 @@ void Tst26TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   if(!vertex) vertex = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
   if(!muon)   muon = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
+
   if(1 == track->GetTrackID()) return;
   G4int regionIndex = 0;
+
   const G4Region* r = track->GetVolume()->GetLogicalVolume()->GetRegion();
+
   if(r == vertex) regionIndex = 1;
   else if(r == muon) regionIndex = 2;
   G4int particleIndex = -1;
   const G4ParticleDefinition* pd = track->GetDefinition();
+
   if(G4Gamma::Gamma() == pd) particleIndex = 0;
   else if(G4Electron::Electron() == pd) particleIndex = 1;
   else if(G4Positron::Positron() == pd) particleIndex = 2;
 
   if(particleIndex >= 0) Tst26Run->AddParticle(particleIndex,regionIndex);
+
 
 }
 

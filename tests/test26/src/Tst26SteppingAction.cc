@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.cc,v 1.4 2003-03-26 17:29:30 vnivanch Exp $
+// $Id: Tst26SteppingAction.cc,v 1.5 2003-04-26 20:10:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,10 +64,10 @@ void Tst26SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   const G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4LogicalVolume* lv = pv->GetLogicalVolume();
-//  const G4MaterialCutsCouple* couple = aStep->GetTrack()->GetMaterialCutsCouple();
-//  G4int idx = couple->GetIndex();
-//  const G4Material* mat = couple->GetMaterial();
-//  G4cout << "Step in " << mat->GetName() << "   idx= " << idx << G4endl;
+  //  const G4MaterialCutsCouple* couple = aStep->GetTrack()->GetMaterialCutsCouple();
+  //  G4int idx = couple->GetIndex();
+  //  const G4Material* mat = couple->GetMaterial();
+  //  G4cout << "Step in " << mat->GetName() << "   idx= " << idx << " edep= " << edep << G4endl;
   G4int volumeIndex = -1;
   
   G4int copyNo = pv->GetCopyNo();
@@ -78,6 +78,7 @@ void Tst26SteppingAction::UserSteppingAction(const G4Step* aStep)
   else if(name == "Abs3") volumeIndex = 3;
   else if(name == "Abs4") volumeIndex = 4;
   else if(name == "Vert") volumeIndex = 5;
+  // G4cout << "     vIndx= " << volumeIndex << " copyNo= " << copyNo << G4endl;
   if(volumeIndex>=0) Tst26Event->AddEnergy(edep, volumeIndex, copyNo);
 }
 
