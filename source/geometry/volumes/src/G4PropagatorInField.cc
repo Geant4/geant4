@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.40 2002-11-22 10:48:49 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.41 2002-11-22 11:19:51 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -232,68 +232,43 @@ G4PropagatorInField::ComputeStep(
     //  CurrentState is updated with the final position and velocity. 
     //
     G4ThreeVector  EndPointB = CurrentState.GetPosition(); 
+    G4ThreeVector  InterSectionPointE;
+    G4double       LinearStepLength;
+ 
+    // Intersect chord AB with geometry
+    intersects= IntersectChord( SubStartPoint, EndPointB, NewSafety,
+				LinearStepLength, InterSectionPointE );
+    // E <- Intersection Point of chord AB and either volume A's surface 
+    //                                  or a daughter volume's surface ..
 
-    // Calculate the direction and length of the chord AB
-     
-    G4ThreeVector  ChordAB_Vector = EndPointB - SubStartPoint;
-    G4double       ChordAB_Length = ChordAB_Vector.mag();  // Magnitude (norm)
-    G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
-
-    // Check whether any volumes are encountered by the chord AB
-     
-    G4double LinearStepLength = 
-        fNavigator->ComputeStep( SubStartPoint, ChordAB_Dir,
-                                 ChordAB_Length, NewSafety );
-    if( first_substep )
-    {
-      currentSafety = NewSafety;
-    }
-    // It might also be possible to update safety in other steps, but
-    // it must be done with care.  J.Apostolakis  August 5th, 1997
-
-    intersects = (LinearStepLength <= ChordAB_Length); 
-      // G4Navigator contracts to return k_infinity if len==asked
-      // and it did not find a surface boundary at that length
-    LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
+    if( first_substep ) { 
+       currentSafety = NewSafety;
+    } // Updating safety in other steps is potential future extention
 
     if( intersects )
     {
-      // E <- Intersection Point of chord AB and either volume A's surface 
-      //                                  or a daughter volume's surface ..
+       G4FieldTrack IntersectPointVelct_G(CurrentState);  // FT-Def-Construct
 
-      G4ThreeVector pointE = SubStartPoint + LinearStepLength * ChordAB_Dir;
-
-      G4FieldTrack IntersectPointVelct_G(CurrentState);  // FT-Def-Construct
-
-      // Find the intersection point of AB true path with the surface
-      // of vol(A) given our current "estimate" point E. 
-  
-      G4bool found_intersection = 
-        LocateIntersectionPoint( SubStepStartState, CurrentState, 
-                                 pointE, IntersectPointVelct_G );
-      if( found_intersection )
-      {        
-        End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
-        StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
-                                   - OriginalState.GetCurveLength();
-         // which is Zero now.
-#ifdef G4DEBUG_FIELD
-        if( Verbose() > 0 )
-          G4cout << " Found intersection after Step of length "
-                 << StepTaken << G4endl;
-#endif
-      }
-      else
-      {
-        intersects= false;  // "Minor" chords do not intersect
-      }
+       // Find the intersection point of AB true path with the surface
+       //   of vol(A), if it exists. Start with point E as first "estimate".
+       G4bool found_intersection = 
+         LocateIntersectionPoint( SubStepStartState, CurrentState, 
+                                  InterSectionPointE, IntersectPointVelct_G );
+       // intersects = intersects & found_intersection;
+       if( found_intersection ) {        
+          End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
+	  StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
+                                      - OriginalState.GetCurveLength();
+       } else {
+          intersects= false;  // "Minor" chords do not intersect
+       }
     }
     if( !intersects )
     {
       StepTaken += s_length_taken; 
-
-      // For storing smooth trajectory info -- to analyse or display (jacek 01/11/2002)
-      // The filter pointer is a valid iff intermediate points should be stored.
+      // Introducing smooth trajectory display (jacek 01/11/2002)
+      // The filter pointer holds a valid filter if and only if
+      // intermediate points should be stored.
       if (fpTrajectoryFilter) {
         fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
       }
@@ -491,25 +466,14 @@ G4PropagatorInField::LocateIntersectionPoint(
       // called at the start of the physical Step
 
       first_step = false;
-       
-      // Calculate the length and direction of the chord AF
-      //
-      G4ThreeVector  ChordAF_Vector = CurrentF_Point - Point_A;
-      G4double       ChordAF_Length = ChordAF_Vector.mag();  
-      G4ThreeVector  ChordAF_Dir    = ChordAF_Vector.unit();
-
-      G4double stepLength = fNavigator->ComputeStep( Point_A, ChordAF_Dir,
-                                                     ChordAF_Length, NewSafety);
-
-      G4bool Intersects_AF = (stepLength <= ChordAF_Length);
-      stepLength = G4std::min(stepLength, ChordAF_Length);
+      G4ThreeVector PointG;   // Candidate intersection point
+      G4double stepLengthAF; 
+      G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
+					     NewSafety, stepLengthAF,
+					     PointG
+					     );
       if( Intersects_AF )
       {
-        // There is an intersection of AF with a volume boundary
-        // G <- First Intersection of Chord AF 
-        //
-        G4ThreeVector PointG = Point_A + stepLength * ChordAF_Dir;
-
         // G is our new Candidate for the intersection point.
         // It replaces  "E" and we will repeat the test to see if
         // it is a good enough approximate point for us.
@@ -523,29 +487,20 @@ G4PropagatorInField::LocateIntersectionPoint(
          // In this case:
          // There is NO intersection of AF with a volume boundary.
          // We must continue the search in the segment FB!
+         fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
 
+	 G4double stepLengthFB;
+	 G4ThreeVector PointH;
          // Check whether any volumes are encountered by the chord FB
          // ---------------------------------------------------------
-         // Calculate the length and direction of the chord AF
-         //
-         G4ThreeVector  ChordFB_Vector = Point_B - CurrentF_Point;
-         G4double       ChordFB_Length = ChordFB_Vector.mag();  
-         G4ThreeVector  ChordFB_Dir    = ChordFB_Vector.unit();
-
-         fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
-         G4double stepLength =
-           fNavigator->ComputeStep( CurrentF_Point, ChordFB_Dir,
-                                    ChordFB_Length, NewSafety);
-
-         G4bool Intersects_FB = stepLength <= ChordFB_Length;
-         stepLength = G4std::min(stepLength, ChordFB_Length);
+	 G4bool Intersects_FB = 
+	   IntersectChord( CurrentF_Point, Point_B, 
+			   NewSafety,      stepLengthFB,  PointH );
 
          if( Intersects_FB )
          { 
            // There is an intersection of FB with a volume boundary
            // H <- First Intersection of Chord FB 
-           //
-           G4ThreeVector PointH = CurrentF_Point + stepLength * ChordFB_Dir;
 
            // H is our new Candidate for the intersection point.
            // It replaces  "E" and we will repeat the test to see if
@@ -746,6 +701,45 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
          << G4endl;
 }
 
+G4bool
+G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
+				     G4ThreeVector  EndPointB,
+				     G4double      &NewSafety,
+				     G4double      &LinearStepLength,
+				     G4ThreeVector &IntersectionPoint
+				   )
+{
+    // Calculate the direction and length of the chord AB
+    G4ThreeVector  ChordAB_Vector = EndPointB - StartPointA;
+    G4double       ChordAB_Length = ChordAB_Vector.mag();  // Magnitude (norm)
+    G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
+    G4bool intersects;
+
+    // Check whether any volumes are encountered by the chord AB
+    LinearStepLength = 
+        fNavigator->ComputeStep( StartPointA, ChordAB_Dir,
+                                 ChordAB_Length, NewSafety );
+    intersects = (LinearStepLength <= ChordAB_Length); 
+      // G4Navigator contracts to return k_infinity if len==asked
+      // and it did not find a surface boundary at that length
+    LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
+
+    // Intersection Point of chord AB and either volume A's surface 
+    //                                or a daughter volume's surface ..
+    IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+
+    return intersects;
+}
+
+G4FieldTrack G4PropagatorInField::
+ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
+		    const G4FieldTrack &EstimatedEndStateB,	
+		    double              curveDist
+		  )
+{
+  G4Exception("G4PropagatorInField::ReEstimateEndpoint is not yet implemented.");
+  return CurrentStateA;
+}
 
 G4std::vector<G4ThreeVector>*
 G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
@@ -757,7 +751,6 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
     return NULL;
   }
 }
-
 
 void 
 G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
