@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.16 2001-10-11 13:29:18 gcosmo Exp $
+// $Id: G4UImanager.cc,v 1.17 2001-10-16 07:33:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 #include "G4strstreambuf.hh"
 #include "G4StateManager.hh"
 #include "G4UIaliasList.hh"
-#include "G4Tokenizer.hh"
+#include "g4rw/ctoken.h"
 
 #include "g4std/strstream"
 
