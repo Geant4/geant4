@@ -14,11 +14,33 @@ case "$g4vis_none" in
 	;;
 esac
 
+#####################################################################
+ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$ogl_dirs" != "X" ; then
+
+g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+g4ogl_base_dir_n=`echo $g4ogl_base_dir_found |awk -F"/" '{print NF}'`
+#echo g4ogl_base_dir_n=$g4ogl_base_dir_n
+
+n=$[$g4ogl_base_dir_n-2]
+#echo n=$n
+
+g4ogl_base_dir_found=`echo $g4ogl_base_dir_found|cut -d"/" -f1-$n`
+
+	g4vis_oglhome=$g4ogl_base_dir_found
+else
 case "$g4vis_oglhome" in
 '')
-	g4vis_oglhome="/usr"
+	$g4vis_oglhome=/usr
 	;;
 esac
+fi
+
+##########################################################################
 
 case "$g4vis_build_openglwin32_driver" in
 '')
@@ -588,7 +610,8 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system:
+Specify the correct path (OGLHOME) where OpenGL is installed in your system
+(it was found or set by defalt):
 EOM`
 
 dflt=$g4vis_oglhome
