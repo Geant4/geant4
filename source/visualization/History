@@ -1,4 +1,4 @@
-$Id: History,v 1.155 2001-08-25 00:36:20 johna Exp $
+$Id: History,v 1.156 2001-08-30 00:16:41 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+29th August 2001  John Allison/Joseph Perl  (vis-V03-02-14)
+- Needs config-V03-02-06.
+- First developers release of HepRep graphics driver.
 
 24th August 2001  Joseph Perl  (vis-V03-02-13-00)
 - First inclusion of HepRep graphics driver.
