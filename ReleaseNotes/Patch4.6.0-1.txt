@@ -124,6 +124,8 @@ List of fixes included in this public patch since release 6.0:
   o Examples:
     --------
     + Updated reference outputs.
+    + extended/analysis/A01
+      o Fixed physics lists for EM processes.
 
  ----------------------------------------------------------------------------
 
