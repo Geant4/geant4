@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PrimaryGeneratorAction.cc,v 1.5 2001-10-25 08:11:23 grichine Exp $
+// $Id: F01PrimaryGeneratorAction.cc,v 1.6 2001-11-07 14:33:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
- G4String F01PrimaryGeneratorAction::thePrimaryParticleName = "proton" ; 
+ G4String F01PrimaryGeneratorAction::thePrimaryParticleName = "e-" ; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,15 +64,15 @@ F01PrimaryGeneratorAction::F01PrimaryGeneratorAction(
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="proton");
+                    = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   
   thePrimaryParticleName = particle->GetParticleName() ;
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
-  particleGun->SetParticleEnergy(1.*GeV);
+  particleGun->SetParticleEnergy(0.5*GeV);
 
-  zvertex = -0.5*(F01Detector->GetAbsorberThickness());
+  zvertex = F01Detector->GetAbsorberZpos() -0.5*(F01Detector->GetAbsorberThickness());
   particleGun->SetParticlePosition(G4ThreeVector(xvertex,yvertex,zvertex));
 
 }
@@ -104,7 +104,7 @@ void F01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     x0 = 0. ;
     y0 = 0. ;
-    z0 = -0.5*(F01Detector->GetWorldSizeZ()) ;
+    z0 = F01Detector->GetAbsorberZpos()-0.5*(F01Detector->GetAbsorberThickness());
   }
   G4double r0,phi0 ;
 

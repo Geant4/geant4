@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.4 2001-10-25 08:11:22 grichine Exp $
+// $Id: F01PhysicsList.cc,v 1.5 2001-11-07 14:33:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -271,7 +271,6 @@ void F01PhysicsList::ConstructEM()
      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
       
-     pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
      pmanager->AddProcess( muonStepCut,-1,-1,3);
      muonStepCut->SetMaxStep(MaxChargedStep) ;
 

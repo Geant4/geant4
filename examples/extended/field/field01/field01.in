@@ -9,7 +9,10 @@
 #
 #
 /field/setStepperType 4
-/field/setMinStep 10 mm
+#
+#/field/setMinStep 10 mm
+#
+/field/setMinStep 1 mm
 #
 /field/update
 #
@@ -18,8 +21,13 @@
 /run/particle/dumpCutValues
 #
 /gun/particle e-
+#
+#/gun/particle proton
+#
+#/gun/particle chargedgeantino
+#
 /gun/energy 500.0 MeV
 #
-/event/printModulo 50
+#/event/printModulo 1
 /run/beamOn 100
 #
