@@ -1,0 +1,43 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber box )
+# 158.6  MeV p, 0.2160 g/cm2 RAl
+# G4 simulation to be compared with data
+# of B.Gottschalk et al. NIM B74(1993) 467.
+#  exp(-0.5*(th/th0)**2  th0 = 3.534 +- 0.491 mrad
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+/testem/phys/setGCut 1.0 mm
+/testem/phys/setEcut 1.0 mm
+/run/initialize
+#
+/testem/det/setAbsMat Aluminium
+/testem/det/setAbsThick 800.000 micrometer
+/testem/det/setAbsYZ 10. cm
+/testem/det/update
+#
+/testem/gun/setDefault
+#
+#  hist file name
+/testem/plots/sethistName geant4.plot81 
+#  PLOT:  angle distr. of transmitted particles
+/testem/plots/setnbinTh 100
+/testem/plots/setThlow  0.0 deg
+/testem/plots/setThhigh 0.6 deg
+#  PLOT: proj. angle distr. of transmitted particles
+/testem/plots/setnbinThproj 100
+/testem/plots/setThlowproj  -0.6 deg
+/testem/plots/setThhighproj  0.6 deg
+#
+#
+/gun/particle proton
+/gun/energy 158.6 MeV
+#
+/run/beamOn 100000
+#
+
+
