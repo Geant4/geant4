@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.5 1999-05-17 10:44:54 fbehner Exp $
+// $Id: globals.hh,v 1.6 1999-05-24 18:23:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,18 +53,8 @@
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
 #include <CLHEP/config/TemplateFunctions.h>
 
-// Typedefs to decouple from library classes
-// Typedefs for numeric types
-// [NOTE: Will in future need to be made more sophisticated]
-typedef HepDouble G4double;
-typedef HepFloat G4float;
-typedef HepInt G4int;
-#ifdef G4_HAVE_BOOL
-  typedef bool G4bool;
-#else
-  typedef HepBoolean G4bool;
-#endif
-typedef long G4long;
+// Typedefs for base types
+#include "G4Types.hh"
 
 // Other typedefs
 #include <rw/cstring.h>
@@ -90,15 +80,4 @@ void G4Exception(string s);
 void G4Exception(G4String s);
 #endif
 #endif /* GLOBALS_HH */
-
-
-
-
-
-
-
-
-
-
-
 

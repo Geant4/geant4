@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.4 1999-05-24 10:41:46 stesting Exp $
+// $Id: G4Timer.hh,v 1.5 1999-05-24 18:23:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,21 +83,7 @@
    };
 #endif  /* WIN32 */
 
-#include "CLHEP/config/CLHEP.h"
-// Typedefs to decouple from library classes
-// Typedefs for numeric types
-// [NOTE: Will in future need to be made more sophisticated]
-typedef HepDouble G4double;
-typedef HepFloat G4float;
-typedef HepInt G4int;
-#ifdef G4_HAVE_BOOL
-  typedef bool G4bool;
-#else
-  typedef HepBoolean G4bool;
-#endif
-typedef long G4long;
- 
-
+#include "G4Types.hh"
 
 class ostream;
 
