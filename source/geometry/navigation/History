@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2004-09-28 14:21:00 gcosmo Exp $
+$Id: History,v 1.34 2004-11-17 17:21:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 17th, 2004 - G.Cosmo  (geomnav-V06-02-05)
+------------------------
+- Allow consecutive corrections for stuck tracks in G4Navigator::ComputeStep()
+  up to 10 times before aborting the event.
 
 Sep 28th, 2004 - G.Cosmo  (geomnav-V06-02-04)
 ------------------------
