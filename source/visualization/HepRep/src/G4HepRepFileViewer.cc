@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileViewer.cc,v 1.11 2003-07-12 19:48:15 duns Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.12 2004-03-15 08:00:22 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -71,6 +71,7 @@ void G4HepRepFileViewer::ShowView () {
   G4cout << "G4HepRepFileViewer::ShowView" << G4endl;
 #endif
   G4VViewer::ShowView();
-
-  hepRepXMLWriter->close();
+  
+  if (hepRepXMLWriter->isOpen)
+    hepRepXMLWriter->close();
 }
