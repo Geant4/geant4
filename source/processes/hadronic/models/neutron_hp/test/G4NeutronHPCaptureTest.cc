@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureTest.cc,v 1.5 2001-02-09 17:46:13 hpw Exp $
+// $Id: G4NeutronHPCaptureTest.cc,v 1.6 2001-03-03 10:24:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -253,10 +253,25 @@
 //     theAu->AddElement( elAu, 1 );
 //     theMaterials[23] = theAu;
     
-     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
-     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
-     theC->AddElement( elC, 1 );
-     theMaterials[23] = theC;
+//     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
+//     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
+//     theC->AddElement( elC, 1 );
+//     theMaterials[23] = theC;
+    
+//     G4int nel, nnucleons;
+//     G4double aboundance;
+//     G4Material *theGd = new G4Material(name="Gadolinium", density=7.895*g/cm3, nEl=1);
+//     G4Isotope* Gd_157 = new G4Isotope(name="64_157_Gadolinium",z=64.,nnucleons=157,a=156.924*g/mole);
+//     G4Element* Gd  = new G4Element(name="Gadolinium "  ,symbol=" Gd" ,nel=1);
+//     Gd -> AddIsotope(Gd_157, aboundance=100.*perCent);
+//     theGd->AddElement(Gd, 1 );
+//     theMaterials[23] = theGd;
+
+    
+     G4Material *theH = new G4Material(name="Hydrogen", density=1.95*g/cm3, nEl=1);
+     G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
+     theH->AddElement( elH, 1 );
+     theMaterials[23] = theH;
 
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;

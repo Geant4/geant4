@@ -73,11 +73,43 @@
 
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons=thePhotons->length();
-    theResult.SetNumberOfSecondaries(nPhotons);
+    G4int nParticles = nPhotons;
+    if(1==nPhotons) nParticles = 2;
+    theResult.SetNumberOfSecondaries(nParticles);
+
+    // back to lab system
+    for(i=0; i<nPhotons; i++)
+    {
+      thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), theTarget);
+    }
+    
+    // Recoil, if only one gamma
+    if (1==nPhotons)
+    {
+       G4DynamicParticle * theOne = new G4DynamicParticle;
+       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+                                        ->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ);
+       theOne->SetDefinition(aRecoil);
+       // Now energy; assume that momentum gets taken by 'surrounding'.
+       G4ThreeVector aMomentum =  theTrack.GetMomentum()
+                                 +theTarget.GetMomentum()
+				 -thePhotons->at(0)->GetMomentum();
+       G4ThreeVector theMomUnit = aMomentum.unit();
+       G4double aKinEnergy =  theTrack.GetKineticEnergy()
+                             +theTarget.GetKineticEnergy()
+			     -thePhotons->at(0)->GetKineticEnergy();
+       G4double theResMass = aRecoil->GetPDGMass();
+       G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
+       G4double theAbsMom = sqrt(theResE*theResE - theResMass*theResMass);
+       G4ThreeVector theMomentum = theAbsMom*theMomUnit;
+       theOne->SetMomentum(theMomentum);
+       theResult.AddSecondary(theOne);
+    }
+
+    // Now fill in the gammas.
     for(i=0; i<nPhotons; i++)
     {
       // back to lab system
-      thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), theTarget);
       G4DynamicParticle * theOne = new G4DynamicParticle;
       theOne->SetDefinition(thePhotons->at(i)->GetDefinition());
       theOne->SetMomentum(thePhotons->at(i)->GetMomentum());
@@ -85,7 +117,6 @@
       delete thePhotons->at(i);
     }
     delete thePhotons; 
-
 // clean up the primary neutron
     theResult.SetStatusChange(fStopAndKill);
     return &theResult;
