@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.9 2002-05-03 10:26:48 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.10 2002-05-15 10:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,17 +66,17 @@ G4VoxelNavigation::~G4VoxelNavigation()
 // ********************************************************************
 //
 G4double
-G4VoxelNavigation::ComputeStep( const G4ThreeVector &localPoint,
-                                const G4ThreeVector &localDirection,
+G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
+                                const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
-                                      G4double &newSafety,
-                                      G4NavigationHistory &history,
-                                      G4bool &validExitNormal,
-                                      G4ThreeVector &exitNormal,
-                                      G4bool &exiting,
-                                      G4bool &entering,
+                                      G4double& newSafety,
+                                      G4NavigationHistory& history,
+                                      G4bool& validExitNormal,
+                                      G4ThreeVector& exitNormal,
+                                      G4bool& exiting,
+                                      G4bool& entering,
                                       G4VPhysicalVolume *(*pBlockedPhysical),
-                                      G4int &blockedReplicaNo )
+                                      G4int& blockedReplicaNo )
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical, *blockedExitedVol=0;
   G4LogicalVolume *motherLogical;
@@ -502,8 +502,8 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 // ********************************************************************
 //
 G4double
-G4VoxelNavigation::ComputeSafety(const G4ThreeVector &localPoint,
-                                 const G4NavigationHistory &history,
+G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
+                                 const G4NavigationHistory& history,
                                  const G4double pMaxLength )
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
