@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.13 2000-05-18 13:45:45 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.14 2001-01-16 18:33:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -130,7 +130,7 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   fpCommand -> SetGuidance
     ("/vis/sceneHandler/create");
   fpCommand -> SetGuidance
-    ("     <graphics-system-name> [<scene-handler-name>]");
+    ("     [<graphics-system-name>] [<scene-handler-name>]");
   fpCommand -> SetGuidance
     ("Creates an scene handler for a specific graphics system.");
   fpCommand -> SetGuidance
@@ -145,7 +145,8 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
     ("This scene handler becomes current.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("graphics-system-name",
-				 's', omitable = false);
+				 's', omitable = true);
+  parameter -> SetDefaultValue("error");
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.17 2000-05-04 08:52:10 johna Exp $
+// $Id: G4VisManager.cc,v 1.18 2001-01-16 18:33:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

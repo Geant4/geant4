@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.21 2000-10-18 14:03:08 allison Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.22 2001-01-16 18:33:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,8 +161,9 @@ viewers.
 
 The G4VisManager has a list of scene handlers.
 
-/vis/sceneHandler/create <graphics-system-name> [<scene-handler-name>]
-  default:                                      auto-generated name
+/vis/sceneHandler/create [<graphics-system-name>] [<scene-handler-name>]
+  default:                     error               auto-generated name
+  (The first default simply triggers a list of possibilities.)
   This scene handler becomes current.
   The current scene, if any, is attached.
 
@@ -404,22 +405,22 @@ General Commands
 Compound Commands
 =================
 
-/vis/open <graphics-system-name>       /vis/sceneHandler/create $1
+/vis/open [<graphics-system-name>]     /vis/sceneHandler/create $1
                                        /vis/viewer/create
+default:          error
+Note: this default simply triggers a list of possibilities.
 
 * /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
-/vis/drawVolume <physical-volume-name> /vis/scene/create
-Default:             world             /vis/scene/add/volume $1
-                                       /vis/sceneHandler/attach
-                                       /vis/viewer/refresh
-                                       /vis/viewer/update
+/vis/drawVolume [<physical-volume-name>] /vis/scene/create
+default:             world               /vis/scene/add/volume $1
+                                         /vis/sceneHandler/attach
+                                         /vis/viewer/refresh
 
-/vis/specify <logical-volume-name>     /vis/scene/create
-                                       /vis/scene/add/logicalVolume $1
-                                       /vis/sceneHandler/attach
-                                       /vis/viewer/refresh
-                                       /vis/viewer/update
-                                       /geometry/print $1
+/vis/specify <logical-volume-name>  /geometry/print $1
+                                    /vis/scene/create
+                                    /vis/scene/add/logicalVolume $1
+                                    /vis/sceneHandler/attach
+                                    /vis/viewer/refresh
 
   ******************************************************************/
 
