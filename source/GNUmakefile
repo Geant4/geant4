@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.64 2004-07-26 11:04:59 stesting Exp $
+# $Id: GNUmakefile,v 1.65 2004-12-13 16:27:48 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -151,11 +151,11 @@ clean:
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
 	@echo Removing physics-lists installation ...
 ifndef G4LISTS_BASE
-	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
-	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
+	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
+	@rm -rf $(G4TMP)/plists/$(G4SYSTEM)
 else
-	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
-	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/hadronic/plists/tmp/$(G4SYSTEM)
 endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
@@ -164,11 +164,11 @@ endif
 clean_lists:
 	@echo Removing physics-lists installation ...
 ifndef G4LISTS_BASE
-	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
-	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
+	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
+	@rm -rf $(G4TMP)/plists/$(G4SYSTEM)
 else
-	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
-	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/hadronic/plists/tmp/$(G4SYSTEM)
 endif
 
 # Pay _extremely_ attention before executing the following target !!
@@ -185,7 +185,7 @@ clean_all:
 	@rm -rf $(G4INCLUDE)
 ifdef G4LISTS_BASE
 	@echo Removing physics-lists installation ...
-	@rm -rf $(G4LISTS_BASE)/lists/.lists_build
+	@rm -rf $(G4LISTS_BASE)/hadronic/plists
 endif
 	@echo Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config
