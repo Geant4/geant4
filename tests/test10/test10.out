@@ -20,8 +20,46 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 You select Sphere detector
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : Water
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Water1
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
            geantino,      opticalphoton,
 You select Cone detector
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water1
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
 >>> Start Event 0
 >>> End Event 0

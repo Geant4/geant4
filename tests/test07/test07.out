@@ -69,6 +69,72 @@ Current available graphics systems are:
 phot:  Total cross sections from Sandia parametrisation. 
 T07PhysicsList::SetCuts:CutLength : 2 (mm)
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : liquidArgon
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : Water
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : Scintillator
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : No      recalculation needed : Yes
+ Material : quartz
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 5     used in the geometry : Yes     recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : Aerogel
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : No      recalculation needed : Yes
+ Material : CarbonicGas
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : WaterSteam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 9     used in the geometry : No      recalculation needed : Yes
+ Material : Galactic
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 10     used in the geometry : No      recalculation needed : Yes
+ Material : Beam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+====================================================================
+
+
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
@@ -127,38 +193,90 @@ MuPairProd:  theoretical cross sections
 # /run/verbose 2
 #
 /run/particle/dumpCutValues
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-        liquidArgon           2 mm            2 mm 
-               Lead           2 mm            2 mm 
-              Water           2 mm            2 mm 
-       Scintillator           2 mm            2 mm 
-             quartz           2 mm            2 mm 
-                Air           2 mm            2 mm 
-            Aerogel           2 mm            2 mm 
-        CarbonicGas           2 mm            2 mm 
-         WaterSteam           2 mm            2 mm 
-           Galactic           2 mm            2 mm 
-               Beam           2 mm            2 mm 
-Cut in energy
-        liquidArgon        8.59 keV         561 keV
-               Lead         121 keV        2.61 MeV
-              Water        3.89 keV         568 keV
-       Scintillator        3.07 keV         575 keV
-             quartz        7.59 keV         907 keV
-                Air         990 eV          990 eV 
-            Aerogel        2.32 keV         181 keV
-        CarbonicGas         990 eV         54.1 keV
-         WaterSteam         990 eV          990 eV 
-           Galactic         990 eV          990 eV 
-               Beam         990 eV          990 eV 
-===================================================
 #
 #
 /gun/particle e+
 /gun/energy 300 MeV
 /run/beamOn 500
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 8.59044 keV    e- 561.061 keV    e+ 540.718 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.8945 keV    e- 568.011 keV    e+ 547.416 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.07446 keV    e- 575.046 keV    e+ 554.196 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : quartz
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 7.58509 keV    e- 906.814 keV    e+ 863.242 keV
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Aerogel
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 2.31907 keV    e- 180.778 keV    e+ 176.381 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : CarbonicGas
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 54.1006 keV    e+ 53.4386 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : WaterSteam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Beam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            2 mm            2 mm            2 mm 
+                 Air         990 eV          990 eV          990 eV 
+                Lead         121 keV        2.61 MeV        2.43 MeV
+         liquidArgon        8.59 keV         561 keV         541 keV
+=======================================================================
+
 ### Run 0 start.
 /calor/setAbsMat Aluminium
 /calor/setGapMat Aerogel
@@ -182,6 +300,85 @@ Cut in energy
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 500
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 8.59044 keV    e- 561.061 keV    e+ 540.718 keV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.8945 keV    e- 568.011 keV    e+ 547.416 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.07446 keV    e- 575.046 keV    e+ 554.196 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : quartz
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 7.58509 keV    e- 906.814 keV    e+ 863.242 keV
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Aerogel
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 2.31907 keV    e- 180.778 keV    e+ 176.381 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : CarbonicGas
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 54.1006 keV    e+ 53.4386 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : WaterSteam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Beam
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            2 mm            2 mm            2 mm 
+                 Air         990 eV          990 eV          990 eV 
+                Lead         121 keV        2.61 MeV        2.43 MeV
+             Aerogel        2.32 keV         181 keV         176 keV
+=======================================================================
+
 ### Run 1 start.
 Graphics systems deleted.
 Visualization Manager deleting...

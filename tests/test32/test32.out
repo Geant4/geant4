@@ -13,6 +13,30 @@ SimpleBox is now made of Pb
 
 phot:  Total cross sections from Sandia parametrisation. 
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : Al
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Pb
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
@@ -67,17 +91,18 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-                Air          10 cm           10 cm 
-                 Al          10 cm           10 cm 
-                 Pb          10 cm           10 cm 
-Cut in energy
-                Air        1.23 keV        89.6 keV
-                 Al        79.1 keV        56.7 MeV
-                 Pb        2.25 MeV         438 MeV
-===================================================
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range           10 cm           10 cm           10 cm 
+                 Air        1.23 keV        89.6 keV        88.5 keV
+                  Pb        2.25 MeV         438 MeV         407 MeV
+=======================================================================
+
 /gun/direction 0. 0. 1.
 /gun/position 0. 0. -400. cm 
 /gun/energy 1 GeV
@@ -86,22 +111,166 @@ Cut in energy
 #/tracking/verbose 1
 /gun/particle neutron
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.23146 keV    e- 89.6195 keV    e+ 88.523 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141 keV    e- 56.7407 MeV    e+ 54.0144 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Pb
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 406.735 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range           10 cm           10 cm           10 cm 
+                 Air        1.23 keV        89.6 keV        88.5 keV
+                  Pb        2.25 MeV         438 MeV         407 MeV
+=======================================================================
+
 ### Run 0 start.
 number of event = 1000
- User=22.66s Real=28.6s Sys=5.92s
+ User=20.73s Real=29.07s Sys=4.93s
 #
 /gun/particle proton
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.23146 keV    e- 89.6195 keV    e+ 88.523 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141 keV    e- 56.7407 MeV    e+ 54.0144 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Pb
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 406.735 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range           10 cm           10 cm           10 cm 
+                 Air        1.23 keV        89.6 keV        88.5 keV
+                  Pb        2.25 MeV         438 MeV         407 MeV
+=======================================================================
+
 ### Run 1 start.
 number of event = 1000
- User=14.49s Real=18.54s Sys=4.02s
+ User=15.23s Real=21.29s Sys=4.05s
 /gun/particle pi-
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.23146 keV    e- 89.6195 keV    e+ 88.523 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141 keV    e- 56.7407 MeV    e+ 54.0144 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Pb
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 406.735 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range           10 cm           10 cm           10 cm 
+                 Air        1.23 keV        89.6 keV        88.5 keV
+                  Pb        2.25 MeV         438 MeV         407 MeV
+=======================================================================
+
 ### Run 2 start.
 number of event = 1000
- User=18.85s Real=24.1s Sys=5.12s
+ User=20.62s Real=31.87s Sys=5.66s
 /gun/particle pi+
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.23146 keV    e- 89.6195 keV    e+ 88.523 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141 keV    e- 56.7407 MeV    e+ 54.0144 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Pb
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 406.735 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range           10 cm           10 cm           10 cm 
+                 Air        1.23 keV        89.6 keV        88.5 keV
+                  Pb        2.25 MeV         438 MeV         407 MeV
+=======================================================================
+
 ### Run 3 start.
 number of event = 1000
- User=19.86s Real=24.97s Sys=5.09s
+ User=19.7s Real=27.27s Sys=4.97s

@@ -22,8 +22,52 @@ Daughter CSG/Boolean will be made of Pb
 /gun/energy 100 GeV
 /gun/direction 1 0 0
 /run/initialize
-Tst01PhysicsList::SetCuts:/tracking/verbose 1
+Tst01PhysicsList::SetCuts:
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+/tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -34,6 +78,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 #
 # SimpleBox geometry made by Al
 # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -45,6 +111,28 @@ Daughter CSG/Boolean will be made of Al
 /tracking/verbose 1
 /run/beamOn 1
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
@@ -54,6 +142,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 #
 # SimpleBox geometry made by Air
 # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -65,6 +175,28 @@ Daughter CSG/Boolean will be made of Air
 /tracking/verbose 1
 /run/beamOn 1
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
@@ -74,6 +206,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (1.,0.,0.)
@@ -85,6 +239,28 @@ Now Detector is Honeycomb
 /tracking/verbose 1
 /run/beamOn 1
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
@@ -94,6 +270,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -102,6 +300,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 /gun/direction 0 1 0
 /tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -112,6 +332,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -120,6 +362,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 /gun/direction 1 1 0
 /tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -130,6 +394,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 #
 # Assembly geometry
 # Geantino 100 GeV to the direction (0.,0.,1.)
@@ -141,6 +427,30 @@ Now Detector is Assembly
 /gun/direction 0      0    1
 /tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -161,6 +471,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    11      600      600    1e+03     1e+05        0      450   1.6e+03  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 #
 # Assembly geometry
 # Geantino 100 GeV to the direction (1.,1.,1.)
@@ -170,6 +504,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 /gun/direction 1 1 1
 /tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -184,6 +542,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5    1e+03    1e+03    1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 #
 # Assembly geometry
 # Geantino 100 GeV to the direction (-1.,-1.,-1.)
@@ -192,6 +574,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 /gun/direction -1 -1 -1
 /tracking/verbose 1
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -206,3 +612,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5   -1e+03   -1e+03   -1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
