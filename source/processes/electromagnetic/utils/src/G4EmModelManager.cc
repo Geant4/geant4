@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.21 2004-01-26 08:59:29 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.22 2004-01-27 11:21:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -131,7 +131,8 @@ G4EmModelManager::~G4EmModelManager()
       for(j = i+1; j<nEmModels; j++) {
         if(models[i] == models[j]) orderOfModels[j] = 0;
       }
-      delete models[i];
+      G4String nam = models[i]->GetName();
+      if(nam != "PAI" && nam != "PAIModel" ) delete models[i];
     }
   }
   for(i = 0; i<nEmModels; i++) {
