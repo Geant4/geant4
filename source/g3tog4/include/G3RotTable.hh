@@ -8,25 +8,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.5 1999-05-26 03:46:29 lockman Exp $
+// $Id: G3RotTable.hh,v 1.6 1999-07-20 14:16:27 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G3 materials table.
-// Maps G3 material indices to their G4 material object counterparts.
-// Maintains a linked List of G3 material index/G4 material pointer pairs.
+// Maps G3 rotation indices to G3toG4RotationMatrix*
 
-#include <rw/tpordvec.h>
-#include "G3toG4RotationMatrix.hh"
+#include <rw/tphdict.h>
+class G3toG4RotationMatrix;
 
 class G3RotTable {
 private:
-  RWTPtrOrderedVector<G3toG4RotationMatrix>* _Rot;
+  RWTPtrHashDictionary<G4String, G3toG4RotationMatrix>* _Rot;
+  void HashID(G4int rotid, G4String* _HID);
+  void HashID(G4int rotid, G4String& _HID);
 public:
   G3RotTable();
   ~G3RotTable();
-  G3toG4RotationMatrix* Get(G4int rotid);
-  void Put(G4int rotid, G3toG4RotationMatrix* rotpt);
+  G3toG4RotationMatrix* get(G4int rotid);
+  void put(G4int rotid, G3toG4RotationMatrix* rotpt);
 };
 
 extern G3RotTable G3Rot;

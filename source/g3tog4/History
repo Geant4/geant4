@@ -1,7 +1,13 @@
-$Id: History,v 1.18 1999-05-28 23:34:49 lockman Exp $
+$Id: History,v 1.19 1999-07-20 14:15:53 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-01-01-00 19-Jul-1999 Lockman
+- G3matTable, G3MedTable, G3RotTable: convert from lists RWTPtrOrderedVector 
+  to RWTPtrHashDictionary to allow for noncontiguous indices
+- G3RotTable::Put,Get->put,get. 
+- G3toG4BuildGeom, G4gsrotm: put,get signature change 
 
 g3tog4-01-00-06 28-May-1999 Lockman
 - ~G3Mat,MedTable: do not destroy G4Material Objects in list. Do a clear()

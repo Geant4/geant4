@@ -8,20 +8,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.3 1999-05-06 17:46:37 lockman Exp $
+// $Id: G3MatTable.hh,v 1.4 1999-07-20 14:16:20 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G3 materials table.
-// Maps G3 material indices to their G4 material object counterparts.
+// Maps G3 material indices to G4Material*
 
-#include <rw/tpordvec.h>
-
+#include <rw/tphdict.h>
 class G4Material;
 
 class G3MatTable {
 private:
-  RWTPtrOrderedVector<G4Material>* _Mat;
+  RWTPtrHashDictionary<G4String, G4Material>* _Mat;
+  void HashID(G4int matid, G4String* _HID);
+  void HashID(G4int matid, G4String& _HID);
 public:
   G3MatTable();
   ~G3MatTable();

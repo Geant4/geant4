@@ -5,32 +5,49 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.6 1999-05-28 21:09:06 lockman Exp $
+// $Id: G3RotTable.cc,v 1.7 1999-07-20 14:16:49 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include <strstream.h>
 #include "globals.hh"
 #include "G3toG4RotationMatrix.hh"
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
 
 G3RotTable::G3RotTable(){
-  _Rot = new 
-    RWTPtrOrderedVector<G3toG4RotationMatrix>;
+  _Rot = new RWTPtrHashDictionary<G4String,G3toG4RotationMatrix>(G4String::hash);
 };
 
 G3RotTable::~G3RotTable(){
-  _Rot->clearAndDestroy();
-  delete _Rot;
+  _Rot->clear();
   G4cout << "Deleted G3RotTable..." << endl;
+  delete _Rot;
 };
 
 G3toG4RotationMatrix*
-G3RotTable::Get(G4int RotID){
-  return (*_Rot)[RotID];
+G3RotTable::get(G4int rotid){
+  G4String _ShashID; // static
+  HashID(rotid, _ShashID);
+  return _Rot->findValue(&_ShashID);
 };
 
 void 
-G3RotTable::Put(G4int RotID, G3toG4RotationMatrix *RotPT){
-  _Rot->insertAt(RotID, RotPT);
+G3RotTable::put(G4int rotid, G3toG4RotationMatrix* RotPT){
+  G4String* _HashID = new G4String(); // Dynamic
+  HashID(rotid, _HashID);
+  _Rot->insertKeyAndValue(_HashID, RotPT);
+};
+
+void
+G3RotTable::HashID(G4int rotid, G4String& _HashID){
+  char s[20];
+  ostrstream ostr(s, sizeof s);
+  ostr << "Rot" << rotid << ends;
+  _HashID = s;
+};
+
+void 
+G3RotTable::HashID(G4int rotid, G4String* _HashID){
+  HashID(rotid, *_HashID);
 };
