@@ -288,9 +288,9 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "    Track Length in absorber = " <<
            tlSumAbs/mm      << " +- " << sAbs/mm    <<
           "  mm  " << G4endl; 
-  G4cout << "    CSDA  Range  in absorber = " <<
-           nStepSumCharged/mm      << " +- " << sigstep/mm    <<
-          "  mm  " << G4endl; 
+  // G4cout << "    CSDA  Range  in absorber = " <<
+  //         nStepSumCharged/mm      << " +- " << sigstep/mm    <<
+  //        "  mm  " << G4endl; 
   G4cout << G4endl;
   G4cout << "    Energy deposit in absorber = " <<
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
@@ -304,8 +304,8 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
            nStepSumCharged/(0.008869*mm) - 1.0 << " % " << G4endl;
   G4cout << G4endl ;
   */
-  //  G4cout << "(number) transmission coeff=" << Transmitted <<
-  //          "  reflection coeff=" << Reflected << G4endl;
+  G4cout << "(number) transmission coeff=" << Transmitted <<
+            "  reflection coeff=" << Reflected << G4endl;
   G4cout << G4endl; 
 
  G4cout.precision(prec);

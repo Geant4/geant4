@@ -209,10 +209,10 @@ Cut in energy
  ================== run summary =====================
  end of Run TotNbofEvents = 9999
     Track Length in absorber = 0.00922 +- 2.12701e-06  mm  
-    CSDA  Range  in absorber = 0.00900441 +- 2.54013e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
+(number) transmission coeff=0  reflection coeff=0
 
 #
 /gun/particle anti_proton
@@ -221,10 +221,10 @@ Cut in energy
  ================== run summary =====================
  end of Run TotNbofEvents = 9996
     Track Length in absorber = 0.00976976 +- 2.31843e-06  mm  
-    CSDA  Range  in absorber = 0.00925978 +- 2.95464e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
+(number) transmission coeff=0  reflection coeff=0
 
 
 #scaled energy
@@ -235,8 +235,8 @@ Cut in energy
  ================== run summary =====================
  end of Run TotNbofEvents = 10000
     Track Length in absorber = 0.00899575 +- 2.79334e-06  mm  
-    CSDA  Range  in absorber = 0.0083421 +- 1.59564e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 
+(number) transmission coeff=0  reflection coeff=0
 
