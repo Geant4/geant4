@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm3.cc,v 1.2 1999-01-26 16:27:34 maire Exp $
+// $Id: TestEm3.cc,v 1.3 1999-03-03 09:50:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments
@@ -16,6 +16,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "Em3VisManager.hh"
@@ -37,6 +38,9 @@ template class G4Allocator  <Em3CalorHit>;
 #endif
 
 int main(int argc,char** argv) {
+
+  //choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
 
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
