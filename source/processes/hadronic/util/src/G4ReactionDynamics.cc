@@ -1378,7 +1378,9 @@
     //
     // nucleons and some pions from intranuclear cascade
     //
-    const G4double afc = 0.312 + 0.2 * log(log(centerofmassEnergy*centerofmassEnergy));
+    G4double term1 = log(centerofmassEnergy*centerofmassEnergy);
+    if(term1 < 0) term1 = 0.0001; // making sure xtarg<0;
+    const G4double afc = 0.312 + 0.2 * log(term1);
     G4double xtarg;
     if( centerofmassEnergy < 2.0+G4UniformRand() )        // added +2 below, JLC 4Jul97
       xtarg = afc * (pow(atomicWeight,0.33)-1.0) * (2*backwardCount+vecLen+2)/2.0;
