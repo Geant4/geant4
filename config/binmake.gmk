@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.100 2004-06-02 09:28:55 gcosmo Exp $
+# $Id: binmake.gmk,v 1.101 2004-06-08 08:43:32 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -173,7 +173,7 @@ LDLIBS1 += $(EXTRALIBS)
 # VISLIBS and UILIBS are now handled by the granular library script...
 #
 ifdef GLOBALLIBS
-  LDLIBS1 += $(VISLIBS) $(UILIBS) -lG4persistency
+  LDLIBS1 += $(VISLIBS) -lG4interfaces -lG4persistency
 
   ifdef G4USE_G3TOG4
     LDLIBS1 += -lG3toG4
