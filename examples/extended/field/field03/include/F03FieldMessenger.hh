@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldMessenger.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03FieldMessenger.hh,v 1.3 2003-12-01 17:28:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class F03ElectroMagneticField;
+class F03FieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -46,7 +46,7 @@ class G4UIcmdWithoutParameter;
 class F03FieldMessenger: public G4UImessenger
 {
   public:
-    F03FieldMessenger(F03ElectroMagneticField* );
+    F03FieldMessenger(F03FieldSetup* );
    ~F03FieldMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
@@ -54,7 +54,7 @@ class F03FieldMessenger: public G4UImessenger
     
   private:
 
-    F03ElectroMagneticField*   fEMfield;
+    F03FieldSetup*             fEMfieldSetup;
     
     G4UIdirectory*             F03detDir;
 

@@ -21,16 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.cc,v 1.9 2003-11-25 14:51:15 gcosmo Exp $
+// $Id: F03DetectorConstruction.cc,v 1.10 2003-12-01 17:28:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "F03DetectorConstruction.hh"
 #include "F03DetectorMessenger.hh"
-
 #include "F03CalorimeterSD.hh"
-#include "F03ElectroMagneticField.hh"
+#include "F03FieldSetup.hh"
 
 #include "G4VClusterModel.hh"
 #include "G4PAIclusterModel.hh"
@@ -59,7 +58,7 @@
 F03DetectorConstruction::F03DetectorConstruction()
  : solidWorld(0), logicWorld(0), physiWorld(0),
    solidAbsorber(0),logicAbsorber(0), physiAbsorber(0),
-   magField(0), fEmField(0), calorimeterSD(0),
+   magField(0), fEmFieldSetup(0), calorimeterSD(0),
    AbsorberMaterial(0), fRadiatorMat(0), worldchanged(false), WorldMaterial(0)
 {
   // default parameter values of the calorimeter
@@ -88,7 +87,7 @@ F03DetectorConstruction::F03DetectorConstruction()
   
   DefineMaterials();
 
-  fEmField = new F03ElectroMagneticField() ;
+  fEmFieldSetup = new F03FieldSetup() ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,7 +97,7 @@ F03DetectorConstruction::F03DetectorConstruction()
 F03DetectorConstruction::~F03DetectorConstruction()
 { 
   delete detectorMessenger;
-  if (fEmField) delete fEmField ;
+  if (fEmFieldSetup) delete fEmFieldSetup ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -296,7 +295,7 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
 
   G4bool allLocal = true ;
        
-  logicRadiator->SetFieldManager( fEmField->GetLocalFieldManager(), 
+  logicRadiator->SetFieldManager( fEmFieldSetup->GetLocalFieldManager(), 
                                   allLocal ) ;
 
        
