@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.4 2001-10-16 08:14:31 gcosmo Exp $
+// $Id: G4UItokenNum.hh,v 1.5 2002-11-27 19:08:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UItokenNum.hh
@@ -56,7 +56,7 @@ typedef struct yystype {
     char     C;
     G4String S;
     G4int operator==(const yystype &right) const
-    { return (this == &right); }
+    { return (this == &right)?1:0; }
 } yystype;
  
 #endif
