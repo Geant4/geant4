@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:07:13 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-07-13 14:19:42 graignac Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for geometry/management library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -12,6 +12,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include 
