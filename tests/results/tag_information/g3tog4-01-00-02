@@ -1,0 +1,16 @@
+The material/mixtures handling in G3toG4 has been updated to create
+materials and mixtures in the Geant4 paradigm (based on elements). I
+provided some updated examples from bbsim's SVT geometry (svt.dat and
+svtwaf.dat). The code has been tested on SunOS at SLAC and
+hpplus at CERN. The good news is that I can track without bombing
+through the full SVT geometry, including support elements made up of
+G4Polycones and G4Polyhedra.  The (somewhat) bad news is that it takes
+quite awhile to close the geometry, although the situation is now much
+better than it was a few months ago.
+
+I've also updated the clGeometry example (based on N03) to display tracks.
+At some point, when all the features of G3toG4 are working, clGeometry
+should be migrated to the examples/novice area.
+
+As far as divisions is concerned, I've temporarily disabled them until
+I've had a chance to review and update the algorithms.
