@@ -147,8 +147,14 @@ void hTestHisto::SaveToTuple(const G4String& parname,G4double val,G4double defva
 
 void hTestHisto::bookHisto()
 {
+  G4double zmax = AbsorberThickness * NumberOfAbsorbers / mm;
   G4cout << "hTestHisto: Histograms will be saved to the file <" 
-         << histName << ">" << G4endl;
+         << histName << ">"
+         << " AbsThick(mm)= " << AbsorberThickness/mm
+         << " Nabs= " << NumberOfAbsorbers
+         << " zmax= " << zmax
+         << " nHisto= " << nHisto
+         << G4endl;
 
   // init hbook
   hbookManager = new HBookFile(histName, 68);
@@ -157,7 +163,6 @@ void hTestHisto::bookHisto()
 
   histo.resize(nHisto);
 
-  G4double zmax = AbsorberThickness * (G4double)NumberOfAbsorbers / mm;
 
   if(0 < nHisto) histo[0] = hbookManager->histogram(
     "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax);

@@ -91,7 +91,7 @@ void hTestPhysicsList::InitializeMe()
 
   emPhysics = G4String("");
   hadronPhysics = G4String("");
-  decayPhysics = G4String("");
+  decayPhysics = G4String("none");
   SetEMPhysicsList(G4String("LowEnergy"));  
   SetHadronPhysicsList(G4String("none"));
 

@@ -204,13 +204,17 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
 
   if( command == NumOfAbsCmd )
-   { hDet->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));}
+   { hDet->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));
+     (hTestHisto::GetPointer())->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));
+   }
 
   if( command == AbsMaterCmd )
    { hDet->SetAbsorberMaterial(newValue);}
    
   if( command == AbsThickCmd )
-   { hDet->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+   { hDet->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));
+    (hTestHisto::GetPointer())->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));
+   }
 
   if( command == WorldMaterCmd )
    { hDet->SetWorldMaterial(newValue);}

@@ -83,24 +83,24 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
 G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
+  if(0.0 == edep) return true;
+
   theHisto->AddTrackLength(aStep->GetStepLength());
 
-  if(0.0 < edep) {
-    G4int j = aStep->GetTrack()->GetVolume()->GetCopyNo();
+  G4int j = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetCopyNo();
    
-    if(j < 0 || j >= numAbs) {
+  if(j < 0 || j >= numAbs) {
       G4cout << "Warning!!! hTestCalorimeterSD: cannot add " << edep/MeV
              << " MeV to the slice # " << j << G4endl;
 
-    } else {
+  } else {
       energy[j] += edep;
-    }
+  }
 
-    if(1 < theHisto->GetVerbose()) {
+  if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestCalorimeterSD: energy = " << edep/MeV
              << " MeV is deposited at " << j
              << "-th absorber slice " << G4endl;
-    }
   }
 
   const G4Track* track = aStep->GetTrack();
