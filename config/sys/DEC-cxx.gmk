@@ -14,6 +14,8 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   endif
   G4_HAVE_BOOL  := yes
   CXXFLAGS	+= -ieee -timplicit_local
+  SHEXT         := so
+  G4RUNPATHOPTION := -rpath
   FC		:= f77
   FCLIBS	:= -lUfor -lfor -lFutil -lots
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
@@ -40,10 +42,11 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   endif
 
   define build-granular-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -shared -o $$libdir/$(@F) *.o
   endef
   define build-global-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @echo "Global shared Libraries not yet supported on $(G4SYSTEM)
   endef
-
 endif
