@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.47 2003-11-03 02:16:36 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.48 2003-11-10 15:49:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,27 +371,25 @@ void G4VUserPhysicsList::BuildPhysicsTable()
   // Sets a value to particle
   // set cut values for gamma at first and for e- and e+
   G4String particleName;
-  G4ParticleDefinition* GammaP = theParticleTable->FindParticle(particleName="gamma");
+  G4ParticleDefinition* GammaP = theParticleTable->FindParticle("gamma");
   if(GammaP) BuildPhysicsTable(GammaP);
-  G4ParticleDefinition* EMinusP = theParticleTable->FindParticle(particleName="e-");
+  G4ParticleDefinition* EMinusP = theParticleTable->FindParticle("e-");
   if(EMinusP) BuildPhysicsTable(EMinusP);
-  G4ParticleDefinition* EPlusP = theParticleTable->FindParticle(particleName="e+");
+  G4ParticleDefinition* EPlusP = theParticleTable->FindParticle("e+");
   if(EPlusP) BuildPhysicsTable(EPlusP);
-  G4ParticleDefinition* ProtonP = theParticleTable->FindParticle(particleName="proton");
+  G4ParticleDefinition* ProtonP = theParticleTable->FindParticle("proton");
   if(ProtonP) BuildPhysicsTable(ProtonP);
-  G4ParticleDefinition* AntiProtonP = theParticleTable->FindParticle(particleName="anti_proton");
-  if(AntiProtonP) BuildPhysicsTable(AntiProtonP);
-  G4ParticleDefinition* NeutronP = theParticleTable->FindParticle(particleName="neutron");
-  if(NeutronP) BuildPhysicsTable(NeutronP);
-  G4ParticleDefinition* AntiNeutronP = theParticleTable->FindParticle(particleName="anti_neutron");
-  if(AntiNeutronP) BuildPhysicsTable(AntiNeutronP);
+
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    if(particle!=GammaP && particle!=EMinusP && particle!=EPlusP && particle!=ProtonP
-    && particle!=AntiProtonP && particle!=NeutronP && particle!=AntiNeutronP)
-    { BuildPhysicsTable(particle); }
+    if( particle!=GammaP && 
+	particle!=EMinusP && 
+	particle!=EPlusP && 
+	particle!=ProtonP   ){
+      BuildPhysicsTable(particle); 
+    }
   }
 }
 ///////////////////////////////////////////////////////////////
