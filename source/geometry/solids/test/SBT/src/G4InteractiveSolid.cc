@@ -730,7 +730,7 @@ void G4InteractiveSolid::MakeMeDircTest()
 //
 // BooleanSolid1Test
 //
-void G4InteractiveSolid::MakeMeBooleanSolid1(G4String values)
+void G4InteractiveSolid::MakeMeBooleanSolid1(G4String)
 {
   /*
     G4IntersectionSolid.hh  G4SubtractionSolid.hh  G4UnionSolid.hh

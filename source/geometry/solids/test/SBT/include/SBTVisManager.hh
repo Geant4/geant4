@@ -37,7 +37,7 @@ class SBTFakeModel : public G4NullModel {
 	SBTFakeModel(const G4ModelingParameters* pMP) : G4NullModel(pMP) { ; }
 	~SBTFakeModel() {;}
 	
-	inline virtual void DescribeYourselfTo( G4VGraphicsScene &scene ) { ; }
+	inline virtual void DescribeYourselfTo( G4VGraphicsScene & ) { ; }
 };
 		
 

@@ -9,6 +9,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 1, 2003 - G.Cosmo
+---------------------
+- Updated vis-manager to recent visualisation drivers.
+- Cleared compilation warnings...
+
 Nov 18, 2003 - J.Apostolakis
 ----------------------------
 - Attempted to update to changes in G4VisManager which require
