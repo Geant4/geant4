@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.1 1999-01-07 16:11:03 gunter Exp $
+// $Id: G4MuEnergyLoss.hh,v 1.2 1999-03-15 12:53:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -48,6 +48,7 @@
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonMinus.hh"
@@ -140,10 +141,13 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4PhysicsTable* theLossTable ;
    
-    // cut in range
-    G4double CutInRange ;
-    // last cut in range 
-    G4double lastCutInRange ;
+    G4double lastgammaCutInRange ;
+    G4double lastelectronCutInRange ;
+
+    const G4Electron* theElectron;
+    const G4Positron* thePositron;
+    const G4MuonPlus* theMuonPlus;
+    const G4MuonMinus* theMuonMinus;
 
     // particle mass
     G4double ParticleMass;
@@ -194,15 +198,6 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     // variables for the integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
 
-    //  cuts in kinetic energy ........ 
-    G4double* ParticleCutInKineticEnergy ;
-    G4double ParticleCutInKineticEnergyNow ; 
-
-    const G4Electron* theElectron;
-    const G4Positron* thePositron;
-    const G4MuonPlus* theMuonPlus;
-    const G4MuonMinus* theMuonMinus;
-
     // data members to speed up the fluctuation calculation
     G4int imat ;
     G4Material *lastMaterial ;
@@ -241,8 +236,6 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* theProperTimemuplusTable ;
     static G4PhysicsTable* theProperTimemuminusTable ;
 
-    static G4double CutInmupluslossTable;
-    static G4double CutInmuminuslossTable;
 
   //  processes inherited from G4muEnergyLoss 
   //   register themselves  in the static array Recorder
