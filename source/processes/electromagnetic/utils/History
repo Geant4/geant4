@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2002-02-11 16:00:39 maire Exp $
+$Id: History,v 1.40 2002-02-14 10:05:42 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 feb 02: L.Urban
+- initial value of data member of G4VEnergyLoss finalRange
+  has been changed
+  (actual value of this data member is computed in
+   G4VeEnergyLoss,G4VhEnergyLoss and G4VMuEnergyLoss..)
 
 11 feb 02: mma (utils-V04-00-00)
 - subSecFlag = false --> No sucutoff generation
