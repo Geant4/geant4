@@ -1,4 +1,4 @@
-$Id: History,v 1.204 2002-11-12 12:10:04 johna Exp $
+$Id: History,v 1.205 2002-11-15 09:14:28 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-11th November 2002  John Allison
+11th November 2002  John Allison  (vis-V04-01-05)
 - Corrected inclusion of G4OpenGLXViewer #ifdef X_DRIVER for Windows
   and other small changes in OpenGL (opengl-V04-01-02).
 - Added integer argument to /vis/scene/add/trajectories [drawing-mode].
