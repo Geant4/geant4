@@ -1,9 +1,9 @@
-The Geant4 Hadronic Data Set: G4HDS
+                                The Geant4 Hadronic Data Set: G4HDS
 
 Simone.Gilardoni@cern.ch
 Vladimir.Grichine@cern.ch
 
-Last Update: 24/10/03
+Last Update: 20/11/03
 
 1	Introduction
 
