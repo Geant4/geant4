@@ -49,7 +49,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
-  
+
   stepMaxProcess  = 0;
 
   pMessenger = new PhysicsListMessenger(this);
@@ -94,17 +94,17 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
-  AddStepMax();
   for(size_t i=0; i<hadronPhys.size(); i++) {
     hadronPhys[i]->ConstructProcess();
   }
+  AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>-1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -169,18 +169,18 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-     
+
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-    
+  SetCutValue(cutForPositron, "e+");
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
