@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2000-05-13 08:10:26 johna Exp $
+$Id: History,v 1.22 2000-05-22 05:41:41 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th May 2000  Evgeni Chernaev
+- Temporary workaround to avoid caseIE() and caseEE.
 
 13th May 2000  John Allison (greps-V01-01-02)
 - Changed std:: to HepStd:: for ISO compatibility (Evgeni Chernaev).
