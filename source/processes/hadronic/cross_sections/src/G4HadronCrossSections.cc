@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.cc,v 1.8 2002-06-07 15:30:53 jwellisc Exp $
+// $Id: G4HadronCrossSections.cc,v 1.9 2002-06-18 10:07:16 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1224,7 +1224,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
                           const G4Element* anElement)
 {
    G4double sigel, sigin, sigtot;
-   G4double xsecel, xsecin;
+   G4double xsecel, xsecin=0;
    xsecel = 0;
    G4double dx, dy, rc, rca, b;
    G4double crel, crin;
