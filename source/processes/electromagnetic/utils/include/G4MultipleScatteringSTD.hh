@@ -42,8 +42,12 @@
 // 05-02-03 changes in data members, L.Urban
 // 28-03-03 Move to model design (V.Ivanchenko)
 // 18-04-03 Change name (V.Ivanchenko)
+// 16-06-03: ShortLived are not applicable any more (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
+//
+// $Id: G4MultipleScatteringSTD.hh,v 1.12 2003-06-16 14:43:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
 //
@@ -72,7 +76,7 @@ public:    // with description
   ~G4MultipleScatteringSTD();
 
   G4bool IsApplicable (const G4ParticleDefinition& p)
-             {return (p.GetPDGCharge() != 0.0);};
+             {return (p.GetPDGCharge() != 0.0 && !p.IsApplicable());};
      // returns true for charged particles, false otherwise
 
   void InitialiseProcess(const G4ParticleDefinition&);
