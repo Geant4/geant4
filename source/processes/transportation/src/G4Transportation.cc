@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.32 2002-12-16 11:21:46 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.33 2003-01-04 18:24:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -607,7 +607,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 ) pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
-  if( pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
+  if( pNewVol!=0 && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
   {
     // for parametrized volume
     pNewMaterialCutsCouple
