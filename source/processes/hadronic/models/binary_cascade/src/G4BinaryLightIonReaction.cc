@@ -189,7 +189,7 @@
       if(1==resZ) it = new G4ReactionProduct(G4Proton::ProtonDefinition());
       it->SetTotalEnergy(momentum.t());
       it->SetMomentum(momentum.vect());
-      it->SetNewlyAdded();
+      it->SetNewlyAdded(true);
       proFrag->push_back(it);
     }
     // collect the evaporation part
