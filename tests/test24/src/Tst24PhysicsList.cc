@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst24PhysicsList.cc,v 1.1 2002-11-04 13:26:00 jwellisc Exp $
+// $Id: Tst24PhysicsList.cc,v 1.2 2002-11-26 12:15:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -268,8 +268,8 @@ void Tst24PhysicsList::ConstructEM()
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
-// -- km
-#include "G4HadronKineticModel.hh"
+// -- bc
+#include "G4BinaryCascade.hh"
 
 //
 // ConstructHad()
@@ -318,7 +318,7 @@ void Tst24PhysicsList::ConstructHad()
     theTheoModel->SetMinEnergy(19*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
     
-    G4HadronKineticModel * theKM = new G4HadronKineticModel;
+    G4BinaryCascade * theKM = new G4BinaryCascade;
 
       G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
