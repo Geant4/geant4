@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-05-18 10:00:22 johna Exp $
+$Id: History,v 1.9 2001-07-14 19:21:19 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-18th May 2001 John Allison (raytracer-V03-01-00)
+14th July 2001  John Allison  (raytracer-V03-02-00)
+- Changed some arguments in G4RayTracer.hh from G4ThreeVector to const
+  G4ThreeVector& to keep Sun compiler happy.
+
+18th May 2001  John Allison  (raytracer-V03-01-00)
 - Removed unnecessary virtual inheritance of G4VViewer in G4RayTracerViewer.
 
 2nd May 2000  John Allison
