@@ -393,6 +393,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 			G4cout << " *** Absorption *** " << G4endl;
 		if ( theStatus == Detection )
 			G4cout << " *** Detection *** " << G4endl;
+                if ( theStatus == NotAtBoundary )
+                        G4cout << " *** NotAtBoundary *** " << G4endl;
+                if ( theStatus == SameMaterial )
+                        G4cout << " *** SameMaterial *** " << G4endl;
+                if ( theStatus == StepTooSmall )
+                        G4cout << " *** StepTooSmall *** " << G4endl;
+                if ( theStatus == NoRINDEX )
+                        G4cout << " *** NoRINDEX *** " << G4endl;
         }
 
 	aParticleChange.SetMomentumChange(NewMomentum);
@@ -493,9 +501,6 @@ void G4OpBoundaryProcess::DielectricMetal()
 
                 DoReflection();
 
-                OldMomentum = NewMomentum;
-                OldPolarization = NewPolarization;
-
              } else {
 
                 if ( n == 1 ) ChooseReflection();
@@ -508,13 +513,19 @@ void G4OpBoundaryProcess::DielectricMetal()
                    NewPolarization = -OldPolarization;
                 }
                 else {
-                                                                                
+
+                   theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+
                    G4double PdotN = OldMomentum * theFacetNormal;
                    NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
                    G4double EdotN = OldPolarization * theFacetNormal;
                    NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;                                                                                
                 }
+
              }
+
+             OldMomentum = NewMomentum;
+             OldPolarization = NewPolarization;
 
 	   }
 
