@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.37 2003-04-26 03:02:57 asaim Exp $
+// $Id: G4MultipleScattering.cc,v 1.38 2003-04-26 11:37:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -52,13 +52,14 @@
 // 30-10-02 modified angle distribution,mods in boundary algorithm,
 //          changes in data members, L.Urban
 // 30-10-02 rename variable cm - Ecm, V.Ivanchenko
-// 11-12-02 precision problem in ComputeTransportCrossSection 
+// 11-12-02 precision problem in ComputeTransportCrossSection
 //          for small Tkin/for heavy particles cured, L.Urban
 // 05-02-03 changes in data members, new sampling for geom.
 //          path length, step dependence reduced with new
 //          method
 // 17-03-03 cut per region, V.Ivanchenko
 // 13-04-03 add initialisation in GetContinuesStepLimit + change table size (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (M.Asai)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,7 +118,7 @@ void G4MultipleScattering::BuildPhysicsTable(
 {
   // set values of some data members
     if((aParticleType.GetParticleName() == "e-") ||
-       (aParticleType.GetParticleName() == "e+"))  
+       (aParticleType.GetParticleName() == "e+"))
     {
        // parameters for e+/e-
        alfa1 = 1.45 ;
@@ -177,7 +178,7 @@ void G4MultipleScattering::BuildPhysicsTable(
                                      material->GetVecNbOfAtomsPerVolume();
       const G4int NumberOfElements = material->GetNumberOfElements();
       density = material->GetDensity();
- 
+
       // loop for kinetic energy values
       for (G4int i=0; i<TotBin; i++)
       {
@@ -859,8 +860,8 @@ G4bool G4MultipleScattering::RetrievePhysicsTable(
 				                 G4bool          ascii)
 {
   // set values of some data members
-    if((particle->GetParticleName() == "e-") ||
-       (particle->GetParticleName() == "e+"))  
+  G4String name = particle->GetParticleName();
+  if(name == "e-" || name == "e+")
     {
        // parameters for e+/e-
        alfa1 = 1.45 ;
@@ -882,7 +883,7 @@ G4bool G4MultipleScattering::RetrievePhysicsTable(
     }
 
   // ..............................
-    Tlow = particle->GetPDGMass();
+  Tlow = particle->GetPDGMass();
 
   // delete theTransportMeanFreePathTable
   if (theTransportMeanFreePathTable != 0) {
@@ -894,22 +895,25 @@ G4bool G4MultipleScattering::RetrievePhysicsTable(
 
   // retreive mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theTransportMeanFreePathTable = 
+  theTransportMeanFreePathTable =
                        new G4PhysicsTable(G4Material::GetNumberOfMaterials());
   if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
+
+  if (name == "e-" || name == "mu+" || name == "proton") PrintInfoDefinition();
+
   return true;
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 void G4MultipleScattering::PrintInfoDefinition()
 {
   G4String comments = " Tables of transport mean free paths.";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.25 2003-04-26 02:06:36 asaim Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.26 2003-04-26 11:38:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 particleMass becomes a local variable (mma)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 #include "G4MuBremsstrahlung.hh"
@@ -81,9 +82,7 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 
       delete theMeanFreePathTable;
    }
-   if (&PartialSumSigma) {
-      PartialSumSigma.clearAndDestroy();
-   }
+   PartialSumSigma.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -276,7 +275,7 @@ void G4MuBremsstrahlung::BuildLambdaTable(
                              }
   theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
 
-  PartialSumSigma.clearAndDestroy();
+  PartialSumSigma.clear();
   PartialSumSigma.resize(numOfCouples);
 
   G4PhysicsLogVector* ptrVector;
@@ -745,7 +744,6 @@ G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
     theMeanFreePathTable->clearAndDestroy();
     delete theMeanFreePathTable;
   }
-  if (&PartialSumSigma != 0) PartialSumSigma.clear();
 
   // get bining from EnergyLoss
   LowestKineticEnergy  = GetLowerBoundEloss();
@@ -758,6 +756,8 @@ G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
+  PartialSumSigma.clear();
+  PartialSumSigma.resize(numOfCouples);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
@@ -800,9 +800,11 @@ G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
       CounterOfmuplusProcess++;
     }
 
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
   MakeSamplingTables(particle);
 
   G4VMuEnergyLoss::BuildDEDXTable(*particle);
+  if(particle==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
 
   return true;
 }

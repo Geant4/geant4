@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.16 2003-04-26 03:02:58 asaim Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.17 2003-04-26 11:37:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -59,6 +59,7 @@
 //          path length, step dependence reduced with new
 //          method (L.Urban)
 // 13-04-03 add initialisation in GetContinuesStepLimit + change table size (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 //
@@ -871,8 +872,8 @@ G4bool G4MultipleScatteringSTD::RetrievePhysicsTable(
 				                 G4bool          ascii)
 {
   // set values of some data members
-    if((aParticleType.GetParticleName() == "e-") ||
-       (aParticleType.GetParticleName() == "e+"))
+  G4String name = particle->GetParticleName();
+  if(name == "e-" || name == "e+")
     {
        // parameters for e+/e-
        alfa1 = 1.45 ;
@@ -893,7 +894,7 @@ G4bool G4MultipleScatteringSTD::RetrievePhysicsTable(
        c0 = 1.40 ;
     }
 
-    Tlow = aParticleType.GetPDGMass();
+  Tlow = particle->GetPDGMass();
 
   // delete theTransportMeanFreePathTable
   if (theTransportMeanFreePathTable != 0) {
@@ -916,6 +917,9 @@ G4bool G4MultipleScatteringSTD::RetrievePhysicsTable(
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
+  
+  if (name == "e-" || name == "mu+" || name == "proton") PrintInfoDefinition();
+
   return true;
 }
 

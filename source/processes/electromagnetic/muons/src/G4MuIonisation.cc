@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.30 2003-04-26 02:06:36 asaim Exp $
+// $Id: G4MuIonisation.cc,v 1.31 2003-04-26 11:38:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -42,6 +42,7 @@
 // 08-11-01 particleMass becomes a local variable (mma)
 // 04-12-02 fix misprint in majorant in PostStep (VI)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -612,8 +613,8 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
-
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
+  
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
   theLossTable = new G4PhysicsTable(numOfCouples);
@@ -649,6 +650,7 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
 
 
   G4VMuEnergyLoss::BuildDEDXTable(*particle);
+  if(particle==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
 
   return true;
 }

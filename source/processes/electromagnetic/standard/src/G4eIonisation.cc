@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.28 2003-04-26 02:06:38 asaim Exp $
+// $Id: G4eIonisation.cc,v 1.29 2003-04-26 11:38:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
@@ -43,6 +43,7 @@
 // 26-03-02 change access to cuts in BuildLossTables (V.Ivanchenko)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -294,7 +295,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
      G4double y=1./(1.+gamma);
      dEdx = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
             - beta2*(tau+2.*d-y*(3.*d2+y*(d-d3+y*(d2-tau*d3+d4))))/tau;
-   } 
+   }
 
  //density correction
  G4double Cden   = material->GetIonisation()->GetCdensity();
@@ -302,7 +303,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  G4double Aden   = material->GetIonisation()->GetAdensity();
  G4double X0den  = material->GetIonisation()->GetX0density();
  G4double X1den  = material->GetIonisation()->GetX1density();
-  
+
  const G4double twoln10 = 2.*log(10.); 
  G4double  x = log(bg2)/twoln10;
  G4double delta;
@@ -315,7 +316,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  dEdx -= delta;
  dEdx *= twopi_mc2_rcl2*ElectronDensity/beta2;
  if (dEdx <= 0.) dEdx = 0.;
-   
+
  // low energy ?
  const G4double Tl = 0.2*keV; 
  if (Tsav > 0.)
@@ -560,7 +561,7 @@ G4bool G4eIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
@@ -594,12 +595,13 @@ G4bool G4eIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
      RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
      CounterOfPositronProcess++;
     }
- 	 
+
   BuildDEDXTable(*particle);
-  	 
+  if (particle==G4Electron::Electron()) PrintInfoDefinition();
+
   return true;
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eIonisation::PrintInfoDefinition()

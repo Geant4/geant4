@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.29 2003-04-26 02:06:37 asaim Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.30 2003-04-26 11:38:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,6 +48,7 @@
 // 08-11-01 particleMass becomes a local variable
 // 11-11-02 fix of division by 0 (VI)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 //
 // --------------------------------------------------------------
 
@@ -77,19 +78,17 @@ G4eBremsstrahlung::G4eBremsstrahlung(const G4String& processName)
  MinThreshold = 1*keV; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 // destructor
- 
+
 G4eBremsstrahlung::~G4eBremsstrahlung()
 {
-     if (theMeanFreePathTable) {
-        theMeanFreePathTable->clearAndDestroy();
-        delete theMeanFreePathTable;
-     }
+  if (theMeanFreePathTable) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
 
-   if (&PartialSumSigma) {
-      PartialSumSigma.clearAndDestroy();
-   }
+  PartialSumSigma.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +113,7 @@ G4double G4eBremsstrahlung::GetLowerBoundLambda()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4eBremsstrahlung::GetUpperBoundLambda()         
+G4double G4eBremsstrahlung::GetUpperBoundLambda()
          {return UpperBoundLambda;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,7 +123,7 @@ G4int G4eBremsstrahlung::GetNbinLambda()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4eBremsstrahlung::SetLPMflag(G4bool val) 
+void G4eBremsstrahlung::SetLPMflag(G4bool val)
      {LPMflag = val;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -231,7 +230,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
                 else
                   {
                    // extrapolation for KineticEnergy>100 GeV
-                   x=log(Thigh/particleMass) ; 
+                   x=log(Thigh/particleMass) ;
                    if (Cut<Thigh)
                      {
                       losslim = ComputeBremLoss(Z,natom,Thigh,Cut,x) ;
@@ -274,7 +273,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
              G4double floss = 0. ;
              G4int nmax = 100 ;
-   
+
              G4double vmin=log(kmin);
              G4double vmax=log(kmax) ;
              G4int nn = (G4int)(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin)) ;
@@ -1070,7 +1069,6 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
     delete theMeanFreePathTable;
   }
 
-  if (&PartialSumSigma != 0) PartialSumSigma.clear();
 
     // get bining from EnergyLoss
   LowestKineticEnergy  = GetLowerBoundEloss();
@@ -1103,6 +1101,8 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
   }
 
   // retrieve PartialSumSigma table (G4OrderedTable)
+  PartialSumSigma.clear();
+  PartialSumSigma.resize(numOfCouples);
   filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
   if ( !PartialSumSigma.Retrieve(filename, ascii) ){
     G4cout << " FAIL PartialSumSigma.retrieve in " << filename
@@ -1127,6 +1127,7 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
 
   BuildDEDXTable (*particle);
 
+  if (particle==G4Electron::Electron()) PrintInfoDefinition();
   return true;
 }
 

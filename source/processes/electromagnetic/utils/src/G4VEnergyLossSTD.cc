@@ -298,7 +298,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() done for "
-           << GetProcessName() 
+           << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
@@ -949,6 +949,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	        const G4String& directory,
 			  	              G4bool ascii)
 {
+  Initialise();
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "

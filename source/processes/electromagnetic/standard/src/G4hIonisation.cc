@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.40 2003-04-26 02:06:38 asaim Exp $
+// $Id: G4hIonisation.cc,v 1.41 2003-04-26 11:38:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -54,6 +54,7 @@
 // 07-04-03 Fix problem of several runs (V.Ivanchenko)
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
 // 17-04-03 fix problem of hadron tests (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -602,13 +603,14 @@ G4bool G4hIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
   G4String filename;
 
   // store stopping power table
-  if ((particleName == "proton")||(particleName == "anti_proton")){
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }}
+  if ((particleName == "proton")||(particleName == "anti_proton")) {
+    filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+    if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+      G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+             << G4endl;
+      return false;
+    }
+  }
 
   // store mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
@@ -651,25 +653,21 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
 
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
+  G4double charge = particle->GetPDGCharge()/eplus;
+  G4ParticleDefinition* basep = G4Proton::Proton();
+  if(charge < 0.0) basep = G4AntiProton::AntiProton();
+  filename = GetPhysicsTableFileName(basep,directory,"StoppingPower",ascii);
 
-  // retreive stopping power table
-  if ((particleName == "proton")||(particleName == "anti_proton")) {
-    filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-
-
-    theLossTable = new G4PhysicsTable(numOfCouples);
-    if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+  theLossTable = new G4PhysicsTable(numOfCouples);
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
       G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
              << G4endl;
-      return false;
-    }
-    if (particleName == "proton")
-       RecorderOfpProcess[CounterOfpProcess++] = theLossTable;
-    if (particleName == "anti_proton")
-       RecorderOfpbarProcess[CounterOfpbarProcess++] = theLossTable;
+      BuildPhysicsTable(*particle);
+      return true;
   }
+  RecorderOfpProcess[0] = (*this).theLossTable;
 
   // retreive mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
@@ -686,6 +684,7 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
          << directory << G4endl;
 
   BuildDEDXTable(*particle);
+  if (particle == G4Proton::Proton())  PrintInfoDefinition();
 
   return true;
 }
