@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.5 2004-08-30 15:47:34 vnivanch Exp $
+// $Id: Em10PhysicsList.hh,v 1.6 2005-02-01 09:37:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -89,6 +89,8 @@ class Em10PhysicsList: public G4VUserPhysicsList
     void SetElectronCut(G4double);
 
     void SetMaxStep(G4double);
+    void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};     
+    void SetMinGammaEnergy(G4double E)   {fMinGammaEnergy=E;};       
 
   public:   
 
@@ -119,6 +121,9 @@ class Em10PhysicsList: public G4VUserPhysicsList
 
     Em10DetectorConstruction* pDet;
     Em10PhysicsListMessenger* physicsListMessenger;
+
+    G4double fMinElectronEnergy;      // minimalEnergy of produced electrons
+    G4double fMinGammaEnergy;         // minimalEnergy of scattered photons
 };
 
 #endif

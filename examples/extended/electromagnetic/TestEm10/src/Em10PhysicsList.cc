@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.10 2005-01-14 11:42:14 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.11 2005-02-01 09:37:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,14 +59,14 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
      theeplusMultipleScattering(0),  theeplusIonisation(0),
      theeplusBremsstrahlung(0),
      theeplusAnnihilation(0),
-     theeminusStepCut(0),            theeplusStepCut(0)
+     theeminusStepCut(0),            theeplusStepCut(0),
+     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV)
 {
   pDet = p;
 
   defaultCutValue = 1.000*mm ;
-
-  cutForGamma = defaultCutValue ;
-  cutForElectron = defaultCutValue ;
+  cutForGamma     = defaultCutValue ;
+  cutForElectron  = defaultCutValue ;
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em10PhysicsListMessenger(this);
@@ -151,7 +151,8 @@ void Em10PhysicsList::ConstructBarions()
 void Em10PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  // AddParameterisation();
+  
+// AddParameterisation();
 
   ConstructEM();
   ConstructGeneral();
@@ -162,8 +163,10 @@ void Em10PhysicsList::ConstructProcess()
 //
 
 #include "G4ComptonScattering.hh"
+#include "XTRComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "XTRPhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
 
@@ -182,6 +185,7 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "G4ForwardXrayTR.hh"
 #include "G4RegularXTRadiator.hh"
+#include "G4GammaXTRadiator.hh"
 
 #include "Em10StepCut.hh"
 
@@ -192,8 +196,33 @@ void Em10PhysicsList::ConstructProcess()
 
 void Em10PhysicsList::ConstructEM()
 {
+  
+  // G4cout<<"fMinElectronEnergy = "<<fMinElectronEnergy/keV<<" keV"<<G4endl;
+  // G4cout<<"fMinGammaEnergy = "<<fMinGammaEnergy/keV<<" keV"<<G4endl;
+
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
+    /*    
+     G4RegularXTRadiator* regXTRprocess = 
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+    */ 
+      G4GammaXTRadiator* gammaXTRprocess =
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       2.,
+				       10.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator");
 
   theParticleIterator->reset();
 
@@ -207,12 +236,22 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();
-      theComptonScattering   = new G4ComptonScattering();
-      theGammaConversion     = new G4GammaConversion();
+      // thePhotoElectricEffect = new G4PhotoElectricEffect();
+      // theComptonScattering   = new G4ComptonScattering();
+      // pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+      // pmanager->AddDiscreteProcess(theComptonScattering);
 
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      XTRPhotoElectricEffect* xtrPhotoElectricEffect = new XTRPhotoElectricEffect();
+      //  xtrPhotoElectricEffect->SetMinElectronEnergy(fMinElectronEnergy);
+
+      XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
+      xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
+      xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
+
+      theGammaConversion                             = new G4GammaConversion();
+
+      pmanager->AddDiscreteProcess(xtrPhotoElectricEffect);
+      pmanager->AddDiscreteProcess(xtrComptonScattering);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
     }
@@ -233,17 +272,29 @@ void Em10PhysicsList::ConstructEM()
       
       pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
-
+      /*
       pmanager->AddContinuousProcess(
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
-						    pDet->GetFoilMaterial(),
-						    pDet->GetGasMaterial(),
-						    pDet->GetFoilThick(),
-						    pDet->GetGasThick(),
-						    pDet->GetFoilNumber(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
-
+       
+      pmanager->AddContinuousProcess(
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       2.,
+				       10.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator"));
+       // ,-1,1,-1);
+       */
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -290,7 +341,29 @@ void Em10PhysicsList::ConstructEM()
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
-
+      /*
+      pmanager->AddContinuousProcess(
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator"));
+       // ,-1,1,-1);
+       
+      pmanager->AddContinuousProcess(
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       2.,
+				       10.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator"));
+       // ,-1,1,-1);
+       */
       pmanager->AddProcess( muonStepCut,-1,-1,5);
       muonStepCut->SetMaxStep(MaxChargedStep) ;
 
@@ -316,7 +389,20 @@ void Em10PhysicsList::ConstructEM()
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);
-
+      /*
+      pmanager->AddContinuousProcess(
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator"));
+       // ,-1,1,-1);
+       */
+      pmanager->AddContinuousProcess(gammaXTRprocess);
+       // ,-1,1,-1);
+       
       pmanager->AddProcess( thehadronStepCut,-1,-1,3);
       thehadronStepCut->SetMaxStep(MaxChargedStep) ;
 

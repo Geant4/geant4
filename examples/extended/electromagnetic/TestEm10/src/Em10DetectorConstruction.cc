@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.10 2005-01-14 11:42:13 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.11 2005-02-01 09:37:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -535,9 +535,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
       
   // World
   
-  if(solidWorld) delete solidWorld ;
-  if(logicWorld) delete logicWorld ;
-  if(physiWorld) delete physiWorld ;
+  // if(solidWorld) delete solidWorld ;
+  // if(logicWorld) delete logicWorld ;
+  // if(physiWorld) delete physiWorld ;
 
   solidWorld = new G4Box("World",				//its name
                    WorldSizeR,WorldSizeR,WorldSizeZ/2.)       ;//its size
@@ -568,9 +568,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
   G4cout<<"WorldMaterial = "<<WorldMaterial->GetName()<<G4endl ;
  
-  if(solidRadiator) delete solidRadiator;
-  if(logicRadiator) delete logicRadiator;
-  if(physiRadiator) delete physiRadiator;
+  //  if(solidRadiator) delete solidRadiator;
+  //  if(logicRadiator) delete logicRadiator;
+  //  if(physiRadiator) delete physiRadiator;
 
   solidRadiator = new G4Box("Radiator",1.1*AbsorberRadius , 
                                               1.1*AbsorberRadius, 
@@ -585,9 +585,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                                      "Radiator", logicRadiator,		
                                      physiWorld, false,	0       );  	
 
-  if(fSolidRadSlice) delete fSolidRadSlice;
-  if(fLogicRadSlice) delete fLogicRadSlice; 
-  if(fPhysicRadSlice) delete fPhysicRadSlice; 
+  //  if(fSolidRadSlice) delete fSolidRadSlice;
+  //  if(fLogicRadSlice) delete fLogicRadSlice; 
+  //  if(fPhysicRadSlice) delete fPhysicRadSlice; 
 
   fSolidRadSlice = new G4Box("RadSlice",AbsorberRadius,
                                 AbsorberRadius,0.5*fRadThickness ) ;
@@ -656,9 +656,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   G4cout<<"zAbsorber = "<<zAbsorber/mm<<" mm"<<G4endl;
   if (AbsorberThickness > 0.) 
   { 
-      if(solidAbsorber) delete solidAbsorber ;
-      if(logicAbsorber) delete logicAbsorber ;
-      if(physiAbsorber) delete physiAbsorber ;
+    //  if(solidAbsorber) delete solidAbsorber ;
+    //  if(logicAbsorber) delete logicAbsorber ;
+    //  if(physiAbsorber) delete physiAbsorber ;
 
       solidAbsorber = new G4Box("Absorber",AbsorberRadius,		
                                            AbsorberRadius,
