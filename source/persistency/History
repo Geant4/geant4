@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 October, 03  G.Cosmo (persistency-V05-02-00)
+- GNUmakefile:
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
 04 June, 03   G.Cosmo (persistency-V05-01-01)
 - Fixes for inclusion of <strstream> in G4MCTSimParticle.cc and
   G4MCTSimVertex.cc in view of the g4std wrappers migration.
