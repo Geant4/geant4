@@ -63,7 +63,7 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   Tkin  = aStep->GetTrack()->GetKineticEnergy(); 
   Edep  = aStep->GetTotalEnergyDeposit();         
-  Theta = acos(aStep->GetTrack()->GetMomentumDirection().x());
+  Theta = std::acos(aStep->GetTrack()->GetMomentumDirection().x());
   xend  = aStep->GetPostStepPoint()->GetPosition().x()/mm;
 
   eventaction->AddE(Edep);

@@ -76,12 +76,15 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
   length2 /= nev;
   xend    /= nev;
   xend2   /= nev;
+
   G4double sigl = length2 - length*length;
-  if(sigl > 0.0) sigl = sqrt(sigl/nev);
+  if(sigl > 0.0) sigl = std::sqrt(sigl/nev);
   else           sigl = 0.0;
+
   G4double sigx = xend2 - xend*xend;
-  if(sigx > 0.0) sigx = sqrt(sigx/nev);
+  if(sigl > 0.0) sigx = std::sqrt(sigx/nev);
   else           sigx = 0.0;
+
   G4double nc = (G4double)nCharged / nev;
   G4double nn = (G4double)nNeutral / nev;
   G4bool icru = false;
@@ -89,13 +92,15 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
   G4double protR = 0.0;
   G4double protL = 0.0;
 
-  if(abs(kinEnergy0 - 500.0*keV)<0.1*keV && part0 == theProton) {
+  if(std::abs(kinEnergy0 - 500.0*keV)<0.1*keV && part0 == theProton) { 
+
     icru  = true;
     protL = 0.009059*mm;
     protR = 0.008869*mm;
   }
 
-  if(abs(kinEnergy0 - MeV)<0.1*keV && part0->GetParticleName() == "pi-") {
+  if(std::abs(kinEnergy0 - MeV)<0.1*keV && part0->GetParticleName() == "pi-") { 
+
     icru  = true;
     protL = 0.009158*cm*0.9059/0.8869;
     protR = 0.009158*cm;
