@@ -1,3 +1,16 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.7 2001-10-15 09:21:07 guardi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef FluoTestPrimaryGeneratorAction_h
@@ -6,45 +19,29 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
-class G4GeneralParticleSource;
-//class G4ParticleGun;
+class G4ParticleGun;
 class G4Event;
 class FluoTestDetectorConstruction;
 class FluoTestPrimaryGeneratorMessenger;
-class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FluoTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-   FluoTestPrimaryGeneratorAction(FluoTestDetectorConstruction*);    
+    FluoTestPrimaryGeneratorAction(FluoTestDetectorConstruction*);    
    ~FluoTestPrimaryGeneratorAction();
 
   public:
-    
     void GeneratePrimaries(G4Event*);
-   void SetRndmFlag(G4String val) { rndmFlag = val;}
-  // void SetRandomizePrimary (G4String val){ randomizePrimary = val;}   
+    void SetRndmFlag(G4String val) { rndmFlag = val;}
+
   private:
-   G4GeneralParticleSource*                particleGun;	  //pointer a to G4 service class
-    FluoTestDetectorConstruction*    Detector;  //pointer to the geometry
+    G4ParticleGun*                particleGun;	  //pointer a to G4 service class
+    FluoTestDetectorConstruction*    FluoTestDetector;  //pointer to the geometry
     
-  // FluoTestPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
+    FluoTestPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
     G4String                      rndmFlag;	  //flag for a random impact point       
-  //G4String                      randomizePrimary; //flag for a random energy of the 
-                                                   //particle
-   
-  /*G4double momentum;
-    G4double sigmaMomentum;
-    G4double sigmaAngle;
- 
-public:
- 
-    inline void SetMomentum(G4double val) { momentum = val; }
-    inline G4double GetMomentum() const { return momentum; }
-    void SetSigmaMomentum(G4double);
-    void SetSigmaAngle(G4double);*/  
 };
 
 #endif

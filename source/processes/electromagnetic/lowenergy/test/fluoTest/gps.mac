@@ -1,8 +1,8 @@
-/tracking/verbose 6
+#/tracking/verbose 6
 
-/lowenergy/lowlimGE 250 eV
-/lowenergy/cutG 1.5 mum
-/lowenergy/cutE 1.5 mum
+#/lowenergy/lowlimGE 250 eV
+#/lowenergy/cutG 1.5 mum
+#/lowenergy/cutE 1.5 mum
 
 
 /gps/type Beam
