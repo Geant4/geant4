@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4PersistencyManager.hh,v 1.3 2002-12-04 10:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.hh
@@ -10,16 +10,16 @@
 #define PERSISTENCY_MANAGER_HH 1
 
 #include "G4Event.hh"
-#include "CLHEP/HepMC/GenEvent.h"
+#ifndef WIN32
+  #include "CLHEP/HepMC/GenEvent.h"
+  #include "G4VHepMCIO.hh"
+#endif
 #include "G4HCIOcatalog.hh"
 #include "G4DCIOcatalog.hh"
 #include "G4VPEventIO.hh"
 #include "G4VPHitIO.hh"
 #include "G4VPDigitIO.hh"
-#include "G4VHepMCIO.hh"
 #include "G4VMCTruthIO.hh"
-// #include "GeneratorCenter.hh"
-// #include "G4MCTManager.hh"
 #include "G4VTransactionManager.hh"
 #include <string>
 
@@ -126,11 +126,11 @@ class G4PersistencyManager
       virtual G4VPDigitIO* DigitIO() { return 0; };
       // Returns the current digit I/O handling manager
       // Each derived class should return the pointer of actual manager.
-
+#ifndef WIN32
       virtual G4VHepMCIO* HepMCIO() { return 0; };
       // Returns the current HepMC I/O handling manager
       // Each derived class should return the pointer of actual manager.
-
+#endif
       virtual G4VMCTruthIO* MCTruthIO() { return 0; };
       // Returns the current MCTruth I/O handling manager
       // Each derived class should return the pointer of actual manager.
@@ -151,11 +151,11 @@ class G4PersistencyManager
 
       G4bool Retrieve(G4Event*& evt);
       // Retrieve the G4Event and its associated objects
-
+#ifndef WIN32
       G4bool Retrieve(HepMC::GenEvent*& evt, int id=-1);
       // retrieves HepMC GenEvent and its associated object.
       // To be used by generator/HepMCObjyReader.
-
+#endif
       G4bool Store(const G4Run*) {return false;};
       // not used
 

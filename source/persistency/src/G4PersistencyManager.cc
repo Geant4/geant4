@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.3 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4PersistencyManager.cc,v 1.4 2002-12-04 10:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -113,6 +113,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
 
   G4std::string file;
 
+#ifndef WIN32
+
   // Store HepMC event
   //
   G4std::string obj = "HepMC";
@@ -139,6 +141,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   } else { // recycle or off
     // hepevt= f_GenCenter-> GetGenEvent();
   }
+
+#endif
 
   // Store MCTruth event
   //
@@ -306,6 +310,8 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   return st;
 }
 
+#ifndef WIN32
+
 // Implementation of Retrieve
 G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
 {
@@ -368,6 +374,7 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
 
   return st;
 }
+#endif
 
 // End of G4PersistencyManager.cc
 

@@ -1,10 +1,12 @@
-// $Id: G4Pevent.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4Pevent.cc,v 1.2 2002-12-04 10:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4Pevent.cc
 //
 // History:
 //   '01.11.18  Youhei Morita  Initial creation
+
+#ifndef WIN32
 
 #include "G4Pevent.hh"
 
@@ -23,5 +25,4 @@ G4Pevent::~G4Pevent()
   delete f_g4evt;
 }
 
-// End of G4Pevent.cc
-
+#endif
