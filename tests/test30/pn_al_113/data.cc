@@ -98,6 +98,7 @@ int main(int argc, char** argv)
   int nbin = 0;
   int ibin, inum;
   int counter = 0;
+  double elim = 0.65*MeV;
   double elim0= 2.0*MeV;
   double x, an, e1, e2, y1, y2, ct1, ct2, xs;
   G4DataVector* angle = new G4DataVector();
@@ -175,7 +176,7 @@ int main(int argc, char** argv)
           cross = new G4DataVector();
           ibin = 0;
 
-        } else if(end) {
+        } else if(end && e1 > elim) {
 
           ibin++;
           cross->push_back(x);
