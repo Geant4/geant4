@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.cc,v 1.4 2000-02-10 09:06:29 urban Exp $
+// $Id: G4PAIenergyLoss.cc,v 1.5 2000-03-02 16:21:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -25,6 +25,7 @@
 // corrected by V. Grichine on 24/11/97
 // corrected by L. Urban    on 27/05/98   ( other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 02/03/00 initialisation of theDEDXTable
 //
  
 
@@ -67,6 +68,8 @@ G4PhysicsTable* G4PAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
 
 // G4PhysicsTable* G4PAIenergyLoss::fPAItransferBank = NULL ;
 
+G4PhysicsTable* G4PAIenergyLoss::theDEDXTable = NULL ;
+
 G4double G4PAIenergyLoss::CutInRange = 0;
 
 G4double G4PAIenergyLoss::LowerBoundEloss= 1.00*keV ;
@@ -85,9 +88,8 @@ G4PAIenergyLoss::G4PAIenergyLoss(const G4String& processName)
      theAntiProton ( G4AntiProton::AntiProton() )
 {
      theLossTable = NULL ;
-     theDEDXTable = NULL ;
 
-//  calculate data members LOGRTable,RTable first
+  //  calculate data members LOGRTable,RTable first
   G4double lrate ;
   lrate = log(UpperBoundEloss/LowerBoundEloss) ;
   LOGRTable=lrate/NbinEloss;
