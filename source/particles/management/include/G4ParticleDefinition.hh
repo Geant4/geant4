@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.16 2003-04-02 21:56:46 asaim Exp $
+// $Id: G4ParticleDefinition.hh,v 1.17 2003-04-04 17:06:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -332,6 +332,7 @@ class G4ParticleDefinition
       G4double  GetEnergyThreshold(const G4Material* ) const;
       // Get a energy cut for a material
 
+      static void SetEnergyRange(G4double lowedge, G4double highedge);
 };
 
 #include "G4ParticleDefinition.icc"

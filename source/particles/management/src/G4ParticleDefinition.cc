@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.14 2003-04-02 21:56:46 asaim Exp $
+// $Id: G4ParticleDefinition.cc,v 1.15 2003-04-04 17:06:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -346,6 +346,13 @@ G4double G4ParticleDefinition::GetEnergyThreshold(const G4Material* aMat) const
   G4double* vec 
    = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsDoubleVector(idx);
   return vec[materialCutsCouple->GetIndex()];
+}
+
+#include "G4VRangeToEnergyConverter.hh"
+
+void G4ParticleDefinition::SetEnergyRange(G4double lowedge, G4double highedge)
+{
+  G4VRangeToEnergyConverter::SetEnergyRange(lowedge, highedge);
 }
 
 
