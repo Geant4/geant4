@@ -21,30 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRep.hh,v 1.1 2001-08-24 23:06:16 perl Exp $
+// $Id: G4XXX.cc,v 1.3 2001-08-25 00:22:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
 // A graphics system to dump geometry hierarchy.
 
-#ifndef G4HepRep_HH
-#define G4HepRep_HH
+#include "G4XXX.hh"
+#include "G4XXXSceneHandler.hh"
+#include "G4XXXViewer.hh"
 
-#include "G4VGraphicsSystem.hh"
+G4XXX::G4XXX():
+  G4VGraphicsSystem("G4XXX",
+		    "XXX",
+		    "A template graphics driver",
+		    G4VGraphicsSystem::noFunctionality) {}
 
-// HepRep
-#include "JHepRepFactory.hh"
+G4XXX::~G4XXX() {}
 
-class G4HepRep: public G4VGraphicsSystem {
-public:
-  G4HepRep();
-  virtual ~G4HepRep();
-  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
+G4VSceneHandler* G4XXX::CreateSceneHandler(const G4String& name) {
+  G4VSceneHandler* pScene = new G4XXXSceneHandler(*this, name);
+  G4cout << G4XXXSceneHandler::GetSceneCount()
+         << ' ' << fName << " scene handlers extanct." << G4endl;
+  return pScene;
+}
 
-  JHepRepFactory *GetHepRepFactory();
-  JHepRep *GetHepRep();
-};
-
-#endif
+G4VViewer* G4XXX::CreateViewer(G4VSceneHandler& scene,
+			       const G4String& name) {
+  G4VViewer* pView =
+    new G4XXXViewer((G4XXXSceneHandler&) scene, name);
+  if (pView) {
+    if (pView->GetViewId() < 0) {
+      G4cout <<
+	"G4XXX::CreateViewer: ERROR flagged by negative"
+        " view id in G4XXXViewer creation."
+        "\n Destroying view and returning null pointer."
+	     << G4endl;
+      delete pView;
+      pView = 0;
+    }
+  }
+  else {
+    G4cout <<
+      "G4XXX::CreateViewer: ERROR: null pointer on new G4XXXViewer."
+	   << G4endl;
+  }
+  return pView;
+}

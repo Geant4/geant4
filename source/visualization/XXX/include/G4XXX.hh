@@ -21,33 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepViewer.hh,v 1.1 2001-08-24 23:06:22 perl Exp $
+// $Id: G4XXX.hh,v 1.3 2001-08-25 00:22:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
-// A base class for a dummy viewer to dump geometry hierarchy.
+// A graphics system to dump geometry hierarchy.
 
-#ifndef G4HepRepVIEWER_HH
-#define G4HepRepVIEWER_HH
+#ifndef G4XXX_HH
+#define G4XXX_HH
 
-#include "G4VViewer.hh"
+#include "G4VGraphicsSystem.hh"
 
-#include "JHepRep.hh"
-#include "JHepRepFactory.hh"
-
-class G4HepRepViewer: public G4VViewer {
+class G4XXX: public G4VGraphicsSystem {
 public:
-  G4HepRepViewer(G4VSceneHandler&,const G4String& name);
-  virtual ~G4HepRepViewer();
-  void SetView();
-  void ClearView();
-  void DrawView();
-  void ShowView();
-
-private:
-  JHepRep *heprep;
-  JHepRepFactory *factory;
+  G4XXX();
+  virtual ~G4XXX();
+  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
+  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif
