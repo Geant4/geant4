@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2004-09-22 20:07:18 johna Exp $
+$Id: History,v 1.41 2004-11-15 12:11:46 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+15th November 2004  Guy Barrand
+- G4OpenGLWin32Viewer::ShowView : glFlush was not sufficient 
+  to see trajectories (for example with N03). Correct so that
+  ShowView do a FinishView that does : glFlush, wglSwapBuffer
+  and empty the Windows message queue.
 
 22nd September 2004  John Allison  (opengl-V06-02-06)
 - doxygen output to tmp area.
