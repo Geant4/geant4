@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2002-08-13 14:12:19 dressel Exp $
+$Id: History,v 1.62 2002-08-13 18:34:14 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 13, 2002 M.Asai (run-V04-01-01)
+- G4RunManager sets "eventAbortion" flag of G4Event if that particular event is
+  aborted. Co-working with "event-V04-01-01" and "tracking-V04-01-00".
 
 Aug 13, 2002 M.Dressel
 - removed the files I have placed in run:
