@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.hh,v 1.11 2001-07-11 09:59:34 gunter Exp $
+// $Id: G4FPlane.hh,v 1.12 2002-01-28 16:38:40 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -73,7 +73,8 @@ public:  // with description
 
   G4FPlane( const G4Vector3D& direction, 
 	    const G4Vector3D& axis     ,	   
-	    const G4Point3D&  Pt0       );
+	    const G4Point3D&  Pt0,
+      G4int sense = 1 );
     // Normal constructor.
 
   G4FPlane(const G4Point3DVector* pVec, 
