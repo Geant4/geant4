@@ -80,7 +80,7 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
@@ -114,7 +114,8 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
-  if(zstart > 0.0 && zstart < zmax && (zend <= 0.0 || zend >= zmax)) outAbs = true;
+  if(zstart > 0.0 && zstart < zmax 
+                  && (zend <= 0.0 || zend >= zmax)) outAbs = true;
 
   // new particle
   if(trIDnow != trIDold || evno != evnOld) {

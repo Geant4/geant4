@@ -13,12 +13,16 @@
 /hTest/physics/cutGamma    1.0 cm
 /hTest/physics/cutElectron 1.0 mm
 /hTest/physics/MaxStep     1.0 mm
-#/hTest/physics/EMList      LowEnergy
-/hTest/physics/EMList      Standard
+/hTest/physics/EMList      LowEnergy
+#/hTest/physics/EMList      Standard
 /hTest/physics/HadronList  LowEnergy
 /hTest/AbsorberMaterial    Air
 /hTest/WorldMaterial       Vacuum
+/hTest/AbsorberThick       1.0 mm
+/hTest/AbsorberXY          20.0 cm
+/hTest/NumberOfAbsorbers   300
 /hTest/HistoName           air.paw 
+/hTest/gun/beamE           5.0 MeV
 /hTest/NumberOfEvents      1000
 #
 #/gun/particle e-
@@ -27,11 +31,4 @@
 /gun/particle alpha
 #/gun/particle triton
 #/gun/particle IonC12
-/gun/energy 5.0 MeV
-#/gun/energy 0.001 MeV
-#/gun/energy 175.0 MeV
-#/gun/energy 360.0 MeV
-#/gun/energy 3240.0 MeV
-#
-#/run/beamOn 10
 
