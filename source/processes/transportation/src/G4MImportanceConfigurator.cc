@@ -21,59 +21,58 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.4 2002-10-10 13:24:09 dressel Exp $
+// $Id: G4MImportanceConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VSampler
-//
-// Class description:
-//
-// This interface discribes a configurable sampler.
-// It applies to a given particle type.
-// Concrete classes with this interface may be used for 
-// scoring, importance sampling and weigth cutoff (weight roulett).
+// Class G4MImportanceConfigurator
 //
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VSampler_hh
-#define G4VSampler_hh G4VSampler_hh
 
 
-#include "globals.hh"
+#include "G4MImportanceConfigurator.hh"
 
-class G4VPhysicalVolume;
-class G4VImportanceAlgorithm;
-class G4VIStore;
-class G4VPScorer;
+#include "G4MassImportanceProcess.hh"
+#include "G4ProcessPlacer.hh"
+#include "G4ImportanceAlgorithm.hh"
 
+G4MImportanceConfigurator::
+G4MImportanceConfigurator(const G4String &particlename,
+			  G4VIStore &istore,
+			  const G4VImportanceAlgorithm *ialg)
+  :
+  fPlacer(particlename),
+  fIStore(istore),
+  fDeleteIalg( ( ! ialg) ),
+  fIalgorithm(( (fDeleteIalg) ? 
+		new G4ImportanceAlgorithm : ialg)),
+  fMassImportanceProcess(0)
+{}
 
-class G4VSampler {
+G4MImportanceConfigurator::
+~G4MImportanceConfigurator(){
+  if (fMassImportanceProcess) {
+    fPlacer.RemoveProcess(fMassImportanceProcess);
+    delete fMassImportanceProcess;
+  }
+  if (fDeleteIalg) delete fIalgorithm;
+}
+void  
+G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf){
+  G4VTrackTerminator *terminator = 0;
+  if (preConf) {
+    terminator = preConf->GetTrackTerminator();
+  };
 
-public:  
-  
-  virtual ~G4VSampler() {}
+  fMassImportanceProcess = 
+    new G4MassImportanceProcess(*fIalgorithm, 
+				fIStore, 
+				terminator);
+  fPlacer.AddProcessAsSecondDoIt(fMassImportanceProcess);
+}
 
-  virtual void PrepareScoring(G4VPScorer *Scorer) = 0;
-
-  virtual void PrepareImportanceSampling(G4VIStore *istore,
-					 const G4VImportanceAlgorithm 
-					 *ialg = 0) = 0;
-
-
-  virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
-				    G4double wlimit = 0.25,
-				    G4double isource = 1) = 0;
-
-  virtual void Configure() = 0;
-
-  virtual void ClearSampling() = 0;
-    // clear the sampler and remove the processes
-
-  virtual G4bool IsConfigured() const = 0;
-    // check if some initialization hase already been done
-};
-  
-#endif
-
+G4VTrackTerminator *G4MImportanceConfigurator::GetTrackTerminator(){
+  return fMassImportanceProcess;
+}

@@ -21,62 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreSampler.hh,v 1.2 2002-08-13 10:07:45 dressel Exp $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MassScoreSampler
+// Class G4WeightCutOffConfigurator
 //
-// Class description:
-//
-// A user should use this class to set up scoring in the "mass" geometry.
-// The user must create an object of this kind and initialise it.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4MassScoreSampler_hh
-#define G4MassScoreSampler_hh G4MassScoreSampler_hh
 
-#include "globals.hh"
-#include "G4VSampler.hh"
+#include "G4WeightCutOffConfigurator.hh"
+#include "G4WeightCutOffProcess.hh"
 
-class G4VProcess;
-class G4VPScorer;
-class G4MScoreProcess;
-class G4VTrackTerminator;
 
-class G4MassScoreSampler : public G4VSampler
-{
+G4WeightCutOffConfigurator::
+G4WeightCutOffConfigurator(const G4String &particlename,
+			      G4double wsurvival,
+			      G4double wlimit,
+			      G4double isource,
+			      G4VIStore *istore,
+			      G4VParallelStepper  *astepper)
+  :
+  fPlacer(particlename),
+  fWeightCutOffProcess(new  G4WeightCutOffProcess(wsurvival,
+						  wlimit,
+						  isource,
+						  istore,
+						  astepper)),
+  fPlaced(false)
+{}
 
-public:  // with description
 
-  G4MassScoreSampler(G4VPScorer &ascorer, const G4String &particlename);
-    // a G4MassScoreSampler for a particle type
+G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator(){
+  if (fPlaced) {
+    fPlacer.RemoveProcess(fWeightCutOffProcess);
+    delete fWeightCutOffProcess;
+  }
+}
 
-  ~G4MassScoreSampler();
-    // delete G4MScoreProcess if constructed
+void G4WeightCutOffConfigurator::
+Configure(G4VSamplerConfigurator *preConf){
+  fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
+  fPlaced = true;
+}
 
-  G4MScoreProcess *CreateMassScoreProcess();
-    // create the mass score process 
-    // don't use it if you use Initialize()
+G4VTrackTerminator *G4WeightCutOffConfigurator::GetTrackTerminator(){
+  return 0;
+}
 
-  G4VTrackTerminator *GetTrackTerminator();
-    // used internally by G4MassImportanceScoreSampler
-
-  void Initialize();
-    // the G4MassScoreSampler has to be initialised after
-    // the initialisation of the G4RunManager !
-
-private:
-
-  G4MassScoreSampler(const G4MassScoreSampler &);
-  G4MassScoreSampler &operator=(const G4MassScoreSampler &);
-
-private:
-
-  G4VPScorer &fScorer;
-  G4String fParticleName;
-  G4MScoreProcess *fMScoreProcess;
-};
-
-#endif

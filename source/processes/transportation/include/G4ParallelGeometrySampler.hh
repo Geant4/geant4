@@ -21,76 +21,77 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceSampler.hh,v 1.2 2002-08-13 10:07:45 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MassImportanceSampler
+// Class G4ParallelGeometrySampler
 //
 // Class description:
 //
-// A user should use this class to set up importance sampling
-// in the "mass" geometry.
-// The user must create an object of this kind and initialise it.
-
+// Class description:
+// This class inherits from G4VSampler. It is used for scoring and 
+// importance smpling in a parallel geometry.
+// See also the description in G4VSampler.hh.
+//
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4MassImportanceSampler_hh
-#define G4MassImportanceSampler_hh G4MassImportanceSampler_hh
+#ifndef G4ParallelGeometrySampler_hh
+#define G4ParallelGeometrySampler_hh G4ParallelGeometrySampler_hh
 
-#include "globals.hh"
 #include "G4VSampler.hh"
 
-class G4VIStore;
-class G4MassImportanceProcess;
-class G4VImportanceAlgorithm;
-class G4VProcess;
-class G4VTrackTerminator;
+#include "globals.hh"
 
-class G4MassImportanceSampler : public G4VSampler
-{
+#include "G4ParallelWorld.hh"
 
-public:  // with description
+#include "G4VSamplerConfigurator.hh"
 
-  G4MassImportanceSampler(G4VIStore &aIstore,
-			  const G4String &particlename,
-			  const G4VImportanceAlgorithm *algorithm = 0);
-    // if *algorithm = 0: use the G4ImportanceAlgorithm 
-    // else: use a customised  importance algorithm derived from
-    // G4VImportanceAlgorithm
+class G4ParallelTransportConfigurator;
+class G4PScoreConfigurator;
+class G4PImportanceConfigurator;
+class G4WeightCutOffConfigurator;
 
-  ~G4MassImportanceSampler();
-    // delete G4MassImportanceProcess and G4VImportanceAlgorithm
-    // if constructed by this object
+class G4ParallelGeometrySampler : public G4VSampler{
 
-  G4MassImportanceProcess *CreateMassImportanceProcess();
-    // create the mass importance process 
-    // don't use it if you use Initialize()
+public: 
 
-  void SetTrackTerminator(G4VTrackTerminator *tt){
-    fTrackTerminator = tt;
-  }
-    // used internaly by G4MassImportanceScoreSampler
+ 
+  G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
+			    const G4String &particlename);
+  ~G4ParallelGeometrySampler();
 
-  void Initialize();
-    // the G4MassImportanceSampler has to be initialised after
-    // the initialisation of the G4RunManager !
+  void PrepareScoring(G4VPScorer *Scorer);
+  void PrepareImportanceSampling(G4VIStore *istore,
+				 const G4VImportanceAlgorithm 
+				 *ialg);
+  void PrepareWeightRoulett(G4double wsurvive, 
+			    G4double wlimit,
+			    G4double isource);
   
+  void Configure();
 
+  void ClearSampling();
+  G4bool IsConfigured() const;
+  
 private:
 
-  G4MassImportanceSampler(const G4MassImportanceSampler &);
-  G4MassImportanceSampler &operator=(const G4MassImportanceSampler &);
+  G4ParallelGeometrySampler(const G4ParallelGeometrySampler &);
+  G4ParallelGeometrySampler &
+  operator=(const G4ParallelGeometrySampler &);
 
 private:
-
-  G4VIStore &fIStore;
-  G4VTrackTerminator *fTrackTerminator;
   G4String fParticleName;
-  G4MassImportanceProcess *fMassImportanceProcess;
-  G4bool fCreatedAlgorithm;
-  const G4VImportanceAlgorithm *fAlgorithm;
+  G4ParallelWorld fParallelWorld;
+  G4ParallelTransportConfigurator *fParallelTransportConfigurator;
+  G4PImportanceConfigurator *fPImportanceConfigurator;
+  G4PScoreConfigurator *fPScoreConfigurator;
+  G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
+  G4VIStore *fIStore;
+  G4bool fIsConfigured;
+  G4Configurators fConfigurators;
 };
-
+  
 #endif
+

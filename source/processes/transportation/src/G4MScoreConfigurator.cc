@@ -21,42 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4MScoreConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4MScoreConfigurator
 //
-// G4MassImportanceScoreSampler.cc
-//
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#include "G4MassImportanceScoreSampler.hh"
-#include "G4MassImportanceSampler.hh"
-#include "G4MassScoreSampler.hh"
+#include "G4MScoreConfigurator.hh"
+#include "G4VPScorer.hh"
+#include "G4VTrackTerminator.hh"
 
-
-G4MassImportanceScoreSampler::
-G4MassImportanceScoreSampler(G4VIStore &aIstore,
-			     G4VPScorer &ascorer,
-			     const G4String &particlename,
-			     const G4VImportanceAlgorithm *algorithm)
- : fMassImportanceSampler(new G4MassImportanceSampler(aIstore, 
-                                                      particlename,
-                                                      algorithm)),
-   fMassScoreSampler(new G4MassScoreSampler(ascorer, particlename))
+G4MScoreConfigurator::
+G4MScoreConfigurator(const G4String &particlename,
+		       G4VPScorer &scorer) 
+  :
+  fPlacer(particlename),
+  fScorer(scorer),
+  fMScoreProcess(0)
 {}
 
-G4MassImportanceScoreSampler::~G4MassImportanceScoreSampler()
-{
-  delete fMassScoreSampler;
-  delete fMassImportanceSampler;
+G4MScoreConfigurator::~G4MScoreConfigurator(){
+  if (fMScoreProcess) {
+    fPlacer.RemoveProcess(fMScoreProcess);
+    delete fMScoreProcess;
+  }
+}
+  
+G4VTrackTerminator *G4MScoreConfigurator::GetTrackTerminator(){
+  return fMScoreProcess;
 }
 
-void G4MassImportanceScoreSampler::Initialize()
+void G4MScoreConfigurator::Configure(G4VSamplerConfigurator *preConf)
 {
-  fMassScoreSampler->Initialize();
-  fMassImportanceSampler->SetTrackTerminator(fMassScoreSampler->
-					     GetTrackTerminator());
-  fMassImportanceSampler->Initialize();
+  fMScoreProcess = new G4MScoreProcess(fScorer);
+  fPlacer.AddProcessAsSecondDoIt(fMScoreProcess);
 }

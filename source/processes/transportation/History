@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2002-09-18 13:53:31 dressel Exp $
+$Id: History,v 1.51 2002-10-10 13:24:08 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct  10th, 2002 M.Dressel transport-V04-01-01-internal-5
+--------------------------------------------------------
+- changing sampler concept: instead of separat samplers for
+  all combinations of importance sampling, scoring, wieght roulette
+  for parallel and mass geometry there are two Samplers now
+  for the mass and parallel geometry: G4MassGeometrySampler 
+  and G4ParallelGeometrySampler. 
+- Introduction of Configurators to setup the processes.
+
 
 Sep  18th, 2002 M.Dressel transport-V04-01-01-internal-4
 --------------------------------------------------------

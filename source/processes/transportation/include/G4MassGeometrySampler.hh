@@ -21,51 +21,65 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4MassGeometrySampler.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4MassGeometrySampler
 //
-// G4MassScoreSampler.cc
+// Class description:
+// This class inherits from G4VSampler. It is used for scoring and 
+// importance smpling in the tracking (mass) geometry.
+// See also the description in G4VSampler.hh.
 //
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4MassGeometrySampler_hh
+#define G4MassGeometrySampler_hh G4MassGeometrySampler_hh
 
-#include "G4MassScoreSampler.hh"
-#include "G4MScoreProcess.hh"
-#include "G4ProcessPlacer.hh"
+#include "G4VSampler.hh"
+#include "globals.hh"
+#include "G4VSamplerConfigurator.hh"
 
+class G4MImportanceConfigurator;
+class G4MScoreConfigurator;
+class G4WeightCutOffConfigurator;
 
-G4MassScoreSampler::G4MassScoreSampler(G4VPScorer &ascorer,
-                                       const G4String &particlename)
- : fScorer(ascorer),
-   fParticleName(particlename),
-   fMScoreProcess(0)
-{}
+class G4MassGeometrySampler : public G4VSampler{
 
-G4MassScoreSampler::~G4MassScoreSampler()
-{
-  if (fMScoreProcess) {
-    G4ProcessPlacer placer(fParticleName);
-    placer.RemoveProcess(fMScoreProcess);
-    delete fMScoreProcess;
-  }
-}
+public:  
+ 
+  G4MassGeometrySampler(const G4String &particlename);
+  ~G4MassGeometrySampler();
 
-G4MScoreProcess *G4MassScoreSampler::CreateMassScoreProcess()
-{
-  if (!fMScoreProcess) {
-    fMScoreProcess = new G4MScoreProcess(fScorer);
-  }
-  return fMScoreProcess;
-}
+  void PrepareScoring(G4VPScorer *Scorer);
+  void PrepareImportanceSampling(G4VIStore *istore,
+				 const G4VImportanceAlgorithm 
+				 *ialg);
+  void PrepareWeightRoulett(G4double wsurvive, 
+			    G4double wlimit,
+			    G4double isource);
+  
+  void Configure();
 
-void G4MassScoreSampler::Initialize()
-{
-  G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsSecondDoIt(CreateMassScoreProcess());
-}
+  void ClearSampling();
+  G4bool IsConfigured() const;
+    
+private:
 
-G4VTrackTerminator *G4MassScoreSampler::GetTrackTerminator(){
-  return fMScoreProcess;
+  G4MassGeometrySampler(const G4MassGeometrySampler &);
+  G4MassGeometrySampler &
+  operator=(const G4MassGeometrySampler &);
+
+private:
+  G4String fParticleName;
+  G4MImportanceConfigurator *fMImportanceConfigurator;
+  G4MScoreConfigurator *fMScoreConfigurator;
+  G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
+  G4VIStore *fIStore;
+  G4bool fIsConfigured;
+  G4Configurators fConfigurators;
 };
+  
+#endif
+

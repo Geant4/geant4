@@ -21,49 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.8 2002-10-10 13:24:09 dressel Exp $
+// $Id: G4WeightCutOffProcess.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4MassImportanceProcess.cc
+// G4WeightCutOffProcess.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4MassImportanceProcess.hh"
-#include "G4VImportanceAlgorithm.hh"
-#include "G4ImportanceFinder.hh"
-#include "G4GeometryCell.hh"
+#include "G4WeightCutOffProcess.hh"
+#include "G4VPScorer.hh"
+#include "G4PStep.hh"
+#include "G4VParallelStepper.hh"
+#include "G4TouchableHandle.hh"
+#include "G4VIStore.hh"
 
-G4MassImportanceProcess::
-G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
-			const G4VIStore &aIstore,
-			G4VTrackTerminator *TrackTerminator,
-			const G4String &aName)
- : G4VProcess(aName),
-   fTrackTerminator(TrackTerminator),
-   fImportanceAlgorithm(aImportanceAlgorithm),
-   fImportanceFinder(new G4ImportanceFinder(aIstore))
+G4WeightCutOffProcess::
+G4WeightCutOffProcess(G4double wsurvival,
+		      G4double wlimit,
+		      G4double isource,
+		      G4VIStore *istore,
+		      G4VParallelStepper *astepper,
+		      const G4String &aName)
+  : 
+  G4VProcess(aName), 
+  fWeightSurvival(wsurvival),
+  fWeightLimit(wlimit),
+  fSourceImportance(isource),
+  fIStore(istore),
+  fPstepper(astepper)
 {
-  if (fTrackTerminator==0) {
-    fTrackTerminator = this;
-  }
-  fImportancePostStepDoIt = new 
-    G4ImportancePostStepDoIt(*fTrackTerminator);
-  
   fParticleChange = new G4ParticleChange;
   G4VProcess::pParticleChange = fParticleChange;
 }
 
-G4MassImportanceProcess::~G4MassImportanceProcess()
+G4WeightCutOffProcess::~G4WeightCutOffProcess()
 {
-  delete fImportanceFinder;
   delete fParticleChange;
-  delete fImportancePostStepDoIt;
 }
 
-G4double G4MassImportanceProcess::
+G4double G4WeightCutOffProcess::
 PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4double   previousStepSize,
 				     G4ForceCondition* condition)
@@ -72,35 +71,41 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
   return kInfinity;
 }
   
-G4VParticleChange *
-G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
-				      const G4Step &aStep)
+G4VParticleChange * 
+G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack, 
+				    const G4Step &aStep)
 {
   fParticleChange->Initialize(aTrack);
-  if (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary
-      && aStep.GetStepLength() > kCarTolerance) {
-    if (aTrack.GetTrackStatus()==fStopAndKill) {
-      G4cout << "G4MassImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
+  G4GeometryCell postCell = GetPostGeometryCell(aStep);
+  G4double R = fSourceImportance;
+  if (fIStore) {
+    G4double i = fIStore->GetImportance(postCell);
+    if (i>0) {
+      R/=i;
     }
-
-    G4StepPoint *prepoint = aStep.GetPreStepPoint();
-    G4StepPoint *postpoint = aStep.GetPostStepPoint();
-  
-
-    G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
-			 prepoint->GetTouchable()->GetReplicaNumber());
-    G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
-			  postpoint->GetTouchable()->GetReplicaNumber());
-
-    G4Nsplit_Weight nw = fImportanceAlgorithm.
-      Calculate(fImportanceFinder->GetImportance(prekey),
-		fImportanceFinder->GetImportance(postkey), 
-		aTrack.GetWeight());
-    fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+  }
+  G4double w = aTrack.GetWeight();
+  if (w<R*fWeightLimit) {
+    G4double ws = fWeightSurvival*R;
+    G4double p = w/(ws);
+    if (G4UniformRand()<p) {
+      fParticleChange->SetStatusChange(fStopAndKill);
+    }
+    else {
+      fParticleChange->SetWeightChange(ws);
+    }                  
   }
   return fParticleChange;
 }
 
-void G4MassImportanceProcess::KillTrack(){
-  fParticleChange->SetStatusChange(fStopAndKill);
+G4GeometryCell
+G4WeightCutOffProcess::GetPostGeometryCell(const G4Step &aStep){
+  if (fPstepper) {
+    return fPstepper->GetPStep().GetPostGeometryCell();
+  }
+  else {
+    const G4TouchableHandle& th =
+      aStep.GetPostStepPoint()->GetTouchableHandle();
+    return G4GeometryCell(*th->GetVolume(), th->GetReplicaNumber());
+  }
 }

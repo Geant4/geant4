@@ -21,65 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreSampler.hh,v 1.2 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ParallelTransportConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MassImportanceScoreSampler
+// Class G4ParallelTransportConfigurator
 //
-// Class description:
-//
-// A user should use this class to set up importance sampling and scoring
-// in the "mass" geometry.
-// The user must create an object of this kind and initialise it.
-
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4MassImportanceScoreSampler_hh
-#define G4MassImportanceScoreSampler_hh G4MassImportanceScoreSampler_hh
 
-#include "globals.hh"
-#include "G4VSampler.hh"
+#include "G4ParallelTransportConfigurator.hh"
+#include "G4ParallelWorld.hh"
 
-class G4VIStore;
-class G4VPScorer;
-class G4VImportanceAlgorithm;
-class G4MassImportanceSampler;
-class G4MassScoreSampler;
+G4ParallelTransportConfigurator::
+G4ParallelTransportConfigurator(const G4String &particlename,
+			   G4ParallelWorld &pworld)
+  :
+  fPlacer(particlename),
+  fPWorld(pworld),
+  fParallelTransport(0)
+{}
 
-class G4MassImportanceScoreSampler : public G4VSampler
-{
+G4ParallelTransportConfigurator::
+~G4ParallelTransportConfigurator(){
+  if (fParallelTransport) {
+    fPlacer.RemoveProcess(fParallelTransport);
+    delete fParallelTransport;
+  }
+}
 
-public:  // with description
+void G4ParallelTransportConfigurator::
+Configure(G4VSamplerConfigurator *preConf){
+  fParallelTransport = new 
+    G4ParallelTransport(fPWorld.GetGeoDriver(), 
+			fPWorld.GetParallelStepper());
+  fPlacer.AddProcessAsSecondDoIt(fParallelTransport);
+}
 
-  G4MassImportanceScoreSampler(G4VIStore &aIstore,
-			       G4VPScorer &ascorer,
-			       const G4String &particlename,
-			       const G4VImportanceAlgorithm 
-			       *algorithm = 0);
-    // if *algorithm = 0: use the G4ImportanceAlgorithm
-    // else : use a customised  importance algorithm derived from
-    // G4VImportanceAlgorithm  
-  
-
-  ~G4MassImportanceScoreSampler();
-    // delete G4MassScoreSampler and G4MassImportanceSampler if created
-
-  void Initialize();
-    // the G4MassImportanceScoreSampler has to be initialised after
-    // the initialisation of the G4RunManager !
-
-private:
-
-  G4MassImportanceScoreSampler(const G4MassImportanceScoreSampler &);
-  G4MassImportanceScoreSampler &
-  operator=(const G4MassImportanceScoreSampler &);
-
-private:
-
-  G4MassImportanceSampler *fMassImportanceSampler;
-  G4MassScoreSampler *fMassScoreSampler;
-};
-
-#endif
+G4VTrackTerminator *G4ParallelTransportConfigurator::
+GetTrackTerminator(){
+  return 0;
+}

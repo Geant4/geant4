@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,59 +22,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4VSamplerConfigurator
 //
-// G4MassImportanceSampler.cc
+// Class description:
 //
+// This is an interface for configurators seeting up processes
+// needed for importance sampling and scoring. 
+// The Configurator may be given a pointer to another Configurator.
+// If a configurator will be given a pointer to another configurator
+// it may obtain a G4VTrackTerminator from the given Configurator.
+// This way it is possible to delegate the killing of a track.
+// 
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#include "G4MassImportanceSampler.hh"
-#include "G4MassImportanceProcess.hh"
-#include "G4ProcessPlacer.hh"
-#include "G4ImportanceAlgorithm.hh"
-#include "G4VTrackTerminator.hh"
+#ifndef G4VSamplerConfigurator_hh
+#define G4VSamplerConfigurator_hh G4VSamplerConfigurator_hh
 
-G4MassImportanceSampler::
-G4MassImportanceSampler(G4VIStore &aIstore,
-			const G4String &particlename,
-			const G4VImportanceAlgorithm *algorithm)
- : fIStore(aIstore),
-   fTrackTerminator(0),
-   fParticleName(particlename),
-   fMassImportanceProcess(0),
-   fCreatedAlgorithm( ( ! algorithm) ),
-   fAlgorithm(( (fCreatedAlgorithm) ? 
-		new G4ImportanceAlgorithm : algorithm))
-{}
-
-G4MassImportanceSampler::~G4MassImportanceSampler()
-{
-  if (fMassImportanceProcess) {
-    G4ProcessPlacer placer(fParticleName);
-    placer.RemoveProcess(fMassImportanceProcess);
-    delete fMassImportanceProcess;
-  }
-  if (fCreatedAlgorithm) delete fAlgorithm;
-}
+#include "globals.hh"
+#include "g4std/vector"
+class G4VTrackTerminator;
 
 
-G4MassImportanceProcess *G4MassImportanceSampler::CreateMassImportanceProcess()
-{
-  if (!fMassImportanceProcess) {
-    fMassImportanceProcess =
-      new G4MassImportanceProcess(*fAlgorithm, 
-				  fIStore, 
-				  fTrackTerminator);
-  }
-  return fMassImportanceProcess;
-}
+class G4VSamplerConfigurator{
+public:
+  virtual ~G4VSamplerConfigurator() {}
+  virtual void Configure(G4VSamplerConfigurator *preConf) = 0;
+    // do the configuration, if preConf is given a
+    //  G4VTrackTerminator may be obtained from it
+  virtual G4VTrackTerminator *GetTrackTerminator() = 0;
+    // return a G4VTrackTerminator or 0
+};
 
-void G4MassImportanceSampler::Initialize()
-{
-  G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsSecondDoIt(CreateMassImportanceProcess());
-}
+typedef G4std::vector<G4VSamplerConfigurator *> G4Configurators;
+
+
+#endif

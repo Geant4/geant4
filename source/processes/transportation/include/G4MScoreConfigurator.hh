@@ -21,59 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.4 2002-10-10 13:24:09 dressel Exp $
+// $Id: G4MScoreConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VSampler
+// Class G4MScoreConfigurator
 //
 // Class description:
-//
-// This interface discribes a configurable sampler.
-// It applies to a given particle type.
-// Concrete classes with this interface may be used for 
-// scoring, importance sampling and weigth cutoff (weight roulett).
-//
+// This class builds and places  the G4MScoreProcess.
+// If the object is deleted the process is removed from the 
+// process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VSampler_hh
-#define G4VSampler_hh G4VSampler_hh
 
+#ifndef G4MScoreConfigurator_hh
+#define G4MScoreConfigurator_hh G4MScoreConfigurator_hh
 
 #include "globals.hh"
+#include "G4MScoreProcess.hh"
+#include "G4ProcessPlacer.hh"
 
-class G4VPhysicalVolume;
-class G4VImportanceAlgorithm;
-class G4VIStore;
+#include "G4VSamplerConfigurator.hh"
+
 class G4VPScorer;
+class G4VTrackTerminator;
 
-
-class G4VSampler {
-
-public:  
+class G4MScoreConfigurator : public G4VSamplerConfigurator{
+public:
+  G4MScoreConfigurator(const G4String &particlename,
+		       G4VPScorer &scorer);
+  ~G4MScoreConfigurator();
   
-  virtual ~G4VSampler() {}
+  void Configure(G4VSamplerConfigurator *preConf);
+  G4VTrackTerminator *GetTrackTerminator();
 
-  virtual void PrepareScoring(G4VPScorer *Scorer) = 0;
-
-  virtual void PrepareImportanceSampling(G4VIStore *istore,
-					 const G4VImportanceAlgorithm 
-					 *ialg = 0) = 0;
-
-
-  virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
-				    G4double wlimit = 0.25,
-				    G4double isource = 1) = 0;
-
-  virtual void Configure() = 0;
-
-  virtual void ClearSampling() = 0;
-    // clear the sampler and remove the processes
-
-  virtual G4bool IsConfigured() const = 0;
-    // check if some initialization hase already been done
+  
+private:
+  G4ProcessPlacer fPlacer;
+  G4VPScorer &fScorer;
+  G4MScoreProcess *fMScoreProcess;
 };
-  
-#endif
 
+
+#endif
