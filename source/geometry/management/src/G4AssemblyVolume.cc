@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.11 2002-09-10 10:49:18 radoone Exp $
+// $Id: G4AssemblyVolume.cc,v 1.12 2002-09-10 16:59:58 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,10 @@ unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 // Default constructor
 //
 G4AssemblyVolume::G4AssemblyVolume()
+: fAssemblyID( 0 )
 {
   InstanceCountPlus();
+  SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
 }
 
@@ -192,7 +194,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
-           << GetInstanceCount()
+           << GetAssemblyID()
            << "_impr_"
            << GetImprintsCount()
            << "_"
@@ -268,7 +270,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
-           << GetInstanceCount()
+           << GetAssemblyID()
            << "_impr_"
            << GetImprintsCount()
            << "_"
@@ -300,6 +302,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   }
 }
 
+// The following two methods manipulate the current object's counter value
 unsigned int G4AssemblyVolume::GetInstanceCount() const
 {
   return G4AssemblyVolume::fsInstanceCounter;
@@ -310,6 +313,7 @@ void         G4AssemblyVolume::SetInstanceCount( unsigned int value )
   G4AssemblyVolume::fsInstanceCounter = value;
 }
 
+// The following two methods manipulate the counter of the class instances
 void         G4AssemblyVolume::InstanceCountPlus()
 {
   G4AssemblyVolume::fsInstanceCounter++;
