@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticTest.cc,v 1.4 2003-06-19 14:42:08 gunter Exp $
+// $Id: G4LElasticTest.cc,v 1.5 2003-11-13 18:56:19 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -47,8 +47,6 @@
 
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
-
-#include "G4ExcitationHandler.hh"
  
  // forward declarations
  

@@ -40,6 +40,7 @@ INCFLAGS := \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/management/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
