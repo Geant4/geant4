@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.54 2003-11-14 15:59:40 johna Exp $
+// $Id: G4VisManager.cc,v 1.55 2003-11-27 09:55:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,34 +151,12 @@ void G4VisManager::Initialise () {
   }
 
   if (fVerbosity >= parameters) {
-    PrintAllGraphicsSystems ();
-    PrintInstalledGraphicsSystems ();
     G4cout <<
       "\nYou have instantiated your own Visualization Manager, inheriting"
       "\n  G4VisManager and implementing RegisterGraphicsSystems(), in which"
       "\n  you should, normally, instantiate drivers which do not need"
-      "\n  external packages or libraries, namely:"
-      "\n    ASCIITree, DAWNFILE, HepRepFile, GAGTree, RayTracer, VRMLFILE"
-      "\n  and, optionally, drivers under control of the following"
-      "\n  environment variables:"
-#ifdef G4VIS_BUILD_DAWN_DRIVER
-      "\n    G4VIS_USE_DAWN"
-#endif
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-      "\n    G4VIS_USE_OPENGLX"
-#endif
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-      "\n    G4VIS_USE_OPENGLXM"
-#endif
-#ifdef G4VIS_BUILD_OIX_DRIVER
-      "\n    G4VIS_USE_OIX"
-#endif
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-      "\n    G4VIS_USE_OIWIN32"
-#endif
-#ifdef G4VIS_BUILD_VRML_DRIVER
-      "\n    G4VIS_USE_VRML"
-#endif
+      "\n  external packages or libraries, and, optionally, drivers under"
+      "\n  control of environment variables."
       "\n  See visualization/include/MyVisManager.hh/cc, for example."
       "\n  In your main() you will have something like:"
       "\n  #ifdef G4VIS_USE"
@@ -207,9 +185,6 @@ void G4VisManager::Initialise () {
 
   fInitialised = true;
 }
-
-// void G4VisManager::RegisterMessengers () - see separate file,
-// G4VisManagerRegisterMessengers.cc.
 
 void G4VisManager::Enable() {
   if (IsValidView ()) {
@@ -891,69 +866,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandDrawView);
   fMessengerList.push_back (new G4VisCommandOpen);
   fMessengerList.push_back (new G4VisCommandSpecify);
-}
-
-void G4VisManager::PrintAllGraphicsSystems () const {
-  G4cout <<
-    "\nThe following graphics systems drivers are supported in the"
-    " GEANT4 distribution:"
-    "\n\n  ASCIITree (prints geometry hierarchy)"
-    "\n\n  DAWN (socket connection to the Fukui Renderer DAWN) "
-	 << G4VisFeaturesOfFukuiRenderer () <<
-    "\n\n  DAWNFILE (file connection to the Fukui Renderer DAWN  ) "
-	 << G4VisFeaturesOfDAWNFILE () <<
-    "\n\n  GAGTree (prints geometry hierarchy, connectable to GAG"
-    "\n  user interface)"
-    "\n\n  HepRepFile (file connection to HepRep viewers, e.g., WIRED)"
-    "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLIX () <<
-    "\n\n  OpenGLSX (display List/stored drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLSX () <<
-    "\n\n  OpenGLIXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLIXm () <<
-    "\n\n  OpenGLSXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLSXm () <<
-    "\n\n  Open Inventor"
-       << G4VisFeaturesOfOpenInventor () <<
-    "\n\n  RayTracer (produces JPEG file)"
-    "\n\n  VRML1     (produces VRML 1 file over network)"
-    "\n\n  VRML1FILE (produces VRML 1 file locally    )"
-    "\n\n  VRML2     (produces VRML 2 file over network)"
-    "\n\n  VRML2FILE (produces VRML 2 file locally    )"
-       << G4endl;
-}
-
-void G4VisManager::PrintInstalledGraphicsSystems () const {
-  G4cout << "\nThe following graphics systems drivers are installed on your"
-    " system:"
-       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
-#ifdef G4VIS_BUILD_DAWN_DRIVER
-       << "\n  DAWN     (socket connection to the Fukui Renderer DAWN)"
-#endif
-       << "\n  DAWNFILE (file connection to the Fukui Renderer DAWN)"
-       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-       << "\n  OpenGLIX (direct/immediate drawing on X Windows)"
-       << "\n  OpenGLSX (display List/stored drawing on X Windows)"
-#endif
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-       << "\n  OpenGLIXm (with Motif widgets)"
-       << "\n  OpenGLSXm (with Motif widgets)"
-#endif
-#ifdef G4VIS_BUILD_OIX_DRIVER
-       << "\n  Open Inventor X11"
-#endif
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-       << "\n  Open Inventor Win32"
-#endif
-       << "\n  RayTracer (produces JPEG file)"
-#ifdef G4VIS_BUILD_VRML_DRIVER
-       << "\n  VRML1 (produces VRML 1 file over network)"
-       << "\n  VRML2 (produces VRML 2 file over network)"
-#endif
-       << "\n  VRML1FILE (produces VRML 1 file locally)"
-       << "\n  VRML2FILE (produces VRML 2 file locally)"
-       << G4endl;
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
