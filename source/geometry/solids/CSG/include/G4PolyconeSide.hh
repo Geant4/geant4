@@ -24,6 +24,9 @@ class G4PolyconeSide : public G4VCSGface {
 			const G4bool phiIsOpen, const G4bool isAllBehind=false );
 	virtual ~G4PolyconeSide();
 	
+	G4PolyconeSide( const G4PolyconeSide &source );
+	G4PolyconeSide *operator=( const G4PolyconeSide &source );
+	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 			  const G4bool outgoing, const G4double surfTolerance,
 			  G4double &distance, G4double &distFromSurface,
@@ -42,6 +45,8 @@ class G4PolyconeSide : public G4VCSGface {
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
 			      G4SolidExtentList &extentList       );
+
+	G4VCSGface *Clone() { return new G4PolyconeSide( *this ); }
 	
 	protected:
 	G4double r[2], z[2];	// r, z parameters, in specified order
@@ -68,6 +73,8 @@ class G4PolyconeSide : public G4VCSGface {
 			
 	G4bool PointOnCone( const G4ThreeVector &hit, const G4double normSign,
 			    const G4ThreeVector &p, const G4ThreeVector &v, G4ThreeVector &normal );
+
+	void CopyStuff( const G4PolyconeSide &source );
 };
 
 

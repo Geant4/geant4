@@ -17,6 +17,9 @@ class G4VCSGfaceted : public G4CSGSolid
 	G4VCSGfaceted( G4String name) : G4CSGSolid(name) {;}
 	virtual ~G4VCSGfaceted();
 	
+	G4VCSGfaceted( const G4VCSGfaceted &source );
+	G4VCSGfaceted* operator=( const G4VCSGfaceted &source );
+	
 	virtual G4bool CalculateExtent(	const EAxis pAxis,
 					const G4VoxelLimits& pVoxelLimit,
 					const G4AffineTransform& pTransform,
@@ -46,7 +49,9 @@ class G4VCSGfaceted : public G4CSGSolid
 	G4VCSGface **faces;
 
 	virtual G4double DistanceTo( const G4ThreeVector &p, const G4bool outgoing ) const;
-	
+
+	void CopyStuff( const G4VCSGfaceted &source );
+	void DeleteStuff();
 };
 
 #endif

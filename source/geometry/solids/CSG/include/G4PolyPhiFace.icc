@@ -1,0 +1,44 @@
+//
+// G4PolyPhiFace.icc
+//
+// Implementation of inline methods of G4PolyPhiFace
+//
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//	
+
+//
+// ExactZOrder
+//
+// Decide precisely whether a trajectory passes to the left, right, or exactly 
+// passes through the z position of a vertex point in our face.
+//
+// Result is only determined within an arbitrary (positive) factor.
+//      > 0 to the right
+//      < 0 to the left
+//      = 0 exactly on top of
+// In 99.9999% of the cases, a trivial calculation is used. In difficult
+// cases, a precise, compliant calculation is relied on.
+//
+inline G4double G4PolyPhiFace::ExactZOrder( const G4double z, 
+					    const G4double qx, const G4double qy, const G4double qz, 
+					    const G4ThreeVector &v, 
+					    const G4double normSign,
+					    const G4PolyPhiFaceVertex *vert ) const {
+	G4double answer = vert->z - z;
+	if (fabs(answer) < kCarTolerance) {
+		G4ThreeVector qa( qx - vert->x + radial.x(),
+				  qy - vert->y + radial.y(), qz - vert->z ),
+			      qb( qx - vert->x, qy - vert->y, qz - vert->z );
+		G4ThreeVector qacb = qa.cross(qb); 
+
+		answer = normSign*qacb.dot(v)*(normal.y()*radial.x()-normal.x()*radial.y());
+	}
+	
+	return answer;
+}

@@ -123,7 +123,18 @@
 //                        limits) along the direction pAxis.
 //               6. If min/max were updated, return true
 //                           
-//       
+//	-------------------------------------------------------------------
+//        G3VCSGface *Clone()
+//
+//	    This method is invoked by G4CSGfaceted during the copy constructor
+//	    or the assignment operator. Its purpose is to return a pointer
+// 	    (of type G4VCSGface) to a duplicate copy of the face. The implementation
+//	    is straight forward for inherited classes. Example:
+//
+//	    	  G4VCSGface G4PolySideFace::Clone() { return new G4PolySideFace(*this); }
+//
+//	    Of course, this assumes the copy constructor of G4PolySideFace is
+//	    correctly implemented.
 //
 // Implementation notes:
 //	* distance.
@@ -244,6 +255,8 @@ class G4VCSGface {
 				      const G4VoxelLimits &voxelLimit,
 				      const G4AffineTransform &tranform,
 				      G4SolidExtentList &extentList       ) = 0;
+
+	virtual G4VCSGface* Clone() = 0;
 };
 
 #endif

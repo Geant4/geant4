@@ -33,6 +33,9 @@ class G4PolyhedraSide : public G4VCSGface {
 			 const G4bool phiIsOpen, const G4bool isAllBehind=false );
 	virtual ~G4PolyhedraSide();
 	
+	G4PolyhedraSide( const G4PolyhedraSide &source );
+	G4PolyhedraSide *operator=( const G4PolyhedraSide &source );
+	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 			  const G4bool outgoing, const G4double surfTolerance,
 			  G4double &distance, G4double &distFromSurface,
@@ -51,6 +54,8 @@ class G4PolyhedraSide : public G4VCSGface {
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
 			      G4SolidExtentList &extentList        );
+
+	G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
 	
 	protected:
 	//
@@ -103,7 +108,7 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4int ClosestPhiSegment( const G4double phi );
 	
 	G4int PhiSegment( const G4double phi );
-
+	
 	G4double DistanceToOneSide( const G4ThreeVector &p,
 				    const G4PolyhedraSideVec vec,
 				    G4double *normDist );
@@ -111,6 +116,8 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4double DistanceAway( const G4ThreeVector &p,
 			       const G4PolyhedraSideVec vec,
 			       G4double *normDist );
+			       
+	void CopyStuff( const G4PolyhedraSide &source );
 };
 
 

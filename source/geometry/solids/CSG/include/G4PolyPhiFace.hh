@@ -43,6 +43,9 @@ class G4PolyPhiFace : public G4VCSGface {
 	G4PolyPhiFace( const G4ReduciblePolygon *rz,
 		       const G4double phi, const G4double deltaPhi, const G4double phiOther );
 	virtual ~G4PolyPhiFace();
+
+	G4PolyPhiFace( const G4PolyPhiFace &source );
+	G4PolyPhiFace *operator=( const G4PolyPhiFace &source );
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 			  const G4bool outgoing, const G4double surfTolerance,
@@ -62,6 +65,8 @@ class G4PolyPhiFace : public G4VCSGface {
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
 			      G4SolidExtentList &extentList        );
+
+	G4VCSGface *Clone() { return new G4PolyPhiFace(*this); }
 	
 	protected:
 	G4PolyPhiFaceEdge	*edges;		// The edges of the face
@@ -81,6 +86,16 @@ class G4PolyPhiFace : public G4VCSGface {
 	G4bool InsideEdges( const G4double r, const G4double z, 
 			    G4double *distRZ2, G4PolyPhiFaceVertex **base3Dnorm=0,
 			    G4ThreeVector **head3Dnorm=0 );
+
+	inline G4double ExactZOrder( const G4double z, 
+				     const G4double qx, const G4double qy, const G4double qz, 
+				     const G4ThreeVector &v, 
+				     const G4double normSign,
+				     const G4PolyPhiFaceVertex *vert ) const;
+
+	void CopyStuff( const G4PolyPhiFace &source );
 };
+
+#include "G4PolyPhiFace.icc"
 
 #endif

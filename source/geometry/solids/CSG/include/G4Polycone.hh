@@ -43,6 +43,9 @@ class G4Polycone : public G4VCSGfaceted
 		    const G4double z[]       ); 	// z coordinate of these corners
 
 	virtual ~G4Polycone();
+	
+	G4Polycone( const G4Polycone &source );
+	G4Polycone *operator=( const G4Polycone &source );
 
 	//
 	// A couple overrides to speed things up
@@ -85,17 +88,20 @@ class G4Polycone : public G4VCSGfaceted
 	//
 	// The following is temporary until graphics_reps is brought up to this design
 	//
-	typedef struct {
+	struct G4PolyconeHistorical {
+		G4PolyconeHistorical() {;}
+		~G4PolyconeHistorical();
+		G4PolyconeHistorical( const G4PolyconeHistorical &source );
+	
 		G4double Start_angle;
 		G4double Opening_angle;
 		G4int	 Num_z_planes;
 		G4double *Z_values;
 		G4double *Rmin;
 		G4double *Rmax;
-		G4bool   exist;
-	} G4PolyconeKluge;
+	};
 	
-	G4PolyconeKluge	original_parameters;
+	G4PolyconeHistorical	*original_parameters;
 
 	//
 	// Our quick test
@@ -108,6 +114,8 @@ class G4Polycone : public G4VCSGfaceted
 	void Create( const G4double phiStart,	    // initial phi starting angle
             	     const G4double phiTotal,	    // total phi angle
 		     G4ReduciblePolygon *rz    );   // r/z coordinate of these corners
+
+	void CopyStuff( const G4Polycone &source );
 };
 
 #endif

@@ -27,7 +27,7 @@ class G4Polyhedra : public G4VCSGfaceted {
 	G4Polyhedra( G4String name, 
                      const G4double phiStart,		// initial phi starting angle
                      const G4double phiTotal,		// total phi angle
-		     const G4double numSide,		// number sides
+		     const G4int numSide,		// number sides
                      const G4int numZPlanes,		// number of z planes
                      const G4double zPlane[],		// position of z planes
                      const G4double rInner[],		// tangent distance to inner surface
@@ -36,12 +36,15 @@ class G4Polyhedra : public G4VCSGfaceted {
 	G4Polyhedra( G4String name, 
 		     const G4double phiStart,		// initial phi starting angle
                      const G4double phiTotal,		// total phi angle
-		     const G4double numSide,		// number sides
+		     const G4int    numSide,		// number sides
 		     const G4int    numRZ,		// number corners in r,z space
 		     const G4double r[], 		// r coordinate of these corners
 		     const G4double z[]       ); 	// z coordinate of these corners
 
 	virtual ~G4Polyhedra();
+	
+	G4Polyhedra( const G4Polyhedra &source );
+	G4Polyhedra *operator=( const G4Polyhedra &source );
 
 	//
 	// A couple overrides to speed things up
@@ -75,12 +78,16 @@ class G4Polyhedra : public G4VCSGfaceted {
 	G4double endPhi;		// end phi value (0 < endPhi-phiStart < 2pi)
 	G4bool	 phiIsOpen;		// true if there is a phi segment
 	G4int	 numCorner;		// number RZ points
-	G4PolyhedraSideRZ *corners;	// corner r,z points
+	G4PolyhedraSideRZ *corners;	// our corners
 	
 	//
 	// The following is temporary until graphics_reps is brought up to this design
 	//
-	typedef struct {
+	struct G4PolyhedraHistorical {
+		G4PolyhedraHistorical() {;}
+		~G4PolyhedraHistorical();
+		G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
+	
 		G4double Start_angle;
 		G4double Opening_angle;
 		G4int	 numSide;
@@ -88,10 +95,9 @@ class G4Polyhedra : public G4VCSGfaceted {
 		G4double *Z_values;
 		G4double *Rmin;
 		G4double *Rmax;
-		G4bool   exist;
-	} G4PolyhedraKluge;
+	};
 	
-	G4PolyhedraKluge	original_parameters;
+	G4PolyhedraHistorical	*original_parameters;
 	
 	//
 	// Our quick test
@@ -103,8 +109,11 @@ class G4Polyhedra : public G4VCSGfaceted {
 	//
 	void Create( const G4double phiStart,	    // initial phi starting angle
             	     const G4double phiTotal,	    // total phi angle
-		     const G4double numSide,	    // number sides
+		     const G4int    numSide,	    // number sides
 		     G4ReduciblePolygon *rz   );    // rz coordinates
+
+	void CopyStuff( const G4Polyhedra &source );
+	void DeleteStuff();
 };
 
 #endif
