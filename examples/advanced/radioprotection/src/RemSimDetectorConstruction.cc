@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.10 2004-05-21 14:42:44 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.11 2004-05-21 15:01:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,7 +68,7 @@ RemSimDetectorConstruction::RemSimDetectorConstruction()
  decoratorSPE = 0;
  decorator1 = 0; //pointing to astronaut
  decoratorRoof = 0; //pointing to the roof of the Moon Habitat
- moon = false;
+ moon = false; 
  flag = false;
 }
 
@@ -130,7 +130,6 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
   if (moon == false)
     {
   decoratorValue = value;
-  decorator = retrieveDecorator();
    
   if (decoratorValue == "On")
 	{
@@ -155,14 +154,13 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
           else  G4cout<<" The Shielding does not exist!"<<G4endl;
 	}
     }
+  else G4cout << " The shielding is not available in Moon habitat configuration"<<G4endl;
 }
 
 void RemSimDetectorConstruction::AddShelterSPE(G4String value)
 { 
   if (moon == false)
     { 
-      decoratorSPE = retrieveDecoratorSPE();
-
       if (value == "On")
 	{
 	if (decoratorSPE == 0)
@@ -193,8 +191,6 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
 { 
   if (moon == true)
     { 
-      decoratorRoof = retrieveDecoratorRoof();
-
       if (value == "On")
 	{
 	if (decoratorRoof == 0)
@@ -221,24 +217,6 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
   else  G4cout<< " It is not possible to select the Roof in the vehicle configuration" << G4endl;
 }
 
-RemSimDecorator* RemSimDetectorConstruction::retrieveDecorator()
-{
-  return decorator;
-}
-
-RemSimDecorator* RemSimDetectorConstruction::retrieveDecorator1()
-{
-  return decorator1;
-}
-
-RemSimDecorator* RemSimDetectorConstruction::retrieveDecoratorSPE()
-{
-  return decoratorSPE;
-}
-RemSimDecorator* RemSimDetectorConstruction::retrieveDecoratorRoof()
-{
-  return decoratorRoof;
-}
 void RemSimDetectorConstruction::ChangeShieldingMaterial(G4String material)
 {
 //   decorator = retrieveDecorator();
@@ -251,24 +229,21 @@ void RemSimDetectorConstruction::ChangeShieldingMaterial(G4String material)
 }
 void RemSimDetectorConstruction::ChangeShieldingThickness(G4double thick)
 {  
- if (moon == false)
-   {
-  decorator = retrieveDecorator();
-  if (decorator != 0)
-    { 
-      decorator = retrieveDecorator();
-      decorator -> ChangeThickness(thick);
-      G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
+  if (moon == false)
+    {
+      if (decorator != 0)
+	{ 
+	  decorator -> ChangeThickness(thick);
+	  G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
+	}
+      else G4cout<<" Define the shielding before!"<< G4endl;
     }
-  else G4cout<<" Define the shielding before!"<< G4endl;
-   }
 }
 
 void RemSimDetectorConstruction::ChangeRoofThickness(G4double thick)
 {  
   if (moon == true)
     {
-      decoratorRoof = retrieveDecoratorRoof();
       if (decoratorRoof != 0)
 	{ 
 	  decoratorRoof -> ChangeThickness(thick);

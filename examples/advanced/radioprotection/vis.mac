@@ -29,8 +29,8 @@
 #
 # draw scene
 #
-#/configuration/choose moon
-/configuration/choose vehicle
+/configuration/choose moon
+#/configuration/choose vehicle
 /configuration/AddShielding On
 /configuration/AddSPE On
 /configuration/AddRoof On

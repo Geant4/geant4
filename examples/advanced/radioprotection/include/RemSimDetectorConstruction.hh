@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.8 2004-05-21 14:42:44 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.9 2004-05-21 15:01:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,10 +58,6 @@ public:
   void ChooseConfiguration(G4String);
 
 private:
-  RemSimDecorator* retrieveDecorator(); 
-  RemSimDecorator* retrieveDecoratorSPE();
-  RemSimDecorator* retrieveDecoratorRoof(); 
-  RemSimDecorator* retrieveDecorator1();
 
   G4LogicalVolume* experimentalHall_log;
   G4VPhysicalVolume* experimentalHall_phys;
@@ -71,12 +67,12 @@ private:
   RemSimVGeometryComponent* pMoon;
   RemSimMaterial*  pMaterial;
   RemSimDetectorMessenger* messenger; 
-  RemSimDecorator* decorator;
-  RemSimDecorator* decoratorSPE;
-  RemSimDecorator* decorator1;
-  RemSimDecorator* decoratorRoof; 
   G4String decoratorValue;
   G4String astronautValue;
+  RemSimDecorator* decorator; 
+  RemSimDecorator* decoratorSPE;
+  RemSimDecorator* decorator1;
+  RemSimDecorator* decoratorRoof;
   G4bool moon;
   G4bool flag;
 };
