@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.11 2003-06-16 17:01:50 gunter Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.12 2003-07-21 12:52:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,7 +154,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
 
   for (size_t ii=0; ii<partialSumSigma.size(); ii++){
     G4DataVector* a=partialSumSigma[ii];
-    if ( a )  delete a;    
+    if ( a )  delete a;
   }
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
@@ -165,12 +165,12 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
     partialSumSigma.push_back(dv);
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
-  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuPairProductionModel::ComputeDEDX(const G4Material* material,
+G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                               const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
@@ -180,6 +180,7 @@ G4double G4MuPairProductionModel::ComputeDEDX(const G4Material* material,
   G4double cut = cutEnergy;
   if(kineticEnergy <= cutEnergy) cut = kineticEnergy;
 
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
 
@@ -479,7 +480,7 @@ G4double G4MuPairProductionModel::ComputeDDMicroscopicCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
+G4double G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* couple,
                                                const G4ParticleDefinition*,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
@@ -490,6 +491,7 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
   G4double tmax = std::min(maxEnergy, kineticEnergy);
   if(cutEnergy >= tmax) return cross;
 
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 

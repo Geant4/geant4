@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4UniversalFluctuation.cc,v 1.9 2003-07-21 12:52:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file

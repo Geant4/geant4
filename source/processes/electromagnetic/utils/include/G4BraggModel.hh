@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BraggModel.hh,v 1.9 2003-07-21 12:52:06 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -75,12 +77,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
@@ -109,7 +111,7 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  // hide assignment operator 
+  // hide assignment operator
   G4BraggModel & operator=(const  G4BraggModel &right);
   G4BraggModel(const  G4BraggModel&);
 

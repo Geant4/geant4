@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.10 2003-06-16 17:01:47 gunter Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.11 2003-07-21 12:52:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,7 +154,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4Material* material,
+G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                               const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
@@ -162,7 +162,8 @@ G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   if(kineticEnergy < lowKinEnergy) return 0.0;
 
   G4double cut = std::min(cutEnergy, kineticEnergy);
-
+  
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
 
@@ -328,7 +329,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::CrossSection(const G4Material* material,
+G4double G4MuBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* couple,
                                                const G4ParticleDefinition*,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
@@ -339,6 +340,7 @@ G4double G4MuBremsstrahlungModel::CrossSection(const G4Material* material,
   G4double cut  = cutEnergy;
   if(cut >= tmax) return cross;
 
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 

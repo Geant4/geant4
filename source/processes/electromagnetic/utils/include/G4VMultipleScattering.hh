@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VMultipleScattering.hh,v 1.9 2003-07-21 12:52:06 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,6 +35,8 @@
 // Creation date: 12.03.2002
 //
 // Modifications:
+//
+// 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -54,10 +58,10 @@
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
+#include "G4VMscModel.hh"
 
 class G4Step;
 class G4ParticleDefinition;
-class G4VEmModel;
 class G4DataVector;
 class G4Navigator;
 class G4PhysicsTable;
@@ -124,7 +128,7 @@ public:
     // File name should is constructed as processName+particleName and the
     // should be placed under the directory specifed by the argument.
 
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VMscModel*, const G4Region* region = 0);
 
   G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
@@ -192,13 +196,12 @@ private:
   G4ParticleChangeForMSC      fParticleChange;
   G4EmModelManager*           modelManager;
   G4Navigator*                navigator;
-  G4VEmModel*                 currentModel;
+  G4VMscModel*                currentModel;
 
   // tables and vectors
   G4PhysicsTable*             theLambdaTable;
 
   // cash
-  const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
 
@@ -226,7 +229,6 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
-    currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
   }
 }
@@ -307,7 +309,7 @@ inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
 
   } else {
-    x = currentModel->CrossSection(currentMaterial,p,e,0.0,1.0);
+    x = currentModel->CrossSection(currentCouple,p,e,0.0,1.0);
   }
   return x;
 }
@@ -331,7 +333,8 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 
 inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  currentModel = dynamic_cast<G4VMscModel*>
+                 (modelManager->SelectModel(kinEnergy, currentMaterialIndex));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

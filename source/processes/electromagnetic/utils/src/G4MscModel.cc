@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MscModel.cc,v 1.3 2003-07-21 12:52:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -65,10 +67,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar, 
-                           G4double& m_FactPar, G4double& m_facxsi, 
+G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
+                           G4double& m_FactPar, G4double& m_facxsi,
 			   G4bool& m_samplez, const G4String& nam)
-  : G4VEmModel(nam),
+  : G4VMscModel(nam),
   highKinEnergy(10.0*TeV),
   lowKinEnergy(0.1*keV),
   taubig(8.0),
@@ -129,12 +131,13 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::CrossSection(const G4Material* material,
+G4double G4MscModel::CrossSection(const G4MaterialCutsCouple* couple,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double,
                                           G4double)
 {
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
   G4int NumberOfElements = material->GetNumberOfElements();
@@ -422,8 +425,7 @@ G4double G4MscModel::GeomPathLength(
     charge = particle->GetPDGCharge()/eplus;
   }
   currentKinEnergy = T0;
-  const G4Material* material = couple->GetMaterial();
-  currentRadLength = material->GetRadlen();
+  currentRadLength = couple->GetMaterial()->GetRadlen();
 
   lambda0 = lambda;
   lambda1 = -1.;
@@ -449,7 +451,7 @@ G4double G4MscModel::GeomPathLength(
       G4bool bb;
       lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
     } else {
-      lambda1 = CrossSection(material,particle,T1,0.0,1.0);
+      lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
     if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
     G4double blam = 1.+alam/lambda0 ;

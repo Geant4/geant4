@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BetheBlochModel.hh,v 1.8 2003-07-21 12:52:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -76,12 +78,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
@@ -110,7 +112,7 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  // hide assignment operator 
+  // hide assignment operator
   G4BetheBlochModel & operator=(const  G4BetheBlochModel &right);
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
@@ -122,7 +124,7 @@ private:
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double twoln10;
-  G4double bg2lim; 
+  G4double bg2lim;
   G4double taulim;
   G4double qc;
 };

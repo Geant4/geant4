@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MultipleScatteringSTD.hh,v 1.14 2003-07-21 12:52:06 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -46,7 +48,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScatteringSTD.hh,v 1.13 2003-06-16 14:44:10 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.hh,v 1.14 2003-07-21 12:52:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description

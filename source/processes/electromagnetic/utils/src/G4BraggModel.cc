@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BraggModel.cc,v 1.10 2003-07-21 12:52:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -131,12 +133,12 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::ComputeDEDX(const G4Material* material,
+G4double G4BraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                    const G4ParticleDefinition* p,
                                          G4double kineticEnergy,
                                          G4double cutEnergy)
 {
-
+  const G4Material* material = couple->GetMaterial();
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double dedx  = DEDX(material, kineticEnergy/massRate);
 
@@ -148,7 +150,7 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
     G4double beta2 = 1. - 1./(gam*gam);
     //    G4double bg2   = tau * (tau+2.0);
     dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
-          *  (material->GetElectronDensity())/beta2;
+          * (material->GetElectronDensity())/beta2;
   }
 
   // now compute the total ionization loss
@@ -162,7 +164,7 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::CrossSection(const G4Material* material,
+G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double cutEnergy,
@@ -172,17 +174,18 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
   G4double cross = 0.0;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {
-    
+
     G4double x      = cutEnergy/tmax;
     G4double energy = kineticEnergy + mass;
     G4double gam    = energy/mass;
     G4double beta2  = 1. - 1./(gam*gam);
     cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
-        
-    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
+
+    cross *= twopi_mc2_rcl2*chargeSquare*
+             (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax 
-  //         << " cross= " << cross << G4endl; 
+  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
+  //         << " cross= " << cross << G4endl;
   return cross;
 }
 

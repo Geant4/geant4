@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MscModel.hh,v 1.3 2003-07-21 12:52:06 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -41,7 +43,7 @@
 // Class Description:
 //
 // Implementation of the model of multiple scattering based on
-// H.W.Lewis Phys Rev 78 (1950) 526 and others
+// H.W.Lewis Phys Rev 78 (1950) 526 and L.Urban model
 
 // -------------------------------------------------------------------
 //
@@ -49,9 +51,9 @@
 #ifndef G4MscModel_h
 #define G4MscModel_h 1
 
-#include "G4VEmModel.hh"
+#include "G4VMscModel.hh"
 
-class G4MscModel : public G4VEmModel
+class G4MscModel : public G4VMscModel
 {
 
 public:
@@ -76,12 +78,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double,
                              G4double) {return 0.0;};
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4EmModelManager.cc,v 1.15 2003-07-21 12:52:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +44,8 @@
 // 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
 // 13-04-03 Add startFromNull (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
+// 16-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
+//          calculation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -364,13 +368,12 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 
   G4double e;
 
-  const G4Material* material = couple->GetMaterial();
   size_t i = couple->GetIndex();
   G4double cut = theCuts[i];
 
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::FillDEDXVector() for "
-           << material->GetName()
+           << couple->GetMaterial()->GetName()
 	   << "  Ecut(MeV)= " << cut/MeV
            << G4endl;
   }
@@ -385,7 +388,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 
   if(0 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
-             << material->GetName()
+             << couple->GetMaterial()->GetName()
 	     << " at the region #" << reg
 	     << G4endl;
   }
@@ -400,15 +403,15 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   dedxLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
-  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(material,particle,e,cut);
+  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(couple,particle,e,cut);
 
   if(nmod > 1) {
     for(j=1; j<nmod; j++) {
 
       e = upperEkin[regModels->ModelIndex(j-1)];
-      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,cut);
+      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
       e = upperEkin[regModels->ModelIndex(j)];
-      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,cut);
+      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
     }
 
     for(j=1; j<nmod; j++) {
@@ -436,11 +439,11 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(material,particle,e,cut)*fac;
+    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,cut)*fac;
 
     if(dedx < 0.0) dedx = 0.0;
     if(1 < verboseLevel) {
-        G4cout << "Material= " << material->GetName()
+        G4cout << "Material= " << couple->GetMaterial()->GetName()
                << "   E(MeV)= " << e/MeV
                << "  dEdx(MeV/mm)= " << dedx*mm/MeV
                << "  fac= " << fac
@@ -465,12 +468,11 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
 
   G4double e;
 
-  const G4Material* material = couple->GetMaterial();
   size_t i = couple->GetIndex();
 
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::FillDEDXVector() for "
-           << material->GetName()
+           << couple->GetMaterial()->GetName()
            << G4endl;
   }
 
@@ -484,7 +486,7 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
 
   if(0 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
-             << material->GetName()
+             << couple->GetMaterial()->GetName()
 	     << " at the region #" << reg
 	     << G4endl;
   }
@@ -499,15 +501,15 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
   dedxLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
-  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(material,particle,e,e);
+  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(couple,particle,e,e);
 
   if(nmod > 1) {
     for(j=1; j<nmod; j++) {
 
       e = upperEkin[regModels->ModelIndex(j-1)];
-      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,e);
+      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
       e = upperEkin[regModels->ModelIndex(j)];
-      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,e);
+      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
     }
 
     for(j=1; j<nmod; j++) {
@@ -535,11 +537,11 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(material,particle,e,e)*fac;
+    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,e)*fac;
 
     if(dedx < 0.0) dedx = 0.0;
     if(1 < verboseLevel) {
-        G4cout << "Material= " << material->GetName()
+        G4cout << "Material= " << couple->GetMaterial()->GetName()
                << "   E(MeV)= " << e/MeV
                << "  dEdx(MeV/mm)= " << dedx*mm/MeV
                << "  fac= " << fac
@@ -563,12 +565,10 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
   G4double e;
 
-  const G4Material* material = couple->GetMaterial();
-
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::FillLambdaVector() for particle "
            << particle->GetParticleName()
-           << " in " << material->GetName()
+           << " in " << couple->GetMaterial()->GetName()
            << G4endl;
   }
 
@@ -585,7 +585,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
   if(1 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
-             << material->GetName() << G4endl;
+             << couple->GetMaterial()->GetName() << G4endl;
   }
 
   // calculate factors to provide continuity of energy loss
@@ -598,7 +598,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   e = upperEkin[regModels->ModelIndex(0)];
 
   if(1 < verboseLevel) {
-      G4cout << "### For material " << material->GetName()
+      G4cout << "### For material " << couple->GetMaterial()->GetName()
              << "  " << nmod
              << " models"
              << " Ecut(MeV)= " << cut/MeV
@@ -607,16 +607,16 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
              << G4endl;
   }
 
-  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(material,particle,e,cut,e);
+  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,cut,e);
 
   if(nmod > 1) {
 
     for(j=1; j<nmod; j++) {
 
       e  = upperEkin[regModels->ModelIndex(j-1)];
-      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(material,particle,e,cut,e);
+      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
       e  = upperEkin[regModels->ModelIndex(j)];
-      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(material,particle,e,cut,e);
+      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
     }
     for(j=1; j<nmod; j++) {
       if(sigmaLow[j] > 0.0) factor[j] = (sigmaHigh[j-1]/sigmaLow[j] - 1.0);
@@ -639,7 +639,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,cut,e)*fac;
+    G4double cross = models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,cut,e)*fac;
     if(j==0 && startFromNull) cross = 0.0;
 
     if(1 < verboseLevel) {
@@ -673,7 +673,6 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
 
   G4double e;
 
-  const G4Material* material = couple->GetMaterial();
   size_t i = couple->GetIndex();
   G4double cut = theCuts[i];
   G4double subcut = theSubCuts[i];
@@ -687,7 +686,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
 
   if(0 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
-             << material->GetName() << G4endl;
+             << couple->GetMaterial()->GetName() << G4endl;
   }
 
   // calculate factors to provide continuity of energy loss
@@ -701,7 +700,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
 
 
   if(1 < verboseLevel) {
-      G4cout << "### For material " << material->GetName()
+      G4cout << "### For material " << couple->GetMaterial()->GetName()
              << " are available " << nmod
              << " models"
              << " Ecut(MeV)= " << cut/MeV
@@ -709,16 +708,16 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
              << G4endl;
   }
 
-  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(material,particle,e,subcut,cut);
+  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,subcut,cut);
 
   if(nmod > 1) {
 
     for(j=1; j<nmod; j++) {
 
       e  = upperEkin[regModels->ModelIndex(j-1)];
-      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(material,particle,e,subcut,cut);
+      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,subcut,cut);
       e  = upperEkin[regModels->ModelIndex(j)];
-      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(material,particle,e,subcut,cut);
+      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,subcut,cut);
     }
     for(j=1; j<nmod; j++) {
       if(sigmaLow[j] > 0.0) factor[j] = (sigmaHigh[j-1]/sigmaLow[j] - 1.0);
@@ -741,7 +740,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double cross=models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,subcut,cut)*fac;
+    G4double cross=models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,subcut,cut)*fac;
     if(j==0 && startFromNull) cross = 0.0;
 
     if(1 < verboseLevel) {

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VEmModel.hh,v 1.11 2003-07-21 12:52:06 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -38,6 +40,9 @@
 // 24-01-03 Cut per region (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 25-02-03 Add sample theta and displacement (V.Ivanchenko)
+// 16-07-03 Move MSC methods to the derived class;
+//          replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
+//          calculation (V.Ivanchenko)
 //
 
 //
@@ -55,11 +60,8 @@
 #include <vector>
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DataVector.hh"
-
-class G4PhysicsTable;
 
 class G4VEmModel
 {
@@ -85,12 +87,12 @@ public:
 
   virtual G4bool IsInCharge(const G4ParticleDefinition*) = 0;
 
-  virtual G4double ComputeDEDX(const G4Material*,
+  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
                                const G4ParticleDefinition*,
                                      G4double kineticEnergy,
                                      G4double cutEnergy) = 0;
 
-  virtual G4double CrossSection(const G4Material*,
+  virtual G4double CrossSection(const G4MaterialCutsCouple*,
                                 const G4ParticleDefinition*,
                                       G4double kineticEnergy,
                                       G4double cutEnergy,
@@ -107,23 +109,6 @@ public:
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double tmax) = 0;
-
-  virtual G4double GeomPathLength(G4PhysicsTable*,
-                            const G4MaterialCutsCouple*,
-		            const G4ParticleDefinition*,
-		                  G4double&,
-			          G4double,
-			          G4double,
-    			          G4double truePathLength) {return truePathLength;};
-  // G4double parameters: kinEnergy, lambda, range, 
-  // G4PhysicsTable: theLambdaTable 
-
-  virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
-
-  virtual G4double SampleCosineTheta(G4double ) {return 1.0; };
-  // G4double parrameter trueStepLength
-
-  virtual G4double SampleDisplacement() {return 0.0;};
 
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;
@@ -145,7 +130,4 @@ private:
 };
 
 #endif
-
-
-
 

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VMultipleScattering.cc,v 1.9 2003-07-21 12:52:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,9 +35,10 @@
 // Creation date: 25.03.2003
 //
 // Modifications:
-// 
+//
 // 13.04.03 Change printout (V.Ivanchenko)
 // 04-06-03 Fix compilation warnings (V.Ivanchenko)
+// 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -52,7 +55,6 @@
 #include "G4LossTableManager.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4DataVector.hh"
 #include "G4PhysicsTable.hh"
@@ -167,7 +169,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
+void G4VMultipleScattering::AddEmModel(G4int order, G4VMscModel* p,
                                  const G4Region* region)
 {
   G4VEmFluctuationModel* fm = 0;

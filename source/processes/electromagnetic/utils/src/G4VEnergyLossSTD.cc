@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VEnergyLossSTD.cc,v 1.44 2003-07-21 12:52:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -429,7 +431,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTable()
   }
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildDEDXTable(): table is built for " 
+    G4cout << "G4VEnergyLossSTD::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
@@ -799,7 +801,7 @@ void G4VEnergyLossSTD::PrintInfoDefinition()
          << G4BestUnit(maxKinEnergy,"Energy")
          << " in " << nLambdaBins << " bins."
          << G4endl;
-  /*   
+  /*
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
       if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
       G4cout << "RangeTable address= " << theRangeTable << G4endl;

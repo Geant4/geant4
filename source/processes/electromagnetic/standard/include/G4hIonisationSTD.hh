@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4hIonisationSTD.hh,v 1.13 2003-07-21 12:52:23 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -134,7 +136,7 @@ private:
 
 inline G4bool G4hIonisationSTD::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && 
+  return (p.GetPDGCharge() != 0.0 &&
           p.GetPDGMass() > 10.0*MeV &&
 	 !p.IsShortLived());
 }
