@@ -1,0 +1,66 @@
+
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+ 
+ null 0 120 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dE (mb/MeV)'
+ 
+ 
+ hi/file 1 prec.paw
+ set dmod 3
+ hi/pl 23 shist
+ line 100 1.6 110 1.6
+ itx 115 35 'PREC'
+ close 1
+ 
+ 
+ hi/file 1 kin.paw
+ set dmod 1
+ hi/pl 23 shist
+ line 100 1.2 110 1.2
+ itx 115 15 'KIN'
+ close 1
+ 
+ 
+  ve/create X1(29) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 25 35 45 55 65 75 85 95 105 115
+ve/create Y1(29) R 59.735 59.245 41.32 32.88 24.96 19.26 15.97 13.47 11.5 9.76 9.03 8.3 7.77 6.55 6.49 6.69 6.21 5.65 5.87 4.66 4.24 3.5 3.17 2.87 2.43 2.44 1.99 1.32 0.69
+gr/h/symb X1 Y1 29 25 0.2
+
+ exe ../prf n_e eps
+
+  null 0 120 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dE (mb/MeV)'
+ 
+  gr/h/symb X1 Y1 29 21 0.2
+
+  hi/file 1 par.paw
+
+ set dmod 3
+ hi/pl 23 shist
+ line 100 1.8 110 1.8
+ itx 115 60 'LEPAR'
+ close 1
+
+  hi/file 1 chips.paw
+ set dmod 1
+ hi/pl 23 shist
+ line 100 1.4 110 1.4
+ itx 115 22 'CHIPS'
+ close 1
+ 
+
+ opt liny
+
+exe ../prf nk_e eps
+
+
+

@@ -1,0 +1,16 @@
+macro nimeps yscale=1.
+set xmgr 0.01
+set ymgu 0.01
+set xmgl 0.01
+set ymgl 0.01
+set xwin 0.01
+set ywin 0.01
+* opt utit
+* title ' ' U
+xzones = $grafinfo('xzones')
+yzones = $grafinfo('yzones')
+set xsiz 7.6
+set ysiz 7.0*[yscale]
+zone [xzones] [yzones]
+exec kumac/seteps -1 0.
+return
