@@ -51,7 +51,7 @@ public:
   G4int GetTotalNumberOfFile(){return TotalNumberOfFile;}
   G4std::vector<G4String> GetListOfFile() {return ListOfFile;}
   G4int GetTotalRows() {return TotalRows;}
-  
+  G4int GetTotalColumns() {return TotalColumns;}  
  
 private:
 	
@@ -59,10 +59,10 @@ private:
   G4int TotalNumberOfFile;
   vector<G4String> ListOfFile;
   G4int  TotalRows;
+  G4int  TotalColumns;
 
 public:
 	
-	G4int  TotalColumns;
 	double  X_PixelSpacing, Y_PixelSpacing;
 	double  SliceTickness;
 	double  SliceLocation;

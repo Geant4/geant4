@@ -67,8 +67,9 @@ void DicomGeometry::patientConstruction()
   Attributes_param->SetForceSolid(false);
   Attributes_param->SetColour(red=1.,green=0.,blue=0.,alpha=1.);
   G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
-
-  Parameterisation_Box = new G4Box("Parameterisation Mother",ReadConfiguration->TotalColumns*(ReadConfiguration->X_PixelSpacing)/2.*mm, ReadConfiguration->TotalRows*(ReadConfiguration->Y_PixelSpacing)/2.*mm, totalNumberOfFile*(ReadConfiguration->SliceTickness)/2.*mm);
+  G4int totalRows = ReadConfiguration->GetTotalRows(); 
+  G4int totalColumns = ReadConfiguration->GetTotalColumns();
+  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->X_PixelSpacing)/2.*mm, totalRows*(ReadConfiguration->Y_PixelSpacing)/2.*mm, totalNumberOfFile*(ReadConfiguration->SliceTickness)/2.*mm);
   logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
   logical_param->SetVisAttributes(Attributes_param);
 
