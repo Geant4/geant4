@@ -92,12 +92,12 @@ G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
 //
 //
 
-inline G4double G4PAIonisation::
-GetMeanFreePath( const G4Track&          trackData,
-                       G4double          previousStepSize,
-                       G4ForceCondition* condition         ) 
+inline G4double 
+G4PAIonisation::GetMeanFreePath( const G4Track&          trackData,
+                                       G4double          previousStepSize,
+                                       G4ForceCondition* condition         ) 
 {
-// G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;
+  // G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;
 
   G4int iTkin, iPlace ;
   G4double charge, charge2, mass, massRatio, kinE, gamma, scaledE, meanFreePath ;
@@ -115,7 +115,7 @@ GetMeanFreePath( const G4Track&          trackData,
     mass = aParticle->GetDefinition()->GetPDGMass() ;
     gamma = 1.0 + kinE/mass ;
 
-    if(gamma < 1.2) return meanFreePath = DBL_MAX ;
+  //  if(gamma < 1.2) return meanFreePath = DBL_MAX ;
 
     charge = aParticle->GetDefinition()->GetPDGCharge() ;
     charge2 = charge*charge ;
@@ -133,13 +133,15 @@ GetMeanFreePath( const G4Track&          trackData,
 
     if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
     {
-      meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace))(0)/charge2 ;
+    //  meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace))(0)/charge2 ;
+      meanFreePath = (*fLambdaVector)(iPlace)/charge2 ;
     }
     else
     {
       if(iTkin == 0) // Tkin is too small, trying from right only
       {
-        meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace+1))(0)/charge2 ;
+      //  meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace+1))(0)/charge2 ;
+        meanFreePath = (*fLambdaVector)(iPlace+1)/charge2 ;
       }
       else
       {
@@ -148,9 +150,8 @@ GetMeanFreePath( const G4Track&          trackData,
         W  = 1.0/(E2 - E1) ;
         W1 = (E2 - scaledE)*W ;
         W2 = (scaledE - E1)*W ;
-        primaryIon = (*(*fPAItransferBank)(iPlace  ))(0)*W1 + 
-                     (*(*fPAItransferBank)(iPlace+1))(0)*W2    ;
-        meanFreePath = 1.0/primaryIon/charge2 ;
+        meanFreePath = (*fLambdaVector)(iPlace)*W1 + (*fLambdaVector)(iPlace+1)*W2 ;
+        meanFreePath /= charge2 ;
       }
     }
     // meanFreePath = DBL_MAX ;

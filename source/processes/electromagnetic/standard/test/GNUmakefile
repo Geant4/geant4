@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:32:25 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2002-05-17 09:18:16 grichine Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -48,19 +48,19 @@ INCFLAGS := \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/electromagnetic/xrays/include
 
-LDLIBS   := \
-            -lG4event \
-            -lG4tracking \
-            -lG4electromagnetic \
-            -lG4track \
-            -lG4particles \
-            -lG4decay \
-            -lG4procman \
-            -lG4materials \
-            -lG4digits+hits \
-            -lG4geometry \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4global
+#LDLIBS   := \
+#            -lG4event \
+#            -lG4tracking \
+#            -lG4electromagnetic \
+#            -lG4track \
+#            -lG4particles \
+#            -lG4decay \
+#            -lG4procman \
+#            -lG4materials \
+#            -lG4digits+hits \
+#            -lG4geometry \
+#            -lG4graphics_reps \
+#            -lG4intercoms \
+#            -lG4global
 
 include $(G4INSTALL)/config/binmake.gmk

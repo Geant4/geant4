@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.10 2002-04-09 17:34:42 vnivanch Exp $
+// $Id: G4PAIxSection.cc,v 1.11 2002-05-17 09:18:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,7 +167,10 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
          fDifPAIxSection[i]        = 0.0 ;   
          fIntegralPAIxSection[i]   = 0.0 ;   
       }
-      **************************************************  */   
+      **************************************************  */  
+ 
+      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
+      fThomasReicheKuhn *= fElectronDensity ;      
 
       InitPAI() ;  // create arrays allocated above
       
@@ -286,6 +289,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       */ ////////////////////////
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
+      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
+      fThomasReicheKuhn *= fElectronDensity ;      
       
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
@@ -300,6 +305,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
+         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
@@ -420,7 +426,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       */ ////////////////////////
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
-      
+      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
+      fThomasReicheKuhn *= fElectronDensity ;      
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
 
@@ -434,6 +441,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
+         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
@@ -504,6 +512,7 @@ void G4PAIxSection::InitPAI()
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
+         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
