@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.35 2003-05-28 08:10:11 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.36 2003-07-10 07:52:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -146,6 +146,8 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 		  G4double xend = aStep->GetTrack()->GetPosition().x()/mm ;
 		  G4double yend = aStep->GetTrack()->GetPosition().y()/mm ;
 		  G4double zend = aStep->GetTrack()->GetPosition().z()/mm ;
+                  G4int stepNumber = aStep->GetTrack()->GetCurrentStepNumber();
+                  G4cout<< stepNumber <<"numero di steps"<<G4endl;
                   // calculation of CSDA range 
                   // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
 		  G4double range = (sqrt(xend*xend + yend*yend + zend*zend)); 

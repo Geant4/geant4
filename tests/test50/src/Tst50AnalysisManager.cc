@@ -26,10 +26,8 @@
 //    *                             *
 //    *******************************
 //
-
-// $Id: Tst50AnalysisManager.cc,v 1.23 2003-07-03 13:43:10 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.24 2003-07-10 07:52:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
@@ -99,10 +97,9 @@ void Tst50AnalysisManager::book()
   
   //Create the factories for dataPoint and histograms
   dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
-  
-  //Create Data Points
-  stoppingPowerDataPoint = dataPointFactory -> create("Stopping Power test",2); 
-  CSDARangeDataPoint = dataPointFactory -> create ("CSDA Range test",2);
+
+  stoppingPowerDataPoint = dataPointFactory -> create("SP","Stopping Power test",2); 
+  CSDARangeDataPoint = dataPointFactory -> create ("CSDARange","CSDA Range test",2);
   particleTransmissionDataPoint = dataPointFactory -> create ("Transmission test",3);
   gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2);  
 
@@ -146,6 +143,8 @@ void Tst50AnalysisManager::StoppingPower(G4int PointNumber,
   coordinateX -> setErrorMinus( 0. );
   AIDA::IMeasurement* coordinateY = point->coordinate( 1 );
   coordinateY -> setValue( SP);
+  coordinateY -> setErrorPlus( 0. );
+  coordinateY -> setErrorMinus( 0. );
 }
 
 void Tst50AnalysisManager::CSDARange(G4int PointNumber,
@@ -156,8 +155,12 @@ void Tst50AnalysisManager::CSDARange(G4int PointNumber,
   AIDA::IDataPoint* point = CSDARangeDataPoint -> point(PointNumber);
   AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
   coordinateX -> setValue(primaryParticleEnergy );
+  coordinateX -> setErrorPlus( 0. );
+  coordinateX -> setErrorMinus( 0. );
   AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
   coordinateY -> setValue(range);
+  coordinateY -> setErrorPlus( 0. );
+  coordinateY -> setErrorMinus( 0. );
 }
 
 void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,

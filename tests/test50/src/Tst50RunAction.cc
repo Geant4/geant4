@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst50RunAction.cc,v 1.21 2003-07-03 13:43:10 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.22 2003-07-10 07:52:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -110,7 +109,7 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   if (primaryParticleName == "gamma")
     {
       G4double gammaTransmittedFraction = (gammaTransmitted/numberEvents);
-      G4double gammaTransmittedFractionError = -(log(sqrt(gammaTransmitted)/numberEvents)/(targetThickness*absorberMaterialDensity)); 
+      G4double gammaTransmittedFractionError = 1/(gammaTransmitted*(targetThickness*absorberMaterialDensity)); 
       G4double gammaAttenuationCoefficient = -(log(gammaTransmittedFraction))/(targetThickness*absorberMaterialDensity);
       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       analysis -> AttenuationGammaCoeffiecient(runID,primaryParticleEnergy/MeV,gammaAttenuationCoefficient/(cm2/g),gammaTransmittedFractionError/(cm2/g));
