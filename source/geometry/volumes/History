@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2002-01-10 16:04:38 gcosmo Exp $
+$Id: History,v 1.67 2002-01-10 16:15:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jan 10th, 2002       G. Cosmo
+Jan 10th, 2002       G. Cosmo - geomvol-V04-00-01
 - Activated mechanism in GNUmakefile for allowing compilation with
   G4DEBUG_FIELD or G4DEBUG_NAVIGATION flags. Replaced DEBUG with
   G4DEBUG_NAVIGATION in G4Navigator.cc.
@@ -25,11 +25,11 @@ Jan 10th, 2002       G. Cosmo
 Jan  8th, 2002       J. Apostolakis - geomvol-V04-00-00
 - G4AuxiliaryNavServices
   o Fixed it so that it only considers whether a (Point,Direction) 'ray' if
-      it is on the surface (it was mistakenly also checking those inside, and
-      rejecting them.)
-      [ This erroneous condition occurred frequently in the new usage of Locate 
-        with Direction to initialise a step.  
-        It's unclear if it occurred also at other times.]
+    it is on the surface (it was mistakenly also checking those inside, and
+    rejecting them.)
+    [ This erroneous condition occurred frequently in the new usage of Locate 
+      with Direction to initialise a step.  
+      It's unclear if it occurred also at other times.]
 
 Jan 8th, 2002        G. Cosmo
 - Fixed compilation problems and warnings on unit tests.
