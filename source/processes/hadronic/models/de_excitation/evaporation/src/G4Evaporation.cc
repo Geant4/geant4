@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.3 2003-11-04 11:24:24 lara Exp $
+// $Id: G4Evaporation.cc,v 1.4 2004-12-07 13:46:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -249,7 +249,7 @@ void G4Evaporation::CheckConservation(const G4Fragment & theInitialState,
 	       << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	       << theInitialState.GetZ() - ProductsZ << G4endl;
     }
-    if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+    if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4Evaporation.cc: Energy Conservation test for evaporation fragments" 
 	       << G4endl; 
@@ -257,9 +257,9 @@ void G4Evaporation::CheckConservation(const G4Fragment & theInitialState,
 	       << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	       << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
     } 
-    if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-	abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-	abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+    if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+	std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+	std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4Evaporation.cc: Momentum Conservation test for evaporation fragments" 
 	       << G4endl; 

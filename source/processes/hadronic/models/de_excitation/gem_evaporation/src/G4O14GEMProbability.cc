@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4O14GEMProbability.cc,v 1.2 2003-11-03 17:53:04 hpw Exp $
+// $Id: G4O14GEMProbability.cc,v 1.3 2004-12-07 13:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -37,23 +37,23 @@ G4O14GEMProbability::G4O14GEMProbability() :
 
   ExcitEnergies.push_back(5920.0*keV);
   ExcitSpins.push_back(0.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(50.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(50.0*keV));
 
   ExcitEnergies.push_back(6272.0*keV);
   ExcitSpins.push_back(3.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(103.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(103.0*keV));
 
   ExcitEnergies.push_back(6590.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(60.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(60.0*keV));
 
   ExcitEnergies.push_back(7768.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(76.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(76.0*keV));
 
   ExcitEnergies.push_back(9915.0*keV);
   ExcitSpins.push_back(4.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(100.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(100.0*keV));
 
 }
 

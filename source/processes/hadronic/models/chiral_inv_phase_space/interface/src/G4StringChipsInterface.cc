@@ -62,7 +62,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double radius2 = theNucleus->GetNuclearRadius(5*perCent);
   radius2 *= radius2;
   G4double pathlength = 0;
-  if(radius2 - inpactPar2>0) pathlength = 2.*sqrt(radius2 - inpactPar2);
+  if(radius2 - inpactPar2>0) pathlength = 2.*std::sqrt(radius2 - inpactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
@@ -228,7 +228,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int targetPDGCode = 90000000 + 1000*resZ + (resA-resZ);
   G4double targetMass = theNucleus->GetMass();
   targetMass -= hitMass;
-  G4double targetEnergy = sqrt(hitMomentum.mag2()+targetMass*targetMass);
+  G4double targetEnergy = std::sqrt(hitMomentum.mag2()+targetMass*targetMass);
   // !! @@ Target should be at rest: hitMomentum=(0,0,0) @@ !! M.K.
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
   

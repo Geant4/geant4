@@ -81,7 +81,7 @@ G4NuclearAbrasionGeometry::G4NuclearAbrasionGeometry (G4double AP1,
   Q  = (1.0 - b)/n;
   S  = Q * Q;
   T  = S * Q;
-  R  = sqrt(m*n);
+  R  = std::sqrt(m*n);
   U  = 1.0/m - 2.0;
 //
 //
@@ -122,9 +122,9 @@ G4double G4NuclearAbrasionGeometry::P ()
   }
   else
   {
-    if (rP-rT<=r && r<=rP+rT) P = 0.125*R*U*S - 0.125*(0.5*sqrt(n/m)*U-
-      (sqrt(1.0-m*m)/n - 1.0)*sqrt((2.0-m)/pow(m,5.0)))*T;
-    else                      P = (sqrt(1.0-m*m)/n-1.0)*sqrt(1.0-b*b/n/n);
+    if (rP-rT<=r && r<=rP+rT) P = 0.125*R*U*S - 0.125*(0.5*std::sqrt(n/m)*U-
+      (std::sqrt(1.0-m*m)/n - 1.0)*std::sqrt((2.0-m)/std::pow(m,5.0)))*T;
+    else                      P = (std::sqrt(1.0-m*m)/n-1.0)*std::sqrt(1.0-b*b/n/n);
   }
 
   if (!(P <= 1.0 && P>= -1.0))
@@ -153,9 +153,9 @@ G4double G4NuclearAbrasionGeometry::F ()
   }
   else
   {
-    if (rP-rT<=r && r<=rP+rT) F = 0.75*R*S - 0.125*(3.0*sqrt(n/m)-
-      (1.0-pow(1.0-m*m,3.0/2.0))*sqrt(1.0-pow(1.0-m,2.0))/pow(m,3.0))*T;
-    else                      F = (1.0-pow(1.0-m*m,3.0/2.0))*sqrt(1.0-b*b/n/n);
+    if (rP-rT<=r && r<=rP+rT) F = 0.75*R*S - 0.125*(3.0*std::sqrt(n/m)-
+      (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-std::pow(1.0-m,2.0))/std::pow(m,3.0))*T;
+    else                      F = (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-b*b/n/n);
   }
 
   if (!(F <= 1.0 && F>= 0.0))
@@ -174,7 +174,7 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfProjectile ()
   G4double Es = 0.0;
 
   Es = 0.95 * MeV * 4.0 * pi * rP*rP/fermi/fermi *
-       (1.0+P1-pow(1.0-F1,2.0/3.0));
+       (1.0+P1-std::pow(1.0-F1,2.0/3.0));
 //  if (rT < rP && r < rP-rT)
   if ((r-rP)/rT < rth)
   {
@@ -207,7 +207,7 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget ()
   G4double Es = 0.0;
 
   Es = 0.95 * MeV * 4.0 * pi * rT*rT/fermi/fermi *
-       (1.0+P1-pow(1.0-F1,2.0/3.0));
+       (1.0+P1-std::pow(1.0-F1,2.0/3.0));
 //  if (rP < rT && r < rT-rP)
   if ((r-rT)/rP < rth)
   {

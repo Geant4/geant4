@@ -215,7 +215,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
         tmpstream >>recordType >>a >>b;
         if (recordType == "P")
         {
-          if (abs(a*keV-aE) < levelTolerance)
+          if (std::abs(a*keV-aE) < levelTolerance)
           {
             found    = true;
             lifetime = b/0.693147*s ;

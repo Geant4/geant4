@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.2 2003-11-03 17:53:04 hpw Exp $
+// $Id: G4GEMCoulombBarrierHE.cc,v 1.3 2004-12-07 13:47:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -81,7 +81,7 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
     
 //    Barrier *= K;
     
-    Barrier /= (1.0 + sqrt(U/(2.0*static_cast<G4double>(ARes))));
+    Barrier /= (1.0 + std::sqrt(U/(2.0*static_cast<G4double>(ARes))));
   }
   return Barrier;
 }
@@ -89,8 +89,8 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
 
 G4double G4GEMCoulombBarrierHE::CalcCompoundRadius(const G4double ARes) const
 {
-    G4double AresOneThird = pow(ARes,1.0/3.0);
-    G4double AejectOneThird = pow(G4double(GetA()),1.0/3.0);
+    G4double AresOneThird = std::pow(ARes,1.0/3.0);
+    G4double AejectOneThird = std::pow(G4double(GetA()),1.0/3.0);
 
     G4double Result = 1.12*(AresOneThird + AejectOneThird) - 
 	0.86*(AresOneThird+AejectOneThird)/(AresOneThird*AejectOneThird);

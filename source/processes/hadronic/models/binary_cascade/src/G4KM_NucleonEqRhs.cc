@@ -44,7 +44,7 @@ G4KM_NucleonEqRhs::G4KM_NucleonEqRhs(G4KM_DummyField *field,
 {
   theMass = 0.;
   A = theNucleus->GetMassNumber();
-  factor = hbarc*hbarc*pow(3.*pi2*A,2./3.)/3.;
+  factor = hbarc*hbarc*std::pow(3.*pi2*A,2./3.)/3.;
 }
 
 
@@ -52,8 +52,8 @@ void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
 					  const G4double *,
 					  G4double dydx[]) const
 {
-  G4double yMod = sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);
-  G4double e = sqrt(theMass*theMass+y[3]*y[3]+y[4]*y[4]+y[5]*y[5]);
+  G4double yMod = std::sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);
+  G4double e = std::sqrt(theMass*theMass+y[3]*y[3]+y[4]*y[4]+y[5]*y[5]);
 
 // y[0..2] is position
 // y[3..5] is momentum (and not mom.direction)
@@ -85,7 +85,7 @@ void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
   G4double density=  nuclearDensity->GetDensity(pos);
   G4double deriv(0);
   if (density > 0 ) deriv = (factor/theMass)*
-			pow(density, -1./3.)*nuclearDensity->GetDeriv(pos);
+			std::pow(density, -1./3.)*nuclearDensity->GetDeriv(pos);
 
 //  dydx[3] = yMod == 0 ? 0 : -deriv*y[0]/yMod;
 //  dydx[4] = yMod == 0 ? 0 : -deriv*y[1]/yMod;

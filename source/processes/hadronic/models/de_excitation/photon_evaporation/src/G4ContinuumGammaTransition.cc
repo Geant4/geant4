@@ -81,7 +81,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
   // Energy range for photon generation; upper limit is defined 5*Gamma(GDR) from GDR peak
   _eMin = 0.001 * MeV;
   // Giant Dipole Resonance energy
-  G4double energyGDR = (40.3 / pow(G4double(_nucleusA),0.2) ) * MeV;
+  G4double energyGDR = (40.3 / std::pow(G4double(_nucleusA),0.2) ) * MeV;
   // Giant Dipole Resonance width
   G4double widthGDR = 0.30 * energyGDR;
   // Extend 
@@ -182,8 +182,8 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   G4ConstantLevelDensityParameter ldPar;
   G4double aLevelDensityParam = ldPar.LevelDensityParameter(_nucleusA,_nucleusZ,_excitation);
 
-  G4double levelDensBef = exp(2.0*sqrt(aLevelDensityParam*_excitation));
-  G4double levelDensAft = exp(2.0*sqrt(aLevelDensityParam*(_excitation - e)));
+  G4double levelDensBef = std::exp(2.0*std::sqrt(aLevelDensityParam*_excitation));
+  G4double levelDensAft = std::exp(2.0*std::sqrt(aLevelDensityParam*(_excitation - e)));
 
   if(_verbose > 20)
     G4cout << _nucleusA << " LevelDensityParameter = " <<  aLevelDensityParam
@@ -197,7 +197,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   //  G4double sigma0 = 2.5 * _nucleusA * millibarn;  
   G4double sigma0 = 2.5 * _nucleusA;  
 
-  G4double Egdp = (40.3 / pow(G4double(_nucleusA),0.2) )*MeV;
+  G4double Egdp = (40.3 / std::pow(G4double(_nucleusA),0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
   G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
@@ -224,7 +224,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 G4double G4ContinuumGammaTransition::GammaTime()
 {
 
-  G4double GammaR = 0.30 * (40.3 / pow(G4double(_nucleusA),0.2) )*MeV;
+  G4double GammaR = 0.30 * (40.3 / std::pow(G4double(_nucleusA),0.2) )*MeV;
   G4double tau = hbar_Planck/GammaR;
 
   G4double tMin = 0;
@@ -235,7 +235,7 @@ G4double G4ContinuumGammaTransition::GammaTime()
   for(G4int i = 0;i<nBins;i++)
   {
     G4double t = tMin + ((tMax-tMin)/nBins)*i;
-    sampleArray[i] = (exp(-t/tau))/tau;
+    sampleArray[i] = (std::exp(-t/tau))/tau;
   }
 
   G4RandGeneralTmp randGeneral(sampleArray, nBins);

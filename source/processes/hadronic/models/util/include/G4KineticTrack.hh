@@ -271,10 +271,10 @@ inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
   G4double mass2=theTotal4Momentum.mag2();
   if ( sqr(aEnergy) > mass2 )
   {
-      newP = sqrt(sqr(aEnergy) - mass2 );
+      newP = std::sqrt(sqr(aEnergy) - mass2 );
   } else
   {
-      aEnergy=sqrt(mass2);
+      aEnergy=std::sqrt(mass2);
   }
   Set4Momentum(G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy));
 }
@@ -283,7 +283,7 @@ inline void G4KineticTrack::Update4Momentum(const G4ThreeVector & aMomentum)
 {
 // update the4Momentum with aMomentum at constant mass (the4Momentum.mag()  
 //   updates theTotal4Momentum as well.
-  G4double newE=sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
+  G4double newE=std::sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
   Set4Momentum(G4LorentzVector(aMomentum, newE));
 }
 
@@ -296,7 +296,7 @@ inline void G4KineticTrack::SetTrackingMomentum(const G4LorentzVector& aMomentum
 //     keep mass of aMomentum for the total momentum
   G4double m2 = aMomentum.mag2();
   G4double p2=theTotal4Momentum.vect().mag2();
-  theTotal4Momentum.setE(sqrt(m2+p2));
+  theTotal4Momentum.setE(std::sqrt(m2+p2));
 }
 
 inline void G4KineticTrack::UpdateTrackingMomentum(G4double aEnergy)
@@ -307,10 +307,10 @@ inline void G4KineticTrack::UpdateTrackingMomentum(G4double aEnergy)
   G4double mass2=theTotal4Momentum.mag2();
   if ( sqr(aEnergy) > mass2 )
   {
-      newP = sqrt(sqr(aEnergy) - mass2 );
+      newP = std::sqrt(sqr(aEnergy) - mass2 );
   } else
   {
-      aEnergy=sqrt(mass2);
+      aEnergy=std::sqrt(mass2);
   }
   SetTrackingMomentum(G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy));
 }
@@ -319,7 +319,7 @@ inline void G4KineticTrack::UpdateTrackingMomentum(const G4ThreeVector & aMoment
 {
 // update the4Momentum with aMomentum at constant mass (the4Momentum.mag()  
 //   updates theTotal4Momentum as well.
-  G4double newE=sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
+  G4double newE=std::sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
   SetTrackingMomentum(G4LorentzVector(aMomentum, newE));
 }
 
@@ -331,7 +331,7 @@ inline G4double G4KineticTrack::GetActualMass() const
  G4ThreeVector theMomentum = the4Momentum.vect();
  G4double      theMomentum2 = theMomentum.mag2();
  G4double      theTotalEnergy = the4Momentum.e();
- G4double      theMass = sqrt(abs(theTotalEnergy * theTotalEnergy - theMomentum2));
+ G4double      theMass = std::sqrt(std::abs(theTotalEnergy * theTotalEnergy - theMomentum2));
  return        theMass;
 }
 
@@ -378,7 +378,7 @@ inline G4double G4KineticTrack::SampleResidualLifetime()
 {
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  G4double tau = hbar_Planck * (-1.0 / theTotalActualWidth);
- G4double theResidualLifetime = tau * log(G4UniformRand());
+ G4double theResidualLifetime = tau * std::log(G4UniformRand());
  return theResidualLifetime*the4Momentum.gamma();
 }
 
@@ -390,7 +390,7 @@ inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double m,
   G4double theCMMomentum;
   if((m_ij[0]+m_ij[1])<m)
    theCMMomentum = 1 / (2 * m) * 
-          sqrt (((m * m) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
+          std::sqrt (((m * m) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
                 ((m * m) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
   else
    theCMMomentum=0.;

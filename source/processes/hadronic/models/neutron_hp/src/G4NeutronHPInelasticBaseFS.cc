@@ -63,7 +63,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
-  if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
+  if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;
@@ -191,7 +191,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
     thePhaseSpaceDistribution.SetTarget(&theTarget);
     for(ii=0; ii<nDef; ii++) 
     {
-      G4double massCode = 1000.*abs(theDefs[ii]->GetPDGCharge());
+      G4double massCode = 1000.*std::abs(theDefs[ii]->GetPDGCharge());
       massCode += theDefs[ii]->GetBaryonNumber(); 
       G4double dummy = 0;
       G4ReactionProduct * aSec = thePhaseSpaceDistribution.Sample(eKinetic, massCode, dummy);
@@ -283,8 +283,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	    G4double concreteMass = G4NucleiPropertiesTable::GetNuclearMass(z1, a1);
 	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
-	    G4double emin = availableEnergy+m1+m2 - sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
-	    G4double p1=sqrt(2.*m2*emin);
+	    G4double emin = availableEnergy+m1+m2 - std::sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
+	    G4double p1=std::sqrt(2.*m2*emin);
 	    bufferedDirection = p1*aHadron->GetMomentum().unit();
 	    if(getenv("HTOKEN")) // @@@@@ verify the nucleon counting...
 	    { 
@@ -301,7 +301,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	  {
 	    G4cout << " HTOKEN "<<bufferedDirection.mag2()<<G4endl;
 	  }
-	  aHadron->SetTotalEnergy( sqrt(aHadron->GetMass()*aHadron->GetMass()
+	  aHadron->SetTotalEnergy( std::sqrt(aHadron->GetMass()*aHadron->GetMass()
 	                              +bufferedDirection.mag2()) );
 	  aHadron->SetMomentum(bufferedDirection);
           aHadron->Lorentz(*aHadron, -1.*(theTarget+theNeutron)); 

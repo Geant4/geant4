@@ -372,8 +372,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 	  G4double theMassRatio = thePoleMass / theActualMass;
           G4double theMomRatio = theActualMom / thePoleMom;
           theActualWidth[index] = thePoleWidth * theMassRatio *
-                                  pow(theMomRatio, (2 * l + 1)) *
-                                  (1.2 / (1+ 0.2*pow(theMomRatio, (2 * l))));
+                                  std::pow(theMomRatio, (2 * l + 1)) *
+                                  (1.2 / (1+ 0.2*std::pow(theMomRatio, (2 * l))));
           delete [] theDaughterMass;
 	  theDaughterMass = 0;
           delete [] theDaughterWidth;
@@ -688,7 +688,7 @@ G4double G4KineticTrack::IntegrandFunction1(G4double xmass) const
   G4double gamma2 = theDaughterWidth[1];
   
   G4double result = (1. / (2 * mass)) *
-    sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+    std::sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
 	     ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))),0.0)) *
     BrWig(gamma2, mass2, xmass);
   return result;
@@ -701,7 +701,7 @@ G4double G4KineticTrack::IntegrandFunction2(G4double xmass) const
   G4double mass2 = theDaughterMass[1];
   G4double gamma2 = theDaughterWidth[1];
   G4double result = (1. / (2 * mass)) *
-    sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+    std::sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
 	     ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))),0.0)) *
     BrWig(gamma2, mass2, xmass);
  return result;
@@ -715,7 +715,7 @@ G4double G4KineticTrack::IntegrandFunction3(G4double xmass) const
   const G4double gamma2 = theDaughterWidth[1];
 
   const G4double result = (1. / (2 * mass)) *
-    sqrt(((mass * mass) - (G4KineticTrack_xmass1 + xmass) * (G4KineticTrack_xmass1 + xmass)) *
+    std::sqrt(((mass * mass) - (G4KineticTrack_xmass1 + xmass) * (G4KineticTrack_xmass1 + xmass)) *
 	 ((mass * mass) - (G4KineticTrack_xmass1 - xmass) * (G4KineticTrack_xmass1 - xmass))) *
     BrWig(gamma2, mass2, xmass);
   return result;

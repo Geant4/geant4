@@ -106,7 +106,7 @@ class G4GHEKinematicsVector
    void SetMomentumAndUpdate( G4ParticleMomentum mom )
    {
      momentum      = mom;
-     energy        = sqrt(mass*mass + momentum.mag2());
+     energy        = std::sqrt(mass*mass + momentum.mag2());
      kineticEnergy = std::max(0.,energy - mass);
      return;
    }
@@ -129,7 +129,7 @@ class G4GHEKinematicsVector
      momentum.setX( x );
      momentum.setY( y );
      momentum.setZ( z );
-     energy        = sqrt(mass*mass + momentum.mag2());
+     energy        = std::sqrt(mass*mass + momentum.mag2());
      kineticEnergy = std::max(0.,energy-mass);
      return;
    }
@@ -147,7 +147,7 @@ class G4GHEKinematicsVector
    {
      momentum.setX( x );
      momentum.setY( y );
-     energy = sqrt(mass*mass + momentum.mag2());
+     energy = std::sqrt(mass*mass + momentum.mag2());
      kineticEnergy = std::max(0.,energy-mass);
      return;
    }
@@ -163,7 +163,7 @@ class G4GHEKinematicsVector
    void SetMomentumAndUpdate( G4double z )
    {
      momentum.setZ( z );
-     energy = sqrt(mass*mass + momentum.mag2());
+     energy = std::sqrt(mass*mass + momentum.mag2());
      kineticEnergy = std::max(0.,energy-mass);
      return;
    }
@@ -187,14 +187,14 @@ class G4GHEKinematicsVector
          energy = e;
          kineticEnergy   = energy - mass;
          G4double momold = momentum.mag();
-         G4double momnew = sqrt(energy*energy - mass*mass);
+         G4double momnew = std::sqrt(energy*energy - mass*mass);
          if (momold == 0.)
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
-             G4double sint = sqrt(1. - cost*cost);
+             G4double sint = std::sqrt(1. - cost*cost);
              G4double phi  = M_2PI* G4UniformRand();
-             momentum.setX( momnew * sint * cos(phi));
-             momentum.setY( momnew * sint * sin(phi));
+             momentum.setX( momnew * sint * std::cos(phi));
+             momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
            }
          else
@@ -227,14 +227,14 @@ class G4GHEKinematicsVector
          energy = ekin + mass;
          kineticEnergy   = ekin;
          G4double momold = momentum.mag();
-         G4double momnew = sqrt(energy*energy - mass*mass);
+         G4double momnew = std::sqrt(energy*energy - mass*mass);
          if (momold == 0.)
            {
              G4double cost = 1.0-2.0*G4UniformRand();
-             G4double sint = sqrt(1. - cost*cost);
+             G4double sint = std::sqrt(1. - cost*cost);
              G4double phi  = M_2PI* G4UniformRand();
-             momentum.setX( momnew * sint * cos(phi));
-             momentum.setY( momnew * sint * sin(phi));
+             momentum.setX( momnew * sint * std::cos(phi));
+             momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
            }
          else
@@ -263,7 +263,7 @@ class G4GHEKinematicsVector
     kineticEnergy = std::max(0., energy - m);
     mass = m;
     energy = kineticEnergy + mass;
-    G4double momnew = sqrt(std::max(0., energy*energy - mass*mass));
+    G4double momnew = std::sqrt(std::max(0., energy*energy - mass*mass));
     if ( momnew == 0.0) 
        {
          momentum.setX( 0.0 );
@@ -276,10 +276,10 @@ class G4GHEKinematicsVector
          if (momold == 0.)
             { 
               G4double cost = 1.-2.*G4UniformRand();
-              G4double sint = sqrt(1.-cost*cost);
+              G4double sint = std::sqrt(1.-cost*cost);
               G4double phi  = M_2PI*G4UniformRand();
-              momentum.setX( momnew*sint*cos(phi));
-              momentum.setY( momnew*sint*sin(phi));
+              momentum.setX( momnew*sint*std::cos(phi));
+              momentum.setY( momnew*sint*std::sin(phi));
               momentum.setZ( momnew*cost);
             }
          else
@@ -356,9 +356,9 @@ class G4GHEKinematicsVector
      energy = p1.energy + p2.energy;
      G4double b = energy*energy - momentum.mag2();
      if( b < 0 )
-       mass = -1. * sqrt( -b );
+       mass = -1. * std::sqrt( -b );
      else
-       mass = sqrt( b );
+       mass = std::sqrt( b );
      kineticEnergy = std::max(0.,energy - mass);
      charge        = p1.charge + p2.charge;
      code          = p1.code   + p2.code;
@@ -372,9 +372,9 @@ class G4GHEKinematicsVector
      energy = p1.energy - p2.energy;
      G4double b = energy*energy - momentum.mag2();
      if( b < 0 )
-       mass = -1. * sqrt( -b );
+       mass = -1. * std::sqrt( -b );
      else
-       mass = sqrt( b );
+       mass = std::sqrt( b );
      kineticEnergy = std::max(0.,energy - mass);
      charge        = p1.charge - p2.charge;
      code          = p1.code   - p2.code;
@@ -389,7 +389,7 @@ class G4GHEKinematicsVector
      momentum.setX( p1.momentum.x()+a*p2.momentum.x() );
      momentum.setY( p1.momentum.y()+a*p2.momentum.y() );
      momentum.setZ( p1.momentum.z()+a*p2.momentum.z() );
-     energy = sqrt( sqr(p1.mass) + momentum.mag2() );
+     energy = std::sqrt( sqr(p1.mass) + momentum.mag2() );
      mass = p1.mass;
      kineticEnergy = std::max(0.,energy - mass);
      timeOfFlight  = p1.timeOfFlight;
@@ -402,28 +402,28 @@ class G4GHEKinematicsVector
   inline
    G4double CosAng( const G4GHEKinematicsVector & p )
    {
-     G4double a = sqrt( momentum.mag2() * p.momentum.mag2() );
+     G4double a = std::sqrt( momentum.mag2() * p.momentum.mag2() );
      if( a != 0.0 ) 
        {
          a = (momentum.x()*p.momentum.x() +
               momentum.y()*p.momentum.y() +
               momentum.z()*p.momentum.z()) / a;
-         if( fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( std::fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
        }
      return a;
    }
   inline
    G4double Ang(const G4GHEKinematicsVector & p )
    {
-     G4double a = sqrt( momentum.mag2() * p.momentum.mag2() );
+     G4double a = std::sqrt( momentum.mag2() * p.momentum.mag2() );
      if( a != 0.0 ) 
        {
          a = (momentum.x()*p.momentum.x() +
               momentum.y()*p.momentum.y() +
               momentum.z()*p.momentum.z()) / a;
-         if( fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( std::fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
        }
-     return acos(a);
+     return std::acos(a);
    }      
 
   inline
@@ -499,7 +499,7 @@ class G4GHEKinematicsVector
      momentum.setY( h * p.momentum.y());
      momentum.setZ( h * p.momentum.z());
      mass          = p.mass;
-     energy        = sqrt(momentum.mag2() + mass*mass);
+     energy        = std::sqrt(momentum.mag2() + mass*mass);
      kineticEnergy = energy - mass;
      charge        = p.charge;
      timeOfFlight  = p.timeOfFlight;
@@ -514,12 +514,12 @@ class G4GHEKinematicsVector
    void Norz( const G4GHEKinematicsVector & p )
    {
      G4double a =   p.momentum.mag2();
-     if (a > 0.0) a = 1./sqrt(a);
+     if (a > 0.0) a = 1./std::sqrt(a);
      momentum.setX( a * p.momentum.x() );
      momentum.setY( a * p.momentum.y() );
      momentum.setZ( a * p.momentum.z() );
      mass          = p.mass;
-     energy        = sqrt(momentum.mag2() + mass*mass);
+     energy        = std::sqrt(momentum.mag2() + mass*mass);
      kineticEnergy = energy - mass;
      charge        = p.charge;
      timeOfFlight  = p.timeOfFlight;
@@ -575,15 +575,15 @@ class G4GHEKinematicsVector
         {
           G4double ph, px, py, pz;
           G4double cost  = p2.momentum.z()/p2.momentum.mag(); 
-          G4double sint  = 0.5 * (  sqrt(fabs((1.-cost)*(1.+cost))) 
-                                  + sqrt(pt2)/p2.momentum.mag());
+          G4double sint  = 0.5 * (  std::sqrt(std::fabs((1.-cost)*(1.+cost))) 
+                                  + std::sqrt(pt2)/p2.momentum.mag());
           (p2.momentum.y() < 0.) ? ph = 1.5*M_PI : ph = 0.5*M_PI;
           if( p2.momentum.x() != 0.0) 
-             ph = atan2(p2.momentum.y(),p2.momentum.x());             
-          px =   cost*cos(ph)*p1.momentum.x() - sin(ph)*p1.momentum.y()
-               + sint*cos(ph)*p1.momentum.z();
-          py =   cost*sin(ph)*p1.momentum.x() + cos(ph)*p1.momentum.y()
-               + sint*sin(ph)*p1.momentum.z();
+             ph = std::atan2(p2.momentum.y(),p2.momentum.x());             
+          px =   cost*std::cos(ph)*p1.momentum.x() - std::sin(ph)*p1.momentum.y()
+               + sint*std::cos(ph)*p1.momentum.z();
+          py =   cost*std::sin(ph)*p1.momentum.x() + std::cos(ph)*p1.momentum.y()
+               + sint*std::sin(ph)*p1.momentum.z();
           pz = - sint        *p1.momentum.x() 
                + cost        *p1.momentum.z();
           momentum.setX( px ); 

@@ -315,10 +315,10 @@ void G4Analyser::handleWatcherStatistics() {
   };
 
   if (checked > 0.0) {
-    gl_chsq = sqrt(gl_chsq) / checked;
+    gl_chsq = std::sqrt(gl_chsq) / checked;
     averat /= checked;
     ave_err /= checked;
-    fgr = pow(10.0, sqrt(fgr / checked)); 
+    fgr = std::pow(10.0, std::sqrt(fgr / checked)); 
   };
 
   if (verboseLevel > 3) {

@@ -216,7 +216,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   if (AF > 0)
   {
     G4double AFd = static_cast<G4double>(AF);
-    G4double R = 11.8 / pow(AFd, 0.45);
+    G4double R = 11.8 / std::pow(AFd, 0.45);
     G4int minZ = Z - DAabl;
     if (minZ <= 0) minZ = 1;
 //
@@ -228,7 +228,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     G4double sum = 0.0;
     for (G4int ii=minZ; ii<= Z; ii++)
     {
-      sum   += exp(-R*pow(abs(ii - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
+      sum   += std::exp(-R*std::pow(std::abs(ii - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
       sig[ii] = sum;
     }
 //
@@ -266,10 +266,10 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   for (G4int ift=0; ift<nFragTypes; ift++)
   {
     G4ParticleDefinition *type = fragType[ift];
-    G4double n  = floor((G4double) DAabl / type->GetBaryonNumber() + 1.0E-10);
+    G4double n  = std::floor((G4double) DAabl / type->GetBaryonNumber() + 1.0E-10);
     G4double n1 = 1.0E+10;
     if (fragType[ift]->GetPDGCharge() > 0.0)
-      n1 = floor((G4double) DZabl / type->GetPDGCharge() + 1.0E-10);
+      n1 = std::floor((G4double) DZabl / type->GetPDGCharge() + 1.0E-10);
     if (n > n1) n = n1;
     if (n > 0.0)
     {
@@ -327,7 +327,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     G4double mass = G4ParticleTable::GetParticleTable()->GetIonTable()->
       GetIonMass(ZF,AF);
     G4double e    = mass + 10.0*eV;
-    G4double p    = sqrt(e*e-mass*mass);
+    G4double p    = std::sqrt(e*e-mass*mass);
     G4ThreeVector direction(0.0,0.0,1.0);
     G4LorentzVector lorentzVector = G4LorentzVector(direction*p, e);
     lorentzVector.boost(-boost);
@@ -478,11 +478,11 @@ void G4WilsonAblationModel::SelectSecondariesByDefault (G4ThreeVector boost)
     G4ParticleDefinition *type = fragType[i];
     G4double mass              = type->GetPDGMass();
     G4double e                 = mass + 10.0*eV;
-    G4double p                 = sqrt(e*e-mass*mass);
+    G4double p                 = std::sqrt(e*e-mass*mass);
     G4double costheta          = 2.0*G4UniformRand() - 1.0;
-    G4double sintheta          = sqrt((1.0 - costheta)*(1.0 + costheta));
+    G4double sintheta          = std::sqrt((1.0 - costheta)*(1.0 + costheta));
     G4double phi               = twopi * G4UniformRand() * rad;
-    G4ThreeVector direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
+    G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
     G4LorentzVector lorentzVector = G4LorentzVector(direction*p, e);
     lorentzVector.boost(-boost);
     G4Fragment *fragment          = 

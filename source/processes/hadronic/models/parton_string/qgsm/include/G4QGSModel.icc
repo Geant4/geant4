@@ -50,9 +50,9 @@ void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4Dynam
 //    G4double vz_old = aProjectile.Get4Momentum().pz()/
 //                  (aProjectile.Get4Momentum().e() + G4Proton::Proton()->GetPDGMass());
     G4double nCons = 1;
-    if(abs(aProjectile.GetDefinition()->GetBaryonNumber()) !=0) 
+    if(std::abs(aProjectile.GetDefinition()->GetBaryonNumber()) !=0) 
     {
-      nCons = abs(aProjectile.GetDefinition()->GetBaryonNumber());
+      nCons = std::abs(aProjectile.GetDefinition()->GetBaryonNumber());
     }
     G4double pz_per_projectile = aProjectile.Get4Momentum().pz()/nCons;
 //    G4double e_per_projectile = aProjectile.Get4Momentum().vect()*aProjectile.Get4Momentum().vect();
@@ -61,7 +61,7 @@ void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4Dynam
     G4double e_per_projectile = aProjectile.Get4Momentum()*aProjectile.Get4Momentum();
              e_per_projectile += aProjectile.Get4Momentum().vect()*aProjectile.Get4Momentum().vect();
              e_per_projectile /=nCons*nCons;
-	     e_per_projectile = sqrt(e_per_projectile);
+	     e_per_projectile = std::sqrt(e_per_projectile);
 	     e_per_projectile += G4Proton::Proton()->GetPDGMass();
     G4double vz = pz_per_projectile/e_per_projectile;
 //--DEBUG--    cout << "IncomingMomentum "<<aProjectile.Get4Momentum()<<G4endl;

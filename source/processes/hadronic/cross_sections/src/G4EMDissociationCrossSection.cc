@@ -161,10 +161,10 @@ G4PhysicsFreeVector *
 //
 // Initialise variables and calculate the energies for the GDR and GQR.
 //
-  G4double AProot3 = pow(AP,1.0/3.0);
+  G4double AProot3 = std::pow(AP,1.0/3.0);
   G4double u       = 3.0 * J / Qprime / AProot3;
   G4double R0      = r0 * AProot3;
-  G4double E_GDR  = hbarc / sqrt(0.7*amu_c2*R0*R0/8.0/J*
+  G4double E_GDR  = hbarc / std::sqrt(0.7*amu_c2*R0*R0/8.0/J*
     (1.0 + u - (1.0 + epsilon + 3.0*u)/(1.0 + epsilon + u)*epsilon));
   G4double E_GQR  = 63.0 * MeV / AProot3;
 //
@@ -232,7 +232,7 @@ G4double
   else
   {
     G4double p1 = (G4double) Z / (G4double) A;
-    G4double p2 = 1.95*exp(-0.075*Z);
+    G4double p2 = 1.95*std::exp(-0.075*Z);
     if (p1 < p2) p = p1;
     else         p = p2;
   }

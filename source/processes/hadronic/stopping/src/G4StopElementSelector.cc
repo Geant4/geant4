@@ -195,7 +195,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
   r2 = 1.0 - xmu;
   lambda = t1 * zeff2 * zeff2 * (r2 * r2) * (1.0 - (1.0 - xmu) * .75704) *
           (a2ze * b0a + 1.0 - (a2ze - 1.0) * b0b -
-          (2.0 * (A - Z) /  Z  + abs(a2ze - 1.) ) * b0c / (A * 4.) );
+          (2.0 * (A - Z) /  Z  + std::abs(a2ze - 1.) ) * b0c / (A * 4.) );
 
   // == Mu capture data are taken if exist 
   for (unsigned int j = 0; j < ListZE; j++) {

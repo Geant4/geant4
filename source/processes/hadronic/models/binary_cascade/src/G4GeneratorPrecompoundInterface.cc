@@ -150,7 +150,7 @@
                 G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
        residualMass += exEnergy;
        G4LorentzVector exciton4Momentum(exciton3Momentum, 
-                                        sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
+                                        std::sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
      
        anInitialState.SetA(anA);
        anInitialState.SetZ(aZ);

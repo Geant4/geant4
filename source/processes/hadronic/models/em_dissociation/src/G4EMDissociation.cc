@@ -373,11 +373,11 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 //    }
   }
   else
-    pp = sqrt(pp);
+    pp = std::sqrt(pp);
   G4double costheta = 2.*G4UniformRand()-1.0;
-  G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
+  G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
   G4double phi      = 2.0*pi*G4UniformRand()*rad;
-  G4ThreeVector direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
   G4DynamicParticle *dynamicNucleon =
     new G4DynamicParticle(typeNucleon, direction*pp);
   dynamicNucleon->Set4Momentum(dynamicNucleon->Get4Momentum().boost(-boost));

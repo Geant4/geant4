@@ -78,7 +78,7 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
                 if (Tmax > 0.0) {
                     G4double width = CalcProbability(fragment,Tmax,CoulombBarrier);
                     // update probability
-                    if (hbar_Planck*log(2.0)/width < ExcitationLifetimes->operator[](i)) {
+                    if (hbar_Planck*std::log(2.0)/width < ExcitationLifetimes->operator[](i)) {
                         EmissionProbability += width;
                     }
                 }
@@ -113,26 +113,26 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     
     G4double Ux = (2.5 + 150.0/ResidualA)*MeV;
     G4double Ex = Ux + delta0;
-    G4double T = 1.0/(sqrt(a/Ux) - 1.5/Ux);
-    G4double E0 = Ex - T*(log(T*MeV) - log(a/MeV)/4.0 - 1.25*log(Ux*MeV) + 2.0*sqrt(a*Ux));
+    G4double T = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
+    G4double E0 = Ex - T*(std::log(T*MeV) - std::log(a/MeV)/4.0 - 1.25*std::log(Ux*MeV) + 2.0*std::sqrt(a*Ux));
     
     G4double Width;
     G4double InitialLevelDensity;
     if ( MaximalKineticEnergy < Ex ) {
         G4double t = MaximalKineticEnergy/T;
-        Width = (I1(t,t) + (Beta+V)*I0(t))/exp(E0/T);
-        InitialLevelDensity = (pi/12.0)*exp((U-E0)/T)/T;
+        Width = (I1(t,t) + (Beta+V)*I0(t))/std::exp(E0/T);
+        InitialLevelDensity = (pi/12.0)*std::exp((U-E0)/T)/T;
     } else {
         G4double t = MaximalKineticEnergy/T;
         G4double tx = Ex/T;
-        G4double s = 2.0*sqrt(a*(MaximalKineticEnergy-delta0));
-        G4double sx = 2.0*sqrt(a*(Ex-delta0));
-        Width = I1(t,tx)/exp(E0/T) + I3(s,sx)*exp(s)/(sqrt(2.0)*a);
+        G4double s = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
+        G4double sx = 2.0*std::sqrt(a*(Ex-delta0));
+        Width = I1(t,tx)/std::exp(E0/T) + I3(s,sx)*std::exp(s)/(std::sqrt(2.0)*a);
         // For charged particles (Beta+V) = 0 beacuse Beta = -V
         if (theZ == 0) {
-            Width += (Beta+V)*(I0(tx)/exp(E0/T) + 2.0*sqrt(2.0)*I2(s,sx)*exp(s));
+            Width += (Beta+V)*(I0(tx)/std::exp(E0/T) + 2.0*std::sqrt(2.0)*I2(s,sx)*std::exp(s));
         }
-        InitialLevelDensity = (pi/12.0)*exp(2*sqrt(a*(U-delta0)))/pow(a*pow(U-delta0,5.0),1.0/4.0);
+        InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(a*(U-delta0)))/std::pow(a*std::pow(U-delta0,5.0),1.0/4.0);
     }
     
 
@@ -141,8 +141,8 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     G4double RN = 0.0;
     if (theA > 4) 
     {
-	G4double R1 = pow(ResidualA,1.0/3.0);
-	G4double R2 = pow(G4double(theA),1.0/3.0);
+	G4double R1 = std::pow(ResidualA,1.0/3.0);
+	G4double R2 = std::pow(G4double(theA),1.0/3.0);
 	RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
 	RN *= fermi;
     }
@@ -150,10 +150,10 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     {
 	RN = 1.5*fermi;
     }
-    G4double GeometricalXS = pi*RN*RN*pow(ResidualA,2./3.); 
+    G4double GeometricalXS = pi*RN*RN*std::pow(ResidualA,2./3.); 
 
 
-    Width *= sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
+    Width *= std::sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
     return Width;
 }
 
@@ -162,14 +162,14 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
 G4double G4GEMProbability::I0(const G4double t)
 {
-    G4double result = (exp(t) - 1.0);
+    G4double result = (std::exp(t) - 1.0);
     return result;
 }
 
 G4double G4GEMProbability::I1(const G4double t, const G4double tx)
 {
     G4double result = t - tx + 1.0;
-    result *= exp(tx);
+    result *= std::exp(tx);
     result -= (t + 1.0);
     return result;
 }
@@ -177,11 +177,11 @@ G4double G4GEMProbability::I1(const G4double t, const G4double tx)
 
 G4double G4GEMProbability::I2(const G4double s, const G4double sx)
 {
-    G4double S = 1.0/sqrt(s);
-    G4double Sx = 1.0/sqrt(sx);
+    G4double S = 1.0/std::sqrt(s);
+    G4double Sx = 1.0/std::sqrt(sx);
     
     G4double p1 = S*S*S*( 1.0 + S*S*( 1.5 + 3.75*S*S) );
-    G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*exp(sx-s);
+    G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s);
     
     return p1-p2;
 }
@@ -190,9 +190,9 @@ G4double G4GEMProbability::I3(const G4double s, const G4double sx)
 {
     G4double s2 = s*s;
     G4double sx2 = sx*sx;
-    G4double S = 1.0/sqrt(s);
+    G4double S = 1.0/std::sqrt(s);
     G4double S2 = S*S;
-    G4double Sx = 1.0/sqrt(sx);
+    G4double Sx = 1.0/std::sqrt(sx);
     G4double Sx2 = Sx*Sx;
     
     G4double p1 = S *(2.0 + S2 *( 4.0 + S2 *( 13.5 + S2 *( 60.0 + S2 * 325.125 ))));
@@ -203,7 +203,7 @@ G4double G4GEMProbability::I3(const G4double s, const G4double sx)
                     (12.875*s2+0.625*sx2) + Sx2 *(
                         (59.0625*s2+0.9375*sx2) + Sx2 *(324.8*s2+3.28*sx2))))));
 
-  p2 *= exp(sx-s);
+  p2 *= std::exp(sx-s);
 
   return p1-p2; 
 }

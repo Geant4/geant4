@@ -165,12 +165,12 @@ G4double G4VXResonance::DetailedBalance(const G4KineticTrack& trk1,
     if(in1->IsShortLived())
     {
       G4DetailedBalancePhaseSpaceIntegral theI(in1);
-      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(sqrt(s));
+      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(s));
     }
     else if(in2->IsShortLived())
     {
       G4DetailedBalancePhaseSpaceIntegral theI(in2);
-      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(sqrt(s));
+      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(s));
     }
 
     result = factor * relativeMomsquared;

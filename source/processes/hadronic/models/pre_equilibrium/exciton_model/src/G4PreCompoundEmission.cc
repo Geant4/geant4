@@ -119,7 +119,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   
   // Now we can calculate the four momentum 
   // both options are valid and give the same result but 2nd one is faster
-  // G4LorentzVector EmittedMomentum(momentum,sqrt(momentum.mag2()+EmittedMass*EmittedMass));
+  // G4LorentzVector EmittedMomentum(momentum,std::sqrt(momentum.mag2()+EmittedMass*EmittedMass));
   G4LorentzVector EmittedMomentum(momentum,EmittedMass+KineticEnergyOfEmittedFragment);
     
   // Perform Lorentz boost
@@ -236,9 +236,9 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
       Eav = Ef;
     }
   
-  G4double zeta = std::max(1.0,9.3/sqrt(KineticEnergyOfEmittedFragment/MeV));
+  G4double zeta = std::max(1.0,9.3/std::sqrt(KineticEnergyOfEmittedFragment/MeV));
 	
-  G4double an = 3.0*sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
+  G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
   if (aFragment.GetNumberOfExcitons() == 1)
     {
       an /= (zeta*2.0*aFragment.GetNumberOfExcitons()*Eav);
@@ -249,22 +249,22 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
     }
 			
 			
-  G4double expan = exp(an);
+  G4double expan = std::exp(an);
 	
-  G4double theta = acos(log(expan-G4UniformRand()*(expan-1.0/expan))/an);
+  G4double theta = std::acos(std::log(expan-G4UniformRand()*(expan-1.0/expan))/an);
 	
   G4double phi = twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
   G4double EmittedMass = theFragment->GetNuclearMass();
-  G4double pmag = sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
+  G4double pmag = std::sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
   
   
-  G4double sinTheta = sin(theta);
-  //  G4double cosTheta = sqrt(1.0-sinTheta*sinTheta);
-  G4double cosTheta = cos(theta);
+  G4double sinTheta = std::sin(theta);
+  //  G4double cosTheta = std::sqrt(1.0-sinTheta*sinTheta);
+  G4double cosTheta = std::cos(theta);
 
-  G4ThreeVector momentum(pmag*cos(phi)*sinTheta,pmag*sin(phi)*sinTheta,pmag*cosTheta);
+  G4ThreeVector momentum(pmag*std::cos(phi)*sinTheta,pmag*std::sin(phi)*sinTheta,pmag*cosTheta);
   // theta is the angle wrt the incident direction
   momentum.rotateUz(theIncidentDirection);
 
@@ -354,10 +354,10 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
     {
       if (E-alpha-static_cast<G4double>(j)*Ef > 0.0)
 	{
-	  G4double t1 = pow(-1.0, static_cast<G4double>(j));
+	  G4double t1 = std::pow(-1.0, static_cast<G4double>(j));
 	  G4double t2 = fact[static_cast<G4int>(h)]/ (fact[static_cast<G4int>(h)-j]*fact[j]);
 	  G4double t3 = E - static_cast<G4double>(j)*Ef - Aph;
-	  t3 = pow(t3,p+h-1);
+	  t3 = std::pow(t3,p+h-1);
 	  tot += t1*t2*t3;
 	}
       else 
@@ -411,7 +411,7 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
         }
     }
   
-  tot *= pow(g,p+h)/factph;
+  tot *= std::pow(g,p+h)/factph;
   tot /= factp;
   tot /= facth;
     
@@ -446,7 +446,7 @@ void G4PreCompoundEmission::CheckConservation(const G4Fragment & theInitialState
 	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	   << theInitialState.GetZ() - ProductsZ << G4endl;
   }
-  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 10.0*eV) {
+  if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 10.0*eV) {
     G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PreCompoundEmission.cc: Energy Conservation test" 
 	   << G4endl; 
@@ -454,9 +454,9 @@ void G4PreCompoundEmission::CheckConservation(const G4Fragment & theInitialState
 	   << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	   << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
   } 
-  if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 10.0*eV || 
-      abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 10.0*eV ||
-      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 10.0*eV) {
+  if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 10.0*eV || 
+      std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 10.0*eV ||
+      std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 10.0*eV) {
     G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PreCompoundEmission.cc: Momentum Conservation test" 
 	   << G4endl; 

@@ -85,7 +85,7 @@ G4double G4XAqmElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   G4XAqmTotal aqmTotal;
 
   G4double sigmaTot = aqmTotal.CrossSection(trk1,trk2);
-  sigma = coeff * pow(sigmaTot,param);  
+  sigma = coeff * std::pow(sigmaTot,param);  
 
   // Verify that elastic cross section < total cross section
 

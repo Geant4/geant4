@@ -218,10 +218,10 @@ G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
 {
 
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
   G4double Phi = twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-                       Magnitude*sin(Phi)*SinTheta,
+  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+                       Magnitude*std::sin(Phi)*SinTheta,
                        Magnitude*CosTheta);
 
   return Vector;

@@ -265,11 +265,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       for (i=0; i< nSecondaries; i++)
       {
 	G4double costheta = 2.*G4UniformRand()-1;
-	G4double theta = acos(costheta);
+	G4double theta = std::acos(costheta);
 	G4double phi = twopi*G4UniformRand();
-	G4double sinth = sin(theta);
+	G4double sinth = std::sin(theta);
 	G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-	G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+	G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
 	thePhotons->operator[](i)->SetMomentum( temp ) ;
   //      G4cout << "Isotropic distribution in PhotonDist"<<temp<<G4endl;
       }
@@ -281,7 +281,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	G4double currentEnergy = thePhotons->operator[](i)->GetTotalEnergy();
 	for(ii=0; ii<nDiscrete2; ii++) 
 	{
-          if (abs(currentEnergy-theGammas[ii])<0.1*keV) break;
+          if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
 	}
 	if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistancy found in the ENDF 7N14 data. @@
 	if(ii<nIso)
@@ -289,9 +289,9 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           // isotropic distribution
           G4double theta = pi*G4UniformRand();
           G4double phi = twopi*G4UniformRand();
-          G4double sinth = sin(theta);
+          G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
           thePhotons->operator[](i)->SetMomentum( tempVector ) ;
 	}
 	else if(tabulationType==1)
@@ -308,11 +308,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
           aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
           G4double cosTh = aStore.SampleMax(anEnergy);
-          G4double theta = acos(cosTh);
+          G4double theta = std::acos(cosTh);
           G4double phi = twopi*G4UniformRand();
-          G4double sinth = sin(theta);
+          G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
           thePhotons->operator[](i)->SetMomentum( tempVector ) ;
 	}
 	else
@@ -326,11 +326,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
               break;
           }
           G4double costh = theAngular[ii-nIso][it].GetCosTh(); // no interpolation yet @@
-          G4double theta = acos(costh);
+          G4double theta = std::acos(costh);
           G4double phi = twopi*G4UniformRand();
-          G4double sinth = sin(theta);
+          G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tmpVector(en*sinth*cos(phi), en*sinth*sin(phi), en*costh );
+          G4ThreeVector tmpVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costh );
           thePhotons->operator[](i)->SetMomentum( tmpVector ) ;
 	}
       }  
@@ -365,11 +365,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
     if( isoFlag == 1)
     {
       G4double costheta = 2.*G4UniformRand()-1;
-      G4double theta = acos(costheta);
+      G4double theta = std::acos(costheta);
       G4double phi = twopi*G4UniformRand();
-      G4double sinth = sin(theta);
+      G4double sinth = std::sin(theta);
       G4double en = theOne->GetTotalEnergy();
-      G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       theOne->SetMomentum( temp ) ;
     }
     else
@@ -377,7 +377,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       G4double currentEnergy = theOne->GetTotalEnergy();
       for(ii=0; ii<nDiscrete2; ii++) 
       {
-        if (abs(currentEnergy-theGammas[ii])<0.1*keV) break;
+        if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
       }
       if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistancy found in the ENDF 7N14 data. @@
       if(ii<nIso)
@@ -385,9 +385,9 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
         // isotropic distribution
         G4double theta = pi*G4UniformRand();
         G4double phi = twopi*G4UniformRand();
-        G4double sinth = sin(theta);
+        G4double sinth = std::sin(theta);
         G4double en = theOne->GetTotalEnergy();
-        G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+        G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
         theOne->SetMomentum( tempVector ) ;
       }
       else if(tabulationType==1)
@@ -404,11 +404,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
         aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
         aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
         G4double cosTh = aStore.SampleMax(anEnergy);
-        G4double theta = acos(cosTh);
+        G4double theta = std::acos(cosTh);
         G4double phi = twopi*G4UniformRand();
-        G4double sinth = sin(theta);
+        G4double sinth = std::sin(theta);
         G4double en = theOne->GetTotalEnergy();
-        G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+        G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
         theOne->SetMomentum( tempVector ) ;
       }
       else
@@ -422,11 +422,11 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
             break;
         }
         G4double costh = theAngular[ii-nIso][it].GetCosTh(); // no interpolation yet @@
-        G4double theta = acos(costh);
+        G4double theta = std::acos(costh);
         G4double phi = twopi*G4UniformRand();
-        G4double sinth = sin(theta);
+        G4double sinth = std::sin(theta);
         G4double en = theOne->GetTotalEnergy();
-        G4ThreeVector tmpVector(en*sinth*cos(phi), en*sinth*sin(phi), en*costh );
+        G4ThreeVector tmpVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costh );
         theOne->SetMomentum( tmpVector ) ;
       }
     }

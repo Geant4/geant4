@@ -72,10 +72,10 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M, const std::vector<G4
       G4ParticleMomentum RandVector(IsotropicVector(PFragMagCM));
 
       PFragCM.setVect(RandVector);
-      PFragCM.setE(sqrt(RandVector.mag2()+m[k]*m[k]));
+      PFragCM.setE(std::sqrt(RandVector.mag2()+m[k]*m[k]));
 
       PRestCM.setVect(-RandVector);
-      PRestCM.setE(sqrt(RandVector.mag2()+RestMass*RestMass));
+      PRestCM.setE(std::sqrt(RandVector.mag2()+RestMass*RestMass));
 
 
       G4ThreeVector BoostV = PRestLab.boostVector();
@@ -168,12 +168,12 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
 
   G4ParticleMomentum a3P = this->IsotropicVector(p[0]);
 
-  P->operator[](0) = new G4LorentzVector( a3P, sqrt(a3P.mag2()+m[0]*m[0]) );  
-  P->operator[](1) = new G4LorentzVector(-a3P, sqrt(a3P.mag2()+m[1]*m[1]) );
+  P->operator[](0) = new G4LorentzVector( a3P, std::sqrt(a3P.mag2()+m[0]*m[0]) );  
+  P->operator[](1) = new G4LorentzVector(-a3P, std::sqrt(a3P.mag2()+m[1]*m[1]) );
   for (i = 2; i < N; i++)
     {
       a3P = this->IsotropicVector(p[i-1]);
-      P->operator[](i) = new G4LorentzVector(a3P, sqrt(a3P.mag2() + m[i]*m[i]));
+      P->operator[](i) = new G4LorentzVector(a3P, std::sqrt(a3P.mag2() + m[i]*m[i]));
       G4ThreeVector Beta = (-1.0)*P->operator[](i)->boostVector();
       // boost already created particles
       for (j = 0; j < i; j++)
@@ -195,15 +195,15 @@ TwoBodyDecay(const G4double M, const std::vector<G4double>& m) const
   G4double m0 = m.front();
   G4double m1 = m.back();
   G4double psqr = this->PtwoBody(M,m0,m1);
-  G4ParticleMomentum p = this->IsotropicVector(sqrt(psqr));
+  G4ParticleMomentum p = this->IsotropicVector(std::sqrt(psqr));
 
   G4LorentzVector * P41 = new G4LorentzVector;
   P41->setVect(p);
-  P41->setE(sqrt(psqr+m0*m0));
+  P41->setE(std::sqrt(psqr+m0*m0));
 
   G4LorentzVector * P42 = new G4LorentzVector;
   P42->setVect(-p);
-  P42->setE(sqrt(psqr+m1*m1));
+  P42->setE(std::sqrt(psqr+m1*m1));
 
   std::vector<G4LorentzVector*> * result = new std::vector<G4LorentzVector*>;
   result->push_back(P41);
@@ -219,10 +219,10 @@ G4ParticleMomentum G4FermiPhaseSpaceDecay::IsotropicVector(const G4double Magnit
   // By default Magnitude = 1.0
 {
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
   G4double Phi = twopi*G4UniformRand();
-  G4ParticleMomentum Vector(Magnitude*cos(Phi)*SinTheta,
-			    Magnitude*sin(Phi)*SinTheta,
+  G4ParticleMomentum Vector(Magnitude*std::cos(Phi)*SinTheta,
+			    Magnitude*std::sin(Phi)*SinTheta,
 			    Magnitude*CosTheta);
   return Vector;
 }

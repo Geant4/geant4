@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
+// $Id: G4StatMFMacroChemicalPotential.cc,v 1.3 2004-12-07 13:47:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -58,10 +58,10 @@ G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void)
     //	Calculate Chemical potential \nu
 {
     G4double CP = ((3./5.)*elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0-1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0));
+	(1.0-1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0));
 
     // Initial value for _ChemPotentialNu	
-    _ChemPotentialNu = (theZ/theA)*(8.0*G4StatMFParameters::GetGamma0()+2.0*CP*pow(theA,2./3.)) -
+    _ChemPotentialNu = (theZ/theA)*(8.0*G4StatMFParameters::GetGamma0()+2.0*CP*std::pow(theA,2./3.)) -
 	4.0*G4StatMFParameters::GetGamma0();
 		
 
@@ -75,12 +75,12 @@ G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void)
 	// bracketing the solution
 	if (fChemPa < 0.0) {
 	    do {
-		ChemPb -= 1.5*abs(ChemPb-ChemPa);
+		ChemPb -= 1.5*std::abs(ChemPb-ChemPa);
 		fChemPb = this->operator()(ChemPb);   
 	    } while (fChemPb < 0.0);
 	} else {
 	    do {
-		ChemPb += 1.5*abs(ChemPb-ChemPa);
+		ChemPb += 1.5*std::abs(ChemPb-ChemPa);
 		fChemPb = this->operator()(ChemPb);
 	    } while (fChemPb > 0.0);
 	}

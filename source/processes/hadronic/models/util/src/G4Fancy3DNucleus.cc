@@ -172,7 +172,7 @@ G4double G4Fancy3DNucleus::GetOuterRadius()
 	   	maxradius2=theNucleons[i].GetPosition().mag2();
 	   }
 	}
-	return sqrt(maxradius2)+nucleondistance;
+	return std::sqrt(maxradius2)+nucleondistance;
 }
 
 G4double G4Fancy3DNucleus::GetMass()
@@ -200,7 +200,7 @@ void G4Fancy3DNucleus::DoLorentzBoost(const G4ThreeVector & theBeta)
 
 void G4Fancy3DNucleus::DoLorentzContraction(const G4ThreeVector & theBeta)
 {
-	G4double factor=(1-sqrt(1-theBeta.mag2()))/theBeta.mag2(); // (gamma-1)/gamma/beta**2
+	G4double factor=(1-std::sqrt(1-theBeta.mag2()))/theBeta.mag2(); // (gamma-1)/gamma/beta**2
 	for (G4int i=0; i< myA; i++)
 	{
 	     G4ThreeVector rprime=theNucleons[i].GetPosition() - 
@@ -318,7 +318,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 		    //  that the Fermi Energy > CoulombBarrier
 		  if (theNucleons[i].GetDefinition() == G4Proton::Proton())
 		  {
-	             G4double eFermi= sqrt( sqr(pFermi) + sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
+	             G4double eFermi= std::sqrt( sqr(pFermi) + sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
 		                      - theNucleons[i].GetDefinition()->GetPDGMass();
 	             if (eFermi <= CoulombBarrier() ) freeplace=false;
 		  }
@@ -352,12 +352,12 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	   G4ThreeVector mom=theFermi.GetMomentum(density);
 	   if (theNucleons[i].GetDefinition() == G4Proton::Proton())
 	   {
-	      G4double eMax = sqrt(sqr(fermiM[i]) +sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
+	      G4double eMax = std::sqrt(sqr(fermiM[i]) +sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
 	                      - CoulombBarrier();
 	      if ( eMax > theNucleons[i].GetDefinition()->GetPDGMass() )
 	      {
 	          G4double pmax2= sqr(eMax) - sqr(theNucleons[i].GetDefinition()->GetPDGMass());
-		  fermiM[i] = sqrt(pmax2);
+		  fermiM[i] = std::sqrt(pmax2);
 		  while ( mom.mag2() > pmax2 )
 		  {
 		      mom=theFermi.GetMomentum(density, fermiM[i]);
@@ -481,9 +481,9 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 			// find the momentum closest to choosen momentum for last Nucleon.
 			G4double pTry=(testSums[aNucleon].vector()-sum).mag();
 			if ( pTry < PFermi
-			 &&  abs(momentum[myA-1].mag() - pTry ) < pBest )
+			 &&  std::abs(momentum[myA-1].mag() - pTry ) < pBest )
 		        {
-			   pBest=abs(momentum[myA-1].mag() - pTry );
+			   pBest=std::abs(momentum[myA-1].mag() - pTry );
 			   best=aNucleon;
 			}
 		}
@@ -533,6 +533,6 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 
 G4double G4Fancy3DNucleus::CoulombBarrier()
 {
-  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + pow(G4double(myA),1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + std::pow(G4double(myA),1./3.));
   return coulombBarrier;
 }

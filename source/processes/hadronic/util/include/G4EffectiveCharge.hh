@@ -121,7 +121,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
   if( ionCharge < 2.5 ) 
   {
     G4double theHeMassAMU(4.0026);
-    G4double e = log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
+    G4double e = std::log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
     G4double x = c[0] ;
     G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) 
@@ -130,8 +130,8 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
       x += y * c[i] ;
     }
     G4double q = 7.6 -  e ; 
-    q = 1.0 + ( 0.007 + 0.00005 * z ) * exp( -q*q ) ;
-    return  sqrt(4.0 * q * q * (1.0 - exp(-x))) ;
+    q = 1.0 + ( 0.007 + 0.00005 * z ) * std::exp( -q*q ) ;
+    return  std::sqrt(4.0 * q * q * (1.0 - std::exp(-x))) ;
 
     // Heavy ion case
   } 
@@ -139,9 +139,9 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
   {
 
     // v1 is ion velocity in vF unit
-    G4double v1 = sqrt( reducedEnergy / (25.0 * keV) )/ vF ;
+    G4double v1 = std::sqrt( reducedEnergy / (25.0 * keV) )/ vF ;
     G4double y ;
-    G4double z13 = pow(ionCharge, 0.3333) ;
+    G4double z13 = std::pow(ionCharge, 0.3333) ;
 
     // Faster than Fermi velocity
     if ( v1 > 1.0 ) 
@@ -155,23 +155,23 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
       y = 0.6923 * vF * (1.0 + 2.0*v1*v1/3.0 + v1*v1*v1*v1/15.0) / (z13*z13) ;
     }
 
-    G4double y3 = pow(y, 0.3) ;
-    G4double q = 1.0 - exp( 0.803*y3 - 1.3167*y3*y3 - 
+    G4double y3 = std::pow(y, 0.3) ;
+    G4double q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 
                             0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double s = 7.6 -  log(std::max(1.0, reducedEnergy/keV)) ; 
-    s = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -s*s )/ (ionCharge*ionCharge) ;
+    G4double s = 7.6 -  std::log(std::max(1.0, reducedEnergy/keV)) ; 
+    s = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -s*s )/ (ionCharge*ionCharge) ;
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
-    G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
+    G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
     G4double qeff   = ionCharge * s *
-      ( q + 0.5*(1.0-q) * log(1.0 + lambda*lambda) / (vF*vF) ) ;
+      ( q + 0.5*(1.0-q) * std::log(1.0 + lambda*lambda) / (vF*vF) ) ;
     if( 1.0 > qeff ) qeff = 1.0 ; 
-    return sqrt(qeff) ;    
+    return std::sqrt(qeff) ;    
   }
 }
 

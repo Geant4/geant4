@@ -41,18 +41,18 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     
     G4double GetRelativeDensity(const G4ThreeVector & aPosition) const
     {
-      return 1./(1.+exp((aPosition.mag()-theR)/a));
+      return 1./(1.+std::exp((aPosition.mag()-theR)/a));
     }
     
     G4double GetRadius(const G4double maxRelativeDenisty) const
     {
       return (maxRelativeDenisty>0 && maxRelativeDenisty <= 1 ) ?
-             (theR + a*log((1-maxRelativeDenisty+exp(-1*theR/a))/maxRelativeDenisty))  : DBL_MAX;
+             (theR + a*std::log((1-maxRelativeDenisty+std::exp(-1*theR/a))/maxRelativeDenisty))  : DBL_MAX;
     }
     
     G4double GetDeriv(const G4ThreeVector & aPosition) const
     {
-      return -exp((aPosition.mag()-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
+      return -std::exp((aPosition.mag()-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
     }   
    
   private:

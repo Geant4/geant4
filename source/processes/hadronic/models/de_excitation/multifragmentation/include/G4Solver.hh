@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Solver.hh,v 1.1 2003-08-26 18:47:18 lara Exp $
+// $Id: G4Solver.hh,v 1.2 2004-12-07 13:47:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -31,6 +31,8 @@
 #define G4Solver_h 1
 
 #include "globals.hh"
+
+#include <cmath>
 
 #define DefaultTolerance 5.0e-14
 

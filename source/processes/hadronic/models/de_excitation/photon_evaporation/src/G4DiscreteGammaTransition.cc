@@ -152,7 +152,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 	  }
       }
     
-      G4double tau = _level.HalfLife() / log(2.0);
+      G4double tau = _level.HalfLife() / std::log(2.0);
 
       G4double tMin = 0;
       G4double tMax = 10.0 * tau;
@@ -163,7 +163,7 @@ void G4DiscreteGammaTransition::SelectGamma()
       //  for(G4int i = 0;i<nBins;i++)
       //{
       //  G4double t = tMin + ((tMax-tMin)/nBins)*i;
-      //  sampleArray[i] = (exp(-t/tau))/tau;
+      //  sampleArray[i] = (std::exp(-t/tau))/tau;
       // }
 
       //  G4RandGeneralTmp randGeneral(sampleArray, nBins);
@@ -176,8 +176,8 @@ void G4DiscreteGammaTransition::SelectGamma()
       if (tau != 0 ) 
       {
 	  random = G4UniformRand() ;
-	  _gammaCreationTime = -(log(random*(exp(-tMax/tau) - exp(-tMin/tau)) + 
-					exp(-tMin/tau)));
+	  _gammaCreationTime = -(std::log(random*(std::exp(-tMax/tau) - std::exp(-tMin/tau)) + 
+					std::exp(-tMin/tau)));
 	  //  if(_verbose > 10)
 	  //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
 	  //	   << _gammaCreationTime/second << G4endl;

@@ -47,7 +47,7 @@
       
       const G4double cech[] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.10,0.09,0.07};
       G4int iplab = G4int(std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*5.0 ));
-      if( G4UniformRand() > cech[iplab]/pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aPiZero );
         // targetParticle->SetDefinition( aProton );
@@ -86,7 +86,7 @@
       
       const G4double cech[] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.10,0.09,0.07};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*5.0 ) );
-      if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         if( G4UniformRand() < 0.5 )
           resultant->SetDefinition( aKaonZS );
@@ -120,7 +120,7 @@
       
       const G4double cech[] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.10,0.09,0.07};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*5.0 ) );
-      if( G4UniformRand() > cech[iplab]/pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aKaonPlus );
         // targetParticle->SetDefinition( aNeutron );
@@ -176,7 +176,7 @@
     if( targetParticle->GetDefinition() == aNeutron ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-      if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aNeutron );
         // targetParticle->SetDefinition( aProton );
@@ -203,7 +203,7 @@
     if( targetParticle->GetDefinition() == aProton ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*10.0 ) );
-      if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.75) ) {
+      if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.75) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( anAntiNeutron );
         // targetParticle->SetDefinition( aNeutron );
@@ -229,7 +229,7 @@
     if( targetParticle->GetDefinition() == aProton ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-      if( G4UniformRand() > cech[iplab]/pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aProton );
         // targetParticle->SetDefinition( aNeutron );
@@ -256,7 +256,7 @@
     if( targetParticle->GetDefinition() == aNeutron ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
       G4int iplab = std::min( 9, G4int( incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-      if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.75) ) {
+      if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.75) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( anAntiProton );
         // targetParticle->SetDefinition( aProton );
@@ -285,7 +285,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       G4int irn = G4int( G4UniformRand()/0.2 );
       if( targetParticle->GetDefinition() == aNeutron ) {
@@ -363,7 +363,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       G4int irn = G4int( G4UniformRand()/0.2 );
       if( targetParticle->GetDefinition() == aNeutron ) {
@@ -442,7 +442,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       
       // introduce charge and strangeness exchange reactions
@@ -504,7 +504,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       
       // introduce charge and strangeness exchange reactions
@@ -566,7 +566,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       G4int irn = G4int( G4UniformRand()/0.2 );
       if( targetParticle->GetDefinition() == aNeutron ) {
@@ -625,7 +625,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       G4int irn = G4int( G4UniformRand()/0.2 );
       if( targetParticle->GetDefinition() == aNeutron ) {
@@ -688,7 +688,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       if( targetParticle->GetDefinition() == aNeutron ) {
         G4int irn = G4int( G4UniformRand()*7.0 );
@@ -772,7 +772,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       if( targetParticle->GetDefinition() == aNeutron ) {
         G4int irn = G4int( G4UniformRand()*5.0 );
@@ -861,7 +861,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       if( targetParticle->GetDefinition() == aNeutron ) {
         G4int irn = G4int( G4UniformRand()*7.0 );
@@ -949,7 +949,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       if( targetParticle->GetDefinition() == aNeutron ) {
         G4int irn = G4int( G4UniformRand()*5.0 );
@@ -1035,7 +1035,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       
       // introduce charge and strangeness exchange reactions
@@ -1136,7 +1136,7 @@
     
     const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
     G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-    if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.42) ) {
+    if( G4UniformRand() <= cech[iplab]/std::pow(atomicNumber,0.42) ) {
       G4DynamicParticle* resultant = new G4DynamicParticle;
       
       // introduce charge and strangeness exchange reactions

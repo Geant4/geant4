@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.8 2003-06-16 17:11:04 gunter Exp $
+// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.9 2004-12-07 13:49:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPSimpleEvapSpectrum_h
@@ -41,7 +41,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   public:
   G4NeutronHPSimpleEvapSpectrum()
   {
-    expm1 = exp(-1.);
+    expm1 = std::exp(-1.);
   }
   ~G4NeutronHPSimpleEvapSpectrum()
   {
@@ -66,7 +66,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
     do
     {
       random = G4UniformRand();
-      result = -theta*log(random); 
+      result = -theta*std::log(random); 
       cut = G4UniformRand();
     }
     while(cut>result/max); 
@@ -77,7 +77,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   
   inline G4double Evapo(G4double anEnergy, G4double theta)
   {
-    G4double result = (anEnergy*eV)*exp(-anEnergy*eV/theta);
+    G4double result = (anEnergy*eV)*std::exp(-anEnergy*eV/theta);
     return result;
   }
   

@@ -395,10 +395,10 @@ G4double G4RadioactiveDecay::GetTaoTime(G4double t, G4double tao)
   if (nbin > 0) { 
     for (G4int i = 0; i < nbin; i++) 
       {
-	taotime += SProfile[i] * (exp(-(t-SBin[i+1])/tao)-exp(-(t-SBin[i])/tao));
+	taotime += SProfile[i] * (std::exp(-(t-SBin[i+1])/tao)-std::exp(-(t-SBin[i])/tao));
       }
   }
-  taotime +=  SProfile[nbin] * (1-exp(-(t-SBin[nbin])/tao));
+  taotime +=  SProfile[nbin] * (1-std::exp(-(t-SBin[nbin])/tao));
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
     {G4cout <<" Tao time: " <<taotime <<G4endl;}
@@ -594,7 +594,7 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
   G4int i;
   for ( i = 0 ; i < TotBin ; i++ ) {
       gammainv = 1.0/(aVector->GetLowEdgeEnergy(i) + 1.0);
-      beta  = sqrt((1.0 - gammainv)*(1.0 +gammainv));
+      beta  = std::sqrt((1.0 - gammainv)*(1.0 +gammainv));
       aVector->PutValue(i, beta/gammainv);
   }
   aPhysicsTable->insert(aVector);
@@ -701,7 +701,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 	    {
 	      tmpStream >>recordType >>a >>b;
 	      if (found) {complete = true;}
-	      else {found = (abs(a*keV - E)<levelTolerance);}
+	      else {found = (std::abs(a*keV - E)<levelTolerance);}
 	    }
 	  else if (found)
 	    {
@@ -768,7 +768,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			      // bug fix (#662) (flei, 22/09/2004)
 			      e =e0*(ptn+0.5)/100.;
 			      g = e+1.;
-			      f = sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+			      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
 			      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
 			    }		  
 			    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
@@ -813,7 +813,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			      // bug fix (#662) (flei, 22/09/2004)
 			      e =e0*(ptn+0.5)/100.;
 			      g = e+1.;
-			      f = sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+			      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
 			      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
 			    }
 			    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
@@ -1081,7 +1081,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	if ( levelManager->NumberOfLevels() ) {
 	  const G4NuclearLevel* level = levelManager->NearestLevel (daughterExcitation);
 
-	  if (abs(daughterExcitation - level->Energy()) < levelTolerance) {
+	  if (std::abs(daughterExcitation - level->Energy()) < levelTolerance) {
 	    
 	    // Level hafe life is in ns and I want to set the gate as 1 micros
 	    if ( theDecayMode == 0 && level->HalfLife() >= 1000.){    
@@ -1438,7 +1438,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	    // time lapsed between the particle come to rest and the actual decay. This time 
 	    // is simply sampled with the mean-life of the particle.
 	    //
-	    finalGlobalTime += -log( G4UniformRand()) * theParticleDef->GetPDGLifeTime() ;
+	    finalGlobalTime += -std::log( G4UniformRand()) * theParticleDef->GetPDGLifeTime() ;
 	    energyDeposit += theParticle->GetKineticEnergy();
 	  }
 	else

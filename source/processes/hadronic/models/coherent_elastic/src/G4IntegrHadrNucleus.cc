@@ -55,16 +55,16 @@
           Bhad    = HadrSlope;                         //{In GeV-2}
           Asq     = 1+HadrReIm*HadrReIm;
 
-          R0      = sqrt(0.99);                        //{ This is fermi}
-          if (Anucleus >10)  R0 = sqrt(0.84);          
-          if (Anucleus >20)  R0 = sqrt((35.34+0.5*Anucleus)
+          R0      = std::sqrt(0.99);                        //{ This is fermi}
+          if (Anucleus >10)  R0 = std::sqrt(0.84);          
+          if (Anucleus >20)  R0 = std::sqrt((35.34+0.5*Anucleus)
                                   /(40.97+Anucleus));
-          if (Anucleus == 16) R0 = sqrt(0.75);
-          if (Anucleus == 58) R0 = sqrt(0.6);
+          if (Anucleus == 16) R0 = std::sqrt(0.75);
+          if (Anucleus == 58) R0 = std::sqrt(0.6);
 
-//          R0      =  sqrt(0.64);
+//          R0      =  std::sqrt(0.64);
 
-          Rnucl   = R0*pow(static_cast<double>(Anucleus),0.3333);            //{In Fermi }
+          Rnucl   = R0*std::pow(static_cast<double>(Anucleus),0.3333);            //{In Fermi }
 
         if(Anucleus == 4) Rnucl = 1.2;
 
@@ -107,7 +107,7 @@
 
 //                 Inel2      = Inel2+Inel1*N3;
                  Prod0    = Prod0+Prod1*N3;
-          if(abs(N1/i/Inel0) < 0.0001)  break;
+          if(std::abs(N1/i/Inel0) < 0.0001)  break;
               }  // i
 
              Tot0         = Tot0*HadrTot;
@@ -117,17 +117,17 @@
              Tot00        = Tot0;
 
              ak           = (Rnuc2*2*Pi1/Stot);
-    G4double DDSect1      = (DDSect2+DDSect3*log(1.06*2*HadrEnergy
-                             /Rnucl/sqrt(25.68)/4));
+    G4double DDSect1      = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy
+                             /Rnucl/std::sqrt(25.68)/4));
 
              Dtot         = 8*Pi1*ak/HadrTot*(1-(1+Anucleus/ak)
-                              *exp(-Anucleus/ak))*DDSect1/MbToB;
+                              *std::exp(-Anucleus/ak))*DDSect1/MbToB;
              DTot00       = Dtot;
              
              bk           = (1-1/ak)/Stot/(1-1/ak/4);
 
              bd           = bk*bk*DDSect1*(1-(1+Anucleus/ak*(1-1/ak/4))*
-                             exp(-Anucleus/ak*(1-1/4/ak)))*Rnuc2;
+                             std::exp(-Anucleus/ak*(1-1/4/ak)))*Rnuc2;
 
              Dprod        = bd*4*Pi1*Pi1*MbToB;
 

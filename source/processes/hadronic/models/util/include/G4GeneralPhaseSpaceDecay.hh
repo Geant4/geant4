@@ -113,7 +113,7 @@ inline
         G4HadronicException(__FILE__, __LINE__, "G4GeneralPhaseSpaceDecay::Pmx energy in cms > mass1+mass2");	
    }
    G4double ppp = (e+p1+p2)*(e+p1-p2)*(e-p1+p2)*(e-p1-p2)/(4.0*e*e);
-   if (ppp>0) return sqrt(ppp);
+   if (ppp>0) return std::sqrt(ppp);
    else       return -1.;
 }
 

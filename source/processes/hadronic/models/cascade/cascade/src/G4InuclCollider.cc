@@ -313,7 +313,7 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
   }; 
 
   // VCOL used  for testing if elastic collision possible
-  G4double VCOL = coeff * zt * zb / (pow(at, one_third) + pow(ab, one_third)); 
+  G4double VCOL = coeff * zt * zb / (std::pow(at, one_third) + std::pow(ab, one_third)); 
 
   // possible = VCOL < ekin; // NOTE: inelastic collision if not true
   possible = true; // we force elastic

@@ -85,8 +85,8 @@ G4XnpTotalLowE::G4XnpTotalLowE()
   // Cross-sections are available in the range (_eMin,_eMax)
 
   _eMin = _eMinTable * GeV;
-  _eMin = exp(log(_eMinTable)-_eStepLog)*GeV;
-  _eMax = exp(log(_eMinTable) + _tableSize * _eStepLog) * GeV;
+  _eMin = std::exp(std::log(_eMinTable)-_eStepLog)*GeV;
+  _eMax = std::exp(std::log(_eMinTable) + _tableSize * _eStepLog) * GeV;
 
   // Protections: validity limits must be compatible with available data
 

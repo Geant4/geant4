@@ -247,10 +247,10 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 #endif
               G4double GammaEnergy = (*j)->GetExcitationEnergy();
               G4double cosTheta = 1. - 2. * G4UniformRand();
-              G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
+              G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
               G4double phi = twopi * G4UniformRand();
-              G4ThreeVector GammaP(GammaEnergy * sinTheta * cos(phi),
-                                   GammaEnergy * sinTheta * sin(phi),
+              G4ThreeVector GammaP(GammaEnergy * sinTheta * std::cos(phi),
+                                   GammaEnergy * sinTheta * std::sin(phi),
                                    GammaEnergy * cosTheta );
               G4LorentzVector Gamma4P(GammaP,GammaEnergy);
               G4Fragment * theHandlerPhoton = new G4Fragment(Gamma4P,G4Gamma::GammaDefinition());
@@ -259,7 +259,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
               
               G4double Mass = (*j)->GetGroundStateMass();
               G4ThreeVector ResidualP((*j)->GetMomentum().vect() - GammaP);
-              G4double ResidualE = sqrt(ResidualP*ResidualP + Mass*Mass);
+              G4double ResidualE = std::sqrt(ResidualP*ResidualP + Mass*Mass);
               G4LorentzVector Residual4P(ResidualP,ResidualE);
               (*j)->SetMomentum(Residual4P);
               
@@ -413,7 +413,7 @@ void G4ExcitationHandler::CheckConservation(const G4Fragment & theInitialState,
 	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	   << theInitialState.GetZ() - ProductsZ << G4endl;
   }
-  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+  if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4ExcitationHandler.cc: Energy Conservation test for deexcitation fragments" 
 	   << G4endl; 
@@ -421,9 +421,9 @@ void G4ExcitationHandler::CheckConservation(const G4Fragment & theInitialState,
 	   << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	   << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
   } 
-  if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-      abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+  if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+      std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+      std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4ExcitationHandler.cc: Momentum Conservation test for deexcitation fragments" 
 	   << G4endl; 

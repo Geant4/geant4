@@ -48,7 +48,7 @@ G4double G4HETCAlpha::K(const G4Fragment & aFragment)
 	 2*H*(Pa*Na*(Na-1.0)*r+Pa*(Pa-1.0)*Na*(1.0-r)) +
 	 Pa*(Pa-1.0)*Na*(Na-1.0));
 
-      result /= 6.0*pow((TargetZ/TargetA)*((TargetA-TargetZ)/TargetA),2.0);
+      result /= 6.0*std::pow((TargetZ/TargetA)*((TargetA-TargetZ)/TargetA),2.0);
     }
 
   return std::max(0.0,result);

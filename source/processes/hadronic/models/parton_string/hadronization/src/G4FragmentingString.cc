@@ -209,5 +209,5 @@ G4double G4FragmentingString::Mass2() const
 
 G4double G4FragmentingString::Mass() const
 {
-	return sqrt(this->Mass2());
+	return std::sqrt(this->Mass2());
 }

@@ -148,14 +148,14 @@ G4BigBanger::generateBangInSCM(G4double etot,
   if(ia == 1) {
     // abnormal situation
     G4double m = iz > 0 ? mp : mn;
-    G4double pmod = sqrt((etot + 2.0 * m) * etot);
+    G4double pmod = std::sqrt((etot + 2.0 * m) * etot);
     std::vector<G4double> mom(4);
     std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
     G4double FI = randomPHI();
     G4double Pt = pmod * COS_SIN.second;
 
-    mom[1] = Pt * cos(FI);
-    mom[2] = Pt * sin(FI);
+    mom[1] = Pt * std::cos(FI);
+    mom[2] = Pt * std::sin(FI);
     mom[3] = Pt * COS_SIN.first;    
 
     G4int knd = iz > 0 ? 1 : 2;
@@ -180,8 +180,8 @@ G4BigBanger::generateBangInSCM(G4double etot,
       double FI = randomPHI();
       double Pt = pmod[0] * COS_SIN.second;
 
-      mom[1] = Pt * cos(FI);
-      mom[2] = Pt * sin(FI);
+      mom[1] = Pt * std::cos(FI);
+      mom[2] = Pt * std::sin(FI);
       mom[3] = Pt * COS_SIN.first;    
 
       for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
@@ -202,8 +202,8 @@ G4BigBanger::generateBangInSCM(G4double etot,
 	G4double FI = randomPHI();
 	G4double Pt = pmod[i] * COS_SIN.second;
 
-	mom[1] = Pt * cos(FI);
-	mom[2] = Pt * sin(FI);
+	mom[1] = Pt * std::cos(FI);
+	mom[2] = Pt * std::sin(FI);
 	mom[3] = Pt * COS_SIN.first;    
 
 	for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
@@ -212,7 +212,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
       };
 
       //                handle last two
-      G4double tot_mod = sqrt(tot_mom[1] * tot_mom[1] + 
+      G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
 			      tot_mom[2] * tot_mom[2] + 
 			      tot_mom[3] * tot_mom[3]); 
       G4double ct = -0.5 * (tot_mod * tot_mod + pmod[ia - 2] * pmod[ia - 2] -
@@ -222,13 +222,13 @@ G4BigBanger::generateBangInSCM(G4double etot,
 	G4cout << " ct last " << ct << G4endl;
       }
   
-      if(fabs(ct) < ang_cut) {
+      if(std::fabs(ct) < ang_cut) {
 	std::vector<G4double> mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
 	//       rotate to the normal system
 	std::vector<G4double> apr = tot_mom;
 	G4int i;
 	for(i = 1; i < 4; i++) apr[i] /= tot_mod;
-	G4double a_tr = sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
+	G4double a_tr = std::sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
 	std::vector<G4double> mom(4);
 	mom[1] = mom2[3] * apr[1] + ( mom2[1] * apr[2] + mom2[2] * apr[3] * apr[1]) / a_tr; // ::: replace with clhep tools?
 	mom[2] = mom2[3] * apr[2] + (-mom2[1] * apr[1] + mom2[2] * apr[3] * apr[2]) / a_tr;      
@@ -288,7 +288,7 @@ std::vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
     G4double m = i < iz ? mp : mn;
 
     pmod[i] = pmod[i] * etot / xtot;
-    pmod[i] = sqrt(pmod[i] * (pmod[i] + 2.0 * m));
+    pmod[i] = std::sqrt(pmod[i] * (pmod[i] + 2.0 * m));
 
     if (verboseLevel > 2) {
       G4cout << " i " << i << " pmod " << pmod[i] << G4endl;
@@ -313,10 +313,10 @@ G4double G4BigBanger::xProbability(G4double x,
     ekpr = x * x;
 
     if(2 * ihalf == ia) { // even A
-      ekpr *= sqrt(1.0 - x) * pow((1.0 - x), G4int(G4double(3 * ia - 6) / 2.0)); 
+      ekpr *= std::sqrt(1.0 - x) * std::pow((1.0 - x), G4int(G4double(3 * ia - 6) / 2.0)); 
     }
     else {
-      ekpr *= pow((1.0 - x), G4int(G4double(3 * ia - 5) / 2.0));
+      ekpr *= std::pow((1.0 - x), G4int(G4double(3 * ia - 5) / 2.0));
     };
   }; 
   

@@ -63,16 +63,16 @@ public:
      aZ += aTrack.GetDefinition()->GetPDGCharge();
      
      G4int numberOfEx = aTrack.GetDefinition()->GetBaryonNumber();
-     G4int numberOfCh = abs(aTrack.GetDefinition()->GetPDGCharge());
+     G4int numberOfCh = std::abs(aTrack.GetDefinition()->GetPDGCharge());
      G4int numberOfHoles = 0;
      G4double exEnergy = 0;
      
      G4ThreeVector exciton3Momentum = aTrack.Get4Momentum()i.vect();
      G4double compoundMass = aTrack.GetTotalEnergy();
      compoundMass += nucMass;
-     compoundMass = sqrt(compoundMass*compoundMass - exciton3Momentum*exciton3Momentum);
+     compoundMass = std::sqrt(compoundMass*compoundMass - exciton3Momentum*exciton3Momentum);
      G4LorentzVector fragment4Momentum(exciton3Momentum, 
-                                      sqrt(exciton3Momentum.mag2()+compoundMass*compoundMass));
+                                      std::sqrt(exciton3Momentum.mag2()+compoundMass*compoundMass));
     
     anInitialState.SetA(anA);
     anInitialState.SetZ(aZ);

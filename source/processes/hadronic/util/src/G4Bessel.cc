@@ -86,16 +86,16 @@ G4double G4Bessel::I0 (G4double x)
                  Q9 = 0.00392377;
   
   G4double I = 0.0;
-  if (fabs(x) < 3.75)
+  if (std::fabs(x) < 3.75)
   {
-    G4double y = pow(x/3.75, 2.0);
+    G4double y = std::pow(x/3.75, 2.0);
     I = P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7)))));
   }
   else
   {
-    G4double ax = fabs(x);
+    G4double ax = std::fabs(x);
     G4double y  = 3.75/ax;
-    I  = exp(ax) / sqrt(ax) *
+    I  = std::exp(ax) / std::sqrt(ax) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*(Q7+y*(Q8+y*Q9))))))));
   }
   return I;
@@ -123,13 +123,13 @@ G4double G4Bessel::K0 (G4double x)
   if (x <= 2.0)
   {
     G4double y = x * x / 4.0;
-    K = (-log(x/2.0)) * I0(x) +
+    K = (-std::log(x/2.0)) * I0(x) +
       P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7)))));
   }
   else
   {
     G4double y = 2.0 / x;
-    K = exp(-x)  / sqrt(x) *
+    K = std::exp(-x)  / std::sqrt(x) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*Q7))))));
   }
   return K;
@@ -156,17 +156,17 @@ G4double G4Bessel::I1 (G4double x)
                  Q9 =-0.00420059;
 
   G4double I = 0.0;
-  if (fabs(x) < 3.75)
+  if (std::fabs(x) < 3.75)
   {
-    G4double ax = fabs(x);
-    G4double y = pow(x/3.75, 2.0);
+    G4double ax = std::fabs(x);
+    G4double y = std::pow(x/3.75, 2.0);
     I = ax*(P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7))))));
   }
   else
   {
-    G4double ax = fabs(x);
+    G4double ax = std::fabs(x);
     G4double y  = 3.75/ax;
-    I  = exp(ax) / sqrt(ax) *
+    I  = std::exp(ax) / std::sqrt(ax) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*(Q7+y*(Q8+y*Q9))))))));
   }
   if (x < 0.0) I = -I;
@@ -195,13 +195,13 @@ G4double G4Bessel::K1 (G4double x)
   if (x <= 2.0)
   {
     G4double y = x * x / 4.0;
-    K = log(x/2.0)*I1(x) + 1.0/x *
+    K = std::log(x/2.0)*I1(x) + 1.0/x *
       (P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7))))));
   }
   else
   {
     G4double y = 2.0 / x;
-    K = exp(-x) / sqrt(x) *
+    K = std::exp(-x) / std::sqrt(x) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*Q7))))));
   }
   return K;
@@ -237,13 +237,13 @@ G4double G4Bessel::pI0 (G4double x)
     {
       s *= 0.25 * y / i / i;
       I += s;
-      if (abs(s/I) < 1.0E-15) break;
+      if (std::abs(s/I) < 1.0E-15) break;
     }
   }
   else
   {
     G4double y = 1.0 / x;
-    I = exp(x) / sqrt(twopi*x) *
+    I = std::exp(x) / std::sqrt(twopi*x) *
       (1.0 + y*(A0+y*(A1+y*(A2+y*(A3+y*(A4+y*(A5+y*(A6+y*(A7+y*(A8+y*(A9+y*(A10+y*A11))))))))))));
   }
 
@@ -280,7 +280,7 @@ G4double G4Bessel::pI1 (G4double x)
     {
       s *= 0.25 * y / i / (i+1.0);
       I += s;
-      if (abs(s/I) < 1.0E-15) break;
+      if (std::abs(s/I) < 1.0E-15) break;
     }
     I *= 0.5 * x;
     
@@ -288,7 +288,7 @@ G4double G4Bessel::pI1 (G4double x)
   else
   {
     G4double y = 1.0 / x;
-    I = exp(x) / sqrt(twopi*x) *
+    I = std::exp(x) / std::sqrt(twopi*x) *
       (1.0 + y*(A0+y*(A1+y*(A2+y*(A3+y*(A4+y*(A5+y*(A6+y*(A7+y*(A8+y*(A9+y*(A10+y*A11))))))))))));
   }
 
@@ -315,7 +315,7 @@ G4double G4Bessel::pK0 (G4double x)
   else if (x < 9.0)
   {
     G4double y = x * x;
-    G4double C = -log(x/2.0) - 0.5772156649015329;
+    G4double C = -std::log(x/2.0) - 0.5772156649015329;
     G4double s = 1.0;
     G4double t = 0.0;
     for (G4int i=1; i<51; i++)

@@ -96,7 +96,7 @@ public:
     if (ip < 3 && izone < number_of_zones) {
       G4double pf = fermi_momenta[ip - 1][izone]; 
       G4double mass = ip == 1 ? 0.93827 : 0.93957;
-      ekin = sqrt(pf * pf + mass * mass) - mass;
+      ekin = std::sqrt(pf * pf + mass * mass) - mass;
     };  
 
     return ekin;

@@ -158,18 +158,18 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   if (eGamma > 0.) 
     {
       G4double cosTheta = 1. - 2. * G4UniformRand();
-      G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
+      G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
       G4double phi = twopi * G4UniformRand();
       G4double pM = eGamma;
       G4DiscreteGammaTransition* dtransition = 0; 
       dtransition = dynamic_cast <G4DiscreteGammaTransition*> (_transition);
       if ( dtransition && !( dtransition->IsAGamma()) ) {
 	G4double eMass = G4Electron::ElectronDefinition()->GetPDGMass();
-	pM =sqrt(eGamma*(eGamma + 2.0*eMass));
+	pM =std::sqrt(eGamma*(eGamma + 2.0*eMass));
 	eGamma = eGamma + eMass;
       }
-      G4ThreeVector pGamma( pM * sinTheta * cos(phi),
-			    pM * sinTheta * sin(phi),
+      G4ThreeVector pGamma( pM * sinTheta * std::cos(phi),
+			    pM * sinTheta * std::sin(phi),
 			    pM * cosTheta );
       G4LorentzVector gamma(pGamma, eGamma);
       //	gamma.boost(_nucleus.GetMomentum().boostVector() );
@@ -225,7 +225,7 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
     newExcitation = 0;
   
   G4ThreeVector p3Residual(p4Nucleus.vect() - pGamma);
-  G4double newEnergy = sqrt(p3Residual * p3Residual +
+  G4double newEnergy = std::sqrt(p3Residual * p3Residual +
 			    (Mass + newExcitation) * (Mass + newExcitation));
   G4LorentzVector p4Residual(p3Residual, newEnergy);
   

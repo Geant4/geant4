@@ -93,8 +93,8 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 							static_cast<G4int>(Zfrag),
 							Uexcite);
 
-  G4double levelDensBef = exp(2.0*sqrt(aLevelDensityParam*Uexcite));
-  G4double levelDensAft = exp(2.0*sqrt(aLevelDensityParam*(Uexcite-gammaE)));
+  G4double levelDensBef = std::exp(2.0*std::sqrt(aLevelDensityParam*Uexcite));
+  G4double levelDensAft = std::exp(2.0*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
 
   // Now form the probability density
 
@@ -103,7 +103,7 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 
   G4double sigma0 = 2.5 * Afrag * millibarn;  // millibarns
 
-  G4double Egdp = (40.3 / pow(Afrag,0.2) )*MeV;
+  G4double Egdp = (40.3 / std::pow(Afrag,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
   static G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
@@ -182,7 +182,7 @@ G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag,
   // Simple Gaussian quadrature integration
 
   G4double x;
-  G4double root3 = 1.0/sqrt(3.0);
+  G4double root3 = 1.0/std::sqrt(3.0);
 
   G4double Step = (upLim-lowLim)/(2.0*numIters);
   G4double Delta = Step*root3;

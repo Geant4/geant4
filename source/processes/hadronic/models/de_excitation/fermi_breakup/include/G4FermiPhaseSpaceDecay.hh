@@ -32,6 +32,7 @@
 #include <CLHEP/Random/RandGamma.h>
 
 #include <vector>
+#include <cmath>
 
 
 #define G4RandGamma  RandGamma

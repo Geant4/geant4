@@ -62,7 +62,7 @@ public:
       particleType(type) {
 
     particleMass = getParticleMass(type);
-    momentum[0] = sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
+    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
 		       momentum[3] * momentum[3] + particleMass * particleMass);
     valid_particle = true;
   };
@@ -74,7 +74,7 @@ public:
     particleMass = getParticleMass(type);
     momentum.resize(4);
     momentum[0] = ekin + particleMass;
-    momentum[3] = sqrt(momentum[0] * momentum[0] - particleMass * particleMass); 
+    momentum[3] = std::sqrt(momentum[0] * momentum[0] - particleMass * particleMass); 
     momentum[1] = momentum[2] = 0.0;
     valid_particle = true;
   };
@@ -88,7 +88,7 @@ public:
   void setMomentum(const std::vector<G4double>& mom) {
 
     momentum = mom;
-    momentum[0] = sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
+    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
 		       momentum[3] * momentum[3] + particleMass * particleMass);
     valid_particle = true;
   };

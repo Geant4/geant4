@@ -81,13 +81,13 @@ G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double mas
 
    G4double cosTh = G4UniformRand();
    G4double phi = twopi*G4UniformRand();
-   G4double theta = acos(cosTh);
-   G4double sinth = sin(theta);
+   G4double theta = std::acos(cosTh);
+   G4double sinth = std::sin(theta);
    
 // we need the the Q value of the reaction
    result->SetKineticEnergy(std::max(0.001*MeV, anEnergy+GetQValue()));
    G4double mtot = result->GetTotalMomentum(); 
-   G4ThreeVector tempVector(mtot*sinth*cos(phi), mtot*sinth*sin(phi), mtot*cos(theta) );
+   G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*std::cos(theta) );
    result->SetMomentum(tempVector);
 
    return result;

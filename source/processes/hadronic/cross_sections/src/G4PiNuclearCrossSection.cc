@@ -272,8 +272,8 @@
  Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
  {
    G4double result = 0;
-   G4double r1 = x1/pow(G4double(Z1), 2./3.)*pow(G4double(Z), 2./3.);
-   G4double r2 = x2/pow(G4double(Z2), 2./3.)*pow(G4double(Z), 2./3.);
+   G4double r1 = x1/std::pow(G4double(Z1), 2./3.)*std::pow(G4double(Z), 2./3.);
+   G4double r2 = x2/std::pow(G4double(Z2), 2./3.)*std::pow(G4double(Z), 2./3.);
    result = (r1+r2)/2.;
    return result;
  }

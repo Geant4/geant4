@@ -38,7 +38,7 @@
 //    if(filename=="") return false;
     std::ifstream theChannel(filename);
     
-    if(Z==1 && (aFile.GetZ()!=Z || abs(aFile.GetA()-A)>0.0001) )
+    if(Z==1 && (aFile.GetZ()!=Z || std::abs(aFile.GetA()-A)>0.0001) )
     {
       if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
       theChannel.close();

@@ -34,8 +34,8 @@
   
                   if(Nucleus == 208)
                     {  //  R1 = 20.73; R2 = 15.74.
-                  R1       = 4.1408*pow(static_cast<double>(Nucleus),0.3018);
-                  R2       = 3.806*pow(Nucleus-10.068,0.2685);
+                  R1       = 4.1408*std::pow(static_cast<double>(Nucleus),0.3018);
+                  R2       = 3.806*std::pow(Nucleus-10.068,0.2685);
                   Pnucl    = 0.9;
                   Aeff     = 1.1;
                   R1       = 19.5;
@@ -78,10 +78,10 @@
                     }
                   else
                     {
-                      R1    = 4.45*pow(Nucleus-1.0,0.309);
+                      R1    = 4.45*std::pow(Nucleus-1.0,0.309);
                  if(Nucleus == 28)
-                      R1    = 4.25*pow(Nucleus-1.0,0.309);
-                      R2    = 2.3*pow(static_cast<double>(Nucleus),0.36);
+                      R1    = 4.25*std::pow(Nucleus-1.0,0.309);
+                      R2    = 2.3*std::pow(static_cast<double>(Nucleus),0.36);
                       Pnucl = 0.176+0.00167*Nucleus+
                                  8.69E-6*Nucleus*Nucleus;
                       Aeff  = 0.9;
@@ -163,15 +163,15 @@
                MassH       = aHadron->GetMass()/1000;
                MassN       = Nucleus*0.938;
                S           = 2*MassN*HadrEnergy+MassN*MassN+MassH*MassH;
-               EcmH        = (S-MassN*MassN+MassH*MassH)/2/sqrt(S);
-               MomentumCMN = sqrt(EcmH*EcmH-MassH*MassH);
+               EcmH        = (S-MassN*MassN+MassH*MassH)/2/std::sqrt(S);
+               MomentumCMN = std::sqrt(EcmH*EcmH-MassH*MassH);
 
       G4double    MbToB    = 2.568;        //  from mb to GeV^-2
       G4double    Pi1      = 3.1416;
       G4double    Stot     = HadrTot*MbToB;          //In GeV-2
       G4double    Bhad     = HadrSlope;              //In GeV-2
       G4double    Asq      = 1+HadrReIm*HadrReIm;
-      G4double    Rho2     = sqrt(Asq);
+      G4double    Rho2     = std::sqrt(Asq);
       G4double    Pnuclp   = 0.001;
                   Pnuclp   = Pnucl;
       G4double    R12      = R1*R1;
@@ -192,10 +192,10 @@
       G4double    R22Apd   = 2/R22Ap;
       G4double R12ApdR22Ap = 0.5*(R12Apd+R22Apd);
 
-      G4double DDSec1p  = (DDSect2+DDSect3*log(1.06*2*HadrEnergy/R1/4));
-      G4double DDSec2p  = (DDSect2+DDSect3*log(1.06*2*HadrEnergy/
-                             sqrt((R12+R22)/2)/4));
-      G4double DDSec3p  = (DDSect2+DDSect3*log(1.06*2*HadrEnergy/R2/4));
+      G4double DDSec1p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/R1/4));
+      G4double DDSec2p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/
+                             std::sqrt((R12+R22)/2)/4));
+      G4double DDSec3p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/R2/4));
 
       G4double    Norm     = (R12*R1-Pnucl*R22*R2)*Aeff;
       G4double    Normp    = (R12*R1-Pnuclp*R22*R2)*Aeff;
@@ -204,7 +204,7 @@
       G4double    Unucl    = Stot/2/Pi1/Norm*R13;
       G4double    UnuclScr = Stot/2/Pi1/Normp*R13Ap;
       G4double    SinFi    = HadrReIm/Rho2;
-      G4double    FiH      = asin(SinFi);
+      G4double    FiH      = std::asin(SinFi);
       G4double    N        = -1;
       G4double    N2       = R23/R13;
 
@@ -220,21 +220,21 @@
              {
                   N       = -N*Unucl*(Nucleus-i+1)/i*Rho2;
                   N4      = 1;
-                  Prod1   = exp(-Q2/i*R12B/4)/i*R12B;
+                  Prod1   = std::exp(-Q2/i*R12B/4)/i*R12B;
                   medTot  = R12B/i;
 
                   for(G4int l=1; l<=i; l++)
                     {
                      exp1    = l/R22B+(i-l)/R12B;
                      N4      = -N4*(i-l+1)/l*N2;
-                     Prod1   = Prod1+N4/exp1*exp(-Q2/exp1/4);
+                     Prod1   = Prod1+N4/exp1*std::exp(-Q2/exp1/4);
                      medTot  = medTot+N4/exp1;
                     }  // end l
 
-                  ReElasticAmpl0  = ReElasticAmpl0+Prod1*N*sin(FiH*i);
-                  ImElasticAmpl0  = ImElasticAmpl0+Prod1*N*cos(FiH*i);
-                  Tot1            = Tot1+medTot*N*cos(FiH*i);
-             if(abs(Prod1*N/ImElasticAmpl0) < 0.000001) break;
+                  ReElasticAmpl0  = ReElasticAmpl0+Prod1*N*std::sin(FiH*i);
+                  ImElasticAmpl0  = ImElasticAmpl0+Prod1*N*std::cos(FiH*i);
+                  Tot1            = Tot1+medTot*N*std::cos(FiH*i);
+             if(std::abs(Prod1*N/ImElasticAmpl0) < 0.000001) break;
                }      // i
 
     ImElasticAmpl0 = ImElasticAmpl0*Pi1/2.568;   // The amplitude in mB
@@ -242,9 +242,9 @@
     Tot1           = Tot1*Pi1*2.0/2.568;
 
       G4double N1p  = 1;
-      G4double Din1 = 0.5*(R13Ap*R13Ap*exp(-Q2/8*R12Ap)/2*R12Ap/2*DDSec1p-
-              2*R23Ap*R13Ap/2/R12ApdR22Ap*exp(-Q2/4/R12ApdR22Ap)*DDSec2p+
-              R23Ap*R23Ap/2*R22Ap/2*exp(-Q2/8*R22Ap)*DDSec3p);   // at i=0
+      G4double Din1 = 0.5*(R13Ap*R13Ap*std::exp(-Q2/8*R12Ap)/2*R12Ap/2*DDSec1p-
+              2*R23Ap*R13Ap/2/R12ApdR22Ap*std::exp(-Q2/4/R12ApdR22Ap)*DDSec2p+
+              R23Ap*R23Ap/2*R22Ap/2*std::exp(-Q2/8*R22Ap)*DDSec3p);   // at i=0
 
            DTot1 = 0.5*(R13Ap*R13Ap/2*R12Ap/2*DDSec1p-
                        2*R23Ap*R13Ap/2/R12ApdR22Ap*DDSec2p+
@@ -279,9 +279,9 @@
                      exp3p = exp1+R22Apd;
 
                 Din2     = Din2 + N2p*BinCoeff*
-                     (R13Ap*R13Ap/2/exp1p*exp(-Q2/4/exp1p)*DDSec1p-
-                    2*R13Ap*R23Ap/2/exp2p*exp(-Q2/4/exp2p)*DDSec2p+
-                      R23Ap*R23Ap/2/exp3p*exp(-Q2/4/exp3p)*DDSec3p);
+                     (R13Ap*R13Ap/2/exp1p*std::exp(-Q2/4/exp1p)*DDSec1p-
+                    2*R13Ap*R23Ap/2/exp2p*std::exp(-Q2/4/exp2p)*DDSec2p+
+                      R23Ap*R23Ap/2/exp3p*std::exp(-Q2/4/exp3p)*DDSec3p);
 
                 DmedTot = DmedTot + N2p*BinCoeff*
                            (R13Ap*R13Ap/2/exp1p*DDSec1p-
@@ -291,9 +291,9 @@
                 N2p   = -N2p*R23dR13;
                            }     // l
 
-               Din1  = Din1+Din2*N1p*Mnoj[i]/(i+2)/(i+1)*cos(FiH*i);
-               DTot1 = DTot1+DmedTot*N1p*Mnoj[i]/(i+2)/(i+1)*cos(FiH*i);
-             if(abs(Din2*N1p/Din1) < 0.000001) break;
+               Din1  = Din1+Din2*N1p*Mnoj[i]/(i+2)/(i+1)*std::cos(FiH*i);
+               DTot1 = DTot1+DmedTot*N1p*Mnoj[i]/(i+2)/(i+1)*std::cos(FiH*i);
+             if(std::abs(Din2*N1p/Din1) < 0.000001) break;
                     }           //  i
 
                    Din1 = -1*Din1*Nucleus*(Nucleus-1)

@@ -35,12 +35,12 @@ G4double G4LowEXsection::
      if((*i).first/MeV>aX) break;
      it = i;
    }
-   G4double x1 = log((*it).first);
-   G4double x2 = log((*(it+1)).first);
-   G4double y1 = log((*it).second);
-   G4double y2 = log((*(it+1)).second);
-   G4double x = log(aX);
+   G4double x1 = std::log((*it).first);
+   G4double x2 = std::log((*(it+1)).first);
+   G4double y1 = std::log((*it).second);
+   G4double y2 = std::log((*(it+1)).second);
+   G4double x = std::log(aX);
    G4double y = y1+(x-x1)*(y2-y1)/(x2-x1);
-   result = exp(y);
+   result = std::exp(y);
    return result*millibarn;
  }

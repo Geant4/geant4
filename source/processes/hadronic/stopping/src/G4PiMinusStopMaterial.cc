@@ -129,7 +129,7 @@ std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double bi
       eKin1 = _distributionE->Generate(ranflat);
       mass = (*_definitions)[0]->GetPDGMass();
       energy = eKin1 + mass;
-      p = sqrt(energy*energy - mass*mass);
+      p = std::sqrt(energy*energy - mass*mass);
       G4double theta1 = pi*G4UniformRand();
       G4double phi1 = GenerateAngle(2.*pi);
       p1 = MakeP4(p,theta1,phi1,energy);
@@ -138,7 +138,7 @@ std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double bi
       eKin2 = _distributionE->Generate(ranflat);
       mass = (*_definitions)[1]->GetPDGMass();
       energy = eKin2 + mass;
-      p = sqrt(energy*energy - mass*mass);
+      p = std::sqrt(energy*energy - mass*mass);
       ranflat = G4UniformRand();
       G4double opAngle = _distributionAngle->Generate(ranflat);
       G4double theta2 = theta1 + opAngle;
@@ -147,7 +147,7 @@ std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double bi
       p2 = MakeP4(p,theta2,phi2,energy);
 
       G4double pNucleus = (p1.vect() + p2.vect()).mag();
-      eRecoil = sqrt(pNucleus*pNucleus + massNucleus*massNucleus) - massNucleus;
+      eRecoil = std::sqrt(pNucleus*pNucleus + massNucleus*massNucleus) - massNucleus;
 
       // ---- Debug     
       //      G4cout << " ---- binding = " << binding << ", nucleus mass = " << massNucleus 
@@ -175,9 +175,9 @@ G4double G4PiMinusStopMaterial::GenerateAngle(G4double x)
 G4LorentzVector G4PiMinusStopMaterial::MakeP4(G4double p, G4double theta, G4double phi, G4double e)
 {
   //  G4LorentzVector p4;
-  G4double px = p * sin(theta) * cos(phi);
-  G4double py = p * sin(theta) * sin(phi);
-  G4double pz = p * cos(theta);
+  G4double px = p * std::sin(theta) * std::cos(phi);
+  G4double py = p * std::sin(theta) * std::sin(phi);
+  G4double pz = p * std::cos(theta);
   G4LorentzVector p4(px,py,pz,e);
   return p4;
 }
@@ -191,7 +191,7 @@ G4double G4PiMinusStopMaterial::RecoilEnergy(const G4double mass)
       p = p + (*_momenta)[i]->vect();
     }
   G4double pNucleus = p.mag();
-  G4double eNucleus = sqrt(pNucleus*pNucleus + mass*mass);
+  G4double eNucleus = std::sqrt(pNucleus*pNucleus + mass*mass);
 
   return eNucleus;
 }

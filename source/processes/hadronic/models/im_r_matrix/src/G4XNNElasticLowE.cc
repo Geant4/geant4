@@ -87,14 +87,14 @@ G4XNNElasticLowE::G4XNNElasticLowE()
   // Cross-sections are available in the range (_eMin,_eMax)
 
   _eMin = _eMinTable * GeV;
-  _eMax = exp(log(_eMinTable) + tableSize * _eStepLog) * GeV;
+  _eMax = std::exp(std::log(_eMinTable) + tableSize * _eStepLog) * GeV;
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");    
   if (_highLimit > _eMax)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - High energy limit not valid");    
   G4PhysicsVector* pp = new G4PhysicsLnVector(_eMin,_eMax,tableSize);
 
-  _eMin = exp(log(_eMinTable)-_eStepLog)*GeV;
+  _eMin = std::exp(std::log(_eMinTable)-_eStepLog)*GeV;
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");
   G4PhysicsVector* np = new G4PhysicsLnVector(_eMin,_eMax,tableSize);

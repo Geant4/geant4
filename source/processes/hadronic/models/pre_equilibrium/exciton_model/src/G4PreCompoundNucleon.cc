@@ -58,8 +58,8 @@ ProbabilityDistributionFunction(const G4double eKin,
 
 
   G4double Probability = 2.0/(hbarc*hbarc*hbarc) * GetReducedMass() * 
-      r0 * r0 * pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
-      P*(N-1.0) * pow(g1*E1/(g0*E0),N-2.0)/E0 *
+      r0 * r0 * std::pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
+      P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 *
       g1/(g0*g0);
 
   return Probability;

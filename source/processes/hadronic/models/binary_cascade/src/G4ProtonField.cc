@@ -117,7 +117,7 @@ G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
 
 G4double G4ProtonField::GetBarrier()
 {
-  G4double coulombBarrier = (1.44/1.14) * MeV * theZ / (1.0 + pow(theA,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * theZ / (1.0 + std::pow(theA,1./3.));
 //GF   G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
   G4double bindingEnergy =0;
 /*

@@ -54,7 +54,7 @@ InCharge(G4int aCode, G4int bCode)
 inline G4double G4ASCCrossSection::
 GetXsec(G4double s)
 {
-   G4double result = theX*pow(s, theEps) + theY*pow(s, -theEta);
+   G4double result = theX*std::pow(s, theEps) + theY*std::pow(s, -theEta);
    return result;
 }
 

@@ -149,7 +149,7 @@
      theDelayed = theFS.ApplyYourself(0, delayed, theDecayConstants);
      for(i=0; i<theDelayed->size(); i++)
      {
-       G4double time = -log(G4UniformRand())/theDecayConstants[i];
+       G4double time = -std::log(G4UniformRand())/theDecayConstants[i];
        time += theTrack.GetGlobalTime();
        G4HadSecondary * track = new G4HadSecondary(theDelayed->operator[](i));
        track->SetTime(time);
@@ -173,7 +173,7 @@
      }
      for(i0=Prompt; i0<Prompt+delayed; i0++)
      {
-       G4double time = -log(G4UniformRand())/theDecayConstants[i0-Prompt];
+       G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
        time += theTrack.GetGlobalTime();        
        G4HadSecondary * track = new G4HadSecondary(theNeutrons->operator[](i));
        track->SetTime(time);

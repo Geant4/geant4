@@ -90,7 +90,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
     if (SumMass > TotalCollisionMass) return FALSE;
     SumMass = SumMom.m2();
     if (SumMass < 0) return FALSE;
-    SumMass = sqrt(SumMass);
+    SumMass = std::sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
     G4ThreeVector Beta = -SumMom.boostVector();
@@ -109,7 +109,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
       {
         G4LorentzVector HadronMom = Output->operator[](cHadron)->Get4Momentum();
         HadronMom.setVect(Scale*HadronMom.vect());
-        G4double E = sqrt(HadronMom.vect().mag2() + sqr(Output->operator[](cHadron)->GetDefinition()->GetPDGMass()));
+        G4double E = std::sqrt(HadronMom.vect().mag2() + sqr(Output->operator[](cHadron)->GetDefinition()->GetPDGMass()));
         HadronMom.setE(E);
         Output->operator[](cHadron)->Set4Momentum(HadronMom);
         Sum += E;

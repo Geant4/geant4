@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4C10GEMProbability.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
+// $Id: G4C10GEMProbability.cc,v 1.3 2004-12-07 13:46:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -41,7 +41,7 @@ G4C10GEMProbability::G4C10GEMProbability() :
 
   ExcitEnergies.push_back(6580.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(200.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(200.0*keV));
 
   SetExcitationEnergiesPtr(&ExcitEnergies);
   SetExcitationSpinsPtr(&ExcitSpins);

@@ -365,10 +365,10 @@
     }
     result->SetKineticEnergy(fsEnergy);
     G4double phi = twopi*G4UniformRand();
-    G4double theta = acos(cosTh);
-    G4double sinth = sin(theta);
+    G4double theta = std::acos(cosTh);
+    G4double sinth = std::sin(theta);
     G4double mtot = result->GetTotalMomentum();
-    G4ThreeVector tempVector(mtot*sinth*cos(phi), mtot*sinth*sin(phi), mtot*cos(theta) );
+    G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*std::cos(theta) );
     result->SetMomentum(tempVector);
 //  return the result.    
     return result;

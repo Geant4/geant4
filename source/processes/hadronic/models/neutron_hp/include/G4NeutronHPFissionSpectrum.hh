@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionSpectrum.hh,v 1.8 2003-06-16 17:10:43 gunter Exp $
+// $Id: G4NeutronHPFissionSpectrum.hh,v 1.9 2004-12-07 13:49:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionSpectrum_h
@@ -41,7 +41,7 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
   public:
   G4NeutronHPFissionSpectrum()
   {
-    expm1 = exp(-1.);
+    expm1 = std::exp(-1.);
   }
   ~G4NeutronHPFissionSpectrum()
   {
@@ -82,7 +82,7 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
   // this is the function to sample from. 
   inline G4double Maxwell(G4double anEnergy, G4double theta)
   {
-    G4double result = sqrt(anEnergy/eV)*exp(-anEnergy/eV/theta);
+    G4double result = std::sqrt(anEnergy/eV)*std::exp(-anEnergy/eV/theta);
     return result;
   }
   

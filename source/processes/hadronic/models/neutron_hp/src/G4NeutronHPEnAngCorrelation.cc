@@ -70,8 +70,8 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     G4double totE = nEnergy+tEnergy;
     G4ThreeVector the3CMS = the3Target+the3Neutron;
     theCMS.SetMomentum(the3CMS);
-    G4double cmsMom = sqrt(the3CMS*the3CMS);
-    G4double sqrts = sqrt((totE-cmsMom)*(totE+cmsMom));
+    G4double cmsMom = std::sqrt(the3CMS*the3CMS);
+    G4double sqrts = std::sqrt((totE-cmsMom)*(totE+cmsMom));
     theCMS.SetMass(sqrts);
     theCMS.SetTotalEnergy(totE);
     G4ReactionProduct aNeutron;

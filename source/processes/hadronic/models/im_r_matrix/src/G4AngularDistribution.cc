@@ -184,7 +184,7 @@ G4double G4AngularDistribution::CosTheta(G4double s, G4double m1, G4double m2) c
 
 
    if (cosTheta > 1. || cosTheta < -1.)
-     throw G4HadronicException(__FILE__, __LINE__, "G4AngularDistribution::CosTheta - cos(theta) outside allowed range");
+     throw G4HadronicException(__FILE__, __LINE__, "G4AngularDistribution::CosTheta - std::cos(theta) outside allowed range");
 
    return cosTheta;
 }
@@ -308,20 +308,20 @@ G4double G4AngularDistribution::Cross(G4double tpPion,
 {
   G4double cross = 0;
      //  Pion
-    cross += ((cPion_3 * tpPion  + cPion_2)  * tpPion  + cPion_1)  * tpPion  + cPion_m/tmPion   + cPion_0  +  cPion_L * log(tpPion*tmPion);
+    cross += ((cPion_3 * tpPion  + cPion_2)  * tpPion  + cPion_1)  * tpPion  + cPion_m/tmPion   + cPion_0  +  cPion_L * std::log(tpPion*tmPion);
 //    G4cout << "cross1 "<< cross<<G4endl;
     //  Sigma
-    cross += ((cSigma_3 * tpSigma + cSigma_2) * tpSigma + cSigma_1) * tpSigma + cSigma_m/tmSigma + cSigma_0 + cSigma_L * log(tpSigma*tmSigma);
+    cross += ((cSigma_3 * tpSigma + cSigma_2) * tpSigma + cSigma_1) * tpSigma + cSigma_m/tmSigma + cSigma_0 + cSigma_L * std::log(tpSigma*tmSigma);
 //    G4cout << "cross2 "<< cross<<G4endl;
     // Omega
-    cross += ((bOmega_3 * tpOmega + bOmega_2) * tpOmega + bOmega_1) * tpOmega + bOmega_m/tmOmega + bOmega_0 + bOmega_L * log(tpOmega*tmOmega)
+    cross += ((bOmega_3 * tpOmega + bOmega_2) * tpOmega + bOmega_1) * tpOmega + bOmega_m/tmOmega + bOmega_0 + bOmega_L * std::log(tpOmega*tmOmega)
     // Mix
     +  bMix_o1 * (tpOmega - 1.)
     +  bMix_s1 * (tpSigma - 1.)
-    +  bMix_Omega * log(tmOmega)
-    +  bMix_sm * log(tmSigma)
-    +  bMix_oL * log(tpOmega)
-    +  bMix_sL * log(tpSigma);
+    +  bMix_Omega * std::log(tmOmega)
+    +  bMix_sm * std::log(tmSigma)
+    +  bMix_oL * std::log(tpOmega)
+    +  bMix_sL * std::log(tpSigma);
 /*      G4cout << "cross3 "<< cross<<" "
              <<bMix_o1<<" "
              <<bMix_s1<<" "

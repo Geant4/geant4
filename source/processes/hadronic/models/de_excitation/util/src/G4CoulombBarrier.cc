@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
+// $Id: G4CoulombBarrier.cc,v 1.3 2004-12-07 13:48:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -74,14 +74,14 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
   } else {
     G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ZRes));
     Barrier = elm_coupling/CompoundRadius * static_cast<G4double>(GetZ())*static_cast<G4double>(ZRes)/
-      (pow(static_cast<G4double>(GetA()),1./3.) + pow(static_cast<G4double>(ARes),1./3.));
+      (std::pow(static_cast<G4double>(GetA()),1./3.) + std::pow(static_cast<G4double>(ARes),1./3.));
 
     // Barrier penetration coeficient
     G4double K = BarrierPenetrationFactor(ZRes);
 		
     Barrier *= K;
 		
-    Barrier /= (1.0 + sqrt(U/(2.0*static_cast<G4double>(ARes))));
+    Barrier /= (1.0 + std::sqrt(U/(2.0*static_cast<G4double>(ARes))));
   }
   return Barrier;
 }

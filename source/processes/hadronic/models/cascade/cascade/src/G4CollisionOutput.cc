@@ -61,7 +61,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
   for(i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
 
-  G4double pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
+  G4double pnc = std::sqrt(mon_non_cons[1] * mon_non_cons[1] + 
 		      mon_non_cons[2] * mon_non_cons[2] + 
 		      mon_non_cons[3] * mon_non_cons[3]);
 
@@ -75,7 +75,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     G4cout << " remaining exitation " << eex_rest << G4endl;
   }
 
-  if(fabs(mon_non_cons[0]) > accuracy || pnc > accuracy) { // renormalization
+  if(std::fabs(mon_non_cons[0]) > accuracy || pnc > accuracy) { // renormalization
     G4int npart = outgoingParticles.size();
  
     if(npart > 0) {
@@ -100,7 +100,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     }; 
     out_mom = getTotalOutputMomentum();
     for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
-    pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
+    pnc = std::sqrt(mon_non_cons[1] * mon_non_cons[1] + 
 	       mon_non_cons[2] * mon_non_cons[2] + 
 	       mon_non_cons[3] * mon_non_cons[3]);
 
@@ -153,8 +153,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
         if(DET > 0.0) {
 
-          G4double x1 = -(W + sqrt(DET));
-   	  G4double x2 = -(W - sqrt(DET));
+          G4double x1 = -(W + std::sqrt(DET));
+   	  G4double x2 = -(W - std::sqrt(DET));
 	  // choose the appropriate solution
           G4bool xset = false;
  	  G4double x = 0.0;
@@ -195,14 +195,14 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
             out_mom = getTotalOutputMomentum();
 	    std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
             for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
-            pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
+            pnc = std::sqrt(mon_non_cons[1] * mon_non_cons[1] + 
 		       mon_non_cons[2] * mon_non_cons[2] + 
 		       mon_non_cons[3] * mon_non_cons[3]);
 	    if(verboseLevel > 2){
 	      G4cout << " momentum non conservation tuning: " << G4endl 
 		     << " e " << mon_non_cons[0] << " p " << pnc << G4endl;
 	    }
-            if(fabs(mon_non_cons[0]) < accuracy || pnc < accuracy) on_shell = true;
+            if(std::fabs(mon_non_cons[0]) < accuracy || pnc < accuracy) on_shell = true;
 	  }
 	  else {
 	    if(verboseLevel > 2){
@@ -251,7 +251,7 @@ std::pair<std::pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4
     G4int ibest1 = -1;
     G4int ibest2 = -1;  
     G4double pbest = 0.0;
-    G4double pcut = 0.3 * sqrt(1.88 * fabs(de));
+    G4double pcut = 0.3 * std::sqrt(1.88 * std::fabs(de));
     G4double p1 = 0.0;
     G4double p2;
    
@@ -265,9 +265,9 @@ std::pair<std::pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4
 
 	for(G4int l = 1; l < 4; l++) {
 	  if(mom1[l] * mom2[l] < 0.0) { 
-	    if(fabs(mom1[l]) > pcut && fabs(mom2[l]) > pcut) {
+	    if(std::fabs(mom1[l]) > pcut && std::fabs(mom2[l]) > pcut) {
 
-	      G4double psum = fabs(mom1[l]) + fabs(mom2[l]);  
+	      G4double psum = std::fabs(mom1[l]) + std::fabs(mom2[l]);  
 
 	      if(psum > pbest) {
 		ibest1 = i;

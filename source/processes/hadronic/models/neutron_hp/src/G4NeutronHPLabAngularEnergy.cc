@@ -233,7 +233,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
        x =  random;
        x1 = theThVec.GetY(ith-1)-theThVec.GetY(0); // integrals
        x2 = theThVec.GetY(ith)-theThVec.GetY(0);
-       y1 = theThVec.GetX(ith-1); // cos(theta)
+       y1 = theThVec.GetX(ith-1); // std::cos(theta)
        y2 = theThVec.GetX(ith);
        cosTh = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
                                   x, x1,x2,y1,y2);
@@ -341,10 +341,10 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
    result->SetKineticEnergy(secEnergy);
    
    G4double phi = twopi*G4UniformRand();
-   G4double theta = acos(cosTh);
-   G4double sinth = sin(theta);
+   G4double theta = std::acos(cosTh);
+   G4double sinth = std::sin(theta);
    G4double mtot = result->GetTotalMomentum(); 
-   G4ThreeVector tempVector(mtot*sinth*cos(phi), mtot*sinth*sin(phi), mtot*cos(theta) );
+   G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*std::cos(theta) );
    result->SetMomentum(tempVector);
    
    return result;

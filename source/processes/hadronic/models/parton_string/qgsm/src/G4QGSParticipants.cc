@@ -133,7 +133,7 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
 //      ModelMode = DIFFRACTIVE;
       if (Probability > rndNumber)
       {
-//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<sqrt(Distance2)<<G4endl;
+//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<std::sqrt(Distance2)<<G4endl;
         G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
         G4QGSParticipants_NPart ++;
 	theTargets.push_back(aTarget);

@@ -62,7 +62,7 @@ inline G4double
 G4FermiPhaseSpaceDecay::PtwoBody(G4double E, G4double P1, G4double P2) const
 {
   G4double P = (E+P1+P2)*(E+P1-P2)*(E-P1+P2)*(E-P1-P2)/(4.0*E*E);
-  if (P>0.0) return sqrt(P);
+  if (P>0.0) return std::sqrt(P);
   else return -1.0;
 }
 

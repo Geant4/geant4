@@ -37,7 +37,7 @@
    G4double G4NeutronInelasticCrossSection::
    GetCrossSection(G4double anEnergy, G4double atomicNumber, G4double nOfProtons)
    {
-      G4double kineticEnergy = log10(anEnergy/MeV);
+      G4double kineticEnergy = std::log10(anEnergy/MeV);
       G4double nOfNeutrons = atomicNumber-nOfProtons;
       const G4double p1=1.3773;
       const G4double p2=1.+10./atomicNumber-0.0006*atomicNumber;
@@ -47,15 +47,15 @@
       const G4double p6=1.+200./atomicNumber+0.02*atomicNumber;
       const G4double p7=(atomicNumber-70.)*(atomicNumber-200.)/11000.;
       
-      double part1 = pi*(p1*p1)*log(nOfNeutrons);
-      double part2 = 1.+ pow(atomicNumber, 1./3.) - p2*(1.-1./pow(atomicNumber, 1./3.));
+      double part1 = pi*(p1*p1)*std::log(nOfNeutrons);
+      double part2 = 1.+ std::pow(atomicNumber, 1./3.) - p2*(1.-1./std::pow(atomicNumber, 1./3.));
 
       double firstexp = -p4*(kineticEnergy-p5);
-      double first=1.+exp(firstexp);
+      double first=1.+std::exp(firstexp);
       double corr = 1.+p3*(1.-1./first); 
 
       double secondexp = -p6*(kineticEnergy-p7);
-      double second=1.+exp(secondexp);
+      double second=1.+std::exp(secondexp);
       double corr2 =1./second;
 
       double xsec = corr*corr2*part1*part2*10.*millibarn;

@@ -47,8 +47,8 @@ GetCrossSection(const G4DynamicParticle* aParticle,
 
    G4double one_third = 1.0 / 3.0;
 
-   G4double cubicrAt = pow ( G4double(At) , G4double(one_third) );  
-   G4double cubicrAp = pow ( G4double(Ap) , G4double(one_third) );  
+   G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) );  
+   G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
 
 
    G4double Bc = Zt * Zp / ( ( rc / fermi ) * (  cubicrAp + cubicrAt ) );   // rc divide fermi
@@ -78,10 +78,10 @@ GetCrossSection(const G4DynamicParticle* aParticle,
 
 G4double G4IonsKoxCrossSection::calEcm ( G4double mp , G4double mt , G4double Plab )
 {
-   G4double Elab = sqrt ( mp * mp + Plab * Plab );
-   G4double Ecm = sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
+   G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
+   G4double Ecm = std::sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
    G4double Pcm = Plab * mt / Ecm;
-   G4double KEcm = sqrt ( Pcm * Pcm + mp * mp ) - mp;
+   G4double KEcm = std::sqrt ( Pcm * Pcm + mp * mp ) - mp;
    return KEcm;
 }
 
@@ -94,14 +94,14 @@ G4double G4IonsKoxCrossSection::calCeValue( const G4double ke )
    // There are no data below 30 MeV/n in Kox et al., 
 
    G4double Ce; 
-   G4double log10_ke = log10 ( ke );   
+   G4double log10_ke = std::log10 ( ke );   
    if ( log10_ke > 1.5 ) 
    {
-      Ce = - 10.0 / pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
+      Ce = - 10.0 / std::pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
    }
    else
    {
-      Ce = ( - 10.0 / pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / pow ( G4double(1.5) , G4double(3) ) * pow ( G4double(log10_ke) , G4double(3) );
+      Ce = ( - 10.0 / std::pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / std::pow ( G4double(1.5) , G4double(3) ) * std::pow ( G4double(log10_ke) , G4double(3) );
 
    }
    return Ce;

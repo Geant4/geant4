@@ -159,7 +159,7 @@ G4double G4BertiniEvaporationChannel::getCoulomb()
   // In HETC88 this factor was 0.88235, perhaps due to different r0
 
   G4double coulomb = factor *  particleZ * qmFactor() * residualZ / 
-         ( pow( G4double(residualA), 0.33333333 ) + rho ) * MeV;
+         ( std::pow( G4double(residualA), 0.33333333 ) + rho ) * MeV;
   
   if ( verboseLevel >= 10 )
     G4cout << " G4BertiniEvaporationChannel::getThresh() " << G4endl
@@ -192,7 +192,7 @@ G4double G4BertiniEvaporationChannel::getLevelDensityParameter()
   G4double y0 = 1.5;
 
   G4double temp = ( residualA - 2.0 * residualZ ) / residualA;
-  G4double smallA =  residualA * ( 1.0 + y0 * pow( temp, 2. ) ) / b0 / MeV; 
+  G4double smallA =  residualA * ( 1.0 + y0 * std::pow( temp, 2. ) ) / b0 / MeV; 
 
   // In HETC98 b0 = b0(E).
 
@@ -204,12 +204,12 @@ void G4BertiniEvaporationChannel::isotropicCosines( G4double & u, G4double & v, 
 {
   // Samples isotropic random direction cosines.
   G4double CosTheta = 1.0 - 2.0 * G4UniformRand();
-  G4double SinTheta = sqrt( 1.0 - CosTheta * CosTheta );
+  G4double SinTheta = std::sqrt( 1.0 - CosTheta * CosTheta );
   G4double Phi = twopi * G4UniformRand();
 
-  u = cos( Phi ) * SinTheta;
-  v = cos( Phi ) * CosTheta,
-  w = sin( Phi );
+  u = std::cos( Phi ) * SinTheta;
+  v = std::cos( Phi ) * CosTheta,
+  w = std::sin( Phi );
 
   return;
 }

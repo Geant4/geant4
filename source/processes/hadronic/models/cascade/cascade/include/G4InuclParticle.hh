@@ -55,7 +55,7 @@ public:
 
   G4double getMomModule() const { 
 
-    return sqrt(momentum[1] * momentum[1] +
+    return std::sqrt(momentum[1] * momentum[1] +
 		momentum[2] * momentum[2] + 
 		momentum[3] * momentum[3]); 
   };
@@ -64,7 +64,7 @@ public:
 
     G4cout << " px " << momentum[1] << " py " << momentum[2] <<
       " pz " << momentum[3] <<
-      " pmod " << sqrt(momentum[1] * momentum[1] + 
+      " pmod " << std::sqrt(momentum[1] * momentum[1] + 
 		       momentum[2] * momentum[2] +
 		       momentum[3] * momentum[3])
 	   << " E " << momentum[0] << G4endl;

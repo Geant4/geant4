@@ -125,7 +125,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	}
 
 	nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
-	PEX[0] = sqrt(PEX[1] * PEX[1] + 
+	PEX[0] = std::sqrt(PEX[1] * PEX[1] + 
 		      PEX[2] * PEX[2] + 
 		      PEX[3] * PEX[3] +
 		      nuc_mass * nuc_mass);  	
@@ -170,18 +170,18 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      if (goodRemnant(A1[i], Z1[i])) {
 		G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
 		V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
-		  (pow(A1[i], one_third) + pow(AN[i], one_third));
+		  (std::pow(A1[i], one_third) + std::pow(AN[i], one_third));
 		TM[i] = EEXS - QB - V[i] * A / A1[i];  
 	      };
 	    }; 
       
-	    G4double ue = 2.0 * sqrt(u1 * EEXS);
+	    G4double ue = 2.0 * std::sqrt(u1 * EEXS);
 	    G4double prob_sum = 0.0;
 	
 	    if (TM[0] > cut_off_energy) {
 	      G4double AL = getAL(A);
-	      W[0] = BE * pow(A1[0], two_thirds) * G[0] * AL;
-	      G4double TM1 = 2.0 * sqrt(u[0] * TM[0]) - ue;
+	      W[0] = BE * std::pow(A1[0], two_thirds) * G[0] * AL;
+	      G4double TM1 = 2.0 * std::sqrt(u[0] * TM[0]) - ue;
 
 	      if (TM1 > huge_num) {
 		TM1 = huge_num;
@@ -189,7 +189,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      } else if (TM1 < small) {
 		TM1 = small;
 	      };
-	      W[0] = W[0] * exp(TM1); 	     
+	      W[0] = W[0] * std::exp(TM1); 	     
 	      prob_sum += W[0];
 
 	    } else {
@@ -199,8 +199,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    for (i = 1; i < 6; i++) {
 
 	      if (TM[i] > cut_off_energy) {
-		W[i] = BE * pow(A1[i], two_thirds) * G[i] * (1.0 + CPA[i]);
-		G4double TM1 = 2.0 * sqrt(u[i] * TM[i]) - ue;
+		W[i] = BE * std::pow(A1[i], two_thirds) * G[i] * (1.0 + CPA[i]);
+		G4double TM1 = 2.0 * std::sqrt(u[i] * TM[i]) - ue;
 
 		if (TM1 > huge_num) {
 		  TM1 = huge_num;
@@ -208,7 +208,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		} else if (TM1 < small) {
 		  TM1 = small;
 		};
-		W[i] = W[i] * exp(TM1); 	     
+		W[i] = W[i] * std::exp(TM1); 	     
 		prob_sum += W[i];
 
 	      } else {
@@ -226,7 +226,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  
 	      if (EF > 0.0) {
 		G4double AF = u1 * getAF(X, A, Z, EEXS);
-		G4double TM1 = 2.0 * sqrt(AF * EF) - ue;
+		G4double TM1 = 2.0 * std::sqrt(AF * EF) - ue;
 
 		if (TM1 > huge_num) {
 		  TM1 = huge_num;
@@ -234,7 +234,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		} else if (TM1 < small) {
 		  TM1 = small;
 		};
-		W[6] = BF * exp(TM1);
+		W[6] = BF * std::exp(TM1);
 
 		if (W[6] > fisssion_cut * W[0]) W[6] = fisssion_cut * W[0]; 	     
 		prob_sum += W[6];
@@ -252,7 +252,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	    if (prob_sum < prob_cut_off) { // photon emission chain
 	      G4double UCR0 = 2.5 + 150.0 / A;
-	      G4double T00 = 1.0 / (sqrt(u1 / UCR0) - 1.25 / UCR0);
+	      G4double T00 = 1.0 / (std::sqrt(u1 / UCR0) - 1.25 / UCR0);
 	      G4int itry_gam = 0;
 
 	      while (EEXS > cut_off_energy && try_again) {
@@ -262,10 +262,10 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		G4double FMAX;
 
 		if (T04 < EEXS) {
-		  FMAX = pow(T04, 4) * exp((EEXS - T04) / T00);	        
+		  FMAX = std::pow(T04, 4) * std::exp((EEXS - T04) / T00);	        
 
 		} else {
-		  FMAX = pow(EEXS, 4);
+		  FMAX = std::pow(EEXS, 4);
 		}; 
 
 		G4double S(0);
@@ -273,7 +273,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		while (itry < itry_max) {
 		  itry++;
 		  S = EEXS * inuclRndm();
-		  G4double X1 = pow(S, 4) * exp((EEXS - S) / T00);
+		  G4double X1 = std::pow(S, 4) * std::exp((EEXS - S) / T00);
 
 		  if (X1 > FMAX * inuclRndm()) break;
 		};
@@ -286,14 +286,14 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		  G4double FI = randomPHI();
 		  G4double P1 = pmod * COS_SIN.second;
-		  mom[1] = P1 * cos(FI);
-		  mom[2] = P1 * sin(FI);
+		  mom[1] = P1 * std::cos(FI);
+		  mom[2] = P1 * std::sin(FI);
 		  mom[3] = pmod * COS_SIN.first;
 		  mom[0] = pmod;
 		  std::vector<G4double> mom_at_rest(4);
 
 		  for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
-		  mom_at_rest[0] = sqrt(mom_at_rest[1] * mom_at_rest[1] +
+		  mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
 					mom_at_rest[2] * mom_at_rest[2] + 
 					mom_at_rest[3] * mom_at_rest[3] +
 					nuc_mass * nuc_mass); 
@@ -301,14 +301,14 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  std::vector<G4double> part_mom = 
 		    toTheNucleiSystemRestFrame.backToTheLab(mom);
 
-		  part_mom[0] = sqrt(part_mom[1] * part_mom[1] +
+		  part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
 				     part_mom[2] * part_mom[2] + 
 				     part_mom[3] * part_mom[3]); 
 
 		  std::vector<G4double> ex_mom = 
 		    toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
 
-		  ex_mom[0] = sqrt(ex_mom[1] * ex_mom[1] + 
+		  ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
 				   ex_mom[2] * ex_mom[2]
 				   + ex_mom[3] * ex_mom[3] + 
 				   nuc_mass * nuc_mass);			
@@ -349,8 +349,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      };
 
 	      if (icase < 6) { // particle or light nuclei escape
-		G4double uc = 2.0 * sqrt(u[icase] * TM[icase]);
-		G4double ur = (uc > huge_num ? exp(huge_num) : exp(uc));
+		G4double uc = 2.0 * std::sqrt(u[icase] * TM[icase]);
+		G4double ur = (uc > huge_num ? std::exp(huge_num) : std::exp(uc));
 		G4double d1 = 1.0 / ur;
 		G4double d2 = 1.0 / (ur - 1.0);	    
 		G4int itry1 = 0;
@@ -364,7 +364,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		  while (itry < itry_max && EPR < 0.0) {
 		    itry++;
-		    G4double uu = uc + log((1.0 - d1) * inuclRndm() + d2);
+		    G4double uu = uc + std::log((1.0 - d1) * inuclRndm() + d2);
 		    S = 0.5 * (uc * uc - uu * uu) / u[icase];
 		    EPR = TM[icase] - S * A / (A - 1.0) + V[icase];
 		  }; 
@@ -377,35 +377,35 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      G4InuclElementaryParticle particle(ptype);
 		      G4double mass = particle.getMass();
 		      // generate particle momentum
-		      G4double pmod = sqrt((2.0 * mass + S) * S);
+		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		      std::vector<G4double> mom(4);
 		      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
-		      mom[1] = P1 * cos(FI);
-		      mom[2] = P1 * sin(FI);
+		      mom[1] = P1 * std::cos(FI);
+		      mom[2] = P1 * std::sin(FI);
 		      mom[3] = pmod * COS_SIN.first;
 		      std::vector<G4double> mom_at_rest(4);
 
 		      for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
 		      G4double new_nuc_mass = dummy_nuc.getNucleiMass(A1[icase],
 								      Z1[icase]);
-		      mom_at_rest[0] = sqrt(mom_at_rest[1] * mom_at_rest[1] +
+		      mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
 					    mom_at_rest[2] * mom_at_rest[2] + 
 					    mom_at_rest[3] * mom_at_rest[3] +
 					    new_nuc_mass * new_nuc_mass); 
-		      mom[0] = sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
+		      mom[0] = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
 				    mom[3] * mom[3] + mass * mass);
 
 		      std::vector<G4double> part_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom);
-		      part_mom[0] = sqrt(part_mom[1] * part_mom[1] +
+		      part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
 					 part_mom[2] * part_mom[2] + 
 					 part_mom[3] * part_mom[3] +
 					 mass * mass);
 		      std::vector<G4double> ex_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
-		      ex_mom[0] = sqrt(ex_mom[1] * ex_mom[1] + 
+		      ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
 				       ex_mom[2] * ex_mom[2] + 
 				       ex_mom[3] * ex_mom[3] + 
 				       new_nuc_mass * new_nuc_mass);			
@@ -428,36 +428,36 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      G4InuclNuclei nuclei(AN[icase], Q[icase]);
 		      G4double mass = nuclei.getMass();
 		      // generate particle momentum
-		      G4double pmod = sqrt((2.0 * mass + S) * S);
+		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		      std::vector<G4double> mom(4);
 		      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
-		      mom[1] = P1 * cos(FI);
-		      mom[2] = P1 * sin(FI);
+		      mom[1] = P1 * std::cos(FI);
+		      mom[2] = P1 * std::sin(FI);
 		      mom[3] = pmod * COS_SIN.first;
 		      std::vector<G4double> mom_at_rest(4);
 
 		      for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
 		      G4double new_nuc_mass = dummy_nuc.getNucleiMass(A1[icase],
 								      Z1[icase]);
-		      mom_at_rest[0] = sqrt(mom_at_rest[1] * mom_at_rest[1] +
+		      mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
 					    mom_at_rest[2] * mom_at_rest[2] + 
 					    mom_at_rest[3] * mom_at_rest[3] +
 					    new_nuc_mass * new_nuc_mass); 
-		      mom[0] = sqrt(mom[1] * mom[1] + 
+		      mom[0] = std::sqrt(mom[1] * mom[1] + 
 				    mom[2] * mom[2] +
 				    mom[3] * mom[3] + 
 				    mass * mass);
 		      std::vector<G4double> part_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom);
-		      part_mom[0] = sqrt(part_mom[1] * part_mom[1] +
+		      part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
 					 part_mom[2] * part_mom[2] + 
 					 part_mom[3] * part_mom[3] +
 					 mass * mass);
 		      std::vector<G4double> ex_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
-		      ex_mom[0] = sqrt(ex_mom[1] * ex_mom[1] + 
+		      ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
 				       ex_mom[2] * ex_mom[2] +
 				       ex_mom[3] * ex_mom[3] + 
 				       new_nuc_mass * new_nuc_mass);			
@@ -661,9 +661,9 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
   if (x < XMIN || x > XMAX) {
 
     G4double X1 = 1.0 - 0.02 * x2;
-    G4double FX = (0.73 + (3.33 * X1 - 0.66) * X1) * pow(X1, 3);
+    G4double FX = (0.73 + (3.33 * X1 - 0.66) * X1) * std::pow(X1, 3);
 
-    QFF = G0 * FX * pow(a, 2.0 / 3.0);
+    QFF = G0 * FX * std::pow(a, 2.0 / 3.0);
  
   } else {
 

@@ -45,9 +45,9 @@
       else if(x2==0) result = y2;
       else
       {
-        G4double b = (y2-y1)/(log(x2)-log(x1));
-        G4double a = y1 - b*log(x1);
-        result = (a-b)*(x2-x1) + b*(x2*log(x2)-x1*log(x1));
+        G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
+        G4double a = y1 - b*std::log(x1);
+        result = (a-b)*(x2-x1) + b*(x2*std::log(x2)-x1*std::log(x1));
       }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
@@ -55,9 +55,9 @@
       if(y1==0||y2==0) result =0;
       else
       {
-        G4double b = (log(y2)-log(y1))/(x2-x1);
-        G4double a = log(y1) - b*x1;
-        result = (exp(a)/b)*(exp(b*x2)-exp(b*x1));
+        G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
+        G4double a = std::log(y1) - b*x1;
+        result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
       }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
@@ -67,9 +67,9 @@
       else if(y1==0||y2==0) result =0;
       else
       {      
-        G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
-        G4double a = log(y1) - b*log(x1);;
-        result = (exp(a)/(b+1))*(pow(x2,b+1)-pow(x1,b+1));
+        G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
+        G4double a = std::log(y1) - b*std::log(x1);;
+        result = (std::exp(a)/(b+1))*(std::pow(x2,b+1)-std::pow(x1,b+1));
       }
     }
     else
@@ -99,10 +99,10 @@
       else if(x2==0) result = y2;
       else
       {
-        G4double b = (y2-y1)/(log(x2)-log(x1));
-        G4double a = y1 - b*log(x1);
-        result = ( x2*x2/2. * (a-b/2.+b*log(x2)) )
-                -( x1*x1/2. * (a-b/2.+b*log(x1)) );
+        G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
+        G4double a = y1 - b*std::log(x1);
+        result = ( x2*x2/2. * (a-b/2.+b*std::log(x2)) )
+                -( x1*x1/2. * (a-b/2.+b*std::log(x1)) );
       }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
@@ -110,9 +110,9 @@
       if(y1==0||y2==0) result = 0;
       else
       {
-        G4double b = (log(y2)-log(y1))/(x2-x1);
-        G4double a = log(y1) - b*x1;
-        result = exp(a)/(b*b)*( exp(b*x2)*(b*x2-1.) - exp(b*x1)*(b*x1-1.) );
+        G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
+        G4double a = std::log(y1) - b*x1;
+        result = std::exp(a)/(b*b)*( std::exp(b*x2)*(b*x2-1.) - std::exp(b*x1)*(b*x1-1.) );
       }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
@@ -122,9 +122,9 @@
       if(y1==0||y2==0) result = 0;
       else
       {
-        G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
-        G4double a = log(y1) - b*log(x1);;
-        result = exp(a)/(b+2.)*( pow(x2, b+2.) - pow(x1, b+2) );
+        G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
+        G4double a = std::log(y1) - b*std::log(x1);;
+        result = std::exp(a)/(b+2.)*( std::pow(x2, b+2.) - std::pow(x1, b+2) );
       }
     }
     else

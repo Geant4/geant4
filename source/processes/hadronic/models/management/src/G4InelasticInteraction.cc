@@ -51,12 +51,12 @@
     G4double nmf = 0.0;
     G4double nzf = 0.0;
     G4int i;
-    for( i=2; i<=np; i++ )npf += log((double)i);
-    for( i=2; i<=nm; i++ )nmf += log((double)i);
-    for( i=2; i<=nz; i++ )nzf += log((double)i);
+    for( i=2; i<=np; i++ )npf += std::log((double)i);
+    for( i=2; i<=nm; i++ )nmf += std::log((double)i);
+    for( i=2; i<=nz; i++ )nzf += std::log((double)i);
     G4double r;
     r = std::min( expxu, std::max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
-    return exp(r);
+    return std::exp(r);
   }
 
  G4bool
@@ -145,7 +145,7 @@
     //
     // number of total particles vs. centre of mass Energy - 2*proton mass
     //
-    G4double aleab = log(en/GeV);
+    G4double aleab = std::log(en/GeV);
     n = 3.62567 + aleab*(0.665843 + aleab*(0.336514 + aleab*(0.117712 + 0.0136912*aleab)));
     n -= 2.0;
     //
@@ -156,7 +156,7 @@
     for( G4int i=iBegin; i<=numSec; ++i )
     {
       temp = pi*i/(2.0*n*n);
-      test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
+      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
       if( temp < 1.0 )
       {
         if( test >= 1.0e-10 )anpn += temp*test;
@@ -232,7 +232,7 @@
       modifiedOriginal.SetKineticEnergy( ekOrg );
       G4double amas = originalIncident->GetDefinition()->GetPDGMass();
       G4double et = ekOrg + amas;
-      G4double p = sqrt( abs(et*et-amas*amas) );
+      G4double p = std::sqrt( std::abs(et*et-amas*amas) );
       G4double pp = modifiedOriginal.GetMomentum().mag();
       if( pp > 0.0 )
       {
@@ -405,7 +405,7 @@
         theParticleChange.SetMomentumChange( 1.0, 0.0, 0.0 );
 
       G4double aE = currentParticle.GetKineticEnergy();
-      if (fabs(aE)<.1*eV) aE=.1*eV;
+      if (std::fabs(aE)<.1*eV) aE=.1*eV;
       theParticleChange.SetEnergyChange( aE );
     }
     if( targetParticle.GetMass() > 0.0 )  // targetParticle can be eliminated in TwoBody

@@ -186,7 +186,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	  //      vol. 35, 1957, p.1022
 
 	  nucleusTotalMomentum = pEmittedParticle->GetTotalMomentum(); // CMS frame
-	  nucleusKineticEnergy = pow( nucleusTotalMomentum, 2 ) / ( 2 * mRes );
+	  nucleusKineticEnergy = std::pow( nucleusTotalMomentum, 2 ) / ( 2 * mRes );
 	  newExcitation = excE - pEmittedParticle->GetKineticEnergy() - nucleusKineticEnergy - pSelectedChannel->getQ();
 
  	  if ( verboseLevel >= 10)
@@ -402,12 +402,12 @@ void G4BertiniEvaporation::isotropicCosines( G4double & u, G4double & v, G4doubl
 {
   // Samples isotropic random direction cosines.
   G4double CosTheta = 1.0 - 2.0 * G4UniformRand();
-  G4double SinTheta = sqrt( 1.0 - CosTheta * CosTheta );
+  G4double SinTheta = std::sqrt( 1.0 - CosTheta * CosTheta );
   G4double Phi = twopi * G4UniformRand();
 
-  u = cos( Phi ) * SinTheta;
-  v = cos( Phi ) * CosTheta,
-  w = sin( Phi );
+  u = std::cos( Phi ) * SinTheta;
+  v = std::cos( Phi ) * CosTheta,
+  w = std::sin( Phi );
 
   return;
 }

@@ -40,7 +40,7 @@ static void DumpFrame(G4FastVector<G4ReactionProduct,128> &vec, G4int vecLen)
 //      y = G4UniformRand()*10-5;
 //      z = G4UniformRand()*10-5;
 //    }
-//    while(sqrt(x*x+y*y+z*z)>5);
+//    while(std::sqrt(x*x+y*y+z*z)>5);
 //    cout << x<<" "<<y<<" "<<z;
 //    cout << vec[i]->GetMomentum()<<" ";
 //    cout << vec[i]->GetTotalEnergy();

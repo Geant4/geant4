@@ -334,10 +334,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	  continue;
 	}
 //
-	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
+	G4double newP = std::sqrt(newE*newE- sqr(kt->GetActualMass()));
 	G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
 	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
-	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
+	G4ThreeVector boost= transfer / std::sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->SetTrackingMomentum(new4Mom);
         kt->SetState(G4KineticTrack::inside);
@@ -416,8 +416,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // 		<< (*theFieldMap)[encoding]->GetField(savePos)
 // 		<< G4endl;
 
-	  if ( abs(currentField->GetField(savePos)) > 0. &&
-	       abs(currentField->GetField(kt->GetPosition())) > 0.)
+	  if ( std::abs(currentField->GetField(savePos)) > 0. &&
+	       std::abs(currentField->GetField(kt->GetPosition())) > 0.)
 	  { // FixMe GF: savePos/pos may be out of nucleus, where GetField(..)=0
 	    //           This wrongly adds or subtracts the Barrier here while
 	    //           this is done later.
@@ -441,10 +441,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	     }
 	     continue; // the particle cannot exit the nucleus
 	   }
-	   G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
+	   G4double newP = std::sqrt(newE*newE- sqr(kt->GetActualMass()));
 	   G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
 	   G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
-	   G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
+	   G4ThreeVector boost= transfer / std::sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	   new4Mom*=G4LorentzRotation(boost);
 	   kt->SetTrackingMomentum(new4Mom);
 	}
@@ -464,10 +464,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	     }
 	  continue;
 	}
-	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
+	G4double newP = std::sqrt(newE*newE- sqr(kt->GetActualMass()));
 	G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
 	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
-	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
+	G4ThreeVector boost= transfer / std::sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->SetTrackingMomentum(new4Mom);
 	kt->SetState(G4KineticTrack::gone_out);
@@ -536,11 +536,11 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
 
 // Correct for momentum ( thus energy) transfered to nucleus, boost particle into moving nuclues frame.
     G4ThreeVector MomentumTranfer = kt->GetTrackingMomentum().vect() - track.GetMomentum();
-    G4ThreeVector boost= MomentumTranfer / sqrt (MomentumTranfer.mag2() +sqr(theNucleus->GetMass()));
+    G4ThreeVector boost= MomentumTranfer / std::sqrt (MomentumTranfer.mag2() +sqr(theNucleus->GetMass()));
 
  // update the kt
     kt->SetPosition(track.GetPosition());
-    G4LorentzVector mom(track.GetMomentum(),sqrt(track.GetMomentum().mag2() + sqr(kt->GetActualMass())));
+    G4LorentzVector mom(track.GetMomentum(),std::sqrt(track.GetMomentum().mag2() + sqr(kt->GetActualMass())));
     mom *= G4LorentzRotation( boost );
     theMomentumTranfer += ( kt->GetTrackingMomentum() - mom ).vect();
     kt->SetTrackingMomentum(mom);
@@ -611,8 +611,8 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4double radius,
 //     G4cout << " GetSphereIntersectionTimes sqrtArg negative: " << sqrtArg << G4endl;
      return false;
   }
-  t1 = (-scalarProd - sqrt(sqrtArg))/speedMag/speedMag/c_light;
-  t2 = (-scalarProd + sqrt(sqrtArg))/speedMag/speedMag/c_light;
+  t1 = (-scalarProd - std::sqrt(sqrtArg))/speedMag/speedMag/c_light;
+  t2 = (-scalarProd + std::sqrt(sqrtArg))/speedMag/speedMag/c_light;
   return true;
 }
 
@@ -630,8 +630,8 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4KineticTrack * kt,
   {
      return false;
   }
-  t1 = (-scalarProd - sqrt(sqrtArg))/speedMag2/c_light;
-  t2 = (-scalarProd + sqrt(sqrtArg))/speedMag2/c_light;
+  t1 = (-scalarProd - std::sqrt(sqrtArg))/speedMag2/c_light;
+  t2 = (-scalarProd + std::sqrt(sqrtArg))/speedMag2/c_light;
   return true;
 }
 

@@ -137,7 +137,7 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   // momenta of string ends 
   G4double pt2 = HadronMom.perp2();
   G4double transverseMass2 = HadronMom.plus()*HadronMom.minus();
-  G4double maxAvailMomentum2 = sqr(sqrt(transverseMass2) - sqrt(pt2));
+  G4double maxAvailMomentum2 = sqr(std::sqrt(transverseMass2) - std::sqrt(pt2));
   G4ThreeVector pt(minTransverseMass, minTransverseMass, 0);
   if(maxAvailMomentum2/widthOfPtSquare>0.01) pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
   //std::cout << "DSU 1.1 - "<< maxAvailMomentum2<< pt <<std::endl;
@@ -149,7 +149,7 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   //std::cout << "DSU 2 - "<<RightMom<<" "<< LeftMom <<std::endl;
 
   G4double Local1 = HadronMom.minus() + (RightMom.perp2() - LeftMom.perp2())/HadronMom.plus();
-  G4double Local2 = sqrt(std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
+  G4double Local2 = std::sqrt(std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
   //std::cout << "DSU 3 - "<< Local1 <<" "<< Local2 <<std::endl;
   if (Direction) Local2 = -Local2;
   G4double RightMinus   = 0.5*(Local1 + Local2);
@@ -242,10 +242,10 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    G4int ColorEncoding = pColorParton->GetPDGcode();
    G4int AntiColorEncoding = pAntiColorParton->GetPDGcode();
    
-   pts   =  sigmaPt*sqrt(-log(G4UniformRand()));
+   pts   =  sigmaPt*std::sqrt(-std::log(G4UniformRand()));
    phi   = 2.*pi*G4UniformRand();
-   G4double Px = pts*cos(phi);
-   G4double Py = pts*sin(phi);
+   G4double Px = pts*std::cos(phi);
+   G4double Py = pts*std::sin(phi);
    SumPx += Px;
    SumPy += Py;
 
@@ -284,7 +284,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      nAttempt++;
      G4int    NumberOfUnsampledSeaQuarks = 2*nSeaPair;
      G4double beta1 = beta;
-     if (abs(ColorEncoding) <= 1000 && abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson        
+     if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson        
      ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
      HPWtest = ColorX;
      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
@@ -369,7 +369,7 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
 	// spin-3 of parton 1 and 2 choosen at random by G4Parton(aEnd)
 	// spin-3 of parton 2 may be constrained by spin of original particle:
 
-  if ( abs(Parton1->GetSpinZ() + Parton2->GetSpinZ()) > aPart->GetPDGSpin()) 
+  if ( std::abs(Parton1->GetSpinZ() + Parton2->GetSpinZ()) > aPart->GetPDGSpin()) 
   {
 		Parton2->SetSpinZ(-(Parton2->GetSpinZ()));    
   } 
@@ -388,10 +388,10 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
 G4ThreeVector G4QGSMSplitableHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 {
   G4double R;
-  while((R = -widthSquare*log(G4UniformRand())) > maxPtSquare);
-  R = sqrt(R);
+  while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare);
+  R = std::sqrt(R);
   G4double phi = twopi*G4UniformRand();
-  return G4ThreeVector (R*cos(phi), R*sin(phi), 0.);    
+  return G4ThreeVector (R*std::cos(phi), R*std::sin(phi), 0.);    
 }
 
 G4Parton * G4QGSMSplitableHadron::
@@ -414,9 +414,9 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
   G4double ymax = 0;
   for(G4int ii=0; ii<100; ii++)
   {
-    G4double y = pow(1./G4double(ii), alpha);
-    y *= pow( pow(1-anXmin-totalSea*anXmin, alpha+1) - pow(anXmin, alpha+1), nSea);
-    y *= pow(1-anXmin-totalSea*anXmin, aBeta+1) - pow(anXmin, aBeta+1);
+    G4double y = std::pow(1./G4double(ii), alpha);
+    y *= std::pow( std::pow(1-anXmin-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
+    y *= std::pow(1-anXmin-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);
     if(y>ymax) ymax = y;
   }
   G4double y;
@@ -434,9 +434,9 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
       }
       x1 = G4UniformRand();
     }
-    y = pow(x1, alpha);
-    y *= pow( pow(1-x1-totalSea*anXmin, alpha+1) - pow(anXmin, alpha+1), nSea);
-    y *= pow(1-x1-totalSea*anXmin, aBeta+1) - pow(anXmin, aBeta+1);  
+    y = std::pow(x1, alpha);
+    y *= std::pow( std::pow(1-x1-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
+    y *= std::pow(1-x1-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);  
     x2 = ymax*G4UniformRand();
   }
   while(x2>y);

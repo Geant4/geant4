@@ -61,13 +61,13 @@ ProbabilityDistributionFunction(const G4double eKin,
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
   //    theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
-  G4double pA = (3.0/4.0) * sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
-      GetAlpha()*(eKin+GetBeta())/(r0*pow(GetRestA(),1.0/3.0)) *
+  G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
+      GetAlpha()*(eKin+GetBeta())/(r0*std::pow(GetRestA(),1.0/3.0)) *
       CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P);
 
-  G4double pB = pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
+  G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
 
-  G4double pC = pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
+  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
 
   G4double Probability = pA * pB * pC;
 

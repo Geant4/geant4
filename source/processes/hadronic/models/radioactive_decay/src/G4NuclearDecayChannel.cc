@@ -213,7 +213,7 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
 
       daughterExcitation = level->Energy();
 
-      if (abs(daughterExcitation-theDaughterExcitation)>levelTolerance){
+      if (std::abs(daughterExcitation-theDaughterExcitation)>levelTolerance){
 #ifdef G4VERBOSE
 	if (GetVerboseLevel()>1){
 	  G4cout <<"In G4NuclearDecayChannel::FillDaughterNucleus" <<G4endl;
@@ -438,10 +438,10 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       for (G4int ig=0; ig<nGammas; ig++)
 	{
 	  //	  G4double costheta = 2.0*G4UniformRand() - 1.0;
-	  //	  G4double sintheta = sqrt((1.0 - costheta) * (1.0+costheta));
+	  //	  G4double sintheta = std::sqrt((1.0 - costheta) * (1.0+costheta));
 	  //	  G4double phi      = twopi * G4UniformRand();
 	  // G4ParticleMomentum gDirection
-	  //  (sintheta*cos(phi),sintheta*sin(phi),costheta);
+	  //  (sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 	  //G4double gEnergy = gammas->operator[](ig)->GetMomentum().e() 
 	  //  - gammas->operator[](ig)->GetParticleDefinition()->GetPDGMass() ;
 	  G4DynamicParticle *theGammaRay = new
@@ -511,31 +511,31 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     G4double daughtermomentum[2];
     G4double daughterenergy[2];
     daughterenergy[0] = RandomEnergy->shoot() * Q;
-    daughtermomentum[0] = sqrt(daughterenergy[0]*daughterenergy[0] +
+    daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
 			       2.0*daughterenergy[0] * daughtermass[0]);
     // the recoil neuleus is asummed to have a maximum energy of Q/daughterA/1000.
     daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);    
-    daughtermomentum[1] = sqrt(daughterenergy[1]*daughterenergy[1] +
+    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
 			       2.0*daughterenergy[1] * daughtermass[1]);
     //
     //create daughter G4DynamicParticle
     G4double costheta, sintheta, phi, sinphi, cosphi;
     //    G4double costhetan, sinthetan, phin, sinphin, cosphin;
     costheta = 2.*G4UniformRand()-1.0;
-    sintheta = sqrt((1.0-costheta)*(1.0+costheta));
+    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
     phi  = 2.0*M_PI*G4UniformRand()*rad;
-    sinphi = sin(phi);
-    cosphi = cos(phi);
+    sinphi = std::sin(phi);
+    cosphi = std::cos(phi);
     G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
     G4DynamicParticle * daughterparticle
       = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
     products->PushProducts(daughterparticle);
     // The two products are independent in directions
     costheta = 2.*G4UniformRand()-1.0;
-    sintheta = sqrt((1.0-costheta)*(1.0+costheta));
+    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
     phi  = 2.0*M_PI*G4UniformRand()*rad;
-    sinphi = sin(phi);
-    cosphi = cos(phi);
+    sinphi = std::sin(phi);
+    cosphi = std::cos(phi);
     G4ParticleMomentum direction1(sintheta*cosphi,sintheta*sinphi,costheta);
     daughterparticle
       = new G4DynamicParticle( daughters[1], direction1*daughtermomentum[1]);
@@ -579,16 +579,16 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 	// daughter 0
 	
 	//     energy = rd2*(pmass - sumofdaughtermass);
-	daughtermomentum[0] = sqrt(rd2) * sqrt((Q + 2.0*daughtermass[0])*Q);
-	daughterenergy[0] = sqrt(daughtermomentum[0]*daughtermomentum[0] +
+	daughtermomentum[0] = std::sqrt(rd2) * std::sqrt((Q + 2.0*daughtermass[0])*Q);
+	daughterenergy[0] = std::sqrt(daughtermomentum[0]*daughtermomentum[0] +
 				 daughtermass[0] * daughtermass[0]) - daughtermass[0];
 	if ( daughtermomentum[0] >momentummax )momentummax =  daughtermomentum[0];
 	momentumsum  +=  daughtermomentum[0];
 	
 	// daughter 2
 	//     energy = (1.-rd1)*(pmass - sumofdaughtermass);
-	daughtermomentum[2] = sqrt(rd1)*sqrt((Q + 2.0*daughtermass[2])*Q);
-	daughterenergy[2] = sqrt(daughtermomentum[2]*daughtermomentum[2] +
+	daughtermomentum[2] = std::sqrt(rd1)*std::sqrt((Q + 2.0*daughtermass[2])*Q);
+	daughterenergy[2] = std::sqrt(daughtermomentum[2]*daughtermomentum[2] +
 				 daughtermass[2] * daughtermass[2]) - daughtermass[2];
 	if ( daughtermomentum[2] >momentummax )momentummax =  daughtermomentum[2];
 	momentumsum  +=  daughtermomentum[2];
@@ -597,7 +597,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 	
 	daughterenergy[1] = Q - daughterenergy[0] - daughterenergy[2];
 	if (daughterenergy[1] > 0.0) {
-	  daughtermomentum[1] = sqrt(daughterenergy[1]*daughterenergy[1] +
+	  daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
 				     2.0*daughterenergy[1] * daughtermass[1]);
 	  if ( daughtermomentum[1] >momentummax ) momentummax =
 						    daughtermomentum[1];
@@ -628,7 +628,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     G4double daughterenergy[3];
     // Use the histogramed distribution to generate the beta energy
     daughterenergy[0] = RandomEnergy->shoot() * Q;
-    daughtermomentum[0] = sqrt(daughterenergy[0]*daughterenergy[0] +
+    daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
 			       2.0*daughterenergy[0] * daughtermass[0]);
 	 
     //neutrino energy distribution is flat within the kinematical limits
@@ -642,7 +642,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 	  
     // the recoil neuleus
     daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
-    daughtermomentum[1] = sqrt(daughterenergy[1]*daughterenergy[1] +
+    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
 			       2.0*daughterenergy[1] * daughtermass[1]);
   
     // output message
@@ -655,10 +655,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     G4double costheta, sintheta, phi, sinphi, cosphi;
     G4double costhetan, sinthetan, phin, sinphin, cosphin;
     costheta = 2.*G4UniformRand()-1.0;
-    sintheta = sqrt((1.0-costheta)*(1.0+costheta));
+    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
     phi  = 2.0*M_PI*G4UniformRand()*rad;
-    sinphi = sin(phi);
-    cosphi = cos(phi);
+    sinphi = std::sin(phi);
+    cosphi = std::cos(phi);
     G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
     G4DynamicParticle * daughterparticle
       = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
@@ -668,10 +668,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 		 daughtermomentum[2]*daughtermomentum[2]-
 		 daughtermomentum[0]*daughtermomentum[0])/
       (2.0*daughtermomentum[2]*daughtermomentum[0]);
-    sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
+    sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
     phin  = 2.0*M_PI*G4UniformRand()*rad;
-    sinphin = sin(phin);
-    cosphin = cos(phin);
+    sinphin = std::sin(phin);
+    cosphin = std::cos(phin);
     G4ParticleMomentum direction2;
     direction2.setX( sinthetan*cosphin*costheta*cosphi - 
 		     sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi);

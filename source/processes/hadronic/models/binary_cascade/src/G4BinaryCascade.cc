@@ -229,7 +229,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   theParticleChange.SetStatusChange(stopAndKill);
   G4ReactionProductVector::iterator iter;
   G4double Efinal=0;
-  	if (abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
+  	if (std::abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
 	{
 	   G4cout <<" BIC-weight change " << theParticleChange.GetWeightChange()<< G4endl;
 	}
@@ -242,8 +242,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 			    (*iter)->GetMomentum());
     if(getenv("BCDEBUG") )
     {
-      if(abs(aNew->GetDefinition()->GetPDGEncoding()) >100
-         && abs(aNew->GetDefinition()->GetPDGEncoding()) < 300) G4cout << "Pion info "<<aNew->GetDefinition()->GetPDGEncoding() <<" "<<aNew->GetKineticEnergy()<<G4endl;
+      if(std::abs(aNew->GetDefinition()->GetPDGEncoding()) >100
+         && std::abs(aNew->GetDefinition()->GetPDGEncoding()) < 300) G4cout << "Pion info "<<aNew->GetDefinition()->GetPDGEncoding() <<" "<<aNew->GetKineticEnergy()<<G4endl;
     }
     // FixMe: should I use "position" or "time" specifyed AddSecondary() methods?
     theParticleChange.AddSecondary(aNew);
@@ -268,7 +268,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   the3DNucleus = NULL;  // protect from wrong usage...
 
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number ends ######### "<<eventcounter<<G4endl;
-  	if (abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
+  	if (std::abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
 	{
 	   G4cout <<" BIC-fin-weight change " << theParticleChange.GetWeightChange()<< G4endl;
 	}
@@ -556,7 +556,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	     if ( eCMS < sumMass )                    // @@GF --- Cheat!!
 	     {
 	        eCMS=sumMass + (2*MeV*masses.size());     
-		finalP.setE(sqrt(finalP.vect().mag2() + sqr(eCMS)));
+		finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
 	     }
 	     precompoundLorentzboost.set(finalP.boostVector());
 	     std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
@@ -800,7 +800,7 @@ void G4BinaryCascade::BuildTargetList()
 	theInitial4Mom += mom;
 //   In the kinetic Model, the potential inside the nucleus is taken into account, and nucleons
 //    are on mass shell.
-	mom.setE( sqrt( mom.vect().mag2() + sqr(definition->GetPDGMass()) ) );
+	mom.setE( std::sqrt( mom.vect().mag2() + sqr(definition->GetPDGMass()) ) );
 	G4KineticTrack * kt = new G4KineticTrack(definition, 0., pos, mom);
 	kt->SetState(G4KineticTrack::inside);
 	kt->SetNucleon(nucleon);
@@ -907,8 +907,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4int initialCharge(0);
   initialCharge+=G4lrint(primary->GetDefinition()->GetPDGCharge());
 
-// for primary resonances, subtract neutron ( = proton) field ( ie. add abs(field))
-  G4int PDGcode=abs(primary->GetDefinition()->GetPDGEncoding());
+// for primary resonances, subtract neutron ( = proton) field ( ie. add std::abs(field))
+  G4int PDGcode=std::abs(primary->GetDefinition()->GetPDGEncoding());
   G4LorentzVector mom4Primary=primary->Get4Momentum();
   G4double initial_Efermi=RKprop->GetField(primary->GetDefinition()->GetPDGEncoding(),primary->GetPosition());
   if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
@@ -948,7 +948,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
    G4KineticTrackVector resonances;
    for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
    {
-       G4int PDGcode=abs((*i)->GetDefinition()->GetPDGEncoding());
+       G4int PDGcode=std::abs((*i)->GetDefinition()->GetPDGEncoding());
        final_Efermi+=RKprop->GetField(PDGcode,(*i)->GetPosition());
        if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
        {  
@@ -970,7 +970,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	     return false;
 	  }
 	  G4cout << " correct resonance from /to " << mom.e() << " / " << newEnergy<< G4endl;
-	  G4ThreeVector mom3=sqrt(newEnergy2 - mass2) * mom.vect().unit();
+	  G4ThreeVector mom3=std::sqrt(newEnergy2 - mass2) * mom.vect().unit();
 	  (*res)->Set4Momentum(G4LorentzVector(mom3,newEnergy));
       }
    }
@@ -1270,7 +1270,7 @@ G4bool G4BinaryCascade::CheckPauliPrinciple(G4KineticTrackVector * products)
        G4ThreeVector pos = (*i)->GetPosition();
        G4double d = density->GetDensity(pos);
 	// energy correspondiing to fermi momentum
-       G4double eFermi = sqrt( sqr(fermiMom.GetFermiMomentum(d)) + (*i)->Get4Momentum().mag2() );
+       G4double eFermi = std::sqrt( sqr(fermiMom.GetFermiMomentum(d)) + (*i)->Get4Momentum().mag2() );
        if( definition == G4Proton::Proton() )
        {
          eFermi -= the3DNucleus->CoulombBarrier();
@@ -1497,7 +1497,7 @@ void G4BinaryCascade::CorrectFinalPandE()
   G4cout << "CorrectFinal CMS pN pF " <<toCMS*pNucleus << " "
          <<pFinals << G4endl
          << " nucleus initial mass : " <<GetFinal4Momentum().mag()
-	 <<" massInNucleus m(nucleus) m(finals) sqrt(s): " << massInNucleus << " " <<pNucleus.mag()<< " "
+	 <<" massInNucleus m(nucleus) m(finals) std::sqrt(s): " << massInNucleus << " " <<pNucleus.mag()<< " "
 	 << pFinals.mag() << " " << pCM.mag() << G4endl;
 #endif
 
@@ -1513,7 +1513,7 @@ void G4BinaryCascade::CorrectFinalPandE()
 	G4cout << "G4BinaryCascade::CorrectFinalPandE() : error! " << G4endl;
 
 	G4cout << "not enough mass to correct: mass, A,Z, mass(nucl), mass(finals) " 
-              << sqrt(-s+(m10+m20)*(m10+m20)) << " " 
+              << std::sqrt(-s+(m10+m20)*(m10+m20)) << " " 
 	      << currentA << " " << currentZ << " "
 	      << m10 << " " << m20 
 	      << G4endl;
@@ -1525,7 +1525,7 @@ void G4BinaryCascade::CorrectFinalPandE()
   }
 
   // Three momentum in cm system
-  G4double pInCM = sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
+  G4double pInCM = std::sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
     #ifdef debug_BIC_CorrectFinalPandE
     G4cout <<" CorrectFinalPandE pInCM  new, CURRENT, ratio : " << pInCM 
   	   << " " << (pFinals).vect().mag()<< " " <<  pInCM/(pFinals).vect().mag() << G4endl;
@@ -1541,7 +1541,7 @@ void G4BinaryCascade::CorrectFinalPandE()
     {
 //      G4ThreeVector p3((toCMS*(*i)->Get4Momentum()).vect() + deltap);
       G4ThreeVector p3(factor*(toCMS*(*i)->Get4Momentum()).vect());
-      G4LorentzVector p(p3,sqrt((*i)->Get4Momentum().mag2() + p3.mag2()));
+      G4LorentzVector p(p3,std::sqrt((*i)->Get4Momentum().mag2() + p3.mag2()));
       qFinals += p;
       p *= toLab;
         #ifdef debug_BIC_CorrectFinalPandE
@@ -2316,9 +2316,9 @@ G4ThreeVector G4BinaryCascade::GetSpherePoint(
  * // with z < 0.
  *   G4double b = r*G4UniformRand();  // impact parameter
  *   G4double phi = G4UniformRand()*2*pi;
- *   G4double x = b*cos(phi);
- *   G4double y = b*sin(phi);
- *   G4double z = -sqrt(r*r-b*b);
+ *   G4double x = b*std::cos(phi);
+ *   G4double y = b*std::sin(phi);
+ *   G4double z = -std::sqrt(r*r-b*b);
  *   z *= 1.001; // Get position a little bit out of the sphere...
  *   point.setX(x);
  *   point.setY(y);
@@ -2405,7 +2405,7 @@ G4bool G4BinaryCascade::CheckDecay(G4KineticTrackVector * products)
        G4LorentzVector mom = (*i)->Get4Momentum();
        G4LorentzRotation boost(mom.boostVector()); 
        G4ThreeVector pion3(227*MeV * mom.vect().unit()); // 227 is decay product in rest frame
-       G4LorentzVector pion(pion3, sqrt(sqr(140*MeV) +pion3.mag()));
+       G4LorentzVector pion(pion3, std::sqrt(sqr(140*MeV) +pion3.mag()));
      // G4cout << "pi rest " << pion << G4endl;
        pion = boost * pion;
      // G4cout << "pi lab  " << pion << G4endl;
@@ -2450,7 +2450,7 @@ G4double G4BinaryCascade::GetIonMass(G4int Z, G4int A)
       // all neutral, or empty nucleus 
       mass = A * G4Neutron::Neutron()->GetPDGMass();
       
-   } else if ( A == 0 && abs(Z)<2 )
+   } else if ( A == 0 && std::abs(Z)<2 )
    {
       // empty nucleus, except maybe pions
       mass = 0;

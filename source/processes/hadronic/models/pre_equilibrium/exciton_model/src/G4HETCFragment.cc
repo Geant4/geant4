@@ -122,8 +122,8 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
   G4double Probability = GetSpinFactor()/(pi*hbarc*hbarc*hbarc) * GetReducedMass() * GetAlpha() *
-    r0 * r0 * pow(GetRestA(),2.0/3.0)/pow(U,N-1) * (pow(gb,Nb)/pow(g,N)) * Pf * Hf * Nf * K(aFragment) *
-    pow(Y,Nb) * (X/Nb - Y/(Nb+1));
+    r0 * r0 * std::pow(GetRestA(),2.0/3.0)/std::pow(U,N-1) * (std::pow(gb,Nb)/std::pow(g,N)) * Pf * Hf * Nf * K(aFragment) *
+    std::pow(Y,Nb) * (X/Nb - Y/(Nb+1));
 
   return Probability;
 }

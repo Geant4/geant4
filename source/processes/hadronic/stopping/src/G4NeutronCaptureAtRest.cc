@@ -318,7 +318,7 @@ void G4NeutronCaptureAtRest::NeutronCapture(G4int *nopt)
   Normal(&ran);
   pcm = ran * G4float(.001) + G4float(.0065);
   ran = G4UniformRand();
-  result.SetTOF( result.GetTOF() - log(ran) * G4float(480.) );
+  result.SetTOF( result.GetTOF() - std::log(ran) * G4float(480.) );
   pv[3].SetZero();
   pv[3].SetMass( 0. );
   pv[3].SetKineticEnergyAndUpdate( pcm );
@@ -407,12 +407,12 @@ G4double G4NeutronCaptureAtRest::AtomAs(G4float a, G4float z)
     d__1 = aa / G4float(2.) - zz;
     d__2 = zz;
     mass = (aa - zz) * rmn + zz * rmp + zz * rmel - aa * G4float(15.67) +
-      pow(aa, .6666667) * G4float(17.23) + d__1 * d__1 * G4float(93.15) / aa +
-      d__2 * d__2 * G4float(.6984523) / pow(aa, .3333333);
+      std::pow(aa, .6666667) * G4float(17.23) + d__1 * d__1 * G4float(93.15) / aa +
+      d__2 * d__2 * G4float(.6984523) / std::pow(aa, .3333333);
     ipp = (ia - iz) % 2;
     izz = iz % 2;
     if (ipp == izz) {
-      mass += (ipp + izz - 1) * G4float(12.) * pow(aa, -.5);
+      mass += (ipp + izz - 1) * G4float(12.) * std::pow(aa, -.5);
     }
   }
   ret_val = mass * G4float(.001);

@@ -61,7 +61,7 @@ inline G4double G4ReactionKinematics::BreakupMomentum(
          (m0squared-(massA+massB)*(massA+massB))*
          (m0squared-(massA-massB)*(massA-massB))/
          (4*m0squared);
-    if (breakupMomentumSquared>0) return sqrt(breakupMomentumSquared);
+    if (breakupMomentumSquared>0) return std::sqrt(breakupMomentumSquared);
     else       return -1.;
 }        
 

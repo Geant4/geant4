@@ -140,7 +140,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
           theBuff.SetY(ii, theInt.Interpolate(theManager.GetScheme(high),
                                               x, x1, x2, y1, y2)); //energy interpol
           theBuff.SetScheme(ii, data[low].GetScheme(i1));
-          if(abs(GetX(low,i1)-GetX(high,i2))<0.001) i2++;
+          if(std::abs(GetX(low,i1)-GetX(high,i2))<0.001) i2++;
           i1++;
           ii++;
 	}
@@ -152,7 +152,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
           theBuff.SetY(ii, theInt.Interpolate(theManager.GetScheme(high),
                                               x, x1, x2, y1, y2)); //energy interpol
           theBuff.SetScheme(ii, data[high].GetScheme(i2));
-          if(abs(GetX(low,i1)-GetX(high,i2))<0.001) i1++;
+          if(std::abs(GetX(low,i1)-GetX(high,i2))<0.001) i1++;
           i2++;
           ii++;
 	} 

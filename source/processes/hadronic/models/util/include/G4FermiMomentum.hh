@@ -59,7 +59,7 @@ class G4FermiMomentum
 
   private:
 
-    G4double cbrt(G4double x) { return pow(x,1./3.); }
+    G4double cbrt(G4double x) { return std::pow(x,1./3.); }
 
   private:
   

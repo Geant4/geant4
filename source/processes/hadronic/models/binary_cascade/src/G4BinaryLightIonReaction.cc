@@ -32,6 +32,7 @@
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4HadTmpUtil.hh"
+#include <cmath>
  
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
@@ -179,7 +180,7 @@
           it->SetState(G4KineticTrack::outside);
 	  G4double pfermi= theFermi.GetFermiMomentum(density);
 	  G4double mass = aNuc->GetDefinition()->GetPDGMass();
-	  G4double Efermi= sqrt( sqr(mass) + sqr(pfermi)) - mass;
+	  G4double Efermi= std::sqrt( sqr(mass) + sqr(pfermi)) - mass;
           it->SetProjectilePotential(-Efermi);
 	  initalState->push_back(it);
 	}
@@ -256,7 +257,7 @@
           G4double localDensity = projectile->GetNuclearDensity()->GetDensity(aPosition);
 	  G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
 	  G4double nucMass = aNuc->GetDefinition()->GetPDGMass();
-	  G4double localFermiEnergy = sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
+	  G4double localFermiEnergy = std::sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
 	  G4double deltaE = localFermiEnergy - (aNuc->GetMomentum().t()-aNuc->GetMomentum().mag());
 	  theStatisticalExEnergy += deltaE;
 	}
@@ -320,7 +321,7 @@
       debug.dump();
       G4LorentzVector momentum(iState-fState);
       G4int loopcount(0);
-      while (abs(momentum-pspectators.e()) > 10*MeV)
+      while (std::abs(momentum.e()-pspectators.e()) > 10*MeV)
       {
 	 debug.push_back("the momentum balance");
 	 debug.push_back(iState);
@@ -572,7 +573,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     if (SumMass > TotalCollisionMass) return FALSE;
     SumMass = SumMom.m2();
     if (SumMass < 0) return FALSE;
-    SumMass = sqrt(SumMass);
+    SumMass = std::sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
     G4ThreeVector Beta = -SumMom.boostVector();
@@ -600,7 +601,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
       {
         G4LorentzVector HadronMom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         HadronMom.setVect(HadronMom.vect()+ factor*Scale*HadronMom.vect());
-        G4double E = sqrt(HadronMom.vect().mag2() + sqr((*Output)[i]->GetDefinition()->GetPDGMass()));
+        G4double E = std::sqrt(HadronMom.vect().mag2() + sqr((*Output)[i]->GetDefinition()->GetPDGMass()));
         HadronMom.setE(E);
         (*Output)[i]->SetMomentum(HadronMom.vect());
         (*Output)[i]->SetTotalEnergy(HadronMom.e());
@@ -610,12 +611,12 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
       Scale = TotalCollisionMass/Sum - 1;
       if ( cAttempt > 10 ) 
       {
-//         G4cout << " speed it up? " << abs(OldScale/(OldScale-Scale)) << G4endl;
-	 factor=std::max(1.,log(abs(OldScale/(OldScale-Scale))));
+//         G4cout << " speed it up? " << std::abs(OldScale/(OldScale-Scale)) << G4endl;
+	 factor=std::max(1.,std::log(std::abs(OldScale/(OldScale-Scale))));
 //	 G4cout << " ? factor ? " << factor << G4endl;
       }   
 //  G4cout << "E/P corr - " << cAttempt << " " << Scale << G4endl;
-      if (abs(Scale) <= ErrLimit) 
+      if (std::abs(Scale) <= ErrLimit) 
       {
         if (getenv("debug_G4BinaryLightIonReactionResults")) G4cout << "E/p corrector: " << cAttempt << G4endl;
         success = true;

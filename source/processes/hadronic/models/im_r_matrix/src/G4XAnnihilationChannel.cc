@@ -101,7 +101,7 @@ G4double G4XAnnihilationChannel::CrossSection(const G4KineticTrack& trk1,
   G4double s = eCM * eCM;
   if (s == 0.) throw G4HadronicException(__FILE__, __LINE__, "G4XAnnihilationChannel::CrossSection - eCM = 0");
 
-  G4double pCM = sqrt((s-(m1+m2)*(m1+m2))*(s-(m1-m2)*(m1-m2))/(4.*s));
+  G4double pCM = std::sqrt((s-(m1+m2)*(m1+m2))*(s-(m1-m2)*(m1-m2))/(4.*s));
 
   sigma = ( (JRes + 1.) / ( (J1 + 1) * (J2 + 1) ) 
 	    * pi / (pCM * pCM) * branch * width * width / 

@@ -218,7 +218,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
         {
           G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
           G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	  running[i]=fracInPercent*pow(runningA, 2./3.);
+	  running[i]=fracInPercent*std::pow(runningA, 2./3.);
 	  // rough approximation; to get it better, redesign getMSC to not use G4Element, see also below
 	  if(i!=0) running[i] += running[i-1];
         }
@@ -265,7 +265,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
           {
             G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
             G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	    running[i]=fracInPercent*pow(runningA, 2./3.);
+	    running[i]=fracInPercent*std::pow(runningA, 2./3.);
 	    if(i!=0) running[i] += running[i-1];
           }
 	  G4double trial = G4UniformRand();
@@ -293,7 +293,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       {
         G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
         G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-	running[i]=fracInPercent*pow(runningA, 2./3.);
+	running[i]=fracInPercent*std::pow(runningA, 2./3.);
 	// rough approximation; to get it better, redesign getMSC to not use G4Element
 	if(i!=0) running[i] += running[i-1];
       }
@@ -555,8 +555,8 @@ XBiasSurvivalProbability()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  G4double biasedProbability = 1.-exp(-nLTraversed);
-  G4double realProbability = 1-exp(-nLTraversed/aScaleFactor);
+  G4double biasedProbability = 1.-std::exp(-nLTraversed);
+  G4double realProbability = 1-std::exp(-nLTraversed/aScaleFactor);
   result = (biasedProbability-realProbability)/biasedProbability;
   return result;
 }
@@ -566,7 +566,7 @@ XBiasSecondaryWeight()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  result = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
+  result = 1./aScaleFactor*std::exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
   return result;
 }
 
@@ -641,7 +641,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	  }
   	  G4double newM=aT.GetDefinition()->GetPDGMass();
 	  G4double newE=aR->GetEnergyChange() + newM;
-	  G4double newP=sqrt(newE*newE - newM*newM);
+	  G4double newP=std::sqrt(newE*newE - newM*newM);
 	  G4DynamicParticle * aNew = 
 	     new G4DynamicParticle(aT.GetDefinition(), newE, newP*aR->GetMomentumChange());
 	  G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
@@ -682,7 +682,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         G4double newWeight = theTotalResult->GetParentWeight();
 	G4double newM=aT.GetDefinition()->GetPDGMass();
 	G4double newE=aR->GetEnergyChange() + newM;
-	G4double newP=sqrt(newE*newE - newM*newM);
+	G4double newP=std::sqrt(newE*newE - newM*newM);
 	G4DynamicParticle * aNew = 
 	   new G4DynamicParticle(aT.GetDefinition(), newE, newP*aR->GetMomentumChange());
 	// std::cout << "Debug 0 "<<aR->GetNumberOfSecondaries()<<std::endl;

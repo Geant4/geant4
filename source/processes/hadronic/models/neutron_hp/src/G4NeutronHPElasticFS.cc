@@ -147,8 +147,8 @@
     G4double totE = nEnergy+tEnergy;
     G4ThreeVector the3CMS = the3Target+the3Neutron;
     theCMS.SetMomentum(the3CMS);
-    G4double cmsMom = sqrt(the3CMS*the3CMS);
-    G4double sqrts = sqrt((totE-cmsMom)*(totE+cmsMom));
+    G4double cmsMom = std::sqrt(the3CMS*the3CMS);
+    G4double sqrts = std::sqrt((totE-cmsMom)*(totE+cmsMom));
     theCMS.SetMass(sqrts);
     theCMS.SetTotalEnergy(totE);
     
@@ -177,8 +177,8 @@
     }
     if(cosTh<-1.1) return NULL;
     G4double phi = twopi*G4UniformRand();
-    G4double theta = acos(cosTh);
-    G4double sinth = sin(theta);
+    G4double theta = std::acos(cosTh);
+    G4double sinth = std::sin(theta);
     if (frameFlag == 1) // final state data given in target rest frame.
     {
       // we have the scattering angle, now we need the energy, then do the
@@ -194,10 +194,10 @@
       G4double a = 4*(eE+p0*cosTh)*(eE-p0*cosTh);
       G4double b = 4*ap*p0*cosTh;
       G4double c = (2.*eE*mN-ap)*(2.*eE*mN+ap);
-      G4double en = (-b+sqrt(b*b - 4*a*c) )/(2*a);
-      G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4double en = (-b+std::sqrt(b*b - 4*a*c) )/(2*a);
+      G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       theNeutron.SetMomentum(tempVector);
-      theNeutron.SetTotalEnergy(sqrt(en*en+theNeutron.GetMass()*theNeutron.GetMass()));
+      theNeutron.SetTotalEnergy(std::sqrt(en*en+theNeutron.GetMass()*theNeutron.GetMass()));
       // first to lab     
       theNeutron.Lorentz(theNeutron, -1.*theTarget);
       // now to CMS
@@ -217,20 +217,20 @@
       G4double cms_theta=cmsMom.theta();
       G4double cms_phi=cmsMom.phi();
       G4ThreeVector tempVector;
-      tempVector.setX(cos(theta)*sin(cms_theta)*cos(cms_phi)
-                      +sin(theta)*cos(phi)*cos(cms_theta)*cos(cms_phi)
-                      -sin(theta)*sin(phi)*sin(cms_phi)  );
-      tempVector.setY(cos(theta)*sin(cms_theta)*sin(cms_phi)
-                      +sin(theta)*cos(phi)*cos(cms_theta)*sin(cms_phi)
-                      +sin(theta)*sin(phi)*cos(cms_phi)  );
-      tempVector.setZ(cos(theta)*cos(cms_theta)
-                      -sin(theta)*cos(phi)*sin(cms_theta)  );
+      tempVector.setX(std::cos(theta)*std::sin(cms_theta)*std::cos(cms_phi)
+                      +std::sin(theta)*std::cos(phi)*std::cos(cms_theta)*std::cos(cms_phi)
+                      -std::sin(theta)*std::sin(phi)*std::sin(cms_phi)  );
+      tempVector.setY(std::cos(theta)*std::sin(cms_theta)*std::sin(cms_phi)
+                      +std::sin(theta)*std::cos(phi)*std::cos(cms_theta)*std::sin(cms_phi)
+                      +std::sin(theta)*std::sin(phi)*std::cos(cms_phi)  );
+      tempVector.setZ(std::cos(theta)*std::cos(cms_theta)
+                      -std::sin(theta)*std::cos(phi)*std::sin(cms_theta)  );
       tempVector *= en;
       theNeutron.SetMomentum(tempVector);
       theTarget.SetMomentum(-tempVector);
       G4double tP = theTarget.GetTotalMomentum();
       G4double tM = theTarget.GetMass();
-      theTarget.SetTotalEnergy(sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
+      theTarget.SetTotalEnergy(std::sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
       theTarget.Lorentz(theTarget, -1.*theCMS);
     }

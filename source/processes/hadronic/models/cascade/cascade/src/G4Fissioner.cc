@@ -58,11 +58,11 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4double EEXS = nuclei_target->getExitationEnergy();
     G4double mass_in = nuclei_target->getMass();
     G4double e_in = mass_in + 0.001 * EEXS;
-    G4double PARA = 0.055 * pow(A, two_thirds) * (pow(A - Z, one_third) + pow(Z, one_third));
-    G4double TEM = sqrt(EEXS / PARA);
-    G4double TETA = 0.494 * pow(A, one_third) * TEM;
+    G4double PARA = 0.055 * std::pow(A, two_thirds) * (std::pow(A - Z, one_third) + std::pow(Z, one_third));
+    G4double TEM = std::sqrt(EEXS / PARA);
+    G4double TETA = 0.494 * std::pow(A, one_third) * TEM;
 
-    TETA = TETA / sinh(TETA);
+    TETA = TETA / std::sinh(TETA);
 
     if (A < 246.0) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
 
@@ -80,13 +80,13 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     std::vector<G4double> AL1(2, -0.15);
     std::vector<G4double> BET1(2, 0.05);
     G4FissionStore fissionStore;
-    G4double R12 = pow(A1, one_third) + pow(A2, one_third); 
+    G4double R12 = std::pow(A1, one_third) + std::pow(A2, one_third); 
   
     for (G4int i = 0; i < 50 && A1 > 30.0; i++) {
       A1 -= 1.0;
       A2 = A - A1;
-      G4double X3 = 1.0 / pow(A1, one_third);
-      G4double X4 = 1.0 / pow(A2, one_third);
+      G4double X3 = 1.0 / std::pow(A1, one_third);
+      G4double X4 = 1.0 / std::pow(A2, one_third);
       Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
       std::vector<G4double> EDEF1(2);
       G4double Z2 = Z - Z1;
@@ -104,10 +104,10 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     
       if(EZL > 0.0) { // generate fluctuations
 	//  faster, using randomGauss
-	G4double C1 = sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
+	G4double C1 = std::sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
 	G4double DZ = randomGauss(C1);
 
-	DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(fabs(DZ - 0.5));
+	DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(std::fabs(DZ - 0.5));
 	Z1 += DZ;
 	Z2 -= DZ;
 
@@ -139,21 +139,21 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       G4double mass1 = nuclei1.getMass();
       G4double mass2 = nuclei2.getMass();
       G4double EK = config.ekin;
-      G4double pmod = sqrt(0.001 * EK * mass1 * mass2 / mass_in);
+      G4double pmod = std::sqrt(0.001 * EK * mass1 * mass2 / mass_in);
       std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       G4double Fi = randomPHI();
       G4double P1 = pmod * COS_SIN.second;
       std::vector<G4double> mom1(4);
       std::vector<G4double> mom2(4);
 
-      mom1[1] = P1 * cos(Fi);
-      mom1[2] = P1 * sin(Fi);
+      mom1[1] = P1 * std::cos(Fi);
+      mom1[2] = P1 * std::sin(Fi);
       mom1[3] = pmod * COS_SIN.first;
 
       for (G4int i = 1; i < 4; i++) mom2[i] = -mom1[i];
 
-      G4double e_out = sqrt(pmod * pmod + mass1 * mass1) + 
-	sqrt(pmod * pmod + mass2 * mass2);
+      G4double e_out = std::sqrt(pmod * pmod + mass1 * mass1) + 
+	std::sqrt(pmod * pmod + mass2 * mass2);
       G4double EV = 1000.0 * (e_in - e_out) / A;
 
       if (EV > 0.0) {
@@ -196,7 +196,7 @@ G4double G4Fissioner::getC2(G4double A1,
   }
 
   G4double C2 = 124.57 * (1.0 / A1 + 1.0 / A2) + 0.78 * (X3 + X4) - 176.9 *
-    (pow(X3, 4) + pow(X4, 4)) + 219.36 * (1.0 / (A1 * A1) + 1.0 / (A2 * A2)) - 1.108 / R12;
+    (std::pow(X3, 4) + std::pow(X4, 4)) + 219.36 * (1.0 / (A1 * A1) + 1.0 / (A2 * A2)) - 1.108 / R12;
 
   return C2;   
 }
@@ -213,7 +213,7 @@ G4double G4Fissioner::getZopt(G4double A1,
   }
 
   G4double Zopt = (87.7 * (X4 - X3) * (1.0 - 1.25 * (X4 + X3)) +
-		   ZT * ((124.57 / A2 + 0.78 * X4 - 176.9 * pow(X4, 4) + 219.36 / (A2 * A2)) - 0.554 / R12)) /
+		   ZT * ((124.57 / A2 + 0.78 * X4 - 176.9 * std::pow(X4, 4) + 219.36 / (A2 * A2)) - 0.554 / R12)) /
     getC2(A1, A2, X3, X4, R12);
 
   return Zopt;
@@ -258,7 +258,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   G4int i;
 
   for (i = 0; i < 2; i++) {
-    R[i] = pow(A1[i], one_third);
+    R[i] = std::pow(A1[i], one_third);
     Y1 = R[i] * R[i];
     Y2 = Z1[i] * Z1[i] / R[i];
     C[i] = 6.8 * Y1 - 0.142 * Y2;
@@ -318,15 +318,15 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 	DX1 = 0.0;
 	DX2 = 0.0;
 
-	if (fabs(AL1[i]) >= DS1) {
+	if (std::fabs(AL1[i]) >= DS1) {
 	  G4double XXX = AL1[i] * AL1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge_num : exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : std::exp(XXX);
 	  DX1 = 2.0 * (1.0 + 2.0 * AL1[i] * AL1[i] * DS2) * DEX * DS2;
 	};
 
-	if (fabs(BET1[i]) >= DS1) {
+	if (std::fabs(BET1[i]) >= DS1) {
 	  G4double XXX = BET1[i] * BET1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge_num : exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : std::exp(XXX);
 	  DX2 = 2.0 * (1.+2.0 * BET1[i] * BET1[i] * DS2) * DEX * DS2;
 	};
 
@@ -356,9 +356,9 @@ void G4Fissioner::potentialMinimization(G4double& VP,
       DX1 = 0.0;
       DX2 = 0.0;
 
-      if (fabs(AL1[i]) >= DS1) DX1 = 2.0 * AL1[i] * DS2 * exp(AL1[i] * AL1[i] * DS2);
+      if (std::fabs(AL1[i]) >= DS1) DX1 = 2.0 * AL1[i] * DS2 * std::exp(AL1[i] * AL1[i] * DS2);
 
-      if (fabs(BET1[i]) >= DS1) DX2 = 2.0 * BET1[i] * DS2 * exp(BET1[i] * BET1[i] * DS2);
+      if (std::fabs(BET1[i]) >= DS1) DX2 = 2.0 * BET1[i] * DS2 * std::exp(BET1[i] * BET1[i] * DS2);
       B[i] =     R2 * RAL[i] - 2.0e-3 * C[i] * AL1[i] + DX1;
       B[i + 2] = R2 * RBE[i] - 2.0e-3 * F[i] * BET1[i] + DX2;
     };
@@ -380,7 +380,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
       BET1[i] += B[i + 2] * STEP;
       DSOL += B[i] * B[i] + B[i + 2] * B[i + 2]; 
     };
-    DSOL = sqrt(DSOL);
+    DSOL = std::sqrt(DSOL);
 
     if (DSOL < DSOL1) break;
   };

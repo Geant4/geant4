@@ -292,7 +292,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     while (r > rPT)
     {
       G4double bsq = rPTsq * G4UniformRand();
-      r            = (rm + sqrt(rm*rm + 4.0*bsq)) / 2.0;
+      r            = (rm + std::sqrt(rm*rm + 4.0*bsq)) / 2.0;
     }
     rsq = r * r;
 //
@@ -302,13 +302,13 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     if (rT > rP)
     {
       G4double x = (rPsq + rsq - rTsq) / 2.0 / r;
-      if (x > 0.0) CT = 2.0 * sqrt(rTsq - x*x);
-      else         CT = 2.0 * sqrt(rTsq - rsq);
+      if (x > 0.0) CT = 2.0 * std::sqrt(rTsq - x*x);
+      else         CT = 2.0 * std::sqrt(rTsq - rsq);
     }
     else
     {
       G4double x = (rTsq + rsq - rPsq) / 2.0 / r;
-      if (x > 0.0) CT = 2.0 * sqrt(rTsq - x*x);
+      if (x > 0.0) CT = 2.0 * std::sqrt(rTsq - x*x);
       else         CT = 2.0 * rT;
     }
 //
@@ -321,8 +321,8 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
     theAbrasionGeometry = new G4NuclearAbrasionGeometry(AP,AT,r);
     F                   = theAbrasionGeometry->F();
-    G4double lambda     = 16.6*fermi / pow(E/MeV,0.26);
-    G4double Mabr       = F * AP * (1.0 - exp(-CT/lambda));
+    G4double lambda     = 16.6*fermi / std::pow(E/MeV,0.26);
+    G4double Mabr       = F * AP * (1.0 - std::exp(-CT/lambda));
     G4long n            = 0;
     for (G4int i = 0; i<10; i++)
     {
@@ -452,7 +452,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   G4double deltaE = TotalEPre - TotalEPost;
   if (deltaE > 0.0 && conserveEnergy)
   {
-    G4double beta = sqrt(1.0 - EMassP*EMassP/pow(deltaE+EMassP,2.0));
+    G4double beta = std::sqrt(1.0 - EMassP*EMassP/std::pow(deltaE+EMassP,2.0));
     boost = boost / boost.mag() * beta;
   }
 //
@@ -485,7 +485,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4double m                    = lorentzVector.m();
     if (conserveMomentum)
       fragmentP->SetMomentum
-        (G4LorentzVector(pBalance,sqrt(pBalance.mag2()+m*m+1.0*eV*eV)));
+        (G4LorentzVector(pBalance,std::sqrt(pBalance.mag2()+m*m+1.0*eV*eV)));
     else
     {
       G4double mg = fragmentP->GetGroundStateMass();
@@ -631,8 +631,8 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 // spectrum.
 //
   
-  G4double pK   = hbarc * pow(9.0 * pi / 4.0 * A, third) / (1.29 * r);
-  if (A <= 24.0) pK *= -0.229*pow(A,third) + 1.62; 
+  G4double pK   = hbarc * std::pow(9.0 * pi / 4.0 * A, third) / (1.29 * r);
+  if (A <= 24.0) pK *= -0.229*std::pow(A,third) + 1.62; 
   G4double pKsq = pK * pK;
   G4double p1sq = 2.0/5.0 * pKsq;
   G4double p2sq = 6.0/5.0 * pKsq;
@@ -669,8 +669,8 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
     {
       while (p <= 0.0) p = npK * pK * G4UniformRand();
       G4double psq = p * p;
-      found = maxn * G4UniformRand() < C1*exp(-psq/p1sq/2.0) +
-        C2*exp(-psq/p2sq/2.0) + C3*exp(-psq/p3sq/2.0) + p/g/sinh(p/g);
+      found = maxn * G4UniformRand() < C1*std::exp(-psq/p1sq/2.0) +
+        C2*std::exp(-psq/p2sq/2.0) + C3*std::exp(-psq/p3sq/2.0) + p/g/std::sinh(p/g);
     }
 //
 //
@@ -694,11 +694,11 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 // boosted later.
 //
     G4double costheta = 2.*G4UniformRand()-1.0;
-    G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
+    G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
     G4double phi      = 2.0*pi*G4UniformRand()*rad;
-    G4ThreeVector direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
+    G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
     G4double nucleonMass = typeNucleon->GetPDGMass();
-    G4double E           = sqrt(p*p + nucleonMass*nucleonMass)-nucleonMass;
+    G4double E           = std::sqrt(p*p + nucleonMass*nucleonMass)-nucleonMass;
     dynamicNucleon = new G4DynamicParticle(typeNucleon,direction,E);
     theParticleChange.AddSecondary (dynamicNucleon);
     pabr += p*direction;
@@ -715,7 +715,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
   {
     G4double ionMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
                        GetIonMass(G4lrint(Z-Zabr),G4lrint(A-Aabr));
-    G4double E       = sqrt(pabr.mag2() + ionMass*ionMass);
+    G4double E       = std::sqrt(pabr.mag2() + ionMass*ionMass);
     G4LorentzVector lorentzVector = G4LorentzVector(-pabr, E + 1.0*eV);
     fragment =
       new G4Fragment((G4int) (A-Aabr), (G4int) (Z-Zabr), lorentzVector);
@@ -741,11 +741,11 @@ G4double G4WilsonAbrasionModel::GetNucleonInducedExcitation
 // Depending upon the impact parameter, a different form of the chord length is
 // is used.
 //  
-  if (r > rT) Cl = 2.0*sqrt(rPsq + 2.0*r*rT - rsq - rTsq);
+  if (r > rT) Cl = 2.0*std::sqrt(rPsq + 2.0*r*rT - rsq - rTsq);
   else        Cl = 2.0*rP;
   
   G4double bP = (rPsq+rsq-rTsq)/2.0/r;
-  G4double Ct = 2.0*sqrt(rPsq - bP*bP);
+  G4double Ct = 2.0*std::sqrt(rPsq - bP*bP);
   
   G4double Ex = 13.0 * Cl / fermi;
   if (Ct > 1.5*fermi)
