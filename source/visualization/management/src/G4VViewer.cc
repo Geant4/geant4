@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.3 1999-01-11 00:48:30 allison Exp $
+// $Id: G4VViewer.cc,v 1.4 1999-11-10 18:30:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,8 @@ void G4VViewer::ProcessView () {
   // necessary to visit the kernel (this should be Done in the concrete
   // object's DrawView ())...
   if (fNeedKernelVisit) {
-    fNeedKernelVisit = false;
     fSceneHandler.ProcessScene (*this);
+    fNeedKernelVisit = false;
   }
 }
 
