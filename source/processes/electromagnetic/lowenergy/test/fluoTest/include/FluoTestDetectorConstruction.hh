@@ -296,7 +296,7 @@ inline void FluoTestDetectorConstruction::ComputeApparateParameters()
   DeviceSizeX =NbOfPixelColumns*max(ContactSizeXY,PixelSizeXY);
   
   WorldSizeZ = (2 * (DistDe  +1.4142 *(max(max(DeviceThickness,DeviceSizeY), max(SiSizeXY,SiThickness)), DeviceSizeX)))+5*m; 
-  WorldSizeXY = 2 * (DistDe +1.4142 *max(Dia1SizeXY,max(SiSizeXY,SiThickness)));
+  WorldSizeXY = 2 * (DistDe +1.4142 *max(Dia1SizeXY,max(SiSizeXY,SiThickness)))+5*m;
 		
 }
 

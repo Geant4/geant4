@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorMessenger.hh,v 1.7 2001-10-31 12:33:43 elena Exp $
+// $Id: FluoTestPrimaryGeneratorMessenger.hh,v 1.8 2001-11-15 13:04:07 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,8 @@ class FluoTestPrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithAString*          RndmCmd;
  G4UIcmdWithAString*          RndmPart;
   G4UIcmdWithAString*          RndmVert;
-
+  G4UIcmdWithAString*        spectrum;
+  G4UIcmdWithAString*        isoVert;
 };
 
 #endif

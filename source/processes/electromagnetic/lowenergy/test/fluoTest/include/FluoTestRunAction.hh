@@ -15,6 +15,7 @@
 
 class G4Run;
 class FluoTestDataSet;
+class FluoTestResponse;
 
 class FluoTestRunAction : public G4UserRunAction
 {
@@ -27,7 +28,9 @@ class FluoTestRunAction : public G4UserRunAction
    FluoTestRunAction();
 #endif 
  ~FluoTestRunAction();
-  const FluoTestDataSet* GetSet(); 
+  const FluoTestDataSet* GetSet();
+  
+  const FluoTestDataSet* GetEfficiencySet();
 
   public:
     void BeginOfRunAction(const G4Run*);
@@ -39,6 +42,8 @@ private:
 
 #endif  
  const FluoTestDataSet* dataSet;
+ 
+  const FluoTestDataSet* efficiencySet;
 };
 
 #endif

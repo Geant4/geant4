@@ -105,7 +105,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  {
 	    gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
-	    
+	     G4cout<<"Prodotto un gamma con energia: "<< gammaBornInSample/keV<<" keV"<<G4endl;
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamBornSample(gammaBornInSample/keV);  
 #endif 
@@ -125,7 +125,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	 {if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
 	   {
 	     eleBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	     
+	     G4cout<<"Prodotto un elettrone con energia: "<< eleBornInSample/keV<<" keV"<<G4endl;
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsEleBornSample(eleBornInSample/keV);  
 #endif 
@@ -152,6 +152,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamDetPre(gammaAtTheDetPre/keV);  
 #endif 
+
 	    }
       }
     }

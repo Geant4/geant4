@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.5 2001-10-31 12:33:46 elena Exp $
+// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.6 2001-11-15 13:04:12 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,23 @@ FluoTestPrimaryGeneratorMessenger::FluoTestPrimaryGeneratorMessenger(FluoTestPri
   RndmVert->SetDefaultValue("on");
   RndmVert->SetCandidates("on off");
   RndmVert->AvailableForStates(PreInit,Idle);
+
+  spectrum = new G4UIcmdWithAString("/gun/spectrum",this);
+  spectrum->SetGuidance("Shoot the incident particle with a certain energy spectrum.");
+  spectrum->SetGuidance("  Choice : on(default), off");
+  spectrum->SetParameterName("choice",true);
+  spectrum->SetDefaultValue("on");
+  spectrum->SetCandidates("on off");
+  spectrum->AvailableForStates(PreInit,Idle);
+
+  isoVert = new G4UIcmdWithAString("/gun/isoVert",this);
+  isoVert->SetGuidance("Shoot the incident particle from an isotrofic direction.");
+  isoVert->SetGuidance("  Choice : on(default), off");
+  isoVert->SetParameterName("choice",true);
+  isoVert->SetDefaultValue("on");
+  isoVert->SetCandidates("on off");
+  isoVert->AvailableForStates(PreInit,Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,6 +72,8 @@ FluoTestPrimaryGeneratorMessenger::~FluoTestPrimaryGeneratorMessenger()
   delete RndmCmd;
   delete RndmPart;
   delete  RndmVert;
+  delete spectrum;
+  delete isoVert;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,7 +86,10 @@ void FluoTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4Stri
    { FluoTestAction->SetRndmPart(newValue);}
  if( command == RndmVert )
    { FluoTestAction->SetRndmVert(newValue);}
-
+ if( command == spectrum )
+   { FluoTestAction->SetSpectrum(newValue);} 
+ if( command == isoVert )
+   { FluoTestAction->SetIsoVert(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

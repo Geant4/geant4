@@ -3,7 +3,8 @@
 #include "FluoTestEventAction.hh"
 #include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
-
+#include "FluoTestRunAction.hh"
+#include "FluoTestResponse.hh"
 #ifdef G4ANALYSIS_USE
 #include "FluoTestAnalysisManager.hh"
 #endif
@@ -19,7 +20,7 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -31,7 +32,8 @@ FluoTestEventAction::FluoTestEventAction(FluoTestAnalysisManager* aMgr):
   printModulo(1),fAnalysisManager(aMgr)
  {
    eventMessenger = new FluoTestEventActionMessenger(this);
-
+   runManager = new FluoTestRunAction();
+   
 }
 
 #else
@@ -44,6 +46,8 @@ FluoTestEventAction::FluoTestEventAction()
  
 {
   eventMessenger = new FluoTestEventActionMessenger(this);
+  runManager = new FluoTestRunAction();
+ 
 }
 
 #endif
@@ -55,6 +59,8 @@ FluoTestEventAction::FluoTestEventAction()
 FluoTestEventAction::~FluoTestEventAction()
 {
    delete eventMessenger;
+   delete  runManager;
+   runManager = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,7 +98,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
     FluoTestSensorHitsCollection* HPGeHC = 0;
     G4int n_hit = 0;
     G4double totEnergyDetect=0., totEnergy=0, energyD=0.;
-    
+    G4double energyDeposit = 0.;
     if (HCE) HPGeHC = (FluoTestSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
     if(HPGeHC)
       {
@@ -100,14 +106,12 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 	for (G4int i=0;i<n_hit;i++)
 	  {
 	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
-	    /*
-#ifdef G4ANALYSIS_USE
-	    fAnalysisManager->InsGamDet((*HPGeHC)[i]->GetEdepTot()/keV);  
-#endif;
-	    */ 
-	    energyD    = (*HPGeHC)[i]->RandomCut();
+	
+	    energyD = RandomCut(totEnergy);
+
+	  
 	    totEnergyDetect += energyD;
-	 
+
 #ifdef G4ANALYSIS_USE
 	    fAnalysisManager->InsGamDet(energyD/keV);  
 #endif
@@ -160,5 +164,36 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
+
+G4double FluoTestEventAction::RandomCut(G4double energy)
+
+{
+  G4double efficiency = 1.;
+  G4double F = 0.15;
+  G4double epsilon = 2.96 * eV;
+  G4double deltaE = 220 * eV;
+  G4double EdepDetect = 0.;
+  const FluoTestDataSet* dataSet = runManager->GetEfficiencySet();
+     
+ //G4double id = 0;
+ 
+  // efficiency = dataSet->FindValue(energy,id); 
+ 
+  G4double  Random = G4UniformRand(); 
+
+    if ( Random<efficiency )
+      {
+	G4double sigma = sqrt(F*epsilon*energy+pow(deltaE/2355,2));
+
+	//RandEngine FluoTestEngine;
+
+	//EdepDetect = RandGaussQ::shoot(&FluoTestEngine, energy, sigma );
+	EdepDetect = G4RandGauss::shoot(energy, sigma );
+
+  }
+    else {EdepDetect = 0.;}
+    return   EdepDetect;
+    
+};
 
 

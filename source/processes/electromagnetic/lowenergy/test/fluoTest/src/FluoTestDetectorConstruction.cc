@@ -48,8 +48,8 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   PixelThickness =  1. * mm;
   ContactSizeXY     = 0.005*mm;
   //ContactSizeXY = 0.5 * cm;
-  SampleThickness = 0.125 * mm;
-  //SampleThickness = 0.5 * cm;
+  SampleThickness = 0.5 * mm;
+  //SampleThickness = 0.25 * cm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
   Dia2Thickness = 1. *mm;
@@ -180,7 +180,14 @@ void FluoTestDetectorConstruction::DefineMaterials()
   a = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
   
-  //define lead
+  //define titanium 
+  density = 4.54 *g/cm3;
+ a = 47.867*g/mole;
+ G4Material* Ti  = new G4Material(name="Titanium",z=22.,a,density);
+
+
+
+//define lead
   
   density = 11.35*g/cm3;
   a=207.19*g/mole;
@@ -213,14 +220,14 @@ void FluoTestDetectorConstruction::DefineMaterials()
   //default materials of the apparate
   
   SiMaterial = Si;
-  sampleMaterial = Al;
+  sampleMaterial = Ti;
   Dia1Material = Pb;
   Dia2Material = Pb;
   Dia3Material = Pb;
   pixelMaterial = HPGe;
   //pixelMaterial =Al;
   OhmicPosMaterial = Cu;
-  OhmicNegMaterial = Cu;
+  OhmicNegMaterial = Pb;
   defaultMaterial = Vacuum;
   
 }
@@ -248,7 +255,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				 0,			//its mother  volume
 				 false,			//no boolean operation
 				 0);			//copy number
-  
+  /*
   //SiDetector
   
   solidSi = 0;  physiSi = 0;  logicSi=0;
@@ -274,6 +281,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				  false,		//no boolean operation
 				  0);		//copy number
     }
+  */
   //HPGeDetector
   
   solidHPGe = 0;  physiHPGe = 0;  logicHPGe=0;
@@ -405,6 +413,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 					0);		//copy number
 	
       }
+    /*
     //Diaphragm1
     
   solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
@@ -492,7 +501,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				    false,		//no boolean operation
 				    0);		//copy number
     }    
-  
+    */
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
   if(!HPGeSD)
@@ -515,14 +524,16 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
-  logicSi->SetVisAttributes(simpleBoxVisAtt);
-  //logicPixel->SetVisAttributes(G4VisAttributes::Invisible);
+  //logicSi->SetVisAttributes(simpleBoxVisAtt);
+ 
   logicPixel->SetVisAttributes(simpleBoxVisAtt);
   logicHPGe->SetVisAttributes(G4VisAttributes::Invisible );
   logicSample->SetVisAttributes(simpleBoxVisAtt);
+  /*
   logicDia1->SetVisAttributes(simpleBoxVisAtt);
   logicDia2->SetVisAttributes(simpleBoxVisAtt);
   logicDia3->SetVisAttributes(simpleBoxVisAtt);
+  */
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
   //always return the physical World

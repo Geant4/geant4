@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.10 2001-10-31 12:33:43 elena Exp $
+// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.11 2001-11-15 13:04:07 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,13 +47,16 @@ class FluoTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   void SetRndmFlag(G4String val) { rndmFlag = val;}
   void SetRndmPart (G4String val) { rndmPart = val;}
   void SetRndmVert (G4String val) { beam = val;}
-  
+  void SetSpectrum (G4String val) { spectrum= val  ;}
+  void SetIsoVert  (G4String val) { isoVert = val  ;}
+
 private:
   G4ParticleGun*                particleGun;	  //pointer a to G4 service class
   FluoTestDetectorConstruction*    FluoTestDetector;  //pointer to the geometry
 
   FluoTestPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
   FluoTestRunAction*  runManager;
+  
 
 #ifdef G4ANALYSIS_USE   
     FluoTestAnalysisManager* analysisManager;
@@ -63,8 +66,8 @@ private:
   G4String                      rndmFlag;	  //flag for a random impact point  
   G4String                      rndmPart;//flag for a random particle shot
   G4String                      beam;
-  
-     
+  G4String                      spectrum;
+  G4String                      isoVert;
 };
 
 #endif

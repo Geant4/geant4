@@ -14,7 +14,7 @@ FluoTestNormalization::~FluoTestNormalization()
 const FluoTestDataSet* FluoTestNormalization::Normalize(G4double minIntExtreme, G4double maxIntExtreme, G4int nBins)
 {
  
- G4String fileName = "B_flare";
+ G4String fileName = "C_flare";
  G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
  FluoTestDataSet* dataSet = 
    new FluoTestDataSet(1,fileName,interpolation,keV,1);

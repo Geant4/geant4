@@ -30,12 +30,12 @@ class FluoTestPhysicsListMessenger;
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
-
+class FluoTestDetectorConstruction;
 class FluoTestPhysicsList: public G4VUserPhysicsList
 {
 public:
 
-  FluoTestPhysicsList();
+  FluoTestPhysicsList(FluoTestDetectorConstruction*);
   virtual ~FluoTestPhysicsList();
   
 protected:
@@ -49,7 +49,8 @@ protected:
   // these methods Construct particles 
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
-  
+  virtual void ConstructHadrons();
+
 protected:
   // these methods Construct physics processes and register them
   void ConstructEM();
@@ -67,6 +68,9 @@ public:
   void SetGELowLimit(G4double);
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
+  void SetProtonCut(G4double);
+  void SetCutsByEnergy(G4double);
+  
 
 private:
 
@@ -76,7 +80,9 @@ private:
   FluoTestPhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;
-
+  G4double cutForProton;
+  FluoTestDetectorConstruction* pDet;
+  
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsList.cc,v 1.17 2001-10-31 12:33:45 elena Exp $
+// $Id: FluoTestPhysicsList.cc,v 1.18 2001-11-15 13:04:11 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
-
+#include "FluoTestDetectorConstruction.hh"
 //#include "G4EnergyLossTables.hh"
 //#include "G4Material.hh"
 //#include "G4RunManager.hh"
@@ -48,12 +48,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FluoTestPhysicsList::FluoTestPhysicsList()
+FluoTestPhysicsList::FluoTestPhysicsList(FluoTestDetectorConstruction* p)
 : G4VUserPhysicsList()
 {
-  defaultCutValue = 0.1*mm;
+  pDet = p;
+  defaultCutValue = 0.00001*mm;
+
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
+  cutForProton    = 0.00001*mm;
   SetVerboseLevel(1);
   physicsListMessenger = new FluoTestPhysicsListMessenger(this);
 }
@@ -76,6 +79,7 @@ void FluoTestPhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
+  ConstructHadrons();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,6 +100,11 @@ void FluoTestPhysicsList::ConstructLeptons()
   G4Positron::PositronDefinition();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void FluoTestPhysicsList::ConstructHadrons()
+{
+  G4Proton::ProtonDefinition();
+}
 
 void FluoTestPhysicsList::ConstructProcess()
 {
@@ -118,6 +127,7 @@ void FluoTestPhysicsList::ConstructProcess()
 
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+#include "G4hLowEnergyIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -158,6 +168,17 @@ void FluoTestPhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       
     } 
+    else if (particleName == "proton") {
+      //proton
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hLowEnergyIonisation,-1, 2,2);
+      /*
+ Test17StepCut* thehadronStepCut = new Test17StepCut();
+      thehadronStepCut->SetMaxStep(MaxChargedStep);          		       
+      pmanager->AddProcess( thehadronStepCut,       -1,-1,3);
+      */
+
+    }
   }
 }
 
@@ -218,7 +239,7 @@ void FluoTestPhysicsList::SetCuts(){
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
-
+   SetCutValue(cutForProton, "proton");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -240,6 +261,60 @@ void FluoTestPhysicsList::SetLowEnSecElecCut(G4double cut){
   //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void FluoTestPhysicsList::SetProtonCut(G4double val)
+{
+  //  ResetCuts();
+  cutForProton = val;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+void FluoTestPhysicsList::SetCutsByEnergy(G4double val)
+{
+  G4ParticleTable* theFluoTestParticleTable =  G4ParticleTable::GetParticleTable();
+  G4Material* currMat = pDet->GetSampleMaterial();
+  G4ParticleDefinition* part;
+  G4double cut;
+
+  part = theFluoTestParticleTable->FindParticle("e-");
+  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  SetCutValue(cut, "e-");
+  /*
+  part = theFluoTestParticleTable->FindParticle("gamma");
+  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  SetCutValue(cut, "gamma");
+  */
+  part = theFluoTestParticleTable->FindParticle("proton");
+  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  SetCutValue(cut, "proton");
+  G4cout<<"cut in energy set : "<<cut/eV<<" eV"<<G4endl;
+  if (verboseLevel>0) DumpCutValuesTable();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

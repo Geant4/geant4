@@ -8,7 +8,8 @@
 #include "G4ios.hh"
 #include "FluoTestDataSet.hh"
 #include "FluoTestNormalization.hh"
-
+#include "FluoTestResponse.hh"
+#include "G4LogLogInterpolation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -28,6 +29,10 @@ FluoTestRunAction::FluoTestRunAction()
       FluoTestNormalization* normalization = new FluoTestNormalization();
     
       dataSet = normalization->Normalize(min, max, nBins);
+     
+      G4String fileName = "efficienza";
+      G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
+      efficiencySet = new FluoTestDataSet(1,fileName,interpolation,keV,1);
 
  delete normalization;
 
@@ -42,9 +47,12 @@ FluoTestRunAction::FluoTestRunAction()
 
 FluoTestRunAction::~FluoTestRunAction()
 {
-  //delete normalization;
-  delete dataSet;
-  dataSet = 0;
+  
+  //delete responseFunction;
+  //responseFunction = 0;
+  // delete dataSet;
+  //dataSet = 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,6 +96,10 @@ if (G4VVisManager::GetConcreteInstance()) {
 const FluoTestDataSet* FluoTestRunAction::GetSet()
 {
   return  dataSet;
+}
+const FluoTestDataSet* FluoTestRunAction::GetEfficiencySet()
+{
+  return efficiencySet;
 }
 
 

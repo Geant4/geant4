@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsListMessenger.cc,v 1.13 2001-10-31 12:33:45 elena Exp $
+// $Id: FluoTestPhysicsListMessenger.cc,v 1.14 2001-11-15 13:04:11 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,6 +95,20 @@ FluoTestPhysicsListMessenger::FluoTestPhysicsListMessenger(FluoTestPhysicsList *
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(Idle);
 
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutP",this);
+  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
+  cutPCmd->SetParameterName("cutP",false);
+  cutPCmd->SetRange("cutP>0.");
+  cutPCmd->SetUnitCategory("Length");    
+  cutPCmd->AvailableForStates(Idle);
+ 
+  eCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutEnergy",this);
+  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
+  eCmd->SetParameterName("cutenergy",false);
+  eCmd->SetRange("cutenergy>0.");
+  eCmd->SetUnitCategory("Energy");   
+  eCmd->AvailableForStates(Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,7 +123,8 @@ FluoTestPhysicsListMessenger::~FluoTestPhysicsListMessenger()
   delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
-
+  delete cutPCmd;
+  delete eCmd;
 
 }
 
@@ -137,6 +152,12 @@ void FluoTestPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String new
 
   if(command == cutECmd)
     { FluoTestList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+
+ if(command == cutPCmd)
+    { FluoTestList->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
+
+ if(command == eCmd)
+    { FluoTestList->SetCutsByEnergy(eCmd->GetNewDoubleValue(newValue));}
 
 }
 

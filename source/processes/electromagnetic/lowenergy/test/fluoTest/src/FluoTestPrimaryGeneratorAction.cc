@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.9 2001-10-31 12:33:46 elena Exp $
+// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.10 2001-11-15 13:04:12 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,8 @@
 
 #ifdef G4ANALYSIS_USE
 FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction( FluoTestDetectorConstruction* FluoTestDC,FluoTestAnalysisManager* analysisMgr)
-  :FluoTestDetector(FluoTestDC),analysisManager(analysisMgr),rndmFlag("off")
+  :FluoTestDetector(FluoTestDC),analysisManager(analysisMgr),rndmFlag("off"),
+   rndmPart("off"),beam("off"),spectrum("off"),isoVert("off")
 { G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   
@@ -53,7 +54,8 @@ FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction( FluoTestDetector
 #else
 FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
                                                FluoTestDetectorConstruction* FluoTestDC)
-:FluoTestDetector(FluoTestDC),rndmFlag("off")
+  :FluoTestDetector(FluoTestDC),rndmFlag("off"),
+ rndmPart("off"),beam("off"),spectrum("off"),isoVert("off")
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
@@ -70,6 +72,7 @@ FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
                     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+ 
   particleGun->SetParticleEnergy(50.*MeV);
   G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
@@ -127,43 +130,77 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double rho = radius*sqrt(G4UniformRand());
       G4double theta = 2*pi*G4UniformRand()*rad;
       G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
+
       G4double y = rho * sin(theta);
       G4double x = rho * cos(theta);
-    
+      
       particleGun->SetParticlePosition(G4ThreeVector(x,y,position));
+    }
+//shoot particles according to a certain spectrum
+  if (spectrum =="on")
+    {
       const FluoTestDataSet* dataSet = runManager->GetSet();
-     
+      
       G4int i = 0;
       G4int id = 0;
       G4double minEnergy = 0. * keV;
-
+      G4double particleEnergy= 0.;
       G4double maxEnergy = 10. * keV;
       G4double energyRange = maxEnergy - minEnergy;
-     
-      G4double randomEnergy  = 0;
+      
+    
       while ( i == 0)
 	{
 	  G4double random = G4UniformRand();
-	 
+	  
 	  G4double randomNum = G4UniformRand();
-	 
-	  randomEnergy = random *  energyRange;
-	 
-	  if ((dataSet->FindValue(randomEnergy,id)) > randomNum)
+	  
+	  particleEnergy = random *  energyRange;
+	  
+	  if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
 	    {
 	      i = 1;
-	     
+	      
 	    }
 	}
+      /*      
+	      #ifdef G4ANALYSIS_USE 
+	      analysisManager->InsSpectrum(particleEnergy/keV);
+	      #endif
+      */
+ particleGun->SetParticleEnergy(particleEnergy);
+
+    }      
+  if (isoVert == "on")
+    {
+      G4double rho = 1. *m;
+      //theta in [0;pi/2]
+      G4double theta = (pi/2)*G4UniformRand();
+      //phi in [-pi;pi]
+      G4double phi = (G4UniformRand()*2*pi)- pi;
+      G4double x = rho*sin(theta)*sin(phi);
+      G4double y = rho*sin(theta)*cos(phi);
+      G4double z = -(rho*cos(theta));
+      particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
+      G4cout<<"x = "<<x/m <<" m"<<G4endl;
+      G4cout<<"y = "<<y/m <<" m"<<G4endl;
+      G4cout<<"z = "<<z/m <<" m"<<G4endl;
+      G4double Xdim = FluoTestDetector->GetSampleSizeXY();
+      G4double Ydim = FluoTestDetector->GetSampleSizeXY();
      
+      G4double Dx = Xdim*(G4UniformRand()-0.5);
+      G4cout<<"Dx = "<<Dx/m<<" m"<<G4endl;
+      G4double Dy = Ydim*(G4UniformRand()-0.5);
+      G4cout<<"Dy = "<<Dy/m<<" m"<<G4endl;
+      particleGun->SetParticleMomentumDirection(G4ThreeVector(-x+Dx,-y+Dy,-z));
+      
+    }
 #ifdef G4ANALYSIS_USE 
-      analysisManager->InsSpectrum(randomEnergy/keV);
+  G4double partEnergy = particleGun->GetParticleEnergy();
+  analysisManager->InsSpectrum(partEnergy/keV);
+ 
 #endif
-     
-      particleGun->SetParticleEnergy(randomEnergy);
-
-    } 
-
+ 
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

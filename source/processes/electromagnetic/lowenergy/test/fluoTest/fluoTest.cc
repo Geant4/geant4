@@ -35,7 +35,8 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   FluoTestDetectorConstruction* detector = new FluoTestDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new FluoTestPhysicsList);
+  FluoTestPhysicsList* list = new   FluoTestPhysicsList(detector);
+  runManager->SetUserInitialization(list);
   
   G4UIsession* session=0;
   

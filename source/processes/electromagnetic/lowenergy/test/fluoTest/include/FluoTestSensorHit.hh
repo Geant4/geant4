@@ -11,6 +11,7 @@
 #include <CLHEP/Random/Randomize.h>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class FluoTestRunAction;
 class FluoTestSensorHit : public G4VHit
 {
 public:
@@ -28,17 +29,12 @@ public:
   void Print();
      G4double GetEdepTot()      { return EdepTot;};
   G4double GetEdepDetect()   { return EdepDetect;};
-  G4double RandomCut ();  
-
-
+ 
 private:
 
    G4double EdepTot;
-  G4double Efficiency; 
+ 
   G4double EdepDetect; 
-  G4double F;
-  G4double deltaE;
-  G4double epsilon;
  
 };
 

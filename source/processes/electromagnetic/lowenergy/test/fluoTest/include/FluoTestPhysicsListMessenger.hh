@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsListMessenger.hh,v 1.12 2001-10-31 12:33:43 elena Exp $
+// $Id: FluoTestPhysicsListMessenger.hh,v 1.13 2001-11-15 13:04:06 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,8 @@ private:
   G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
   G4UIcmdWithADoubleAndUnit* cutGCmd;
   G4UIcmdWithADoubleAndUnit* cutECmd;
+  G4UIcmdWithADoubleAndUnit* cutPCmd;
+  G4UIcmdWithADoubleAndUnit* eCmd;
 };
 
 #endif

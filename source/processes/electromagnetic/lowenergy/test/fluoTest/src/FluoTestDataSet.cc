@@ -29,6 +29,7 @@ FluoTestDataSet:: FluoTestDataSet(G4int Z,
   numberOfBins = energies->size();
 }
 
+
 // Destructor
 
 FluoTestDataSet::~FluoTestDataSet()
@@ -90,7 +91,7 @@ G4int FluoTestDataSet::FindBinLocation(G4double energy) const
       if ( energy < (*energies)[midBin] ) upperBound = midBin-1;
       else lowerBound = midBin+1;
   }
-  
+ 
   return upperBound;
 }
 
@@ -106,7 +107,7 @@ void FluoTestDataSet::LoadData(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/fluoIntegration/fluoTest";
+  char* path = "/mnt/home/guardi/workdir/flAIDAInt2/fluoTest";
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;

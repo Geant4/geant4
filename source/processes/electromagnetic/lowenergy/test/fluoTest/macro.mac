@@ -1,9 +1,18 @@
 
+#/tracking/verbose 2
 #/lowenergy/lowlimGE 250 eV
 #/lowenergy/cutG 0.01 mum
 #/lowenergy/cutE 0.01 mum
+#/lowenergy/cutP 0.01 mum
+/lowenergy/cutEnergy 250 eV
 
+#/tracking/verbose 1
+#/gun/spectrum on
+#/gun/isoVert on
 /gun/randomVert on
-/gun/particle gamma
-#/gun/energy 3.5 keV
-/run/beamOn 10000000
+#/gun/particle gamma
+/gun/particle proton
+/gun/energy 5 MeV
+
+/run/beamOn 100
+#/run/beamOn 10

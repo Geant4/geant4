@@ -11,10 +11,11 @@ class FluoTestAnalysisManager;
 
 #endif
 
-
+class FluoTestRunAction;
 class FluoTestEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 class FluoTestEventAction : public G4UserEventAction
 {
@@ -39,10 +40,14 @@ class FluoTestEventAction : public G4UserEventAction
     G4int                       HPGeCollID; 
   FluoTestEventActionMessenger*  eventMessenger;
     G4int                       printModulo;                         
-   
+ 
+  G4double RandomCut(G4double);
+
+
 #ifdef G4ANALYSIS_USE
     FluoTestAnalysisManager* fAnalysisManager;
 #endif
+  FluoTestRunAction* runManager;
 };
 
 #endif
