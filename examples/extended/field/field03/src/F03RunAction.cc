@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: F03RunAction.cc,v 1.4 2001-10-25 14:54:05 gcosmo Exp $
+// $Id: F03RunAction.cc,v 1.5 2001-11-07 16:36:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 
 #include "F03RunAction.hh"
 #include "F03RunMessenger.hh"
@@ -70,119 +68,12 @@ void F03RunAction::BeginOfRunAction(const G4Run* aRun)
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)    UI->ApplyCommand("/vis/scene/notifyHandlers");
-
-      
-  EnergySumAbs = 0. ;
-  EnergySquareSumAbs = 0.;
-  tlSumAbs = 0. ;
-  tlsquareSumAbs = 0. ;
-  nStepSumCharged = 0. ;
-  nStepSum2Charged= 0. ;
-  nStepSumNeutral = 0. ;
-  nStepSum2Neutral= 0. ;
-  TotNbofEvents = 0. ;
-  SumCharged=0.;
-  SumNeutral=0.;
-  Sum2Charged=0.;
-  Sum2Neutral=0.;
-  Selectron=0.;
-  Spositron=0.;
-
-  Transmitted=0.;
-  Reflected  =0.;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void F03RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
-
-  tlSumAbs /= TotNbofEvents ;
-  sAbs = tlsquareSumAbs/TotNbofEvents-tlSumAbs*tlSumAbs ;
-  if(sAbs>0.)
-    sAbs = sqrt(sAbs/TotNbofEvents) ;
-  else
-    sAbs = 0. ;
-  
-  EnergySumAbs /= TotNbofEvents ;
-  sigAbs = EnergySquareSumAbs/TotNbofEvents-EnergySumAbs*EnergySumAbs;
-  if(sigAbs>0.)
-    sigAbs = sqrt(sigAbs/TotNbofEvents);
-  else
-    sigAbs = 0.;
-
-  nStepSumCharged /= TotNbofEvents ;
-  sigstep = nStepSum2Charged/TotNbofEvents-nStepSumCharged*nStepSumCharged;
-  if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
-  else
-    sigstep = 0.;
-  G4double sigch=sigstep ;
-  
-  nStepSumNeutral /= TotNbofEvents ;
-  sigstep = nStepSum2Neutral/TotNbofEvents-nStepSumNeutral*nStepSumNeutral;
-  if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
-  else
-    sigstep = 0.;
-  G4double signe=sigstep ;
-  
-  SumCharged /= TotNbofEvents;
-  sigcharged = Sum2Charged/TotNbofEvents-SumCharged*SumCharged; 
-  if(sigcharged>0.)
-    sigcharged = sqrt(sigcharged/TotNbofEvents);
-  else
-    sigcharged = 0. ;
- 
-  SumNeutral /= TotNbofEvents;
-  signeutral = Sum2Neutral/TotNbofEvents-SumNeutral*SumNeutral; 
-  if(signeutral>0.)
-    signeutral = sqrt(signeutral/TotNbofEvents);
-  else
-    signeutral = 0. ;
- 
-  Selectron /= TotNbofEvents ;
-  Spositron /= TotNbofEvents ;
-
-  Transmitted /=TotNbofEvents ;
-  Reflected   /=TotNbofEvents ;
- G4cout << " ================== run summary =====================" << G4endl;
- G4int prec = G4cout.precision(6);
-  G4cout << " end of Run TotNbofEvents = " <<  
-           TotNbofEvents << G4endl ;
-  G4cout << "    mean charged track length   in absorber=" <<
-           tlSumAbs/mm      << " +- " << sAbs/mm    <<
-          "  mm  " << G4endl; 
-  G4cout << G4endl;
-  G4cout << "            mean energy deposit in absorber=" <<
-           EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
-          "  MeV " << G4endl ;
-  G4cout << G4endl ;
-  G4cout << " mean number of steps in absorber (charged) =" <<
-           nStepSumCharged         << " +- " << sigch     <<
-          "      " << G4endl ;
-  G4cout << " mean number of steps in absorber (neutral) =" <<
-           nStepSumNeutral         << " +- " << signe     <<
-          "      " << G4endl ;
-  G4cout << G4endl ;
-  G4cout << "   mean number of charged secondaries = " <<
-           SumCharged << " +- " << sigcharged << G4endl;  
-  G4cout << G4endl ;
-  G4cout << "   mean number of neutral secondaries = " <<
-           SumNeutral << " +- " << signeutral << G4endl;  
-  G4cout << G4endl ;
-  
-  G4cout << "   mean number of e-s =" << Selectron << 
-            "  and e+s =" << Spositron << G4endl;
-  G4cout << G4endl; 
-  
-  G4cout << "(number) transmission coeff=" << Transmitted <<
-            "  reflection coeff=" << Reflected << G4endl;
-  G4cout << G4endl; 
-  
-  G4cout.precision(prec);
-  
   if (G4VVisManager::GetConcreteInstance())
   {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
@@ -195,69 +86,6 @@ void F03RunAction::EndOfRunAction(const G4Run* aRun)
     HepRandom::showEngineStatus();
     HepRandom::saveEngineStatus("endOfRun.rndm");
   }     
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::CountEvent()
-{
-  TotNbofEvents += 1. ;
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::AddnStepsCharged(G4double ns)
-{
-  nStepSumCharged += ns;
-  nStepSum2Charged += ns*ns;
-}
-
-////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::AddnStepsNeutral(G4double ns)
-{
-  nStepSumNeutral += ns;
-  nStepSum2Neutral += ns*ns;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::AddEdeps(G4double Eabs)
-{
-  EnergySumAbs += Eabs;
-  EnergySquareSumAbs += Eabs*Eabs;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::AddTrackLength(G4double tlabs)
-{
-  tlSumAbs += tlabs;
-  tlsquareSumAbs += tlabs*tlabs ;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::AddTrRef(G4double tr,G4double ref)
-{
-  Transmitted += tr ;
-  Reflected   += ref;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void F03RunAction::CountParticles(G4double nch,G4double nne)
-{
-  SumCharged += nch ;
-  SumNeutral += nne ;
-  Sum2Charged += nch*nch ;
-  Sum2Neutral += nne*nne ;
-}
-
-void F03RunAction::AddEP(G4double nele,G4double npos) 
-{
-  Selectron += nele;
-  Spositron += npos;
 }
 
 //

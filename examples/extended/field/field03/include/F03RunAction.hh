@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03RunAction.hh,v 1.3 2001-10-15 17:20:49 gcosmo Exp $
+// $Id: F03RunAction.hh,v 1.4 2001-11-07 16:36:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,30 +53,10 @@ class F03RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 
-    void CountEvent();
-    void CountParticles(G4double,G4double);
-    void AddEP(G4double,G4double);
-    void AddEdeps(G4double Eabs); 
-    void AddTrackLength(G4double tlabs); 
-    void AddnStepsCharged(G4double ns);
-    void AddnStepsNeutral(G4double ns);
-
-    void AddTrRef(G4double tr,G4double ref);
-
     void  SetRndmFreq(G4int val) {saveRndm = val;}
     G4int GetRndmFreq()          {return saveRndm;}
 
   private:
-
-    G4double EnergySumAbs,EnergySquareSumAbs;
-    G4double tlSumAbs,tlsquareSumAbs;
-    G4double nStepSumCharged,nStepSum2Charged ;
-    G4double nStepSumNeutral,nStepSum2Neutral ;
-    G4double TotNbofEvents;
-    G4double SumCharged,Sum2Charged,SumNeutral,Sum2Neutral;
-    G4double Selectron,Spositron;
-
-    G4double Transmitted,Reflected ;
  
     F03RunMessenger* runMessenger;
     G4int saveRndm;    

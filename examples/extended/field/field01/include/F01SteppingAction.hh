@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01SteppingAction.hh,v 1.2 2001-07-11 09:57:59 gunter Exp $
+// $Id: F01SteppingAction.hh,v 1.3 2001-11-07 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,14 +33,9 @@
 #define F01SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 
-class F01DetectorConstruction;
-class F01RunAction;
-class F01EventAction;
 class F01SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,21 +43,14 @@ class F01SteppingMessenger;
 class F01SteppingAction : public G4UserSteppingAction
 {
   public:
-    F01SteppingAction(F01DetectorConstruction*, F01EventAction*,
-                      F01RunAction* );
+    F01SteppingAction();
    ~F01SteppingAction();
 
     void UserSteppingAction(const G4Step*);
 
   private:
-    F01DetectorConstruction* detector;
-    F01EventAction*          eventaction;
-    F01RunAction*            runaction;
+
     F01SteppingMessenger*    steppingMessenger;
-
-    G4int IDnow,IDold;
-    G4int evnoold ;
-
 };
 
 #endif

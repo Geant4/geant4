@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01CalorimeterSD.cc,v 1.3 2001-11-07 14:33:21 grichine Exp $
+// $Id: F01CalorimeterSD.cc,v 1.4 2001-11-07 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,21 +73,18 @@ void F01CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
   G4double stepl = 0.;
-  // if ( (aStep->GetTrack()->GetDefinition()->GetPDGCharge()) != 0.0 ) 
-  {
-    stepl = aStep->GetStepLength();
-  }
+
+  stepl = aStep->GetStepLength();
+
   if ((edep == 0.) && (stepl == 0.) ) return false;      
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
-  //theTouchable->MoveUpHistory();
-  G4int F01Number = 0 ;
 
+  G4int F01Number = 0 ;
   if (HitID[F01Number]==-1)
     { 
       F01CalorHit* calHit = new F01CalorHit();
@@ -103,7 +100,6 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (verboseLevel>0)
         G4cout << " Energy added to F01: " << F01Number << G4endl; 
     }
-    
   return true;
 }
 
@@ -129,13 +125,3 @@ void F01CalorimeterSD::PrintAll()
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-

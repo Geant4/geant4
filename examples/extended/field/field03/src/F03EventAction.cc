@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03EventAction.cc,v 1.3 2001-10-15 17:20:50 gcosmo Exp $
+// $Id: F03EventAction.cc,v 1.4 2001-11-07 16:36:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
-#include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
@@ -82,56 +81,12 @@ void F03EventAction::BeginOfEventAction(const G4Event* evt)
      G4SDManager * SDman = G4SDManager::GetSDMpointer();
      calorimeterCollID = SDman->GetCollectionID("CalCollection");
     } 
-
-  nstep = 0. ;
-  nstepCharged = 0. ;
-  nstepNeutral = 0. ;
-  Nch = 0. ;
-  Nne = 0. ;
-  NE=0.;
-  NP=0.;
-  Transmitted=0.;
-  Reflected  =0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F03EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  F03CalorHitsCollection* CHC = 0;
-  if (HCE)  CHC = (F03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
-
-  if (CHC)
-  {
-    G4int n_hit = CHC->entries();
-    G4double totEAbs=0, totLAbs=0;
-    for (G4int i=0;i<n_hit;i++)
-      { totEAbs += (*CHC)[i]->GetEdepAbs(); 
-        totLAbs += (*CHC)[i]->GetTrakAbs();
-      }
-  if(verboselevel==2)
-    G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
-                             G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
-                             G4BestUnit(totLAbs,"Length")
-       << G4endl;           
-
-   // count event, add deposits to the sum ...
-    runaction->CountEvent() ;
-    runaction->AddTrackLength(totLAbs) ;
-    runaction->AddnStepsCharged(nstepCharged) ;
-    runaction->AddnStepsNeutral(nstepNeutral) ;
-    if(verboselevel==2)
-      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
-    runaction->CountParticles(Nch,Nne);
-    runaction->AddEP(NE,NP);
-    runaction->AddTrRef(Transmitted,Reflected) ;
-    runaction->AddEdeps(totEAbs) ;
-    nstep=nstepCharged+nstepNeutral ;
-  }
-  
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)
@@ -177,62 +132,6 @@ G4int F03EventAction::GetEventno()
 void F03EventAction::setEventVerbose(G4int level)
 {
   verboselevel = level ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::CountStepsCharged()
-{
-  nstepCharged += 1. ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::CountStepsNeutral()
-{
-  nstepNeutral += 1. ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::AddCharged() 
-{
-  Nch += 1.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::AddNeutral() 
-{
-  Nne += 1.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::AddE() 
-{
-  NE += 1.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::AddP() 
-{
-  NP += 1.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::SetTr()
-{
-  Transmitted = 1.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03EventAction::SetRef()
-{
-  Reflected   = 1.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

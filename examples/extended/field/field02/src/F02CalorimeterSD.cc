@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorimeterSD.cc,v 1.3 2001-10-15 17:20:43 gcosmo Exp $
+// $Id: F02CalorimeterSD.cc,v 1.4 2001-11-07 16:36:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,21 +76,18 @@ void F02CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 G4bool F02CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
   G4double stepl = 0.;
-  // if ( (aStep->GetTrack()->GetDefinition()->GetPDGCharge()) != 0.0 ) 
-  {
-    stepl = aStep->GetStepLength();
-  }
+
+  stepl = aStep->GetStepLength();
+
   if ((edep == 0.) && (stepl == 0.) ) return false;      
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
-  //theTouchable->MoveUpHistory();
-  G4int F02Number = 0 ;
 
+  G4int F02Number = 0 ;
   if (HitID[F02Number]==-1)
     { 
       F02CalorHit* calHit = new F02CalorHit();

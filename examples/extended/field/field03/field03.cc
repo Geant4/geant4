@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: field03.cc,v 1.3 2001-10-15 17:20:47 gcosmo Exp $
+// $Id: field03.cc,v 1.4 2001-11-07 16:36:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,9 +99,7 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(eventAction);
 
-  F03SteppingAction* steppingAction = new F03SteppingAction(detector,
-                                                            eventAction, 
-                                                            runAction);
+  F03SteppingAction* steppingAction = new F03SteppingAction();
   runManager->SetUserAction(steppingAction);
   
   // Initialize G4 kernel, physics tables ...

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02EventAction.hh,v 1.2 2001-07-11 09:58:01 gunter Exp $
+// $Id: F02EventAction.hh,v 1.3 2001-11-07 16:36:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,15 +52,6 @@ class F02EventAction : public G4UserEventAction
     G4int GetEventno();
     void setEventVerbose(G4int level);
     
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
     void SetDrawFlag(G4String val)  {drawFlag = val;};
     void SetPrintModulo(G4int val)  {printModulo = val;};
         
@@ -69,15 +60,9 @@ class F02EventAction : public G4UserEventAction
     F02EventActionMessenger*  eventMessenger;
     F02RunAction* runaction;
     G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
     
     G4String drawFlag;
     G4int    printModulo;             
 };
 
 #endif
-
-    
