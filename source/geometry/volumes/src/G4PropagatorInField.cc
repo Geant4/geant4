@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.26 2001-12-07 09:42:10 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.27 2001-12-08 01:12:51 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -110,40 +110,58 @@ G4double G4PropagatorInField::
 
   this->SetEpsilonStep( epsilon );
 
-  if( fNoZeroStep > fThresholdNo_ZeroSteps ) {
+  //  Shorten the proposed step in case of earlier problems (zero steps)
+  // 
+  if( fNoZeroStep > fActionThreshold_NoZeroSteps ) {
      G4double stepTrial; //  = fMidPoint_CurveLen_of_LastAttempt;
-     stepTrial= 0.5 * fFull_CurveLen_of_LastAttempt; 
+
+     stepTrial= fFull_CurveLen_of_LastAttempt; 
      if( (stepTrial <= 0.0) && (fLast_ProposedStepLength>0.0) ) 
-        stepTrial=0.5 * fLast_ProposedStepLength; 
-#ifdef G4DEBUG_FIELD
-     G4cout << " PiF: NoZeroStep= " << fNoZeroStep
-	    << " CurrentProposedStepLength= " << CurrentProposedStepLength
-            << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
-	    << " last proposed step-length= " << fLast_ProposedStepLength 
-	    << " step trial = " << stepTrial
-	    << endl;
-     //     printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
-     //	                 -1.0,  0,  pPhysVol);
-#endif
-     if( fNoZeroStep > 2*fThresholdNo_ZeroSteps ){
-        stepTrial *= 0.5;     // Ensure quicker convergence.
+        stepTrial= fLast_ProposedStepLength; 
+
+     G4double decreaseFactor=0.9; // Unused default
+     // G4double thisTolerance= kCarTolerance;
+     if( (fNoZeroStep < fSevereActionThreshold_NoZeroSteps)
+	  && (stepTrial > 1000.0*kCarTolerance) ){
+        // Ensure quicker convergence.
+        decreaseFactor= 0.1;
+     } else {
+        // We are in significant difficulties, probably at a boundary
+        //   that is either geometrically sharp 
+        //     or between very different materials.
+        // 
+        // Careful decreases to cope with tolerance are required.
+        if(stepTrial > 1000.0*kCarTolerance)
+	   decreaseFactor= 0.25;     // Try slow decreases
+	else if(stepTrial > 100.0*kCarTolerance)
+	   decreaseFactor= 0.5;      // Try slower decreases
+	else if(stepTrial > 10.0*kCarTolerance)
+	   decreaseFactor= 0.75;     // Try even slower decreases
+	else
+	   decreaseFactor= 0.9;      // Try very slow decreases
+     }
+     stepTrial *= decreaseFactor;
 
 #ifdef G4DEBUG_FIELD
-        // We are already in serious trouble, probably at some boundary
-	//   Let us try to print out some information to guide in 
-	//   diagnosing the problem.
-	// printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
-	//   -1.0,  0,  pPhysVol);
+     PrintStepLengthDiagnostic(CurrentProposedStepLength, decreaseFactor,
+			       stepTrial, pFieldTrack);
 #endif
-	if(   (stepTrial == 0.0) 
-	   || ( fNoZeroStep > 5*fThresholdNo_ZeroSteps ) ) { 
- 	   G4cerr << " G4PropagatorInField::ComputeStep "
-		  << "  ERROR : attempting a zero step= " << stepTrial << G4endl
-		  << " and/or no progress after "  << fNoZeroStep 
-		  << " trial steps.  ABORTING." << G4endl;
-	   G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps"); 
-	} 
+     if(   (stepTrial == 0.0) ) {
+           //  || ( fNoZeroStep > fAbandonThresholdNo_ZeroSteps )  ) {
+         G4cout << " G4PropagatorInField::ComputeStep "
+              << " Particle abandoned due to lack of progress in field."
+	      << G4endl
+              << " Properties : " << pFieldTrack << " "
+              << G4endl;
+         G4cerr << " G4PropagatorInField::ComputeStep "
+              << "  ERROR : attempting a zero step= " << stepTrial << G4endl
+              << " while attempting to progress after "  << fNoZeroStep
+              << " trial steps.  Will abandon step." << G4endl;
+         //  G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps");
+         fParticleIsLooping= true;
+         return 0;  // = stepTrial;
      }
+     
      if( stepTrial < CurrentProposedStepLength)
         CurrentProposedStepLength = stepTrial;
   }
@@ -250,7 +268,7 @@ G4double G4PropagatorInField::
 
 #ifdef G4DEBUG_FIELD
      // if( fNoZeroStep )
-     if( fNoZeroStep > fThresholdNo_ZeroSteps )
+     if( fNoZeroStep > fActionThreshold_NoZeroSteps )
      {
      // if( Verbose() > 0 )
        //if(do_loop_count==0) 
@@ -269,6 +287,8 @@ G4double G4PropagatorInField::
   }
   while( (!intersects ) && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
                         && ( do_loop_count < GetMaxLoopCount() ) );
+
+
 				       
 #ifdef G4VERBOSE
   if( do_loop_count >= GetMaxLoopCount() ){
@@ -332,6 +352,14 @@ G4double G4PropagatorInField::
     fNoZeroStep++;
   else
     fNoZeroStep= 0;
+
+  if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+     G4cout << " G4PropagatorInField::ComputeStep : Warning :" 
+            << " no progress after "  << fNoZeroStep << " trial steps. "   
+            << G4endl;
+     G4cout << "   Particle will be abandoned." ; 
+     fParticleIsLooping= true;
+  } 
 
   return TruePathLength;
 
@@ -672,4 +700,23 @@ void G4PropagatorInField::printStatus(
        G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << G4endl;
        G4cout << G4endl; 
     }
+}
+
+
+void 
+G4PropagatorInField::PrintStepLengthDiagnostic(G4double CurrentProposedStepLength,
+					       G4double decreaseFactor,
+					       G4double stepTrial,
+					       const G4FieldTrack& aFieldTrack)
+{
+     G4cout << " PiF: NoZeroStep= " << fNoZeroStep
+	    << " CurrentProposedStepLength= " << CurrentProposedStepLength
+            << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
+	    << " last proposed step-length= " << fLast_ProposedStepLength 
+	    << " decreate factor = " << decreaseFactor
+	    << " step trial = " << stepTrial
+	    << endl;
+     //     printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
+     //	                 -1.0,  0,  pPhysVol);
+
 }
