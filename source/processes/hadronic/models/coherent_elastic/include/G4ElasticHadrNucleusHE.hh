@@ -25,10 +25,10 @@
 #ifndef G4ElasticHadrNucleusHE_h
 #define G4ElasticHadrNucleusHE_h 1
 
-#include "G4ParticleChange.hh"
-#include "G4Track.hh"
 #include "Randomize.hh"
 #include "G4Nucleus.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
 #include "G4IonTable.hh"
 #include "G4DiffElasticHadrNucleus.hh"
 #include "G4IntegrHadrNucleus.hh"
@@ -80,13 +80,13 @@
 
         ~G4ElasticHadrNucleusHE() {;}
 
-         G4VParticleChange * ApplyYourself( const G4Track   &aTrack,
-                                                  G4Nucleus &aNucleus);
+        G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
+                                        G4Nucleus &targetNucleus );
 
-         G4double RandomElastic0( const G4DynamicParticle *   aHadron,
+         G4double RandomElastic0( const G4HadProjectile *   aHadron,
                                         G4Nucleus *           aNucleus);
 
-         G4double RandomElastic1( const G4DynamicParticle *   aHadron,
+         G4double RandomElastic1( const G4HadProjectile *   aHadron,
                                         G4Nucleus *           aNucleus);
  private:
          G4String GetHadronName(const G4DynamicParticle * aHadron);

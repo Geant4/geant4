@@ -92,7 +92,7 @@
              MyIonTable  = new G4IonTable();
              iPoE        = iNpoE;
 
-       G4int  iNnucl = aNucleus->GetN();
+       G4int  iNnucl = static_cast<G4int>(aNucleus->GetN()+.01);
 
   if(iNnucl<11)
          {
@@ -179,8 +179,7 @@
         G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
    {
         MyIonTable  = new G4IonTable();
-        G4int ii, kk, ik;
-        G4double    aaa;
+        G4int ii, kk;
 
         iKindWork   = 2;
 
@@ -361,7 +360,6 @@
         G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
    {
         G4int       ii, kk, ik;
-        G4double    aaa;
 
         G4String sNameHdr  = GetHadronName(aHadron);
         G4int    iNnucl    = (int) aNucleus->GetN();
@@ -400,7 +398,7 @@
         pTableCrSec    = new G4double[ONQ2XE*AreaNumb]; //  pointer
         pTableE        = new G4double[iNpoE*AreaNumb];  //  pointer
 
-        G4double aNuc  = aNucleus->GetN();
+        // G4double aNuc  = aNucleus->GetN();
 
         std::ifstream TestFile(sNameFile.str(), std::ios::in);
              TestFile.setf(std::ios::scientific);
@@ -494,21 +492,21 @@
    }
 
 //  ++++++++++++++++++  ApplayYourself  ++++++++++++++++++++
-    G4VParticleChange *
+    G4HadFinalState *
     G4ElasticHadrNucleusHE::ApplyYourself(
-                          const  G4Track    &aTrack,
+                          const  G4HadProjectile    &aTrack,
                                  G4Nucleus  &aNucleus)
  {
               G4int    nN, nZ;
 
-        const G4DynamicParticle * aParticle = aTrack.GetDynamicParticle();
+        const G4HadProjectile * aParticle = &aTrack;
               G4Nucleus *         aNucl     = &aNucleus;
 
         G4double   aNuclZ     = aNucl->GetZ();    
                   aNucleon    = aNucl->GetN();
 
-                         nN   = aNucleon;
-                         nZ   = aNuclZ;
+                         nN   = static_cast<G4int>(aNucleon+.1);
+                         nZ   = static_cast<G4int>(aNuclZ+.1);
 
         G4ParticleDefinition * secNuclDef;
 
@@ -520,8 +518,8 @@
 
         G4ThreeVector      NuclPos;
 
-        G4Track      secNuclTrack = G4Track(secNuclDyn,
-                                          0.0, NuclPos);
+        //G4Track      secNuclTrack = G4Track(secNuclDyn,
+        //                                  0.0, NuclPos);
 
         G4double   ranQ2;       //      ranQ2   -  MeV^2
 
@@ -532,7 +530,7 @@
 
         G4double   inLabMom  = aParticle->GetTotalMomentum(); // MeV
         G4double   inEnHadr  = aParticle->GetTotalEnergy();   // MeV
-        G4double   MassHadr  = aParticle->GetMass();          // MeV
+        G4double   MassHadr  = aParticle->GetDefinition()->GetPDGMass();          // MeV
         G4double   MassNucl  = aNucleus.GetN()*938;           // MeV
         G4double   sqrMass   = MassNucl*MassNucl+MassHadr*MassHadr;
 
@@ -584,7 +582,7 @@
                    NucMomHdrSys[2] =  cosNucl;
 
 //  __________ The angles of unit vector in absolute system ----------
-        G4double   cosTet  = aParticle->GetMomentumDirection().z();
+        G4double   cosTet  = aParticle->Get4Momentum().vect().unit().z();
         G4double   sinTet;
         G4double   sinFi;
         G4double   cosFi;
@@ -598,9 +596,9 @@
                  else
                      {
                sinTet  = sqrt(1-cosTet*cosTet);
-               sinFi   = aParticle->GetMomentumDirection().y()/
+               sinFi   = aParticle->Get4Momentum().vect().unit().y()/
                          sinTet;
-               cosFi   = aParticle->GetMomentumDirection().x()/
+               cosFi   = aParticle->Get4Momentum().vect().unit().x()/
                          sinTet;
                      }
 
@@ -644,10 +642,10 @@ if(iContr == 137 )
                                        NucMomOldSys[1],     //    MeV
                                        NucMomOldSys[2]);    //    MeV
 
-                secNuclDyn->SetMomentum(aNuclMom);
-                secNuclTrack.SetKineticEnergy(outEnNucl-MassNucl);
+             //   secNuclDyn->SetMomentum(aNuclMom);
+             //   secNuclTrack.SetKineticEnergy(outEnNucl-MassNucl);
 
-                secNuclTrack.SetMomentumDirection(aNuclMom);
+             //   secNuclTrack.SetMomentumDirection(aNuclMom);
 
                 G4double pxnew = NewMomOldSys[0];    //  In  MeV
                 G4double pynew = NewMomOldSys[1];    //      Mev
@@ -670,17 +668,17 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
 }
 
      if(iKindWork>0)
-              theParticleChange.AddSecondary( &secNuclTrack);
+              theParticleChange.AddSecondary( secNuclDyn);
 
        theParticleChange.SetEnergyChange(outEnHadr);
-       theParticleChange.SetMomentumDirectionChange(pxnew, pynew, pznew);
+       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
 
        return &theParticleChange;
   }
 
 // +++++++  The randomization of one dimensional array +++++++
     G4double G4ElasticHadrNucleusHE::RandomElastic0(
-                           const G4DynamicParticle * aHadron,
+                           const G4HadProjectile * aHadron,
                                  G4Nucleus         * aNucleus)
          {
 
@@ -724,7 +722,7 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
 
 // +++++++++ The randomization of two dimensoinal array   ++++++++
     G4double G4ElasticHadrNucleusHE::RandomElastic1(
-                           const G4DynamicParticle *  aHadron,
+                           const G4HadProjectile *  aHadron,
                                  G4Nucleus         *  aNucleus)
      {
          G4double forQ2[3];

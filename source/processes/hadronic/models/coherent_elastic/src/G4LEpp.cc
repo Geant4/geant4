@@ -71,19 +71,18 @@ G4LEpp::SetCoulombEffects(G4int State)
 }
 
 
-G4VParticleChange*
-G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState*
+G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-    theParticleChange.Initialize(aTrack);
-
-    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+    theParticleChange.Clear();
+    const G4HadProjectile* aParticle = &aTrack;
 
     G4double P = aParticle->GetTotalMomentum();
-    G4double Px = aParticle->GetMomentum().x();
-    G4double Py = aParticle->GetMomentum().y();
-    G4double Pz = aParticle->GetMomentum().z();
+    G4double Px = aParticle->Get4Momentum().x();
+    G4double Py = aParticle->Get4Momentum().y();
+    G4double Pz = aParticle->Get4Momentum().z();
     G4double ek = aParticle->GetKineticEnergy();
-    G4ThreeVector theInitial = aParticle->GetMomentum();
+    G4ThreeVector theInitial = aParticle->Get4Momentum().vect();
 
     if (verboseLevel > 1) {
       G4double E = aParticle->GetTotalEnergy();
@@ -299,7 +298,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     G4DynamicParticle* newP = new G4DynamicParticle;
-    newP->SetDefinition(aParticle->GetDefinition());
+    newP->SetDefinition(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()) );
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
 
@@ -338,7 +337,6 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     }
 
     //    if (theta < pi/2.) {
-      theParticleChange.SetNumberOfSecondaries(1);
       //  G4double p = newP->GetMomentum().mag();
       //      G4ThreeVector m = newP->GetMomentum();
       //      if (p > DBL_MIN)
@@ -346,8 +344,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       //      else
       //        theParticleChange.SetMomentumChange(0., 0., 0.);
 
-      theParticleChange.SetMomentumDirectionChange(
-                                              newP->GetMomentumDirection());
+      theParticleChange.SetMomentumChange( newP->GetMomentumDirection());
       theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
       delete newP;
 

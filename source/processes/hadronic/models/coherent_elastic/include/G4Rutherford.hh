@@ -3,8 +3,9 @@
 
 // J.P. Wellisch, X-mas 2002.
 #include "G4HadronicInteraction.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadFinalState.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include "G4HadProjectile.hh"
 
 class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
 {
@@ -14,8 +15,8 @@ class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
      game = false;
      theMaxCosTh=cut;
    }
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack,
-                                    G4Nucleus& targetNucleus);
+        G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
+                                        G4Nucleus &targetNucleus );
 				    
    G4double Apply(const G4ParticleDefinition * aP, G4Nucleus& targetNucleus);
    virtual G4bool IsApplicable(const G4DynamicParticle* aP, const G4Element*aE)
@@ -76,7 +77,7 @@ class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
    
    void prepare(const G4ParticleDefinition* aP, G4Nucleus& targetNucleus);
 
-   G4ParticleChange theResult;
+   G4HadFinalState theResult;
    G4bool game;
    G4double theMaxCosTh;
    

@@ -1,24 +1,22 @@
 // J.P. Wellisch, X-mas 2002.
 
 #include "G4Rutherford.hh"
-#include "G4HadPointVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4LorentzRotation.hh"
 
-G4VParticleChange * G4Rutherford::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState * G4Rutherford::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-  theResult.Initialize(aTrack);
-  theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(2);
-  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  theResult.Clear();
+  theResult.SetStatusChange(stopAndKill);
+  const G4HadProjectile* aParticle = &aTrack;
   G4double m1=aParticle->GetDefinition()->GetPDGMass();
-  G4double z2=targetNucleus.GetZ();
-  G4double a2=targetNucleus.GetN();
+  G4int z2=static_cast<G4int>(targetNucleus.GetZ()+.1);
+  G4int a2=static_cast<G4int>(targetNucleus.GetN()+.1);
   G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2,a2);
 
-  G4LorentzVector projectileMomentum = aTrack.GetDynamicParticle()->Get4Momentum();
+  G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
   toZ.rotateY(-projectileMomentum.theta());
