@@ -1,12 +1,8 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (10-Mar-2000)
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
-
-ionIoni:    Knock-on electron cross sections . 
-         MeanFreePath is computed at tracking time.
-         delta ray energy sampled from  differential Xsection.
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -34,13 +30,14 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.66
+                Lead         229.54
             ArgonGas           0.99
-             Silicon         116.08
-        Scintillator         82.869
+             Silicon         116.06
+        Scintillator         82.859
             dummyMat         129.45
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -54,10 +51,10 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
            material        min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.66
+                Lead         229.54
             ArgonGas           0.99
-             Silicon         116.08
-        Scintillator         82.869
+             Silicon         116.06
+        Scintillator         82.859
             dummyMat         129.45
 
 hIoni:    Knock-on electron cross sections . 
@@ -91,20 +88,20 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
      5 hits are stored in ExN04TrackerHitsCollection.
-     5 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.29503 (GeV)
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.29801 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     13 hits are stored in ExN04TrackerHitsCollection.
-     31 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.4306 (GeV)
+     21 hits are stored in ExN04TrackerHitsCollection.
+     19 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.856 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     67 hits are stored in ExN04TrackerHitsCollection.
-     19 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.6677 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     17 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 11.4 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

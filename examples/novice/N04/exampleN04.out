@@ -88,9 +88,9 @@ MuPairProd:  theoretical cross sections
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     147 hits are stored in ExN04TrackerHitsCollection.
-     59 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.77973 (GeV)
+     150 hits are stored in ExN04TrackerHitsCollection.
+     52 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.71166 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -103,8 +103,8 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     88 hits are stored in ExN04TrackerHitsCollection.
+     84 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.338 (GeV)
+     Total energy deposition in calorimeter : 0.33742 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 #
