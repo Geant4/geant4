@@ -1,0 +1,6 @@
+transport-01-00-02
+
+Description:
+  Added a protection so that the full relocation is not used in a rare
+case - (if a track started on surface and step < tolerance.)  
+FYI: This full relocation is only done for verification purposes in debug mode.
