@@ -429,7 +429,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
   setenv G4DEBUG   1
-  #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+  setenv G4LIB_BUILD_SHARED 1
   # G4 build flags :
   setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
@@ -492,6 +492,9 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv CPPVERBOSE 1
   alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
   alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/lib/${G4SYSTEM}
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
   set prompt='g4-pc-gbp> ' 
 endif
 #
