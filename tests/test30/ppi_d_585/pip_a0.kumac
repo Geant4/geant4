@@ -12,7 +12,7 @@ set NDVY 010205
  opt logy
  
  null 0 250 0.0001 1
- atitle 'E?kin!(MeV) secondary pi-' 'ds/dEdo (mb/MeV/sr) theta = 135 deg'
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 22.5 deg'
  
  
 * hi/file 1 prec.paw
@@ -25,35 +25,35 @@ set NDVY 010205
  
  hi/file 1 kin.paw
  set dmod 1
- hi/pl 45 shist
+ hi/pl 46 shist
  line 100 -1 110 -1
  itx 115 0.1 'KIN'
  close 1
  
-ve/create X(5) R 24 35 46 88 151
-ve/create Y(5) R 0.00263 0.00302 0.00323 0.00116 0.00023
+ve/create X(5) R 24 35 88 151 249
+ve/create Y(5) R 0.00091 0.00093 0.00399 0.00912 0.0134 
 ve/create Z1(5) R 0 0 0 0 0 
-ve/create Z(5) R 0.00035 0.00018 0.00021 0.00005 0.00002 
-gr/h/error X Y Z1 Z 5 21 0.2 
+ve/create Z(5) R 0.00016 0.00016 0.00016 0.00016 0.00016 
+gr/h/error X Y Z1 Z 5 21 0.2
  
 
- exe ../prf pin_a4 eps
+ exe ../prf pip_a0 eps
 
- null 0 250 0.0001 1
- atitle 'E?kin!(MeV) secondary pi-' 'ds/dEdo (mb/MeV/sr) theta = 135 deg'
+  null 0 250 0.0001 1
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 22.5 deg'
  
-gr/h/error X Y Z1 Z 5 21 0.2 
+gr/h/error X Y Z1 Z 5 21 0.2
 
   hi/file 1 par.paw
  set dmod 3
- hi/pl 45 shist
+ hi/pl 46 shist
  line 100 -0.3 110 -0.3
  itx 115 0.5 'LEPAR'
  close 1
  
   hi/file 1 chips.paw
  set dmod 1
- hi/pl 45 shist
+ hi/pl 46 shist
  line 100 -1 110 -1
  itx 115 0.1 'CHIPS'
  close 1
@@ -61,7 +61,7 @@ gr/h/error X Y Z1 Z 5 21 0.2
  
  opt liny
 
-exe ../prf pink_a4 eps
+exe ../prf pipk_a0 eps
 
 
 

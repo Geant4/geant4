@@ -30,11 +30,11 @@ set NDVY 010205
  itx 115 0.1 'KIN'
  close 1
  
-ve/create X(5) R 24 35 46 88 151
-ve/create Y(5) R 0.00263 0.00302 0.00323 0.00116 0.00023
-ve/create Z1(5) R 0 0 0 0 0 
-ve/create Z(5) R 0.00035 0.00018 0.00021 0.00005 0.00002 
-gr/h/error X Y Z1 Z 5 21 0.2 
+ve/create X(3) R 24.4 33.3 47
+ve/create Y(3) R 0.00132 0.001 0.00152
+ve/create Z1(3) R  0 0 0 
+ve/create Z(3) R 0 0 0
+gr/h/error X Y Z1 Z 3 21 0.2 
  
 
  exe ../prf pin_a4 eps
@@ -42,7 +42,7 @@ gr/h/error X Y Z1 Z 5 21 0.2
  null 0 250 0.0001 1
  atitle 'E?kin!(MeV) secondary pi-' 'ds/dEdo (mb/MeV/sr) theta = 135 deg'
  
-gr/h/error X Y Z1 Z 5 21 0.2 
+gr/h/error X Y Z1 Z 3 21 0.2 
 
   hi/file 1 par.paw
  set dmod 3

@@ -60,6 +60,10 @@ void Test30Material::Initialise()
   G4std::vector<G4Material*> list;
 	G4Material* ma;
 
+  ma  = new G4Material("H",     1.,  1.0*g/mole, 1.*g/cm3);
+	list.push_back(ma);
+  ma  = new G4Material("D",     1.,  2.0*g/mole, 1.*g/cm3);
+	list.push_back(ma);
   ma  = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
 	list.push_back(ma);
   ma  = new G4Material("C",     6.,  12.00*g/mole, 2.0*g/cm3);

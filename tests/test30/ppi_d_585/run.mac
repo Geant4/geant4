@@ -13,11 +13,9 @@
 proton
 //--------
 #material
-Al
+D
 #energy(MeV)
 585.
-#elim(MeV)
-2.
 #emaxpi(MeV)
 250.
 #emax(MeV)
@@ -29,9 +27,7 @@ Al
 #nbinspi
 25
 #nangle
-5
-#angles
-30. 60. 90. 120. 150.
+0
 #dangle
 10.
 #nanglepi
@@ -49,11 +45,11 @@ par.paw
 //#paw
 //prec.paw
 //#run
-#generator
-CHIPS
-#paw
-chips.paw
-#run
+//#generator
+//CHIPS
+//#paw
+//chips.paw
+//#run
 #generator
 kinetic
 #paw
