@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.36 2001-08-11 21:40:04 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.37 2001-08-14 18:31:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,7 @@ NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
   Current scene remains current.
 
 /vis/scene/notifyHandlers
-  Refreshes all viewers of current scene.
+  Clears and refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
 /vis/scene/remove <scene-name>
