@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.19 2001-12-14 09:59:35 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.20 2001-12-14 10:06:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,9 +129,9 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable handle is copied to keep the pointer
-  aTrack->SetTouchableHandle((G4VTouchable*)0);
-
-  //  add a secondary
+  aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
+ 
+ //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
 }
 
@@ -146,7 +146,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
+  aTrack->SetTouchableHandle((G4VTouchable*)0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
