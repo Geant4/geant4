@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeGammaConversionTest.cc,v 1.3 2003-06-16 17:00:57 gunter Exp $
+// $Id: G4PenelopeGammaConversionTest.cc,v 1.4 2003-07-07 12:25:51 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -311,7 +311,7 @@ G4int main()
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
   gProcessManager->AddDiscreteProcess(gammaProcess);
-  G4ForceCondition* condition=0;  //l'ho fissata a zero! E' onesto??
+  G4ForceCondition* condition;
 
   //electron
   
