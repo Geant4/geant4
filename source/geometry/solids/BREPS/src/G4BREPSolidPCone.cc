@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.8 1999-02-16 17:16:15 japost Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.9 1999-02-16 17:41:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -273,57 +273,71 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
   
   ///////////////////////////////////////////////////
   // Create two end planes  
-   
-  // Create start G4Plane & boundaries    
-  G4Point3D ArcStart1a = Origin + (RMIN[0]*PlaneDir);
-  G4Point3D ArcStart1b = Origin + (RMAX[0]*PlaneDir);
- 
+
   G4CurveVector cv;
   G4CircularCurve* tmp;
 
-  tmp = new G4CircularCurve;
-  tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
-  tmp->SetBounds(ArcStart1a, ArcStart1a);
-  tmp->SetSameSense(0);
-  cv.append(tmp);
+  if(RMIN[0] < RMAX[0]) {
+
+    // Create start G4Plane & boundaries    
+    G4Point3D ArcStart1a = Origin + (RMIN[0]*PlaneDir);
+    G4Point3D ArcStart1b = Origin + (RMAX[0]*PlaneDir);
+ 
+    tmp = new G4CircularCurve;
+    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
+    tmp->SetBounds(ArcStart1a, ArcStart1a);
+    tmp->SetSameSense(0);
+    cv.append(tmp);
   
-  tmp = new G4CircularCurve;
-  tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMAX[0]);
-  tmp->SetBounds(ArcStart1b, ArcStart1b);
-  tmp->SetSameSense(1);
-  cv.append(tmp);
+    tmp = new G4CircularCurve;
+    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMAX[0]);
+    tmp->SetBounds(ArcStart1b, ArcStart1b);
+    tmp->SetSameSense(1);
+    cv.append(tmp);
 
-  SurfaceVec[nb_of_surfaces-2]   = new G4FPlane(PlaneDir, PlaneAxis, Origin);
-  SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
+    SurfaceVec[nb_of_surfaces-2]   = new G4FPlane(PlaneDir, PlaneAxis, Origin);
+    SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
 
-  // set sense of the surface
-  SurfaceVec[nb_of_surfaces-2]->SetSameSense(1);
+    // set sense of the surface
+    SurfaceVec[nb_of_surfaces-2]->SetSameSense(1);
+  }else{
+    // RMIN[0] == RMAX[0] 
+    //  no surface is needed, it is a line!
+    nb_of_surfaces--;    
+  }
 
-  // Create end G4Plane & boundaries    
-  G4Point3D ArcStart2a = LocalOrigin + (RMIN[sections]*PlaneDir);  
-  G4Point3D ArcStart2b = LocalOrigin + (RMAX[sections]*PlaneDir);    
+  if(RMIN[sections] < RMAX[sections]) {
+
+    // Create end G4Plane & boundaries    
+    G4Point3D ArcStart2a = LocalOrigin + (RMIN[sections]*PlaneDir);  
+    G4Point3D ArcStart2b = LocalOrigin + (RMAX[sections]*PlaneDir);    
   
-  cv.clear();
+    cv.clear();
 
-  tmp = new G4CircularCurve;
-  tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
-	    RMIN[sections]);
-  tmp->SetBounds(ArcStart2a, ArcStart2a);
-  tmp->SetSameSense(0);
-  cv.append(tmp);
-
-  tmp = new G4CircularCurve;
-  tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
-	    RMAX[sections]);
-  tmp->SetBounds(ArcStart2b, ArcStart2b);
-  tmp->SetSameSense(1);
-  cv.append(tmp);
+    tmp = new G4CircularCurve;
+    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
+	      RMIN[sections]);
+    tmp->SetBounds(ArcStart2a, ArcStart2a);
+    tmp->SetSameSense(0);
+    cv.append(tmp);
+    
+    tmp = new G4CircularCurve;
+    tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
+	      RMAX[sections]);
+    tmp->SetBounds(ArcStart2b, ArcStart2b);
+    tmp->SetSameSense(1);
+    cv.append(tmp);
   
-  SurfaceVec[nb_of_surfaces-1]= new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
-  SurfaceVec[nb_of_surfaces-1]->SetBoundaries(&cv);
+    SurfaceVec[nb_of_surfaces-1]= new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
+    SurfaceVec[nb_of_surfaces-1]->SetBoundaries(&cv);
   
-  // set sense of the surface
-  SurfaceVec[nb_of_surfaces-1]->SetSameSense(1);
+    // set sense of the surface
+    SurfaceVec[nb_of_surfaces-1]->SetSameSense(1);
+  }else{
+    // RMIN[0] == RMAX[0] 
+    //  no surface is needed, it is a line!
+    nb_of_surfaces--;    
+  }
 
   active=1;
   Initialize();
@@ -582,7 +596,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
     }
   }
   
-  // Be carreful !
+  // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   if(ShortestDistance != kInfinity)
     return sqrt(ShortestDistance);
