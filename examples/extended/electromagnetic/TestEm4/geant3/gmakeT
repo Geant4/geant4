@@ -4,20 +4,14 @@
 set name=testem4
 
 set extnam=" "
-if ($G4SYSTEM == AIX-xlC) set extnam=-qextname
+if ($G4SYSTEM == AIX-AFS) set extnam=-qextname
 #
 mkdir $G4SYSTEM
 cd    $G4SYSTEM
 #
-# Run patchy
-#
-ypatchy - $name ../$name $name - $name :go
-#
 # fortran compilation
 #
-fsplit $name.f
-rm   $name.f
-hepf77  $extnam -c -g *.f 
+hepf77  $extnam -c -g -I/cern/pro/include -I../include ../src/*.F 
 #
 # Link
 #
@@ -31,7 +25,7 @@ chmod +x $name.xt
 #
 # cleanup
 #
-rm *.lis *.lst *.f *.o
+rm *.o
 echo 'done'  
 exit
  
