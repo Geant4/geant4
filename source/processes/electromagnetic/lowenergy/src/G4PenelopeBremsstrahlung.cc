@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.4 2003-04-24 14:19:37 vnivanch Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.5 2003-04-24 14:51:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -308,16 +308,16 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
 {
   aParticleChange.Initialize(track);
 
-  const G4Material* material = track.GetMaterial();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  const G4Material* material = couple->GetMaterial();
   G4double kineticEnergy = track.GetKineticEnergy();
-  G4int index = material->GetIndex();
+  G4int index = couple->GetIndex();
   G4double tCut = cutForSecondaryPhotons[index];
 
   // Control limits
-  if(tCut >= kineticEnergy) 
+  if(tCut >= kineticEnergy)
      return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
-  
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+
   G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
 
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
