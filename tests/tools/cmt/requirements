@@ -79,6 +79,7 @@ library G4geometry ${Geant4_libopts} -s=${Geant4_source}/geometry \
  solids/BREPS/src/*.cc \
  solids/STEPinterface/src/*.cc \
  management/src/*.cc \
+ biasing/src/*.cc \
  volumes/src/*.cc \
  magneticfield/src/*.cc \
  verification/src/*.cc
@@ -123,7 +124,7 @@ library G4processes ${Geant4_libopts} \
  string_common/src/*.cc \
  string_fragmentation/src/*.cc \
  util/src/*.cc
-macro G4processes_shlibflags "${G4track_linkopts} ${G4particles_linkopts} ${G4intercoms_linkopts} ${G4materials_linkopts} ${CLHEP_linkopts} ${G4global_linkopts}"
+macro G4processes_shlibflags "${G4geometry_linkopts} ${G4track_linkopts} ${G4particles_linkopts} ${G4intercoms_linkopts} ${G4materials_linkopts} ${CLHEP_linkopts} ${G4global_linkopts}"
 apply_pattern Geant4_pattern_linkopts lib=G4processes
 
 library G4digitsPlusHits ${Geant4_libopts} -s=${Geant4_source}/digits+hits \
@@ -131,7 +132,7 @@ library G4digitsPlusHits ${Geant4_libopts} -s=${Geant4_source}/digits+hits \
  digits/src/*.cc \
  hits/src/*.cc
 apply_pattern Geant4_pattern_linkopts lib=G4digitsPlusHits
- 
+
 library G4event ${Geant4_libopts} ${Geant4_source}/event/src/*.cc 
 apply_pattern Geant4_pattern_linkopts lib=G4event
 
@@ -146,5 +147,7 @@ apply_pattern Geant4_pattern_linkopts lib=G4parameterisations
 
 #library G4readout ${Geant4_libopts} ${Geant4_source}/readout/src/*.cc 
 #apply_pattern Geant4_pattern_linkopts lib=G4readout
+
+
 
 
