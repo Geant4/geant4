@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.5 1999-06-03 14:19:55 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.6 1999-06-03 14:23:27 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -596,7 +596,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	if(ThereAreShells != FALSE){
 	  
 	  thePrimaryShell = fluorPar[0];
-	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[3]) ;
+	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[2]) ;
 	  photvec.insert(newPart);
 	  theEnergyDeposit -= fluorPar[2]*MeV;
 	
