@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.12 2002-04-19 08:20:23 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.13 2002-05-11 14:16:10 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -30,6 +30,8 @@
 //
 // History:
 //
+//  10.05.02 V.Grichine, bug fixed in ClipPoligon: clip only other axis and limited
+//                       voxels
 //  15.04.02 V.Grichine, bug fixed in ClipPoligon: clip only one axis
 //  13.03.02 V.Grichine, cosmetics of voxel limit functions  
 //  15.11.00 D.Williams, V.Grichine change in CalculateClippedPolygonExtent:
@@ -255,7 +257,7 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
 
   if ( pVoxelLimit.IsLimited() )
   {
-    if (pVoxelLimit.IsXLimited() && pAxis == kXAxis)
+    if (pVoxelLimit.IsXLimited() && pAxis != kXAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kXAxis,pVoxelLimit.GetMinXExtent(),kInfinity);
@@ -274,7 +276,7 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
       if ( !pPolygon.size() )       return;		
       else                          outputPolygon.clear();	
     }
-    if ( pVoxelLimit.IsYLimited() && pAxis == kYAxis)
+    if ( pVoxelLimit.IsYLimited() && pAxis != kYAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kYAxis,pVoxelLimit.GetMinYExtent(),kInfinity);
@@ -294,7 +296,7 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
       if ( !pPolygon.size() )       return;
       else                          outputPolygon.clear();	
     }
-    if ( pVoxelLimit.IsZLimited() && pAxis == kZAxis)
+    if ( pVoxelLimit.IsZLimited() && pAxis != kZAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kZAxis,pVoxelLimit.GetMinZExtent(),kInfinity);
