@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.13 1999-10-05 14:24:37 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.14 1999-10-19 08:35:51 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -35,6 +35,8 @@
 #include "G4hEnergyLossPlus.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
 // Initialisation of static members ******************************************
 // contributing processes : ion.loss ->NumberOfProcesses is initialized
@@ -1185,23 +1187,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
   TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
                        electron_mass_c2)-ww) ;
 
- // G4cout << endl;
- // G4cout << "  hEnergyLossPlus AlongStepDoIt print ........." << endl;
- //       x1=stepData.GetPreStepPoint()->GetPosition().x();
- //       y1=stepData.GetPreStepPoint()->GetPosition().y();
- //       z1=stepData.GetPreStepPoint()->GetPosition().z();
- //       dx=stepData.GetPostStepPoint()->GetPosition().x() ;
- //       dy=stepData.GetPostStepPoint()->GetPosition().y() ;
- //       dz=stepData.GetPostStepPoint()->GetPosition().z() ;
- // G4cout << "  PreStepPoint x,y,z:" 
- //       << setw(15) << x1 << setw(15) << y1 << setw(15) << z1 << endl; 
- // G4cout << " PostStepPoint x,y,z:" 
- //       << setw(15) << dx << setw(15) << dy << setw(15) << dz << endl; 
- //     presafety  = stepData.GetPreStepPoint()->GetSafety() ;
- //     postsafety = stepData.GetPostStepPoint()->GetSafety() ;
- // G4cout << "  presafety=" << setw(12) << presafety/mm 
- //       << "  postsafety=" << setw(12) << postsafety/mm << "  (mm)." << endl;  
-
   if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
                                    && (finalT > MinKineticEnergy))
   {
@@ -1217,7 +1202,13 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
     if((Tc > MinDeltaEnergyNow) && (Tmax > MinDeltaEnergyNow))
     {
       presafety  = stepData.GetPreStepPoint()->GetSafety() ;
-      postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+     // postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+
+      G4Navigator *navigator=
+         G4TransportationManager::GetTransportationManager()
+                                   ->GetNavigatorForTracking();
+      postsafety =
+          navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
       safety = min(presafety,postsafety) ;
 
@@ -1276,7 +1267,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
         // compute nb of delta rays to be generated
         G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
                 (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
- // G4cout << " # of delta rays to be generated=" << setw(8) << N << endl;
 
         if(N > 0)
         {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.13 1999-09-08 15:15:21 maire Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.14 1999-10-19 08:35:51 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -32,6 +32,9 @@
 #include "G4eEnergyLossPlus.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -1004,7 +1007,14 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
     if(Tc > MinDeltaEnergyNow)
     {
       presafety  = stepData.GetPreStepPoint()->GetSafety() ;
-      postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+       
+      // postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+     
+      G4Navigator *navigator=
+         G4TransportationManager::GetTransportationManager()
+                                   ->GetNavigatorForTracking();
+      postsafety =
+          navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
         
       safety=min(presafety,postsafety);
 
