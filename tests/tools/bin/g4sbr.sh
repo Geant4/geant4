@@ -4,6 +4,7 @@
 ##########################
 
 #############set -x
+echo "STT:G4SBR start."
 
 REFTREE=$1
 DEBOPT=`echo $2|cut -c 1`
