@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.3 1999-01-29 18:38:57 japost Exp $
+// $Id: G4Navigator.cc,v 1.4 1999-03-19 10:23:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,8 +109,11 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 
 	      // A fix for the case where a volume is "entered" at an edge
 	      //   and a coincident surface exists outside it.
-	      //  This stops it from exiting further volumes and cycling
-	      if( fLastStepWasZero )
+	      //  - This stops it from exiting further volumes and cycling
+	      //  - However ReplicaNavigator treats this case itself
+	      if( fLocatedOnEdge 
+                  && (VolumeType(fBlockedPhysicalVolume) != kReplica ))
+                                                    // ( fLastStepWasZero )
 		{ 
 		  fExiting= false;
 		}
