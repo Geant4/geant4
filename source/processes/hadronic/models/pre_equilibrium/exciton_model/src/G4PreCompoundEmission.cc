@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.2 2003-08-26 21:41:12 lara Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.3 2003-08-28 14:41:10 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -222,14 +222,23 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   G4double Eav = 2.0*p*(p+1.0)/((p+h)*g);
 	
   // Excitation energy relative to the Fermi Level
-  //	G4double Uf = U - (p - h)*Ef;
-  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
+  G4double Uf = std::max(U - (p - h)*Ef , 0.0);
+  //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
 
-	
-  Eav *= rho(p+1,h,g,Uf,Ef)/rho(p,h,g,Uf,Ef);
-	
-  Eav += - Uf/(p+h) + Ef;
-	
+
+
+  G4double w_num = rho(p+1,h,g,Uf,Ef);
+  G4double w_den = rho(p,h,g,Uf,Ef);
+  if (w_num > 0.0 && w_den > 0.0)
+    {
+      Eav *= (w_num/w_den);
+      Eav += - Uf/(p+h) + Ef;
+    }
+  else 
+    {
+      Eav = Ef;
+    }
+  
   G4double zeta = std::max(1.0,9.3/sqrt(KineticEnergyOfEmittedFragment/MeV));
 	
   G4double an = 3.0*sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
@@ -305,17 +314,24 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
   //      fact[n] = fact[n-1]*static_cast<G4double>(n); 
   //    }
 	
-  G4double aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-	
+  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
+  G4double alpha = (p*p+h*h)/(2.0*g);
+
   G4double tot = 0.0;
   for (G4int j = 0; j <= h; j++) 
     {
-      G4double t1 = pow(-1.0, static_cast<G4double>(j));
-      G4double t2 = fact[j]/ (fact[static_cast<G4int>(h)-j]*fact[static_cast<G4int>(h)]);
-      G4double t3 = E - static_cast<G4double>(j)*Ef - aph;
-      if (t3 < 0.0) t3 = 0.0;
-      t3 = pow(t3,p+h-1);
-      tot += t1*t2*t3;
+      if (E-alpha-static_cast<G4double>(j)*Ef > 0.0)
+	{
+	  G4double t1 = pow(-1.0, static_cast<G4double>(j));
+	  G4double t2 = fact[static_cast<G4int>(h)]/ (fact[static_cast<G4int>(h)-j]*fact[j]);
+	  G4double t3 = E - static_cast<G4double>(j)*Ef - Aph;
+	  t3 = pow(t3,p+h-1);
+	  tot += t1*t2*t3;
+	}
+      else 
+        {
+          continue;
+        }
     }
     
   tot *= pow(g,p+h)/(fact[static_cast<G4int>(p)]*fact[static_cast<G4int>(h)]*fact[static_cast<G4int>(p+h)-1]);
@@ -323,34 +339,6 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
   return tot;
 }
 
-//  G4double G4PreCompoundEmission::bessi0(const G4double x) const
-//    // Returns the modified Bessel function I_0(x) for any real x.
-//  {
-//    G4double ax,ans; 
-//    G4double y;     
-
-//    if ((ax=fabs(x)) < 3.75) {      /* Polynomial fit. */
-//      y=x/3.75; 
-//      y*=y; 
-//      ans=1.0+y*(3.5156229+y*(3.0899424+
-//  			    y*(1.2067492+
-//  			       y*(0.2659732+
-//  				  y*(0.360768e-1+
-//  				     y*0.45813e-2))))); 
-//    } else {
-//      y=3.75/ax; 
-//      ans=(exp(ax)/sqrt(ax))*(0.39894228+y*(0.1328592e-1+
-//  					  y*(0.225319e-2+
-//  					     y*(-0.157565e-2+
-//  						y*(0.916281e-2+
-//  						   y*(-0.2057706e-1+
-//  						      y*(0.2635537e-1+
-//  							 y*(-0.1647633e-1+
-//  							    y*0.392377e-2))))))));
-//    } 
-//    return ans; 
-	
-//  }
 
 
 #ifdef debug
