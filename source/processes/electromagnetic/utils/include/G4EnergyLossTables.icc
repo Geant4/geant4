@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 1.9 2000-03-21 11:09:46 urban Exp $
+// $Id: G4EnergyLossTables.icc,v 1.10 2000-05-05 08:07:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -460,6 +460,7 @@ inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
+    oldIndex = -1 ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
