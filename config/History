@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2000-08-22 19:07:41 johna Exp $
+$Id: History,v 1.110 2000-08-23 06:25:11 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22nd August 2000  John Allison
+22nd August 2000  John Allison (config-V02-00-02)
 - Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
   This causes dependencies of both #include "..." and #include <...> to be
   followed.  This is the safer option, since some users might/should use,
