@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.25 2001-08-11 21:39:57 johna Exp $
+// $Id: G4VisManager.hh,v 1.26 2001-08-17 23:01:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 //
 // The GEANT4 Visualization Manager - John Allison 02/Jan/1996.
 //
-// G4VisManage is a "Singleton", i.e., only one instance of it or any
+// G4VisManager is a "Singleton", i.e., only one instance of it or any
 // derived class may exist.  A G4Exception is thrown if an attempt is
 // made to instantiate more than one.
 //
@@ -98,6 +98,7 @@ class G4VViewer;
 class G4Polyline;
 class G4Text;
 class G4Circle;
+class G4Scale;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
@@ -176,25 +177,28 @@ public: // With description
   // G4VVisManager for drawing various visualization primitives, useful
   // for representing hits, digis, etc.
 
-  void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
   void Draw (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
-  void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Polymarker&,
+  void Draw (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
-  void Draw (const G4NURBS&,
+  void Draw (const G4Polyline&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Polymarker&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Scale&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Square&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////
@@ -203,13 +207,13 @@ public: // With description
   // the 2nd argument overrides any visualization attributes that are
   // associated with the object itself.
 
-  void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////////
@@ -288,8 +292,17 @@ public: // With description
   // is done on short name.
 
   static Verbosity GetVerbosityValue(const G4String&);
+  // Returns verbosity given a string.  (Uses first character only.)
+
   static Verbosity GetVerbosityValue(G4int);
+  // Returns verbosity given an integer.  If integer is out of range,
+  // selects verbosity at extreme of range.
+
+  static G4String VerbosityString(Verbosity);
+  // Converts the verbosity into a string for suitable for printing.
+  
   static G4String VerbosityGuidanceString;
+  // Guidance on the use of visualization verbosity.
 
 protected:
 
