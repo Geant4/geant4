@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 December, 00   Y.Morita (persistency-V02-00-03)
+- added more SRM comments
+
 5 December, 00   Y.Morita (persistency-V02-00-02)
 - added SRM comments to some classes
 
