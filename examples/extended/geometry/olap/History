@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-06-04 09:24:02 gcosmo Exp $
+$Id: History,v 1.3 2002-06-05 16:01:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 5th, 2002  M.Liendl - olapex-V04-00-01
+- Updated README.
 
 June 4th, 2002  G.Cosmo - olapex-V04-00-00
 - Some general code cleanup.
