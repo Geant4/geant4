@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoryContainer.hh,v 1.1 1999-01-07 16:06:35 gunter Exp $
+// $Id: G4TrajectoryContainer.hh,v 1.2 1999-04-15 08:41:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -16,11 +16,11 @@
 #define G4TrajectoryContainer_h 1
 
 // TrackManagement
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
 // RWTPtrOrderedVector
 #include <rw/tpordvec.h>
 
-typedef RWTPtrOrderedVector<G4Trajectory> G4TrajectoryContainer;
+typedef RWTPtrOrderedVector<G4VTrajectory> G4TrajectoryContainer;
 
 #endif
 

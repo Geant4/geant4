@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.hh,v 1.1 1999-01-07 16:06:33 gunter Exp $
+// $Id: G4EventManager.hh,v 1.2 1999-04-15 08:41:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,7 +28,7 @@ class G4UserSteppingAction;
 class G4EvManMessenger;
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
 #include "G4TrackStatus.hh"
 class G4SDManager;
 #include "globals.hh"
