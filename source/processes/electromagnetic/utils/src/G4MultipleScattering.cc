@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.45 2003-11-10 13:40:28 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.46 2003-11-12 16:11:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -81,8 +81,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        facxsi(1.0),
        cf(1.001),
        stepnolastmsc(-1000000),
-       nsmallstep(5),
-       samplez(true)
+       nsmallstep(5)
 {
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
@@ -108,10 +107,12 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition& particl
     SetBoundary(false);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
+    Setsamplez(false) ;
   } else {
     SetBoundary(true);
     SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
+    Setsamplez(true) ;
   }
   G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
   em->SetLowEnergyLimit(lowKineticEnergy);

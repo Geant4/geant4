@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.11 2003-11-10 13:40:28 urban Exp $
+// $Id: G4MscModel.cc,v 1.12 2003-11-12 16:11:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -587,13 +587,6 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
         const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
-       // G4double xmean1,xmean2,eaa,b1,bx,qprob,prob;
-       // G4double c=1., c1=0., eb1=0., ebx=0. ;
-       // G4double x0 = 1.-xsi/a;
-       // G4double oneminusx0=xsi/a ;
-       // G4double oneplusx0=2.+xsi/a ;
-       // G4double ea = 0.;
-
 	G4double ea,eaa,xmean1 ;
 	G4double b1 = 2., bx = 2., c = 1., c1 = 0.,
 	         eb1 = 0., ebx = 0., xmean2 = 0. ;
@@ -619,12 +612,6 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           xmean1 = 1.-1./a+oneminusx0*ea/eaa ;
           qprob = xmeanth/xmean1 ;
 
-	//  b = 1. ; 
-        //  b1 = 2. ;
-        //  bx = b1 ;
-        //  xmean2 = 0. ;
-
-        //  prob = 1. ;
         }
         else
         {
