@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.3 1999-02-17 08:51:43 urban Exp $
+// $Id: G4EnergyLossTables.cc,v 1.4 1999-03-05 14:23:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,7 @@
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
 const G4ParticleDefinition* G4EnergyLossTables::lastParticle = NULL ; 
 G4double G4EnergyLossTables::Chargesquare ;
+G4int    G4EnergyLossTables::oldIndex = -1 ;
 
 RWTValHashDictionary<const G4ParticleDefinition*, G4EnergyLossTablesHelper>
 G4EnergyLossTables::dict(G4EnergyLossTables::HashFun);

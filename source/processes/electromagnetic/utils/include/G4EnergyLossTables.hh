@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.2 1999-02-16 13:18:01 urban Exp $
+// $Id: G4EnergyLossTables.hh,v 1.3 1999-03-05 14:23:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -148,6 +148,7 @@ private:
   static G4EnergyLossTablesHelper t ;
   static const G4ParticleDefinition* lastParticle ;
   static G4double Chargesquare ;
+  static G4int oldIndex ;
 
 };
 
