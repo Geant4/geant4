@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.19 2000-09-25 16:24:03 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.20 2000-09-26 13:11:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -750,11 +750,12 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  }
 		  else
 		  {
-		    G4cerr<<"***G4QEnv::HadrQE:"<<iq<<",nH="<<nHadrons<<",QC="<<totQC<<",M="<<totQM<<G4endl;
+#ifdef pdebug
+		    G4cout<<"***G4QEnv::HadrQE:"<<iq<<",nH="<<nHadrons<<",QC="<<totQC<<",M="<<totQM<<G4endl;
 		    for (G4int kq=0; kq<nQuasmons; kq++)
-			  G4cerr<<kq<<". Stat="<<theQuasmons[kq]->GetStatus()<<",QC="<<theQuasmons[kq]->GetQC()
+			  G4cout<<kq<<". Stat="<<theQuasmons[kq]->GetStatus()<<",QC="<<theQuasmons[kq]->GetQC()
                     <<",M="<<theQuasmons[kq]->Get4Momentum().m()<<G4endl;
-            //G4Exception("G4QEnvironment::HadronizeQEnvironment: Vacuum Quasmon Decay in NOTHING");
+#endif
             G4int nOfOUT = theQHadrons.entries();
             G4double  dM = totQM-gsM;
             while(nOfOUT)
@@ -887,7 +888,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         totS=0;                                  // Anti-strangness goes to anti-Kaons
 	  }
       else if (totBN>0&&totS>totBN&&totBN<totS+totChg)// => "additional K0" case
-	  {
+	  {// @@ Here Ksi0 check should be added totS=2>totBN=1&&totBN=1<totS=2+totChg=0
         aKPDG=-311;
         NaK=totS-totBN;
         MaK=mK0*NaK;
@@ -895,7 +896,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         totS-=NaK;                               // Reduce residualstrangeness
 	  }
       else if (totBN>0&&totS>totBN&&totChg<0)    // => "additional K-" case
-	  {
+	  {// @@ Here Ksi- check should be added totS=2>totBN=1&&totChg=-1<0
         aKPDG=-321;
         NaK=totS-totBN;
         MaK=mK0*NaK;
@@ -904,16 +905,16 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         totS-=NaK;                               // Reduce residual strangeness
 	  }
       // === Now residual DELTAS should be subtracted === 
-      if      (totBN>0&&totChg>totBN-totS)       // => "additional DELTA++" case
-	  {
+      if      (totBN>0&&totChg>totBN-totS)       // => "additional PI++" case
+	  {// @@ Here Sigma+ check should be added totChg=1>totBn=1-totS=1
         PiPDG=211;
         NPi=totChg-totBN+totS;
         MPi=mPi*NPi;
         totQC-=NPi*PiQC;
         totChg=totBN-totS;
 	  }
-      else if (totBN>0&&totChg<0)                // => "additional DELTA-" case
-	  {
+      else if (totBN>0&&totChg<0)                // => "additional PI-" case
+	  {// @@ Here Sigma- check should be added totChg<0
         PiPDG=-211;
         NPi=-totChg;
         MPi=mPi*NPi;
@@ -1704,7 +1705,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
     return;
   }
   else if(thePDG>80000000&&thePDG!=90000000&&thePDG!=90002999&&thePDG!=89999003)
-  {
+  { // @@ Should be improved for Sigma+, Sigma-, Ksi0 & Ksi-
     G4QNucleus qNuc(q4M,thePDG);               // Make a Nucleus out of the Hadron
     G4double GSMass =qNuc.GetGSMass();         // GrState Mass of the nuclear fragment
     G4int    bA     =qNuc.GetA();              // A#of baryons in the Nucleus
