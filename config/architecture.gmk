@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.58 1999-12-06 08:17:13 gcosmo Exp $
+# $Id: architecture.gmk,v 1.59 1999-12-07 08:37:13 gracia Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -198,7 +198,7 @@ ifdef G4USE_OSPACE
   ifeq ($(G4SYSTEM),WIN32-VC)
     OSPACE_BASE_DIR := $(OBJECT_SPACE_BASE)
     OSPACEINC  := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl -I$(OSPACE_BASE_DIR)
-    OSPACELIBS := '-libpath:$(OSPACE_BASE_DIR)/lib std-2.1-vc5.0-mt.lib'
+    OSPACELIBS := '-libpath':$(OSPACE_BASE_DIR)/lib std-2.1-vc5.0-mt.lib
     CPPFLAGS   += -DG4USE_OLDSTL 
     CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
   endif
