@@ -1,4 +1,4 @@
-$Id: History,v 1.245 2004-06-01 07:54:43 gcosmo Exp $
+$Id: History,v 1.246 2004-06-07 14:44:59 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th June 2004 Gabriele Cosmo (config-V06-01-05)
+- Corrected setup for WIN32-VC7 for building of DLLs.
+- Cosmetics in build printout...
 
 1st June 2004 Gabriele Cosmo (config-V06-01-04)
 - binmake.gmk, added include paths to new hadronic models for
