@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.6 2004-11-19 14:21:42 japost Exp $
+// $Id: G4Navigator.icc,v 1.7 2004-11-24 08:27:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -366,30 +366,39 @@ void  G4Navigator::CheckMode(G4bool mode)
   freplicaNav.CheckMode(mode);
 }
 
+// ********************************************************************
+// SeverityOfZeroStepping
+//
+// Reports on severity of error in case Navigator is stuck
+// and is returning zero steps
+// ********************************************************************
+//
 inline 
-G4int G4Navigator::SeverityOfZeroStepping( G4int *noZeroSteps ) const 
-    // Report on severity of error (in case Navigator is stuck
-    //   and is returning zero steps.)
+G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const 
 {
   G4int severity=0, noZeros= fNumberZeroSteps;
   if( noZeroSteps) *noZeroSteps = fNumberZeroSteps;
 
-  if( noZeros >= fAbandonThreshold_NoZeroSteps ){
+  if( noZeros >= fAbandonThreshold_NoZeroSteps )
+  {
     severity = 10;
   }
-  if( noZeros > 0 && noZeros < fActionThreshold_NoZeroSteps ){
+  if( noZeros > 0 && noZeros < fActionThreshold_NoZeroSteps )
+  {
     severity =  5 * noZeros / fActionThreshold_NoZeroSteps;
   }
-  else if( noZeros == fActionThreshold_NoZeroSteps ){
+  else if( noZeros == fActionThreshold_NoZeroSteps )
+  {
     severity =  5; 
   }
-  else if( noZeros >= fAbandonThreshold_NoZeroSteps - 2 ){
+  else if( noZeros >= fAbandonThreshold_NoZeroSteps - 2 )
+  {
     severity =  9; 
   }
-  else if( noZeros < fAbandonThreshold_NoZeroSteps - 2 ){
-    severity =  5 + 4 * (noZeros-fAbandonThreshold_NoZeroSteps) / fActionThreshold_NoZeroSteps;
+  else if( noZeros < fAbandonThreshold_NoZeroSteps - 2 )
+  {
+    severity =  5 + 4 * (noZeros-fAbandonThreshold_NoZeroSteps)
+                      / fActionThreshold_NoZeroSteps;
   }
-
   return severity;
 }
- 

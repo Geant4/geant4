@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2004-11-19 14:25:00 japost Exp $
+$Id: History,v 1.37 2004-11-24 08:27:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,8 +19,7 @@ committal in the CVS repository !
 
 Nov 19th, 2004 - J.Apostolakis (geomnav-V06-02-06)
 ------------------------------
-- New access method in G4Navigator for SeverityOfZeroStepping.
-
+- New access method in G4Navigator for SeverityOfZeroStepping().
 
 Nov 17th, 2004 - G.Cosmo  (geomnav-V06-02-05)
 ------------------------
