@@ -1,11 +1,40 @@
-pcgeant  Linux-g++  debug   all all all all 1
-dxplus01 DEC-cxx    debug_ISO      all all all all 1
-dxplus02 DEC-cxx    optim_ISO      all all all all 1
-dxplus03 DEC-cxx    debug_NONISO   all all all all 1
-dxplus04 DEC-cxx    optim_NONISO   all all all all 1
-hpplus01 HP-aCC     debug          all all all all 1
-hpplus02 HP-aCC     optim          all all all all 1
-pcgeant  Linux-g++  optim          all all all all 1
-sungeant SUN-CC     optim_NONISO   all all all all 1
+# testing configuration Nov 20
+prod pcgeant  Linux-g++  debug   all all all all 1
+dev1 pcgeant  Linux-g++  debug   all all all all 1
+dev2 pcgeant  Linux-g++  debug   all all all all 1
+% sleep 5
+prod dxplus01 DEC-cxx    debug_ISO      all all all all 1
+dev1 dxplus01 DEC-cxx    debug_ISO      all all all all 1
+dev2 dxplus01 DEC-cxx    debug_ISO      all all all all 1
+% sleep 5
+prod dxplus02 DEC-cxx    optim_ISO      all all all all 1
+dev1 dxplus02 DEC-cxx    optim_ISO      all all all all 1
+dev2 dxplus02 DEC-cxx    optim_ISO      all all all all 1
+% sleep 5
+prod dxplus03 DEC-cxx    debug_NONISO   all all all all 1
+dev1 dxplus03 DEC-cxx    debug_NONISO   all all all all 1
+dev2 dxplus03 DEC-cxx    debug_NONISO   all all all all 1
+% sleep 5
+prod dxplus04 DEC-cxx    optim_NONISO   all all all all 1
+dev1 dxplus04 DEC-cxx    optim_NONISO   all all all all 1
+dev2 dxplus04 DEC-cxx    optim_NONISO   all all all all 1
+% sleep 5
+prod hpplus03 HP-aCC     debug          all all all all 1
+dev1 hpplus03 HP-aCC     debug          all all all all 1
+dev2 hpplus03 HP-aCC     debug          all all all all 1
+% sleep 5
+prod hpplus04 HP-aCC     optim          all all all all 1
+dev1 hpplus04 HP-aCC     optim          all all all all 1
+dev2 hpplus04 HP-aCC     optim          all all all all 1
+% sleep 5
+prod pcgeant  Linux-g++  optim          all all all all 1
+dev1 pcgeant  Linux-g++  optim          all all all all 1
+dev2 pcgeant  Linux-g++  optim          all all all all 1
+% sleep 5
+prod sungeant SUN-CC     optim_NONISO   all all all all 1
+dev1 sungeant SUN-CC     optim_NONISO   all all all all 1
+dev2 sungeant SUN-CC     optim_NONISO   all all all all 1
 % sleep 600
-sungeant SUN-CC     debug_NONISO   all all all all 1
+prod sungeant SUN-CC     debug_NONISO   all all all all 1
+dev1 sungeant SUN-CC     debug_NONISO   all all all all 1
+dev2 sungeant SUN-CC     debug_NONISO   all all all all 1
