@@ -85,14 +85,12 @@ class DMXEventAction : public G4UserEventAction {
     G4int P_hits;
 
     // event summary
-    G4double aveTimeScintHits;
     G4double aveTimePmtHits;
     G4double totEnergy;
     G4double totEnergyGammas;
     G4double totEnergyNeutrons;
     G4double hitEnergy;
-    G4double hitTime;
-    G4double globalTime;
+    G4double firstLXeHitTime;
     G4double particleEnergy;
     G4String particleName;
     G4String firstParticleName;

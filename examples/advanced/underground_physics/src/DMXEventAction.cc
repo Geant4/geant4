@@ -129,9 +129,8 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
   totEnergy         = 0.;
   totEnergyGammas   = 0.;
   totEnergyNeutrons = 0.;
-  hitTime           = 0.;
-  aveTimeScintHits  = 0.;
   particleEnergy    = 0.;
+  firstLXeHitTime   = 0.;
   aveTimePmtHits    = 0.;
 
   firstParticleName = "";
@@ -156,13 +155,12 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
     for (G4int i=0; i<S_hits; i++) {
       if(i==0) {
 	firstParticleName = (*SHC)[0]->GetParticle();
+	firstLXeHitTime   = (*SHC)[0]->GetTime();
 	if (event_id%printModulo == 0)
 	  G4cout << "     First hit: " << firstParticleName << G4endl;
       }
       hitEnergy         = (*SHC)[i]->GetEdep();
       totEnergy        += hitEnergy;
-      hitTime           = (*SHC)[i]->GetTime();
-      aveTimeScintHits += hitTime/(double)S_hits;
       particleName      = (*SHC)[i]->GetParticle();
       particleEnergy    = (*SHC)[i]->GetParticleEnergy();
 
@@ -170,7 +168,6 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 	gamma_ev = true;
 	start_gamma = true;
 	start_neutron = false;
-	// globalTime = hitTime;
       }
       else if(particleName == "neutron") 
 	neutron_ev = true;
@@ -204,10 +201,12 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
     
     // average time of PMT hits
     for (G4int i=0; i<P_hits; i++)
-      aveTimePmtHits += ((*PHC)[i]->GetTime())/(double)P_hits;
+      aveTimePmtHits += 
+	((*PHC)[i]->GetTime() - firstLXeHitTime) 
+	/ (G4double)P_hits;
     if (event_id%printModulo == 0)
       G4cout << "     Average light collection time: "
-	     << aveTimePmtHits / ns << " ns" << G4endl;
+	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
 
     // write out (x,y,z) of PMT hits
     if (savePmtFlag)
@@ -253,23 +252,26 @@ void DMXEventAction::writeScintHitsToFile(void) {
   if(hitsfile.is_open()) {
 
     hitsfile << G4std::setiosflags(G4std::ios::fixed)
-             << G4std::setprecision(4)
-             << G4std::setiosflags(G4std::ios::left)
-             << G4std::setw(6);
-
-    hitsfile << event_id << "\t"
-             << totEnergy/MeV << "\t"
-             << S_hits  << "\t"
-             << aveTimeScintHits/nanosecond << "\t"
-             << P_hits << "\t"
-             << aveTimePmtHits/nanosecond << "\t"
-             << firstParticleName << "\t"
-             << (gamma_ev    ? "gamma " : "") 
-             << (neutron_ev  ? "neutron " : "") 
-             << (positron_ev ? "positron " : "") 
-             << (electron_ev ? "electron " : "") 
-             << (other_ev    ? "other " : "") 
-             << G4endl;
+	     << G4std::setprecision(4)
+	     << G4std::setiosflags(G4std::ios::left)
+	     << G4std::setw(6)
+	     << event_id << "\t"
+	     << totEnergy/MeV << "\t"
+	     << S_hits  << "\t"
+	     << G4std::setiosflags(G4std::ios::scientific) 
+	     << G4std::setprecision(2)
+	     << firstLXeHitTime/nanosecond << "\t"
+	     << P_hits << "\t"
+	     << G4std::setiosflags(G4std::ios::fixed) 
+	     << G4std::setprecision(4)
+	     << aveTimePmtHits/nanosecond << "\t"
+	     << firstParticleName << "\t"
+	     << (gamma_ev    ? "gamma " : "") 
+	     << (neutron_ev  ? "neutron " : "") 
+	     << (positron_ev ? "positron " : "") 
+	     << (electron_ev ? "electron " : "") 
+	     << (other_ev    ? "other " : "") 
+	     << G4endl;
 
     if (event_id%printModulo == 0)
       G4cout << "     Event summary in file " << filename << G4endl;  
