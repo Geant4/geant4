@@ -18,10 +18,10 @@ G4ODBMS := true
 G4ODBMS_INSTALLATION := true
 
 SUBDIRS = digits+hits/hits events run geometry/global \
-          geometry/management geometry/solids/CSG geometry/solids/Boolean \
+          geometry/solids/CSG geometry/solids/Boolean geometry/management \
           management
 SUBLIBS = G4phits G4pevents G4prun G4pgeomGlobal \
-          G4pgeomn G4pcsg G4pgeomBoolean \
+          G4pcsg G4pgeomBoolean G4pgeomn \
           G4pmanagement
 
 ifndef G4INSTALL
@@ -46,10 +46,11 @@ ifndef G4SCHEMA_FDID
 	exit 1
 endif
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
+	@rm -f $(G4TMPSCHEMA_INCLUDE)/*.hh
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA.FDDB
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/*.G4TMPSCHEMA.DB
-	@echo Copying schema file to $(G4TMPSCHEMA_BOOT) for FDID $(G4SCHEMA_FDID)
+	@echo Copying schema to $(G4TMPSCHEMA_BOOT) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
 	  $(G4TMPSCHEMA_BOOT) $(G4SCHEMA_FDID)
 

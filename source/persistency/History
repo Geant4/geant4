@@ -15,7 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 16, 99  Y.Morita (persistency-V00-01-06)
+November 17, 99  Y.Morita (persistency-V00-01-06)
+- Move schema header files from tmp to schema/include (requires new config)
+
+November 16, 99  Y.Morita
 - more fix on circular dependencies:
   + Moved G4PVSolids and G4PAffineTransform to pgeomGlobal
   + G4PersistencyManager: Splitted classes into separate objects
