@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-05-26 18:44:51 pia Exp $
+# $Id: GNUmakefile,v 1.3 2004-02-08 14:01:50 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -67,27 +67,25 @@ INCFLAGS += \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/general/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
+            -I$(G4BASE)/processes/hadronic/util/include \
+            -I$(G4BASE)/processes/hadronic/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
             -I$(G4BASE)/processes/hadronic/models/generator/util/include \
             -I$(G4BASE)/processes/hadronic/management/include
 
-LDLIBS   := \
-            -lG4event \
-            -lG4tracking \
-            -lG4hadronic_stop \
-            -lG4hadronic_deex \
-	    -lG4hadronic_util_gen \
-            -lG4hadronic_util \
-            -lG4hadronic_mgt \
-            -lG4procman \
-            -lG4particles \
-            -lG4materials \
-            -lG4track \
-            -lG4geometry \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4global
 
 include $(G4INSTALL)/config/binmake.gmk
 
