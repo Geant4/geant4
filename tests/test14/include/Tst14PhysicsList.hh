@@ -6,6 +6,9 @@
 
 class Tst14PhysicsListMessenger;
 class G4LowEnergyIonisation;
+class G4LowEnergyPhotoElectric;
+class G4LowEnergyBremsstrahlung;
+
 class Tst14PhysicsList: public G4VUserPhysicsList
 {
 public:
@@ -24,14 +27,13 @@ protected:
   // these methods Construct particles 
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
-  virtual void ConstructMesons();
-  virtual void ConstructBarions();
   
 protected:
   // these methods Construct physics processes and register them
-  void AddParameterisation();
-  virtual void ConstructGeneral();
-  virtual void ConstructEM();
+  void ConstructEM();
+  void ConstructGeneral();
+
+  void SetCuts();
 
 public:
 
@@ -41,12 +43,14 @@ public:
   void SetGammaLowLimit(G4double);
   void SetElectronLowLimit(G4double);
   void SetGELowLimit(G4double);
-
-  virtual void SetCuts();
+  void SetLowEnSecPhotCut(G4double);
+  void SetLowEnSecElecCut(G4double);
 
 private:
 
-  G4LowEnergyIonisation* LEIOprocess;
+  G4LowEnergyIonisation*  LeIoprocess;
+  G4LowEnergyPhotoElectric* LePeprocess;
+  G4LowEnergyBremsstrahlung* LeBrprocess;
   Tst14PhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.3 1999-06-14 23:26:49 aforti Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.4 1999-06-21 16:15:16 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,20 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
   cutGELowLimCmd->SetDefaultUnit("MeV");
   cutGELowLimCmd->AvailableForStates(Idle);
 
+  cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
+  cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma.");
+  cutSecPhotCmd->SetParameterName("energy",true);
+  cutSecPhotCmd->SetDefaultValue(5e-5);
+  cutSecPhotCmd->SetDefaultUnit("MeV");
+  cutSecPhotCmd->AvailableForStates(Idle);
+
+  cutSecElecCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/seceleccut",this);
+  cutSecElecCmd->SetGuidance("Set production threshold for secondary e-");
+  cutSecElecCmd->SetParameterName("energy",true);
+  cutSecElecCmd->SetDefaultValue(5e-5);
+  cutSecElecCmd->SetDefaultUnit("MeV");
+  cutSecElecCmd->AvailableForStates(Idle);
+
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("range",true);
@@ -75,7 +89,8 @@ Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
   delete cutGLowLimCmd;
   delete cutELowLimCmd;
   delete cutGELowLimCmd;
-
+  delete cutSecElecCmd;
+  delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
 
@@ -94,6 +109,12 @@ void Tst14PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 
   if(command == cutGELowLimCmd)
     { Tst14List->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue));}
+
+  if(command == cutSecPhotCmd)
+    { Tst14List->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue));}
+
+  if(command == cutSecElecCmd)
+    { Tst14List->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue));}
 
   if(command == cutGCmd)
     { Tst14List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}

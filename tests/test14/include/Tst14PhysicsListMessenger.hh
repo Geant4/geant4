@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.3 1999-06-14 23:25:27 aforti Exp $
+// $Id: Tst14PhysicsListMessenger.hh,v 1.4 1999-06-21 16:15:06 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@ private:
   G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
+  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
+  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
   G4UIcmdWithADoubleAndUnit* cutGCmd;
   G4UIcmdWithADoubleAndUnit* cutECmd;
 };
