@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.20 2001-11-21 16:17:52 grichine Exp $
+// $Id: G4ChordFinder.cc,v 1.21 2001-11-21 16:37:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -322,7 +322,7 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   // const 
   G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
-#ifdef G4DEBUG
+#ifdef G4FIELD_DEBUG
     G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: " << G4endl <<
       " The two points are further apart than the curve length " << G4endl <<
       " Dist = "         << ABdist  << 
@@ -331,7 +331,7 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 	   << G4endl;
 #endif
     if( curve_length < ABdist * (1. - 10*eps_step) ) {
-#ifdef G4DEBUG
+#ifdef G4FIELD_DEBUG
       G4cerr << " ERROR: the size of the above difference exceeds allowed limits.  Aborting." 
 	     << G4endl;
 #endif
