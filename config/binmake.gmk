@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.60 2001-06-21 08:50:57 gcosmo Exp $
+# $Id: binmake.gmk,v 1.61 2001-06-21 14:02:54 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -253,16 +253,8 @@ else
 .PHONY: bin bin_d clean clean_bin debug cleandb newboot newfd
 endif
 
-#
-# Target "bin" requires dependency files.
-# gmake must be recursively called with MAKE_DFILES=1.
-#
-
-bin: 
-	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) bin_d)
-
 # Make $(G4TARGET) executable.
-bin_d: $(G4BINDIR)/$(G4TARGET)
+bin: $(G4BINDIR)/$(G4TARGET)
 
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
@@ -325,10 +317,13 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
+ifdef G4SKIP_DEPEND
+	@echo Skip creation of dependency file for $< ...
+else
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-ifdef MAKE_DFILES
+
 ifneq ($(dependencies),)
 -include $(dependencies)
 endif

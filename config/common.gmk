@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.26 2001-06-21 07:16:44 gunter Exp $
+# $Id: common.gmk,v 1.27 2001-06-21 14:02:54 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -38,16 +38,7 @@ endif
 #
 # Actual gmake targets.
 #
-
-#
-# Target "lib" requires dependency files.
-# gmake must be recursively called with MAKE_DFILES=1.
-#
-
-lib: 
-	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) lib_d)
-
-lib_d: $(g4libraries_to_build)
+lib: $(g4libraries_to_build)
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
@@ -95,11 +86,15 @@ $(G4TMPDIR)/obj.last: $(objects) $(schema_o)
 # schema_hh and schema_ref_hh are defined in common_objy.gmk.
 
 $(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR)  ;fi
+ifdef G4SKIP_DEPEND
+	@echo Skip creation of dependency file for $< ...
+else
 	@echo Making dependency for file $< ...
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
-ifdef MAKE_DFILES
+
 ifneq ($(dependencies),)
 -include $(dependencies)
 endif
