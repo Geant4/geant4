@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.7 2001-09-17 17:01:17 maire Exp $
+// $Id: G4Scintillation.cc,v 1.8 2001-11-07 17:07:41 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4Track* aSecondaryTrack = 
 		new G4Track(aScintillationPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchable(0);
+                aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 

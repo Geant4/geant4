@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.11 2001-09-17 17:01:17 maire Exp $
+// $Id: G4Cerenkov.cc,v 1.12 2001-11-07 17:07:40 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -290,7 +290,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4Track* aSecondaryTrack = 
 		new G4Track(aCerenkovPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchable(0);
+                aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
