@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.6 2000-10-17 15:08:28 tsasaki Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.7 2000-11-11 06:34:11 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -13,9 +13,10 @@
 //
 // G4VSteppingVerbose.hh
 //
-// Description:
+// class description:
 //   This class manages the vervose outputs in G4SteppingManager. 
-//   
+//   The instance should be singleton. Users can inherit this 
+//   class to make their own verbosing class.
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -33,7 +34,7 @@ class G4SteppingManager;
 class G4Navigator;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
-#include "G4VProcess.hh" 
+#include "G4VProcess.hh"
 class G4ProcessVector;
 class G4SteppingManager;              // Include from 'tracking'
 class G4Track;
@@ -52,11 +53,11 @@ class G4VSteppingVerbose{
 // Constructor/Destructor
 protected:    // to force 'singleton'
   G4VSteppingVerbose();  
-public:   
+public:  
   virtual ~G4VSteppingVerbose();
   //
-public:   
-// 
+public:   // with description
+// static methods to set/get the object's pointer 
   static void SetInstance(G4VSteppingVerbose* Instance)
     {
       fInstance = Instance;
@@ -65,7 +66,7 @@ public:
     {
       return fInstance;
     }
-//
+// these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();
   void SetManager(G4SteppingManager* const);

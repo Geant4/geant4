@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoryPoint.hh,v 1.5 1999-12-15 14:53:57 gunter Exp $
+// $Id: G4TrajectoryPoint.hh,v 1.6 2000-11-11 06:34:10 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 // G4TrajectoryPoint.hh
 //
-// Description:
+// class description:
 //   This class represents the trajectory of a particle tracked.
 //   It includes information of 
 //     1) List of trajectory points which compose the trajectory,
@@ -44,7 +44,7 @@ class G4TrajectoryPoint : public G4VTrajectoryPoint
 {
 
 //--------
-   public:
+public: // without description
 //--------
 
 // Constructor/Destructor

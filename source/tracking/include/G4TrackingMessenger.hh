@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingMessenger.hh,v 1.5 1999-12-15 14:53:57 gunter Exp $
+// $Id: G4TrackingMessenger.hh,v 1.6 2000-11-11 06:34:10 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 // G4TrackingMessenger.hh
 //
-// Description:
+// class Description:
 //   This is a messenger class to interface to exchange information
 //   between tracking/stepping and UI.
 //
@@ -41,7 +41,7 @@ class G4TrackingMessenger: public G4UImessenger
 {
 
 //--------
-   public:
+public: // without description
 //--------
 
    G4TrackingMessenger(G4TrackingManager* trMan);

@@ -5,16 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.12 2000-06-01 03:17:39 kurasige Exp $
+// $Id: G4SteppingManager.hh,v 1.13 2000-11-11 06:34:09 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
 //
 // G4SteppingManager.hh
 //
-// Description:
-//   This class represents the manager who steers to move the give
-//   particle from the TrackingManger by one Step.
+// class description:
+//  This is the class which plays an essential role in tracking 
+//  the particle. It takes cares all message passing between
+//  objects in the different categories (for example, 
+//  geometry(including transportation), interactions in 
+//  matter, etc). It's public method 'stepping' steers to step 
+//  the particle.
+//  Geant4 kernel use only
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -71,7 +76,7 @@ class G4SteppingManager
 ///////////////////////
 {
 //--------
-   public:
+public: //without description
 //--------
 
 // Constructor/Destructor
