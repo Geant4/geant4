@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.5 2000-09-04 18:19:16 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.6 2001-05-02 11:38:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -357,13 +357,16 @@ G4int main()
       ntuple1->column("pzch", pzChange);
       ntuple1->column("pch", zChange);  
       ntuple1->column("thetach", thetaChange);  
-      ntuple1->dumpData(); 
-
+      
       // Secondaries physical quantities 
       
       hNSec->accumulate(particleChange->GetNumberOfSecondaries());
       hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
       
+      G4int nElectrons = 0;
+      G4int nPositrons = 0;
+      G4int nPhotons = 0;
+
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{
 	  // The following two items should be filled per event, not
@@ -403,10 +406,21 @@ G4int main()
 	  hP->accumulate(p);
 	  
 	  G4int partType;
-	  if (particleName == "e-") partType = 1;
-	  else if (particleName == "e+") partType = 2;
-	  else if (particleName == "gamma") partType = 3;
-	  
+	  if (particleName == "e-") 
+	    {
+	      partType = 1;
+	      nElectrons++;
+	    }
+	  else if (particleName == "e+") 
+	    {
+	      partType = 2;
+	      nPositrons++;
+	    }
+	  else if (particleName == "gamma") 
+	    {
+	      partType = 3;
+	      nPhotons++;
+	    }
 	  // Fill the secondaries ntuple
           ntuple2->column("eprimary",initEnergy);
 	  ntuple2->column("px", px);
@@ -422,7 +436,12 @@ G4int main()
 	  
 	  delete particleChange->GetSecondary(i);
 	}
-      
+
+      ntuple1->column("nelectrons",nElectrons);
+      ntuple1->column("npositrons",nPositrons);
+      ntuple1->column("nphotons",nPhotons);
+      ntuple1->dumpData(); 
+	          
       particleChange->Clear();
       
     } 

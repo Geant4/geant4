@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationTest.cc,v 1.4 2000-07-11 18:40:02 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.5 2001-05-02 11:38:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4int main()
   // ---- HBOOK initialization
 
 
-  hbookManager = new HBookFile("bremtest.hbook", 58);
+  hbookManager = new HBookFile("ionitest.hbook", 58);
   assert (hbookManager != 0);
   
   // ---- Book a histogram and ntuples
@@ -349,13 +349,16 @@ G4int main()
       ntuple1->column("pych", pyChange);
       ntuple1->column("pzch", pzChange);
       ntuple1->column("pch", zChange);  
-      ntuple1->dumpData(); 
 
       // Secondaries physical quantities 
       
       hNSec->accumulate(particleChange->GetNumberOfSecondaries());
       hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
-      
+
+      G4int nElectrons = 0;
+      G4int nPositrons = 0;
+      G4int nPhotons = 0;
+
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{
 	  // The following two items should be filled per event, not
@@ -370,6 +373,7 @@ G4int main()
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
 	  G4double p   = sqrt(px*px+py*py+pz*pz);
+          G4double theta = (finalParticle->GetMomentum()).theta();
 
 	  if (eKin > initEnergy)
 	    {	    
@@ -391,10 +395,21 @@ G4int main()
 	  hP->accumulate(p);
 	  
 	  G4int partType;
-	  if (particleName == "e-") partType = 1;
-	  else if (particleName == "e+") partType = 2;
-	  else if (particleName == "gamma") partType = 3;
-	  
+	  if (particleName == "e-") 
+	    {
+	      partType = 1;
+	      nElectrons++;
+	    }
+	  else if (particleName == "e+") 
+	    {
+	      partType = 2;
+	      nPositrons++;
+	    }
+	  else if (particleName == "gamma") 
+	    {
+	      partType = 3;
+	      nPhotons++;
+	    }
 	  // Fill the secondaries ntuple
           ntuple2->column("eprimary",initEnergy);
 	  ntuple2->column("px", px);
@@ -403,17 +418,21 @@ G4int main()
 	  ntuple2->column("p", p);
 	  ntuple2->column("e", e);
 	  ntuple2->column("ekin", eKin);
+          ntuple2->column("theta",theta);
 	  ntuple2->column("type", partType);
 	  
 	  ntuple2->dumpData(); 
 	  
 	  delete particleChange->GetSecondary(i);
 	}
-      
+      ntuple1->column("nelectrons",nElectrons);
+      ntuple1->column("npositrons",nPositrons);
+      ntuple1->column("nphotons",nPhotons);
+      ntuple1->dumpData(); 
+	    
       particleChange->Clear();
       
     } 
-  
   
   cout  << "Iteration number: "  <<  G4endl;
   hbookManager->write();
