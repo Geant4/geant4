@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2002-06-13 17:49:26 jwellisc Exp $
+# $Id: GNUmakefile,v 1.19 2002-11-18 10:16:48 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -15,6 +15,7 @@ SUBDIRS += hadronic/cross_sections hadronic/stopping
 SUBDIRS += hadronic/models/low_energy hadronic/models/high_energy
 SUBDIRS += hadronic/models/neutron_hp
 SUBDIRS += hadronic/models/isotope_production
+SUBDIRS += hadronic/models/cascade/cascade
 SUBDIRS += hadronic/models/cascade/evaporation
 SUBDIRS += hadronic/models/cascade/utils
 SUBDIRS += hadronic/models/chiral_inv_phase_space/body
@@ -42,7 +43,8 @@ SUBLIBS += G4hadronic_xsect G4hadronic_stop G4hadronic_LE G4hadronic_HE
 SUBLIBS += G4hadronic_neu G4hadronic_iso
 SUBLIBS += G4hadronic_hetcpp_evaporation G4hadronic_hetcpp_utils
 SUBLIBS += G4hadronic_body_ci G4hadronic_interface_ci G4hadronic_coherent_elastic
-SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
+SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen 
+SUBLIBS += G4hadronic_kinetic G4hadronic_scattering
 SUBLIBS += G4hadronic_qgstring
 SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_string_common
 SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
