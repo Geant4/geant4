@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.2 2002-10-29 16:37:09 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.3 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -78,6 +78,7 @@ private:
   G4bool CheckCreateIStore();
   G4bool CheckCreateWeightRoulette();
   G4bool CheckCreateApp();
+  void NewFailed(const G4String &function, const G4String &cl);
 
   Tst33AppStarterMessenger fMessenger;
   G4RunManager fRunManager;

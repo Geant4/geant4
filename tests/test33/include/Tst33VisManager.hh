@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisManager.hh,v 1.1 2002-10-29 15:43:06 dressel Exp $
+// $Id: Tst33VisManager.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  void RegisterGraphicsSystems ();
+  virtual void RegisterGraphicsSystems ();
 
 };
 

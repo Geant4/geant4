@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VEventAction.hh,v 1.1 2002-10-29 15:43:06 dressel Exp $
+// $Id: Tst33VEventAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,8 @@ class G4CellScorer;
 class Tst33VEventAction : public G4UserEventAction
 {
 public:
+  Tst33VEventAction();
+  virtual ~Tst33VEventAction();
   virtual void SetCell_19_Scorer(const G4CellScorer *scorer) = 0;
   virtual void Clear() = 0;
 };

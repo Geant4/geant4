@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PhysicsList.cc,v 1.1 2002-10-29 15:43:07 dressel Exp $
+// $Id: Tst33PhysicsList.cc,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -296,7 +296,7 @@ void Tst33PhysicsList::ConstructHad()
         theHandler->SetFermiModel(theFermiBreakUp);
         theHandler->SetMultiFragmentation(theMF);
         theHandler->SetMaxAandZForFermiBreakUp(12, 6);
-        theHandler->SetMinEForMultiFrag(3*MeV);
+        theHandler->SetMinEForMultiFrag(3*G4std::MeV);
 	
     // Pre equilibrium stage 
     G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
@@ -313,8 +313,8 @@ void Tst33PhysicsList::ConstructHad()
     theStringModel = new G4FTFModel;
     theTheoModel->SetTransport(theCascade);
     theTheoModel->SetHighEnergyGenerator(theStringModel);
-    theTheoModel->SetMinEnergy(19*GeV);
-    theTheoModel->SetMaxEnergy(100*TeV);
+    theTheoModel->SetMinEnergy(19*G4std::GeV);
+    theTheoModel->SetMaxEnergy(100*G4std::TeV);
 
       G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
@@ -623,7 +623,7 @@ void Tst33PhysicsList::SetCuts()
   if (verboseLevel >0)
   {
     G4std::G4cout << "Tst33PhysicsList::SetCuts:";
-    G4std::G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
+    G4std::G4cout << "CutLength : " << defaultCutValue/G4std::mm << " (mm)" << G4endl;
   }  
   //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 

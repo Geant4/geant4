@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.hh,v 1.1 2002-10-29 15:43:05 dressel Exp $
+// $Id: Tst33TimedEventAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ class G4CellScorer;
 class Tst33TimedEventAction : public Tst33VEventAction
 {
 public:
-  Tst33TimedEventAction(G4int time);
+  explicit Tst33TimedEventAction(G4int time);
   virtual ~Tst33TimedEventAction();
   
 public:

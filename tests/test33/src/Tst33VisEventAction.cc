@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.1 2002-10-29 15:43:08 dressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.2 2002-10-31 08:32:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,21 +80,34 @@ void Tst33VisEventAction::BeginOfEventAction(const G4Event* evt)
 void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
 {
   
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-     G4int n_trajectories = 0;
-     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+  if (G4VVisManager::GetConcreteInstance()) {
+    G4TrajectoryContainer* trajectoryContainer(0);
+    trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
+    if (trajectoryContainer) {
+      n_trajectories = trajectoryContainer->entries();
+    }
 
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                                ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") trj->DrawTrajectory(50);
-          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50);
-          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);
-        }
+    for (G4int i=0; i<n_trajectories; i++)  { 
+      G4Trajectory* trj = 0;
+      trj = dynamic_cast<G4Trajectory*>((*trajectoryContainer)[i]);
+      if (trj) {
+	G4bool charged(false);
+	charged = G4std::fabs(trj->GetCharge()) > 0;
+	if (drawFlag == "all") {
+	  trj->DrawTrajectory(50);
+	}
+	else if ((drawFlag == "charged")&&(charged)) {
+	  trj->DrawTrajectory(50);
+	}
+	else if ((drawFlag == "neutral")&&(!charged)) {
+	  trj->DrawTrajectory(50);
+	}
+      }
+      else {
+	G4std::G4cerr << " Tst33VisEventAction::EndOfEventAction: failed to dynamic cast to G4Trajectory!" << G4endl;
+      }
+    }
   }
 }  
 

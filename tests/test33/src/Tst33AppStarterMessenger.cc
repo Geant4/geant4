@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -98,14 +98,14 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
     fAppStarter.CreateVisApplication();
   }
   if (pCmd==fTimedAppComand) {
-    G4int time = fTimedAppComand->GetNewIntValue(szValue);
+    G4int time(fTimedAppComand->GetNewIntValue(szValue));
     fAppStarter.CreateTimedApplication(time);
   }
   if (pCmd==fPostRunCmd) {
     fAppStarter.PostRun();
   }
   if (pCmd==fRunCmd) {
-    G4int nevents = fRunCmd->GetNewIntValue(szValue);
+    G4int nevents(fRunCmd->GetNewIntValue(szValue));
     fAppStarter.Run(nevents);
   }
   

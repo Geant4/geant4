@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33MaterialFactory.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33MaterialFactory.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -41,16 +41,16 @@ Tst33MaterialFactory::Tst33MaterialFactory(){
 
   G4String name, symbol;
 
-  FillElementMap("Hydrogen", "H", 1, 1.01*g/mole);
-  FillElementMap("Carbon", "C", 6, 12.01*g/mole);
-  FillElementMap("Oxygen", "O", 8,  16.00*g/mole);
-  FillElementMap("Natrium", "Na", 11, 22.99*g/mole);
-  //  FillElementMap("Hg", "Hg", 80, 200.59*g/mole);
-  FillElementMap("Aluminium", "Al", 14, 26.98*g/mole);
-  FillElementMap("Silicon", "Si", 14, 28.09*g/mole);
-  FillElementMap("K", "K", 19, 39.1*g/mole);
-  FillElementMap("Calzium", "Ca", 31, 69.72*g/mole);
-  FillElementMap("Iron", "Fe", 26, 55.85*g/mole);
+  FillElementMap("Hydrogen", "H", 1, 1.01*G4std::g/G4std::mole);
+  FillElementMap("Carbon", "C", 6, 12.01*G4std::g/G4std::mole);
+  FillElementMap("Oxygen", "O", 8,  16.00*G4std::g/G4std::mole);
+  FillElementMap("Natrium", "Na", 11, 22.99*G4std::g/G4std::mole);
+  //  FillElementMap("Hg", "Hg", 80, 200.59*G4std::g/G4std::mole);
+  FillElementMap("Aluminium", "Al", 14, 26.98*G4std::g/G4std::mole);
+  FillElementMap("Silicon", "Si", 14, 28.09*G4std::g/G4std::mole);
+  FillElementMap("K", "K", 19, 39.1*G4std::g/G4std::mole);
+  FillElementMap("Calzium", "Ca", 31, 69.72*G4std::g/G4std::mole);
+  FillElementMap("Iron", "Fe", 26, 55.85*G4std::g/G4std::mole);
 
   fConcreteFractions[fMapSymbolElement["H"]] = 0.01;
   fConcreteFractions[fMapSymbolElement["O"]] = 0.529;
@@ -87,7 +87,7 @@ void Tst33MaterialFactory::FillElementMap(const G4String &name,
 }
 
 G4Material *Tst33MaterialFactory::CreateConcrete(){
-  G4double density = 2.03*g/cm3;
+  G4double density = 2.03*G4std::g/G4std::cm3;
   G4Material* Concrete = 0;
   Concrete = new G4Material("Concrete", density, 
 			    fConcreteFractions.size());
@@ -101,7 +101,7 @@ G4Material *Tst33MaterialFactory::CreateConcrete(){
 }
 
 G4Material *Tst33MaterialFactory::CreateLightConcrete(){
-  G4double density = 0.0203*g/cm3;
+  G4double density = 0.0203*G4std::g/G4std::cm3;
   G4Material* LightConcrete = 0;
   LightConcrete = new G4Material("LightConcrete", density, 
 				 fConcreteFractions.size());
@@ -113,10 +113,10 @@ G4Material *Tst33MaterialFactory::CreateLightConcrete(){
 }
 
 G4Material *Tst33MaterialFactory::CreateGalactic(){
-  G4double density = universe_mean_density;  //from PhysicalConstants.h
+  G4double density = G4std::universe_mean_density;  //from PhysicalConstants.h
   G4double pressure    = 3.e-18*pascal;
-  G4double temperature = 2.73*kelvin;
-  return  new G4Material("Galactic", 1., 1.01*g/mole, density,
+  G4double temperature = 2.73*G4std::kelvin;
+  return  new G4Material("Galactic", 1., 1.01*G4std::g/G4std::mole, density,
 			 kStateGas,temperature,pressure);
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.hh,v 1.1 2002-10-29 15:43:06 dressel Exp $
+// $Id: Tst33VisEventAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,26 +41,35 @@ class Tst33VisEventActionMessenger;
 
 class Tst33VisEventAction : public Tst33VEventAction
 {
-  public:
-    Tst33VisEventAction();
-    virtual ~Tst33VisEventAction();
+public:
+  Tst33VisEventAction();
+  virtual ~Tst33VisEventAction();
 
-  public:
   virtual void   BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
   virtual void SetCell_19_Scorer(const G4CellScorer *scorer);
   virtual void Clear();
-
-    void SetDrawFlag   (G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-    
-  private:
-    G4String                    drawFlag;
-    G4int                       printModulo;                         
-    Tst33VisEventActionMessenger*  eventMessenger;
+  
+  inline void SetDrawFlag   (const G4String &val);
+  inline void SetPrintModulo(G4int    val);  
+private:
+  Tst33VisEventAction(const Tst33VisEventAction &);
+  Tst33VisEventAction &operator=(const Tst33VisEventAction &);
+  
+  G4String                    drawFlag;
+  G4int                       printModulo;                         
+  Tst33VisEventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void Tst33VisEventAction::SetDrawFlag   (const G4String &val){ 
+  drawFlag = val;
+}
+
+inline void Tst33VisEventAction::SetPrintModulo(G4int    val) {
+  printModulo = val;
+}
 
 #endif
 

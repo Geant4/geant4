@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33Sigma.cc,v 1.1 2002-10-29 15:43:08 dressel Exp $
+// $Id: Tst33Sigma.cc,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,7 +59,9 @@ void Tst33Sigma::Init()
 
 G4int Tst33Sigma::Xin(G4double x, G4double w)
 {
-  if (w<0.) Error("Xin: w < 0");
+  if (w<0.) {
+    Error("Xin: w < 0");
+  }
   fEntries++;
   fXsum+=x;
   fXXsum+=x*x;
@@ -77,12 +79,11 @@ G4int Tst33Sigma::GetCalc() const
   return fcalc;
 }
 
-G4int Tst33Sigma::Calculate() const
-{
+G4int Tst33Sigma::Calculate() const {
   if (fcalc==0) {
     if(fWsum>0) {
       fMean=fWXsum/fWsum;
-      fSigma = sqrt( fWXXsum / fWsum - fMean * fMean);
+      fSigma = G4std::sqrt( fWXXsum / fWsum - fMean * fMean);
       fcalc = 1;
     } else {
       fcalc = -1;
@@ -98,13 +99,17 @@ G4int Tst33Sigma::GetEntries() const
 
 G4double Tst33Sigma::GetMean() const
 {
-  if (fcalc==0) Calculate();
+  if (fcalc==0) {
+    Calculate();
+  }
   return fMean;
 }
 
 G4double Tst33Sigma::GetSigma() const
 {
-  if (fcalc==0) Calculate();
+  if (fcalc==0) {
+    Calculate();
+  }
   return fSigma;
 }
 
@@ -116,7 +121,7 @@ G4double Tst33Sigma::GetWeightedXXsum() const {return fWXXsum;}
 
 void Tst33Sigma::Error(const G4String &m)
 {
-  G4cout << "ERROR: Tst33Sigma::" << m << G4endl;
+  G4std::G4cout << "ERROR: Tst33Sigma::" << m << G4endl;
 }
 
 G4std::ostream& operator<<(G4std::ostream &out, const Tst33Sigma &s)

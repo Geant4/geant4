@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisRunAction.hh,v 1.1 2002-10-29 15:43:06 dressel Exp $
+// $Id: Tst33VisRunAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,13 +41,13 @@ class G4Run;
 
 class Tst33VisRunAction : public G4UserRunAction
 {
-  public:
-    Tst33VisRunAction();
-   ~Tst33VisRunAction();
+public:
+  Tst33VisRunAction();
+  virtual ~Tst33VisRunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 
 };
 

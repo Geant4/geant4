@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventActionMessenger.hh,v 1.1 2002-10-29 15:43:06 dressel Exp $
+// $Id: Tst33VisEventActionMessenger.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,16 +43,19 @@ class G4UIcmdWithAnInteger;
 
 class Tst33VisEventActionMessenger: public G4UImessenger
 {
-  public:
-    Tst33VisEventActionMessenger(Tst33VisEventAction*);
-   ~Tst33VisEventActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    Tst33VisEventAction*   eventAction;   
-    G4UIcmdWithAString* DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+public:
+  explicit Tst33VisEventActionMessenger(Tst33VisEventAction*);
+  virtual ~Tst33VisEventActionMessenger();
+  
+  virtual void SetNewValue(G4UIcommand*, G4String);
+  
+private:
+  Tst33VisEventActionMessenger(const Tst33VisEventActionMessenger &);
+  Tst33VisEventActionMessenger &
+  operator=(const Tst33VisEventActionMessenger &);
+  Tst33VisEventAction*   eventAction;   
+  G4UIcmdWithAString* DrawCmd;
+  G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

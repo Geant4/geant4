@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScorerBuilder.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33ScorerBuilder.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -58,9 +58,9 @@ CreateScorer(Tst33VGeometry *samplegeo,
   G4int i = 1;
   for (i=1; i <= 19; i++) {
     G4String volname = samplegeo->GetCellName(i);
-    G4double imp = pow(2,i-1);
+    G4double imp = G4std::pow(2,i-1);
     if (i==19) {
-      imp = pow(2,17);
+      imp = G4std::pow(2,17);
     }
     
     const G4VPhysicalVolume *pvol = samplegeo->

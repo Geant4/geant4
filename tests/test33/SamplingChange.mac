@@ -30,3 +30,11 @@
 /Tst33/ConfigureSampling
 /Tst33/Run 30
 /Tst33/PostRun
+
+#change to use importance sampling only
+/Tst33/ClearSampling
+/Tst33/WeightRoulette
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+

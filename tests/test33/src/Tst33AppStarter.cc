@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.3 2002-10-30 10:11:47 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.4 2002-10-31 08:32:44 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -73,6 +73,9 @@ Tst33AppStarter::Tst33AppStarter()
   fWeightroulette(false),
   fTime(0)
 {
+  if (!fDetectorConstruction) {
+    NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
+  }
   fRunManager.SetUserInitialization(new Tst33PhysicsList); 
   fRunManager.SetUserAction(new Tst33PrimaryGeneratorAction);  
   fRunManager.SetUserInitialization(fDetectorConstruction);
@@ -93,10 +96,17 @@ void Tst33AppStarter::CreateMassGeometry() {
   } 
   else {
     fMassGeometry = new Tst33SlobedConcreteShield;
+    if (!fMassGeometry) {
+      NewFailed("CreateMassGeometry", "Tst33SlobedConcreteShield");
+    }
+
     fDetectorConstruction->SetWorldVolume(&fMassGeometry->
 					  GetWorldVolume());
     fSampleGeometry = fMassGeometry;
-    fSampler = new G4MassGeometrySampler("neutron"); 
+    fSampler = new G4MassGeometrySampler("neutron");
+    if (!fSampler) {
+      NewFailed("CreateMassGeometry", "G4MassGeometrySampler");
+    } 
   }
 }
 
@@ -106,13 +116,22 @@ void Tst33AppStarter::CreateParallelGeometry() {
   } 
   else {
     fMassGeometry = new Tst33ConcreteShield;
+    if (!fMassGeometry) {
+      NewFailed("CreateParallelGeometry", "Tst33ConcreteShield");
+    }    
     fDetectorConstruction->SetWorldVolume(&fMassGeometry->
 					  GetWorldVolume());
     fParallelGeometry = new Tst33ParallelGeometry;
+    if (!fParallelGeometry) {
+      NewFailed("CreateParallelGeometry", "Tst33ParallelGeometry");
+    }
     fSampleGeometry = fParallelGeometry;
     fSampler = new
       G4ParallelGeometrySampler(fParallelGeometry->GetWorldVolume(),
 				"neutron");
+    if (!fSampler) {
+      NewFailed("CreateParallelGeometry", "G4ParallelGeometrySampler");
+    }
   }
 }
 
@@ -148,6 +167,9 @@ void Tst33AppStarter::CreateScorer() {
     fScorerStore = sb.CreateScorer(fSampleGeometry,
 				   &fCell_19_Scorer);
     fScorer = new G4CellStoreScorer(*fScorerStore);
+    if (!fScorer) {
+      NewFailed("CreateScorer","G4CellStoreScorer");
+    }
     fSampler->PrepareScoring(fScorer);
     fEventAction->SetCell_19_Scorer(fCell_19_Scorer);
   }
@@ -219,6 +241,9 @@ G4bool Tst33AppStarter::CheckCreateApp() {
 void Tst33AppStarter::CreateVisApplication(){
   if (CheckCreateApp()) {
     fApp = new Tst33VisApplication;
+    if (!fApp) {
+      NewFailed("CreateVisApplication", "Tst33VisApplication");
+    }
     fRunAction = fApp->CreateRunAction();
     fRunManager.SetUserAction(fRunAction);
     fEventAction = fApp->CreateEventAction();
@@ -232,6 +257,9 @@ void Tst33AppStarter::CreateTimedApplication(G4int time) {
   if (CheckCreateApp()) {
     fTime = time;
     fApp = new Tst33TimedApplication(fTime);
+    if (!fApp) {
+      NewFailed("CreateTimedApplication","Tst33TimedApplication");
+    }
     fEventAction = fApp->CreateEventAction();
     fRunManager.SetUserAction(fEventAction);    
     fRunManager.Initialize();
@@ -261,7 +289,7 @@ void Tst33AppStarter::ClearSampling() {
 void Tst33AppStarter::ConfigureSampling(){
   if (!fConfigured) {
     if (!IsGeo_n_App()) {
-      G4cout << "ConfigureSampling no geometry or application given!" << G4endl;
+      G4std::G4cout << "ConfigureSampling no geometry or application given!" << G4endl;
     }
     else {
       fConfigured = true;
@@ -275,7 +303,7 @@ void Tst33AppStarter::ConfigureSampling(){
 
 void Tst33AppStarter::Run(G4int nevents) {
   if (!fConfigured) {
-    G4cout << "Not configured yet!" << G4endl;
+    G4std::G4cout << "Not configured yet!" << G4endl;
   } 
   else {
     G4int n = nevents;
@@ -299,6 +327,10 @@ void Tst33AppStarter::PostRun() {
 }
 
 
+void Tst33AppStarter::NewFailed(const G4String &function, 
+				const G4String &cl){
+  G4std::G4Exception("Tst33AppStarter::" + function + ": new failed to create: " + cl + "!");
+}
 
 
 
