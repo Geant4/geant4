@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.2 2000-04-07 13:42:55 lefebure Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.3 2000-04-11 10:08:28 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -32,6 +32,7 @@
 // 16-10-98: public method SetStepFunction() 
 // 20-01-99: important correction in AlongStepDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 11/04/00: Bug fix in dE/dx fluctuation simulation, Veronique Lefebure
 // --------------------------------------------------------------
  
 #include "G4eLowEnergyLoss.hh"
@@ -356,7 +357,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-    if (finalT < 0.) finalT = E-MeanLoss;
+    if (finalT < 0.) finalT = 0.;
   }
 
 
