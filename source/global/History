@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2000-02-08 14:14:36 gcosmo Exp $
+$Id: History,v 1.41 2000-02-11 14:07:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,7 @@ February 08, 2000 G.Cosmo (global-V01-00-03)
 - STLInterface/cstring.icc: fixed yet another bug in G4String::toUpper()
   and G4String::toLower(). Loop over the string characters was causing
   bounds overflow.
+- tpvector[.h.icc]: added resize(size_t) method which was missing!
 
 January 31, 2000 G.Cosmo (global-V01-00-02)
 - STLInterface: several fixes.
