@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.5 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4AssemblyVolume.hh,v 1.6 2002-06-07 13:57:36 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,16 @@ class G4AssemblyVolume
     // Constructors & destructor.
     // At destruction all the generated physical volumes and associated
     // rotation matrices of the imprints will be destroyed.
+    //
+    // The rotation matrix passed in can be 0 = identity or an address even of an object
+    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+    // and keeps track of it so it can delete it later at destruction time.
+    // This new policy has been adopted since user has no control on the way the rotations
+    // are combined it's safer doing it this way.
+    //
+    // WARNING! This interface will likely change in the next major release of Geant4 from
+    //          a pointer to a reference due to the reason above
+    //
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4ThreeVector& translation,
@@ -91,6 +101,16 @@ class G4AssemblyVolume
     //   the coordinate system of the first one.
     //   Every next volume being added into the assembly will be placed
     //   w.r.t to the previous one.
+    //
+    // The rotation matrix passed in can be 0 = identity or an address even of an object
+    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+    // and keeps track of it so it can delete it later at destruction time.
+    // This new policy has been adopted since user has no control on the way the rotations
+    // are combined it's safer doing it this way.
+    //
+    // WARNING! This interface will likely change in the next major release of Geant4 from
+    //          a pointer to a reference due to the reason above
+    //
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4Transform3D&   transformation);
