@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.10 2003-10-28 10:24:56 japost Exp $
+// $Id: testG4Sphere.cc,v 1.11 2003-10-30 19:35:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -623,8 +623,54 @@ G4ThreeVector s9v(-0.6542770611918751,
                     vy,   kSurface); 
         checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 1.5, 
                     vy,   kInside); 
+
+        // Try one that has a 'deep' negative phi section
+	//   --> Vlad. Grichine test case, 30 Oct 2003
+        // 
+        G4cout << G4endl << G4endl << "" << G4endl;
+	G4cout << "========================================================= " << G4endl; 
+
+	G4Sphere SphDeepNeg("DeepNegPhiSphere",  10.*mm, 1000.*mm, 
+			   -270.0*degree, 280.0*degree,          //  start Phi,   delta Phi
+			    0.*degree, 180.0*degree );        //  start Theta, delta Theta
+        G4double phiPoint = 160.0 * degree; 
+        G4ThreeVector  StartPt( radOne * cos(phiPoint), radOne * sin(phiPoint), 0.0); 
+        G4cout << "For sphere " << SphDeepNeg.GetName() << G4endl;
+        G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
+
+        checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
+
+        // Try the edges  
+        G4ThreeVector  NegEdgePt( radOne * cos(-270.0*degree), radOne * sin(-270.0*degree), 0.0); 
+        G4ThreeVector  PosEdgePt( radOne * cos(10.0*degree), radOne * sin(10.0*degree), 0.0); 
+
+        G4cout << "--------------------------------------------------------" << G4endl; 
+	G4cout << " New point " << NegEdgePt << " should be at Neg edge of -270.0 degrees " <<  G4endl;
+	checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
+	checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
+	checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
+	checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 1.25,  -vx,   kInside); 
+	checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 1.25,  -vx,   kOutside); 
+
+	G4cout << "--------------------------------------------------------" << G4endl; 
+	G4cout << " New point " << PosEdgePt << " should be at Pos edge of +10.0 degrees " <<  G4endl;
+        checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
+	checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
+	checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
+	checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 1.25,  -vy,   kOutside); 
+	checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 1.25,  -vy,   kInside); 
+
 	return 0;
 }
+
+// Given the sphere 'rSphere', a point 'origin'
+//                                               -->     -->              --> 
+//   the function below checks that the point    pnew=( origin + dist * direction )
+//     - the point (p+dist*dir) is located in the part of the solid given by 'expectedInResult'
+//     - and that from there, the DistanceToIn along 'dir' is not negative or Infinite
+//
+//  Use cases expected:
+//   - 'origin' is on/near a surface and 'direction' is pointing towards the inside of the solid
 
 G4bool
 checkPoint( const G4Sphere &rSphere, 
@@ -633,48 +679,54 @@ checkPoint( const G4Sphere &rSphere,
             G4ThreeVector  direction, 
             EInside        expectedInResult)
 {
+    G4int verbose = 0; 
+
     G4ThreeVector newPoint; 
     G4double  distIn=-1.0, distOut=-1.0; 
 
     newPoint = origin + dist * direction; 
 
-    // G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
-    G4cout << G4endl;
-    // G4cout << " Sphere " << rSphere.GetName();
     G4int oldPrecision= G4cout.precision(10); 
-    G4cout << " dir= " << direction;
-    G4cout << " dist= " << dist;
+    // G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
+    if( verbose > 0 ) {
+      G4cout << G4endl;
+      if (verbose > 2 ) G4cout << " Sphere " << rSphere.GetName();
+      G4cout.precision(10); 
+      if (verbose > 1 ) G4cout << " dir= " << direction;
+      G4cout << " dist= " << dist;
+    } 
 
     EInside  inSphere=  rSphere.Inside( newPoint ) ; 
                               /*======*/
     G4cout.precision(15); 
     // G4cout << " NewPoint  " << newPoint << " is " 
-    G4cout << " New point " << " is " 
-      <<  OutputInside( inSphere ) 
-      <<  " vs "
-      <<  OutputInside( expectedInResult ) 
-      <<  " expected."
-      <<  G4endl ;
-
-    G4bool good= (inSphere == expectedInResult) ; 
-    if ( !good ) {
-        G4cout << " ************ Unexpected Result for Inside *************** " << G4endl;
+    G4bool goodIn= (inSphere == expectedInResult) ; 
+    if ( !goodIn ) {
+      G4cout << " ************ Unexpected Result for Inside *************** " << G4endl;
     } 
+    if ( verbose || !goodIn ) {
+       G4cout << " New point " 
+	      << " is "  <<  OutputInside( inSphere ) 
+	      <<  " vs " <<  OutputInside( expectedInResult ) 
+	      <<  " expected." <<  G4endl ;
+    }
+
+    G4bool goodDistIn = true; 
 
     distIn = rSphere.DistanceToIn( newPoint, direction ); 
                     /*===========*/
-    G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
+    if ( verbose )  G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
     if( (inSphere == kOutside) 
         && (distIn < 0.0 ) // Cannot use 0.5*kCarTolerance for Angular tolerance!! 
       ){
        G4cout << " ********** Unexpected Result for DistanceToIn from outside ********* " << G4endl;
        // G4cout << " It should be " << G4endl;
-       good = false;
+       goodDistIn = false;
     }
     if( (inSphere == kSurface ) 
         && ( (distIn < 0.0) || (distIn >= kInfinity )) 
       ){
-       G4cout << " ********** Unexpected Result for DistanceToIn ********* " << G4endl;
+       G4cout << " ********** Unexpected Result for DistanceToIn on surface   ********* " << G4endl;
        // if ( (distIn != 0.0) ) 
        //  -  Can check that the return value must be 0.0
        //     But in general case the direction can be away from the solid, 
@@ -682,12 +734,26 @@ checkPoint( const G4Sphere &rSphere,
        //        --> must check the direction against the normal
        //            in order to perform this check in general case.
 
-       good = false;
+       goodDistIn = false;
     }
+    if ( verbose || !goodDistIn ) {
+      G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
+    }
+
+    G4bool good= (goodIn && goodDistIn);  
+    if ( !good ){ 
+       // There was an error -- document the use case!
+       G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
+       G4cout << "  Origin=    " << origin << G4endl; 
+       G4cout << "  Direction= " << direction  << G4endl; 
+       G4cout << "  dist= " << dist;
+       G4cout << "  Actual-point= " << newPoint << G4endl;    
+    } 
 
     distOut = rSphere.DistanceToOut( newPoint, direction ); 
                     /*=============*/
-    G4cout << " DistToOut (p, dir) = " << distOut << G4endl;
+    if ( verbose ) G4cout << " DistToOut (p, dir) = " << distOut << G4endl;
+ 
     G4cout.precision(oldPrecision); 
 
     return good;
