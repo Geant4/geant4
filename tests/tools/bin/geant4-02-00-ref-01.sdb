@@ -1,3 +1,7 @@
+./examples/extended/g3tog4            g3tog4Tests-V02-00-01
+./examples/novice/N05         exampleN05-V02-00-01r
+./tests/GNUmakefile           tests-V02-00-01
+./tests/test201               test201-V02-00-00r
 .		geant4-02-00-cand-00
 ./config		config-V02-00-00
 ./examples/extended/electromagnetic/TestEm2		testem2-V02-00-00
