@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.12 2004-11-19 16:17:26 gcosmo Exp $
+// $Id: G4Timer.cc,v 1.13 2004-11-22 08:14:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ void G4Exception(const char* s=0);
 
 #ifdef WIN32
 #  include <sys/types.h>
+#  include <windows.h>
 
    // extract milliseconds time unit
    int sysconf(int a){
