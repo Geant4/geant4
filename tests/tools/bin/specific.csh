@@ -357,7 +357,7 @@ if ( `uname -n` == "lx1" ) then
   #setenv G4DEBUG   1
   # Shareable library
   setenv G4LIB_BUILD_SHARED 1
-  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$G4LIB/$G4SYSTEM
   # G4 build flags :
   #setenv G4UI_BUILD_XM_SESSION       1
   #setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
@@ -378,6 +378,7 @@ if ( `uname -n` == "lx1" ) then
   #setenv G4VIS_USE_VRMLFILE          1
   # Specific :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.1.0/rh72_gcc332
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
   #setenv OGLHOME        /lal/Mesa/3.1/Linux
   #setenv OIVHOME        /lal/SoFree/v2r9
   #setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
@@ -511,6 +512,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4LIB_BUILD_SHARED 1
   setenv DYLD_LIBRARY_PATH $G4LIB/$G4SYSTEM
   setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.1.0
+  setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
