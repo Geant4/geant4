@@ -4,22 +4,21 @@
 
 class Octree;
 
-//enum OctreeNodeType { MIDDLE_NODE, TERMINAL_NODE };
 class MiddleNode : public OctreeNode
 {
-    friend class Octree;
+  //    friend class Octree;
 
 public:
-    OctreeNode*  mChildren[8];
+  OctreeNode*  mChildren[8];
 
-    void ResetFamily();
-    MiddleNode();
-    MiddleNode( OctreeNode* pParent );
-    ~MiddleNode();
+  void ResetFamily();
+  MiddleNode();
+  MiddleNode( OctreeNode* pParent );
+  ~MiddleNode();
 
-    OctreeNode*& operator []( G4int index );
-    OctreeNodeType Type();
-    G4int FindChild( const OctreeNode* pNode );
-    G4int MemSize();
+  OctreeNode*& operator []( G4int index );
+  OctreeNodeType Type();
+  G4int FindChild( const OctreeNode* pNode );
+  G4int MemSize();
 };
 #endif
