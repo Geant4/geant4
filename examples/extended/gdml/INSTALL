@@ -1,0 +1,39 @@
+GDML Processor for Geant4 setup and build instructions
+======================================================
+
+Requirements
+------------
+Build Geant4 with shared libraries support enbled, e.g.:
+
+export G4LIB_BUILD_SHARED=1
+
+
+Unpacking
+---------
+
+cd $G4INSTALL/examples/advanced
+tar zvxf /path/to/gdml.tgz
+
+Xerces-C XML Parser
+-------------------
+
+Set the environment variable XERCESCROOT:
+
+export XERCESROOT=$G4INSTALL/examples/advanced/gdml/xerces-c
+
+Build GDML Processor
+--------------------
+
+cd $G4INSTALL/examples/advanced/gdml
+gmake
+
+Run sample application
+----------------------
+
+Set LD_LIBRARY_PATH to the location of the G4 shared libraries + Xerces-C libraries:
+
+export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:$XERCESCROOT/lib:.
+
+cd $G4INSTALL/examples/advanced/gdml/sample
+$G4WORKDIR/bin/$G4SYSTEM/gogdml
+

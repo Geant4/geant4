@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../schema/gdml_1.0.xsd">
+ <define>
+  <constant name="NbOfLayers"                      value="10"/>
+  <quantity name="AbsorberThickness" type="length" value="10.0" unit="cm"/>
+  <quantity name="GapThickness"      type="length" value="5.0"  unit="cm"/>
+  <quantity name="CalorSizeYZ"       type="length" value="20.0" unit="cm"/>
+  <expression name="LayerThickness">AbsorberThickness+GapThickness</expression>
+  <expression name="CalorThickness">NbOfLayers*LayerThickness</expression>
+  <expression name="WorldSizeX">1.2*CalorThickness</expression>
+  <expression name="WorldSizeYZ">1.2*CalorSizeYZ</expression>
+  <!-- Positions & Rotations -->
+  <position name="GapPosition"      x="AbsorberThickness/2"/>
+  <position name="AbsorberPosition" x="-GapThickness/2"/>
+  <position name="center"                        />
+  <position name="shiftx"   x="1*LayerThickness"   />
+  <position name="shift2x"  x="2*LayerThickness" />
+  <position name="shift-1x"  x="-1*LayerThickness" />
+  <position name="shift-2x"  x="-2*LayerThickness" />
+  <rotation name="identity"                      />
+ </define>
+ <materials>
+  <define>
+   <quantity type="density" name="universe_mean_density" value="1.e-25" unit="g/cm3"/>
+  </define>
+  <!-- Element from isotopes -->
+  <isotope name="U235" Z="92" N="235"> <atom type="A" value="235.01"/> </isotope>
+  <isotope name="U238" Z="92" N="238"> <atom type="A" value="238.03"/> </isotope>
+  <element name="enriched_Uranium" formula="U">
+   <fraction ref="U235" n="0.9"/>
+   <fraction ref="U238" n="0.1"/>
+  </element>
+  <!-- Elements -->
+  <element name="Hydrogen" formula="H"  Z="1.">  <atom value="1.01"/>   </element>
+  <element name="Carbon"   formula="C"  Z="6.">  <atom value="12.01"/>  </element>
+  <element name="Nitrogen" formula="N"  Z="7.">  <atom value="14.01"/>  </element>
+  <element name="Oxygen"   formula="O"  Z="8.">  <atom value="16.0"/>   </element>
+  <element name="Silicon"  formula="Si" Z="14."> <atom value="28.09"/>  </element>
+  <!-- Simple materials -->
+  <material name="Aluminium"  formula="Al" Z="13.0">
+   <D value="2.70"/> <atom value="26.98"/>
+  </material>
+  <material name="liquidArgon" formula="Ar" Z="18.0">
+   <D value="1.390"/> <atom value="39.95"/>
+  </material>
+  <material name="Lead" formula="Pb" Z="82.">
+   <D value="11.35"/> <atom value="207.19"/>
+  </material>
+  <!-- Material from elements or chemical formula -->
+  <material name="Water" formula="H20">
+   <D value="1.0"/> <composite n="2" ref="Hydrogen"/> <composite n="1" ref="Oxygen"/>
+  </material>
+  <material name="Scintillator">
+   <D value="1.032"/> <composite n="9"  ref="Carbon"/> <composite n="10" ref="Hydrogen"/>
+  </material>
+  <material name="SiO2">
+   <D value="2.200"/> <composite n="1" ref="Silicon"/> <composite n="2" ref="Oxygen"/>
+  </material>
+  <!-- Material from elements by fractional mass -->
+  <material name="Air">
+   <D value="1.290" unit="mg/cm3"/>
+   <fraction n="0.7" ref="Nitrogen"/>
+   <fraction n="0.3" ref="Oxygen"/>
+  </material>
+  <!-- Material from elements and/or mixtures by fractional mass -->
+  <material name="Aerogel">
+   <D value="0.200"/>
+   <fraction n="0.625" ref="SiO2"/>
+   <fraction n="0.374" ref="Water"/>
+   <fraction n="0.001" ref="Carbon"/>
+  </material>
+  <!-- Example of gas in nonSTP conditions -->
+  <material name="CarbonicGas" state="gas">
+   <T value="325.0"/> <P value="50." unit="atmosphere"/> <D value="27.0" unit="mg/cm3"/>
+   <composite n="1" ref="Carbon"/> <composite n="2" ref="Oxygen"/>
+  </material>
+  <material name="WaterSteam" state="gas">
+   <T value="500.0"/> <P value="2." unit="atmosphere"/> <D value="0.3" unit="mg/cm3"/>
+   <fraction n="1." ref="Water"/>
+  </material>
+  <!-- Vacuum -->
+  <material name="Galactic" Z="1.">
+   <T value="2.73"/> <P value="3.0e-18" unit="pascal"/> <Dref ref="universe_mean_density"/>
+   <atom value="1.01"/>
+  </material>
+  <material name="Beam" state="gas">
+   <!-- <temperature value="STP_Temperature"/> -->
+   <P value="2.e-2" unit="bar"/> <D value="1.0e-5"/>
+   <fraction n="1." ref="Air"/>
+  </material>
+ </materials>
+ <solids>
+  <box name="solidWorld"    x="WorldSizeX"        y="WorldSizeYZ" z="WorldSizeYZ"/>
+  <box name="solidCalor"    x="CalorThickness"    y="CalorSizeYZ" z="CalorSizeYZ"/>
+  <box name="solidLayer"    x="LayerThickness"    y="CalorSizeYZ" z="CalorSizeYZ"/>
+  <box name="solidAbsorber" x="AbsorberThickness" y="CalorSizeYZ" z="CalorSizeYZ"/>
+  <box name="solidGap"      x="GapThickness"      y="CalorSizeYZ" z="CalorSizeYZ"/>
+ </solids>
+ <structure>
+  <volume name="Gap">
+   <materialref ref="liquidArgon"/> <solidref ref="solidGap"/>
+  </volume>
+  <volume name="Absorber">
+   <materialref ref="Lead"/> <solidref ref="solidAbsorber"/>
+  </volume>
+  <volume name="Layer">
+   <materialref ref="Galactic"/> <solidref ref="solidLayer"/>
+   <child>
+    <volumeref ref="Absorber"/> <positionref ref="AbsorberPosition"/> <rotationref ref="identity"/>
+   </child>
+   <child>
+    <volumeref ref="Gap"/> <positionref ref="GapPosition"/> <rotationref ref="identity"/>
+   </child>
+  </volume>
+  <volume name="Calorimeter">
+   <materialref ref="Galactic"/> <solidref ref="solidCalor"/>
+   <child> <volumeref ref="Layer"/> <positionref ref="shift-1x"/> <rotationref ref="identity"/> </child>
+   <child> <volumeref ref="Layer"/> <positionref ref="shift-2x"/> <rotationref ref="identity"/> </child>
+   <child> <volumeref ref="Layer"/> <positionref ref="center"/>  <rotationref ref="identity"/> </child>
+   <child> <volumeref ref="Layer"/> <positionref ref="shiftx"/>  <rotationref ref="identity"/> </child>
+   <child> <volumeref ref="Layer"/> <positionref ref="shift2x"/> <rotationref ref="identity"/> </child>
+  </volume>
+  <volume name="World">
+   <materialref ref="Galactic"/> <solidref ref="solidWorld"/>
+   <child> <volumeref ref="Calorimeter"/> <positionref ref="center"/> <rotationref ref="identity"/> </child>
+  </volume>
+ </structure>
+ <setup name="N03" version="1.0"> <world ref="World"/> </setup>
+ <setup name="Test1" version="1.0"> <world ref="World"/> </setup>
+</gdml>

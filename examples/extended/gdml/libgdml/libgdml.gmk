@@ -1,0 +1,37 @@
+# $Id: libgdml.gmk,v 1.1.1.1 2002-05-31 00:34:42 radoone Exp $
+# ----------------------------------------------------------------
+# GNUmakefile settings for GDML libraries. Radovan Chytracek, 30/05/2002.
+# ----------------------------------------------------------------
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../..
+endif
+
+GDMLINSTALL := $(G4INSTALL)/examples/extended/gdml
+GDMLLIBROOT := $(GDMLINSTALL)/libgdml
+
+CPPFLAGS    += \
+               -I$(GDMLINSTALL)/libgdml/saxana/include \
+               -I$(GDMLINSTALL)/libgdml/schema/include \
+               -I$(GDMLINSTALL)/libgdml/management/include \
+               -I$(GDMLINSTALL)/libgdml/processes/include \
+               -I$(GDMLINSTALL)/libgdml/subscribers/include \
+               -I$(XERCESCROOT)/include
+
+EXTRALIBS   += \
+              -lGDMLsaxana \
+              -lGDMLmanagement \
+              -lGDMLschema \
+              -lGDMLprocesses \
+              -lGDMLsubscribers \
+              -L $(XERCESCROOT)/lib -lxerces-c
+          
+EXTRALIBSSOURCEDIRS += \
+                       $(GDMLLIBROOT)/saxana \
+                       $(GDMLLIBROOT)/schema \
+                       $(GDMLLIBROOT)/processes \
+                       $(GDMLLIBROOT)/management \
+                       $(GDMLLIBROOT)/subscribers
+                       
+include $(G4INSTALL)/config/architecture.gmk
+include $(G4INSTALL)/config/common.gmk

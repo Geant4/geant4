@@ -1,0 +1,150 @@
+$Id: README,v 1.1.1.1 2002-05-31 00:34:43 radoone Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExampleN03
+                            ----------
+
+	This example simulates a simple Sampling Calorimeter setup.
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	The calorimeter is a box made of a given number of layers. A layer
+ 	consists of an absorber plate and of a detection gap. The layer is
+ 	replicated.
+ 	
+ 	Six parameters define the calorimeter :
+ 	- the material of the absorber,
+	- the thickness of an absorber plate,
+ 	- the material of the detection gap,
+ 	- the thickness of a  gap,
+ 	- the number of layers,
+ 	- the transverse size of the calorimeter (the input face is a square). 
+ 	
+ 	In addition a transverse uniform magnetic field can be applied.
+ 	
+ 	The default geometry is constructed in DetectorConstruction class,
+ 	but all of the above parameters can be modified interactively via
+ 	the commands defined in the DetectorMessenger class.
+ 	
+ 	NB. The thickness of the absorber or of the gap can be set to zero
+ 	    (but not together), and the number of layers to 1. In this case we
+ 	    have a unique homogeneous block of matter, which looks like
+ 	    a bubble chamber rather than a calorimeter ...
+ 	    (see the macro of commands: newgeom.mac)
+ 	    
+ 2- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle which hits the
+ 	calorimeter perpendicular to the input face. The type of the particle
+ 	and its energy are set in the PrimaryGeneratorAction class, and can
+ 	be changed via the G4 build-in commands of ParticleGun class (see
+ 	the macros provided with this example).
+ 	
+ 	In addition one can choose randomly the impact point of the incident
+ 	particle. The corresponding interactive command is built in
+ 	PrimaryGeneratorMessenger class.
+ 	
+ 	A RUN is a set of events.
+ 	
+ 3- DETECTOR RESPONSE
+ 
+ 	A HIT is a record, event per event and volume per volume, of all the 
+ 	informations needed to simulate and analyse the detector response.
+ 	
+ 	In this example a CalorHit is defined as a set of 4 informations per
+	layer :
+ 	- the total energy deposit in the absorber plate,
+ 	- the total tracklength of all charged particles in the absorber plate,
+ 	- the total energy deposit in the detection gap,
+ 	- the total tracklength of all charged particles in the detection gap.
+ 	
+ 	Therefore both the absorber and the detection gap are declared
+ 	'sensitive detector' (SD), which means they can contribute to the hit.
+ 	
+ 	At the end of a run, from the CalorHitsCollection, one can study the
+	calorimeter performances such as :
+				- shower profile,
+ 				- calorimeter resolution,
+ 				- pi/e ratio ...
+ 				
+ 4- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via a set of /vis/ commands
+        in the macro vis.mac. This macro is automatically read from 
+ 	the main in case of interactive running mode.
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	calorimeter.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+ 	Optionaly one can choose to draw all particles, only the charged,
+ 	or neutral or none. This command is build in EventActionMessenger class.
+	
+	NB 1: the visualization (with OpenGL driver) assumes two things:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.   
+
+	NB 2: the visualization (with DAWNFILE driver) assumes two things:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
+ 	
+	NN 3: The macros "visTutor/exN03VisX.mac" are tutorial macros for 
+              visualization.  They can be tried as:
+               % $G4BINDIR/exampleN03
+	       idle > /control/execute visTutor/exN03VisX.mac
+              For details, see comment lines  described in the macro files.
+              These macros are designed to help your understanding the 
+              User's Guide.    
+
+ 5- PHYSICS DEMO
+ 
+ 	The particle's type and the physic processes which will be available
+ 	in this example are set in PhysicsList class.
+ 	
+ 	In addition the build-in interactive command:
+	         /process/(in)activate processName
+ 	allows to activate/inactivate the processes one by one.
+ 	Then one can well visualize the processes one by one, especially 
+ 	in the bubble chamber setup with a transverse magnetic field.
+ 
+ 	As a homework try to visualize a gamma conversion alone, 
+ 	or the effect of the multiple scattering.
+	
+ 6- USER INTERFACES
+  
+        The default command interface, called G4UIterminal, is done via
+	standart cin/G4cout.
+	On Linux and Sun-cc on can use a smarter command interface G4UItcsh.
+	It is enough to set the environment variable G4UI_USE_TCSH
+	
+	On can use a Motif driven command interface (called G4UIXm) if:
+	  1- interfaces category has been compiled with G4UI_BUILD_XM_SESSION
+	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
+ 
+      	
+ 7- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd N03
+ 		% gmake
+ 		
+ 	- execute N03 in 'batch' mode from macro files
+ 		% exampleN03   run1.mac
+ 		
+ 	- execute N03 in 'interactive mode' with visualization
+ 		% exampleN03
+ 		....
+ 		Idle> type your commands. For instance:
+ 		Idle> /control/execute newgeom.mac
+ 		....
+ 		Idle> exit
+ 	
+ 	  
+ 	

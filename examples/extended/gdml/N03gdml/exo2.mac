@@ -1,0 +1,35 @@
+# $Id: exo2.mac,v 1.1.1.1 2002-05-31 00:34:43 radoone Exp $
+#
+# Macro file for "exampleN03.cc" 
+#
+# this macro can be executed 
+# during an interactive session:
+#
+# Idle> /control/execute exo2.mac
+# 
+#
+/calor/setNbOfLayers 1
+#
+/calor/setAbsMat Aluminium
+/calor/setAbsThick 10 cm
+#
+/calor/setGapMat Air
+/calor/setGapThick  0 cm
+#
+/calor/setSizeYZ   10 cm
+#
+/calor/update
+#
+/vis/viewer/zoom 1.3
+#
+/process/list
+/process/inactivate msc
+/process/inactivate eBrem
+/process/inactivate phot
+/process/inactivate conv
+#
+/run/particle/setCut 10 cm
+/run/initialize
+#
+/gun/particle gamma
+/gun/energy 10 MeV

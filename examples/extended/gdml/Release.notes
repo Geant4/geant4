@@ -1,0 +1,65 @@
+GDML Processor for Geant4 RC 1.0 RELEASE NOTES
+----------------------------------------------
+
+Platforms
+---------
+
+Developed and tested on Linux, G4SYSTEM: Linux-g++
+
+Requirements
+------------
+
+CERN RH 7.2.1
+gcc 2.95.2
+Apache Xerces-C 1.6.0 or better (included version 1.7.0.)
+
+Planned support for:
+Solaris and Windows
+
+Supported GDML Features
+-----------------------
+
+GDML Schema 1.0 compatible features include:
+
+a) Expressions support
+   - constants,physics constants, translations and rotations, num. expressions
+   - including CLHEP units
+
+b) Full materials support
+   - isotopes, elements, compounds anf mixtures
+
+c) CSG solids
+   - all Geant4 CSG solids
+   - boolean solids, e.g. union, subtraction, intersection
+
+d) geometrical structure
+   - volumes, placements (single, so far)
+
+e) geometry setups
+   - more then one setup is possible
+   - selection based on name-version pair
+
+Known issues and problems
+-------------------------
+
+1.
+> Current implementation works only when build with shared libraries enabled.
+> It's understood issue of bootstraping of the components in statically linked
+> executables. It's being worked on it.
+SOLVED!
+
+2.
+> Only GDML DTD is here due to lack of time, GDML Schema is work in progress,
+> hopefully released soon.
+SOLVED!
+
+3.
+> The Saxana components' interfaces are a bit messy, this issue is being addressed already in the new
+> development tree together with support for XML Schema.
+Still an issue. The Saxana engine will be rewritten with generative version of XML Engine.
+Work on it is in progress.
+
+Any feedback is welcome
+
+mailto:Radovan.Chytracek@cern.ch
+

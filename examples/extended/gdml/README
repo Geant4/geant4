@@ -1,0 +1,16 @@
+GDML Processor for Geant4 release candidate 1.0
+-----------------------------------------------
+
+This release is packaged as a G4 advanced example including
+the lateset stable version of Xerces-C 1.7.0 XML parser for Linux, see [1].
+The functionality is as described at the CHEP'01 conference, see [2].
+
+For more technical details see Release.notes.
+
+Radovan Chytracek
+
+References:
+-----------
+
+1. http://xml.apache.org
+2. http://cern.ch/gdml/chep01

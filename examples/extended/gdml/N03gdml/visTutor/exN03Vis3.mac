@@ -1,0 +1,136 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis3.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE:                                                              #
+#        Nov      07, 2001                                            #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#        November 26, 2000                                            #
+#        October  17, 2000                                            # 
+#        June     06, 2000                                            # 
+#        May      20, 2000                                            # 
+#        November 10, 1999                                            #
+#                                                                     #
+#  CONTENTS: A basic macro for demonstrating various drawing styles   #
+#                                                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Vis3.mac              #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
+#                                  DAWN (version 3.85 or after)       #
+#                                  gv (Ghostview), Tcl/Tk             #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPENGLX            1                          #
+#                                                                     # 
+#  ADDITIONAL NOTES:                                                  #
+#    The compound command "/vis/open <vis-driver-name>"               #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
+#                                                                     #
+#######################################################################
+
+##############################################
+# Store particle trajactories for visualization
+##############################################
+/tracking/storeTrajectory 1
+
+###########################################################
+# Visualization with the OGLIX (OpenGL Immediate X) driver
+###########################################################
+
+# Invoke the OGLSX driver 
+/vis/open OGLSX
+
+# Create an empty scene and add the detector geometry to it 
+/vis/drawVolume
+
+# Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
+#/vis/scene/add/trajectories
+
+# Bird-eye view of events with 
+#  the hidden-surface drawing style
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi  45 45 
+/vis/viewer/set/style          surface
+/run/beamOn                    10
+
+##########################################################
+# Visualization with the DAWNFILE driver
+#
+#  * Each visualized view is saved to a file "g4_XX.eps"  
+#    with the "vectorized" PostScript format.
+#
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
+#
+##########################################################
+
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+# Create an empty scene and add the detector geometry to it 
+/vis/drawVolume
+
+# Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
+#/vis/scene/add/trajectories
+
+# Bird-eye view of events with the 
+#  wireframe drawing style
+/vis/viewer/reset 
+/vis/viewer/zoom               1.5
+/vis/viewer/set/viewpointThetaPhi  45 45 
+/vis/viewer/set/style          wireframe
+/run/beamOn                    3
+
+# Set the trajectory-accumulation mode to "accumulate".
+#  Trajectories of each event are accumulated
+#  and visualized at the end of one run.
+/vis/scene/endOfEventAction    accumulate
+
+# Bird-eye view of events with the 
+#  hidden-surface drawing style
+/vis/viewer/set/style          surface
+/run/beamOn                    50
+
+# Cull detector geometry and show only trajectories.
+/vis/viewer/reset 
+/vis/viewer/set/culling     global  true
+/vis/viewer/set/culling     density true 999
+/vis/viewer/set/style       wireframe
+/run/beamOn                 10
+
+# Reset the culling policy for next visualization
+#  The default culling policy is:
+#   global          : on
+#   invisible       : on 
+#   low density     : off 
+#   covered daughter: off
+#
+#  Note: You may also use "/vis/viewer/reset" 
+#        for this initialization. 
+/vis/viewer/set/culling  density false
+
+# Reset trajectory-accumulation mode to "refresh" (default)
+#  Trajectories are visualized at the end of each event.
+/vis/scene/endOfEventAction       refresh

@@ -1,0 +1,20 @@
+# $Id: run1.mac,v 1.1.1.1 2002-05-31 00:34:43 radoone Exp $
+#
+# Macro file for "exampleN03.cc"
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+/control/verbose 2
+/control/saveHistory
+#
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 1
+# 
+# muon 300 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+/gun/particle mu+
+/gun/energy 300 MeV
+/run/beamOn 3

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../schema/gdml_1.0.xsd">
+ <define>
+  <constant name="PI" value="pi"/>
+  <constant name="TWOPI" value="2.*PI"/>
+  <constant name="HALFPI" value="pi/2."/>
+  <position name="center"/>
+  <rotation name="identity"/>
+  <position name="shiftbyx" x="20"/>
+  <rotation name="rotatebyx" x="HALFPI"/>
+  <rotation name="rotatebyall" x="HALFPI" y="PI" z="TWOPI"/>
+ </define>
+ <materials>
+  <define>
+    <quantity type="density" name="ro" unit="g/cm3" value="1234.00"/>
+  </define>
+  <isotope Z="92" N="235" name="U235">  <atom type="A" value="235.01"/>  </isotope>
+  <isotope name="U238" Z="92.0" N="238"> <atom type="A" value="238.03"/> </isotope>
+  <element name="enriched_Uranium">
+   <fraction ref="U235" n="0.9"/>
+   <fraction ref="U238" n="0.1"/>
+  </element>
+  <element name="Hydrogen" formula="H"  Z="1.">  <atom value="1.01"/>   </element>
+  <element name="Oxygen"   formula="O"  Z="8.">  <atom value="16.0"/>   </element>
+  <element name="Nitrogen" formula="N"  Z="7.">  <atom value="14.01"/>  </element>
+  <element name="Lead"     formula="Pb" Z="82."> <atom value="207.20"/> </element>
+  <material name="Al" Z="13.0"> <D value="2.70"/> <atom value="26.98"/> </material>
+  <material name="Water" formula="H20">
+   <D value="1.0"/>
+   <composite n="2" ref="Hydrogen"/>
+   <composite n="1" ref="Oxygen"/>
+  </material>
+  <material name="Air">
+   <D value="1.290" unit="mg/cm3"/>
+   <fraction n="0.7" ref="Nitrogen"/>
+   <fraction n="0.3" ref="Oxygen"/>
+  </material>
+ </materials>
+ <solids>
+  <define>
+   <quantity type="length" name="sizeoft500" unit="mm" value="500.0"/>
+   <position name="shiftbysizeoft500" x="500.0"/>
+  </define>
+  <box name="WorldBox" x="10000.0" y="10000.0" z="10000.0"/>
+  <box name="b100" x="100.0" y="100.0" z="100.0"/>
+  <box name="b500" x="500.0" y="500.0" z="500.0"/>
+  <cone name="c1" z="111.0" rmax1="22.0" rmax2="33.0" deltaphi="TWOPI"/>
+  <para name="p1" x="10.0" y="10.0" z="10.0" alpha="30.0" theta="30.0" phi="30.0"/>
+  <sphere name="s1" rmax="200.0" deltaphi="6.28" deltatheta="3.14"/>
+  <trap name="trap1" z="100.0" theta="60.0" phi="60.0"
+                             y1="10.0"    x1="10.0" x2="10.0"
+                             alpha1="30.0"  y2="10.0" x3="10.0"
+                             x4="10.0"    alpha2="30.0"/>
+  <trd name="trd1" x1="10.0" x2="10.0" y1="10.0" y2="20.0" z="30.0"/>
+  <tube name="t1000" z="1000.0" rmax="100.0" deltaphi="TWOPI"/>
+  <tube name="t900" z="900.0" rmax="100.0" deltaphi="TWOPI"/>
+  <tube name="t100" z="100.0" rmax="10.0" deltaphi="TWOPI"/>
+  <union name="u1">
+   <first ref="b500"/>  <second ref="b100"/>
+   <position name="unionidentitypos"/>  <rotation name="unionidentityrot"/>
+  </union>
+  <union name="u2">
+   <first ref="b500"/>  <second ref="t100"/>
+   <positionref ref="shiftbyx"/>
+  </union>
+  <subtraction name="sub1">
+   <first ref="b500"/> <second ref="b100"/>
+   <positionref ref="center"/> <rotationref ref="identity"/>
+  </subtraction>
+  <subtraction name="sub2">
+   <first ref="t900"/> <second ref="b100"/>
+   <positionref ref="center"/> <rotationref ref="identity"/>
+  </subtraction>
+  <intersection name="intersec1">
+   <first ref="b100"/> <second ref="b100"/>
+   <positionref ref="identity"/> <rotationref ref="rotatebyx"/>
+  </intersection>
+ </solids>
+ <structure>
+  <volume name="v1">
+   <materialref ref="Water"/>
+   <solidref ref="t1000"/>
+  </volume>
+  <volume name="v2">
+   <materialref ref="Water"/>
+   <solidref ref="sub2"/>
+  </volume>
+  <volume name="World">
+   <materialref ref="Air"/>
+   <solidref ref="WorldBox"/>
+   <child> <volumeref ref="v1"/>
+    <positionref ref="center"/>
+    <rotationref ref="identity"/>
+   </child>
+  </volume>
+ </structure>
+ <setup name="Test1" version="1.0">
+  <world ref="World"/>
+ </setup>
+</gdml>
