@@ -1,15 +1,14 @@
 #ifndef DicomOctreeTerminalNode_h
 #define DicomOctreeTerminalNode_h
 
-//class Octree;
 class  DicomOctreeTerminalNode : public DicomOctreeNode
 {
 public:
-
    DicomOctreeTerminalNode(DicomOctreeNode* pParent );
   ~ DicomOctreeTerminalNode();
 
-public:
+public: 
+  // ---- MGP ---- Replace *& with proper design of the operator
   DicomOctreeNode*& operator []( G4int index );
   G4int MemSize();
 

@@ -40,12 +40,10 @@ public:
   DicomOctreeNode* Root()   { return mRoot; } 
   G4double Size()      { return mSize; }
   G4int NoLevels()     { return mNoLevels; }
-  G4int Resolution()   { return ( 1 << mNoLevels ); }
+  G4bool Resolution()   { return ( 1 << mNoLevels ); }
   
 private:
-
   void CountRecursive( DicomOctreeNode* pNode, G4int rMiddle, G4int rTerminal );
-
   // Root node of the tree
   DicomOctreeMiddleNode* mRoot;
   
@@ -56,7 +54,6 @@ private:
   // Number of levels denotes the maximal number of
   // nodes in a single branch, starting from the root node.
   G4int mNoLevels;
-
 };
 #endif 
 

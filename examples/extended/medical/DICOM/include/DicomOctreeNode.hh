@@ -2,18 +2,16 @@
 #define DICOMOCTREENODE_H
 #include "globals.hh"
 
-//class Octree;
-
 enum OctreeNodeType { MIDDLE_NODE, TERMINAL_NODE };
 
-//  OctreeNode represents a single node in the octree.
-
+//  OctreeNode represents a single node in the Octree.
 class DicomOctreeNode
 {
 public:
 
   DicomOctreeNode();
   ~DicomOctreeNode();
+
   DicomOctreeNode( DicomOctreeNode* pParent );
   
   G4double Density(){return mDensity;}

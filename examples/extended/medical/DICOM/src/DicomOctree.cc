@@ -1,5 +1,4 @@
 
-//#include <stddef.h>
 #include "DicomOctree.hh"
 #include "DicomOctreeNode.hh"
 #include "DicomOctreeMiddleNode.hh"
