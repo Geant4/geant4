@@ -94,7 +94,7 @@ else
 cd ${G4WORKDIR}
 echo REMOVE
 mv stt stt.${PREVTAG}
-rm -r bin lib tmp
+rm -r bin/* lib/* tmp/*
 fi
 ########################################################
 
