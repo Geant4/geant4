@@ -21,27 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc,v 1.6 2003-10-31 14:35:50 gcosmo Exp $
+// $Id: G4ChordFinder.icc,v 1.7 2003-11-05 10:47:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ChordFinder inline implementations
 //
 // --------------------------------------------------------------------
-
-inline
-G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
-  : fDeltaChord( fDefaultDeltaChord ),
-    fAllocatedStepper(false),
-    fEquation(0), 
-    fDriversStepper(0), 
-    fNoTrials(0), fNoCalls(0)
-{
-  // Simple constructor which does not create equation, ..
-
-  fIntgrDriver= pIntegrationDriver;
-  fAllocatedStepper= false;
-  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
-}
 
 inline 
 void G4ChordFinder::SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver)
