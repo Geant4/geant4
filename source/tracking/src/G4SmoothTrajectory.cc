@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.7 2002-11-09 00:05:28 jacek Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.8 2002-11-11 13:13:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,11 +46,6 @@
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "g4std/strstream"
-#include "G4Polyline.hh"
-#include "G4Circle.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4VVisManager.hh"
 
 G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
@@ -116,50 +111,9 @@ void G4SmoothTrajectory::ShowTrajectory(G4std::ostream& os) const
 
 void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {
-   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-   if(i_mode>=0)
-   {
-     G4Polyline pPolyline;
-     for (size_t i = 0; i < positionRecord->size() ; i++) {
-       // Copy auxiliary points ...
-       const G4std::vector<G4ThreeVector>& auxiliaryPoints = 
-	 *((*positionRecord)[i]->GetAuxiliaryPoints());
-       if(&auxiliaryPoints) {
-	 for (size_t j = 0; j < auxiliaryPoints.size(); ++j ) {
-	   pPolyline.push_back( auxiliaryPoints[j] );
-	 }
-       }
-       pPolyline.push_back( (*positionRecord)[i]->GetPosition() );
-     }
-
-     G4Colour colour;
-     if(PDGCharge<0.)
-        colour = G4Colour(1.,0.,0.);
-     else if(PDGCharge>0.) 
-        colour = G4Colour(0.,0.,1.);
-     else
-        colour = G4Colour(0.,1.,0.);
-
-     G4VisAttributes attribs(colour);
-     pPolyline.SetVisAttributes(attribs);
-     if(pVVisManager) pVVisManager->Draw(pPolyline);
-   }
-
-   if(i_mode!=0)
-   {
-     // NB Not bothering with the auxiliary points in here for now,
-     // remember to do it later (jacek 31/10/2002)
-     for(size_t j=0; j<positionRecord->size(); j++) {
-       G4Circle circle( (*positionRecord)[j]->GetPosition() );
-       circle.SetScreenSize(0.001*i_mode);
-       circle.SetFillStyle(G4Circle::filled);
-       G4Colour colSpot(0.,0.,0.);
-       G4VisAttributes attSpot(colSpot);
-       circle.SetVisAttributes(attSpot);
-       if(pVVisManager) pVVisManager->Draw(circle);
-     }
-   }
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory(i_mode);
+  // ... or override with your own code here.
 }
 
 const G4std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
