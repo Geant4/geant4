@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.26 2003-04-26 11:38:04 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.27 2003-04-29 04:58:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,7 +82,7 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 
       delete theMeanFreePathTable;
    }
-   PartialSumSigma.clear();
+   PartialSumSigma.clearAndDestroy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -275,7 +275,7 @@ void G4MuBremsstrahlung::BuildLambdaTable(
                              }
   theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
 
-  PartialSumSigma.clear();
+  PartialSumSigma.clearAndDestroy();
   PartialSumSigma.resize(numOfCouples);
 
   G4PhysicsLogVector* ptrVector;
@@ -756,8 +756,8 @@ G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
-  PartialSumSigma.clear();
-  PartialSumSigma.resize(numOfCouples);
+  PartialSumSigma.clearAndDestroy();
+  PartialSumSigma.reserve(numOfCouples);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);

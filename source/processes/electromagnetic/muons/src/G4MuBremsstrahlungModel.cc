@@ -135,6 +135,10 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
   G4double fixedEnergy = 0.5*highKinEnergy;
 //  G4double fixedEnergy = 500000.*TeV;
 
+  for (size_t ii=0; ii<partialSumSigma.size(); ii++){
+    G4DataVector* a=partialSumSigma[ii];
+    if ( a )  delete a;    
+  } 
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);

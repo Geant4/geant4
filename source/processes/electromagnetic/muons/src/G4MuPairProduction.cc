@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.32 2003-04-26 11:38:05 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.33 2003-04-29 04:58:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -84,7 +84,7 @@ G4MuPairProduction::~G4MuPairProduction()
       delete theMeanFreePathTable;
    }
 
-  PartialSumSigma.clear();
+  PartialSumSigma.clearAndDestroy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -305,7 +305,7 @@ void G4MuPairProduction::BuildLambdaTable(
                              }
   theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
 
-  PartialSumSigma.clear();
+  PartialSumSigma.clearAndDestroy();
   PartialSumSigma.resize(numOfCouples);
 
   G4PhysicsLogVector* ptrVector;
@@ -957,8 +957,8 @@ G4bool G4MuPairProduction::RetrievePhysicsTable(G4ParticleDefinition* particle,
   }
 
   // retrieve PartialSumSigma table (G4OrderedTable)
-  PartialSumSigma.clear();
-  PartialSumSigma.resize(numOfCouples);
+  PartialSumSigma.clearAndDestroy();
+  PartialSumSigma.reserve(numOfCouples);
   filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
   if ( !PartialSumSigma.Retrieve(filename, ascii) ){
     G4cout << " FAIL PartialSumSigma.retrieve in " << filename

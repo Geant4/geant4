@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.30 2003-04-26 11:38:11 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.31 2003-04-29 04:59:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,7 +88,7 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
     delete theMeanFreePathTable;
   }
 
-  PartialSumSigma.clear();
+  PartialSumSigma.clearAndDestroy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1101,8 +1101,8 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
   }
 
   // retrieve PartialSumSigma table (G4OrderedTable)
-  PartialSumSigma.clear();
-  PartialSumSigma.resize(numOfCouples);
+  PartialSumSigma.clearAndDestroy();
+  PartialSumSigma.reserve(numOfCouples);
   filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
   if ( !PartialSumSigma.Retrieve(filename, ascii) ){
     G4cout << " FAIL PartialSumSigma.retrieve in " << filename

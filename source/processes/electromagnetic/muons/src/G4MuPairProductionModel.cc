@@ -149,6 +149,10 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
   size_t numOfCouples = theCoupleTable->GetTableSize();
   G4double fixedEnergy = sqrt(lowKinEnergy*highKinEnergy);
 
+  for (size_t ii=0; ii<partialSumSigma.size(); ii++){
+    G4DataVector* a=partialSumSigma[ii];
+    if ( a )  delete a;    
+  } 
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
@@ -158,7 +162,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
     partialSumSigma.push_back(dv);
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
-
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

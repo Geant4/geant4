@@ -138,6 +138,10 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
+  for (size_t ii=0; ii<partialSumSigma.size(); ii++){
+    G4DataVector* a=partialSumSigma[ii];
+    if ( a )  delete a;    
+  } 
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
