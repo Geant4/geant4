@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.11 2001-02-23 15:43:25 johna Exp $
+// $Id: G4VViewer.cc,v 1.12 2001-05-21 14:03:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,7 @@
 #include "G4ios.hh"
 #include "g4std/strstream"
 
+#include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
@@ -42,6 +43,12 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
+
+  G4VisManager* pVisMan = G4VisManager::GetInstance();
+  G4double xHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintX();
+  G4double yHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintY();
+  fVP.SetWindowSizeHint(xHint,yHint);
+  fDefaultVP.SetWindowSizeHint(xHint,yHint);
 }
 
 G4VViewer::~G4VViewer () {}
