@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.21 2001-11-27 10:43:13 japost Exp $
+// $Id: G4SteppingManager.cc,v 1.22 2001-11-27 13:52:36 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -270,6 +270,8 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
      fTrack->SetTouchableHandle( fTouchableHandle );
      fTrack->SetNextTouchableHandle( fTouchableHandle );
+  }else{
+     fTrack->SetNextTouchableHandle( fTrack->GetTouchableHandle() );  
   }
 // Set vertex information of G4Track at here
    if ( fTrack->GetCurrentStepNumber() == 0 ) {
