@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.7 2001-08-11 22:36:50 johna Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.8 2001-08-24 23:30:41 perl Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -19,6 +19,14 @@ ifndef G4VIS_NONE
 
 ifdef G4VIS_BUILD_DAWN_DRIVER
   CPPFLAGS += -DG4VIS_BUILD_DAWN_DRIVER
+endif
+
+ifdef G4VIS_BUILD_HEPREP_DRIVER
+  CPPFLAGS += -DG4VIS_BUILD_HEPREP_DRIVER
+  CPPFLAGS += -I$(FREEHEP)/hep/graphics/heprep/jni
+  CPPFLAGS += -I$(FREEHEP)/hep/graphics/heprep/include
+  CPPFLAGS += -I$(JDK_HOME)/include/$(G4_HEPREP_OSNAME)
+  CPPFLAGS += -I$(JDK_HOME)/include
 endif
 
 ifdef G4VIS_BUILD_OPACS_DRIVER
