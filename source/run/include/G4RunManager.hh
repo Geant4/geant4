@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.26 2002-11-27 17:55:07 asaim Exp $
+// $Id: G4RunManager.hh,v 1.27 2002-12-16 18:26:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,7 @@ class G4UserTrackingAction;
 class G4UserSteppingAction;
 
 class G4VPhysicalVolume;
+class G4Region;
 class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
@@ -229,6 +230,9 @@ class G4RunManager
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
     G4String versionString;
+
+    G4VPhysicalVolume* currentWorld;
+    G4Region* defaultRegion;
 
   public:
     virtual void rndmSaveThisRun();
