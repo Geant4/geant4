@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.hh,v 1.1 2001-05-15 10:20:51 urban Exp $
+// $Id: G4MultipleScatteringx.hh,v 1.2 2001-06-28 13:00:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -89,10 +89,10 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    void SetScatteringParameter3(G4double value)
            { scatteringparameter3 = value ; } ;
    void SetBoundary(G4bool value) { boundary = value ;} ;
+   void SetFactlim(G4double val) { factlim=val;};
 
    void SetTuning(G4double value) { tuning = value ; };
    void SetCparm (G4double value) { cparm  = value ; };
-   void SetTlimitmsc  (G4double value) { Tlimit = value ; };
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
    
    void SetNuclCorrPar(G4double val) { NuclCorrPar = val; } ;
@@ -123,10 +123,8 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4PhysicsTable* theTransportMeanFreePathTable ;
 
    G4double fTransportMeanFreePath ;
-   G4double range,alpha1 ;
-   G4int stepFlag ;
 
-   G4double biglambda ;
+   G4double taubig,tausmall,taulim ;
 
    G4double LowestKineticEnergy ;
    G4double HighestKineticEnergy ;
@@ -142,14 +140,13 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4double tLast ;
    G4double zLast ;
 
-   G4double Tlimit ;
-
    // model parameters
-   G4double scatteringparameter1;  // for low energy scattering
-   G4double scatteringparameter2;  // alfamax in scattering
-   G4double scatteringparameter3;  // param. for z/t distr.
+   G4double scatteringparameter1;  // param. for z/t distr.
+   G4double scatteringparameter2;  // 
+   G4double scatteringparameter3;  // 
 
    G4bool boundary ;               // spec. handling near boundaries
+   G4double factlim ;
    G4GPILSelection  valueGPILSelectionMSC ;
 
    G4double tuning;        //  param. for lambda tuning

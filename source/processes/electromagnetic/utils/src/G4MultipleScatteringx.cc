@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.cc,v 1.4 2001-05-18 13:57:55 vnivanch Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.5 2001-06-28 13:01:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -21,10 +21,7 @@
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
-       range(1.e10*mm),
-       alpha1(5.),
-       stepFlag(0),
-       biglambda (1.e10*mm), 
+       taubig(10.),tausmall(1.e-12),taulim(1.e-6),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -35,11 +32,11 @@
        materialIndex(0),
        tLast (0.0),
        zLast (0.0),
-       Tlimit(1.*keV),
-       scatteringparameter1(0.9),
-       scatteringparameter2(5.0),
-       scatteringparameter3(1.0),
-       boundary(false),
+       scatteringparameter1(1.0),
+       scatteringparameter2(2.3407),
+       scatteringparameter3(1.0142),
+       boundary(true),
+       factlim(1.0),
        tuning (1.00),
        cparm (1.5),
        fLatDisplFlag(true),
@@ -403,13 +400,10 @@
                                                const G4Track& trackData,
                                                const G4Step& stepData)
   {
-    static G4double taulim=1.e-6,randlim = 0.25*taulim*taulim  ;
-    static const G4double tausmall = 5.e-5,taubig =10.,
-          kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
+    static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
-    G4double KineticEnergy,truestep,tau,cth,sth,phi,
+    G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
              dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
-    G4double prob = 0.0;
     G4bool isOut;
 
     fParticleChange.Initialize(trackData) ;
@@ -420,116 +414,60 @@
 
     KineticEnergy = aParticle->GetKineticEnergy() ;
 
-    if(stepFlag == 0)
-    {
-       fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                               (materialIndex)->GetValue(KineticEnergy,isOut);
-    } 
+    fTransportMeanFreePath = (*theTransportMeanFreePathTable)
+                             (materialIndex)->GetValue(KineticEnergy,isOut);
 
     //  change direction first ( scattering ) ..........................
-
-    static G4double cp0 = 3.218 ; 
-    static G4double cp1 = 118.08 ; 
-    static G4double cmax=5.0 ;
-
-    static G4double alfa0=0.180 ;
-    static G4double alfa1=53.08 ;
-    static G4double alfamax = 1.0 ;
-
-    G4double alfa ;
-    G4double a,ap1,am1,b,c,c1,c2,c3,u1,u2,u3,v1,v2,v3,I0,I1,I2,e ;
+    static G4double cq = 0.99985 ;
+    G4double e,alfa,alfamin,a,b,b1,x0,q ;
     G4double w1,w2 ;
 
-    if(stepFlag == 0)
-    {
-      tau = truestep/fTransportMeanFreePath ;
-    }
-    else
-    {
-      tau = truestep/range ;
-      if(tau < taulim)
-        prob = exp(-(alpha1-1.)*tau)*(1.+scatteringparameter1*tau) ;
-      else if(tau < 1.) 
-        prob = exp((alpha1-1.)*log(1.-tau))*(1.+scatteringparameter1*tau) ;
-      else
-        prob = 0. ;
-    }
+    prob = 1. ;
+    q = 0. ;
 
-    if(tau >= taulim)
-    {  
-      if(stepFlag == 0)
+    tau = truestep/fTransportMeanFreePath ;
+
+    if(tau < tausmall)
+    {
+      cth = 1. ;
+    }
+    else if(tau > taubig)
+    {
+      cth = -1.+2.*G4UniformRand() ;
+    }
+    else 
+    {
+      e=exp(-tau) ;
+      alfamin= 2.*e/(1.-e) ;
+      alfa = alfamin*scatteringparameter2 ;
+      a = alfa/(alfa+2.) ;
+
+      b=scatteringparameter3/e ;
+
+      prob = (cq*e-1./b)/(a-1./b) ;
+
+      x0 = -1.+2.*exp(-1./alfa) ;
+
+      q=(1.-cq)*e/((2.+x0)/3.-cq*e) ;
+
+      if(G4UniformRand() <= q)
       {
-        if(tau < taubig)        
-        {                  
-
-          e=exp(-tau) ;
-
-          alfa =alfa0+alfa1*tau ;
-          if(alfa > alfamax) alfa=alfamax ;
-          a = exp(alfa*tau) ;
-          am1 = a-1. ;
-          ap1 = a+1. ;
-    
-          c=cp0+cp1*tau ;
-          if(c > cmax) c=cmax ;
-          if(c > scatteringparameter2) c=scatteringparameter2 ;
-          c1=c-1. ;
-          c2=c-2. ;
-          c3=c-3. ;
-
-          u3=exp(log(ap1)*c3) ;
-          v3=exp(log(am1)*c3) ;
-          u2=u3*ap1 ;
-          v2=v3*am1 ;
-          u1=u2*ap1 ;
-          v1=v2*am1 ;
+        cth = x0+(1.-x0)*sqrt(G4UniformRand()) ;
+      }
+      else
+      {
  
-          I0 = (1./v1-1./u1)/c1 ;
-          I1 = a*I0-(1./v2-1./u2)/c2 ;
-          I2 = a*a*I0-2.*a*(1./v2-1./u2)/c2+(1./v3-1./u3)/c3 ;
-
-          b = c/(am1+c) ;
-          if(b > 1.) b = 1. ;           //  from the definition of f(x)
-
-          prob = e*(I0-b*I1)/(I1-b*I2) ;
-          if(prob > 1.) prob = 1. ;
-
-          if(G4UniformRand() <= prob)
-          {
-            w1 = 1.-a*b ;
-            w2 = G4std::max(w1/am1,w1/ap1)+b ;
-
-            do
-            {
-              cth = a -am1*ap1/exp(log(v2+G4UniformRand()*(u2-v2))/c2) ;
-            } while ( G4UniformRand() > (w1/(a-cth)+b)/w2 ) ;
-          }
-          else
-          {
-            cth = -1.+2.*G4UniformRand() ;
-          }
-        }             
+        if(G4UniformRand() <= prob)
+        {
+          cth = -1.+2.*exp(log(G4UniformRand())/alfa) ;
+        }
         else
         {
-          cth = -1.+2.*G4UniformRand() ;
-        }        
-     } 
-     else
-     {
-       if(G4UniformRand()<prob)
-       {
-         w = 1.+scatteringparameter1*tau ;
-         w1 = w-1. ;
-         cth = w-w1*(w+1.)/sqrt(w1*w1+4.*w*G4UniformRand()) ;
-       }
-       else
-         cth = -1.+2.*G4UniformRand() ;
-     }
-  
-   }
-   else
-     cth = 1. ;
-
+          b1=b-1. ;
+          cth = b-b1*(b+1.)/sqrt(b1*b1+4.*b*G4UniformRand()) ;
+        }
+      } 
+    }
     sth = sqrt(1.-cth*cth) ;
 
     phi = twopi*G4UniformRand() ;
@@ -556,7 +494,9 @@
 
       if(safetyminustolerance > 0.)
       {
-        if(tau<tausmall)
+        if(tau < tausmall)
+          rmean = 0. ;
+        else if(tau<taulim)
           rmean = 5.*tau*tau*tau/12. ;
         else
         {
