@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2003-12-09 14:12:53 sussi Exp $
+$Id: History,v 1.2 2004-05-25 11:27:50 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,8 +8,12 @@ $Id: History,v 1.1 2003-12-09 14:12:53 sussi Exp $
 
                       Category History file
                       ---------------------
+25.05.2004 - J. Apostolakis   purtag-V06-01-00
+  Tagged 
 
-09.12.2003 - Example commited
+24.05.2004 - J. Apostolakis
+  Modified README file
 
-
+09.12.2003 - S. Larsson
+  Example commited
 
