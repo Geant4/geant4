@@ -133,8 +133,8 @@ void G4hLowEnergyIonisation::InitializeMe()
   protonHighEnergy     = 2.*MeV ;
   antiProtonLowEnergy  = 1.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
-  minGammaEnergy       = 250.*keV;
-  minElectronEnergy    = 250.*keV;
+  minGammaEnergy       = 25.*keV;
+  minElectronEnergy    = 25.*keV;
   verboseLevel         = 0;
   shellCS = new G4hShellCrossSection();
 }
