@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.15 2004-12-17 16:34:58 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.16 2005-02-14 13:55:52 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,15 +35,19 @@
 //
 //   Oliver Link (Oliver.Link@cern.ch)
 //
+// History:
+//    14.2.05 Changed Polynom Solver to G4JTPolynomialSolver
+//
 // --------------------------------------------------------------------
 
 #include <cmath>
 
 #include "G4TwistedTrapSide.hh"
-#include "G4PolynomRoot.hh"
+#include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
+
 
 G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
                                      G4double      PhiTwist,
@@ -298,7 +302,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 	   <<  c[7] << G4endl ;
 #endif    
 
-    G4PolynomRoot trapEq ;
+    G4JTPolynomialSolver trapEq ;
+
     G4int num = trapEq.FindRoots(c,7,sr,si);
   
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.7 2004-12-17 16:34:57 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.8 2005-02-14 13:55:52 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,12 +35,15 @@
 //
 //   Oliver Link (Oliver.Link@cern.ch)
 //
+// History:
+//    14.2.05 Changed Polynom Solver to G4JTPolynomialSolver
+//
 // --------------------------------------------------------------------
 
 #include <cmath>
 
 #include "G4TwistedBoxSide.hh"
-#include "G4PolynomRoot.hh"
+#include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -294,7 +297,7 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 	   <<  c[8] << G4endl ;
 #endif    
 
-    G4PolynomRoot trapEq ;
+    G4JTPolynomialSolver trapEq ;
     G4int num = trapEq.FindRoots(c,8,sr,si) ;
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
