@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.32 2001-05-25 17:08:30 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.33 2001-05-25 17:26:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // constructor
  
@@ -60,7 +60,7 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName
     totBin = GetNbinEloss();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // destructor
  
@@ -97,7 +97,7 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // SET CUT FOR LOW ENERGY SECONDARY PHOTONS A. FORTI
 void G4LowEnergyBremsstrahlung::SetcutForLowEnSecPhotons(G4double cut){
 
@@ -136,7 +136,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
  
 
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
   // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC. 
 void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
@@ -272,7 +272,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 }
 
       
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//     
 
 //
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
@@ -340,7 +340,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 //
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
@@ -375,7 +375,7 @@ void G4LowEnergyBremsstrahlung::ComputepartialSumSigma(const G4double KineticEne
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 							   const G4Step& stepData){
@@ -612,7 +612,7 @@ G4double G4LowEnergyBremsstrahlung::GetEnergyLossWithCut(const G4double AtomicNu
    loss+=SmallLoss;
   return loss ;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 G4double G4LowEnergyBremsstrahlung::GetCrossSection(const G4double AtomicNumber,
                                                     const G4double KineticEnergy){
 						    
@@ -647,7 +647,7 @@ G4double G4LowEnergyBremsstrahlung::GetCrossSectionWithCut(const G4double Atomic
     return CrossSection*fraction;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
 // LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
@@ -664,7 +664,7 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   return (*theElementVector)(0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
@@ -680,7 +680,7 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 
 }         
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 
 

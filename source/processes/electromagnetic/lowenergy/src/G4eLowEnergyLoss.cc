@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.8 2001-05-07 23:32:10 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.9 2001-05-25 17:26:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 // Initialisation of static data members
 // -------------------------------------
@@ -90,7 +90,7 @@ G4double         G4eLowEnergyLoss::LOGRTable ;
 
 G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // constructor and destructor
  
@@ -112,7 +112,7 @@ G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4eLowEnergyLoss::~G4eLowEnergyLoss() 
 {
@@ -123,7 +123,7 @@ G4eLowEnergyLoss::~G4eLowEnergyLoss()
        }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//     
 
 void G4eLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
@@ -308,7 +308,7 @@ void G4eLowEnergyLoss::BuildDEDXTable(
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
       
 G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                                                  const G4Step&  stepData)
@@ -386,6 +386,6 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   return &fParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 

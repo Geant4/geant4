@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.11 2001-05-25 17:08:31 pia Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.12 2001-05-25 17:26:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4double     G4VeLowEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4VeLowEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
@@ -55,7 +55,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss()
   G4Exception("G4VeLowEnergyLoss:: default constructor is called");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
@@ -65,13 +65,13 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VeLowEnergyLoss::~G4VeLowEnergyLoss()
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
@@ -81,7 +81,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
         G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
@@ -111,7 +111,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
    return theRangeTable ;
 }   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
                                          G4double lowestKineticEnergy,
@@ -149,7 +149,7 @@ void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   }
 }    
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -180,7 +180,7 @@ G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -214,7 +214,7 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4PhysicsTable* theLabTimeTable,
@@ -248,7 +248,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTabl
   return theLabTimeTable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4PhysicsTable* theProperTimeTable,
@@ -282,7 +282,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
   return theProperTimeTable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
                                     G4double lowestKineticEnergy,
@@ -344,7 +344,7 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
                                     G4double lowestKineticEnergy,
@@ -405,7 +405,7 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -438,7 +438,7 @@ G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -471,7 +471,7 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRangeTable,
                                    G4PhysicsTable* theRangeCoeffATable,
@@ -515,7 +515,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
   return theInverseRangeTable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
                               G4PhysicsTable* theRangeCoeffATable,
@@ -571,7 +571,7 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffATable,
@@ -634,7 +634,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
   return theRangeCoeffATable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
   
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffBTable,
@@ -696,7 +696,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
   return theRangeCoeffBTable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffCTable,
@@ -758,7 +758,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
   return theRangeCoeffCTable ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
@@ -999,5 +999,5 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   return loss ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
    

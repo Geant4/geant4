@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.icc,v 1.1 2000-04-04 13:47:36 lefebure Exp $
+// $Id: G4eLowEnergyLoss.icc,v 1.2 2001-05-25 17:26:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -64,7 +64,7 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
   return StepLimit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 inline G4double G4eLowEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
@@ -81,7 +81,7 @@ inline G4double G4eLowEnergyLoss::GetContinuousStepLimit(
   return Step ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 inline G4bool G4eLowEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
@@ -89,5 +89,5 @@ inline G4bool G4eLowEnergyLoss::IsApplicable(const G4ParticleDefinition&
            ||(&particle == G4Positron::Positron()) );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 

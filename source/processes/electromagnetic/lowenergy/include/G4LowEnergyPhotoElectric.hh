@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.17 2001-05-25 17:08:30 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.18 2001-05-25 17:26:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,13 +34,13 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
 typedef G4ThirdLevel allAtomTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 class G4LowEnergyPhotoElectric : public G4VDiscreteProcess
 
@@ -121,7 +121,7 @@ private:
   G4double MeanFreePath;           
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 #include "G4LowEnergyPhotoElectric.icc"
 

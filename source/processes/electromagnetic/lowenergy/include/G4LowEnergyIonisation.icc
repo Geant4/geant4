@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.15 2001-05-25 17:08:30 pia Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.16 2001-05-25 17:26:15 pia Exp $
 //
 // 
 // ---------------------------------------------------------------
@@ -26,7 +26,7 @@
 // 22/05/01 V.Ivanchenko: switch on using tables of cross sections.
 // ---------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 inline G4bool G4LowEnergyIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
@@ -40,7 +40,7 @@ inline G4bool G4LowEnergyIonisation::IsApplicable(
 	  );
 }
          
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 inline G4double G4LowEnergyIonisation::GetMeanFreePath(
                                                const G4Track& track,

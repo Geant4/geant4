@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.icc,v 1.17 2001-05-25 17:08:29 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.18 2001-05-25 17:26:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,7 @@
 // ***************************************************************
 #include "G4Gamma.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 inline G4bool G4LowEnergyBremsstrahlung::IsApplicable(
                             const G4ParticleDefinition& particle)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.47 2001-05-25 17:08:31 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.48 2001-05-25 17:26:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,8 +66,8 @@
 
 typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
+//    
 
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
    : G4eLowEnergyLoss(processName),
@@ -87,7 +87,7 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
     TotBin = GetNbinEloss();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4LowEnergyIonisation::~G4LowEnergyIonisation() 
 {
@@ -129,21 +129,21 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   CutForLowEnergySecondaryPhotons = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut){
 
   CutForLowEnergySecondaryElectrons = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
@@ -182,7 +182,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType) 
 {
@@ -257,7 +257,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 // CONSTRUCT THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EEDL DATA
 void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
@@ -293,7 +293,7 @@ void G4LowEnergyIonisation::BuildBindingEnergyTable(){
   theBindingEnergyTable = util.BuildSecondLevelTables(0,dataNum,"fluor/binding");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // CONSTRUCT THE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVECFLUOR DIFFERENT 
 // FROM ZNUMVEC BECAUSE THERE IS NO FLUORESCENCE FOR THE FIRST 5 ELEMENTS. 
 void G4LowEnergyIonisation::BuildFluorTransitionTable(){
@@ -322,7 +322,7 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // BUILD THE TABLE OF COEFFICIENT FOR THE ELEMENTS MAPPED IN ZNUMVEC
 void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
 
@@ -346,7 +346,7 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 //
 // vector mapping the elements of the material table 
 // 
@@ -377,7 +377,7 @@ void G4LowEnergyIonisation::BuildZVec(){
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
@@ -442,7 +442,7 @@ void G4LowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aPartic
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 						    const G4double IncEnergy){
@@ -482,7 +482,7 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
   return TotalCrossSection ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::ComputeCrossSectionWithCut(
                                             const G4double AtomIndex,
@@ -508,7 +508,7 @@ G4double G4LowEnergyIonisation::ComputeCrossSectionWithCut(
   return TotalCrossSection ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::GetShellCrossSection(
                                                const G4double AtomicNumber,
@@ -540,7 +540,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSection(
   return crossSec;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
                                              const G4double AtomicNumber,
@@ -749,7 +749,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
   return xsec*CrossSection/norm ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
                                               const G4double AtomicNumber,
@@ -981,7 +981,7 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
   return loss ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//     
  
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,   
 						       const G4Step&  step)
@@ -1263,7 +1263,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 //
 // selection of the first ionized subshell: partial sum method
@@ -1306,7 +1306,7 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 //
 // Element selction in the material already in the standard processes
@@ -1357,7 +1357,7 @@ G4Element* G4LowEnergyIonisation::SelectRandomAtom(
   return (*theElementVector)(0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 //
 // Select a random transition with the transition probabilities and 
@@ -1436,7 +1436,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   return ColIsFull;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber, 
 					       const G4int ShellIndex, 
@@ -1784,7 +1784,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   return sample;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
@@ -1797,6 +1797,6 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
   G4cout << GetProcessName() << ":  " << comments << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 
