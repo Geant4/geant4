@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.3 2004-05-19 15:22:39 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,8 @@ const G4int  G4VSurface::kAreaMask       = 0XF0000000;
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4VSurface::G4VSurface(const G4String &name, G4VSolid *solid)
-   : fName(name), fSolid(solid)
+G4VSurface::G4VSurface(const G4String &name)
+  : fName(name)
 {
 
    fAxis[0]    = kUndefined;

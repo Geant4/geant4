@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.3 2004-05-19 15:25:33 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ class G4VSurface
 
  public:  // with description
 
-   G4VSurface (const G4String &name, G4VSolid *solid);
+   G4VSurface (const G4String &name);
    G4VSurface (const G4String &name,
                const G4RotationMatrix &rot,
                const G4ThreeVector    &tlate,
@@ -163,13 +163,13 @@ class G4VSurface
    inline void SetAxis(G4int i, const EAxis axis)  { fAxis[i] = axis; }
    inline void SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min, 
                              G4VSurface* axis0max, G4VSurface* axis1max);
-   inline void SetSolid(G4VSolid *solid)  { fSolid = solid; }
+  //   inline void SetSolid(G4VSolid *solid)  { fSolid = solid; }
 
  protected:  // with description
  
    // get methods
 
-   inline  G4VSolid*     GetSolid()      { return fSolid; } 
+  //   inline  G4VSolid*     GetSolid()      { return fSolid; } 
    inline  G4VSurface**  GetNeighbours() { return fNeighbours; } 
    inline  G4int         GetNeighbours(G4int areacode, G4VSurface* surfaces[]);
    inline  G4ThreeVector GetCorner(G4int areacode) const;
@@ -418,7 +418,7 @@ class G4VSurface
        G4int         amIOnLeftSide;
    } fAmIOnLeftSide ;
 
-   G4VSolid           *fSolid; 
+  //   G4VSolid           *fSolid; 
 };
 
 //========================================================
