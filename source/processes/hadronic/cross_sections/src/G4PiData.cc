@@ -39,6 +39,7 @@ ReactionXSection(G4double kineticEnergy)
   e2=(*(it)).first;
   x2=(*(it)).second.second;
   result = max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
+  return result;
 }
 
 G4double G4PiData::
@@ -55,4 +56,5 @@ ElasticXSection(G4double kineticEnergy)
   e2=(*(it)).first;
   x2=(*(it)).second.first - (*(it)).second.second;
   result = max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
+  return result;
 }
