@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.21 2003-03-17 21:32:21 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.22 2003-03-18 01:19:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,7 +181,7 @@ class G4VUserPhysicsList
     // at the proper moment.
     void DumpCutValuesTableIfRequested();
 
-    void DumpCutValues(const G4String &particle_name = "ALL") const
+    void DumpCutValues(const G4String &particle_name = "ALL")
    {
     G4cerr << "WARNING !" << G4endl;
     G4cerr << " DumpCutValues() became obsolete." << G4endl;
@@ -189,7 +189,7 @@ class G4VUserPhysicsList
     G4cerr << " This dummy method implementation will be removed soon." << G4endl;
     DumpCutValuesTable();
    }
-    void DumpCutValues(G4ParticleDefinition* ) const
+    void DumpCutValues(G4ParticleDefinition* )
    {
     G4cerr << "WARNING !" << G4endl;
     G4cerr << " DumpCutValues() became obsolete." << G4endl;
