@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.1 2003-09-21 19:38:50 kurasige Exp $
+// $Id: G4HtmlPPReporter.cc,v 1.2 2003-10-30 09:22:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 
   GenerateIndex();
 
-  for (G4int i=0; i< pList.size(); i++){
+  for (size_t i=0; i< pList.size(); i++){
     G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( pList[i]->GetParticleName() ); 
     GeneratePropertyTable(particle);
   }
@@ -98,7 +98,7 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << sTD << sLFONT << "Anti-Particle" << eLFONT<< eTD; 
   outFile << eTR << G4endl;;
   
-  for (G4int i=0; i< pList.size(); i++){
+  for (size_t i=0; i< pList.size(); i++){
     outFile << sTR << G4endl;;
     // column 1  : endcoding
     outFile << sTD << pList[i]->GetPDGEncoding() << eTD << G4endl;; 
