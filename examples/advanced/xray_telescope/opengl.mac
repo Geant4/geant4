@@ -14,8 +14,8 @@
 # * MACRO:             opengl.mac                                   * #
 # * ------             demostrates the OGLIX DRIVER                 * #
 # *                                                                 * #
-# * Version:           0.6                                          * #
-# * Date:              15/11/00                                     * #
+# * Version:           1.0                                          * #
+# * Date:              16/10/01                                     * #
 # * Author:            R Nartallo                                   * #
 # * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands        * #
 # *                                                                 * #
@@ -42,6 +42,9 @@
 #   CHANGE HISTORY                                                    #
 #   --------------                                                    #
 #                                                                     #
+#   16.10.2001 R. Nartallo                                            #
+#   - New implementation with new "/vis" commands                     #
+#                                                                     #
 #   15.11.2000 R. Nartallo                                            #
 #   - Replaced standard particle gun by GPS set options               #
 #                                                                     #
@@ -55,26 +58,10 @@
 
 # Invoke the OGLIX driver 
 /vis/open OGLIX
-
-# Create a new scene 
-/vis/scene/create
-
-# Attach the current scene handler to the current scene
-/vis/sceneHandler/attach 
-
-# Add the world volume to the current scene
-/vis/scene/add/volume
-
-# Add all trajectories to the current scene
-#/vis/scene/add/trajectories
-
-# Set drawing style
-/vis/viewer/set/style surface
-
-# Set camera
-/vis/camera/reset
-/vis/camera/viewpoint 25 0
-#/vis/camera/spin     360 1
+/vis/viewer/set/style wireframe
+/vis/drawVolume
+/vis/viewer/viewpointThetaPhi 60 -75 deg  
+/vis/scene/endOfEventAction accumulate
 
 # Visualize one event added to the current scene
 # * Command "/vis/scene/notifyHandlers" is written in 
@@ -86,7 +73,7 @@
 /tracking/storeTrajectory 1
 
 # Set to draw tracks of positively charged particles
-# /event/drawTracks charged
+/event/drawTracks charged
 
 # Set General Particle Source options
 /gps/particle proton
@@ -98,14 +85,15 @@
 /gps/radius0 30.5 cm
 /gps/centre 780.1 0. 0. cm
 /gps/angtype cos
-/gps/angrot1 0. 0. 1.
-/gps/angrot2 0. 1. 0.
 /gps/maxtheta 1. deg
 /gps/energytype Mono
 /gps/monoenergy 0.5 MeV
 
 # Set number of particles and start
-/run/beamOn 10000
+/run/beamOn 30000
+
+
+
 
 
 

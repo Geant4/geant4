@@ -14,8 +14,8 @@
 # * MACRO:             vrml.mac                                     * #
 # * ------             demostrates the VRML DRIVER                  * #
 # *                                                                 * #
-# * Version:           0.6                                          * #
-# * Date:              15/11/00                                     * #
+# * Version:           1.0                                          * #
+# * Date:              16/10/01                                     * #
 # * Author:            R Nartallo                                   * #
 # * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands        * #
 # *                                                                 * #
@@ -49,6 +49,9 @@
 #                                                                     #
 #   CHANGE HISTORY                                                    #
 #   --------------                                                    #
+#                                                                     #
+#   16.10.2001 R. Nartallo                                            #
+#   - New implementation with new "/vis" commands                     #
 #                                                                     #
 #   15.11.2000 R. Nartallo                                            #
 #   - Replaced standard particle gun by GPS set options               #
@@ -85,25 +88,29 @@
 # Invoke the VRML2FILE driver
 /vis/open VRML2FILE
 
+# Set viewer rendering style
+# "wireframe" means  "half-transparent" in VRML2FILE driver 
+#/vis/viewer/set/style surface
+/vis/viewer/set/style wireframe
+
+# Compund command: creates scene, adds volume, attaches scene handler
+# and refreshes viewer
+/vis/drawVolume
+
 # Create a new scene 
 /vis/scene/create
 
-# Add the world volume to the current scene
-/vis/scene/add/volume
-
 # Attach the current scene handler to the current scene
 /vis/sceneHandler/attach 
+
+# Add the world volume to the current scene
+/vis/scene/add/volume
 
 # Visualize one event added to the current scene
 # * Command "/vis/scene/notifyHandlers" is written in 
 #   XrayTelRunAction::BeginOfRunAction()
 # * Command "/vis/viewer/update" is written in 
 #   XrayTelRunAction::EndOfRunAction()
-
-# Set viewer rendering style
-# "wireframe" means  "half-transparent" in VRML2FILE driver 
-#/vis/viewer/set/style surface
-/vis/viewer/set/style wireframe
 
 # Store particle trajactories for visualization
 /tracking/storeTrajectory 1

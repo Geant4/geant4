@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-06-18 17:43:03 nartallo Exp $
+$Id: History,v 1.11 2001-11-08 13:48:41 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07.11.2001 - RN, tag xraytel-V02-00-12
+             Cleaned up code to avoid compilation warnings arising 
+             from "ANSI" and "pedantic" options
+             Implemented new "/vis" commands in macro files
 
 18.06.2001 - RN, tag xraytel-V02-00-11
              tested with latest global tag geant4-03-01-ref-02

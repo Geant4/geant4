@@ -28,8 +28,8 @@
 // * MODULE:            XrayTelSteppingAction.hh                        *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              16/10/01                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -37,6 +37,9 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 16.10.2001 R.Nartallo
+// - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
 // 06.11.2000 R.Nartallo
 // - First implementation of X-ray Telescope advanced example.
@@ -69,9 +72,9 @@ public:
   virtual void UserSteppingAction(const G4Step*);
   
 private:
-  G4bool* drawEvent;
   G4std::vector<G4double*>* enteringEnergy;
   G4std::vector<G4ThreeVector*>* enteringDirection;
+  G4bool* drawEvent;
 
   XrayTelAnalysisManager* fAnalysisManager;
 };

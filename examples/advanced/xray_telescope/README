@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2000-12-06 18:34:42 nartallo Exp $
+$Id: README,v 1.6 2001-11-08 13:48:42 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -108,13 +108,17 @@ VRMLview for Linux can be obtained from
 To execute a sample simulation with visualisation of proton tracks
 reaching the detector run:
 
-XrayTel opengl.mac  for OpenGL display
-XrayTel vrml.mac    for VRML display and output file
-XrayTel dawn.mac    for dawn display and PS output file
+XrayTel 
 
-To execute a run without visualisation
+execute command "/control/execute xxxxx.mac"
 
-XrayTel test.mac
+visualisation macros provided are 
+  - opengl.mac  for OpenGL display
+  - vrml.mac    for VRML display and output file
+  - dawn.mac    for dawn display and PS output file
+
+To execute a run without visualisation use 
+  - test.mac
 
 
 If the Lizard analysis options are set, histograming windows will
@@ -164,6 +168,13 @@ Lizard is not currently implemented on platforms other than Linux.
 To build and execute the example on other platforms the analysis 
 environment variables must not be set, except for G4ANALYSIS_BUILD 
 which is required for building the executable.
+
+
+
+
+
+
+
 
 
 

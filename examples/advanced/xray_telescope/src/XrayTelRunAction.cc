@@ -28,8 +28,8 @@
 // * MODULE:            XrayTelRunAction.cc                             *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              16/10/01                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -37,6 +37,10 @@
 // 
 // CHANGE HISTORY
 // --------------
+//
+// 16.10.2001 R. Nartallo
+// - Updated "/vis" commands to new versions
+// - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
 // 30.11.2000 R. Nartallo
 // - Add pre-processor directives to compile without analysis option
@@ -88,8 +92,7 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/clear/view");
-    UI->ApplyCommand("/vis/draw/current");
+    UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 
   enteringEnergy->clear();
@@ -105,10 +108,10 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
 
-  G4int i;
+  size_t i;
 
   if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
   G4std::ofstream outscat("detector.hist", ios::app);
 

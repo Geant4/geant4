@@ -89,8 +89,6 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step*)
 {
   const G4SteppingManager* pSM = fpSteppingManager;
   G4Track* fTrack = pSM->GetTrack();
-  G4Step* fStep = pSM->GetStep();
-  G4int TrackID = fTrack->GetTrackID();
   G4int StepNo = fTrack->GetCurrentStepNumber();
 
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);

@@ -28,8 +28,8 @@
 // * MODULE:            XrayTelEventAction.hh                           *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              16/10/01                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -37,6 +37,9 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 16.10.2001 R.Nartallo
+// - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
 // 06.11.2000 R.Nartallo
 // - First implementation of X-ray Telescope advanced example.
@@ -68,9 +71,9 @@ public:
   void SetDrawFlag(G4String val)  {drawFlag = val;};
     
 private:
-  G4bool* drawEvent;
   G4String drawFlag;                         // control the drawing of event
   XrayTelEventActionMessenger* eventMessenger;
+  G4bool* drawEvent;
 };
 
 #endif

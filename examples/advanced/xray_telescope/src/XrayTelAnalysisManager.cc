@@ -144,6 +144,7 @@ void XrayTelAnalysisManager::BeginOfRun(){
 void XrayTelAnalysisManager::EndOfRun(){
   // the following things cannot be done in Run::EndOfRun()
   // only now plot the energy of the particles
+
   if(enteringEnergyHistogram) {
     Plot(enteringEnergyHistogram);
   }
@@ -172,6 +173,8 @@ void XrayTelAnalysisManager::Step(const G4SteppingManager* aSteppingManager) {
 } 
 
 #endif
+
+
 
 
 
