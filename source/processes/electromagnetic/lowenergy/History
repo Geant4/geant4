@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2002-06-02 21:15:31 pia Exp $
+$Id: History,v 1.145 2002-06-03 00:12:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02.06-2002   MGP, tag emlowen-V04-00-12
+03.06-2002   MGP, tag emlowen-V04-00-13
+             Fixes to Auger by Alfonso Mantero
+             Goes with new version of G4LEDATA G4EMLOW1.1
+
+03.06-2002   MGP, tag emlowen-V04-00-12
              Introduce Auger implementation (previously handled as
              local energy deposit)
 
@@ -28,6 +32,7 @@ committal in the CVS repository !
                  sampling and integration
              VNI Add excitation cross sections and energy 
              New interpolation algorithm
+             Goes with new version of G4LEDATA G4EMLOW1.0
 
 02.06-2002   MGP, tag emlowen-V04-00-10
              Improvements to PolarizedCompton by F. Longo and G. Depaola
