@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.5 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4GammaConversion.hh,v 1.6 2001-08-09 17:24:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ------------ G4GammaConversion physics process ------
@@ -34,7 +34,9 @@
 // 14-01-97, crossection table + meanfreepath table.
 //           PartialSumSigma removed, M.Maire
 // 14-03-97, new physics scheme for geant4alpha, M.Maire
-// 13-08-98, new methods SetBining() PrintInfo() 
+// 13-08-98, new methods SetBining() PrintInfo()
+// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)  
 // ------------------------------------------------------------
 
 // class description
@@ -68,7 +70,7 @@ class G4GammaConversion : public G4VDiscreteProcess
 {  
   public:  // with description
  
-     G4GammaConversion(const G4String& processName ="conv");
+     G4GammaConversion(const G4String& processName ="gamaconv");
  
     ~G4GammaConversion();
 
@@ -79,18 +81,27 @@ class G4GammaConversion : public G4VDiscreteProcess
        // Allows to define the binning of the PhysicsTables, 
        // before to build them.
      
-     void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
+     void BuildThePhysicsTable();
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
        // and for every material contained in the materialTable.       
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the G4ParticleWithCuts::SetCut() method.
-             
+       // It is invoked by the constructor.
+       
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+			      const G4String& directory, G4bool);
+       // store CrossSection and MeanFreePath tables into an external file
+       // specified by 'directory' (must exist before invokation)
+
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+				 const G4String& directory, G4bool);
+       // retrieve CrossSection and MeanFreePath tables from an external file
+       // specified by 'directory' 
+       				         	                          
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildPhysicsTable(). 
+       // Invoked by BuildThePhysicsTable(). 
 
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
@@ -101,8 +112,8 @@ class G4GammaConversion : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.		      
        // It is invoked by the ProcessManager of the Particle.
        
-     G4double GetMicroscopicCrossSection(const G4DynamicParticle* aDynamicGamma,
-                                         G4Element*         anElement);
+     G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicGamma,
+                                           G4Element*         anElement);
        // It returns the total CrossSectionPerAtom of the process, 
        // for the current DynamicGamma (energy), in anElement.	
        
@@ -115,8 +126,8 @@ class G4GammaConversion : public G4VDiscreteProcess
         
   protected:
 
-     virtual G4double ComputeMicroscopicCrossSection(G4double GammaEnergy, 
-                                             G4double AtomicNumber);
+     virtual G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
+                                                 G4double AtomicNumber);
 
      virtual G4double ComputeMeanFreePath (G4double GammaEnergy, 
                                            G4Material* aMaterial);
@@ -141,9 +152,9 @@ class G4GammaConversion : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crossection
      G4PhysicsTable* theMeanFreePathTable;
      
-     G4double LowestEnergyLimit ;      // low  energy limit of the crossection formula
-     G4double HighestEnergyLimit ;     // high energy limit of the crossection formula 
-     G4int NumbBinTable ;              // number of bins in the crossection table
+     G4double LowestEnergyLimit ;      // low  energy limit of the tables
+     G4double HighestEnergyLimit ;     // high energy limit of the tables 
+     G4int NumbBinTable ;              // number of bins in the tables
 
      G4double MeanFreePath;            // actual Mean Free Path (current medium)
 };

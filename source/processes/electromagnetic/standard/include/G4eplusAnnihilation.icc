@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.icc,v 1.5 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4eplusAnnihilation.icc,v 1.6 2001-08-09 17:24:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,7 +44,7 @@ inline G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
                                            G4DynamicParticle* aDynamicPositron,
                                            G4Element*         anElement)
  
-// gives the microscopic total cross section in GEANT4 internal units
+// return the total cross section per atom in GEANT4 internal units
 
 {
    G4double crossSection;

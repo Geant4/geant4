@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.5 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.6 2001-08-09 17:24:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,9 @@
 
 // 10-01-97, crossection table + meanfreepath table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
-// 31-08-98, new methods SetBining() and PrintInfo() 
+// 31-08-98, new methods SetBining() and PrintInfo()
+// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)   
 // 
 
 // class description
@@ -73,18 +75,27 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // Allows to define the binning of the PhysicsTables, 
        // before to build them.
             
-     void BuildPhysicsTable(const G4ParticleDefinition& PositronType);
+     void BuildThePhysicsTable();
        // It builds the total CrossSectionPerAtom table, for e+,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for e+,
        // and for every material contained in the materialTable.       
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the G4ParticleWithCuts::SetCut() method. 
-            
+       // It is invoked by the constructor. 
+       
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+			      const G4String& directory, G4bool);
+       // store CrossSection and MeanFreePath tables into an external file
+       // specified by 'directory' (must exist before invokation)
+
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+				 const G4String& directory, G4bool);
+       // retrieve CrossSection and MeanFreePath tables from an external file
+       // specified by 'directory' 
+                   
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildPhysicsTable(). 
+       // Invoked by BuildThePhysicsTable(). 
            
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
@@ -125,7 +136,7 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
   protected:
 
      virtual G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
-                                                     G4double AtomicNumber);
+                                                 G4double AtomicNumber);
 
      virtual G4double ComputeMeanFreePath(G4double PositKinEnergy, 
                                           G4Material* aMaterial);
@@ -133,17 +144,17 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
   private:
   
    // hide assignment operator as private 
-   G4eplusAnnihilation& operator=(const G4eplusAnnihilation &right);
+   G4eplusAnnihilation& operator=(const G4eplusAnnihilation& right);
    G4eplusAnnihilation(const G4eplusAnnihilation& );
       
   private:
 
-     G4PhysicsTable* theCrossSectionTable;    // table for crossection
+     G4PhysicsTable* theCrossSectionTable;    
      G4PhysicsTable* theMeanFreePathTable;
      
-     G4double LowestEnergyLimit ;      // low  energy limit of the crossection formula
-     G4double HighestEnergyLimit ;     // high energy limit of the crossection formula 
-     G4int NumbBinTable ;              // number of bins in the crossection table
+     G4double LowestEnergyLimit;      // low  energy limit of the tables
+     G4double HighestEnergyLimit;     // high energy limit of the tables 
+     G4int NumbBinTable;              // number of bins in the tables
 };
 
 #include "G4eplusAnnihilation.icc"

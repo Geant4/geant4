@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.7 2001-07-17 14:22:52 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.8 2001-08-09 17:24:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //------------ G4ComptonScattering physics process --------
 //                   by Michel Maire, April 1996
 //
-// --------------------------------------------------------------
 // 28-05-96, DoIt() small change in ElecDirection, by M.Maire
 // 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
@@ -41,7 +40,9 @@
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 13-07-01, DoIt: suppression of production cut for the electron (mma) 
+// 13-07-01, DoIt: suppression of production cut for the electron (mma)
+// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
 // --------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -55,10 +56,12 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName)
   : G4VDiscreteProcess (processName),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),  
-    LowestEnergyLimit ( 10*keV),              // initialization
+    LowestEnergyLimit ( 10*keV),              
     HighestEnergyLimit(100*GeV),
     NumbBinTable(100)
-{ }
+{
+ BuildThePhysicsTable();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -86,17 +89,16 @@ void G4ComptonScattering::SetPhysicsTableBining(G4double lowE, G4double highE, G
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition& GammaType)
-
-// Build microscopic cross section table and mean free path table
+void G4ComptonScattering::BuildThePhysicsTable()
+// Build cross section and mean free path tables
 {
    G4double LowEdgeEnergy, Value;
    G4PhysicsLogVector* ptrVector;
 
-// Build microscopic cross section tables for the Compton Scattering process
+// Build cross section per atom tables for the Compton Scattering process
 
    if (theCrossSectionTable) {
-              theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; }
+       theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable;}
 
    theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
@@ -124,7 +126,7 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition& GammaTyp
 // Build mean free path table for the Compton Scattering process
 
    if (theMeanFreePathTable) {
-             theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
+       theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
  
    theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
@@ -153,10 +155,80 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition& GammaTyp
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4bool G4ComptonScattering::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+
+  // store cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  if ( !theCrossSectionTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4ComptonScattering::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theCrossSectionTable and theMeanFreePathTable
+  if (theCrossSectionTable != 0) {
+    theCrossSectionTable->clearAndDestroy();
+    delete theCrossSectionTable;
+  }
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+
+  // retreive cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
+  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4ComptonScattering::ComputeCrossSectionPerAtom
                               (G4double GammaEnergy, G4double Z)
  
-// Calculates the microscopic cross section in GEANT4 internal units.
+// Calculates the cross section per atom in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate the total cross section.
 // It gives a good description of the data from 10 keV to 100/Z GeV.
  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.7 2001-07-17 14:22:52 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.8 2001-08-09 17:24:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ------------ G4GammaConversion physics process --------
@@ -29,7 +29,7 @@
 // --------------------------------------------------------------------
 // 11-06-96, Added SelectRandomAtom() method, M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
-// 24-06-96, simplification in ComputeMicroscopicCrossSection, M.Maire
+// 24-06-96, simplification in ComputeCrossSectionPerAtom, M.Maire
 // 24-06-96, in DoIt : change the particleType stuff, M.Maire
 // 25-06-96, modification in the generation of the teta angle, M.Maire
 // 16-09-96, minors optimisations in DoIt. Thanks to P.Urban
@@ -41,12 +41,14 @@
 //           for further annihilation, M.Maire
 // 14-03-97, new Physics scheme for geant4alpha, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
+// 19-06-97, correction in ComputeCrossSectionPerAtom, L.Urban
 // 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 11-07-01, PostStepDoIt - sampling epsil: power(rndm,0.333333)
-// 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)  
+// 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)
+// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)   
 // --------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -63,7 +65,9 @@ G4GammaConversion::G4GammaConversion(const G4String& processName)
     LowestEnergyLimit (2*electron_mass_c2),
     HighestEnergyLimit(100*GeV),
     NumbBinTable(100)
-{ }
+{
+ BuildThePhysicsTable(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -92,13 +96,13 @@ void G4GammaConversion::SetPhysicsTableBining(G4double lowE, G4double highE, G4i
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType)
-// Build microscopic cross section table and mean free path table
+void G4GammaConversion::BuildThePhysicsTable()
+// Build cross section and mean free path tables
 {
    G4double LowEdgeEnergy, Value;
    G4PhysicsLogVector* ptrVector;
 
-// Build microscopic cross section tables for the e+e- pair creation
+// Build cross section per atom tables for the e+e- pair creation
 
    if (theCrossSectionTable) {
          theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; }
@@ -118,7 +122,7 @@ void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType)
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
-             Value = ComputeMicroscopicCrossSection( LowEdgeEnergy, AtomicNumber);  
+             Value = ComputeCrossSectionPerAtom( LowEdgeEnergy, AtomicNumber);  
              ptrVector->PutValue( i , Value ) ;
            }
 
@@ -158,7 +162,77 @@ void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4GammaConversion::ComputeMicroscopicCrossSection
+G4bool G4GammaConversion::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+
+  // store cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  if ( !theCrossSectionTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4GammaConversion::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theCrossSectionTable and theMeanFreePathTable
+  if (theCrossSectionTable != 0) {
+    theCrossSectionTable->clearAndDestroy();
+    delete theCrossSectionTable;
+  }
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+
+  // retreive cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
+  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4GammaConversion::ComputeCrossSectionPerAtom
                               (G4double GammaEnergy, G4double AtomicNumber)
  
 // Calculates the microscopic cross section in GEANT4 internal units.
@@ -381,7 +455,7 @@ G4Element* G4GammaConversion::SelectRandomAtom(const G4DynamicParticle* aDynamic
  
   for ( G4int i=0 ; i < NumberOfElements ; i++ )
       { PartialSumSigma += theAtomNumDensityVector[i] *
-                   GetMicroscopicCrossSection(aDynamicGamma, (*theElementVector)(i));
+                   GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)(i));
         if (rval <= PartialSumSigma) return ((*theElementVector)(i));
       }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()

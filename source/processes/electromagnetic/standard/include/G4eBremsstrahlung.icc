@@ -21,22 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.icc,v 1.5 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4eBremsstrahlung.icc,v 1.6 2001-08-09 17:24:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4eBremsstrahlung physics process ---------
 //                     by Michel Maire, 27 July 1996
-// ***************************************************************
+// 
 // 13-12-96 : Sign corrected in the ScreenFunctions, L.Urban
 // 20/03/97 : new energy loss+ionisation+brems scheme, L.Urban
-// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// ***************************************************************
+// 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// ---------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -61,10 +55,9 @@ inline G4double G4eBremsstrahlung::GetMeanFreePath(const G4Track& track,
    G4Material* aMaterial  = track.GetMaterial();
    
    G4double MeanFreePath;
-   G4bool isOutRange ;
+   G4bool isOutRange;
 
-   if (KineticEnergy <  LowestKineticEnergy)
-     MeanFreePath = DBL_MAX;
+   if (KineticEnergy < LowestKineticEnergy) MeanFreePath = DBL_MAX;
    else {
      if (KineticEnergy > HighestKineticEnergy) KineticEnergy = 0.99*HighestKineticEnergy ;
      MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
@@ -114,13 +107,9 @@ inline G4double G4eBremsstrahlung::GetLambda(
                               G4double KineticEnergy,
                               G4Material* material)
 {
-  G4bool isOut;
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
- 
-  G4double lambda = (*theMeanFreePathTable)
-                    [material->GetIndex()]->
-                    GetValue(KineticEnergy,isOut);
-  return lambda;
+  G4bool isOut; 
+  return (*theMeanFreePathTable)[material->GetIndex()]->
+                                           GetValue(KineticEnergy,isOut);
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

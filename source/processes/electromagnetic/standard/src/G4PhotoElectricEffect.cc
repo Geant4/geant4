@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.15 2001-07-17 14:22:52 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.16 2001-08-09 17:24:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,6 +44,8 @@
 // 22-02-01, back to 08-06-99 after correc in SandiaTable (materials-V03-00-05)  
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 13-07-01, DoIt: suppression of production cut of the electron (mma)
+// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,7 +64,9 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
     LowestEnergyLimit (50*keV),
     HighestEnergyLimit(50*MeV),
     NumbBinTable(100)
-{ }
+{
+ BuildThePhysicsTable();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -90,17 +94,17 @@ void G4PhotoElectricEffect::SetPhysicsTableBining(G4double lowE, G4double highE,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
+void G4PhotoElectricEffect::BuildThePhysicsTable()
 
-// Build microscopic cross section table and mean free path table
+// Build cross section per atom and mean free path tables
 {
    G4double LowEdgeEnergy, Value;
    G4PhysicsLogVector* ptrVector;
 
-// Build microscopic cross section tables for the Photo Electric Effect
+// Build cross section per atom tables for the Photo Electric Effect
 
    if (theCrossSectionTable) {
-           theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; }
+       theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable;}
 
    theCrossSectionTable = new G4PhysicsTable( G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
@@ -128,7 +132,7 @@ void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& Photon
 // Build mean free path table for the Photo Electric Effect
 
    if (theMeanFreePathTable) {
-           theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
+       theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 
    theMeanFreePathTable = new G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
@@ -156,11 +160,81 @@ void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& Photon
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4PhotoElectricEffect::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+
+  // store cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  if ( !theCrossSectionTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4PhotoElectricEffect::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theCrossSectionTable and theMeanFreePathTable
+  if (theCrossSectionTable != 0) {
+    theCrossSectionTable->clearAndDestroy();
+    delete theCrossSectionTable;
+  }
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+
+  // retreive cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
+  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom (G4double PhotonEnergy,
                                                             G4double AtomicNumber)
  
-// Calculates the microscopic cross section in GEANT4 internal units.
+// Calculates the cross section per atom in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate the total cross section.
 // It gives a good description of the elements : 5 < Atomic Number < 100 and
 //                                               from 10 keV to 50 MeV.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.6 2001-07-17 14:22:52 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.7 2001-08-09 17:24:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -32,7 +32,9 @@
 // 31-08-98, new methods SetBining() and PrintInfo()
 // 22-02-01, postStepDoIt: fStopButAlive instead of kineEnergy == 0.  
 // 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 13-07-01, DoIt: suppression of production cut for the gamma (mma)  
+// 13-07-01, DoIt: suppression of production cut for the gamma (mma)
+// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)    
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,10 +50,12 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName)
   : G4VRestDiscreteProcess (processName),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),   
-    LowestEnergyLimit ( 10*keV),      // initialization
+    LowestEnergyLimit ( 10*keV), 
     HighestEnergyLimit( 10*TeV),
     NumbBinTable(100)
- { }
+{
+  BuildThePhysicsTable();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -80,14 +84,14 @@ void G4eplusAnnihilation::SetPhysicsTableBining(G4double lowE, G4double highE, G
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& PositronType)
+void G4eplusAnnihilation::BuildThePhysicsTable()
 
-// Build microscopic total cross section tables and mean free path table
+// Build total cross section and mean free path tables
 {
    G4double LowEdgeEnergy, Value;
    G4PhysicsLogVector* ptrVector;
 
-// Build microscopic cross section tables for the e+e- annihilation
+// Build cross section per atom tables for the e+e- annihilation
 
    if (theCrossSectionTable) {
           theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; }
@@ -147,10 +151,80 @@ void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& Positron
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+
+  // store cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  if ( !theCrossSectionTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theCrossSectionTable and theMeanFreePathTable
+  if (theCrossSectionTable != 0) {
+    theCrossSectionTable->clearAndDestroy();
+    delete theCrossSectionTable;
+  }
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+
+  // retreive cross section table
+  filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
+  theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
+  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
                               (G4double PositKinEnergy, G4double AtomicNumber)
  
-// Calculates the microscopic cross section of annihilation into two photons
+// Calculates the cross section per atom of annihilation into two photons
 // from the Heilter formula.
 // GEANT4 internal units.
 

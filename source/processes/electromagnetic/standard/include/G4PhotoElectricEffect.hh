@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.7 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.8 2001-08-09 17:24:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,8 @@
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
+// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,7 +70,7 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
 {
   public:  // with description
  
-     G4PhotoElectricEffect(const G4String& processName ="phot");
+     G4PhotoElectricEffect(const G4String& processName ="photelec");
  
     ~G4PhotoElectricEffect();
 
@@ -79,18 +81,27 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
        // Allows to define the binning of the PhysicsTables, 
        // before to build them.
 
-     void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
+     void BuildThePhysicsTable();
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
        // and for every material contained in the materialTable.       
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the G4ParticleWithCuts::SetCut() method.
-             
+       // It is invoked by the constructor.
+
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+			      const G4String& directory, G4bool);
+       // store CrossSection and MeanFreePath tables into an external file
+       // specified by 'directory' (must exist before invokation)
+
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+				 const G4String& directory, G4bool);
+       // retrieve CrossSection and MeanFreePath tables from an external file
+       // specified by 'directory' 
+       				         	             
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildPhysicsTable().      
+       // Invoked by BuildThePhysicsTable().      
      
      G4double GetMeanFreePath(const G4Track&          aTrack,
                                     G4double          previousStepSize,
@@ -148,8 +159,8 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crossection
      G4PhysicsTable* theMeanFreePathTable;    // table for Mean free path
      
-     G4double LowestEnergyLimit ;      // low  energy limit of the physics tables
-     G4double HighestEnergyLimit ;     // high energy limit of the physics tables 
+     G4double LowestEnergyLimit ;      // low  energy limit of the tables
+     G4double HighestEnergyLimit ;     // high energy limit of the tables 
      G4int NumbBinTable ;              // number of bins in the tables
 
      G4double MeanFreePath;            // actual Mean Free Path (current medium)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.icc,v 1.6 2001-08-06 11:48:48 maire Exp $
+// $Id: G4eIonisation.icc,v 1.7 2001-08-09 17:24:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4eIonisation::IsApplicable(
-                            const G4ParticleDefinition& particle)
+inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& particle)
 {
    return(  (&particle == G4Electron::Electron())
           ||(&particle == G4Positron::Positron()) );
@@ -46,9 +45,7 @@ inline G4bool G4eIonisation::IsApplicable(
          
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eIonisation::GetMeanFreePath(
-                                               const G4Track& track,
-                                               G4double,
+inline G4double G4eIonisation::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*) 
 {
    const G4DynamicParticle* aParticle = track.GetDynamicParticle();
@@ -58,30 +55,25 @@ inline G4double G4eIonisation::GetMeanFreePath(
    G4double MeanFreePath;
    G4bool isOutRange ;
 
-   if( KineticEnergy < LowestKineticEnergy )
-     MeanFreePath = DBL_MAX;
+   if (KineticEnergy < LowestKineticEnergy) MeanFreePath = DBL_MAX;
    else {
-     if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
-     MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                    GetValue( KineticEnergy, isOutRange);
-     }
+         if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
+         MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                        GetValue( KineticEnergy, isOutRange);
+   }
    
-   return MeanFreePath ;
+   return MeanFreePath;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eIonisation::GetLambda(
-                              G4double KineticEnergy,
-                              G4Material* material)
+inline G4double G4eIonisation::GetLambda(G4double KineticEnergy,
+                                         G4Material* material)
 {
   G4bool isOut;
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
- 
-  G4double lambda = (*theMeanFreePathTable)
-                    [material->GetIndex()]->
-                    GetValue(KineticEnergy,isOut);
-  return lambda;
+
+  return (*theMeanFreePathTable)[material->GetIndex()]->
+                                                GetValue(KineticEnergy,isOut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

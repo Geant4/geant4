@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.9 2001-08-06 11:48:48 maire Exp $
+// $Id: G4eIonisation.hh,v 1.10 2001-08-09 17:24:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
 //                by Laszlo Urban, 20 March 1997 
 //
-// 10/02/00  modifications , new e.m. structure, L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
 //
 // ------------------------------------------------------------
 
@@ -64,7 +65,7 @@ class G4eIonisation : public G4VeEnergyLoss
 {
   public:   // with description
  
-    G4eIonisation(const G4String& processName = "eIoni"); 
+    G4eIonisation(const G4String& processName = "eIonisa"); 
 
    ~G4eIonisation();
 
@@ -83,7 +84,17 @@ class G4eIonisation : public G4VeEnergyLoss
     void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
       // build mean free path tables for the delta rays production.
       // the tables are built for every materials.
-    
+      
+    G4bool StorePhysicsTable(G4ParticleDefinition* ,
+		             const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			        const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'
+            
     void PrintInfoDefinition();
       // Print few lines of informations about the process: validity range,
       // origine ..etc..
@@ -110,7 +121,7 @@ class G4eIonisation : public G4VeEnergyLoss
 
   protected:   // with description
 
-    virtual G4double ComputeMicroscopicCrossSection(
+    virtual G4double ComputeCrossSectionPerAtom(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             G4double AtomicNumber,
