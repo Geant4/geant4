@@ -1,0 +1,398 @@
+
+                       geant4-06-02-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added support for DLLs on Windows/.NET for global libraries, and
+    for MacOS .dyn global shared libraries.
+  o Added check to G4Navigator to count the number of steps with zero
+    length and issue an exception aborting the event for rare situations
+    where tracks that get stuck in a loop.
+  o Introduced static methods in G4UIcommand class for conversion between
+    a string and a value.
+  o Fixes in MuPairProduction and eBremsstrahlung.
+  o New model for PIXE for low-energy electromagnetic processes.
+  o New hadronic packages and models: ablation, abrasion, em_dissociation
+    and coherent_elastic, requiring new data set for elastic scattering
+    data at high energies (G4ELASTICDATA).
+  o Cleared dependency on HEPVis for the OpenInventor driver and ported
+    on Windows systems.
+  o Migrated advanced/extended examples to AIDA 3.2.1.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V06-01-10
+------
+- architecture.gmk: added specification for G4LIB_BUILD_DLL/G4LIB_USE_DLL
+  and updated comments to header.
+- binmake.gmk:
+  o Activated shared-libs mechanism for Windows platforms;
+    forced creation of static library for examples/applications for the
+    usage with DLLs.
+  o Restored global lib for interfaces which was missing from linking list.
+  o Added include paths to new hadronic models for abrasion, em_dissociation,
+    de_excitation/ablation and de_excitation/fission.
+- common.gmk, globlib.gmk: fixed clean/clean_libs target.
+- Linux-g++.gmk: made -O2 the default optimisation mode.
+  Archived temporary setup Linux-gO2 recently introduced.
+- Darwin-g++.gmk: use twolevel_namespace and GLOBLIBS for shared-libs
+  build on MacOS. Shared-libs build are possible only global libraries
+  and requires shared-lib version of CLHEP build with compatible options.
+- Corrected setup for WIN32-VC7 for building of DLLs.
+- WIN32-VC.gmk: added targets for DLLs build.
+
+digits_hits                                      digits_hits-V06-01-03
+-----------
+- Use global flag G4DIGI_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified granular GNUmakefiles and rearranged usage of extern symbols
+  in classes.
+
+event                                            events-V06-01-07
+-----
+- G4EventManager: fixed incorrect behaviour of event abortion requested
+  by BeginOfEventAction().
+- Use global flag G4EVENT_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified GNUmakefile and rearranged usage of extern symbols in classes.
+
+intercoms                                        intercoms-V06-01-02
+---------
+- Introduced static methods in G4UIcommand class for conversion between
+  a string and a value. Some implementation of derived classes are modified
+  accordingly.
+- Introduced utility methods ConvertToStringWithBestUnit() and
+  ConvertToStringWithDefaultUnit() for command classes taking a unit
+  parameter.
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+interfaces                                       interfaces-V06-01-01
+----------
+- G4UIWin32: moved usage of inline methods to non-inline for DLLs
+  support on Windows.
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+geometry                                         geometry-V06-01-01
+--------
+- Use global flag G4GEOMETRY_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified granular GNUmakefiles and rearranged usage of extern symbols
+  in classes in volumes module.
+- navigation (geomnav-V06-01-03)
+  o Added check to G4Navigator to count the number of steps with zero length
+    and issue an exception aborting the event for rare situations where tracks
+    that get stuck in a loop. A corrective action is attempted after 10
+    consecutive zero-steps; the event is aborted after 25 consecutive
+    zero-steps.
+- solids/specific (geom-specific-V06-01-04)
+  o Fixed compilation problem in on WIN32-VC.
+  o Fixed archiving problem on WIN32-VC7: replaced structs with classes
+    in G4VSurface.
+  o Replaced misleading names for masks in G4VSurface and moved inlined
+    methods of nested classes to .cc.
+
+global                                           global-V06-01-02c
+------
+- Use global flag G4IOS_EXPORT to export extern symbols for DLLs.
+  Modified granular GNUmakefiles and corrected G4ios.cc to the new scheme.
+
+graphics_reps                                    greps-V06-01-01 
+-------------
+- Fixed compilation problem on WIN32-VC for G4AttDefStore.
+- Added definition of GLOBLIBS in GNUmakefile for DLLs build on Windows.
+
+intercoms                                        intercoms-V06-01-02
+---------
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+materials                                        materials-V06-01-01
+---------
+- Added new utility method ConstPropertyExists(const char * key)
+  returning true/false according to the existance of the 'key' in
+  the table G4MaterialPropertiesTable.
+
+parameterisations                                parmodels-V06-01-00
+-----------------
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+particles                                        particles-V06-01-01 
+---------
+- Use global flag G4PARTICLES_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified granular GNUmakefiles and rearranged usage of extern symbols
+  in classes in "management" module.
+
+persistency                                      persistency-V06-01-00 
+-----------
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+processes/cuts                                   procuts-V06-01-01 
+--------------
+- Moved usage of statics in inline functions in G4ProductionCuts to
+  non-inline to allow porting for DLLs on Windows.
+
+processes/decay                                  decay-V06-01-00 
+---------------
+- Changed internal implemntation to use new methods from G4VParticleChange.
+
+processes/electromagnetic/lowenergy              emlowen-V06-01-02 
+-----------------------------------
+- First iteration towards new models for photoelectric angular distribution:
+  design iteration and re-implementation of non-polarized Sauter-Gavrila
+  distribution (K-shell approximation).
+- New model for PIXE.
+- Bug fix for Barkas effect.
+- Bug fix in energy loss concerning positrons handled by Penelope.
+- Fix in G4hShellCrossSectionExp for compilation error on WIN32-VC.
+
+processes/electromagnetic/muons                  muons-V06-01-01
+-------------------------------
+- Set default regime of MuIonisation integral.
+- Minor fix in differential cross section for MuPairProduction.
+
+processes/electromagnetic/standard               stand-V06-01-03
+----------------------------------
+- Set integral regime to be default for G4ionIonisation and G4hIonisation.
+- Exclude G4PAIwithPhotons and G4InitXscPAI classes previously included
+  by mistake but still under development ...
+- Updated and optimised PAI model.
+- Minor fix in eBremsstrahlung: units properly used.
+- G4PAIxSection: fix in constructor for compilation error in VC++ 6.0
+- Moved usage of statics in inline functions to non-inline to allow
+  porting for DLLs on Windows.
+  Modified classes: G4PAIonisation, G4SynchrotronRadiation.
+
+processes/hadronic                               ghad-V06-01-01
+------------------
+- New packages and models:
+  o Ablation (ghad-ablation-V06-01-01): model for evaporation (used
+    in conjunction with abrasion code).
+  o Abrasion (ghad-abrasion-V06-01-01): package for ion reactions.
+  o EM dissociation (ghad_em_diss-V06-01-00):
+    Fixed a problem seen during verification in the distributions
+    for heavy materials, where zero-energy neutrons were observed.
+  o Coherent_elastic: new model for high energy elastic scattering,
+    requiring a new provided data set for elasting scattering data.
+- cross_sections (ghad-cross-V06-01-01)
+  o Removed discontinuities in pion scattering data.
+  o Fix in high energy p-H cross-sections (G3 legacy bug).
+- management
+  o Optionally killing of primaries, steerable from use code.
+  o Bug fix for cross-section biasing.
+  o Added protection to hadronic processes against illegal track status.
+- util
+  o Added a fuzzy initializer class.
+  o Added a Besselfunction class.
+  o Fixed two rare bugs seen by LHCb in G4HadFinalState that
+    lead to an exception.
+- models/binary_cascade (ghad-bin-V06-01-02)
+  o Some performance optimizations.
+  o Corrected rotation in inverse kinematics for light ion reaction code.
+  o Added some protections fixing problems reported in bug-reports
+    #574 and #593.
+  o Bug fix related to bug report #607.
+- models/cascade
+  o Fixed memory leak.
+- models/chiral_invariant_phase_space (ghad-chips-body-V06-01-05)
+  o Correction in G4QEnvironment for problem reported on test23. 
+- models/coherent_elastic (ghad-cohe-V06-01-01)
+  o Fixed warning for uninitialised variable.
+- models/de_excitation/fermi-break-up (ghad-fermi-breakup-V06-01-00)
+  o Bug fix in the splitting probabilities.
+  o Adding destruction of configurations.
+- models/de_excitation/photon-evaporation
+  o Slight optimisation of E1 probabilities.
+- models/high_energy
+  o Re-added class-descriptions.
+- models/im_r_matrix
+  o Some optimizations in G4Scatterer.
+- models/management
+  o Protections for rounding issues.
+    Enabling user overload of some methods.
+- models/neutron_hp
+  o Some code clean-up.
+  o Now suitable for DLL usage.
+- models/pre_equilibrium
+  o Dixed updating of charged/neutral excited particles.
+- models/util (ghad-mod-util-V06-01-03)
+  o Optimized initialization for G4Fancy3DNucleus.
+  o Fix in decay routines for decays involving broad resonances
+    in the final state.
+
+processes/GNUmakefile                            processes-gmk-V06-01-01 
+---------------------
+- Added new hadronic models: ablation, abration, em_dissociation.
+
+run                                              run-V06-01-03
+---
+- Use global flag G4RUN_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified GNUmakefile and rearranged usage of extern symbols in G4Run.
+- Updated date in G4RunManagerKernel for release 6.2.
+
+track                                            track-V06-01-05
+-----
+- G4VParticleChange: added new methods ProposeXXX() (and corresponding
+  GetXXX() methods) as replacement for old SetXXXChange() and GetXXXChange(),
+  now obsolete.
+- G4ParticleChangeForLoss: fixed minor energy non-conservation problem in
+  case of more than 1 processes changing the energy.
+  Fix in the initialization of ParentWeight.
+- Use global flag G4TRACK_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified GNUmakefile and rearranged usage of extern symbols in G4Track.
+
+tracking                                         tracking-V06-01-02
+--------
+- Use global flag G4TRACKING_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified GNUmakefile and rearranged usage of extern symbols in classes.
+
+visualization                                    vis-V06-01-03
+-------------
+- management (visman-V06-01-00)
+  o Minor correction in the GNUmakefile for definition of GLOBLIBS.
+- HepRep (vis-HepRep-V06-01-05)
+  o Renamed zlib prefix from z_ to heprep_z_.
+    Added symbol z_errmsg to list for renaming to avoid conflicts
+    with other programs who contain a copy of zlib.
+  o Added attributes for Region and root-Region to both HepRep drivers.
+  o Added ability to separately write geometry files.
+  o Bug fix: copied new interfaces for HepRep, which uses fewer pointers.
+  o Added initial viewpoint settings and a command to set the coordinate
+    system.
+- OpenInventor (openinventor-V06-01-00)
+  o Added copy of the few necessary HEPVis code. HEPVis module dependency
+    is now no more needed.
+  o Ported code to run on Windows systems.
+  o Split Viewer to have G4OpenInventorXtViewer and G4OpenInventorWinViewer.
+  o Split G4OpenInventor to have G4OpenInventorXt and G4OpenInventorWin:
+    Xt and Win to follow the conventions found in the OpenInventor environment.
+- RayTracer (raytracer-V06-01-00)
+  o Adopt DLLIMPORT/EXPORT technique to handle extern simbols for
+    allowing support of DLLs on Windows.
+
+g3tog4                                           g3tog4-V06-01-02
+------
+- GNUmakefile: added definition of GLOBLIBS.
+
+source/Configure                                 Configure-V06-01-00
+----------------
+- Added new G4ELASTICDATA data-set
+- Added support for DLLs build on Windows system.
+
+source/electromagnetic_lists                     emphys-V06-01-00 
+----------------------------
+- New module with samples of physics list for standard electromagnetic
+  physics.
+
+source/GNUmakefile                               source-gmk-V06-01-01 
+------------------
+- Reorganised build of libraries according to dependency, in order to
+  allow build od DLLs on Windows and .dyn on MacOS.
+- Added 'dll' target for building global DLLs on WIN32-VC7.
+
+examples                                         examples-V06-01-02
+--------
+- Updated reference outputs.
+- advanced
+  o cosmicray_charging (cosmicray_charging-V06-01-02)
+    + New example illustrating an application aimed at simulating the
+      electrostatic charging of isolated test masses in the LISA mission
+      by galactic cosmic ray protons and helium nuclei.
+  o gammaray_telescope (GammaRayTel-V06-01-01)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+  o hadrontherapy (hadrontherapy-V06-01-01)
+    + New example illustrating an application simulating an hadron
+      therapy beam line for medical physics.
+  o lAr_calorimeter (lAr_calorimeter-V06-01-01)
+    + Corrected setup for the usage of PI-Lite 1.2.1.
+  o purging_magnet (purtag-V06-01-02)
+    + New example illustrating an application that simulates electrons
+      traveling through a 3D magnetic field; used in a medical environment
+      for simulating a strong purging magnet in a treatment head.
+  o radioprotection (radioprotection-V06-01-06)
+    + New example illustrating an application to evaluate the dose in
+      astronauts, in vehicle concepts and Moon surface habitat configurations,
+      in a defined interplanetary space radiation environment.
+  o Rich (Rich-V06-01-00)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+  o Tiara (Tiara-V06-01-03)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+  o underground_physics (DMX-V06-01-00)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+  o xray_fluorescence (XrayFluo-V06-01-06)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+  o xray_telescope (xraytel-V06-01-01)
+    + Ported on using AIDA 3.2.1 and PI 1.2.1.
+- extended
+  o analysis/A01 (exampleA01-V06-01-01)
+    + Updated mac files for HepRep2 driver to set zoom factor
+      and coordinate system and write separate geometry.
+  o biasing (exbiasing-V06-01-00)
+    + Migrated B02 and B03 examples to AIDA 3.2.1 and PI 1.2.1.
+  o electromagnetic/MuonProcesses (muonprocesses-V06-01-01)
+    + New example intended to check implementation of the processes 
+      of muon interactions: ionization, direct (e+,e-) production,
+      bremsstrahlung, mu-nuclear interaction.
+      It allows to compute differential cross sections (as function
+      of the energy transfered to secondaries), total cross sections
+      and to compare with analytic calculations.
+  o electromagnetic/PhotonProcesses (photonprocesses-V06-01-01)
+    + Updated HistoManager and Messenger to allow for multi-run jobs.
+  o electromagnetic/TestEm1 (testem1-V06-01-03)
+    + PhysicsLists: removed Particles and General.
+    + EmPhysicsList: set G4eBremsstrahlungCMS as default.
+  o electromagnetic/TestEm2 (testem2-V06-01-03)
+    + Moved acceptance control and histogram names in RunAction.
+    + Added RunActionMessenger.
+  o electromagnetic/TestEm3 (testem3-V06-01-04)
+    + Introduced HistoManager class.
+    + EndOfRun: fixed missprint in rms of totalTrackLength.
+    + Moved acceptance check in RunAction which can be activated by UI command.
+  o electromagnetic/TestEm4 (testem3-V06-01-01)
+    + Migrated to AIDA 3.2.1.
+  o electromagnetic/TestEm5 (testem5-V06-01-04)
+    + Simplifications in HistoManager.
+    + Print rms of projected angle at exit if histo=6 selected.
+    + Modified HistoManager and Messenger in order to allow for multi-run jobs.
+    + Add physicsLists: HadronElastic, BinaryCascade, IonBinaryCascade
+      removed physicsLists for Particles, General.
+  o electromagnetic/TestEm7 (testem7-V06-01-01)
+    + Removed physicsLists for Particles, General.
+  o electromagnetic/TestEm8 (testem8-V06-01-00)
+    + Updated test of PAI model.
+  o electromagnetic/TestEm9 (testem9-V06-01-00)
+    + Removed Clean of G4RegionStore, instead delete regions one by one.
+    + Added acceptance printout.
+    + Added 'histclean' target to GNUmakefile.
+  o field/BlineTracer (BlineTracer-V06-01-00)
+    + Fix in G4BlineTracer: added inclusion of G4ChordFinder.hh in source.
+  o optical (opticalex-V06-01-00)
+    + New example 'LXe' demonstrating the use of optical processes
+      in a multi-purpose detector setup.
+  o parallel (exparallel-V06-01-00)
+    + New example 'ExDiane' showing parallelisation of the 'brachytherapy'
+      example using the DIANE framework.
+    + Bug fix in ParRunManager for ParN02 and ParN04 TOP-C examples.
+    + Reorganised README files
+- novice
+  o N03 (exampleN03-V06-01-00)
+    + Use G4UI_USE_WIN32 to have a default Windows GUI coworking
+      with the OpenGL Windows driver on Windows.
+    + New macro exN03Vis9.mac, demo of the OpenGL Windows
+      driver. Updated the gui.mac menu items.
+  o N06 (exampleN06-V06-01-01)
+    + Updated README.
+
+tests                                            tests-V06-01-02
+-----
+- Updated reference outputs.
+- test02 (test02-V06-01-00)
+  + Now testing also the new high energy elastic model. Requires the
+    new elastic data set through the G4ELASTICDATA variable. 
+- test23 (test23-V06-01-00)
+  + Redirect normal output to G4cout and not to G4cerr.
+- test27 (test27-V06-01-01)
+  + Correctly initialise 'theH2O', found by Valgrind.
+- test28 (test28-V06-01-00)
+  + New test for hadronic abrasion/ablation and em-dissociation.
+- test40 (test40-V06-01-00)
+  + Generalised classes/files names.
+  + Extended geometry and updated acceptance.
