@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.1 1999-01-07 16:09:06 gunter Exp $
+// $Id: G4UnitsTable.cc,v 1.2 1999-03-08 12:59:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -350,18 +350,31 @@ ostream& operator<<(ostream& flux, G4BestUnit a)
   G4int len = theUnitsTable[a.IndexOfCategory]->GetSymbMxLen();
                            
   G4int    ksup(-1), kinf(-1);
-  G4double dsup(DBL_MAX), dinf(-DBL_MAX); 
-  
+  G4double umax(0.), umin(DBL_MAX);
+  G4double rsup(DBL_MAX), rinf(0.);
+   
+  G4double value =fabs(a.Value);
+
   for (G4int k=0; k<List.entries(); k++)
      {
-       G4double diff = fabs(a.Value) - (List[k]->GetValue());
-       if ((diff>=0.)&&(diff<=dsup)) { ksup=k; dsup=diff;}
-       if ((diff< 0.)&&(diff>=dinf)) { kinf=k; dinf=diff;}
+       G4double unit = List[k]->GetValue();
+            if (value==DBL_MAX) {if(unit>umax) {umax=unit; ksup=k;}}
+       else if (value<=DBL_MIN) {if(unit<umin) {umin=unit; kinf=k;}}
+       
+       else { G4double ratio = value/unit;
+              if ((ratio>=1.)&&(ratio<rsup)) {rsup=ratio; ksup=k;}
+              if ((ratio< 1.)&&(ratio>rinf)) {rinf=ratio; kinf=k;}
+	    } 
      }
-  G4int index=ksup;  if(ksup==-1) index=kinf;
+	 
+  G4int index=ksup; if(index==-1) index=kinf; if(index==-1) index=0;
+  
+  G4long oldform = G4cout.setf(ios::left,ios::adjustfield);
   
   flux << a.Value/(List[index]->GetValue()) << " " << setw(len)  
        << List[index]->GetSymbol();
+       
+  G4cout.setf(oldform,ios::adjustfield);     
   
   return flux;
 }       
