@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.48 2005-03-09 16:25:25 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.49 2005-03-10 19:33:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -72,9 +72,7 @@ static void G4VisCommandsSceneAddUnsuccessful
 G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
-  fpCommand -> SetGuidance
-    ("/vis/scene/add/axes [<x0>] [<y0>] [<z0>] [<length>] [<unit>]");
-  fpCommand -> SetGuidance ("Default: 0 0 0 1 m");
+  fpCommand -> SetGuidance ("Add axes.");
   fpCommand -> SetGuidance
     ("Draws axes at (x0, y0, z0) of given length.");
   G4UIparameter* parameter;
@@ -92,7 +90,6 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue  ("m");
-  parameter->SetGuidance      ("mm, cm, or m.");
   fpCommand->SetParameter     (parameter);
 }
 
@@ -152,11 +149,8 @@ G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/add/ghosts", this);
   fpCommand -> SetGuidance
-    ("/vis/scene/add/ghosts [<particle-name>]");
-  fpCommand -> SetGuidance
     ("Adds ghost volumes (G4FlavoredParallelWorld) to the current scene.");
-  fpCommand -> SetGuidance
-    ("Selects by particle (default = \"all\").");
+  fpCommand -> SetGuidance ("Selects by particle.");
   fpCommand -> SetParameterName ("particle", omitable = true);
   fpCommand -> SetDefaultValue ("all");
 }
@@ -267,11 +261,10 @@ void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneAddHits::G4VisCommandSceneAddHits () {
   fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/hits", this);
-  fpCommand -> SetGuidance
-    ("Adds hits to current scene.");
+  fpCommand -> SetGuidance ("Adds hits to current scene.");
   fpCommand -> SetGuidance
     ("Hits are drawn at end of event when the scene in which"
-     " they are added is current.");
+     "\nthey are added is current.");
 }
 
 G4VisCommandSceneAddHits::~G4VisCommandSceneAddHits () {
@@ -313,39 +306,25 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
 G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
-  fpCommand -> SetGuidance
-    ("/vis/scene/add/logicalVolume <logical-volume-name>"
-     " [<depth-of-descending>] [<voxels-flag>] [<readout-flag>]");
   fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
   fpCommand -> SetGuidance
-    ("  showing boolean components (if any) (default: true), voxels (if any)");
-  fpCommand -> SetGuidance
-    ("  (default:true) and readout geometry (if any) (default:true).");
-  fpCommand -> SetGuidance
-    ("  Note: voxels are not constructed until start of run - /run/beamOn.");
-  fpCommand -> SetGuidance
-    ("1st parameter: volume name.");
-  fpCommand -> SetGuidance
-    ("2nd parameter: depth of descending geometry hierarchy (default 1).");
-  fpCommand -> SetGuidance
-    ("3rd parameter: flag for drawing boolean components (if any) (default: true).");
-  fpCommand -> SetGuidance
-    ("4th parameter: flag for drawing voxels (if any) (default: true).");
-  fpCommand -> SetGuidance
-    ("5th parameter: flag for readout geometry (if any) (default: true).");
+    ("Shows boolean components (if any), voxels (if any) and readout geometry"
+     "\n(if any).  Note: voxels are not constructed until start of run -"
+     "\n \"/run/beamOn\".");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("volume", 's', omitable = false);
+  parameter = new G4UIparameter ("logical-volume-name", 's', omitable = false);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("depth", 'i', omitable = true);
+  parameter = new G4UIparameter ("depth-of-descent", 'i', omitable = true);
+  parameter -> SetGuidance ("Depth of descent of geometry hierarchy.");
   parameter -> SetDefaultValue (1);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("booleans", 'b', omitable = true);
+  parameter = new G4UIparameter ("booleans-flag", 'b', omitable = true);
   parameter -> SetDefaultValue (true);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("voxels", 'b', omitable = true);
+  parameter = new G4UIparameter ("voxels-flag", 'b', omitable = true);
   parameter -> SetDefaultValue (true);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("readout", 'b', omitable = true);
+  parameter = new G4UIparameter ("readout-flag", 'b', omitable = true);
   parameter -> SetDefaultValue (true);
   fpCommand -> SetParameter (parameter);
 }
@@ -426,7 +405,9 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   fpCommand = new G4UIcommand ("/vis/scene/add/logo", this);
   fpCommand -> SetGuidance 
     ("Adds a G4 logo to the current scene.");
-  fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
+  fpCommand -> SetGuidance 
+    ("The placement, if automatic, is similar to that of scale -"
+     "\n\"help /vis/scene/add/scale\" for more information.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("height", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -435,6 +416,7 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
+  parameter->SetGuidance ("'x', 'y' or 'z' - otherwise defaults to 'x'.");
   parameter->SetDefaultValue ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -447,9 +429,9 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
-  parameter->SetDefaultValue  ("auto");
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
   parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -754,10 +736,6 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/scale", this);
   fpCommand -> SetGuidance 
-    ("/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]");
-  fpCommand -> SetGuidance 
-    ("Defaults: 1 m x 1 0 0 auto 0 0 0 m");
-  fpCommand -> SetGuidance 
     ("Adds an annotated scale line to the current scene.");
   fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
   G4UIparameter* parameter;
@@ -768,6 +746,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
+  parameter->SetGuidance ("'x', 'y' or 'z' - otherwise defaults to 'x'.");
   parameter->SetDefaultValue ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -780,6 +759,8 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
+  parameter->SetGuidance
+    ("Automatic placement or manual placement at (xmid,ymid,zmid).");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
   parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
@@ -1012,34 +993,26 @@ G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/text", this);
   fpCommand -> SetGuidance
-    ("Adds text at (x*unit, y*unit, z*unit) with font_size x_offset y_offset.");
-  fpCommand -> SetGuidance
-    ("Font size and offsets in pixels.");
+    ("Adds text to current scene.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("x", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("x", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("y", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter =  new G4UIparameter ("y", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("z", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter =  new G4UIparameter ("z", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue  ("mm");
-  parameter->SetGuidance      ("mm, cm, or m.");
+  parameter =  new G4UIparameter ("unit", 's', omitable = false);
   fpCommand->SetParameter     (parameter);
-  parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter =  new G4UIparameter ("font_size", 'd', omitable = false);
+  parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("x_offset", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter =  new G4UIparameter ("x_offset", 'd', omitable = false);
+  parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("y_offset", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter =  new G4UIparameter ("y_offset", 'd', omitable = false);
+  parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("text", 's', omitable = true);
-  parameter->SetDefaultValue ("text");
+  parameter =  new G4UIparameter ("text", 's', omitable = false);
   fpCommand->SetParameter (parameter);
 }
 
@@ -1097,19 +1070,16 @@ G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
   fpCommand = new G4UIcmdWithAnInteger
     ("/vis/scene/add/trajectories", this);
   fpCommand -> SetGuidance
-    ("/vis/scene/add/trajectories [drawing-mode]");
-  fpCommand -> SetGuidance
-    ("Default integer parameter: 0");
-  fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
     ("Causes trajectories, if any, to be drawn at the end of processiing an"
      "\nevent. The drawing mode is an integer that is passed to the"
      "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
-     "\nif drawing-mode > 0, draws the trajectory as a polyline and, if"
-     "\ndrawing-mode != 0, draws markers of screen size std::abs(drawing-mode)/1000"
-     "\nin pixels at each step and auxiliary point, if any.  So drawing-mode"
-     "\n== 5000 is a good choice."
+     "\nif drawing-mode >= 0, draws the trajectory as a polyline (blue for"
+     "\npositive, red for negative, green for neutral) and, if"
+     "\ndrawing-mode != 0, draws markers of screen size"
+     "\nstd::abs(drawing-mode)/1000 pixels at each step and auxiliary point,"
+     "\nif any.  So drawing-mode = 5000 is a good choice."
      "\nEnable storing with \"/tracking/storeTrajectory 1\"."
      "\nSee also \"/vis/scene/endOfEventAction\".");
   fpCommand -> SetParameterName ("drawing-mode", omitable = true);
@@ -1159,14 +1129,15 @@ G4VisCommandSceneAddUserAction::G4VisCommandSceneAddUserAction () {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/scene/add/userAction",this);
   fpCommand -> SetGuidance
-    ("Add Vis User Action, if any, to scene and define extent, if required.");
+    ("Add Vis User Action, if any, to current scene.");
   fpCommand -> SetGuidance
-    ("Optional arguments \"xmin xmax ymin ymax zmin zmax unit\" define the"
-     "\nextent of the callback drawing - default 0 0 0 0 0 0 cm.  (You may"
+    ("Optional arguments define the extent of the callback drawing.  You may"
      "\nnot need this if the extent has been defined in the original"
      "\nSetUserAction or is defined by other components of the scene.  But if"
      "\nthe user action is the only component of the scene, you will certainly"
-     "\nneed to set the extent in SetUserAction or here.)");
+     "\nneed to set the extent either in SetUserAction or here.  A scene must"
+     "\nhave an extent one way or another so that the viewer can calculate"
+     "\nhow to point the camera.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("xmin", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -1263,45 +1234,40 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/volume", this);
+  fpCommand -> SetGuidance 
+   ("Adds a physical volume to current scene, with optional clipping volume.");
+  fpCommand -> SetGuidance 
+    ("If physical-volume-name is \"world\" (the default), the top of the"
+     "\ntracking tree is used (GetNavigatorForTracking()->GetWorldVolume())."
+     "\nOtherwise a search of the tracking tree is made, taking the first"
+     "\nmatching occurence only.  To see a representation of the geometry"
+     "\nhierarchy of the tracking tree, try \"/vis/drawTree\" or one of the"
+     "\ndriver/browser combinations that have the required functionality,"
+     "\ne.g., HepRepFile/XML with the WIRED3/4 browser.");
   fpCommand -> SetGuidance
-    ("/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth-of-descending>]");
-  fpCommand -> SetGuidance ("Adds a physical volume to the current scene.");
-  fpCommand -> SetGuidance ("Note: adds first occurence only.");
-  fpCommand -> SetGuidance
-    ("1st parameter: volume name (default \"world\").");
-  // (Always interpreted as GetNavigatorForTracking () -> GetWorldVolume ().)
-  //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
-  //    ("               \"list\" to list all volumes.");
-  fpCommand -> SetGuidance
-    ("2nd parameter: copy number (default -1)."
-     "\n  If negative, first occurrence of physical-volume-name is selected.");
-  fpCommand -> SetGuidance
-    ("3rd parameter: depth of descending geometry hierarchy"
-     " (default G4Scene::UNLIMITED (-1)).");
+    ("If clip-volume-type is specified, the subsequent parameters are used to"
+     "\nto define a clipping volume.  For example,"
+     "\n\"vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1\" will draw the world"
+     "\nwith the positive octant cut away."); 
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("volume", 's', omitable = true);
+  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue ("world");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
+  parameter -> SetGuidance
+    ("If negative, matches any copy no.  First name match is taken.");
   parameter -> SetDefaultValue (-1);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("depth", 'i', omitable = true);
+  parameter = new G4UIparameter ("depth-of-descent", 'i', omitable = true);
+  parameter -> SetGuidance
+    ("Depth of descent of geometry hierarchy. Default = unlimited depth.");
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
-  parameter -> SetDefaultValue ("none");
+  parameter -> SetDefaultValue ("");
   parameter -> SetGuidance
     ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
      "\n Only \"box\" is programmed at present.");
-  /*
-Idle> vis/scene/create 
-New empty scene "scene-1" created.
-Idle> vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1
-First occurrence of "worldP" found at depth 0,
-  with a requested depth of further descent of <0 (unlimited),
-  has been added to scene "scene-1".
-Idle> vis/sceneHandler/attach 
-  */
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("parameter-unit", 's', omitable = true);
   parameter -> SetDefaultValue ("m");

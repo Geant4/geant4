@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.11 2005-03-03 16:13:08 allison Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.12 2005-03-10 19:32:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,8 @@
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
   fpASCIITree(ASCIITree) {
-  G4bool omitable, currentAsDefault;
+
+  G4bool omitable;
 
   fpDirectory = new G4UIdirectory ("/vis/ASCIITree/");
   fpDirectory -> SetGuidance ("Commands for ASCIITree control.");
@@ -49,7 +50,6 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpDirectorySet -> SetGuidance ("Settings for ASCIITree control.");
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
-  fpCommandVerbose -> SetGuidance ("/vis/ASCIITree/verbose [<verbosity>]");
   fpCommandVerbose -> SetGuidance
     ("0 (default) mimimum - 10 maximum printing.");
   fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
@@ -57,11 +57,9 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
 
   fpCommandSetOutFile = new G4UIcmdWithAString ("/vis/ASCIITree/set/outFile", this
 );
-  fpCommandSetOutFile -> SetGuidance
-    ("/vis/ASCIITree/set/outFile <out-filename>");
+  fpCommandSetOutFile -> SetGuidance ("Set name of output file.");
   fpCommandSetOutFile -> SetParameterName ("out-filename",
-					omitable = true,
-					currentAsDefault = false);
+					   omitable = true);
   fpCommandSetOutFile -> SetDefaultValue ("G4cout");
 }
 

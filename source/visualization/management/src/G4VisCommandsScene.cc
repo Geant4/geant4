@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.40 2005-03-09 23:48:15 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.41 2005-03-10 19:33:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -55,8 +55,9 @@ G4VisCommandSceneCreate::G4VisCommandSceneCreate (): fId (0) {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/create", this);
   fpCommand -> SetGuidance
-    ("Creates an empty scene. Invents a name if not supplied."
-     "\nThis scene becomes current.");
+    ("Creates an empty scene.");
+  fpCommand -> SetGuidance
+    ("Invents a name if not supplied.  This scene becomes current.");
   fpCommand -> SetParameterName ("scene-name", omitable = true);
 }
 
@@ -116,9 +117,11 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfEventAction", this);
   fpCommand -> SetGuidance
-    ("accumulate: viewer accumulates hits, etc., event by event, or");
+    ("Accumulate or refresh the viewer for each new event.");
   fpCommand -> SetGuidance
-    ("refresh: viewer shows them at end of event or, for direct-screen"
+    ("\"accumulate\": viewer accumulates hits, etc., event by event, or");
+  fpCommand -> SetGuidance
+    ("\"refresh\": viewer shows them at end of event or, for direct-screen"
      "\n  viewers, refreshes the screen just before drawing the next event.");
   fpCommand -> SetGuidance ("The detector remains or is redrawn.");
   fpCommand -> SetParameterName ("action", omitable = true);
@@ -189,9 +192,11 @@ G4VisCommandSceneEndOfRunAction::G4VisCommandSceneEndOfRunAction () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfRunAction", this);
   fpCommand -> SetGuidance
-    ("accumulate: viewer accumulates hits, etc., run by run, or");
+    ("Accumulate or refresh the viewer for each new run.");
   fpCommand -> SetGuidance
-    ("refresh: viewer shows them at end of run or, for direct-screen"
+    ("\"accumulate\": viewer accumulates hits, etc., run by run, or");
+  fpCommand -> SetGuidance
+    ("\"refresh\": viewer shows them at end of run or, for direct-screen"
      "\n  viewers, refreshes the screen just before drawing the first"
      "\n  event of the next run.");
   fpCommand -> SetGuidance ("The detector remains or is redrawn.");
@@ -262,8 +267,9 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
 G4VisCommandSceneList::G4VisCommandSceneList () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/list", this);
+  fpCommand -> SetGuidance ("Lists scene(s).");
   fpCommand -> SetGuidance
-    ("Lists scene(s).  See /vis/verbose for definition of verbosity.");
+    ("\"help /vis/verbose\" for definition of verbosity.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("scene-name", 's', omitable = true);
   parameter -> SetDefaultValue ("all");
@@ -349,7 +355,9 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/notifyHandlers", this);
   fpCommand -> SetGuidance
-    ("Notifies scene handlers of possible changes of scene and forces a"
+    ("Notifies scene handlers and forces re-rendering.");
+  fpCommand -> SetGuidance
+    ("Notifies the handler(s) of the specified scene and forces a"
      "\nreconstruction of any graphical databases."
      "\nClears and refreshes all viewers of current scene."
      "\n  The default action \"refresh\" does not issue \"update\" (see"
@@ -358,7 +366,7 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
      "\n  \"refresh\" - useful for refreshing and initiating post-processing"
      "\n  for graphics systems which need post-processing.");
   fpCommand -> SetGuidance 
-    ("The <scene-name> default is the current scene name.");
+    ("The default for <scene-name> is the current scene name.");
   fpCommand -> SetGuidance
     ("This command does not change current scene, scene handler or viewer.");
   G4UIparameter* parameter;
@@ -471,8 +479,9 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 G4VisCommandSceneSelect::G4VisCommandSceneSelect () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/select", this);
+  fpCommand -> SetGuidance ("Selects a scene");
   fpCommand -> SetGuidance 
-    ("Selects a scene and makes it current.  \"/vis/scene/list\" to see"
+    ("Makes the scene current.  \"/vis/scene/list\" to see"
      "\n possible scene names.");
   fpCommand -> SetParameterName ("scene-name", omitable = false);
 }
