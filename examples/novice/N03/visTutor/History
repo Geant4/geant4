@@ -2,6 +2,9 @@
 examples/novice/N03/visTutor/History
 ====================================
 
+08-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-01a)
+- /vis/viewer/viewpointThetaPhi ==> /vis/viewer/set/viewpointThetaPhi
+
 07-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-01)
 - Macros are rewritten with /vis/viewer/flush
 - Comments are updated.
