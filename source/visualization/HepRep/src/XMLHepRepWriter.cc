@@ -147,7 +147,8 @@ bool XMLHepRepWriter::write(HepRepInstanceTree* instanceTree) {
 }
 
 bool XMLHepRepWriter::write(HepRepInstance* instance) {
-    xml->setAttribute("type", instance->getType()->getName());
+    // FIXME FREEHEP-356
+    xml->setAttribute("type", instance->getType()->getFullName());
     xml->openTag(nameSpace, "instance");
     write((HepRepAttribute*)instance);
 

@@ -644,8 +644,7 @@ void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name,
 void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4String,G4AttDef>* attDefs) {
     if (attDefs == NULL) return;
 
-    // Specify additional attribute definitions.  Assumes that all attributes for
-    //  the given type can be found from the first instance of this type. GEANT-3
+    // Specify additional attribute definitions.
     map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->begin();
     while (attDefIterator != attDefs->end()) {
 	    // Protect against incorrect use of Category.  Anything value other than the
@@ -825,8 +824,8 @@ HepRepType* G4HepRepSceneHandler::getGeometryType(G4String volumeName, int depth
     if (type == NULL) {
         G4String parentName = getParentTypeName(depth);
         HepRepType* parentType = _geometryType[parentName];
-        // FIXME should have short path element name...(volumeName)
-        type = factory->createHepRepType(parentType, name);
+        // HepRep uses hierarchical names
+        type = factory->createHepRepType(parentType, volumeName);
         _geometryType[name] = type;
     }
     return type;   
@@ -838,8 +837,8 @@ G4String G4HepRepSceneHandler::getFullTypeName(G4String volumeName, int depth) {
         // there is a problem, book this type under problems
         G4String problem = "HierarchyProblem";
         if (_geometryType["/"+problem] == NULL) {
-            // FIXME should have short path element name... GEANT-10
-            HepRepType* type = factory->createHepRepType(getGeometryRootType(), "/"+problem);
+            // HepRep uses hierarchical names
+            HepRepType* type = factory->createHepRepType(getGeometryRootType(), problem);
             _geometryType["/"+problem] = type;
         }
         return "/" + problem + "/" + volumeName;

@@ -36,6 +36,7 @@ class DefaultHepRepType : public DefaultHepRepDefinition, public virtual HEPREP:
         HEPREP::HepRepAttValue* getAttValue(std::string name);
         HEPREP::HepRepType* copy(HEPREP::HepRep* heprep, HEPREP::HepRepType* parent);
         std::string getName();
+        std::string getFullName();
         std::string getDescription();
         void setDescription(std::string description);
         std::string getInfoURL();

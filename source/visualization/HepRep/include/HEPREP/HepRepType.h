@@ -39,10 +39,24 @@ public:
 
     /**
      * Returns the name of this type.
+     * This is the full name if one uses flat-types, and the node name if one
+     * uses hierarchical typenames. It is the name supplied at construction of the type.
      *
      * @return name of type.
+     * @see #getFullName()
      */
     virtual std::string getName() = 0;
+
+    /**
+     * Returns the full name of this type.
+     * The full name is constructed from the root of the typeTree (without the typeTreeName)
+     * by concatenating all the node names separated by slashes "/". For example:
+     * Geometry/InnerDetector/Sector24/Wire20
+     *
+     * @return full name of type.
+     * @see #getName()
+     */
+    virtual std::string getFullName() = 0;
 
     /**
      * Returns the description of this type.

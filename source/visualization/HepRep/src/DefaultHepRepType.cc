@@ -65,6 +65,10 @@ string DefaultHepRepType::getName() {
     return name;
 }
 
+string DefaultHepRepType::getFullName() {
+    return (getSuperType() == NULL) ? getName() : getSuperType()->getFullName() + "/" + getName();
+}
+
 string DefaultHepRepType::getDescription() {
     return description;
 }
