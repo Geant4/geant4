@@ -48,9 +48,11 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CPPFLAGS += -DG4USE_STD_NAMESPACE
   endif
   ifdef G4ODBMS
-    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+    GCCVERSION := $(shell g++ -v 2>&1 | grep version | grep egcs)
+    ifneq ($(findstring 1.1,$(GCCVERSION)),1.1)
+      G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+    endif
   endif
-
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
