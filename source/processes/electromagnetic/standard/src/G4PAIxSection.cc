@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.cc,v 1.2 1999-04-16 09:02:03 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.3 1999-10-27 09:26:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ fRefGammaNumber = 29 ;         // The number of gamma for creation of
 
 // Local class constants
 
-const G4double G4PAIxSection::fDelta = 0.05 ; // energy shift from interval border
+const G4double G4PAIxSection::fDelta = 0.005 ; // energy shift from interval border
 const G4double G4PAIxSection::fError = 0.005 ; // error in lin-log approximation
 
 const G4int G4PAIxSection::fMaxSplineSize = 500 ;  // Max size of output spline
@@ -70,7 +70,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
                              GetElectronDensity() ;
       fIntervalNumber         = (*theMaterialTable)[materialIndex]->
                              GetSandiaTable()->GetMatNbOfIntervals() ;
-      // G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<endl ;
+      G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<endl ;
       // G4double maxEnergyTransfer  = 100*keV ;
 
       fEnergyInterval = new G4double[fIntervalNumber+2] ;
@@ -125,6 +125,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
                         fA4[j] = fA4[j+1] ;
 	  }
           fIntervalNumber-- ;
+          i-- ;
 	}
       }
 
@@ -165,7 +166,8 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
 G4PAIxSection::G4PAIxSection( G4int materialIndex,
 			      G4double maxEnergyTransfer,
 			      G4double betaGammaSq,
- G4double** photoAbsCof, G4int intNumber )
+                              G4double** photoAbsCof, 
+                              G4int intNumber                   )
 {
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j ;   
@@ -241,6 +243,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                         fA4[j] = fA4[j+1] ;
 	  }
           fIntervalNumber-- ;
+          i-- ;
 	}
       }
 
@@ -286,6 +289,139 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       delete[] fA4 ;    
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Test Constructor with beta*gamma square value
+
+G4PAIxSection::G4PAIxSection( G4int materialIndex,
+			      G4double maxEnergyTransfer,
+			      G4double betaGammaSq          )
+{
+   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   G4int i, j, numberOfElements ;   
+   
+   fDensity         = (*theMaterialTable)[materialIndex]->GetDensity();
+   fElectronDensity = (*theMaterialTable)[materialIndex]->GetElectronDensity() ;
+
+   G4SandiaTable thisMaterialSandiaTable(materialIndex) ;
+   numberOfElements = (*theMaterialTable)[materialIndex]->GetNumberOfElements() ;
+
+   G4int* thisMaterialZ = new G4int[numberOfElements] ;
+   for(i=0;i<numberOfElements;i++)
+   {
+         thisMaterialZ[i] = (G4int)(*theMaterialTable)[materialIndex]->
+                                      GetElement(i)->GetZ() ;
+   }
+   fIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
+                           (thisMaterialZ,numberOfElements) ;
+   
+   fIntervalNumber = thisMaterialSandiaTable.SandiaMixing
+                           ( thisMaterialZ ,
+                      (*theMaterialTable)[materialIndex]->GetFractionVector() ,
+        		     numberOfElements,fIntervalNumber) ;
+
+
+      fEnergyInterval = new G4double[fIntervalNumber+2] ;
+      fA1             = new G4double[fIntervalNumber+2] ;
+      fA2             = new G4double[fIntervalNumber+2] ;
+      fA3             = new G4double[fIntervalNumber+2] ;
+      fA4             = new G4double[fIntervalNumber+2] ;
+      for(i=1;i<=fIntervalNumber;i++)
+      {
+         fEnergyInterval[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0) ;
+
+   fA1[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,1)*fDensity ;
+   fA2[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,2)*fDensity ;
+   fA3[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,3)*fDensity ;
+   fA4[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,4)*fDensity ;
+
+         if( i == 1 || i == fIntervalNumber)
+	 {
+	   // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<endl ;
+	 }
+         if(fEnergyInterval[i] >= maxEnergyTransfer)
+         {
+            fEnergyInterval[i] = maxEnergyTransfer ;
+	    fIntervalNumber = i ;
+	    break;
+         }
+      }   
+      if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
+      {
+         fIntervalNumber++;
+         fEnergyInterval[fIntervalNumber] = maxEnergyTransfer ;
+      }
+
+      // Now checking, if two borders are too close together
+
+      for(i=1;i<fIntervalNumber;i++)
+      {
+        if(fEnergyInterval[i+1]-fEnergyInterval[i] >
+           1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
+	{
+          continue ;
+	}
+        else
+	{
+          for(j=i;j<fIntervalNumber;j++)
+	  {
+            fEnergyInterval[j] = fEnergyInterval[j+1] ;
+                        fA1[j] = fA1[j+1] ;
+                        fA2[j] = fA2[j+1] ;
+                        fA3[j] = fA3[j+1] ;
+                        fA4[j] = fA4[j+1] ;
+	  }
+          fIntervalNumber-- ;
+          i-- ;
+	}
+      }
+
+      /* *********************************
+      fSplineEnergy          = new G4double[fMaxSplineSize] ;   
+      fRePartDielectricConst = new G4double[fMaxSplineSize] ;   
+      fImPartDielectricConst = new G4double[fMaxSplineSize] ;   
+      fIntegralTerm          = new G4double[fMaxSplineSize] ;   
+      fDifPAIxSection        = new G4double[fMaxSplineSize] ;   
+      fIntegralPAIxSection   = new G4double[fMaxSplineSize] ;   
+      
+      for(i=0;i<fMaxSplineSize;i++)
+      {
+         fSplineEnergy[i]          = 0.0 ;   
+         fRePartDielectricConst[i] = 0.0 ;   
+         fImPartDielectricConst[i] = 0.0 ;   
+         fIntegralTerm[i]          = 0.0 ;   
+         fDifPAIxSection[i]        = 0.0 ;   
+         fIntegralPAIxSection[i]   = 0.0 ;   
+      }
+      */ ////////////////////////
+
+      // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
+      
+      G4double   betaGammaSqRef = 
+      fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
+
+      NormShift(betaGammaSqRef) ;             
+      SplainPAI(betaGammaSqRef) ;
+      
+      // Preparation of integral PAI cross section for input betaGammaSq
+   
+      for(i = 1 ; i <= fSplineNumber ; i++)
+      {
+         fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+      }
+      IntegralPAIxSection() ;
+      
+      //   delete[] fEnergyInterval ;
+      delete[] fA1 ;
+      delete[] fA2 ;
+      delete[] fA3 ;
+      delete[] fA4 ;    
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+//
 // Destructor
 
 G4PAIxSection::~G4PAIxSection()
@@ -354,15 +490,15 @@ void G4PAIxSection::InitPAI()
 // Shifting from borders to intervals Creation of first energy points
 //
 
-void
-   G4PAIxSection::NormShift(G4double betaGammaSq)
+void G4PAIxSection::NormShift(G4double betaGammaSq)
 {
    G4int i,j;
    for(i=1;i<=fIntervalNumber-1;i++)
    {
       for(j=1;j<=2;j++)
       {
-         fSplineNumber = (i-1)*2 + j;
+         fSplineNumber = (i-1)*2 + j ;
+
          if(j==1)
 	 {
 	    fSplineEnergy[fSplineNumber]=fEnergyInterval[i]*(1+fDelta);
@@ -775,6 +911,44 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    return result ;
 
 } 
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
+{  
+  G4int iTransfer  ;
+  G4long numOfCollisions ;
+  G4double loss = 0.0 ;
+  G4double meanNumber, position ;
+
+  // G4cout<<" G4PAIxSection::GetStepEnergyLoss "<<endl ;
+
+
+
+  meanNumber = fIntegralPAIxSection[1]*step ;
+  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+
+  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+
+  while(numOfCollisions)
+  {
+    position = fIntegralPAIxSection[1]*G4UniformRand() ;
+
+    for( iTransfer=1 ; iTransfer<=fSplineNumber ; iTransfer++ )
+    {
+        if( position >= fIntegralPAIxSection[iTransfer] ) break ;
+    }
+    loss += fSplineEnergy[iTransfer]  ;
+    numOfCollisions-- ;
+  }
+  // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<endl ; 
+
+  return loss ;
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.hh,v 1.2 1999-04-16 09:06:02 grichine Exp $
+// $Id: G4PAIxSection.hh,v 1.3 1999-10-27 09:26:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,10 +23,16 @@
 //
 // History:
 // 1st version 11.06.97, V. Grichine 
-// 2nd version 30.11.97, V. Grichine 
+// 2nd version 30.11.97, V. Grichine
+// 27.10.99, V.Grichine: Bug fixed in constructors, 3rd constructor and 
+//                       GetStepEnergyLoss(step) were added, fDelta = 0.005
 
 #ifndef G4PAIXSECTION_HH
 #define G4PAIXSECTION_HH
+
+#include "G4ios.hh"
+#include "globals.hh"
+#include "Randomize.hh"
 
 #include"G4SandiaTable.hh"
 
@@ -41,7 +47,11 @@ public:
           G4PAIxSection( G4int materialIndex,           // for proton loss table
 		         G4double maxEnergyTransfer,
 		         G4double betaGammaSq ,
-                          G4double** photoAbsCof, G4int intNumber         ) ;
+                         G4double** photoAbsCof, G4int intNumber         ) ;
+
+          G4PAIxSection( G4int materialIndex,           // test constructor
+		         G4double maxEnergyTransfer,
+		         G4double betaGammaSq          ) ;
 	  
 	  // G4PAIxSection(const G4PAIxSection& right) ;
 	  
@@ -84,12 +94,18 @@ public:
 
           G4double SumOverBorder( G4int intervalNumber,
 	                          G4double energy          ) ;
+
+          G4double GetStepEnergyLoss( G4double step ) ;
 	 
 	  // Inline access functions
 
 	  G4int GetNumberOfGammas() const { return fNumberOfGammas ; }
 	  
           G4int GetSplineSize() const { return fSplineNumber ; }
+	  
+          G4int GetIntervalNumber() const { return fIntervalNumber ; }
+
+          G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i] ; } 
 	  
 	  G4double GetMeanEnergyLoss() const {return fIntegralPAIxSection[0] ; }
 
@@ -156,7 +172,8 @@ G4double fPAItable[500][112] ; // Output array
 
 } ;    
 
-// ............................ INLINE METHODS ....................................
+////////////////  Inline methods //////////////////////////////////
+//
 
 
 inline G4double G4PAIxSection::GetPAItable(G4int i, G4int j) const
