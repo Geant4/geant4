@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.14 2004-02-15 17:47:26 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.15 2004-09-13 09:18:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 04-06-03 Fix compilation warnings (V.Ivanchenko)
+// 12-09-04 Add lowestKinEnergy and change order of if in DEDX method (V.Ivanchenko)
 
 // Class Description:
 //
@@ -63,14 +64,15 @@
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
-  highKinEnergy(2.0*MeV),
-  lowKinEnergy(0.0*MeV),
   protonMassAMU(1.007276),
-  theZieglerFactor(eV*cm2*1.0e-15),
   iMolecula(0),
   isIon(false)
 {
   if(p) SetParticle(p);
+  highKinEnergy    = 2.0*MeV;
+  lowKinEnergy     = 0.0*MeV;
+  lowestKinEnergy  = 1.0*keV;
+  theZieglerFactor = eV*cm2*1.0e-15;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,7 +91,6 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     massRate     = mass/proton_mass_c2;
-//    highKinEnergy *= massRate;
     ratio = electron_mass_c2/mass;
     if(particle->GetParticleName() == "GenericIon") isIon = true;
   }
@@ -144,7 +145,10 @@ G4double G4BraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 {
   const G4Material* material = couple->GetMaterial();
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double dedx  = DEDX(material, kineticEnergy/massRate);
+  G4double tkin  = kineticEnergy/massRate;
+  G4double dedx  = 0.0;
+  if(tkin > lowestKinEnergy) dedx = DEDX(material, tkin);
+  else      dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy);
 
   if (cutEnergy < tmax) {
 
@@ -186,10 +190,6 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
     cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
-// +term for spin=1/2 particle
-//    if( 0.5 == spin ) {
-//      cross        +=  0.5 * (tmax - cutEnergy) / energy2;
-//    }
     cross *= twopi_mc2_rcl2*chargeSquare*
              (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
@@ -273,16 +273,11 @@ std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
 
 G4bool G4BraggModel::HasMaterial(const G4Material* material)
 {
+  const size_t numberOfMolecula = 11 ;
+  SetMoleculaNumber(numberOfMolecula) ;
   G4String chFormula = material->GetChemicalFormula() ;
-  G4String myFormula = G4String(" ") ;
-
-  if (myFormula ==  chFormula ) {
-    if(1 == (material->GetNumberOfElements())) return true;
-    return false ;
-  }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 11 ;
   static G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
@@ -292,8 +287,7 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   // Special treatment for water in gas state
   const G4State theState = material->GetState() ;
 
-  myFormula = G4String("H_2O");
-  if( theState == kStateGas && myFormula == chFormula) {
+  if( theState == kStateGas && "H_2O" == chFormula) {
     chFormula = G4String("H_2O-Gas");
   }
 
@@ -314,12 +308,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 {
   G4double ionloss = 0.0 ;
 
-  // pure material (normally not the case for this function)
-  if(1 == (material->GetNumberOfElements())) {
-    G4double z = material->GetZ() ;
-    ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
-
-  } else if (iMolecula < 11) {
+  if (iMolecula < 11) {
   
     // The data and the fit from: 
     // ICRU Report N49, 1993. Ziegler's model for protons.
@@ -363,6 +352,11 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
       }
     }
+
+  // pure material (normally not the case for this function)
+  } else if(1 == (material->GetNumberOfElements())) {
+    G4double z = material->GetZ() ;
+    ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
   }
   
   return ionloss;
@@ -511,26 +505,29 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   const G4int numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
-  
+
+  // compaund material with parametrisation
+  if( HasMaterial(material) ) {
+
+    eloss = StoppingPower(material, kineticEnergy)
+                               * (material->GetTotNbOfAtomsPerVolume());
+    eloss *=  material->GetTotNbOfAtomsPerVolume();
+    if(1 < numberOfElements) {
+      G4int nAtoms = 0;
+     
+      const G4int* theAtomsVector = material->GetAtomsVector();
+      for (G4int iel=0; iel<numberOfElements; iel++) {
+        nAtoms += theAtomsVector[iel];
+      }
+      eloss /= nAtoms;
+    }
   // pure material
-  if(1 == numberOfElements) {
+  } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();
     eloss = ElectronicStoppingPower(z, kineticEnergy)
                                * (material->GetTotNbOfAtomsPerVolume());
 
-  // compaund material with parametrisation
-  } else if( HasMaterial(material) ) {
-
-    eloss = StoppingPower(material, kineticEnergy)
-                               * (material->GetTotNbOfAtomsPerVolume());
-    G4int nAtoms = 0;
-     
-    const G4int* theAtomsVector = material->GetAtomsVector();
-    for (G4int iel=0; iel<numberOfElements; iel++) {
-      nAtoms += theAtomsVector[iel];
-    }
-    eloss /= nAtoms;
 
   // Experimental data exist only for kinetic energy 125 keV
   } else if( MolecIsInZiegler1988(material) ) { 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.11 2004-02-15 17:08:49 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.12 2004-09-13 09:18:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,6 +142,7 @@ private:
   G4double ratio;
   G4double highKinEnergy;
   G4double lowKinEnergy;
+  G4double lowestKinEnergy;
   G4double protonMassAMU;
   G4double theZieglerFactor;
   G4double expStopPower125;        // Experimental Stopping power at 125keV
