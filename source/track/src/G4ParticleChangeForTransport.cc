@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.11 2001-10-22 04:19:41 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.12 2002-11-01 15:55:45 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,6 +109,10 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAtRest(G4Step* pStep)
 
 G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
 {
+  // Smooth curved tajectory representation: let the Step know about
+  // the auxiliary trajectory points (jacek 30/10/2002)
+  pStep->SetPointerToVectorOfAuxiliaryPoints(fpVectorOfAuxiliaryPointsPointer);
+
   // copy of G4ParticleChange::UpdateStepForAlongStep
   //  i.e. no effect for touchable
 
