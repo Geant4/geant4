@@ -1,130 +1,130 @@
 //#define DEBUG
 
-#include "CascadSpecialFunctions.h"
+#include "G4CascadSpecialFunctions.hh"
 
-pair<int,double> CascadSpecialFunctions::getPositionInEnergyScale2(double e) {
+pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
 
-const double EMT2[31] = {
-     0. ,.05,0.1,.15,0.2,.25,0.3,.35,0.4,.45,
-     0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,
-     5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10.,15.
+const G4double EMT2[31] = {
+     0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+     0.5, 1.0,  1.5, 2.0,  2.5, 3.0,  3.5, 4.0,  4.5, 5.0,
+     5.5, 6.0,  6.5, 7.0,  7.5, 8.0,  8.5, 9.0,  9.5, 10.0, 15.0
 };
 
-  int ik = 30;
-  double sk = 1.;
-  for(int i = 1; i < 31; i++) {
+  G4int ik = 30;
+  G4double sk = 1.0;
+  for(G4int i = 1; i < 31; i++) {
     if(e <= EMT2[i]) {
       ik = i;
-      sk = (e - EMT2[ik-1])/(EMT2[ik] - EMT2[ik-1]);
+      sk = (e - EMT2[ik - 1]) / (EMT2[ik] - EMT2[ik - 1]);
       break;
     };
   };
-  return pair<int,double>(ik,sk);
+  return pair<G4int, G4double>(ik, sk);
 }
 
-pair<int,double> CascadSpecialFunctions::getPositionInEnergyScale1(double e) {
+pair<G4int, G4double> CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
 
-const double EMT1[20] = {
-     0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,
-     5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10.
+const G4double EMT1[20] = {
+     0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0,
+     5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0
 };
 
-int ik;
-double sk;
+G4int ik;
+G4double sk;
   
 if(e < EMT1[0]) {
     ik = 1;
-    sk = 0.;
+    sk = 0.0;
 }
  else if(e <= EMT1[19]) {     
-   for(int i = 1; i < 20; i++) {
+   for(G4int i = 1; i < 20; i++) {
       if(e <= EMT1[i]) {
         ik = i;
-        sk = (e - EMT1[ik-1])/(EMT1[ik] - EMT1[ik-1]);
+        sk = (e - EMT1[ik - 1]) / (EMT1[ik] - EMT1[ik - 1]);
         break;
       };
    };
 }
  else {
    ik = 19;
-   sk = 1.;
+   sk = 1.0;
 };
 #ifdef DEBUG
-cout << " e " << e << " ik " << ik << " sk " << sk << endl;
+G4cout << " e " << e << " ik " << ik << " sk " << sk << G4endl;
 #endif
 
-return pair<int,double>(ik,sk);
+return pair<G4int, G4double>(ik, sk);
 
 }
 
-double CascadSpecialFunctions::absorptionCrosSection(double e, int type) {
-  const double corr_fac = 0.2;
-  double csec = 0.;
+G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, G4int type) {
+  const G4double corr_fac = 0.2;
+  G4double csec = 0.0;
   
   if(e < 0.3) {
-    csec = 0.1106/sqrt(e) - 0.8 + 0.08/((e - 0.123)*(e - 0.123) + 0.0056);
+    csec = 0.1106 / sqrt(e) - 0.8 + 0.08 / ((e - 0.123) * (e - 0.123) + 0.0056);
   }
-   else if(e < 1.) {
-    csec = 3.6735*(1. - e)*(1. - e);     
+   else if(e < 1.0) {
+    csec = 3.6735 * (1.0 - e) * (1.0 - e);     
   };
-  if(csec < 0.) csec = 0.;
+  if(csec < 0.0) csec = 0.0;
 #ifdef DEBUG
-cout << " ekin " << e << " abs. csec " << corr_fac*csec << endl;   
+G4cout << " ekin " << e << " abs. csec " << corr_fac * csec << G4endl;   
 #endif
-return corr_fac*csec;
+return corr_fac * csec;
 
 }
 
-pair<int,double> CascadSpecialFunctions::getPositionInEnergyScaleEMS(double e) {
+pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
 
-const double EMS[46] = {
-   0.05,0.06,0.07,0.08,0.09,0.10,0.11,0.12,0.13,0.14,
-   0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,
-   0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,
-   0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,
-   0.45,0.46,0.47,0.48,0.49,0.50
+const G4double EMS[46] = {
+   0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14,
+   0.15, 0.16, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.23, 0.24,
+   0.25, 0.26, 0.27, 0.28, 0.29, 0.30, 0.31, 0.32, 0.33, 0.34,
+   0.35, 0.36, 0.37, 0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44,
+   0.45, 0.46, 0.47, 0.48, 0.49, 0.50
 };
 
-int ik;
-double sk;
+G4int ik;
+G4double sk;
   
 if(e < EMS[0]) {
     ik = 1;
-    sk = 0.;
+    sk = 0.0;
 }
  else if(e <= EMS[45]) {     
-   for(int i = 1; i < 46; i++) {
+   for(G4int i = 1; i < 46; i++) {
       if(e <= EMS[i]) {
         ik = i;
-        sk = (e - EMS[ik-1])/(EMS[ik] - EMS[ik-1]);
+        sk = (e - EMS[ik - 1]) / (EMS[ik] - EMS[ik - 1]);
         break;
       };
    };
 }
  else {
    ik = 45;
-   sk = 1.;
+   sk = 1.0;
 };
 
-return pair<int,double>(ik,sk);
+return pair<G4int, G4double>(ik, sk);
 
 }
 
-double CascadSpecialFunctions::crossSection(double e, int is) {
+G4double G4CascadSpecialFunctions::crossSection(G4double e, G4int is) {
 
-const double dsig[46][2] = {
-      13.7,15.0,15.8,17.6,19.0,15.0,46.0,15.8,52.0,21.0,
-      55.0,21.9,77.0,31.0,101.,38.4,124.,42.7,148.,55.4,
-      165.,55.3,172.,67.9,205.,66.2,189.,67.2,190.,67.8,
-      178.,63.8,148.,64.0,141.,52.1,135.,58.0,127.,48.3,
-      107.,40.0,111.,37.8,81.3,37.5,78.0,31.7,75.0,30.0,
-      64.3,30.0,60.3,27.7,58.9,26.0,55.0,27.0,48.0,26.0,
-      45.2,26.7,40.8,26.0,39.3,27.0,40.7,27.1,31.2,26.5,
-      34.6,26.9,31.4,27.6,27.1,28.4,26.2,27.5,24.4,27.2,
-      25.7,28.8,23.8,29.3,21.5,27.0,22.2,29.5,21.5,31.2,19.,30.7
+const G4double dsig[46][2] = {
+      13.7,  15.0, 15.8,  17.6, 19.0,  15.0, 46.0,  15.8, 52.0,  21.0,
+      55.0,  21.9, 77.0,  31.0, 101.0, 38.4, 124.0, 42.7, 148.0, 55.4,
+      165.0, 55.3, 172.0, 67.9, 205.0, 66.2, 189.0, 67.2, 190.0, 67.8,
+      178.0, 63.8, 148.0, 64.0, 141.0, 52.1, 135.0, 58.0, 127.0, 48.3,
+      107.0, 40.0, 111.0, 37.8, 81.3,  37.5, 78.0,  31.7, 75.0,  30.0,
+      64.3,  30.0, 60.3,  27.7, 58.9,  26.0, 55.0,  27.0, 48.0,  26.0,
+      45.2,  26.7, 40.8,  26.0, 39.3,  27.0, 40.7,  27.1, 31.2,  26.5,
+      34.6,  26.9, 31.4,  27.6, 27.1,  28.4, 26.2,  27.5, 24.4,  27.2,
+      25.7,  28.8, 23.8,  29.3, 21.5,  27.0, 22.2,  29.5, 21.5,  31.2, 19.0, 30.7
 };
 
-const double asig[4][6][31] = {
+const G4double asig[4][6][31] = {
       1.00,1.00,1.00,1.00,1.00,1.00,24.3,24.1,24.0,26.3,
       28.6,24.8,19.9,19.2,17.4,15.3,13.5,12.3,11.9,10.4,
       11.8,11.4,11.0,10.8,10.9,11.7,11.4,10.2,11.0,11.0,
@@ -203,10 +203,10 @@ const double asig[4][6][31] = {
       26.1,25.2,6.92,6.70,0.  ,25.7
 };
 
-const double EMT2_10 = 0.5;
-  double csec;
-  int l = is;
-  int k = 0; // isotropic
+const G4double EMT2_10 = 0.5;
+  G4double csec;
+  G4int l = is;
+  G4int k = 0; // isotropic
   if(l == 4) {
     l = 1;
   } 
@@ -225,67 +225,67 @@ const double EMT2_10 = 0.5;
         csec = 34.5;
       }
        else if(e >= 0.04) {
-        csec = 0.23938/(e*e) + 1.802/e + 27.147;
+        csec = 0.23938 / (e * e) + 1.802 / e + 27.147;
       }
        else if(e >= 0.001) {
-        csec = -0.0050574/(e*e) + 9.0692/e + 6.9466;
+        csec = -0.0050574 / (e * e) + 9.0692 / e + 6.9466;
       }
        else {
-        csec = 4./e;
+        csec = 4.0 / e;
       };   	
     }
      else if(l == 2) { // np
       if(e >= 0.4) {
-        csec = 0.88737/e + 53.37*e + 3.5475;
+        csec = 0.88737 / e + 53.37 * e + 3.5475;
       }
        else if(e >= 0.04) {
-        csec = 0.093074/(e*e) - 0.011148/e + 22.429;
+        csec = 0.093074 / (e * e) - 0.011148 / e + 22.429;
       }
        else if(e >= 0.001) {
-        csec = -0.0011748/(e*e) + 3.0885/e + 5.3107;
+        csec = -0.0011748 / (e * e) + 3.0885 / e + 5.3107;
       }
        else {
-        csec = 1.92/e;
+        csec = 1.92 / e;
       };   	
     }
-     else { // pi + n,p
+     else { // pi + n, p 
       if(e <= 0.05) {
         if(l == 3) {
-	  csec = 3.7 + 204.35*e;
+	  csec = 3.7 + 204.35 * e;
 	}
 	 else if(l == 4) {
-	  csec = 6.5 + 170.71*e;
+	  csec = 6.5 + 170.71 * e;
         }
 	 else if(l == 5) {
-	  csec = 5.1 + 187.53*e;
+	  csec = 5.1 + 187.53 * e;
 	}; 
       }
        else {
-        pair<int,double> iksk = getPositionInEnergyScaleEMS(e);
-        int ik = iksk.first;
-        double sk = iksk.second;
+        pair<G4int, G4double> iksk = getPositionInEnergyScaleEMS(e);
+        G4int ik = iksk.first;
+        G4double sk = iksk.second;
 	if(l < 5) {
 	  int j = l - 3;
-	  csec = dsig[ik-1][j] + sk*(dsig[ik][j] - dsig[ik-1][j]);
+	  csec = dsig[ik - 1][j] + sk * (dsig[ik][j] - dsig[ik - 1][j]);
 	}
 	 else {
-	  csec = 0.5*(dsig[ik-1][0] + dsig[ik-1][1] + 
-	    sk*(dsig[ik][0] - dsig[ik-1][0] + dsig[ik][1] - dsig[ik-1][1]));
+	  csec = 0.5 * (dsig[ik - 1][0] + dsig[ik - 1][1] + 
+	    sk * (dsig[ik][0] - dsig[ik - 1][0] + dsig[ik][1] - dsig[ik - 1][1]));
 	}; 
       }; 
     };  
   }
    else {
-    pair<int,double> iksk = getPositionInEnergyScale2(e);
-    int ik = iksk.first;
-    double sk = iksk.second;
+    pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
+    G4int ik = iksk.first;
+    G4double sk = iksk.second;
     if(l < 5) {
-      csec = asig[l-1][5][ik-1] + sk*(asig[l-1][5][ik] - asig[l-1][5][ik-1]);
+      csec = asig[l - 1][5][ik - 1] + sk * (asig[l - 1][5][ik] - asig[l - 1][5][ik - 1]);
     }
      else {
-      csec = 0.5*(asig[2][5][ik-1] + asig[3][5][ik-1] +
-         sk*(asig[2][5][ik] - asig[2][5][ik-1] +
-             asig[3][5][ik] - asig[3][5][ik-1]));
+      csec = 0.5 * (asig[2][5][ik - 1] + asig[3][5][ik - 1] +
+         sk * (asig[2][5][ik] - asig[2][5][ik - 1] +
+             asig[3][5][ik] - asig[3][5][ik - 1]));
     }; 
   }; 
   return csec;
