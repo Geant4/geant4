@@ -43,16 +43,20 @@
 #include "g4std/vector"
 #include "G4ThreeVector.hh"
 #include "XrayFluoDataSet.hh"
-
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+#include "XrayFluoAnalysisMessenger.hh"
 
 class G4Step;
 //class XrayFluoEventAction;
 
+namespace AIDA {
 class IAnalysisFactory;
 class IHistogramFactory;
 class ITree;
 class ITupleFactory;
 class ITuple;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,35 +76,51 @@ public:
  //fill histograms with data from XrayFluoEventAction
   void analyseEnergyDep(G4double eDep);
   
- //fill histograms with data from XrayFluoPrimarygeneratoraction
+ //fill histograms with data from XrayFluoPrimarygeneratorAction
   void analysePrimaryGenerator(G4double energy);
   
   //method to call to create an instance of this class
   static XrayFluoAnalysisManager* getInstance();
 
-  G4double XrayFluoAnalysisManager::ResponseFunction(G4double energy);
+  //method intended to chenge the name of the hbook output file
+  void SetOutputFileName(G4String);
 
  
 private:
   //private constructor in order to create a singleton
+ 
+
   XrayFluoAnalysisManager();
  
+  G4String outputFileName;
+
   static XrayFluoAnalysisManager* instance;
   
   //pointer to the analysis messenger
- 
+  XrayFluoAnalysisMessenger* analisysMessenger;
+
   //XrayFluoEventAction* pEvent;
 
-  IAnalysisFactory* analysisFactory;
-  ITree* tree;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
 
-  IHistogramFactory *histogramFactory;
-  ITupleFactory* tupleFactory;
+  AIDA::IHistogramFactory *histogramFactory;
+  //  ITupleFactory* tupleFactory;
 
-  
-  ITuple* tuple;
+  //  ITuple* tuple;
 
-
+  AIDA::IHistogram1D*   histo_1;
+  AIDA::IHistogram1D*   histo_2;
+  AIDA::IHistogram1D*   histo_3;
+  AIDA::IHistogram1D*   histo_4;
+  AIDA::IHistogram1D*   histo_5;
+  AIDA::IHistogram1D*   histo_6;
+  AIDA::IHistogram1D*   histo_7;
+  AIDA::IHistogram1D*   histo_8;
+  AIDA::IHistogram1D*   histo_9;
+  AIDA::IHistogram1D*   histo_10;
+  AIDA::IHistogram1D*   histo_12;
+  AIDA::IHistogram1D*   histo_11;
 };
 
 #endif

@@ -51,7 +51,10 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+class G4UIcmdWithAString;
 class XrayFluoAnalysisMessenger: public G4UImessenger
+
 {
 public:
   XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* );
@@ -62,9 +65,12 @@ public:
 private:
 
   //pointer to XrayFluoAnalysisManager
-  XrayFluoAnalysisManager* XrayFluoAnalysis;
-  G4UIdirectory*              XrayFluoAnalysisDir;
- 
+  XrayFluoAnalysisManager* xrayFluoAnalysis;
+  G4UIdirectory* XrayFluoAnalysisDir;
+  G4UIcmdWithAString* ouputFileCommand;
+
 };
 #endif
 #endif
+
+
