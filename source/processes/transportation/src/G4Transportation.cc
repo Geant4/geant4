@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.36 2003-04-02 10:09:21 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.37 2003-05-13 18:03:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -130,7 +130,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      if ( DoesGlobalFieldExist() )
      {
-        fFieldPropagator->GetChordFinder()->ResetStepEstimate();
+        G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
+        if( chordF ) chordF->ResetStepEstimate();
      }
 
      // We need to update the current transportation's touchable handle
@@ -179,14 +180,30 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
   //   By the tracking, after all AlongStepDoIts, in "Relocation"
-  // Does the particle have an (EM) field force exerting upon it?
+
+  // Check whether the particle have an (EM) field force exerting upon it
   //
   if( (particleCharge != 0.0) )
   {
-     fieldExertsForce = DoesGlobalFieldExist() ;
-     //
-     // Future: will/can also check whether current volume's field is Zero or
-     // set by the user (in the logical volume) to be zero.
+     G4bool globalFieldExists=false; // , globalFieldExertsForce= false; 
+     G4bool localFieldExists= false;
+     G4FieldManager* localFieldMgr;
+
+     globalFieldExists= DoesGlobalFieldExist();
+     fieldExertsForce = globalFieldExists; 
+
+     // A local field exists if there is a local field manager.
+     // It is non-zero if it points to a field that is not null. 
+     localFieldMgr = track.GetVolume()->GetLogicalVolume()->GetFieldManager();
+
+     // If a local field manager exists, it overrides the global one.
+     if (localFieldMgr != 0) {
+        localFieldExists = localFieldMgr->GetDetectorField() != 0;
+
+        // So if the local one has no field, there is no field even
+        //  if a global field manager exists!!
+        fieldExertsForce = localFieldExists; 
+     } 
   }
 
   // Choose the calculation of the transportation: Field or not 
