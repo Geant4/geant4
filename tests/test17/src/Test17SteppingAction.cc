@@ -114,6 +114,10 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 
       } else {
 
+          G4cout << "EvtNo= " << evno
+                 << "  length= " << eventaction->TrackLength() 
+                 << "  xend= " << xend << G4endl;
+
         eventaction->CountEvent(true);
         runaction->EndOfTrackCharged(xend) ;
       }

@@ -1,0 +1,23 @@
+#
+# Macro file for the initialization phase of "test17" 
+#
+#
+/control/verbose 2
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+#
+#/run/initialize
+#
+/gun/particle proton
+/gun/energy 500 keV
+#/run/beamOn 10000
+#
+/gun/particle anti_proton
+#/run/beamOn 10000
+
+#scaled energy
+/gun/particle IonC12
+/gun/energy 6000 keV
+/run/beamOn 15
+#
