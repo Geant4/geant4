@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStepLimit.hh,v 1.1 2004-01-23 02:47:50 kurasige Exp $
+// $Id: G4StepLimiter.hh,v 1.1 2004-07-26 00:42:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class description
@@ -33,20 +33,20 @@
 // ------------------------------------------------------------
 //                  23 Jan. 2004  H.Kurashige
 // ------------------------------------------------------------
-#ifndef G4UserStepLimit_h
-#define G4UserStepLimit_h 1
+#ifndef G4StepLimiter_h
+#define G4StepLimiter_h 1
 
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VProcess.hh"
 
-class G4UserStepLimit : public G4VProcess 
+class G4StepLimiter : public G4VProcess 
 {
   public:  // with description     
 
-     G4UserStepLimit(const G4String& processName ="UserStepLimit" );
+     G4StepLimiter(const G4String& processName ="StepLimiter" );
 
-    ~G4UserStepLimit();
+    ~G4StepLimiter();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -91,8 +91,8 @@ class G4UserStepLimit : public G4VProcess
   private:
   
   // hide assignment operator as private 
-      G4UserStepLimit(G4UserStepLimit&);
-      G4UserStepLimit& operator=(const G4UserStepLimit& right);
+      G4StepLimiter(G4StepLimiter&);
+      G4StepLimiter& operator=(const G4StepLimiter& right);
 
 };
 

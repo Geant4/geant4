@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStepLimit.cc,v 1.1 2004-01-23 02:47:51 kurasige Exp $
+// $Id: G4StepLimiter.cc,v 1.1 2004-07-26 00:42:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -30,7 +30,7 @@
 // 23-01-04 first implementation  (H.Kurashige)
 // --------------------------------------------------------------
 
-#include "G4UserStepLimit.hh"
+#include "G4StepLimiter.hh"
 
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
@@ -38,7 +38,7 @@
 
 
 ////////////////////////////////////
-G4UserStepLimit::G4UserStepLimit(const G4String& aName)
+G4StepLimiter::G4StepLimiter(const G4String& aName)
   : G4VProcess(aName)
 {
    if (verboseLevel>1) {
@@ -48,13 +48,13 @@ G4UserStepLimit::G4UserStepLimit(const G4String& aName)
 
 
 ////////////////////////
-G4UserStepLimit::~G4UserStepLimit()
+G4StepLimiter::~G4StepLimiter()
 {
 }
 
 
 ////////////////////////
-G4UserStepLimit::G4UserStepLimit(G4UserStepLimit& right)
+G4StepLimiter::G4StepLimiter(G4StepLimiter& right)
   : G4VProcess(right)
 {
 }
@@ -62,7 +62,7 @@ G4UserStepLimit::G4UserStepLimit(G4UserStepLimit& right)
  
 ////////////////
 G4double 
-  G4UserStepLimit::PostStepGetPhysicalInteractionLength( 
+  G4StepLimiter::PostStepGetPhysicalInteractionLength( 
 				       const G4Track& aTrack,
 				       G4double, // previousStepSize
 				       G4ForceCondition* condition  )
@@ -84,7 +84,7 @@ G4double
 
 ///////////////
 G4VParticleChange*
-  G4UserStepLimit::PostStepDoIt( const G4Track& aTrack,
+  G4StepLimiter::PostStepDoIt( const G4Track& aTrack,
                                  const G4Step&  )
 // Do Nothing
 //
