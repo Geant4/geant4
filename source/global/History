@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2002-12-06 19:26:42 gcosmo Exp $
+$Id: History,v 1.108 2003-01-22 17:57:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 22, 2003  G.Cosmo (global-V05-00-00)
+- global.hh: exclude definition of min/max for Windows .NET VC++ compiler.
 
 December 6, 2002 G.Cosmo (global-V04-01-05)
 - G4Integrator.icc: fixed some uninitialised variables.
