@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.36 2001-11-26 14:11:47 hpw Exp $
+// $Id: G4Quasmon.cc,v 1.37 2001-11-29 14:29:14 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -1372,7 +1372,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
             G4double ctc=(cen*ctkk-kLS)/(cen-kLS*ctkk);//cos(theta_k,kap) in k+pClast CompSystem
             if(abs(ctc)>1.)
             {
-              G4cout<<"***G4Quasm:HadronizeQuasmon: e="<<cen<<", k="<<kLS<<", cost="<<ctc<<G4endl;
+              // G4cout<<"***G4Quasm:HadronizeQuasmon: e="<<cen<<", k="<<kLS<<", cost="<<ctc<<G4endl;
               if(ctc>1.) ctc=1.;
               else if(ctc<-1.) ctc=-1.;
 			}
