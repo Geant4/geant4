@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.14 2002-06-18 18:45:42 griccard Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.15 2002-11-14 10:55:28 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -66,7 +66,9 @@
 // This file is a global variable in which we store energy deposition per hit
 // and other relevant information
 
+#ifdef G4STORE_DATA
 extern G4std::ofstream outFile;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -153,14 +155,24 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	  NPlane = (*THC)[i]->GetNSilPlane();
 	  IsX = (*THC)[i]->GetPlaneType();
 	  
+#ifdef G4STORE_DATA
 	  outFile << G4std::setw(7) << event_id << " " << 
 	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
 	    (*THC)[i]->GetPos().x()/mm <<" "<<
 	    (*THC)[i]->GetPos().y()/mm <<" "<<
 	    (*THC)[i]->GetPos().z()/mm <<" "<<
-	    G4endl;	  
-	  
+	    G4endl;
+#else 	  
+	  G4cout << G4std::setw(7) << event_id << " " << 
+	    ESil/keV << " " << NStrip << 
+	    " " << NPlane << " " << IsX << " " <<
+	    (*THC)[i]->GetPos().x()/mm <<" "<<
+	    (*THC)[i]->GetPos().y()/mm <<" "<<
+	    (*THC)[i]->GetPos().z()/mm <<" "<<
+	    G4endl;
+#endif
+
 #ifdef G4ANALYSIS_USE
 
 	  // Here we fill the histograms of the Analysis manager
@@ -222,8 +234,8 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       NPlane = (*DC)[i]->GetPlaneNumber();
       IsX = (*DC)[i]->GetPlaneType();
       
-      outFile << G4std::setw(7) << event_id << " " << NStrip << 
-	" " << NPlane << " " << IsX << " " << G4endl;	
+      //      outFile << G4std::setw(7) << event_id << " " << NStrip << 
+      //	" " << NPlane << " " << IsX << " " << G4endl;	
     }
   }
   
