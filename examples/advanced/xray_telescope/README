@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2000-11-30 14:14:05 nartallo Exp $
+$Id: README,v 1.5 2000-12-06 18:34:42 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,7 +29,7 @@ in Geant4:
 
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are provided for the Linux and Solaris environment
+ - histograming facilities are provided for the Linux environment only
    with the Lizard system at present, other analysis systems such as 
    OpenScientist and JAS will be implemented at a later stage
 
@@ -38,7 +38,7 @@ necessary and a number of environment variables will have to be set.
 
 
 1. Setting up the environment variables for GAG, Visualisation and 
-   Analysis options
+   Analysis options (example based on Linux at CERN)
 
 #set up GAG 
 setenv G4UI_BUILD_GAG_SESSION       1
@@ -52,18 +52,19 @@ setenv G4VRMLFILE_MAX_FILE_NUM     100
 setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
 setenv G4VIS_USE_VRML               1
 setenv G4VIS_USE_VRMLFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
 
 #set up OpenGL or Mesa 
 setenv G4VIS_BUILD_OPENGLX_DRIVER   1
 setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /usr/local                   #get correct path
-setenv OGLLIBS "-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
 #set up DAWN
 setenv G4VIS_BUILD_DAWN_DRIVER      1
 setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
 setenv G4VIS_USE_DAWN               1
 setenv G4VIS_USE_DAWNFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
 #set up Lizard
 setenv LIZARDROOT  /usr/local/freeLizard/3.2.0  #get correct path 
@@ -74,7 +75,8 @@ setenv G4ANALYSIS_BUILD             1
 setenv G4ANALYSIS_BUILD_LIZARD      1
 
 #add to the LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH /usr/local/freeLizard/3.2.0/Linux/lib
+setenv LD_LIBRARY_PATH /usr/local/freeLizard/3.2.0/Linux/lib:$OGLHOME/lib
+
 
 IMPORTANT WARNING! 
 setenv G4ANALYSIS_BUILD  1 
@@ -158,10 +160,10 @@ The current implementation of the analysis class is very preliminary
 and new tags of this example are anticipated to be released soon after 
 the general release 
 
-Lizard is not currently implemented on platforms other than Linux 
-and Solaris. To build and execute the example on other platforms the
-analysis environment variables must not be set, except for  
-G4ANALYSIS_BUILD which is required for building the executable.
+Lizard is not currently implemented on platforms other than Linux. 
+To build and execute the example on other platforms the analysis 
+environment variables must not be set, except for G4ANALYSIS_BUILD 
+which is required for building the executable.
 
 
 

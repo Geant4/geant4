@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2000-11-30 14:37:07 nartallo Exp $
+$Id: History,v 1.9 2000-12-06 18:34:34 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.12.2000 - RN, tag xraytel-V02-00-10
+             Removed old XrayTelPrimaryGeneratorMessenger.cc and .hh
+             files from cvs
 
 30.11.2000 - RN, tag xraytel-V02-00-09
              Removed longsection.macro file from cvs
