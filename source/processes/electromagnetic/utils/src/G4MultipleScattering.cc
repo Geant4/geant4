@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.33 2003-02-05 12:28:18 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.34 2003-03-17 15:23:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 05-02-03 changes in data members, new sampling for geom.
 //          path length, step dependence reduced with new
 //          method
+// 17-03-03 cut per region, V.Ivanchenko
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,11 +134,11 @@ void G4MultipleScattering::BuildPhysicsTable(
        b = 1. ;
        xsi = facxsi*2.70 ;
        c0 = 1.40 ;
-    }   
+    }
 
   // ..............................
-    Tlow = aParticleType.GetPDGMass(); 
-    
+    Tlow = aParticleType.GetPDGMass();
+
   // tables are built for MATERIALS
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius;
@@ -443,7 +444,7 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MultipleScattering::GetContinuousStepLimit(
-                                   const G4Track& track,                  
+                                   const G4Track& track,
                                    G4double,
                                    G4double currentMinimumStep,
                                    G4double&)
@@ -454,7 +455,7 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   G4double tau,zt,cz,cz1,grej,grej0;
   const G4double expmax = 100., ztmax = (2.*expmax+1.)/(2.*expmax+3.) ;
   const G4double tmax = 1.e20*mm ;
-  
+
   G4bool isOut;
 
   // this process is not a candidate for selection by default
@@ -471,11 +472,13 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   lambda0 = (*theTransportMeanFreePathTable)
             (materialIndex)->GetValue(T0,isOut);
 
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+
   range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
-                                       T0,aMaterial);
+                                       T0,couple);
 
   // special treatment near boundaries ?
-  if (boundary)  
+  if (boundary)
   {
     // step limitation at boundary ?
     stepno = track.GetCurrentStepNumber() ;
@@ -483,9 +486,9 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
     {
       stepnolastmsc = -1000000 ;
       tlimit = 1.e10 ;
-    } 
+    }
 
-    if(stepno > 1) 
+    if(stepno > 1)
     {
       if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
       {
@@ -501,18 +504,18 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
         {
           tPathLength = tlimit ;
           valueGPILSelectionMSC = CandidateForSelection;
-        } 
+        }
       }
-      else if(stepno > stepnolastmsc) 
+      else if(stepno > stepnolastmsc)
       {
-        if((stepno - stepnolastmsc) < nsmallstep) 
+        if((stepno - stepnolastmsc) < nsmallstep)
         {
           if(tPathLength > tlimit)
           {
             laststep *= cf ;
             tPathLength = laststep ;
             valueGPILSelectionMSC = CandidateForSelection;
-          } 
+          }
         }
       }
     }
@@ -528,10 +531,10 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   else
   {
     if(tPathLength/range < dtrl) zmean = lambda0*(1.-exp(-tau));
-    else 
-    {  
+    else
+    {
       T1 = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                   aParticle->GetDefinition(),range-tPathLength,aMaterial);
+                   aParticle->GetDefinition(),range-tPathLength,couple);
       lambda1 = (*theTransportMeanFreePathTable)
                         (materialIndex)->GetValue(T1,isOut);
       if(T0 < Tlow)
@@ -564,7 +567,7 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
       {
         cz1 = 1.+cz ;
         grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
-        do 
+        do
         {
           zPathLength = tPathLength*exp(log(G4UniformRand())/cz1) ;
           grej = exp(cz*log(zPathLength))*(tPathLength-zPathLength)/grej0 ;
@@ -579,28 +582,28 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
     zPathLength = lambda0 ;
 
   tLast = tPathLength;
-  zLast = zPathLength; 
+  zLast = zPathLength;
 
   return zPathLength;
 }
-  
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
                                        const G4Track& track,const G4Step& Step)
-{				                 
+{
   // only a geom path->true path transformation is performed
 
   fParticleChange.Initialize(track);
-  
-  G4double geomPathLength = track.GetStepLength();  
+
+  G4double geomPathLength = track.GetStepLength();
 
   G4double truePathLength = 0. ;
-  
+
   if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
   else if(geomPathLength == zLast)        truePathLength = tLast;
-  else 
-  { 
+  else
+  {
     if(lambda1 < 0.) truePathLength = -lambda0*log(1.-geomPathLength/lambda0) ;
     else if(lambdam < 0.)
     {
@@ -608,7 +611,7 @@ G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
         truePathLength = alam*(1.-exp(log(1.-blam*geomPathLength/alam)/
                                     blam)) ;
       else
-        truePathLength = tLast;  
+        truePathLength = tLast;
     }
     else
     {
@@ -771,7 +774,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
       
       if (safetyminustolerance > 0.)
       {
-        if     (tau < tausmall)  rmean = 0.; 
+        if     (tau < tausmall)  rmean = 0.;
         else if(tau < taulim) rmean = kappa*tau*tau*tau*(1.-kappapl1*tau/4.)/6. ;
         else
         {
