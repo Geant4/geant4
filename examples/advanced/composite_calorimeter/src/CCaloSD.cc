@@ -80,7 +80,7 @@ void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
 }
 
 
-G4bool CCaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {
+G4bool CCaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*) {
 
   if (aStep == NULL) return true;
    
@@ -255,7 +255,7 @@ G4ThreeVector CCaloSD::SetToLocal(G4ThreeVector global){
 }
      
 
-void CCaloSD::EndOfEvent(G4HCofThisEvent*HCE) {
+void CCaloSD::EndOfEvent(G4HCofThisEvent*) {
   summarize();
 }
      

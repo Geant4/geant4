@@ -62,7 +62,7 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
   G4StepPoint*  PreStepPoint= aStep->GetPreStepPoint(); 
   int TSliceID;
 
-  TSliceID = (int) (PostStepPoint->GetGlobalTime() ) / nanosecond;
+  TSliceID = static_cast<int>( (PostStepPoint->GetGlobalTime() ) / nanosecond );
   TSliceID = TSliceID<timeHistoMaxBin ? TSliceID : timeHistoMaxBin-1;
   timeDeposit[TSliceID] += aStep->GetTotalEnergyDeposit() / GeV;
 

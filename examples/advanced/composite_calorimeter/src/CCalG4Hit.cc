@@ -37,7 +37,8 @@ CCalG4Hit::CCalG4Hit() : CCalHit(),
 CCalG4Hit::~CCalG4Hit() {}
 
 
-CCalG4Hit::CCalG4Hit(const CCalG4Hit &right) : CCalHit(right),
+CCalG4Hit::CCalG4Hit(const CCalG4Hit &right) : 
+  G4VHit(right), CCalHit(right),
   elem(right.elem), hadr(right.hadr) 
 {}
 

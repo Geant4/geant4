@@ -56,7 +56,7 @@ public:
   ~CCalHit();
   CCalHit(const CCalHit &right);
   const CCalHit& operator=(const CCalHit &right);
-  int operator==(const CCalHit &right){return 0;}
+  int operator==(const CCalHit &){return 0;}
   
   void print();
   

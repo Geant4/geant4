@@ -75,7 +75,8 @@ CCalAMaterial::~CCalAMaterial() {
   //The base class destructor is called?
 }
 
-CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat){
+CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat) 
+  : CCalMaterial( mat ) {
   name    = mat.name;
   density = mat.density;
   nElem   = mat.nElem;
