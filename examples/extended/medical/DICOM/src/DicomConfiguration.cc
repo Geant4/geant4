@@ -22,10 +22,9 @@
 // fax (418) 691 5268
 //*******************************************************
 
-// Definitions
+
 #include "DicomConfiguration.hh"
 #include "g4std/fstream"
-
 
 G4int DicomConfiguration::ReadDataFile()
 {
@@ -49,7 +48,6 @@ G4int DicomConfiguration::ReadDataFile()
 
 G4int DicomConfiguration::ReadG4File( G4String g4File )
 {
-
   densityValue.clear();
 	
   g4File = g4File + ".g4";
@@ -59,7 +57,8 @@ G4int DicomConfiguration::ReadG4File( G4String g4File )
     return 1;
 		
   readingG4FileHeader >> totalRows >> totalColumns;
-  readingG4FileHeader >> xPixelSpacing >> yPixelSpacing; // X is horizontal, Y is vertical
+  readingG4FileHeader >> xPixelSpacing >> yPixelSpacing; 
+  // X is horizontal, Y is vertical
   readingG4FileHeader >> sliceTickness;
   readingG4FileHeader >> sliceLocation;
   readingG4FileHeader >> compressionUsed;
