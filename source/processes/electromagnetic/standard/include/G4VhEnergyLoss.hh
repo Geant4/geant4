@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.4 2000-06-22 13:26:03 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.5 2000-08-10 22:13:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -98,8 +98,12 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
-                                       
 
+    G4double EnergyLossFluctuation(const G4DynamicParticle *aParticle,
+                                         G4Material *aMaterial,
+                                         G4double MeanLoss,
+                                         G4double ChargeSquare);
+                                       
 // =====================================================================
 
   public:
@@ -225,7 +229,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
     static G4int Ndeltamax ;             // upper limit for nb of subcutoff
                                          // delta rays in one step
-
 
 };
  

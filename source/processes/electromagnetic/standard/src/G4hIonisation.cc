@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.11 2000-05-23 14:42:22 urban Exp $
+// $Id: G4hIonisation.cc,v 1.12 2000-08-10 22:13:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -28,6 +28,10 @@
 // 02/02/99: bugs fixed , L.Urban
 // 29/07/99: correction in BuildLossTable for low energy, L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 10/08/00 : V.Ivanchenko change BuildLambdaTable, in order to 
+//            simulate energy losses of ions; correction to
+//            cross section for particles with spin 1 is inserted
+//            as well
 // --------------------------------------------------------------
  
 
@@ -71,7 +75,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   ParticleMass = aParticleType.GetPDGMass() ;
 
-  Charge = aParticleType.GetPDGCharge();
+  Charge = (aParticleType.GetPDGCharge())/eplus;
 
   G4double ElectronCutInRange = G4Electron::Electron()->GetCuts(); 
 
@@ -289,6 +293,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   // Build mean free path tables for the delta ray production process
   //     tables are built for MATERIALS 
 
+      G4double chargeSquare = Charge*Charge ;
       G4double LowEdgeEnergy , Value ,sigma ;
       G4bool isOutRange ;
       const G4MaterialTable* theMaterialTable=
@@ -345,10 +350,10 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
            
            for (G4int iel=0; iel<NumberOfElements; iel++ )
            {
-                sigma +=  theAtomicNumDensityVector[iel]*
-                        ComputeMicroscopicCrossSection(aParticleType,
-                          LowEdgeEnergy,
-                          (*theElementVector)(iel)->GetZ() ) ;
+             sigma +=  theAtomicNumDensityVector[iel]*
+                       chargeSquare*
+                       ComputeMicroscopicCrossSection(aParticleType,
+                       LowEdgeEnergy,(*theElementVector)(iel)->GetZ() ) ;
            }
 
   // mean free path = 1./macroscopic cross section
@@ -401,16 +406,26 @@ G4double G4hIonisation::ComputeMicroscopicCrossSection(
        TotalCrossSection = (1.-tempvar*(1.-betasquare*log(tempvar)))
                            /DeltaCutInKineticEnergyNow;
 
+       G4double spin = aParticleType.GetPDGSpin() ;
+
   // +term for spin=1/2 particle
-     if(aParticleType.GetPDGSpin() == 0.5)
-     {
-       TotalCrossSection +=  0.5
+       if(0.5 == spin)
+       {
+         TotalCrossSection +=  0.5
                        *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
                        /(TotalEnergy*TotalEnergy);
-       G4double  Section =  0.5
-                       *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
-                       /(TotalEnergy*TotalEnergy);
-     }
+
+    // +term for spin=1 particle
+       } else if( 0.9 < spin )
+       {
+         TotalCrossSection += 
+             -log(tempvar)/(3.0*DeltaCutInKineticEnergyNow) +
+	      (MaxKineticEnergyTransfer - DeltaCutInKineticEnergyNow) * 
+            ( (5.0+ 1.0/tempvar)*0.25 / (TotalEnergy*TotalEnergy) - 
+	       betasquare / 
+              (MaxKineticEnergyTransfer * DeltaCutInKineticEnergyNow) 
+            ) / 3.0 ;
+       }
        TotalCrossSection = twopi_mc2_rcl2 * AtomicNumber
                            *TotalCrossSection/betasquare;
     }
