@@ -129,7 +129,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	{
 	  // Get momentum from H model
 	  G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
-	  targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
+	  targetH = new G4InuclElementaryParticle(targetMomentum, 1); 
 
 	  output = collider->collide(bullet, targetH); 
 	} 
