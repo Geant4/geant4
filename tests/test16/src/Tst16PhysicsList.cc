@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst16PhysicsList.cc,v 1.1 1999-11-18 14:58:18 stesting Exp $
+// $Id: Tst16PhysicsList.cc,v 1.2 1999-11-18 15:18:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,8 @@
 #include <iomanip.h>   
 
 #include "G4FastSimulationManagerProcess.hh"
-
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 Tst16PhysicsList::Tst16PhysicsList():  G4VUserPhysicsList()
 {
@@ -450,6 +451,11 @@ void Tst16PhysicsList::ConstructHad()
          theInelasticProcess->RegisterMe(theLEInelasticModel);
          G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
+          // now the cross-sections.
+	 G4CrossSectionDataStore * theStore1 =
+            ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
+         G4ProtonInelasticCrossSection * theProtonData1 = new G4ProtonInelasticCrossSection;
+         theStore1->AddDataSet(theProtonData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "anti_proton") {
@@ -474,6 +480,11 @@ void Tst16PhysicsList::ConstructHad()
          G4HENeutronInelastic* theHEInelasticModel = 
                                     new G4HENeutronInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
+          // now the cross-sections.
+	 G4CrossSectionDataStore * theStore1 =
+            ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
+         G4NeutronInelasticCrossSection * theNeutronData1 = new G4NeutronInelasticCrossSection;
+         theStore1->AddDataSet(theNeutronData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }  
       else if (particleName == "anti_neutron") {
