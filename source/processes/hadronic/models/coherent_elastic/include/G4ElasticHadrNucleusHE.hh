@@ -77,7 +77,7 @@
    };
 
    class G4ElasticHadrNucleusHE : public G4DiffElasticHadrNucleus,
-                                         G4HadronicInteraction
+                                 public G4HadronicInteraction
    {
  public:
          G4ElasticHadrNucleusHE(const G4ParticleDefinition * aHadron,
