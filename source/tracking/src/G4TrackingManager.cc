@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.12 2002-08-13 18:14:42 asaim Exp $
+// $Id: G4TrackingManager.cc,v 1.13 2002-08-21 22:50:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   GimmeSecondaries()->clear();  
   
   // Pre tracking user intervention process.
-  fpTrajectory = NULL;
+  fpTrajectory = 0;
   if( fpUserTrackingAction != NULL ) {
      fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
@@ -138,6 +138,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 #endif
   if( (!StoreTrajectory)&&fpTrajectory ) {
       delete fpTrajectory;
+      fpTrajectory = 0;
   }
 }
 
