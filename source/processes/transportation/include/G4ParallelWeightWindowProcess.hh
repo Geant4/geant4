@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.hh,v 1.3 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.hh,v 1.4 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,9 +40,9 @@
 
 #include "g4std/strstream"
 
-#include "G4VProcess.hh"
 #include "globals.hh"
 #include "G4Nsplit_Weight.hh"
+#include "G4VProcess.hh"
 
 class G4VIStore;
 class G4VParallelStepper;
@@ -62,19 +62,22 @@ public:  // with description
 				const G4String &aName = "ParallelWeightWindowProcess");
     // create G4ParticleChange
 
-  virtual ~G4ParallelWeightWindowProcess();
+  ~G4ParallelWeightWindowProcess();
     // delete G4ParticleChange
 
 
 
-  virtual G4double 
+  G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
 
 
-  virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
 
+  G4String GetName() const {
+    return theProcessName;
+  }
 
   void StartTracking();
   void EndTracking();
@@ -96,8 +99,8 @@ public:  // without description
 
 protected:
 
-  virtual void Error(const G4String &m);
-  virtual void Warning(const G4String &m);
+  void Error(const G4String &m);
+  void Warning(const G4String &m);
 
   G4ParticleChange *fParticleChange;
 

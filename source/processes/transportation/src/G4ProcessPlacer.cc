@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.8 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4ProcessPlacer.cc,v 1.9 2002-09-18 13:52:11 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,26 +38,26 @@
 
 G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
  : fParticleName(particlename)
-{
-   G4cout << "+++ G4ProcessPlacer::G4ProcessPlacer: for: " <<  particlename 
-	  << G4endl;
-}
+{}
 
 void G4ProcessPlacer::RemoveProcess(G4VProcess *process){
+  G4cout << "=== G4ProcessPlacer::RemoveProcess: for: " <<  fParticleName 
+	 << G4endl;
   G4cout << "  ProcessName: " << process->GetProcessName() 
 	 << ", will be removed!" << G4endl;
 
-  G4cout << "The initial Vectors: " << G4endl;
+  G4cout << "  The initial Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
 
   GetProcessManager().RemoveProcess(process);
 
-  G4cout << "The final Vectors: " << G4endl;
+  G4cout << "  The final Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
-  
 
+  G4cout << "================================================" << G4endl;
+  
 }
 
 void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
@@ -108,13 +108,15 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 
 void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
 {
-  G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt ===" << G4endl;
+  G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: " 
+	 << fParticleName << G4endl;
   AddProcessAs(process, eSecond);
 }
 
 void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
 {
-  G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt ===" << G4endl;
+  G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt: for: " 
+	 << fParticleName << G4endl;
   AddProcessAs(process, eLast);
 }
 

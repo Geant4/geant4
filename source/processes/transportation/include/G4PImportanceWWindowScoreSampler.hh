@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreSampler.hh,v 1.3 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4PImportanceWWindowScoreSampler.hh,v 1.4 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,6 +49,7 @@ class G4ParallelWorld;
 class G4ParallelImportanceSampler;
 class G4VProcess;
 class G4VWeightWindowAlgorithm;
+class G4ParallelWeightWindowProcess;
 
 class G4PImportanceWWindowScoreSampler : 
   public G4VSampler
@@ -74,7 +75,7 @@ public:  // with description
     // create the parallel score process 
     // don't use it if you use Initialize()
 
-  G4VProcess *CreateWeightWindowProcess();
+  G4ParallelWeightWindowProcess *CreateWeightWindowProcess();
 
   void Initialize();
     // the G4MassImportanceScoreSampler has to be initialised after
@@ -93,7 +94,7 @@ private:
   G4VPScorer &fPScorer;
   G4VIStore &fIstore;
   G4PScoreProcess *fPScoreProcess;
-  G4VProcess *fPWeightWindowProcess;
+  G4ParallelWeightWindowProcess *fPWeightWindowProcess;
   G4VWeightWindowAlgorithm &fWWAlgorithm;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.hh,v 1.4 2002-08-13 10:07:45 dressel Exp $
+// $Id: G4MScoreProcess.hh,v 1.5 2002-09-18 13:52:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,6 +72,9 @@ public:  // with description
   }
     // to be called by the importance process if the track should
     // be killed after scoring
+  G4String GetName() const {
+    return theProcessName;
+  }
 
 public:  // without description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreSampler.cc,v 1.3 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4PImportanceWWindowScoreSampler.cc,v 1.4 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4PImportanceWWindowScoreSampler::CreateParallelScoreProcess()
   return fPScoreProcess;
 }
 
-G4VProcess *
+G4ParallelWeightWindowProcess *
 G4PImportanceWWindowScoreSampler::CreateWeightWindowProcess()
 {
   if (!fPWeightWindowProcess) {

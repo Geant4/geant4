@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.4 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4PScoreProcess.hh,v 1.5 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -74,6 +74,11 @@ public:  // with description
   void KillTrack(){
     fKillTrack = true;
   }
+
+  G4String GetName() const {
+    return theProcessName;
+  }
+
     // to be called by the importance process if the track should
     // be killed after scoring
  

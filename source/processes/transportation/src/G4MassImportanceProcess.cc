@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.6 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.7 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,9 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    fImportanceAlgorithm(aImportanceAlgorithm),
    fImportanceFinder(new G4ImportanceFinder(aIstore))
 {
-  if (fTrackTerminator==0) fTrackTerminator = this;
+  if (fTrackTerminator==0) {
+    fTrackTerminator = this;
+  }
   fImportancePostStepDoIt = new 
     G4ImportancePostStepDoIt(*fTrackTerminator);
   

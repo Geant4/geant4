@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.6 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4ParallelImportanceProcess.hh,v 1.7 2002-09-18 13:52:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,6 +66,10 @@ public:  // with description
   void KillTrack();
     // used in case no scoring process follows that does the killing
   
+  G4String GetName() const {
+    return theProcessName;
+  }
+
 
 private:
 
