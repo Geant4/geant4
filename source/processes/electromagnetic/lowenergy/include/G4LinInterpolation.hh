@@ -21,71 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.6 2001-11-29 19:01:44 vnivanch Exp $
+// $Id: G4LinInterpolation.hh,v 1.1 2001-11-29 19:01:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//         V. Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-//                          Values of the parameters from A. Forti's fit
-// 12.09.01 V.Ivanchenko    Add activeZ and paramA
-// 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
-// 29.11.01 V.Ivanchenko    Parametrisation is updated
 //
 // -------------------------------------------------------------------
-
 // Class description:
-// Low Energy Electromagnetic Physics
-// Load and access to parameters for LowEnergyBremsstrahlung from EEDL
-// database. Parametrisation is described in Physics Reference Manual
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// Log-Log interpolation of a data set
+// Part of a strategy pattern to encapsulate algorithms for interpolation of data sets
+// Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
 // -------------------------------------------------------------------
 
-#ifndef G4BREMSSTRAHLUNGPARAMETERS_HH
-#define G4BREMSSTRAHLUNGPARAMETERS_HH 1
+#ifndef G4LININTERPOLATION_HH
+#define G4LININTERPOLATION_HH 1
 
 #include "globals.hh"
+#include "G4VDataSetAlgorithm.hh"
 #include "G4DataVector.hh"
-#include "g4std/map"
 
-class G4VEMDataSet;
-class G4VDataSetAlgorithm;
-
-class G4BremsstrahlungParameters {
+class G4LinInterpolation : public G4VDataSetAlgorithm {
  
 public:
 
-  G4BremsstrahlungParameters(G4int minZ = 1, G4int maxZ = 99);
+  G4LinInterpolation();
 
-  ~G4BremsstrahlungParameters();
+  ~G4LinInterpolation();
  
-  G4double Parameter(G4int parameterIndex, G4int Z, G4double energy) const;
+  G4double Calculate(G4double point, G4int bin, 
+		     const G4DataVector& energies, 
+		     const G4DataVector& data) const;
 
-  G4double ParameterC(G4int index) const;
-  
-  void PrintData() const;
+  virtual G4VDataSetAlgorithm* Clone() const { return new G4LinInterpolation; }
 
 private:
 
-  // hide assignment operator 
-  G4BremsstrahlungParameters(const G4BremsstrahlungParameters&);
-  G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
-
-  void LoadData();
-
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
-
-  G4DataVector paramC;
-  G4DataVector activeZ;
   
-  G4int zMin;
-  G4int zMax;
-
-  size_t length;
+  // Hide copy constructor and assignment operator
 
 };
  

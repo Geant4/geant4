@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.14 2001-10-25 14:31:21 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.15 2001-11-29 19:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -31,7 +31,9 @@
 // 31 Jul 2001   MGP        Created, with dummy implementation
 // 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
 // 04.10.01 V.Ivanchenko    Add BindingEnergy method  
-// 25.10.01 MGP             Many bug fixes, mostly related to the management of pointers
+// 25.10.01 MGP             Many bug fixes, mostly related to the 
+//                          management of pointers
+// 29.11.01 V.Ivanchenko    New parametrisation + Excitation  
 //
 // -------------------------------------------------------------------
 
@@ -40,7 +42,7 @@
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
-#include "G4SemiLogInterpolation.hh"
+#include "G4LogLogInterpolation.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
 #include "g4std/fstream"
@@ -49,7 +51,7 @@
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),
-  length(16)
+  length(7)
 {
   LoadData();
 }
@@ -65,18 +67,6 @@ G4eIonisationParameters::~G4eIonisationParameters()
     {
       counter ++;
       G4VEMDataSet* dataSet = (*pos).second;
-      //      param.erase(pos);
-      /*
-      if (dataSet != 0) 
-	{ 
-	  G4cout << "counter = " << counter << G4endl;
-	  dataSet->PrintData();
-	}
-      else
-	{
-	  G4cout << "---- 0 ---- Z = " << counter << G4endl;
-	}
-	*/
       delete dataSet;
       dataSet = 0;
     }
@@ -103,17 +93,37 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
       const G4DataVector ener = component->GetEnergies(0);
       G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
       value = component->FindValue(ee);
-
     } else {
-      G4cout << "WARNING: G4IonisationParameters::FindParameters "
+      G4cout << "WARNING: G4IonisationParameters::FindParameter "
              << "has no parameters for shell= " << shellIndex 
              << "; Z= " << Z
              << G4endl;
     }
   } else {
-    G4cout << "WARNING: G4IonisationParameters::FindValue "
+    G4cout << "WARNING: G4IonisationParameters::Parameter "
            << "did not find ID = "
            << shellIndex << G4endl;
+  }
+
+  return value;
+}
+
+G4double G4eIonisationParameters::Excitation(G4int Z, G4double e) const
+{
+  G4double value = 0.;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+
+  pos = excit.find(Z);
+  if (pos!= excit.end()) {
+    G4VEMDataSet* dataSet = (*pos).second;
+
+    const G4DataVector ener = dataSet->GetEnergies(0);
+    G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
+    value = dataSet->FindValue(ee);
+  } else {
+    G4cout << "WARNING: G4IonisationParameters::Excitation "
+           << "did not find ID = "
+           << Z << G4endl;
   }
 
   return value;
@@ -143,24 +153,23 @@ void G4eIonisationParameters::LoadData()
     for (size_t iEl=0; iEl<nElements; iEl++) {
       G4Element* element = (*elementVector)[iEl];
       G4double Z = element->GetZ();
-      if (!(activeZ.contains(Z)) && Z > 0 && Z < zMax) {
+      if (!(activeZ.contains(Z))) {
 	activeZ.push_back(Z);
       }
     }
   }
+  
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep = "G4eIonisationParameters - G4LEDATA environment variable not set";
       G4Exception(excep);
     }
+    
   G4String pathString(path);
-  pathString += "/ioni/io-co-";  
+  pathString += "/ioni/io-sp-";  
   
-  G4double energy;
-  // a.resize(length);
-  //  p.resize(length);
-  // q.resize(length);
+  G4double energy, sum;
   
   size_t nZ = activeZ.size();
   
@@ -189,8 +198,8 @@ void G4eIonisationParameters::LoadData()
     G4std::vector<G4VEMDataSet*> p;
     for (size_t k=0; k<length; k++) 
       {
-	G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
-	G4VEMDataSet* composite = new G4CompositeEMDataSet(interpolation,1.,1.);
+	G4VDataSetAlgorithm* inter = new G4LogLogInterpolation();
+	G4VEMDataSet* composite = new G4CompositeEMDataSet(inter,1.,1.);
 	p.push_back(composite);
       }
 
@@ -202,60 +211,44 @@ void G4eIonisationParameters::LoadData()
 	a.push_back(aa);
       } 
     G4DataVector e;
-    G4DataVector q;
     e.clear();
-    q.clear();
     do {
-      file >> energy;
+      file >> energy >> sum;
       if (energy == -2) break;
-
-      size_t j;
-      for (j=0; j<length; j++) 
-	{
-	  G4double qRead;
-	  file >> qRead;
-	  q.push_back(qRead);
-	}    
-      if (q[14] == 0.)   q[14] = DBL_MAX;
-      if (q[15] < q[14]) q[15] = q[14];
-      if (q[15] == 0.)   q[15] = DBL_MAX;
 
       if (energy >  -1) {
         e.push_back(energy);
-        for (j=0; j<length; j++) 
-	  {
-	    a[j]->push_back(q[j]);
+        a[0]->push_back(sum);
+        for (size_t j=0; j<length-1; j++) {
+	  G4double qRead;
+	  file >> qRead;
+	  a[j + 1]->push_back(qRead);
+	}    
+
+      } else {
+
+        // End of set for a shell, fill the map
+	for (size_t k=0; k<length; k++) {
+
+	  G4int id = Z*20 + k;
+	  G4VDataSetAlgorithm* interp  = new G4LogLogInterpolation();
+	  G4DataVector* eVector = new G4DataVector;
+	  size_t eSize = e.size();
+	  for (size_t s=0; s<eSize; s++) {
+	       eVector->push_back(e[s]);
 	  }
-      }
-      q.clear();
+	  G4VEMDataSet* set = new G4EMDataSet(shell,eVector,a[k],interp,1.,1.);
 
-      // End of set for a shell, fill the map
-      if (energy < 0) 
-	{
-	  for (size_t k=0; k<length; k++) 
-	    {
-	      G4int id = Z*20 + k;
-	      G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
-	      G4DataVector* eVector = new G4DataVector;
-	      size_t eSize = e.size();
-	      for (size_t s=0; s<eSize; s++)
-		{
-		  eVector->push_back(e[s]);
-		}
-	      G4VEMDataSet* set = new G4EMDataSet(id, eVector, a[k], interpolation, 1., 1.);
-              // set->PrintData();
-
-	      p[k]->AddComponent(set);
-	    } 
+	  p[k]->AddComponent(set);
+	} 
 	  
 	// clear vectors
-        for (size_t j2=0; j2<length; j2++) 
-	  {
-	    a[j2] = new G4DataVector();
-	  } 
+        for (size_t j2=0; j2<length; j2++) {
+	  a[j2] = new G4DataVector();
+	} 
         shell++;
         e.clear();
-	}
+      }
     } while (energy > -2);
     
     file.close();
@@ -265,14 +258,87 @@ void G4eIonisationParameters::LoadData()
 	G4int id = Z*20 + kk;
 	param[id] = p[kk];
       }
-    /*
-    // remove the last vectors because they are not used
-    for (size_t j1=0; j1<length; j1++) 
-      {
-	delete  a[j1];
-      }
-      */ 
   }
+
+  G4String pathString_a(path);
+  G4String name_a = pathString_a + "/ioni/io-ex-av.dat";  
+  G4std::ifstream file_a(name_a);
+  G4std::filebuf* lsdp_a = file_a.rdbuf();
+  G4String pathString_b(path);
+  G4String name_b = pathString_b + "/ioni/io-ex-sig.dat";  
+  G4std::ifstream file_b(name_b);
+  G4std::filebuf* lsdp_b = file_b.rdbuf();
+  
+  if (! (lsdp_a->is_open()) ) {
+     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+                    + name_a;
+     G4Exception(excep);
+  }  
+  if (! (lsdp_b->is_open()) ) {
+     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+                    + name_b;
+     G4Exception(excep);
+  }  
+
+  // The file is organized into two columns:
+  // 1st column is the energy
+  // 2nd column is the corresponding value
+  // The file terminates with the pattern: -1   -1
+  //                                       -2   -2
+
+  G4double ener, ener1, sig, sig1;
+  G4int z    = 0;
+
+  G4DataVector e;
+  e.clear();
+  G4DataVector d;
+  d.clear();
+
+  do {
+    file_a >> ener >> sig;
+    file_b >> ener1 >> sig1;
+    if(ener != ener1) {
+      G4cout << "G4eIonisationParameters: problem in excitation data "
+             << "ener= " << ener
+             << " ener1= " << ener1
+             << G4endl;
+    }
+    // End of file
+    if (ener == -2) {
+      break;
+
+      // End of next element
+    } else if (ener == -1) {
+
+      z++;
+      G4double Z = (G4double)z;
+    
+	// fill map if Z is used
+      if (activeZ.contains(Z)) {
+
+	G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
+	G4DataVector* eVector = new G4DataVector;
+	G4DataVector* dVector = new G4DataVector;
+	size_t eSize = e.size();
+	for (size_t s=0; s<eSize; s++) {
+           eVector->push_back(e[s]);
+           dVector->push_back(d[s]);
+	}
+	G4VEMDataSet* set = new G4EMDataSet(z,eVector,dVector,inter,1.,1.);
+    	excit[z] = set;	
+      }
+      e.clear();
+      d.clear();
+  
+    } else {
+
+      e.push_back(ener);
+      d.push_back(sig1*sig*barn*MeV);
+    }
+  } while (ener != -2);
+  
+  file_a.close();
+
 }
 
 

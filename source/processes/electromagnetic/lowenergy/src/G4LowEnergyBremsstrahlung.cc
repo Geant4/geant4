@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.53 2001-11-07 20:50:11 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.54 2001-11-29 19:01:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
 //
 // File name:     G4LowEnergyBremsstrahlung
 //
-// Author:        Alessandra Forti
+// Author:        Alessandra Forti, Vladimir Ivanchenko
 // 
 // Creation date: March 1999
 //
@@ -49,6 +49,7 @@
 // 10.10.2001 MGP Revision to improve code quality and consistency with design
 // 18.10.2001 MGP Revision to improve code quality 
 // 28.10.2001 VI  Update printout
+// 29.11.2001 VI  New parametrisation
 //
 // --------------------------------------------------------------
 

@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.75 2001-11-07 20:51:33 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.76 2001-11-29 19:01:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
 //
 // File name:     G4LowEnergyIonisation
 //
-// Author:        Alessandra Forti
+// Author:        Alessandra Forti, Vladimir Ivanchenko
 // 
 // Creation date: March 1999
 //
@@ -82,6 +82,7 @@
 // 19.10.01 V.Ivanchenko    update according to new design, V.Ivanchenko
 // 26.10.01 V.Ivanchenko    clean up deexcitation
 // 28.10.01 V.Ivanchenko    update printout
+// 29.11.01 V.Ivanchenko    New parametrisation introduced
 //
 // --------------------------------------------------------------
 
@@ -272,7 +273,7 @@ void G4LowEnergyIonisation::BuildLossTable(
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector = 
                     material->GetAtomicNumDensityVector();
-    if(verboseLevel > 1) {
+    if(verboseLevel > 0) {
       G4cout << "Energy loss for material # " << m
              << " tCut(keV)= " << tCut/keV
              << G4endl;
@@ -299,6 +300,8 @@ void G4LowEnergyIonisation::BuildLossTable(
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
+          G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
+          //ionloss   += esp * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1) {
             G4cout << "Z= " << Z
                    << " shell= " << n
@@ -306,6 +309,7 @@ void G4LowEnergyIonisation::BuildLossTable(
                    << " Eav(keV)= " << e/keV
                    << " pro= " << pro
                    << " cs= " << cs
+                   << " esp= " << esp
 	           << " loss= " << ionloss
                    << G4endl;
           }

@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.1 2001-10-10 12:02:31 pia Exp $
+// 
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.2 2001-11-29 19:01:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,12 +35,16 @@
 // Creation date: 27 September 2001
 //
 // Modifications: 
-// 10 Oct 2001  MGP  Revision to improve code quality and consistency with design
+// 10.10.01  MGP  Revision to improve code quality and consistency with design
+// 29.11.01  V.Ivanchenko    Parametrisation is updated
 //
 // -------------------------------------------------------------------
 
 // Class Description: 
-// Provides various integration over gamma spectrum of e- Bremsstrahlung  
+// Provides various integration over gamma spectrum of e- Bremsstrahlung. 
+// Parametrisation is described in Physics Reference Manual based on
+// data from EEDL database.
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
@@ -48,6 +52,7 @@
 #define G4EBREMSSTRAHLUNGSPECTRUM_HH 1
 
 #include "globals.hh"
+#include "G4DataVector.hh"
 #include "G4VEnergySpectrum.hh" 
 
 class G4BremsstrahlungParameters;
@@ -90,13 +95,24 @@ public:
 
 private:
 
+  G4double IntSpectrum(G4double xMin, G4double xMax,
+                         const G4DataVector& p) const; 
+  
+  G4double AverageValue(G4double xMin, G4double xMax,
+			const G4DataVector& p) const; 
+  
+  G4double Function(G4double x, const G4DataVector& p) const; 
+
+
   // Hide copy constructor and assignment operator 
   G4eBremsstrahlungSpectrum(const  G4eBremsstrahlungSpectrum&);
   G4eBremsstrahlungSpectrum & operator = (const G4eBremsstrahlungSpectrum &right);
 
   G4BremsstrahlungParameters* theBRparam;
   G4double                    lowestE;
-
+  size_t                      length;
+  G4int                       verbose;
+  G4DataVector                xp;
 };
 
 #endif

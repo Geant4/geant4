@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.5 2001-10-24 22:02:03 pia Exp $
+// $Id: G4eIonisationParameters.hh,v 1.6 2001-11-29 19:01:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -31,15 +31,17 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-// 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
+// 12.09.01 V.Ivanchenko    Add param and interpolation of parametersVI  
 // 10.10.2001 MGP           Revision to improve code quality and 
 //                          consistency with design
+// 29.11.01  V.Ivanchenko    Parametrisation is updated
 //
 // -------------------------------------------------------------------
 
 // Class description:
 // Low Energy Electromagnetic Physics
-// Set of parameters for LowEnergyIonisation
+// Set of parameters for LowEnergyIonisation described spectrum 
+// of delta-electrons retrieved from EEDL database.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
@@ -64,6 +66,8 @@ public:
  
   G4double Parameter(G4int Z, G4int shellIndex, 
 		     G4int parameterIndex, G4double e) const;
+
+  G4double Excitation(G4int Z, G4double e) const;
   
   void PrintData() const;
 
@@ -82,6 +86,7 @@ private:
 
   // Parameters of the energy spectra
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > excit;
 
   size_t length;
 };

@@ -21,83 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.6 2001-11-29 19:01:44 vnivanch Exp $
+// $Id: G4LinInterpolation.cc,v 1.1 2001-11-29 19:01:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//         V. Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-//                          Values of the parameters from A. Forti's fit
-// 12.09.01 V.Ivanchenko    Add activeZ and paramA
-// 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
-// 29.11.01 V.Ivanchenko    Parametrisation is updated
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// Low Energy Electromagnetic Physics
-// Load and access to parameters for LowEnergyBremsstrahlung from EEDL
-// database. Parametrisation is described in Physics Reference Manual
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "G4LinInterpolation.hh"
 
-// -------------------------------------------------------------------
+// Constructor
 
-#ifndef G4BREMSSTRAHLUNGPARAMETERS_HH
-#define G4BREMSSTRAHLUNGPARAMETERS_HH 1
-
-#include "globals.hh"
-#include "G4DataVector.hh"
-#include "g4std/map"
-
-class G4VEMDataSet;
-class G4VDataSetAlgorithm;
-
-class G4BremsstrahlungParameters {
- 
-public:
-
-  G4BremsstrahlungParameters(G4int minZ = 1, G4int maxZ = 99);
-
-  ~G4BremsstrahlungParameters();
- 
-  G4double Parameter(G4int parameterIndex, G4int Z, G4double energy) const;
-
-  G4double ParameterC(G4int index) const;
-  
-  void PrintData() const;
-
-private:
-
-  // hide assignment operator 
-  G4BremsstrahlungParameters(const G4BremsstrahlungParameters&);
-  G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
-
-  void LoadData();
-
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
-
-  G4DataVector paramC;
-  G4DataVector activeZ;
-  
-  G4int zMin;
-  G4int zMax;
-
-  size_t length;
-
-};
- 
-#endif
- 
+G4LinInterpolation::G4LinInterpolation()
+{ }
 
 
+// Destructor
+
+G4LinInterpolation::~G4LinInterpolation()
+{ }
 
 
-
-
-
-
-
-
+G4double G4LinInterpolation::Calculate(G4double x, G4int bin, 
+					  const G4DataVector& points, 
+					  const G4DataVector& data) const
+{
+  G4int nBins = data.size() - 1;
+  G4double value = 0.;
+  if (x < points[0])
+    {
+      value = 0.;
+    }
+  else if (bin < nBins)
+    {
+      G4double e1 = points[bin];
+      G4double e2 = points[bin+1];
+      G4double d1 = data[bin];
+      G4double d2 = data[bin+1];
+      value = d1 + (d2 - d1)*(x - e1)/(e2 - e1);
+    }
+  else
+    {
+      value = data[nBins];
+    }
+  return value;
+}

@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: G4eIonisationSpectrum.hh,v 1.2 2001-10-11 13:58:22 pia Exp $
+// 
+// $Id: G4eIonisationSpectrum.hh,v 1.3 2001-11-29 19:01:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,12 +37,15 @@
 // Modifications: 
 // 10.10.01 MGP             Revision to improve code quality and 
 //                          consistency with design
+// 29.11.01  V.Ivanchenko   Parametrisation is updated
 //
 // -------------------------------------------------------------------
 
 // Class Description: 
 // Provides various integration over delta-electron spectrum for e- 
-// ionisation process
+// ionisation process. Spectrum is parametrised accourding to 
+// EEDL database, details are described in the Physics Reference Manual
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
@@ -78,7 +81,9 @@ public:
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
 				  const G4ParticleDefinition* pd=0) const
-  { return 0.5*kineticEnergy; }
+  { return 0.5*kineticEnergy; };
+
+  G4double Excitation(G4int Z, G4double e) const;
   
   void PrintData() const;
 
@@ -86,17 +91,13 @@ protected:
 
 private:
 
-  G4double IntSpectrum(size_t n, G4double tMin, G4double tMax, G4double b,
-                       const G4DataVector& p) const; 
+  G4double IntSpectrum(G4double xMin, G4double xMax,
+                         const G4DataVector& p) const; 
   
-  G4double AverageValue(size_t n, G4double tMin, G4double tMax, G4double b,
+  G4double AverageValue(G4double xMin, G4double xMax,
 			const G4DataVector& p) const; 
   
-  G4double Function(size_t n, G4double e, G4double b, 
-		    const G4DataVector& p) const; 
-
-  G4double MaxFunction(size_t n, G4double tMin, G4double tMax, G4double b, 
-                       const G4DataVector& p) const; 
+  G4double Function(G4double x, const G4DataVector& p) const; 
   
   // Hide copy constructor and assignment operator 
   G4eIonisationSpectrum(const  G4eIonisationSpectrum&);
@@ -106,8 +107,8 @@ private:
   
   G4eIonisationParameters* theParam;
   G4double                 lowestE;
-  G4int                    verbose;      
-
+  G4double                 factor;
+  G4int                    verbose;            
 };
 
 

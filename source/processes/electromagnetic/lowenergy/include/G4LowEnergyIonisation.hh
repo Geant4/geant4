@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.32 2001-10-26 00:32:18 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.33 2001-11-29 19:01:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -79,11 +79,11 @@ public:
 
   void SetCutForLowEnSecElectrons(G4double cut);
     
-protected:
  
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
+protected:
 
   virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
 							  G4double incidentEnergy,

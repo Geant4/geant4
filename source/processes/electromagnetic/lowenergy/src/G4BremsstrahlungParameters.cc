@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.9 2001-11-27 11:30:14 gcosmo Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.10 2001-11-29 19:01:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,13 +32,14 @@
 // 31 Jul 2001   MGP        Created
 // 12.09.01 V.Ivanchenko    Add activeZ and paramA
 // 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
+// 29.11.01 V.Ivanchenko    Update parametrisation
 //
 // -------------------------------------------------------------------
 
 #include "G4BremsstrahlungParameters.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
-#include "G4SemiLogInterpolation.hh"
+#include "G4LogLogInterpolation.hh"
 #include "G4Material.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
@@ -46,7 +47,8 @@
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), 
-    zMax(maxZ)
+    zMax(maxZ),
+    length(16)
 {
   LoadData();
 }
@@ -57,55 +59,41 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
   // Reset the map of data sets: remove the data sets from the map 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = paramA.begin(); pos != paramA.end(); pos++)
+  for (pos = param.begin(); pos != param.end(); pos++)
     {
       G4VEMDataSet* dataSet = (*pos).second;
-      //      paramA.erase(pos);
       delete dataSet;
     }
 
   activeZ.clear();
-  paramB0.clear();
-  paramB1.clear();
   paramC.clear();
 }
 
 
-G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
+G4double G4BremsstrahlungParameters::Parameter(G4int parameterIndex, 
+                                                 G4int Z, 
+                                                 G4double energy) const
 {
-  if(energy > 10.0*MeV) return -1.0;
   G4double value = 0.;
+  G4int id = Z*20 + parameterIndex;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
-  pos = paramA.find(Z);
-  if (pos!= paramA.end()) {
+
+  pos = param.find(id);
+  if (pos!= param.end()) {
+
     G4VEMDataSet* dataSet = (*pos).second;
-    value = dataSet->FindValue(energy);
+    const G4DataVector ener = dataSet->GetEnergies(0);
+    G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),energy));
+    value = dataSet->FindValue(ee);
+    
   } else {
-    G4String ex = "G4BremsstrahlungParameters::ParameterA - wrong Z=" + Z; 
-    G4Exception(ex);
+    G4cout << "WARNING: G4BremsstrahlungParameters::FindValue "
+           << "did not find ID = "
+           << id << G4endl;
   }
-  if(value < -1.) value = -1.;
+
   return value;
 }
-
-
-G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
-{
-  if(energy > 10.0*MeV) return 0.75;
-  if (Z < zMin || Z > zMax) {
-    G4String ex = "G4BremsstrahlungParameters::ParameterB - wrong Z=" + Z; 
-    G4Exception(ex);
-  }
-
-  G4double b0  = paramB0[Z-1];
-  G4double b1  = paramB1[Z-1];
-  G4double b   = b0 + b1*log10(energy/MeV);
-  if(b > 0.75) b = 0.75;
-  //  if(b < 0. || energy < 10.*eV) b = 0.;
-
-  return b;
-}
-
 
 void G4BremsstrahlungParameters::LoadData()
 {
@@ -135,25 +123,25 @@ void G4BremsstrahlungParameters::LoadData()
       G4double Z = element->GetZ();
       G4int iz = (G4int)Z;
       if(iz < 100)
-              paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
-      if (!(activeZ.contains(Z)) && Z > 0 && Z < zMax) {
+            paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
+      if (!(activeZ.contains(Z))) {
 	 activeZ.push_back(Z);
-      }
+      }   
     }
   }
 
-  // Read parameters A
+  // Read parameters
    
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = G4String("G4BremsstrahlungParameters - G4LEDATA")
+      G4String excep = G4String("G4BremsstrahlungParameters - G4LEDATA") 
                      + G4String("environment variable not set");
       G4Exception(excep);
     }
 
   G4String pathString_a(path);
-  G4String name_a = pathString_a + "/brem/br-co-a.dat";  
+  G4String name_a = pathString_a + "/brem/br-sp.dat";  
   G4std::ifstream file_a(name_a);
   G4std::filebuf* lsdp_a = file_a.rdbuf();
   
@@ -161,7 +149,7 @@ void G4BremsstrahlungParameters::LoadData()
      G4String excep = G4String("G4BremsstrahlungParameters: cannot open file ")
                     + name_a;
      G4Exception(excep);
-  }
+  }  
 
   // The file is organized into two columns:
   // 1st column is the energy
@@ -171,93 +159,94 @@ void G4BremsstrahlungParameters::LoadData()
 
   G4DataVector* energies;
   G4DataVector* data;
-  G4double e = 0;
-  G4double a = 0;
+  G4double ener = 0.0;
+  G4double sum = 0.0;
   size_t nZ  = activeZ.size();
   energies   = new G4DataVector(); 
   data       = new G4DataVector(); 
   G4int z    = 0;
 
-  do {
-    file_a >> e >> a;
+  G4bool used = false;
+  G4std::vector<G4DataVector*> a;
+  for (size_t j=0; j<length; j++) {
+    G4DataVector* aa = new G4DataVector();
+    a.push_back(aa);
+  } 
+  G4DataVector e;
+  e.clear();
 
-    // End of the next element
-    if (e == -1) {
+  do {
+    file_a >> ener >> sum;
+
+    // End of file
+    if (ener == -2) {
+      break;
+
+      // End of next element
+    } else if (ener == -1) {
 
       z++;
-      G4bool used = false;
-      for (size_t i=0; i<nZ; i++) {
+      G4double Z = (G4double)z;
     
-	// fill map
-        if (z == (G4int)activeZ[i]) {
-	  G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
-          G4VEMDataSet* dataSet = 
-                    new G4EMDataSet(z, energies, data, interpolation, 1., 1.);
-          paramA[z] = dataSet;
-          used = true;
+	// fill map if Z is used
+      if (activeZ.contains(Z)) {
+
+ 	for (size_t k=0; k<length; k++) {
+
+	    G4int id = z*20 + k;
+	    G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
+	    G4DataVector* eVector = new G4DataVector;
+	    size_t eSize = e.size();
+	    for (size_t s=0; s<eSize; s++) {
+	       eVector->push_back(e[s]);
+	    }
+	    G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
+    	    param[id] = set;
 	}
+        used = true;
+        a.clear();
+        for (size_t j=0; j<length; j++) {
+            G4DataVector* aa = new G4DataVector();
+            a.push_back(aa);
+        } 
       }
       if(!used) {
-        energies->clear();
-        data->clear();
+        for (size_t j=0; j<length; j++) {
+          a[j]->clear();
+          used = false; 
+        }
       }
+      e.clear();
   
-      if (z > 98) break;
+    } else {
 
-      energies   = new G4DataVector(); 
-      data       = new G4DataVector(); 
-      
-    } else if(e > 0) {
+      if(ener > 1000.) ener = 1000.;
+      e.push_back(ener);
+      a[length-1]->push_back(sum);
 
-      energies->push_back(e);
-      data->push_back(a);
+      for (size_t j=0; j<length-1; j++) {
+	G4double qRead;
+	file_a >> qRead;
+	/*
+        if(ener == 1000.) {
+          G4double x = 0.1*((G4double)j);
+          if(j == 0) x = 0.01;
+          if(j == 10) x = 0.95;
+          if(j == 11) x = 0.97;
+          if(j == 12) x = 0.99;
+          if(j == 13) x = 0.995;
+          if(j == 14) x = 1.0;
+          qRead = 1. - x + 0.75*x*x;
+	}
+	*/
+	a[j]->push_back(qRead);
+      }    
+
     }
-  } while (e != -2);
+  } while (ener != -2);
   
   file_a.close();
 
-  // Read parameters B
-  
-  char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
-  
-  G4String fileName = "brem/br-co-b";
-  ost << fileName  << ".dat";
-  
-  G4String name(nameChar);
-    
-  G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
-  
-  if (! (lsdp->is_open()) )
-	{
-	  G4String excep = "G4BremsstrahlungParameters - data file: " + dirFile + " not found";
-	  G4Exception(excep);
-	}
-
-  //  G4int nParam = 2;
-  a = 0;
-  e = 0;
-
-  do {
-      file >> e >> a;
-      // The file is organized into two columns:
-      // 1st column is the energy
-      // 2nd column is the corresponding value
-      // The file terminates with the pattern: -1   -1
-      //                                       -2   -2
-
-      if (e == -1 || e == -2) break;
-      else {
-	  paramB0.push_back(e);
-	  paramB1.push_back(a);
-	}
-    } while (e != -2); // end of file
-  
-  zMax = paramB0.size();
-  file.close();
 }
 
 
@@ -279,7 +268,7 @@ void G4BremsstrahlungParameters::PrintData() const
   G4cout << G4endl;
   G4cout << "===== G4BremsstrahlungParameters =====" << G4endl;
   G4cout << G4endl;
-  G4cout << "===== Parameter A =====" << G4endl;
+  G4cout << "===== Parameters =====" << G4endl;
   G4cout << G4endl;
 
   size_t nZ = activeZ.size();
@@ -287,28 +276,21 @@ void G4BremsstrahlungParameters::PrintData() const
 
   for (size_t j=0; j<nZ; j++) {
     G4int Z = (G4int)activeZ[j];   
-    pos = paramA.find(Z);
-    if (pos!= paramA.end()) {
-      G4cout << "===== Z= " << Z << " =====" << G4endl;
-      G4VEMDataSet* dataSet = (*pos).second;
-      dataSet->PrintData();
+
+    for (size_t i=0; i<length; i++) {
+
+      pos = param.find(Z*20 + i);
+      if (pos!= param.end()) {
+
+        G4cout << "===== Z= " << Z  
+                 << " parameter[" << i << "]  =====" 
+                 << G4endl;
+        G4VEMDataSet* dataSet = (*pos).second;
+        dataSet->PrintData();
+      }
     }
   }
 
-  G4cout << G4endl;
-  G4cout << "===== Parameter B =====" << G4endl;
-  G4cout << G4endl;
-
-  for (G4int i=zMin-1; i<zMax-1; i++)
-    {
-      G4double b0 = paramB0[i];
-      G4double b1 = paramB1[i];
-      G4cout << "Z = " << i << " - Parameter B: "
-	     << b0
-	     << ",  "
-	     << b1
-	     << G4endl; 
-    }
   G4cout << "==========================================" << G4endl;
 }
 

@@ -87,6 +87,9 @@ public:
 					  G4int Z = 0,
 					  const G4ParticleDefinition* pd = 0) const = 0;
 
+  virtual G4double Excitation(G4int Z, G4double kineticEnergy) const
+                               {return 0.0;}; 
+
   virtual void PrintData() const = 0;
 
 protected:

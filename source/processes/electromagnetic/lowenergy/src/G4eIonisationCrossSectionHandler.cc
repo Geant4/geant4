@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.5 2001-10-25 10:13:44 pia Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.6 2001-11-29 19:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,8 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
 
     const G4Material* material = (*materialTable)[m];
     const G4ElementVector* elementVector = material->GetElementVector();
-    const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
+    //const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
+    const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
     G4int nElements = material->GetNumberOfElements();
 
     G4double tcut  = (*energyCuts)[m];
@@ -114,9 +115,16 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
         if(e > tcut) {
           for (G4int n=0; n<nShells; n++) {
             G4double cross = FindValue(Z, e, n);
-            G4double p = theParam->Probability(Z, tcut, e, e, n);
-        
+            G4double p = theParam->Probability(Z, tcut, e, e, n);  
             value += cross * p * density;
+	    /*
+            G4cout << "G4eIonisationCrossSectionHandler: e= " << e
+                   << " n= " << n
+                   << " cross= " << cross
+                   << " p= " << p
+                   << " value= " << value
+                   << G4endl;
+	    */
 	  }
 	}
         cs->push_back(value);
