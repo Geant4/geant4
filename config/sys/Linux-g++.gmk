@@ -49,7 +49,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CPPFLAGS += -DG4USE_STD_NAMESPACE
   endif
   ifdef G4ODBMS
-    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+##    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
 
   define build-granular-shared-lib
