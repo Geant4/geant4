@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.hh,v 1.1 1999-01-07 16:14:29 gunter Exp $
+// $Id: G4SteppingVerbose.hh,v 1.2 1999-02-17 12:39:42 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -75,7 +75,7 @@ public:
   void DPSLPostStepDoItOneByOne();
   void VerboseTrack();
   void VerboseParticleChange();
-
+  void ShowStep() const;
 //
 // Member data
 private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.cc,v 1.1 1999-01-07 16:14:31 gunter Exp $
+// $Id: G4SteppingVerbose.cc,v 1.2 1999-02-17 12:39:53 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -190,7 +190,7 @@ void G4SteppingVerbose::AtRestDoItInvoked()
    }
    
    if( verboseLevel >= 4 ){ 
-     fStep->ShowStep();
+     ShowStep();
      G4cout << endl;
    }
 }
@@ -215,7 +215,7 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
             }
         }         
 
-        fStep->ShowStep();
+        ShowStep();
         G4cout << endl;
         G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
@@ -275,7 +275,7 @@ void G4SteppingVerbose::PostStepDoItAllDone()
 	     }
 	  }
 
-        fStep->ShowStep();
+        ShowStep();
         G4cout << endl;
         G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
@@ -548,7 +548,7 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
              << "   Process Name = " 
              << fCurrentProcess->GetProcessName() << endl;
 
-        fStep->ShowStep();
+        ShowStep();
         G4cout << "          "
 	       << "!Note! Safety of PostStep is only valid "
 	       << "after all DoIt invocations."
@@ -598,7 +598,7 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
              << "   Process Name = " 
              << fCurrentProcess->GetProcessName() << endl;
 
-        fStep->ShowStep();
+        ShowStep();
         G4cout << endl;
         VerboseParticleChange();    
         G4cout << endl;
@@ -807,3 +807,136 @@ void G4SteppingVerbose::VerboseParticleChange()
   G4cout << "    ++G4ParticleChange Information " << endl;
   fParticleChange->DumpInfo();
 }
+/////////////////////////////////////////
+void G4SteppingVerbose::ShowStep() const
+////////////////////////////////////////
+{
+
+// Show header
+   G4cout << endl;
+   G4cout << "    ++G4Step Information " << endl;
+   G4cout.precision(3);
+
+// Show G4Step specific information
+   G4cout << "      Address of G4Track    : " << fStep->GetTrack() << endl;
+   G4cout << "      Step Length (mm)      : " << fStep->GetTrack()->GetStepLength() << endl;
+   G4cout << "      Energy Deposit (MeV)  : " << fStep->GetTotalEnergyDeposit() << endl;
+
+// Show G4StepPoint specific information
+   G4cout << "      -------------------------------------------------------" 
+        << "----------------" <<  endl;
+   G4cout << "        StepPoint Information  " << setw(20) << "PreStep" 
+                                             << setw(20) << "PostStep" << endl;
+   G4cout << "      -------------------------------------------------------" 
+        << "----------------" <<  endl;
+   G4cout << "         Position - x (mm)   : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPosition().x() 
+        << setw(20) << fStep->GetPostStepPoint()->GetPosition().x() << endl;
+   G4cout << "         Position - y (mm)   : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPosition().y() 
+        << setw(20) << fStep->GetPostStepPoint()->GetPosition().y() << endl;
+   G4cout << "         Position - z (mm)   : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPosition().z() 
+        << setw(20) << fStep->GetPostStepPoint()->GetPosition().z() << endl;
+   G4cout << "         Global Time (ns)    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetGlobalTime()
+        << setw(20) << fStep->GetPostStepPoint()->GetGlobalTime() << endl;
+   G4cout << "         Local Time (ns)     : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetLocalTime() 
+        << setw(20) << fStep->GetPostStepPoint()->GetLocalTime() << endl;
+   G4cout << "         Proper Time (ns)    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetProperTime()
+        << setw(20) << fStep->GetPostStepPoint()->GetProperTime() << endl;
+   G4cout << "         Momentum Direct - x : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().x()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().x() << endl;
+   G4cout << "         Momentum Direct - y : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().y()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().y() << endl;
+   G4cout << "         Momentum Direct - z : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().z()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().z() << endl;
+   G4cout << "         Momentum - x (MeV/c): " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentum().x()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentum().x() << endl;
+   G4cout << "         Momentum - y (MeV/c): " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentum().y()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentum().y() << endl;
+   G4cout << "         Momentum - z (MeV/c): " 
+        << setw(20) << fStep->GetPreStepPoint()->GetMomentum().z()
+        << setw(20) << fStep->GetPostStepPoint()->GetMomentum().z() << endl;
+   G4cout << "         Total Energy (MeV)  : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetTotalEnergy()
+        << setw(20) << fStep->GetPostStepPoint()->GetTotalEnergy() << endl;
+   G4cout << "         Kinetic Energy (MeV): " 
+        << setw(20) << fStep->GetPreStepPoint()->GetKineticEnergy()
+        << setw(20) << fStep->GetPostStepPoint()->GetKineticEnergy() << endl;
+   G4cout << "         Velocity (mm/ns)    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetVelocity()
+        << setw(20) << fStep->GetPostStepPoint()->GetVelocity() << endl;
+   G4cout << "         Volume Name         : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()
+        << setw(20) << fStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() << endl;
+   G4cout << "         Safety (mm)         : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetSafety()
+        << setw(20) << fStep->GetPostStepPoint()->GetSafety() << endl;
+   G4cout << "         Polarization - x    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPolarization().x()
+        << setw(20) << fStep->GetPostStepPoint()->GetPolarization().x() << endl;
+   G4cout << "         Polarization - y    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPolarization().y()
+        << setw(20) << fStep->GetPostStepPoint()->GetPolarization().y() << endl;
+   G4cout << "         Polarization - Z    : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetPolarization().z()
+        << setw(20) << fStep->GetPostStepPoint()->GetPolarization().z() << endl;
+   G4cout << "         Weight              : " 
+        << setw(20) << fStep->GetPreStepPoint()->GetWeight()
+        << setw(20) << fStep->GetPostStepPoint()->GetWeight() << endl;
+   G4cout << "         Step Status         : " ;
+        G4StepStatus  tStepStatus = fStep->GetPreStepPoint()->GetStepStatus();
+        if( tStepStatus == fGeomBoundary ){
+           G4cout << setw(20) << "Geom Limit";
+        } else if ( tStepStatus == fAlongStepDoItProc ){
+          G4cout << setw(20) << "AlongStep Proc.";
+        } else if ( tStepStatus == fPostStepDoItProc ){
+           G4cout << setw(20) << "PostStep Proc";
+        } else if ( tStepStatus == fAtRestDoItProc ){
+           G4cout << setw(20) << "AtRest Proc";
+        } else if ( tStepStatus == fUndefined ){
+           G4cout << setw(20) << "Undefined";
+        }
+
+        tStepStatus = fStep->GetPostStepPoint()->GetStepStatus();
+        if( tStepStatus == fGeomBoundary ){
+           G4cout << setw(20) << "Geom Limit";
+        } else if ( tStepStatus == fAlongStepDoItProc ){
+           G4cout << setw(20) << "AlongStep Proc.";
+        } else if ( tStepStatus == fPostStepDoItProc ){
+           G4cout << setw(20) << "PostStep Proc";
+        } else if ( tStepStatus == fAtRestDoItProc ){
+           G4cout << setw(20) << "AtRest Proc";
+        } else if ( tStepStatus == fUndefined ){
+           G4cout << setw(20) << "Undefined";
+        }
+
+        G4cout << endl;
+        G4cout << "         Process defined Step: " ;
+        if( fStep->GetPreStepPoint()->GetProcessDefinedStep() == NULL ){
+ 	   G4cout << setw(20) << "Undefined";
+        } else {
+  	   G4cout << setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()
+                                             ->GetProcessName();
+        }
+        if( fStep->GetPostStepPoint()->GetProcessDefinedStep() == NULL){
+  	   G4cout << setw(20) << "Undefined";
+        } else {
+ 	   G4cout << setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
+                                              ->GetProcessName(); 
+        }
+
+   G4cout << endl;
+   G4cout << "      -------------------------------------------------------" 
+        << "----------------" << endl;
+}
+
+
