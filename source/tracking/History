@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-11-05 16:15:49 jacek Exp $
+$Id: History,v 1.46 2002-11-05 16:25:03 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 05, 2002, M.Asai (tracking-V04-01-05)
+- tagged.
+
 Nov 05, 2002, J.Generowicz
 - Renamed aTrajectory(Point)Allocator to aSmoothTrajectory(Point)Allocator
   in the SmoothTrajectory(Point) classes.
