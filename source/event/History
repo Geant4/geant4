@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:06:32 gunter Exp $
+$Id: History,v 1.2 1999-04-09 03:03:45 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 09, 99 M.Asai (tag event-01-00-01)
+- Change the pointer arguments in user action classes to const.
 
 Nov 11, 98 M.Asai (tag event-00-03-04)
 - Optimize G4PrimaryVertex for events such as having huge number

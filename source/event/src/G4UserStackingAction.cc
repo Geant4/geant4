@@ -5,11 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserStackingAction.cc,v 1.1 1999-01-07 16:06:40 gunter Exp $
+// $Id: G4UserStackingAction.cc,v 1.2 1999-04-09 03:04:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-//  Last Modification : 09/Dec/96 M.Asai
 //
 
 #include "G4UserStackingAction.hh"
@@ -23,7 +20,7 @@ G4UserStackingAction::~G4UserStackingAction()
 {;}
 
 G4ClassificationOfNewTrack G4UserStackingAction::ClassifyNewTrack
-(G4Track * const aTrack)
+(const G4Track* aTrack)
 {
   return fUrgent;
 }
