@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.14 2003-02-10 18:39:49 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.15 2003-03-25 17:13:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -253,8 +253,8 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
                                    
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
+                                 logicWorld,		//its logical volume				 
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
@@ -275,9 +275,9 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
     				       
       physiCalor = new G4PVPlacement(0,			//no rotation
                                      G4ThreeVector(),	//at (0,0,0)
+                                     logicCalor,	//its logical volume				     
                                      "Calorimeter",	//its name
-                                     logicCalor,	//its logical volume
-                                     physiWorld,	//its mother  volume
+                                     logicWorld,	//its mother  volume
                                      false,		//no boolean operation
                                      0);		//copy number
   
@@ -293,16 +293,16 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
       if (NbOfLayers > 1)                                      
         physiLayer = new G4PVReplica("Layer",		//its name
       				     logicLayer,	//its logical volume
-      				     physiCalor,	//its mother
+      				     logicCalor,	//its mother
                                      kXAxis,		//axis of replication
                                      NbOfLayers,	//number of replica
                                      LayerThickness);	//witdth of replica
       else
         physiLayer = new G4PVPlacement(0,		//no rotation
                                      G4ThreeVector(),	//at (0,0,0)
+                                     logicLayer,	//its logical volume				     
                                      "Layer",		//its name
-                                     logicLayer,	//its logical volume
-                                     physiCalor,	//its mother  volume
+                                     logicCalor,	//its mother  volume
                                      false,		//no boolean operation
                                      0);		//copy number     
     }                                   
@@ -322,9 +322,9 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
       			                  
       physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		    G4ThreeVector(-GapThickness/2,0.,0.),  //its position
+                                        logicAbsorber,     //its logical volume		    
                                         AbsorberMaterial->GetName(), //its name
-                                        logicAbsorber,     //its logical volume
-                                        physiLayer,        //its mother
+                                        logicLayer,        //its mother
                                         false,             //no boulean operat
                                         0);                //copy number
                                         
@@ -345,9 +345,9 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
       				     
       physiGap = new G4PVPlacement(0,                      //no rotation
                G4ThreeVector(AbsorberThickness/2,0.,0.),   //its position
+                                   logicGap,               //its logical volume	       
                                    GapMaterial->GetName(), //its name
-                                   logicGap,               //its logical volume
-                                   physiLayer,             //its mother
+                                   logicLayer,             //its mother
                                    false,                  //no boulean operat
                                    0);                     //copy number
     } 
