@@ -4,7 +4,7 @@
 #
 /tracking/verbose 1
 /control/verbose 2
-/run/verbose 2
+# /run/verbose 2
 /run/initialize
 #
 # SimpleBox geometry made by Pb

@@ -3,7 +3,7 @@
 # for tracking performance test
 #
 /control/verbose 2
-/run/verbose 2
+# /run/verbose 2
 #
 # SimpleBox geometry made by Pb
 # Geantino 100 GeV to the direction (1.,0.,0.)

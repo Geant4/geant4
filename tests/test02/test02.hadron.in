@@ -3,7 +3,7 @@
 # for tests of basic hadronic processes
 #
 /control/verbose 2
-/run/verbose 2
+# /run/verbose 2
 /run/initialize
 /gun/direction 1 0 0
 #

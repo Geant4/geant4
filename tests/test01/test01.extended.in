@@ -4,7 +4,7 @@
 # 100 Gev geantino
 #
 /control/verbose 2
-/run/verbose 2
+# /run/verbose 2
 /gun/particle geantino
 /gun/energy 100 GeV
 /run/initialize

@@ -3,7 +3,7 @@
 # for tests of basic e.m. processes +polarised Compton + new p.e. + synchrotron radiation
 #
 /control/verbose 2
-/run/verbose 2
+# /run/verbose 2
 /run/initialize
 /gun/direction 1 0 0
 #
