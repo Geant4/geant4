@@ -1,0 +1,18 @@
+
+#********************************
+#   defaultMacro.mac
+#
+#********************************
+
+/process/activate Transportation all
+/hits/activate
+/hits/verbose 0
+
+/gun/particle proton
+
+/tracking/verbose 0
+/run/initialize
+
+/run/beamOn 1000
+
+
