@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-07-18 14:59:41 dressel Exp $
+$Id: History,v 1.46 2002-08-13 10:07:45 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug  13th, 2002 M.Dressel transport-V04-01-01
+----------------------------------------------
+- added G4CellStoreScorer,  G4VTrackTerminator and changed the sampler
+  classes in order to use the G4VTrackTerminator (if necessary) to
+  kill a track. 
 
 July 18th, 2002 M.Dressel 
 -------------------------
