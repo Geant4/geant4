@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.6 2003-02-20 15:52:01 vnivanch Exp $
+# $Id: run01.mac,v 1.7 2003-03-06 18:16:15 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -12,7 +12,7 @@
 #/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 #
-#/run/particle/setCut 0.5 mm
+#/testem/phys/setCuts 0.5 mm
 /run/initialize
 #
 /run/verbose 2

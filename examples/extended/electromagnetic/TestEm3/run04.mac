@@ -1,4 +1,4 @@
-# $Id: run04.mac,v 1.6 2003-02-20 15:52:01 vnivanch Exp $
+# $Id: run04.mac,v 1.7 2003-03-06 18:16:16 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -15,7 +15,7 @@
 #/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 #
-/run/particle/setCut 1 mm
+/testem/phys/setCuts 1 mm
 /run/initialize 
 #
 /testem/det/setNbOfLayers 15
