@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.12 2001-08-17 00:14:29 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.13 2002-11-19 02:00:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -328,7 +328,8 @@ void G4VDecayChannel::FillDaughters()
   // check sum of daghter mass
   const G4double AllowanceOfMassDifference = 1.0 * MeV;
  if ( (sumofdaughtermass > parentmass + AllowanceOfMassDifference) ||
-      ( (parent->GetParticleType() != "nucleus") &&
+      ( ( (parent->GetParticleType() != "nucleus")|| 
+          (parent->IsShortLived())                   )&&
         (sumofdaughtermass > parentmass )           )            ){
    // !!! illegal mass  !!!
 #ifdef G4VERBOSE
@@ -344,12 +345,9 @@ void G4VDecayChannel::FillDaughters()
 	 G4cout << "[GeV/c/c]" <<G4endl;
        }
      }
-     G4cout << " The BR of this decay mode is set to zero " << G4endl;
    }
 #endif
-   SetBR(0.0);
-   return;
-  }
+ }
 }
 
 
