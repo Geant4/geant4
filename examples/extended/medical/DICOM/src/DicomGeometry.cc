@@ -101,7 +101,7 @@ void DicomGeometry::InitialisationOfMaterials()
 
   // Trabecular Bone 
   G4Material* trabecularBone = new G4Material( "Skeleton_Spongiosa", 
-					       density = 1159*kg/m3, 
+					       density = 1159.*kg/m3, 
 					       numberofElements = 12 );
   trabecularBone->AddElement(elH,0.085);
   trabecularBone->AddElement(elC,0.404);
@@ -118,7 +118,7 @@ void DicomGeometry::InitialisationOfMaterials()
   
   // dense Bone
   G4Material* denseBone = new G4Material( "Skeleton_ribs", 
-					  density = 1575*kg/m3, 
+					  density = 1575.*kg/m3, 
 					  numberofElements = 11 );
   denseBone->AddElement(elH,0.056);
   denseBone->AddElement(elC,0.235);
@@ -134,7 +134,7 @@ void DicomGeometry::InitialisationOfMaterials()
  
   // Liver
   G4Material* liver = new G4Material( "Liver", 
-				      density = 1071*kg/m3, 
+				      density = 1071.*kg/m3, 
 				      numberofElements = 9);
   liver->AddElement(elH,0.102);
   liver->AddElement(elC,0.139);
@@ -170,7 +170,7 @@ void DicomGeometry::InitialisationOfMaterials()
 
   // Breast
   G4Material* breast = new G4Material( "Breast", 
-                           density = 990*kg/m3, 
+                           density = 990.*kg/m3, 
                            numberofElements = 8 );
   breast->AddElement(elH,0.109);
   breast->AddElement(elC,0.506);
@@ -183,7 +183,7 @@ void DicomGeometry::InitialisationOfMaterials()
 
   // Adipose tissue
   G4Material* adiposeTissue = new G4Material( "adipose_tissue", 
-                                  density = 967*kg/m3, 
+                                  density = 967.*kg/m3, 
                                   numberofElements = 7);
   adiposeTissue->AddElement(elH,0.114);
   adiposeTissue->AddElement(elC,0.598);
@@ -194,33 +194,33 @@ void DicomGeometry::InitialisationOfMaterials()
   adiposeTissue->AddElement(elCl,0.001);
 
 
-   G4Material* lungexhale = new G4Material( "Lung_Exhale", 
-					   density = 508*kg/m3, 
+  //  LungEXhale
+  G4Material* lungExhale = new G4Material( "Lung_Exhale", 
+					   density = 508.*kg/m3, 
 					   numberofElements = 9 );
- //  LungEXhale
-  lungexhale->AddElement(elH,0.103);
-  lungexhale->AddElement(elC,0.105);
-  lungexhale->AddElement(elN,0.031);
-  lungexhale->AddElement(elO,0.749);
-  lungexhale->AddElement(elNa,0.002);
-  lungexhale->AddElement(elP,0.002);
-  lungexhale->AddElement(elS,0.003);
-  lungexhale->AddElement(elCl,0.002);
-  lungexhale->AddElement(elK,0.003);
+  lungExhale->AddElement(elH,0.103);
+  lungExhale->AddElement(elC,0.105);
+  lungExhale->AddElement(elN,0.031);
+  lungExhale->AddElement(elO,0.749);
+  lungExhale->AddElement(elNa,0.002);
+  lungExhale->AddElement(elP,0.002);
+  lungExhale->AddElement(elS,0.003);
+  lungExhale->AddElement(elCl,0.002);
+  lungExhale->AddElement(elK,0.003);
 
   //  LungINhale
-  G4Material* lunginhale = new G4Material( "Lung_Inhale", 
-                               density = 217*kg/m3, 
+  G4Material* lungInhale = new G4Material( "Lung_Inhale", 
+                               density = 217.*kg/m3, 
                                numberofElements = 9);
-  lunginhale->AddElement(elH,0.103);
-  lunginhale->AddElement(elC,0.105);
-  lunginhale->AddElement(elN,0.031);
-  lunginhale->AddElement(elO,0.749);
-  lunginhale->AddElement(elNa,0.002);
-  lunginhale->AddElement(elP,0.002);
-  lunginhale->AddElement(elS,0.003);
-  lunginhale->AddElement(elCl,0.002);
-  lunginhale->AddElement(elK,0.003);
+  lungInhale->AddElement(elH,0.103);
+  lungInhale->AddElement(elC,0.105);
+  lungInhale->AddElement(elN,0.031);
+  lungInhale->AddElement(elO,0.749);
+  lungInhale->AddElement(elNa,0.002);
+  lungInhale->AddElement(elP,0.002);
+  lungInhale->AddElement(elS,0.003);
+  lungInhale->AddElement(elCl,0.002);
+  lungInhale->AddElement(elK,0.003);
 
 
   // Air

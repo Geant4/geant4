@@ -37,8 +37,8 @@ private:
   char sliceTicknessBuf[300];
   char sliceLocationBuf[300];
   char fullname[300];
-  FILE* readData;
-  FILE* readConf;
+  
+  //FILE* readConf;
   G4int flag_contours;
   G4int lenc,lenr;
   char densityBuf[300];

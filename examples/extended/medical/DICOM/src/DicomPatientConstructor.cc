@@ -44,6 +44,7 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double 
     {
       G4std::fscanf(lecturePref,"%s",name);
       G4std::sprintf(fullname,"%s.g4",name);
+      FILE* readData;
       readData = G4std::fopen(fullname,"r");
  
       G4std::fscanf(readData,"%s %s",rowsBuf,columnsBuf);
@@ -199,9 +200,11 @@ void DicomPatientConstructor::readContour()
     }
 }
 
-// This function tell if the coordinates (X,Y,Z) is within one of the curves from plan.roi
+
 G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 {
+// This function tell if the coordinates (X,Y,Z) is within one of the curves from plan.roi
+
   G4int x,i,j;
   G4int state = 0;  // This variable = 0 if the point is outside curve
   G4int lenPoints = -1;  // Number of points avaible in a curve, to be initialised each time!
