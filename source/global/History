@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2000-05-26 07:55:13 gcosmo Exp $
+$Id: History,v 1.49 2000-06-15 17:30:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 15, 2000 G.Cosmo (global-V01-01-04)
+- Introduced fixes to g4std/complex for ISO and non-ISO compliance.
+  Defined G4complex type as complex type of doubles.
+- Changed implementation of G4Integrator to a template class, to allow
+  porting on Solaris CC compiler which does not implement templated member
+  functions.
 
 May 25, 2000 J.Allison (global-V01-01-03)
 - Added new G4UnitDefinition("kg/m3",...) to G4UnitsTable.cc.
