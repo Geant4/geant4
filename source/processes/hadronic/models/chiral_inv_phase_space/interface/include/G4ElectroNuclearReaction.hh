@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.17 2003-10-31 13:06:45 hpw Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.18 2003-10-31 15:31:55 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,6 +114,9 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   G4double xSec = theElectronData.GetCrossSection(theElectron, anElement); // Check cross section
   if(xSec<=0.) 
   {
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(theElectron->GetKineticEnergy());
+    theResult.SetMomentumChange(theElectron->GetMomentumDirection()); // new direction for the electron
     return &theResult;        // DO-NOTHING condition
   }
   G4double photonEnergy = theElectronData.GetEquivalentPhotonEnergy();
@@ -122,6 +125,9 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4cout << "G4ElectroNuclearReaction::ApplyYourself: photonEnergy is very high"<<G4endl;
     G4cout << "If this condition appears frequently, please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(theElectron->GetKineticEnergy());
+    theResult.SetMomentumChange(theElectron->GetMomentumDirection()); // new direction for the electron
     return &theResult;        // DO-NOTHING condition
   }
   G4double photonQ2 = theElectronData.GetEquivalentPhotonQ2(photonEnergy);
@@ -132,6 +138,9 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   }
   if(W<0.) 
   {
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(theElectron->GetKineticEnergy());
+    theResult.SetMomentumChange(theElectron->GetMomentumDirection()); // new direction for the electron
     return &theResult;        // DO-NOTHING condition
     G4Exception("G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
   }
@@ -145,6 +154,9 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   G4double rndFraction = theElectronData.GetVirtualFactor(photonEnergy, photonQ2);
   if(sigNu*G4UniformRand()>sigK*rndFraction) 
   {
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(theElectron->GetKineticEnergy());
+    theResult.SetMomentumChange(theElectron->GetMomentumDirection()); // new direction for the electron
     return &theResult; // DO-NOTHING condition
   }
   theResult.SetStatusChange(isAlive);
