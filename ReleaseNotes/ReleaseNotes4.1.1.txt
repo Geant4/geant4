@@ -1,0 +1,279 @@
+
+                 Geant4 1.1 Release Notes
+                 ------------------------
+
+                                                       10th March 2000
+
+The following is a summary of the main fixes collected since release 1.0 and
+included in Geant4 1.1 (for the detailed list of fixes/updates, please refer
+to the related History files):
+
+  o Configuration scripts
+    - introduced G4NO_OPTIMISE flag for compilation with no optimisation level,
+      G4DEBUG if defined takes precedence.
+    - added G4DEBUG and G4OPTIMISE to the CPPFLAGS list.
+    - fixed bug in EXTRALIBS.
+    - fixed linking order for compound libraries.
+
+  o Electromagnetic Processes:
+    - low-energy processes:
+      + updated anti-proton energy losses to provide simulation down to 1 keV.
+      + minor bug fixes to G4ionLowEnergyIonisation.
+      + fixes to electron and photon low energy processes.
+
+  o Events:
+    - introduced corrections for trajectories of suspended tracks.
+
+  o Geometry:
+    - syncronixed HEAD version of files after ISO-C++ migration.
+    - CSG:
+       fixed bug in DistanceToIn(p,v) for G4Trap.
+    - volumes:
+       added protection to GetSlice() in G4DrawVoxels.
+
+  o Globals:
+    - added check on definition of CLHEP_MAX_MIN_DEFINED flag.
+    - introduced constructor for 3vectors in G4BestUnits.
+    - fixed truncation problem in G4Poisson.
+    - STLinterface:
+       + enforced bound-checking for [] access operators.
+       + fixed bugs in G4String::toUpper() and G4String::toLower().
+       + fixed bounds overflow error in G4RWTPtrSortedVector::find().       
+
+  o Graphics Representations
+    - fix for spheres with small dtheta.
+
+  o Hadronic Processes:
+    - fixed the 'no data' problem observed in the neutron transport tests.
+    
+  o Persistency:
+    - fixed typo in G4PersistentGeomMan class.
+
+  o Tracking & Track:
+    - added protection for NULL pointers in G4SteppingManager.
+    - fixed bug related to track weight in G4VParticleChange.
+
+  o Visualization:
+    - added fix for ISO-ANSI C++ in VRML driver.
+    - introduced commands /vis/viewer/show and /vis/viewer/refresh
+    - introduced general handling of displaced solids.
+    - added some protections in case of no viewer and no voxelisation.
+
+  o G3-to-G4 tool:
+    - introduced fixes to G3VolTable::GetVTE() and G3Division::CreateSolid().
+    - avoid placement of top-level logical volume in G3toG4BuildTree.
+    - removed obsolete files.
+   
+  o Examples:
+    - introduced stepping verbosity (N02, N03).
+    - added 10 TeV mu- in macro exampleN04.EMtest.in.
+    - extended/electromagnetic examples: bug fixes and introduced low-energy
+      test (TestEm6)
+    - introduced 'large N' input macros.
+    - updated reference outputs.
+
+Notes: 
+
+  o  Geant4 1.1 is based on STL and the code has been upgraded to be
+     ISO-ANSI C++ compliant. Code in this release include the ability to
+     choose between using the 'std' namespace in ISO/ANSI mode or using
+     traditional style programming in the global namespace (exceptions
+     still apply concerning mathematical functions - <math.h> in global
+     namespace is still in use, or standard C I/O functions).
+
+The source code and some binary libraries are available through our "Source
+Code" Web page:
+- see our <A href="http://wwwinfo.cern.ch/asd/geant4/geant4.html">Geant4
+  Home Page</A>.
+
+Please refer to <A
+href="http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. CLHEP 1.4
+  3. The Standard Template Library (STL)
+  4. Persistency
+  5. Compiler Specific Problems
+  6. Known Run-Time Problems
+  7. Compilation Warnings
+  8. Known Run-Time Warnings
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.6, C++ 4.2 patch 104631-04
+  o HP 10.20, aCC C++ B3910B A.01.18  or  A.01.21
+  o Linux 2.2.5-22, gcc C++ egcs-2.91.66 (egcs 1.1.2).
+      This configuration was tested in the RedHat 6.1 distribution, but
+      versions of Geant4 have also been compiled successfully on, Debian
+      and Suse distributions.
+
+Platforms/compilers also tested but giving rise to some problems - see below:
+
+  o DEC V4.0, cxx C++ V6.1-027.
+  o SUN Solaris 5.6, C++ 5.0 patches 107357-07, 107311-09
+  o NT 4.0 with Service Pack 4 and Cygnus Tools b20 with:
+      Visual C++ 6.0 Service Pack 2
+
+Platforms configured but not tested and not supported:
+  o SGI V6.5.5, CC 7.2.1 with ObjectSpace
+  o AIX 4.3.2, xlC compiler with ObjectSpace
+
+2. CLHEP 1.4
+------------
+
+Geant4 1.0 requires the installation of CLHEP 1.4. 
+
+See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
+CLHEP 1.4</A>.  
+
+Be aware, for the platforms listed below, the standard CLHEP installation
+will use ISO-ANSI setup:
+
+  DEC: if using the compiler option "-std strict_ansi", it is required to
+       compile Geant4 in ISO-ANSI mode and 'native' STL.
+
+  NT: if CLHEP has been installed with the line:
+         #define HEP-USE-STD 1
+      uncommented in file config/CLHEP-x86-cygnus-win32, it is required to
+      compile Geant4 in ISO-ANSI mode and 'native' STL.
+
+
+
+3. The Standard Template Library
+--------------------------------
+
+The following versions of STL have been tested:
+
+   "Native" STL on: Linux, HP, DEC, SUN, NT.
+
+   ObjectSpace STL on
+          DEC, HP, NT and SUN.
+
+          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+
+This is selected at installation/compile time by the environment variable
+G4USE_OSPACE in the case of the latter - see documentation.
+
+NOTES:
+- Be aware that by default, the installation scripts will expect to use
+  the native STL implementation. You must set the G4USE_OSPACE variable
+  in the environment in order to select the ObjectSpace implementation.
+
+- Platforms specific setup:
+  o DEC: - Default: 'native' STL and ISO-ANSI setup.
+         - G4USE_OSPACE set: selects ObjectSpace STL (required)
+	                     and no ISO-ANSI setup.
+  o HP:  - Default: 'native' STL and ISO-ANSI setup.
+         - G4USE_OSPACE set: selects ObjectSpace STL (required)
+	                     and no ISO-ANSI setup.
+         - G4NO_STD_NAMESPACE set: either ObjectSpace or 'native' STL
+	                     can be used.
+  o SUN: - Default: 'native' STL and ISO-ANSI setup.
+                             This setup requires the CC compiler version 5.0.
+         - G4USE_OSPACE set: selects ObjectSpace STL (required)
+	                     and no ISO-ANSI setup.
+  o Linux: native STL is required. No ISO-ANSI setup.
+  o NT:  - Default: 'native' STL and ISO-ANSI setup.
+         - G4USE_OSPACE set: selects ObjectSpace STL (required)
+	                     and no ISO-ANSI setup.
+
+Geant4 1.1 requires the Standard Template Library.
+In the interest of stability, a significant part of the code still makes use
+of the "STL Interface" wrapper classes.  For these the emphasis has remained
+on correct behaviour, rather than performance.
+
+
+4. Persistency
+--------------
+
+- See release notes for Geant4 1.0.
+
+
+5. Compiler Specific Problems
+-----------------------------
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+      We have found cases of mis-compilation of min and max templates
+      on DEC.  We have traced those which cause serious malfunction
+      but there is no guarantee that there are no other cases.
+      Detailed inspection of assembler output suggests that this
+      problem might not be confined to min and max.  This has been
+      reported to DEC/Compaq.  We understand a new version 6.2 of the
+      compiler is now available.  However we cannot guarantee correct
+      execution of Geant4 on DEC with the current version of the
+      compiler.
+
+  o SUN Solaris 5.6, CC 5.0 patches 107357-07, 107311-09
+
+      The listed patches are required in order to fix a bug in the
+      system Standard I/O libraries for streams.
+      Part of the Geant4 code can be compiled only in debug mode (G4DEBUG
+      set). A bug in the compiler optimiser causes the compiler to run in
+      an infinite loop during compilation. Also, the inclusion of debug
+      symbols causes the generation of abnormally huge binary objects.
+      A bug report is being filed to SUN Support.
+
+  o NT
+
+      - Due to limitations of the VC++ optimiser, testing was done using
+        the debuggable version only.
+      - g3tog4 has not been ported to NT.
+      - During the making of dependency files during compilation there
+          are repeated warnings ("Strstrea.h not found") - this is an
+          artifact of using g++ for this purpose.
+      - Ignore linker warnings: "conflicts with use of other libs".
+      - Ignore linker errors: "unresolved external symbol
+          __imp__MessageBoxA@16". 
+
+6. Known Run-Time Problems
+--------------------------
+
+  o Reading STEP files on DEC with optimised libraries causes a Memory
+    fault - but see notes on DEC above.
+  o In rare cases heavy ions appear not to be properly stopped and killed
+    in tracking, therefore Geant4 sticks making many small steps. This
+    behaviour has been observed on SUN and is under investigation.
+  o On WindowsNT and DEC (ISO-ANSI setup), a problem can occur reading the data
+    files associated with the environment variable $NeutronHPCrossSections.
+    The problem is being investigated. 
+
+
+7. Compilation Warnings
+-----------------------
+
+There are compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, however a parallel
+Q/A activity is on going to reduce them.
+
+
+8. Known Run-Time Warnings
+--------------------------
+
+The following messages can be written to error output while tracking.  We
+believe none give rise to incorrect behaviour.
+
+  o G4PropagatorInField::LocateIntersectionPoint: Warning: Integration
+      inaccuracy requires an adjustment in the step's endpoint Two
+      mid-points are further apart than their curve length difference:
+      Dist = xxx curve length = yyy
+  o Warning in G4Navigator::ComputeStep: The Step's starting point has
+      moved...
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field  while a maximum of 10000
+       are allowed. 
+
+For very high energy muons (ex. 1 TeV) warnings of this kind might be
+generated:
+
+  o G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+    Difference:  1e-09
+    G4ParticleChange::CheckIt 
