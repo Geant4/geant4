@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2001-05-25 15:45:27 pia Exp $
+$Id: History,v 1.3 2001-10-12 15:46:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Oct 2001 - MGP, tag test20-V03-02-00
+              Fixes for STL migration of materials
 
 25 May 2001 - MGP, tag test20-V03-01-01
               Cloned test14 into test20 and adapted for test of

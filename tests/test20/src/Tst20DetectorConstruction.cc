@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorConstruction.cc,v 1.3 2001-07-11 10:10:17 gunter Exp $
+// $Id: Tst20DetectorConstruction.cc,v 1.4 2001-10-12 15:46:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -270,8 +270,8 @@ void Tst20DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (size_t J=0 ; J<theMaterialTable->length() ; J++)
-    { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<G4Material::GetNumberOfMaterials() ; J++)
+    { pttoMaterial = (*theMaterialTable)[J];     
     if (pttoMaterial->GetName() == materialChoice)
       {AbsorberMaterial = pttoMaterial;
       logicAbsorber->SetMaterial(pttoMaterial); 
@@ -291,8 +291,8 @@ void Tst20DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (size_t J=0 ; J<theMaterialTable->length() ; J++)
-    { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<G4Material::GetNumberOfMaterials() ; J++)
+    { pttoMaterial = (*theMaterialTable)[J];     
     if (pttoMaterial->GetName() == materialChoice)
       {WorldMaterial = pttoMaterial;
       logicWorld->SetMaterial(pttoMaterial); 
