@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.33 2004-12-10 18:16:00 gcosmo Exp $
+// $Id: G4VSceneHandler.cc,v 1.34 2005-01-26 16:57:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),
+  fNestingDepth          (0),
   fpVisAttribs           (0),
   fCurrentDepth          (0),
   fpCurrentPV            (0),
@@ -183,7 +184,6 @@ void G4VSceneHandler::AddThis (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
-  
   traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
 }
 
@@ -198,7 +198,8 @@ void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
 void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
   pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
 					&fpCurrentPV,
-					&fpCurrentLV);
+					&fpCurrentLV,
+					&fpCurrentMaterial);
 }
 
 void G4VSceneHandler::BeginModeling () {
@@ -208,9 +209,18 @@ void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
   if (!fpModel) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
   fpObjectTransformation = &objectTransformation;
+  fNestingDepth++;
+  if (fNestingDepth > 1)
+    G4Exception("G4VSceneHandler::BeginPrimitives: Nesting detected."
+		"\n  It is illegal to nest Begin/EndPrimitives.");
 }
 
-void G4VSceneHandler::EndPrimitives () {}
+void G4VSceneHandler::EndPrimitives () {
+  if (fNestingDepth <= 0)
+    G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
+  fNestingDepth--;
+  fpObjectTransformation = &G4Transform3D::Identity;
+}
 
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
