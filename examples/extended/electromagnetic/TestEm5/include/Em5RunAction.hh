@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.10 2002-06-06 17:23:22 maire Exp $
+// $Id: Em5RunAction.hh,v 1.11 2002-12-12 13:26:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,10 @@ class Em5RunMessenger;
 class G4Run;
 
 #ifndef G4NOHIST
+namespace AIDA {
  class ITree;
  class IHistogram1D;
+} 
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,7 +115,7 @@ class Em5RunAction : public G4UserRunAction
     G4double GetdTh() { return dTh;};
     G4double GetdThback() { return dThback;};
 #ifndef G4NOHIST
-    IHistogram1D* GetHisto(G4int id) {return histo[id];}
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
 
   private:
@@ -125,8 +127,8 @@ class Em5RunAction : public G4UserRunAction
     G4String histName;
     
 #ifndef G4NOHIST    
-    ITree* tree;
-    IHistogram1D* histo[10];    
+    AIDA::ITree* tree;
+    AIDA::IHistogram1D* histo[10];    
 #endif
     
     G4double EnergySumAbs,EnergySquareSumAbs;
