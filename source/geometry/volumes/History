@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2001-10-18 13:15:25 japost Exp $
+$Id: History,v 1.50 2001-10-22 14:59:23 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
+ - Added a new 'maximum' epsilon value in G4PropagatorInField,
+    as some ill-conditions appear to be due to large proposed relative errors.
 
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-00
 - Corrected the initialisation of fEpsilonMin in G4PropagatorInField 
