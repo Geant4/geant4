@@ -1,4 +1,4 @@
-$Id: History,v 1.41 1999-06-09 11:44:29 gunter Exp $
+$Id: History,v 1.42 1999-06-19 15:20:41 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,8 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th June 1999  John Allison
+- Removed references to G4Ray in G4VIS_BUILD.gmk and G4VIS_USE.gmk.
+
 9th June 1999  Gunter Folger
 - Adapt liblist.c for Windows, all changes contained withing #ifdef WIN32 blocks. 
+
 4th June 1999  John Allison
 - Corrected USER_DEFINED_LDLIBS action.
 - Changed `export G4TMP=$(G4TMP);' to `G4TMP=$(G4TMP); export G4TMP;'
