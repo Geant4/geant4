@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.20 2004-12-07 13:46:22 gunter Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.21 2004-12-10 22:11:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,7 +83,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   static const G4double dM=G4Proton::Proton()->GetPDGMass()+G4Neutron::Neutron()->GetPDGMass(); // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double me=G4Electron::Electron()->GetPDGMass();      // electron mass
   static const G4double me2=me*me;        // squared electron mass
-  static const G4double dpi=2*M_PI; // 2*pi
+  static const G4double dpi=twopi; // 2*pi
   G4DynamicParticle theTempEl(const_cast<G4ParticleDefinition *>(aTrack.GetDefinition()), 
                               aTrack.Get4Momentum().vect());
   const G4DynamicParticle* theElectron=&theTempEl;

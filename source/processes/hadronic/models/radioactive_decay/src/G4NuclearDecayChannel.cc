@@ -523,7 +523,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     //    G4double costhetan, sinthetan, phin, sinphin, cosphin;
     costheta = 2.*G4UniformRand()-1.0;
     sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = 2.0*M_PI*G4UniformRand()*rad;
+    phi  = twopi*G4UniformRand()*rad;
     sinphi = std::sin(phi);
     cosphi = std::cos(phi);
     G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -533,7 +533,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     // The two products are independent in directions
     costheta = 2.*G4UniformRand()-1.0;
     sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = 2.0*M_PI*G4UniformRand()*rad;
+    phi  = twopi*G4UniformRand()*rad;
     sinphi = std::sin(phi);
     cosphi = std::cos(phi);
     G4ParticleMomentum direction1(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -656,7 +656,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     G4double costhetan, sinthetan, phin, sinphin, cosphin;
     costheta = 2.*G4UniformRand()-1.0;
     sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = 2.0*M_PI*G4UniformRand()*rad;
+    phi  = twopi*G4UniformRand()*rad;
     sinphi = std::sin(phi);
     cosphi = std::cos(phi);
     G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -669,7 +669,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 		 daughtermomentum[0]*daughtermomentum[0])/
       (2.0*daughtermomentum[2]*daughtermomentum[0]);
     sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-    phin  = 2.0*M_PI*G4UniformRand()*rad;
+    phin  = twopi*G4UniformRand()*rad;
     sinphin = std::sin(phin);
     cosphin = std::cos(phin);
     G4ParticleMomentum direction2;
