@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalRotationMatrixFactory.cc
+// Description: CCalRotationFactory is a factory class to define all rotation
 //              matrices used in geometry building
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalRotationMatrixFactory.hh"

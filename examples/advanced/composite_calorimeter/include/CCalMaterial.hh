@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//////////////////////////////////////////////////////////////////////////////
+// File: CCalMaterial.hh
+// Description: CCalMaterial holds the basic information needed to make a
 //              G4Material. 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalMaterial_h

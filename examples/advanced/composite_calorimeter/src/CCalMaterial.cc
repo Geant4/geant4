@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalMaterial.cc
+// Description: CCalMaterial transient class to store information from 
 //              material table (database) which is used to make a G4Material
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalMaterial.hh"

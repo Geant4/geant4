@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalEcalOrganization.cc
+// Description: Defines numbering schema for the Electromagnetic Calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalEcalOrganization.hh"
 #include "G4VPhysicalVolume.hh"

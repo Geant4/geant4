@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAMaterial.hh
+// Description: CCalAMaterial holds the basic information needed to make a
 //              G4Material from atomic proportions.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalAMaterial_h

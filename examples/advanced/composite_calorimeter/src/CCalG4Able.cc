@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Able.cc
+// Description: CCalG4Able is the base class of a Geant4 geometry factory
 ///////////////////////////////////////////////////////////////////////////////
 //Comment/Uncomment next line to unset/set debug information printing
 //#define debug

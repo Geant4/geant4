@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Able.hh
+// Description: CCalG4Able will provide the basic functionallity of a CCal
 //              "detector" to become a Geant4 Detector.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalG4Able_h

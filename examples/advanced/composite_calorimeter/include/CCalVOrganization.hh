@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVOrganization.hh
+// Description: Base class for definition of sensitive unit numbering schema
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalVOrganization_h
 #define CCalVOrganization_h

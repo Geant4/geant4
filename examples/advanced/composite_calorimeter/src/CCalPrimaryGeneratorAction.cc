@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalPrimaryGeneratorAction.cc
+// Description: CCalPrimaryGeneratorAction Sets up particle beam
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalPrimaryGeneratorAction.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHit.cc
+// Description: Hit class for Calorimeters (Ecal, Hcal, ...)
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalHit.hh"

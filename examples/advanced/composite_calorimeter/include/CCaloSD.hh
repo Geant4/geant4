@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+///////////////////////////////////////////////////////////////////////////////
+// File: CCaloSD.hh
+// Description: Stores hits of calorimetric type in appropriate container
+//
 // Use in your geometry routine: 
 //    CCaloSD* caloSD = new CCaloSD(SDname, new CalorimeterOrganization);
 //    G4SDManager::GetSDMpointer()->AddNewDetector(caloSD);

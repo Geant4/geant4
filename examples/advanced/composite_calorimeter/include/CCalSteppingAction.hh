@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSeppingAction.hh
+// Description: Stepping action needed for analysis
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalSteppingAction_h
 #define CCalSteppingAction_h

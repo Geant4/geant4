@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Hall.hh
+// Description: Equipped to construct G4 geometry of the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalG4Hall_h
 #define CCalG4Hall_h 1

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalMaterialFactory.cc
+// Description: CCalMaterialFactory is a factory class to vuild G4Material 
 //              from CCalMaterial and CCalAmaterial
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalMaterialFactory.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAnalysis.hh
+// Description: CCalAnalysis is a singleton class and interfaces all user
 //              analysis code
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalRunAction.cc
+// Description: A class for providing user actions at begin and end of run
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalRunAction.hh"
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVisManager.hh
+// Description: Example Visualization Manager implementing virtual function
 //              RegisterGraphicsSystems.  Exploits C-pre-processor variables
 //              G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
 //              environment variables of the same name are set.

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVisManager.cc
+// Description: CCalVisManager visualisation manager for the example
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "g4std/iostream"

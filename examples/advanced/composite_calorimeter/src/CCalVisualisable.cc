@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVisualisable.cc
+// Description: Sets visualisable attributes from .vis files
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalVisualisable.hh"
 

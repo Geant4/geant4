@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Ecal.cc
+// Description: CCalG4Ecal Factory class to construct the G4 geometry of the
 //              electromagnetic calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 

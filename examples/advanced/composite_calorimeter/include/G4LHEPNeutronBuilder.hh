@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4LHEPNeutronBuilder_h
+#define G4LHEPNeutronBuilder_h 1
+
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"

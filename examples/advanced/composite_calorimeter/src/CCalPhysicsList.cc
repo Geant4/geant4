@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//---------------------------------------------------
+// This file should be copied as CCalPhysicsList.cc
+// if you want to use the 
 //                        *** QGSC *** 
 // Physics List
 //---------------------------------------------------

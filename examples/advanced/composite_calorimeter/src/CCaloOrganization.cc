@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCaloOrganization.cc
+// Description: Packing, unpacking and other related utilities for 
 //              calorimetric numbering schema
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCaloOrganization.hh"

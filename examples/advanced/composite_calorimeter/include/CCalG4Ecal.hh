@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Ecal.hh
+// Description: Equipped to describe crystal matrix for different testbeam run
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalG4Ecal_h
 #define CCalG4Ecal_h 1

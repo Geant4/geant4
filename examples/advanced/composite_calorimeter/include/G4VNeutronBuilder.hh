@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4VNeutronBuilder_h
+#define G4VNeutronBuilder_h
+
 class G4HadronElasticProcess;
 class G4HadronFissionProcess;
 class G4HadronCaptureProcess;

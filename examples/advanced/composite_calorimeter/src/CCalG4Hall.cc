@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Hall.cc
+// Description: CCalG4Hall Geometry factory class to construct G4 geometry 
 //              of the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalG4Hall.hh"

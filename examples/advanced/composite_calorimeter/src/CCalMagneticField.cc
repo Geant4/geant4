@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalMagneticField.cc
+// Description: User Field class implementation.
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalMagneticField.hh"
 #include "CCalutils.hh"

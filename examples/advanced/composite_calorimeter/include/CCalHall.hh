@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHall.hh
+// Description: Equipped to construct the geometry of the 96 Test Beam
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalHall_h
 #define CCalHall_h 1

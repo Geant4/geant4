@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4HitCollection.hh
+// Description: Collection of calorimetric hits
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef CCalG4HitCollection_h

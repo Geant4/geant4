@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalGeometryConfiguration.hh
+// Description: This singleton holds the information in the file geometry.conf 
 //              Use getInstance to retrieve it.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalGeometryConfiguration_h

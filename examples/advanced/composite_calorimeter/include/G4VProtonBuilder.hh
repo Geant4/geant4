@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4VProtonBuilder_h
+#define G4VProtonBuilder_h
+
 class G4ProtonInelasticProcess;
 
 class G4VProtonBuilder

@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHit.h
+// Description: Hit class for Calorimeters (Ecal, Hcal, ...)
+//
 // One Hit object should be created
 // -for each new particle entering the calorimeter
 // -for each detector unit (= cristal or fiber or scintillator layer)

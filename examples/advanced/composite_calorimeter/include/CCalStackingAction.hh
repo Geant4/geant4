@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalStackingAction.hh
+// Description: Action needed to keep track of the ID of particle generating 
 //              showers in any calorimeter part.
 //              For the moment it is requested only by CCalSensAssign
 ///////////////////////////////////////////////////////////////////////////////

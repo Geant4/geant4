@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSDList.cc
+// Description: Records names of all SD objects
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSDList.hh"
 

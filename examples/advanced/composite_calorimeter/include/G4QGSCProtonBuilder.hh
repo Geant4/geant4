@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4QGSCProtonBuilder_h
+#define G4QGSCProtonBuilder_h 
+
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"

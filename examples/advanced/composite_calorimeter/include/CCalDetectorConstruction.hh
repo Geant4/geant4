@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalDetectorConstruction.hh
+// Description: Constructs the 96 test beam configuration of HCAL
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef CCalDetectorConstruction_h

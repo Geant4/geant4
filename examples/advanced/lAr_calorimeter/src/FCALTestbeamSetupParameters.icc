@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
+MotherSizeX = 500.*cm;
+MotherSizeY = 500.*cm ;
+MotherSizeZ = 3300.*cm;
+
 //---------------------------
 // Sciantillators S1, S2, S3
 //---------------------------

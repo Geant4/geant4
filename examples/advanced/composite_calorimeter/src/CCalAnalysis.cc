@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAnalysis.cc
+// Description: CCalAnalysis interfaces all user analysis code
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef G4ANALYSIS_USE

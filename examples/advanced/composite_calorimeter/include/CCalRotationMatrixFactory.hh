@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalRotationMatrixFactory.hh
+// Description: CCalRotationFactory is a singleton class to get from a file
 //              the information to build CCal Rotation matrices.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalRotationMatrixFactory_h

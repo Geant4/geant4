@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Hcal.cc
+// Description: CCalG4Hcal Factory class to construct the G4 geometry of the
 //              hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalG4Hcal.hh"

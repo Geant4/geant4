@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalMagneticField.hh
+// Description: A class for control of the Magnetic Field of the detector.
 //              The field is assumed to be uniform.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalMagneticField_H

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensAssign.cc
+// Description: CCalSenAssign creates and assigns the sensitive detetctors 
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSensAssign.hh"
 #include "CCalStackingAction.hh"

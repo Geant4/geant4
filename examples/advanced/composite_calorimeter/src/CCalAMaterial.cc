@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAMaterial.cc
+// Description: Specialised class to store information to make G4Material 
 //              from atomic proportion
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalAMaterial.hh"

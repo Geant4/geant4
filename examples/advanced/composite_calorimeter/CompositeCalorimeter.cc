@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CompositeCalorimeter.cc
+// Description: Main function for Geant4 application HCAL Test-BEAM H2-96
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalDetectorConstruction.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalutils.hh
+// Description: General utilities.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalutils_hh
 #define CCalutils_hh 1

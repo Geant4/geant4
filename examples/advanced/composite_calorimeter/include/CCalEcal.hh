@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalEcal.hh
+// Description: CCalEcal Geometry factory class for crystal matrix
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalEcal_h
 #define CCalEcal_h 1

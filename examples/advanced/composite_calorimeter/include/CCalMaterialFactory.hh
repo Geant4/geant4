@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalMaterialFactory.hh
+// Description: CCalMaterialFactory is a singleton class to get from a file
 //              the information to build CMS Materials. A G4Material is built
 //              only if asked. A parallel structure with the file information
 //              is keeped in a CCalMaterial pointer vector (CCalMaterialTable).

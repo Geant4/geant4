@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHcal.hh
+// Description: Equipped to construct the geometry of the hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalHcal_h
 #define CCalHcal_h 1

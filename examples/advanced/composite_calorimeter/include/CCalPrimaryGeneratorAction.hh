@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalPrimaryGeneratorAction.hh
+// Description: Sets up particle beam
+//
 //     By default 1 pi+  is shot from (0,0,0)
 //     in (1,1,0.1) direction at 100 GeV
 //     Use /gun/... commands to modify energy,origin,direction at run time.

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHcalOrganization.hh
+// Description: Defines numbering schema for the Hadron Calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalHcalOrganization_h
 #define CCalHcalOrganization_h

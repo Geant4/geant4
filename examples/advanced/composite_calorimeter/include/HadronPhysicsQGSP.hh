@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef HadronPhysicsQGSP_h
+#define HadronPhysicsQGSP_h 1
+
 #include "globals.hh"
 #include "G4ios.hh"
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalG4Hit.hh
+// Description: G4 Hit class for Calorimeters (Ecal, Hcal, ...)
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef CCalG4Hit_h

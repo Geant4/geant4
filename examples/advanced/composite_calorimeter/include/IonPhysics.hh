@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//========================
+// taken from example N04 of G4 distribution
+//========================
 #ifndef IonPhysics_h
 #define IonPhysics_h 1
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//-----------------------------------------------------------
+// Renamed of the ufficial Physics List.
+//-----------------------------------------------------------
 #ifndef CCalPhysicsList_h
 #define CCalPhysicsList_h 1
 

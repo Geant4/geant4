@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSDList.hh
+// Description: Records name of all SD objects and classify them into
 //              CALO and Tracker SD
 //              Singleton class
 ///////////////////////////////////////////////////////////////////////////////

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4LHEPPiKBuilder_h
+#define G4LHEPPiKBuilder_h 1
+
 #include "globals.hh"
 #include "G4ios.hh"
 

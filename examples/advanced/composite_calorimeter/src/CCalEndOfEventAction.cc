@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalEndOfEventAction.cc
+// Description: CCalEndOfEventAction provides User actions at end of event
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalEndOfEventAction.hh"
 #include "CCaloSD.hh"

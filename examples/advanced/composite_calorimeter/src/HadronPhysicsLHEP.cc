@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#include "HadronPhysicsLHEP.hh"
+
+#include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 #include "G4ParticleDefinition.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensitiveDetectors.cc
+// Description: Provides a map of logicalvolume pointers which can be sensitive
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalSensitiveDetectors.hh"

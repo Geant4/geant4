@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensitiveConfiguration.h
+// Description: This singleton holds the information given in the file 
 //              g4geometry.conf 
 //              Use getInstance to retrieve it.
 ///////////////////////////////////////////////////////////////////////////////

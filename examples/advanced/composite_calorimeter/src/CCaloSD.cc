@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCaloSD.cc
+// Description: Stores hits of calorimetric type in appropriate container
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCaloSD.hh"

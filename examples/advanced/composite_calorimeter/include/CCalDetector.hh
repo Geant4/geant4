@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalDetector.hh
+// Description: CCalDetector will provide the basic functionallity of a 
 //              detector factory. It has a construct method that describes 
 //              the construction sequence of the detector. It has a Name, 
 //              a file associated with it, and a collection of other 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalPrimaryGeneratorMessenger.cc
+// Description: CCalPrimaryGeneratorMessenger adds new commands for
 //              primary generator action
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalPrimaryGeneratorMessenger.hh"

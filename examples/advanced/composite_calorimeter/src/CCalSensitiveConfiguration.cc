@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensitiveConfiguration.cc
+// Description: CCalSensitiveConfiguration handles the declaration of
 //              sensitive detectors and visibilities
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSensitiveConfiguration.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVisualisable.hh
+// Description: Sets visualisable attributes from the information in flat file
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalVisualisable_hh
 #define CCalVisualisable_hh 1

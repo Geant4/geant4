@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensitiveDetectors.hh
+// Description: Container of logical volume pointers which can be sensitive
 //              detectors
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalSensitiveDetectors_h

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalEcalOrganization.hh
+// Description: Defines numbering schema for the Electromagnetic Calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalEcalOrganization_h
 #define CCalEcalOrganization_h

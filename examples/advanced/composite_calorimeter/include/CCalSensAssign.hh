@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSensAssign.hh
+// Description: CCalSenAssign creates and assigns the sensitive detetctors 
 //              from the map of logical volumes which are potentially sensitive
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalSensAssign_h

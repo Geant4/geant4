@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalHall.cc
+// Description: CCalHall Geometry factory class for the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalHall.hh"
 

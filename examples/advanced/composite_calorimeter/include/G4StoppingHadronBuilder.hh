@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef G4StoppingHadronBuilder_h
+#define G4StoppingHadronBuilder_h 1
+
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/vector"

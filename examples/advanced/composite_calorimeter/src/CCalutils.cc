@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalutils.cc
+// Description: General utilities.
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalutils.hh"
 #include "G4ios.hh"

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalPrimaryGeneratorMessenger.hh
+// Description: Adds a new command to (un)select random shooting.
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef CCalPrimaryGeneratorMessenger_h

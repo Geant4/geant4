@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalDetectorConstruction.cc
+// Description: CCalDetectorConstruction user action class to construct 
 //              detector geometry
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalDetectorConstruction.hh"

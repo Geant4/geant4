@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalStackingAction.cc
+// Description: Stacking action needed for the application
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalStackingAction.hh"
 #include "G4StackManager.hh"
