@@ -59,6 +59,8 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4DataVector.hh"
 
+class G4PhysicsTable;
+
 class G4VEmModel
 {
 
@@ -106,15 +108,19 @@ public:
                                       G4double tmin,
                                       G4double tmax) = 0;
   
-  virtual G4double SampleCosineTheta(G4double& kineticEnergy,
-                                     G4double& energyDeposition,
-				     G4double& stepLength,
-				     G4double& lambda) {return 1.0;};
+  virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
+                            const G4MaterialCutsCouple* couple,
+		            const G4ParticleDefinition* particle,
+		                  G4double& kineticEnergy,
+			          G4double& lambda,
+			          G4double& range,
+			          G4double  truePathLength) {return truePathLength;};
 
-  virtual G4double SampleDisplacement(G4double& kineticEnergy,
-                                     G4double& truePathLength,
-				     G4double& stepLength,
-				     G4double& lambda) {return 0.0;};
+  virtual G4double TrueStepLength(G4double& geomStepLength) {return geomStepLength;};
+
+  virtual G4double SampleCosineTheta(G4double& trueStepLength) {return 1.0;};
+
+  virtual G4double SampleDisplacement(G4double& trueStepLength) {return 0.0;};
 
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;
