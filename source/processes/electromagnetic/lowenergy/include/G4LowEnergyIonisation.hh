@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.23 2001-09-10 18:05:16 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.24 2001-10-01 12:45:36 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,8 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4ShellData.hh"
+#include "G4AtomicDeexcitation.hh"
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
@@ -164,6 +166,8 @@ private:
 
   G4DataVector thePrimShVec;
   G4double lEnergyLimit;
+  G4ShellData shellData;
+  G4AtomicDeexcitation deexcitationManager;
 };
  
 #include "G4LowEnergyIonisation.icc"

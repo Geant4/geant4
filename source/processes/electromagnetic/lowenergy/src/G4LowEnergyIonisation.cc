@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.57 2001-09-23 23:08:57 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.58 2001-10-01 12:45:49 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,19 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
     lowestKineticEnergy  = GetLowerBoundEloss();
     highestKineticEnergy = GetUpperBoundEloss();
     TotBin = GetNbinEloss();
+
+    G4String shellDataFile = "/fluor/binding";
+    shellData.LoadData(shellDataFile);
+    
+    /*   if (verboseLevel > 0) 
+      {
+       G4cout << GetProcessName() << " is created " << G4endl
+	      << "Energy range: " 
+	      << lowEnergyLimit / keV << " keV - "
+	      << highEnergyLimit / GeV << " GeV" 
+	      << G4endl;
+      }
+    */
 }
 
 //    
@@ -1036,8 +1049,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   }
 
   // Create lists of pointers to DynamicParticles (photons and electrons) 
-  G4ParticleVector photvec;
-  G4ParticleVector elecvec;
+  G4std::vector<G4DynamicParticle*>* photonVector = 0;
+  G4std::vector<G4DynamicParticle*> electronVector;
 
   // select randomly one element constituing the material.
   G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
@@ -1054,6 +1067,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
     return G4VContinuousDiscreteProcess::PostStepDoIt(track,step); 
   }
   
+   G4int shellId = shellData.ShellId(AtomIndex,subShellIndex);
+   
   // Get the subshell energy
   G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[AtomIndex-1];
   G4int thePrimaryShell = (G4int) (*(*theBindEnVec)[0])[subShellIndex];
@@ -1119,7 +1134,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   theDeltaRay->SetKineticEnergy(deltaKinEnergy);
   theDeltaRay->SetMomentumDirection(dirx*norm,diry*norm,dirz*norm); 
   theDeltaRay->SetDefinition(G4Electron::Electron());
-  elecvec.push_back(theDeltaRay);
+  electronVector.push_back(theDeltaRay);
      
   G4double theEnergyDeposit = BindingEn;
 
@@ -1139,115 +1154,70 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
 
   if(thePrimShVec.size() != 0) thePrimShVec.clear();
   thePrimShVec.push_back(thePrimaryShell);
-  if(AtomIndex > 5){
-      
-      G4bool ThereAreShells = TRUE;
-      G4int AtomInd = ZNumVecFluor->index(AtomIndex);
-      oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomInd];
-      
-      while(ThereAreShells) {
-	
-	// Select the second transition from another subshell
-	// fluorPar[0] = SubShell 
-	// fluorPar[1] = Sec SubShell (if there is), 
-	// fluorPar[2] = Transition Probability
-	// fluorPar[3] = Transition Energy
-	// the same for augerPar
-	
-	G4double fluorPar[3] = {0};
-	
-  // SelectRandomTransition argument is oneAtomTable loop on shells is inside
-	ThereAreShells = SelectRandomTransition(thePrimaryShell, 
-						fluorPar, 
-						oneAtomFluorTrans);
-	
-	
-	// Daugther dynamic particle
-	G4DynamicParticle* newPart;
-	
-	// Direction of the outcoming particle isotropic selection
-	G4double newcosTh = 1.0-2.0*G4UniformRand();
-	G4double newsinTh = sqrt(1.0-newcosTh*newcosTh);
-	G4double newPhi = twopi*G4UniformRand();
-	
-	G4double dirx, diry, dirz;
-	dirz = newcosTh;
-	diry = newsinTh*cos(newPhi);
-	dirx = newsinTh*sin(newPhi);
-	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	
-	if(ThereAreShells) {
-	  
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  
-	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
-	    
-            G4double e = fluorPar[2]*MeV;
-            if(e > theEnergyDeposit) e = theEnergyDeposit;
-	    theEnergyDeposit -= e;
-	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
-					     newPartDirection, e);
-	    
-	    photvec.push_back(newPart);
-	  }
-	} else {
-	  
-	  /////Energy deposition vl
-	  ////=================NEW================vl
-	  
-	  /*
-	  // last shell transition from continuum
-	  G4int k = 0;
-	  while(thePrimaryShell != (*(*theBindEnVec)[0])[k]){
-	    k++;
-	  }
-	  
-	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  
-	  if(lastTransEnergy >= CutForLowEnergySecondaryPhotons){
-	    
-	    theEnergyDeposit -= lastTransEnergy*MeV;
-	    
-	    newPart = new G4DynamicParticle(G4Gamma::Gamma(), 
-					    newPartDirection, 
-					    lastTransEnergy);
-	    
-	    photvec.push_back(newPart);
-	  }
-	    
-	  thePrimShVec.insert(thePrimaryShell);
-	  */
+
+ G4int nElectrons = electronVector.size();
+ size_t nTotPhotons = 0;
+ G4int nPhotons=0;
+  
+ // Generation of fluorescence
+  if (AtomIndex > 5)
+    {
+      photonVector = deexcitationManager.GenerateParticles(AtomIndex,shellId); 
+      nTotPhotons = photonVector->size();
+      for (size_t k=0; k<nTotPhotons; k++)
+	{
+	  G4DynamicParticle* aPhoton = (*photonVector)[k];
+	  if(aPhoton==0)
+	    {
+	      delete aPhoton;
+	    }
+	  else
+	    {
+	      G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
+	      G4double eDepositTmp = theEnergyDeposit - itsKineticEnergy;
+	      if (itsKineticEnergy>=CutForLowEnergySecondaryPhotons &&
+		 eDepositTmp > 0.)
+		{
+		  nPhotons++;
+		  // Local energy deposit is given as the sum of the 
+		  // energies of incident photons minus the energies
+		  // of the outcoming fluorescence photons
+		  theEnergyDeposit -= itsKineticEnergy;
+		  
+		}
+	      else
+		{delete aPhoton;}
+	    }
 	}
-      }
-    } //END OF THE CHECK ON ATOMIC NUMBER
-
-  G4int numOfElec = elecvec.size();
-  G4int numOfPhot = photvec.size();
-  G4int numOfDau = numOfElec + numOfPhot;
-  aParticleChange.SetNumberOfSecondaries(numOfDau);
+    }
+  G4int nSecondaries  = nElectrons + nPhotons;
+  
+  aParticleChange.SetNumberOfSecondaries(nSecondaries);
+  
   G4int l = 0;
-
-  for(l = 0; l<numOfElec; l++ ){
-    aParticleChange.AddSecondary(elecvec[l],true);
-  }
-    
-  for(l = 0; l < numOfPhot; l++) {    
-    aParticleChange.AddSecondary(photvec[l],true); 
-  }
-
-  photvec.clear();
-  elecvec.clear();
-    
+  for ( l = 0; l<nElectrons; l++ )
+    {
+      aParticleChange.AddSecondary(electronVector[l]);
+    }
+  for (l = 0; l < nPhotons; l++) 
+    {
+      aParticleChange.AddSecondary((*photonVector)[l]); 
+    }
+  
+  // Is clear necessary?
+  delete photonVector;
+    photonVector->clear();
+  electronVector.clear();
+  
   // fill ParticleChange 
   // changed energy and momentum of the actual particle
-
+  
   if(finalKineticEnergy > DeltaThreshold){
     G4double fac = 1.0/sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
     finalPx *= fac;
     finalPy *= fac;
     finalPz *= fac;
-
+    
     aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
     aParticleChange.SetEnergyChange(finalKineticEnergy);
     if(theEnergyDeposit < 0.) {
@@ -1256,7 +1226,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
       theEnergyDeposit = 0.0;
     }
     aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit);
-   
+    
   } else {
     theEnergyDeposit += finalKineticEnergy ;
     if(theEnergyDeposit < 0.){
@@ -1270,7 +1240,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
     aParticleChange.SetEnergyChange(0.);
     aParticleChange.SetStatusChange(fStopAndKill);
   }
-    
+  
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
 
