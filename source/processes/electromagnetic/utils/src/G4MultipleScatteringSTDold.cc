@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTDNEW.cc,v 1.5 2003-04-24 07:26:26 urban Exp $
+// $Id: G4MultipleScatteringSTDold.cc,v 1.1 2003-05-26 14:15:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -41,7 +41,8 @@
 // 27-09-01 value of data member factlim changed, L.Urban
 // 31-10-01 big fixed in PostStepDoIt,L.Urban
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
-// 22-04-02 boundary algorithm modified -> important improvement in timing (L.Urban)
+// 22-04-02 boundary algorithm modified ->
+//              important improvement in timing (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
 // 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
@@ -58,14 +59,20 @@
 // 05-02-03 changes in data members, new sampling for geom.
 //          path length, step dependence reduced with new
 //          method (L.Urban)
-// 13-04-03 add initialisation in GetContinuesStepLimit + change table size (V.Ivanchenko)
+// 13-04-03 add initialisation in GetContinuesStepLimit +
+//          change table size (V.Ivanchenko)
+// 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
+// 23-05-03 important change in angle distribution for muons/hadrons
+//          the central part now is similar to the Highland parametrization +
+//          minor correction in angle sampling algorithm (for all particles)
+//          (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4MultipleScatteringSTDNEW.hh"
+#include "G4MultipleScatteringSTDold.hh"
 #include "G4LossTableManager.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
@@ -74,7 +81,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processName)
+G4MultipleScatteringSTDold::G4MultipleScatteringSTDold(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        taubig(8.0),tausmall(1.e-14),taulim(1.e-5),
@@ -85,7 +92,7 @@ G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processNa
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       facrange(0.199),tlimit(1.e10*mm),tlimitmin(1.e-6*mm),
+       facrange(0.199),tlimit(1.e10*mm),tlimitmin(1.e-7*mm),
        cf(1.001),
        stepno(0),stepnolastmsc(-1000000),nsmallstep(5),
        laststep(0.),
@@ -102,7 +109,7 @@ G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processNa
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MultipleScatteringSTDNEW::~G4MultipleScatteringSTDNEW()
+G4MultipleScatteringSTDold::~G4MultipleScatteringSTDold()
 {
   if(theTransportMeanFreePathTable)
     {
@@ -113,7 +120,7 @@ G4MultipleScatteringSTDNEW::~G4MultipleScatteringSTDNEW()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScatteringSTDNEW::BuildPhysicsTable(
+void G4MultipleScatteringSTDold::BuildPhysicsTable(
                               const G4ParticleDefinition& aParticleType)
 {
   // set values of some data members
@@ -170,7 +177,8 @@ void G4MultipleScatteringSTDNEW::BuildPhysicsTable(
                           LowestKineticEnergy,HighestKineticEnergy,TotBin);
 
       // get elements in the material
-      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      const G4MaterialCutsCouple* couple = theCoupleTable->
+                         GetMaterialCutsCouple(i);
       const G4Material* material = couple->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
       const G4double* NbOfAtomsPerVolume =
@@ -209,7 +217,7 @@ void G4MultipleScatteringSTDNEW::BuildPhysicsTable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MultipleScatteringSTDNEW::ComputeTransportCrossSection(
+G4double G4MultipleScatteringSTDold::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
                          G4double AtomicNumber,G4double AtomicWeight)
@@ -329,6 +337,7 @@ G4double G4MultipleScatteringSTDNEW::ComputeTransportCrossSection(
    G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
 
    G4double ParticleMass = aParticleType.GetPDGMass();
+   G4double ParticleKineticEnergy = KineticEnergy ;
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -365,9 +374,9 @@ G4double G4MultipleScatteringSTDNEW::ComputeTransportCrossSection(
   // ( a simple approximation at present)
   G4double corrnuclsize,a,x0,w1,w2,w;
 
-  x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+  x0 = 1. - NuclCorrPar*ParticleMass/(ParticleKineticEnergy*
                exp(log(AtomicWeight/(g/mole))/3.));
-  if ( (x0 < -1.) || (KineticEnergy  <= 10.*MeV))
+  if ( (x0 < -1.) || (ParticleKineticEnergy <= 10.*MeV))
       { x0 = -1.; corrnuclsize = 1.;}
   else
       { a = 1.+1./eps;
@@ -377,7 +386,7 @@ G4double G4MultipleScatteringSTDNEW::ComputeTransportCrossSection(
         if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
         else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
         corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
+        corrnuclsize = exp(-FactPar*ParticleMass/ParticleKineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
 
@@ -446,7 +455,7 @@ G4double G4MultipleScatteringSTDNEW::ComputeTransportCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MultipleScatteringSTDNEW::GetContinuousStepLimit(
+G4double G4MultipleScatteringSTDold::GetContinuousStepLimit(
                                    const G4Track& track,
                                    G4double,
                                    G4double currentMinimumStep,
@@ -486,7 +495,7 @@ G4double G4MultipleScatteringSTDNEW::GetContinuousStepLimit(
   blam    = 1.+alam/lambda0 ;
   zm      = 1.;
   // special treatment near boundaries ?
-  if (boundary)
+  if (boundary && range >= currentMinimumStep)
   {
     // step limitation at boundary ?
     stepno = track.GetCurrentStepNumber() ;
@@ -534,10 +543,7 @@ G4double G4MultipleScatteringSTDNEW::GetContinuousStepLimit(
 
   tau   = tPathLength/lambda0 ;
 
-//  G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
-//         << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
-
-  if(tau < tausmall) zPathLength = tPathLength;
+  if(tau < tausmall || range < currentMinimumStep ) zPathLength = tPathLength;
   else
   {
     if(tPathLength/range < dtrl) zmean = lambda0*(1.-exp(-tau));
@@ -599,7 +605,7 @@ G4double G4MultipleScatteringSTDNEW::GetContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4MultipleScatteringSTDNEW::AlongStepDoIt(
+G4VParticleChange* G4MultipleScatteringSTDold::AlongStepDoIt(
                                        const G4Track& track,const G4Step& step)
 {
   // only a geom path->true path transformation is performed
@@ -613,7 +619,6 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::AlongStepDoIt(
   else if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
   else
   {
-  //  G4cout << "alam= " << alam << " blam= " << blam << " lambda1= " << lambda1 << G4endl;
     if(lambda1 < 0.) truePathLength = -lambda0*log(1.-geomPathLength/lambda0) ;
     else if(lambdam < 0.)
     {
@@ -637,7 +642,6 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::AlongStepDoIt(
       }
       else
       {
-    //G4cout << "clam= " << clam << " zm= " << zm << " cthm= " << cthm << G4endl;
         if(clam*(geomPathLength-zm)/(alam*cthm) < 1.)
           truePathLength = 0.5*tLast + alam*(1.-
                       exp(log(1.-clam*(geomPathLength-zm)/(alam*cthm)))/clam) ;
@@ -645,15 +649,12 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::AlongStepDoIt(
           truePathLength = tLast ;
       }
     }
-//    G4cout << "tLenth= " << truePathLength << " tpl= " << tLast << G4endl;
    // protection ....
     if(truePathLength > tLast)
       truePathLength = tLast ;
   }
   //VI truePath length cannot be smaller than geomPathLength
   if (truePathLength < geomPathLength) truePathLength = geomPathLength;
-  //G4cout << "AlongStep: trueLength= " << truePathLength << " geomLength= "
-  //       << geomPathLength << " zlast= " << zLast << G4endl;
   fParticleChange.SetTrueStepLength(truePathLength);
   return &fParticleChange;
 
@@ -661,7 +662,7 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::AlongStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
+G4VParticleChange* G4MultipleScatteringSTDold::PostStepDoIt(
                                                const G4Track& trackData,
                                                const G4Step& stepData)
 {
@@ -673,14 +674,14 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
 
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
+  G4double Mass = aParticle->GetDefinition()->GetPDGMass() ;
 
   // do nothing for stopped particles !
-  if(KineticEnergy > 0.0)
+  if(KineticEnergy > 0.)
   {
     //  change direction first ( scattering )
-    G4double cth = 1.;
+    G4double cth = 1. ;
     G4double tau = truestep/lambda0 ;
-    //G4cout << "tau= " << tau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
 
     if     (tau < tausmall) cth =  1.;
     else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
@@ -688,110 +689,190 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
     {
       if(lambda1 > 0.)
       {
-        if(lambdam < 0.)
-          tau = -alam*log(1.-truestep/alam)/lambda0 ;
-        else
-          tau = -log(cthm)-alam*log(1.-(truestep-0.5*tLast)/alam)/lambdam ;
+       if(lambdam < 0.)
+        tau = -alam*log(1.-truestep/alam)/lambda0 ;
+       else
+        tau = -log(cthm)-alam*log(1.-(truestep-0.5*tLast)/alam)/lambdam ;
       }
 
       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
       else
       {
-        const G4double amax=25. ;
-        const G4double tau0 = 0.02  ;
+       const G4double amax=25. ;
+       const G4double tau0 = 0.02  ;
+       const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
 
-        G4double a,x0,c,xmean1,xmean2,
+       const G4double x1fac1 = exp(-xsi) ;
+       const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
+       const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
+
+       G4double a,x0,c,xmean1,xmean2,
                  xmeanth,prob,qprob ;
-        G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0,w ;
+       G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0,w ;
 
-        w = log(tau/tau0) ;
-        if(tau < tau0)
-          a = (alfa1-alfa2*w)/tau ;
-        else
-          a = (alfa1+alfa3*w)/tau ;
+       // for heavy particles take the width of the cetral part
+       //  from the Highland formula
+       // (Particle Physics Booklet, July 2002, eq. 26.10)
+       if(Mass > electron_mass_c2) // + other conditions (beta, x/X0,...?)
+       {
+         G4double Q = abs(aParticle->GetDefinition()->GetPDGCharge()) ;
+         G4double X0 = trackData.GetMaterialCutsCouple()->
+                       GetMaterial()->GetRadlen() ;
+         G4double xx0 = truestep/X0 ;
+         G4double betacp = KineticEnergy*(KineticEnergy+2.*Mass)/
+                          (KineticEnergy+Mass) ;
+         G4double theta0=c_highland*Q*sqrt(xx0)*
+                         (1.+corr_highland*log(xx0))/betacp ;
+         if(theta0 > tausmall)
+           a = 0.5/(1.-cos(theta0)) ;
+         else
+           a = 4./(theta0*theta0) ;
+       }
+       else
+       {
+         w = log(tau/tau0) ;
+         if(tau < tau0)
+           a = (alfa1-alfa2*w)/tau ;
+         else
+           a = (alfa1+alfa3*w)/tau ;
+       }
 
-        x0 = 1.-xsi/a ;
-        if(x0 < 0.) x0 = 0. ;
+       xmeanth = exp(-tau) ;
 
-        // from continuity of the 1st derivatives
-        c = a*(b-x0) ;
-        if(a*tau < c0)
+       x0 = 1.-xsi/a ;
+       if(x0 < -1.) x0 = -1. ;
+
+       if(x0 == -1.)
+       {
+         // 1 model fuction only
+         // in order to have xmean1 > xmeanth -> qprob < 1
+         if((1.-1./a) < xmeanth)
+           a = 1./(1.-xmeanth) ;
+
+         if(a*(1.-x0) < amax)
+           ea = exp(-a*(1.-x0)) ;
+         else
+           ea = 0. ;
+         eaa = 1.-ea ;
+         xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+
+         c = 2. ;
+         b1 = b+1. ;
+         bx = b1 ;
+         eb1 = b1 ;
+         ebx = b1 ;
+         xmean2 = 0. ;
+
+         prob = 1. ;
+         qprob = xmeanth/xmean1 ;
+       }
+       else
+       {
+         // 2 model fuctions
+         // in order to have xmean1 > xmeanth
+         if((1.-x1fac2/a) < xmeanth)
+         {
+           a = x1fac3*x1fac2/(1.-xmeanth) ;
+           if(a*(1.-x0) < amax)
+             ea = exp(-a*(1.-x0)) ;
+           else
+             ea = 0. ;
+           eaa = 1.-ea ;
+           xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+         }
+         else
+         {
+           ea = x1fac1 ;
+           eaa = 1.-x1fac1 ;
+           xmean1 = 1.-x1fac2/a ;
+         }
+
+         // from continuity of the 1st derivatives
+         c = a*(b-x0) ;
+         if(a*tau < c0)
           c = c0*(b-x0)/tau ;
 
-        if(c == 1.) c=1.000001 ;
-        if(c == 2.) c=2.000001 ;
-        if(c == 3.) c=3.000001 ;
+         if(c == 1.) c=1.000001 ;
+         if(c == 2.) c=2.000001 ;
+         if(c == 3.) c=3.000001 ;
 
-        if(a*(1.-x0) < amax)
-          ea = exp(-a*(1.-x0)) ;
-        else
-          ea = 0. ;
+         b1 = b+1. ;
+         bx=b-x0 ;
+         eb1=exp((c-1.)*log(b1)) ;
+         ebx=exp((c-1.)*log(bx)) ;
+         xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
 
-	eaa = 1.-ea ;
-        xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+         cnorm1 = a/eaa ;
+         f1x0 = cnorm1*exp(-a*(1.-x0)) ;
+         cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
+         f2x0 = cnorm2/exp(c*log(b-x0)) ;
 
-        b1 = b+1. ;
-        bx=b-x0 ;
-        eb1=exp((c-1.)*log(b1)) ;
-        ebx=exp((c-1.)*log(bx)) ;
-        xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+         // from continuity at x=x0
+         prob = f2x0/(f1x0+f2x0) ;
+         // from xmean = xmeanth
+         qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
+       }
 
-        xmeanth = exp(-tau) ;
+       // protection against prob or qprob > 1 and
+       //  prob or qprob < 0
+       // ***************************************************************
+       if((qprob > 1.) || (qprob < 0.) || (prob > 1.) || (prob < 0.))
+       {
+         // this print possibility has been left intentionally
+         // for debugging purposes ..........................
+         G4bool pr = false ;
+        //         pr = true ;
+         if(pr)
+         {
+           const G4double prlim = 0.10 ;
+           if((abs((xmeanth-xmean2)/(xmean1-xmean2)-prob)/prob > prlim) ||
+              ((xmeanth-xmean2)/(xmean1-xmean2) > 1.) ||
+              ((xmeanth-xmean2)/(xmean1-xmean2) < 0.) )
+           {
+             G4cout.precision(5) ;
+             G4cout << "\nparticle=" << aParticle->GetDefinition()->
+                       GetParticleName() << " in material "
+                    << trackData.GetMaterialCutsCouple()->
+                       GetMaterial()->GetName() << " with kinetic energy "
+                    << KineticEnergy << " MeV," << G4endl ;
+             G4cout << " step length="
+                    << truestep << " mm" << G4endl ;
+             G4cout << "p=" << prob << "  q=" << qprob << " -----> "
+                    << "p=" << (xmeanth-xmean2)/(xmean1-xmean2)
+                    << "  q=" << 1. << G4endl ;
+           }
+         }
 
-        cnorm1 = a/eaa ;
-        cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
-        f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-        f2x0 = cnorm2/exp(c*log(b-x0)) ;
+         qprob = 1. ;
+         prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
+       }
+       // **************************************************************
 
-        // from continuity at x=x0
-        prob = f2x0/(f1x0+f2x0) ;
-        // from xmean = xmeanth
-        qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
-
-        // protection against qprob > 1
-        // *******************************************
-        if(qprob > 1.)
-        {
-          qprob = 1. ;
-          prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
-        }
-        // *******************************************
-
-        // sampling of costheta
-/*
-       G4cout << "tau= " << tau << " prob= " << prob << " qprob= " << qprob << G4endl;
-       G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
-              << " b= " << b << " b1= " << b1 << " bx= " << bx
-	      << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
-	      << G4endl;
-*/
-        if(G4UniformRand() < qprob)
-        {
-          if(G4UniformRand() < prob)
-            cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
-          else
-            cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
-        }
-        else
-          cth = -1.+2.*G4UniformRand() ;
+       // sampling of costheta
+       if(G4UniformRand() < qprob)
+       {
+         if(G4UniformRand() < prob)
+          cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+         else
+          cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
+       }
+       else
+         cth = -1.+2.*G4UniformRand() ;
       }
     }
-    // G4cout << "cth= " << cth << G4endl;
 
-    G4double sth  = sqrt(1.-cth*cth);
-    G4double phi  = twopi*G4UniformRand();
-    G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
+  G4double sth  = sqrt(1.-cth*cth);
+  G4double phi  = twopi*G4UniformRand();
+  G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
 
-    //G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << tLast << G4endl;
+  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
-    G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
-
-    G4ThreeVector newDirection(dirx,diry,dirz);
-    newDirection.rotateUz(ParticleDirection);
-    fParticleChange.SetMomentumChange(newDirection.x(),
+  G4ThreeVector newDirection(dirx,diry,dirz);
+  newDirection.rotateUz(ParticleDirection);
+  fParticleChange.SetMomentumChange(newDirection.x(),
                                     newDirection.y(),
                                     newDirection.z());
-    if (fLatDisplFlag)
+  if (fLatDisplFlag)
     {
       // compute mean lateral displacement, only for safety > tolerance !
       G4double safetyminustolerance = stepData.GetPostStepPoint()->GetSafety();
@@ -807,19 +888,17 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
           rmean = -kappa*tau;
           rmean = -exp(rmean)/(kappa*kappami1);
           rmean += tau-kappapl1/kappa+kappa*etau/kappami1;
-     //G4cout << "tau= " << tau << " lambda0= " << lambda0 <<  " etau= " << etau << " kappa= " << kappa << G4endl;
         }
 
         if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
         else          rmean = 0.;
-      //  G4cout << "rmean= " << rmean << G4endl;
+
 
         // for rmean > 0) only
         if (rmean > 0.)
         {
           if (rmean>safetyminustolerance) rmean = safetyminustolerance;
 
-        //  G4cout << "r= " << rmean << " safety= " << safetyminustolerance << G4endl;
           // sample direction of lateral displacement
           phi  = twopi*G4UniformRand();
           dirx = cos(phi); diry = sin(phi); dirz = 0.;
@@ -846,7 +925,8 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- G4bool G4MultipleScatteringSTDNEW::StorePhysicsTable(G4ParticleDefinition* particle,
+ G4bool G4MultipleScatteringSTDold::StorePhysicsTable(
+                                              G4ParticleDefinition* particle, 
 				              const G4String& directory,
 				              G4bool          ascii)
 {
@@ -867,11 +947,36 @@ G4VParticleChange* G4MultipleScatteringSTDNEW::PostStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4MultipleScatteringSTDNEW::RetrievePhysicsTable(
+G4bool G4MultipleScatteringSTDold::RetrievePhysicsTable(
                                                  G4ParticleDefinition* particle,
 					         const G4String& directory,
 				                 G4bool          ascii)
 {
+  // set values of some data members
+  G4String name = particle->GetParticleName();
+  if(name == "e-" || name == "e+")
+    {
+       // parameters for e+/e-
+       alfa1 = 1.45 ;
+       alfa2 = 0.60 ;
+       alfa3 = 0.30 ;
+       b = 1. ;
+       xsi = facxsi*2.22 ;
+       c0 = 2.30 ;
+    }
+    else
+    {
+       // parameters for heavy particles
+       alfa1 = 1.10 ;
+       alfa2 = 0.14 ;
+       alfa3 = 0.07 ;
+       b = 1. ;
+       xsi = facxsi*2.70 ;
+       c0 = 1.40 ;
+    }
+
+  Tlow = particle->GetPDGMass();
+
   // delete theTransportMeanFreePathTable
   if (theTransportMeanFreePathTable != 0) {
     theTransportMeanFreePathTable->clearAndDestroy();
@@ -893,12 +998,15 @@ G4bool G4MultipleScatteringSTDNEW::RetrievePhysicsTable(
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
+  
+  if (name == "e-" || name == "mu+" || name == "proton") PrintInfoDefinition();
+
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScatteringSTDNEW::PrintInfoDefinition()
+void G4MultipleScatteringSTDold::PrintInfoDefinition()
 {
   G4String comments = " Tables of transport mean free paths.";
         comments += "\n          New model of MSC , computes the lateral \n";

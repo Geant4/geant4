@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringSTD.icc,v 1.4 2003-04-24 16:49:46 vnivanch Exp $
+// $Id: G4MultipleScatteringSTDold.icc,v 1.1 2003-05-26 14:14:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------ G4MultipleScattering physics process ---------------------------
@@ -35,20 +35,21 @@
 // 27-08-01 bugfix in AlongStepDoIt, L.Urban
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved to .cc file (mma)
 // 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering (mma)
+// 23-05-03 Move to "old" (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4bool G4MultipleScatteringSTD::IsApplicable(const G4ParticleDefinition& particle)
+G4bool G4MultipleScatteringSTDold::IsApplicable(const G4ParticleDefinition& particle)
 {
   return(particle.GetPDGCharge() != 0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MultipleScatteringSTD::AlongStepGetPhysicalInteractionLength(
+inline G4double G4MultipleScatteringSTDold::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double previousStepSize,
                              G4double currentMinimumStep,
@@ -65,7 +66,7 @@ inline G4double G4MultipleScatteringSTD::AlongStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MultipleScatteringSTD::GetMeanFreePath(
+inline G4double G4MultipleScatteringSTDold::GetMeanFreePath(
                                             const G4Track& track,
                                             G4double,
                                             G4ForceCondition* condition)
@@ -81,7 +82,7 @@ inline G4double G4MultipleScatteringSTD::GetMeanFreePath(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4MultipleScatteringSTD::GetTransportMeanFreePath(G4double KineticEnergy,
+G4double G4MultipleScatteringSTDold::GetTransportMeanFreePath(G4double KineticEnergy,
                                                      const G4MaterialCutsCouple* couple)
 {
   G4bool isOut;

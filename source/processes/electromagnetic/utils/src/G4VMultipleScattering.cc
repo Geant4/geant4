@@ -203,7 +203,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
   }
   */
 
- //   G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << truePathLength << G4endl;
+    //    G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << truePathLength << G4endl;
 
     if (latDisplasment) {
 
@@ -212,7 +212,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
         G4double r = currentModel->SampleDisplacement();
         if (r > safety) r = safety;
 
-   //     G4cout << "r= " << r << " safety= " << safety << G4endl;
+	//    G4cout << "r= " << r << " safety= " << safety << G4endl;
 
         // sample direction of lateral displacement
         G4double phi  = twopi*G4UniformRand();

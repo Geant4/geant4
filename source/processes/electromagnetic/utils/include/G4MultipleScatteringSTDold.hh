@@ -40,7 +40,7 @@
 // 30-10-02 changes in data members, L.Urban
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 05-02-03 changes in data members, L.Urban
-// 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
+// 23-05-03 Move to "old" (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -54,8 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4MultipleScatteringSTDNEW_h
-#define G4MultipleScatteringSTDNEW_h 1
+#ifndef G4MultipleScatteringSTDold_h
+#define G4MultipleScatteringSTDold_h 1
 
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4GPILSelection.hh"
@@ -66,14 +66,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MultipleScatteringSTDNEW : public G4VContinuousDiscreteProcess
+class G4MultipleScatteringSTDold : public G4VContinuousDiscreteProcess
 
 {
  public:    // with description
 
-   G4MultipleScatteringSTDNEW(const G4String& processName="msc");
+   G4MultipleScatteringSTDold(const G4String& processName="msc");
 
-  ~G4MultipleScatteringSTDNEW();
+  ~G4MultipleScatteringSTDold();
           
    G4bool IsApplicable ( const G4ParticleDefinition& );
      // returns true for charged particles, false otherwise
@@ -140,7 +140,7 @@ class G4MultipleScatteringSTDNEW : public G4VContinuousDiscreteProcess
 
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep);
      // It computes the final state of the particle: samples the
-     // ScatteringSTDNEW angle and computes the lateral displacement.
+     // ScatteringSTDold angle and computes the lateral displacement.
      // The final state is returned as a ParticleChange object.
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
@@ -182,8 +182,8 @@ class G4MultipleScatteringSTDNEW : public G4VContinuousDiscreteProcess
  private:
 
  //  hide assignment operator as  private
-   G4MultipleScatteringSTDNEW & operator = (const G4MultipleScatteringSTDNEW &right);
-   G4MultipleScatteringSTDNEW ( const G4MultipleScatteringSTDNEW &);
+   G4MultipleScatteringSTDold & operator = (const G4MultipleScatteringSTDold &right);
+   G4MultipleScatteringSTDold ( const G4MultipleScatteringSTDold &);
 
  private:        // data members
 
@@ -221,70 +221,17 @@ class G4MultipleScatteringSTDNEW : public G4VContinuousDiscreteProcess
    G4double NuclCorrPar;
    G4double FactPar;
 
-   G4ParticleChangeForMSC fParticleChange;
+   G4ParticleChangeForMSC fParticleChange; 
 
    G4double alfa1,alfa2,alfa3,b,xsi,c0,facxsi ;  // angle distr. parameters
-                                                 // facxsi : some tuning
-                                                 // possibility in the tail
+                                                 // facxsi : some tuning 
+                                                 // possibility in the tail 
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4bool G4MultipleScatteringSTDNEW::IsApplicable(const G4ParticleDefinition& particle)
-{
-  return(particle.GetPDGCharge() != 0.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4MultipleScatteringSTDNEW::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double previousStepSize,
-                             G4double currentMinimumStep,
-                             G4double& currentSafety,
-                             G4GPILSelection* selection)
-{
-  // get Step limit proposed by the process
-  G4double steplength = GetContinuousStepLimit(track,previousStepSize,
-                                              currentMinimumStep,currentSafety);
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelectionMSC;
-  return  steplength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4MultipleScatteringSTDNEW::GetMeanFreePath(
-                                            const G4Track& track,
-                                            G4double,
-                                            G4ForceCondition* condition)
-
- //  it does not limit the Step size , but it sets condition to
- //   Forced , because the PostStepDoIt always has to be called
-
-{
-  *condition = Forced;
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4MultipleScatteringSTDNEW::GetTransportMeanFreePath(G4double KineticEnergy,
-                                                     const G4MaterialCutsCouple* couple)
-{
-  G4bool isOut;
-
-  return  (*theTransportMeanFreePathTable)
-          (couple->GetIndex())->GetValue(KineticEnergy,isOut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#include "G4MultipleScatteringSTDold.icc"
 
 #endif
+ 
 
-
-
+ 
