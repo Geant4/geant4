@@ -102,8 +102,8 @@ G4double FilterTrData::GetCurrentFilTrans(G4double trnData) {
   G4double trn = trnData/100.0;
   // G4double na=  FilterRefIndexNominal;
   // G4double nb=  CurNeighbourRefIndexNominal;
-  // G4double LossAtFEntrance=pow(((na-nb)/(na+nb)),2.0);
-  // G4double LossAtFExit = pow(((nb-na)/(nb+na)),2.0);
+  // G4double LossAtFEntrance=std::pow(((na-nb)/(na+nb)),2.0);
+  // G4double LossAtFExit = std::pow(((nb-na)/(nb+na)),2.0);
 
   if(trn > 1.0 ) trn=1.0;
   return trn;

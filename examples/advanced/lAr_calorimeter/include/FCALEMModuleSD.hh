@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.hh,v 1.6 2003-12-09 15:30:08 gunter Exp $
+// $Id: FCALEMModuleSD.hh,v 1.7 2004-11-29 18:03:05 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

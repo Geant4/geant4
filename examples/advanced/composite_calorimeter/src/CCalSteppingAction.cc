@@ -72,7 +72,7 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
 				PreStepPoint->GetPosition());	
   // Because the beam axis has been defined as the x-axis, 
   // the lateral displacement is given in terms of the y and z positions. 
-  double perp = sqrt(HitPoint.y()*HitPoint.y()+HitPoint.z()*HitPoint.z());
+  double perp = std::sqrt(HitPoint.y()*HitPoint.y()+HitPoint.z()*HitPoint.z());
   int radialPosition = std::min(69,int(perp/cm));
   LateralProfile[radialPosition] += aStep->GetTotalEnergyDeposit() / GeV;
   

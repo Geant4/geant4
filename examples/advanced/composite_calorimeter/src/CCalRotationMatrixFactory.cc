@@ -118,7 +118,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (TH1 == 270.0 || TH1 == -90.0) {
     sinth1 = -1.0; costh1 = 0.0;
   } else {
-    sinth1 = sin(th1); costh1 = cos(th1);
+    sinth1 = std::sin(th1); costh1 = std::cos(th1);
   }
   
   if (TH2 == 0.0 || TH2 == 360) {
@@ -130,7 +130,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (TH2 == 270.0 || TH2 == -90.0) {
     sinth2 = -1.0; costh2 = 0.0;
   } else {
-    sinth2 = sin(th2); costh2 = cos(th2);
+    sinth2 = std::sin(th2); costh2 = std::cos(th2);
   }
 		
   if (TH3 == 0.0 || TH3 == 360) {
@@ -142,7 +142,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (TH3 == 270.0 || TH3 == -90.0) {
     sinth3 = -1.0; costh3 = 0.0;
   } else {
-    sinth3 = sin(th3); costh3 = cos(th3);
+    sinth3 = std::sin(th3); costh3 = std::cos(th3);
   }
       
   if (PH1 == 0.0 || PH1 == 360) {
@@ -154,7 +154,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (PH1 == 270.0 || PH1 == -90.0) {
     sinph1 = -1.0; cosph1 = 0.0;
   } else {
-    sinph1 = sin(phi1); cosph1 = cos(phi1);
+    sinph1 = std::sin(phi1); cosph1 = std::cos(phi1);
   }
 
   if (PH2 == 0.0 || PH2 == 360) {
@@ -166,7 +166,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (PH2 == 270.0 || PH2 == -90.0) {
     sinph2 = -1.0; cosph2 = 0.0;
   } else {
-    sinph2 = sin(phi2); cosph2 = cos(phi2);
+    sinph2 = std::sin(phi2); cosph2 = std::cos(phi2);
   }
 		
   if (PH3 == 0.0 || PH3 == 360) {
@@ -178,7 +178,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else if (PH3 == 270.0 || PH3 == -90.0) {
     sinph3 = -1.0; cosph3 = 0.0;
   } else {
-    sinph3 = sin(phi3); cosph3 = cos(phi3);
+    sinph3 = std::sin(phi3); cosph3 = std::cos(phi3);
   }
 				    
   //xprime axis coordinates

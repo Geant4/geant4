@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2004-07-14 12:33:46 gcosmo Exp $
+$Id: History,v 1.10 2004-11-29 18:03:04 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.9 2004-07-14 12:33:46 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+29.11.04 - A.Ribon (lAr_calorimeter-V06-02-01)
+           Migration to cmath.
+
 14.07.04 - G.Cosmo (lAr_calorimeter-V06-02-00)
            Corrected hadronic_lists.gmk, removed unnecessary addition
            of kernel libraries to EXTRALIBS.

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.7 2004-01-28 17:58:59 ribon Exp $
+// $Id: lArCal.cc,v 1.8 2004-11-29 18:03:04 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

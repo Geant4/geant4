@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALPrimaryGeneratorAction.cc,v 1.5 2004-01-27 09:08:05 ribon Exp $
+// $Id: FCALPrimaryGeneratorAction.cc,v 1.6 2004-11-29 18:03:06 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.24 2004-07-14 12:26:26 gcosmo Exp $
+$Id: History,v 1.25 2004-11-29 17:59:07 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.24 2004-07-14 12:26:26 gcosmo Exp $
 
                       Example History file
                       ---------------------
+
+29.11.04 - A.Ribon (ccal-V06-02-01)
+- Migration to cmath.
 
 14.07.04 - G.Cosmo (ccal-V06-02-00)
 - Corrected hadronic_lists.gmk, removed unnecessary list of kernel

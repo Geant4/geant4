@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALRunAction.cc,v 1.5 2003-12-09 15:30:32 gunter Exp $
+// $Id: FCALRunAction.cc,v 1.6 2004-11-29 18:03:06 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

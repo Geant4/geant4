@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.8 2004-01-27 09:08:05 ribon Exp $
+// $Id: FCALTestbeamSetupSD.cc,v 1.9 2004-11-29 18:03:07 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

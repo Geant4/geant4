@@ -403,7 +403,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
     
     GlassD263Rindex[ibin]=RefIndexGlassD263;
     if(ibin > 0 && ibin < NumPhotBinGlassD263Trans+1 ){
- //now using the formula trans=exp(-thickness/absorplength).
+ //now using the formula trans=std::exp(-thickness/absorplength).
       G4int ibina=ibin-1;
 
     if(GlassD263TransWL[ibina] > 0.0 ) {
@@ -436,7 +436,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
        if(currBulkTransFilter[ibin] > 0.0 && 
           currBulkTransFilter[ibin] < 0.9995 ) {
         GlassD263AbsorpLength[ibin]=
-        -(2.0*FilterHalfZ)/(log(currBulkTransFilter[ibin]));
+        -(2.0*FilterHalfZ)/(std::log(currBulkTransFilter[ibin]));
        }else if (currBulkTransFilter[ibin]== 0.0 ) {
          GlassD263AbsorpLength[ibin]=FilterHalfZ/1.0E32;
        }else {
@@ -525,12 +525,12 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    currentAgelTrans[ibin]= 
         GetCurrentBulkTrans( currentAgelRefIndex,
         currentNeighbourRefIndex,MaxTotTransmission);
- //now using the formula trans=exp(-thickness/absorplength)
+ //now using the formula trans=std::exp(-thickness/absorplength)
  // to get the absorplength.
 
      if( currentAgelTrans[ibin] > 0.0 && currentAgelTrans[ibin] < 0.9995) {
         AerogTypeAAbsorpLength[ibin]=
-        -(AerogelLength)/(log( currentAgelTrans[ibin]));
+        -(AerogelLength)/(std::log( currentAgelTrans[ibin]));
      }else if (currentAgelTrans[ibin] == 0.0) {
     
        AerogTypeAAbsorpLength[ibin]=AerogelLength/1.0E32;
@@ -604,7 +604,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
  G4double CathTrans=PhCathodeNominalTransmission;
  G4double CathAbsorpLen;
  if(CathTrans > 0.0 && CathTrans < 0.9995 ) {
-      CathAbsorpLen =  -(CathLen)/(log(CathTrans));
+      CathAbsorpLen =  -(CathLen)/(std::log(CathTrans));
  }else if (CathTrans > 0.0) {
      CathAbsorpLen  = CathLen/1.0E32;
  }else {
