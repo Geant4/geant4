@@ -1,4 +1,4 @@
-// $Id: A01EmCalorimeterHit.cc,v 1.1 2002-11-13 07:23:08 duns Exp $
+// $Id: A01EmCalorimeterHit.cc,v 1.2 2002-11-26 19:43:26 duns Exp $
 // --------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
@@ -70,6 +70,7 @@ void A01EmCalorimeterHit::Draw()
     if(pVA) attribs = *pVA;
     G4double rcol = edep/(0.7*GeV);
     if(rcol>1.) rcol = 1.;
+    if(rcol<0.4) rcol = 0.4;
     G4Colour colour(rcol,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
