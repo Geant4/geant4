@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2004-12-01 19:37:12 vnivanch Exp $
+$Id: History,v 1.136 2005-02-07 17:12:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07 Feb 05: mma (stand-V07-00-00)
+- G4MultipleScattering.cc : make the Setsamplez function working
+- G4UniversalFluctuation.hh and .cc : define problim = 5.e-3
+                                      set minLoss = 10 eV
 
 01 Dec 04: V.Ivant (stand-V06-02-14)
 - Migration to cmath
