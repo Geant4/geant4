@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.6 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4MagIntegratorDriver.icc,v 1.7 2001-10-25 09:11:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -144,4 +144,17 @@ void G4MagInt_Driver::GetDerivatives(const G4FieldTrack y_curr,  // const, INput
   G4double  tmpValArr[G4FieldTrack::ncompSVEC];
   y_curr.DumpToArray( tmpValArr  );
   pIntStepper -> RightHandSide( tmpValArr , dydx );
+}
+
+
+inline
+G4double G4MagInt_Driver::GetVerboseLevel() const
+{
+      return fVerboseLevel;
+} 
+
+inline 
+void G4MagInt_Driver::SetVerboseLevel( int newLevel)
+{
+      fVerboseLevel= newLevel;
 }

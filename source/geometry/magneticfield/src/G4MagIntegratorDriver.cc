@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.15 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.16 2001-10-25 09:11:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,8 @@ const G4int  G4MagInt_Driver::fMaxStepBase = 5000;
 G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
 				  G4MagIntegratorStepper *pItsStepper,
 				  G4int                   numComponents)
-  : nvar(numComponents)
+  : nvar(numComponents), 
+    fVerboseLevel(0)
 {  
       RenewStepperAndAdjust( pItsStepper );
       hminimum_val= hminimum;
@@ -84,17 +85,22 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
 {
   G4int nstp, i; 
-  static G4int dbg=0;
   G4double x, hnext, hdid, h ;
+
+  static G4int dbg=0;
+  G4int  no_warnings=0;
 #ifdef G4DEBUG
   dbg=1;
+  fVerboseLevel=2;
 #endif
 
   // G4double yscal[ncompSVEC];
   G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
-  G4double ystart[G4FieldTrack::ncompSVEC]; 
+  G4double ystart[G4FieldTrack::ncompSVEC], yEnd[G4FieldTrack::ncompSVEC]; 
   G4double  x1, x2;
   G4bool succeeded = true, lastStepSucceeded;
+
+  G4FieldTrack yStartFT(y_current);
 
   //  Assume that hstep > 0 
 
@@ -146,12 +152,15 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      // Check the endpoint
      G4double endPointDist= (EndPos-StartPos).mag(); 
      if( endPointDist >= h*(1.+perMillion) ){
+        noBadSteps  ++;
         // Issue a warning only for gross differences -
         //   we understand how small difference occur.
         if( endPointDist >= h*(1.+perThousand) ){ 
            WarnEndPointTooFar ( endPointDist, h, eps, dbg ); 
+	   G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
+	   PrintStatus( ystart, x1, y, x, -nstp);  no_warnings++;
+                // Potentially add as arguments:  <dydx> - as Initial Force
 	}
-        noBadSteps  ++;
      } else { // ie (!dbg)
         noGoodSteps ++;
      } 
@@ -165,34 +174,52 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
             (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
             //   && (hnext < hstep * PerThousand ) 
-          )
-	  //  Issue WARNING
-	  WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
-        else 
-	  succeeded = false;  // Meaningful only if we break out of the loop.
+	  ){
+	     //  Issue WARNING
+	     WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
+	     PrintStatus( ystart, x1, y, x, no_warnings?-nstp:nstp);
+	     no_warnings++;
+	}
+        // else 
+	//   succeeded = false;  // Meaningful only if we break out of the loop.
+	// 
+        // lastStep = true;   //  Make this the last step ... Dubious now
 
-        lastStep = true;   // ensure that this was the last step
+        // Make sure that the next step is at least Hmin.
+        h = Hmin();
+     }else{
+        h = hnext ;
      }
 
-     h = hnext ;
-  }while (((nstp++)<=fMaxNoSteps) &&
-          (x < x2)           //  Have we reached the end ?
-                             //   --> a better test might be x-x2 > an_epsilon
+  }while ( ((nstp++)<=fMaxNoSteps)
+          && (x < x2)           //  Have we reached the end ?
+                                //   --> a better test might be x-x2 > an_epsilon
           && (!lastStep)
          );
 
   succeeded=  (x>=x2);  // If it was a "forced" last step
 
-  for(i=0;i<nvar;i++)  ystart[i] = y[i] ;
+  for(i=0;i<nvar;i++)  yEnd[i] = y[i] ;
+
+  // Put back the values.
+  y_current.LoadFromArray( yEnd );
+  y_current.SetCurveLength( x );
 
   if(nstp > fMaxNoSteps){
      WarnTooManyStep( x1, x2, x );  //  Issue WARNING
+     PrintStatus( yEnd, x1, y, x, -nstp);
+     no_warnings++;
      succeeded = false;
   }
 
-  // Put back the values.
-  y_current.LoadFromArray( ystart );
-  y_current.SetCurveLength( x );
+#ifdef G4DEBUG
+  if( no_warnings ){
+     G4cerr << " Exiting status: "
+	   << " no-steps " << nstp
+	   <<endl;
+     PrintStatus( yEnd, x1, y, x, nstp);
+  }
+#endif
 
   return succeeded;
 
@@ -204,15 +231,23 @@ G4MagInt_Driver::WarnSmallStepSize( G4double hnext, G4double hstep,
 				    G4int nstp)
 {
   static G4int noWarningsIssued =0;
-  const  G4int maxNoWarnings = 100; 
-  if( noWarningsIssued < maxNoWarnings ){
-    G4cerr<< " Warning (G4MagIntegratorDriver): The stepsize for the " 
-	  << " next iteration=" << hnext << " is too small - in Step number "
-	  << nstp << "." << G4endl;
-    G4cerr << "     Requested step size was " << hstep << " ." << G4endl ;
-    G4cerr << "     Previous  step size was " << h     << " ." << G4endl ;
+  const  G4int maxNoWarnings =  10;   // Number of verbose warnings
+  if( (noWarningsIssued < maxNoWarnings) || fVerboseLevel > 10 ){
+    G4cerr<< " Warning (G4MagIntegratorDriver::AccurateAdvance): The stepsize for the " 
+	  << " next iteration=" << hnext << " is too small " 
+	  << "- in Step number " << nstp << "." << G4endl;
     G4cerr << "     The minimum for the driver is " << Hmin()  << G4endl ;
+    G4cerr << "     Requested integr. length was " << hstep << " ." << G4endl ;
+    G4cerr << "     The size of this sub-step was " << h     << " ." << G4endl ;
     G4cerr << "     The integrations has already gone " << xDone << G4endl ;
+  }else{
+    G4cerr<< " G4MagInt_Driver: Too small 'next' step " << hnext 
+	  << " step-no "  << nstp ;                     // << G4setw(4)
+    G4cerr << "  min " << Hmin()  
+           << "  sub-step " << h     
+	   << "  total_len " << hstep 
+	   << "  done " << xDone 
+	   << G4endl ;
   }
   noWarningsIssued++;
 }
@@ -236,20 +271,22 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
 				     G4double  eps,
 				     G4int     dbg)
 {
-	static G4double maxRelError= 0.0;
+	static G4double maxRelError= 0.0, maxRelError_last_printed=0.0;
 	G4bool isNewMax, prNewMax;
 
         isNewMax = endPointDist > (1.0 + maxRelError) * h;
         prNewMax = endPointDist > (1.0 + 1.05 * maxRelError) * h;
 	if( isNewMax )
 	   maxRelError= endPointDist / h - 1.0; 
+        if( prNewMax )
+ 	   maxRelError_last_printed = maxRelError;
 
         if(    dbg 
 	    && (h > kCarTolerance) 
-	    && ( prNewMax || (endPointDist >= h*(1.+eps) ) ) 
+	    && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) 
           ){ 
            static G4int noWarnings = 0;
-           if( (noWarnings ++ < 10) || (dbg>1) ){
+           if( (noWarnings ++ < 10) || (dbg>2) ){
  	      G4cerr << " Warning (G4MagIntegratorDriver): "
 		     << " The integration produced an endpoint which " << G4endl
 		     << "   is further from the startpoint than the curve length." << G4endl; 
@@ -258,26 +295,29 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
 		     << "  curve length = " <<  h
 		     << "  Difference (curveLen-endpDist)= " << (h - endPointDist)
 		     << "  relative = " << (h-endPointDist) / h 
+		     << "  epsilon =  " << eps 
 		     << G4endl;
 	   }else{
-	      G4cerr << "  EndpointDist = " << endPointDist
-		     << "  curve length = " <<  h
-		     << "  Diff (cl-ed)= " << (h - endPointDist)
+ 	      G4cerr << " Warning:" 
+		     << "  dist_e= " << endPointDist
+		     << "  h_step = " <<  h
+		     << "  Diff (hs-ed)= " << (h - endPointDist)
 		     << "  rel = " << (h-endPointDist) / h 
-		     << " (from G4MagIntegratorDriver)" << G4endl;
+		     << "  eps = " << eps
+		     << " (from G4MagInt_Driver)" << G4endl;
 	   }
 	}
 }
 // ---------------------------------------------------------
 
 void
-G4MagInt_Driver::OneGoodStep(      G4double y[],
+G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 			     const G4double dydx[],
-				   G4double& x,
+				   G4double& x,         // InOut
 			           G4double htry,
 			           G4double eps_rel_max,
-				   G4double& hdid,
-				   G4double& hnext )
+				   G4double& hdid,      // Out
+				   G4double& hnext )    // Out
 
 // Driver for one Runge-Kutta Step with monitoring of local truncation error
 // to ensure accuracy and adjust stepsize. Input are dependent variable
@@ -436,12 +476,11 @@ G4MagInt_Driver::ComputeNewStepSize(
   return hnew;
 }
 
-// --------------------------------------------------------------------------
-//  This method computes new step sizes - but does not limit changes to
-//   within  certain factors
+// -----------------------------------------------------------------------------
+//  This method computes new step sizes limiting changes within certain factors
 // 
-//   It shares its logic with AccurateAdvance, so they should eventually 
-//     be merged  ??
+//   It shares its logic with AccurateAdvance.
+//    They are kept separate currently for optimisation.
 
 G4double 
 G4MagInt_Driver::ComputeNewStepSize_WithinLimits( 
@@ -468,4 +507,119 @@ G4MagInt_Driver::ComputeNewStepSize_WithinLimits(
   }
 
   return hnew;
+}
+
+void G4MagInt_Driver::PrintStatus( const G4double*   StartArr,  
+				   G4double          xstart,
+				   const G4double*   CurrentArr, 
+				   G4double          xcurrent,
+				   G4int             subStepNo)
+{
+   G4FieldTrack  StartFT(G4ThreeVector(0,0,0), G4ThreeVector(0,0,0), 0., 0., 0., 0. );
+   G4FieldTrack  CurrentFT (StartFT);
+
+   StartFT.LoadFromArray( StartArr); 
+   StartFT.SetCurveLength( xstart);
+   CurrentFT.LoadFromArray( CurrentArr); 
+   CurrentFT.SetCurveLength( xcurrent );
+
+   PrintStatus(StartFT, CurrentFT, xcurrent, subStepNo ); 
+}
+
+#include "g4std/iomanip"
+
+void G4MagInt_Driver::PrintStatus(
+                  const G4FieldTrack&  StartFT,
+		  const G4FieldTrack&  CurrentFT, 
+                  G4double             requestStep, 
+                  // G4double             safety,
+                  G4int                subStepNo)
+{
+    G4int verboseLevel= fVerboseLevel;
+
+    const G4ThreeVector StartPosition=      StartFT.GetPosition();
+    const G4ThreeVector StartUnitVelocity=  StartFT.GetMomentumDir();
+    const G4ThreeVector CurrentPosition=    CurrentFT.GetPosition();
+    const G4ThreeVector CurrentUnitVelocity=    CurrentFT.GetMomentumDir();
+
+    G4double step_len= CurrentFT.GetCurveLength() 
+                         - StartFT.GetCurveLength();
+      
+    if( (subStepNo <= 0) && (verboseLevel <= 3) )
+    {
+       static G4int noPrecision= 4;
+       subStepNo = - subStepNo;        // To allow printing banner
+
+       G4cout.precision(noPrecision);
+       // G4cout.setf(ios_base::fixed,ios_base::floatfield);
+       G4cout << G4std::setw( 6)  << " " 
+	      << G4std::setw( 25) << " G4MagInt_Driver: Current Position  and  Direction" << " "
+	      << G4endl; 
+       G4cout << G4std::setw( 5) << "Step#" << " "
+	      << G4std::setw( 7) << "s-curve" << " "
+	      << G4std::setw( 9) << "X(mm)" << " "
+	      << G4std::setw( 9) << "Y(mm)" << " "  
+	      << G4std::setw( 9) << "Z(mm)" << " "
+	      << G4std::setw( 7) << " N_x " << " "
+	      << G4std::setw( 7) << " N_y " << " "
+	      << G4std::setw( 7) << " N_z " << " "
+	      << G4std::setw( 7) << "KinEner " << " "
+	      << G4std::setw( 9) << "StepLen" << " "   // Add the Sub-step ??
+	      << G4std::setw( 9) << "ReqStep" << " "  
+	      << G4endl;
+
+        PrintStat_Aux( StartFT,  requestStep, 0., 0);
+        //*************
+    }
+
+    if( verboseLevel <= 3 )
+    {
+       G4cout.precision(3);
+       PrintStat_Aux( CurrentFT, requestStep, step_len, subStepNo);
+       //*************
+    }
+
+    else // if( verboseLevel > 3 )
+    {
+       //  Multi-line output
+       
+       // G4cout << "Current  Position is " << CurrentPosition << G4endl 
+       //    << " and UnitVelocity is " << CurrentUnitVelocity << G4endl;
+       // G4cout << "Step taken was " << step_len  
+       //    << " out of PhysicalStep= " <<  requestStep << G4endl;
+       // G4cout << "Final safety is: " << safety << G4endl;
+
+       // G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << G4endl;
+       // G4cout << G4endl; 
+    }
+}
+
+void G4MagInt_Driver::PrintStat_Aux(
+                  const G4FieldTrack&  aFieldTrack,
+                  G4double             requestStep, 
+		  G4double             step_len,
+                  G4int                subStepNo)
+{
+    const G4ThreeVector Position=      aFieldTrack.GetPosition();
+    const G4ThreeVector UnitVelocity=  aFieldTrack.GetMomentumDir();
+ 
+    if( subStepNo >= 0)
+       G4cout << G4std::setw( 5) << subStepNo << " ";
+    else
+       G4cout << G4std::setw( 5) << "Start" << " ";
+    G4cout << G4std::setw( 7) << aFieldTrack.GetCurveLength();
+    G4cout << G4std::setw( 9) << Position.x() << " "
+	   << G4std::setw( 9) << Position.y() << " "
+	   << G4std::setw( 9) << Position.z() << " "
+	   << G4std::setw( 7) << UnitVelocity.x() << " "
+	   << G4std::setw( 7) << UnitVelocity.y() << " "
+	   << G4std::setw( 7) << UnitVelocity.z() << " ";
+    G4cout << G4std::setw( 7) << aFieldTrack.GetKineticEnergy();
+    G4cout << G4std::setw( 9) << step_len << " "; 
+    if( requestStep != -1.0 ) 
+       G4cout << G4std::setw( 9) << requestStep << " ";
+    else
+       G4cout << G4std::setw( 9) << " InitialStep " << " "; 
+    // G4cout << G4std::setw(12) << safety << " ";
+    G4cout << G4endl;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.8 2001-07-11 09:59:08 gunter Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.9 2001-10-25 09:11:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,12 +131,17 @@ class G4MagInt_Driver
 
      inline G4int    GetMaxNoSteps() const;
      inline void     SetMaxNoSteps( G4int val); 
+        //  Modify and Get the Maximum number of Steps that can be
+        //   taken for the integration of a single segment -
+        //   (ie a single call to AccurateAdvance).
 
    public:  // without description
 
      inline void SetHmin(G4double newval);
+     inline void SetVerboseLevel( int newLevel); 
+     inline G4double GetVerboseLevel() const;
 
-   protected:
+   protected:  // without description
 
      void WarnSmallStepSize( G4double hnext, G4double hstep, 
 			     G4double h,     G4double xDone,
@@ -147,6 +152,21 @@ class G4MagInt_Driver
 			      G4double  epsilonRelative,
 			      G4int     debugFlag);
         //  Issue warnings for undesirable situations
+
+     void PrintStatus(  const G4double*      StartArr,
+			G4double             xstart,
+			const G4double*      CurrentArr, 
+			G4double             xcurrent, 
+			G4int                subStepNo);
+     void PrintStatus(  const G4FieldTrack&  StartFT,
+			const G4FieldTrack&  CurrentFT, 
+			G4double             requestStep, 
+			G4int                subStepNo);
+     void PrintStat_Aux( const G4FieldTrack&  aFieldTrack,
+			 G4double             requestStep, 
+			 G4double             actualStep,
+			 G4int                subStepNo);       
+       //  Verbose output for debugging
 
    private:
 
@@ -174,6 +194,9 @@ class G4MagInt_Driver
      static const G4double max_stepping_increase;
      static const G4double max_stepping_decrease;
         // Maximum stepsize increase/decrease factors.
+
+     G4int  fVerboseLevel;
+        // Verbosity level for printing (debug, ..)
 };
 
 #include "G4MagIntegratorDriver.icc"
