@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinus.cc,v 1.6 2001-07-11 10:01:41 gunter Exp $
+// $Id: G4OmegaMinus.cc,v 1.7 2001-10-15 10:10:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,3 @@ G4OmegaMinus G4OmegaMinus::theOmegaMinus(
 );
 
 G4OmegaMinus* G4OmegaMinus::OmegaMinusDefinition(){return &theOmegaMinus;}
-// initialization for static cut values
-G4double   G4OmegaMinus::theOmegaMinusLengthCut = -1.0;
-G4double*  G4OmegaMinus::theOmegaMinusKineticEnergyCuts = NULL;

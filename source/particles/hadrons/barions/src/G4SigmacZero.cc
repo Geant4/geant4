@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacZero.cc,v 1.7 2001-09-19 11:16:51 kurasige Exp $
+// $Id: G4SigmacZero.cc,v 1.8 2001-10-15 10:10:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,10 +99,6 @@ G4SigmacZero G4SigmacZero::theSigmacZero(
 
 G4SigmacZero* G4SigmacZero::SigmacZeroDefinition(){return &theSigmacZero;}
 G4SigmacZero* G4SigmacZero::SigmacZero(){return &theSigmacZero;}
-// initialization for static cut values
-G4double   G4SigmacZero::theSigmacZeroLengthCut = -1.0;
-G4double*  G4SigmacZero::theSigmacZeroKineticEnergyCuts = NULL;
-
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
@@ -111,14 +107,10 @@ G4double*  G4SigmacZero::theSigmacZeroKineticEnergyCuts = NULL;
 
 void G4SigmacZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
- 
-  theSigmacZeroLengthCut = theCutInMaxInteractionLength;  
-  theSigmacZeroKineticEnergyCuts = theKineticEnergyCuts;
-  
 }
 
 

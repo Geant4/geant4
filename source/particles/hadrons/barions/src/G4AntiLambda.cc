@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.cc,v 1.8 2001-09-19 11:16:49 kurasige Exp $
+// $Id: G4AntiLambda.cc,v 1.9 2001-10-15 10:10:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,9 +99,6 @@ G4AntiLambda G4AntiLambda::theAntiLambda(
 );
 
 G4AntiLambda* G4AntiLambda::AntiLambdaDefinition(){return &theAntiLambda;}
-// initialization for static cut values
-G4double   G4AntiLambda::theAntiLambdaLengthCut = -1.0;
-G4double*  G4AntiLambda::theAntiLambdaKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -110,13 +107,10 @@ G4double*  G4AntiLambda::theAntiLambdaKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4AntiLambda::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
- 
-  theAntiLambdaLengthCut = theCutInMaxInteractionLength;  
-  theAntiLambdaKineticEnergyCuts = theKineticEnergyCuts;
   
 }
 

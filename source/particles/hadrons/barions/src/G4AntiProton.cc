@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.5 2001-07-11 10:01:39 gunter Exp $
+// $Id: G4AntiProton.cc,v 1.6 2001-10-15 10:10:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,9 +79,6 @@ G4AntiProton G4AntiProton::theAntiProton(
 );
 
 G4AntiProton* G4AntiProton::AntiProtonDefinition(){return &theAntiProton;}
-// initialization for static cut values
-G4double   G4AntiProton::theAntiProtonLengthCut = -1.0;
-G4double*  G4AntiProton::theAntiProtonKineticEnergyCuts = NULL;
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.cc,v 1.5 2001-07-11 10:01:41 gunter Exp $
+// $Id: G4Proton.cc,v 1.6 2001-10-15 10:10:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,3 @@ G4Proton G4Proton::theProton(
 );
 
 G4Proton* G4Proton::ProtonDefinition(){return &theProton;}
-// initialization for static cut values
-G4double   G4Proton::theProtonLengthCut = -1.0;
-G4double*  G4Proton::theProtonKineticEnergyCuts = NULL;

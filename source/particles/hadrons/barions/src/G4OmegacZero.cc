@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegacZero.cc,v 1.8 2001-09-19 11:16:50 kurasige Exp $
+// $Id: G4OmegacZero.cc,v 1.9 2001-10-15 10:10:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,9 +85,6 @@ G4OmegacZero G4OmegacZero::theOmegacZero(
 
 G4OmegacZero* G4OmegacZero::OmegacZeroDefinition(){return &theOmegacZero;}
 G4OmegacZero* G4OmegacZero::OmegacZero(){return &theOmegacZero;}
-// initialization for static cut values
-G4double   G4OmegacZero::theOmegacZeroLengthCut = -1.0;
-G4double*  G4OmegacZero::theOmegacZeroKineticEnergyCuts = NULL;
 
 
 // **********************************************************************
@@ -97,13 +94,10 @@ G4double*  G4OmegacZero::theOmegacZeroKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4OmegacZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
-
-  theOmegacZeroLengthCut = theCutInMaxInteractionLength;  
-  theOmegacZeroKineticEnergyCuts = theKineticEnergyCuts;
   
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlus.cc,v 1.5 2001-07-11 10:01:39 gunter Exp $
+// $Id: G4AntiSigmacPlus.cc,v 1.6 2001-10-15 10:10:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,7 +99,4 @@ G4AntiSigmacPlus G4AntiSigmacPlus::theAntiSigmacPlus(
 
 G4AntiSigmacPlus* G4AntiSigmacPlus::AntiSigmacPlusDefinition(){return &theAntiSigmacPlus;}
 G4AntiSigmacPlus* G4AntiSigmacPlus::AntiSigmacPlus(){return &theAntiSigmacPlus;}
-// initialization for static cut values
-G4double   G4AntiSigmacPlus::theAntiSigmacPlusLengthCut = -1.0;
-G4double*  G4AntiSigmacPlus::theAntiSigmacPlusKineticEnergyCuts = NULL;
 

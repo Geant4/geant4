@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaMinus.cc,v 1.6 2001-07-11 10:01:39 gunter Exp $
+// $Id: G4AntiSigmaMinus.cc,v 1.7 2001-10-15 10:10:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ G4AntiSigmaMinus::G4AntiSigmaMinus(
 
   SetDecayTable(table);
 
-}
+};
 
 // ......................................................................
 // ...                 static member definitions                      ...
@@ -101,7 +101,3 @@ G4AntiSigmaMinus* G4AntiSigmaMinus::AntiSigmaMinusDefinition()
 {
   return &theAntiSigmaMinus;
 }
-
-// initialization for static cut values
-G4double   G4AntiSigmaMinus::theAntiSigmaMinusLengthCut = -1.0;
-G4double*  G4AntiSigmaMinus::theAntiSigmaMinusKineticEnergyCuts = NULL;

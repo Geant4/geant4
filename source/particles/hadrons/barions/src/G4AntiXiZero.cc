@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiZero.cc,v 1.8 2001-09-19 11:16:50 kurasige Exp $
+// $Id: G4AntiXiZero.cc,v 1.9 2001-10-15 10:10:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,9 +97,6 @@ G4AntiXiZero G4AntiXiZero::theAntiXiZero(
 );
 
 G4AntiXiZero* G4AntiXiZero::AntiXiZeroDefinition(){return &theAntiXiZero;}
-// initialization for static cut values
-G4double   G4AntiXiZero::theAntiXiZeroLengthCut = -1.0;
-G4double*  G4AntiXiZero::theAntiXiZeroKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -108,13 +105,9 @@ G4double*  G4AntiXiZero::theAntiXiZeroKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4AntiXiZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
-
-  theAntiXiZeroLengthCut = theCutInMaxInteractionLength;  
-  theAntiXiZeroKineticEnergyCuts = theKineticEnergyCuts;
-  
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.cc,v 1.6 2001-07-11 10:01:41 gunter Exp $
+// $Id: G4SigmaMinus.cc,v 1.7 2001-10-15 10:10:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,3 @@ G4SigmaMinus G4SigmaMinus::theSigmaMinus(
 );
 
 G4SigmaMinus* G4SigmaMinus::SigmaMinusDefinition(){return &theSigmaMinus;}
-// initialization for static cut values
-G4double   G4SigmaMinus::theSigmaMinusLengthCut = -1.0;
-G4double*  G4SigmaMinus::theSigmaMinusKineticEnergyCuts = NULL;

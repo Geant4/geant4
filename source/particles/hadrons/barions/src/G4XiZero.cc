@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.8 2001-09-19 11:16:51 kurasige Exp $
+// $Id: G4XiZero.cc,v 1.9 2001-10-15 10:10:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,9 +97,6 @@ G4XiZero G4XiZero::theXiZero(
 );
 
 G4XiZero* G4XiZero::XiZeroDefinition(){return &theXiZero;}
-// initialization for static cut values
-G4double   G4XiZero::theXiZeroLengthCut = -1.0;
-G4double*  G4XiZero::theXiZeroKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -108,13 +105,10 @@ G4double*  G4XiZero::theXiZeroKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4XiZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
- 
-  theXiZeroLengthCut = theCutInMaxInteractionLength;  
-  theXiZeroKineticEnergyCuts = theKineticEnergyCuts;
   
 }
 

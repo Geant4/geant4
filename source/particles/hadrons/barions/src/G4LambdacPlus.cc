@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LambdacPlus.cc,v 1.6 2001-07-11 10:01:40 gunter Exp $
+// $Id: G4LambdacPlus.cc,v 1.7 2001-10-15 10:10:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,4 @@ G4LambdacPlus G4LambdacPlus::theLambdacPlus(
 
 G4LambdacPlus* G4LambdacPlus::LambdacPlusDefinition(){return &theLambdacPlus;}
 G4LambdacPlus* G4LambdacPlus::LambdacPlus(){return &theLambdacPlus;}
-// initialization for static cut values
-G4double   G4LambdacPlus::theLambdacPlusLengthCut = -1.0;
-G4double*  G4LambdacPlus::theLambdacPlusKineticEnergyCuts = NULL;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.9 2001-09-19 11:16:50 kurasige Exp $
+// $Id: G4Neutron.cc,v 1.10 2001-10-15 10:10:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,13 +32,11 @@
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
 //      add neutron life time    Oct 17 2000 
-//      add neutron beta decay   Sep 17 2001 
 // **********************************************************************
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
 #include "G4Neutron.hh"
-
 #include "G4NeutronBetaDecayChannel.hh"
 #include "G4DecayTable.hh"
 
@@ -94,9 +92,6 @@ G4Neutron G4Neutron::theNeutron(
 );
 
 G4Neutron* G4Neutron::NeutronDefinition(){return &theNeutron;}
-// initialization for static cut values
-G4double   G4Neutron::theNeutronLengthCut = -1.0;
-G4double*  G4Neutron::theNeutronKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -105,14 +100,11 @@ G4double*  G4Neutron::theNeutronKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4Neutron::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
 
-  theNeutronLengthCut = theCutInMaxInteractionLength;  
-  theNeutronKineticEnergyCuts = theKineticEnergyCuts;
-  
 }
 
 

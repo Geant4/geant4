@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiMinus.cc,v 1.6 2001-07-11 10:01:42 gunter Exp $
+// $Id: G4XiMinus.cc,v 1.7 2001-10-15 10:10:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,3 @@ G4XiMinus G4XiMinus::theXiMinus(
 );
 
 G4XiMinus* G4XiMinus::XiMinusDefinition(){return &theXiMinus;}
-// initialization for static cut values
-G4double   G4XiMinus::theXiMinusLengthCut = -1.0;
-G4double*  G4XiMinus::theXiMinusKineticEnergyCuts = NULL;

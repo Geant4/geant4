@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.6 2001-07-11 10:01:40 gunter Exp $
+// $Id: G4AntiXicPlus.cc,v 1.7 2001-10-15 10:10:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,3 @@ G4AntiXicPlus G4AntiXicPlus::theAntiXicPlus(
 
 G4AntiXicPlus* G4AntiXicPlus::AntiXicPlusDefinition(){return &theAntiXicPlus;}
 G4AntiXicPlus* G4AntiXicPlus::AntiXicPlus(){return &theAntiXicPlus;}
-// initialization for static cut values
-G4double   G4AntiXicPlus::theAntiXicPlusLengthCut = -1.0;
-G4double*  G4AntiXicPlus::theAntiXicPlusKineticEnergyCuts = NULL;
