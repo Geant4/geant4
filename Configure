@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.42 2003-10-02 18:04:36 stesting Exp $
+# $Id: Configure,v 1.43 2003-12-10 15:33:06 stesting Exp $
 #
-# Generated on Thu Oct  2 20:02:53 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Wed Dec 10 16:29:50 CET 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -235,8 +235,6 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
-g4w_use_step=''
-g4wlib_build_step=''
 lns=''
 c=''
 n=''
@@ -2581,7 +2579,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW2.2
+	g4ledata=$g4install/../G4EMLOW2.3
 	;;
 esac
 
@@ -2637,7 +2635,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW1.1 data installed ?"
+		rp="Where is G4EMLOW2.3 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
@@ -4337,48 +4335,6 @@ gans=$ans
 
 
 echo " "
-case "$g4wlib_build_step" in
-'')
-	g4wlib_build_step=n
-	;;
-esac
-
-case "$g4w_use_step" in
-'')
-	g4w_use_step=n
-	;;
-esac
-
-echo ""
-
-g4message=`cat << EOM
-
-  G4LIB_BUILD_STEP  
-
-If this variable is set, it will be built STEP module.
-Do you want to set this variable ?
-
-EOM`
-
-dflt=$g4wlib_build_step
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4wlib_build_step=n
-		g4w_use_step=n
-		;;
-	y*|Y*) 
-		g4wlib_build_step=y
-		g4w_use_step=y
-		;;
-	esac
-
-
-echo " "
 
 case "$g4wanalysis_use" in
 '')
@@ -4557,7 +4513,6 @@ g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
-g4w_use_step='$g4w_use_step'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4567,7 +4522,6 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
-g4wlib_build_step='$g4wlib_build_step'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'
