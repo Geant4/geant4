@@ -1,0 +1,18 @@
+JAIDA-Geant4
+============
+http://java.freehep.org/lib/freehep/doc/aida/geant4.html
+-----------
+
+Ported to: Linux-g++, WIN32-VC, SUN-CC, Darwin-g++, Darwin-g++
+
+To link with JAIDA and JAS, make sure you have:
+
+1. JDK_HOME set to your Java Standard Development Kit (1.4.x or up).
+2. the JAIDA-x.x.x-Geant4.x.x tar or zip file overlayed on geant4.
+3. GEANT4_HOME set to your geant4 directory.
+
+now execute:
+
+source setup-analysis (.csh, .sh, .win32)
+gmake
+

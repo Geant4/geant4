@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.4 2002-12-13 11:34:33 gunter Exp $
+// $Id: A01DetectorConstruction.cc,v 1.5 2002-12-20 21:40:30 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -63,8 +63,7 @@
 
 A01DetectorConstruction::A01DetectorConstruction()
  : air(0), argonGas(0), scintillator(0), CsI(0), lead(0),
-   hodoscope1(0), hodoscope2(0), chamber1(0), chamber2(0),
-   EMcalorimeter(0), HadCalorimeter(0), worldVisAtt(0), magneticVisAtt(0),
+   worldVisAtt(0), magneticVisAtt(0),
    armVisAtt(0), hodoscopeVisAtt(0), chamberVisAtt(0),
    wirePlaneVisAtt(0), EMcalorimeterVisAtt(0), cellVisAtt(0),
    HadCalorimeterVisAtt(0), HadCalorimeterCellVisAtt(0),
@@ -84,13 +83,6 @@ A01DetectorConstruction::~A01DetectorConstruction()
 
   DestroyMaterials();
 
-  delete hodoscope1;
-  delete hodoscope2;
-  delete chamber1;
-  delete chamber2;
-  delete EMcalorimeter;
-  delete HadCalorimeter;
-
   delete worldVisAtt;
   delete magneticVisAtt;
   delete armVisAtt;
@@ -105,6 +97,16 @@ A01DetectorConstruction::~A01DetectorConstruction()
 
 G4VPhysicalVolume* A01DetectorConstruction::Construct()
 {
+  // All managed (deleted) by SDManager
+  G4VSensitiveDetector* hodoscope1;
+  G4VSensitiveDetector* hodoscope2;
+  G4VSensitiveDetector* chamber1;
+  G4VSensitiveDetector* chamber2;
+  G4VSensitiveDetector* EMcalorimeter;
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  G4VSensitiveDetector* HadCalorimeter;
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
   ConstructMaterials();
 
   // Magnetic field ----------------------------------------------------------

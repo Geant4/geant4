@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.3 2002-12-13 11:34:34 gunter Exp $
+// $Id: A01EventAction.cc,v 1.4 2002-12-20 21:40:30 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -87,11 +87,12 @@ A01EventAction::A01EventAction()
     plotter = analysisManager->createPlotter();
     if (plotter)
     {
-       plotter->createRegions(2,2);
+       plotter->createRegions(3,2);
        plotter->region(0)->plot(*dc1Hits);
        plotter->region(1)->plot(*dc2Hits);
        plotter->region(2)->plot(*dc1XY);
-       plotter->region(3)->plot(*evstof);
+       plotter->region(3)->plot(*dc2XY);
+       plotter->region(4)->plot(*evstof);
        plotter->show();
      }
   }
@@ -165,7 +166,6 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
       }
     }
   }
-
 
   // Fill the tuple
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.hh,v 1.3 2002-12-13 11:34:28 gunter Exp $
+// $Id: A01DetectorConstruction.hh,v 1.4 2002-12-20 21:40:29 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -64,15 +64,6 @@ class A01DetectorConstruction : public G4VUserDetectorConstruction
     G4Material* CsI;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     G4Material* lead;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-    G4VSensitiveDetector* hodoscope1;
-    G4VSensitiveDetector* hodoscope2;
-    G4VSensitiveDetector* chamber1;
-    G4VSensitiveDetector* chamber2;
-    G4VSensitiveDetector* EMcalorimeter;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    G4VSensitiveDetector* HadCalorimeter;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     G4VisAttributes* worldVisAtt;

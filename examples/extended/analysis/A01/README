@@ -1,0 +1,14 @@
+A01 Example
+-----------
+By default (without sourcing setup-analysis) the compilation
+will link in a DummyAnalysisFactory which will not produce
+anything for analysis.
+
+The default graphics drivers are always linked in and can be used
+to generate event output.
+
+You can link this example with a specific AIDA compliant
+analysis implementation. See other READMEs.
+
+README.JAIDA for linking JAS-AIDA to Geant4.
+http://java.freehep.org/lib/freehep/doc/aida/geant4.html
