@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorConstruction.cc,v 1.5 2003-01-31 10:56:59 gcosmo Exp $
+// $Id: Tst20DetectorConstruction.cc,v 1.6 2003-05-15 08:49:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,11 +371,7 @@ void Tst20DetectorConstruction::SetMagField(G4double fieldValue)
   
 void Tst20DetectorConstruction::UpdateGeometry()
 {
-  G4VPhysicalVolume* v = ConstructCalorimeter();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
