@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.1 1999-01-07 16:12:57 gunter Exp $
+// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.2 1999-06-29 18:43:53 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
@@ -25,14 +25,8 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
 {
   public:
   
-  G4NeutronHPDiscreteTwoBody()
-  {
-    theCoeff = NULL;
-  }
-  ~G4NeutronHPDiscreteTwoBody()
-  {
-    if(theCoeff!=NULL) delete [] theCoeff;
-  }
+  G4NeutronHPDiscreteTwoBody();
+  ~G4NeutronHPDiscreteTwoBody();
   
   void Init(ifstream & aDataFile)
   {

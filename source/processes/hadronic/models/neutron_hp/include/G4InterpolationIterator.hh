@@ -7,9 +7,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InterpolationIterator.hh,v 1.1 1999-01-07 16:12:50 gunter Exp $
+// $Id: G4InterpolationIterator.hh,v 1.2 1999-06-29 18:43:42 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// Here only for historical reasons.....HPW
+
 #ifndef G4InterpolationIterator_h
 #define G4InterpolationIterator_h 1
 
@@ -18,16 +21,12 @@
 class G4InterpolationIterator
 {
    private:   
-   G4InterpolationIterator() {}
+   G4InterpolationIterator();
    
    public:
-   G4InterpolationIterator(G4InterpolationManager * aManager)
-   {
-     started = false;
-     theManager = aManager;
-   }
+   G4InterpolationIterator(G4InterpolationManager * aManager);
    
-   ~G4InterpolationIterator(){}
+   ~G4InterpolationIterator();
    
    inline G4bool Fetch() 
    {
@@ -39,8 +38,10 @@ class G4InterpolationIterator
      }
      G4bool result = true;
      if(++counter==nEntries)
+     {
        started = false;
        result = false;
+     }
      else if(current != nRanges-1&&counter==theManager->start[current+1])
        current++;
      return result;
@@ -49,12 +50,14 @@ class G4InterpolationIterator
    inline G4InterpolationScheme Current() 
    {
      if(!started) G4Exception("G4InterpolationIterator not started yet");
-     return aManager->scheme[current];
+     return theManager->scheme[current];
    }
    
    private:
    G4InterpolationManager * theManager;
    G4int current;
+   G4int nEntries;
+   G4int nRanges;
    G4int counter;
    G4bool started;
 };

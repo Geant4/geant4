@@ -7,12 +7,7 @@ class G4NeutronHPDataUsed
 {
   public:
   
-  G4NeutronHPDataUsed()
-  {
-    theName = "";
-    theA = 0;
-    theZ = 0;
-  }
+  G4NeutronHPDataUsed();
   
   void SetA(G4double anA){theA = anA;}
   void SetZ(G4int aZ){theZ = aZ;}

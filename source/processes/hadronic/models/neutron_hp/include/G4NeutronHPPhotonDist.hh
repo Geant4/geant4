@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.1 1999-01-07 16:13:08 gunter Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.2 1999-06-29 18:44:12 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -34,49 +34,9 @@ class G4NeutronHPPhotonDist
 {
 public:
 
-  G4NeutronHPPhotonDist()
-  {
-     disType = NULL;
-     energy = NULL;
-     theYield = NULL;
-     thePartialXsec = NULL;
-     isPrimary = NULL;
-     theShells = NULL;
-     theGammas = NULL;
-     nNeu = NULL;
-     theLegendre = NULL;
-     theAngular = NULL;
-     distribution = NULL;
-     probs = NULL;
-     partials = NULL;
-     actualMult = NULL;
+  G4NeutronHPPhotonDist();
 
-     theLevelEnergies = NULL;
-     theTransitionProbabilities = NULL;
-     thePhotonTransitionFraction = NULL;
-  }
-
-  ~G4NeutronHPPhotonDist()
-  {
-     if(disType != NULL) delete [] disType;
-     if(energy != NULL) delete [] energy;
-     if(theYield != NULL) delete [] theYield;
-     if(thePartialXsec != NULL) delete [] thePartialXsec;
-     if(isPrimary != NULL) delete [] isPrimary;
-     if(theShells != NULL) delete [] theShells;
-     if(theGammas != NULL) delete [] theGammas;
-     if(nNeu != NULL) delete [] nNeu;
-     if(theLegendre != NULL) delete [] theLegendre;
-     if(theAngular != NULL) delete [] theAngular;
-     if(distribution != NULL) delete [] distribution;
-     if(probs != NULL) delete [] probs;
-     if(partials != NULL) delete [] partials;
-     if(actualMult != NULL) delete [] actualMult;
-
-     if(theLevelEnergies != NULL) delete theLevelEnergies;
-     if(theTransitionProbabilities != NULL) delete theTransitionProbabilities;
-     if(thePhotonTransitionFraction != NULL) delete thePhotonTransitionFraction;
-  }
+  ~G4NeutronHPPhotonDist();
   
   G4bool InitMean(ifstream & aDataFile);
     

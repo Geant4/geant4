@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.1 1999-01-07 16:13:00 gunter Exp $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.2 1999-06-29 18:44:00 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionERelease_h
@@ -20,8 +20,6 @@
 class G4NeutronHPFissionERelease
 {
   public:
-  G4NeutronHPFissionERelease(){}
-  ~G4NeutronHPFissionERelease(){}
   
   inline void Init(ifstream & aDataFile)
   {

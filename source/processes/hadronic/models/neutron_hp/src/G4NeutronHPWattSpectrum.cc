@@ -3,6 +3,15 @@
 // A prototype of the low energy neutron transport model.
 #include "G4NeutronHPWattSpectrum.hh"
 
+  G4NeutronHPWattSpectrum::G4NeutronHPWattSpectrum()
+  {
+    expm1 = exp(-1.);
+  }
+  
+  G4NeutronHPWattSpectrum::~G4NeutronHPWattSpectrum()
+  {
+  }
+
   G4double G4NeutronHPWattSpectrum::Sample(G4double anEnergy) 
   {
     G4double a = theApar.GetY(anEnergy)*eV;

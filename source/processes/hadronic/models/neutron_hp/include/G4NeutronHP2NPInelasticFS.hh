@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHP2NPInelasticFS.hh,v 1.1 1999-01-07 16:12:52 gunter Exp $
+// $Id: G4NeutronHP2NPInelasticFS.hh,v 1.2 1999-06-29 18:43:45 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHP2NPInelasticFS_h
@@ -26,8 +26,8 @@ class G4NeutronHP2NPInelasticFS : public G4NeutronHPInelasticBaseFS
 {
   public:
   
-  G4NeutronHP2NPInelasticFS(){}
-  ~G4NeutronHP2NPInelasticFS(){}
+  G4NeutronHP2NPInelasticFS();
+  ~G4NeutronHP2NPInelasticFS();
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
   G4ParticleChange * ApplyYourself(const G4Track & theTrack);
   G4NeutronHPFinalState * New() 

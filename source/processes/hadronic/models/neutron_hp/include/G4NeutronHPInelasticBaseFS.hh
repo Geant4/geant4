@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.1 1999-01-07 16:13:01 gunter Exp $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.2 1999-06-29 18:44:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
@@ -27,24 +27,8 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
 {
   public:
     
-  G4NeutronHPInelasticBaseFS()
-  {
-    hasXsec = true; 
-    theXsection = new G4NeutronHPVector;
-    
-    theEnergyDistribution = NULL;
-    theFinalStatePhotons = NULL;
-    theEnergyAngData = NULL;
-    theAngularDistribution = NULL;
-  }
-  virtual ~G4NeutronHPInelasticBaseFS()
-  {
-    delete theXsection;
-    if(theEnergyDistribution!=NULL) delete theEnergyDistribution;
-    if(theFinalStatePhotons!=NULL) delete theFinalStatePhotons;
-    if(theEnergyAngData!=NULL) delete theEnergyAngData;
-    if(theAngularDistribution!=NULL) delete theAngularDistribution;
-  }
+  G4NeutronHPInelasticBaseFS();
+  virtual ~G4NeutronHPInelasticBaseFS();
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
   void BaseApply(const G4Track & theTrack, G4ParticleDefinition ** theDefs, G4int nDef);

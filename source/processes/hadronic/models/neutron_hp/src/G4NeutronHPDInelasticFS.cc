@@ -6,6 +6,8 @@
 #include "G4Nucleus.hh"
 #include "G4Deuteron.hh"
 
+  G4NeutronHPDInelasticFS::G4NeutronHPDInelasticFS(){}
+  G4NeutronHPDInelasticFS::~G4NeutronHPDInelasticFS(){}
 void G4NeutronHPDInelasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
 {
    G4NeutronHPInelasticCompFS::Init(A, Z, dirName, aFSType);

@@ -7,6 +7,8 @@
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
 
+  G4NeutronHPDAInelasticFS::G4NeutronHPDAInelasticFS(){}
+  G4NeutronHPDAInelasticFS::~G4NeutronHPDAInelasticFS(){}
 G4ParticleChange * G4NeutronHPDAInelasticFS::ApplyYourself(const G4Track & theTrack)
 {
 // these are the particle types in the final state

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.1 1999-01-07 16:12:58 gunter Exp $
+// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.2 1999-06-29 18:43:53 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
@@ -25,16 +25,8 @@
 class G4NeutronHPEnAngCorrelation
 {
   public:
-  G4NeutronHPEnAngCorrelation()
-  {
-    theProducts = NULL;
-    inCharge = false;
-    theTotalMeanEnergy = -1.;
-  }
-  ~G4NeutronHPEnAngCorrelation()
-  {
-    if(theProducts!=NULL) delete [] theProducts;
-  }
+  G4NeutronHPEnAngCorrelation();
+  ~G4NeutronHPEnAngCorrelation();
   
   inline void Init(ifstream & aDataFile)
   {

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPLegendreStore.hh,v 1.1 1999-01-07 16:13:03 gunter Exp $
+// $Id: G4NeutronHPLegendreStore.hh,v 1.2 1999-06-29 18:44:04 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLegendreStore_h
@@ -22,17 +22,9 @@ class G4NeutronHPLegendreStore
 {
   public:
   
-  G4NeutronHPLegendreStore(G4int n)
-  {
-    theCoeff = new G4NeutronHPLegendreTable[n];
-    nEnergy = n;
-  }
+  G4NeutronHPLegendreStore(G4int n);
   
-  ~G4NeutronHPLegendreStore()
-  {
-    delete [] theCoeff;
-  }
-  
+  ~G4NeutronHPLegendreStore();
   inline void Init(G4int i, G4double e, G4int n)
   {
     theCoeff[i].Init(e, n);

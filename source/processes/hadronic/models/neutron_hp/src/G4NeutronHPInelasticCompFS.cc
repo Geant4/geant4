@@ -10,6 +10,30 @@
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
 
+  G4NeutronHPInelasticCompFS::G4NeutronHPInelasticCompFS()
+  {
+    for(G4int i=0; i<51; i++)
+    {
+      hasXsec = true; 
+      theXsection[i] = NULL;
+      theEnergyDistribution[i] = NULL;
+      theAngularDistribution[i] = NULL;
+      theEnergyAngData[i] = NULL;
+      theFinalStatePhotons[i] = NULL;
+    }
+  }
+  G4NeutronHPInelasticCompFS::~G4NeutronHPInelasticCompFS()
+  {
+    for(G4int i=0; i<51; i++)
+    {
+      if(theXsection[i] != NULL) delete theXsection[i];
+      if(theEnergyDistribution[i] != NULL) delete theEnergyDistribution[i];
+      if(theAngularDistribution[i] != NULL) delete theAngularDistribution[i];
+      if(theEnergyAngData[i] != NULL) delete theEnergyAngData[i];
+      if(theFinalStatePhotons[i] != NULL) delete theFinalStatePhotons[i];
+    }
+  }
+
 void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
    char the[100] = {""};

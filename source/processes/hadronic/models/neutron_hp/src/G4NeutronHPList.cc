@@ -4,6 +4,18 @@
 //
 #include "G4NeutronHPList.hh"
 
+  G4NeutronHPList::G4NeutronHPList()
+  {
+    theData = new G4double[100]; 
+    nPoints=100;
+    nEntries=0;
+  }
+  
+  G4NeutronHPList::~G4NeutronHPList()
+  {
+    delete [] theData;
+  }
+
   void G4NeutronHPList::Check(G4int i)
   {
     if(i<0) 

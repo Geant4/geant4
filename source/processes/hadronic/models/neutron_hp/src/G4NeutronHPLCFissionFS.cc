@@ -4,6 +4,8 @@
 //
 #include "G4NeutronHPLCFissionFS.hh"
 
+  G4NeutronHPLCFissionFS::G4NeutronHPLCFissionFS(){ hasXsec = false; }
+  G4NeutronHPLCFissionFS::~G4NeutronHPLCFissionFS(){}
   void G4NeutronHPLCFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
   {
     G4String aString = "/LC/";

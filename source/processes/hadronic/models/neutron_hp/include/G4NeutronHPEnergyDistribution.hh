@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPEnergyDistribution.hh,v 1.1 1999-01-07 16:12:58 gunter Exp $
+// $Id: G4NeutronHPEnergyDistribution.hh,v 1.2 1999-06-29 18:43:56 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPEnergyDistribution_h
@@ -30,23 +30,8 @@
 class G4NeutronHPEnergyDistribution
 {
   public:
-  G4NeutronHPEnergyDistribution()
-  {
-    theEnergyDistribution = NULL;
-    theNumberOfPartials = 0;
-    theRepresentationType = 0;
-  }
-  ~G4NeutronHPEnergyDistribution()
-  {
-    if(theEnergyDistribution != NULL)
-    {
-      for(G4int i=0; i<theNumberOfPartials; i++) 
-      {
-        delete theEnergyDistribution[i];
-      }
-      delete [] theEnergyDistribution;
-    }
-  }
+  G4NeutronHPEnergyDistribution();
+  ~G4NeutronHPEnergyDistribution();
   
   inline void Init(ifstream & theData)
   {

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.1 1999-01-07 16:13:01 gunter Exp $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.2 1999-06-29 18:44:02 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
@@ -27,29 +27,8 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPInelasticCompFS()
-  {
-    for(G4int i=0; i<51; i++)
-    {
-      hasXsec = true; 
-      theXsection[i] = NULL;
-      theEnergyDistribution[i] = NULL;
-      theAngularDistribution[i] = NULL;
-      theEnergyAngData[i] = NULL;
-      theFinalStatePhotons[i] = NULL;
-    }
-  }
-  virtual ~G4NeutronHPInelasticCompFS()
-  {
-    for(G4int i=0; i<51; i++)
-    {
-      if(theXsection[i] != NULL) delete theXsection[i];
-      if(theEnergyDistribution[i] != NULL) delete theEnergyDistribution[i];
-      if(theAngularDistribution[i] != NULL) delete theAngularDistribution[i];
-      if(theEnergyAngData[i] != NULL) delete theEnergyAngData[i];
-      if(theFinalStatePhotons[i] != NULL) delete theFinalStatePhotons[i];
-    }
-  }
+  G4NeutronHPInelasticCompFS();
+  virtual ~G4NeutronHPInelasticCompFS();
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aSFType);
   void InitGammas(G4double AR, G4double ZR);
   virtual G4ParticleChange * ApplyYourself(const G4Track & theTrack) = 0;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPElasticFS.hh,v 1.1 1999-01-07 16:12:57 gunter Exp $
+// $Id: G4NeutronHPElasticFS.hh,v 1.2 1999-06-29 18:43:53 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPElasticFS_h
@@ -27,17 +27,8 @@ class G4NeutronHPElasticFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPElasticFS()
-  {
-    hasXsec = false; 
-    theCoefficients = NULL;
-    theProbArray = NULL;
-  }
-  ~G4NeutronHPElasticFS()
-  {
-    if(theCoefficients!=NULL) delete theCoefficients;
-    if(theProbArray!=NULL) delete theProbArray;
-  }
+  G4NeutronHPElasticFS();
+  ~G4NeutronHPElasticFS();
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
   G4ParticleChange * ApplyYourself(const G4Track & theTrack);
   G4NeutronHPFinalState * New() 

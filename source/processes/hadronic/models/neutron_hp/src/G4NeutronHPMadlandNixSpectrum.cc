@@ -3,6 +3,14 @@
 // A prototype of the low energy neutron transport model.
 #include "G4NeutronHPMadlandNixSpectrum.hh"
   
+  G4NeutronHPMadlandNixSpectrum::G4NeutronHPMadlandNixSpectrum()
+  {
+    expm1 = exp(-1.);
+  }
+  G4NeutronHPMadlandNixSpectrum::~G4NeutronHPMadlandNixSpectrum()
+  {
+  }
+
   G4double G4NeutronHPMadlandNixSpectrum::Madland(G4double aSecEnergy, G4double tm)
   {
     G4double result;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFCFissionFS.hh,v 1.1 1999-01-07 16:12:58 gunter Exp $
+// $Id: G4NeutronHPFCFissionFS.hh,v 1.2 1999-06-29 18:43:57 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFCFissionFS_h
@@ -22,8 +22,8 @@ class G4NeutronHPFCFissionFS : public G4NeutronHPFissionBaseFS
 {
   public:
   
-  G4NeutronHPFCFissionFS(){ hasXsec = false; }
-  ~G4NeutronHPFCFissionFS(){}
+  G4NeutronHPFCFissionFS();
+  ~G4NeutronHPFCFissionFS();
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
   G4DynamicParticleVector * ApplyYourself(G4int nNeutrons);
   G4NeutronHPFinalState * New() 

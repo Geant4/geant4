@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.1 1999-01-07 16:12:55 gunter Exp $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.2 1999-06-29 18:43:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContAngularPar_h
@@ -25,15 +25,8 @@ class G4NeutronHPContAngularPar
 {
   public:
   
-  G4NeutronHPContAngularPar()
-  {
-    theAngular = NULL;
-    currentMeanEnergy = -2;
-  }
-  ~G4NeutronHPContAngularPar()
-  {
-    if(theAngular!=NULL) delete [] theAngular;
-  }
+  G4NeutronHPContAngularPar();
+  ~G4NeutronHPContAngularPar();
   
   void Init(ifstream & aDataFile);
   

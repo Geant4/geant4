@@ -4,6 +4,12 @@
 //
 #include "G4NeutronHPGamma.hh"
 
+  G4NeutronHPGamma::G4NeutronHPGamma() 
+  {
+    next = NULL;
+  }
+  G4NeutronHPGamma::~G4NeutronHPGamma() {}
+
 G4bool G4NeutronHPGamma::Init(ifstream & aDataFile)
 {
   G4bool theResult = true;

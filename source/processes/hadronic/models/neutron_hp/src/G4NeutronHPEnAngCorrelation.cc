@@ -4,6 +4,17 @@
 //
 #include "G4NeutronHPEnAngCorrelation.hh"
 
+  G4NeutronHPEnAngCorrelation::G4NeutronHPEnAngCorrelation()
+  {
+    theProducts = NULL;
+    inCharge = false;
+    theTotalMeanEnergy = -1.;
+  }
+  G4NeutronHPEnAngCorrelation::~G4NeutronHPEnAngCorrelation()
+  {
+    if(theProducts!=NULL) delete [] theProducts;
+  }
+
 G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
 {  
   G4ReactionProduct * result = new G4ReactionProduct;

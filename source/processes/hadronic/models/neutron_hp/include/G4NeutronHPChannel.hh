@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPChannel.hh,v 1.1 1999-01-07 16:12:55 gunter Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.2 1999-06-29 18:43:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -34,33 +34,8 @@ class G4NeutronHPChannel
 {
 public:
 
-  G4NeutronHPChannel()
-  {
-    theChannelData = new G4NeutronHPVector; 
-    theBuffer = NULL;
-    theIsotopeWiseData = NULL;
-    theFinalStates = NULL;
-    active = NULL;
-    registerCount = -1;
-  }
-  
-  ~G4NeutronHPChannel()
-  {
-    delete theChannelData; 
-    G4int i;
-    if(theBuffer != NULL) delete theBuffer; 
-    if(theIsotopeWiseData != NULL) delete [] theIsotopeWiseData;
-    if(theFinalStates != NULL)
-    {
-      for(i=0; i<niso; i++)
-      {
-        delete theFinalStates[i];
-      }
-      delete [] theFinalStates;
-    }
-    if(active!=NULL) delete [] active;
-    
-  }
+  G4NeutronHPChannel();
+  ~G4NeutronHPChannel();
   
   G4double GetXsec(G4double energy);
   

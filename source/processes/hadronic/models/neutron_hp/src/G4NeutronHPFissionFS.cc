@@ -6,6 +6,10 @@
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
+
+  G4NeutronHPFissionFS::G4NeutronHPFissionFS(){ hasXsec = false; }
+  G4NeutronHPFissionFS::~G4NeutronHPFissionFS(){}
+
   void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
   {
      theFS.Init(A, Z, dirName, aFSType);

@@ -13,6 +13,16 @@
 #include "G4LorentzVector.hh"
 #include "G4NeutronHPDataUsed.hh"
 
+  G4NeutronHPFissionBaseFS::G4NeutronHPFissionBaseFS()
+  { 
+    hasXsec = true; 
+    theXsection = new G4NeutronHPVector;
+  }
+  G4NeutronHPFissionBaseFS::~G4NeutronHPFissionBaseFS()
+  {
+    delete theXsection;
+  }
+
   void G4NeutronHPFissionBaseFS::Init (G4double A, G4double Z, G4String & dirName, G4String & bit)
   {
     G4String tString = dirName;

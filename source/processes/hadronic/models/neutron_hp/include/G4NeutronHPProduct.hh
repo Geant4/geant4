@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPProduct.hh,v 1.1 1999-01-07 16:13:09 gunter Exp $
+// $Id: G4NeutronHPProduct.hh,v 1.2 1999-06-29 18:44:13 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPProduct_h
@@ -31,14 +31,8 @@
 class G4NeutronHPProduct
 {
   public:
-  G4NeutronHPProduct()
-  {
-    theDist = NULL;
-  }
-  ~G4NeutronHPProduct()
-  {
-    if(theDist != NULL) delete theDist;
-  }
+  G4NeutronHPProduct();
+  ~G4NeutronHPProduct();
   
   inline void Init(ifstream & aDataFile)
   {

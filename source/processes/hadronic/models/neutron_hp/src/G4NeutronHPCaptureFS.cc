@@ -11,6 +11,14 @@
 #include "G4ParticleTable.hh" 
 #include "G4NeutronHPDataUsed.hh"
 
+  G4NeutronHPCaptureFS::G4NeutronHPCaptureFS()
+  {
+    hasXsec = false; 
+  }
+  
+  G4NeutronHPCaptureFS::~G4NeutronHPCaptureFS()
+  {
+  }
   G4ParticleChange * G4NeutronHPCaptureFS::ApplyYourself(const G4Track & theTrack)
   {
     G4int i;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.1 1999-01-07 16:12:57 gunter Exp $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.2 1999-06-29 18:43:52 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDeExGammas_h
@@ -26,19 +26,8 @@ class G4NeutronHPDeExGammas
 {
   public:
   
-  G4NeutronHPDeExGammas() 
-  {
-    levelStart = NULL;
-    levelSize = NULL;
-    nLevels = 0;
-    theLevels = NULL;
-  }
-  ~G4NeutronHPDeExGammas() 
-  {
-    if(levelStart!=NULL) delete [] levelStart;
-    if(levelSize!=NULL) delete [] levelSize;
-    if(theLevels!=NULL) delete [] theLevels;
-  }
+  G4NeutronHPDeExGammas();
+  ~G4NeutronHPDeExGammas();
   
   void Init(ifstream & aDataFile);
 

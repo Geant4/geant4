@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPPartial.hh,v 1.1 1999-01-07 16:13:08 gunter Exp $
+// $Id: G4NeutronHPPartial.hh,v 1.2 1999-06-29 18:44:12 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPartial_h
@@ -22,22 +22,12 @@ class G4NeutronHPPartial
 {
   public:
   
-  G4NeutronHPPartial(G4int n)
-  { 
-    X = new G4double[n];
-    data = new G4NeutronHPVector[n];
-    nData = n;
-    T=NULL;
-  }
+  G4NeutronHPPartial(G4int n);
   
-  G4NeutronHPPartial(G4int n1, G4int n2)
-  {
-    T = new G4double[n2];
-    X = new G4double[n1];
-    data = new G4NeutronHPVector[n1];
-    nData = max(n1,n2);
-  }  
+  G4NeutronHPPartial(G4int n1, G4int n2);  
   
+  ~G4NeutronHPPartial();
+
   void InitInterpolation(G4int i, ifstream & aDataFile)
   {
     data[i].InitInterpolation(aDataFile);
@@ -78,12 +68,6 @@ class G4NeutronHPPartial
     }          
   }
   
-  ~G4NeutronHPPartial()
-  {
-    delete [] X;
-    if(T!=NULL) delete [] T;
-    delete [] data;
-  }
   inline G4int GetNumberOfEnergies() {return nData;}
   
   inline void SetX(G4int i, G4double x) {X[i]=x;}

@@ -5,6 +5,27 @@
 #include "G4NeutronHPKallbachMannSyst.hh" 
 #include "Randomize.hh" 
 
+   G4NeutronHPKallbachMannSyst::G4NeutronHPKallbachMannSyst(G4double aCompoundFraction,
+                               G4double anIncidentEnergy, G4double anIncidentMass,
+                               G4double aProductEnergy, G4double aProductMass,
+                               G4double aResidualMass, G4int aResidualA, G4int aResidualZ,
+                               G4double aTargetMass, G4int aTargetA, G4int aTargetZ)
+  {
+    theCompoundFraction = aCompoundFraction;
+    theIncidentEnergy = anIncidentEnergy;
+    theIncidentMass = anIncidentMass;
+    theProductEnergy = aProductEnergy;
+    theProductMass = aProductMass;
+    theResidualMass = aResidualMass;
+    theResidualA = aResidualA;
+    theResidualZ = aResidualZ;
+    theTargetMass = aTargetMass;
+    theTargetA = aTargetA;
+    theTargetZ = aTargetZ;
+  }
+  
+  G4NeutronHPKallbachMannSyst::~G4NeutronHPKallbachMannSyst() {};
+  
 G4double G4NeutronHPKallbachMannSyst::Sample(G4double anEnergy)
 {
   G4double result;

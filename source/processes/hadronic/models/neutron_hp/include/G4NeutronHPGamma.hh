@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPGamma.hh,v 1.1 1999-01-07 16:13:01 gunter Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.2 1999-06-29 18:44:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -25,11 +25,8 @@ class G4NeutronHPGamma
 {
   public:
   
-  G4NeutronHPGamma() 
-  {
-    next = NULL;
-  }
-  ~G4NeutronHPGamma() {}
+  G4NeutronHPGamma();
+  ~G4NeutronHPGamma();
   
   G4bool Init(ifstream & aDataFile);
   

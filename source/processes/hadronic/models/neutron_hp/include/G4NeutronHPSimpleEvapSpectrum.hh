@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.1 1999-01-07 16:13:09 gunter Exp $
+// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.2 1999-06-29 18:44:14 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPSimpleEvapSpectrum_h
@@ -25,13 +25,8 @@
 class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
 {
   public:
-  G4NeutronHPSimpleEvapSpectrum()
-  {
-    expm1 = exp(-1.);
-  }
-  ~G4NeutronHPSimpleEvapSpectrum()
-  {
-  }
+  G4NeutronHPSimpleEvapSpectrum();
+  ~G4NeutronHPSimpleEvapSpectrum();
   
   inline void Init(ifstream & aDataFile)
   {

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.1 1999-01-07 16:13:05 gunter Exp $
+// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.2 1999-06-29 18:44:07 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
@@ -22,11 +22,6 @@
 
 class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
 {
-  public:
-  
-  G4NeutronHPNBodyPhaseSpace(){}
-  ~G4NeutronHPNBodyPhaseSpace(){}
-  
   public:
   
   void Init(G4double aMass, G4int aCount)

@@ -5,6 +5,34 @@
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
 
+  G4NeutronHPChannel::G4NeutronHPChannel()
+  {
+    theChannelData = new G4NeutronHPVector; 
+    theBuffer = NULL;
+    theIsotopeWiseData = NULL;
+    theFinalStates = NULL;
+    active = NULL;
+    registerCount = -1;
+  }
+  
+  G4NeutronHPChannel::~G4NeutronHPChannel()
+  {
+    delete theChannelData; 
+    G4int i;
+    if(theBuffer != NULL) delete theBuffer; 
+    if(theIsotopeWiseData != NULL) delete [] theIsotopeWiseData;
+    if(theFinalStates != NULL)
+    {
+      for(i=0; i<niso; i++)
+      {
+        delete theFinalStates[i];
+      }
+      delete [] theFinalStates;
+    }
+    if(active!=NULL) delete [] active;
+    
+  }
+
   G4double G4NeutronHPChannel::GetXsec(G4double energy)
   {
     return theChannelData->GetXsec(energy);

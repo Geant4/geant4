@@ -6,6 +6,9 @@
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
 
+  G4NeutronHP2NPInelasticFS::G4NeutronHP2NPInelasticFS(){}
+  G4NeutronHP2NPInelasticFS::~G4NeutronHP2NPInelasticFS(){}
+
 G4ParticleChange * G4NeutronHP2NPInelasticFS::ApplyYourself(const G4Track & theTrack)
 {
 // these are the particle types in the final state

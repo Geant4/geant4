@@ -6,6 +6,29 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "Randomize.hh"
 
+   G4NeutronHPPartial::G4NeutronHPPartial(G4int n)
+  { 
+    X = new G4double[n];
+    data = new G4NeutronHPVector[n];
+    nData = n;
+    T=NULL;
+  }
+  
+   G4NeutronHPPartial::G4NeutronHPPartial(G4int n1, G4int n2)
+  {
+    T = new G4double[n2];
+    X = new G4double[n1];
+    data = new G4NeutronHPVector[n1];
+    nData = max(n1,n2);
+  }  
+
+  G4NeutronHPPartial::~G4NeutronHPPartial()
+  {
+    delete [] X;
+    if(T!=NULL) delete [] T;
+    delete [] data;
+  }
+
 G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
   {
     G4NeutronHPVector * aBuffer = new G4NeutronHPVector();

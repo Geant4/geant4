@@ -6,6 +6,8 @@
 #include "G4Nucleus.hh"
 #include "G4Alpha.hh"
 
+  G4NeutronHP2NInelasticFS::G4NeutronHP2NInelasticFS(){}
+  G4NeutronHP2NInelasticFS::~G4NeutronHP2NInelasticFS(){}
 G4ParticleChange * G4NeutronHP2NInelasticFS::ApplyYourself(const G4Track & theTrack)
 {
 

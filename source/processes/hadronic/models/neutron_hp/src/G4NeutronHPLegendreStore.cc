@@ -9,6 +9,17 @@
 #include "Randomize.hh"
 #include <iostream.h>
 
+  G4NeutronHPLegendreStore::G4NeutronHPLegendreStore(G4int n)
+  {
+    theCoeff = new G4NeutronHPLegendreTable[n];
+    nEnergy = n;
+  }
+  
+  G4NeutronHPLegendreStore::~G4NeutronHPLegendreStore()
+  {
+    delete [] theCoeff;
+  }
+
 G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {
   G4double result;

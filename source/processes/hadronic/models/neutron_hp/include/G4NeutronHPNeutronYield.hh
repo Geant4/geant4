@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNeutronYield.hh,v 1.1 1999-01-07 16:13:07 gunter Exp $
+// $Id: G4NeutronHPNeutronYield.hh,v 1.2 1999-06-29 18:44:10 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNeutronYield_h
@@ -21,14 +21,8 @@
 class G4NeutronHPNeutronYield
 {
   public:
-  G4NeutronHPNeutronYield()
-  {
-    simpleMean = true;
-    spontPrompt = true;
-    hasPromptData = false;
-    hasDelayedData = false;
-  }
-  ~G4NeutronHPNeutronYield(){}
+  G4NeutronHPNeutronYield();
+  ~G4NeutronHPNeutronYield();
   
   G4double GetTargetMass() { return targetMass; }
   

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFieldPoint.hh,v 1.1 1999-01-07 16:12:59 gunter Exp $
+// $Id: G4NeutronHPFieldPoint.hh,v 1.2 1999-06-29 18:43:59 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFieldPoint_h
@@ -19,12 +19,7 @@ class G4NeutronHPFieldPoint
 {
   public:
   
-  G4NeutronHPFieldPoint()
-  {
-    X = 0;
-    nP = 0;
-    Y = NULL;
-  }
+  G4NeutronHPFieldPoint();
   
   G4NeutronHPFieldPoint(G4int n);
   

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InterpolationManager.hh,v 1.1 1999-01-07 16:12:51 gunter Exp $
+// $Id: G4InterpolationManager.hh,v 1.2 1999-06-29 18:43:42 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationManager_h
@@ -24,24 +24,9 @@ class G4InterpolationManager
    
    friend class G4InterpolationIterator;
    
-   G4InterpolationManager()
-   {
-     nRanges = 1;
-     start = new G4int[1];
-     start[0] = 0;
-     range = new G4int[1];
-     range [0] = 100000;
-     scheme = new G4InterpolationScheme[1];
-     scheme[0] = LINLIN;
-     nEntries = 0;
-   }
+   G4InterpolationManager();
    
-   ~G4InterpolationManager()
-   {
-     if(start!=NULL) delete [] start;
-     if(range!=NULL) delete [] range;
-     if(scheme!=NULL) delete [] scheme;
-   }
+   ~G4InterpolationManager();
    
    G4InterpolationManager & operator= (const G4InterpolationManager & aManager)
    {

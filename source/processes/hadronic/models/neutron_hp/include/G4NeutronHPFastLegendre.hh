@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.1 1999-01-07 16:12:59 gunter Exp $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.2 1999-06-29 18:43:58 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFastLegendre_h
@@ -19,82 +19,9 @@ class G4NeutronHPFastLegendre
 {
   public:
   
-  G4NeutronHPFastLegendre()
-  {
-    value = new G4double * [31];
-    value[0] = l0;
-    value[1] = l1;
-    value[2] = l2;
-    value[3] = l3;
-    value[4] = l4;
-    value[5] = l5;
-    value[6] = l6;
-    value[7] = l7;
-    value[8] = l8;
-    value[9] = l9;
-    value[10] = l10;
-    value[11] = l11;
-    value[12] = l12;
-    value[13] = l13;
-    value[14] = l14;
-    value[15] = l15;
-    value[16] = l16;
-    value[17] = l17;
-    value[18] = l18;
-    value[19] = l19;
-    value[20] = l20;
-    value[21] = l21;
-    value[22] = l22;
-    value[23] = l23;
-    value[24] = l24;
-    value[25] = l25;
-    value[26] = l26;
-    value[27] = l27;
-    value[28] = l28;
-    value[29] = l29;
-    value[30] = l30;
-    integral = new G4double * [31];
-    integral[0] = i0;
-    integral[1] = i1;
-    integral[2] = i2;
-    integral[3] = i3;
-    integral[4] = i4;
-    integral[5] = i5;
-    integral[6] = i6;
-    integral[7] = i7;
-    integral[8] = i8;
-    integral[9] = i9;
-    integral[10] = i10;
-    integral[11] = i11;
-    integral[12] = i12;
-    integral[13] = i13;
-    integral[14] = i14;
-    integral[15] = i15;
-    integral[16] = i16;
-    integral[17] = i17;
-    integral[18] = i18;
-    integral[19] = i19;
-    integral[20] = i20;
-    integral[21] = i21;
-    integral[22] = i22;
-    integral[23] = i23;
-    integral[24] = i24;
-    integral[25] = i25;
-    integral[26] = i26;
-    integral[27] = i27;
-    integral[28] = i28;
-    integral[29] = i29;
-    integral[30] = i30;
-    
-    G4int i;
-    for(i=0;i<31;i++) theNbin[i]=1+200*(i+1);
-  }
+  G4NeutronHPFastLegendre();
   
-  ~G4NeutronHPFastLegendre()
-  {
-    delete [] value;
-    delete [] integral;
-  }
+  ~G4NeutronHPFastLegendre();
   
   G4double Integrate(G4int l, G4double costh)
   {

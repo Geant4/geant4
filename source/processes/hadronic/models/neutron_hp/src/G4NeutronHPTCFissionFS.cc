@@ -3,6 +3,9 @@
 // A prototype of the low energy neutron transport model.
 #include "G4NeutronHPTCFissionFS.hh"
 
+  G4NeutronHPTCFissionFS::G4NeutronHPTCFissionFS(){ hasXsec = false; }
+  G4NeutronHPTCFissionFS::~G4NeutronHPTCFissionFS(){}
+
   void G4NeutronHPTCFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType0)
   {
     G4String aString = "/TC/";

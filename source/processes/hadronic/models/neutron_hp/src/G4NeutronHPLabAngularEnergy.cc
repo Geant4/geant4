@@ -14,6 +14,26 @@
 #include "G4Alpha.hh"
 #include "Randomize.hh"
 
+  G4NeutronHPLabAngularEnergy::G4NeutronHPLabAngularEnergy()
+  {
+    theEnergies = NULL;
+    theData = NULL;
+    nCosTh = NULL;
+    theSecondManager = NULL;
+  }
+  G4NeutronHPLabAngularEnergy::~G4NeutronHPLabAngularEnergy()
+  {
+    if(theEnergies != NULL) delete [] theEnergies;
+    if(nCosTh != NULL) delete [] nCosTh;
+    if(theData != NULL) 
+    {
+      for(G4int i=0; i<nEnergies; i++)
+        delete [] theData[i];
+      delete [] theData;
+    }
+    if(theSecondManager != NULL) delete [] theSecondManager;
+  }
+  
 void G4NeutronHPLabAngularEnergy::Init(ifstream & aDataFile)
 {
   aDataFile >> nEnergies;

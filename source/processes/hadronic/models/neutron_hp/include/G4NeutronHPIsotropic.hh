@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsotropic.hh,v 1.1 1999-01-07 16:13:02 gunter Exp $
+// $Id: G4NeutronHPIsotropic.hh,v 1.2 1999-06-29 18:44:02 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsotropic_h
@@ -21,12 +21,6 @@
 
 class G4NeutronHPIsotropic : public G4VNeutronHPEnergyAngular
 {
-  public:
-  
-  G4NeutronHPIsotropic(){}
-  
-  ~G4NeutronHPIsotropic(){}
-  
   public:
   
   void Init(ifstream & aDataFile);
