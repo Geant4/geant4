@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2003-11-08 02:20:43 japost Exp $
+$Id: History,v 1.87 2003-11-08 03:47:22 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 7th, 2003  J.Apostolakis - field-V05-02-07
+----------------------------
+- G4ChordFinder 
+  o Made this a base class
+    * to enable specialised implementations
+    * virtual methods: FindNextChord, PrintStatistics)
+    * new method AccumulateStatistics to aid in this
+
+- G4FieldManager
+  o Changed default values of
+      Delta One Step     to  0.010 mm   (from 0.25 mm)
+      Delta Intersection to  0.001 mm   (from 0.10 mm)
+    for increased default accuracy
+  o Use field's DoesFieldChangesEnergy method to set relevant member variable
+
 Nov 7th, 2003  J.Apostolakis - field-V05-02-06
 ----------------------------
 - G4ChordFinder
