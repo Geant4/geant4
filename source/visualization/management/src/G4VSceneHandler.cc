@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.21 2001-08-09 20:13:44 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.22 2001-08-14 18:30:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,6 +116,9 @@ void G4VSceneHandler::PostAddThis () {
 
 void G4VSceneHandler::ClearStore () {
   if (fpViewer) fpViewer -> NeedKernelVisit ();
+  // ?? Viewer is supposed to be smart enough to know when to visit
+  // kernel, but a problem in OpenGL Stored seems to require a forced
+  // kernel visit triggered by the above code.  John Allison Aug 2001
 }
 
 void G4VSceneHandler::ClearTransientStore () {
@@ -187,7 +190,6 @@ void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
 }
 
 void G4VSceneHandler::BeginModeling () {
-  if (!GetModel ()) G4Exception ("G4VSceneHandler::BeginModeling: NO MODEL!!!");
 }
 
 void G4VSceneHandler::BeginPrimitives
@@ -287,14 +289,15 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   G4Transform3D transformation(translation * rotation);
 
   // Draw...
-  BeginPrimitives(transformation);
-  AddPrimitive(scaleLine);
-  AddPrimitive(tick11);
-  AddPrimitive(tick12);
-  AddPrimitive(tick21);
-  AddPrimitive(tick22);
+  // We would like to call BeginPrimitives(transformation) here but
+  // calling BeginPrimitives from within an AddPrimitive is not
+  // allowed!  So we have to do our own transformation...
+  AddPrimitive(scaleLine.transform(transformation));
+  AddPrimitive(tick11.transform(transformation));
+  AddPrimitive(tick12.transform(transformation));
+  AddPrimitive(tick21.transform(transformation));
+  AddPrimitive(tick22.transform(transformation));
   AddPrimitive(G4Text(scale.GetAnnotation(), textPosition));
-  EndPrimitives();
 }
 
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
@@ -355,6 +358,8 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
+  if (!GetModel ())
+    G4Exception ("G4VSceneHandler::RequestPrimitives: NO MODEL!!!");
   G4Polyhedron* pPolyhedron;
   G4NURBS*      pNURBS;
   BeginPrimitives (*fpObjectTransformation);
@@ -426,12 +431,13 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Traversing scene data..." << G4endl;
     }
+    BeginModeling ();
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
-      // NOTE THAT tempMP COULD BE ZERO.
+      // NOTE THAT pModel->GetModelingParameters() COULD BE ZERO.
       // (Not sure the above is necessary; but in future we might
       // want to take notice of the modeling parameters with which
       // the model was created.  For the time being we are ignoring
@@ -443,13 +449,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
       // and convert using pMP = CreateModelingParameters () as above.)
       pModel -> SetModelingParameters (pMP);
       SetModel (pModel);  // Store for use by derived class.
-      BeginModeling ();
       pModel -> DescribeYourselfTo (*this);
-      EndModeling ();
       pModel -> SetModelingParameters (tempMP);
     }
     delete pMP;
     SetModel (0);  // Flags invalid model.
+    EndModeling ();
   }
   else {
     G4VisManager::Verbosity verbosity =
