@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.14 2003-01-22 18:42:25 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.15 2003-04-18 17:50:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -51,6 +51,7 @@
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 // 23/11/01 V.Ivanchenko Move static member-functions from header to source
 // 22/01/03 V.Ivanchenko Cuts per region
+// 18/04/03 V.Ivanchenko Make dRoverRange protected
 //
 // Class description:
 // Class for Low Energy electromagnetic energy loss of hadrons
@@ -262,8 +263,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* theRangeCoeffCTable;
     static G4int NumberOfProcesses ;
 
-    static G4double dRoverRange ; // maximum allowed deltarange/range
-                                  //  in one step
   protected:
 
     G4PhysicsTable* theLossTable ;
@@ -272,6 +271,8 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4double MinKineticEnergy ;
 
+    static G4double dRoverRange ; // maximum allowed deltarange/range
+                                  //  in one step
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.icc,v 1.5 2003-01-22 18:42:24 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.icc,v 1.6 2003-04-18 17:50:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 08-09-98  cleanup
 // 28-03-02  V.Ivanchenko add fluorescence flag
 // 21-01-03  V.Ivanchenko cut per region
+// 18-04-03  V.Ivanchenko finalRange redefinition
 //
 // ---------------------------------------------------------------
 
@@ -54,11 +55,7 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
   const G4ParticleDefinition* ParticleType=aParticle->GetDefinition();
 
   Charge = aParticle->GetDefinition()->GetPDGCharge();
-  if(Charge != lastCharge)
-  {
-    lastCharge = Charge ;
-
-  }
+  if(Charge != lastCharge) lastCharge = Charge ;
 
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
@@ -66,13 +63,13 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
   fRangeNow =
            G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,couple);
 
-  // compute the (random) Step limit
-  if (fRangeNow>finalRange)
-  {
-    StepLimit = c1lim*fRangeNow+c2lim+c3lim/fRangeNow;
+  G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+
+  if (fRangeNow > r) {
+    StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
     //randomise this value
-    if (rndmStepFlag) StepLimit = finalRange +
-                          (StepLimit-finalRange)*G4UniformRand();
+    if (rndmStepFlag) StepLimit = finalRange + (StepLimit-finalRange)*G4UniformRand();
     if (StepLimit > fRangeNow) StepLimit = fRangeNow;
   }
   else StepLimit = fRangeNow;

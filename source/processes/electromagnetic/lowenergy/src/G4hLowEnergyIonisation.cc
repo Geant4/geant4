@@ -87,6 +87,7 @@
 // 21 Jan   2003 V.Ivanchenko Cut per region
 // 10 Mar   2003 V.Ivanchenko Use SubTypes for ions
 // 12 Apr   2003 V.Ivanchenko Cut per region for fluo AlongStep
+// 18 Apr   2003 V.Ivanchenko finalRange redefinition 
 
 // -----------------------------------------------------------------------
 
@@ -161,7 +162,7 @@ void G4hLowEnergyIonisation::InitializeMe()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hLowEnergyIonisation::~G4hLowEnergyIonisation() 
+G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
 {
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy();
@@ -304,41 +305,45 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     G4cout << "Cuts are defined " << G4endl;
   }
 
-
   if(0.0 < charge)
     {
-	{
-	  BuildLossTable(*theProton) ;
-	  RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
-	  CounterOfpProcess++;
-	}
-
-    } else{
-
-	{
-	  BuildLossTable(*theAntiProton) ;
-	  RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
-	  CounterOfpbarProcess++;
-	}
-    }
+      {
+        BuildLossTable(*theProton) ;
+        RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
+        CounterOfpProcess++;
+      }
+  } else {
+      {
+        BuildLossTable(*theAntiProton) ;
+        RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
+        CounterOfpbarProcess++;
+      }
+  }
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
-           << "Loss table is built" << G4endl;
+           << "Loss table is built "
+	   << theLossTable
+	   << G4endl;
   }
 
   BuildLambdaTable(aParticleType) ;
   BuildDataForFluorescence(aParticleType);
+  
   if(verboseLevel > 1) {
     G4cout << (*theMeanFreePathTable) << G4endl;
   }
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
-           << "DEDX table will be built" << G4endl;
+           << "DEDX table will be built "
+	   << theDEDXpTable << " " << theDEDXpbarTable
+	   << " " << theRangepTable << " " << theRangepbarTable
+	   << G4endl;
   }
 
   BuildDEDXTable(aParticleType) ;
+
   if(verboseLevel > 1) {
     G4cout << (*theDEDXpTable) << G4endl;
   }
@@ -810,23 +815,27 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   // scaling back
   fRangeNow /= (chargeSquare*massRatio) ;
   dx        /= (chargeSquare*massRatio) ;
+
   stepLimit  = fRangeNow ;
+  G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+
+  if (fRangeNow > r)
+    stepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
 
   // compute the (random) Step limit in standard energy range
   if(tscaled > highEnergy ) {
-    if(fRangeNow > finalRange) {
-      stepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow) ;
 
       //  randomise this value
-      if(rndmStepFlag) stepLimit = finalRange +
+    if(rndmStepFlag) stepLimit = finalRange +
                                   (stepLimit-finalRange)*G4UniformRand() ;
-    }
     // cut step in front of Bragg's peak
     if(stepLimit > fRangeNow - dx*0.9) stepLimit = fRangeNow - dx*0.9 ;
 
   // Step limit in low energy range
   } else {
-    stepLimit = G4std::min(fRangeNow, dx*paramStepLimit) ;
+    G4double x = dx*paramStepLimit;
+    if (stepLimit > x) stepLimit = x;
   }
 
   return stepLimit ;
