@@ -1,4 +1,4 @@
-$Id: History,v 1.116 2003-10-24 18:07:22 vnivanch Exp $
+$Id: History,v 1.117 2003-10-27 17:26:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 24 Oct 03: V.Ivant (utils-V05-02-09)
 - Update logic of BuildPhysicsTable to take into account desactivate processes
+- Update defalts for stepping algorithm
 
 20 Oct 03: V.Ivant (utils-V05-02-08)
 - Minor change of interface to G4EmFluctuationModel for PAI development

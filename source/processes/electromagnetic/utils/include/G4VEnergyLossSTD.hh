@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.32 2003-08-29 07:34:03 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.33 2003-10-27 17:24:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -227,7 +227,7 @@ public:
 
   void SetLossFluctuations(G4bool val) {lossFluctuationFlag = val;};
 
-  void SetIntegral(G4bool val) {integral = val;};
+  void SetIntegral(G4bool val);
   G4bool IsIntegral() const {return integral;}
 
   void SetRandomStep(G4bool val) {rndmStepFlag = val;};
@@ -368,6 +368,8 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
+  G4double defaultRoverRange;
+  G4double defaultIntegralRange;
 
   G4bool lossFluctuationFlag;
   G4bool rndmStepFlag;
@@ -568,19 +570,20 @@ inline G4int G4VEnergyLossSTD::LambdaBinning() const
   return nLambdaBins;
 }
 */
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-  lowKinEnergy = minKinEnergy*faclow;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::MinKinEnergy() const
 {
   return minKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossSTD::SetMinKinEnergy(G4double e)
+{
+  minKinEnergy = e;
+  lowKinEnergy = minKinEnergy*faclow;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -723,9 +723,9 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* couple,
 
 G4double G4PAIModel::SampleFluctuations( const G4Material* material,
                                          const G4DynamicParticle* aParticle,
-				               G4double& tmax,
+				               G4double&,
 					       G4double& step,
-                                               G4double& meanLoss     )
+                                               G4double&)
 {
   size_t jMat;
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )

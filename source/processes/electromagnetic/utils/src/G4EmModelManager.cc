@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.18 2003-10-16 13:06:40 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.19 2003-10-27 17:24:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -226,7 +226,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   verboseLevel = val;
 
   if(0 < verboseLevel) {
-    G4cout << "### G4EmModelManager::Initialise() for "
+    G4cout << "G4EmModelManager::Initialise() for "
            << p->GetParticleName()
            << G4endl;
   }

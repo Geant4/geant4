@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.12 2003-10-14 07:50:35 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.13 2003-10-27 17:24:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,7 +106,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
   if(0 < verboseLevel) {
-    G4cout << "G4VMultipleScattering::BuildPhysicsTable() for "
+    G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
@@ -161,7 +161,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            PrintInfoDefinition();
 
   if(0 < verboseLevel) {
-    G4cout << "G4VMultipleScattering::BuildPhysicsTable() done for "
+    G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.53 2003-10-23 15:13:13 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.54 2003-10-27 17:24:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,6 +122,8 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   faclow(1.5),
   linLossLimit(0.05),
   minSubRange(0.1),
+  defaultRoverRange(0.2),
+  defaultIntegralRange(1.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
@@ -136,7 +138,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   lowKinEnergy         = minKinEnergy*faclow;
 
   // default dRoverRange and finalRange
-  SetStepFunction(0.2, 1.0*mm);
+  SetStepFunction(defaultIntegralRange, 1.0*mm);
   SetVerboseLevel(0);
 
   modelManager = new G4EmModelManager();
@@ -274,7 +276,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   currentCouple = 0;
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
+    G4cout << "### G4VEnergyLossSTD::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
@@ -311,7 +313,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!baseParticle) PrintInfoDefinition();
 
     if(0 < verboseLevel) {
-      G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() done for "
+      G4cout << "### G4VEnergyLossSTD::BuildPhysicsTable() done for "
              << GetProcessName()
              << " and particle " << part.GetParticleName()
              << G4endl;
@@ -984,7 +986,18 @@ void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 {
   dRoverRange = v1;
   finalRange = v2;
-  if (dRoverRange > 0.999) dRoverRange = 1.0;
+  if (dRoverRange > 1.0) dRoverRange = 1.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetIntegral(G4bool val)
+{
+  if(integral != val) {
+    if(val) dRoverRange = defaultIntegralRange;
+    else    dRoverRange = defaultRoverRange;
+  }
+  integral = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

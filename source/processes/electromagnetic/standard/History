@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2003-10-24 18:05:00 vnivanch Exp $
+$Id: History,v 1.102 2003-10-27 17:27:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 24 Oct 03: V.Ivant (stand-V05-02-05)
--Update defults for G4eIonisation
+-Update defults for processes
+-Add PAI model (V.Grichine)
 
 4 Oct 03: G.Cosmo (stand-V05-02-04)
 - Modified GNUmakefiles:
