@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2002-12-12 08:21:38 gcosmo Exp $
+$Id: History,v 1.70 2003-02-05 15:31:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 5th, 2003      G. Cosmo - field-V05-00-00
+---------------------------
+- Removed redundant inclusions of PhysicalConstants.h or SystemOfUnits.h.
+  Now using directly CLHEP's headers.
 
 Dec 12th, 2002     G. Cosmo - field-V04-01-06
 ---------------------------
