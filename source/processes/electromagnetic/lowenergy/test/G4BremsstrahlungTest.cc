@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.3 2000-07-11 18:40:02 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.4 2000-07-29 13:17:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -326,6 +326,7 @@ G4int main()
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
       G4double zChange = particleChange->GetPositionChange()->z();
+      G4double thetaChange = particleChange->GetPositionChange()->theta();
 
       G4cout << "---- Primary after the step ---- " << G4endl;
  
@@ -355,6 +356,7 @@ G4int main()
       ntuple1->column("pych", pyChange);
       ntuple1->column("pzch", pzChange);
       ntuple1->column("pch", zChange);  
+      ntuple1->column("thetach", thetaChange);  
       ntuple1->dumpData(); 
 
       // Secondaries physical quantities 
@@ -375,6 +377,7 @@ G4int main()
 	  G4double px   = (finalParticle->GetMomentum()).x();
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
+	  G4double theta   = (finalParticle->GetMomentum()).theta();
 	  G4double p   = sqrt(px*px+py*py+pz*pz);
 
 	  if (e > initEnergy)
@@ -411,6 +414,7 @@ G4int main()
 	  ntuple2->column("pz", pz);
 	  ntuple2->column("p", p);
 	  ntuple2->column("e", e);
+	  ntuple2->column("theta", theta);
 	  ntuple2->column("ekin", eKin);
 	  ntuple2->column("type", partType);
 	  
