@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:14:19 gunter Exp $
+$Id: History,v 1.2 1999-02-06 10:43:21 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb 6, 1999 H.Kurashige (track-01-00-01)
+-  Added Get/SetMomentumDirectionChange in G4ParticleChange (Hisaya)
+-  Removed using G4ParticleMomentum (Hisaya)
+
 December 15,  1998 H.Kurashige (track-00-04-05)
 - G4ParticleChange::CheckIt is activated in VERBOSE mode (Hisaya) 
 
