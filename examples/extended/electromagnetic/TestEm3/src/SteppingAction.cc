@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.17 2005-01-11 16:40:07 maire Exp $
+// $Id: SteppingAction.cc,v 1.18 2005-01-11 17:29:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,11 +52,7 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-
-  G4StepPoint* prePoint = aStep->GetPreStepPoint();
-  G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  G4Track*     track    = aStep->GetTrack();
-  G4ParticleDefinition* particle = track->GetDefinition(); 
+  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
       
   //if World, returns
   //
@@ -64,7 +60,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == detector->GetWorldMaterial()) return;
-  
+ 
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4Track*     track    = aStep->GetTrack();
+  const G4ParticleDefinition* particle = track->GetDefinition(); 
+ 
   //locate the absorber
   //
   G4int absorNum  = volume->GetCopyNo();
