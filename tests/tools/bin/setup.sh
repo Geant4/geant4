@@ -49,7 +49,7 @@ fi
 #
 # Other G4 environment variables.
 #
-export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
+export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 export G4LEDATA=$G4INSTALL/../G4EMLOW0.3
 #
