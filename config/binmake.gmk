@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.24 1999-06-04 16:58:17 stesting Exp $
+# $Id: binmake.gmk,v 1.25 1999-06-04 17:24:33 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -190,7 +190,9 @@ LDLIBS4 += $(LOADLIBS)
 
 # Finally assemble libraries...
 #
-ifndef USER_DEFINED_LDLIBS
+ifdef USER_DEFINED_LDLIBS
+  LDLIBS_PREFINAL := $(LDLIBS)
+else
   LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
