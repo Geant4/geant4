@@ -27,11 +27,7 @@
 #include "DicomPatientConstructor.hh"
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include "g4std/fstream"
 #include "G4String.hh"
-#include <stdio.h>
-#include <math.h>
 
 G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double minDensity)
 {

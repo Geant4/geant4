@@ -35,12 +35,12 @@
 
 DicomPhysicsList::DicomPhysicsList():  G4VUserPhysicsList()
 {
-    defaultCutValue = 10.*mm;
-    cutForGamma     = 10.*mm;
-    cutForElectron  = defaultCutValue;
-    cutForPositron  = defaultCutValue;
+  defaultCutValue = 10.*mm;
+  cutForGamma     = 10.*mm;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
 
-    SetVerboseLevel(0);
+  SetVerboseLevel(0);
 }
 
 DicomPhysicsList::~DicomPhysicsList()
@@ -48,33 +48,33 @@ DicomPhysicsList::~DicomPhysicsList()
 
 void DicomPhysicsList::ConstructParticle()
 {
-    // In this method, static member functions should be called
-    // for all particles which you want to use.
-    // This ensures that objects of these particle types will be
-    // created in the program.
+  // In this method, static member functions should be called
+  // for all particles which you want to use.
+  // This ensures that objects of these particle types will be
+  // created in the program.
 
-    ConstructBosons();
-    ConstructLeptons();
+  ConstructBosons();
+  ConstructLeptons();
 }
 
 void DicomPhysicsList::ConstructBosons()
 {
-    // gamma
-    G4Gamma::GammaDefinition();
+  // gamma
+  G4Gamma::GammaDefinition();
 
 }
 
 void DicomPhysicsList::ConstructLeptons()
 {
-    // leptons
-    G4Electron::ElectronDefinition();
-    G4Positron::PositronDefinition();
+  // leptons
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
 }
 
 void DicomPhysicsList::ConstructProcess()
 {
-    AddTransportation();
-    ConstructEM();
+  AddTransportation();
+  ConstructEM();
 }
 
 #include "G4MultipleScattering.hh"
@@ -93,42 +93,42 @@ void DicomPhysicsList::ConstructProcess()
 
 void DicomPhysicsList::ConstructEM()
 {
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() )
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
     {
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
 
-        //processes
-        lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-        loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-        loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+      //processes
+      lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
+      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
 
-        if (particleName == "gamma")
+      if (particleName == "gamma")
         {
-            //gamma
-            pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-            pmanager->AddDiscreteProcess(lowePhot);
-            pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-            pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  //gamma
+	  pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+	  pmanager->AddDiscreteProcess(lowePhot);
+	  pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+	  pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 
         }
-        else if (particleName == "e-")
+      else if (particleName == "e-")
         {
-            //electron
-            pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-            pmanager->AddProcess(loweIon,     -1, 2,2);
-            pmanager->AddProcess(loweBrem,    -1,-1,3);
+	  //electron
+	  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	  pmanager->AddProcess(loweIon,     -1, 2,2);
+	  pmanager->AddProcess(loweBrem,    -1,-1,3);
 
         }
-        else if (particleName == "e+")
+      else if (particleName == "e+")
         {
-            //positron
-            pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-            pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-            pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-            pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	  //positron
+	  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+	  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
 
         }
     }
@@ -136,116 +136,116 @@ void DicomPhysicsList::ConstructEM()
 #include "G4Decay.hh"
 void DicomPhysicsList::ConstructGeneral()
 {
-    // Add Decay Process
-    G4Decay* theDecayProcess = new G4Decay();
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() )
+  // Add Decay Process
+  G4Decay* theDecayProcess = new G4Decay();
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
     {
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        if (theDecayProcess->IsApplicable(*particle))
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      if (theDecayProcess->IsApplicable(*particle))
         {
-            pmanager ->AddProcess(theDecayProcess);
-            // set ordering for PostStepDoIt and AtRestDoIt
-            pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-            pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+	  pmanager ->AddProcess(theDecayProcess);
+	  // set ordering for PostStepDoIt and AtRestDoIt
+	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+	  pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
         }
     }
 }
 
 void DicomPhysicsList::SetCuts()
 {
-    if (verboseLevel >0)
+  if (verboseLevel >0)
     {
-        G4cout << "DicomPhysicsList::SetCuts:";
-        G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+      G4cout << "DicomPhysicsList::SetCuts:";
+      G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
     }
 
-    // set cut values for gamma at first and for e- second and next for e+,
-    // because some processes for e+/e- need cut values for gamma
-    SetCutValue(cutForGamma, "gamma");
-    SetCutValue(cutForElectron, "e-");
-    SetCutValue(cutForPositron, "e+");
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
 
-    SetCutValueForOthers(defaultCutValue);
+  SetCutValueForOthers(defaultCutValue);
 
-    if (verboseLevel>0)
-        DumpCutValuesTable();
+  if (verboseLevel>0)
+    DumpCutValuesTable();
 }
 
 
 void DicomPhysicsList::SetGammaLowLimit(G4double lowcut)
 {
-    if (verboseLevel >0)
+  if (verboseLevel >0)
     {
-        G4cout << "DicomPhysicsList::SetCuts:";
-        G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
+      G4cout << "DicomPhysicsList::SetCuts:";
+      G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
     }
 
-    G4Gamma::SetEnergyRange(lowcut,1e5);
+  G4Gamma::SetEnergyRange(lowcut,1e5);
 
 }
 
 void DicomPhysicsList::SetElectronLowLimit(G4double lowcut)
 {
-    if (verboseLevel >0)
+  if (verboseLevel >0)
     {
 
-        G4cout << "DicomPhysicsList::SetCuts:";
-        G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
+      G4cout << "DicomPhysicsList::SetCuts:";
+      G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
 
     }
 
-    G4Electron::SetEnergyRange(lowcut,1e5);
+  G4Electron::SetEnergyRange(lowcut,1e5);
 }
 
 void DicomPhysicsList::SetGELowLimit(G4double lowcut)
 {
-    if (verboseLevel >0)
+  if (verboseLevel >0)
     {
-        G4cout << "DicomPhysicsList::SetCuts:";
-        G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
+      G4cout << "DicomPhysicsList::SetCuts:";
+      G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
     }
 
-    G4Gamma::SetEnergyRange(lowcut,1e5);
-    G4Electron::SetEnergyRange(lowcut,1e5);
-    G4Positron::SetEnergyRange(lowcut,1e5);
+  G4Gamma::SetEnergyRange(lowcut,1e5);
+  G4Electron::SetEnergyRange(lowcut,1e5);
+  G4Positron::SetEnergyRange(lowcut,1e5);
 
 }
 
 void DicomPhysicsList::SetGammaCut(G4double val)
 {
-    ResetCuts();
-    cutForGamma = val;
+  ResetCuts();
+  cutForGamma = val;
 }
 
 void DicomPhysicsList::SetElectronCut(G4double val)
 {
-    //  ResetCuts();
-    cutForElectron = val;
+  //  ResetCuts();
+  cutForElectron = val;
 }
 
 void DicomPhysicsList::SetPositronCut(G4double val)
 {
-    //  ResetCuts();
-    cutForPositron = val;
+  //  ResetCuts();
+  cutForPositron = val;
 }
 
 void DicomPhysicsList::SetLowEnSecPhotCut(G4double cut)
 {
 
-    G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
-    G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
-    lowePhot->SetCutForLowEnSecPhotons(cut);
-    loweIon->SetCutForLowEnSecPhotons(cut);
-    loweBrem->SetCutForLowEnSecPhotons(cut);
+  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
+  lowePhot->SetCutForLowEnSecPhotons(cut);
+  loweIon->SetCutForLowEnSecPhotons(cut);
+  loweBrem->SetCutForLowEnSecPhotons(cut);
 }
 
 void DicomPhysicsList::SetLowEnSecElecCut(G4double cut)
 {
 
-    G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
-    G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-    loweIon->SetCutForLowEnSecElectrons(cut);
+  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
+  loweIon->SetCutForLowEnSecElectrons(cut);
 
 }

@@ -35,44 +35,44 @@ class G4LowEnergyBremsstrahlung;
 class DicomPhysicsList: public G4VUserPhysicsList
 {
 public:
-    DicomPhysicsList();
-    ~DicomPhysicsList();
+  DicomPhysicsList();
+  ~DicomPhysicsList();
 
-    // Set Cuts
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetPositronCut(G4double);
+  // Set Cuts
+  void SetGammaCut(G4double);
+  void SetElectronCut(G4double);
+  void SetPositronCut(G4double);
 
-    void SetGammaLowLimit(G4double);
-    void SetElectronLowLimit(G4double);
-    void SetGELowLimit(G4double);
-    void SetLowEnSecPhotCut(G4double);
-    void SetLowEnSecElecCut(G4double);
+  void SetGammaLowLimit(G4double);
+  void SetElectronLowLimit(G4double);
+  void SetGELowLimit(G4double);
+  void SetLowEnSecPhotCut(G4double);
+  void SetLowEnSecElecCut(G4double);
 
 protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
 
-    void SetCuts();
+  void SetCuts();
 
-    // these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
+  // these methods Construct particles
+  void ConstructBosons();
+  void ConstructLeptons();
 
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  // these methods Construct physics processes and register them
+  void ConstructGeneral();
+  void ConstructEM();
 
 private:
 
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
 
-    G4LowEnergyIonisation*  loweIon;
-    G4LowEnergyPhotoElectric* lowePhot;
-    G4LowEnergyBremsstrahlung* loweBrem;
+  G4LowEnergyIonisation*  loweIon;
+  G4LowEnergyPhotoElectric* lowePhot;
+  G4LowEnergyBremsstrahlung* loweBrem;
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DicomPrimaryGeneratorAction.hh,v 1.2 2003-06-03 21:37:04 pia Exp $
+// $Id: DicomPrimaryGeneratorAction.hh,v 1.3 2003-06-04 22:24:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,7 +31,6 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-//#include "G4ThreeVector.hh"
 
 class G4ParticleGun;
 class G4Event;

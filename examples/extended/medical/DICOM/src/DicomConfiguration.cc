@@ -24,11 +24,8 @@
 
 // Definitions
 #include "DicomConfiguration.hh"
-#include "g4std/iostream"
 #include "g4std/fstream"
 
-#include <stdio.h>
-#include "g4std/iomanip"
 
 G4int DicomConfiguration::ReadDataFile()
 {

@@ -23,29 +23,18 @@
 
 #include "DicomEventAction.hh"
 #include "G4Event.hh"
-#include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
 
 DicomEventAction::DicomEventAction():drawFlag("all")
-{
-  ;
-}
+{ }
 
 DicomEventAction::~DicomEventAction()
-{
-  ;
-}
+{ }
 
 void DicomEventAction::BeginOfEventAction(const G4Event*)
-{
-  ;
-}
+{ }
 
 void DicomEventAction::EndOfEventAction(const G4Event* evt)
 {

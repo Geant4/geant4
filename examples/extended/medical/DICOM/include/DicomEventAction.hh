@@ -26,7 +26,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class G4EventManager;
 class G4Event;
 
 class DicomEventAction : public G4UserEventAction

@@ -1,6 +1,9 @@
 
-#include <stddef.h>
+//#include <stddef.h>
 #include "DicomOctree.hh"
+#include "DicomOctreeNode.hh"
+#include "DicomOctreeMiddleNode.hh"
+#include "DicomOctreeTerminalNode.hh"
 
 Octree::Octree( G4int noLevels, G4double size )
 {
