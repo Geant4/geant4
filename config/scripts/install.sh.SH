@@ -335,6 +335,22 @@ export G4USE_G3TOG4
 echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
 fi 
 
+#
+# Use STEP module
+#
+#+
+if [ X$g4wlib_build_step = Xy ] ; then
+G4LIB_BUILD_STEP=1
+export G4LIB_BUILD_STEP
+echo "On this machine the G4LIB_BUILD_STEP=\$G4LIB_BUILD_STEP"
+fi 
+
+if [ X$g4w_use_step = Xy ] ; then
+G4USE_STEP=1
+export G4USE_STEP
+echo "On this machine the G4USE_STEP=\$G4USE_STEP"
+fi 
+
 #+
 #
 # g4shared
@@ -399,7 +415,7 @@ cd $g4install/source
 # There is no env!
 if [ X$g4global = Xy ] ; then
 echo ""
-rm -r $g4conf/g4make.log
+rm -rf $g4conf/g4make.log
 $g4make global 2>&1 | tee $g4conf/g4make.log
 fi
 
@@ -407,7 +423,7 @@ fi
 if [ X$g4granular = Xy ] ; then
 G4LIB_USE_GRANULAR=1
 export G4LIB_USE_GRANULAR
-rm -r $g4conf/g4make.log
+rm -rf $g4conf/g4make.log
 $g4make 2>&1 | tee $g4conf/g4make.log
 fi
 

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.34 2003-07-27 01:10:02 stesting Exp $
+# $Id: Configure,v 1.35 2003-08-26 23:27:51 stesting Exp $
 #
-# Generated on Wed Jul 23 23:13:07 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Wed Aug 27 01:25:17 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -234,6 +234,8 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
+g4w_use_step=''
+g4wlib_build_step=''
 lns=''
 c=''
 n=''
@@ -3556,7 +3558,7 @@ case "$g4vis_none" in
 esac
 
 #####################################################################
-ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*`
+ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*|xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$ogl_dirs" != "X" ; then
@@ -3564,13 +3566,7 @@ if test "X$ogl_dirs" != "X" ; then
 g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
 #echo g4ogl_base_dir_found=$g4ogl_base_dir_found
 
-g4ogl_base_dir_n=`echo $g4ogl_base_dir_found |awk -F"/" '{print NF}'`
-#echo g4ogl_base_dir_n=$g4ogl_base_dir_n
-
-n=$[$g4ogl_base_dir_n-2]
-#echo n=$n
-
-g4ogl_base_dir_found=`echo $g4ogl_base_dir_found|cut -d"/" -f1-$n`
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 
 	g4vis_oglhome=$g4ogl_base_dir_found
 else
@@ -4162,6 +4158,7 @@ rp=$g4message
 g4vis_oglhome=$ans
 
 fi
+
 echo " "
 case "$g4wlib_build_g3tog4" in
 '')
@@ -4169,7 +4166,7 @@ case "$g4wlib_build_g3tog4" in
 	;;
 esac
 
-case "$g4w_use_g4tog4" in
+case "$g4w_use_g3tog4" in
 '')
 	g4w_use_g3tog4=n
 	;;
@@ -4179,7 +4176,7 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4USE_G3TOG4  
+  G4LIB_BUILD_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
 Do you want to set this variable ?
@@ -4195,11 +4192,53 @@ gans=$ans
 	
 	n*|N*) 
 		g4wlib_build_g3tog4=n
-		g4w_use_g4tog4=n
+		g4w_use_g3tog4=n
 		;;
 	y*|Y*) 
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
+		;;
+	esac
+
+
+echo " "
+case "$g4wlib_build_step" in
+'')
+	g4wlib_build_step=n
+	;;
+esac
+
+case "$g4w_use_step" in
+'')
+	g4w_use_step=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_STEP  
+
+If this variable is set, it will be built STEP module.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4wlib_build_step
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_step=n
+		g4w_use_step=n
+		;;
+	y*|Y*) 
+		g4wlib_build_step=y
+		g4w_use_step=y
 		;;
 	esac
 
@@ -4382,6 +4421,7 @@ g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
+g4w_use_step='$g4w_use_step'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4391,6 +4431,7 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
+g4wlib_build_step='$g4wlib_build_step'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'
