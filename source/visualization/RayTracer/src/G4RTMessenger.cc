@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc,v 1.5 2001-07-11 10:09:03 gunter Exp $
+// $Id: G4RTMessenger.cc,v 1.6 2002-12-05 01:37:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,7 @@ G4RTMessenger::G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2)
   fileCmd->SetGuidance("Define the name of output JPEG file.");
   fileCmd->SetParameterName("fileName",true);
   fileCmd->SetDefaultValue("g4RayTracer.jpeg");
-  fileCmd->AvailableForStates(Idle);
+  fileCmd->AvailableForStates(G4State_Idle);
 
   columnCmd = new G4UIcmdWithAnInteger("/vis/rayTracer/column",this);
   columnCmd->SetGuidance("Define the number of horizontal pixels.");

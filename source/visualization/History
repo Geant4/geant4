@@ -1,4 +1,4 @@
-$Id: History,v 1.209 2002-11-27 12:53:43 johna Exp $
+$Id: History,v 1.210 2002-12-05 01:39:16 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th December 2002  Makoto Asai (vis-V04-01-09)
+- Migration to new G4ApplicationState
 
 27th November 2002  John Allison  (vis-V04-01-08)
 - Fixes to HepRep - see History file.

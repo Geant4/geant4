@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.9 2002-11-09 07:40:05 yhajime Exp $
+// $Id: G4RayTracer.cc,v 1.10 2002-12-05 01:37:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,7 @@ void G4RayTracer::Trace(G4String fileName)
 {
   G4StateManager* theStateMan = G4StateManager::GetStateManager();
   G4ApplicationState currentState = theStateMan->GetCurrentState();
-  if(currentState!=Idle)
+  if(currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - Trace() ignored." << G4endl;
     return;
