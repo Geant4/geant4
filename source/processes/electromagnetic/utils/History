@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2003-04-07 18:01:17 vnivanch Exp $
+$Id: History,v 1.88 2003-04-09 17:21:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 Mar 03: V.Ivant (utils-V05-00-09)
+- Fix problem of negative step limit for STD
 
 07 Mar 03: V.Ivant (utils-V05-00-08)
 - Add DeRegister to STD loss classes
