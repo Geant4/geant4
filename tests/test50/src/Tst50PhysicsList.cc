@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.22 2004-11-24 17:05:07 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.23 2004-11-24 17:11:19 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -52,7 +52,7 @@
 #include "Tst50PositronPenelope.hh"
 #include "Tst50ProtonStandard.hh"
 #include "Tst50ProtonICRU49.hh"
-#include "Tst50ProtonEEDLziegler.hh"
+#include "Tst50ProtonZiegler85.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -350,7 +350,7 @@ if (name == "alpha-ziegler77")
 	}
     }
 
-if (name == "proton-eedl-ziegler") 
+if (name == "proton-ziegler85") 
     {
       if (protonIsRegistered) 
 	{
@@ -360,7 +360,7 @@ if (name == "proton-eedl-ziegler")
       else 
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new Tst50ProtonEEDLziegler(name) );
+	  RegisterPhysics( new Tst50ProtonZiegler85(name) );
 	  protonIsRegistered = true;
 	}
     }
