@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PhysicsList.cc,v 1.5 2003-06-16 17:14:52 gunter Exp $
+// $Id: Tst10PhysicsList.cc,v 1.6 2004-01-25 14:06:12 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -87,17 +87,19 @@ void Tst10PhysicsList::ConstructProcess()
 void Tst10PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
-    if (particleName == "opticalphoton") {
+    if (particleName == "opticalphoton") 
+    {
     //opticalphoton
-      // Construct processes for opticalphoton
-			pmanager->AddDiscreteProcess(new G4OpBoundaryProcess());
+    // Construct processes for opticalphoton
+    //  pmanager->AddDiscreteProcess(new G4OpBoundaryProcess());
  
-		} 
+    } 
   }
 }
 

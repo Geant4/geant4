@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.6 2003-06-16 17:14:53 gunter Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.7 2004-01-25 14:06:12 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -30,6 +30,7 @@
 // ------------------------------------------------------------
 
 #include "Tst10PrimaryGeneratorAction.hh"
+#include "Tst10DetectorConstruction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -37,10 +38,14 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "globals.hh"
+
 #include <iostream>
 #include <fstream>
 
-Tst10PrimaryGeneratorAction::Tst10PrimaryGeneratorAction()
+Tst10PrimaryGeneratorAction::
+Tst10PrimaryGeneratorAction(Tst10DetectorConstruction*det)
+  :
+  fDetector(det)
 {
   particleGun = new G4ParticleGun();
 }
@@ -65,18 +70,20 @@ void Tst10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4PrimaryVertex* aVertex = 
     new G4PrimaryVertex( VertexPosition, 0);
 
-  G4int NumberOfParticlesToBeGenerated = 10000;
-	G4cout << "  A " << NumberOfParticlesToBeGenerated << 
-	    " optical photons vertex has been generated at " << VertexPosition << G4endl;
+  //  G4int NumberOfParticlesToBeGenerated = 10000;
+  G4int NumberOfParticlesToBeGenerated = 1;
+  // G4cout << "  A " << NumberOfParticlesToBeGenerated 
+  //          << " optical photons vertex has been generated at " 
+  //          << VertexPosition << G4endl;
   // create new primaries and set them to the vertex
   for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
 		G4ThreeVector m = GetRandomDirection();
 //		G4ThreeVector m(1,0,0);
     G4PrimaryParticle* aPrimaryParticle =
-      new G4PrimaryParticle(aParticleDefinition,m.x(),m.y(),m.z());
+      new G4PrimaryParticle(aParticleDefinition, m.x(), m.y(), m.z());
     aPrimaryParticle->SetMass (0);
-		G4ThreeVector p = GetRandomPolarization ( m );
+    G4ThreeVector p = GetRandomPolarization ( m );
     aPrimaryParticle->SetPolarization(p.x(),p.y(),p.z());
     aVertex->SetPrimary( aPrimaryParticle );
   }
@@ -111,11 +118,13 @@ G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomDirection() {
   return retval;
 }
 
-G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPosition() {
+G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPosition() 
+{
+  G4double a = fDetector->GetHallSize();
 
-  G4double x = (G4UniformRand()*2-1)*m;
-  G4double y = (G4UniformRand()*2-1)*m;
-  G4double z = (G4UniformRand()*2-1)*m;
+  G4double x = ( G4UniformRand()*2 - 1 )*a;
+  G4double y = ( G4UniformRand()*2 - 1 )*a;
+  G4double z = ( G4UniformRand()*2 - 1 )*a;
 
   G4ThreeVector retval (x, y, z);
 
@@ -127,4 +136,9 @@ G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPolarization(G4ThreeVector D
   G4ThreeVector retval = Polarization.unit();
   return retval;
 }
+
+
+
+
+
 

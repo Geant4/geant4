@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.hh,v 1.3 2003-01-30 10:59:07 gcosmo Exp $
+// $Id: Tst10DetectorConstruction.hh,v 1.4 2004-01-25 14:04:27 grichine Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -51,9 +51,9 @@ class Tst10DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      G4VPhysicalVolume* SelectDetector (const G4String& val);
-     void SwitchDetector();
-     void SetMaterial();
-
+     void               SwitchDetector();
+     void               SetMaterial();
+     G4double           GetHallSize(){return fHallSize;};
   private:
      Tst10DetectorMessenger* detectorMessenger;
      G4VSolid* aVolume;
@@ -61,6 +61,7 @@ class Tst10DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* Water;
      G4Material* Water1;
      G4OpticalSurface* aSurface;
+     G4double fHallSize;
 };
 
 #endif

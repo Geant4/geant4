@@ -20,44 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PrimaryGeneratorAction.hh,v 1.3 2004-01-25 14:04:28 grichine Exp $
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
 //
-//      This class is a class derived from G4VUserPrimaryGeneratorAction
-//      for constructing all particles and processes.
+// $Id: Tst10EventActionMessenger.hh,v 1.1 2004-01-25 14:04:28 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//	History
-//        first version              09 Sept. 1998 by S.Magni
-// ------------------------------------------------------------
+// 
 
-#ifndef Tst10PrimaryGeneratorAction_h
-#define Tst10PrimaryGeneratorAction_h 1
+#ifndef Tst10EventActionMessenger_h
+#define Tst10EventActionMessenger_h 1
 
-#include "G4ThreeVector.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4ParticleGun;
-class G4Event;
-class Tst10DetectorConstruction;
+class Tst10EventAction;
+
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 
 
-class Tst10PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+
+class Tst10EventActionMessenger: public G4UImessenger
 {
   public:
-    Tst10PrimaryGeneratorAction(Tst10DetectorConstruction*);
-    ~Tst10PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event* anEvent);
+    Tst10EventActionMessenger( Tst10EventAction* evAct);
+   ~Tst10EventActionMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
   private:
-    G4ParticleGun* particleGun;
-		G4ThreeVector GetRandomPolarization( G4ThreeVector direction );
-		G4ThreeVector GetRandomDirection( );
-		G4ThreeVector GetRandomPosition( );
-  Tst10DetectorConstruction* fDetector;
+
+    Tst10EventAction*     eventAction;   
+    G4UIcmdWithAnInteger* PrintCmd;
 };
 
 #endif
-
-

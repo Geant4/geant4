@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10EventAction.cc,v 1.6 2003-06-16 17:14:51 gunter Exp $
+// $Id: Tst10EventAction.cc,v 1.7 2004-01-25 14:06:12 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -30,6 +30,7 @@
 // ------------------------------------------------------------
 
 #include "Tst10EventAction.hh"
+#include "Tst10EventActionMessenger.hh"
 
 
 #include "G4Event.hh"
@@ -44,19 +45,29 @@
 #include <iostream>
 
 Tst10EventAction::Tst10EventAction()
-{;}
+{
+  eventMessenger = new Tst10EventActionMessenger(this);
+}
 
 Tst10EventAction::~Tst10EventAction()
-{;}
+{
+  delete eventMessenger;
+}
 
 void Tst10EventAction::BeginOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Start Event " << evt->GetEventID() << G4endl;
+ G4int evtNb = evt->GetEventID();
+ 
+ if ( evtNb % printModulo == 0 )
+ { 
+    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
+ }
+   //  G4cout << ">>> Start Event " << evt->GetEventID() << G4endl;
 }
 
 void Tst10EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> End Event " << evt->GetEventID() << G4endl;
+  // G4cout << ">>> End Event " << evt->GetEventID() << G4endl;
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
@@ -69,6 +80,8 @@ void Tst10EventAction::EndOfEventAction(const G4Event* evt)
     { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
 	}		 
 }
+
+
 
 
 

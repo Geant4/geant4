@@ -20,28 +20,53 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: Tst10EventActionMessenger.cc,v 1.1 2004-01-25 14:06:12 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#ifndef Tst10DetectorMessenger_h
-#define Tst10DetectorMessenger_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "Tst10EventActionMessenger.hh"
+#include "Tst10EventAction.hh"
+
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class Tst10DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Tst10DetectorMessenger: public G4UImessenger
+Tst10EventActionMessenger::Tst10EventActionMessenger(Tst10EventAction* EvAct)
+:
+eventAction(EvAct)
+{ 
+  
+  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  PrintCmd->SetGuidance("Print events modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+  PrintCmd->AvailableForStates(G4State_Idle);     
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+Tst10EventActionMessenger::~Tst10EventActionMessenger()
 {
-  public:
-    Tst10DetectorMessenger(Tst10DetectorConstruction * myDC);
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-  private:
-    Tst10DetectorConstruction * myDetector;
-    G4UIdirectory *      mydetDir;
-    G4UIcmdWithAString * selDetCmd;
-};
+  delete PrintCmd;    
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void Tst10EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                            G4String     newValue  )
+{    
+  if(command == PrintCmd)
+  {
+    eventAction->SetPrintModulo( PrintCmd->GetNewIntValue(newValue) );
+  }
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

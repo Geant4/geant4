@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10EventAction.hh,v 1.3 2001-07-11 10:09:48 gunter Exp $
+// $Id: Tst10EventAction.hh,v 1.4 2004-01-25 14:04:28 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -36,6 +36,9 @@
 
 #include "G4UserEventAction.hh"
 
+#include "globals.hh"
+
+class Tst10EventActionMessenger;
 class G4Event;
 
 class Tst10EventAction : public G4UserEventAction
@@ -43,10 +46,16 @@ class Tst10EventAction : public G4UserEventAction
   public:
     Tst10EventAction();
     virtual ~Tst10EventAction();
+    void   SetPrintModulo(G4int val)  { printModulo = val;};
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
+
+private:
+
+  G4int    printModulo;
+  Tst10EventActionMessenger*  eventMessenger;
 };
 
 #endif

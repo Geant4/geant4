@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test10.cc,v 1.4 2001-07-11 10:09:47 gunter Exp $
+// $Id: test10.cc,v 1.5 2004-01-25 14:04:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,13 +56,14 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes
-  runManager->SetUserInitialization(new Tst10DetectorConstruction);
+  Tst10DetectorConstruction* detector =  new Tst10DetectorConstruction();
+  runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Tst10PhysicsList);
 
   // UserAction classes
   runManager->SetUserAction(new Tst10RunAction);
   runManager->SetUserAction(new Tst10EventAction);
-  runManager->SetUserAction(new Tst10PrimaryGeneratorAction);
+  runManager->SetUserAction(new Tst10PrimaryGeneratorAction(detector));
 
 #ifdef G4VIS_USE
   G4cout << "Visualization init\n";
