@@ -1,0 +1,51 @@
+$Id: History,v 1.1 2000-05-24 15:36:10 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+24 may 00: mma  (utils-V01-01-02)
+- merge "plus" processes into standard      
+     
+27 apr 00 mma  (em-V01-01-01)
+- G4endl (dec/iso)      
+     
+26 apr 00 mma  (em-V01-01-00)
+- all EnergyLoss classes renamed G4V... 
+  Most classes in standard and muons affected.
+- G4Muls moved in utils
+- bugs fixe in MuPairProduction  
+- cowork with geant4-01-01-ref-02
+     
+02 mar 00 mma  (em-V01-00-00)
+- new G4VEnergyLoss class and related structure
+- cowork with geant4-01-00-ref-06
+     
+10 nov 99 mma  (em-V00-01-03)
+- migration to STL: remove RWT hash dictionnary
+
+14th June 1999  John Allison (em-01-00-05b)
+- Muon corrections in G4MultipleScattering.cc, G4MuBremsstrahlung.cc
+  and G4MuPairProduction.cc by Laszlo Urban, Pedro Arce.
+  (Also in rocesses/photoleplon_hadron/src/G4MuNuclearInteraction.cc.)
+
+5th June 1999  John Allison
+- standard/GNUmakefile: Force non-optimised compliation of some
+  files on HP with aCC: HP ANSI C++ B3910B A.01.15.
+
+May 29, 1999: John Allison
+- Added electromagnetic/lowenergy to GNUmakefile and
+  electromagnetic/GNUmakefile..
