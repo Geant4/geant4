@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.9 2002-02-27 14:40:23 vnivanch Exp $
+// $Id: G4hIonisation.icc,v 1.10 2002-03-27 21:43:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,9 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
    
  G4double MeanFreePath;
  G4bool isOut;
-   
- if(kinEnergy > HighestKineticEnergy) kinEnergy = HighestKineticEnergy;
- if(kinEnergy > LowestKineticEnergy)
+    
+ if(kinEnergy > UpperBoundLambda) kinEnergy = UpperBoundLambda;
+ if(kinEnergy > LowerBoundLambda)
          MeanFreePath = (((*theMeanFreePathTable)(aMaterial->GetIndex()))->
                         GetValue(kinEnergy, isOut))/currentChargeSquare; 
  else    MeanFreePath = DBL_MAX;
