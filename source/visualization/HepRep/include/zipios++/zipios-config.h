@@ -36,7 +36,7 @@
 /* define if the compiler has std compliant iostream library */
 #define HAVE_STD_IOSTREAM 1
 
-#ifndef S_ISSOCK
+#ifndef __S_ISSOCK
 #   define S_ISSOCK(mode)	0
 #endif
 
