@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.3 2003-11-03 17:15:21 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.4 2003-11-05 11:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -52,6 +52,21 @@ G4Navigator::G4Navigator()
 //
 G4Navigator::~G4Navigator()
 {;}
+
+// ********************************************************************
+// LocateGlobalPointAndSetup
+// ********************************************************************
+//
+G4VPhysicalVolume*
+G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
+                                       const G4ThreeVector &direction,
+                                       const G4TouchableHistory &h)
+{
+  ResetState();
+  fHistory = *h.GetHistory();
+  SetupHierarchy();
+  return LocateGlobalPointAndSetup(p, &direction, true, false);
+}
 
 // ********************************************************************
 // LocateGlobalPointAndSetup
@@ -489,6 +504,23 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 }
 
 // ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+//
+// Use direction
+// ********************************************************************
+//
+void G4Navigator::LocateGlobalPointAndUpdateTouchable(
+                           const G4ThreeVector&       position,
+                           const G4ThreeVector&       direction,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch  )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+
+// ********************************************************************
 // ComputeStep
 //
 // Computes the next geometric Step: intersections with current
@@ -808,6 +840,32 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #endif
 
   return Step;
+}
+
+// ********************************************************************
+// ResetState
+//
+// Resets stack and minimum of navigator state `machine'
+// ********************************************************************
+//
+void G4Navigator::ResetState()
+{
+  fWasLimitedByGeometry=false;
+  fEntering=false;
+  fExiting=false;
+  fLocatedOnEdge = false;
+  fLastStepWasZero= false;
+  fEnteredDaughter = false;
+  fExitedMother = false;
+  
+  fValidExitNormal = false;
+  fExitNormal = G4ThreeVector(0,0,0);
+
+  fPreviousSftOrigin = G4ThreeVector(0,0,0);
+  fPreviousSafety = 0.0; 
+    
+  fBlockedPhysicalVolume=0;
+  fBlockedReplicaNo=-1;
 }
 
 // ********************************************************************

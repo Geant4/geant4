@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.3 2003-11-05 11:59:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,13 +119,13 @@ class G4Navigator
   G4Navigator();
     // Constructor - initialisers and setup.
 
-  ~G4Navigator();
+  virtual ~G4Navigator();
     // Destructor. No actions.
 
-  G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-                       const G4ThreeVector &pDirection,
-                       const G4double pCurrentProposedStepLength,
-                             G4double  &pNewSafety);
+  virtual G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
+                               const G4ThreeVector &pDirection,
+                               const G4double pCurrentProposedStepLength,
+                                     G4double  &pNewSafety);
     // Calculate the distance to the next boundary intersected
     // along the specified NORMALISED vector direction and
     // from the specified point in the global coordinate
@@ -139,7 +139,7 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-  inline
+  virtual
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
                                                const G4ThreeVector &direction,
                                                const G4TouchableHistory &h);
@@ -164,7 +164,7 @@ class G4Navigator
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
+  virtual void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
     // Notify the Navigator that a track has moved to the new Global point
     // 'position', that is known to be within the current safety.
     // No check is performed to ensure that it is within  the volume. 
@@ -173,7 +173,7 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  inline void LocateGlobalPointAndUpdateTouchableHandle(
+  virtual void LocateGlobalPointAndUpdateTouchableHandle(
                 const G4ThreeVector&       position,
                 const G4ThreeVector&       direction,
                       G4TouchableHandle&   oldTouchableToUpdate,
@@ -202,8 +202,8 @@ class G4Navigator
     // Inform the navigator that the previous Step calculated
     // by the geometry was taken in its entirety.
 
-  G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                         const G4double pProposedMaxLength = DBL_MAX);
+  virtual G4double ComputeSafety(const G4ThreeVector &globalpoint,
+                                 const G4double pProposedMaxLength = DBL_MAX);
     // Calculate the isotropic distance to the nearest boundary from the
     // specified point in the global coordinate system. 
     // The globalpoint utilised must be within the current volume.
@@ -241,7 +241,7 @@ class G4Navigator
   inline G4TouchableHistory* CreateTouchableHistory() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
-  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
+  virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   inline G4bool IsExitNormalValid();
@@ -258,7 +258,7 @@ class G4Navigator
     // (The normal is in the coordinate system of the final volume.)
     // It is in the coordinate system of the final volume.
 
-  G4ThreeVector GetLocalExitNormal(G4bool* valid);
+  virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
     // More powerful calculation of Exit Surface Normal, returns validity too.
     // But it can only be called if the Navigator's last Step has crossed a
     // volume geometrical boundary.
@@ -294,7 +294,7 @@ class G4Navigator
 
  protected:  // with description
 
-  inline void ResetState();
+  virtual void ResetState();
   inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.
@@ -306,7 +306,7 @@ class G4Navigator
   inline EVolume CharacteriseDaughters(const G4LogicalVolume *pLog) const;
     // Characterise daughter of logical volume.
 
-  void SetupHierarchy();
+  virtual void SetupHierarchy();
     // Renavigate & reset hierarchy described by current history
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised

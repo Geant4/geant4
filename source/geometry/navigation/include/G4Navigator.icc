@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.2 2003-10-24 12:51:02 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.3 2003-11-05 11:59:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,33 +114,6 @@ inline
 void G4Navigator::SetGeometricallyLimitedStep()
 {
   fWasLimitedByGeometry=true;
-}
-
-// ********************************************************************
-// ResetState
-//
-// Resets stack and minimum of navigator state `machine'
-// ********************************************************************
-//
-inline
-void G4Navigator::ResetState()
-{
-  fWasLimitedByGeometry=false;
-  fEntering=false;
-  fExiting=false;
-  fLocatedOnEdge = false;
-  fLastStepWasZero= false;
-  fEnteredDaughter = false;
-  fExitedMother = false;
-  
-  fValidExitNormal = false;
-  fExitNormal = G4ThreeVector(0,0,0);
-
-  fPreviousSftOrigin = G4ThreeVector(0,0,0);
-  fPreviousSafety = 0.0; 
-    
-  fBlockedPhysicalVolume=0;
-  fBlockedReplicaNo=-1;
 }
 
 // ********************************************************************
@@ -354,22 +327,6 @@ G4bool  G4Navigator::EnteredDaughterVolume()
 // }
 
 // ********************************************************************
-// LocateGlobalPointAndSetup
-// ********************************************************************
-//
-inline
-G4VPhysicalVolume*
-G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
-                                       const G4ThreeVector &direction,
-                                       const G4TouchableHistory &h)
-{
-  ResetState();
-  fHistory = *h.GetHistory();
-  SetupHierarchy();
-  return LocateGlobalPointAndSetup(p, &direction, true, false);
-}
-
-// ********************************************************************
 // LocateGlobalPointAndUpdateTouchable
 // ********************************************************************
 //
@@ -381,24 +338,6 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchable(
 {
   G4VPhysicalVolume* pPhysVol;
   pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
-  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
-}
-
-// ********************************************************************
-// LocateGlobalPointAndUpdateTouchable
-//
-// Use direction
-// ********************************************************************
-//
-inline
-void G4Navigator::LocateGlobalPointAndUpdateTouchable(
-                           const G4ThreeVector&       position,
-                           const G4ThreeVector&       direction,
-                                 G4VTouchable*        touchableToUpdate,
-                           const G4bool               RelativeSearch  )
-{
-  G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
 }
 
