@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.10 2004-08-09 09:03:01 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.11 2004-08-11 14:13:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,16 +102,16 @@ G4VEmProcess::~G4VEmProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::Initialise()
+void G4VEmProcess::InitialiseEmProcess()
 {
   Clear();
-  const std::vector<G4double>* theCutsGamma =
+  theCutsGamma =
         modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  theCutsGamma    = theCoupleTable->GetEnergyCutsVector(0);
-  theCutsElectron = theCoupleTable->GetEnergyCutsVector(1);
-  theCutsPositron = theCoupleTable->GetEnergyCutsVector(2);
+  theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
+  theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
+  theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -157,12 +157,12 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
   if( !cutsWasModified ) return;
 
-  Initialise();
+  InitialiseEmProcess();
   theLambdaTable = BuildLambdaTable();
   FindLambdaMax();
   PrintInfoDefinition();
 
-  if(0 < verboseLevel) {
+  if(-1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -245,7 +245,7 @@ void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin, G4double em
 G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
                                               const G4Step& step)
 {
-  fParticleChange.Initialize(track);
+  fParticleChange.InitializeForPostStep(track);
 
   // Do not make anything if particle is stopped, the annihilation then
   // should be performed by the AtRestDoIt!
@@ -267,7 +267,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     if(preStepLambda*G4UniformRand() > lx)
       return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-
+ 
   G4VEmModel* currentModel = SelectModel(finalT);
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
@@ -285,6 +285,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(currentModel,
                                                               currentCouple,
 		                                              dynParticle);
+  G4double edep = fParticleChange.GetLocalEnergyDeposit();
   if (newp) {
     G4int num = newp->size();
     if(num > 0) {
@@ -292,7 +293,6 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
       G4double gcut = (*theCutsGamma)[currentMaterialIndex];
       G4double ecut = (*theCutsElectron)[currentMaterialIndex];
       G4double pcut = (*theCutsPositron)[currentMaterialIndex];
-      G4double edep = 0.0;
       for (G4int i=0; i<num; i++) {
         G4DynamicParticle* dp = (*newp)[i];
         const G4ParticleDefinition* p = dp->GetDefinition();
@@ -314,13 +314,13 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	     edep += e + electron_mass_c2;
 	   }
         }
-        if (good) aParticleChange.AddSecondary(dp);
+        if (good) fParticleChange.AddSecondary(dp);
         else      delete dp;
       }
-      fParticleChange.SetLocalEnergyDeposit(edep);
     }
     delete newp;
   }
+  fParticleChange.SetLocalEnergyDeposit(edep);
 
   return &fParticleChange;
 }
@@ -422,7 +422,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   const G4String particleName = part->GetParticleName();
   if( !particle ) particle = part;
 
-  Initialise();
+  InitialiseEmProcess();
 
   G4String filename;
   const G4ProductionCutsTable* theCoupleTable=

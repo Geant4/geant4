@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.28 2004-08-08 20:45:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.29 2004-08-11 14:13:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -718,7 +718,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  fParticleChange.SetLocalEnergyDeposit(eloss);
+  fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
   return &fParticleChange;
 }
@@ -767,8 +767,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   if (finalT <= 0.0) {
     fParticleChange.SetProposedKineticEnergy(0.0);
 
-    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
-    else                fParticleChange.SetStatusChange(fStopAndKill);
+    if (hasRestProcess) fParticleChange.ProposeTrackStatus(fStopButAlive);
+    else                fParticleChange.ProposeTrackStatus(fStopAndKill);
 
     return &fParticleChange;
   }

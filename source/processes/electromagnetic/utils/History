@@ -1,4 +1,4 @@
-$Id: History,v 1.159 2004-08-08 12:11:58 vnivanch Exp $
+$Id: History,v 1.160 2004-08-11 14:16:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,9 @@ committal in the CVS repository !
 - Optimise MFP and step limit calculation
 - Remove random step feature from G4VEnergyLossProcess
 - Add interfaces to G4Emcalculator
+- Clear up interfaces in G4VEmProcess
+- Use new interfaces from G4VParticleChange
+- Remove obsolete interfaces for particles
 
 27 July 04: V.Ivanchenko (utils-V06-02-04)
 - Fix a compilation problem connected with removal of the dependence

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.11 2004-08-09 09:16:30 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.12 2004-08-11 14:13:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,8 @@
 //
 // Modifications:
 // 30-06-04 make destructor virtual (V.Ivanchenko)
-// 30-09-08 optimise integral option (V.Ivanchenko)
+// 09-08-04 optimise integral option (V.Ivanchenko)
+// 11-08-04 add protected methods to access cuts (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -76,7 +77,7 @@ public:
 
   virtual ~G4VEmProcess();
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
@@ -168,9 +169,12 @@ protected:
 
   void ResetNumberOfInteractionLengthLeft();
 
+  G4double GetGammaEnergyCut();
+  G4double GetElectronEnergyCut();
+
 private:
 
-  void Initialise();
+  void InitialiseEmProcess();
 
   void Clear();
 
@@ -339,6 +343,20 @@ inline const G4ParticleDefinition* G4VEmProcess::Particle() const
 inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 {
   return secondaryParticle;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetGammaEnergyCut()
+{
+  return (*theCutsGamma)[currentMaterialIndex];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetElectronEnergyCut()
+{
+  return (*theCutsElectron)[currentMaterialIndex];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
