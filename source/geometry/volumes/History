@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2002-05-15 10:24:03 gcosmo Exp $
+$Id: History,v 1.76 2002-06-01 02:03:19 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 31st, 2002 	     J. Apostolakis - geomvol-V04-00-08
+- G4Navigator.cc
+  o Corrections for problem report #351, #284 concerning ExitNormal:
+     - using Daugther's solid preferentially (if applicable)
+     - adjusting fEntering/fEnteredDaugther in LocateGlobalPointAndSetup
+         to enable this 
+     - correcting location of point for which exit normal is requested
+         for 'non-convex point' on solid boundary
+  
+   Thanks to Bryan Tipton (tipton@krl.caltech.edu),
+             Antonis Papanestis (antonis.papanestis@cern.ch)
+        and  Peter Gumplinger for their demonstrations of the delicate problem.
+
 
 May 15th, 2002      G. Cosmo - geomvol-V04-00-07
 - G4ParameterisedNavigation:
