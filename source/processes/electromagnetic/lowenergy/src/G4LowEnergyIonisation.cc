@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.95 2003-06-16 17:00:12 gunter Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.96 2004-09-01 09:45:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -95,6 +95,7 @@
 // 21.01.03 VI              Cut per region
 // 12.02.03 VI              Change signature for Deexcitation
 // 12.04.03 V.Ivanchenko    Cut per region for fluo AlongStep
+// 31.08.04 V.Ivanchenko    Add density correction
 //
 // --------------------------------------------------------------
 
@@ -229,6 +230,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
 
+  G4double twoln10 = 2.0*log(10.0);
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   size_t   totBin = GetNbinEloss();
@@ -277,6 +279,14 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
 
+    // Parameterisation of density coorection
+    G4double cden  = material->GetIonisation()->GetCdensity();
+    G4double mden  = material->GetIonisation()->GetMdensity();
+    G4double aden  = material->GetIonisation()->GetAdensity();
+    G4double x0den = material->GetIonisation()->GetX0density();
+    G4double x1den = material->GetIonisation()->GetX1density();
+    G4double eDensity = material->GetElectronDensity();
+
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector =
@@ -306,6 +316,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * theAtomicNumDensityVector[iel];
+
           if(verboseLevel > 1 || (Z == 14 && lowEdgeEnergy>1. && lowEdgeEnergy<0.)) {
             G4cout << "Z= " << Z
                    << " shell= " << n
@@ -319,6 +330,22 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
         }
         G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
         ionloss   += esp * theAtomicNumDensityVector[iel];
+
+	// density correction
+        G4double dedx = 0.0;
+        G4double tau  = lowEdgeEnergy/electron_mass_c2;
+        G4double gam  = tau + 1.0;
+        G4double bg2  = tau * (tau+2.0);
+        G4double beta2= bg2/(gam*gam);
+
+	G4double x = log(bg2)/twoln10;
+        if ( x >= x0den ) {
+	  dedx -= twoln10*x - cden ;
+	  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
+	}
+        ionloss += dedx*twopi_mc2_rcl2*eDensity/beta2;
+
+
       }
       if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
             G4cout << "Sum: "
