@@ -1,4 +1,4 @@
-# $Id: stt-dev1.sdb,v 1.15 2000-04-20 13:39:23 stesting Exp $
+# $Id: stt-dev1.sdb,v 1.16 2000-04-26 14:59:14 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -12,7 +12,7 @@ geant4/examples                                     examples-V01-01-00
 geant4/examples/extended/electromagnetic/TestEm6    geant4-01-01-ref-02
 #       geant4/source - split into categories - see below.
 #       geant4/tests - checkout HEAD by hand and use this script, except...
-geant4/tests/test14                                 geant4-01-01-ref-02
+geant4/tests/test14                                 test14-V01-01-01
 # Source categories
 geant4/source/GNUmakefile                           geant4-01-01-ref-02
 geant4/source/digits+hits                           geant4-01-01-ref-02
@@ -35,9 +35,9 @@ geant4/source/persistency                           geant4-01-01-ref-02
 geant4/source/processes/GNUmakefile                 geant4-01-01-ref-02
 geant4/source/processes/History                     geant4-01-01-ref-02
 geant4/source/processes/decay	                    geant4-01-01-ref-02
-geant4/source/processes/electromagnetic	            geant4-01-01-ref-02
-geant4/source/processes/electromagnetic/lowenergy   geant4-01-01-ref-02
-geant4/source/processes/hadronic                    had-V01-01-00a
+geant4/source/processes/electromagnetic	            em-V01-01-00
+geant4/source/processes/electromagnetic/lowenergy   emlowen-V01-01-09
+geant4/source/processes/hadronic                    geant4-01-01-ref-02
 geant4/source/processes/management                  geant4-01-01-ref-02
 geant4/source/processes/optical	                    geant4-01-01-ref-02
 geant4/source/processes/parameterisation            geant4-01-01-ref-02
