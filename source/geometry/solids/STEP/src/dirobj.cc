@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.cc,v 1.4 2000-06-08 17:18:12 gcosmo Exp $  */ 
+/* $Id: dirobj.cc,v 1.5 2000-11-20 18:15:01 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -112,7 +112,7 @@ const char* DirObj::RealPath (const char* path) {
 
 boolean DirObj::LoadDirectory (const char* name) {
     char buf[MAXPATHLEN+2];
-    const char* path = buf;
+//    const char* path = buf;
 
     strcpy(buf, ValidDirectories(RealPath(name)));
     return Reset(buf);

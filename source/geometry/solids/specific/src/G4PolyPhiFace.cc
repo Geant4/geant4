@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyPhiFace.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.3 2000-11-20 18:18:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -748,7 +748,7 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
 				   G4ThreeVector **head3Dnorm )
 {
 	G4double bestDistance2 = kInfinity;
-	G4bool	 answer;
+	G4bool	 answer = 0;
 	
 	G4PolyPhiFaceEdge *edge = edges;
 	do {

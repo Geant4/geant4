@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReduciblePolygon.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.3 2000-11-20 18:19:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -235,7 +235,6 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
 	// Loop over all vertices
 	//
 	ABVertex *curr = vertexHead, 
-		 *prev = 0,
 		 *next = curr->next;	// A little dangerous
 	while( curr ) {
 		next = curr->next;
@@ -378,8 +377,9 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
 	// Top loop over line segments. By the time we finish
 	// with the second to last segment, we're done.
 	//
-	ABVertex *curr1 = vertexHead, *next1;
-	while (next1 = curr1->next) {
+	ABVertex *curr1 = vertexHead, *next1=0;
+	while (curr1->next) {
+	        next1 = curr1->next;
 		G4double da1 = next1->a-curr1->a,
 			 db1 = next1->b-curr1->b;
 		
@@ -450,7 +450,8 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
 			if (nNeg) return true;
 			nPos++;
 		}
-	} while( curr = curr->next );
+		curr = curr->next;
+	} while( curr );
 		
 	return false;
 }
@@ -476,7 +477,8 @@ G4double G4ReduciblePolygon::Area()
 		if (next==0) next = vertexHead;
 		
 		answer += curr->a*next->b - curr->b*next->a;
-	} while( curr = curr->next );
+		curr = curr->next;
+	} while( curr );
 	
 	return 0.5*answer;
 }
@@ -490,7 +492,8 @@ void G4ReduciblePolygon::Print()
 	ABVertex *curr = vertexHead;
 	do {
 		G4cerr << curr->a << " " << curr->b << G4endl;
-	} while( curr = curr->next );
+		curr = curr->next;
+	} while( curr );
 }
 
 

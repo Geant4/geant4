@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: mgrnodearray.cc,v 1.3 2000-01-21 13:43:12 gcosmo Exp $ */ 
+/* $Id: mgrnodearray.cc,v 1.4 2000-11-20 18:15:02 gcosmo Exp $ */ 
 
 /*
  * MgrNodeArray - dynamic array object of MgrNodes.
@@ -230,7 +230,7 @@ int MgrNodeArraySorted::MgrNodeIndex(int fileId) {
 	G4cout << "MgrNodeArraySorted::MgrNodeIndex()\n";
     int low = 0;
     int high = _count - 1;
-    int mid;
+    int mid = 0;
     int found = 0;
     int curFileId;
 

@@ -129,7 +129,8 @@ class EntList {
     friend G4std::ostream & operator<< ( G4std::ostream &, MultList & );
 
   public:
-    EntList( JoinType j ) : join(j), prev(0), next(0), viable(UNKNOWN),
+    // Changed order of member initialisations to match correct order - GC
+    EntList( JoinType j ) : join(j), next(0), prev(0), viable(UNKNOWN),
                             level(0) {}
     virtual ~EntList() {}
     MatchType viableVal() { return viable; }
@@ -173,7 +174,8 @@ class SimpleList : public EntList {
     friend G4std::ostream & operator<< ( G4std::ostream &, SimpleList & );
 
   public:
-    SimpleList( const char *n ) : I_marked(NOMARK), EntList(SIMPLE)
+    // Changed order of member initialisations to match correct order - GC
+    SimpleList( const char *n ) : EntList(SIMPLE), I_marked(NOMARK)
         { strcpy( name, n ); }
     ~SimpleList() {}
     
@@ -292,7 +294,8 @@ class ComplexList {
   public:
   
     // Changed 'and' to 'andl'. 'and' is reserved word in the standard - GC
-    ComplexList( AndList *andl = NULL ) : head(andl), list(0), next(0),
+    // Changed order of member initialisations to match correct order - GC
+    ComplexList( AndList *andl = NULL ) : list(0), head(andl), next(0),
                                           abstract(0), dependent(0),
                                           multSupers(0) {}
     ~ComplexList();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurfaceCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
+// $Id: G4BSplineSurfaceCreator.cc,v 1.4 2000-11-20 18:17:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,7 +33,6 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
   SdaiB_spline_surface* bSpline = new SdaiB_spline_surface(&Ent);
   G4int u,v;
-  STEPentity* ent=0;
   G4String attrName("u_degree");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
   u = *Attr->ptr.i;
@@ -55,8 +54,6 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   cols = v+1;
   rows = u+1;
 
-  STEPentity* entity;
-  G4int Index;
   STEPentity *Entity;
   char tmp[16];
   SCLstring s;
@@ -65,7 +62,6 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4int stringlength = strlen(Str);  
   G4ControlPoints controlPoints(4,rows, cols);
   RealAggregate rationalAggr;
-  RealNode* rNode =0;
   for(G4int a=0;a<rows;a++)
     for(G4int b=0;b<cols;b++)    
       {
@@ -94,7 +90,7 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	  }
 
 	c = Str[Count];
-	int Index=0;
+	G4int Index=0;
 
 	while(c != ',' && c != ')')
 	  {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyconeSide.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.3 2000-11-20 18:18:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -629,7 +629,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	}
 
 	do {
-		G4double min, max;
 	
 		phi += sigPhi;
 		if (numPhi == 1) phi = startPhi+deltaPhi;	// Try to avoid roundoff
@@ -703,7 +702,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	// Add two additional faces if necessary
 	//
 	if (phiIsOpen && rNorm > DBL_MIN) {
-		G4double min, max;
 		
 		G4double cosPhi = cos(startPhi),
 			 sinPhi = sin(startPhi);

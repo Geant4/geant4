@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometricRepresentationContextCreator.cc,v 1.3 2000-01-21 13:46:02 gcosmo Exp $
+// $Id: G4GeometricRepresentationContextCreator.cc,v 1.4 2000-11-20 18:17:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,8 +41,8 @@ void G4GeometricRepresentationContextCreator::CreateG4Geometry(STEPentity& Ent)
   G4String attrName("coordinate_space_dimension");
   Attr = GetNamedAttribute(attrName, Ent);
 
-  // Get coordinate space dimension
-  SdaiReal Tmpdim = *Attr->ptr.r; // ptr.r --> REAL_TYPE
+  // Get coordinate space dimension (ptr.r --> REAL_TYPE)
+  // SdaiReal Tmpdim = *Attr->ptr.r;
 
   // void *tmp = G4GeometryTable::CreateObject(*TmpEnt);
   // place = (G4Axis2Placement3D*)tmp...;

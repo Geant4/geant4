@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
+// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.4 2000-11-20 18:17:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& sEnt
   G4PlacedSolid* placedSld; 
   G4BREPSolid* sld; 
   STEPentity* ent;
-  G4Axis2Placement3D* place;
+  G4Axis2Placement3D* place = 0;
 
   // default place
   G4Axis2Placement3D* place0 = new (G4Axis2Placement3D)( G4Vector3D(1, 0, 0),

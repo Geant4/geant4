@@ -11,7 +11,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile_inline.cc,v 1.6 2000-02-14 13:44:04 gcosmo Exp $ */ 
+/* $Id: STEPfile_inline.cc,v 1.7 2000-11-20 18:14:58 gcosmo Exp $ */ 
 
 #include <STEPfile.h>
 #include <s_HEADER_SCHEMA.h>
@@ -34,19 +34,19 @@ extern void HeaderSchemaInit (Registry & reg);
 
 STEPfile::STEPfile(Registry& r, InstMgr& i, const char *filename)
 
+// Changed order of member initialisations to match correct order - GC
 #ifdef __O3DB__
-: _reg(&r), _instances(&i),
+: _instances(&i), _reg(&r),
 #else
-: _reg(r), _instances(i), 
+: _instances(i), _reg(r), 
 #endif
 #ifdef __OSTORE__
   db (0),
 #endif
-  _headerId(0), _maxErrorCount(5000), 
+  _fileIdIncr (0), _headerId(0),
   _fileName (0), _entsNotCreated(0), _entsInvalid(0), 
   _entsIncomplete(0), _entsWarning(0), 
-  _errorCount (0), _warningCount (0),
-  _fileIdIncr (0)
+  _errorCount (0), _warningCount (0), _maxErrorCount(5000)
 
 { 
     SetFileType(VERSION_CURRENT);

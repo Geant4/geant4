@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: ExpDict.cc,v 1.5 2000-06-08 17:18:11 gcosmo Exp $  */ 
+/* $Id: ExpDict.cc,v 1.6 2000-11-20 18:14:56 gcosmo Exp $  */ 
 #include <memory.h>
 #include <math.h>
 #include <stdio.h>
@@ -834,7 +834,7 @@ AttrDescriptor::ExpandedTypeName(SCLstring & s) const
 const char * 
 AttrDescriptor::GenerateExpress (SCLstring &buf) const
 {
-    char tmp[BUFSIZ];
+//    char tmp[BUFSIZ];
     SCLstring sstr;
     buf = AttrExprDefStr(sstr);
     buf.Append(";\n");
@@ -955,7 +955,7 @@ EnumTypeDescriptor::GenerateExpress (SCLstring &buf) const
     const char *desc = Description();
     const char *ptr = &(desc[16]);
     int count;
-    Where_rule_ptr wr;
+//    Where_rule_ptr wr;
     int i;
     int all_comments = 1;
     
@@ -1058,10 +1058,10 @@ EntityDescriptor::~EntityDescriptor ()
 const char * 
 EntityDescriptor::GenerateExpress (SCLstring &buf) const
 {
-    char tmp[BUFSIZ];
+//    char tmp[BUFSIZ];
     SCLstring sstr;
     int count;
-    Where_rule_ptr wr;
+//    Where_rule_ptr wr;
     int i;
     int all_comments = 1;
 
@@ -1681,7 +1681,7 @@ TypeDescriptor::GenerateExpress (SCLstring &buf) const
     const char *desc = Description();
     const char *ptr = desc;
     int count;
-    Where_rule_ptr wr;
+//    Where_rule_ptr wr;
     int i;
     int all_comments = 1;
     
@@ -2093,7 +2093,7 @@ SelectTypeDescriptor::CanBe (const TypeDescriptor * other) const
 const TypeDescriptor *
 SelectTypeDescriptor::CanBe (const char * other) const
 {
-  const TypeDescriptor * found =0;
+//  const TypeDescriptor * found =0;
   TypeDescItr elements (GetElements()) ;
   const TypeDescriptor * td =0;
 

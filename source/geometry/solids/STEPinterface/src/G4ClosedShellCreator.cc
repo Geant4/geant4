@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClosedShellCreator.cc,v 1.4 2000-11-08 14:32:47 gcosmo Exp $
+// $Id: G4ClosedShellCreator.cc,v 1.5 2000-11-20 18:17:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@ void G4ClosedShellCreator::CreateG4Geometry(STEPentity& Ent)
  
   G4SurfaceVector SurfaceVec;  
 
-  for(size_t a=0; a<FaceCount;a++)
+  for(G4int a=0; a<FaceCount;a++)
   {
     TmpEnt = ((EntityNode*)Node)->node;
     void *tmp = G4GeometryTable::CreateObject(*TmpEnt);
@@ -59,7 +59,7 @@ void G4ClosedShellCreator::CreateG4Geometry(STEPentity& Ent)
            << "\tTotal of " << SurfNum << " G4Surface components created, out of "
 	   << FaceCount << " expected !" << G4endl
 	   << "\tBREP Solid not correctly instantiated." << G4endl;
-  for(size_t b=0;b<SurfNum;b++)
+  for(G4int b=0;b<SurfNum;b++)
     srfVec[b] = (SurfaceVec[b]);    
     
   G4BREPSolid* sld = new G4BREPSolid(" ", srfVec, SurfNum);

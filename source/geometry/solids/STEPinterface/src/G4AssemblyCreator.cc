@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyCreator.cc,v 1.6 2000-11-09 16:35:52 gcosmo Exp $
+// $Id: G4AssemblyCreator.cc,v 1.7 2000-11-20 18:17:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -86,8 +86,8 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
   // Advanced_Brep_Shape_Representation are created into
   // Context_Dependent_Shape_Representation and
   // Shape_Definition_Representation
-  G4int AdvancedBrepShapes = instanceManager.EntityKeywordCount
-    ("Advanced_Brep_Shape_Representation");
+  // G4int AdvancedBrepShapes = instanceManager.EntityKeywordCount
+  //  ("Advanced_Brep_Shape_Representation");
   
   
   G4int ConDepShapes = instanceManager.EntityKeywordCount
@@ -96,7 +96,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
   G4int ShapeDefReps = instanceManager.EntityKeywordCount
     ("Shape_Definition_Representation"); 
   
-  G4int instanceCount = instanceManager.InstanceCount();
+  // G4int instanceCount = instanceManager.InstanceCount();
   
   STEPentity* ent=0;
   index = 0;
@@ -225,13 +225,13 @@ void G4AssemblyCreator::CreateSTEPGeometry(void* G4obj)
   Registry reg(&::HeaderSchemaInit);
   SdaiCONFIG_CONTROL_DESIGNInit (reg);
 
-  //G4Placement* plc = (G4Placement*)G4obj;
-  //G4String name("Axis2Placement3d");
+  //  G4Placement* plc = (G4Placement*)G4obj;
+  //  G4String name("Axis2Placement3d");
   //  G4FCylindricalSurface *fCyl = (G4FCylindricalSurface *)G4obj;
   //  G4String name("Cylindrical_Surface");
-  G4ToroidalSurface *tor = (G4ToroidalSurface *)G4obj;
+  //  G4ToroidalSurface *tor = (G4ToroidalSurface *)G4obj;
   G4String name("Toroidal_Surface");
-  {
-    void *tmp =G4GeometryTable::CreateSTEPObject(G4obj, name);
-  }
+
+  G4GeometryTable::CreateSTEPObject(G4obj, name);
+
 }

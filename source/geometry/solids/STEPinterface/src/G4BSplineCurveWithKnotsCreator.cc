@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.4 2000-02-25 16:36:17 gcosmo Exp $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.5 2000-11-20 18:17:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -114,7 +114,7 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     G4Point3D* pt = (G4Point3D*) tmp;
     G4Point3D Pt(pt->x(), pt->y(), pt->z());
 
-    if(controlPointsList.length() <= nbpoint+1)
+    if(G4int(controlPointsList.length()) <= nbpoint+1)
       controlPointsList.reshape(nbpoint+1);
 
     controlPointsList[nbpoint] = Pt;
@@ -159,7 +159,7 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     if (weight <= 0)
       weight = 1;
 
-    if(weightsData.length() <= nbpoint+1)
+    if(G4int(weightsData.length()) <= nbpoint+1)
       weightsData.reshape(nbpoint+1);
     
     weightsData[nbpoint] = weight;
@@ -204,7 +204,7 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     if (knot <= 0)
       knot = 1;
 
-    if(knots.length() <= nbpoint+1)
+    if(G4int(knots.length()) <= nbpoint+1)
       knots.reshape(nbpoint+1);
    
     knots[nbpoint] = knot;

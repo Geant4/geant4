@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.cc,v 1.8 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.9 2000-11-20 18:18:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -182,7 +182,7 @@ EInside G4EllipticalTube::Inside( const G4ThreeVector& p) const
 	//
 	// Check x,y: are we outside?
 	//
-	G4double x = p.x(), y = p.y();
+	// G4double x = p.x(), y = p.y();
 	
 	if (CheckXY(p.x(), p.y(), +halfTol) > 1.0) return kOutside;
 	
@@ -459,7 +459,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,const G4ThreeVe
 	if (calcNorm) *validNorm = true;
 	
 	G4double sBest = kInfinity;
-	const G4ThreeVector *nBest;
+	const G4ThreeVector *nBest=0;
 	
 	//
 	// Might we intersect the -dz surface?

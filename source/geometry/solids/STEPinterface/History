@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-11-10 17:44:59 gcosmo Exp $
+$Id: History,v 1.8 2000-11-20 18:17:25 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th November 2000  Gabriele Cosmo  (stepinterface-V02-00-02)
+- Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
 
 10th November 2000  Gabriele Cosmo  (stepinterface-V02-00-01)
 - Added GetInstanceManager() method to G4GeometryCreator.

@@ -14,7 +14,7 @@ int pr_obj_errors = 0;
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile.cc,v 1.4 2000-01-21 13:42:57 gcosmo Exp $ */ 
+/* $Id: STEPfile.cc,v 1.5 2000-11-20 18:14:58 gcosmo Exp $ */ 
 
 /********************************************************************
  TODO LIST:
@@ -272,7 +272,7 @@ STEPfile::HeaderConvertToNew(InstMgr& oldinst)
     InstMgr* imtmp = new InstMgr; 
     SCLP23(Application_instance)* oldse;
     
-    int count = 0;
+//    int count = 0;
     
 // FILE_NAME <== (N279)FILE_IDENTIFICATION
     p21DIS_File_name * fn = 0;
@@ -498,7 +498,7 @@ STEPfile::HeaderMergeInstances(InstMgr* im)
 {
     SCLP23(Application_instance)* se = 0; 
     SCLP23(Application_instance)* from = 0;
-    SCLP23(Application_instance)* to = 0;
+//    SCLP23(Application_instance)* to = 0;
     
     int idnum;
 
@@ -1545,7 +1545,7 @@ STEPfile::FindHeaderSection (G4std::istream& in)
 {
     char buf[BUFSIZ];
     char *b = buf;
-    int rval =0;
+//    int rval =0;
     
     *b = '\0';
     
@@ -1597,7 +1597,7 @@ STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out)
 
     int fileid = -1;
     SCLP23(Application_instance_ptr) * scopelist =0;
-    int n =0;
+//    int n =0;
 
     SCLP23(Application_instance)* obj;
     ErrorDescriptor result;
@@ -2125,7 +2125,7 @@ STEPfile::ReadInstance(G4std::istream& in, G4std::ostream& out, SCLstring &cmtSt
 
     char c;
     int fileid;
-    int n =0;
+//    int n =0;
     SCLP23(Application_instance)* obj = ENTITY_NULL;
     int idIncrNum = FileIdIncr();
 
@@ -2333,7 +2333,7 @@ BUG: doesn't check to see if the backup command works.
 void
 STEPfile::MakeBackupFile() 
 {
-  static int i =1;
+//  static int i =1;
     char backup_call [2*BUFSIZ];
     char backup_file [BUFSIZ];
 
@@ -2930,6 +2930,9 @@ STEPfile::AppendFile (G4std::istream* in, int useTechCor)
 	case WORKING_SESSION:
 //	  valid_insts = ReadWorkingData2 (*in2);
 	  valid_insts = ReadData2 (*in2, useTechCor);
+	  break;
+
+	default:		// Added default field - GC
 	  break;
       }
 

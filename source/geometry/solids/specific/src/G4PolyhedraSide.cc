@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyhedraSide.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.3 2000-11-20 18:19:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,7 +207,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 	} while( prev=vec, ++vec < vecs + numSide );
 	
 	if (phiIsOpen) {
-		G4double rFact = cos(0.5*deltaPhi);
+		// G4double rFact = cos(0.5*deltaPhi);
 		//
 		// If phi is open, we need to patch up normals of the
 		// first and last edges and their corresponding

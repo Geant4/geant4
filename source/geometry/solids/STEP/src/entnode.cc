@@ -22,7 +22,7 @@ EntNode::EntNode( const char **names )
      * element.  This ensures that `this' points to the start of the list.
      */
 {
-    int j = 1, comp;
+    int j = 1, comp = 0;
     EntNode *prev, *prev2 = NULL, // prev2 - the one before prev
 	    *newnode, *firstnode;
     const char *nm;

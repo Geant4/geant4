@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicCreator.cc,v 1.2 2000-01-21 13:45:59 gcosmo Exp $
+// $Id: G4ConicCreator.cc,v 1.3 2000-11-20 18:17:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@ void G4ConicCreator::CreateG4Geometry(STEPentity& Ent)
 
   // Get the placement
     STEPentity* TmpEnt= *Attr->ptr.c;
-  void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
+    G4GeometryTable::CreateObject(*TmpEnt);
 //  place = (G4Placement*)place;
   
 }

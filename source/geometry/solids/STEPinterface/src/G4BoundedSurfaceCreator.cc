@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundedSurfaceCreator.cc,v 1.4 2000-02-25 16:36:18 gcosmo Exp $
+// $Id: G4BoundedSurfaceCreator.cc,v 1.5 2000-11-20 18:17:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,6 @@ G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator() {}
 void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
   STEPcomplex* complexEnt = (STEPcomplex*)&Ent;
-  void* tmp=0;
   STEPentity* subEnt=0;
   SdaiB_spline_surface *bSpline=0;
   SdaiB_spline_surface_with_knots *bSplineWithKnots=0;
@@ -89,8 +88,6 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   cols = v+1;
   rows = u+1;
   char tmpstr[16];
-  STEPentity* entity;
-  G4int Index;
   STEPentity *Entity;
   SCLstring s;
   STEPaggregate *Aggr=bSpline->control_points_list_();
@@ -99,7 +96,6 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4int stringlength = strlen(Str);  
   G4ControlPoints controlPoints(4,rows, cols);
   RealAggregate rationalAggr;
-  RealNode* rNode =0;
   G4int a;
   for(a=0;a<rows;a++)
     for(G4int b=0;b<cols;b++)    
@@ -110,7 +106,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	// The string Str contains the STEP file id:s of the underlying point
 	// entities so well have to parse the string to get them out...arghhh!
 	char c = ' ';
-	int Count=0;
+	G4int Count=0;
 	// Loop to find the entities
 
 
@@ -129,7 +125,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	  }
 
 	c = Str[Count];
-	int Index=0;
+	G4int Index=0;
 
 	while(c != ',' && c != ')')
 	  {
@@ -198,7 +194,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4int vMultCount = multAggr->EntryCount();
   
   knotAggr = bSplineWithKnots->v_knots_();
-  G4int vKnotCount = knotAggr->EntryCount();
+  // G4int vKnotCount = knotAggr->EntryCount();
 
   G4int totalVKnotCount = 0;
   multiNode = (IntNode*)multAggr->GetHead();

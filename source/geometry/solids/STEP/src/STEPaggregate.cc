@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPaggregate.cc,v 1.4 2000-01-21 13:42:56 gcosmo Exp $ */
+/* $Id: STEPaggregate.cc,v 1.5 2000-11-20 18:14:57 gcosmo Exp $ */
 
 #include <stdio.h> 
 
@@ -25,7 +25,7 @@ const int Real_Num_Precision = REAL_NUM_PRECISION; // from STEPattribute.h
 
 #define STRING_DELIM '\''
 
-static char rcsid[] = "$Id: STEPaggregate.cc,v 1.4 2000-01-21 13:42:56 gcosmo Exp $";
+// static char rcsid[] = "$Id: STEPaggregate.cc,v 1.5 2000-11-20 18:14:57 gcosmo Exp $";
 
 /******************************************************************
 **	  Functions for manipulating aggregate attributes
@@ -1980,7 +1980,7 @@ RealNode::asStr(SCLstring &s)
 const char *
 RealNode::STEPwrite(SCLstring &s, const char *)
 {
-    char tmp[BUFSIZ];
+//    char tmp[BUFSIZ];
     if(value != S_REAL_NULL)
     {
 //	sprintf(tmp, "%.15g", value);

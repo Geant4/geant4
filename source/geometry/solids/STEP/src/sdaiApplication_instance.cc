@@ -10,9 +10,9 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiApplication_instance.cc,v 1.1 2000-01-21 13:43:15 gcosmo Exp $ */
+/* $Id: sdaiApplication_instance.cc,v 1.2 2000-11-20 18:15:04 gcosmo Exp $ */
 
-//static char rcsid[] ="$Id: sdaiApplication_instance.cc,v 1.1 2000-01-21 13:43:15 gcosmo Exp $";
+//static char rcsid[] ="$Id: sdaiApplication_instance.cc,v 1.2 2000-11-20 18:15:04 gcosmo Exp $";
 
 #include <sdai.h>
 //#include <STEPentity.h>
@@ -901,7 +901,7 @@ ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList,
       case '#':
 	{
 	    int id = -1; 
-	    int n = 0;
+//	    int n = 0;
 	    in >>  id;
 	    if (in.fail ())  //  there's been an error in input
 	    {

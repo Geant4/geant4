@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurfaceWithKnotsCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
+// $Id: G4BSplineSurfaceWithKnotsCreator.cc,v 1.4 2000-11-20 18:17:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -101,7 +101,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   Attr = GetNamedAttribute(attrName, Ent);
   knotAggr = Attr->ptr.a;
   bSpline.v_knots_((RealAggregate*)knotAggr);
-  G4int vKnotCount = knotAggr->EntryCount();
+  // G4int vKnotCount = knotAggr->EntryCount();
 
   G4int totalVKnotCount = 0;
   multiNode = (IntNode*)multAggr->GetHead();
@@ -135,8 +135,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 
   // b_spline base parts
   
-  G4int u,v;
-  STEPentity* ent=0;
+  G4int u=0,v=0;
   attrName = "u_degree";
   Attr = GetNamedAttribute(attrName, Ent);
   if(Attr)
@@ -172,8 +171,6 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
       cols = v+1;
       rows = u+1;
 
-      STEPentity* entity;
-      G4int Index;
       STEPentity *Entity;
       char tmp[16];
       SCLstring s;
@@ -182,7 +179,6 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
       G4int stringlength = strlen(Str);  
       controlPoints = new G4ControlPoints(4,rows, cols);
       RealAggregate rationalAggr;
-      RealNode* rNode =0;
       for(G4int a=0;a<rows;a++)
 	for(G4int b=0;b<cols;b++)    
 	  {
@@ -192,7 +188,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 	    // The string Str contains the STEP file id:s of the underlying point
 	    // entities so well have to parse the string to get them out...arghhh!
 	    char c = ' ';
-	    int Count=0;
+	    G4int Count=0;
 	    // Loop to find the entities
 
 
@@ -211,7 +207,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 	      }
 
 	    c = Str[Count];
-	    int Index=0;
+	    G4int Index=0;
 
 	    while(c != ',' && c != ')')
 	      {

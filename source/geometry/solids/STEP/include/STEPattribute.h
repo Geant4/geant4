@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPattribute.h,v 1.4 2000-01-21 13:42:31 gcosmo Exp $ */
+/* $Id: STEPattribute.h,v 1.5 2000-11-20 18:14:54 gcosmo Exp $ */
 
 #include <sclprefixes.h>
 
@@ -123,16 +123,16 @@ class STEPattribute {
 //    friend class SCLP23(Application_instance);
 //  protected:
   public:
+
     ErrorDescriptor _error;
+
+    const AttrDescriptor * aDesc;
+
     unsigned int _derive : 1;
     int Derive (unsigned int n =1)  { return _derive =n; }
 
     STEPattribute *_redefAttr; 
     void RedefiningAttr(STEPattribute *a) { _redefAttr = a; }
-
-  public:
-
-    const AttrDescriptor * aDesc;
 
     // You know which of these to use based on the return value of
     // NonRefType() - see below. BASE_TYPE is defined in baseType.h

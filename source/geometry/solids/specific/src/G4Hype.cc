@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.4 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.5 2000-11-20 18:18:58 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -156,7 +156,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
 	//
 	
 	G4bool splitOuter = (outerRadius/endOuterRadius < 0.95);
-	G4bool splitInner;
+	G4bool splitInner = 0;
 	if (InnerSurfaceExists()) {
 		splitInner = (innerRadius/endInnerRadius < 0.95);
 	}
@@ -186,7 +186,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
 	transform.ApplyPointTransform( v0 );
 	transform.ApplyPointTransform( v1 );
 	
-	G4double zInnerSplit;
+	G4double zInnerSplit=0.;
 	if (InnerSurfaceExists()) {
 		if (splitInner) {
 			v2 = transform.TransformPoint( 

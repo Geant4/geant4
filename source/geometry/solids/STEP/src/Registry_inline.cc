@@ -13,7 +13,7 @@ extern int pr_obj_errors;
 * and is not subject to copyright.
 */
 
-/* $Id: Registry_inline.cc,v 1.3 2000-01-21 13:42:55 gcosmo Exp $  */ 
+/* $Id: Registry_inline.cc,v 1.4 2000-11-20 18:14:56 gcosmo Exp $  */ 
 
 #include <ExpDict.h>
 #include <Registry.h>
@@ -33,7 +33,8 @@ static int uniqueNames( const char *, const SchRename * );
 //#else
 Registry::Registry (CF_init initFunct) 
 //#endif
-: entity_cnt(0), all_ents_cnt(0), col(0)
+// Changed order of member initialisations to match correct order - GC
+: col(0), entity_cnt(0), all_ents_cnt(0)
 { 
 //#ifdef __OSTORE__
     // need to make this thing persistent in a database - DAS

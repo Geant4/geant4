@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FaceSurfaceCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
+// $Id: G4FaceSurfaceCreator.cc,v 1.4 2000-11-20 18:17:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,7 +33,6 @@ G4FaceSurfaceCreator::~G4FaceSurfaceCreator() {}
 void G4FaceSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
   G4Surface* srf=0;
-  G4bool sense;
   
   G4String attrName("face_geometry");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);

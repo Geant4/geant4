@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.5 2000-06-08 17:54:01 gracia Exp $
+// $Id: G4VCSGfaceted.cc,v 1.6 2000-11-20 18:19:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,7 +137,7 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
 //
 EInside G4VCSGfaceted::Inside( const G4ThreeVector &p ) const
 {
-	EInside answer;
+	EInside answer=kOutside;
 	G4VCSGface **face = faces;
 	G4double best = kInfinity;
 	do {
@@ -181,8 +181,8 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const
 {
 	G4double distance = kInfinity;
-	G4double distFromSurface;
-	G4VCSGface *bestFace;
+	G4double distFromSurface = kInfinity;
+	G4VCSGface *bestFace=0;
 	G4VCSGface **face = faces;
 	do {
 		G4double 	faceDistance,
@@ -230,9 +230,9 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p, const G4ThreeVect
 {
 	G4bool allBehind = true;
 	G4double distance = kInfinity;
-	G4double distFromSurface;
+	G4double distFromSurface = kInfinity;
 	G4ThreeVector normal;
-	G4VCSGface *bestFace;
+	G4VCSGface *bestFace=0;
 	
 	G4VCSGface **face = faces;
 	do {
@@ -328,9 +328,7 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
 	G4double answers[6] = {-kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity};
 
 	G4VCSGface **face = faces;
-	do {
-		G4double vmax;
-		
+	do {		
 		const G4ThreeVector **axis = axes+5 ;
 		G4double *answer = answers+5;
 		do {

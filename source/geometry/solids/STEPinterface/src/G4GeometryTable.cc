@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryTable.cc,v 1.6 2000-02-25 16:36:19 gcosmo Exp $
+// $Id: G4GeometryTable.cc,v 1.7 2000-11-20 18:17:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@ G4bool G4GeometryTable::ExistsInTable(G4String& objectName)
 {
   G4bool existsInTable = false;
 
-  for(G4int a=0;a<RegisteredObjects.length();a++)
+  for(size_t a=0;a<RegisteredObjects.length();a++)
   {
     G4GeometryCreator* gcTmp =  RegisteredObjects(a);
     G4String rName = gcTmp->Name();
@@ -58,7 +58,7 @@ void G4GeometryTable::RegisterObject(G4GeometryCreator* gc)
 
 G4GeometryCreator* G4GeometryTable::GetObject(G4String objectName)
 {
-  for(G4int a=0; a<RegisteredObjects.length(); a++)
+  for(size_t a=0; a<RegisteredObjects.length(); a++)
   {
     G4GeometryCreator* gcTmp =  RegisteredObjects(a);
     G4String rName = gcTmp->Name();

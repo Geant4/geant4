@@ -1180,7 +1180,7 @@ ReadTokenSeparator(G4std::istream& in, SCLstring *comments)
 {
     char c;
     SCLstring s; // used if need to read a comment
-    const char *cstr = 0;
+//    const char *cstr = 0;
 
     if (in.eof()) 
     {
