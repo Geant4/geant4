@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-04-01 06:31:05 gcosmo Exp $
+$Id: History,v 1.6 1999-04-01 06:32:57 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th February 1999  John Allison
+- Added G4USE_STL flag.
+- Added code for linking granular libraries.
 
 1st January 1999  Gunter Folger (config-01-00-02)
 - Add FCLIBS for SUN.
