@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.20 2001-12-14 12:19:57 sadilov Exp $
+# $Id: Configure,v 1.21 2002-06-23 18:29:08 stesting Exp $
 #
-# Generated on Fri Dec 14 13:19:47 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Sun Jun 23 20:13:17 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -226,6 +226,11 @@ g4wanalysis_use=''
 g4wanalysis_use_jas=''
 g4wanalysis_use_lab=''
 g4wanalysis_use_lizard=''
+g4_gmake=''
+g4_gmake_version=''
+g4_make=''
+g4_make_version=''
+g4make=''
 lns=''
 c=''
 n=''
@@ -2586,7 +2591,9 @@ gans=$ans
 		;;
 	y*|Y*) 
 		g4global=y
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
 		g4granular=n
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
 		g4lib_use_granular=n
 		break
 		;;
@@ -2728,6 +2735,7 @@ done
 
 
 echo " "
+
 case "$g4lib_build_shared" in
 '')
 	g4lib_build_shared=n
@@ -2735,6 +2743,7 @@ case "$g4lib_build_shared" in
 esac
 
 echo " "
+
 case "$g4lib_build_static" in
 '')
 	g4lib_build_static=n
@@ -2742,6 +2751,7 @@ case "$g4lib_build_static" in
 esac
 
 echo " "
+
 case "$g4lib_use_shared" in
 '')
 	g4lib_use_shared=n
@@ -2749,6 +2759,7 @@ case "$g4lib_use_shared" in
 esac
 
 echo " "
+
 case "$g4lib_use_static" in
 '')
 	g4lib_use_static=n
@@ -2880,6 +2891,97 @@ done
 fi
 
 fi
+
+
+echo " "
+
+case "$g4make" in
+'')
+	g4make=gmake
+	;;
+esac
+
+echo ""
+
+	g4_gmake_version=`(gmake -v)`
+				case $g4_gmake_version in
+				GNU*) 
+				g4_gmake=y				
+				;;
+				*) 
+				g4_gmake=n
+				;;
+				esac				
+
+	g4_make_version=`(make -v)`
+				case $g4_make_version in
+				GNU*) 
+				g4_make=y				
+				;;
+				*) 
+				g4_make=n
+				;;
+				esac				
+
+if  [ $g4_gmake = y ] ; then
+
+g4make=gmake
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = y ] ; then
+
+g4make=make
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = n ] ; then
+
+g4make=none
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have NO GNU make which could be used to build GEANT4.
+Please select your own 'make' program compatible with GNU make.
+EOM`
+
+fi
+
+dflt=$g4make
+rp=$g4message
+
+
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	'') 
+		g4make=$dflt
+		;;
+	*) 
+		g4make=$gans
+		;;
+	esac
+
 
 
 echo " "
@@ -3911,6 +4013,10 @@ contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'
 g4_build_wo_session='$g4_build_wo_session'
+g4_gmake='$g4_gmake'
+g4_gmake_version='$g4_gmake_version'
+g4_make='$g4_make'
+g4_make_version='$g4_make_version'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
@@ -3933,6 +4039,7 @@ g4lib_build_static='$g4lib_build_static'
 g4lib_use_granular='$g4lib_use_granular'
 g4lib_use_shared='$g4lib_use_shared'
 g4lib_use_static='$g4lib_use_static'
+g4make='$g4make'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
 g4osname='$g4osname'
 g4radioactivedata='$g4radioactivedata'
