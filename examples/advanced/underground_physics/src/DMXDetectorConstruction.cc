@@ -882,7 +882,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   
   G4UnionSolid* pmt_sol = new G4UnionSolid("pmt_sol", pmt_tube, pmt_window,
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0,0,0.5*pmtHeight
-    -2.*pmtRadius*cos(30.0*deg))));
+    -2.*pmtRadius*std::cos(30.0*deg))));
 
   pmt_log  = new G4LogicalVolume(pmt_sol, pmt_mat, "pmt_log");
   pmt_phys = new G4PVPlacement(0,G4ThreeVector(0.*cm, 0.*cm, pmtVPosition),
@@ -902,7 +902,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // photocathode *******************************************************
 
-  G4double phcathVOffset     = 0.5*pmtHeight-2.*pmtRadius*cos(30.0*deg);
+  G4double phcathVOffset     = 0.5*pmtHeight-2.*pmtRadius*std::cos(30.0*deg);
   G4double phcathVPosition   = phcathVOffset;
 
   G4Sphere* phcath_sol = new G4Sphere("phcath_sphere",
