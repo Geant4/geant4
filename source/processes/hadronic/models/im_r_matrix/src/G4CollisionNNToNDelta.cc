@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDelta.cc,v 1.1 2003-10-07 12:37:35 hpw Exp $ //
+// $Id: G4CollisionNNToNDelta.cc,v 1.2 2003-12-12 12:27:23 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNDelta.hh"
@@ -30,29 +30,26 @@
 #include "G4Neutron.hh"
 #include "G4ParticleTable.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4Pair.hh"
+#include "G4HadParticleCodes.hh"
 
 // complete hpw
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, NeutronPC, Delta0PC) theC1;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, ProtonPC, DeltamPC) theC2;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC, ProtonPC, Delta0PC) theC3;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC, NeutronPC, DeltapPC) theC4;
+typedef INT4(G4ConcreteNNToNDelta, ProtonPC, ProtonPC, NeutronPC, DeltappPC) theC5;
+typedef INT4(G4ConcreteNNToNDelta, ProtonPC, ProtonPC, ProtonPC, DeltapPC) theC6;
 
+typedef GROUP6(theC1, theC2, theC3, theC4, theC5, theC6) theChannels;
+       
 G4CollisionNNToNDelta::G4CollisionNNToNDelta()
 { 
   // Subtype of interacting particles
   G4ShortLivedConstructor ShortLived;
   ShortLived.ConstructParticle();
+  G4ForEach<theChannels, Resolve>::Apply(this);
 
-  G4ParticleDefinition * aProton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition * aNeutron = G4Neutron::NeutronDefinition();
-  G4ParticleDefinition * aDeltapp = G4ParticleTable::GetParticleTable()->FindParticle(2224); // D++
-  G4ParticleDefinition * aDeltap = G4ParticleTable::GetParticleTable()->FindParticle(2214); // D+
-  G4ParticleDefinition * aDelta0 = G4ParticleTable::GetParticleTable()->FindParticle(2114); // D0
-  G4ParticleDefinition * aDeltam = G4ParticleTable::GetParticleTable()->FindParticle(1114); // D-
-  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aNeutron, aNeutron, aNeutron, aDelta0));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aNeutron, aNeutron, aProton, aDeltam));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aNeutron, aProton, aProton, aDelta0));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aNeutron, aProton, aNeutron, aDeltap));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aProton, aProton, aNeutron, aDeltapp));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDelta(aProton, aProton, aProton, aDeltap));
-  
 }
 
 

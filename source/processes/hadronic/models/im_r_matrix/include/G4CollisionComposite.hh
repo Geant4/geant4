@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.3 2003-12-12 11:33:11 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.4 2003-12-12 12:27:23 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -45,6 +45,7 @@
 #include "G4CollisionVector.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4CrossSectionBuffer.hh"
+#include "G4Pair.hh"
 
 class G4KineticTrack;
 class G4VCrossSectionSource;
@@ -76,6 +77,19 @@ protected:
     template <class T> void operator()(T*, G4CollisionComposite * aC)
     {
       aC->AddComponent(new T());
+    }
+  };
+  struct Resolve
+  {
+    template <class t1, int t2, int t3, int t4, int t5> 
+    void operator()(INT4(t1,t2,t3,t4,t5) * , G4CollisionComposite * aC)
+    {
+      G4ParticleDefinition * p2, *p3, *p4, *p5;
+      p2=G4ParticleTable::GetParticleTable()->FindParticle(t2);
+      p3=G4ParticleTable::GetParticleTable()->FindParticle(t3);
+      p4=G4ParticleTable::GetParticleTable()->FindParticle(t4);
+      p5=G4ParticleTable::GetParticleTable()->FindParticle(t5);
+      aC->AddComponent(new t1(p2, p3, p4, p5));  
     }
   };
 
