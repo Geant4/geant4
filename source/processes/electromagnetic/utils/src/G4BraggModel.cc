@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.13 2004-02-15 17:08:50 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.14 2004-02-15 17:47:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -176,17 +176,17 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
                                           G4double maxKinEnergy)
 {
 
-  G4double cross = 0.0;
-  G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double cross     = 0.0;
+  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
   G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < tmax) {
 
-    G4double energy = kineticEnergy + mass;
-    G4double energy2= energy*energy;
-    G4double beta2  = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross           = 1.0/cutEnergy - (1.0 + beta2*log(tmax/cutEnergy))/tmax;
+    G4double energy  = kineticEnergy + mass;
+    G4double energy2 = energy*energy;
+    G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
-    // +term for spin=1/2 particle
+// +term for spin=1/2 particle
 //    if( 0.5 == spin ) {
 //      cross        +=  0.5 * (tmax - cutEnergy) / energy2;
 //    }
@@ -229,7 +229,7 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
     if(f > grej) {
         G4cout << "G4BraggModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
-               << f << " for x= " << z
+               << f << " for e= " << deltaKinEnergy
                << G4endl;
     }
 

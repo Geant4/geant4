@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.4 2004-01-21 18:05:07 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.5 2004-02-15 17:47:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -475,11 +475,9 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
-                                                        G4double,
-                                                        G4ForceCondition* cond)
+                                                            G4double, G4ForceCondition*)
 {
-  *cond = NotForced;
-
+//  *cond = NotForced;
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
