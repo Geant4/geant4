@@ -2,22 +2,14 @@
 # GammaRayTel
 #
 #
+
 /control/verbose 1
+/control/saveHistory
 /run/verbose 1
 
-/gun/particle gamma
-/gun/energy 1 GeV
-/gun/sourceType 1
-/run/beamOn 100
-
-/gun/particle e-
-/gun/energy 1 GeV
-/gun/sourceType 1
-/run/beamOn 100
-
 /gun/particle proton
 /gun/energy 1 GeV
-/gun/sourceType 1
+/gun/sourceType 2
 /run/beamOn 100
 
 /gun/particle gamma
@@ -34,3 +26,8 @@
 /gun/energy 1 GeV
 /gun/sourceType 2
 /run/beamOn 100
+
+
+
+
+
