@@ -1,0 +1,15 @@
+# $Id: store.mac,v 1.1 2001-12-14 14:53:22 kurasige Exp $
+#
+#  Macro file store.mac
+#   Data of Physics Table will be stored under physData 
+#
+/control/verbose 2
+#
+/myphys/setCut 1 10 mm
+/run/initialize
+/run/particle/storePhysicsTable physData 
+#
+/run/beamOn 1 
+/run/particle/dumpCutValues
+
+#

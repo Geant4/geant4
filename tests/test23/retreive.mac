@@ -1,0 +1,22 @@
+# $Id: retreive.mac,v 1.1 2001-12-14 14:53:22 kurasige Exp $
+#
+# Macro file retreive.mac
+#  Retreive cut and physics table data from files under physData directory
+#
+/control/verbose 2
+#
+#/tracking/verbose 1 
+/mydet/SelectMaterial Al
+/run/particle/setCut 1 m
+#
+# electron 50 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+/run/particle/retrievePhysicsTable physData 
+#
+/mydet/SelectMaterial 
+#/run/particle/verbose 3 
+/run/initialize
+/run/beamOn 1 
+#
+/run/particle/dumpCutValues

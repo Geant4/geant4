@@ -1,0 +1,357 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (14-Dec-2001)
+             Copyright : Geant4 Collaboration
+**********************************************
+SimpleBox is now made of Pb
+MuonMinusCaptureAtRest is created 
+#set cut value
+/run/particle/setCut 1 mm
+# initialization
+/run/initialize
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+#gun parameter
+/gun/direction 0 0 1
+/gun/position 0 0 1 
+#/tracking/verbose 1 
+#
+# gamma 500 MeV in Al
+#
+/mydet/SelectMaterial Al
+SimpleBox is now made of Al
+/myphys/setCut 1 10 mm  
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 1
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+>>> Event 0
+     Total energy deposition in 0-th BOX: 0.499623 (GeV)
+     Total energy deposition in 1-th BOX: 0.500377 (GeV)
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+                Air           1 mm            1 mm 
+               Air'           1 mm            1 mm 
+                 Al           1 mm            1 mm 
+                Al'           1 cm            1 cm 
+                 Pb           1 mm            1 mm 
+                Pb'           1 mm            1 mm 
+Cut in energy
+                Air         990 eV          990 eV 
+               Air'         990 eV          990 eV 
+                 Al        6.89 keV         597 keV
+                Al'        20.5 keV        4.55 MeV
+                 Pb         101 keV        1.38 MeV
+                Pb'         101 keV        1.38 MeV
+===================================================
+#
+# electron 500 MeV in Air
+#
+/mydet/SelectMaterial Air
+SimpleBox is now made of Air
+/myphys/setCut 1 10 mm  
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+>>> Event 0
+     Total energy deposition in 0-th BOX: 0.00105059 (GeV)
+     Total energy deposition in 1-th BOX: 0.000965709 (GeV)
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+                Air           1 mm            1 mm 
+               Air'           1 cm            1 cm 
+                 Al           1 mm            1 mm 
+                Al'           1 mm            1 mm 
+                 Pb           1 mm            1 mm 
+                Pb'           1 mm            1 mm 
+Cut in energy
+                Air         990 eV          990 eV 
+               Air'         990 eV         8.07 keV
+                 Al        6.89 keV         597 keV
+                Al'        6.89 keV         597 keV
+                 Pb         101 keV        1.38 MeV
+                Pb'         101 keV        1.38 MeV
+===================================================
+#
+# muon 100 GeV in Pb
+#
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/myphys/setCut 1 10 mm  
+/gun/particle mu+
+/gun/energy 100 GeV
+/run/beamOn 1
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+>>> Event 0
+     Total energy deposition in 0-th BOX: 8.74707 (GeV)
+     Total energy deposition in 1-th BOX: 9.74075 (GeV)
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+                Air           1 mm            1 mm 
+               Air'           1 mm            1 mm 
+                 Al           1 mm            1 mm 
+                Al'           1 mm            1 mm 
+                 Pb           1 mm            1 mm 
+                Pb'           1 cm            1 cm 
+Cut in energy
+                Air         990 eV          990 eV 
+               Air'         990 eV          990 eV 
+                 Al        6.89 keV         597 keV
+                Al'        6.89 keV         597 keV
+                 Pb         101 keV        1.38 MeV
+                Pb'         282 keV          15 MeV
+===================================================
