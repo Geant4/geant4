@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.1 2001-08-20 16:37:37 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.2 2001-08-29 18:32:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,9 +68,19 @@ G4CompositeEMDataSet::~G4CompositeEMDataSet()
 G4double G4CompositeEMDataSet::FindValue(G4double e, G4int id) const
 {
   // Returns the value in component id corresponding to e
+  G4double value = 0.;
 
   G4VEMDataSet* component = components[id];
-  G4double value = component->FindValue(e);
+  if (component != 0)
+    {
+      value = component->FindValue(e);
+    }
+  else
+    {
+      G4cout << "WARNING - G4CompositeEMDataSet::FindValue - component "
+	     << id << " not found" << G4endl; 
+    }
+
   return value;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.2 2001-08-23 19:55:12 stesting Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.3 2001-08-29 18:32:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -356,6 +356,7 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(G4double ener
       energyVector.push_back(pow(10., log10(eMin)+i*dBin));
     }
 
+
   if (energyThreshold > 0.0)
     {
       // For ContinuousDiscrete processes
@@ -380,17 +381,21 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(G4double ener
 
   for (size_t m=0; m<nMaterials; m++)
     {
-      //    const G4Material* material= (*materialTable)[m];
-      energies = new G4DataVector;
+     energies = new G4DataVector;
       data = new G4DataVector;
       for (G4int bin=0; bin<nBins; bin++)
 	{
 	  G4double e = energyVector[bin];
 	  energies->push_back(e);
-	  //  G4double materialCrossSection = ValueForMaterial(material,e);
 	  G4VEMDataSet* materialSet = crossSections[m];
 	  G4double materialCrossSection = materialSet->FindValue(e);
   
+	  // MGP DEBUG
+	  //	  const G4Material* material= (*materialTable)[m];
+	  // 	  G4double materialCrossSection0 = ValueForMaterial(material,e);
+	  //          G4cout << materialCrossSection0 << " " << materialCrossSection << G4endl;
+	  // End debug
+
 	  if (materialCrossSection > 0.)
 	    {
 	      data->push_back(1./materialCrossSection);
@@ -409,9 +414,9 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(G4double ener
 
 G4int G4CrossSectionHandler::SelectRandomAtom(const G4Material* material, G4double e) const
 {
-  // Select randomly an element within the material, according to the weight determined
-  // by the cross sections in the data set
-
+  // Select randomly an element within the material, according to the weight 
+  // determined by the cross sections in the data set
+  
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
 
@@ -424,12 +429,13 @@ G4int G4CrossSectionHandler::SelectRandomAtom(const G4Material* material, G4doub
 
   // Composite material
 
-  //  G4double materialCrossSection0 = ValueForMaterial(material,e);
-  size_t materialIndex = material->GetIndex();
-  G4VEMDataSet* materialSet = crossSections[materialIndex];
-  G4double materialCrossSection = materialSet->FindValue(e);
+  G4double materialCrossSection0 = ValueForMaterial(material,e);
+  //  size_t materialIndex = material->GetIndex();
 
-  G4double random = G4UniformRand() * materialCrossSection;
+  //  G4VEMDataSet* materialSet = crossSections[materialIndex];
+  //  G4double materialCrossSection = materialSet->FindValue(e);
+
+  G4double random = G4UniformRand() * materialCrossSection0;
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();   
   G4double partialSumSigma = 0.;
 
@@ -463,12 +469,12 @@ const G4Element* G4CrossSectionHandler::SelectRandomElement(const G4Material* ma
   else
     {
       // Composite material   
-      //      G4double materialCrossSection0 = ValueForMaterial(material,e);
-      size_t materialIndex = material->GetIndex();
-      G4VEMDataSet* materialSet = crossSections[materialIndex];
-      G4double materialCrossSection = materialSet->FindValue(e);
+      G4double materialCrossSection0 = ValueForMaterial(material,e);
+      //      size_t materialIndex = material->GetIndex();
+      //      G4VEMDataSet* materialSet = crossSections[materialIndex];
+      //      G4double materialCrossSection = materialSet->FindValue(e);
       
-      G4double random = G4UniformRand() * materialCrossSection;
+      G4double random = G4UniformRand() * materialCrossSection0;
       const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();   
       G4double partialSumSigma = 0.;
       
