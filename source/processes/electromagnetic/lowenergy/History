@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2001-08-19 17:02:02 vnivanch Exp $
+$Id: History,v 1.85 2001-08-20 16:25:22 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.08.2001 - MGP, tag emlowen-V03-02-04
+	     Same as emlowen-V03-02-02 + bug fix by V.I. described below
 
 18.08.2001 - V.Ivanchenko fix energy conservation bugs for small
              range cuts in G4LowEnergyIonisation.cc
