@@ -376,6 +376,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 //		 <<aT.GetWeight()<<" "
 //		 <<G4endl;
       theTotalResult->Clear();
+      theTotalResult->SetLocalEnergyDeposit(0.);
       theTotalResult->Initialize(aT);
       theTotalResult->SetSecondaryWeightByProcess(true);
       theTotalResult->SetStatusChange(fAlive);
@@ -433,8 +434,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
 	}
       }
+
       theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
       theTotalResult->SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
+
       for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
       {
         G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
