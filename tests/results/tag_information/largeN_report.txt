@@ -14,7 +14,7 @@ It is hoped to extend the coverage and speed up the problem reporting in the Sep
         |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test01  | No-diff |         |          |          |          |          |          |          |         |         |         |         |
-test02  | OK      |         |          |          |          |          | OK       |          |         |         |         |         |
+test02  | Warn 1.1| Warn1.1 |          |          |          |          | OK       |          |         |         |         |         |
 test02.h| OK      | Warn 3  | Warn 2&3 |          | Err 4    | Warn 3   |          | Warn 3   |  Err 5  | Warn 3  | Err 5   |         |
 test05  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
