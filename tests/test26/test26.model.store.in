@@ -1,0 +1,32 @@
+# $Id: test26.model.store.in,v 1.1 2003-02-18 12:13:35 vnivanch Exp $
+#
+# Macro file for "test26.cc"
+# V.Ivanchenko
+#
+#
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+#  select EM PhysicsList
+#
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+#
+/testem/phys/WorldCuts  5.0 mm
+/testem/phys/VertexCuts 0.01 mm
+/testem/phys/MuonCuts  10.0 mm
+/run/initialize
+/run/particle/storePhysicsTable physdata
+#
+/gun/particle mu-
+/gun/energy 1 GeV
+/run/beamOn 100
+#
+/run/particle/retrievePhysicsTable physdata
+/random/resetEngineFrom currentRun.rndm
+/run/beamOn 100
+#
+
+
+
