@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransportationManager.hh,v 1.1 1999-01-07 16:08:45 gunter Exp $
+// $Id: G4TransportationManager.hh,v 1.2 1999-12-02 13:20:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -49,15 +49,15 @@ class G4TransportationManager
 
      ~G4TransportationManager(); 
 
+  protected:
+     G4TransportationManager(); 
+    
   private:
      G4Navigator*            fNavigatorForTracking ;
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;
 
-     G4TransportationManager(); 
-     // Must we also declare a null copy constructor ??
-
-     static G4TransportationManager  fTransportationManager;
+     static G4TransportationManager*  fTransportationManager;
 };
 
 #include "G4TransportationManager.icc"

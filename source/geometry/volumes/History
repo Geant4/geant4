@@ -1,4 +1,4 @@
-$Id: History,v 1.17 1999-11-26 18:54:57 japost Exp $
+$Id: History,v 1.18 1999-12-02 13:20:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 2nd, 1999   G. Cosmo - geomvol-V00-01-02
+
+G4TransportationManager: Fixed definition of the singleton to conform
+    to the canonical implementation. Moved default constructor from private
+    to protected and added call to G4Exception in case of multiple instances
+    through derived classes.
+
 November 26th, 1999   J. Apostolakis - geomvol-V00-01-01
 
 G4TouchableHistory: Moved GetTranslation and GetRotation from inline file 
