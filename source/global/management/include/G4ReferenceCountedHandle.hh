@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.7 2001-09-24 21:08:09 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.8 2001-09-24 22:35:19 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -206,12 +206,6 @@ public: // with description
   inline operator bool() const {
     return( ( fObj != 0 && fObj->GetObject() != 0 ) ? true : false );
   }
-
-  inline X& operator *() const {
-     return( ( fObj != 0 ) ? *(fObj->GetObject()) : 0 );
-  } // Dereference operator to make the feeling of dereferencing a pointer to
-    // the counted object
-    // May be called on initialized smart-pointer only!
 
   inline X* operator ()() const {
      return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
