@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2000-05-18 09:52:51 johna Exp $
+$Id: History,v 1.77 2000-05-19 00:00:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+18th May 2000  John Allison
+- G4ViewParameters.cc: bug fix in density culling printing.
+- G4VisCommandsSceneHandler.cc: bug fix in /vis/sceneHandler/create.
+- G4VisManagerRegisterMessengers.cc: improved comments.
 
 18th May 2000  John Allison  vis-V01-01-04
 - Included DAWN-V01-01-04: Automatic filename incrementation is made default.
