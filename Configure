@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.29 2002-07-01 10:45:04 stesting Exp $
+# $Id: Configure,v 1.30 2002-12-10 13:36:37 stesting Exp $
 #
-# Generated on Mon Jul  1 12:23:24 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 10 14:32:23 CET 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -233,6 +233,8 @@ g4_gmake_version=''
 g4_make=''
 g4_make_version=''
 g4make=''
+g4w_use_g3tog4=''
+g4wlib_build_g3tog4=''
 lns=''
 c=''
 n=''
@@ -449,6 +451,7 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-install) shift; install=yes;;
+	-libs) shift; g4liblist=yes;;
 	-f)
 		shift
 		cd ../..
@@ -503,11 +506,12 @@ done
 case "$error" in
 true)
 	cat >&2 <<EOM
-Usage: $me [-dehrsEKOSV] [-install] [-f config.sh] [-D symbol] [-D symbol=value]
+Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
   -install : start configuration AND installation of Geant4 libraries. 
+  -libs : retrieve the list of libraries to link
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
@@ -573,7 +577,7 @@ chmod +x contains
 esac
 
 : first determine how to suppress newline on echo command
-echo " "
+#echo " "
 #echo "Checking echo to see how to suppress newlines..."
 (echo "hi there\c" ; echo " ") >.echotmp
 if $contains c .echotmp >/dev/null 2>&1 ; then
@@ -895,27 +899,27 @@ true)
 esac
 
 : Eunice requires " " instead of "", can you believe it
-echo " "
+#echo " "
 : Here we go...
-if [ X$install = Xyes ] ; then
-echo " "
-echo " "
-echo " "
-echo "                --- Geant4 Toolkit Installation  ---"
-echo " "
-echo " "
-echo " "
-echo " "
-else
-echo " "
-echo " "
-echo " "
-echo "                --- Geant4 Toolkit Installation  ---"
-echo "                  (setting environments for USER )"
-echo " "
-echo " "
-echo " "
-fi
+#if [ X$install = Xyes ] ; then
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo " "
+#echo " "
+#echo " "
+#echo " "
+#else
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo "                  (setting environments for USER )"
+#echo " "
+#echo " "
+#echo " "
+#fi
 
 trap 'echo " ";rm -rf ../../.config/UU; test -d ../../.config/UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
@@ -936,6 +940,16 @@ case "$user" in
 '') user=`whoami 2>&1`;;
 esac
 if [ X$install = Xyes ] ; then
+
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo " "
+echo " "
+echo " "
+echo " "
+
 if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
 	echo " "
@@ -1560,7 +1574,7 @@ fi
 	fi
 	: Sadilov: g4system.U - inserted here.
 	: 'current' directory is where 'Configure' is started 
-echo " "
+#echo " "
 case "$g4osname" in
 
 '')
@@ -1584,7 +1598,7 @@ case "$g4osname" in
 	esac
 esac
 
-echo " "
+#echo " "
 
 case  "$g4compiler" in
 
@@ -1752,6 +1766,7 @@ EOM
 		;;
 	esac
 done
+
 fi
 
 #
@@ -1759,11 +1774,11 @@ fi
 #
 g4system=$g4osname-$g4compiler
 
-cat << EOM
-
-G4SYSTEM is now set to $g4system.
-
-EOM
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
 
 cd .config/UU
 
@@ -1775,7 +1790,41 @@ dflt=n
 
 cd ../..
 if [ X$install = X ] ; then
+
+
 	if test -f $src/.config/bin/$g4system/env.sh; then
+
+	if [ X$g4liblist = Xyes ] ; then
+
+#	cat >&2 <<EOM
+#---------------------------------------------------
+#LibList mode :)
+#---------------------------------------------------
+#EOM
+	
+	. $src/.config/bin/$g4system/env.sh
+	$G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+	$rm -rf .config/UU
+	exit 1
+
+	else
+
+# header for User
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo "                  (setting environments for USER )"
+echo " "
+echo " "
+echo " "
+
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
+
 	cat >&2 <<EOM
 ---------------------------------------------------
 The Geant4 toolkit installation was found.
@@ -1800,7 +1849,19 @@ cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
 
 	exit 1
+	fi
 else
+
+# header for Installer
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo " "
+echo " "
+echo " "
+echo " "
+
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
@@ -3967,6 +4028,49 @@ gans=$ans
 
 
 echo " "
+case "$g4wlib_build_g3tog4" in
+'')
+	g4wlib_build_g3tog4=n
+	;;
+esac
+
+case "$g4w_use_g4tog4" in
+'')
+	g4w_use_g3tog4=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_G3TOG4
+  G4USE_G3TOG4  
+
+If this variable is set, it will be built G3TOG4 module.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4wlib_build_g3tog4
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_g3tog4=n
+		g4w_use_g4tog4=n
+		;;
+	y*|Y*) 
+		g4wlib_build_g3tog4=y
+		g4w_use_g3tog4=y
+		;;
+	esac
+
+
+echo " "
 
 case "$g4wanalysis_use" in
 '')
@@ -4144,6 +4248,7 @@ g4vis_use_openglxm='$g4vis_use_openglxm'
 g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
+g4w_use_g3tog4='$g4w_use_g3tog4'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4152,6 +4257,7 @@ g4wanalysis_use='$g4wanalysis_use'
 g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
+g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'
