@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc,v 1.7 2003-11-05 10:47:58 japost Exp $
+// $Id: G4ChordFinder.icc,v 1.8 2003-11-08 01:12:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ChordFinder inline implementations
@@ -72,3 +72,7 @@ void G4ChordFinder::ResetStepEstimate()
 {
   fLastStepEstimate_Unconstrained = DBL_MAX;    
 }
+
+inline G4int G4ChordFinder::GetNoCalls()     { return fNoCalls_FNC; }
+inline G4int G4ChordFinder::GetNoTrials()    { return fTotalNoTrials_FNC; }
+inline G4int G4ChordFinder::GetNoMaxTrials() { return fmaxTrials_FNC; } 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.12 2003-11-05 10:47:17 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.13 2003-11-08 01:12:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ class G4ChordFinder
                      G4double         stepMinimum = 1.0e-2 * mm, 
                      G4MagIntegratorStepper* pItsStepper = 0 );  
         // A constructor that creates defaults for all "children" classes.
-                  
+      
       ~G4ChordFinder();
 
 
@@ -87,6 +87,11 @@ class G4ChordFinder
       inline void ResetStepEstimate();
         // Clear internal state (last step estimate)
 
+      inline G4int GetNoCalls(); 
+      inline G4int GetNoTrials();        // Total number of trials
+      inline G4int GetNoMaxTrials();     // Maximum # of trials for one call
+        // Get statistics about number of calls & trials in FindNextChord
+  
    protected:   // .........................................................
 
       inline G4bool AcceptableMissDist(G4double dChordStep) const;
@@ -132,7 +137,11 @@ class G4ChordFinder
       G4bool fAllocatedStepper;
       G4EquationOfMotion* fEquation; 
       G4MagIntegratorStepper* fDriversStepper; 
-      G4int                   fNoTrials, fNoCalls;
+
+      // For Statistics
+      // -- G4int   fNoTrials, fNoCalls;
+      G4int   fTotalNoTrials_FNC,  fNoCalls_FNC, fmaxTrials_FNC; // fnoTimesMaxTrFNC; 
+
 };
 
 // Inline function implementation:
