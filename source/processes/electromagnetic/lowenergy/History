@@ -1,4 +1,4 @@
-$Id: History,v 1.181 2003-05-20 20:55:15 pia Exp $
+$Id: History,v 1.182 2003-05-25 14:39:58 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.05-2003   MGP, tag emlowen-V05-01-03
+             Removed memory leaks in G4PenelopeCompton and 
+             G4PenelopeBremsstrahlung
+             Corrected design flaw in private interface of 
+             G4eBremsstrahlungSpectrum
 
 20.05-2003   MGP, tag emlowen-V05-01-02
              Design iteration in G4LowEnergyBremsstrahlung: abstract class for 
