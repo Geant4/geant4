@@ -20,40 +20,46 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef G4SOWINDOW_h
-#define G4SOWINDOW_h 
+//
+// $Id: G4OpenInventorXt.cc,v 1.1 2004-04-08 09:41:11 gbarrand Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// Jeff Kallenbach 01 Aug 1996
+// OpenInventor graphics system factory.
+
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
+// this :
+#include "G4OpenInventorXt.hh"
 
 #include <Inventor/Xt/SoXt.h>
-#include <HEPVis/SbBasic.h>
 
-class SbDict;
+#include "G4Xt.hh"
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorXtViewer.hh"
 
-class G4SoWindow {
-public:
-  G4SoWindow(const char*,SbBool=FALSE);
-  virtual ~G4SoWindow();
-  Widget getWidget() const;
-  void show();
-  void hide();
-  void setTitle(const char*);
-  void setSize(const SbVec2s&);
-  SbVec2s getSize();
-  void setWMClose(SbBool);
-  SbBool getWMClose() const;
-  static void clearClass();
-protected:
-  void registerWidget(Widget);
-  void unregisterWidget(Widget);
-  static G4SoWindow* getWindow(Widget);
-private:
-  Widget fWidget;
-  SbBool fWMClose;
-  static SbDict* fWidgetDictionary;
-#ifdef HEPVisXt
-  static void widgetDestroyedCB(Widget,XtPointer,XtPointer);
-public:
-  static void closeWindow(Widget,XEvent*,char**,Cardinal*);
-#endif
-};
+G4OpenInventorXt::G4OpenInventorXt ()
+:G4OpenInventor("OpenInventorXt","OIX",G4VGraphicsSystem::threeD)
+{
+  SetInteractorManager (G4Xt::getInstance ());
+  GetInteractorManager () -> 
+    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
+  GetInteractorManager () -> 
+    AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
+
+  Widget toplevel = (Widget)GetInteractorManager()->GetMainInteractor();
+  SoXt::init(toplevel);
+
+  InitNodes();
+}
+
+G4OpenInventorXt::~G4OpenInventorXt () {}
+G4VViewer* G4OpenInventorXt::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
+{
+  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
+  return new G4OpenInventorXtViewer (*pScene, name);
+}
+
 
 #endif

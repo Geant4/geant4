@@ -21,32 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.5 2004-04-08 09:39:38 gbarrand Exp $
+// $Id: G4OpenInventorWin.cc,v 1.1 2004-04-08 09:41:11 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// jck  17 Dec 1996
-// G4OpenGLInventorTransform3D provides SoSFMatrix transformation matrix
-// from G4Transform3D.
+// OpenInventor graphics system factory.
 
-#ifndef G4OPENINVENTORTRANSFORM3D_HH
-#define G4OPENINVENTORTRANSFORM3D_HH
+#ifdef G4VIS_BUILD_OIWIN32_DRIVER
 
-#ifdef G4VIS_BUILD_OI_DRIVER
+// this :
+#include "G4OpenInventorWin.hh"
 
-#include "G4Transform3D.hh"
+#include <Inventor/Win/SoWin.h>
 
-class SoSFMatrix;
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorWinViewer.hh"
+#include "G4Win32.hh"
 
-class G4OpenInventorTransform3D : public G4Transform3D {
-public:
-  G4OpenInventorTransform3D (const G4Transform3D &t);
-  SoSFMatrix* GetOIMatrix () const;
+G4OpenInventorWin::G4OpenInventorWin ()
+:G4OpenInventor("OpenInventorWin","OIWIN32",G4VGraphicsSystem::threeD)
+{
+  SetInteractorManager (G4Win32::getInstance());
+  GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  
+  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
 
-private:
-  G4float m[16];
-};
+  HWND toplevel = (HWND)GetInteractorManager()->GetMainInteractor();
 
-#endif
+  SoWin::init(toplevel);
+
+  InitNodes();
+}
+
+G4OpenInventorWin::~G4OpenInventorWin () {}
+G4VViewer* G4OpenInventorWin::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
+{
+  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
+  return new G4OpenInventorWinViewer (*pScene, name);
+}
+
 
 #endif

@@ -21,30 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.5 2004-04-08 09:39:38 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// jck  17 Dec 1996
-// G4OpenGLInventorTransform3D provides SoSFMatrix transformation matrix
-// from G4Transform3D.
+// Jeff Kallenbach 01 Aug 1996
+// OpenInventor viewer - opens window, hard copy, etc.
 
-#ifndef G4OPENINVENTORTRANSFORM3D_HH
-#define G4OPENINVENTORTRANSFORM3D_HH
+#ifndef G4OPENINVENTORXTVIEWER_HH
+#define G4OPENINVENTORXTVIEWER_HH
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include "G4Transform3D.hh"
+#include "G4VViewer.hh"
 
-class SoSFMatrix;
+#include <X11/Intrinsic.h>
+class SoXtExaminerViewer;
 
-class G4OpenInventorTransform3D : public G4Transform3D {
+class SoSelection;
+class G4OpenInventorSceneHandler;
+class G4VInteractorManager;
+
+//
+// Base class for various OpenInventorView classes.
+//
+class G4OpenInventorXtViewer: public G4VViewer {
+
 public:
-  G4OpenInventorTransform3D (const G4Transform3D &t);
-  SoSFMatrix* GetOIMatrix () const;
-
+  G4OpenInventorXtViewer(G4OpenInventorSceneHandler& scene,
+		       const G4String& name = "");
+  virtual ~G4OpenInventorXtViewer();
+  void DrawView();
+  void ShowView();
 private:
-  G4float m[16];
+  void ClearView();
+  void FinishView();
+  void SetView();
+  void KernelVisitDecision();
+  G4bool CompareForKernelVisit(G4ViewParameters&);
+  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
+  Widget fShell;
+  SoXtExaminerViewer* fViewer;
+  SoSelection* fSelection;
+  G4VInteractorManager* fInteractorManager;
 };
 
 #endif

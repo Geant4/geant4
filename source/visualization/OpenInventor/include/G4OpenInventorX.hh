@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorX.hh,v 1.5 2001-07-11 10:09:00 gunter Exp $
+// $Id: G4OpenInventorX.hh,v 1.6 2004-04-08 09:39:38 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,12 +33,14 @@
 #ifndef G4OPENINVENTORX_HH
 #define G4OPENINVENTORX_HH
 
-#include "G4OpenInventor.hh"
+// For backward compatibilty.
 
-class G4OpenInventorX: public G4OpenInventor {
+#include "G4OpenInventorXt.hh"
+
+class G4OpenInventorX: public G4OpenInventorXt {
 public:
-  G4OpenInventorX ();
-  virtual ~G4OpenInventorX ();
+  G4OpenInventorX () {}
+  virtual ~G4OpenInventorX () {}
 };
 
 #endif

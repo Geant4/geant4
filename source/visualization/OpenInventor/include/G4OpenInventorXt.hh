@@ -21,30 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.5 2004-04-08 09:39:38 gbarrand Exp $
+// $Id: G4OpenInventorXt.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// jck  17 Dec 1996
-// G4OpenGLInventorTransform3D provides SoSFMatrix transformation matrix
-// from G4Transform3D.
+// Andrew Walkden  27th March 1996
+// OpenInventor graphics system factory.
 
-#ifndef G4OPENINVENTORTRANSFORM3D_HH
-#define G4OPENINVENTORTRANSFORM3D_HH
+#if defined (G4VIS_BUILD_OIX_DRIVER) || defined (G4VIS_USE_OIX)
 
-#ifdef G4VIS_BUILD_OI_DRIVER
+#ifndef G4OPENINVENTORXT_HH
+#define G4OPENINVENTORXT_HH
 
-#include "G4Transform3D.hh"
+#include "G4OpenInventor.hh"
 
-class SoSFMatrix;
-
-class G4OpenInventorTransform3D : public G4Transform3D {
+class G4OpenInventorXt: public G4OpenInventor {
 public:
-  G4OpenInventorTransform3D (const G4Transform3D &t);
-  SoSFMatrix* GetOIMatrix () const;
-
-private:
-  G4float m[16];
+  G4OpenInventorXt ();
+  virtual ~G4OpenInventorXt ();
+  G4VViewer* CreateViewer(G4VSceneHandler&,const G4String& name = "");
 };
 
 #endif
