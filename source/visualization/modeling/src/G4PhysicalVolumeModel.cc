@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.5 1999-11-10 18:20:59 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.6 1999-12-06 16:08:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -356,7 +356,7 @@ void G4PhysicalVolumeModel::DescribeSolids
     G4Transform3D theBT (theAT);
     G4DisplacedSolid* pDisSol = pBoolSolB -> GetDisplacedSolidPtr ();
     if (pDisSol) {
-      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation (),
+      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
 				     pDisSol -> GetObjectTranslation ());
     }
     DescribeSolids (theBT, pBoolSolB, pVisAttribs, sceneHandler);
