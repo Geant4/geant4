@@ -1,0 +1,6 @@
+global-V01-01-01
+----------------
+- STLInterface: forced initialization of vectors' members also for
+  ordered/sorted collections. Even when using the access operator
+  vector::operator[] as left-hand operand, STL requires the vector
+  to be not empty. Removed usage of vector::reserve(capacity).
