@@ -1,4 +1,4 @@
-//
+///
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.8 2004-09-22 20:01:18 johna Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.9 2005-02-15 14:09:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpCommandSetOutFile = new G4UIcmdWithAString ("/vis/ASCIITree/set/outFile", this
 );
   fpCommandSetOutFile -> SetGuidance
-    ("/vis/ASCIITree/set/OutFile <out-filename>");
+    ("/vis/ASCIITree/set/outFile <out-filename>");
   fpCommandSetOutFile -> SetParameterName ("out-filename",
 					omitable = true,
 					currentAsDefault = false);
