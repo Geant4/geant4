@@ -69,28 +69,28 @@ int main(int argc, char **argv) {
   const G4PMapPtkTallys &m = mScorer.GetMapPtkTallys();
   for (G4PMapPtkTallys::const_iterator mit = m.begin();
        mit != m.end(); mit++) {
-    G4PTouchableKey ptk = mit->first; // get a key identifying a volume
-    G4PMapNameTally mtallies = mit->second; // get tallies of the volume
+    G4PTouchableKey ptk = (*mit).first; // get a key identifying a volume
+    G4PMapNameTally mtallies = (*mit).second; // get tallies of the volume
     G4String name(ptk.fVPhysiclaVolume->GetName()); // print volume name
     G4int nEnteringTracks = 0;
     G4double colli_EnteringTrack = 0;
     G4double meanTrackEnergy = 0, sigmaTrackEnergy = 0;
     for (G4PMapNameTally::iterator mt = mtallies.begin();
 	 mt != mtallies.end(); mt++) {
-      G4String tmp(mt->first);
+      G4String tmp((*mt).first);
       if (tmp == "HistorysEntering") {
-	nEnteringTracks = mt->second.GetXsum();
+	nEnteringTracks = (*mt).second.GetXsum();
       }
       if (tmp == "EnergyEnteringHistory") {
-	meanTrackEnergy =  mt->second.GetMean();
-	sigmaTrackEnergy = mt->second.GetSigma();
+	meanTrackEnergy =  (*mt).second.GetMean();
+	sigmaTrackEnergy = (*mt).second.GetSigma();
       }
       if (tmp == "Collisions") {
 	if (!nEnteringTracks) {
 	  G4cout << "exampleB01: Error nEnteringTracks=0" <<G4endl;
 	}
 	else {
-	  colli_EnteringTrack =  mt->second.GetXsum() / nEnteringTracks;
+	  colli_EnteringTrack =  (*mt).second.GetXsum() / nEnteringTracks;
 	}
       }
     }

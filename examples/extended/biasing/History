@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-04-08 08:59:13 gcosmo Exp $
+$Id: History,v 1.3 2002-04-08 12:38:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 8th, 2002  G.Cosmo - exbiasing-V04-00-03
+- Fixed usage of 'first'/'second' in iterators for porting
+  on DEC-cxx non-ISO.
 
 April 8th, 2002  M.Dressel - exbiasing-V04-00-02
 - Resolved compilation problems on HP-aCC.
