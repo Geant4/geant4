@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-04-11 16:26:38 johna Exp $
+$Id: History,v 1.21 2000-05-13 08:10:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th May 2000  John Allison (greps-V01-01-02)
+- Changed std:: to HepStd:: for ISO compatibility (Evgeni Chernaev).
 
 11th April 2000  John Allison (greps-V01-01-01)
 - Added operator = (const HepPolyhedron&) to ExtPolyhedron.
