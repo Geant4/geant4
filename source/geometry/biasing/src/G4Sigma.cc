@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sigma.cc,v 1.5 2002-07-10 14:07:21 dressel Exp $
+// $Id: G4Sigma.cc,v 1.6 2002-07-10 14:52:42 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -122,42 +122,6 @@ void G4Sigma::Error(const G4String &m)
   G4cout << "ERROR: G4Sigma::" << m << G4endl;
 }
 
-
-G4double G4Sigma::GetValueByname(const G4String &sigspec){
-  if (sigspec=="Mean") {
-    return GetMean();
-  }
-  else if (sigspec=="Sigma") {
-    return GetSigma();
-  }
-  else if (sigspec=="Entries") {
-    return GetEntries();
-  }
-  else if (sigspec=="Xsum") {
-    return GetXsum();
-  }
-  else if (sigspec=="XXsum") {
-    return GetXXsum();
-  }
-  else if (sigspec=="Wsum") {
-    return GetWsum();
-  }
-  else if (sigspec=="WWsum") {
-    return GetWWsum();
-  }
-  else if (sigspec=="WXsum") {
-    return GetWXsum();
-  }
-  else if (sigspec=="WXXsum") {
-    return GetWXXsum();
-  }
-  else {
-    G4cout << "Error:G4Sigma::GetValueByname: can't " 
-	   << "read sigmas: Get"
-	   << sigspec << "() function" << G4endl;
-    return -1;
-  }
-}
 
 
 G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s)

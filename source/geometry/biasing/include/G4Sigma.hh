@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sigma.hh,v 1.7 2002-07-10 14:07:21 dressel Exp $
+// $Id: G4Sigma.hh,v 1.8 2002-07-10 14:52:42 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,9 +83,6 @@ class G4Sigma
 
   G4double GetWXXsum() const;
     // get weighted sum over squarted x: Sum(W*x*x)
-
-  G4double GetValueByname(const G4String &sigspec);
-    // return a value by the name of the Get<name>() function. 
 
  private:
 
