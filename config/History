@@ -1,4 +1,4 @@
-$Id: History,v 1.64 1999-10-28 17:20:14 gcosmo Exp $
+$Id: History,v 1.65 1999-10-29 08:51:23 barrand Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th October 1999  Guy Barrand
+- architecture.gmk, interactivity.gmk : introduce 
+  "G4_OPACS_WIDGET_SET lesstif" logic to handle the case
+  of using, on Linux, the bugged lesstif with the non bugged OPACS.
 
 29th October 1999  Gabriele Cosmo
 - Introduced fixes for shared library setup (courtesy of F.Carminati).

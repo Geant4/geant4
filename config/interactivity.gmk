@@ -32,7 +32,12 @@ ifdef INC_OPACS
   ifeq ($(G4_OPACS_WIDGET_SET),Xm)
     INC_XM    = 1
     CPPFLAGS += -DHAS_XM
-  else
+  endif
+  ifeq ($(G4_OPACS_WIDGET_SET),lesstif)
+    INC_XM    = 1
+    CPPFLAGS += -DHAS_XM
+  endif
+  ifeq ($(G4_OPACS_WIDGET_SET),Xaw)
     INC_XAW   = 1
     CPPFLAGS += -DHAS_XAW
   endif
@@ -44,7 +49,15 @@ ifeq ($(G4_OPACS_WIDGET_SET),Xm)
   INC_XM   = 1
   LOAD_XM  = 1
   INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXm
-else
+endif
+ifeq ($(G4_OPACS_WIDGET_SET),lesstif)
+  INC_XM    = 1
+  LOAD_XM   = 1
+  INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXm
+# lesstif is bugged on popup ; then OPACS/Xo uses Xaw for popup.
+  LOAD_XAW  = 1
+endif
+ifeq ($(G4_OPACS_WIDGET_SET),Xaw)
   INC_XAW  = 1
   LOAD_XAW = 1
   INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXaw
