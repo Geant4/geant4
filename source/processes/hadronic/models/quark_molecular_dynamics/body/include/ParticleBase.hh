@@ -16,6 +16,7 @@ class ParticleBase
   friend G4std::ostream& operator<<(G4std::ostream&,const ParticleBase&);
 public:
   virtual ~ParticleBase() {}
+  virtual int PDGCode() const = 0;
   virtual int C() const = 0;
   virtual double B() const = 0;
   virtual int S() const = 0;
@@ -33,6 +34,7 @@ public:
   virtual QuantumState getProperties() const = 0;
   virtual const ParticleType& getType() const = 0;
 
+  virtual void SetPDGCode(int pdgCode) = 0;
   virtual void SetMass(double m) = 0;
   virtual void SetFlag(int flag) = 0;
   virtual void setLifetime(double) = 0;
@@ -58,10 +60,12 @@ public:
   virtual bool isGluon() const = 0;
 
   virtual Vektor3 Force() const { return Vektor3(0,0,0); }
+
   void Lorentz(int j,double beta);
   void Lorentz(const Vektor3& beta);
   double Charge() const { return Iso3()+0.5*(B()+S()+Charm()); }
   double E() const  { return sqrt(Momentum()*Momentum()+Mass()*Mass()); }
+
 protected:
   virtual void announceEvent() const {} 
   virtual bool noPotentials() const = 0;

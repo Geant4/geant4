@@ -11,6 +11,11 @@
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "globals.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 
 G4qmd::G4qmd()
 {
@@ -221,8 +226,9 @@ void G4qmd::SetupFromFile()
 
 
 
-void G4qmd::justRun()
+G4KineticTrackVector * G4qmd::TheHadrons()
 {
+	G4KineticTrackVector * theHadrons = new G4KineticTrackVector();
   try {
 
     theQuarkSystem.print(cout);
@@ -253,9 +259,14 @@ void G4qmd::justRun()
       theQuarkSystem.print(cout);
     }
 
+		theHadrons = theQuarkSystem.GetNewHadrons();
+
   }
   catch ( char *s ) {
     G4cerr << "ERROR: " << s << G4endl;
   }
+
+	return theHadrons;
+
 }
 

@@ -50,6 +50,7 @@ class ParticleProperties : private QuantumProjections,
   const ParticleType& Type;
   double mass,lifetime;
 	int flag;
+	int pdgCode;
 
 protected:
   ParticleProperties(const ParticleType& h,double Emax = 0.0);
@@ -66,6 +67,7 @@ public:
   
   virtual void SetMass(double m) { mass = m; }
   virtual void SetFlag(int f) { flag = f; }
+  virtual void SetPDGCode(int pdgc) { pdgCode = pdgc; }
   virtual void SetColor(const RGB& c) { QuantumProjections::setColor(c); }
   virtual void Conjugate() { c = -c; iso3 = -iso3; spin3=-spin3; color=-color; }
   virtual double B() const { return C()*Type.B(); }
@@ -85,8 +87,18 @@ public:
   virtual bool isGluon() const { return Type.isGluon(); }
 
   virtual int Flag() const { return flag; }
-
   virtual String Name() const;
+
+	//
+  // PDGCODE
+	// depending on how it is set - first guess: constructed from Name()
+  //
+  virtual int PDGCode() const;
+  // 
+  // better would be
+  //
+  //  virtual int PDGCode() const { return pdgCode; }
+
   virtual double Lifetime() const { return lifetime; }
   virtual QuantumState getProperties() const { return QuantumState(Type,*this); }
   virtual const ParticleType& getType() const { return Type; }

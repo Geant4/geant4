@@ -5,11 +5,22 @@
 
 G4std::ostream& operator<<(G4std::ostream& o,const ParticleBase& p)
 {
-  o << p.Name() << ":  " << p.B() << "  " << p.S() << "  "
-    << p.Charm() << "  " << p.Mass() << "  " 
-    << p.Isospin() << "  " << p.Iso3() << "  " << p.Spin() << "  " 
-    << p.Spin3() << "  " << p.Coordinates() << "  " << p.Momentum() << "  " 
-    << p.Color() << "  " << p.Force() << "  " << p.Lifetime() << "  " << p.Flag() << "  " ;
+  o << p.Name()        << " (" 
+    << p.PDGCode()     << "): " 
+    << p.B()           << "  " 
+    << p.S()           << "  "
+    << p.Charm()       << "  " 
+    << p.Mass()        << "  " 
+    << p.Isospin()     << "  " 
+    << p.Iso3()        << "  " 
+    << p.Spin()        << "  " 
+    << p.Spin3()       << "  " 
+    << p.Coordinates() << "  " 
+    << p.Momentum()    << "  " 
+    << p.Color()       << "  " 
+    << p.Force()       << "  " 
+    << p.Lifetime()    << "  " 
+    << p.Flag()        << "  " ;
   return o;
 }
 

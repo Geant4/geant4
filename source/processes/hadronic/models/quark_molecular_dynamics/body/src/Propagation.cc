@@ -1,5 +1,10 @@
 #include "G4ios.hh"
 #include "g4std/fstream"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -29,7 +34,7 @@
 
 //extern outputList Output;
 
-double ColorString::Ekin_min = 0.15; // minimum kinetic energy for final break
+double ColorString::Ekin_min = 0.15;  // minimum kinetic energy for final break
 double ColorString::Cutoff = 10.0;    // [GeV]
 
 ParticleBase* makeParticle(const ParticleType& h)
@@ -95,11 +100,30 @@ void Quark::announceEvent() const
     CollisionTab::addEntry(Time(),*this,FLUXTUBE);
 }
 
-ColorString::ColorString(const double& E,const Vektor3& ptot,const Vektor3& rtot,int n,const QuantumState pparray[],const vector<ParticleBase*>& types) : Etot(E),Ptot(ptot),Rtot(rtot),N(n)
+ColorString::ColorString(const double& E, 
+                         const Vektor3& ptot, 
+                         const Vektor3& rtot, 
+                         int n,
+                         const QuantumState pparray[],
+                         const vector<ParticleBase*>& types,
+                         int nhadronever) :
+                         N(n),
+                         Mass0(E),
+                         Ptot(ptot),
+                         Rtot(rtot),
+                         NhadronEver(nhadronever)
 {
+	PDGCode=0;
+	FormationTime=0;
+//
+// building hadrons out of clusters of 2 quarks
+//
   if ( N == 2 )
     for (int i=0; i<N; i++)
       array[i] = pparray[i];
+//
+// building hadrons out of clusters of 3 quarks
+//
   else if ( N == 3 ) {
     int choose = rand_gen::Random(1,3);
     switch ( choose ) {
@@ -117,21 +141,41 @@ ColorString::ColorString(const double& E,const Vektor3& ptot,const Vektor3& rtot
       break;
     }
   }
+//
+// larger clusters are not considered
+//
   else
     throw "Something went wrong!";
+
   pp = array[0]+array[1];
-  beta = Ptot/(-sqrt(Etot*Etot+Ptot*Ptot));
-  G4cerr << "STRING: " << Etot << " --> ";
-  if ( 1 || Etot < Cutoff ) {
+  beta = Ptot/(-sqrt(Mass0*Mass0+Ptot*Ptot));
+  G4cerr << "CLUSTER: " << Mass0 << " --> ";
+//
+// make hadron out of cluster
+//
+  if ( 1 || Mass0 < Cutoff ) {
     ParticleType& knot = Knot<ParticleType>::FindKnot((ParticleType&)(QuantumNumbers&)pp);
-    ParticleType& h = knot.selectType(pp.C(),types,Etot);
-    //    ParticleType& h = TypeContainer::ParticleTypes->findType(pp,Etot);
+    ParticleType& h = knot.selectType(pp.C(),types,Mass0);
     ParticleBase* H = makeParticle(h,pp);
+    H->SetFlag(NhadronEver) ;
     H->SetMomentum(Ptot);
     H->SetCoordinates(Rtot);
-    H->SetMass(Etot);
-    // (*Output::fileout) << H->Time() << "  " << length(H->Coordinates()) << G4endl;
+    H->SetMass(Mass0);
+ 
     G4cerr << H->Name() << G4endl;
+//
+//  G4cout << "- NEW HADRON BY CLUSTERING at time=" << H->Time() << ": " << *H << endl;
+//
+    G4cout << "NEW HADRON BY CLUSTERING at time=" << H->Time() 
+           << " and point="                       << H->Coordinates() 
+           << " with momentum="                   << H->Momentum() 
+           << " - PDGCode: "                      << H->PDGCode() 
+           << " ("                                << H->Name()
+           << ")" << endl;
+
+		PDGCode = H->PDGCode();
+    FormationTime = H->Time();
+
   }
   else {
     G4cerr << "Too high!!!!\n";
@@ -144,17 +188,17 @@ ColorString::~ColorString()
 
 void ColorString::breakUp()
 {
-  if ( Etot < Cutoff ) {
+  if ( Mass0 < Cutoff ) {
     ParticleType& knot = Knot<ParticleType>::FindKnot((ParticleType&)(QuantumNumbers&)pp);
-    ParticleType& h = knot.selectType(Etot);
-    //    ParticleType& h = TypeContainer::ParticleTypes->findType(pp,Etot);
+    ParticleType& h = knot.selectType(Mass0);
+    //    ParticleType& h = TypeContainer::ParticleTypes->findType(pp,Mass0);
     ParticleBase* H = makeParticle(h,pp);
     H->SetMomentum(Ptot);
     H->SetCoordinates(Rtot);
-    H->SetMass(Etot);
+    H->SetMass(Mass0);
   }
   else {
-    G4cerr << "Etot = " << Etot << ":\n";
+    G4cerr << "ZeroMass = " << Mass0 << ":\n";
   }
 }
 
@@ -237,7 +281,11 @@ vector<ParticleType*> Colour::Quarks;
 Colour::Colour(double h) 
   : Nbody(h),InverseFunctionWithNewton(0.3)
 {
-  Nquark = Npart;
+	Nquark = Npart;
+	NquarkEver = Npart;
+
+	TheNewHadrons = new  G4KineticTrackVector();
+
   //  vector<ParticleType*> Q=Knot<ParticleType>::Find("SQ");
   //  vector<ParticleType*> D=Knot<ParticleType>::Find("DQ");
   //  vector<ParticleType*> Q=TypeContainer::ParticleTypes->findType(AnyQuark());
@@ -251,7 +299,7 @@ Colour::Colour(double h)
   if ( !Pot )
     G4cerr << "No Potential defined...";
   G4cout << "third try"<<endl;
-  FlavorFission = NEW double[Quarks.size()];
+  FlavorFission = NEW double[Quarks.size()]; G4cerr << "Check: " << Quarks.size() << G4endl; 
   FissionRate = Schwinger(kappa);
   double u = B/(2*kappa*a)*(1+sqrt(1-4*kappa*a/B))-1.0;
   r0 = R+a*log(u);
@@ -308,9 +356,17 @@ ParticleType& Colour::TunnelRate(double kap)
 void Colour::setup()
 {
   Nquark = 0;
-  for (int i=0; i<Npart; i++)
-    if ( List[i]->isQuark() || List[i]->isDiquark() )
+	NquarkEver = 0;
+	NhadronEver = 0 ;
+  for (int i=0; i<Npart; i++) {
+    if ( List[i]->isQuark() || List[i]->isDiquark() ) {
       ++Nquark;
+			++NquarkEver;
+		}
+		else {
+			++NhadronEver;
+    }
+  }
 }
 
 Vektor3 Colour::Ptot()
@@ -474,6 +530,13 @@ void Colour::decompose(ParticleBase* p)
     //    sub(p);
   }
   catch ( char* s) {}
+
+	for (int i=0; i<Npart; i++) {
+		if ( List[i]->isQuark() && (List[i]->Flag() == 0) ) {
+			++NquarkEver;
+			List[i]->SetFlag(NquarkEver);
+		}
+	}
 }
 
 void Colour::decomposeAll()
@@ -504,13 +567,26 @@ void Colour::decomposition(int i)
 
 void Colour::one_step()
 {
+
   Nbody::one_step();
+
   bool decayOccured = false;
+
   if ( allowDecomposition ) {
     int n = Npart;
     for (int i=Nquark; i<Npart; i++) 
       decomposition(i); 
     CollisionTab::perform(Time());
+//		Nquark = 0;
+//		for (int i=0; i<Npart; i++) {
+//			if ( List[i]->isQuark() || List[i]->isDiquark() ) {
+//				++Nquark;
+//			}
+//			if ( List[i]->isQuark() && (List[i]->Flag() == 0) ) {
+//				++NquarkEver;
+//				List[i]->SetFlag(NquarkEver);
+//			}
+//		}
     if ( n != Npart ) {
       setup();
     }
@@ -573,9 +649,19 @@ void Colour::one_step()
               Vektor3 x0 = r_k+(lambda/lf)*f;
               G4cerr << h.Name() << ": " << sigma << "  " 
                    << lambda << "  " << x0 << "  " << f << G4endl;
+							//
+							// color string fission from Schwinger mechanism
+							//
+							//
               if ( directHadrons ) {
                 ParticleBase* p_hadron = makeParticle(*had,pp_hadron,new_P,r_k);
                 ParticleBase* p_quark = makeParticle(h,pp_alpha,Pt,x0);
+								NquarkEver += 1;
+								NhadronEver += 1;
+								p_quark->SetFlag(NquarkEver) ;
+								p_hadron->SetFlag(NhadronEver) ;
+								G4cerr << "- NEW HADRON at time=" << Time() << ": " << *p_hadron << endl;
+								G4cerr << "- NEW QUARK at time=" << Time() << ": " << *p_quark << endl;
               }
               else {
                 Vektor3 x1 = r_k+((lambda-sigma)/lf)*f;
@@ -583,7 +669,11 @@ void Colour::one_step()
                 ParticleBase* p_new1 = makeParticle(h,pp_alpha,Pt,x0);
                 ParticleBase* p_new2 = makeParticle(h,pp_beta,-Pt,x1);
                 Nquark += 2;
+								NquarkEver += 2;
                 G4cerr << "quarks created: " << length(xs) << G4endl;
+								G4cerr << "quarks created: " << length(xs) << endl;
+								G4cout << "- NEW QUARK at time=" << Time() << ": " << *p_new1 << endl;
+								G4cout << "- NEW QUARK at time=" << Time() << ": " << *p_new2 << endl;
               }
               firstCall = true;
             }
@@ -658,7 +748,33 @@ void Colour::one_step()
       	double p_mass = sqrt(eps*eps-ptot*ptot);
       	try {
       	  try {
-      	    ColorString formed(p_mass,Ptot,Rtot,eraseList.size(),quarkList,Types);
+//
+// ------------------- Hadronization of cluster ----------------------------------
+//
+      	    ColorString NewHadron(p_mass,Ptot,Rtot,eraseList.size(),quarkList,Types,NhadronEver);
+
+						G4cerr << "NEW Hadron: "      << NewHadron.GetPDGCode()
+                   << " at time "         << NewHadron.GetFormationTime()
+                   << " and point "       << NewHadron.GetPosition()
+                   << " with 4momentum "  << NewHadron.Get4Momentum()
+                   << G4endl;
+
+            G4ParticleDefinition * NewHadronDefinition = 
+                 G4ParticleTable::GetParticleTable()->FindParticle(NewHadron.GetPDGCode());
+
+            G4KineticTrack * NewHadronTrack = 
+                 new G4KineticTrack(NewHadronDefinition, NewHadron.GetFormationTime(),NewHadron.GetPosition(),NewHadron.Get4Momentum());
+
+            G4cerr << " remaining lifetime: " << NewHadronTrack->SampleResidualLifetime()
+                   << G4endl;
+ 
+            TheNewHadrons->insert(NewHadronTrack);
+
+      	    NhadronEver++;
+//
+// -------------------------------------------------------------------------------
+//
+
       	  }
       	  catch ( const ParticleType::undefinedParticle& ) {
       	    if ( !removeWhenUndefined ) 

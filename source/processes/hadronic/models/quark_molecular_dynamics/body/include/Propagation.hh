@@ -11,6 +11,11 @@
 #include "MathTools.hh"
 #include "Geometry.hh"
 #include "double.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 
 struct connect
 {
@@ -33,6 +38,7 @@ class Quark;
 class Colour : public Nbody,protected InverseFunctionWithNewton
 {
 protected:
+
   enum { MAX_TRIES = 20 };
   friend class Quark;
   static double colors[7][7];
@@ -47,7 +53,9 @@ protected:
   REAL ToBeInverted(REAL x) const;
   REAL Derivative(REAL x) const;
   vector<int> eraseList;
+
 public:
+
   enum criterion { ALL, NO_DIQUARK };
   virtual void init(double) {}
   Colour(double h = 0.01);
@@ -62,6 +70,9 @@ public:
   inline Vektor3 dHdx(int i);
   Vektor3 Ptot();
   void one_step();
+
+	G4KineticTrackVector * GetNewHadrons() const { return TheNewHadrons; }
+
   virtual void print(G4std::ostream& o);
   void Correlation();
   void clusters(int i);
@@ -94,10 +105,17 @@ public:
   static vector<ParticleType*> Quarks;
   static void setQuarks(vector<ParticleType*>&);
   int Nquark;
+  int NquarkEver;
+  int NhadronEver;
   double Factor(double r,int i,int j,int s = 1) const;
+
 private:
+
   static double colorProfile(double r) { return 1.0; }
   double a0,r0,E0;
+
+  G4KineticTrackVector * TheNewHadrons;
+
 };
 
 class Radiation : public Colour
@@ -190,15 +208,37 @@ protected:
 
 class ColorString 
 {
+//
+// the name of this class is very misleading: it just produces a hadron out of a quark cluster!
+//
+
   int N;
-  double Etot;
+  double Mass0;
+  int NhadronEver;
+  Vektor3 beta,Ptot,Rtot;
+
   QuantumState pp;
   QuantumState array[2];
-  Vektor3 beta,Ptot,Rtot;
+  int PDGCode;
+	double FormationTime;
+
 public:
-  ColorString(const double& Etot,const Vektor3& Ptot,const Vektor3& Rtot,int n,
-	 const QuantumState parray[],const vector<ParticleBase*>&);
+
+  ColorString(const double& Mass0,const Vektor3& Ptot,const Vektor3& Rtot,int n,
+	 const QuantumState parray[],const vector<ParticleBase*>&, int NhadronEver);
   ~ColorString();
+
+	G4int GetPDGCode() const { return PDGCode; }
+  G4double GetFormationTime() const { return FormationTime; }
+  G4ThreeVector GetPosition() const { 
+    G4ThreeVector z(Rtot[1],Rtot[2],Rtot[3]); 
+    return z;
+  }
+  G4LorentzVector Get4Momentum() const { 
+   	double E=sqrt(Mass0*Mass0+Ptot*Ptot);
+    G4LorentzVector z (Ptot[1],Ptot[2],Ptot[3],E);
+    return z;
+  }
 
   static double Cutoff;
   static double Ekin_min;

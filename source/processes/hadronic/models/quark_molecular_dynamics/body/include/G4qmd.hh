@@ -38,6 +38,11 @@
 #include "Quarkbox.hh"
 #include "output.hh"
 #include "globals.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 #include "G4ExcitedStringDecay.hh"
 
 class Knot<ParticleType>;
@@ -79,8 +84,7 @@ class G4qmd
 
       void SetupFromFile();
       void SetupFromG4ExcitedString();
-      void justRun();
-
+ 
       G4KineticTrackVector * TheHadrons() ;
 
   private:
@@ -169,10 +173,10 @@ inline void G4qmd::SetOutputTimestep(double aOutputTimestep)
 
 
 
-inline G4KineticTrackVector * TheHadrons() 
-{
- return 0;
-}
+//inline G4KineticTrackVector * TheHadrons() 
+//{
+//return 0;
+//}
 
 #endif
 
