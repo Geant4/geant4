@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004-12-06 11:00:15 radoone Exp $
+# $Id: GNUmakefile,v 1.3 2004-12-06 14:26:14 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # Author: Radovan Chytracek
@@ -10,7 +10,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef SCRAM_ARCH
-  SCRAM_ARCH := rh73_gcc32
+  SCRAM_ARCH := rh73_gcc323
 endif
 
 ifndef G4INSTALL
@@ -26,14 +26,16 @@ CPPFLAGS    += \
                -I$(GDML_BASE)/geant4/include \
                -I$(XERCESCROOT)/include
 
-EXTRALIBS   += -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
-               -llcg_GDMLSaxana \
-               -llcg_GDMLProcesses \
-               -llcg_GDMLWriter \
+EXTRALIBS   += \
                -L$(GDML_BASE)/geant4/$(SCRAM_ARCH)/lib \
                -llcg_G4GDMLProcessor \
                -llcg_G4GDMLSubscribers \
+               -llcg_G4GDMLProcessor \
                -llcg_G4GDMLWriter \
+               -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
+               -llcg_GDMLSaxana \
+               -llcg_GDMLProcesses \
+               -llcg_GDMLWriter \
                -L$(XERCESCROOT)/lib -lxerces-c
 
 .PHONY: all
