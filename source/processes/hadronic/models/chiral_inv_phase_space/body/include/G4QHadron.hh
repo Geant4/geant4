@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.11 2001-09-13 14:05:30 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.12 2001-09-17 14:19:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,6 +60,7 @@ public:
   G4double              GetWidth()        const;    // Get Width of Hadron 
   G4int                 GetNFragments()   const;    // Get a#of Fragments of this Hadron
   G4int                 GetCharge()       const;    // Get Charge of the Hadron
+  G4int                 GetStrangeness()  const;    // Get Strangeness of the Hadron
   G4int                 GetBaryonNumber() const;    // Get Baryon Number of the Hadron
   // Modifiers
   void SetQPDG(const G4QPDGCode& QPDG);             // Set QPDG of the Hadron
@@ -103,6 +104,7 @@ inline G4double        G4QHadron::GetMass()         const   {return theMomentum.
 inline G4double        G4QHadron::GetMass2()        const   {return theMomentum.m2();}
 //@@ This is an example how to make other inline selectors for the Hadron
 inline G4int           G4QHadron::GetCharge()       const   {return valQ.GetCharge();}
+inline G4int           G4QHadron::GetStrangeness()  const   {return valQ.GetStrangeness();}
 inline G4int           G4QHadron::GetBaryonNumber() const   {return valQ.GetBaryonNumber();}
 
 inline void            G4QHadron::MakeAntiHadron()          {if(TestRealNeutral()) NegPDGCode();}

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.26 2001-09-13 15:19:40 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.27 2001-09-17 14:19:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -620,6 +620,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	{
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);// PION + BoundCluster
       valQ=EnFlQC+curQC;
+      if(projE<mPi)G4cout<<"***INPUT ERROR***G4QE::CrQ: pi- Energy="<<projE<<" < mPi="<<mPi<<G4endl;
 #ifdef pdebug
       G4cout<<"G4QEnv::CreateQ:Q="<<q4Mom<<valQ<<"+pi="<<proj4M<<", QEnv="<<theEnvironment<<G4endl;
 #endif
@@ -948,7 +949,8 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 #ifdef pdebug
     G4cout<<"G4QEnv::HadrQE:FRAGMENTATION IN NUCLEAR ENVIRONMENT nQ="<<nQuasmons<<G4endl;
 #endif
-    G4int   c3Max = 27;
+    //G4int   c3Max = 27;
+    G4int   c3Max = 3;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
@@ -2832,6 +2834,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
 #endif
       G4QHadron* curHadr = theQHadrons[hadron];    // Get a pointer to the current Hadron
       G4int         hPDG = curHadr->GetPDGCode();
+      G4int           hS = curHadr->GetStrangeness();
       G4int           hF = curHadr->GetNFragments();
       G4LorentzVector h4m= curHadr->Get4Momentum();
       G4double hM        = h4m.m();                // Mass of the first fragment
@@ -2843,26 +2846,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
 #ifdef pdebug
       G4cout<<"G4QE::Fr:h="<<hPDG<<",hF="<<hF<<",hB="<<hB<<",h#"<<hadron<<" < nH="<<nHadr<<G4endl;
 #endif
-      //G4int fL=5;                           // Limit for the fusion (fragments with A<fL can fuse)
-      //G4int fL=4;                         // Limit for the fusion (fragments with A<fL can fuse)
-      //G4double cut=1.;
-	  //if(hadron<nHadr-1&&hB<fL&&hB)     // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&hB<fL&&hadron!=nHadr-1)    // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&hB<fL)      // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&hB<fL&&nHadr>3&&hadron!=nHadr-1)//Close the ThermonucBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&hB<fL&&nHadr>3)// Close the ThermonuclearBackFusion(VIMP for gamA TotCS)
-	  //if(hB&&hadron!=nHadr-1)       // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&(nHadr>3||nHadr==3&&hB<2&&lHadr>12))// Close ThermonBackFusion (VIMP for gamA TotCS)
-	  //if(hB)       // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&(nHadr>3||hB<2))// Close ThermonuclBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&(nHadr>3||hB<2&&hPDG>90000000&&envA>20)) // Close ThermonuclBackFusion (gamA TotCS)
-	  //if(hB&&(nHadr>3||hB<2&&envA>15&&envA<28))// Close ThermonuclBackFusion (VIMP for gamA TotCS)
-	  if(hB&&(nHadr>3||hB<2))// Close ThermonuclBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&(nHadr>3||hB<2&&hPDG>90000000))// Close ThermonuclBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&(nHadr>3||hB<2&&envA>15))// Close ThermonuclBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&nHadr>3||envA>8)       // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-	  //if(hB&&nHadr>3)       // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
-      //if(hadron<nHadr-1&&hB)
+	  if(hB>0&&!hS&&(nHadr>3||hB<2))      // ThermonuclBackFusion condition (VIMP for gamA TotCS)
 	  //if(2>3)                           // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
       {
 #ifdef pdebug
@@ -2878,6 +2862,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
           G4double bM= b4m.m();               // Mass of the second fragment
           G4QContent bQC = backH->GetQC();
           G4int   bB = backH->GetBaryonNumber();
+          G4int   bS = backH->GetStrangeness();
           G4int   bC = backH->GetCharge();
           G4QContent sQC=bQC+hQC;
           G4int sPDG=sQC.GetZNSPDGCode();
@@ -2894,7 +2879,8 @@ G4QHadronVector* G4QEnvironment::Fragment()
           if(nHadr==3)G4cout<<"G4QE::F:"<<pt<<",B="<<bB<<",f="<<bF<<",p="<<pCM2<<">"<<p2cut<<G4endl;
 #endif
           //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut
-		  if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3||pCM2<p2cut2&&nHadr==3))
+		  if(bF>0&&!bS&&(bB==1&&hB>0||hB==1&&bB>0)&&bM+hM>tM+.001
+             && (pCM2<p2cut&&nHadr>3||pCM2<p2cut2&&nHadr==3))
 		  //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3 ||
 		  //   pCM2<p2cut2&&nHadr==3&&bPDG>90000000))
           //if(!bF&&(bB<3||hB<3)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut
@@ -2905,8 +2891,8 @@ G4QHadronVector* G4QEnvironment::Fragment()
 	      {
 #ifdef pdebug
             //if(nHadr==3)
-	        G4cout<<"G4QE::Fr:*FUSION*M"<<hadron<<"["<<hPDG<<"]="<<hM<<"+M"<<pt<<"["<<bPDG<<"]="<<bM
-                  <<"="<<bM+hM<<", sM="<<sM<<">["<<sPDG<<"]"<<tM<<", p2="<<pCM2<<"<"<<p2cut<<G4endl;
+	        G4cout<<"G4QE::Fr:*FUSION*#"<<hadron<<"["<<hPDG<<"]"<<hM<<"+#"<<pt<<"["<<bPDG<<"]"<<bM
+                  <<"="<<bM+hM<<", sM="<<sM<<">["<<sPDG<<"]"<<tM<<",p2="<<pCM2<<"<"<<p2cut<<G4endl;
             //    <<"="<<bM+hM<<", sM="<<sM<<">["<<sPDG<<"]"<<tM<<",t="<<sM-bM-hM<<"<"<<cut<<G4endl;
 #endif
             bfAct=true;

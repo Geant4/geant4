@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.16 2001-09-13 15:19:41 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.17 2001-09-17 14:19:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -2803,12 +2803,15 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   static const G4double wellDebth=27.;            //@@ Should be jus binding energy @@ done
   //if(B>1) return 1.;
   G4double nA=GetA();
+  //G4double nA=GetA()-B;
+  //if(nA==40) G4cout<<"G4QN::CBPP:Z="<<GetZ()<<",C="<<C<<",B="<<B<<G4endl;
   if(E<CB) return 0.;
   //else     return 1.;           // @@@@@ Over barrier reflection is closed @@@ !!! @@@
   //      Li6      C12           Al27
-  else if(nA<7||nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" cond
+  //else if(nA<7||nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" cond
   //else if(nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" Condition
-  //else if(nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" Condition
+  else if(nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" Condition
+  //else if(nA<12||nA>16) return 1.; // "OverBarrierReflection is closed" Condition
   //else if(nA<12) return 1.;    // @@@@@ Over barrier reflection is closed @@@ !!! @@@
   //if(B+B>Z+N+S) return 1.;
   //G4double wD=wellDebth*B;
@@ -2855,3 +2858,4 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   if(sR>=1.) return 0.;
   return   1.-sR*sR*sR;
 } // End of "CoulBarPenProb"
+

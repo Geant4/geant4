@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.14 2001-09-13 15:19:41 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.15 2001-09-17 14:19:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -750,7 +750,14 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   G4int au=0;
   G4int as=0;
   G4int ab=abs(thePDGCode);
-  if     (ab==22) return G4QContent(0,0,0,0,0,0); // Photon
+  if     (ab==22 || ab==10)
+  {
+#ifdef debug
+    if     (ab==22) G4cout<<"***G4QPDGCode::GetQuarkContent: For the Photon? - Return 0"<<G4endl;
+    else if(ab==10) G4cout<<"***G4QPDGCode::GetQuarkContent: For the Chipolino? - Return 0"<<G4endl;
+#endif
+    return G4QContent(0,0,0,0,0,0); // Photon
+  }
   else if(ab<80000000) // Baryons & Mesons
   {
     G4int c=ab/10;     // temporary (quarks)
@@ -758,7 +765,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
     G4int v=c/10;      // (2,3) temporary(B) or (2) final(M) (high quarks, high quark)
     G4int t=0;         // (3)prototype of highest quark (B)
 #ifdef debug
-	cout<<"G4QPDGCode::GetQuarkContent: ab="<<ab<<", c="<<c<<", f="<<f<<", v="<<v<<endl;
+	G4cout<<"G4QPDGCode::GetQuarkContent: ab="<<ab<<", c="<<c<<", f="<<f<<", v="<<v<<G4endl;
 #endif
     if(v>10)           // Baryons
 	{

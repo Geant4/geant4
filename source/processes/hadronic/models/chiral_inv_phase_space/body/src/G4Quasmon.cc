@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.26 2001-09-13 15:19:42 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.27 2001-09-17 14:19:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -301,6 +301,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   static const G4double mK0  = G4QPDGCode(311).GetMass();
   static const G4double mEta = G4QPDGCode(221).GetMass();
   static const G4double mEtaP= G4QPDGCode(331).GetMass();
+  static const G4double diPiM= mPi0 + mPi0;
+  static const G4double PiNM = mPi + mNeut;
   static const G4double mPi2 = mPi * mPi;
   static const G4double mPi02= mPi0* mPi0;
   static const G4double mK2  = mK  * mK;
@@ -529,8 +531,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       else                                          // "Env. exists" case - find k_min & k_max
 	  {
         minK=100000.;
-        if(piF) maxK=mNeut/2.+(quasM-iniQM)*iniQM/(iniQM+mNeut);
-        else
+        if(piF&&quasM>iniQM) maxK=mNeut/2.+(quasM-iniQM)*iniQM/(iniQM+mNeut);
+        else if(quasM>iniQM)
 		{
           G4double limK=envM/2.+(quasM-iniQM)*iniQM/(iniQM+envM);
           if(limK<maxK) maxK=limK;
@@ -1834,6 +1836,145 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           qEnv=theEnvironment;
           return theQHadrons;
 		}
+        else if(totBN==1&&nQuasms==1) // Decay of the baryonic total state
+		{
+          G4double nucM= mProt;
+          G4double piM = 0.;
+          G4int nucPDG = 2212;
+          G4int piPDG  = 22;
+          if(abs(totS)==1)
+          {
+            if(totS==1)               // Decay of the strange hyperstate
+			{
+              if(!totZ&&totMass>mLamb+mPi0)
+			  {
+                nucM  = mLamb;
+                nucPDG= 3122;
+                piM   = mPi0;
+                piPDG = 111;
+			  }
+              else if(abs(totZ)==1&&totMass>mLamb+mPi)
+			  {
+                nucM  = mLamb;
+                nucPDG= 3122;
+                piM   = mPi;
+                if(totZ>0) piPDG = 211;
+                else       piPDG =-211;
+			  }
+              else
+			  {
+                G4cerr<<"***G4Q::HQ:tZ="<<totZ<<",tS="<<totS<<",T="<<totQC<<",M="<<totMass<<G4endl;
+    	        G4Exception("G4Quasmon::HadronizeQuasmon: Pion + Lambda decay did not succeed");
+              }
+			}
+			else                      // Decay of the anti-strange hyperstate
+			{
+              if(!totZ&&totMass>mNeut+mK0)
+			  {
+                nucM  = mNeut;
+                nucPDG= 2112;
+                piM   = mK0;
+                piPDG = 311;
+			  }
+              else if(totZ==2&&totMass>mProt+mK)
+			  {
+                piM   = mK;
+                piPDG = 321;
+			  }
+              else if(totZ==1&&totMass>mProt+mK0&&G4UniformRand()>0.5)
+			  {
+                piM   = mK0;
+                piPDG = 311;
+			  }
+              else if(totZ==1&&totMass>=mNeut+mK)
+			  {
+                nucM  = mNeut;
+                nucPDG= 2112;
+                piM   = mK;
+                piPDG = 321;
+			  }
+              else
+			  {
+                G4cerr<<"***G4Q::HQ:tZ="<<totZ<<",tS="<<totS<<",T="<<totQC<<",M="<<totMass<<G4endl;
+    	        G4Exception("G4Quasmon::HadronizeQuasmon: Kaon + Nucleon decay did not succeed");
+              }
+			}
+		  }
+          else if(totMass>PiNM&&!totS) // Decay in nucleon & pion
+          {
+            if(!totZ&&totMass>mProt+mPi&&G4UniformRand()<0.5)
+		    {
+              piM   = mPi;
+              piPDG = -211;
+            }
+            else if(!totZ&&totMass>mNeut+mPi0)
+		    {
+              nucM  = mNeut;
+              nucPDG= 2112;
+              piM   = mPi0;
+              piPDG = 111;
+            }
+            else if(totZ==1&&totMass>mNeut+mPi&&G4UniformRand()<0.5)
+		    {
+              nucM  = mNeut;
+              nucPDG= 2112;
+              piM   = mPi;
+              piPDG = 211;
+            }
+            else if(totZ==1&&totMass>mProt+mPi0)
+		    {
+              piM   = mPi0;
+              piPDG = 111;
+            }
+            else if(totZ==-1)
+		    {
+              nucM  = mNeut;
+              nucPDG= 2112;
+              piM   = mPi;
+              piPDG = -211;
+            }
+            else if(totZ==2)
+		    {
+              piM   = mPi;
+              piPDG = 211;
+            }
+            else
+			{
+              G4cerr<<"***G4Q::HQ:totZ="<<totZ<<",totB="<<totBN<<",E="<<envQC<<",Q="<<valQ<<G4endl;
+    	      G4Exception("G4Quasmon::HadronizeQuasmon: Pion + Nucleon decay did not succeed");
+            }
+		  }
+          else if(!totS)
+		  {
+            if(!totZ)
+			{
+              nucM=mNeut;
+              nucPDG=2112;
+            }
+            else if(totZ<0||totZ>1)
+			{
+              G4cerr<<"***G4Q::HQ:totZ="<<totZ<<",totB="<<totBN<<",E="<<envQC<<",Q="<<valQ<<G4endl;
+    	      G4Exception("G4Quasmon::HadronizeQuasmon: Photon + Nucleon decay did not succeed");
+            }
+          }
+          G4LorentzVector pi4M(0.,0.,0.,piM);       // mass of the kaon/pion/photon
+          G4LorentzVector nuc4M(0.,0.,0.,nucM);     // mass of the nucleon
+          if(!G4QHadron(tot4M).DecayIn2(pi4M, nuc4M))
+          {
+            G4cerr<<"***G4Q::HQ:T="<<tot4M<<totMass<<"->gam/pi/K+N="<<nucPDG<<", MN="<<nucM<<G4endl;
+    	    G4Exception("G4Quasmon::HadronizeQuasmon: gamma/Pi + Nucleon decay did not succeed");
+          }
+#ifdef debug
+	      G4cout<<"G4Q::HQ:T="<<tot4M<<totMass<<"->GPK="<<piPDG<<pi4M<<"+B="<<nucPDG<<nuc4M<<G4endl;
+#endif
+          G4QHadron* piH = new G4QHadron(piPDG,pi4M);// Create Hadron for gamma/Pion
+          FillHadronVector(piH);                     // Fill "new piH" (delete equivalent)
+          G4QHadron* nucH = new G4QHadron(nucPDG,nuc4M); // Creation Hadron for the nucleon
+          FillHadronVector(nucH);                    // Fill "new nucH" (delete equivalent)
+          KillQuasmon();                             // This Quasmon is done          
+          qEnv=vacuum;
+          return theQHadrons;                        // The last decay of the total nucleus...
+        }
 #ifdef debug
         else G4cerr<<"***G4Q::HQ: B="<<totBN<<",tM="<<totMass<<" > M="<<totM<<",S="<<totS<<G4endl;
 #endif
@@ -1927,6 +2068,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         }
   	  }
       G4double freeRQM=rQPDG.GetMass();
+      G4double RQB=rQPDG.GetBaryNum();
       G4double fRQW=3*rQPDG.GetWidth();
       if(fRQW<.001) fRQW=.001;
       G4QPDGCode sQPDG(sPDG);
@@ -1942,8 +2084,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #ifdef debug
 	  G4cout<<"G4Q::HQ:rqCB="<<rCB<<",rqC="<<rChg<<",rqB="<<sBaryn<<",rQPDG="<<rQPDG<<G4endl;
 #endif
-	  if(totBN>1&&totS>=0 && (reMass+sMass>quasM || sCB+rCB+reMass+sMass+envM>totMass)
-         && envPDG>80000000 && envPDG!=NUCPDG)       // Cann't decay Q
+	  if(totBN>1&&totS>=0 && envPDG>80000000 && envPDG!=NUCPDG
+         && (reMass+sMass>quasM || sCB+rCB+reMass+sMass+envM>totMass || !RQB&&quasM<diPiM))
 	  //if(2>3)                                      // This Evaporation channel is closed
       {
 #ifdef ppdebug
@@ -1959,6 +2101,37 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       {
         G4cerr<<"***G4Quasmon::HadronizeQuasmon: rPDG=90000000, MV="<<reMass<<G4endl;
         G4Exception("***G4Quasmon::HadronizeQuasmon: Residual Particle is Vacuum");
+      }
+      if(rPDG==2212&&sPDG==311&&reMass+sMass>quasM)
+	  {
+        if(mNeut+mK<=quasM+.001)
+		{
+          reMass=mNeut;
+          rPDG  =2112;
+          rQPDG=G4QPDGCode(rPDG);
+          rChg=rQPDG.GetCharge();
+          rBaryn=rQPDG.GetBaryNum();
+          rCB=theEnvironment.CoulombBarrier(rChg,rBaryn);
+#ifdef debug
+	      G4cout<<"G4Q::HQ:NCB="<<rCB<<",NC="<<rChg<<",rqB="<<sBaryn<<",rQPDG="<<rQPDG<<G4endl;
+#endif
+          sMass =mK;
+          if(mNeut+mK<=quasM) sMass=quasM-mNeut;
+          sPDG  =321;
+          sQPDG=G4QPDGCode(sPDG);
+          sChg=sQPDG.GetCharge();
+          sBaryn=sQPDG.GetBaryNum();
+          sCB=theEnvironment.CoulombBarrier(sChg,sBaryn);
+#ifdef debug
+	      G4cout<<"G4Q::HQ:KCB="<<sCB<<",KC="<<sChg<<",frB="<<sBaryn<<",E="<<theEnvironment<<G4endl;
+#endif
+          curQ=neutQC;
+        }
+        else
+        {
+          G4cerr<<"***G4Quasmon::HadronizeQuasmon:(NK) QM="<<quasM<<",d="<<quasM-mNeut-mK<<G4endl;
+          G4Exception("***G4Quasmon::HadronizeQuasmon: Can't decay Q in N and K");
+        }
       }
       G4LorentzVector r4Mom(0.,0.,0.,reMass);
       G4LorentzVector s4Mom(0.,0.,0.,sMass);         // Mass is random since probab. time
@@ -2335,10 +2508,30 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 #ifdef ppdebug
   G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<qH->Get4Momentum()<<G4endl;
 #endif
-  // In the decay scheme only one resonance can be present & it should be the last
-  if (thePDG==90000000||thePDG==90999999||thePDG==90999000||thePDG==90000999||thePDG==89999001)
-  {
-    G4cerr<<"***G4Quasmon::FillHadronVector:PDG="<<thePDG<<",M="<<qH->Get4Momentum().m()<<G4endl;
+  if(thePDG>80000000 && (thePDG<90000000 || thePDG%1000>500 || thePDG%1000000>500000))
+  { // Translation from CHIPS encoding to PDG encoding
+    if     (thePDG==90999999) thePDG=-311;  // anti-K0 === Meson OCTET
+    else if(thePDG==90999000) thePDG=-321;  // K-
+    else if(thePDG==89000001) thePDG=311;   // K0
+    else if(thePDG==89001000) thePDG=321;   // K+
+    else if(thePDG==90000999) thePDG=211;   // pi+
+    else if(thePDG==89999001) thePDG=-211;  // pi-
+    else if(thePDG==89999999) thePDG=-2112; // anti-neutron === anti-OCTET(reduced to SEPTUM Lam/S0)
+    else if(thePDG==89999000) thePDG=-2212; // anti-proton
+    else if(thePDG==89000000) thePDG=-3122; // anti-lambda
+    else if(thePDG==88999002) thePDG=-3222; // anti-SIGMA+
+    else if(thePDG==89000999) thePDG=-3222; // anti-SIGMA-
+    else if(thePDG==88000001) thePDG=-3322; // anti-KSI0
+    else if(thePDG==88001000) thePDG=-3312; // anti-KSI-
+    else if(thePDG==89999002) thePDG=1114;  // Delta-(resonance) === bary-DECUPLET/OCTET
+    else if(thePDG==90001999) thePDG=2224;  // Delta++(resonance) (Delta0&Delta+ a covered by n&p)
+    else if(thePDG==90999001) thePDG=3112;  // Sigma-
+    else if(thePDG==91000999) thePDG=3222;  // Sigma+ (Sigma0 iz covered by Lambda)
+    else if(thePDG==91999000) thePDG=3312;  // Ksi-
+    else if(thePDG==91999999) thePDG=3322;  // Ksi0
+    else if(thePDG==92998999) thePDG=3112;  // Omega-(resonance)
+    else G4cerr<<"*G4Quasmon::FillHadronVector:PDG="<<thePDG<<",M="<<qH->Get4Momentum().m()<<G4endl;
+    qH->SetQPDG(G4QPDGCode(thePDG));
   }
   if (thePDG==10) // Chipolino decays (@@always - Chipolino is not kept in HadV (*Example*))
   {
@@ -2628,8 +2821,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   G4double qMass = q4Mom.m();
   G4double kLim  = qMass/2.;               //Kinematikal limit for "k"
   G4double twM   = qMass+qMass;
-  kMax  = kLim;                            //@@@@@@@@@
-  //if(kLim<kMax) kMax  = kLim;
+  ////kMax  = kLim;                            //@@@@@@@@@
+  if(kLim<kMax) kMax  = kLim;
   G4double kMin  = mC2/twM;
   //if(mR2!=0.)
   //{
