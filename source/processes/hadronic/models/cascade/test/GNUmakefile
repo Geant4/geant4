@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2002-11-12 12:59:37 miheikki Exp $
+# $Id: GNUmakefile,v 1.11 2002-11-12 14:37:57 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -149,14 +149,14 @@ t7:	# ::: problem 7 (H) missing pions
 	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; gmake a; #cat cascade.out
 
 t8:	# ::: problem 8 (Zr) delta missing
-	rm -r cascade.out cascade.ps; cascade 10000 2 800 91 40 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out cascade.ps; cascade 1000 2 800 91 40 > cascade.out; gmake a; #cat cascade.out
 
 
 tt2: # :: timing for t1
 	time -v gmake t2
 
 a: # ::: (a for analysis) Integrated analysis root, eps generation for latex 
-	root -b -q cascade.C; gv cascade.ps; 
+	rm cascade.ps; root -b -q cascade.C; gv cascade.ps; 
 
 arel: #::: release analysis
 	convert cascade.ps cascade.eps; cp cascade.eps $(RELD)/pictures/cascade.eps;
