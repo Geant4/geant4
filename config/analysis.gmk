@@ -1,0 +1,78 @@
+#   Guy Barrand, 20th Mai 2000
+#
+# Analysis variables...
+#
+# ------------- OpenScientist -----------------
+ifdef G4ANALYSIS_USE_OPEN_SCIENTIST
+  CPPFLAGS += -DG4ANALYSIS_USE_OPEN_SCIENTIST
+  CPPFLAGS += -DG4ANALYSIS_USE
+  G4ANALYSIS_BUILD_OPEN_SCIENTIST = 1
+endif
+
+ifdef G4ANALYSIS_BUILD_OPEN_SCIENTIST
+  CPPFLAGS += -DG4ANALYSIS_BUILD
+  CPPFLAGS += -DG4ANALYSIS_BUILD_OPEN_SCIENTIST
+  INC_ANALYSIS = 1	
+  LIB_ANALYSIS = 1	
+  INC_OPEN_SCIENTIST = 1	
+  LIB_OPEN_SCIENTIST = 1	
+endif
+
+# ------------- jas -----------------
+ifdef G4ANALYSIS_USE_JAS
+  CPPFLAGS += -DG4ANALYSIS_USE_JAS
+  CPPFLAGS += -DG4ANALYSIS_USE
+  G4ANALYSIS_BUILD_JAS = 1
+endif
+
+ifdef G4ANALYSIS_BUILD_JAS
+  CPPFLAGS += -DG4ANALYSIS_BUILD
+  CPPFLAGS += -DG4ANALYSIS_BUILD_JAS
+  INC_ANALYSIS = 1	
+  LIB_ANALYSIS = 1	
+  INC_JAS = 1	
+  LIB_JAS = 1	
+endif
+
+# ------------- Hook packages -----------------
+ifdef INC_ANALYSIS
+  CPPFLAGS += -I$(G4BASE)/analysis/management/include
+  CPPFLAGS += -I$(AIDAINCS)
+endif
+#
+ifdef LIB_OPEN_SCIENTIST
+  ANALYSISLIBS += -lG4OpenScientist
+endif
+ifdef LIB_ANALYSIS
+  ANALYSISLIBS += -lG4analysis_management 
+endif
+ifdef LIB_JAS
+  ANALYSISLIBS += -lG4jas
+endif
+#
+ifdef INC_OPEN_SCIENTIST
+  CPPFLAGS += -I$(G4BASE)/analysis/OpenScientist/include
+  CPPFLAGS += -I$(LIBHOME)/include -I$(HCLHOME)/include -I$(LABHOME)/include
+  CPPFLAGS += -DHasRio
+endif
+#
+ifdef LIB_OPEN_SCIENTIST
+  ANALYSISLIBS += -L$(LABHOME)/$(LABCONFIG) -lLab
+  ANALYSISLIBS += -L$(RIOGRANDEHOME)/$(RIOGRANDECONFIG) -lRioTree -lRioBed
+  ANALYSISLIBS += -L$(CINTHOME)/$(CINTCONFIG) -lcint
+  ANALYSISLIBS += -L$(HCLHOME)/$(HCLCONFIG) -lHCL
+  ANALYSISLIBS += -L$(MIDNIGHTHOME)/$(MIDNIGHTCONFIG) -lMidnight
+  ANALYSISLIBS += -L$(LIBHOME)/$(LIBCONFIG) -lLib
+  ANALYSISLIBS += $(DLDLIBS)
+endif
+#
+ifdef INC_JAS
+  CPPFLAGS += -I$(G4BASE)/analysis/jas/include
+  CPPFLAGS += -I$(JDKHOME)/include -I$(JDKHOME)/include/linux
+endif
+#
+ifdef LIB_JAS
+  ANALYSISLIBS += -L$(JDKHOME)/jre/lib/i386/classic -L$(JDKHOME)/jre/lib/i386/native_threads -ljvm -lhpi
+endif
+
+
