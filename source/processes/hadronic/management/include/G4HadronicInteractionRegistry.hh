@@ -14,7 +14,13 @@ class G4HadronicInteractionRegistry
   static void RegisterMe(G4HadronicInteraction * aModel);
   static void RemoveMe(G4HadronicInteraction * aModel){};
   
+  protected:
+
+  G4HadronicInteractionRegistry() 
+  { G4Exception("G4HadronicInteractionRegistry meant as a singleton; please do not inherit");}
+
   private:
+
   //  !!!  can not use "copy constructor" nor "default constructor" !!!!
        G4HadronicInteractionRegistry(const G4HadronicInteractionRegistry &right) 
        { nModels = right.nModels; }
