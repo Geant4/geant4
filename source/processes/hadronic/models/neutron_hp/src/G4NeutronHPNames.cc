@@ -169,7 +169,10 @@
       G4cout << *theName <<" "<<A<<" "<<Z<<" "<<result.GetName()<<G4endl;
     }
     delete theName;
-    check->close();
-    delete check;
+    if(aFlag)
+    {
+      check->close();
+      delete check;
+    }
     return result;
   }
