@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.20 2004-11-16 10:38:44 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.21 2004-11-18 06:38:57 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,9 +265,9 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    if(NofInactiveProc==MAXofAtRestLoops){ 
      //     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
      G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
+   } else {
+        (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
    }
-
-   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
 
    fStep->SetStepLength( 0. );  //the particle has stopped
    fTrack->SetStepLength( 0. );
