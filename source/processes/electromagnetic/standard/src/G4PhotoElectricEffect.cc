@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.25 2002-04-18 10:12:01 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.26 2002-04-29 13:39:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,6 +53,8 @@
 // 10-01-02, moved few function from icc to cc
 // 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
 //           Simplify public interface (mma)
+// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gravila
+//           distribution (mma) 
 //    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,11 +152,19 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
 
    if (ElecKineEnergy > fminimalEnergy)
      {
-      // the electron is created in the direction of the incident photon ...  
+      // direction of the photo electron
+      //
+      G4double cosTeta = ElecThetaDistribution(ElecKineEnergy);
+      G4double sinTeta = sqrt(1.-cosTeta*cosTeta);
+      G4double Phi     = twopi * G4UniformRand();
+      G4double dirx = sinTeta*cos(Phi),diry = sinTeta*sin(Phi),dirz = cosTeta;
+      G4ThreeVector ElecDirection(dirx,diry,dirz);
+      ElecDirection.rotateUz(PhotonDirection);
+      // 
       G4DynamicParticle* aElectron = new G4DynamicParticle (
-                        G4Electron::Electron(),PhotonDirection, ElecKineEnergy);
+                        G4Electron::Electron(),ElecDirection, ElecKineEnergy);
       aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary( aElectron ); 
+      aParticleChange.AddSecondary(aElectron); 
      }
    else
      {
@@ -199,6 +209,32 @@ G4Element* G4PhotoElectricEffect::SelectRandomAtom(
      }
   return ((*theElementVector)[NumberOfElements-1]);    
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4PhotoElectricEffect::ElecThetaDistribution(G4double kineEnergy)
+{
+ // Compute Theta distribution of the emitted electron, with respect to the
+ // incident Gamma.
+ // The Sauter-Gravila distribution for the K-shell is used.
+ //
+ G4double gamma = 1. + kineEnergy/electron_mass_c2;
+ G4double beta = sqrt(gamma*gamma-1.)/gamma;
+ G4double factor = 0.5*gamma*(gamma-1.)*(gamma-2);
+    
+ G4double rndm,costeta,term,greject,grejmax;
+ if (gamma < 2.) grejmax = gamma*gamma*(1.+factor-beta*factor);
+ else            grejmax = gamma*gamma*(1.+factor+beta*factor);
+  
+ do { rndm = 1.-2*G4UniformRand();
+      costeta = (rndm+beta)/(rndm*beta+1.);
+      term = 1.-beta*costeta;
+      greject = (1.+factor*term)*(1.-costeta*costeta)/(term*term);
+ } while(greject < G4UniformRand()*grejmax);
+       
+ return costeta;      
+     
+}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.13 2002-04-18 10:12:01 maire Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.14 2002-04-29 13:39:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,9 @@
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 10-01-02, moved few function from icc to cc
 // 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
-//           Simplify public interface (mma)      
+//           Simplify public interface (mma)
+// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gravila
+//           distribution (mma)       
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,6 +117,9 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
      G4double ComputeMeanFreePath(G4double PhotonEnergy, 
                                   G4Material* aMaterial);
 				  
+  protected:
+     virtual
+     G4double ElecThetaDistribution(G4double ElecKineEnergy);				  
 
   private:
 
