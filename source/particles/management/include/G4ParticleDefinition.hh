@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.26 2004-12-30 21:09:32 asaim Exp $
+// $Id: G4ParticleDefinition.hh,v 1.27 2005-01-14 03:00:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,9 @@ class G4ParticleDefinition
 			   G4bool           stable,
 			   G4double         lifetime,
 			   G4DecayTable     *decaytable,
-			   G4bool           shortlived = false);
+			   G4bool           shortlived = false,
+                           const G4String&  subType ="",
+                           G4int            anti_encoding =0);
 
        virtual ~G4ParticleDefinition();
       
@@ -172,6 +174,12 @@ class G4ParticleDefinition
       //  this->thePDGEncoding.
 
       void   SetParticleSubType(const G4String& subtype);
+
+  public:
+    void SetAtomicNumber(G4int);
+    G4int GetAtomicNumber() const;
+    void SetAtomicMass(G4int);
+    G4int GetAtomicMass() const;
 
  public:
       void  SetVerboseLevel(G4int value);
@@ -291,11 +299,15 @@ class G4ParticleDefinition
       //  Points to G4ProcessManager
 
       G4ParticleTable* theParticleTable;
+
+  private:
+    G4int theAtomicNumber;
+    G4int theAtomicMass;
  
- private:
+  private:
    G4int verboseLevel;
 
- private:
+  private:
    G4bool fApplyCutsFlag;
  public:
 
