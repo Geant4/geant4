@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.8 2003-03-05 18:15:28 gcosmo Exp $
+// $Id: G4NavigationHistory.icc,v 1.9 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4NavigationHistory Inline implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 inline
 G4NavigationHistory&

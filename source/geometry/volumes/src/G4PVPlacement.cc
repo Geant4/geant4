@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.1 2003-10-01 14:57:44 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.2 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVPlacement Implementation
+//
+// ----------------------------------------------------------------------
 
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"    

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.1 2003-10-01 14:55:55 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.2 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,11 +29,12 @@
 //
 // ----------------------------------------------------------------------
 
+#include "G4AssemblyVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
-#include "G4Transform3D.hh"
 #include "G4AffineTransform.hh"
-#include "G4AssemblyVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include <strstream>
 

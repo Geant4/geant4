@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.2 2003-10-23 14:46:13 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.3 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVReplica Implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4PVReplica.hh"
 #include "G4LogicalVolume.hh"

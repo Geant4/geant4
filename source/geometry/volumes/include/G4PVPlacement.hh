@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.1 2003-10-01 14:57:30 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.2 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 // 28.02.97 J.Apostolakis Added 2nd constructor with G4Transform3D of solid.
 // 11.07.97 J.Apostolakis Added 3rd constructor with pMotherLogical 
 // 11.05.98 J.Apostolakis Added 4th constructor with G4Transform3D & pMotherLV
-
+// ----------------------------------------------------------------------
 #ifndef G4PVPLACEMENT_HH
 #define G4PVPLACEMENT_HH
 

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc,v 1.7 2003-10-23 14:46:13 gcosmo Exp $
+// $Id: G4NavigationLevelRep.icc,v 1.8 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.1 2003-10-01 14:56:43 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.2 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 //
 // Implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4PVParameterised.hh"
 
@@ -45,7 +45,8 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
 #ifdef G4VERBOSE  
   if ((pMother) && (pMother->IsParameterised()))
   {
-    G4cout << "WARNING - A parameterised volume is being placed" << G4endl
+    G4cout << "WARNING - G4PVParameterised::G4PVParameterised()" << G4endl
+           << "          A parameterised volume is being placed" << G4endl
            << "          inside another parameterised volume !" << G4endl
            << "          To make sure that no overlaps are generated," << G4endl
            << "          you should verify the mother replicated shapes" << G4endl

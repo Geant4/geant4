@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.1 2003-10-01 14:57:04 gcosmo Exp $
+// $Id: G4PVParameterised.hh,v 1.2 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 // History:
 // 29.07.95 P.Kent First non-stub version
-
+// ----------------------------------------------------------------------
 #ifndef G4PVPARAMETERISED_HH
 #define G4PVPARAMETERISED_HH
 

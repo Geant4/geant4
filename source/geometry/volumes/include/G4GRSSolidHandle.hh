@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolidHandle.hh,v 1.4 2002-07-23 08:50:34 gcosmo Exp $
+// $Id: G4GRSSolidHandle.hh,v 1.5 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Class G4GRSSolidHandle
@@ -37,8 +37,7 @@
 
 // Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
 //
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef _G4GRSSOLIDHANDLE_H_
 #define _G4GRSSOLIDHANDLE_H_ 1
 

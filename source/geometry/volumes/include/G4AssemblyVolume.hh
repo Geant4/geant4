@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.1 2003-10-01 14:55:33 gcosmo Exp $
+// $Id: G4AssemblyVolume.hh,v 1.2 2003-11-02 16:06:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,6 @@
 // Version:     1.0
 // Date:        November 2000
 // ----------------------------------------------------------------------
-
 #ifndef G4_ASSEMBLYVOLUME_H
 #define G4_ASSEMBLYVOLUME_H 
 
@@ -157,9 +156,9 @@ class G4AssemblyVolume
   
  protected:
     
-  void         SetImprintsCount( unsigned int value );
-  void         ImprintsCountPlus();
-  void         ImprintsCountMinus();
+  void SetImprintsCount( unsigned int value );
+  void ImprintsCountPlus();
+  void ImprintsCountMinus();
     //
     // Internal counting mechanism, used to compute unique the names of
     // phys. volumes created by MakeImprint(...) method(s).
@@ -179,11 +178,11 @@ class G4AssemblyVolume
   
  protected:
      
-  void         SetInstanceCount( unsigned int value );
-  void         SetAssemblyID( unsigned int value );
+  void SetInstanceCount( unsigned int value );
+  void SetAssemblyID( unsigned int value );
  
-  void         InstanceCountPlus();
-  void         InstanceCountMinus();
+  void InstanceCountPlus();
+  void InstanceCountMinus();
 
  private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.8 2002-08-06 08:23:38 gcosmo Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.9 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -35,10 +35,11 @@
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 // Modified:    1997-06-26  John Apostolakis
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
 #include "G4ios.hh"
+#include "G4LogicalVolume.hh"
 
 G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSurfaceTable;
 

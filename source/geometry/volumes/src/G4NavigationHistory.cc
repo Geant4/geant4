@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.7 2003-06-16 16:54:54 gunter Exp $
+// $Id: G4NavigationHistory.cc,v 1.8 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 //
 // Author: P.Kent, August 96
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.1 2003-10-01 14:58:20 gcosmo Exp $
+// $Id: G4PVReplica.hh,v 1.2 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,12 +66,11 @@
 // 29.07.95 P.Kent         First non-stub version
 // 26.10.97 J.Apostolakis  Added constructor that takes mother logical volume
 // 16.02.98 J.Apostolakis  Added copy number
-
+// ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH
 #define G4PVREPLICA_HH
 
 #include "G4VPhysicalVolume.hh"
-#include "G4RotationMatrix.hh"
 
 class G4PVReplica : public G4VPhysicalVolume
 {

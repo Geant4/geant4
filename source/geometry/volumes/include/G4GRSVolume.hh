@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.hh,v 1.6 2002-07-23 08:50:34 gcosmo Exp $
+// $Id: G4GRSVolume.hh,v 1.7 2003-11-02 16:06:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,7 @@
 
 // History:
 // - Created. Paul Kent, August 1996
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4GRSVOLUME_HH
 #define G4GRSVOLUME_HH
 
@@ -46,6 +45,7 @@
 
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
 class G4GRSVolume : public G4VTouchable

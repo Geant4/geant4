@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.6 2002-08-06 10:35:57 gcosmo Exp $
+// $Id: G4TouchableHistory.cc,v 1.7 2003-11-02 16:06:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory Implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
 
