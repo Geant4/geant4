@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.2 2004-08-26 10:47:04 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.3 2004-08-26 17:59:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -199,9 +199,9 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     chargeCorrection = sq * (q + 0.5*(1.0 - q)*log(1.0 + lambda*lambda)/(vF*vF) );
     if(q > 0.0) sq /= q;
   }
-    G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
-           << " chargeCor= " << chargeCorrection 
-	   << " e(MeV)= " << kineticEnergy/MeV << G4endl;
+  //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
+  //         << " chargeCor= " << chargeCorrection 
+  //	   << " e(MeV)= " << kineticEnergy/MeV << G4endl;
   return q*charge;
 }
 

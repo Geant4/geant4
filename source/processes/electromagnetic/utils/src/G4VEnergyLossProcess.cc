@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.29 2004-08-11 14:13:52 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.30 2004-08-26 17:59:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -622,9 +622,17 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Long step
   } else {
-    G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy)/reduceFactor;
+    G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
     G4double x = r - length/reduceFactor;
-    eloss =  (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
+    if(x < 0.0) {
+      G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
+             << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
+             << " step(mm)= " << length/mm 
+             << " for " << track.GetDefinition()->GetParticleName()
+             << G4endl;
+      x = 0.0;
+    }
+    eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
     /*
     if(-1 < verboseLevel) {
@@ -632,7 +640,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
-             << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length/MeV
+             << " eloss0(MeV)= " 
+             << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
              << G4endl;
     }
     */
@@ -646,14 +655,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
-           << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length
-           << " r0(mm)= " << GetRangeForLoss(preStepKinEnergy)
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
            << G4endl;
   }
   */
-
+ 
   // Sample fluctuations
   if (lossFluctuationFlag && eloss + lowestKinEnergy <= preStepKinEnergy) {
 
@@ -709,7 +716,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
     delete newp;
   }
-  /*
+  /*  
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
