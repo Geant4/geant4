@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: StandaloneVisAction.cc,v 1.2 2005-02-20 00:41:42 allison Exp $
+// $Id: StandaloneVisAction.cc,v 1.3 2005-02-23 11:30:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "StandaloneVisAction.hh"
@@ -30,6 +30,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
+#include "G4SubtractionSolid.hh"
 
 void StandaloneVisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
@@ -47,5 +48,17 @@ void StandaloneVisAction::Draw() {
     G4VisAttributes subVisAtts(G4Colour(0,1,1));
     pSubtracted->SetVisAttributes(&subVisAtts);
     pVisManager->Draw(*pSubtracted,G4Translate3D(6*m,6*m,6*m));
+    delete pA;
+    delete pB;
+    delete pSubtracted;
+
+    // Same using Boolean solids...
+    G4Box boxA("boxA",3*m,3*m,3*m);
+    G4Box boxB("boxB",1*m,1*m,1*m);
+    G4SubtractionSolid subtracted("subtracted_boxes",&boxA,&boxB,
+		       G4Translate3D(3*m,3*m,3*m));
+    pVisManager->Draw(subtracted,
+		      G4VisAttributes(G4Colour(0,1,1)),
+		      G4Translate3D(-6*m,-6*m,-6*m));
   }
 }
