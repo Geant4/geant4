@@ -1,0 +1,27 @@
+
+inline 
+unsigned int G4AssemblyVolume::GetImprintsCount() const
+{
+  return fImprintsCounter;
+}
+
+inline 
+void         G4AssemblyVolume::SetImprintsCount( unsigned int value )
+{
+  fImprintsCounter = value;
+}
+
+
+inline 
+void         G4AssemblyVolume::ImprintsCountPlus()
+{
+  fImprintsCounter++;
+}
+
+inline 
+void         G4AssemblyVolume::ImprintsCountMinus()
+{
+  fImprintsCounter--;
+}
+
+

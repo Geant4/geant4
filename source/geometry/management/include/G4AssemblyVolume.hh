@@ -1,5 +1,5 @@
-#ifndef G4ASSEMBLYVOLUME_H
-#define G4ASSEMBLYVOLUME_H 1
+#ifndef G4_ASSEMBLYVOLUME_H
+#define G4_ASSEMBLYVOLUME_H 
 
 #include "G4Transform3D.hh"
 #include "G4AssemblyTriplet.hh"
@@ -12,7 +12,7 @@ class G4VPhysicalVolume;
  * Description: This is a helper class to make the build process of geometry
  *              easier. It allows to combine several volumes together in an
  *              arbitrary way in 3D space and then work with the result as with
- *              single logical volume for placement.
+ *              a single logical volume for placement.
  *              The resulting objects are independent copies of each of the
  *              assembled logical volumes. The placements are not, however,
  *              bound one to each other when placement is done.
@@ -61,9 +61,9 @@ public:
                       );
 
   /**
-    * The same as previous but takes complete 3D transformation in space
-    * as its argument
-    */
+   * The same as previous but takes complete 3D transformation in space
+   * as its argument
+   */
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume
                        ,G4Transform3D&   transformation
                       );
@@ -77,13 +77,12 @@ public:
                   );
 
   /**
-    * The same as previous but takes complete 3D transformation in space
-    * as its argument
-    */
+   * The same as previous but takes complete 3D transformation in space
+   * as its argument
+   */
   void MakeImprint( G4LogicalVolume* pMotherLV
                    ,G4Transform3D&   transformation
                   );
-
 private:    
 
   /**
@@ -104,7 +103,39 @@ private:
    * This may affect validity of detector contruction!
    */
   G4std::vector<G4VPhysicalVolume*> fPVStore;
+
+  /**
+    *  Internal counting mechanism, used to compute unique the names of phys. volumes
+    *  created by MakeImprint(...) method(s).
+    */
+protected:
+
+  unsigned int GetImprintsCount() const;
+  void         SetImprintsCount( unsigned int value );
+  void         ImprintsCountPlus();
+  void         ImprintsCountMinus();
+
+private:
+
+  /**
+    * Number of imprints of the given assembly volume
+    */
+  unsigned int fImprintsCounter;
+
+protected:
+
+  unsigned int GetInstanceCount() const;
+  void         SetInstanceCount( unsigned int value );
+  void         InstanceCountPlus();
+  void         InstanceCountMinus();
+
+private:
+
+  static unsigned int fsInstanceCounter;
+
 };
 
-#endif //G4ASSEMBLYVOLUME_H
+#include "G4AssemblyVolume.icc"
+
+#endif // G4_ASSEMBLYVOLUME_H
 
