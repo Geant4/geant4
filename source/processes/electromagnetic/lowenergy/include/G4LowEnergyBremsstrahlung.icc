@@ -1,0 +1,183 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.1 1999-03-27 19:18:13 aforti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4LowEnergyBremsstrahlung physics process ---------
+//                     by Michel Maire, 27 July 1996
+// ***************************************************************
+// 13-12-96 : Sign corrected in the ScreenFunctions, L.Urban
+// 20/03/97 : new energy loss+ionisation+brems scheme, L.Urban
+// ***************************************************************
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4LowEnergyBremsstrahlung::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(  (&particle == G4Electron::Electron())
+          ||(&particle == G4Positron::Positron()) );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
+                                                         G4double,
+                                                         G4ForceCondition*)
+ 
+// gives the MeanFreePath in GEANT4 internal units
+
+{
+   const G4DynamicParticle* aDynamicParticle = track.GetDynamicParticle();
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+   G4Material* aMaterial  = track.GetMaterial();
+   
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+
+   if (KineticEnergy <  LowestKineticEnergy)
+     MeanFreePath = DBL_MAX;
+   else {
+     if (KineticEnergy > HighestKineticEnergy) KineticEnergy = 0.99*HighestKineticEnergy ;
+     MeanFreePath = DataLogInterpolation(KineticEnergy, aMaterial->GetIndex(), theMeanFreePathTable);
+   }
+
+   return MeanFreePath; 
+} 
+
+inline G4double G4LowEnergyBremsstrahlung::DataLogInterpolation(G4double Argument, G4double TableIndex, G4PhysicsTable* Table){
+
+  G4PhysicsVector* theVec = (*Table)(TableIndex);
+  G4int theLoc = FindBinLocation(Argument, theVec); 
+
+  G4double val1 = (*theVec)(theLoc), val2 = (*theVec)(theLoc+1);
+  G4double arg1 = theVec->GetLowEdgeEnergy(theLoc), arg2 = theVec->GetLowEdgeEnergy(theLoc+1);
+
+  G4double theVal = (log10(val1)*log10(arg2/Argument)
+		     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
+  
+  theVal = pow(10,theVal);
+  return theVal;
+}
+
+inline G4int G4LowEnergyBremsstrahlung::FindBinLocation(G4double arg, G4PhysicsVector* vec){
+
+  G4int numberOfBin = vec->GetVectorLength();
+  G4int lowerBound = 0;
+  G4int upperBound = numberOfBin-1;
+
+  do {
+
+    G4int midBin = (lowerBound + upperBound)/2;
+
+    if( arg < vec->GetLowEdgeEnergy(midBin) )
+       upperBound = midBin-1;
+    else
+
+       lowerBound = midBin+1;
+  } while (lowerBound <= upperBound); 
+
+  return upperBound;
+}
+
+inline G4double G4LowEnergyBremsstrahlung::ComputeA(G4int AtomicNumber, G4double ElectronKinEnergy){
+
+  G4double aVal;
+  G4DataVector ElectEnVec = (*(*(*ATable)[AtomicNumber-1])[0]);
+  G4DataVector AValueVec = (*(*(*ATable)[AtomicNumber-1])[1]);
+
+  aVal = DataLogInterpolation(ElectronKinEnergy, ElectEnVec, AValueVec);
+	
+  if(AtomicNumber > 99){
+
+    aVal = 0;	
+  }
+
+  return aVal;
+} 
+
+inline G4double G4LowEnergyBremsstrahlung::ComputeB(G4int AtomicNumber, G4double ElectronKinEnergy){
+
+  G4double bVal;
+  G4double constTerm  = (*(*BTable)[AtomicNumber-1])[0];
+  G4double linearTerm = (*(*BTable)[AtomicNumber-1])[1];
+  G4double logElectEn = log10(ElectronKinEnergy);
+  if(logElectEn > -5 && logElectEn < (-constTerm/linearTerm)){
+
+    bVal = linearTerm*logElectEn+constTerm;
+  }
+  else{
+
+    bVal = 0;
+  }
+
+  if(AtomicNumber > 99){
+    bVal = 0;	
+  }
+
+  return bVal;
+}
+
+inline G4double G4LowEnergyBremsstrahlung::DataLogInterpolation(G4double Argument, 
+							       const G4DataVector& argVec, 
+                                                               const G4DataVector& valVec){
+
+  G4int theLoc = FindBinLocation(Argument, argVec); 
+
+  if(theLoc == argVec.length()-1){
+    return valVec[theLoc];
+  }
+
+  G4double val1 = valVec[theLoc], val2 = valVec[theLoc+1];
+  G4double arg1 = argVec[theLoc], arg2 = argVec[theLoc+1];
+
+  G4double theVal = (log10(val1)*log10(arg2/Argument)
+                     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
+  
+  theVal = pow(10,theVal);
+
+  return theVal;
+}
+
+
+inline G4int G4LowEnergyBremsstrahlung::FindBinLocation(G4double arg, const G4DataVector & vec){
+
+  G4int numberOfBin = vec.length();
+  G4int lowerBound = 0;
+  G4int upperBound = numberOfBin-1;
+
+  do {
+
+    G4int midBin = (lowerBound + upperBound)/2;
+
+    if( arg < vec[midBin] )
+
+       upperBound = midBin-1;
+    else
+
+       lowerBound = midBin+1;
+
+  } while (lowerBound <= upperBound); 
+
+  return upperBound;
+}
+
+
+
+
+
+
+
