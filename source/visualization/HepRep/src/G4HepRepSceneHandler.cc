@@ -527,6 +527,17 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     HepRepType* trajectoryType = getTrajectoryType();
     addAttDefs(trajectoryType, trajectoryAttDefs);
     
+    // these attValues are non-standard, so can only be added when we have the attDef.
+    double charge = 0;
+    _trajectoryType->addAttValue("Ch", charge);
+    G4Color color = getColor(charge);
+    _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+    _trajectoryType->addAttValue("ID", -1);
+    _trajectoryType->addAttValue("IMom", G4String(""));
+    _trajectoryType->addAttValue("PDG", -1);
+    _trajectoryType->addAttValue("PN", G4String(""));
+    _trajectoryType->addAttValue("PID", -1);
+
     HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), trajectoryType);
     addAttVals(trajectoryInstance, trajectoryAttDefs, trajectoryAttValues);
     
@@ -1008,16 +1019,6 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryType() {
     if (_trajectoryType == NULL) {
         _trajectoryType = factory->createHepRepType(getEventType(), "Trajectory");
         
-        double charge = 0;
-        _trajectoryType->addAttValue("Ch", charge);
-        G4Color color = getColor(charge);
-        _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
-        _trajectoryType->addAttValue("ID", -1);
-        _trajectoryType->addAttValue("IMom", G4String(""));
-        _trajectoryType->addAttValue("PDG", -1);
-        _trajectoryType->addAttValue("PN", G4String(""));
-        _trajectoryType->addAttValue("PID", -1);
-
         _trajectoryType->addAttValue("Layer", trajectoryLayer);
         _trajectoryType->addAttValue("DrawAs", G4String("Line"));
 
