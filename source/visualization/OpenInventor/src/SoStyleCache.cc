@@ -50,6 +50,31 @@ SoMaterial* SoStyleCache::getMaterial(
   fMaterials->addChild(material);
   return material;
 }
+//////////////////////////////////////////////////////////////////////////////
+SoMaterial* SoStyleCache::getMaterial(
+ float aRed
+,float aGreen
+,float aBlue
+,float aTransparency
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  SbColor aRGB(aRed,aGreen,aBlue);
+  int number = fMaterials->getNumChildren();
+  for(int index=0;index<number;index++) { 
+    SoMaterial* material = (SoMaterial*)fMaterials->getChild(index);
+    if( (material->diffuseColor[0]==aRGB) &&
+        (material->transparency[0]==aTransparency) ) {
+      return material;
+    }
+  }
+  SoMaterial* material = new SoMaterial;
+  material->diffuseColor.setValue(aRGB);
+  material->transparency.setValue(aTransparency);
+  fMaterials->addChild(material);
+  return material;
+}
 /*
 //////////////////////////////////////////////////////////////////////////////
 SoDrawStyle* SoStyleCache::getLineStyle(
@@ -91,6 +116,30 @@ SoDrawStyle* SoStyleCache::getLineStyle(
   return drawStyle;
 }
 */
+//////////////////////////////////////////////////////////////////////////////
+SoDrawStyle* SoStyleCache::getLineStyle(
+ unsigned short aPattern
+,float aWidth
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  int number = fLineStyles->getNumChildren();
+  for(int index=0;index<number;index++) { 
+    SoDrawStyle* drawStyle = (SoDrawStyle*)fLineStyles->getChild(index);
+    if( (drawStyle->style.getValue()==SoDrawStyle::LINES) &&
+        (drawStyle->lineWidth.getValue()==aWidth) &&
+        (drawStyle->linePattern.getValue()==aPattern) ) {
+      return drawStyle;
+    }
+  }
+  SoDrawStyle* drawStyle = new SoDrawStyle;
+  drawStyle->style.setValue(SoDrawStyle::LINES);
+  drawStyle->lineWidth.setValue(aWidth);
+  drawStyle->linePattern.setValue(aPattern);
+  fLineStyles->addChild(drawStyle);
+  return drawStyle;
+}
 //////////////////////////////////////////////////////////////////////////////
 SoLightModel* SoStyleCache::getLightModelPhong(
 ) 

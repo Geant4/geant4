@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.17 2004-11-11 16:11:57 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.18 2004-11-11 17:24:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 
 class G4OpenInventor;
 class SoSeparator;
+class Geant4_SoStyleCache;
 
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
@@ -118,6 +119,7 @@ private:
   SoSeparator* fTransientRoot;
   SoSeparator* fCurrentSeparator;
   G4bool fModelingSolid;
+  Geant4_SoStyleCache* fStyleCache;
 };
 
 #include "G4OpenInventorSceneHandler.icc"

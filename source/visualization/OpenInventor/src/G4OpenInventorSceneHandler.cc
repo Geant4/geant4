@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.20 2004-11-11 16:14:51 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.21 2004-11-11 17:26:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,7 @@
 #include "HEPVis/nodes/SoMarkerSet.h"
 typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
+#include "HEPVis/misc/SoStyleCache.h"
 
 #include "Geant4_SoPolyhedron.h"
 
@@ -111,8 +112,13 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,fTransientRoot(0)
 ,fCurrentSeparator(0)
 ,fModelingSolid(false)
+,fStyleCache(0)
 {
   fSceneCount++;
+
+  fStyleCache = new SoStyleCache;
+  fStyleCache->ref();
+
   fRoot = new SoSeparator;
   fRoot->ref();
   fRoot->setName("Root");
@@ -131,6 +137,7 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 {
   fRoot->unref();
+  fStyleCache->unref();
   fSceneCount--;
 }
 
@@ -150,10 +157,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   //
   // Color
   //
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (line);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  fCurrentSeparator->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  fCurrentSeparator->addChild(material);
   
   //
   // Point Set
@@ -165,8 +172,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   //
   // Wireframe
   // 
-  SoDrawStyle *drawStyle = new SoDrawStyle;
-  drawStyle->style = SoDrawStyle::LINES;
+  SoDrawStyle* drawStyle = fStyleCache->getLineStyle();
   fCurrentSeparator->addChild(drawStyle);
 
   SoLineSet *pLine = new SoLineSet;
@@ -203,9 +209,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
                             polymarker[iPoint].z());
   }
 
-  SoMaterial* material = new SoMaterial;
   const G4Colour& c = GetColour (polymarker);
-  material->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
   fCurrentSeparator->addChild(material);
   
   SoCoordinate3* coordinate3 = new SoCoordinate3;
@@ -245,11 +251,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
   //
   // Color
   //
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetTextColour (text);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  //pMaterial->diffuseColor.setValue(1.0, 0.0, 1.0); // Magenta so we can see
-  fCurrentSeparator->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  fCurrentSeparator->addChild(material);
 
   //
   // Font
@@ -276,10 +281,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   //
   // Color
   //
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (circle);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  fCurrentSeparator->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  fCurrentSeparator->addChild(material);
 
   //
   // Dimensions
@@ -317,10 +322,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
   //
   // Color
   //
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (Square);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  fCurrentSeparator->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  fCurrentSeparator->addChild(material);
 
   //
   // Size
@@ -353,16 +358,15 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   //
   // Define Material
   //
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (polyhedron);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  fCurrentSeparator->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  fCurrentSeparator->addChild(material);
 
   G4bool modelingSolid = false;
-  SoLightModel* lightModel = new SoLightModel;
-  lightModel->model.setValue(modelingSolid ?
-			     SoLightModel::PHONG:
-			     SoLightModel::BASE_COLOR);
+  SoLightModel* lightModel = 
+    modelingSolid ? fStyleCache->getLightModelPhong() : 
+                    fStyleCache->getLightModelBaseColor();
   fCurrentSeparator->addChild(lightModel);
 
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
@@ -397,10 +401,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   //
   // Color
   //  
-  SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (nurb);
-  pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  surfSep->addChild(pMaterial);
+  SoMaterial* material = 
+    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+  surfSep->addChild(material);
 
   //
   // Set up NURBS
@@ -669,6 +673,15 @@ void G4OpenInventorSceneHandler::PreAddThis
       (SoSeparator*) g4DetectorTreeKit->getPart("fullSeparator",   TRUE);
     fullSeparator->renderCaching = SoSeparator::OFF;
 
+    SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+    g4DetectorTreeKit->setPart("appearance.material",material);
+
+    SoLightModel* lightModel = 
+      fModelingSolid ? fStyleCache->getLightModelPhong() : 
+                       fStyleCache->getLightModelBaseColor();
+    g4DetectorTreeKit->setPart("appearance.lightModel",lightModel);
+
+    /*
     SoMaterial* matColor = (SoMaterial*) 
       g4DetectorTreeKit->getPart("appearance.material", TRUE);
     matColor->diffuseColor.setValue(red,green,blue);
@@ -678,7 +691,8 @@ void G4OpenInventorSceneHandler::PreAddThis
     lightModel->model.setValue(fModelingSolid ?
 			       SoLightModel::PHONG:
 			       SoLightModel::BASE_COLOR);
-   
+   */
+
     //
     // Add the full separator to the dictionary; it is indexed by the 
     // address of the logical volume!
@@ -732,23 +746,22 @@ void G4OpenInventorSceneHandler::PreAddThis
     // attributes will go under "fDetectorRoot"
     //
     if (!fCurrentSeparator) {
-      SoMaterial* newColor = new SoMaterial();
-      newColor->diffuseColor.setValue(red,green,blue);
-      fDetectorRoot->addChild(newColor);
-      SoLightModel* lightModel = new SoLightModel;
-      lightModel->model.setValue(fModelingSolid ?
-			         SoLightModel::PHONG:
-			         SoLightModel::BASE_COLOR);
+      SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+      fDetectorRoot->addChild(material);
+
+      SoLightModel* lightModel = 
+        fModelingSolid ? fStyleCache->getLightModelPhong() : 
+                         fStyleCache->getLightModelBaseColor();
       fDetectorRoot->addChild(lightModel);
+
       fCurrentSeparator = fDetectorRoot;
     } else {
-      SoMaterial* newColor = new SoMaterial();
-      newColor->diffuseColor.setValue(red,green,blue);
-      fCurrentSeparator->addChild(newColor);    
-      SoLightModel* lightModel = new SoLightModel;
-      lightModel->model.setValue(fModelingSolid ?
-			         SoLightModel::PHONG:
-			         SoLightModel::BASE_COLOR);
+      SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+      fCurrentSeparator->addChild(material);    
+
+      SoLightModel* lightModel = 
+        fModelingSolid ? fStyleCache->getLightModelPhong() : 
+                         fStyleCache->getLightModelBaseColor();
       fCurrentSeparator->addChild(lightModel);
     }
   }
