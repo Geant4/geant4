@@ -1,4 +1,4 @@
-$Id: History,v 1.46 1999-11-23 07:09:07 stanaka Exp $
+$Id: History,v 1.47 1999-11-25 15:26:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-10  25th November 1999  John Allison
+- Adapted relevant header files of modeling and management for
+  Software Reference Manual.
 
 vis-V00-01-09  23th November 1999  Satoshi Tanaka
 - Protection to ill-defined G4Trap in AddThis() 
