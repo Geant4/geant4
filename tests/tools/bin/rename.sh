@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/sh
 
 if [ $# -lt 3 ]
 then
