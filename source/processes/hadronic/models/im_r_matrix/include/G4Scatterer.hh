@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.hh,v 1.3 2003-12-12 11:33:11 hpw Exp $ //
+// $Id: G4Scatterer.hh,v 1.4 2003-12-15 16:40:11 hpw Exp $ //
 //
 //
 // removing a auther spec that was part of a template.
@@ -74,8 +74,7 @@ private:
     template<class T> void operator()(T*, G4CollisionVector * aC)
     {
       G4VCollision* aT = new T; 
-      G4CollisionPtr aPtr = G4CollisionPtr(aT);
-      aC->push_back(aPtr);
+      aC->push_back(aT);
     }
   };
 

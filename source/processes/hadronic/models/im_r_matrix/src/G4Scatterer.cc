@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.11 2003-12-12 11:33:11 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.12 2003-12-15 16:40:11 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -53,13 +53,8 @@ G4Scatterer::G4Scatterer()
 
 G4Scatterer::~G4Scatterer()
 {
-  for (size_t i=0; i<collisions.size(); i++)
-    {
-      G4CollisionPtr collisionPtr = collisions[i];
-      G4VCollision* component = collisionPtr();
-      delete component;
-      component = 0;
-    }
+  for_each(collisions.begin(), collisions.end(), G4Delete());
+  collisions.clear();
 }
 
 
@@ -368,8 +363,7 @@ G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
   size_t i;
   for (i=0; i<collisions.size(); i++)
     {
-      G4CollisionPtr collisionPtr = collisions[i];
-      G4VCollision* component = collisionPtr();
+      G4VCollision* component = collisions[i];
       if (component->IsInCharge(trk1,trk2))
 	{
 	  collisionInCharge = component;
