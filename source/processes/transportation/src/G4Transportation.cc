@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.3 1999-04-27 09:51:28 japost Exp $
+// $Id: G4Transportation.cc,v 1.4 1999-04-27 09:56:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,7 +212,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 						     currentSafety,
 						     track.GetVolume() );
      //               ----------------
-     if( lengthAlongCurve< currentMinimumStep){
+     if( lengthAlongCurve <= currentMinimumStep){
         geometryStepLength=lengthAlongCurve;
 	fGeometryLimitedStep= true;
      }else{
