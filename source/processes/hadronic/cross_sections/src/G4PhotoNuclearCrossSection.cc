@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaGiantResonanceDataSet.cc,v 1.5 2001-10-05 16:08:35 hpw Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.1 2001-10-24 11:42:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
