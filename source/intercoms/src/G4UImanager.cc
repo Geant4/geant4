@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.19 2001-10-23 07:51:36 gcosmo Exp $
+// $Id: G4UImanager.cc,v 1.20 2001-11-24 18:37:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -374,6 +374,29 @@ G4int G4UImanager::ApplyCommand(G4String aCommand)
   else
   {
     commandString = aCommand;
+  }
+
+  // remove doubled slash
+  G4int len = commandString.length();
+  G4int ll = 0;
+  G4String a1;
+  G4String a2;
+  while(ll<len-1)
+  {
+    if(commandString(ll,2)=="//")
+    {
+      if(ll==0)
+      { commandString.remove(ll,1); }
+      else
+      {
+        a1 = commandString(0,ll);
+        a2 = commandString(ll+1,len-ll-1);
+        commandString = a1+a2;
+      }
+      len--;
+    }
+    else
+    { ll++; }
   }
 
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );

@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2001-10-23 07:51:21 gcosmo Exp $
+$Id: History,v 1.38 2001-11-24 18:37:10 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2001, M.Asai (intercoms-V03-02-15)
+- Fix a problem with a command which has doubled slash.
 
 Oct 23, 2001, G.Cosmo (intercoms-V03-02-14)
 - Restored inclusion of G4Tokenizer.hh for removal of STLinterface module.
