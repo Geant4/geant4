@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.20 2004-07-09 15:44:23 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.21 2004-07-13 13:17:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -354,25 +354,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   //Get colour, etc..
   const G4Colour& c = GetColour (polyhedron);
+  GLfloat materialColour [4];
+  materialColour [0] = c.GetRed ();
+  materialColour [1] = c.GetGreen ();
+  materialColour [2] = c.GetBlue ();
+  materialColour [3] = 1.0;
   
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
-    // cout << "Hidden edge not implememented in G4OpenGL.\n"
-    // << "Using hidden surface removal." << G4endl;
-  case (G4ViewParameters::hsr):
-    glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LESS);    
-    glEnable (GL_CULL_FACE);
-    glCullFace (GL_BACK); 
-    glEnable (GL_LIGHTING);
-    glPolygonMode (GL_FRONT, GL_FILL);
-    GLfloat materialColour [4];
-    materialColour [0] = c.GetRed ();
-    materialColour [1] = c.GetGreen ();
-    materialColour [2] = c.GetBlue ();
-    materialColour [3] = 1.0;
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
-    break;
+    // Set up as for hidden line removal but paint polygons...
   case (G4ViewParameters::hlr):
     glEnable (GL_STENCIL_TEST);
     // The stencil buffer is cleared in G4OpenGLViewer::ClearView.
@@ -386,6 +376,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glPolygonMode (GL_FRONT, GL_LINE);
     glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    break;
+  case (G4ViewParameters::hsr):
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_LESS);    
+    glEnable (GL_CULL_FACE);
+    glCullFace (GL_BACK); 
+    glEnable (GL_LIGHTING);
+    glPolygonMode (GL_FRONT, GL_FILL);
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     break;
   case (G4ViewParameters::wireframe):
   default:
@@ -441,15 +440,21 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glEnd ();
 
     // Do it all over again (twice) for hlr...
-    if  (drawing_style == G4ViewParameters::hlr) {
+    if  (drawing_style == G4ViewParameters::hlr ||
+	 drawing_style == G4ViewParameters::hlhsr) {
 
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       glPolygonMode (GL_FRONT, GL_FILL);
-      GLdouble clear_colour[4];
-      glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
-      glColor4dv (clear_colour);
+      if  (drawing_style == G4ViewParameters::hlr) {
+	GLdouble clear_colour[4];
+	glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
+	glColor4dv (clear_colour);
+      } else {
+	glEnable (GL_LIGHTING);
+	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+      }
       glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount]) {
@@ -462,10 +467,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
+      glDisable (GL_LIGHTING);
 
       // and once more to reset the stencil bits...
       glStencilFunc (GL_ALWAYS, 0, 1);
       glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
+      glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
       glPolygonMode (GL_FRONT, GL_LINE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
@@ -482,6 +489,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glEnd ();
       
+      glDepthFunc (GL_LESS);   // Revert for next quadrilateral.
     }
   } while (notLastFace);  
   
