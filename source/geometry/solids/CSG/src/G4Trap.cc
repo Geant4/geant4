@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.4 1999-11-19 16:10:13 grichine Exp $
+// $Id: G4Trap.cc,v 1.5 1999-12-13 15:16:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -19,6 +19,7 @@
 //  8.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
 //  4.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
 // 19.11.99 V.Grichine, kUndefined was added to Eside enum
+// 13.12.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
 #include <math.h>
 #include "G4Trap.hh"
@@ -938,120 +939,113 @@ G4double G4Trap::DistanceToIn(const G4ThreeVector& p,
 //
 // Z Intersection range
 //
-    if (v.z()>0)
-	{
-	    max=fDz-p.z();
-	    if (max>kCarTolerance/2)
-		{
-		   smax=max/v.z();
-		   smin=(-fDz-p.z())/v.z();
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
-    else if (v.z()<0)
-	{
-	    max=-fDz-p.z();
-	    if (max<-kCarTolerance/2)
-		{
-		   smax=max/v.z();
-		   smin=(fDz-p.z())/v.z();
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+    if (v.z() > 0 )
+    {
+       max = fDz - p.z() ;
+
+       if (max > 0.5*kCarTolerance)
+       {
+	  smax = max/v.z();
+	  smin = (-fDz-p.z())/v.z();
+       }
+       else
+       {
+	  return snxt=kInfinity;
+       }
+    }
+    else if (v.z() < 0 )
+    {
+       max = - fDz - p.z() ;
+
+       if (max < -0.5*kCarTolerance )
+       {
+	  smax=max/v.z();
+	  smin=(fDz-p.z())/v.z();
+       }
+       else
+       {
+	  return snxt=kInfinity;
+       }
+    }
     else
-	{
-	    if (fabs(p.z())<=fDz) // Inside
-		{
-		   smin=0;
-		   smax=kInfinity;
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+    {
+       if (fabs(p.z())<fDz - 0.5*kCarTolerance) // Inside was <=fDz
+       {
+	  smin=0;
+	  smax=kInfinity;
+       }
+       else
+       {
+	  return snxt=kInfinity;
+       }
+    }
 
     for (i=0;i<4;i++)
-	{
-	    pdist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d;
-	    Comp=fPlanes[i].a*v.x()+fPlanes[i].b*v.y()+fPlanes[i].c*v.z();
+    {
+       pdist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d;
+       
+       Comp=fPlanes[i].a*v.x()+fPlanes[i].b*v.y()+fPlanes[i].c*v.z();
 
-	    if (pdist>0)
-		{
+       if ( pdist >= -0.5*kCarTolerance )      // was >0
+       {
+//
 // Outside the plane -> this is an extent entry distance
-		    if (Comp>0)
-			{
-			    return snxt=kInfinity;
-			}
-		    else if (Comp<0)
-			{
-			    vdist=-pdist/Comp;
-			    if (vdist>smin)
-				{
-				    if (vdist<smax)
-					{
-					   smin=vdist;
-					}
-				    else
-					{
-					    return snxt=kInfinity;
-					}
-				}
-			}
-		}
-	    else if (pdist<0)
+//
+	  if (Comp >= 0)   // was >0
+	  {
+	     return snxt=kInfinity ;
+	  }
+	  else 
+	  {
+	     vdist=-pdist/Comp;
+
+	     if (vdist>smin)
+	     {
+		if (vdist<smax)
 		{
+		   smin = vdist;
+		}
+		else
+		{
+		   return snxt=kInfinity;
+		}
+	     }
+	  }
+       }
+       else
+       {
+//
 // Inside the plane -> couble  be an extent exit distance (smax)
-		    if (Comp>0)
-			{
-// Will leave extent
-			    if (pdist<-kCarTolerance/2)
-				{
-				    vdist=-pdist/Comp;
-				    if (vdist<smax)
-					{
-					    if (vdist>smin)
-						{
-						   smax=vdist;
-						}
-					    else
-						{
-						    return snxt=kInfinity;
-						}
-					}
-				}
-			    else
-				{
-				    return snxt=kInfinity;
-				}
-			}
-		}
-	    else
+//
+	  if (Comp>0)  // Will leave extent
+	  {
+	     vdist=-pdist/Comp;
+
+	     if (vdist<smax)
+	     {
+		if (vdist>smin)
 		{
-// Exactly on the plane
-		    if (Comp>0)
-			{
-			    return snxt=kInfinity;
-			}
+		   smax=vdist;
 		}
-	}
-
+		else
+		{
+		       return snxt=kInfinity;
+		}
+	     }	
+	  }
+       }
+   }
+//
 // Checks in non z plane intersections ensure smin<smax
-
-    if (smin>=0)
-	{
-	   snxt=smin;
-	}
+//
+    if (smin >=0 )
+    {
+       snxt = smin ;
+    }
     else
-	{
-       snxt=0;
-	}
+    {
+       snxt = 0 ;
+    }
     return snxt;
 }
 
