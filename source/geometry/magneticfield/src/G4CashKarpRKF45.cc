@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.9 2001-07-11 09:59:10 gunter Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.10 2001-11-21 17:56:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -51,6 +51,7 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariab
   ak4 = new G4double[fNumberOfVariables] ; 
   ak5 = new G4double[fNumberOfVariables] ; 
   ak6 = new G4double[fNumberOfVariables] ; 
+  ak7 = 0;
   yTemp = new G4double[fNumberOfVariables] ; 
   yIn = new G4double[fNumberOfVariables] ;
 
@@ -77,7 +78,7 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
   delete[] ak4;
   delete[] ak5;
   delete[] ak6;
-  delete[] ak7;
+  // delete[] ak7;
   delete[] yTemp;
   delete[] yIn;
 
