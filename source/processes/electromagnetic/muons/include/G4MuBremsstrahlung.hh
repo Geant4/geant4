@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.4 2000-02-10 08:29:12 urban Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.5 2000-02-10 09:08:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -18,6 +18,8 @@
 //      -------- G4MuBremsstrahlung physics process ---------
 //                by Laszlo Urban, September 1997
 // ************************************************************
+// 10/02/00  modifications , new e.m. structure, L.Urban
+//
 
 #ifndef G4MuBremsstrahlung_h
 #define G4MuBremsstrahlung_h 1

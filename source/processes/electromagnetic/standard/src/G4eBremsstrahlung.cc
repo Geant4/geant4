@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.7 1999-12-15 14:51:52 gunter Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.8 2000-02-10 09:06:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
 // 03-03-99 : Bug fixed in LPM effect, L.Urban
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -43,9 +44,9 @@
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& processName)
   : G4eEnergyLoss(processName),      // initialization
     theMeanFreePathTable(NULL),
-    LowestKineticEnergy (1.*keV),
-    HighestKineticEnergy(100.*TeV),
-    TotBin(100)
+    LowerBoundLambda (1.*keV),
+    UpperBoundLambda(100.*TeV),
+    NbinLambda(100)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,16 +67,13 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
-{
-  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
 
     BuildLossTable(aParticleType) ;
  
@@ -418,7 +416,7 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
 // tables are Build for MATERIALS. 
 {
    G4double LowEdgeEnergy , Value;
-   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
+   G4double FixedEnergy = (LowerBoundLambda + UpperBoundLambda)/2.;
 
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
@@ -433,12 +431,12 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 
         //create physics vector then fill it ....
-        ptrVector = new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
-                                           TotBin ) ;
+        ptrVector = new G4PhysicsLogVector(LowerBoundLambda, UpperBoundLambda,
+                                           NbinLambda ) ;
 
         const G4Material* material= (*theMaterialTable)[J];
 
-        for ( G4int i = 0 ; i < TotBin ; i++ )      
+        for ( G4int i = 0 ; i < NbinLambda ; i++ )      
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
              Value = ComputeMeanFreePath( &ParticleType, LowEdgeEnergy,
@@ -938,9 +936,9 @@ void G4eBremsstrahlung::PrintInfoDefinition()
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,"Energy")
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
+         << " in " << NbinLambda << " bins. \n";
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

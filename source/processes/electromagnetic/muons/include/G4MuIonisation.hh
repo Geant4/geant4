@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.hh,v 1.5 2000-02-10 08:29:12 urban Exp $
+// $Id: G4MuIonisation.hh,v 1.6 2000-02-10 09:08:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // ------------------------------------------------------------
@@ -23,6 +23,7 @@
 // It calculates the ionisation for muons.      
 // ************************************************************
 // 
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4MuIonisation_h

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.7 1999-12-15 14:51:53 gunter Exp $
+// $Id: G4hIonisation.cc,v 1.8 2000-02-10 09:06:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -27,6 +27,7 @@
 // 22/10/98: cleanup L.Urban
 // 02/02/99: bugs fixed , L.Urban
 // 29/07/99: correction in BuildLossTable for low energy, L.Urban
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
  
 
@@ -38,6 +39,9 @@
 G4hIonisation::G4hIonisation(const G4String& processName)
    : G4hEnergyLoss(processName),
      theMeanFreePathTable(NULL),
+     LowerBoundLambda(1.*keV),
+     UpperBoundLambda(100.*TeV),
+     NbinLambda(100),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),
      theElectron ( G4Electron::Electron() )
@@ -51,24 +55,16 @@ G4hIonisation::~G4hIonisation()
      }
 }
  
-void G4hIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
-                                 G4int nBins)
-{
-  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE;
-  TotBin = nBins ;
-}
-
 // methods.............................................
 
 void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
-  if(&aParticleType == G4Proton::Proton())
-  {
-                        LowestKineticEnergy= 1.00*keV;
-                        HighestKineticEnergy= 100.*TeV;
-                        TotBin=100  ;
-  }
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
+
 
   ParticleMass = aParticleType.GetPDGMass() ;
 
@@ -317,7 +313,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
         //create physics vector then fill it ....
 
         G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-               LowestKineticEnergy, HighestKineticEnergy, TotBin);
+               LowerBoundLambda,UpperBoundLambda,NbinLambda);
 
   // compute the (macroscopic) cross section first
  
@@ -337,7 +333,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
         DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
 
-        for ( G4int i = 0 ; i < TotBin ; i++ )
+        for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
            LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
 

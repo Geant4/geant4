@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.6 2000-02-10 08:32:21 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.7 2000-02-10 09:10:39 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 // **************************************************************
 // 08-04-98: remove 'tracking cut' of the ionizing particle, MMa
 // 26/10/98: new stuff from R.Kokoulin + cleanup , L.Urban
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
  
 
