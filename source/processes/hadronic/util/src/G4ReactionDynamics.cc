@@ -122,8 +122,8 @@
     if(vecLen == 0) return false;
 
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
-    G4ParticleDefinition *anAntiNeutron = G4AntiNeutron::AntiNeutron();
+    // G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
+    // G4ParticleDefinition *anAntiNeutron = G4AntiNeutron::AntiNeutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
@@ -3141,7 +3141,7 @@
     
     G4int i;
     G4double pp;
-    G4double totalQ = 0;
+    // G4double totalQ = 0;
     G4double kinCreated = 0;
     G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * exp(-(atomicWeight-1.0)/120.0);
     if( npnb > 0)  // first add protons and neutrons
@@ -3252,7 +3252,7 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
-    G4double delta = epnb+edta - kinCreated;
+    // G4double delta = epnb+edta - kinCreated;
   }
  
  void G4ReactionDynamics::MomentumCheck(
