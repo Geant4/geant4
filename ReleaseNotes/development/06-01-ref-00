@@ -1,0 +1,153 @@
+
+                       geant4-06-01-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added "check_mode" state for navigators and improved overall verbosity
+    levels and output formatting.
+  o Added new classes for retrieving particle properties from file.
+  o Implemented new debug system for CHIPS hadronic model.
+  o Bug Fixes in model variant of multiple-scattering and simplifications
+    of calculation of energy dependence on internal parameters.
+  o Extensions to HepRepFile driver to handle duplicate ShowView
+    and improved layering and hierarchy for hits.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+digits_hits                             digits_hits-V06-00-01
+-----------
+- Added methods to G4HCtable for additional verbosity.
+
+event                                   events-V06-00-01
+-----
+- LocateGlobalPointAndSetup() method of G4Navigator is now invoked at the
+  beginning of each new event to reset the navigation history.
+- Bug Fix in the destructor of G4ParticleGunMessenger.
+
+geometry/navigation                     geomnav-V06-00-02
+-------------------
+- G4Navigator: fixed old outstanding bug in ComputeStep() for the location
+  of the the local point in the calculation of a valid exit normal.
+- Added "check_mode" state for navigators. The state can be activated by
+  a new UI command (geometry/navigator/check_mode [true/false]) and will
+  force more strict and less tolerant checks in step/safety computation to
+  verify the correctness of solids' response in the geometry.
+- Reorganised verbosity levels. Added more useful information activated
+  when in G4VERBOSE mode and verbosity level selected.
+  Fixed output formatting when entering/exiting verbose blocks.
+
+geometry/solids/Boolean                 geom-bool-V06-00-00
+-----------------------
+- G4UnionSolid, G4SubtractionSolid: fix in debug printout for SurfaceNomal().
+
+global                                  global-V06-00-01
+------
+- Removed obsolete "includes" target in management/GNUmakefile.
+- Corrected comments in G4UserLimits header.
+
+particles                               particles-V06-00-02
+---------
+- Added classes for retrieving particle properties from file:
+  o Base class G4VParticlePropertyRetriever.
+  o Classes G4TextPPReporter and G4TextPPRetriever.
+
+processes/decay                         decay-V06-00-00
+---------------
+- Fixed bug in PostStepGPIL() in case of stopping during AlongStep actions.
+
+processes/electromagnetic/lowenergy              emlowen-V06-00-01
+-----------------------------------
+- Bug fixes in G4IonisationParameters, G4PenelopeCompton and
+  G4PenelopeIonisation.
+- Fixed some compilation warnings on Intel/icc compiler.
+- Performance improvement in G4Generator2BN.
+
+processes/electromagnetic/muons                  muons-V06-00-02
+-------------------------------
+- Minor fix in initialisation of G4MuPairProductionModel.
+
+processes/electromagnetic/standard               stand-V06-00-04
+----------------------------------
+- Fixes in constructor of discrete processes for setting of name and type.
+
+processes/electromagnetic/utils                  utils-V06-00-08
+-------------------------------
+- Fixed problem of ionisation in air with low pressure 10^-4 Atm.
+- Bug Fixes in model variant of multiple-scattering and simplifications
+  of calculation of energy dependence on internal parameters:
+  o G4MscModel: changes in data members, corrections in GeomPathLength,
+   TrueStepLength, SampleCosineTheta.
+- Updated calculation of energy from range.
+- G4LossTableManager: fixed problem of Precise Range table
+- G4VEnergyLossProcess: fixed problem of step limit calculation,
+  [lowestKinEnergy = 1.*eV].
+- Added G4EmProcessOptions class.
+
+processes/hadronic                               ghad-V06-00-05
+------------------
+- models/binary_cascade (ghad-bin-V06-00-00)
+  o Fixed a few memory leaks. Corrected a logic bug.
+- models/chiral_inv_phase_space/body (ghad-chips-body-V06-00-04):
+  o Implemented new debug system of step by step energy/momentum and
+    charge/baryon_number conservation control.
+  o Resolved en/mom conflicts in the Sigma+Delta++ and Sigma-Delta-
+    final states.
+  o Corrected baryon number and charge non conservation observed in some
+    decays.
+  o Cleared unnecessary warnings, for which it was tested that the conflict
+    situation is successfully resolved.
+  o Fixed bug for Delta-,Delta-,n under 3n+2pi- together with all possible
+    Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,(k*p)
+    under  (k+2)*p+2pi+ threshold possible fragmentation states. 
+
+process/readout                                  readout-V06-00-00
+---------------
+- Added some methods in G4DCtable to enhance a verbosity.
+
+run                                              run-V06-00-02
+---
+- Invocation of G4Navigator::LocateGlobalPointAndSetup() is now moved to
+  G4EventManager so that the navigation history is reset for every new event.
+- Updated date to run-manager kernel.
+
+visualization                                    vis-V06-00-01
+-------------
+- HepRep (vis-HepRep-V06-00-06):
+  o HepRepFile handle duplicate ShowView.
+  o HepRepFile improve layering and hierarchy for hits.
+  o Fixed compilation warnings for the Linux-icc (8.0) compiler.
+  o Removed appendzip.cc file, since it is strictly not necessary.
+    Fixes problem report #570.
+  o Renamed the HepRep schema locator to:
+    http://java.freehep.org/schemas/heprep/2.0
+- management:
+  o Added checks and minor improvment of behaviour at end of event and run:
+    + G4VisManager::EndOfRun(): added check on MarkForClearingTransientStore.
+    + G4VisCommandsScene: For "/vis/scene/endOf[Event|Run]Action refresh",
+      SetMarkForClearingTransientStore(true).
+
+examples                                         examples-V06-00-02
+--------
+- Updated reference outputs.
+- advanced:
+  o brachytheraphy (brachy-V06-00-01)
+    + Added a new histogram and some code cleanup.
+  o composite_calorimeter (ccal-V06-00-00)
+    + Removed redefinition of streaming operator for G4LorentzVector
+      in CCalRotationMatrixFactory, causing compilation problems on some
+      compiler/system configurations.
+  o Rich (Rich-V06-00-00)
+    + Fixed compilation errors and warnings for gcc-3.2.
+- extended/medical:
+  o DICOM (DICOM-V06-00-00)
+    + ????.
+
+tests                                            tests-V06-00-02
+-----
+- Updated reference outputs.
+- tests/test50 (test50-V06-00-00)
+  o Removed reference output.
