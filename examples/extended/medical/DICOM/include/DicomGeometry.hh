@@ -61,7 +61,6 @@ private:
   
   DicomPatientConstructor* patientConstructor;
 
-
 private:
 
   // Materials
@@ -151,9 +150,9 @@ private:
 
   G4ThreeVector theWorldDim;
 
-  char PatientArrayName[30];
-  char LogicPatientArrayName[30];
-  char PhysiPatientArrayName[30];
+  G4String PatientArrayName[30];
+  G4String LogicPatientArrayName[30];
+  G4String PhysiPatientArrayName[30];
 
   G4double PatientX;
   G4double PatientY;
