@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.20 2004-08-13 13:44:21 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.21 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -339,19 +339,19 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
    
    G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
    GammaDirection1.rotateUz(GammaDirection0);
-   aParticleChange.SetMomentumChange( GammaDirection1 );
+   aParticleChange.ProposeMomentumDirection( GammaDirection1 );
    G4double GammaEnergy1 = epsilon*GammaEnergy0;
    G4double localEnergyDeposit = 0.;
    
    if (GammaEnergy1 > fminimalEnergy)
      {
-       aParticleChange.SetEnergyChange( GammaEnergy1 );
+       aParticleChange.ProposeEnergy( GammaEnergy1 );
      }
    else
      {
        localEnergyDeposit += GammaEnergy1;    
-       aParticleChange.SetEnergyChange(0.) ;
-       aParticleChange.SetStatusChange(fStopAndKill);
+       aParticleChange.ProposeEnergy(0.) ;
+       aParticleChange.ProposeTrackStatus(fStopAndKill);
      }
        
    //
@@ -380,7 +380,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
         aParticleChange.SetNumberOfSecondaries(0);
 	localEnergyDeposit += ElecKineEnergy;
       }      
-    aParticleChange.SetLocalEnergyDeposit (localEnergyDeposit);
+    aParticleChange.ProposeLocalEnergyDeposit (localEnergyDeposit);
        
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);

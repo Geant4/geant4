@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.17 2004-08-05 10:33:41 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.18 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -356,15 +356,14 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    }   
    else  localEnergyDeposit += Phot2Energy;
      
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident positron 
    //
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange(0.); 
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeEnergy(0.); 
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
    return &aParticleChange;
 }
@@ -395,11 +394,11 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
    aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
                                            -Direction, electron_mass_c2) ); 
 
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   aParticleChange.ProposeLocalEnergyDeposit(0.);
 
    // Kill the incident positron 
    //
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
       
    return &aParticleChange;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.10 2004-06-07 13:49:52 gcosmo Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.11 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -256,22 +256,22 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       
       if (newKinEnergy > 0.)
       {
-        aParticleChange.SetMomentumChange( particleDirection );
-        aParticleChange.SetEnergyChange( newKinEnergy );
-        aParticleChange.SetLocalEnergyDeposit (0.); 
+        aParticleChange.ProposeMomentumDirection( particleDirection );
+        aParticleChange.ProposeEnergy( newKinEnergy );
+        aParticleChange.ProposeLocalEnergyDeposit (0.); 
       } 
       else
       { 
-        aParticleChange.SetEnergyChange( 0. );
-        aParticleChange.SetLocalEnergyDeposit (0.);
+        aParticleChange.ProposeEnergy( 0. );
+        aParticleChange.ProposeLocalEnergyDeposit (0.);
         G4double charge = aDynamicParticle->GetDefinition()->GetPDGCharge();   
         if (charge<0.)
         {
-           aParticleChange.SetStatusChange(fStopAndKill) ;
+           aParticleChange.ProposeTrackStatus(fStopAndKill) ;
 	}
         else      
         {
-          aParticleChange.SetStatusChange(fStopButAlive) ;
+          aParticleChange.ProposeTrackStatus(fStopButAlive) ;
 	}
       } 
     }       

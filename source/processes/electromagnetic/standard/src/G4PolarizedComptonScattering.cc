@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.10 2003-05-26 16:13:14 vnivanch Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.11 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,13 +143,13 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    
    if (GammaEnergy1 > fminimalEnergy)
      {
-       aParticleChange.SetEnergyChange(GammaEnergy1);
+       aParticleChange.ProposeEnergy(GammaEnergy1);
      }
    else
      {
        localEnergyDeposit += GammaEnergy1;    
-       aParticleChange.SetEnergyChange(0.) ;
-       aParticleChange.SetStatusChange(fStopAndKill);
+       aParticleChange.ProposeEnergy(0.) ;
+       aParticleChange.ProposeTrackStatus(fStopAndKill);
      }
        
    //
@@ -177,7 +177,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
        localEnergyDeposit += ElecKineEnergy;
       }
       
-    aParticleChange.SetLocalEnergyDeposit (localEnergyDeposit);       
+    aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);       
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
@@ -271,12 +271,12 @@ void G4PolarizedComptonScattering::SystemOfRefChange(G4ThreeVector& Direction0,
   Direction1.rotateZ(Psi);
   // 
   Direction1.rotateUz(Direction0);
-  aParticleChange.SetMomentumChange(Direction1);  
+  aParticleChange.ProposeMomentumDirection(Direction1);  
 
   // 3 Euler angles rotation for scattered photon polarization
   Polarization1.rotateZ(Psi);
   Polarization1.rotateUz(Direction0);
-  aParticleChange.SetPolarizationChange(Polarization1);
+  aParticleChange.ProposePolarization(Polarization1);
 
 }
 

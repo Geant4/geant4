@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.6 2004-08-05 11:16:56 maire Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.7 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -29,6 +29,7 @@
 //
 //
 // 07-08-02: missprint in OR condition in DoIt : f1<0 || f1>f1_max ..etc ...
+// 25-10-04: migrade to new interfaces of ParticleChange (vi)
 // ---------------------------------------------------------------------------
 
 #include "G4GammaConversionToMuons.hh"
@@ -343,9 +344,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   //
   // Kill the incident photon
   //
-  aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
-  aParticleChange.SetEnergyChange( 0. ) ;
-  aParticleChange.SetStatusChange( fStopAndKill ) ;
+  aParticleChange.ProposeMomentumDirection( 0., 0., 0. ) ;
+  aParticleChange.ProposeEnergy( 0. ) ;
+  aParticleChange.ProposeTrackStatus( fStopAndKill ) ;
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.20 2004-08-13 13:14:58 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.21 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -452,15 +452,14 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
                       G4Positron::Positron(),PositDirection,PositKineEnergy);
    aParticleChange.AddSecondary(aParticle2); 
 
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident photon 
    //
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange( 0. ); 
-   aParticleChange.SetStatusChange( fStopAndKill );
+   aParticleChange.ProposeEnergy( 0. ); 
+   aParticleChange.ProposeTrackStatus( fStopAndKill );
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );

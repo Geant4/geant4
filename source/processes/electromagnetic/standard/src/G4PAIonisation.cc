@@ -715,7 +715,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
     finalPy /= finalMomentum;
     finalPz /= finalMomentum;
 
-    aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+    aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
  }
  else
  {
@@ -724,13 +724,13 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
    finalKineticEnergy = 0.;
 
    if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
-           aParticleChange.SetStatusChange(fStopAndKill);
-   else  aParticleChange.SetStatusChange(fStopButAlive);
+           aParticleChange.ProposeTrackStatus(fStopAndKill);
+   else  aParticleChange.ProposeTrackStatus(fStopButAlive);
  }
- aParticleChange.SetEnergyChange( finalKineticEnergy );
+ aParticleChange.ProposeEnergy( finalKineticEnergy );
  aParticleChange.SetNumberOfSecondaries(1);   
  aParticleChange.AddSecondary(theDeltaRay);
- aParticleChange.SetLocalEnergyDeposit (Edep);
+ aParticleChange.ProposeLocalEnergyDeposit (Edep);
       
  //ResetNumberOfInteractionLengthLeft();
 return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -859,13 +859,13 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
     {
       finalT = 0.;
       if (aParticle->GetDefinition()->GetParticleName() == "proton")
-               aParticleChange.SetStatusChange(fStopAndKill);
-      else     aParticleChange.SetStatusChange(fStopButAlive);
+               aParticleChange.ProposeTrackStatus(fStopAndKill);
+      else     aParticleChange.ProposeTrackStatus(fStopButAlive);
     }
 
   aParticleChange.SetNumberOfSecondaries(0);
-  aParticleChange.SetEnergyChange( finalT ) ;
-  aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
+  aParticleChange.ProposeEnergy( finalT ) ;
+  aParticleChange.ProposeLocalEnergyDeposit(E-finalT) ;
 //  G4cout << "Edep= " << E-finalT << G4endl;
   return &aParticleChange ;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.cc,v 1.1 2003-08-08 11:30:02 vnivanch Exp $
+// $Id: G4eBremsstrahlung52.cc,v 1.2 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -774,9 +774,9 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
    // check against insufficient energy
     if (KineticEnergy < GammaEnergyCut)
        {
-         aParticleChange.SetMomentumChange( ParticleDirection );
-         aParticleChange.SetEnergyChange( KineticEnergy );
-         aParticleChange.SetLocalEnergyDeposit (0.);
+         aParticleChange.ProposeMomentumDirection( ParticleDirection );
+         aParticleChange.ProposeEnergy( KineticEnergy );
+         aParticleChange.ProposeLocalEnergyDeposit (0.);
          aParticleChange.SetNumberOfSecondaries(0);
          return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
        }
@@ -930,16 +930,16 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
    G4double NewKinEnergy = KineticEnergy - GammaEnergy;
    if (NewKinEnergy > 0.)
      {
-      aParticleChange.SetMomentumChange( ParticleDirection );
-      aParticleChange.SetEnergyChange( NewKinEnergy );
-      aParticleChange.SetLocalEnergyDeposit (0.);
+      aParticleChange.ProposeMomentumDirection( ParticleDirection );
+      aParticleChange.ProposeEnergy( NewKinEnergy );
+      aParticleChange.ProposeLocalEnergyDeposit (0.);
      }
    else
      {
-      aParticleChange.SetEnergyChange( 0. );
-      aParticleChange.SetLocalEnergyDeposit (0.);
-      if (charge<0.) aParticleChange.SetStatusChange(fStopAndKill);
-          else       aParticleChange.SetStatusChange(fStopButAlive);
+      aParticleChange.ProposeEnergy( 0. );
+      aParticleChange.ProposeLocalEnergyDeposit (0.);
+      if (charge<0.) aParticleChange.ProposeTrackStatus(fStopAndKill);
+          else       aParticleChange.ProposeTrackStatus(fStopButAlive);
      }
 
    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);

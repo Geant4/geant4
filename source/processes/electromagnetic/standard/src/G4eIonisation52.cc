@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation52.cc,v 1.1 2003-08-08 11:30:02 vnivanch Exp $
+// $Id: G4eIonisation52.cc,v 1.2 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation52 physics process --------------------------------
@@ -491,20 +491,20 @@ G4VParticleChange* G4eIonisation52::PostStepDoIt( const G4Track& trackData,
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
 
-      aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
+      aParticleChange.ProposeMomentumDirection(finalPx, finalPy, finalPz);
     }
   else
     {
       Edep = finalKineticEnergy;
       finalKineticEnergy = 0.;
-      if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-      else             aParticleChange.SetStatusChange(fStopButAlive);
+      if (Charge < 0.) aParticleChange.ProposeTrackStatus(fStopAndKill);
+      else             aParticleChange.ProposeTrackStatus(fStopButAlive);
     }
 
-  aParticleChange.SetEnergyChange(finalKineticEnergy);
+  aParticleChange.ProposeEnergy(finalKineticEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(theDeltaRay);
-  aParticleChange.SetLocalEnergyDeposit(Edep);
+  aParticleChange.ProposeLocalEnergyDeposit(Edep);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }

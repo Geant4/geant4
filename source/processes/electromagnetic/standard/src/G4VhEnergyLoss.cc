@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.46 2003-06-16 17:02:13 gunter Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.47 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -667,7 +667,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                } while (subdelta<N);
 
             // update the particle direction and kinetic energy
-            if(subdelta > 0) aParticleChange.SetMomentumChange(Px,Py,Pz);
+            if(subdelta > 0) aParticleChange.ProposeMomentumDirection(Px,Py,Pz);
             E = Tkin;
            }
           }
@@ -693,12 +693,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   {
    finalT = 0.;
    if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
-          aParticleChange.SetStatusChange(fStopAndKill);
-   else   aParticleChange.SetStatusChange(fStopButAlive);
+          aParticleChange.ProposeTrackStatus(fStopAndKill);
+   else   aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
 
-  aParticleChange.SetEnergyChange(finalT);
-  aParticleChange.SetLocalEnergyDeposit(E-finalT);
+  aParticleChange.ProposeEnergy(finalT);
+  aParticleChange.ProposeLocalEnergyDeposit(E-finalT);
 
   return &aParticleChange;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.3 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4AnnihiToMuPair.cc,v 1.4 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -30,8 +30,9 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......//
 //
-// 04.02.03 : cosmetic simplifications (mma)
 // 27.01.03 : first implementation (hbu)
+// 04.02.03 : cosmetic simplifications (mma)
+// 25.10.04 : migrade to new interfaces of ParticleChange (vi)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -229,9 +230,8 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
   // Kill the incident positron 
   //
-  aParticleChange.SetMomentumChange( 0., 0., 0. );
-  aParticleChange.SetEnergyChange(0.); 
-  aParticleChange.SetStatusChange(fStopAndKill);
+  aParticleChange.ProposeEnergy(0.); 
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   return &aParticleChange;
 }

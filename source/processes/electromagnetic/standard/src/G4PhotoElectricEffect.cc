@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.31 2004-08-13 14:21:55 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.32 2004-10-25 09:22:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -208,9 +208,9 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    //
    // Kill the incident photon 
    //
-   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);
-   aParticleChange.SetEnergyChange(0.);  
-   aParticleChange.SetStatusChange(fStopAndKill); 
+   aParticleChange.ProposeLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);
+   aParticleChange.ProposeEnergy(0.);  
+   aParticleChange.ProposeTrackStatus(fStopAndKill); 
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
