@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.2 2003-11-02 16:06:06 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.3 2003-11-17 11:29:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,9 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   if (pMother)
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    if (pLogical == motherLogical)
+      G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+                  FatalException, "Cannot place a volume inside itself!");
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
   }
@@ -64,6 +67,9 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   if (pMother)
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    if (pLogical == motherLogical)
+      G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+                  FatalException, "Cannot place a volume inside itself!");
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
   }
@@ -71,7 +77,6 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 
 //
 // The logical volume of the mother is utilised (not the physical)
-// The physical volume is needed, known and set only at tracking time.
 //
 
 G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
@@ -84,6 +89,9 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   : G4VPhysicalVolume(pRot,tlate,pName,pCurrentLogical,0),
     fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
+  if (pCurrentLogical == pMotherLogical)
+    G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
 }
@@ -98,9 +106,11 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   : G4VPhysicalVolume(0,Transform3D.getTranslation(),pName,pCurrentLogical,0),
     fmany(pMany), fcopyNo(pCopyNo)
 {
+  if (pCurrentLogical == pMotherLogical)
+    G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
   SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
   fallocatedRotM = (GetRotation() != 0);
-  
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
 }

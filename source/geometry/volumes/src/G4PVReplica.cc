@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.3 2003-11-02 16:06:06 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.4 2003-11-17 11:29:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,9 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                 "NULL pointer to mother. World volume cannot be sliced !");
   }
   G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+  if (pLogical == motherLogical)
+    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
   SetMotherLogical(motherLogical);
   motherLogical->AddDaughter(this);
   if (motherLogical->GetNoDaughters() != 1)
@@ -82,6 +85,9 @@ G4PVReplica::G4PVReplica( const G4String& pName,
     G4Exception("G4PVReplica::G4PVReplica()", "NullPointer", FatalException,
                 "Invalid setup. NULL pointer specified as mother !");
   }
+  if (pLogical == pMotherLogical)
+    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical->GetNoDaughters() != 1)
