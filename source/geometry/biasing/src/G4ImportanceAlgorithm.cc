@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.5 2002-07-18 14:55:50 dressel Exp $
+// $Id: G4ImportanceAlgorithm.cc,v 1.6 2002-10-10 13:17:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,9 +49,17 @@ G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
 }
 
 G4Nsplit_Weight
-G4ImportanceAlgorithm::Calculate(G4double ipre_over_ipost,
+G4ImportanceAlgorithm::Calculate(G4double ipre,
+				 G4double ipost,
                                  G4double init_w) const
 {
+  if (ipost==0.){
+    return G4Nsplit_Weight(0,0);
+  }
+  if (ipre==0.){
+    G4Exception("Error: G4ImportanceAlgorithm::Calculate: ipre==0.");
+  }
+  G4double ipre_over_ipost = ipre/ipost;
   if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
     G4std::ostrstream os;
     os << "Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = "

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.hh,v 1.4 2002-08-29 15:30:49 dressel Exp $
+// $Id: G4ImportanceFinder.hh,v 1.5 2002-10-10 13:17:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,10 +55,8 @@ public:  // with description
   ~G4ImportanceFinder();
     // destruction
 
-  G4double GetIPre_over_IPost(const G4GeometryCell &prekey,
-			      const G4GeometryCell &postkey) const;
-    // get the ratio of importances of the pre over the
-    // post G4GeometryCell importances.
+  G4double GetImportance(const G4GeometryCell &gCell) const;
+  // get the importance to a G4GeometryCell
 
 private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.5 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4ImportanceFinder.cc,v 1.6 2002-10-10 13:17:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,37 +45,16 @@ G4ImportanceFinder::~G4ImportanceFinder()
 {}
 
 G4double
-G4ImportanceFinder::GetIPre_over_IPost(const G4GeometryCell &prekey,
-		                       const G4GeometryCell &postkey) 
-  const
+G4ImportanceFinder::GetImportance(const G4GeometryCell &gCell) const
 {  
-  G4double ratio = 1;
-  // if either the pro or the post gCell is not known
-  // the ratio of pre over post importance is set to 1
-  // so no splitting od RR is done
-  if ( fIStore.IsKnown(prekey) && fIStore.IsKnown(postkey) ) {
-    G4double  ipre = fIStore.GetImportance(prekey);
-    G4double ipost = fIStore.GetImportance(postkey);
-    // importances < 0 are not allowed
-    if (ipre < 0 || ipost < 0 ) {
-      G4std::ostrstream os;
-      os << "ipre < 0 || ipost < 0, preGeometryCell = " << prekey 
-	 << ", postGeometryCell = " << postkey << '\0';
-      Error(os.str());
-    }
-    // importances == 0 mean don't do any biaisng here
-    else if (ipre == 0 || ipost == 0) {
-      ratio = 1;
-    }
-    else {
-      ratio =  ipre/ipost;
-    }
+  G4double  imp = fIStore.GetImportance(gCell);
+  // importances < 0 are not allowed
+  if (imp < 0) {
+    G4std::ostrstream os;
+    os << "imp < 0: GeometryCell = " << gCell  << '\0';
+    Error(os.str());
   }
-  else {
-    ratio = 1;
-  }
-
-  return ratio;
+  return imp;
 }
 
 void G4ImportanceFinder::Error(const G4String &m) const
