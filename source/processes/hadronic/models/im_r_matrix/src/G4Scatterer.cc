@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.12 2003-12-15 16:40:11 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.13 2004-02-05 10:48:49 stesting Exp $ //
 //
 
 #include "globals.hh"
@@ -53,7 +53,7 @@ G4Scatterer::G4Scatterer()
 
 G4Scatterer::~G4Scatterer()
 {
-  for_each(collisions.begin(), collisions.end(), G4Delete());
+  std::for_each(collisions.begin(), collisions.end(), G4Delete());
   collisions.clear();
 }
 

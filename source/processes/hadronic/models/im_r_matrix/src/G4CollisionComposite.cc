@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.3 2003-12-15 16:40:11 hpw Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.4 2004-02-05 10:48:48 stesting Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -44,7 +44,7 @@ G4CollisionComposite::G4CollisionComposite()
 
 G4CollisionComposite::~G4CollisionComposite()
 { 
-  for_each(components.begin(), components.end(), G4Delete());
+  std::for_each(components.begin(), components.end(), G4Delete());
 }
 
 
