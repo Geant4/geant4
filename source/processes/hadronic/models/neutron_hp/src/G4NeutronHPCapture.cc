@@ -64,7 +64,7 @@
   }
   
   #include "G4NeutronHPThermalBoost.hh"
-  G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+  G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
   {
     if(getenv("NeutronHPCapture")) G4cout <<" ####### G4NeutronHPCapture called"<<G4endl;
     G4Material * theMaterial = aTrack.GetMaterial();

@@ -56,8 +56,8 @@
   }
 
   G4ReactionProduct * 
-  G4NeutronHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double targetMass, 
-                                    G4int angularRep, G4int interpolE)
+  G4NeutronHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
+                                    G4int angularRep, G4int /*interpolE*/)
   {
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);

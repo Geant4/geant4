@@ -61,7 +61,7 @@ void G4NeutronHPLabAngularEnergy::Init(G4std::ifstream & aDataFile)
   }
 }
 
-G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4double massCode, G4double mass)
+G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4double massCode, G4double )
 {
    G4ReactionProduct * result = new G4ReactionProduct;
    G4int Z = static_cast<G4int>(massCode/1000);

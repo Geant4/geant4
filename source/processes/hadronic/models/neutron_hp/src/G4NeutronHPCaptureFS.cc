@@ -147,7 +147,7 @@
     return &theResult;
   }
 
-  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;

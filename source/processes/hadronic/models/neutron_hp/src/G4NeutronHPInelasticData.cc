@@ -29,7 +29,7 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 
-G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element*anE)
+G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
 {
   G4bool result = true;
   G4double eKin = aP->GetKineticEnergy();

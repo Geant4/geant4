@@ -36,11 +36,11 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 
-void G4NeutronHPIsotropic::Init(G4std::ifstream & aDataFile)
+void G4NeutronHPIsotropic::Init(G4std::ifstream & )
 {
 }
 
-G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double massCode, G4double mass)
+G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double massCode, G4double )
 {
    G4ReactionProduct * result = new G4ReactionProduct;
    G4int Z = static_cast<G4int>(massCode/1000);

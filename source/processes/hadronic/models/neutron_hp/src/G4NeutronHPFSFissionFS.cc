@@ -36,7 +36,7 @@
 #include "G4LorentzVector.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPFSFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+  void G4NeutronHPFSFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;

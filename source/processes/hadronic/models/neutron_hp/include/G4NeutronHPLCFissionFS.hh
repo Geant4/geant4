@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLCFissionFS.hh,v 1.6 2002-12-12 19:18:14 gunter Exp $
+// $Id: G4NeutronHPLCFissionFS.hh,v 1.7 2003-05-30 11:32:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLCFissionFS_h
@@ -47,7 +47,7 @@ class G4NeutronHPLCFissionFS : public G4NeutronHPFissionBaseFS
   }
   
   private:
-  G4ParticleChange * ApplyYourself(const G4Track & theTrack) { return NULL; }
+  G4ParticleChange * ApplyYourself(const G4Track & ) { return NULL; }
     
 };
 #endif
