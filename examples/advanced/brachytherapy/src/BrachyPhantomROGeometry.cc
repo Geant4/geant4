@@ -20,12 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// Code developed by:
+// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+//
 //    ************************************
 //    *                                  *
 //    *   BrachyPhantomROGeometry.cc    *
 //    *                                  *
 //    ************************************
-
+//
+// $Id: BrachyPhantomROGeometry.cc,v 1.3 2002-11-18 15:18:38 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"
 

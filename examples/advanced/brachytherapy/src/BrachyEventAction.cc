@@ -20,11 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Code developed by:
+//  S.Guatelli
+//
 //    *******************************
 //    *                             *
-//    *    BrachyEventAction.cc  	*
+//    *    BrachyEventAction.cc     *
 //    *                             *
 //    *******************************
+//
+// $Id: BrachyEventAction.cc,v 1.12 2002-11-18 15:18:38 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "BrachyPrimaryGeneratorActionI.hh"
 #include "BrachyEventAction.hh"
 #include "BrachyPhantomHit.hh"

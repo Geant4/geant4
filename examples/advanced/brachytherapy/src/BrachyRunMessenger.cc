@@ -20,14 +20,24 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Code developed by:
+//  S.Guatelli
 //
-// $Id: BrachyRunMessenger.cc,v 1.1 2002-11-15 17:31:23 guatelli Exp $
+// $Id: BrachyRunMessenger.cc,v 1.2 2002-11-18 15:18:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+//
+//    *******************************
+//    *                             *
+//    *    BrachyRunMessenger.cc    *
+//    *                             *
+//    *******************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "BrachyRunMessenger.hh"
 #include"BrachyFactoryIr.hh"

@@ -21,7 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.3 2002-11-15 17:31:21 guatelli Exp $
+// Code developed by:
+//  S.Guatelli
+//
+//    *********************************
+//    *                               *
+//    *    BrachyDetectorMessenger.cc *
+//    *                               *
+//    *********************************
+//
+//
+// $Id: BrachyDetectorMessenger.cc,v 1.4 2002-11-18 15:18:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

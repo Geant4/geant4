@@ -20,7 +20,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
+// $Id: Brachy.cc
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -28,13 +30,21 @@
 //
 // Code developed by:
 // S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+
 //
-// Brachytherapy simulates the energy deposition in a cubic (10*cm)
+//    *******************************
+//    *                             *
+//    *    Brachy.cc                *
+//    *                             *
+//    *******************************
+//
+// Brachytherapy simulates the energy deposition in a cubic (30*cm)
 //
 // brachytherapy source.
 //
 // Simplified gamma generation is used.
-// Source axis is oriented along Z axis. 
+// Source axis is oriented along Z axis. The source is in the centre
+//of the box.
 
 //default source Ir-192
 #include "G4RunManager.hh"

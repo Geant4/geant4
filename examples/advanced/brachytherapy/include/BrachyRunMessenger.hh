@@ -21,11 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunMessenger.hh,v 1.1 2002-11-15 17:31:20 guatelli Exp $
+// $Id: BrachyRunMessenger.hh,v 1.2 2002-11-18 15:18:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
+//
+//
+//    ********************************************
+//    *                                          *
+//    *      BrachyRunMessenger.hh               *
+//    *                                          *
+//    ********************************************
+// This class permits to switch the energy of the gamma delivered from the 
+//radionuclides (Iodium/Iridium)
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

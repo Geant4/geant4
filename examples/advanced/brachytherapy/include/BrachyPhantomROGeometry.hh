@@ -20,13 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: BrachyPhantomROGeometry.hh,v 1.3 2002-11-18 15:18:36 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //    ************************************
 //    *                                  *
 //    *    BrachyPhantomROGeometry.hh   *
 //    *                                  *
 //    ************************************
-
-
+//
+//The phantom is devided in voxels. the dimension of the voxel is 1mm
+//
 #ifndef BrachyPhantomROGeometry_h
 #define BrachyPhantomROGeometry_h 
 

@@ -20,11 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: BrachyPhantomHit.hh,v 1.4 2002-11-18 15:18:36 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 //    ********************************
 //    *                              *
-//    *    BrachyWaterBoxHit.hh      *
+//    *    BrachyPhantomHit.hh       *
 //    *                              *
 //    ********************************
+// It manages the hits 
 
 #ifndef BrachyPhantomHit_h
 #define BrachyPhantomHit_h 1
