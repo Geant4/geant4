@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.7 1999-06-07 17:26:41 japost Exp $
+// $Id: G4BREPSolid.cc,v 1.8 1999-06-10 09:49:30 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4BREPSolid.hh"
@@ -542,7 +542,7 @@ G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
 
 
       yoffset=pTransform.NetTranslation().y();
-      yMin=yoffset-Min.y();
+      yMin=yoffset+Min.y();
       yMax=yoffset+Max.y();
       if (pVoxelLimit.IsYLimited())
 	{
@@ -566,7 +566,7 @@ G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
 
 
       zoffset=pTransform.NetTranslation().z();
-      zMin=zoffset-Min.z();
+      zMin=zoffset+Min.z();
       zMax=zoffset+Max.z();
       if (pVoxelLimit.IsZLimited())
 	{
