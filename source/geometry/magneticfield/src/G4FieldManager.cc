@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.12 2003-11-08 03:44:52 japost Exp $
+// $Id: G4FieldManager.cc,v 1.13 2003-11-08 04:08:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,8 +40,8 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
      fAllocatedChordFinder(false),
      fDefault_Delta_One_Step_Value(0.01*mm), 
      fDefault_Delta_Intersection_Val(0.001*mm),
-     fEpsilonMinDefault(5.0e-7), 
-     fEpsilonMaxDefault(0.05),
+     fEpsilonMinDefault(5.0e-5), 
+     fEpsilonMaxDefault(0.001),
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 { 
@@ -58,8 +58,8 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
      fFieldChangesEnergy(false), 
      fDefault_Delta_One_Step_Value(0.01*mm),
      fDefault_Delta_Intersection_Val(0.001*mm),
-     fEpsilonMinDefault(5.0e-7), 
-     fEpsilonMaxDefault(0.05),
+     fEpsilonMinDefault(5.0e-5), 
+     fEpsilonMaxDefault(0.001),
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 {
