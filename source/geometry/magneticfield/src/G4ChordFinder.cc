@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.22 2001-11-21 16:43:16 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.23 2001-11-21 16:51:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -344,7 +344,6 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   }
 
   G4double  new_st_length; 
-  G4double smallDist = 0.01*mm ;
   if ( ABdist > 0.0 ){
      AE_fraction = ChordAE_Vector.mag() / ABdist;
   }else{
