@@ -48,7 +48,7 @@ Imsc:   Tables of transport mean free paths.
 IhIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 50 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -81,7 +81,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=25.77s Real=38.3s Sys=1.07s
+  User=36.02s Real=37.13s Sys=1.02s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -94,7 +94,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.16s Real=2.67s Sys=0.03s
+  User=3.02s Real=3.04s Sys=0.02s
 Idle> #
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

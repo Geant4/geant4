@@ -8,7 +8,7 @@ PreInit> /run/initialize
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
          delta ray energy sampled from  differential Xsection.
-/afs/cern.ch/sw/geant4/stt/ref+/src/geant4/../G4NDL0.1
+/afs/cern.ch/sw/geant4/stt/dev/src/geant4/../G4NDL0.1
 Tst11PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -48,7 +48,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
