@@ -6,8 +6,9 @@
 /control/saveHistory
 #
 # John's personal preferences
-/vis/lights/move_with_camera true
-/vis/set/marker_choices 1
+/vis/viewer/set/lightsMove true
+/vis/viewer/set/hiddenMarker true
+#/vis/verbose 10
 #
 # See list of detector possibilities.
 /test19det/detector
@@ -55,7 +56,7 @@ help /vis/sceneHandler/create
 # Create a viewer.
 /vis/viewer/create
 #
-/vis/set/sides 100
+/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
@@ -64,9 +65,9 @@ help /vis/sceneHandler/create
 # Create another viewer.
 /vis/viewer/create
 #
-/vis/camera/viewpoint 35 35
-/vis/set/drawing_style 2
-/vis/camera/projection_style 1 30
+/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/style surface
+/vis/viewer/set/projection perspective 30
 #
 /vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
@@ -74,7 +75,7 @@ help /vis/sceneHandler/create
 /vis/viewer/update
 #
 /vis/set/drawing_style 0
-/vis/camera/projection_style 0
+/vis/viewer/set/style wireframe
 #
 # Start a run to initialise/optimise geometry.
 /run/beamOn
@@ -84,7 +85,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume expHall_L
 /vis/sceneHandler/create OGLSX
 /vis/viewer/create
-/vis/camera/viewpoint 35 35
+/vis/viewer/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/update
 #
@@ -94,7 +95,7 @@ help /vis/sceneHandler/create
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/viewer/reset
-/vis/camera/viewpoint 35 35
+/vis/viewer/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/update
 #
@@ -102,7 +103,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume subtraction_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
-/vis/camera/viewpoint 35 35
+/vis/viewer/viewpointThetaPhi 35 35
 /vis/viewer/refresh
 /vis/viewer/update
 #
@@ -110,7 +111,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume union_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
-/vis/camera/viewpoint 35 35
+/vis/viewer/viewpointThetaPhi 35 35
 /vis/viewer/refresh
 /vis/viewer/update
 #
@@ -122,16 +123,16 @@ help /vis/sceneHandler/create
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/viewer/reset
-/vis/camera/viewpoint 35 35
+/vis/viewer/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /run/beamOn 1
 /vis/viewer/update
 #
 # G4Trap1
 /vis/viewer/reset
-#/vis/viewer/panTo -200 200 cm
-/vis/camera/pan -2750 750
-/vis/camera/zoom 5
+#/vis/viewer/panTo -200 200 cm  # Originally intended to be absolute coords.
+/vis/viewer/pan -275 75 cm
+/vis/viewer/zoom 5
 /vis/viewer/refresh
 /gun/direction -1 0 0
 /gun/position -20 120 -200 cm
@@ -243,11 +244,11 @@ help /vis/sceneHandler/create
 # G4Trap2
 /vis/viewer/reset
 #/vis/viewer/panTo -200 400 cm
-/vis/camera/pan -2750 2750
-/vis/camera/viewpoint 90 180
+/vis/viewer/pan -275 275 cm
+/vis/viewer/viewpointThetaPhi 90 180
 #/vis/viewer/panTo -200 0 cm
-/vis/camera/pan -2000 0
-/vis/camera/zoom 5
+/vis/viewer/pan -200 0 cm
+/vis/viewer/zoom 5
 /vis/viewer/refresh
 /gun/direction 0 0 -1
 /gun/position -200 400 -20 cm
@@ -269,8 +270,8 @@ help /vis/sceneHandler/create
 # Displaced solid.
 /vis/viewer/reset
 #/vis/viewer/panTo 200 -200 cm
-/vis/camera/pan 1250 -3250
-/vis/camera/zoom 5
+/vis/viewer/pan 125 -325 cm
+/vis/viewer/zoom 5
 /vis/viewer/refresh
 /gun/position 100 -180 0 cm
 /gun/direction 1 0 0
@@ -280,8 +281,8 @@ help /vis/sceneHandler/create
 # Boolean solid.
 /vis/viewer/reset
 #/vis/viewer/panTo 250 -50 cm
-/vis/camera/pan 1750 -1750
-/vis/camera/zoom 3
+/vis/viewer/pan 175 -175 cm
+/vis/viewer/zoom 3
 /vis/viewer/refresh
 /gun/direction 1 0 0
 /gun/position 50 -105 0 cm
@@ -344,8 +345,8 @@ help /vis/sceneHandler/create
 # name = EB20 is entirely outside mother logical volume name = EBMX
 /vis/viewer/reset
 #/vis/viewer/panTo -200 0 cm
-/vis/camera/pan -2750 -1250
-/vis/camera/zoom 7
+/vis/viewer/pan -275 -125 cm
+/vis/viewer/zoom 7
 /vis/viewer/refresh
 /gun/direction 0 1 0
 # The following just crash with replicas...
@@ -381,19 +382,19 @@ help /vis/sceneHandler/create
 /vis/viewer/update
 #...end
 #
-/vis/camera/viewpoint 30 30
-/vis/camera/projection_style 1 30
+/vis/viewer/viewpointThetaPhi 30 30
+/vis/viewer/set/projection perspective 30
 /vis/viewer/refresh
 /vis/viewer/update
 #
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
 /vis/viewer/reset
-/vis/camera/viewpoint 30 30
+/vis/viewer/viewpointThetaPhi 30 30
 /vis/viewer/refresh
 /vis/viewer/update
 #
-/vis/camera/projection_style 1 30
+/vis/viewer/set/projection perspective  30
 /vis/rayTracer/column 400
 /vis/rayTracer/row 400
 /vis/viewer/refresh
