@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.12 2002-11-08 14:47:32 dressel Exp $
+// $Id: exampleB02.cc,v 1.13 2002-11-13 15:10:27 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@
 int main(int argc, char **argv)
 {  
   G4std::ostream *myout = &G4cout;
-  G4int numberOfEvent = 1000;
+  G4int numberOfEvent = 100;
 
   G4long myseed = 345354;
 
