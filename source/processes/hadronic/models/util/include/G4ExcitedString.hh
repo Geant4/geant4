@@ -139,6 +139,7 @@ G4LorentzVector G4ExcitedString::Get4Momentum() const
 	G4LorentzVector momentum;
 	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
+	    // std::cout << "HPW "<<thePartons[index]->Get4Momentum()<<std::endl;
 	    momentum += thePartons[index]->Get4Momentum();
 	}
 	return momentum;

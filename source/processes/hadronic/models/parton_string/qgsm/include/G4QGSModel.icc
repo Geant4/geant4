@@ -92,12 +92,12 @@ G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
     if (aPair->GetCollisionType() == G4PartonPair::DIFFRACTIVE)
     {
       aString = theDiffractiveStringBuilder.BuildString(aPair);
-//      G4cout << "diffractive "<<aString->Get4Momentum()<<endl;
+      // G4cout << "diffractive "<<aString->Get4Momentum()<<std::endl;
     }
     else
     {
       aString = theSoftStringBuilder.BuildString(aPair);
-//      G4cout << "soft "<<aString->Get4Momentum()<<endl;
+      // G4cout << "soft "<<aString->Get4Momentum()<<std::endl;
     }
     aString->Boost(theCurrentVelocity);  
     theStrings->push_back(aString);

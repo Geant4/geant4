@@ -76,12 +76,13 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
   
   private:
    // model parameters
-    double alpha;
-    double beta;
-    double theMinPz; 
-    double StrangeSuppress;
-    double sigmaPt;
-    double widthOfPtSquare; 
+    G4double alpha;
+    G4double beta;
+    G4double theMinPz; 
+    G4double StrangeSuppress;
+    G4double sigmaPt;
+    G4double widthOfPtSquare; 
+    G4double minTransverseMass;
 };
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextParton()

@@ -22,6 +22,7 @@
 //
 // Historic fragment from M.Komogorov; clean-up still necessary @@@
 #include "G4ExcitedStringDecay.hh"
+#include "G4KineticTrack.hh"
 
 G4ExcitedStringDecay::G4ExcitedStringDecay()
 {
@@ -65,14 +66,27 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
        return TRUE;
     G4LorentzVector SumMom;
     G4double        SumMass = 0;     
-    G4double        TotalCollisionMass = TotalCollisionMom.m(); 
+    G4double        TotalCollisionMass = TotalCollisionMom.m();
+    if( !(SumMom<1) && !(SumMom>-1) )
+    {
+      std::cout << "TotalCollisionMomentum = "<<TotalCollisionMom<<G4endl;
+      throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay received nan mass...");
+    }
     // Calculate sum hadron 4-momenta and summing hadron mass
     unsigned int cHadron;
     for(cHadron = 0; cHadron < Output->size(); cHadron++)
-        {
+    {
         SumMom  += Output->operator[](cHadron)->Get4Momentum();
+	if( !(SumMom<1) && !(SumMom>-1) )
+	{
+          throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay generated nan momentum...");
+	}
         SumMass += Output->operator[](cHadron)->GetDefinition()->GetPDGMass();
-        }
+	if( !(SumMom<1) && !(SumMom>-1) )
+	{
+          throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay generated nan mass...");
+	}
+    }
     if (SumMass > TotalCollisionMass) return FALSE;
     SumMass = SumMom.m2();
     if (SumMass < 0) return FALSE;
@@ -113,6 +127,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
       G4cout << "G4ExcitedStringDecay::EnergyAndMomentumCorrector - Warning"<<G4endl;
       G4cout << "   Scale not unity at end of iteration loop: "<<TotalCollisionMass<<" "<<Sum<<" "<<Scale<<G4endl;
       G4cout << "   Increase number of attempts or increase ERRLIMIT"<<G4endl;
+       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay failed to correct...");
     }
 
     // Compute c.m.s. interaction velocity and KTV back boost   
