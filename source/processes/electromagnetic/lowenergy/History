@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2001-06-05 15:04:47 pia Exp $
+$Id: History,v 1.76 2001-06-05 19:03:03 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,10 +19,10 @@ committal in the CVS repository !
 
 05.06.2001 - MGP, tag emlowen-V03-01-17
              Fix in G4QAOLowEnergyLoss by S. Chauvie of bugs introduced
-             with the changes below             
+             with the changes below    
+             Also fixes in unit tests related to hadron ionisation         
 
-01.06.2001 - 
-             V.Ivanchenko change G4QAOLowEnergyLoss: materials
+01.06.2001 - V.Ivanchenko change G4QAOLowEnergyLoss: materials
              search by Z not name, validity range down to 5 keV,
              fix sign of the Barkas term
 
