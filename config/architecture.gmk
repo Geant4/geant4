@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.52 1999-11-30 09:30:35 morita Exp $
+# $Id: architecture.gmk,v 1.53 1999-12-01 14:37:12 morita Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -98,40 +98,61 @@ ifndef G4BIN
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
+####################### schema directories for G4ODBMS #######################
+ifdef G4ODBMS
 # If not specified, the default path for G4 schema G4SCHEMA_DIR is
-# set to $G4WORKDIR/schema/$G4SYSTEM ...
+# set to $G4LIB/$G4SYSTEM/schema ...
 #
 ifndef G4SCHEMA_DIR
-  G4SCHEMA_DIR := $(G4WORKDIR)/schema/$(G4SYSTEM)
+  G4SCHEMA_DIR := $(G4LIB)/$(G4SYSTEM)/schema
   G4SCHEMA_INCLUDE := $(G4SCHEMA_DIR)/include
+endif
+ifndef G4SCHEMA_FDID
   G4SCHEMA_FDID := 207
 endif
-ifdef G4ODBMS
-  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
-  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_INCLUDE) ] && mkdir -p $(G4SCHEMA_INCLUDE) )
-endif
+
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_INCLUDE) ] && mkdir -p $(G4SCHEMA_INCLUDE) )
 
 # If not specified, the default path for G4 temporary schema G4TMPSCHEMA_DIR is
-# set to $G4WORKDIR/tmp/schema (for building persistency library)...
+# set to $G4TMP/$G4SYSTEM/schema (for building persistency library)...
 #
 ifndef G4TMPSCHEMA_DIR
-  G4TMPSCHEMA_DIR := $(G4WORKDIR)/tmp/schema/$(G4SYSTEM)
+  G4TMPSCHEMA_DIR := $(G4TMP)/$(G4SYSTEM)/schema
   G4TMPSCHEMA_BOOT := $(G4TMPSCHEMA_DIR)/G4SCHEMA
 endif
-ifdef G4ODBMS
-  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_DIR) ] && mkdir -p $(G4TMPSCHEMA_DIR) )
-endif
 
-# If not specified, the default path for G4 example federated database is
-# set to $HOME/G4EXAMPLE ...
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_DIR) ] && mkdir -p $(G4TMPSCHEMA_DIR) )
+
+# If not specified, the default path for G4 example schema G4EXAMPLE_BOOT_DIR is
+# set to $G4WORKDIR/exampleSchema (for persistency examples)...
 #
 ifndef G4EXAMPLE_BOOT_DIR
-  G4EXAMPLE_BOOT_DIR := $(HOME)/G4EXAMPLE
-  G4EXAMPLE_BOOT := $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE
+  G4EXAMPLE_BOOT_DIR := $(G4WORKDIR)/exampleSchema/$(G4SYSTEM)
 endif
-ifdef G4ODBMS
-  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_BOOT_DIR) ] && mkdir -p $(G4EXAMPLE_BOOT_DIR) )
+
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_BOOT_DIR) ] && mkdir -p $(G4EXAMPLE_BOOT_DIR) )
+
+ifndef G4EXAMPLE_BOOT
+  G4EXAMPLE_BOOT = $(G4EXAMPLE_BOOT_DIR)/$(name)
 endif
+
+# If not specified, the default path for G4 example runtime federated
+# database directory G4EXAMPLE_FD_DIR is set to $G4WORKDIR/exampleFD
+# (for persistency examples)...
+#
+ifndef G4EXAMPLE_FD_DIR
+  G4EXAMPLE_FD_DIR := $(G4WORKDIR)/exampleFD/$(G4SYSTEM)
+endif
+
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_FD_DIR) ] && mkdir -p $(G4EXAMPLE_FD_DIR) )
+
+ifndef G4EXAMPLE_FD
+  G4EXAMPLE_FD = $(G4EXAMPLE_FD_DIR)/$(name)
+endif
+
+endif
+####################### schema directories for G4ODBMS #######################
 
 # If G4DEBUG not specified, the default compilation is optimised ...
 #
