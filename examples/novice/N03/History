@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2001-11-07 22:27:31 stanaka Exp $
+$Id: History,v 1.44 2001-11-14 04:55:36 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14-11-01 Satoshi Tanaka (exampleN03-V03-02-05)
+- exN03Vis8.mac : Batch visualization with the DAWNFILE driver
+- exN03Vis9.mac : Multi-page PostScript file generation (old exN03Vis8.mac)
 
 07-11-01 Satoshi (exampleN03-V03-02-04a)
 - /vis/viewer/viewpointThetaPhi ==> /vis/viewer/set/viewpointThetaPhi
