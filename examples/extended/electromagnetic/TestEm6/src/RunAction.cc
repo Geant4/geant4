@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2004-09-27 09:35:38 maire Exp $
+// $Id: RunAction.cc,v 1.9 2005-03-02 15:47:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,29 +48,35 @@ RunAction::RunAction()
  // Creating the analysis factory
  af = AIDA_createAnalysisFactory();
  
- // Creating the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
+ if (af) { 
+   // Creating the tree factory
+   AIDA::ITreeFactory* tf = af->createTreeFactory();
  
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create("testem6.paw", "hbook", readOnly, createNew, "uncompress");
- //tree = tf->create("testem4.root", "root",readOnly, createNew, "uncompress");
- //tree = tf->create("testem4.aida", "XML" ,readOnly, createNew, "uncompress");
+   // Creating a tree mapped to an hbook file.
+   G4bool readOnly  = false;
+   G4bool createNew = true;
+   tree = tf->create("testem6.hbook","hbook",readOnly,createNew,"uncompress");
+   //tree = tf->create("testem6.root", "root",readOnly,createNew,"uncompress");
+   //tree = tf->create("testem6.XML" ,"XML"  ,readOnly,createNew,"uncompress");
+   delete tf;
+   
+   if (tree) {   
+     // Creating a histogram factory
+     AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
- // Creating a histogram factory, whose histograms will be handled by the tree
- AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
- // Creating histograms
- histo[0] = hf->createHistogram1D("1","1/(1+(theta+[g]+)**2)",100, 0 ,1.);
- histo[1] = hf->createHistogram1D("2","log10(theta+ [g]+)",   100,-3.,1.);
- histo[2] = hf->createHistogram1D("3","log10(theta- [g]-)",   100,-3.,1.);
- histo[3] = hf->createHistogram1D("4","log10(theta+ [g]+ -theta- [g]-)",100,-3.,1.);
- histo[4] = hf->createHistogram1D("5","xPlus" ,100,0.,1.);
- histo[5] = hf->createHistogram1D("6","xMinus",100,0.,1.);
+     // Creating histograms
+     histo[0] = hf->createHistogram1D("1","1/(1+(theta+[g]+)**2)",100, 0 ,1.);
+     histo[1] = hf->createHistogram1D("2","log10(theta+ [g]+)",   100,-3.,1.);
+     histo[2] = hf->createHistogram1D("3","log10(theta- [g]-)",   100,-3.,1.);
+     histo[3] = hf->createHistogram1D("4","log10(theta+ [g]+ -theta- [g]-)",
+                                                                  100,-3.,1.);
+     histo[4] = hf->createHistogram1D("5","xPlus" ,100,0.,1.);
+     histo[5] = hf->createHistogram1D("6","xMinus",100,0.,1.);
   
- delete hf;
- delete tf;
+     delete hf;
+     G4cout << "\n----> Histogram tree is opened" << G4endl;
+   }
+ }
 #endif
     
 }
