@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.12 2001-10-02 00:32:07 asaim Exp $
+// $Id: G4UImanager.cc,v 1.13 2001-10-04 23:15:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,27 +229,39 @@ int G4UImanager::ApplyCommand(G4String aCommand)
 
   G4String commandString;
   G4String commandParameter;
+
   int ia = aCommand.index("[");
   while( ia != int(G4std::string::npos) )
   {
-    int ib = aCommand.index("]");
-    if( ib == int(G4std::string::npos) )
+    int ibx = -1;
+    while(ibx<0)
     {
-      G4cerr << aCommand << G4endl;
-      for(int iz=0;iz<ia;iz++) G4cerr << " ";
-      G4cerr << "^" << G4endl;
-      G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
-      return fCommandNotFound;
+      int ib = aCommand.index("]");
+      if( ib == int(G4std::string::npos) )
+      {
+        G4cerr << aCommand << G4endl;
+        for(int iz=0;iz<ia;iz++) G4cerr << " ";
+        G4cerr << "^" << G4endl;
+        G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
+        return fAliasNotFound;
+      }
+      G4String ps = aCommand(ia+1,aCommand.length()-(ia+1));
+      int ic = ps.index("[");
+      int id = ps.index("]");
+      if(ic!=int(G4std::string::npos) && ic < id)
+      { ia+=ic+1; }
+      else
+      { ibx = ib; }
     }
     G4String subs;
     if(ia>0) subs = aCommand(0,ia);
-    G4String alis = aCommand(ia+1,ib-ia-1);
-    G4String rems = aCommand(ib+1,aCommand.length()-(ia+ib));
+    G4String alis = aCommand(ia+1,ibx-ia-1);
+    G4String rems = aCommand(ibx+1,aCommand.length()-(ia+ibx));
     G4String* alVal = aliasList->FindAlias(alis);
     if(!alVal)
     {
       G4cerr << "Alias <" << alis << "> not found -- command ignored" << G4endl;
-      return fCommandNotFound;
+      return fAliasNotFound;
     }
     aCommand = subs+(*alVal)+rems;
     ia = aCommand.index("[");

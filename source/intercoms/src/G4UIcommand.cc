@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.10 2001-07-17 15:53:13 johna Exp $
+// $Id: G4UIcommand.cc,v 1.11 2001-10-04 23:15:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,8 @@ G4int G4UIcommand::DoIt(G4String parameterList)
       aToken = parameterToken();
       if( aToken.length()>0 && aToken(0)=='"' )
       {
-        while( aToken(aToken.length()-1) != '"' )
+        while( aToken(aToken.length()-1) != '"'
+               || ( aToken.length()==1 && aToken(0)=='"' ))
         {
           G4String additionalToken = parameterToken();
           if( additionalToken.isNull() )
