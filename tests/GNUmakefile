@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.56 2003-11-12 17:50:08 sadilov Exp $
+# $Id: GNUmakefile,v 1.57 2003-11-13 10:53:19 sadilov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -153,10 +153,10 @@ endif
 
 #temp
 # OLAP
-	@$(ECHO) Making OLAP Tests...
-	@for nn in $(OLAP); do \
-	  (cd test10$$nn && $(MAKE)); \
-	done;:
+#	@$(ECHO) Making OLAP Tests...
+#	@for nn in $(OLAP); do \
+#	  (cd test10$$nn && $(MAKE)); \
+#	done;:
 
 # Biasing
 	@$(ECHO) Making Biasing Tests...
