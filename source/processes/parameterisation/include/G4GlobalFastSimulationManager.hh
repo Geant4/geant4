@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.8 2001-07-11 10:08:24 gunter Exp $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.9 2002-11-02 00:10:34 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -88,6 +88,32 @@ public: // With  description
 
   static G4GlobalFastSimulationManager* GetGlobalFastSimulationManager();
   // Provides a global access to the GlobalFastSimulationManager
+  
+  G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
+						 const G4VFastSimulationModel* previousFound = 0) const;
+  // Fetch G4VFastSimulationModel by name:
+  //
+  //    o returns the G4VFastSimulationModel* of model with name modelName;
+  //    o returns 0 if no model found;
+  //
+  //       - usage:
+  //
+  //             myModel = gblManager->GetFastSimulationModel("MyModel");
+  //
+  //    o note for the case of several models having the same name:
+  //        - to get the first "MyModel" model:
+  //          
+  //             myModel1 = gblManager->GetFastSimulationModel("MyModel", 0);
+  //      
+  //        - to get the next one:
+  //          
+  //             myModel2 = gblManager->GetFastSimulationModel("MyModel", myModel1);
+  //
+  //        - and so on.
+  //    
+  //        - When gblManager->GetFastSimulationModel("MyModel", myModel_n)
+  //          returns a null pointer, no extra model with name "MyModel" exist.
+
    
 public: // Without description
 
@@ -100,6 +126,7 @@ public: // Without description
   //
   void AddFastSimulationManager(G4FastSimulationManager*);
   void RemoveFastSimulationManager(G4FastSimulationManager*);
+
 
   // Flag that the Parameterisation must be closed.
   void FastSimulationNeedsToBeClosed();
