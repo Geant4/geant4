@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2001-11-30 16:17:14 barrand Exp $
+$Id: README,v 1.11 2001-12-03 07:49:17 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -66,7 +66,15 @@ $Id: README,v 1.10 2001-11-30 16:17:14 barrand Exp $
  Working with the OpenScientist/Lab package :
  ------------------------------------------
   To reconstruct this example by using the OpenScientist/Lab 
- package (assuming that OpenScientist is installed ! ) do :
+ package (assuming that OpenScientist is installed ! ) you have
+ first to "setup" the environment of the Lab package and Geant4.
+ The Lab package (and all OpenScientist packages) being handled 
+ by the CMT tools, you may have to setup the environment
+ variable "CMTSITE" to execute site specific things in the chain
+ of setup files of the OpenScientist packages. Then for example at CERN :
+   csh> setenv CMTSITE CERN
+  (DOS> set CMTSITE=CERN_WIN32   (for Windows))
+ When done then do :
    csh> source <some directory>/Lab/<version>/cmt/setup.csh
    csh> source <your Geant4 setup script>.csh
    csh> setenv G4ANALYSIS_USE 1
@@ -84,6 +92,7 @@ $Id: README,v 1.10 2001-11-30 16:17:14 barrand Exp $
 
   To plot some histograms, spawn the Lab interactive tool with :
    csh> onx
+  (DOS> onx     (for Windows))
  click in File/Python to map a file chooser, choose AnaEx01.py
  to execute the AnaEx01.py that contains a Python script that
  do some analysis over the AnaEx01.root file (it gets an histo, plots it
