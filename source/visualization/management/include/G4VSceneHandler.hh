@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.17 2001-08-09 20:13:39 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.18 2001-08-14 18:36:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,7 +133,7 @@ public: // With description
   // }
 
   virtual void BeginPrimitives
-  (const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+  (const G4Transform3D& objectTransformation);
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
