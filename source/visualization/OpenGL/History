@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2004-07-16 14:31:18 johna Exp $
+$Id: History,v 1.38 2004-07-23 15:23:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+23rd July 2004  John Allison
+- Draws auxiliary edges if required.
+- Added auxiliary edge button.
 
 16th July 2004  John Allison  (opengl-V06-02-04)
 - Refinements to hidden line, hidden surface removal.

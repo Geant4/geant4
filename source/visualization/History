@@ -1,4 +1,4 @@
-$Id: History,v 1.255 2004-07-16 14:33:14 johna Exp $
+$Id: History,v 1.256 2004-07-23 15:23:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,10 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-16h July 2004  John Allison
+23rd July 2004  John Allison
+- Added auxiliary edge visible flag.
+
+16th July 2004  John Allison
 - Refined forced wireframe algorithm - *always* force wireframe even
   if hidden line removal is specified.
 - opengl-V06-02-04.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.23 2004-07-16 14:26:11 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.24 2004-07-23 15:23:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -401,6 +401,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   //Loop through all the facets...
+  glBegin (GL_QUADS);
   G4bool notLastFace;
   do {
 
@@ -409,18 +410,19 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
 
     //Loop through the four edges of each G4Facet...
-    //G4int lastEdgeFlag (true);
     G4bool notLastEdge;
     G4Point3D vertex[4];
     G4int edgeFlag[4];
     G4int edgeCount = 0;
-    glBegin (GL_QUADS);
     glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
 	       SurfaceUnitNormal.z());
     do {
       notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
 					      edgeFlag[edgeCount]);
       // Check to see if edge is visible or not...
+      if (fpViewer -> GetViewParameters().IsAuxEdgeVisible()) {
+	edgeFlag[edgeCount] = G4int (true);
+      }
       if (edgeFlag[edgeCount]) {
 	glEdgeFlag (GL_TRUE);
       } else {
@@ -446,9 +448,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if  (drawing_style == G4ViewParameters::hlr ||
 	 drawing_style == G4ViewParameters::hlhsr) {
 
-      glEnd ();  // Placed here to allow GL state changes below but
-		 // allow wireframe and hsr (surface) to proceed
-		 // through all facets unimpeded.
+      glEnd ();  // Placed here to balance glBegin above, allowing GL
+		 // state changes below, then glBegin again.  Avoids
+		 // having glBegin/End pairs *inside* loop in the more
+		 // usual case of no hidden line removal.
 
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.13 2004-07-15 15:43:27 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.14 2004-07-23 15:24:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -353,6 +353,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     do {  // loop over edges...
       notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
       // Check to see if edge is visible or not...
+      if (fpViewer -> GetViewParameters().IsAuxEdgeVisible()) {
+	edgeFlag = G4int (true);
+      }
       if (edgeFlag) {
 	// glEdgeFlag (GL_TRUE);
       } else {

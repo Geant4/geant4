@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.14 2003-06-16 17:14:11 gunter Exp $
+// $Id: G4ViewParameters.hh,v 1.15 2004-07-23 15:24:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,7 @@ public: // With description
 
   // Get and Is functions.
         DrawingStyle     GetDrawingStyle         () const;
+        G4bool           IsAuxEdgeVisible        () const;
         RepStyle         GetRepStyle             () const;
         G4bool           IsCulling               () const;
         G4bool           IsCullingInvisible      () const;
@@ -161,6 +162,7 @@ public: // With description
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
+  void SetAuxEdgeVisible       (G4bool);
   void SetRepStyle             (G4ViewParameters::RepStyle style);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
@@ -209,6 +211,7 @@ public: // With description
 private:
 
   DrawingStyle fDrawingStyle;    // Drawing style.
+  G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
   RepStyle     fRepStyle;        // Representation style.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.24 2004-07-14 15:39:03 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.25 2004-07-23 15:24:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -56,10 +56,20 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/autoRefresh",this);
   fpCommandAutoRefresh->SetGuidance
     ("/vis/viewer/set/autoRefresh [true|false]");
+  fpCommandAutoRefresh->SetGuidance("  default: false");
   fpCommandAutoRefresh->SetGuidance
     ("View is automatically refreshed after a change of view parameters.");
   fpCommandAutoRefresh->SetParameterName("auto-refresh",omitable = true);
   fpCommandAutoRefresh->SetDefaultValue(false);
+
+  fpCommandAuxEdge = new G4UIcmdWithABool
+    ("/vis/viewer/set/auxiliaryEdge",this);
+  fpCommandAuxEdge->SetGuidance("/vis/viewer/set/auxiliaryEdge [true|false]");
+  fpCommandAuxEdge->SetGuidance("  default: false");
+  fpCommandAuxEdge->SetGuidance
+    ("Auxiliary edges become visible/invisible.");
+  fpCommandAuxEdge->SetParameterName("edge",omitable = true);
+  fpCommandAuxEdge->SetDefaultValue(false);
 
   fpCommandCulling = new G4UIcommand("/vis/viewer/set/culling",this);
   fpCommandCulling->SetGuidance
@@ -96,6 +106,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
   fpCommandEdge->SetGuidance("/vis/viewer/set/edge [true|false]");
+  fpCommandEdge->SetGuidance("  default: true");
   fpCommandEdge->SetGuidance
     ("Edges become visible/invisible in surface mode.");
   fpCommandEdge->SetParameterName("edge",omitable = true);
@@ -106,7 +117,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandGlobalMarkerScale -> SetGuidance
     ("/vis/viewer/set/globalMarkerScale [<scale-factor>]");
   fpCommandGlobalMarkerScale -> SetGuidance
-    ("default: 1");
+    ("  default: 1");
   fpCommandGlobalMarkerScale -> SetGuidance
     ("Multiplies marker sizes by this factor.");
   fpCommandGlobalMarkerScale -> SetParameterName("scale-factorr",
@@ -116,6 +127,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandHiddenEdge =
     new G4UIcmdWithABool("/vis/viewer/set/hiddenEdge",this);
   fpCommandHiddenEdge->SetGuidance("/vis/viewer/set/hiddenEdge [true|false]");
+  fpCommandHiddenEdge->SetGuidance("  default: true");
   fpCommandHiddenEdge->SetGuidance
     ("Edges become hidden/seen in wireframe or surface mode.");
   fpCommandHiddenEdge->SetParameterName("hidden-edge",omitable = true);
@@ -125,6 +137,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     new G4UIcmdWithABool("/vis/viewer/set/hiddenMarker",this);
   fpCommandHiddenMarker->SetGuidance
     ("/vis/viewer/set/hiddenMarker [true|false]");
+  fpCommandHiddenMarker->SetGuidance("  default: true");
   fpCommandHiddenMarker->SetGuidance
     ("Markers are hidden by/seen though closer objects.");
   fpCommandHiddenMarker->SetParameterName("hidden-marker",omitable = true);
@@ -143,7 +156,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLightsThetaPhi -> SetGuidance
     ("/vis/viewer/set/lightsThetaPhi  [<theta>] [<phi>] [deg|rad]");
   fpCommandLightsThetaPhi -> SetGuidance
-    ("default: 60 45 deg - becomes \"current as default\"");
+    ("  default: 60 45 deg - becomes \"current as default\"");
   fpCommandLightsThetaPhi -> SetGuidance
     ("Set direction from target to lights.");
   parameter = new G4UIparameter("theta", 'd', omitable = true);
@@ -161,7 +174,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLightsVector -> SetGuidance
     ("/vis/viewer/set/lightsVector  [<x>] [<y>] [<z>]");
   fpCommandLightsVector -> SetGuidance
-    ("default: 1 1 1 - becomes \"current as default\"");
+    ("  default: 1 1 1 - becomes \"current as default\"");
   fpCommandLightsVector -> SetGuidance
     ("Set direction from target to lights.");
   parameter = new G4UIparameter("x", 'd', omitable = true);
@@ -179,7 +192,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLineSegments->SetGuidance
     ("/vis/viewer/set/lineSegmentsPerCircle  [<number-of-sides-per-circle>]");
   fpCommandLineSegments->SetGuidance
-    ("default: 24");
+    ("  default: 24");
   fpCommandLineSegments->SetGuidance
     ("Number of sides per circle in polygon/polyhedron graphical"
      "\nrepresentation of objects with curved lines/surfaces.");
@@ -190,7 +203,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandProjection->SetGuidance
     ("/vis/viewer/set/projection"
      " o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]");
-  fpCommandProjection->SetGuidance("Default: orthogonal 30 deg");
+  fpCommandProjection->SetGuidance("  default: orthogonal 30 deg");
   parameter = new G4UIparameter("projection",'s',omitable = true);
   parameter->SetDefaultValue("orthogonal");
   fpCommandProjection->SetParameter(parameter);
@@ -204,7 +217,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandSectionPlane = new G4UIcommand 
     ("/vis/viewer/set/sectionPlane on|off [x] [y] [z] [units] [nx] [ny] [nz]",this);
   fpCommandSectionPlane -> SetGuidance
-    ("Default: none 0 0 0 cm 1 0 0");
+    ("  default: none 0 0 0 cm 1 0 0");
   fpCommandSectionPlane -> SetGuidance
     (
      "Set plane for drawing section (DCUT).  Specify plane by"
@@ -253,7 +266,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandUpThetaPhi -> SetGuidance
     ("/vis/viewer/set/upThetaPhi  [<theta>] [<phi>] [deg|rad]");
   fpCommandUpThetaPhi -> SetGuidance
-    ("Default: 90 90 deg - becomes \"current as default\"");
+    ("  default: 90 90 deg - becomes \"current as default\"");
   fpCommandUpThetaPhi -> SetGuidance
     ("Set up vector.  Viewer will attempt always to show"
      " this direction upwards.");
@@ -272,7 +285,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandUpVector -> SetGuidance
     ("/vis/viewer/set/upVector  [<x>] [<y>] [<z>]");
   fpCommandUpVector -> SetGuidance
-    ("Default: 0 1 0 - becomes \"current as default\"");
+    ("  default: 0 1 0 - becomes \"current as default\"");
   fpCommandUpVector -> SetGuidance
     ("Set up vector.  Viewer will attempt always to show"
      " this direction upwards.");
@@ -291,7 +304,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandViewpointThetaPhi -> SetGuidance
     ("/vis/viewer/set/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
   fpCommandViewpointThetaPhi -> SetGuidance
-    ("Default: 0 0 deg - becomes \"current as default\"");
+    ("  default: 0 0 deg - becomes \"current as default\"");
   fpCommandViewpointThetaPhi -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
      "\nif lights are set to move with camera.");
@@ -310,7 +323,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandViewpointVector -> SetGuidance
     ("/vis/viewer/set/viewpointVector  [<x>] [<y>] [<z>]");
   fpCommandViewpointVector -> SetGuidance
-    ("Default: 0 0 1 - becomes \"current as default\"");
+    ("  default: 0 0 1 - becomes \"current as default\"");
   fpCommandViewpointVector -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
      "\nif lights are set to move with camera.");
@@ -327,6 +340,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAll;
+  delete fpCommandAuxEdge;
   delete fpCommandAutoRefresh;
   delete fpCommandCulling;
   delete fpCommandEdge;
@@ -426,6 +440,15 @@ void G4VisCommandsViewerSet::SetNewValue
       if (!vp.IsAutoRefresh()) G4cout << "not ";
       G4cout << "be automatically refreshed after a change of view parameters."
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandAuxEdge) {
+    vp.SetAuxEdgeVisible(GetNewBoolValue(newValue));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Auxiliary edges will ";
+      if (!vp.IsAuxEdgeVisible()) G4cout << "not ";
+      G4cout << "be visible." << G4endl;
     }
   }
 

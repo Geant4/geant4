@@ -304,6 +304,10 @@ NI /vis/viewer/clone
   default:                    false
   View is automatically refreshed after a change of view parameters.
 
+/vis/viewer/set/auxiliaryEdge [true|false]
+  default:                      false
+  Auxiliary edges become visible/invisible.
+
 /vis/viewer/set/culling
   g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
   [density] [unit]

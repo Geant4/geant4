@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.5 2001-07-11 10:09:15 gunter Exp $
+// $Id: G4ViewParameters.icc,v 1.6 2004-07-23 15:24:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,10 @@
 inline G4ViewParameters::DrawingStyle
 G4ViewParameters::GetDrawingStyle () const {
   return fDrawingStyle;
+}
+
+inline G4bool G4ViewParameters::IsAuxEdgeVisible () const {
+  return fAuxEdgeVisible;
 }
 
 inline G4ViewParameters::RepStyle G4ViewParameters::GetRepStyle () const {
@@ -166,6 +170,10 @@ inline G4bool G4ViewParameters::IsAutoRefresh () const {
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
+}
+
+inline void G4ViewParameters::SetAuxEdgeVisible (G4bool vis) {
+  fAuxEdgeVisible = vis;
 }
 
 inline void
