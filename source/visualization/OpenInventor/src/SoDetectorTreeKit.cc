@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.3 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.4 2004-11-22 23:04:08 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------Hepvis----------------------------------------*/
@@ -31,6 +31,10 @@
 /* Author:           Joe Boudreau Nov 11 1996                                */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
+
+// this :
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
+
 #include <math.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
@@ -48,8 +52,6 @@
 #include <Inventor/nodes/SoUnits.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTexture2Transform.h>
-
-#include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 // This statement is required
 SO_KIT_SOURCE(SoDetectorTreeKit) 
