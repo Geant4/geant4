@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,11 +13,15 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 #
-#/run/particle/setCut 1 mm
+##/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+/testem/phys/setCuts 1 mm
+#
 /run/initialize
 
 ***** Table : Nb of materials = 9 *****
@@ -139,10 +143,10 @@ Cut in energy
    Lead                          101 keV          1.38 MeV
 ===================================================
 #
-/run/particle/applyCuts
+#/run/particle/applyCuts
 #
-/run/verbose 2
-/event/printModulo 10
+/run/verbose 1
+/testem/event/printModulo 10
 #
 /gun/particle e-
 /gun/energy 5 GeV
@@ -153,39 +157,6 @@ Cut in energy
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   51 kByte
-    Total CPU time elapsed for geometry optimisation: 2.8 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-       0.00         0.00         0.00            1k Ring
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-      73.53         37k       401      397       1621         0.00    Ecal
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
-       1.32          0k         1       20         20         0.00    Ring
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -290,31 +261,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 500
-  User=1359.22s Real=1365.98s Sys=0.25s
+  User=377.85s Real=685.17s Sys=0.17s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    0.69%       0.34%             0-> 1.00 radl:    0.69%     0.34% 
-    1.00-> 2.00 radl:    2.64%       1.24%             0-> 2.00 radl:    3.33%     1.49% 
-    2.00-> 3.00 radl:    5.68%       2.23%             0-> 3.00 radl:    9.01%     3.46% 
-    3.00-> 4.00 radl:    8.60%       2.66%             0-> 4.00 radl:   17.61%     5.61% 
-    4.00-> 5.00 radl:   10.59%       2.85%             0-> 5.00 radl:   28.20%     7.71% 
-    5.00-> 6.00 radl:   11.39%       2.52%             0-> 6.00 radl:   39.59%     9.19% 
-    6.00-> 7.00 radl:   10.68%       2.06%             0-> 7.00 radl:   50.28%     9.75% 
-    7.00-> 8.00 radl:    9.55%       1.86%             0-> 8.00 radl:   59.83%     9.54% 
-    8.00-> 9.00 radl:    8.13%       1.78%             0-> 9.00 radl:   67.96%     8.82% 
-    9.00->10.00 radl:    6.55%       1.83%             0->10.00 radl:   74.51%     7.78% 
-   10.00->11.00 radl:    5.25%       1.61%             0->11.00 radl:   79.76%     6.73% 
-   11.00->12.00 radl:    4.09%       1.53%             0->12.00 radl:   83.85%     5.57% 
-   12.00->13.00 radl:    3.11%       1.34%             0->13.00 radl:   86.97%     4.55% 
-   13.00->14.00 radl:    2.29%       1.07%             0->14.00 radl:   89.25%     3.73% 
-   14.00->15.00 radl:    1.73%       0.94%             0->15.00 radl:   90.98%     3.00% 
-   15.00->16.00 radl:    1.29%       0.77%             0->16.00 radl:   92.28%     2.42% 
-   16.00->17.00 radl:    0.96%       0.59%             0->17.00 radl:   93.23%     1.94% 
-   17.00->18.00 radl:    0.70%       0.49%             0->18.00 radl:   93.93%     1.58% 
-   18.00->19.00 radl:    0.50%       0.42%             0->19.00 radl:   94.43%     1.28% 
-   19.00->20.00 radl:    0.33%       0.29%             0->20.00 radl:   94.76%     1.10% 
+    0.00-> 1.00 radl:    0.74%       0.41%             0-> 1.00 radl:    0.74%     0.41% 
+    1.00-> 2.00 radl:    2.65%       1.28%             0-> 2.00 radl:    3.39%     1.58% 
+    2.00-> 3.00 radl:    5.58%       2.38%             0-> 3.00 radl:    8.97%     3.69% 
+    3.00-> 4.00 radl:    8.60%       2.93%             0-> 4.00 radl:   17.57%     6.17% 
+    4.00-> 5.00 radl:   10.66%       2.76%             0-> 5.00 radl:   28.23%     8.23% 
+    5.00-> 6.00 radl:   11.19%       2.43%             0-> 6.00 radl:   39.42%     9.49% 
+    6.00-> 7.00 radl:   10.62%       2.06%             0-> 7.00 radl:   50.04%     9.85% 
+    7.00-> 8.00 radl:    9.41%       1.89%             0-> 8.00 radl:   59.45%     9.60% 
+    8.00-> 9.00 radl:    8.20%       1.83%             0-> 9.00 radl:   67.64%     8.76% 
+    9.00->10.00 radl:    6.65%       1.67%             0->10.00 radl:   74.29%     7.75% 
+   10.00->11.00 radl:    5.31%       1.69%             0->11.00 radl:   79.60%     6.58% 
+   11.00->12.00 radl:    4.10%       1.56%             0->12.00 radl:   83.70%     5.39% 
+   12.00->13.00 radl:    3.17%       1.30%             0->13.00 radl:   86.87%     4.35% 
+   13.00->14.00 radl:    2.41%       1.12%             0->14.00 radl:   89.28%     3.46% 
+   14.00->15.00 radl:    1.81%       0.96%             0->15.00 radl:   91.09%     2.70% 
+   15.00->16.00 radl:    1.37%       0.76%             0->16.00 radl:   92.46%     2.12% 
+   16.00->17.00 radl:    1.00%       0.59%             0->17.00 radl:   93.46%     1.69% 
+   17.00->18.00 radl:    0.72%       0.47%             0->18.00 radl:   94.18%     1.36% 
+   18.00->19.00 radl:    0.51%       0.40%             0->19.00 radl:   94.69%     1.09% 
+   19.00->20.00 radl:    0.37%       0.28%             0->20.00 radl:   95.06%     0.94% 
 
 
 
@@ -322,45 +293,40 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   36.98%       2.35%             0-> 0.25 radl:   36.98%     2.35% 
-    0.25-> 0.50 radl:   18.05%       1.44%             0-> 0.50 radl:   55.04%     2.19% 
-    0.50-> 0.75 radl:   10.25%       1.05%             0-> 0.75 radl:   65.28%     2.02% 
-    0.75-> 1.00 radl:    6.53%       0.83%             0-> 1.00 radl:   71.81%     1.83% 
-    1.00-> 1.25 radl:    4.51%       0.70%             0-> 1.25 radl:   76.32%     1.68% 
-    1.25-> 1.50 radl:    3.34%       0.54%             0-> 1.50 radl:   79.66%     1.56% 
-    1.50-> 1.75 radl:    2.61%       0.45%             0-> 1.75 radl:   82.27%     1.46% 
-    1.75-> 2.00 radl:    2.13%       0.39%             0-> 2.00 radl:   84.39%     1.40% 
-    2.00-> 2.25 radl:    1.77%       0.34%             0-> 2.25 radl:   86.16%     1.32% 
-    2.25-> 2.50 radl:    1.46%       0.33%             0-> 2.50 radl:   87.62%     1.27% 
-    2.50-> 2.75 radl:    1.26%       0.29%             0-> 2.75 radl:   88.88%     1.23% 
-    2.75-> 3.00 radl:    1.07%       0.25%             0-> 3.00 radl:   89.95%     1.19% 
-    3.00-> 3.25 radl:    0.93%       0.23%             0-> 3.25 radl:   90.88%     1.18% 
-    3.25-> 3.50 radl:    0.81%       0.20%             0-> 3.50 radl:   91.68%     1.17% 
-    3.50-> 3.75 radl:    0.70%       0.20%             0-> 3.75 radl:   92.39%     1.14% 
-    3.75-> 4.00 radl:    0.62%       0.18%             0-> 4.00 radl:   93.01%     1.13% 
-    4.00-> 4.25 radl:    0.53%       0.17%             0-> 4.25 radl:   93.54%     1.13% 
-    4.25-> 4.50 radl:    0.48%       0.16%             0-> 4.50 radl:   94.01%     1.11% 
-    4.50-> 4.75 radl:    0.41%       0.14%             0-> 4.75 radl:   94.42%     1.10% 
-    4.75-> 5.00 radl:    0.34%       0.13%             0-> 5.00 radl:   94.76%     1.10% 
+    0.00-> 0.25 radl:   38.94%       2.22%             0-> 0.25 radl:   38.94%     2.22% 
+    0.25-> 0.50 radl:   17.75%       1.34%             0-> 0.50 radl:   56.68%     2.20% 
+    0.50-> 0.75 radl:    9.87%       1.03%             0-> 0.75 radl:   66.55%     1.95% 
+    0.75-> 1.00 radl:    6.31%       0.83%             0-> 1.00 radl:   72.86%     1.76% 
+    1.00-> 1.25 radl:    4.41%       0.63%             0-> 1.25 radl:   77.28%     1.58% 
+    1.25-> 1.50 radl:    3.24%       0.52%             0-> 1.50 radl:   80.52%     1.46% 
+    1.50-> 1.75 radl:    2.57%       0.48%             0-> 1.75 radl:   83.08%     1.36% 
+    1.75-> 2.00 radl:    2.11%       0.41%             0-> 2.00 radl:   85.20%     1.29% 
+    2.00-> 2.25 radl:    1.72%       0.35%             0-> 2.25 radl:   86.92%     1.27% 
+    2.25-> 2.50 radl:    1.41%       0.30%             0-> 2.50 radl:   88.33%     1.21% 
+    2.50-> 2.75 radl:    1.21%       0.27%             0-> 2.75 radl:   89.55%     1.15% 
+    2.75-> 3.00 radl:    1.04%       0.25%             0-> 3.00 radl:   90.58%     1.11% 
+    3.00-> 3.25 radl:    0.89%       0.22%             0-> 3.25 radl:   91.47%     1.07% 
+    3.25-> 3.50 radl:    0.76%       0.20%             0-> 3.50 radl:   92.23%     1.04% 
+    3.50-> 3.75 radl:    0.65%       0.19%             0-> 3.75 radl:   92.88%     1.02% 
+    3.75-> 4.00 radl:    0.56%       0.17%             0-> 4.00 radl:   93.44%     1.00% 
+    4.00-> 4.25 radl:    0.49%       0.15%             0-> 4.25 radl:   93.93%     0.98% 
+    4.25-> 4.50 radl:    0.43%       0.15%             0-> 4.50 radl:   94.37%     0.96% 
+    4.50-> 4.75 radl:    0.37%       0.14%             0-> 4.75 radl:   94.74%     0.95% 
+    4.75-> 5.00 radl:    0.32%       0.12%             0-> 5.00 radl:   95.06%     0.94% 
 
                               SUMMARY
-                         energy deposit :   94.76 % E0 +-    1.10 % E0
-                         charged traklen:  439.14 radl +-    5.63 radl
-                         neutral traklen: 4523.63 radl +-  129.24 radl
+                         energy deposit :   95.06 % E0 +-    0.94 % E0
+                         charged traklen:  481.22 radl +-    5.08 radl
+                         neutral traklen: 4575.12 radl +-  125.89 radl
+
+SUMMARY TEST: limit value in RMS units = 3.000
+Mean energy deposit standard deviation :     -0.715     IS accepted
+RMS of mean energy standard deviation  :     -0.898
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1543815772, 2006737054
+ Current couple of seeds = 1601623615, 429961923
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-EventManager deleted.
-UImanager deleted.
-StateManager deleted.
-RunManager is deleting.
