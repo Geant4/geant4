@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.3 2001-11-08 23:31:24 pia Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.4 2001-11-09 17:13:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -70,28 +70,30 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
   histoManager->selectStore(nameStore);
 
   // Book histograms
-
+  histoManager->create1D("1","Number of secondaries", 10,0.,10.);
+  histoManager->create1D("2","Local energy deposit", 100,0.,10.);
+  histoManager->create1D("3","Kinetic Energy", 100,0.,10.);
+  histoManager->create1D("4","Theta", 100,0.,pi);
+  histoManager->create1D("5","Phi", 100,-pi,pi);
+  
+  /*
   IHistogram1D* hNSec = histoManager->create1D("1","Number of secondaries", 10,0.,10.);
-  //histo1D["nSec"] = hNSec;
-
+  histo1D["nSec"] = hNSec;
   IHistogram1D* hDeposit = histoManager->create1D("2","Local energy deposit", 100,0.,10.);
-  //histo1D["eDeposit"] = hDeposit;
-
+  histo1D["eDeposit"] = hDeposit;
   IHistogram1D* hEKin = histoManager->create1D("3","Kinetic Energy", 100,0.,10.);
-  //histo1D["eKin"] = hEKin;
-
+  histo1D["eKin"] = hEKin;
   IHistogram1D* hTheta = histoManager->create1D("4","Theta", 100,0.,pi);
-  //histo1D["theta"] = hTheta;
-
+  histo1D["theta"] = hTheta;
   IHistogram1D* hPhi = histoManager->create1D("5","Phi", 100,-pi,pi);
-  //histo1D["phi"] = hPhi;
+  histo1D["phi"] = hPhi;
+  */
 
- // Book ntuples
+  // Book ntuples
 
-  //  G4String ntFileName = storeName + "1" + ".hbook::1";
   G4String ntFileName = storeName + ".hbook::1";
   const char* name = ntFileName.c_str();
-  Lizard::NTuple* ntuple1 = ntFactory->createC(name);
+  ntuple1 = ntFactory->createC(name);
 
   //  Add and bind the attributes to the general final state nTuple
 
@@ -111,12 +113,11 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
       delete ntuple1;
       G4Exception("Could not addAndBind ntuple1");
     }
-  ntuples["primary"] = ntuple1;
+  // ntuples["primary"] = ntuple1;
 
-  //  ntFileName = storeName + "2" + ".hbook::2";
   ntFileName = storeName + ".hbook::2";
   name = ntFileName.c_str();
-  Lizard::NTuple* ntuple2 = ntFactory->createC(name);
+  ntuple2 = ntFactory->createC(name);
 
   //  Add and bind the attributes to the secondary nTuple
   if ( !( ntuple2->addAndBind( "e0"      , initialEnergy) &&
@@ -135,7 +136,7 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
       delete ntuple2;
       G4Exception("Could not addAndBind ntuple2");
     }
-  ntuples["secondaries"] = ntuple2;
+  //  ntuples["secondaries"] = ntuple2;
 }
 
 void G4ProcessTestAnalysis::finish()
@@ -143,6 +144,10 @@ void G4ProcessTestAnalysis::finish()
   // Because of a Lizard feature, ntuples must be deleted at this stage, 
   // not in the destructor (otherwise the ntuples are not stored)
 
+  delete ntuple1;
+  delete ntuple2;
+
+  /*
   G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
   Lizard::NTuple* ntuple;
   pos = ntuples.find("primary");
@@ -160,7 +165,7 @@ void G4ProcessTestAnalysis::finish()
       delete ntuple;
       ntuples["secondary"] = 0;
     }
-
+  */
   histoManager->store("1");
   histoManager->store("2");
   histoManager->store("3");
@@ -192,16 +197,10 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
       else if (particleName == "e+") partType = 2;
       else if (particleName == "gamma") partType = 3;
 
-      G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
-      pos = ntuples.find("secondaries");
-      if (pos != ntuples.end()) 
-	{
-	  Lizard::NTuple* ntuple2 = pos->second;
-	  ntuple2->addRow();
-	}
-            
+      // Fill ntuple
+      ntuple2->addRow();
+
       // Fill histograms
-      
       IHistogram1D* h = histoManager->retrieveHisto1D("3");
       h->fill(eKin);
       h = histoManager->retrieveHisto1D("4");
@@ -210,7 +209,15 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
       h->fill(phi);
 
       /*      
-      G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+      G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
+      pos = ntuples.find("secondaries");
+      if (pos != ntuples.end()) 
+	{
+	  Lizard::NTuple* ntuple2 = pos->second;
+	  ntuple2->addRow();
+	}
+
+        G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
 
       pos1 = histo1D.find("eKin");
       if (pos1 != histo1D.end()) 
@@ -281,13 +288,8 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
       else if (particleName == "gamma") nPhotons++;
     }
 
-  G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
-  pos = ntuples.find("primary");
-  if (pos != ntuples.end()) 
-    {
-      Lizard::NTuple* ntuple1 = pos->second;
-      ntuple1->addRow();
-    }
+  // Fill ntuple
+  ntuple1->addRow();
 
   // Fill histograms
   IHistogram1D* h = histoManager->retrieveHisto1D("1");
@@ -296,6 +298,13 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
   h->fill(eDeposit);
 
   /*
+  G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
+  pos = ntuples.find("primary");
+  if (pos != ntuples.end()) 
+    {
+      Lizard::NTuple* ntuple1 = pos->second;
+      ntuple1->addRow();
+    }
   G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
   pos1 = histo1D.find("nSec");
   if (pos1 != histo1D.end()) 
@@ -312,7 +321,6 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
     }
   */
 }
-
 
 G4ProcessTestAnalysis* G4ProcessTestAnalysis::getInstance()
 {

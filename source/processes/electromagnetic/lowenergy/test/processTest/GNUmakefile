@@ -1,10 +1,8 @@
-# $Id: GNUmakefile,v 1.6 2001-11-06 01:38:24 pia Exp $
+# $Id: GNUmakefile,v 1.7 2001-11-09 17:13:55 pia Exp $
 # --------------------------------------------------------------
 
-ifndef G4TARGET
-  G4TARGET := $(TESTTARGET)
-endif
-name := $(G4TARGET)
+name := processTest
+G4TARGET := $(name)
 G4EXLIB := true
 GENERAL=1
 
