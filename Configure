@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.5 2000-12-13 20:08:49 sadilov Exp $
+# $Id: Configure,v 1.6 2000-12-18 22:34:47 sadilov Exp $
 #
-# Generated on Wed Dec 13 23:05:14 MSK 2000 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 19 01:27:04 MSK 2000 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -223,6 +223,14 @@ cf_by=''
 cf_time=''
 contains=''
 d_portable=''
+g4analysis_build=''
+g4analysis_build_jas=''
+g4analysis_build_lab=''
+g4analysis_build_lizard=''
+g4analysis_use=''
+g4analysis_use_jas=''
+g4analysis_use_lab=''
+g4analysis_use_lizard=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
@@ -250,6 +258,17 @@ g4lib_build_shared=''
 g4lib_build_static=''
 g4lib_use_shared=''
 g4lib_use_static=''
+g4ui_build_gag_session=''
+g4ui_build_terminal_session=''
+g4ui_build_win32_session=''
+g4ui_build_xaw_session=''
+g4ui_build_xm_session=''
+g4ui_use_gag=''
+g4ui_use_tcsh=''
+g4ui_use_terminal=''
+g4ui_use_win32=''
+g4ui_use_xaw=''
+g4ui_use_xm=''
 lns=''
 c=''
 n=''
@@ -1586,7 +1605,7 @@ case  "$g4compiler" in
 	esac
 esac
 
-if [ X$install = Xy ] ; then
+if [ X$install = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -2105,6 +2124,165 @@ dflt="$orig_dflt"
 rm -f getfile.ok
 EOSC
 
+
+echo " "
+case "$g4analysis_build" in
+'')
+	g4analysis_build=n
+	;;
+esac
+
+case "$g4analysis_build_jas" in
+'')
+	g4analysis_build_jas=n
+	;;
+esac
+
+case "$g4analysis_build_lab" in
+'')
+	g4analysis_build_lab=n
+	;;
+esac
+
+case "$g4analysis_build_lizard" in
+'')
+	g4analysis_build_lizard=n
+	;;
+esac
+
+case "$g4analysis_use" in
+'')
+	g4analysis_use=n
+	;;
+esac
+
+case "$g4analysis_use_jas" in
+'')
+	g4analysis_use_jas=n
+	;;
+esac
+
+case "$g4analysis_use_lab" in
+'')
+	g4analysis_use_lab=n
+	;;
+esac
+
+case "$g4analysis_use_lizard" in
+'')
+	g4analysis_use_lizard=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD
+  G4ANALYSIS_USE
+  Specifies to include building (using) of the abstract G4AnalysisManager for
+  activating interfaces based on AIDA to analysis drivers.
+  No histogramming capabilities are possible without a specific
+  analysis driver activated.
+EOM`
+
+dflt=$g4analysis_use
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4analysis_build=n
+		g4analysis_use=n
+		;;
+	y*|Y*) 
+		g4analysis_build=y
+		g4analysis_use=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_LAB
+  Includes the Open Scientist proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_LAB
+  To use Open Scientist as analysis system in the application
+  to be built.
+EOM`
+
+dflt=$g4analysis_use_lab
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4analysis_build_lab=n
+		g4analysis_use_lab=n
+		;;
+	y*|Y*) 
+		g4analysis_build_lab=y
+		g4analysis_use_lab=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_LIZARD
+  Includes the Lizard proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_LIZARD
+  To use Lizard as analysis system in the application to be built.
+EOM`
+
+dflt=$g4analysis_use_lizard
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4analysis_build_lizard=n
+		g4analysis_use_lizard=n
+		;;
+	y*|Y*) 
+		g4analysis_build_lizard=y
+		g4analysis_use_lizard=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_JAS
+  Includes the JAS proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_JAS
+  To use JAS as analysis system in the application to be built.
+EOM`
+
+dflt=$g4analysis_use_jas
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4analysis_build_jas=n
+		g4analysis_use_jas=n
+		;;
+	y*|Y*) 
+		g4analysis_build_jas=y
+		g4analysis_use_jas=y
+		;;
+	esac
+
+
 echo " "
 
 #echo "SSS"
@@ -2125,7 +2303,7 @@ case "$g4conf" in
 	;;
 esac
 
-echo "g4conf=$g4conf"
+#echo "g4conf=$g4conf"
 
 case "$g4install" in
 '')
@@ -2166,7 +2344,7 @@ EOM`
 dflt=$g4install
 fn='d~'
 rp=$g4message
-. ./myread
+. ./getfile
 g4install=$ans
 g4workdir=$g4install
 
@@ -2192,9 +2370,9 @@ EOM`
 
 #dflt="NO DEFAULT ANSWER"
 dflt=$g4include
-fn='d~'
+fn='d~+'
 rp=$g4message
-. ./myread
+. ./getfile
 g4include=$ans
 
 fi
@@ -2231,7 +2409,7 @@ g4message=`cat << EOM
 (OPTIONAL) You can now customise installation directories:
   G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
   G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
-  G4BIN - bin/ containing generated installation scripts.
+  G4BIN - bin/ containing final executable and scripts.
 
 1) G4TMP:		$g4tmp
 
@@ -2254,21 +2432,21 @@ gans=$ans
 
 	1) 
 		dflt=$g4tmp
-		fn='d~'
+		fn='d~+'
 		rp="Where will be your Geant4 tmp directory?"
 		. ./getfile
 		g4tmp=$ans
 		;;
 	2) 
 		dflt=$g4lib
-		fn='d~'
+		fn='d~+'
 		rp="Where will be your Geant4 lib directory?"
 		. ./getfile
 		g4lib=$ans
 		;;
 	3) 
 		dflt=$g4bin
-		fn='d~'
+		fn='d~+'
 		rp="Where will be your Geant4 bin directory?"
 		. ./getfile
 		g4bin=$ans
@@ -2308,13 +2486,13 @@ case "$g4clhep_lib" in
 	;;
 esac
 
-while test 1 = 1  ; do
+#while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
 Please, specify where CLHEP is installed:
 
-1)  CLHEP_BASE_DIR:		$g4clhep_base_dir
+CLHEP_BASE_DIR:			$g4clhep_base_dir
 
 According to it will be set:
 
@@ -2324,28 +2502,26 @@ CLHEP_LIB:			CLHEP
 
 If you need to change one of those last three you can do it by editing
 the generated config.sh at the end of this session.
-
-Select from list above (e.g. 1)
 EOM`
 
 
-dflt="Press [Enter] for default settings"
-fn='d~'
+#dflt="Press [Enter] for default settings"
+#fn='d~'
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
 
-	case $gans in
+#	case $gans in
 
-	1) 
+#	1) 
 		dflt=$g4clhep_base_dir
 		fn='d~'
-		rp="Where is CLHEP installed?"
+#		rp="Where is CLHEP installed?"
 		. ./getfile
 		g4clhep_base_dir=$ans
 		g4clhep_base_include=$ans/include
 		g4clhep_base_lib=$ans/lib
-		;;
+#		;;
 #	2) 
 #		dflt=$g4clhep_include_dir
 #		fn='d~'
@@ -2369,12 +2545,12 @@ gans=$ans
 ##	[eE]) 
 ##		break
 ##		;;
-	*) 
+#	*) 
 #		echo " "
-		break
-		;;
-	esac
-done
+#		break
+#		;;
+#	esac
+#done
 echo " "
 
 case "$g4data" in
@@ -2877,6 +3053,239 @@ done
 if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
 g4use_ospace=""
 fi
+
+echo " "
+case "$g4ui_build_terminal_session" in
+'')
+	g4ui_build_terminal_session=y
+	;;
+esac
+
+case "$g4ui_use_terminal" in
+'')
+	g4ui_use_terminal=y
+	;;
+esac
+
+case "$g4ui_build_gag_session" in
+'')
+	g4ui_build_gag_session=n
+	;;
+esac
+
+case "$g4ui_use_gag" in
+'')
+	g4ui_use_gag=n
+	;;
+esac
+
+case "$g4ui_build_xm_session" in
+'')
+	g4ui_build_xm_session=n
+	;;
+esac
+
+case "$g4ui_build_xaw_session" in
+'')
+	g4ui_build_xaw_session=n
+	;;
+esac
+
+case "$g4ui_use_xm" in
+'')
+	g4ui_use_xm=n
+	;;
+esac
+
+case "$g4ui_use_xaw" in
+'')
+	g4ui_use_xaw=n
+	;;
+esac
+
+case "$g4ui_build_win32_session" in
+'')
+	g4ui_build_win32_session=n
+	;;
+esac
+
+case "$g4ui_use_win32" in
+'')
+	g4ui_use_win32=n
+	;;
+esac
+
+case "$g4ui_use_tcsh" in
+'')
+	g4ui_use_tcsh=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_TERMINAL_SESSION
+  Specifies to include in kernel library a basic dumb terminal
+  user interface (default).
+
+  G4UI_USE_TERMINAL
+  Specifies to use dumb terminal interface in the application to be
+  built (default).
+EOM`
+
+dflt=$g4ui_use_terminal
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_terminal_session=n
+		g4ui_use_terminal=n
+		;;
+	y*|Y*) 
+		g4ui_build_terminal_session=y
+		g4ui_use_terminal=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_GAG_SESSION
+  Specifies to include in kernel library the GAG based
+  user interface.
+
+  G4UI_USE_GAG
+  Specifies to use the GAG interface in the application to be
+  built.
+EOM`
+
+dflt=$g4ui_use_gag
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_gag_session=n
+		g4ui_use_gag=n
+		;;
+	y*|Y*) 
+		g4ui_build_gag_session=y
+		g4ui_use_gag=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_XAW_SESSION
+  Specifies to include in kernel library the XAW
+  Motif-based user interfaces.
+
+  G4UI_USE_XAW
+  Specifies to use the XAW interfaces in the
+  application to be built.
+EOM`
+
+dflt=$g4ui_use_xaw
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_xaw_session=n
+		g4ui_use_xaw=n
+		;;
+	y*|Y*) 
+		g4ui_build_xaw_session=y
+		g4ui_use_xaw=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_XM_SESSION
+  Specifies to include in kernel library the XM
+  Motif-based user interfaces.
+
+  G4UI_USE_XM
+  Specifies to use the XM interfaces in the
+  application to be built.
+EOM`
+
+dflt=$g4ui_use_xm
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_xm_session=n
+		g4ui_use_xm=n
+		;;
+	y*|Y*) 
+		g4ui_build_xm_session=y
+		g4ui_use_xm=y
+		;;
+	esac
+
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_WIN32_SESSION
+  Specifies to include in kernel library the WIN32 terminal interface
+  for Windows systems.
+
+  G4UI_USE_WIN32
+  Specifies to use the WIN32 interfaces in the application to be built
+  on Windows systems.
+EOM`
+
+dflt=$g4ui_use_win32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_win32_session=n
+		g4ui_use_win32=n
+		;;
+	y*|Y*) 
+		g4ui_build_win32_session=y
+		g4ui_use_win32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_USE_TCSH
+  Specifies to use the tcsh-style terminal in the application
+  to be built.
+EOM`
+
+dflt=$g4ui_use_tcsh
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_use_tcsh=n
+		;;
+	y*|Y*) 
+		g4ui_use_tcsh=y
+		;;
+	esac
+
 : end of configuration questions
 echo " "
 echo "End of configuration phase."
@@ -2970,6 +3379,14 @@ eunicefix='$eunicefix'
 expr='$expr'
 find='$find'
 flex='$flex'
+g4analysis_build='$g4analysis_build'
+g4analysis_build_jas='$g4analysis_build_jas'
+g4analysis_build_lab='$g4analysis_build_lab'
+g4analysis_build_lizard='$g4analysis_build_lizard'
+g4analysis_use='$g4analysis_use'
+g4analysis_use_jas='$g4analysis_use_jas'
+g4analysis_use_lab='$g4analysis_use_lab'
+g4analysis_use_lizard='$g4analysis_use_lizard'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
@@ -2998,6 +3415,17 @@ g4ospace_base_dir='$g4ospace_base_dir'
 g4radioactivedata='$g4radioactivedata'
 g4system='$g4system'
 g4tmp='$g4tmp'
+g4ui_build_gag_session='$g4ui_build_gag_session'
+g4ui_build_terminal_session='$g4ui_build_terminal_session'
+g4ui_build_win32_session='$g4ui_build_win32_session'
+g4ui_build_xaw_session='$g4ui_build_xaw_session'
+g4ui_build_xm_session='$g4ui_build_xm_session'
+g4ui_use_gag='$g4ui_use_gag'
+g4ui_use_tcsh='$g4ui_use_tcsh'
+g4ui_use_terminal='$g4ui_use_terminal'
+g4ui_use_win32='$g4ui_use_win32'
+g4ui_use_xaw='$g4ui_use_xaw'
+g4ui_use_xm='$g4ui_use_xm'
 g4use_ospace='$g4use_ospace'
 g4workdir='$g4workdir'
 gcc='$gcc'
