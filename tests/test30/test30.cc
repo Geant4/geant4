@@ -131,7 +131,8 @@ int main(int argc, char** argv)
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
   G4double  emaxpi   = 200.*MeV;
-  G4Material* material = 0; 
+  G4double ebinlog   = 2.0*MeV;
+  G4Material* material = 0;
 
   G4double ang[15] = {0.0};
   G4double bng1[15] = {0.0};
@@ -170,7 +171,7 @@ int main(int argc, char** argv)
   
 
 
-  // Track 
+  // Track
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
   G4double      aTime     = 0. ;
   G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
@@ -238,6 +239,7 @@ int main(int argc, char** argv)
   G4cout << "#emax(MeV)" << G4endl;
   G4cout << "#emaxpi(MeV)" << G4endl;
   G4cout << "#elim(MeV)" << G4endl;
+  G4cout << "#ebinlog(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
   G4cout << "#step(mm)" << G4endl;
   G4cout << "#material" << G4endl;
@@ -276,6 +278,10 @@ int main(int argc, char** argv)
       } else if(line == "#elim(MeV)") {
         (*fin) >> elim;
         elim *= MeV;
+      } else if(line == "#ebinlog(MeV)") {
+        (*fin) >> ebinlog;
+	if (ebinlog < 1.5) ebinlog = 1.5;
+        ebinlog *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
       } else if(line == "#exclusive") {
@@ -311,7 +317,7 @@ int main(int argc, char** argv)
       } else if(line == "#material") {
         (*fin) >> nameMat;
       } else if(line == "#particle") {
-        (*fin) >> namePart;				
+        (*fin) >> namePart;
       } else if(line == "#generator") {
         (*fin) >> nameGen;
       } else if(line == "#paw") {
@@ -370,7 +376,7 @@ int main(int argc, char** argv)
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName() 
 	     << " generator " << nameGen << " is unavailable"
-	     << G4endl;			
+	     << G4endl;
 	     exit(1);
     }
 
@@ -407,7 +413,7 @@ int main(int argc, char** argv)
 
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
-    G4double binlog = log10(2.0);
+    G4double binlog = log10(ebinlog);
     G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
     G4double logmax = binlog*nbinlog;
     G4double bine = emax/(G4double)nbinse;
