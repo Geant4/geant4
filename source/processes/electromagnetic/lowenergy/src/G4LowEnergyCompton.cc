@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.17 2000-01-26 09:50:00 lefebure Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.18 2000-03-07 10:01:07 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,8 +243,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
     const G4FirstLevel* oneAtomSF
 	  = (*theScatteringFunctionTable)[ZNumVec->index(elementZ)];
 
-    ScatteringFunction = util.DataLogInterpolation(x, (*(*oneAtomSF)[0]), 
-						   (*(*oneAtomSF)[1]))/cm;
+    ScatteringFunction = util.DataLogInterpolation(x/cm, (*(*oneAtomSF)[0]), 
+						   (*(*oneAtomSF)[1]));
 
     greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
     
