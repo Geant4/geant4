@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.10 2001-08-16 07:28:09 kurasige Exp $
+// $Id: G4Decay.cc,v 1.11 2001-08-22 08:12:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@
 // constructor
 G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
+				verboseLevel(1),
 				LowestBinValue(1.0e-3),
                                 HighestBinValue(10.0),
                                 TotBin(200),
