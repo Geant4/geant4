@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.54 2003-11-12 16:47:01 sadilov Exp $
+# $Id: GNUmakefile,v 1.55 2003-11-12 17:19:59 sadilov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -322,6 +322,20 @@ examples_links_source:
 	  done; \
 	done;:
 
+# BIAS_PYTHON
+	@for nn in $(BIAS_PYTHON); do \
+	  testdir=test8$$nn; \
+	  exdir=$(G4INSTALL)/examples/extended/biasing/B$$nn; \
+	  ln -s $$exdir $$testdir; \
+	  for i in $$exdir/*.cc; do \
+	    exin=`basename $$i .cc`.in; \
+	    exout=`basename $$i .cc`.out; \
+	    testin=`echo $$exin | sed s/exampleB/test8/`; \
+	    testout=`echo $$exout | sed s/exampleB/test8/`; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
+	done;:
+
 # ADV_EXAMPLES
 	@for nn in $(ADV_EXAMPLES); do \
 	  testdir=test8$$nn; \
@@ -395,7 +409,6 @@ examples_links_binaries:
 
 ###########################################################################
 clean_examples_links_source:
-
 # GDML
 	@rm -f test901
 
@@ -404,6 +417,10 @@ clean_examples_links_source:
 
 # Truc for test33/test34
 	@rm -f test34
+	@rm -f test33/test33.in
+	@rm -f test33/test33.out
+	@rm -f test33/test34.in
+	@rm -f test33/test34.out
 
 # Unstandard testname
 	@rm -f test104/test104.EMtest.in
