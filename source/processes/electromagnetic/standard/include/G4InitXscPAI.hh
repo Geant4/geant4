@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.1 2004-04-09 13:36:27 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.2 2004-04-15 09:13:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,11 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4OrderedTable.hh"
 
 class G4MaterialCutsCouple;
 class G4SandiaTable;
-class G4OrderedTable;
+// class G4OrderedTable;
 
 class G4InitXscPAI
 {
@@ -75,12 +76,14 @@ public:
   G4double RePartDielectricConst(G4double energy) ;
 
   G4double DifPAIxSection( G4double omega ) ;
+  G4double DifPAIdEdx( G4double omega ) ;
 
   G4double PAIdNdxCerenkov( G4double omega ) ;
 
   G4double PAIdNdxPlasmon( G4double omega ) ;
 
   G4double IntegralPAIxSection(G4double omega, G4double bg2, G4double Tmax) ;
+  G4double IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax) ;
 
   void     IntegralCerenkov() ;
   void     IntegralPlasmon() ;
@@ -97,6 +100,8 @@ public:
 
   G4double GetNormalizationCof() const { return fNormalizationCof ; }
           
+  G4double GetMatSandiaMatrix(G4int i, G4int j) const 
+          { return (*(*fMatSandiaMatrix)[i])[j]; }
 
 protected :
 
@@ -115,7 +120,6 @@ private :
   G4double fTmax;
   G4double fDensity ;            // Current density
   G4double fElectronDensity ;    // Current electron (number) density
-  G4int    fSplineNumber ;       // Current size of spline
 
 // Arrays of Sandia coefficients
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.1 2004-04-09 13:36:28 grichine Exp $
+// $Id: G4InitXscPAI.cc,v 1.2 2004-04-15 09:13:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ void G4InitXscPAI::KillCloseIntervals()
     {
       for(j = i; j < fIntervalNumber-1; j++)
       {
-        for( k = 0; k < 5; j++ )
+        for( k = 0; k < 5; k++ )
         {
           (*(*fMatSandiaMatrix)[j])[k] = (*(*fMatSandiaMatrix)[j+1])[k];
 	}
@@ -161,8 +161,8 @@ void G4InitXscPAI::Normalisation()
   fNormalizationCof *= fElectronDensity;
   delta = fNormalizationCof - cof;
   fNormalizationCof /= cof;
-  G4cout<<"G4InitXscPAI::fNormalizationCof/cof = "<<fNormalizationCof
-        <<";  at delta ="<<delta<<G4endl ;
+  //  G4cout<<"G4InitXscPAI::fNormalizationCof/cof = "<<fNormalizationCof
+  //    <<";  at delta ="<<delta<<G4endl ;
 
   for (G4int i = 0; i < fIntervalNumber; i++) // renormalisation on QM sum rule
   {
@@ -234,33 +234,27 @@ G4double G4InitXscPAI::RutherfordIntegral( G4int k,
 
 ///////////////////////////////////////////////////////////////
 //
-//  
+//  Integrate photo-absorption cross-section from I1 up to omega
 
 G4double G4InitXscPAI::IntegralTerm(G4double omega)
 {
   G4int i;
   G4double energy1, energy2, result = 0.; 
 	         	
-  for( i = fIntervalTmax; i >= 0; i-- )
+  for( i = 0; i <= fIntervalTmax; i++ )
   {
-    if(omega >= (*(*fMatSandiaMatrix)[i])[0])
+    if(i == fIntervalTmax) 
     {
-      if(i == fIntervalTmax) 
-      {
-        return RutherfordIntegral(i,omega,fTmax);
-      }
-      else 
-      {
-        result += RutherfordIntegral(i,omega,
-                     (*(*fMatSandiaMatrix)[i+1])[0]);
-      }
+      energy1 = (*(*fMatSandiaMatrix)[i])[0];
+      result += RutherfordIntegral(i,energy1,omega);
     }
-    else
+    else 
     {
-      if(i == fIntervalTmax) 
+      if( omega <= (*(*fMatSandiaMatrix)[i+1])[0])
       {
-        result += RutherfordIntegral(i,
-                (*(*fMatSandiaMatrix)[i])[0],fTmax);
+        energy1 = (*(*fMatSandiaMatrix)[i])[0];
+        result += RutherfordIntegral(i,energy1,omega);
+        break;
       }
       else
       {
@@ -275,7 +269,7 @@ G4double G4InitXscPAI::IntegralTerm(G4double omega)
 }
 
 
-/////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 //
 // Imaginary part of dielectric constant
 // (G4int k - interval number, G4double en1 - energy point)
@@ -327,9 +321,16 @@ G4double G4InitXscPAI::RePartDielectricConst(G4double enb)
       a3 = (*(*fMatSandiaMatrix)[i])[3]; 
       a4 = (*(*fMatSandiaMatrix)[i])[4];
  
-      if( abs(x0-x1) < 0.5*(x0+x1)*fDelta ) x0 = x1*(1+fDelta); 
-      if( abs(x0-x2) < 0.5*(x0+x2)*fDelta ) x0 = x2*(1+fDelta);
- 
+      if( abs(x0-x1) < 0.5*(x0+x1)*fDelta ) 
+      {
+        if(x0 >= x1) x0 = x1*(1+fDelta);
+        else         x0 = x1*(1-fDelta);
+      } 
+      if( abs(x0-x2) < 0.5*(x0+x2)*fDelta ) 
+      {
+        if(x0 >= x2) x0 = x2*(1+fDelta);
+        else         x0 = x2*(1-fDelta);
+      }
       xx1 = x1 - x0 ;
       xx2 = x2 - x0 ;
       xx12 = xx2/xx1 ;
@@ -429,6 +430,17 @@ G4double G4InitXscPAI::DifPAIxSection( G4double omega )
    return result ;
 
 } // end of DifPAIxSection 
+
+//////////////////////////////////////////////////////////////////////
+//
+// Differential PAI dEdx(omega)=omega*dNdx(omega)
+//
+
+G4double G4InitXscPAI::DifPAIdEdx( G4double omega )
+{
+  G4double dEdx = omega*DifPAIxSection(omega);
+  return dEdx;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -541,10 +553,72 @@ G4double G4InitXscPAI::PAIdNdxPlasmon( G4double omega )
 ////////////////////////////////////////////////////////////////////////
 //
 // Calculation of the PAI integral cross-section
-// fIntegralPAIxSection[1] = specific primary ionisation, 1/cm
-// and fIntegralPAIxSection[0] = mean energy loss per cm  in keV/cm
+// = specific primary ionisation, 1/cm
+// 
 
 G4double G4InitXscPAI::IntegralPAIxSection(G4double omega, G4double bg2, G4double Tmax)
+{
+  G4int i;
+  G4double energy1, energy2, result=0.;
+
+  fBetaGammaSq = bg2;
+  fTmax = Tmax;
+	         	
+  for( i = fIntervalNumber-1; i >= 0; i-- )
+  {
+    if( Tmax >= (*(*fMatSandiaMatrix)[i])[0] ) break;
+  }
+  if (i < 0) i = 0; // Tmax should be more than 
+                    // first ionisation potential
+  fIntervalTmax = i;
+
+  G4Integrator<G4InitXscPAI,G4double(G4InitXscPAI::*)(G4double)> integral;
+
+  for( i = fIntervalTmax; i >= 0; i-- )
+  {
+    fCurrentInterval = i;
+
+    if(omega >= (*(*fMatSandiaMatrix)[i])[0])
+    {
+      if(i == fIntervalTmax) 
+      {
+        return integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,omega,fTmax);
+      }
+      else 
+      {
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,omega,
+                     (*(*fMatSandiaMatrix)[i+1])[0]);
+        break;
+      }
+    }
+    else
+    {
+      if(i == fIntervalTmax) 
+      {
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,
+                (*(*fMatSandiaMatrix)[i])[0],fTmax);
+      }
+      else
+      {
+        energy1 = (*(*fMatSandiaMatrix)[i])[0];
+        energy2 = (*(*fMatSandiaMatrix)[i+1])[0];
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,
+                           energy1,energy2);
+      }
+    }
+    // G4cout<<"IntegralPAIdNdx<<"("<<omega<<")"<<" = "<<result<<G4endl;
+  }
+  return result;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculation of the PAI integral dEdx
+// = mean energy loss per unit length, keV/cm
+// 
+
+G4double G4InitXscPAI::IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax)
 {
   G4int i;
   G4double energy1, energy2, result=0.;
@@ -570,30 +644,31 @@ G4double G4InitXscPAI::IntegralPAIxSection(G4double omega, G4double bg2, G4doubl
     {
       if(i == fIntervalTmax) 
       {
-        return integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,omega,fTmax);
+        return integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,omega,fTmax);
       }
       else 
       {
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,omega,
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,omega,
                      (*(*fMatSandiaMatrix)[i+1])[0]);
+        break;
       }
     }
     else
     {
       if(i == fIntervalTmax) 
       {
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,
                 (*(*fMatSandiaMatrix)[i])[0],fTmax);
       }
       else
       {
         energy1 = (*(*fMatSandiaMatrix)[i])[0];
         energy2 = (*(*fMatSandiaMatrix)[i+1])[0];
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIxSection,
+        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,
                            energy1,energy2);
       }
     }
-    // G4cout<<"IntegralPAIdNdx<<"("<<omega<<")"<<" = "<<result<<G4endl;
+    // G4cout<<"IntegralPAIdEdx<<"("<<omega<<")"<<" = "<<result<<G4endl;
   }
   return result;
 }
