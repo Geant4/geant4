@@ -33,7 +33,7 @@ digits+hits                             digits_hits-V04-01-05
 - Added GetHit() and GetSize() to G4VHitsCollection.
 - Fixed minor memory leak in G4SDManager.
 
-event                                   event-V04-01-07
+event                                   event-V04-01-08
 -----
 - Added classes for scoring management:
   G4CellScorer[.hh.cc], G4CellScorerStore[.hh.cc],
@@ -82,7 +82,7 @@ geometry/management                     geommng-V04-01-05
   Field Manager to the daughter volumes. Fixes bug report for field
   by logical volume.
 
-geometry/solids/BREPS                   breps-V04-01-03
+geometry/solids/BREPS                   breps-V04-01-04
 ---------------------
 - Implemented virtual StreamInfo(...) method for all concrete BREP
   solids + G4PlacedSolid.
@@ -198,11 +198,12 @@ processes/electromagnetic/xrays         xrays-V04-01-04
 processes/hadronic                      ghad-V04-01-02
 ------------------
 - First release of the binary cascade model (models/kinetic-model module).
-- First release of HETC cascade model (models/cascade/cascade module).
+- First release of HETC cascade model
+  (models/cascade/cascade modulei - ghad-casc-V04-01-02).
 - First release of a generic scattering term for cascade type models
-  (models/generator/scattering module - ghad-scatt-V04-01-03).
+  (models/generator/scattering module - ghad-scatt-V04-01-04).
 - Fixes in modules (more detailed information in public release notes):
-  o cross_sections
+  o cross_sections (gcross-V04-01-04)
     + relaxing the condition for warning cross-section 'non-conservation'
       in electro-nuclear cross-section.
     + added protection for low-Z materials. 
