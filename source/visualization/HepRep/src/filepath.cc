@@ -8,10 +8,6 @@
 
 #include "zipios++/filepath.h"
 
-// MD: some platforms do not have S_ISSOCK
-#undef S_ISSOCK
-#define S_ISSOCK(mode) 0
-
 namespace zipios {
 
 using namespace std ;
