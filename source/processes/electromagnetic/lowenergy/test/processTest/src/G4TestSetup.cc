@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsSetup.cc,v 1.1 2001-10-15 12:34:03 pia Exp $
+// $Id: G4TestSetup.cc,v 1.1 2001-10-15 13:03:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -33,7 +33,7 @@
 // -------------------------------------------------------------------
 
 #include "globals.hh"
-#include "G4PhysicsSetup.hh"
+#include "G4TestSetup.hh"
 #include "G4VProcess.hh"
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -83,7 +83,7 @@
 #include "Randomize.hh"
 
 
-G4PhysicsSetup::G4PhysicsSetup()
+G4TestSetup::G4TestSetup()
 {
   ioniProcess = 0;
   bremProcess = 0;
@@ -96,7 +96,7 @@ G4PhysicsSetup::G4PhysicsSetup()
   step = new G4Step;
 }
 
-G4PhysicsSetup:: ~G4PhysicsSetup()
+G4TestSetup:: ~G4TestSetup()
 {
   if (! ioniSel) delete ioniProcess;
   if (! bremSel) delete bremProcess;
@@ -111,7 +111,7 @@ G4PhysicsSetup:: ~G4PhysicsSetup()
   track = 0;
 }
  
-G4VProcess* G4PhysicsSetup::createTestProcess() 
+G4VProcess* G4TestSetup::createTestProcess() 
 {
   G4VProcess* process = 0;
 
@@ -164,7 +164,7 @@ G4VProcess* G4PhysicsSetup::createTestProcess()
   return process;
 }
 
-void G4PhysicsSetup::createElectronProcesses()
+void G4TestSetup::createElectronProcesses()
 {
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
@@ -200,7 +200,7 @@ void G4PhysicsSetup::createElectronProcesses()
   ioniProcess->BuildPhysicsTable(*electron);
 }
 
-  void G4PhysicsSetup::makeGeometry()
+  void G4TestSetup::makeGeometry()
 {
   G4double dimX = 10.*cm;
   G4double dimY = 10.*cm;
@@ -216,7 +216,7 @@ void G4PhysicsSetup::createElectronProcesses()
 
 }
 
-  void G4PhysicsSetup::makeMaterials()
+  void G4TestSetup::makeMaterials()
 {
   G4Material* Be = new G4Material("Beryllium",    4.,  9.01*g/mole, 1.848*g/cm3);
   G4Material* Graphite = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
@@ -273,7 +273,7 @@ void G4PhysicsSetup::createElectronProcesses()
   G4cout << "The selected material is: " << material->GetName() << G4endl;
 }
 
-const G4Track* G4PhysicsSetup::makeTrack()
+const G4Track* G4TestSetup::makeTrack()
 {
   G4double energy = eMin + (eMax - eMin) * G4UniformRand();
 
@@ -305,7 +305,7 @@ const G4Track* G4PhysicsSetup::makeTrack()
   return track;
 }
 
-const G4Step* G4PhysicsSetup::makeStep()
+const G4Step* G4TestSetup::makeStep()
 {
   step->SetTrack(track);
 
@@ -329,7 +329,7 @@ const G4Step* G4PhysicsSetup::makeStep()
 return step;
 }
 
-void G4PhysicsSetup::init()
+void G4TestSetup::init()
 {
   G4int processSelection;
   G4cout << "LowEnergy [1] or Standard [2] or Polarised? [3]" << G4endl;

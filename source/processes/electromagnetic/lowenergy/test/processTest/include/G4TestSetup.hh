@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsSetup.hh,v 1.1 2001-10-15 12:33:20 pia Exp $
+// $Id: G4TestSetup.hh,v 1.1 2001-10-15 13:02:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -37,8 +37,8 @@
 
 // -------------------------------------------------------------------
 
-#ifndef G4PHYSICSSETUP_HH
-#define G4PHYSICSSETUP_HH 1
+#ifndef G4TESTSETUP_HH
+#define G4TESTSETUP_HH 1
 
 #include "globals.hh"
 
@@ -51,13 +51,13 @@ class G4PVPlacement;
 class G4Track;
 class G4Step;
 
-class G4PhysicsSetup {
+class G4TestSetup {
  
 public:
 
-  G4PhysicsSetup();
+  G4TestSetup();
 
-  virtual ~G4PhysicsSetup();
+  virtual ~G4TestSetup();
  
   void init();
 
@@ -66,11 +66,13 @@ public:
 
   G4VProcess* createTestProcess();
 
+  G4String setupName();
+
 private:
   
   // Hide copy constructor and assignment operator
-  G4PhysicsSetup(const G4PhysicsSetup&);
-  G4PhysicsSetup& operator=(const G4PhysicsSetup& right);
+  G4TestSetup(const G4TestSetup&);
+  G4TestSetup& operator=(const G4TestSetup& right);
 
   void createElectronProcesses();
   void makeGeometry();
