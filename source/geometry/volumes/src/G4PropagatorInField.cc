@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.33 2002-07-24 10:41:54 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.34 2002-07-29 07:46:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -113,7 +113,7 @@ G4double G4PropagatorInField::
      if ( newFieldMgr ) 
         fCurrentFieldMgr = newFieldMgr;
   }
-  GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass);  
+  // GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass);  
 
   G4FieldTrack  CurrentState(pFieldTrack);
 
@@ -391,6 +391,7 @@ G4double G4PropagatorInField::
 #else
      G4cout << " G4PropagatorInField: Particle that is stuck will be killed." << G4endl;
 #endif
+     fNoZeroStep = 0; 
      fParticleIsLooping= true;
   } 
 
