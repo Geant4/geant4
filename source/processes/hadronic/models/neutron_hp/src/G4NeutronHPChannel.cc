@@ -27,6 +27,7 @@
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "globals.hh"
+#include "G4HadTmpUtil.hh"
 
   G4double G4NeutronHPChannel::GetXsec(G4double energy)
   {
@@ -59,7 +60,7 @@
   G4bool G4NeutronHPChannel::Register(G4NeutronHPFinalState *theFS)
   {
     registerCount++;
-    G4int Z = static_cast<G4int>(theElement->GetZ()+0.0001);
+    G4int Z = G4lrint(theElement->GetZ());
     if(registerCount<5)
     {
       Z = Z-registerCount;
@@ -88,13 +89,17 @@
     {
       for (G4int i1=0; i1<nIsos; i1++)
       {
-//        G4cout <<" Init: normal case"<<G4endl;
+        // G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
         theFinalStates[i1]->SetA_Z(A, Z);
 	UpdateData(A, Z, count++, frac);
       }
     } else {
+      //G4cout <<" Init: mean case: "
+      //       <<theStableOnes.GetNumberOfIsotopes(Z)<<" "
+	//     <<Z<<" "<<theElement
+	//     << G4endl;
       G4int first = theStableOnes.GetFirstIsotope(Z);
       for(G4int i1=0; 
         i1<theStableOnes.GetNumberOfIsotopes(Z);
