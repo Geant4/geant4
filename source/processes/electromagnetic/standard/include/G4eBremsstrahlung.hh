@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.17 2003-08-08 11:30:00 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.18 2003-10-17 17:58:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 17-10-03 PrintInfoDefinition - virtual (V.Ivanchenko)
 //
 //
 // Class Description:
