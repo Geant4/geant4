@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.1 2003-03-13 17:25:43 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.2 2003-03-19 10:29:09 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -56,7 +56,6 @@
 //
 // Anche la sezione d'urto totale dovrebbe essere convertita
 // le tabelle di G4 mi paiono piu' complete pero' (le lascio!)
-// Bisogna convertire solo il database per le scaled CS
 //
 
 G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
@@ -121,7 +120,8 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   ebins.push_back(0.99);
   ebins.push_back(0.995);
   ebins.push_back(0.999);
-  ebins.push_back(0.9995);  ebins.push_back(0.9999);
+  ebins.push_back(0.9995);  
+  ebins.push_back(0.9999);
   ebins.push_back(0.99995);
   ebins.push_back(0.99999);
   ebins.push_back(1.0);
@@ -129,7 +129,10 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
  
   const G4String dataName("/penelope/br-sp-pen.dat");
   energySpectrum = new G4eBremsstrahlungSpectrum(ebins,dataName);
-
+ 
+  //the shape of the energy spectrum for positron is the same used for the electrons, 
+  //as the differential cross section is scaled of a factor f(E,Z) which is independent 
+  //on the energy of the gamma
 
   if(verboseLevel > 0) {
     G4cout << "G4PenelopeBremsstrahlungSpectrum is initialized"
@@ -145,7 +148,16 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   G4int    totBin = GetNbinEloss();
   crossSectionHandler = new G4BremsstrahlungCrossSectionHandler(energySpectrum, interpolation);
   crossSectionHandler->Initialise(0,lowKineticEnergy, highKineticEnergy, totBin);
-  crossSectionHandler->LoadShellData("brem/br-cs-");
+  if (&aParticleType==G4Electron::Electron()) 
+    {
+      //G4cout << "Leggo le sezioni d'urto degli elettroni" << G4endl;
+      crossSectionHandler->LoadShellData("brem/br-cs-");
+    }
+  else
+    {
+      //G4cout << "Leggo le sezioni d'urto dei positroni" << G4endl;
+      crossSectionHandler->LoadShellData("penelope/br-cs-pos-"); //cross section for positrons
+    }
 
   if (verboseLevel > 0) {
     G4cout << GetProcessName() 
@@ -240,7 +252,6 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
     // the cut cannot be below lowest limit
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
     tCut = G4std::min(highKineticEnergy, tCut);
-    //G4cout << material->GetName() << ":  " << tCut/keV << "keV" << G4endl;
     cutForSecondaryPhotons.push_back(tCut);
    
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -258,21 +269,22 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
       ionloss->push_back(0.0); //il vettore ha come elementi totBin zeri
     }
             
-   
+    const G4String partName = aParticleType.GetParticleName();
     // loop for elements in the material
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
       G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
       //costruttore del continuo per l'elemento Z
       G4PenelopeBremsstrahlungContinuous* ContLoss = new G4PenelopeBremsstrahlungContinuous(Z,tCut,GetLowerBoundEloss(),
-											    GetUpperBoundEloss());
+											    GetUpperBoundEloss(),
+											    partName);
       //l'inizializzazione va ripetuta per ogni Z!
       // now comes the loop for the kinetic energy values
       for (size_t i = 0; i<totBin; i++) {
 	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
 	//qui viene chiamato il metodo giusto della perdita continua
     	(*ionloss)[i] += ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel];
-	//	if (Z == 29)
-	//G4cout << lowEdgeEnergy << " " << ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel] << G4endl;
+	//if (Z == 29)
+	//  G4cout << lowEdgeEnergy << " " << ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel] << G4endl;
 	//va chiamato una volta per ogni energia
 	//per ogni energia i, somma su tutti gli elementi del materiale
       }
@@ -329,9 +341,9 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   // Sample gamma angle (Z - axis along the parent particle).
   G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
 
-  G4std::ofstream fff("prova.dat",G4std::ios::app);
-  fff << dirZ << G4endl;
-  fff.close();
+  //G4std::ofstream fff("prova.dat",G4std::ios::app);
+  //fff << dirZ << G4endl;
+  //fff.close();
 
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
   G4double phi   = twopi * G4UniformRand();
@@ -378,10 +390,12 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
 
 void G4PenelopeBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from EEDL database.";
+  G4String comments = "Total cross sections from EEDL database for electrons.";
+  comments += "\n Total cross section for positrons calculated from the electrons";
+  comments += "\n through an empirical scaling function.";
   comments += "\n      Gamma energy sampled from a data-driven histogram.";
   comments += "\n      Implementation of the continuous dE/dx part.";  
-  comments += "\n      At present it can be used for electrons ";
+  comments += "\n      It can be used for electrons and positrons";
   comments += "in the energy range [250eV,100GeV].";
   comments += "\n      The process must work with G4LowEnergyIonisation.";
   
@@ -390,7 +404,7 @@ void G4PenelopeBremsstrahlung::PrintInfoDefinition()
 
 G4bool G4PenelopeBremsstrahlung::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return (  (&particle == G4Electron::Electron())  );
+  return (  (&particle == G4Electron::Electron()) || (&particle == G4Positron::Positron()) );
 }
 
 

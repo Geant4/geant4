@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.1 2003-03-13 17:26:23 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.2 2003-03-19 10:30:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -30,17 +30,26 @@
 // Author:        Luciano Pandola
 // 
 // Creation date: February 2003
-//
+// History:
+// -----------
+// 20 Feb 2003  L. Pandola       1st implementation
+// 17 Mar 2003  L. Pandola       Added the correction for positrons
+// 19 Mar 2003  L. Pandola       Bugs fixed
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungContinuous.hh"
 #include "G4PenelopeInterpolator.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "Randomize.hh"
+#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "g4std/strstream"
 
-G4PenelopeBremsstrahlungContinuous::G4PenelopeBremsstrahlungContinuous (G4int Zed,G4double taglio,G4double e1,G4double e2)  : 
-  Zmat(Zed),tCut(taglio),MinE(e1),MaxE(e2)
+G4PenelopeBremsstrahlungContinuous::G4PenelopeBremsstrahlungContinuous (G4int Zed,G4double taglio,G4double e1,
+									G4double e2,
+									const G4String name)  : 
+  Zmat(Zed),tCut(taglio),MinE(e1),MaxE(e2),partName(name)
 {
   //Construct extended energy table      
   //200 bins between MinE and MaxE (logarithmic)
@@ -147,16 +156,14 @@ void G4PenelopeBremsstrahlungContinuous::PrepareInterpolationTable()
   for (i=0;i<NumberofEPoints;i++){
     pX[i] = log(Energies[i]);
   }
-  //G4cout << "Energia minima nel database: " << exp(pX[0]) << G4endl;;
+ 
   for (j=0;j<NumberofKPoints;j++){
     for (i=0;i<NumberofEPoints;i++){
       pYY[i] = log(ReducedCS[i][j]);
     }
     G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator(pX,pYY,NumberofEPoints);
     for (i=0;i<NumberofExtendedEGrid;i++){
-      //G4cout << "Sono qui!" << G4endl;
       G4double ELL = ExtendedLogEnergy[i];
-      //G4cout << i << " " << exp(ELL) << G4endl;
       if (ELL >= pX[0]) {
 	p0[i][j] = exp(interpolator2->CubicSplineInterpolation(ELL));
       }
@@ -164,33 +171,33 @@ void G4PenelopeBremsstrahlungContinuous::PrepareInterpolationTable()
 	{
 	  G4double F1=interpolator2->CubicSplineInterpolation(pX[0]);
 	  G4double FP1 = interpolator2->FirstDerivative(pX[0]);
-	  //G4cout << exp(pX[0]) << " " << exp(ELL) << " " << F1 << " " << FP1 << G4endl;
 	  p0[i][j] = exp(F1+FP1*(ELL-pX[0]));
 	}
     }
     delete interpolator2;
   }
-
-  //Forse questa roba (e Pbcut come membro privato) non serve
-  G4double PDF[NumberofKPoints];
   
-  for (i=0;i<NumberofExtendedEGrid;i++){
-    for (j=0;j<NumberofKPoints;j++){
-      PDF[j]=p0[i][j];
-    } 
-    G4double Xc=0;
-    if (i<(NumberofExtendedEGrid-1)){
-      Xc=tCut/exp(ExtendedLogEnergy[i+1]);
-    }
-    else
-      {
-	Xc=tCut/exp(ExtendedLogEnergy[NumberofExtendedEGrid-1]);
-      }
+  //Forse questa roba (e Pbcut come membro privato) non serve
+ //  G4double PDF[NumberofKPoints];
+  
+//   for (i=0;i<NumberofExtendedEGrid;i++){
+//     for (j=0;j<NumberofKPoints;j++){
+//       PDF[j]=p0[i][j];
+//     } 
+//     G4double Xc=0;
+//     if (i<(NumberofExtendedEGrid-1)){
+//       Xc=tCut/exp(ExtendedLogEnergy[i+1]);
+//     }
+//     else
+//       {
+// 	Xc=tCut/exp(ExtendedLogEnergy[NumberofExtendedEGrid-1]);
+//       }
     
-    G4PenelopeInterpolator* interpolator3 = new G4PenelopeInterpolator(pK,PDF,NumberofKPoints);
-    Pbcut[i]=interpolator3->CalculateMomentum(Xc,-1);
-    delete interpolator3;
-  }
+//     G4PenelopeInterpolator* interpolator3 = new G4PenelopeInterpolator(pK,PDF,NumberofKPoints);
+//     Pbcut[i]=interpolator3->CalculateMomentum(Xc,-1);
+//     delete interpolator3;
+//   }
+  
 }
 		        
 G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
@@ -204,7 +211,10 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   //Global x-section factor
   G4double Fact=pow((G4double) Zmat,2)*(pow(e1+electron_mass_c2,2)/(e1*(e1+2.0*electron_mass_c2)))
     *(millibarn/cm2);
-  
+  //G4cout << "Particella: " << partName << ";Z: " << Zmat << ";Energia: " << e1 << "; fattore di correzione: " 
+  // << PositronCorrection(e1) << G4endl;
+  Fact=Fact*PositronCorrection(e1);
+
   //Moments of the scaled bremss x-section
   G4double wcre = tCut/e1;
   G4double pY[NumberofKPoints];
@@ -221,13 +231,13 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   G4double XS2A = interpolator1->CalculateMomentum(wcre,1);
   delete interpolator1;
   for (i=0;i<NumberofKPoints;i++){
-    pY[i] = p0[G4std::min(Ke+1,(G4int) NumberofExtendedEGrid)][i];
+    pY[i] = p0[G4std::min(Ke+1,(G4int) NumberofExtendedEGrid-1)][i];
   }
   G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator (pK,pY,NumberofKPoints);
   G4double XS1B = interpolator2->CalculateMomentum(wcre,0);
   G4double XS2B = interpolator2->CalculateMomentum(wcre,1);
   delete interpolator2;
-  
+ 
   G4double XS1 = ((1.0-Xek)*XS1A+Xek*XS1B)*Fact*e1; //weighted mean between the energy bin of the grid
   G4double XS2 = ((1.0-Xek)*XS2A+Xek*XS2B)*Fact*e1*e1; //straggling cross section (2nd momentum);
   //Il secondo momento XS2 potrebbe tornare utile in seguito
@@ -243,4 +253,27 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   return XS1;
 }
 
-
+G4double G4PenelopeBremsstrahlungContinuous::PositronCorrection(G4double en)
+{
+  const G4double Coeff[7]={-1.2359e-01,6.1274e-2,-3.1516e-2,7.7446e-3,-1.0595e-3,
+			   7.0568e-5,-1.8080e-6};
+  G4double T=0;
+  G4double correct=0;
+  if (partName == "e-") {
+    return 1.0; //no correction for electrons
+  }
+  else if (partName == "e+"){
+    T=log(1+((1e6*en)/(pow( (G4double) Zmat,2)*electron_mass_c2)));
+    for (G4int i=0;i<7;i++){
+      correct += Coeff[i]*pow(T,i+1);
+    }
+    correct = 1.0-exp(correct);
+    return correct;
+  }
+  else //ne' elettroni ne' positroni...exception
+    {
+      G4String excep = "G4PenelopeBremmstrahlungContinuous: the particle is not e- nor e+!";
+      G4Exception(excep);
+      return 0;
+    }
+}
