@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2001-09-11 15:34:59 maire Exp $
+$Id: History,v 1.17 2001-09-13 13:12:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+13 sep 01: L/Urban (muons-V03-02-02)
+-G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation
+      
 11 sep 01: L.Urban (muons-V03-02-01)
 - G4VMuEnergyLoss: subcutoff delta-rays mechanism implemented     
      
