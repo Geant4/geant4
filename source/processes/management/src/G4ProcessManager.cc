@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.9 1999-08-19 08:50:39 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.10 1999-10-05 06:57:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -374,9 +374,8 @@ G4int G4ProcessManager::AddProcess(
       G4cout << "This process is not applicable to this particle" << endl;
     }
 #endif
-    // --comment out for alpha version   ----
     //  G4Exception((const char*)aErrorMessage); 
-    //  return -1;
+    return -1;
   }
 
 #ifdef G4VERBOSE
