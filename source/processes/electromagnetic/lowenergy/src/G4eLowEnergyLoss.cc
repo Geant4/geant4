@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.1 2000-04-04 13:51:44 lefebure Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.2 2000-04-07 13:42:55 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -50,7 +50,7 @@
 // The NbOfProcesses data member can be changed using the (public static)
 // functions Get/Set/Plus/MinusNbOfProcesses (see G4eLowEnergyLoss.hh)
 
-G4int            G4eLowEnergyLoss::NbOfProcesses = 2;
+G4int            G4eLowEnergyLoss::NbOfProcesses = 1;
 
 G4int            G4eLowEnergyLoss::CounterOfElectronProcess = 0;
 G4int            G4eLowEnergyLoss::CounterOfPositronProcess = 0;

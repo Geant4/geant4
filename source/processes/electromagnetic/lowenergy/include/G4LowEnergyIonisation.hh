@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.13 2000-04-04 13:47:35 lefebure Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.14 2000-04-07 13:43:13 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,8 @@
 //                by Alessandra Forti July 1999
 // ************************************************************
 //
+//   07.04.2000 Veronique Lefebure + Laszlo Urban
+// - First implemention of continuous energy loss
 // 14/07/99: corrections , L.Urban
 // ------------------------------------------------------------
  
@@ -64,10 +66,25 @@ public:
   
   void PrintInfoDefinition();
 
-  protected:
+  G4double GetShellCrossSection(const G4double AtomicNumber,
+                                const G4int subshellindex,
+                                const G4double KineticEnergy) ;
+  G4double GetShellCrossSectionwithCut(const G4double AtomicNumber,
+                                       const G4int subshellindex,
+                                       const G4double KineticEnergy,
+                                       const G4double Tcut) ;
+  G4double GetShellEnergyLosswithCut(const G4double AtomicNumber,
+                                     const G4int subshellindex,
+                                     const G4double KineticEnergy,
+                                     const G4double Tcut) ;
+  
+  private:
   
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,
 				       const G4double IncEnergy);
+  G4double ComputeCrossSectionWithCut(const G4double AtomIndex,
+				      const G4double IncEnergy,
+		   	 	      const G4double CutEnergy);
   
   void BuildLossTable(const G4ParticleDefinition& aParticleType);
   void BuildShellCrossSectionTable();
@@ -75,6 +92,7 @@ public:
   void BuildFluorTransitionTable();
   void BuildSamplingCoeffTable();
   void BuildZVec();
+  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
 private:
   
@@ -84,7 +102,9 @@ private:
   
 private:
   
-  G4int SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy);
+  G4int SelectRandomShell(const G4int AtomIndex
+                        , const G4double IncEnergy
+			, const G4double CutEnergy);
   
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
 			      G4Material* aMaterial);
@@ -94,7 +114,10 @@ private:
 
 
 
-  G4double EnergySampling(const G4int, const G4int,const G4double);
+  G4double EnergySampling(const G4int AtomicNumber
+                        , const G4int ShellIndex
+			, const G4double KinEn
+			, const G4double deltaRayMinE = 0.1*eV);
 
   allAtomTable* allAtomShellCrossSec;
   allAtomTable* theFluorTransitionTable;
@@ -112,6 +135,7 @@ private:
   G4double CutForLowEnergySecondaryPhotons;
   G4double CutForLowEnergySecondaryElectrons;
   G4double MeanFreePath;
+  G4PhysicsTable* theMeanFreePathTable;
 };
  
 #include "G4LowEnergyIonisation.icc"

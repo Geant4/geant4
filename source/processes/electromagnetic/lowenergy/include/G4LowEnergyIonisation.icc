@@ -5,8 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.10 2000-03-22 09:43:26 lefebure Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4LowEnergyIonisation.icc,v 1.11 2000-04-07 13:43:13 lefebure Exp $
 //
 // 
 // ---------------------------------------------------------------
@@ -19,6 +18,8 @@
 //                  by Alessandra Forti , July 1999
 // ***************************************************************
 //
+//   07.04.2000 Veronique Lefebure + Laszlo Urban
+// - First implemention of continuous energy loss
 // 14/07/99: corrections by L. Urban
 // ---------------------------------------------------------------
 
@@ -42,34 +43,32 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
    const G4DynamicParticle* aParticle = track.GetDynamicParticle();
    G4double KineticEnergy = aParticle->GetKineticEnergy();
    const G4Material* aMaterial  = track.GetMaterial();
-   
+   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+   const G4double* theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+   const G4int NumberOfElements = aMaterial->GetNumberOfElements() ;
+   G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
+   G4double DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()] ;
+ 
    G4bool isOutRange ;
+   G4double SIGMA = 0.;
 
    if( KineticEnergy < LowestKineticEnergy )
-     MeanFreePath = DBL_MIN;
+     MeanFreePath = DBL_MAX;
    else {
      if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
-
-     const	
-     G4ElementVector* theElementVector = aMaterial->GetElementVector();
-     const
-     G4double* theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-
-     const
-     G4int NumberOfElements = aMaterial->GetNumberOfElements() ;
-     G4double SIGMA = 0;
-     for(G4int iel=0; iel<NumberOfElements; iel++ ){
-
-       G4double Cs = ComputeCrossSection((*theElementVector)(iel)->GetZ(), KineticEnergy);
-
-       SIGMA += theAtomicNumDensityVector[iel]*Cs;
-     }	
-       
-  
-     // mean free path = 1./macroscopic cross section
-     MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;     
-  }
-
+     ///don't use table for now 
+     ///MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+     ///               GetValue( KineticEnergy, isOutRange);
+        SIGMA = 0.;
+	G4int iel;           
+        for (iel=0; iel<NumberOfElements; iel++ ){
+             SIGMA += theAtomicNumDensityVector[iel]*
+                      ComputeCrossSectionWithCut( (*theElementVector)(iel)->GetZ(),
+			                           KineticEnergy,
+                                                   DeltaThreshold);
+        }
+        MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;     
+   }
   return MeanFreePath ;
 }
 
