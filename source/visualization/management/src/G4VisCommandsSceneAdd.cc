@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.9 1999-12-15 14:54:26 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.10 2000-05-15 11:15:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -97,7 +97,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     else {
       G4cerr << "G4VisCommandSceneAddVolume::SetNewValue: *** ERROR ***"
 	     << "\n  No world - shouldn't happen if G4ApplicationState is"
-	     << " being properly handled!!" << G4endl;
+	     << " being properly noted!!" << G4endl;
     }
   }
   else {
@@ -114,14 +114,15 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 
     // OK, what have we got...?
     foundVolume = searchScene.GetFoundVolume ();
-    const G4Transform3D&
-      transformation = searchScene.GetFoundTransformation ();
     foundDepth = searchScene.GetFoundDepth ();
+    //const G4Transform3D&
+    //  transformation = searchScene.GetFoundTransformation ();
+    // Note: a physical volume carries its own transformation and
+    // does not need an additional model transformation.
 
     if (foundVolume) {
       model = new G4PhysicalVolumeModel (foundVolume,
-					 requestedDepthOfDescent,
-					 transformation);
+					 requestedDepthOfDescent);
     }
     else {
       G4cout << "Volume \"" << name << "\", copy no. " << copyNo
