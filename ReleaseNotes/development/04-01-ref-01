@@ -1,0 +1,119 @@
+
+                       geant4-04-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Critical bug fix in G4PrimaryParticle for initialisation of non
+    charged particles.
+  o Fix in G4PropagatorInField to correctly handle cases when tracks
+    get killed.
+  o Performance improvement and fixes in field management.
+  o Important bug fixes to cross sections and spectrum for low-energy
+    electron processes.
+  o Fixes and improvements in hadronic processes for LEP/HEP models,
+    management and util triggered by ATLAS/HEC, ATLAS/TILE, and BTEV.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-01-00
+------
+- Upgraded WIN32-g++ setup to compile with -ansi and gcc-2.95.3 for
+  most recent versions of CygWin. 
+
+event                                   event-V04-01-00
+-----
+- G4PrimaryParticle:
+  o Bug fixed in the initialisation of 'charge' for all constructors.
+
+geometry/magneticfield                  field-V04-01-01
+----------------------
+- G4FieldManager:
+  o made 'fDefault_Delta_One_Step_Value' and 
+    'fDefault_Delta_Intersection_Val' non static constants to resolve
+    initialisation problems. Fixes problem report #383. 
+- G4ChordFinder: 
+  o in NewStep, fixed case of stepTrial >> stepTrialOld, to take
+    large multiple - not small 
+  o added guard for stepTrial==0.0 in FindNextChord(). 
+- G4MagIntegratorDriver: 
+  o added protection against error of 0.0 in ComputeNewStepSize. 
+  o cleared warning of unused variable.
+- G4EquationOfMotion: 
+  o made RightHandSide() an inline method 
+  o in GetFieldValue() signature of Point is double[4],
+    instead of double[3] 
+  o defined G4maximum_number_of_field_components as enum. 
+- Updated reference outputs and some other updates to unit tests.
+
+geometry/solids/CSG                     geom-csg-V04-01-00
+-------------------
+- G4Cons:
+  o Bug fixed in DistanceToIn(p,v) concerning z-crossing at
+    the edge with Rmin,Rmax.
+
+geometry/solids/STEP                    STEP-V04-01-00
+--------------------
+- Fixed GNUmakefile to parse 'g++' string in G4SYSTEM to detect
+  non-ISO setup for gcc-2.95 and higher.
+
+geometry/solids/STEPinterface           stepinterface-V04-01-00
+-----------------------------
+- Fixed GNUmakefile to parse 'g++' string in G4SYSTEM to detect
+  non-ISO setup for gcc-2.95 and higher.
+
+geometry/verification                   geomver-V04-01-00
+---------------------
+- G4GeomTestVolume:
+  o Fixed recursive call to G4GeomTestVolume to consider also
+    'tolerance' as argument in the recursive test algorithm.
+
+geometry/volumes                        geomvol-V04-01-03
+----------------
+- Code cleanup and cosmetics for most classes.
+- G4PropagatorInField:
+  o In ComputeStep(), reset status to original by setting 'fNoZeroStep'
+    to zero if (fNoZeroStep > fAbandonThreshold_NoZeroSteps).
+    Fixes a problem observed in cases when a looping track is killed,
+    the bug was causing also subsequent tracks to be killed.
+  o Removed not-implemented constructor taking G4Navigator* as argument. 
+  o Get rid of static const data for default 'epsilonStep' size. 
+  o Initialised all data members in constructor! 
+
+global                                  global-V04-01-00
+------
+- G4Allocator:
+  o Moved page size to become data-member of G4Allocator.
+    'fPageSize' is now computed according to the size of the object 
+    to be allocated. The default size is 1024 bytes for objects whose
+    size is less than 512 bytes, 10 times the size of the object otherwise. 
+
+processes/electromagnetic/lowenergy     emlowen-V04-01-01
+-----------------------------------
+- Bug fixes to cross sections and spectrum for electron processes. 
+
+processes/hadronic                      ghad-V04-01-00
+------------------
+- management, utils, models/high_energy:
+  o Introduced accounting of strange baryons. 
+  o Introduced accounting for anti-nucleons and strange mesons. 
+  o Improved treatement of inelasticity for annihilation events and pion 
+    absorptive reactions. 
+  o Added protection in the call to phase-space method for pion induced
+    reactions.
+  o Fixed error in energy conservation observed by BTEV. 
+    Used to show (1/500) for 1.5-2.5 GeV pion reactions in medium A nuclei. 
+- cross-sections:
+  o Fixed bug in caching information in gamma nuclear cross-sections
+    (G4PhotoNuclearCrossSection). 
+
+examples                                examples-V04-01-00
+--------
+- Corrected README in exampleN01.
+- Updated reference outputs.
+
+tests                                   tests-V04-01-00
+-----
+- Updated reference outputs.
