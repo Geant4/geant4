@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.10 2004-11-21 22:54:57 tkoi Exp $
+// $Id: G4Mars5GeV.cc,v 1.11 2004-11-29 01:17:24 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,6 @@
 //
 //   History:
 //   modified as hadronic model 28 Oct 2001 N.Kanaya
-//   Remodified T. Koi 18 Nov T. Koi
 // ------------------------------------------------------------
 //  This is a Event Biasing mechanism based on MARS code
 //   This model is applicable to 
@@ -71,7 +70,7 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
   std::cout << " IP+A -> N/P(CASC)+ PI+/PI-(K+/K-) + PI0 "<<std::endl;
   std::cout << " *********************************************************"<<std::endl;
    std::cout << " Important notice! "<< std::endl; 
-   std::cout << " Since 1998, MARS codes used CEM (Cascade-Exciton Model) " << std::endl; 
+   std::cout << " Since 1998 MARS codes used CEM (Cascade-Exciton Model) " << std::endl; 
    std::cout << " for nuclear interactions below 5 GeV " << std::endl;
    std::cout << " and do NOT use this inclusive model. " << std::endl;
 
@@ -145,6 +144,7 @@ G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
 #endif 
     } else {
       G4HadSecondary *track = new G4HadSecondary(secondaries[idx], fweight);
+//    Remain unchanged, because this is a member function of G4HadFinalSate 
       theParticleChange.AddSecondary(track);
     }
   }
@@ -398,6 +398,7 @@ void G4Mars5GeV::CreatePionZero(G4int ib, G4int pType, G4double  pE)
   selec1.V10 = 1.0;
   if ( SelBS(pType, fANucl, fZNucl) >0.0 ) {
     selec1.Tprod = MarsPI0;
+    //AddSecondary();
     AddSecondaryToMarsList();
   }
 }
@@ -407,7 +408,7 @@ void G4Mars5GeV::AddSecondaryToMarsList()
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeV::AddSecondary()" << G4endl;
+    G4cout << " G4Mars5GeV::AddSecondaryToMarsList()" << G4endl;
     G4cout << " Particle :" << selec1.Tprod;
     G4cout << ":" << GetParticleName(selec1.Tprod) <<G4endl;
     G4cout << " Energy   :" << selec1.EN <<G4endl;
@@ -429,7 +430,7 @@ void G4Mars5GeV::AddSecondaryToMarsList()
 
   Trans(&pin, &pout);
   if (numberOfSecondaries>=FastVectorSize) {
-    G4String text = " G4Mars5GeV::AddSecondary() too many secondaries";
+    G4String text = " G4Mars5GeV::AddSecondaryToMarsList() too many secondaries";
     throw G4HadronicException(__FILE__, __LINE__, text);
   }
 
