@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.28 2001-11-12 18:20:55 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.29 2001-11-28 16:13:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -186,7 +186,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
   
   if(newValue=="all") {
-    G4VFlavoredParallelWorld* CurrentFlavoredWorld(0);
+    G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
     G4bool successful(false);
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
@@ -341,7 +341,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
   int iLV;
-  G4LogicalVolume* pLV(0);
+  G4LogicalVolume* pLV = 0;
   for (iLV = 0; iLV < nLV; iLV++ ) {
     pLV = (*pLVStore) [iLV];
     if (pLV -> GetName () == name) break;
