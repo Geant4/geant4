@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.cc,v 1.4 2001-07-11 09:59:25 gunter Exp $
+// $Id: TstVADetectorConstruction.cc,v 1.5 2001-11-29 15:17:34 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -203,8 +203,8 @@ void TstVADetectorConstruction::ConstructClassic()
     G4LogicalVolume* worldLV   = new G4LogicalVolume( WorldBox, selectedMaterial, "WLog", 0, 0, 0);
     worldVol                   = new G4PVPlacement(0, G4ThreeVector(), "WPhys", worldLV, 0, false, 0);
 
-    // We need to this here to overcome the chicken-egg problem of proper initialization of the
-    // world volume material
+    // We need to do this here to avoid the chicken-egg problem of proper initialization of the
+    // world volume's material
     if( selectedMaterial == 0 )
     {
       SelectMaterialPointer();
