@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.13 2003-06-11 07:16:29 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.14 2003-06-11 09:56:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -273,18 +273,20 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
   }
   
   // Kinetic Energy should not be negative
-  G4bool itsOKforEnergy = true;
+  G4bool itsOKforEnergy;
   accuracy = -1.0*(aTrack.GetKineticEnergy())/MeV;
-  if (accuracy > accuracyForWarning) {
+  if (accuracy < accuracyForWarning) {
+    itsOKforEnergy = true;
+  } else {
 #ifdef G4VERBOSE
     G4cout << " G4VParticleChange::CheckSecondary  :   ";
     G4cout << "the kinetic energy is negative  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
 #endif
     itsOKforEnergy = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    if (accuracy < accuracyForException) { exitWithError = false;}
+    else { exitWithError = true; }
   }
-  
   G4bool itsOKforProperTime = true;
   //accuracy = (aTrack.GetProperTime())/ns;
   //  if (accuracy > accuracyForWarning) {
@@ -356,6 +358,14 @@ void G4VParticleChange::AddSecondary(G4Track *aTrack)
 #endif
   }
 }
+
+
+
+
+
+
+
+
 
 
 
