@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.11 2004-04-08 15:11:26 gbarrand Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.12 2004-04-08 15:12:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,8 +204,8 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   switch (aMessage) { 
-  case WM_PAINT:{
 /*
+  case WM_PAINT:{
     printf("debug : PAINT\n");
     HDC	hDC;
     PAINTSTRUCT	ps;
@@ -227,8 +227,8 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
       This->DrawView();
       This->FinishView();
     }
-*/
   } return 0;
+*/
   default:
     return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
   }
