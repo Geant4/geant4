@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.6 2000-02-16 16:10:06 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.7 2000-05-16 00:34:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,8 +140,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
 
 
   // update polarization
-  //pPostStepPoint->AddPolarization( thePolarizationChange
-  //				   - pPreStepPoint->GetPolarization());
+  pPostStepPoint->AddPolarization( thePolarizationChange
+  				   - pPreStepPoint->GetPolarization());
       
   // update position and time
   pPostStepPoint->AddPosition( thePositionChange 

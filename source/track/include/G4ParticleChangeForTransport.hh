@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.4 2000-05-12 13:15:42 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.5 2000-05-16 00:34:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,9 +69,15 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     void  SetTouchableChange(const G4VTouchable* fTouchable);
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
+
     G4Material* GetMaterialChange() const;
     void SetMaterialChange(G4Material* fMaterial);
     //  Get/Set the material in the touchable of the current particle.
+
+    const G4ThreeVector* GetPolarizationChange() const;
+    void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
+    void SetPolarizationChange(const G4ThreeVector& finalPoralization);
+    // Get/Set thePolarizationChange vector.
 
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
@@ -85,8 +91,11 @@ class G4ParticleChangeForTransport: public G4ParticleChange
 
   private:
     G4bool     isMomentumChanged;
+    //  The flag which is set if mometum is changed in this stepi
     G4Material* theMaterialChange;
-
+     //  The material where given track currently locates
+    G4ThreeVector thePolarizationChange;
+    //  The changed (final) polarization of a given track
 };
 
 #include "G4ParticleChangeForTransport.icc"
