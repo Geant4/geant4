@@ -151,17 +151,19 @@ echo "Starting $1 in $G4WORKDIR `date`"
 
 echo "Finished $1 in $G4WORKDIR `date`"
 
-    if [ -f $1.evalsh ]
-    then
-      $1.evalsh $dir/$1.out $1.out > $dir/$1.eval 2>&1
-      if [ $? != 0 ]
-      then
-        if [ ! -f $dir/$1.badflag ]; then touch $dir/$1.badflag; fi;
-        echo $1 run failure >> $dir/$1.badflag 2>&1
-      fi
-    else
-      diff -w $dir/$1.out $1.out > $dir/$1.diff 2> $dir/$1.diff_err
-      #cat $dir/$1.diff
+    if [ -z "$G4LARGE_N" ]; then
+	if [ -f $1.evalsh ]; then
+	    $1.evalsh $dir/$1.out $1.out > $dir/$1.eval 2>&1
+	    if [ $? != 0 ]; then
+		if [ ! -f $dir/$1.badflag ]; then
+                    touch $dir/$1.badflag
+		fi
+		echo $1 run failure >> $dir/$1.badflag 2>&1
+	    fi
+	else
+	    diff -w $dir/$1.out $1.out > $dir/$1.diff 2> $dir/$1.diff_err
+	    #cat $dir/$1.diff
+	fi
     fi
 
   fi
