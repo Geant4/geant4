@@ -266,6 +266,11 @@ bool G4HepRepSceneHandler::closeHepRep() {
     // add geometry to the heprep
     GetCurrentViewer()->DrawView();
 
+    // couple geometry to event if both exist
+    if ((_eventInstanceTree != NULL) && (_geometryInstanceTree != NULL)) {
+        getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+    }
+    
     // Give this HepRep all of the layer order info for both geometry and event,
     // since these will both end up in a single HepRep.
     if (_geometryRootType    != NULL) _heprep->addLayer(geometryLayer);
@@ -946,7 +951,6 @@ HepRepInstanceTree* G4HepRepSceneHandler::getEventInstanceTree() {
     if (_eventInstanceTree == NULL) {
         // Create the Event InstanceTree.
         _eventInstanceTree = factory->createHepRepInstanceTree("G4EventData", "1.0", getEventTypeTree());
-        _eventInstanceTree->addInstanceTree(getGeometryInstanceTree());
         getHepRep()->addInstanceTree(_eventInstanceTree);
     }
     return _eventInstanceTree;
