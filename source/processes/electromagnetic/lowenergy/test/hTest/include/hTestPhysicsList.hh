@@ -50,6 +50,7 @@ public: // Without description
   // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
+    void ConstructHad();
     
   public: // Without description
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: hTestPrimaryGeneratorAction.cc,v 1.3 2000-08-18 13:34:00 vnivanch Exp $
+// $Id: hTestPrimaryGeneratorAction.cc,v 1.4 2001-03-12 09:17:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -81,6 +82,16 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
                                                 GetParticleName();
    
+  G4double energy;
+  //  G4double sigmaE = 0.9*MeV ;
+  G4double sigmaE = -0.9*MeV ;
+
+  if(0.0 < sigmaE) {
+    energy += G4RandGauss::shoot(175.0*MeV,sigmaE);
+    if(0.0 > energy) energy = 0.0;
+    particleGun->SetParticleEnergy(energy);
+  }  
+
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

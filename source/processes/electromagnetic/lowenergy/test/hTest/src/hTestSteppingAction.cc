@@ -55,13 +55,18 @@ void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
           100000000*(aStep->GetTrack()->GetParentID()); 
 
   Tkin = aStep->GetTrack()->GetKineticEnergy() ; 
-  Edep = -(aStep->GetDeltaEnergy()) ;         
+  //  Edep = -(aStep->GetDeltaEnergy()) ;  
+  Edep = (aStep->GetTotalEnergyDeposit()) ;  
   xend = 0.5*((aStep->GetPreStepPoint()->GetPosition().x()) +
-              (aStep->GetPostStepPoint()->GetPosition().x())  ) / mm ;
+              (aStep->GetPostStepPoint()->GetPosition().x())  ) ;
+  runaction->FillEn(Edep,xend) ;
+
+  G4int copyNo = aStep->GetTrack()->GetVolume()->GetCopyNo();
+  if(xend > 0.0 && xend < 60.0*mm) eventaction->AddE(Edep, copyNo);
+
+
   Tsec = Tkin - Edep ;
   Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-
-  runaction->FillEn(Edep,xend) ;
 
   // new particle
   if(IDnow != IDold) {

@@ -34,8 +34,6 @@ hTestRunAction::hTestRunAction()
    nbinvertexz(0),
 #ifndef G4NOHIST
    histName("histfile"),
-  //   histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
-  //   histo6(0),histo7(0),histo8(0),histo9(0),histo10(0),
 #endif
    theProton (G4Proton::Proton()),
    theElectron ( G4Electron::Electron() ),
@@ -46,13 +44,18 @@ hTestRunAction::hTestRunAction()
 {
   runMessenger = new hTestRunMessenger(this);
 
-  nbinStep = 100;
-  Steplow  = -0.5;
-  Stephigh = 95.5;
+  nbinStep = 300;
+  Steplow  = 0.;
+  Stephigh = 300.;
 
-  nbinEn = 2000;
+  // Water test
+  nbinEn = 600;
   Enlow  = 0.0;
-  Enhigh = 200.0;
+  Enhigh = 60.0;
+  // Mylar/GaAs test
+  //  nbinEn = 60;
+  //Enlow  = 0.0;
+  //Enhigh = 0.06;
 
   nbinTh = 90;
   Thlow  = 0.0;
@@ -94,19 +97,6 @@ hTestRunAction::~hTestRunAction()
   delete runMessenger;
 #ifndef G4NOHIST
   delete hbookManager;
-  /*
-  delete histo1 ;
-  delete histo2 ;
-  delete histo3 ;
-  delete histo4 ;
-  delete histo5 ;
-  delete histo6 ;
-  delete histo7 ;
-  delete histo8 ;
-  delete histo9 ;
-  delete histo10 ;
-  delete ntup;
-  */
 #endif
   G4cout << "runMessenger and histograms are deleted" << G4endl;
 }
@@ -159,11 +149,12 @@ void hTestRunAction::bookHisto()
 
   // book histograms
 
-  //  histo1 = hbookManager->histogram("number of steps/event"
-  //                                 ,nbinStep,Steplow,Stephigh) ;
 
-  histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
-                                     ,nbinEn,Enlow,Enhigh) ;
+  //  histo2 = hbookManager->histogram("energy deposit in absorber (in MeV)"
+  //                                   ,nbinEn,Enlow,Enhigh) ;
+
+    histo2 = hbookManager->histogram("energy deposit in absorber (MeV/1mm)"
+                                   ,nbinStep,Steplow,Stephigh) ;
 
   /*
   histo3 = hbookManager->histogram("angle distribution at exit(deg)"
@@ -891,7 +882,7 @@ void hTestRunAction::FillEn(G4double En, G4double zn)
   if(ibin >= nbinEn) ibin = nbinEn-1 ;
   distEn[ibin] += En ;
 
-  histo2->accumulate(zn,En/MeV) ;
+  histo2->accumulate(zn/mm,En/MeV) ;
   }
 #endif
 }

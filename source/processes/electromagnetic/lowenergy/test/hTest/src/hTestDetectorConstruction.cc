@@ -48,10 +48,18 @@ hTestDetectorConstruction::hTestDetectorConstruction()
  magField(NULL),calorimeterSD(NULL),defaultWorld(true)
 {
   // default parameter values of the calorimeter
-  AbsorberThickness = 0.1*mm;
   AbsorberSizeYZ    = 100.*cm;
   XposAbs           = 0.*cm ;  
-  NumberOfAbsorbers = 2000;
+  // Water test
+    NumberOfAbsorbers = 300;
+    AbsorberThickness = 1.0*mm;
+  // Mylar test
+  // NumberOfAbsorbers = 50;
+  // AbsorberThickness = 0.001*mm;
+  // Silicon test
+  //  NumberOfAbsorbers = 1;
+  //  AbsorberThickness = 1.0*mm;
+  //  NumberOfAbsorbers = 2000;
   ComputeCalorParameters();
 
   // create commands for interactive definition of the calorimeter  
@@ -103,6 +111,12 @@ G4Element* elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 
 a = 12.00*g/mole;
 G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
+
+a = 69.723*g/mole;
+G4Element* elGa  = new G4Element(name="Gallium"  ,symbol="Ga" , z= 31., a);
+
+a = 74.9216*g/mole;
+G4Element* elAs  = new G4Element(name="Arsenicum"  ,symbol="As" , z= 33., a);
 
 //
 // define simple materials
@@ -161,6 +175,12 @@ G4Material*  Graphite = new G4Material(name="Graphite", symbol="Graphite",
 				       density=2.265*g/cm3, ncomponents=1);
 Graphite->AddElement( elC, 1 );
 
+density = 5.3176*g/cm3;
+G4Material* GaAs = new G4Material(name="GaAs", symbol="GaAs", density, ncomponents=2);
+GaAs->AddElement(elGa, natoms=1);
+GaAs->AddElement(elAs, natoms=1);
+
+
 //
 // define a material from elements.   case 2: mixture by fractional mass
 //
@@ -171,14 +191,23 @@ G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
 Air->AddElement(elN, fractionmass=0.7);
 Air->AddElement(elO, fractionmass=0.3);
 
+density = 1.39*g/cm3;
+G4Material* Mylar = new G4Material(name="Mylar"  , density, ncomponents=3);
+Mylar->AddElement(elC, natoms=10);
+Mylar->AddElement(elH, natoms=18);
+Mylar->AddElement(elO, natoms=5);
+
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
-   AbsorberMaterial = H2O;
+//   AbsorberMaterial = Mylar;
+//   AbsorberMaterial = H2O;
+   AbsorberMaterial = Air;
+   //   AbsorberMaterial = GaAs;
 // AbsorberMaterial = Si;
   // AbsorberMaterial = Cu;
 //   AbsorberMaterial = Fe;
-  // AbsorberMaterial = Al;
+//  AbsorberMaterial = Al;
 
   WorldMaterial    = Air;
 }
@@ -219,7 +248,6 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructCalorimeter()
     	                  AbsorberMaterial,             //its material
    	                 "Absorber");                   //its name
       			                  
-  G4int copyNo=0;
   G4double x ;
 
   for (G4int j=0; j<NumberOfAbsorbers; j++)
@@ -231,7 +259,7 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructCalorimeter()
                                 logicAbsorber,     //its logical volume
                                 physiWorld,        //its mother
                                 false,             //no boulean operat
-                                copyNo);           //copy number
+                                j);                //copy number
   }
   
   //                               

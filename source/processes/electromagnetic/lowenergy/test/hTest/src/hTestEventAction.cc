@@ -62,6 +62,7 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
   NP=0.;
   Transmitted=0.;
   Reflected  =0.;
+  for(G4int i=0; i<60; i++){EnergySlice[i] = 0.0;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,9 +78,26 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
 
+    //    runaction->FillEn(EnergyDeposition,EnergyDeposition);
     nstep=nstepCharged+nstepNeutral ;
     runaction->FillNbOfSteps(nstep);
     runaction->SaveToTuple("EDEP",EnergyDeposition);      
+    G4int i,j;
+    G4double EE[60];
+    G4String EEE[60]={
+      "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", 
+      "E10", "E11", "E12", "E13", "E14", "E15", "E16", "E17", "E18", "E19", 
+      "E20", "E21", "E22", "E23", "E24", "E25", "E26", "E27", "E28", "E29", 
+      "E30", "E31", "E32", "E33", "E34", "E35", "E36", "E37", "E38", "E39", 
+      "E40", "E41", "E42", "E43", "E44", "E45", "E46", "E47", "E48", "E49", 
+      "E50", "E51", "E52", "E53", "E54", "E55", "E56", "E57", "E58", "E59"};
+    for(i=0; i<60; i++){
+      EE[i]=0.0;
+      for(j=0; j<i+1; j++) {
+        EE[i] += EnergySlice[j];
+      }  
+      //      runaction->SaveToTuple(EEE[i],EE[i]);      
+    }
 
     runaction->SaveEvent();
     /* 
@@ -91,7 +109,7 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for(G4int i=0; i<n_trajectories; i++) 
+   for(i=0; i<n_trajectories; i++) 
       { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
         if (drawFlag == "all") trj->DrawTrajectory(50);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
@@ -149,9 +167,10 @@ void hTestEventAction::AddNeutral()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestEventAction::AddE(G4double En) 
+void hTestEventAction::AddE(G4double En, G4int copyNo) 
 {
   EnergyDeposition += En;
+  if(copyNo > -1 && copyNo < 60) EnergySlice[copyNo] += En;
   NE += 1.;
 }
 
@@ -178,6 +197,10 @@ void hTestEventAction::SetRef()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
+
+
+
+
 
 
 
