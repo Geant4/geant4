@@ -21,9 +21,47 @@ typedef G4std::vector<partner> partners;
 
 class G4BertiniNucleiModel {
 
+  /// 7 MeV potential
+
+  /// Testing Doxygen properties (http://www.stack.nl/~dimitri/doxygen/)
+
+  /// The distance between \f$(x_1,y_1)\f$ and \f$(x_2,y_2)\f$ is \f$\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\f$.
+
+  /*! \class G4BertiniNucleiModel
+   *  \brief Implements HETC nuclei model
+   *  \author Aatos Heikkinen
+   *  \author Original HETC authors
+   *  \version 0.0
+   *  \date    16.11.2002
+   *  \bug None know
+   *  \warning Wery preliminary
+   */
+
 public:
 
-  G4BertiniNucleiModel();
+  G4BertiniNucleiModel(); /// Initialize
+
+ /**
+              * a normal member taking two arguments and returning an integer value.
+              * @param a an integer argument.
+              * @param s a constant character pointer.
+              * @see Test()
+              * @see ~Test()
+              * @see testMeToo()
+              * @see publicVar()
+              * @return The test results
+              */
+
+
+  /// a normal member taking two arguments and returning an integer value.
+  /// @param a an integer argument.
+  /// @param s a constant character pointer.
+  /// @see Test()
+  /// @see ~Test()
+  /// @see testMeToo()
+  /// @see publicVar()
+  /// @return The test results
+     
 
   G4BertiniNucleiModel(G4InuclNuclei* nuclei) {
 
@@ -31,7 +69,7 @@ public:
   };
 
   void generateModel(G4double a, 
-		     G4double z);
+		     G4double z); //!< a member function.
 
   void reset() {
 
@@ -39,7 +77,7 @@ public:
     protonNumberCurrent = protonNumber;
   };
 
-  void printModel() const; 
+  void printModel() const; /// a member function.
 
   G4double getDensity(G4int ip, 
 		      G4int izone) const {
@@ -110,7 +148,7 @@ public:
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
 private: 
-G4int verboseLevel;
+  G4int verboseLevel;  /*!< Each class has a verbosity level of its own. */
   G4bool passFermi(const G4std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
