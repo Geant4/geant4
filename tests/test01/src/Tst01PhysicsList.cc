@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst01PhysicsList.cc,v 1.6 2001-07-11 10:09:31 gunter Exp $
+// $Id: Tst01PhysicsList.cc,v 1.7 2002-12-09 10:06:16 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -204,7 +204,7 @@ void Tst01PhysicsList::ConstructEM()
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+    // G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") 

@@ -66,10 +66,9 @@
 // Constructor/Destructor
 
 Tst01DetectorConstruction::Tst01DetectorConstruction()
-:simpleBoxLog(NULL),simpleBoxDetector(NULL),honeycombDetector(NULL),
- detectorChoice(0),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL),
- fChoiceCSG(0),fChoiceBool(0),fWorldPhysVol(NULL),
- fTestCSG(NULL),fTestLog(NULL),fTestVol(NULL),
+:simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),fWorldPhysVol(0),
+ fTestCSG(0),fTestLog(0),fTestVol(0),Air(0),Al(0),Pb(0),
+ selectedMaterial(0),detectorChoice(0), fChoiceCSG(0),fChoiceBool(0),
  AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),AssemblyCellLog(0)
 {
   detectorMessenger = new Tst01DetectorMessenger(this);
@@ -257,25 +256,25 @@ void Tst01DetectorConstruction::SwitchBoolean()
   // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
   // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
 
-  G4RotationMatrix identity, xRot ;
+  G4RotationMatrix identity ;
     
-// NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
-
-  xRot.rotateZ(-M_PI*0.5) ;
-
-  G4Transform3D transform(xRot,G4ThreeVector()) ;
+  // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
+  //
+  // G4RotationMatrix xRot ;
+  // xRot.rotateZ(-M_PI*0.5) ;
+  // G4Transform3D transform(xRot,G4ThreeVector()) ;
   
 
 
   G4Box* pb1 = new G4Box("b1",50*cm,50*cm,50*cm) ;
   G4Box* pb2 = new G4Box("b2",10*cm,10*cm,60*cm) ;
-  G4Box* pb3 = new G4Box("b3",40*cm,40*cm,40*cm) ;
+  // G4Box* pb3 = new G4Box("b3",40*cm,40*cm,40*cm) ;
   G4Box* pb4 = new G4Box("b4",50*cm,50*cm, 5*cm) ;
 
   G4DisplacedSolid* disPb4 = new G4DisplacedSolid("disPb4",pb4,&identity,
                                                    G4ThreeVector(0,0,60*cm)) ;
 
-  G4Tubs* tubs1 = new G4Tubs("tubs1",80*cm,90*cm,50*cm,0,2*pi) ;
+  // G4Tubs* tubs1 = new G4Tubs("tubs1",80*cm,90*cm,50*cm,0,2*pi) ;
 
   G4Sphere* sphere1 = new G4Sphere("shere1",80*cm,90*cm,0,2*pi,0,pi) ;
   G4Sphere* sphere2 = new G4Sphere("shere2",0,50*cm,0,2*pi,0,pi) ;
@@ -314,17 +313,19 @@ void Tst01DetectorConstruction::SwitchBoolean()
 
   // daughters
   
-  G4LogicalVolume*   testD1Log = new G4LogicalVolume(sphere3,selectedMaterial,
-                                                "testD1Log",0,0,0) ;
+  G4LogicalVolume*   testD1Log =
+    new G4LogicalVolume(sphere3,selectedMaterial,"testD1Log",0,0,0) ;
 
-  G4VPhysicalVolume* testD1Vol = new G4PVPlacement(0,G4ThreeVector(),
-                             "testD1Vol",testD1Log,testBoolVol,false,0);  
+  // G4VPhysicalVolume* testD1Vol =
+    new G4PVPlacement(0,G4ThreeVector(),
+                      "testD1Vol",testD1Log,testBoolVol,false,0);  
 
-  G4LogicalVolume*   testD2Log = new G4LogicalVolume(sphere1,selectedMaterial,
-                                                "testD2Log",0,0,0) ;
+  G4LogicalVolume*   testD2Log =
+    new G4LogicalVolume(sphere1,selectedMaterial,"testD2Log",0,0,0) ;
 
-  G4VPhysicalVolume* testD2Vol = new G4PVPlacement(0,G4ThreeVector(0,0,0),
-                             "testD2Vol",testD2Log,testBoolVol,false,0);  
+  // G4VPhysicalVolume* testD2Vol =
+    new G4PVPlacement(0,G4ThreeVector(0,0,0),
+                      "testD2Vol",testD2Log,testBoolVol,false,0);  
 
 }
 
@@ -416,8 +417,7 @@ void Tst01DetectorConstruction::ConstructDetectors()
 //  honeycombDetector
 //
 
-  G4double offset=22.5*cm, xTlate, yTlate;
-  G4int i,j,copyNo;
+  size_t i;
 
   G4Box *myWorldBox= new G4Box("WBox",2000*cm, 2000*cm, 2000*cm);
   G4Box *myCalBox = new G4Box("CBox",1500*cm, 1500*cm, 1000*cm);
@@ -452,8 +452,8 @@ void Tst01DetectorConstruction::ConstructDetectors()
 
   const double firstCaloPos        =  500*mm;
   const double caloCaloOffset      =   50*mm;
-  const double plateCaloOffset     =    1*mm;
-  const double platePlateOffset    =    2*mm;
+  // const double plateCaloOffset     =    1*mm;
+  // const double platePlateOffset    =    2*mm;
 
   // Define world volume for Assembly detector
   G4Box* AssemblyBox                   = new G4Box( "AssemblyBox", worldX/2., worldY/2., worldZ/2. );

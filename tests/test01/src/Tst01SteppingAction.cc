@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01SteppingAction.cc,v 1.6 2001-07-11 10:09:33 gunter Exp $
+// $Id: Tst01SteppingAction.cc,v 1.7 2002-12-09 10:06:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,16 +31,12 @@
 //
 
 #include "Tst01SteppingAction.hh"
-#include "G4SteppingManager.hh"
-#include "math.h"
-#include "g4std/fstream"
 
 ////////////////////////////////////////////////////////////////////////////
 //
 //
 
-Tst01SteppingAction::Tst01SteppingAction() : Steplength(100,0.,100.),
-SteplengthProfile(100,0.,2*M_PI),fNumberOfTracks(10,0.,10.0)
+Tst01SteppingAction::Tst01SteppingAction()
 { }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -49,18 +45,6 @@ SteplengthProfile(100,0.,2*M_PI),fNumberOfTracks(10,0.,10.0)
 
 Tst01SteppingAction::~Tst01SteppingAction()
 {
-  G4std::ofstream o("NumberOfTracks.plt");
-  fNumberOfTracks.output(o);
-  o.close();
-
-
-  //  G4std::ofstream o("test01.stepLength.plt");
-  //  Steplength.output(o);
-  //  o.close();
-  //  o.open("test01.stepLengthProfile.plt");
-  //  SteplengthProfile.output(o);
-  //  o.close();
- 
 }
 
 
@@ -69,34 +53,10 @@ Tst01SteppingAction::~Tst01SteppingAction()
 //
 //
 
-void Tst01SteppingAction::UserSteppingAction(const G4Step* aStep)
+void Tst01SteppingAction::UserSteppingAction(const G4Step*)
 {
-
-  //  const G4Track* aTrack = GetSteppingManager()->GetTrack() ;
-
-  // Get the number of steps ? from the track
-
-  if( fpSteppingManager->GetTrack()->GetTrackStatus() != fAlive )
-  {
-     // Add this to an histogram of number of steps 
-
-     fNumberOfTracks.accumulate((G4double)fpSteppingManager->GetTrack()->
-                                                      GetCurrentStepNumber()) ;
-  }
-
-  // Steplength.accumulate(aStep->GetStepLength());
-
-  // G4double phi = aStep->GetDeltaPosition().phi();
-  // if (phi < 0.) phi = phi + twopi;
-  // SteplengthProfile.accumulate(phi,aStep->GetStepLength());
-
 }
 
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
-
-
-

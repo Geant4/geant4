@@ -43,9 +43,9 @@
 
 Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
   generatorAction (standardGun),
-  fGunPosition(0.0, 0.0, 0.0),
   particleGun (0),
   messenger (0),
+  fGunPosition(0.0, 0.0, 0.0),
   worldVolume (0)
 {
   G4int n_particle = 1;
@@ -120,7 +120,6 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4VPhysicalVolume* currentWorldVolume;
   G4ThreeVector direction, position ;
   G4double costheta, sintheta, phi, cosphi, sinphi ;
-  G4double rho;
 
   switch (generatorAction) 
   {

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2000-07-27 12:58:59 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2002-12-09 10:06:15 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -11,16 +11,9 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-CPPFLAGS  += -I$(G4INSTALL)/tests/tools/include
-EXTRALIBS += $(LIB_PATH)$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
-EXTRA_LINK_DEPENDENCIES := \
-  $(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a
-
 .PHONY: all
 
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a:
-	cd $(G4INSTALL)/tests/tools/lib; $(MAKE)

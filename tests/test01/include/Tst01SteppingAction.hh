@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01SteppingAction.hh,v 1.6 2001-07-11 10:09:30 gunter Exp $
+// $Id: Tst01SteppingAction.hh,v 1.7 2002-12-09 10:06:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 #define Tst01SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
-#include "Histo.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -46,10 +45,6 @@ class Tst01SteppingAction : public G4UserSteppingAction
    ~Tst01SteppingAction();
 
     void UserSteppingAction(const G4Step*);
-private:
-  odHisto Steplength;
-  odHisto SteplengthProfile;
-  odHisto fNumberOfTracks;
 };
 
 #endif
