@@ -1,4 +1,4 @@
-# $Id: envCommon.csh,v 1.10 2004-06-18 10:15:16 daquinog Exp $
+# $Id: envCommon.csh,v 1.11 2004-12-08 15:37:13 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -45,7 +45,7 @@ else   # not using PI
          ${?PYTHON_BASE_DIR} == 1 && \
          ${?SWIG_BASE_DIR} == 1 && \
          ${?SWIG_VERSION} == 1 && \
-         ${?CLHEP_BASE_DIR} == 1) then  # settings without Anaphe
+         ${?CLHEP_BASE_DIR} == 1) then  # settings without PI
     setenv PYTHON_LIB_DIR ${PYTHON_BASE_DIR}/lib/python${PYTHONVERSION}/config
     setenv PYTHON_INCLUDE_DIR ${PYTHON_BASE_DIR}/include/python${PYTHONVERSION}
     #

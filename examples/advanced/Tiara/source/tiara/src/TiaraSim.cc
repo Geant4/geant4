@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.5 2003-11-07 12:39:11 vnivanch Exp $
+// $Id: TiaraSim.cc,v 1.6 2004-12-08 15:37:15 daquinog Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
