@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.17 2001-10-24 09:06:06 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.18 2001-10-24 09:21:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -402,7 +402,6 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     size_t nSecondaries = deexcitationProducts->size();
 
     fParticleChange.SetNumberOfSecondaries(nSecondaries);
-    G4Track* newtrack = 0;
     const G4StepPoint* preStep = stepData.GetPreStepPoint();
     const G4StepPoint* postStep = stepData.GetPostStepPoint();
     G4ThreeVector r = preStep->GetPosition();
@@ -413,11 +412,10 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     deltaT -= t;
     G4double time, q, e;
     G4ThreeVector position;
-    G4DynamicParticle* part = 0;
-
+ 
     for (size_t i=0; i<nSecondaries; i++) {
       //    G4cout << "i= " << i << G4endl;
-      part = (*deexcitationProducts)[i]; 
+      G4DynamicParticle* part = (*deexcitationProducts)[i]; 
       if (part != 0) {
         G4double eSecondary = part->GetKineticEnergy();
         edep -= eSecondary;
@@ -427,7 +425,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 	    time = deltaT*q + t;
 	    position  = deltaR*q;
 	    position += r;
-	    newTrack = new G4Track((*deexcitationProducts)[i], time, position);
+	    G4Track* newTrack = new G4Track(part, time, position);
 	    fParticleChange.AddSecondary(newTrack);
 	  }
 	else
