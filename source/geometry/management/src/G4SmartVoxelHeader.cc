@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.15 2002-04-22 13:43:59 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.16 2002-04-22 13:51:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -510,9 +510,9 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   for (size_t islice=0; islice<fslices.size(); islice++)
   {
     G4cout << "     Node #" << islice << " = {";
-    for (G4int j=0; j<fslices(islice)->GetNode()->GetNoContained(); j++)
+    for (G4int j=0; j<fslices[islice]->GetNode()->GetNoContained(); j++)
     {
-      G4cout << " " << fslices(islice)->GetNode()->GetVolume(j);
+      G4cout << " " << fslices[islice]->GetNode()->GetVolume(j);
     }
     G4cout << " }" << G4endl;
   }
@@ -760,7 +760,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     pParam = pDaughter->GetParameterisation();
     if (!pParam)
     {
-      G4cout << "PANIC! Replicated volume with no parameterisation object !")
+      G4cout << "PANIC! Replicated volume with no parameterisation object !"
              << G4endl;
       G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
     }
