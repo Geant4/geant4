@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-10-16 11:56:25 maire Exp $
+$Id: History,v 1.11 2001-10-19 05:46:53 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 19, 2001  Steve O'Neale (examples-V03-02-00)
+- Update reference output
 
 16-10-01 mma (testem5-V03-02-00)
 - removal of G4RW header (EventAction.cc)
