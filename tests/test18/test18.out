@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (10-Mar-2000)
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
  RDM Applies to all Volumes
@@ -117,7 +117,7 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 ### Run : 0
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/data/RadiativeDecay/z12.a24
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/data/RadiativeDecay/z12.a24
 The nucleus is assumed to be stable 
        0.001           1           0     Na24[0.0]
          227           1   3.189e+04     e-

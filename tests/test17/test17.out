@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (10-Mar-2000)
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -214,7 +214,7 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00919951 +- 4.06247e-06  mm  
+    Range in absorber = 0.0092009 +- 4.1913e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -246,7 +246,7 @@ Cut in energy
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.0126891 +- 9.11484e-06  mm  
+    Range in absorber = 0.0126686 +- 9.00263e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 

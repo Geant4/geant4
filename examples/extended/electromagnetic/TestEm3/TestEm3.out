@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (10-Mar-2000)
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -208,7 +208,7 @@ Cut in energy
            Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
                Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.5 2000-06-24 08:03:09 stesting Exp $
+# $Id: TestEm3.out,v 1.6 2000-08-09 09:07:21 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -241,19 +241,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=246.78s Real=267.56s Sys=18.96s
+  User=251.31s Real=269.87s Sys=18.32s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 810.99 MeV +- 15.00 MeV       52.93 cm  +-  1.19 cm 
- Absorber1 ( liquidArgon) : 178.27 MeV +- 13.28 MeV       89.49 cm  +-  7.03 cm 
+ Absorber0 (        Lead) : 811.22 MeV +- 15.41 MeV       52.72 cm  +-  1.25 cm 
+ Absorber1 ( liquidArgon) : 178.99 MeV +- 15.21 MeV       89.88 cm  +-  7.76 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 793891110, 646288150
+ Current couple of seeds = 2114333538, 2055482510
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

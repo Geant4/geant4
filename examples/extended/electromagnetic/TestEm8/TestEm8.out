@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (10-Mar-2000)
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 24.52 s
+total time for build X-ray TR tables = 23.59 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -181,7 +181,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=55.12 s 
+total time(SetCuts)=54.43 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -258,28 +258,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=95.43s Real=98.82s Sys=2.5s
+  User=89.31s Real=91.75s Sys=2.33s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=69.8969 +- 0.915923  mm  
+    mean charged track length   in absorber=71.192 +- 1.0047  mm  
 
-            mean energy deposit in absorber=0.0529754 +- 0.000882392  MeV 
+            mean energy deposit in absorber=0.0535616 +- 0.000926094  MeV 
 
- mean number of steps in absorber (charged) =2.354 +- 0.0353933      
- mean number of steps in absorber (neutral) =5.413 +- 0.0722664      
+ mean number of steps in absorber (charged) =2.352 +- 0.0377372      
+ mean number of steps in absorber (neutral) =5.338 +- 0.0727857      
 
-   mean number of charged secondaries = 1.307 +- 0.0346807
+   mean number of charged secondaries = 1.32 +- 0.0371699
 
-   mean number of neutral secondaries = 0.019 +- 0.00431729
+   mean number of neutral secondaries = 0.012 +- 0.00344325
 
-   mean number of e-s =1.307  and e+s =0
+   mean number of e-s =1.32  and e+s =0
 
-(number) transmission coeff=0.741  reflection coeff=0
+(number) transmission coeff=0.736  reflection coeff=0.001
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 624921899, 1306862265
+ Current couple of seeds = 705959451, 1388635366
 ----------------------------------------
 #
 #
