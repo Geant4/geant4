@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.11 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.12 2003-07-21 13:59:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 13-04-03 Add startFromNull (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
+// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -135,7 +136,7 @@ public:
 
   void FillDEDXVectorForPreciseRange(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
+  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
                         G4bool startFromNull = true);
 
   void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
@@ -158,6 +159,8 @@ public:
 				    size_t&   index);
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
+  
+  void UpdateEmModel(const G4String&, G4double, G4double);
 
 private:
 

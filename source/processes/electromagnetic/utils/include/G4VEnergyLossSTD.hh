@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.26 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.27 2003-07-21 13:59:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
+// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -117,7 +118,7 @@ public:
   // Build physics table during initialisation
 
   virtual void PrintInfoDefinition();
- 
+
   // Print out of the class parameters
 
   G4PhysicsTable* BuildDEDXTable();
@@ -142,28 +143,24 @@ public:
   // Particle definition
 
   void SetDEDXBinning(G4int nbins);
-  //  G4int DEDXBinning() const;
-    // Binning for dEdx, range, and inverse range tables 
+  // Binning for dEdx, range, and inverse range tables
 
   void SetDEDXBinningForPreciseRange(G4int nbins);
-  //  G4int DEDXBinningForPreciseRange() const;
-    // Binning for dEdx, range, and inverse range tables 
+  // Binning for dEdx, range, and inverse range tables
 
   void SetLambdaBinning(G4int nbins);
-  //  G4int LambdaBinning() const;
-    // Binning for lambda table
+  // Binning for lambda table
 
   void SetMinKinEnergy(G4double e);
   G4double MinKinEnergy() const;
-    // Min kinetic energy for tables
+  // Min kinetic energy for tables
 
   void SetMaxKinEnergy(G4double e);
   G4double MaxKinEnergy() const;
-    // Max kinetic energy for tables
+  // Max kinetic energy for tables
 
   void SetMaxKinEnergyForPreciseRange(G4double e);
-  //  G4double MaxKinEnergyForPreciseRange() const;
-    // Max kinetic energy for tables
+  // Max kinetic energy for tables
 
   G4bool StorePhysicsTable(G4ParticleDefinition*,
                      const G4String& directory,
@@ -182,11 +179,15 @@ public:
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
                                 const G4Region* region = 0);
+  // Add EM model coupled with fluctuation model for the region
+
+  void UpdateEmModel(const G4String&, G4double, G4double);
+  // Define new energy range for thhe model identified by the name
 
   void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
+  // Add subcutoff processor for the region
 
-  virtual
-  void SetSubCutoff(G4bool) {};
+  virtual void SetSubCutoff(G4bool) {};
 
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
@@ -212,7 +213,7 @@ public:
   G4double GetKineticEnergy(G4double& range, const G4MaterialCutsCouple* couple);
 
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
-  // It returns the MeanFreePath of the process for a (energy, material)
+  // It returns the MeanFreePath of the process
 
   G4double GetDEDXDispersion(const G4MaterialCutsCouple *couple,
                              const G4DynamicParticle* dp,
@@ -317,10 +318,10 @@ private:
 private:
 
   G4EmModelManager*                     modelManager;
-  std::vector<G4VSubCutoffProcessor*> scoffProcessors;
-  std::vector<const G4Region*>        scoffRegions;
+  std::vector<G4VSubCutoffProcessor*>   scoffProcessors;
+  std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
-  std::vector<G4int>                  idxSCoffRegions;
+  std::vector<G4int>                    idxSCoffRegions;
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
@@ -332,7 +333,7 @@ private:
   G4double*        theDEDXAtMaxEnergy;
   G4double*        theRangeAtMaxEnergy;
 
-  const G4DataVector*    theCuts;
+  const G4DataVector*         theCuts;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
@@ -405,18 +406,6 @@ inline G4double G4VEnergyLossSTD::GetDEDX(G4double& kineticEnergy,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
-                                     const G4MaterialCutsCouple* couple)
-{
-  DefineMaterial(couple);
-  G4bool b;
-  return ((*theRangeTable)[currentMaterialIndex]->
-         GetValue(kineticEnergy*massRatio, b))*reduceFactor;
-}
-
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
                                             const G4MaterialCutsCouple* couple)
@@ -428,7 +417,7 @@ inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
   if (e < highKinEnergyForRange) {
     x = ((*theRangeTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
-    x = theRangeAtMaxEnergy[currentMaterialIndex] + 
+    x = theRangeAtMaxEnergy[currentMaterialIndex] +
       (e - highKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
   }
   return x*reduceFactor;
@@ -494,11 +483,11 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
     x = fRange;
-    G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
-                 ->GetProductionCut(idxG4ElectronCut));
     if( integral ) {
-      if(x < currentMinimumStep && x > r) x *= rangeCoeff;
+      if(x < currentMinimumStep && x > finalRange) x *= rangeCoeff;
     } else {
+      G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
       if (fRange > r) {
 
         x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);

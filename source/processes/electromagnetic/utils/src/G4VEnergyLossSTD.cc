@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.44 2003-07-21 12:52:10 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.45 2003-07-21 13:59:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 23-05-03 Remove tracking cuts (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -361,6 +362,13 @@ void G4VEnergyLossSTD::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuationMo
                                 const G4Region* region)
 {
   modelManager->AddEmModel(order, p, fluc, region);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
+{
+  modelManager->UpdateEmModel(nam, emin, emax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

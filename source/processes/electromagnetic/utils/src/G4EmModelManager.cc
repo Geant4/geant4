@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.15 2003-07-21 12:52:10 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.16 2003-07-21 13:59:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 16-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
 //          calculation (V.Ivanchenko)
+// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -187,6 +188,24 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
     }
   }
   nEmModels++;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmModelManager::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
+{
+  if (nEmModels) {
+    for(G4int i=0; i<nEmModels; i++) {
+      if(nam == models[i]->GetName()) {
+        models[i]->SetLowEnergyLimit(emin);
+        models[i]->SetHighEnergyLimit(emax);
+	break;
+      }
+    }
+  }
+  G4cout << "G4EmModelManager::UpdateEmModel WARNING: no model <" 
+         << nam << "> is found out"
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
