@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EmAcceptance.cc,v 1.3 2004-09-17 10:51:39 maire Exp $
+// $Id: EmAcceptance.cc,v 1.4 2004-12-02 14:57:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +63,10 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
                                            G4double avr, G4double avr0,
                                            G4double rms, G4double limit)
 {
-  G4double x = sqrt((G4double)stat);
+  G4double x = std::sqrt((G4double)stat);
   G4double dde = avr - avr0;
   G4double de = dde*x/rms;
-  if(abs(de) > limit) isAccepted = false;
+  if(std::fabs(de) > limit) isAccepted = false;
   
   G4cout << title << ": " << avr << "  del" << title << "= " << dde 
                                  << " nrms= " << de << G4endl;

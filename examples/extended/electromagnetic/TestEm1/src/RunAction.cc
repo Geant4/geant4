@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.11 2004-11-22 15:07:41 maire Exp $
+// $Id: RunAction.cc,v 1.12 2004-12-02 14:53:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,15 +147,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  //
  csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
  G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
- if (csdaRms>0.) csdaRms = sqrt(csdaRms); else csdaRms = 0.;
+ if (csdaRms>0.) csdaRms = std::sqrt(csdaRms); else csdaRms = 0.;
       
  projRange /= NbOfEvents; projRange2 /= NbOfEvents;
  G4double projRms = projRange2 - projRange*projRange;        
- if (projRms>0.) projRms = sqrt(projRms); else projRms = 0.;
+ if (projRms>0.) projRms = std::sqrt(projRms); else projRms = 0.;
        
  transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
  G4double trvsRms = transvDev2 - transvDev*transvDev;        
- if (trvsRms>0.) trvsRms = sqrt(trvsRms); else trvsRms = 0.;
+ if (trvsRms>0.) trvsRms = std::sqrt(trvsRms); else trvsRms = 0.;
  
  //compare csda range with PhysicsTables
  //
