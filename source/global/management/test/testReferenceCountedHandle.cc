@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testReferenceCountedHandle.cc,v 1.2 2001-04-18 19:40:50 radoone Exp $
+// $Id: testReferenceCountedHandle.cc,v 1.3 2001-06-01 10:33:45 radoone Exp $
 // 
 //
 // The program testing features and behaviour of the reference counted handle, smart-pointer, class.
@@ -20,8 +20,13 @@ static G4std::string sDefault = "Default";
 class Tester
 {
 public:
-  Tester( G4std::string& str = sDefault ) : fData(str) {}
-  ~Tester(){}
+  Tester( G4std::string& str = sDefault ) : fData(str) {
+  }
+  
+  ~Tester(){
+     G4cout << "Tester " << fData << " being destroyed..." << G4endl;    
+  }
+  
   bool Ok() { return true; }
   G4std::string& Data() { return fData; }
 private:
@@ -94,10 +99,16 @@ int main( int argc, char* argv[] )
   //--------------------------------------------------------------------------------
   G4cout << "Testing copy and assignment by pointer to counted object..." << G4endl;
   G4cout << "Tester 1 is counting: >>" << t1->Data() << "<< with the count: " << t1.Count() << G4endl;
-  G4std::string str;
-  t1 = new Tester( str = "New one" );
-  assert( 1 == t1.Count() );    
+  CountedTester t4 = t1;
   G4cout << "Tester 1 is counting: >>" << t1->Data() << "<< with the count: " << t1.Count() << G4endl;
+  G4cout << "Tester 4 is counting: >>" << t4->Data() << "<< with the count: " << t4.Count() << G4endl;
+
+  G4std::string str = "New one";
+  t1 = new Tester( str );
+  assert( 1 == t1.Count() );    
+  G4cout << "After assignment of native pointer to t1: " << G4endl;
+  G4cout << "Tester 1 is counting: >>" << t1->Data() << "<< with the count: " << t1.Count() << G4endl;
+  G4cout << "Tester 4 is counting: >>" << t4->Data() << "<< with the count: " << t4.Count() << G4endl;
   
   //--------------------------------------------------------------------------------
   
