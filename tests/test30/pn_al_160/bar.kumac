@@ -33,4 +33,4 @@ set NDVY 010205
  close 1
  
  opt liny
-exe ../kumac/prf bar eps
+exe ../prf bar eps

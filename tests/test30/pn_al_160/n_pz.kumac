@@ -31,4 +31,4 @@ set NDVY 010205
  itx 200 4000 'KIN'
  close 1
  
-exe ../kumac/prf n_pz eps
+exe ../prf n_pz eps

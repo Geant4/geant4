@@ -31,4 +31,4 @@ set NDVY 010205
  itx 0 100 'KIN'
  close 1
  
-exe ../kumac/prf phi eps
+exe ../prf phi eps

@@ -31,4 +31,4 @@ set NDVY 010205
  itx 20 10000 'KIN'
  close 1
  
-exe ../kumac/prf mult eps
+exe ../prf mult eps

@@ -34,7 +34,7 @@ ve/create Y(27) R 0.072 0.064 0.049 0.04 0.029 0.02 0.015 0.011 0.0086 0.0063 0.
 gr/h/symb X Y 27 21 0.2
  
 
-exe ../kumac/prf n_a9 eps
+exe ../prf n_a9 eps
  
 * null 0 160 0.0001 10
 * atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'

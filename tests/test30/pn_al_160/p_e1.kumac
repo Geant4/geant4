@@ -35,4 +35,4 @@ set NDVY 010205
  
  opt liny
  opt linx
-exe ../kumac/prf p_e1 eps
+exe ../prf p_e1 eps

@@ -31,4 +31,4 @@ set NDVY 010205
  itx 0 500 'KIN'
  close 1
  
-exe ../kumac/prf p_theta eps
+exe ../prf p_theta eps

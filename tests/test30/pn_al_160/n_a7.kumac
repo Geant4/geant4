@@ -34,7 +34,7 @@ ve/create Y(27) R 0.133 0.122 0.113 0.097 0.079 0.064 0.054 0.045 0.036 0.029 0.
 gr/h/symb X Y 27 21 0.2
  
 
-exe ../kumac/prf n_a7 eps
+exe ../prf n_a7 eps
  
   hi/file 1 par.paw
  set dmod 4
