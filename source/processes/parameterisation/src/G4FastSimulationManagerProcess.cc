@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.2 1999-04-14 14:25:34 mora Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.3 1999-04-28 10:06:43 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,7 +108,7 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
   // ----------------------------------------------------------
   if(fStartTracking)
     {
-      G4FlavoredParallelWorld* flavoredWorld = 
+      G4VFlavoredParallelWorld* flavoredWorld = 
 	G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
 	GetFlavoredWorldForThis(track.GetDynamicParticle()->GetDefinition());
 

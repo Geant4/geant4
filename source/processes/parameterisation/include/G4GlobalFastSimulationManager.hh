@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.2 1999-04-15 17:17:20 mora Exp $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.3 1999-04-28 10:06:39 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -76,7 +76,7 @@ public:
   void InActivateFastSimulationModel(const G4String&);
 
   // G4FastSimulationProcess interface
-  G4FlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition *);
+  G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition *);
 
   // G4StateManager interface
   G4bool Notify(G4ApplicationState requestedState);

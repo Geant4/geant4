@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.3 1999-04-15 17:17:22 mora Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.4 1999-04-28 10:06:43 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -120,7 +120,7 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   fClosed=true;
 }
 
-G4FlavoredParallelWorld* 
+G4VFlavoredParallelWorld* 
 G4GlobalFastSimulationManager::
 GetFlavoredWorldForThis(G4ParticleDefinition* particle)
 {
