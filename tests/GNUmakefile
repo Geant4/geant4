@@ -1,7 +1,8 @@
-# $Id: GNUmakefile,v 1.35 2001-08-23 11:00:33 stesting Exp $
+# $Id: GNUmakefile,v 1.36 2001-11-12 17:37:49 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
+# Introduce field/field01,02,03 
 
 ifndef G4INSTALL
   G4INSTALL = ..
@@ -23,6 +24,9 @@ ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
+
+# Symbolic links to extended field examples using test701, etc...
+FIELD += 01 02 03
 
 # System Tests...
 SUBDIRS += test01 ## Geometry - CSG solids and navigator.
@@ -85,6 +89,10 @@ endif
 	@$(ECHO) Making G3toG4 Tests...
 	@for nn in $(G3TOG4); do \
 	  (cd test6$$nn && $(MAKE)); \
+	done;:
+	@$(ECHO) Making Field Tests...
+	@for nn in $(FIELD); do \
+	  (cd test7$$nn && $(MAKE)); \
 	done;:
 	@$(ECHO) Making libG4TestTool.a for System Tests...
 	@cd tools/lib && $(MAKE);:
@@ -161,6 +169,19 @@ examples_links_source:
          ln -s cltog4.in  $$testdir/test602.in;  \
          ln -s cltog4.out $$testdir/test602.out; :
 
+	@for nn in $(FIELD); do \
+	  testdir=test7$$nn; \
+	  exdir=$(G4INSTALL)/examples/extended/field/field$$nn; \
+	  ln -s $$exdir $$testdir; \
+	  for i in $$exdir/*.in; do \
+	    exin=`basename $$i`; \
+	    exout=`basename $$i .in`.out; \
+	    testin=`echo $$exin | sed s/field/test7/`; \
+	    testout=`echo $$exout | sed s/field/test7/`; \
+	    ln -s $$exin $$testdir/$$testin; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
+	done;:
 examples_links_binaries:
 	@$(MAKE) clean_examples_links_binaries
 	@for nn in $(EXAMPLES); do \
@@ -173,6 +194,9 @@ examples_links_binaries:
 	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
 	  ln -s $$exdir/PersistentEx$${nn}run \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
+	done;:
+	@for nn in $(FIELD); do \
+	  ln -s field$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test7$$nn; \
 	done;:
 	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
 	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
@@ -214,5 +238,8 @@ clean_examples_links_binaries:
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
+	done;:
+	@for nn in $(FIELD); do \
+	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test7$$nn; \
 	done;:
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
