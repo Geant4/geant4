@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.8 2000-12-06 13:06:02 barrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.9 2000-12-06 13:08:03 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,11 +24,11 @@
 #ifdef G4ANALYSIS_USE_JAS
 #include "G4JasSystem.hh"
 #endif
-#ifdef G4ANALYSIS_USE_LIZARD
-#include "G4LizardSystem.hh"
-#endif
 #ifdef G4ANALYSIS_USE_LAB
 #include "G4LabSystem.hh"
+#endif
+#ifdef G4ANALYSIS_USE_LIZARD
+#include "G4LizardSystem.hh"
 #endif
 
 #include "AnaEx01CalorHit.hh"
@@ -46,11 +46,11 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(
 #ifdef G4ANALYSIS_USE_JAS
   RegisterAnalysisSystem(new G4JasSystem);
 #endif
-#ifdef G4ANALYSIS_USE_LIZARD
-  RegisterAnalysisSystem(new G4LizardSystem);
-#endif
 #ifdef G4ANALYSIS_USE_LAB
   RegisterAnalysisSystem(new G4LabSystem);
+#endif
+#ifdef G4ANALYSIS_USE_LIZARD
+  RegisterAnalysisSystem(new G4LizardSystem);
 #endif
   // The factory and histograms will be deleted by the analysis manager.
   IHistogramFactory* hfactory = GetHistogramFactory(aSystem);
