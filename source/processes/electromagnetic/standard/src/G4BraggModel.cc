@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.4 2005-02-27 18:07:26 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.5 2005-03-22 13:55:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -508,7 +508,6 @@ G4double G4BraggModel::DEDX(const G4Material* material,
 
     eloss = StoppingPower(material, kineticEnergy)
                                * (material->GetTotNbOfAtomsPerVolume());
-    eloss *=  material->GetTotNbOfAtomsPerVolume();
     if(1 < numberOfElements) {
       G4int nAtoms = 0;
      
