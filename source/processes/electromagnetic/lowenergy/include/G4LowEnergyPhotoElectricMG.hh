@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.hh,v 1.2 2001-09-16 09:45:01 elena Exp $
+// $Id: G4LowEnergyPhotoElectricMG.hh,v 1.3 2001-09-16 15:44:07 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -29,8 +29,9 @@
 //
 // History:
 // -----------
-// 02 Mar 1999   A. Forti   1st implementation
-// 12 Aug 2001   MGP        Major revision according to a design iteration
+// 02 Mar  1999   A. Forti   1st implementation
+// 12 Aug  2001   MGP        Major revision according to a design iteration
+// 16 Sept 2001   E. Guardincerri Added fluorescence generation
 //
 // -------------------------------------------------------------------
 
