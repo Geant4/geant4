@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2003-11-19 18:00:42 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                Example for divisions History file
+                ----------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17-10-03 P.Arce (exdivisions-V05-02-00)
+---------------
+- Created.
