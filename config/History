@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2000-03-30 07:58:46 gcosmo Exp $
+$Id: History,v 1.102 2000-04-07 13:43:52 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th April 2000  Gabriele Cosmo (config-V01-01-02)
+- binmake.gmk: added include path to the new directory
+  geometry/solids/specific.
+- Updated PERL script g4step_correct.pl for parsing STEP files.
 
 30th March 2000  Gabriele Cosmo (config-V01-01-01)
 - makeshlib.sh:
