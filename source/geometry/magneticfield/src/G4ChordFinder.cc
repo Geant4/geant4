@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.28 2002-06-10 17:00:32 sussi Exp $
+// $Id: G4ChordFinder.cc,v 1.29 2002-06-10 17:18:07 sussi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -262,9 +262,8 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   // if ( dChordStep < threshold * fDeltaChord ){
   //    stepTrial= stepTrialOld *  multiplier;    
   // }
-  if( (stepTrial <= 0.001 * stepTrialOld)
-    || (stepTrial > 1000.0 * stepTrialOld)
-    ){
+  if( stepTrial <= 0.001 * stepTrialOld)
+  {
      if ( dChordStep > 1000.0 * fDeltaChord ){
         stepTrial= stepTrialOld * 0.03;   
      }else{
@@ -275,7 +274,11 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 	  stepTrial= stepTrialOld * 0.5;   
 	}
      }
+  }else if (stepTrial > 1000.0 * stepTrialOld)
+  {
+     stepTrial= 1000.0 * stepTrialOld;
   }
+
   if( stepTrial == 0.0 ){
      stepTrial= 0.000001;
   }
