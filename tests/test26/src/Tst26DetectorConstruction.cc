@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.4 2003-02-07 15:33:02 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.5 2003-03-06 10:39:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,7 @@ Tst26DetectorConstruction::Tst26DetectorConstruction()
  logicA2(0)
 {
   detectorMessenger = new Tst26DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +83,6 @@ Tst26DetectorConstruction::~Tst26DetectorConstruction()
 
 G4VPhysicalVolume* Tst26DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructVolumes();
 }
 
@@ -119,6 +119,10 @@ void Tst26DetectorConstruction::DefineMaterials()
     
     a = 208.98*g/mole;
     G4Element* Bi = new G4Element(name="Bismuth"  , symbol="Bi",z=83., a);
+
+    G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
+
+    G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
       
   //  
   // define materials
@@ -137,8 +141,8 @@ void Tst26DetectorConstruction::DefineMaterials()
     G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
     H2O->AddElement(H, natoms=2);
     H2O->AddElement(O, natoms=1);
-    //  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-    //  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
+    G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
+    H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
     
   //liquid argon
     a = 39.95*g/mole;
@@ -156,10 +160,18 @@ void Tst26DetectorConstruction::DefineMaterials()
     vertMaterial = new G4Material(name="Si", z=14., a, density);
 
         
-  //Fe
+    //Fe
     a = 55.85*g/mole;
     density = 7.87*g/cm3;
     yorkMaterial = new G4Material(name="Fe", z=26., a, density);
+
+    // CsI
+    ma = new G4Material ("CsI" , 4.51*g/cm3, 2);
+    ma->SetChemicalFormula("CsI");
+    ma->AddElement(Cs,1);
+    ma->AddElement(I,1);
+    ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
+
     
   //BGO
     density = 7.10*g/cm3;
