@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2004-12-07 08:28:55 gcosmo Exp $
+$Id: History,v 1.99 2005-03-07 16:21:41 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar. 7th, 2005, M.Asai transport-V07-00-00
+----------------------
+- Added virtual to destructors of G4StepLimiter and G4UserSpecialCuts.
 
 Dec. 7th, 2004, G.Cosmo transport-V06-02-05
 -----------------------
