@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisStateDependent.cc,v 1.3 2001-07-11 10:09:20 gunter Exp $
+// $Id: G4VisStateDependent.cc,v 1.4 2001-09-10 10:41:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4VisStateDependent.hh"
@@ -33,10 +33,19 @@ G4VisStateDependent::G4VisStateDependent (G4VisManager* pVisManager):
   fpVisManager (pVisManager) {}
 
 G4bool G4VisStateDependent::Notify (G4ApplicationState requestedState) {
-  G4StateManager* stateManager = G4StateManager::GetStateManager ();
-  if(stateManager -> GetPreviousState () == EventProc &&
-     requestedState == GeomClosed) {
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState previousState = stateManager->GetPreviousState();
+  if (previousState == Idle  &&  requestedState == GeomClosed) {
+    fpVisManager -> BeginOfRun ();
+  }
+  else if (previousState == GeomClosed &&  requestedState == EventProc) {
+    fpVisManager -> BeginOfEvent ();
+  }
+  else if (previousState == EventProc &&  requestedState == GeomClosed) {
     fpVisManager -> EndOfEvent ();
+  }
+  else if (previousState == GeomClosed &&  requestedState == Idle) {
+    fpVisManager -> EndOfRun ();
   }
   return true;
 }
