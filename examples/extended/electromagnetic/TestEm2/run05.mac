@@ -1,0 +1,38 @@
+#
+# Macro file for "TestEm2.cc"
+# (can be run in batch, without graphic)
+#
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
+#
+/control/verbose 2
+#
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 100 MeV
+/run/beamOn 10
+#
+/run/particle/applyCuts
+/run/beamOn 10
+/run/dumpCouples
+#
+#
+/testem/det/setMat  Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/testem/det/update
+/run/initialize
+/run/beamOn 10
+/run/dumpCouples
+#
+/testem/det/setMat  lAr
+/testem/det/update
+/run/initialize
+/run/beamOn 10
+/run/dumpCouples
+#
+
