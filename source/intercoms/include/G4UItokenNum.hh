@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.5 2002-11-27 19:08:09 asaim Exp $
+// $Id: G4UItokenNum.hh,v 1.6 2003-06-04 13:51:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UItokenNum.hh
@@ -31,7 +31,8 @@
 #include "globals.hh"
 
 
-enum  tokenNum {
+enum  tokenNum
+{
   IDENTIFIER = 257,
   CONSTINT   = 258,
   CONSTDOUBLE= 259,
@@ -49,14 +50,34 @@ enum  tokenNum {
 };
 
 
-typedef struct yystype {
+typedef struct yystype
+{
     tokenNum      type;
     G4double D;
     G4int    I;
     char     C;
     G4String S;
-    G4int operator==(const yystype &right) const
-    { return (this == &right)?1:0; }
+
+    yystype() : D(0.0), I(0), C(' '), S("")
+    {
+    }
+    G4int operator==(const yystype& right) const
+    {
+      return (this == &right)?1:0;
+    }
+    yystype& operator=(const yystype& right)
+    {
+      if (&right==this) return *this;
+      type = right.type;
+      D = right.D;
+      I = right.I;
+      C = right.C;
+      S = right.S;
+    }
+    yystype(const yystype& right)
+    {
+      *this=right;
+    }
 } yystype;
  
 #endif
