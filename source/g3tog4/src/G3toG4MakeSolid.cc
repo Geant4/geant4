@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.4 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.5 2000-07-24 11:32:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
@@ -22,6 +22,7 @@
 #include "G4Polyhedra.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
+#include "G4EllipticalTube.hh"
 #include "G3toG4MakeSolid.hh"
         
 G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape, 
@@ -272,8 +273,17 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     delete [] Rmax;
 
   } else if ( shape == "ELTU" ) {
-    // $$$ not implemented.
-    G4cerr << "ELTU not supported" << G4endl;
+    G4double dX = Rpar[0]*cm;
+    G4double dY = Rpar[1]*cm;
+    G4double dZ = Rpar[2]*cm;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
+    
+    NegVolPars = dX<0 || dY<0 || dZ<0;
+    
+    if (!(NegVolPars || Deferred)) { 
+      solid = new G4EllipticalTube(vname, dX, dY, dZ);
+    }
 
   } else if ( shape == "HYPE" ) {
     G4double pRmin = Rpar[0]*cm;
