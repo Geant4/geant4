@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.3 2000-03-24 08:12:26 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.4 2000-06-20 08:47:22 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -25,6 +25,7 @@
 // 17/09/99: corr. for high energy and/or small step , L.Urban
 // 30/09/99: nuclear size effect correction,  L.Urban
 // 22/03/00: value of member cpar has changed! , L.Urban
+// 20/06/00: nuclear size correction for particles other than e+/e- only ,  L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -406,7 +407,10 @@
 
      sigma *= corrfactor ;
 
-     sigma /= corrnuclsize ;
+    //  nucl. size correction for particles other than e+/e- only at present !!!!
+    if((&aParticleType != G4Electron::Electron()) &&
+       (&aParticleType != G4Positron::Positron())  )    
+       sigma /= corrnuclsize ;
 
      return sigma ;
   } 
