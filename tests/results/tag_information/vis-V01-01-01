@@ -1,0 +1,24 @@
+
+12th April 2000  John Allison  vis-V01-01-01
+
+- Made G4PhysicalVolumeModel::DescribeSolid virtual.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with composite
+  solids - now programmed into CompositeSolid::CreatePolyhedron, where
+  CompositeSolid means G4IntersectionSolid, G4SubtractionSolid and
+  G4UnionSolid.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with displaced
+  solids - now programmed into G4DisplacedSolid::CreatePolyhedron.
+- Added G4LogicalVolumeModel::DescribeSolid, which explicitly adds
+  components of composite solids as white forced-wireframe objects.
+- Removed unnecessary #includes from G4VSceneHandler.hh which required
+  consequent inclusion in many other scene handlers and viewers.
+
+These tags include changes for the first implementation of boolean
+solid visualization with G4Polyhedron objects.  All graphics systems
+should now be able to visualize boolean solids.  Note there are still
+problems for boolean solids whose components have shared surfaces.
+
+Vizzers, please try these tags.  Note there has also been some moving
+of #include statements from G4VSceneHandler.hh to several .cc files.
+I hope I've caught all cases - I believe I have all VIS environment
+variables set - but please try your favourite system.

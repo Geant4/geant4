@@ -1,0 +1,16 @@
+
+- management:
+  o made virtual G4VisExtent G4VSolid::GetExtent() non-pure and
+    implemented a default in terms of CalculateExtent.
+- solids:
+  o removed implementations of GetExtent in most sub-classes of
+    G4VSolid.
+  o all implementations of
+    DescribeYourselfTo (G4VGraphicsScene& scene) const
+    now correctly written: scene.AddThis(*this).
+- solids/Boolean:
+  o CreatePolyhedron implemented for BooleanSolids.
+  o G4DisplacedSolid: reversed implementation of GetFrameRotation and
+    GetObjectRotation, removing inappropriate invertion.
+  o G4DisplacedSolid::GetConstituentMovedSolid() made const.
+
