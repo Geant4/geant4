@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2000-01-22 13:46:57 stesting Exp $
+$Id: History,v 1.40 2000-01-24 14:46:01 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th January 2000  John Allison
+- N02/03: Limited printing in ExNnnEventAction::EndOfEventAction to first
+  100 events and then every 100.
 
 21st January 2000  John Allison
 - Added large_N.in files in examples/novice.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.7 1999-12-15 14:49:25 gunter Exp $
+// $Id: ExN03EventAction.cc,v 1.8 2000-01-24 14:46:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,41 +72,46 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 
 void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-  
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  ExN03CalorHitsCollection* CHC = NULL;
-  if (HCE)
-      CHC = (ExN03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
-
-  if (CHC)
-   {
-    int n_hit = CHC->entries();
-    G4cout << "     " << n_hit
-         << " hits are stored in ExN03CalorHitsCollection." << G4endl;
-    G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
-    for (int i=0;i<n_hit;i++)
-      { totEAbs += (*CHC)[i]->GetEdepAbs(); 
-        totLAbs += (*CHC)[i]->GetTrakAbs();
-        totEGap += (*CHC)[i]->GetEdepGap(); 
-        totLGap += (*CHC)[i]->GetTrakGap();
-        
-      }
-    G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLAbs,"Length")
-       << G4endl
-       << "        Gap: total energy: " << G4std::setw(7) << G4BestUnit(totEGap,"Energy")
-       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
-       << G4endl;           
-    }
+  G4int event_id = evt->GetEventID();
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
-  if(trajectoryContainer)
-  { n_trajectories = trajectoryContainer->entries(); }
-  G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << G4endl;
+  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+
+  if (event_id < 100 || event_id%100 == 0) {
+
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+
+    G4cout << "    " << n_trajectories 
+	   << " trajectories stored in this event." << G4endl;
+
+    G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+    ExN03CalorHitsCollection* CHC = NULL;
+    if (HCE)
+      CHC = (ExN03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
+
+    if (CHC)
+      {
+	int n_hit = CHC->entries();
+	G4cout << "     " << n_hit
+	       << " hits are stored in ExN03CalorHitsCollection." << G4endl;
+	G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
+	for (int i=0;i<n_hit;i++)
+	  {
+	    totEAbs += (*CHC)[i]->GetEdepAbs(); 
+	    totLAbs += (*CHC)[i]->GetTrakAbs();
+	    totEGap += (*CHC)[i]->GetEdepGap(); 
+	    totLGap += (*CHC)[i]->GetTrakGap();
+	  }
+	G4cout
+	  << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
+	  << "       total track length: " << G4std::setw(7) << G4BestUnit(totLAbs,"Length")
+	  << G4endl
+	  << "        Gap: total energy: " << G4std::setw(7) << G4BestUnit(totEGap,"Energy")
+	  << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
+	  << G4endl;           
+      }
+  }
 
   if(G4VVisManager::GetConcreteInstance())
   {
@@ -120,5 +125,3 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
