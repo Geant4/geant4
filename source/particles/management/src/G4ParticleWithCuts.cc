@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 1.4 1999-04-15 11:45:59 urban Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.5 1999-06-09 08:56:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -313,42 +313,49 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
                     
   G4double Charge = this->GetPDGCharge() ;
 
-  static G4String protonName = "proton";
-  G4ParticleDefinition* theProton = G4ParticleTable::GetParticleTable()->FindParticle(protonName);
-
   G4bool useProtonCut =
-                       ((GetParticleName() != "gamma" ) &&
-		        (GetParticleName() != "e-"    ) &&
-			(GetParticleName() != "e+"    ) &&
-			(GetParticleName() != "mu-"   ) &&
-			(GetParticleName() != "mu+"   ) &&
-			(GetParticleName() != "proton" ) &&
-			(GetParticleName() != "anti_proton" ) && 
-			(Charge != 0.)                             );
-  if (useProtonCut) {
+           ((GetParticleName() != "gamma" ) &&
+            (GetParticleName() != "e-"    ) &&
+            (GetParticleName() != "e+"    ) &&
+            (GetParticleName() != "mu-"   ) &&
+            (GetParticleName() != "mu+"   ) &&
+            (GetParticleName() != "proton" ) &&
+            (GetParticleName() != "anti_proton" ) && 
+            (Charge != 0.)                             );
+
+  static G4ParticleDefinition* theProton =0;   
+
+  // check if the proton exists or not 
+  if ((useProtonCut) && (theProton ==0)) {
+    theProton =   G4ParticleTable::GetParticleTable()->FindParticle("proton");
     if (theProton ==0) {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cout << " G4ParticleWithCuts::CalcEnergyCuts  ";
-	G4cout << " proton is not defined !!" << endl;
+	    G4cout << " G4ParticleWithCuts::CalcEnergyCuts  ";
+	    G4cout << " proton is not defined !!" << endl;
       }
 #endif
       useProtonCut = false;
     }
+  } 
+
+  if (useProtonCut) {
+    // check if cuts for the proton are defined or not
     if (theProton->GetEnergyCuts()==0) {
       errOs << " G4ParticleWithCuts::CalcEnergyCuts  ";
       errOs << "   proton energy cut is not defined !!" << '\0';    
       G4Exception(errMsg);  
     }
-  }
+    //  check if the cut in range is same as one fro the proton
+    useProtonCut =  ( abs(aCut-theProton->GetLengthCuts())<1.*nanometer );  
+  }	
 
-  if ( useProtonCut && 
-       ( abs(aCut-theProton->GetLengthCuts())<1.*nanometer) ){
-     // use energy cuts for Proton
+  if (useProtonCut) {
+    // use energy cuts for Proton
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
       G4cout << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
-      G4cout << " user Proton Cut " << endl;
+      G4cout << " uses Proton Cut " << endl;
     }
 #endif                                                      
     G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
@@ -359,7 +366,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
       // cut energy is rescaled by using charge and mass ratio
       theKineticEnergyCuts[J] = ChargeSquare*protonEnergyCut/massRatio ; 
       if(theKineticEnergyCuts[J] < LowestEnergy) {
-	theKineticEnergyCuts[J] = LowestEnergy ;
+        theKineticEnergyCuts[J] = LowestEnergy ;
       }
     }
   } else {
