@@ -163,7 +163,6 @@ void Test17PhysicsList::ConstructProcess()
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4ionLowEnergyIonisation.hh"
 
