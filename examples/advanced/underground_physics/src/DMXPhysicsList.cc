@@ -366,7 +366,7 @@ void DMXPhysicsList::ConstructEM() {
 // Optical Processes ////////////////////////////////////////////////////////
 #include "G4Scintillation.hh"
 #include "G4OpAbsorption.hh"
-#include "G4OpRayleigh.hh"
+//#include "G4OpRayleigh.hh"
 #include "G4OpBoundaryProcess.hh"
 
 void DMXPhysicsList::ConstructOp() 
@@ -408,12 +408,12 @@ void DMXPhysicsList::ConstructOp()
 
   // optical processes
   G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
-  G4OpRayleigh* theRayleighScatteringProcess = new G4OpRayleigh();
+  //  G4OpRayleigh* theRayleighScatteringProcess = new G4OpRayleigh();
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   //  theAbsorptionProcess->DumpPhysicsTable();
   //  theRayleighScatteringProcess->DumpPhysicsTable();
   theAbsorptionProcess->SetVerboseLevel(OpVerbLevel);
-  theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
+  // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
@@ -445,7 +445,7 @@ void DMXPhysicsList::ConstructOp()
       
       if (particleName == "opticalphoton") {
 	pmanager->AddDiscreteProcess(theAbsorptionProcess);
-	pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
+	//	pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
 	pmanager->AddDiscreteProcess(theBoundaryProcess);
       }
     }
