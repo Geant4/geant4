@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2003-10-08 16:41:45 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2003-10-17 17:23:43 lara Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -10,6 +10,10 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+
+ifdef PRECOMPOUND_TEST
+  CPPFLAGS += -DPRECOMPOUND_TEST
+endif
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
