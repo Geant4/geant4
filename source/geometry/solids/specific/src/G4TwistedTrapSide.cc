@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.11 2004-12-02 13:25:15 gcosmo Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.12 2004-12-02 16:40:51 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ G4ThreeVector G4TwistedTrapSide::GetNormal(const G4ThreeVector &tmpxx,
 
 #ifdef G4SPECSDEBUG
    G4cout  << "normal vector = " << normal << G4endl ;
-   G4cout << "phi = " << phi << " , L = " << L << G4endl ;
+   G4cout << "phi = " << phi << " , u = " << u << G4endl ;
 #endif
 
    //    normal = normal/normal.mag() ;
@@ -180,8 +180,10 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   G4ThreeVector v = ComputeLocalDirection(gv);
   G4ThreeVector xx[2]; 
 
+#ifdef G4SPECSDEBUG
   G4cout << "Local point p = " << p << G4endl ;
   G4cout << "Local direction v = " << v << G4endl ; 
+#endif
 
   // temporary variables
 
@@ -215,7 +217,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       PhiR[0] = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
       uR[0] =  (b*(4*p.y()*v.x() - 4*p.x()*v.y() + apd*v.y()*std::cos(PhiR[0]) 
 		   - apd*v.x()*std::sin(PhiR[0])))/
-        (2.*((2*b*v.x() - amd *v.y())*std::cos(PhiR[0]) + ( amd * v.x() + 2*b*v.y())*std::sin(PhiR[0])));
+        (2.*((2*b*v.x() - amd *v.y())*std::cos(PhiR[0]) 
+	     + ( amd * v.x() + 2*b*v.y())*std::sin(PhiR[0])));
 
       nxx = 1 ;  // one solution only
       IsGoodSolution[0] = true ;
@@ -347,7 +350,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   for ( G4int k = 0 ; k < nxx ; k++ ) {   // loop over all physical solutions
 
 #ifdef G4SPECSDEBUG
-    G4cout << "Solution " << k " : " 
+    G4cout << "Solution " << k << " : " 
 	   << "reconstructed phiR = " << PhiR[k] 
 	   << ", uR = " << uR[k] << G4endl ; 
 #endif
@@ -370,19 +373,18 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       tmpdist[k] = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx[k]); 
       G4double deltaXtmp = ( tmpxx[0] - xxonsurface ).mag() ; 
 
-    //#ifdef G4SPECSDEBUG
-      G4cout << "Step i = " << i << ", distance = " << tmpdist[k] << ", " << deltaXtmp << G4endl ;
-
-      G4cout << "X = " << tmpxx[k] << G4endl ;
-    //#endif
-      if ( deltaX <= deltaXtmp && i> 1 ) { break ; } ;
-
-    // the new point xx is accepted and phi/psi replaced
-      GetPhiUAtX(tmpxx[k], PhiR[k], uR[k]) ;
-      
 #ifdef G4SPECSDEBUG
-      G4cout << "approximated phiR = " << PhiR[k] << ", uR = " << uR[k] << G4endl ; 
+      G4cout << "Step i = " << i << ", distance = " << tmpdist[k] << ", " << deltaXtmp << G4endl ;
+      G4cout << "X = " << tmpxx[k] << G4endl ;
 #endif
+
+      if ( deltaX <= deltaXtmp && i> 1 ) { break ; } 
+ 
+      GetPhiUAtX(tmpxx[k], PhiR[k], uR[k]) ; // the new point xx is accepted and phi/u replaced
+      
+      //#ifdef G4SPECSDEBUG
+      //G4cout << "approximated phiR = " << PhiR[k] << ", uR = " << uR[k] << G4endl ; 
+      //#endif
 
       deltaX = deltaXtmp ;
 
@@ -392,13 +394,13 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 	IsGoodSolution[k] = false ;  // no convergence after 10 steps 
       }
       
-    }
+    }  // end iterative loop (i)
     
-    //#ifdef G4SPECSDEBUG
+#ifdef G4SPECSDEBUG
     G4cout << "refined solution "  << PhiR[k] << " , " << uR[k]  <<  G4endl ;
     G4cout << "distance = " << tmpdist[k] << G4endl ;
     G4cout << "local X = " << tmpxx[k] << G4endl ;
-    //#endif
+#endif
 
     if ( IsGoodSolution[k] ) {
 
@@ -436,12 +438,15 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
     fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
+
+#ifdef G4SPECSDEBUG
     G4cout << "G4TwistedTrapSide finished " << G4endl ;
     G4cout << "1 possible physical solution found" << G4endl ;
     G4cout << "local X = " << xx[0] << G4endl ;
     G4cout << "intersection Point found: " << gxx[0] << G4endl ;
     G4cout << "distance = " << distance[0] << G4endl ;
     G4cout << "isvalid = " << isvalid[0] << G4endl ;
+#endif
 
     return 1;
 
@@ -474,6 +479,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       isvalid[1]  = tmpisvalid[0];
     }
 
+#ifdef G4SPECSDEBUG
     G4cout << "G4TwistedTrapSide finished " << G4endl ;
     G4cout << "2 possible physical solutions found" << G4endl ;
     for ( G4int k= 0 ; k< nxx ; k++ ) {
@@ -482,7 +488,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       G4cout << "distance = " << distance[k] << G4endl ;
       G4cout << "isvalid = " << isvalid[k] << G4endl ;
     }
-    
+#endif
+
     fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
 				   isvalid[0], 2, validate, &gp, &gv);
     fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
