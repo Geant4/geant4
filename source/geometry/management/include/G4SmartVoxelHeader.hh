@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.hh,v 1.4 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.hh,v 1.5 2001-04-20 20:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelHeader
@@ -23,7 +23,7 @@
 // G4double fmaxExtent
 // G4double fminExtent
 //   - Minimum and maximum coordiantes along the axis
-// G4RWTPtrOrderedVector<G4SmartVoxelProxy> fslices
+// G4std::vector<G4SmartVoxelProxy*> fslices
 //   - The slices along the axis
 //
 // G4int fminEquivalent
@@ -32,7 +32,8 @@
 //     [Applies to the level of the header, not its nodes]
 
 // History:
-// 13.07.95 P.Kent Initial version
+// 18.04.01 G.Cosmo Migrated to STL vector
+// 13.07.95 P.Kent  Initial version
 
 #ifndef G4SMARTVOXELHEADER_HH
 #define G4SMARTVOXELHEADER_HH
@@ -46,9 +47,7 @@
 
 #include "G4ios.hh"
 
-#include "g4rw/tvvector.h"
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 // Forward declarations
 class G4LogicalVolume;
@@ -56,16 +55,16 @@ class G4VoxelLimits;
 class G4VPhysicalVolume;
 
 // Typedefs
-typedef G4RWTPtrOrderedVector<G4SmartVoxelProxy> G4ProxyVector;
-typedef G4RWTPtrOrderedVector<G4SmartVoxelNode> G4NodeVector;
-typedef G4RWTValOrderedVector<G4int> G4VolumeNosVector;
-typedef G4RWTValVector<G4double> G4VolumeExtentVector;
+typedef G4std::vector<G4SmartVoxelProxy*> G4ProxyVector;
+typedef G4std::vector<G4SmartVoxelNode*> G4NodeVector;
+typedef G4std::vector<G4int> G4VolumeNosVector;
+typedef G4std::vector<G4double> G4VolumeExtentVector;
 
 class G4SmartVoxelHeader
 {
   public:  // with description
 
-    G4SmartVoxelHeader(G4LogicalVolume* pVolume,const G4int pSlice=0);
+    G4SmartVoxelHeader(G4LogicalVolume* pVolume, G4int pSlice=0);
       // Constructor for topmost header, to begin voxel construction at a
       // given logical volume. pSlice is used to set max and min equivalent
       // slice nos for the header - they apply to the level of the header,
@@ -75,9 +74,9 @@ class G4SmartVoxelHeader
       // Delete all referenced nodes [but *not* referenced physical volumes].
     
     G4int GetMaxEquivalentSliceNo() const;
-    void SetMaxEquivalentSliceNo(const G4int pMax);
+    void SetMaxEquivalentSliceNo(G4int pMax);
     G4int GetMinEquivalentSliceNo() const;
-    void SetMinEquivalentSliceNo(const G4int pMin);
+    void SetMinEquivalentSliceNo(G4int pMin);
       // Access functions for min/max equivalent slices (nodes & headers).
 
     EAxis GetAxis() const;
@@ -91,7 +90,7 @@ class G4SmartVoxelHeader
     G4int GetNoSlices() const;
       // Return the no of slices along the current axis.
     
-    G4SmartVoxelProxy* GetSlice(const G4int n) const;
+    G4SmartVoxelProxy* GetSlice(G4int n) const;
       // Return ptr to the proxy for the nth slice (numbering from 0,
       // no bounds checking performed).
 
@@ -110,7 +109,7 @@ class G4SmartVoxelHeader
     G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 		       const G4VoxelLimits& pLimits,
 		       const G4VolumeNosVector* pCandidates,
-		       const G4int pSlice=0);
+		       G4int pSlice=0);
       // Build and refine voxels between specified limits, considering only
       // the physical volumes numbered `pCandidates'. pSlice is used to set max
       // and min equivalent slice nos for the header - they apply to the level
@@ -126,7 +125,7 @@ class G4SmartVoxelHeader
       // Build voxels for specified volume containing a single
       // replicated volume.
 
-    void BuildConsumedNodes(const G4int nReplicas);
+    void BuildConsumedNodes(G4int nReplicas);
       // Construct nodes in simple consuming case.
 
     void BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,

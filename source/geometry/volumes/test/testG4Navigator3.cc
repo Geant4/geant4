@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Navigator3.cc,v 1.3 1999-12-15 14:50:28 gunter Exp $
+// $Id: testG4Navigator3.cc,v 1.4 2001-04-20 20:18:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,14 +172,10 @@ int main()
 
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore *ps=G4PhysicalVolumeStore::GetInstance();
-    for (G4int i=ps->entries()-1;i>=0;i--)
+    for (G4int i=ps->size()-1;i>=0;i--)
       {
 	// Delete any rotation matrices
-	delete ps->at(i)->GetRotation();
+	delete (*ps)[i]->GetRotation();
       }
     return 0;
 }
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.icc,v 1.1 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.icc,v 1.2 2001-04-20 20:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,7 +19,7 @@ G4int G4SmartVoxelHeader::GetMaxEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(const G4int pMax)
+void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(G4int pMax)
 {
   fmaxEquivalent=pMax;
 }
@@ -31,7 +31,7 @@ G4int G4SmartVoxelHeader::GetMinEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelHeader::SetMinEquivalentSliceNo(const G4int pMin)
+void G4SmartVoxelHeader::SetMinEquivalentSliceNo(G4int pMin)
 {
   fminEquivalent=pMin;
 }
@@ -57,11 +57,11 @@ G4double G4SmartVoxelHeader::GetMinExtent() const
 inline
 G4int G4SmartVoxelHeader::GetNoSlices() const
 {
-  return fslices.entries();
+  return fslices.size();
 }
 
 inline
-G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(const G4int n) const
+G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(G4int n) const
 {
-  return fslices(n);
+  return fslices[n];
 }

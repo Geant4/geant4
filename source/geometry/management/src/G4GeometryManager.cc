@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryManager.cc,v 1.2 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4GeometryManager.cc,v 1.3 2001-04-20 20:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -70,10 +70,10 @@ void G4GeometryManager::BuildOptimisations(const G4bool allOpts)
      G4SmartVoxelHeader *head;
      G4int nVolumes,n;
      Store=G4LogicalVolumeStore::GetInstance();
-     nVolumes=Store->entries();
+     nVolumes=Store->size();
      for (n=0;n<nVolumes;n++)
 	 {
-	     volume=Store->operator()(n);
+	     volume=(*Store)[n];
 // For safety, check if there are any existing voxels and delete before
 // replacement
 	     head = volume->GetVoxelHeader();
@@ -126,10 +126,10 @@ void G4GeometryManager::DeleteOptimisations()
      G4LogicalVolume *volume;
      G4SmartVoxelHeader *head;
      G4int nVolumes,n;
-     nVolumes=Store->entries();
+     nVolumes=Store->size();
      for (n=0;n<nVolumes;n++)
 	 {
-	     volume=Store->operator()(n);
+	     volume=(*Store)[n];
 	     head=volume->GetVoxelHeader();
 	     if (head)
 		 {

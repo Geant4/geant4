@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidStore.hh,v 1.4 2000-04-20 16:49:48 gcosmo Exp $
+// $Id: G4SolidStore.hh,v 1.5 2001-04-20 20:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SolidStore
@@ -13,7 +13,7 @@
 // Class description:
 //
 // Container for all solids, with functionality derived from
-// G4RWTPtrOrderedVector<T>. The class is a `singleton', in that only
+// std::vector<T>. The class is a `singleton', in that only
 // one can exist, and access is provided via the static method
 // G4SolidStore::GetInstance().
 //
@@ -22,7 +22,7 @@
 // container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for G4RWTPtrOrderedVector<T>
+// instead of inheritance for std::vector<T>
 //
 // Member data:
 //
@@ -30,16 +30,17 @@
 //   - Ptr to the single G4SolidStore
 
 // History:
-// 10.07.95 P.Kent Initial version
+// 18.04.01 G.Cosmo Migrated to STL vector
+// 10.07.95 P.Kent  Initial version
 
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 #include "G4VSolid.hh"
 
-class G4SolidStore : public G4RWTPtrOrderedVector<G4VSolid>
+class G4SolidStore : public G4std::vector<G4VSolid*>
 {
   public:  // with description
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Volumes.cc,v 1.4 2000-02-29 11:38:03 gcosmo Exp $
+// $Id: testG4Volumes.cc,v 1.5 2001-04-20 20:18:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,10 +185,19 @@ G4bool testG4Volumes()
     assert(myDetectorLog.GetDaughter(1)==&offMXPhys);
 
 // Check stores are ok
-    assert(G4PhysicalVolumeStore::GetInstance()->entries()==3);
-    assert(G4LogicalVolumeStore::GetInstance()->entries()==2);
-    assert(G4SolidStore::GetInstance()->entries()==2);
-    assert(G4SolidStore::GetInstance()->contains(&myBox));
+    assert(G4PhysicalVolumeStore::GetInstance()->size()==3);
+    assert(G4LogicalVolumeStore::GetInstance()->size()==2);
+    G4SolidStore* solidStore = G4SolidStore::GetInstance();
+    G4bool exists = 0;
+    G4std::vector<G4VSolid*>::const_iterator i;
+    assert(solidStore->size()==2);
+    for (i=solidStore->begin(); i!=solidStore->end(); ++i) {
+      if (**i==myBox) {
+	exists = 1;
+	break;
+      }
+    }
+    assert(exists);
 
 // Check setup set mother ok
     offXPhys.Setup(&myDetectorPhys);

@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2001-03-08 13:21:11 gcosmo Exp $
+$Id: History,v 1.20 2001-04-20 20:13:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 20, 2001  G. Cosmo                   geommng-V03-01-00
+- Migration to STL vector:
+  o G4VSolid: migrated G4ThreeVectorList typedef.
+  o G4SolidStore, G4LogicalVolumeStore, G4PhysicalVolumeStore: migrated
+    inheritance from base collection of pointers.
+  o G4LogicalVolume: migrated data member "fDaughters".
+  o G4SmartVoxelHeader: migrated typedefs G4ProxyVector, G4NodeVector,
+    G4VolumeNosVector and G4VolumeExtentVector.
+  o G4SmartVoxelNode: migrated G4SliceVector typedef.
 
 March 07, 2001  G. Cosmo                   geommng-V03-00-01
 - G4PVPlacement.hh: corrected comments to constructor with G4RotationMatrix*

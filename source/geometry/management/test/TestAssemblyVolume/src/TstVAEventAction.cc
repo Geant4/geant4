@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TstVAEventAction.cc,v 1.3 2001-02-07 17:31:01 gcosmo Exp $
+// $Id: TstVAEventAction.cc,v 1.4 2001-04-20 20:13:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -13,8 +13,6 @@
 #include "TstVAEventAction.hh"
 
 #include "TstVAEventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

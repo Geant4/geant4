@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.icc,v 1.4 2000-11-01 15:39:33 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.5 2001-04-20 20:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,7 @@
 // 05.11.98 - M. Verderi: Add Get/Set methods for fBiasWeight
 // 09.11.98 - J. Apostolakis:  Changed MagneticField to FieldManager
 // 12.02.99 - S.Giani: Added set/get methods for voxelization quality
+// 18.04.01 - G.Cosmo: Migrated to STL vector
 
 inline
 G4String G4LogicalVolume::GetName() const
@@ -37,13 +38,13 @@ G4FieldManager* G4LogicalVolume::GetFieldManager() const
 inline
 G4int G4LogicalVolume::GetNoDaughters() const
     {
-	return fDaughters.entries();
+	return fDaughters.size();
     }
 
 inline
 G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
     {
-	return fDaughters(i);
+	return fDaughters[i];
     }
 
 inline
@@ -55,10 +56,7 @@ G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const
 inline
 void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 {
-  // manual resize operation to avoid Rogue grabbing RW_DEFAULT
-
-      fDaughters.resize(fDaughters.entries()+1);
-      fDaughters.insert(pNewDaughter);
+      fDaughters.push_back(pNewDaughter);
 
   // Propagates the mother's FastSimulationManager pointer. If we are in
   // the World logical volume, propagates only if pointer != 0.
@@ -102,14 +100,26 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 inline
 G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
     {
-	return fDaughters.contains(p);
+	G4PhysicalVolumeList::const_iterator i;
+        for (i=fDaughters.begin(); i!=fDaughters.end(); ++i)
+        {
+          if (**i==*p) return true;
+        }
+        return false;
     }
 
 inline
 void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
     {
-	fDaughters.remove(p);
-	fDaughters.resize(fDaughters.entries());
+	G4PhysicalVolumeList::iterator i;
+	for (i=fDaughters.begin(); i!=fDaughters.end(); ++i)
+	{
+	   if (**i==*p)
+	   {
+	      fDaughters.erase(i);
+	      break;
+	   }
+	}
     }
 
 inline

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.4 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4LogicalVolumeStore.cc,v 1.5 2001-04-20 20:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4LogicalVolumeStore
@@ -20,14 +20,20 @@
 
 // Protected constructor: Construct underlying container with
 // initial size of 100 entries
-G4LogicalVolumeStore::G4LogicalVolumeStore() : G4RWTPtrOrderedVector<G4LogicalVolume>(100)
+G4LogicalVolumeStore::G4LogicalVolumeStore()
+ : G4std::vector<G4LogicalVolume*>()
 {
+  reserve(100);
 }
 
 // Destructor
 G4LogicalVolumeStore::~G4LogicalVolumeStore()
 {
- while (!isEmpty()) removeFirst();
+  while (!empty())
+  {
+//    delete front();
+    erase(begin());
+  }
 }
 
 // Static class variable
@@ -36,13 +42,20 @@ G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
 // Add volume to container
 void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
 {
-    GetInstance()->insert(pVolume);
+    GetInstance()->push_back(pVolume);
 }
 
 // Remove volume from container
 void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 {
-    GetInstance()->remove(pVolume);
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  {
+    if (**i==*pVolume)
+    {
+      GetInstance()->erase(i);
+      break;
+    }
+  }
 }
 
 // Return ptr to Store, setting if necessary

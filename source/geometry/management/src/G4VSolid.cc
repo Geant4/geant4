@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.cc,v 1.6 2000-11-16 14:29:23 grichine Exp $
+// $Id: G4VSolid.cc,v 1.7 2001-04-20 20:13:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -32,14 +32,14 @@
 G4VSolid::G4VSolid(const G4String& name) :
 fshapeName(name) 
 {
-    G4SolidStore::GetInstance()->append(this);
+    G4SolidStore::GetInstance()->push_back(this);
 }
 
 // Destructor (virtual)
 // - Remove ourselves from solid Store
 G4VSolid::~G4VSolid()
 {
-    G4SolidStore::GetInstance()->remove(this);
+    G4SolidStore::GetInstance()->DeRegister(this);
 }
 	
 // Returns name by value
@@ -75,13 +75,13 @@ void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
   G4int noLeft,i;
   G4double component;
   ClipPolygon(pPolygon,pVoxelLimit);
-  noLeft = pPolygon.entries();
+  noLeft = pPolygon.size();
 
   if (noLeft)
   {
     for (i=0;i<noLeft;i++)
     {
-      component = pPolygon(i).operator()(pAxis);
+      component = pPolygon[i].operator()(pAxis);
 
       if (component < pMin)
       {
@@ -115,10 +115,10 @@ void G4VSolid::ClipCrossSection(G4ThreeVectorList* pVertices,
 {
 
     G4ThreeVectorList polygon;
-    polygon.append(pVertices->operator()(pSectionIndex));
-    polygon.append(pVertices->operator()(pSectionIndex+1));
-    polygon.append(pVertices->operator()(pSectionIndex+2));
-    polygon.append(pVertices->operator()(pSectionIndex+3));
+    polygon.push_back((*pVertices)[pSectionIndex]);
+    polygon.push_back((*pVertices)[pSectionIndex+1]);
+    polygon.push_back((*pVertices)[pSectionIndex+2]);
+    polygon.push_back((*pVertices)[pSectionIndex+3]);
     CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
     return;
 }
@@ -141,28 +141,28 @@ void G4VSolid::ClipBetweenSections(G4ThreeVectorList* pVertices,
 			     G4double& pMin, G4double& pMax) const
 {
     G4ThreeVectorList polygon;
-    polygon.append(pVertices->operator()(pSectionIndex));
-    polygon.append(pVertices->operator()(pSectionIndex+4));
-    polygon.append(pVertices->operator()(pSectionIndex+5));
-    polygon.append(pVertices->operator()(pSectionIndex+1));
+    polygon.push_back((*pVertices)[pSectionIndex]);
+    polygon.push_back((*pVertices)[pSectionIndex+4]);
+    polygon.push_back((*pVertices)[pSectionIndex+5]);
+    polygon.push_back((*pVertices)[pSectionIndex+1]);
     CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
     polygon.clear();
-    polygon.append(pVertices->operator()(pSectionIndex+1));
-    polygon.append(pVertices->operator()(pSectionIndex+5));
-    polygon.append(pVertices->operator()(pSectionIndex+6));
-    polygon.append(pVertices->operator()(pSectionIndex+2));
+    polygon.push_back((*pVertices)[pSectionIndex+1]);
+    polygon.push_back((*pVertices)[pSectionIndex+5]);
+    polygon.push_back((*pVertices)[pSectionIndex+6]);
+    polygon.push_back((*pVertices)[pSectionIndex+2]);
     CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
     polygon.clear();
-    polygon.append(pVertices->operator()(pSectionIndex+2));
-    polygon.append(pVertices->operator()(pSectionIndex+6));
-    polygon.append(pVertices->operator()(pSectionIndex+7));
-    polygon.append(pVertices->operator()(pSectionIndex+3));
+    polygon.push_back((*pVertices)[pSectionIndex+2]);
+    polygon.push_back((*pVertices)[pSectionIndex+6]);
+    polygon.push_back((*pVertices)[pSectionIndex+7]);
+    polygon.push_back((*pVertices)[pSectionIndex+3]);
     CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
     polygon.clear();
-    polygon.append(pVertices->operator()(pSectionIndex+3));
-    polygon.append(pVertices->operator()(pSectionIndex+7));
-    polygon.append(pVertices->operator()(pSectionIndex+4));
-    polygon.append(pVertices->operator()(pSectionIndex));
+    polygon.push_back((*pVertices)[pSectionIndex+3]);
+    polygon.push_back((*pVertices)[pSectionIndex+7]);
+    polygon.push_back((*pVertices)[pSectionIndex+4]);
+    polygon.push_back((*pVertices)[pSectionIndex]);
     CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
     return;
 }
@@ -197,7 +197,7 @@ void G4VSolid::ClipPolygon(G4ThreeVectorList& pPolygon,
 		    ClipPolygonToSimpleLimits(pPolygon,outputPolygon,
 					      simpleLimit1);
 		    pPolygon.clear();
-		    if (!outputPolygon.entries())
+		    if (!outputPolygon.size())
 			{
 			    return;
 			}
@@ -205,7 +205,7 @@ void G4VSolid::ClipPolygon(G4ThreeVectorList& pPolygon,
 		    G4VoxelLimits simpleLimit2;
 		    simpleLimit2.AddLimit(kXAxis,-kInfinity,pVoxelLimit.GetMaxXExtent());
 		    ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
-		    if (!pPolygon.entries())
+		    if (!pPolygon.size())
 			{
 			    return;
 			}
@@ -224,7 +224,7 @@ void G4VSolid::ClipPolygon(G4ThreeVectorList& pPolygon,
 // Must always clear pPolygon - for clip to simpleLimit2 and incase of
 // early exit
 		    pPolygon.clear();
-		    if (!outputPolygon.entries())
+		    if (!outputPolygon.size())
 			{
 			    return;
 			}
@@ -232,7 +232,7 @@ void G4VSolid::ClipPolygon(G4ThreeVectorList& pPolygon,
 		    G4VoxelLimits simpleLimit2;
 		    simpleLimit2.AddLimit(kYAxis,-kInfinity,pVoxelLimit.GetMaxYExtent());
 		    ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
-		    if (!pPolygon.entries())
+		    if (!pPolygon.size())
 			{
 			    return;
 			}
@@ -251,7 +251,7 @@ void G4VSolid::ClipPolygon(G4ThreeVectorList& pPolygon,
 // Must always clear pPolygon - for clip to simpleLimit2 and incase of
 // early exit
 		    pPolygon.clear();
-		    if (!outputPolygon.entries())
+		    if (!outputPolygon.size())
 			{
 			    return;
 			}
@@ -272,18 +272,18 @@ void G4VSolid::ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 				      const G4VoxelLimits& pVoxelLimit) const
 {
     G4int i;
-    G4int noVertices=pPolygon.entries();
+    G4int noVertices=pPolygon.size();
     G4ThreeVector vEnd,vStart;
     for (i=0;i<noVertices;i++)
 	{
-	    vStart=pPolygon(i);
+	    vStart=pPolygon[i];
 	    if (i==noVertices-1)
 		{
-		    vEnd=pPolygon(0);
+		    vEnd=pPolygon[0];
 		}
 	    else
 		{
-		    vEnd=pPolygon(i+1);
+		    vEnd=pPolygon[i+1];
 		}
 
 	    if (pVoxelLimit.Inside(vStart))
@@ -291,13 +291,13 @@ void G4VSolid::ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 		    if (pVoxelLimit.Inside(vEnd))
 			{
 // vStart and vEnd inside -> output end point
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vEnd);
 			}
 		    else
 			{
 // vStart inside, vEnd outside -> output crossing point
 			    pVoxelLimit.ClipToLimits(vStart,vEnd);
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vEnd);
 			}
 		    
 		}
@@ -307,8 +307,8 @@ void G4VSolid::ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 			{
 // vStart outside, vEnd inside -> output inside section
 			    pVoxelLimit.ClipToLimits(vStart,vEnd);
-			    outputPolygon.insert(vStart);
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vStart);
+			    outputPolygon.push_back(vEnd);
 			}
 		    else
 // Both point outside -> no output

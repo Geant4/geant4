@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelNode.icc,v 1.1 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4SmartVoxelNode.icc,v 1.2 2001-04-20 20:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,21 +13,21 @@
 //
 
 inline
-G4int G4SmartVoxelNode::GetVolume(const G4int pVolumeNo) const
+G4int G4SmartVoxelNode::GetVolume(G4int pVolumeNo) const
 {
-  return fcontents(pVolumeNo);
+  return fcontents[pVolumeNo];
 }
 
 inline
 void G4SmartVoxelNode::Insert(G4int pVolumeNo)
 {
-  fcontents.insert(pVolumeNo);
+  fcontents.push_back(pVolumeNo);
 }
 
 inline
 G4int G4SmartVoxelNode::GetNoContained() const
 {
-  return fcontents.entries();
+  return fcontents.size();
 }
 
 inline
@@ -37,7 +37,7 @@ G4int G4SmartVoxelNode::GetMaxEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelNode::SetMaxEquivalentSliceNo(const G4int pMax)
+void G4SmartVoxelNode::SetMaxEquivalentSliceNo(G4int pMax)
 {
   fmaxEquivalent=pMax;
 }
@@ -49,7 +49,7 @@ G4int G4SmartVoxelNode::GetMinEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelNode::SetMinEquivalentSliceNo(const G4int pMin)
+void G4SmartVoxelNode::SetMinEquivalentSliceNo(G4int pMin)
 {
   fminEquivalent=pMin;
 }

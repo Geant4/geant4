@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.cc,v 1.5 2000-11-20 17:31:34 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.6 2001-04-20 20:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,10 +136,10 @@ G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
 
   // Look for the current volume's mother volume.
 
-  for (size_t LV=0;LV < Store->entries(); LV++){
+  for (size_t LV=0;LV < Store->size(); LV++){
      G4LogicalVolume *aLogVol;
     
-     aLogVol= Store->at(LV);
+     aLogVol= (*Store)[LV];
      if( (aLogVol!=this) &&         // Don't look for it inside itself...
 	(aLogVol->GetFastSimulationManager()!=NULL)){
       

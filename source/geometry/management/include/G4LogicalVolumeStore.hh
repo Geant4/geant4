@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.4 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4LogicalVolumeStore.hh,v 1.5 2001-04-20 20:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalVolumeStore
@@ -13,7 +13,7 @@
 // Class description:
 //
 // Container for all LogicalVolumes, with functionality derived from
-// G4RWTPtrOrderedVector<T>. The class is a `singleton', in that only
+// std::vector<T>. The class is a `singleton', in that only
 // one can exist, and access is provided via the static function
 // G4LogicalVolumeStore::GetInstance()
 //
@@ -22,7 +22,7 @@
 // The underlying container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for G4RWTPtrOrderedVector<T>.
+// instead of inheritance for std::vector<T>.
 //
 // Member data:
 //
@@ -30,16 +30,17 @@
 //   - Ptr to the single G4LogicalVolumeStore.
 
 // History:
-// 10.07.95 P.Kent Initial version
+// 18.04.01 G.Cosmo Migrated to STL vector
+// 10.07.95 P.Kent  Initial version
 
 #ifndef G4VLOGICALVOLUMESTORE_HH
 #define G4VLOGICALVOLUMESTORE_HH
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 #include "G4LogicalVolume.hh"
 
-class G4LogicalVolumeStore : public G4RWTPtrOrderedVector<G4LogicalVolume>
+class G4LogicalVolumeStore : public G4std::vector<G4LogicalVolume*>
 {
   public:  // with description
 
