@@ -39,7 +39,7 @@ G4LEpp::G4LEpp() :
   //    SetMinEnergy(10.*MeV);
   //    SetMaxEnergy(1200.*MeV);
 
-  SetCoulombSuppression(1);
+  SetCoulombEffects(0);
 
   SetMinEnergy(0.);
   SetMaxEnergy(1200.*GeV);
@@ -52,21 +52,21 @@ G4LEpp::~G4LEpp()
 
 
 void
-G4LEpp::SetCoulombSuppression(G4int State)
+G4LEpp::SetCoulombEffects(G4int State)
 {
   if (State) {
-    for(G4int i=0; i<NANGLE; i++)
-    {
-      sig[i] = Sig[i];
-    }
-    elab = Elab;
-  }
-  else {
     for(G4int i=0; i<NANGLE; i++)
     {
       sig[i] = SigCoul[i];
     }
     elab = ElabCoul;
+  }
+  else {
+    for(G4int i=0; i<NANGLE; i++)
+    {
+      sig[i] = Sig[i];
+    }
+    elab = Elab;
   }
 }
 
@@ -187,6 +187,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     b = ke1 - rc*sigint1;
     G4double kint = rc*sample + b;
     G4double theta = (0.5 + kint)*pi/180.;
+    if (theta < 0.) theta = 0.;
 
     //    G4int k;
     //abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
