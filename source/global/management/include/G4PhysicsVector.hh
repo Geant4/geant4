@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.10 2001-07-11 10:00:51 gunter Exp $
+// $Id: G4PhysicsVector.hh,v 1.11 2003-05-21 12:48:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,10 +66,14 @@ class G4PhysicsVector
   public:  
 
     G4PhysicsVector();
-    // constructor  
-    // This class is an abstract class with pure virtual method of
-    // virtual size_t FindBinLocation(G4double theEnergy) const
-    // So, default constructor is not supposed to be invoked explicitly
+         // constructor  
+         // This class is an abstract class with pure virtual method of
+         // virtual size_t FindBinLocation(G4double theEnergy) const
+         // So, default constructor is not supposed to be invoked explicitly
+
+    G4PhysicsVector(const G4PhysicsVector&);
+    G4PhysicsVector& operator=(const G4PhysicsVector&);
+         // Copy constructor and assignment operator.
 
   public:  // with description
 
@@ -150,12 +154,6 @@ class G4PhysicsVector
 
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
-
-  protected:
-
-    G4PhysicsVector(const G4PhysicsVector&);
-    G4PhysicsVector& operator=(const G4PhysicsVector&);
-         // Protected copy constructor and assignment operator.
 
   private:
 
