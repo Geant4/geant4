@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.11 2001-11-30 00:52:52 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.12 2001-12-04 11:34:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -280,7 +280,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     a1 = 1./a3;
     a2 = 1./a4;
   }
-  amaj *= 1.1;
+  amaj *= 1.25;
 
   do {
 
