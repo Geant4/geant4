@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003-11-24 18:09:22 vnivanch Exp $
+$Id: History,v 1.11 2003-11-26 13:55:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-11-03 V.Ivant (testem8-V05-02-02)
+- Update for work with AIDA
 
 24-11-03 V.Ivant (testem8-V05-02-01)
 - Remove obsolete classes

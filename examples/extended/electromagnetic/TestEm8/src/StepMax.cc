@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2003-10-27 15:31:04 grichine Exp $
+// $Id: StepMax.cc,v 1.2 2003-11-26 13:55:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -28,7 +28,6 @@
 
 #include "StepMax.hh"
 #include "StepMaxMessenger.hh"
-#include "HistoManager.hh"
 #include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +63,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-  ProposedStep = DBL_MAX;
+  ProposedStep = MaxChargedStep;
 
   return ProposedStep;
 }
@@ -74,15 +73,6 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
-  if (ProposedStep == 0.0) {
-    aParticleChange.SetStatusChange(fStopAndKill);
-    if(1 < (HistoManager::GetPointer())->GetVerbose()) {
-      G4cout << "StepMax: " << aTrack.GetDefinition()->GetParticleName()
-             << " with energy = " << aTrack.GetKineticEnergy()/MeV
-             << " MeV is killed in Check volume at " << aTrack.GetPosition()
-             << G4endl;
-    }
-  }
   return &aParticleChange;
 }
 
