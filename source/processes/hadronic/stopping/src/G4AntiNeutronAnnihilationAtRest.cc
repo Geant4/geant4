@@ -209,9 +209,9 @@ G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
 
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  aParticleChange.ProposeLocalEnergyDeposit( 0.0*GeV );
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident AntiNeutron
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident AntiNeutron
 
 //   clear InteractionLengthLeft
 

@@ -218,9 +218,9 @@ AtRestDoIt(const G4Track& track,const G4Step&)
     }
   }
 
-  aParticleChange.SetLocalEnergyDeposit(0.0);
+  aParticleChange.ProposeLocalEnergyDeposit(0.0);
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident MuonMinus
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident MuonMinus
 
 //   clear InteractionLengthLeft
 

@@ -204,9 +204,9 @@ G4VParticleChange* G4PionMinusAbsorptionAtRest::AtRestDoIt(
 
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  aParticleChange.ProposeLocalEnergyDeposit( 0.0*GeV );
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident PionMinus
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident PionMinus
 
 //   clear InteractionLengthLeft
 

@@ -209,9 +209,9 @@ G4VParticleChange* G4KaonMinusAbsorption::AtRestDoIt(
 
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  aParticleChange.ProposeLocalEnergyDeposit( 0.0*GeV );
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident KaonMinus
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident KaonMinus
 
 //   clear InteractionLengthLeft
 

@@ -202,9 +202,9 @@ G4VParticleChange* G4NeutronCaptureAtRest::AtRestDoIt(
 
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  aParticleChange.ProposeLocalEnergyDeposit( 0.0*GeV );
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident Neutron
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident Neutron
 
 //   clear InteractionLengthLeft
 
