@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02HadronPhysics.cc,v 1.3 2003-06-16 17:14:42 gunter Exp $
+// $Id: Tst02HadronPhysics.cc,v 1.4 2004-06-01 05:51:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,6 @@ void Tst02HadronPhysics::ConstructProcess()
   // PionPlus
   pManager = G4PionPlus::PionPlus()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
   theLEPionPlusModel = new G4LEPionPlusInelastic();
   theHEPionPlusModel = new G4HEPionPlusInelastic();
   thePionPlusInelastic.RegisterMe(theLEPionPlusModel);
@@ -95,10 +93,16 @@ void Tst02HadronPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&thePionPlusMult, idxAlongStep, 1);
   pManager->SetProcessOrdering(&thePionPlusMult, idxPostStep, 1);
 
+  thePipElasticProcess.RegisterMe(&thePipElasticModel);
+  thePipElasticProcess.RegisterMe(&thePipHEElasticModel);
+  thePipElasticModel.SetMaxEnergy(3*GeV);
+  thePipHEElasticModel.SetMinEnergy(2.8*GeV);
+  thePipHEElasticModel.SetMaxEnergy(100*TeV);
+  // pManager->AddDiscreteProcess(&thePipElasticProcess);
+
   // PionMinus
   pManager = G4PionMinus::PionMinus()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEPionMinusModel = new G4LEPionMinusInelastic();
   theHEPionMinusModel = new G4HEPionMinusInelastic();
@@ -113,6 +117,13 @@ void Tst02HadronPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&thePionMinusMult, idxPostStep, 1);
 
   pManager->AddRestProcess(&thePionMinusAbsorption, ordDefault);
+
+  thePimElasticProcess.RegisterMe(&thePimElasticModel);
+  thePimElasticProcess.RegisterMe(&thePimHEElasticModel);
+  thePimElasticModel.SetMaxEnergy(3*GeV);
+  thePimHEElasticModel.SetMinEnergy(2.8*GeV);
+  thePimHEElasticModel.SetMaxEnergy(100*TeV);
+  // pManager->AddDiscreteProcess(&thePimElasticProcess);
 
   // KaonPlus
   pManager = G4KaonPlus::KaonPlus()->GetProcessManager();
@@ -175,7 +186,12 @@ void Tst02HadronPhysics::ConstructProcess()
   // Proton
   pManager = G4Proton::Proton()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  thePElasticProcess.RegisterMe(&thePElasticModel);
+  thePElasticProcess.RegisterMe(&theHEElasticModel);
+  thePElasticModel.SetMaxEnergy(3*GeV);
+  theHEElasticModel.SetMinEnergy(2.8*GeV);
+  theHEElasticModel.SetMaxEnergy(100*TeV);
+  // pManager->AddDiscreteProcess(&thePElasticProcess);
 
   theLEProtonModel = new G4LEProtonInelastic();
   theHEProtonModel = new G4HEProtonInelastic();

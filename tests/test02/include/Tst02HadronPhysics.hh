@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02HadronPhysics.hh,v 1.3 2003-06-16 17:14:39 gunter Exp $
+// $Id: Tst02HadronPhysics.hh,v 1.4 2004-06-01 05:51:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,7 @@
 #include "G4OmegaMinusInelasticProcess.hh"
 #include "G4AntiOmegaMinusInelasticProcess.hh"
 
+#include "G4ElasticHadrNucleusHE.hh"   
 // Low-energy Models
 #include "G4LElastic.hh"   
 #include "G4LFission.hh"
@@ -174,6 +175,9 @@ class Tst02HadronPhysics : public G4VPhysicsConstructor
    G4HEPionPlusInelastic* theHEPionPlusModel;
    G4MultipleScattering thePionPlusMult;
    G4hIonisation thePionPlusIonisation;
+   G4ElasticHadrNucleusHE thePipHEElasticModel;
+   G4HadronElasticProcess thePipElasticProcess;
+   G4LElastic             thePipElasticModel;
 
    // Pi -
    G4PionMinusInelasticProcess thePionMinusInelastic;
@@ -186,6 +190,9 @@ class Tst02HadronPhysics : public G4VPhysicsConstructor
 #else
    G4PiMinusAbsorptionAtRest thePionMinusAbsorption;
 #endif
+   G4ElasticHadrNucleusHE thePimHEElasticModel;
+   G4HadronElasticProcess thePimElasticProcess;
+   G4LElastic             thePimElasticModel;
 
    // K + 
    G4KaonPlusInelasticProcess theKaonPlusInelastic;
@@ -222,6 +229,9 @@ class Tst02HadronPhysics : public G4VPhysicsConstructor
    G4HEProtonInelastic* theHEProtonModel;
    G4MultipleScattering theProtonMult;
    G4hIonisation theProtonIonisation;
+   G4ElasticHadrNucleusHE theHEElasticModel;
+   G4HadronElasticProcess thePElasticProcess;
+   G4LElastic             thePElasticModel;
  
    // anti-proton
    G4AntiProtonInelasticProcess theAntiProtonInelastic;
