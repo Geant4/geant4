@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2001-09-27 12:02:37 gcosmo Exp $
+$Id: History,v 1.34 2001-09-28 15:25:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+28 sep 01: mma (utils-V03-02-07)
+- StorePhysicsTable: ParticleName included in FileName
 
 27 sep 01: L.Urban (utils-V03-02-06)
 -  bug fixed in G4EnergyLossTables.icc,.cc:
-   this bug caused sometime negative energy deposit!!!
-   it was a very-very old bug!!!!!
+   this bug caused sometime negative energy deposit
+   (it was a very-very old bug)
 -  value of data member factlim in msc has been changed
 
 19 sep 01: mma (utils-V03-02-05)
