@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.2 1999-12-15 14:49:24 gunter Exp $
+// $Id: ExN03SteppingVerbose.hh,v 1.3 2000-02-28 18:09:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -14,13 +14,8 @@
 // ExN03SteppingVerbose.hh
 //
 // Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose   
 //
 //---------------------------------------------------------------
 
