@@ -43,6 +43,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4EmCalculator.hh"
 #include "EmAnalysis.hh"
+#include "G4EmCorrections.hh"
+#include "G4NistMaterialManager.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -349,9 +351,52 @@ void test31Histo::TableControl()
     x += step;
   }
 
+  G4bool icorr = true;
+  if(icorr) {
+    G4cout << "====================================================================" << G4endl;
+    G4cout << "             Ionisation Corrections" << G4endl;
+    G4cout << "====================================================================" << G4endl;
+
+    G4String nm[7] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
+    G4double ek[7] = {1.0, 2.0, 6.5, 12., 19.8, 100., 1000.};
+    G4NistMaterialManager  mman;
+    G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
+    part = cal.FindParticle("proton");
+  
+    G4double L, L0, L1, L2, Spin, KS, LS, S, del;
+    for(G4int i=0; i<7; i++) {
+      mat = mman.FindOrBuildMaterial(nm[i]);
+      G4cout << "   New Material  " << mat->GetName() << G4endl;
+      for(G4int j=0; j<7; j++) {
+	G4double e = ek[j]*MeV;
+	L0   = emc->Bethe(part,mat,e);
+	Spin = emc->SpinCorrection(part,mat,e);
+	KS   = emc->KShellCorrection(part,mat,e);
+	LS   = emc->LShellCorrection(part,mat,e);
+	S    = emc->ShellCorrection(part,mat,e);
+	L1   = emc->BarkasCorrection(part,mat,e);
+	L2   = emc->BlochCorrection(part,mat,e);
+        del  = 0.5*emc->DensityCorrection(part,mat,e);
+        L = L0 + L1 + L2 - del -S;
+        x = S + del - L1 - L2;
+	G4cout << j+1 << ". " << ek[j] << " MeV "
+	       << " L0= " << L0
+	       << " Spin= " << Spin
+	       << " KShell= " << KS
+	       << " LShell= " << LS
+	       << " Shell= " << S 
+	       << " L1= " << L1
+	       << " L2= " << L2
+	       << " del= " << del
+	       << " x= " << x
+	       << " L= " << L
+	       << G4endl;
+      }
+      G4cout << "====================================================================" << G4endl;
+    }
+  }
+
   G4cout << "====================================================================" << G4endl;
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
