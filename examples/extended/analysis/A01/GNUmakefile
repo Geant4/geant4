@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-12-13 11:34:27 gunter Exp $
+# $Id: GNUmakefile,v 1.3 2003-10-13 20:52:06 duns Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -19,6 +19,10 @@ include $(G4INSTALL)/config/binmake.gmk
 CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
 CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
 
+#
+# A01HadronPhysics fails to compile in optimized mode on Linux,
+# so it needs this special rule. Hans-Peter Wellish.
+#
 ifeq ($(G4SYSTEM),Linux-g++)
 $(G4TMP)/$(G4SYSTEM)/$(name)/A01HadronPhysics.o: src/A01HadronPhysics.cc
 	@echo "Compiling A01HadronPhysics.cc ..."
