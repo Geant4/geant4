@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.hh,v 1.3 2004-10-06 07:15:44 link Exp $
+// $Id: G4TwistedTrapezoid.hh,v 1.4 2004-10-10 10:39:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,7 @@ class G4TwistedTrapezoid : public G4VSolid
   void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   G4Polyhedron   *CreatePolyhedron   () const;
   G4NURBS        *CreateNURBS        () const;
+  G4Polyhedron   *GetPolyhedron      () const;
 
   std::ostream &StreamInfo(std::ostream& os) const;
 
@@ -143,6 +144,8 @@ class G4TwistedTrapezoid : public G4VSolid
   G4VSurface *fSide90 ;        // Twisted Side at phi = 90 deg
   G4VSurface *fSide180 ;       // Twisted Side at phi = 180 deg
   G4VSurface *fSide270 ;       // Twisted Side at phi = 270 deg
+
+  mutable G4Polyhedron* fpPolyhedron;
 
   class LastState              // last Inside result
   {

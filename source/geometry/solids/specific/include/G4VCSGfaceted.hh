@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.9 2004-09-22 13:14:50 gcosmo Exp $
+// $Id: G4VCSGfaceted.hh,v 1.10 2004-10-10 10:39:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,8 @@ class G4VCSGfaceted : public G4VSolid
 
   virtual G4VisExtent GetExtent() const;
 
+  virtual G4Polyhedron* GetPolyhedron () const;
+
   G4int GetCubVolStatistics() const;
   G4double GetCubVolEpsilon() const;
   void SetCubVolStatistics(G4int st);
@@ -101,6 +103,7 @@ class G4VCSGfaceted : public G4VSolid
   G4int    numFace;
   G4VCSGface **faces;
   G4double fCubicVolume;
+  mutable G4Polyhedron* fpPolyhedron;
 
   virtual G4double DistanceTo( const G4ThreeVector &p,
                                const G4bool outgoing ) const;

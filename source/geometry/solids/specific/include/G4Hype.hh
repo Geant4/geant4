@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.8 2004-09-22 13:14:50 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.9 2004-10-10 10:39:19 johna Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -146,6 +146,7 @@ class G4Hype : public G4VSolid
   G4VisExtent   GetExtent          () const;
   G4Polyhedron* CreatePolyhedron   () const;
   G4NURBS*      CreateNURBS        () const;
+  G4Polyhedron* GetPolyhedron      () const;
 
  protected:  // without description
   
@@ -202,6 +203,7 @@ class G4Hype : public G4VSolid
  private:
 
   G4double fCubicVolume;
+  mutable G4Polyhedron* fpPolyhedron;
 
 };
 

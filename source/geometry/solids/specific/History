@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2004-09-22 13:15:59 gcosmo Exp $
+$Id: History,v 1.44 2004-10-10 10:39:03 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-Oct-2004, J.Allison
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
 
 22-Sep-2004, G.Cosmo (geom-specific-V06-02-01)
 - Added implementation of GetCubicVolume() with cashing mechanism for

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.cc,v 1.3 2004-10-06 07:13:39 link Exp $
+// $Id: G4TwistedTrapezoid.cc,v 1.4 2004-10-10 10:40:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ G4TwistedTrapezoid::G4TwistedTrapezoid(const G4String &pname,
 				       G4double  halfSideZ)
   : G4VSolid(pname), 
      fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0)
+    fSide90(0), fSide180(0), fSide270(0), fpPolyhedron (0)
 {
 
   if ( (    halfSideX  > 2*kCarTolerance)
@@ -814,6 +814,7 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p,
    return fLastDistanceToOutWithV.value;
 }
 
+
 #ifdef DISTANCETOIN
 //=====================================================================
 //* DistanceToOut (p) ----------------------------------------------
@@ -1036,6 +1037,18 @@ G4NURBS* G4TwistedTrapezoid::CreateNURBS () const
   G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
    return new G4NURBStube(maxRad, maxRad, fZHalfLength); 
    // Tube for now!!!
+}
+
+//=====================================================================
+//* GetPolyhedron -----------------------------------------------------
+
+G4Polyhedron* G4TwistedTrapezoid::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+    {
+      fpPolyhedron = CreatePolyhedron ();
+    }
+  return fpPolyhedron;
 }
 
 //=====================================================================

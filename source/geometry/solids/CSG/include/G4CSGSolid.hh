@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.8 2004-09-08 15:13:51 grichine Exp $
+// $Id: G4CSGSolid.hh,v 1.9 2004-10-10 10:44:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -53,9 +53,12 @@ class G4CSGSolid : public G4VSolid
 
     virtual std::ostream& StreamInfo(std::ostream& os) const;
 
+    virtual G4Polyhedron* GetPolyhedron () const;
+
   protected:
 
   G4double fCubicVolume;
+  mutable G4Polyhedron* fpPolyhedron;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.20 2004-09-22 08:25:35 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.21 2004-10-10 10:44:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,6 +98,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
     }
   }
   fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////

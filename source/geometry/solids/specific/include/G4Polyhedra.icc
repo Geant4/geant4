@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc,v 1.5 2004-09-22 13:14:50 gcosmo Exp $
+// $Id: G4Polyhedra.icc,v 1.6 2004-10-10 10:39:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -82,4 +82,5 @@ void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
                 FatalException, "NULL pointer to parameters!");
   *original_parameters = *pars;
   fCubicVolume = 0.;
+  fpPolyhedron = 0;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.16 2004-09-22 13:15:47 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.17 2004-10-10 10:39:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double theDx,
                                           G4double theDy,
                                           G4double theDz )
-  : G4VSolid( name ), fCubicVolume(0.)
+  : G4VSolid( name ), fCubicVolume(0.), fpPolyhedron (0)
 {
   dx = theDx;
   dy = theDy;
@@ -806,4 +806,13 @@ G4double G4EllipticalTube::GetCubicVolume()
   if(fCubicVolume != 0.) ;
     else fCubicVolume = G4VSolid::GetCubicVolume(); 
   return fCubicVolume;
+}
+
+G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+    {
+      fpPolyhedron = CreatePolyhedron ();
+    }
+  return fpPolyhedron;
 }

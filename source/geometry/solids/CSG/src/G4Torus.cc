@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.37 2004-09-22 08:25:34 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.38 2004-10-10 10:44:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,6 +89,7 @@ G4Torus::SetAllParameters( G4double pRmin,
                            G4double pDPhi )
 {
   fCubicVolume= 0.;
+  fpPolyhedron = 0;
   if ( pRtor >= pRmax + kCarTolerance )      // Check swept radius
   {
     fRtor = pRtor ;

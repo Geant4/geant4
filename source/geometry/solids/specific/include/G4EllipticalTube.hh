@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.12 2004-09-22 13:14:49 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.13 2004-10-10 10:39:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -93,7 +93,8 @@ class G4EllipticalTube : public G4VSolid
     G4Polyhedron* CreatePolyhedron() const;
     void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
     G4VisExtent GetExtent() const;
-  
+    virtual G4Polyhedron* GetPolyhedron () const;
+
     // Accessors
 
     inline G4double GetDx() const;
@@ -121,6 +122,7 @@ class G4EllipticalTube : public G4VSolid
   private:
 
     G4double fCubicVolume;
+    mutable G4Polyhedron* fpPolyhedron;
 
 };
 

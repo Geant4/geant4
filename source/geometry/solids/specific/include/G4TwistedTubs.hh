@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.4 2004-09-22 13:14:50 gcosmo Exp $
+// $Id: G4TwistedTubs.hh,v 1.5 2004-10-10 10:39:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,7 @@ class G4TwistedTubs : public G4VSolid
   void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   G4Polyhedron   *CreatePolyhedron   () const;
   G4NURBS        *CreateNURBS        () const;
+  G4Polyhedron   *GetPolyhedron      () const;
 
   std::ostream &StreamInfo(std::ostream& os) const;
 
@@ -220,6 +221,7 @@ class G4TwistedTubs : public G4VSolid
   G4VSurface *fOuterHype;      // Surface of +ve r
 
   G4double fCubicVolume;       // Cached value for cubic volume
+  mutable G4Polyhedron *fpPolyhedron; // Cached polyhedron.
 
   class LastState              // last Inside result
   {
@@ -305,6 +307,7 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
                               G4double positiveEndz)
 {
    fCubicVolume  = 0.;
+   fpPolyhedron = 0;
    fPhiTwist     = phitwist;
    fEndZ[0]      = negativeEndz;
    fEndZ[1]      = positiveEndz;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.icc,v 1.1 2004-09-22 08:25:02 gcosmo Exp $
+// $Id: G4Orb.icc,v 1.2 2004-10-10 10:44:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -43,6 +43,7 @@ void G4Orb::SetRadius(G4double newRmax)
 {
   fRmax=newRmax;
   fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////
