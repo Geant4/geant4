@@ -24,7 +24,6 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4LIB_BUILD_G3TOG4
   G4USE_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
