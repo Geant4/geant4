@@ -56,6 +56,7 @@ G4HepRepMessenger::~G4HepRepMessenger() {
     delete setEventNumberSuffixCommand;
 //    delete appendGeometryCommand;
     delete addPointAttributesCommand;
+    delete heprepDirectory;
 }
 
 G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
