@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.6 2003-11-04 17:00:58 gcosmo Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.7 2003-11-18 12:15:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -44,10 +44,9 @@ G4ParameterisationTrdX::
 G4ParameterisationTrdX( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  CheckAxisIsValid();
-
+  CheckParametersValidity();
   SetType( "DivisionTrdX" );
 
   if( divType == DivWIDTH )
@@ -77,13 +76,21 @@ G4ParameterisationTrdX::~G4ParameterisationTrdX()
 }
 
 //------------------------------------------------------------------------
+G4double G4ParameterisationTrdX::GetMaxParameter() const
+{
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  return 2*msol->GetXHalfLength1();
+}
+
+
+//------------------------------------------------------------------------
 void
 G4ParameterisationTrdX::
 ComputeTransformation( const G4int copyNo,
                        G4VPhysicalVolume *physVol ) const
 {
   G4Trd* msol = (G4Trd*)(fmotherSolid );
-  G4double mdx = (msol->GetXHalfLength1() + msol->GetXHalfLength2()) / 2.;
+  G4double mdx = msol->GetXHalfLength1();
 
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
@@ -139,8 +146,10 @@ ComputeDimensions( G4Trd& trd, const G4int copyNo,
 
 
 //--------------------------------------------------------------------------
-void G4ParameterisationTrdX::CheckAxisIsValid()
+void G4ParameterisationTrdX::CheckParametersValidity()
 {
+  G4VDivisionParameterisation::CheckParametersValidity();
+
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double mpDx1 = msol->GetXHalfLength1();
@@ -148,12 +157,12 @@ void G4ParameterisationTrdX::CheckAxisIsValid()
 
   if( fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
-    G4cerr << "ERROR - G4ParameterisationTrdX::CheckAxisIsValid()" << G4endl
+    G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()" << G4endl
            << "        Making a division of a TRD along axis X," << G4endl
            << "        while the X half lengths are not equal," << G4endl
            << "        is not (yet) supported. It will result" << G4endl
            << "        in non-equal division solids." << G4endl;
-    G4Exception("G4ParameterisationTrdX::CheckAxisIsValid()",
+    G4Exception("G4ParameterisationTrdX::CheckParametersValidity()",
                 "IllegalConstruct", FatalException,
                 "Invalid solid specification. NOT supported.");
   }
@@ -165,10 +174,9 @@ G4ParameterisationTrdY::
 G4ParameterisationTrdY( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType)
-  : G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  CheckAxisIsValid();
-
+  CheckParametersValidity();
   SetType( "DivisionTrdY" );
 
   if( divType == DivWIDTH )
@@ -198,13 +206,21 @@ G4ParameterisationTrdY::~G4ParameterisationTrdY()
 {
 }
 
+//------------------------------------------------------------------------
+G4double G4ParameterisationTrdY::GetMaxParameter() const
+{
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  return 2*msol->GetYHalfLength1();
+}
+
+
 //--------------------------------------------------------------------------
 void
 G4ParameterisationTrdY::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
   G4Trd* msol = (G4Trd*)(fmotherSolid );
-  G4double mdy = (msol->GetYHalfLength1() + msol->GetYHalfLength2())/2.;
+  G4double mdy = msol->GetYHalfLength1();
 
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
@@ -258,8 +274,10 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
 
 
 //--------------------------------------------------------------------------
-void G4ParameterisationTrdY::CheckAxisIsValid()
+void G4ParameterisationTrdY::CheckParametersValidity()
 {
+  G4VDivisionParameterisation::CheckParametersValidity();
+
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double mpDy1 = msol->GetYHalfLength1();
@@ -267,12 +285,12 @@ void G4ParameterisationTrdY::CheckAxisIsValid()
 
   if( fabs(mpDy1 - mpDy2) > kCarTolerance )
   {
-    G4cerr << "ERROR - G4ParameterisationTrdY::CheckAxisIsValid()" << G4endl
+    G4cerr << "ERROR - G4ParameterisationTrdY::CheckParametersValidity()" << G4endl
            << "        Making a division of a TRD along axis Y while" << G4endl
            << "        the Y half lengths are not equal is not (yet)" << G4endl
            << "        supported. It will result in non-equal" << G4endl
            << "        division solids." << G4endl;
-    G4Exception("G4ParameterisationTrdY::CheckAxisIsValid()",
+    G4Exception("G4ParameterisationTrdY::CheckParametersValidity()",
                 "IllegalConstruct", FatalException,
                 "Invalid solid specification. NOT supported.");
   }
@@ -284,8 +302,9 @@ G4ParameterisationTrdZ::
 G4ParameterisationTrdZ( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType )
-  : G4VDivisionParameterisation( axis, nDiv, offset, width, msolid )
+  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 { 
+  CheckParametersValidity();
   SetType( "DivTrdZ" );
 
   if( divType == DivWIDTH )
@@ -315,6 +334,13 @@ G4ParameterisationTrdZ::~G4ParameterisationTrdZ()
 {
 }
 
+//------------------------------------------------------------------------
+G4double G4ParameterisationTrdZ::GetMaxParameter() const
+{
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  return 2*msol->GetZHalfLength();
+}
+
 //--------------------------------------------------------------------------
 void
 G4ParameterisationTrdZ::
@@ -341,7 +367,8 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   {
     G4cout << std::setprecision(8) << " G4ParameterisationTrdZ: "
            << copyNo << G4endl
-           << " Position: " << origin << " Axis " << faxis << G4endl;
+           << " Position: " << origin << " - Offset: " << foffset 
+	   << " - Width: " << fwidth << " Axis " << faxis << G4endl;
   }
 
    //----- set translation 
@@ -357,15 +384,18 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   //---- The division along Z of a Trd will result a Trd
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
-
   G4double pDx1 = msol->GetXHalfLength1();
-  G4double DDx = (msol->GetXHalfLength2() - msol->GetXHalfLength1() ) / fnDiv;
+  G4double DDx = (msol->GetXHalfLength2() - msol->GetXHalfLength1() );
   G4double pDy1 = msol->GetYHalfLength1();
-  G4double DDy = (msol->GetYHalfLength2() - msol->GetYHalfLength1() ) / fnDiv;
+  G4double DDy = (msol->GetYHalfLength2() - msol->GetYHalfLength1() );
   G4double pDz = fwidth/2.;
+  G4double zLength = 2*msol->GetZHalfLength();
  
-  trd.SetAllParameters ( pDx1+DDx*copyNo, pDx1+DDx*(copyNo+1),
-                         pDy1+DDy*copyNo, pDy1+DDy*(copyNo+1), pDz );
+  G4cout << " SetAllParameters " << pDx1+DDx*(foffset+copyNo*fwidth)/zLength << " " << pDx1 << " " << DDx << " " << (foffset+copyNo*fwidth) << " " << zLength << G4endl;
+  trd.SetAllParameters ( pDx1+DDx*(foffset+copyNo*fwidth)/zLength, pDx1+DDx*(foffset+(copyNo+1)*fwidth)/zLength, 
+			 pDy1+DDy*(foffset+copyNo*fwidth)/zLength, pDy1+DDy*(foffset+(copyNo+1)*fwidth)/zLength, pDz );
+  //  trd.SetAllParameters ( pDx1+DDx*copyNo+DDx*foffset/fwidth, pDx1+DDx*(copyNo+1)+DDx*foffset/fwidth,
+  //                         pDy1+DDy*copyNo+DDy*foffset/fwidth, pDy1+DDy*(copyNo+1)+DDy*foffset/fwidth, pDz );
 
   if( verbose >= 1 )
   {

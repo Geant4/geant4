@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.5 2003-10-21 09:04:27 gcosmo Exp $
+// $Id: G4PVDivision.hh,v 1.6 2003-11-18 12:15:29 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -133,9 +133,11 @@ class G4PVDivision : public G4VPhysicalVolume
   private:
 
     void CheckAndSetParameters( const EAxis pAxis,
-                                const G4int nReplicas,
+                                const G4int nDivs,
                                 const G4double width,
-                                const G4double offset, DivisionType divType);
+                                const G4double offset, 
+				DivisionType divType,
+				const G4LogicalVolume* pMotherLogical );
 
     G4PVDivision(const G4PVDivision&);
     const G4PVDivision& operator=(const G4PVDivision&);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh,v 1.3 2003-10-24 11:10:02 gcosmo Exp $
+// $Id: G4ParameterisationTrd.hh,v 1.4 2003-11-18 12:15:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // classes G4ParameterisationTrdX
@@ -47,7 +47,7 @@ class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
 class G4Cons;
-class G4Cons;
+class G4Box;
 class G4Sphere;
 class G4Orb;
 class G4Torus;
@@ -65,6 +65,10 @@ class G4ParameterisationTrdX : public G4VDivisionParameterisation
                             G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTrdX();
+
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation(const G4int copyNo,
                                              G4VPhysicalVolume* physVol) const;
@@ -86,8 +90,6 @@ class G4ParameterisationTrdX : public G4VDivisionParameterisation
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
  
-    virtual void CheckAxisIsValid();
-
 };
 
 
@@ -96,9 +98,13 @@ class G4ParameterisationTrdY : public G4VDivisionParameterisation
   public:  // with description
 
     G4ParameterisationTrdY( EAxis axis, G4int nCopies,
-                            G4double offset, G4double step,
+                            G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTrdY();
+
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume *physVol) const;
@@ -120,8 +126,6 @@ class G4ParameterisationTrdY : public G4VDivisionParameterisation
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
 
-    virtual void CheckAxisIsValid();
-
 };
 
 
@@ -130,9 +134,11 @@ class G4ParameterisationTrdZ : public G4VDivisionParameterisation
   public:  // with description
 
     G4ParameterisationTrdZ( EAxis axis, G4int nCopies,
-                            G4double offset, G4double step,
+                            G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTrdZ();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume* physVol) const;

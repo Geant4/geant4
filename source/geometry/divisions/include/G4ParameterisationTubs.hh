@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.hh,v 1.2 2003-10-24 11:10:02 gcosmo Exp $
+// $Id: G4ParameterisationTubs.hh,v 1.3 2003-11-18 12:15:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // classes G4ParameterisationTubsRho
@@ -65,6 +65,8 @@ class G4ParameterisationTubsRho : public G4VDivisionParameterisation
                                G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTubsRho();
 
+    virtual G4double GetMaxParameter() const;
+
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume* physVol) const;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
@@ -95,6 +97,8 @@ class G4ParameterisationTubsPhi : public G4VDivisionParameterisation
                                G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTubsPhi();
 
+    virtual G4double GetMaxParameter() const;
+
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume* physVol) const;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
@@ -124,6 +128,8 @@ class G4ParameterisationTubsZ : public G4VDivisionParameterisation
                              G4double offset, G4double step,
                              G4VSolid* motherSolid, DivisionType divType );
     virtual ~G4ParameterisationTubsZ();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume* physVol) const;

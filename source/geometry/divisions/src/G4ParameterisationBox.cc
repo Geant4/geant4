@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.3 2003-10-30 10:19:36 arce Exp $
+// $Id: G4ParameterisationBox.cc,v 1.4 2003-11-18 12:15:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
@@ -43,8 +43,9 @@ G4ParameterisationBoxX::
 G4ParameterisationBoxX( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  CheckParametersValidity();
   SetType( "DivisionBoxX" );
 
   if( divType == DivWIDTH )
@@ -71,6 +72,14 @@ G4ParameterisationBoxX( EAxis axis, G4int nDiv, G4double width,
 G4ParameterisationBoxX::~G4ParameterisationBoxX()
 {
 }
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationBoxX::GetMaxParameter() const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+  return 2*msol->GetXHalfLength();
+}
+
 
 //------------------------------------------------------------------------
 void
@@ -109,13 +118,37 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   physVol->SetTranslation( origin );
 }
 
+void
+G4ParameterisationBoxX::
+ComputeDimensions( G4Box& box, const G4int,
+                   const G4VPhysicalVolume* ) const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+
+  G4double pDx = fwidth/2.;
+  G4double pDy = msol->GetYHalfLength();
+  G4double pDz = msol->GetZHalfLength();
+
+  box.SetXHalfLength( pDx );
+  box.SetYHalfLength( pDy );
+  box.SetZHalfLength( pDz );
+  if( verbose >= 2 )
+  {
+    G4cout << " G4ParameterisationBoxX::ComputeDimensions()" << G4endl
+           << " pDx: " << pDz << G4endl;
+    box.DumpInfo();
+  }
+}
+
+
 //------------------------------------------------------------------------
 G4ParameterisationBoxY::
 G4ParameterisationBoxY( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType)
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  CheckParametersValidity();
   SetType( "DivisionBoxY" );
 
   if( divType == DivWIDTH )
@@ -141,6 +174,14 @@ G4ParameterisationBoxY( EAxis axis, G4int nDiv, G4double width,
 G4ParameterisationBoxY::~G4ParameterisationBoxY()
 {
 }
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationBoxY::GetMaxParameter() const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+  return 2*msol->GetYHalfLength();
+}
+
 
 //------------------------------------------------------------------------
 void
@@ -178,14 +219,37 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   physVol->SetTranslation( origin );
 }
 
+void
+G4ParameterisationBoxY::
+ComputeDimensions( G4Box& box, const G4int,
+                   const G4VPhysicalVolume* ) const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+
+  G4double pDx = msol->GetXHalfLength();
+  G4double pDy = fwidth/2.;
+  G4double pDz = msol->GetZHalfLength();
+
+  box.SetXHalfLength( pDx );
+  box.SetYHalfLength( pDy );
+  box.SetZHalfLength( pDz );
+  if( verbose >= 2 )
+  {
+    G4cout << " G4ParameterisationBoxY::ComputeDimensions()" << G4endl
+           << " pDx: " << pDz << G4endl;
+    box.DumpInfo();
+  }
+}
+
 
 //------------------------------------------------------------------------
 G4ParameterisationBoxZ::
 G4ParameterisationBoxZ( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  CheckParametersValidity();
   SetType( "DivisionBoxZ" );
 
   if( divType == DivWIDTH )
@@ -210,6 +274,13 @@ G4ParameterisationBoxZ( EAxis axis, G4int nDiv, G4double width,
 //------------------------------------------------------------------------
 G4ParameterisationBoxZ::~G4ParameterisationBoxZ()
 {
+}
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationBoxZ::GetMaxParameter() const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+  return 2*msol->GetZHalfLength();
 }
 
 //------------------------------------------------------------------------
@@ -246,3 +317,26 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
    //----- set translation 
   physVol->SetTranslation( origin );
 }
+
+void
+G4ParameterisationBoxZ::
+ComputeDimensions( G4Box& box, const G4int,
+                   const G4VPhysicalVolume* ) const
+{
+  G4Box* msol = (G4Box*)(fmotherSolid);
+
+  G4double pDx = msol->GetXHalfLength();
+  G4double pDy = msol->GetYHalfLength();
+  G4double pDz = fwidth/2.;
+
+  box.SetXHalfLength( pDx );
+  box.SetYHalfLength( pDy );
+  box.SetZHalfLength( pDz );
+  if( verbose >= 2 )
+  {
+    G4cout << " G4ParameterisationBoxZ::ComputeDimensions()" << G4endl
+           << " pDx: " << pDz << G4endl;
+    box.DumpInfo();
+  }
+}
+

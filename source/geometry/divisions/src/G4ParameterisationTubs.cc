@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.3 2003-10-30 10:19:36 arce Exp $
+// $Id: G4ParameterisationTubs.cc,v 1.4 2003-11-18 12:15:44 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
@@ -43,8 +43,9 @@ G4ParameterisationTubsRho::
 G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  CheckParametersValidity();
   SetType( "DivisionTubsRho" );
 
   if( divType == DivWIDTH )
@@ -75,6 +76,14 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
 G4ParameterisationTubsRho::~G4ParameterisationTubsRho()
 {
 }
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationTubsRho::GetMaxParameter() const
+{
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  return msol->GetOuterRadius() - msol->GetInnerRadius();
+}
+
 
 //--------------------------------------------------------------------------
 void
@@ -111,8 +120,8 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
 {
   G4Tubs* msol = (G4Tubs*)(fmotherSolid);
 
-  G4double pRMin = msol->GetInnerRadius() + fwidth * copyNo;
-  G4double pRMax = msol->GetInnerRadius() + fwidth * (copyNo+1);
+  G4double pRMin = msol->GetInnerRadius() + foffset + fwidth * copyNo;
+  G4double pRMax = msol->GetInnerRadius() + foffset + fwidth * (copyNo+1);
   G4double pDz = msol->GetZHalfLength();
   //- already rotated  G4double pSR = foffset + copyNo*fwidth;
   G4double pSPhi = msol->GetStartPhiAngle();
@@ -136,8 +145,9 @@ G4ParameterisationTubsPhi::
 G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 { 
+  CheckParametersValidity();
   SetType( "DivisionTubsPhi" );
 
   if( divType == DivWIDTH )
@@ -163,6 +173,13 @@ G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
 //--------------------------------------------------------------------------
 G4ParameterisationTubsPhi::~G4ParameterisationTubsPhi()
 {
+}
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationTubsPhi::GetMaxParameter() const
+{
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  return msol->GetDeltaPhiAngle();
 }
 
 //--------------------------------------------------------------------------
@@ -205,8 +222,8 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();
   G4double pDz = msol->GetZHalfLength();
-  //- already rotated  G4double pSPhi = foffset + copyNo*fwidth;
-  G4double pSPhi = foffset + msol->GetStartPhiAngle();
+  //----- already rotated in 'ComputeTransformation'
+  G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = fwidth;
 
   tubs.SetInnerRadius( pRMin );
@@ -227,8 +244,9 @@ G4ParameterisationTubsZ::
 G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  : G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 { 
+  CheckParametersValidity();
   SetType( "DivisionTubsZ" );
   if( divType == DivWIDTH )
   {
@@ -253,6 +271,13 @@ G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
 //--------------------------------------------------------------------------
 G4ParameterisationTubsZ::~G4ParameterisationTubsZ()
 {
+}
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationTubsZ::GetMaxParameter() const
+{
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  return 2*msol->GetZHalfLength();
 }
 
 //--------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.4 2003-10-30 10:19:36 arce Exp $
+// $Id: G4ParameterisationCons.cc,v 1.5 2003-11-18 12:15:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file
@@ -43,8 +43,9 @@ G4ParameterisationConsRho::
 G4ParameterisationConsRho( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  CheckParametersValidity();
   SetType( "DivisionConsRho" );
 
   G4Cons* msol = (G4Cons*)(msolid);
@@ -82,6 +83,14 @@ G4ParameterisationConsRho::~G4ParameterisationConsRho()
 {
 }
 
+//------------------------------------------------------------------------
+G4double G4ParameterisationConsRho::GetMaxParameter() const
+{
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
+  return msol->GetOuterRadiusMinusZ() - msol->GetInnerRadiusMinusZ();
+}
+
+
 //--------------------------------------------------------------------------
 void
 G4ParameterisationConsRho::
@@ -96,8 +105,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   if( verbose >= 2 )
   {
     G4cout <<  " G4ParameterisationConsRho - copyNo: " << copyNo << G4endl
-           << " Offset: " << foffset/deg
-           << " - Width: " << fwidth/deg << G4endl;
+           << " Offset: " << foffset
+           << " - Width: " << fwidth << G4endl;
   }
   ChangeRotMatrix( physVol );
 
@@ -118,16 +127,16 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
 {
   G4Cons* msol = (G4Cons*)(fmotherSolid);
 
-  G4double pRMin1 = msol->GetInnerRadiusMinusZ() + fwidth * copyNo;
-  G4double pRMax1 = msol->GetInnerRadiusMinusZ() + fwidth * (copyNo+1);
+  G4double pRMin1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth * copyNo;
+  G4double pRMax1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth * (copyNo+1);
  
   //width at Z Plus
   //- G4double fwidthPlus = fwidth * ( msol->GetOuterRadiusPlusZ()/ msol->GetInnerRadiusPlusZ())
   //-  / ( msol->GetOuterRadiusMinusZ() - msol->GetInnerRadiusMinusZ());
   G4double fwidthPlus = CalculateWidth( msol->GetOuterRadiusPlusZ()
                            - msol->GetInnerRadiusPlusZ(), fnDiv, foffset );
-  G4double pRMin2 = msol->GetInnerRadiusPlusZ() + fwidthPlus * copyNo;
-  G4double pRMax2 = msol->GetInnerRadiusPlusZ() + fwidthPlus * (copyNo+1);
+  G4double pRMin2 = msol->GetInnerRadiusPlusZ() + foffset + fwidthPlus * copyNo;
+  G4double pRMax2 = msol->GetInnerRadiusPlusZ() + foffset + fwidthPlus * (copyNo+1);
   G4double pDz = msol->GetZHalfLength();
 
   //- already rotated  double pSR = foffset + copyNo*fwidth;
@@ -154,8 +163,9 @@ G4ParameterisationConsPhi::
 G4ParameterisationConsPhi( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 { 
+  CheckParametersValidity();
   SetType( "DivisionConsPhi" );
 
   if( divType == DivWIDTH )
@@ -182,6 +192,14 @@ G4ParameterisationConsPhi( EAxis axis, G4int nDiv,
 G4ParameterisationConsPhi::~G4ParameterisationConsPhi()
 {
 }
+
+//------------------------------------------------------------------------
+G4double G4ParameterisationConsPhi::GetMaxParameter() const
+{
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
+  return msol->GetDeltaPhiAngle();
+}
+
 
 //--------------------------------------------------------------------------
 void
@@ -245,10 +263,11 @@ G4ParameterisationConsZ::
 G4ParameterisationConsZ( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 { 
-  //  CheckMotherSolid( motherSolid, "G4Cons" );
+  CheckParametersValidity();
   SetType( "DivisionConsZ" );
+
   if( divType == DivWIDTH )
   {
     G4Cons* msol = (G4Cons*)(msolid);
@@ -275,6 +294,13 @@ G4ParameterisationConsZ::~G4ParameterisationConsZ()
 {
 }
 
+//------------------------------------------------------------------------
+G4double G4ParameterisationConsZ::GetMaxParameter() const
+{
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
+  return 2*msol->GetZHalfLength();
+}
+
 //--------------------------------------------------------------------------
 void
 G4ParameterisationConsZ::
@@ -292,7 +318,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   {
     G4cout << " G4ParameterisationConsZ::ComputeTransformation()" << G4endl
            << " Origin: " << origin << " - copyNo: " << copyNo << G4endl
-           << " foffset: " << foffset/deg << " - fwidth: " << fwidth
+           << " foffset: " << foffset << " - fwidth: " << fwidth
            << G4endl;
   }
   ChangeRotMatrix( physVol );
@@ -320,17 +346,6 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   cons.SetInnerRadiusPlusZ( aRInner * xPlusZ + bRInner );
   cons.SetOuterRadiusPlusZ( aROuter * xPlusZ + bROuter );
  
-  /*
-  G4double pRInner1 = msol->GetInnerRadiusMinusZ();
-  G4double pROuter1 = msol->GetOuterRadiusMinusZ();
-  G4double DRInner = (msol->GetInnerRadiusPlusZ() - pRInner1) / fnDiv;
-  G4double DROuter = (msol->GetOuterRadiusPlusZ() - pROuter1 ) / fnDiv;
-
-  cons.SetInnerRadiusMinusZ( pRInner1 + DRInner*copyNo);
-  cons.SetOuterRadiusMinusZ( pROuter1 + DROuter*copyNo );
-  cons.SetInnerRadiusPlusZ( pRInner1 + DRInner*(copyNo+1) );
-  cons.SetOuterRadiusPlusZ( pROuter1 + DROuter*(copyNo+1) );
-  */
   G4double pDz = fwidth / 2.;
   G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = msol->GetDeltaPhiAngle();

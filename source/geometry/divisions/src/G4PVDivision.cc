@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.8 2003-10-30 10:19:36 arce Exp $
+// $Id: G4PVDivision.cc,v 1.9 2003-11-18 12:15:42 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -54,7 +54,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, nDivs,
                        width, offset, DivNDIVandWIDTH );
-  CheckAndSetParameters (pAxis, nDivs, width, offset, DivNDIVandWIDTH);
+  CheckAndSetParameters (pAxis, nDivs, width, offset, DivNDIVandWIDTH, pMotherLogical );
 }
 
 //--------------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV );
-  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV );
+  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical );
 }
 
 //--------------------------------------------------------------------------
@@ -84,15 +84,17 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, 0, width, offset, DivWIDTH );
-  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH );
+  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical );
 }
 
 //--------------------------------------------------------------------------
-void G4PVDivision::CheckAndSetParameters (const EAxis pAxis,
-                                          const G4int nDivs,
-                                          const G4double width,
-                                          const G4double offset,
-                                                DivisionType divType ) 
+void G4PVDivision::
+CheckAndSetParameters( const EAxis pAxis,
+		       const G4int nDivs,
+		       const G4double width,
+		       const G4double offset, 
+		       DivisionType divType,
+		       const G4LogicalVolume* pMotherLogical )
 {
   if( divType == DivWIDTH )
   {
@@ -156,6 +158,27 @@ void G4PVDivision::CheckAndSetParameters (const EAxis pAxis,
                   FatalException, "Unknown axis of replication.");
       break;
   }
+
+
+  //----- Check that mother solid is of the same type than daughter solid (otherwise, the corresponding Parameterisation::ComputeDimension() will not be called)
+  G4cout << " GetMotherLogical " << GetMotherLogical() << G4endl;
+  G4cout << " GetLogicalVolume " << GetLogicalVolume() << G4endl;
+  G4String msolType = pMotherLogical->GetSolid()->GetEntityType();
+  G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
+  if( msolType != dsolType )
+  {
+    G4cerr << "ERROR - G4PVDivision::CheckMotherSolid()"
+           << G4endl
+           << "        Incorrect solid type in call to G4PVDivision of volume "
+           << GetName() << G4endl
+           << "        It is: " << msolType
+           << ", while it should be: " << dsolType << "." << G4endl;
+    G4Exception("G4VDivisionParameterisation::CheckMotherSolid()",
+                "IllegalConstruct", FatalException,
+                "Incorrect solid type for division !");
+  }
+
+
 }
 
 //--------------------------------------------------------------------------
@@ -322,6 +345,14 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
   { 
     switch( axis )
     {
+      case kXAxis:
+        fparam = new G4ParameterisationParaX( axis, nDivs, width,
+                                             offset, mSolid, divType );
+        break;
+      case kYAxis:
+        fparam = new G4ParameterisationParaY( axis, nDivs, width,
+                                             offset, mSolid, divType );
+        break;
       case kZAxis:
         fparam = new G4ParameterisationParaZ( axis, nDivs, width,
                                              offset, mSolid, divType );

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.4 2003-11-04 17:01:52 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.5 2003-11-18 12:15:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -54,7 +54,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
  public:  // with description
   
   G4VDivisionParameterisation( EAxis axis, G4int nDiv, G4double width,
-			       G4double offset, G4VSolid* motherSolid = 0);
+			       G4double offset, DivisionType divType, G4VSolid* motherSolid = 0);
   virtual ~G4VDivisionParameterisation();
   
   virtual void ComputeTransformation(const G4int copyNo,
@@ -71,8 +71,6 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
   
 protected:  // with description
 
-  void CheckMotherSolid( const G4VSolid* motherSolid,
-			 const G4String& solidType ) const;
   void ChangeRotMatrix( G4VPhysicalVolume* physVol,
 			G4double rotZ = 0. ) const;
   
@@ -81,9 +79,11 @@ protected:  // with description
   G4double CalculateWidth( G4double motherDim, G4int nDiv,
 			   G4double offset ) const;
   
-private: 
-  virtual void CheckAxisIsValid(){};
-  
+  virtual void CheckParametersValidity();
+  void CheckOffset( G4double maxPar );
+  void CheckNDivAndWidth( G4double maxPar );
+  virtual G4double GetMaxParameter() const = 0;
+
 protected:
   
   G4String ftype;
@@ -91,10 +91,12 @@ protected:
   G4int fnDiv;
   G4double fwidth;
   G4double foffset;
+  DivisionType fDivisionType;
   G4VSolid* fmotherSolid;
   
   static G4int verbose;
   G4int theVoluFirstCopyNo;
+
 };
 
 #include "G4VDivisionParameterisation.icc"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.hh,v 1.4 2003-11-04 17:03:03 gcosmo Exp $
+// $Id: G4ParameterisationPolycone.hh,v 1.5 2003-11-18 12:15:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // classes G4ParameterisationPolyconeRho,
@@ -70,6 +70,10 @@ class G4ParameterisationPolyconeRho : public G4VDivisionParameterisation
                                    DivisionType divType );
     virtual ~G4ParameterisationPolyconeRho();
 
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
+
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
@@ -114,6 +118,8 @@ class G4ParameterisationPolyconePhi : public G4VDivisionParameterisation
                                    G4VSolid* motherSolid,
                                    DivisionType divType );
     virtual ~G4ParameterisationPolyconePhi();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;
@@ -160,7 +166,9 @@ class G4ParameterisationPolyconeZ : public G4VDivisionParameterisation
                                  DivisionType divType );
     virtual ~G4ParameterisationPolyconeZ();
 
-    virtual void CheckAxisIsValid();
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;

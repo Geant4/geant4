@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.hh,v 1.5 2003-11-04 17:03:03 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.hh,v 1.6 2003-11-18 12:15:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // classes G4ParameterisationPolyhedraRho,
@@ -70,6 +70,10 @@ class G4ParameterisationPolyhedraRho : public G4VDivisionParameterisation
                                     DivisionType divType );
     virtual ~G4ParameterisationPolyhedraRho();
 
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
+
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
@@ -115,6 +119,10 @@ class G4ParameterisationPolyhedraPhi : public G4VDivisionParameterisation
                                    DivisionType divType );
     virtual ~G4ParameterisationPolyhedraPhi();
 
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
+
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
@@ -159,6 +167,10 @@ class G4ParameterisationPolyhedraZ : public G4VDivisionParameterisation
                                   G4VSolid* motherSolid,
                                   DivisionType divType );
     virtual ~G4ParameterisationPolyhedraZ();
+
+    virtual void CheckParametersValidity();
+
+    virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation( const G4int copyNo,
                                         G4VPhysicalVolume* physVol ) const;
