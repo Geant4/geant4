@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: G4Gamma.hh,v 1.7 2001-10-16 08:15:39 kurasige Exp $
+//// $Id: G4Gamma.hh,v 1.8 2001-10-20 01:36:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,22 +74,14 @@ class G4Gamma : public G4VBoson
 
  //--------------for SetCuts----------------------------------------------
  protected:    
-    G4double ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
-    {
-      return ComputeCrossSection(AtomicNumber,KineticEnergy);
-    };
+  G4double ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const;
 
-    void BuildRangeVector(
-                                  const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,     
-				  G4double       aMass,
-                                  G4RangeVector* rangeVector)
-    {
-        BuildAbsorptionLengthVector(aMaterial,
-				    (const G4CrossSectionTable*)aLossTable,
-                                    maxEnergy, aMass, rangeVector);
-    }
+  void BuildRangeVector(
+			const G4Material* aMaterial,
+			const G4LossTable* aLossTable,
+			G4double       maxEnergy,     
+			G4double       aMass,
+			G4RangeVector* rangeVector);
 
   G4double ConvertCutToKineticEnergy(
 				     G4RangeVector* absorptionLengthVector,
@@ -115,6 +107,25 @@ class G4Gamma : public G4VBoson
    static G4Gamma* GammaDefinition();
    static G4Gamma* Gamma();
 };
+
+inline 
+ G4double G4Gamma::ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
+{
+  return ComputeCrossSection(AtomicNumber,KineticEnergy);
+};
+
+inline 
+ void G4Gamma::BuildRangeVector(
+				const G4Material* aMaterial,
+				const G4LossTable* aLossTable,
+				G4double       maxEnergy,     
+				G4double       aMass,
+				G4RangeVector* rangeVector)
+{
+  BuildAbsorptionLengthVector(aMaterial,
+			      (const G4CrossSectionTable*)aLossTable,
+			      maxEnergy, aMass, rangeVector);
+}
 
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.7 2001-10-16 08:15:42 kurasige Exp $
+// $Id: G4Gamma.cc,v 1.8 2001-10-20 01:36:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,7 @@ void G4Gamma::BuildAbsorptionLengthVector(
     aErrorMessage += " NULL pointer is found in absorptionLengthVector \n";
     G4Exception((const char*)aErrorMessage);
   }
-  G4int NumEl = G4Element::GetNumberOfElements();
+  G4int NumEl = aMaterial->GetNumberOfElements();
   G4double absorptionLengthMax = 0.0;
   for (G4int ibin=0; ibin<TotBin; ibin++)
   {
@@ -157,6 +157,7 @@ void G4Gamma::BuildAbsorptionLengthVector(
       G4cout << "in the material " << aMaterial->GetName() << "." << G4endl;
   }
 }
+
 
 // ***********************************************************************
 // ********************** ComputeCrossSection ****************************
