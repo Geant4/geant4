@@ -28,7 +28,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW0.5
+	g4ledata=$g4install/../G4EMLOW1.1
 	;;
 esac
 
@@ -54,7 +54,7 @@ Data which is not part of the default Geant4 distribution:
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -84,7 +84,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW0.5 data installed ?"
+		rp="Where is G4EMLOW1.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
