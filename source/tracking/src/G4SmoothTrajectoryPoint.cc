@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.12 2004-06-11 14:30:19 gcosmo Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.13 2005-03-22 14:40:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,6 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
 
 G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 
@@ -92,24 +91,17 @@ G4SmoothTrajectoryPoint::GetAttDefs() const
 
 std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
 {
-  char c[100];
-  std::ostrstream s(c,100);
-
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   if (fAuxiliaryPointVector) {
     std::vector<G4ThreeVector>::iterator iAux;
     for (iAux = fAuxiliaryPointVector->begin();
 	 iAux != fAuxiliaryPointVector->end(); ++iAux) {
-      s.seekp(std::ios::beg);
-      s << G4BestUnit(*iAux,"Length") << std::ends;
-      values->push_back(G4AttValue("Aux",c,""));
+      values->push_back(G4AttValue("Aux",G4BestUnit(*iAux,"Length"),""));
     }
   }
 
-  s.seekp(std::ios::beg);
-  s << G4BestUnit(fPosition,"Length") << std::ends;
-  values->push_back(G4AttValue("Pos",c,""));
+  values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
 
   return values;
 }

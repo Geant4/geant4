@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2005-03-22 14:40:51 allison Exp $
+$Id: History,v 1.86 2005-03-22 14:42:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22 March 2005 John Allison (tracking-V07-00-00)
+22 March 2005 John Allison (tracking-V07-00-00 - needs global-V07-00-03)
 - Simplified creation of G4AttValues using G4BestUnit::operator
   G4String and G4UIcommand::ConvertToString.
 

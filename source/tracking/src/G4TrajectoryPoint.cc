@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.14 2004-06-11 14:30:20 gcosmo Exp $
+// $Id: G4TrajectoryPoint.cc,v 1.15 2005-03-22 14:40:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,6 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
 
 G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
 
@@ -74,14 +73,9 @@ const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
 
 std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
 {
-  char c[100];
-  std::ostrstream s(c,100);
-
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
-  s.seekp(std::ios::beg);
-  s << G4BestUnit(fPosition,"Length") << std::ends;
-  values->push_back(G4AttValue("Pos",c,""));
+  values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
 
   return values;
 }

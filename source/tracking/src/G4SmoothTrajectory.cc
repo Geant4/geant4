@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.13 2004-11-18 23:10:10 perl Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.14 2005-03-22 14:40:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,8 +43,8 @@
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
 
 G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
@@ -142,8 +142,9 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
 			      "Physics","","G4ThreeVector");
 
     G4String IMag("IMag");
-    (*store)[IMag] = G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
-			      "Physics","","G4double");
+    (*store)[IMag] = G4AttDef
+      (IMag, "Magnitude of momentum of track at start of trajectory",
+       "Physics","","G4double");
 
     G4String NTP("NTP");
     (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
@@ -155,40 +156,30 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
 
 std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
 {
-  char c[100];
-  std::ostrstream s(c,100);
-
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
-  s.seekp(std::ios::beg);
-  s << fTrackID << std::ends;
-  values->push_back(G4AttValue("ID",c,""));
+  values->push_back
+    (G4AttValue("ID",G4UIcommand::ConvertToString(fTrackID),""));
 
-  s.seekp(std::ios::beg);
-  s << fParentID << std::ends;
-  values->push_back(G4AttValue("PID",c,""));
+  values->push_back
+    (G4AttValue("PID",G4UIcommand::ConvertToString(fParentID),""));
 
   values->push_back(G4AttValue("PN",ParticleName,""));
 
-  s.seekp(std::ios::beg);
-  s << PDGCharge << std::ends;
-  values->push_back(G4AttValue("Ch",c,""));
+  values->push_back
+    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
 
-  s.seekp(std::ios::beg);
-  s << PDGEncoding << std::ends;
-  values->push_back(G4AttValue("PDG",c,""));
+  values->push_back
+    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
 
-  s.seekp(std::ios::beg);
-  s << G4BestUnit(initialMomentum,"Energy") << std::ends;
-  values->push_back(G4AttValue("IMom",c,""));
+  values->push_back
+    (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));
 
-  s.seekp(std::ios::beg);
-  s << initialMomentum.mag() << std::ends;
-  values->push_back(G4AttValue("IMag",c,""));
+  values->push_back
+    (G4AttValue("IMag",G4BestUnit(initialMomentum.mag(),"Energy"),""));
 
-  s.seekp(std::ios::beg);
-  s << GetPointEntries() << std::ends;
-  values->push_back(G4AttValue("NTP",c,""));
+  values->push_back
+    (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));
 
   return values;
 }
