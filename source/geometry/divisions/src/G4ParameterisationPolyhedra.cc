@@ -21,17 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.2 2003-10-30 10:19:36 arce Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.3 2003-11-04 17:03:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
 // 14.10.03 - P.Arce Initial version
-// ********************************************************************
+//---------------------------------------------------------------------
 
-#define protected public
-#include "G4Polyhedra.hh"
-#define protected protected
 #include "G4ParameterisationPolyhedra.hh"
 
 #include <iomanip>
@@ -39,6 +36,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Polyhedra.hh"
 
 //--------------------------------------------------------------------------
 G4ParameterisationPolyhedraRho::
@@ -60,7 +58,8 @@ G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
   else if( divType == DivNDIV )
   {
     G4cout  << " original_pars " << original_pars << G4endl;
-    G4cout  << " original_pars rmax size " << original_pars->Rmax << " " <<  original_pars->Rmin << G4endl;
+    G4cout  << " original_pars rmax size " << original_pars->Rmax << " "
+            <<  original_pars->Rmin << G4endl;
 
     fwidth = CalculateWidth( original_pars->Rmax[0]
                            - original_pars->Rmin[0], nDiv, offset );
@@ -86,7 +85,8 @@ G4ParameterisationPolyhedraRho::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
   //----- translation 
-  G4ThreeVector origin(0.,0.,0.); 
+  G4ThreeVector origin(0.,0.,0.);
+
   //----- set translation 
   physVol->SetTranslation( origin );
 
@@ -101,8 +101,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 
   if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraRho " << copyNo
-           << G4endl
+    G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraRho "
+           << copyNo << G4endl
            << " Position: " << origin
            << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
@@ -117,20 +117,25 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
 {
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
-  G4PolyhedraHistorical* origparam = msol->GetOriginalParameters();
-  G4double nZplanes = origparam->Num_z_planes;
-  G4int ii = 0;
+  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
+  G4PolyhedraHistorical origparam( *origparamMother );
+  G4int nZplanes = origparamMother->Num_z_planes;
+  origparam.Z_values = new G4double[nZplanes];
+  origparam.Rmin = new G4double[nZplanes];
+  origparam.Rmax = new G4double[nZplanes];
+
   G4double width = 0.;
-  for( ii = 0; ii < nZplanes; ii++ )
+  for( G4int ii = 0; ii < nZplanes; ii++ )
   {
-    width = CalculateWidth( origparam->Rmax[ii] - origparam->Rmin[ii],
-                            fnDiv, foffset );
-    origparam->Rmin[ii] = foffset + width*copyNo;
-    origparam->Rmax[ii] = foffset + width*(copyNo+1);
+    width = CalculateWidth( origparamMother->Rmax[ii]
+                          - origparamMother->Rmin[ii], fnDiv, foffset );
+    origparam.Z_values[ii] = origparamMother->Z_values[ii];
+    origparam.Rmin[ii] = origparamMother->Rmin[ii]+foffset+width*copyNo;
+    origparam.Rmax[ii] = origparamMother->Rmin[ii]+foffset+width*(copyNo+1);
   }
 
-  *(phedra.original_parameters) = *origparam;
-  phedra.Reset();
+  phedra.SetOriginalParameters(&origparam); // copy values & transfer pointers
+  phedra.Reset();                           // reset to new solid parameters
 
   if( verbose >= -2 )
   {
