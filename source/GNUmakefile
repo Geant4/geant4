@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 1999-12-05 22:36:52 morita Exp $
+# $Id: GNUmakefile,v 1.16 1999-12-15 16:36:30 stesting Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -30,32 +30,32 @@ unique := $(shell echo $$$$)
 all:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making granular libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done;:
 	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE)); done
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
 glob global:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making global libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done;:
 	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) global); done
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) global); done;:
 endif
 
 
