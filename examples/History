@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2003-04-30 13:57:45 gcosmo Exp $
+$Id: History,v 1.69 2003-05-30 13:57:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th May 2003  Gabriele Cosmo (examples-V05-01-00)
+- Updated reference outputs.
 
 30th April 2003  Gabriele Cosmo (examples-V05-00-02)
 - Includes fixes/improvements part of release 5.1.
