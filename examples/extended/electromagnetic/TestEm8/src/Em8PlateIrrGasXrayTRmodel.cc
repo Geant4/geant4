@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PlateIrrGasXrayTRmodel.cc,v 1.1 2000-03-03 09:16:15 grichine Exp $
+// $Id: Em8PlateIrrGasXrayTRmodel.cc,v 1.2 2000-03-28 13:02:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -96,7 +96,7 @@ Em8PlateIrrGasXrayTRmodel::GetStackFactor( G4double energy,
 
   result      = ( 1 - pow(Q,fPlateNumber) )/( 1 - Q ) ;
 
-  result *= 1 + Qa -2*cos(fPlateThick/Za) ;
+  result *= 1 + Qa -2*sqrt(Qa)*cos(fPlateThick/Za) ;
 
   return      result ;
 }
