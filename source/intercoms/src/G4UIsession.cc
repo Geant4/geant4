@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.cc,v 1.4 2001-07-11 10:01:17 gunter Exp $
+// $Id: G4UIsession.cc,v 1.5 2003-05-21 21:13:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@ G4UIsession::~G4UIsession() {;}
 
 G4UIsession * G4UIsession::SessionStart() { return NULL; }
 
-void G4UIsession::PauseSessionStart(G4String Prompt) {;}
+void G4UIsession::PauseSessionStart(G4String) {;}
 
 G4int G4UIsession::ReceiveG4cout(G4String coutString)
 {

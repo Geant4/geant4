@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UImessenger.cc,v 1.4 2003-05-21 21:13:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,13 +38,13 @@ G4UImessenger::G4UImessenger() { }
 
 G4UImessenger::~G4UImessenger() { }
 
-G4String G4UImessenger::GetCurrentValue(G4UIcommand * command) 
+G4String G4UImessenger::GetCurrentValue(G4UIcommand*) 
 { 
   G4String nullString;
   return nullString;
 }
 
-void G4UImessenger::SetNewValue(G4UIcommand * command,G4String newValue) 
+void G4UImessenger::SetNewValue(G4UIcommand*,G4String) 
 { ; }
 
 G4bool G4UImessenger::operator == (const G4UImessenger& messenger) const {

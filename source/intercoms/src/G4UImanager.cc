@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.27 2002-12-04 18:30:43 asaim Exp $
+// $Id: G4UImanager.cc,v 1.28 2003-05-21 21:13:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,13 +95,14 @@ G4UImanager::~G4UImanager()
   fUImanager = NULL;
 }
 
-G4UImanager::G4UImanager(const G4UImanager &right) { }
+G4UImanager::G4UImanager(const G4UImanager &)
+:G4VStateDependent(true) {;}
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
 G4int G4UImanager::operator==(const G4UImanager &right) const
-{ return false; }
+{ return (this==&right); }
 G4int G4UImanager::operator!=(const G4UImanager &right) const
-{ return true; }
+{ return (this!=&right); }
 
 G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
