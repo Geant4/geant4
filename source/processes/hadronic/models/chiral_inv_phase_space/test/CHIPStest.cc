@@ -7,7 +7,6 @@
 
 //#define debug
 //#define pdebug
-//#define ppdebug
 
 #include "G4UIterminal.hh"
 #include "G4ios.hh"
@@ -18,13 +17,10 @@
 //  #include "YY.hh"
 //#endif
 
-/////////#include "CHBook.h"
-#include "G4QNucleus.hh"
-#include "G4Quasmon.hh"
-//#include "G4QHBook.hh"
+#include "G4QEnvironment.hh"
+#include "G4QHBook.hh"
 // ==>>> a trick for the "test" arrangement
-/////////#include "CHBook.cc"
-//#include "G4QHBook.cc"
+#include "G4QHBook.cc"
 
 #include <iostream.h>
 #include <fstream.h>
@@ -48,13 +44,8 @@ int main()
   //}
 
   // Histograms
-  ////////cout<<"Prepare chips.hbook file for HBOOK histograms"<<endl;
-  ////////CHBookFile chipshist("chips.hbook",1,1);
-
-  // Book histograms
-  ////////CHBookHisto histPi(3027,"Pion multiplicity",12,0.,12.);
-  //
-  ////////G4QHBook ntp;
+  cout<<"Prepare G4QHBook files"<<endl;
+  G4QHBook ntp;
   //
   //-------- set standard output format-------
    G4cout.setf( ios::scientific, ios::floatfield );
@@ -69,18 +60,22 @@ int main()
   G4double fN;
   G4double fD;
   G4double cP;
+  G4double sA;
   G4int    nop;
   G4int    pPDG;
   G4int    tPDG;
   G4int    nEvt;
   G4int    nofdecays;
   G4int    decmask=0;
-  inFile>>temperature>>ssin2g>>etaetap>>nop>>momb>>enb>>pPDG>>tPDG>>nEvt>>fN>>fD>>cP;
-  cout<<"CHIPS Par's: Temp="<<temperature<<",ss_sea="<<ssin2g<<",P/S="<<etaetap<<",nop="<<nop
-      <<",p="<<momb<<",e="<<enb<<",projCode="<<pPDG<<",targCode="<<tPDG<<",nEv="<<nEvt
-      <<",fN="<<fN<<",fD="<<fD<<",cP="<<cP<<endl;
+  inFile>>temperature>>ssin2g>>etaetap>>nop>>momb>>enb>>pPDG>>tPDG>>nEvt>>fN>>fD>>cP>>sA;
+  cout<<"CHIPS Par's: Temp="<<temperature<<",ss_sea="<<ssin2g<<",P/S="<<etaetap
+      <<",nop="<<nop<<",p="<<momb<<",e="<<enb<<",projCode="<<pPDG<<",targCode="<<tPDG
+      <<",nEv="<<nEvt<<",fN="<<fN<<",fD="<<fD<<",cP="<<cP<<",sA="<<sA<<endl;
+  //-------- Initialize CHIPS
+  G4QCHIPSWorld aWorld(nop);                          // Create CHIPS World of nop particles
   G4QNucleus::SetParameters(fN,fD,cP);
   G4Quasmon::SetParameters(temperature,ssin2g,etaetap);
+  G4QEnvironment::SetParameters(sA);                  // SolAngle (pbar-A secondary capture)
   //-------- write results onto a file --------
   ofstream outFile( "chipstest.out", ios::out);
   outFile.setf( ios::scientific, ios::floatfield );
@@ -99,11 +94,10 @@ int main()
   G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
   G4int    ct=tQC.GetCharge();
 #ifdef debug
-  cout<<"Main: pQC"<<pQC<<", pch="<<cp<<", tQC"<<tQC<<", tch="<<ct<<endl;
+  G4cout<<"Main: pQC"<<pQC<<", pch="<<cp<<", tQC"<<tQC<<", tch="<<ct<<G4endl;
 #endif
   G4int    totC=cp+ct;
   G4LorentzVector proj4Mom(0.,0.,momb,ep);
-  G4LorentzVector targ4Mom(0.,0.,0.,mt);  
   G4double sumE=0.;
   G4double sumK=0.;
   G4double sumN=0.;
@@ -121,25 +115,26 @@ int main()
 	  vRandCount = G4UniformRand();
 	  iRandCount--;
 	}
-    if(!(ir%10000) && ir) cout<<"CHIPS: "<<ir<<" events are simulated"<<endl;
+    if(!(ir%1000) && ir) cout<<"CHIPS: "<<ir<<" events are simulated"<<endl;
     G4LorentzVector totSum    = G4LorentzVector(0.,0.,momb,ep+mt);
     G4int           totCharge = totC;
-    // Initialization of a quasmon (Temporary wide)
-    G4Quasmon* pan= new G4Quasmon(pPDG,tPDG,proj4Mom,targ4Mom,nop);
+    G4QHadronVector projHV;
+    G4QHadron* iH = new G4QHadron(pPDG,proj4Mom);
+    projHV.insert(iH);
+    G4QEnvironment* pan= new G4QEnvironment(projHV,tPDG);
+    projHV.clearAndDestroy();                 // equivalent of delete iH
 #ifdef debug
-    cout << "===>>> Now call HadronizeQuasmon hadronization function" << endl;
+    G4cout<<"CHIPStest:===>>> Now call Fragment (HadronizeQuasmon) function" << G4endl;
 #endif
-    G4QHadronVector output = pan->HadronizeQuasmon();
+    G4QHadronVector* output = pan->Fragment();
 #ifdef debug
-    cout << "--->>> Now came out of HadronizeQuasmon hadronization function" << endl;
+    G4cout<<"CHIPStest:--->>> Now come out of Fragment (HadronizeQuasmon) function"<<G4endl;
 #endif
-	//
-    //////////ntp.FillEvt(output);
-	//
+    delete pan; // Destruct theHadronVector (& theCandidateVector) of the Quasmon
 #ifdef debug
-    cout << ">>> Here the histograms are filled" << endl;
+    G4cout << "CHIPStest: >>> Here the histograms are filled" << G4endl;
 #endif
-    G4int tNH = output.entries();
+    G4int tNH = output->entries();
     G4int npt=0;
     G4int nPions=0;
     G4int nP0=0;
@@ -149,18 +144,25 @@ int main()
     G4int nPhotons=0;
     G4int nOmega=0;
     G4int nDec=0;
-#ifdef ppdebug
-    cout<<"DONE^^^^^^^^^^^^:ir="<<ir<<": A#ofHadrons="<<tNH<<",p="<<pan<<",o="<<output[0]<<endl;
+#ifdef pdebug
+    G4cout<<"DONE^^^^^^^:ir="<<ir<<": A#ofHadrons="<<tNH<<",p="<<pan<<G4endl;
 #endif
+    G4int ppnn=0;
     for (G4int ind=0; ind<tNH; ind++)
     {
-      G4double m = output[ind]->GetMass();
-      G4LorentzVector lorV = output[ind]->Get4Momentum();
-      G4int d=output[ind]->GetNFragments();
+      G4QHadron* curH=output->at(ind);
+      G4double m = curH->GetMass();
+      G4LorentzVector lorV = curH->Get4Momentum();
+      G4int d=curH->GetNFragments();
       G4ThreeVector p = lorV.vect();
-      G4int c=output[ind]->GetPDGCode();
-      if (!d) npt++;
-      if (d) nDec+=output[ind]->GetNFragments();
+      G4int c=curH->GetPDGCode();
+      if(!d&&(c==90000002||c==90002000))
+      {
+        cout<<"CHIPStest:**PPNN**"<<endl;
+        ppnn=1;
+      }
+      if(!(curH->GetNFragments())) npt++;
+      if(curH->GetNFragments()) nDec+=curH->GetNFragments();
       if(c==223) nOmega++;
       if(c==22) nPhotons++;
       if(c==311||c==321||c==-311||c==-321) nKaons++; // kaons
@@ -168,33 +170,44 @@ int main()
       if(c==211 || c==-211) nPC++;                   // Only charged
       if(c==111) nP0++;                              // Only neutral
       if(c==111 || c==211 || c==-211) nPions++;      // All pions
-      if(!d) totCharge-=output[ind]->GetCharge();
+      if(!d) totCharge-=curH->GetCharge();
       if(!d) totSum    -= lorV;
 #ifdef pdebug
-      cout<<"#"<<ind<<"("<<d<<"), PDG="<<c<<", m="<<m<<", LV="<<lorV<<", Tk="<<lorV.e()-m<<endl;
+      G4cout<<"#"<<ind<<"("<<d<<"),PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<lorV.e()-m<<G4endl;
 #endif
 	  // Write each particle's type, mass, and 4-momentum to DST
 	  //outFile<<ind<<" "<<c<<" "<<m<<" "<<lorV.x()<<" "<<lorV.y()
       //       <<" "<<lorV.z()<<" "<<lorV.t()<<" "<< endl;
     }
 #ifdef pdebug
-    cout << "CHECK: Lorentz Vector sum:" << totSum << ", Charge="<<totCharge<<endl;
+    G4cout << "CHECK: Lorentz Vector sum:" << totSum << ", Charge="<<totCharge<<G4endl;
 #endif
     G4double ss=abs(totSum.t())+abs(totSum.x())+abs(totSum.y())+abs(totSum.z());    
-	if (totCharge || ss>0.005)
+	//if (totCharge || ss>0.005)
+	if (totCharge || ss>0.005 || ppnn)
     {
-      cout<<"***Exception:n="<<ir<<": #ofH="<<tNH<<",res4M="<<totSum<<",c="<<totCharge<<endl;
+      G4cout<<"***Conserve:n="<<ir<<": #ofH="<<tNH<<",s4M="<<totSum<<",sC="<<totCharge<<G4endl;
       for (int indx=0; indx<tNH; indx++)
       {
-        G4double mx = output[indx]->GetMass();
-        G4LorentzVector lorVx = output[indx]->Get4Momentum();
-        G4int dx=output[indx]->GetNFragments();
-        G4int cx=output[indx]->GetPDGCode();
-        cout<<"#"<<indx<<"("<<dx<<"), PDG="<<cx<<",m="<<mx<<",LV="<<lorVx<<endl;
+        G4QHadron* curH=output->at(indx);
+        G4double mx = curH->GetMass();
+        G4LorentzVector lorVx = curH->Get4Momentum();
+        G4int dx=curH->GetNFragments();
+        G4int cx=curH->GetPDGCode();
+        G4cout<<"#"<<indx<<"("<<dx<<"), PDG="<<cx<<",m="<<mx<<",LV="<<lorVx<<G4endl;
       }
       G4Exception("********** Charge or energy/momentum is not conserved");
     }
 	// WRITE in FILE  ---------------
+	//
+#ifdef debug
+    G4cout<<"CHIPStest:--->>> Before ntp.FillEvt"<<G4endl;
+#endif
+    ntp.FillEvt(output);
+#ifdef debug
+    G4cout<<"CHIPStest:--->>> After ntp.FillEvt"<<G4endl;
+#endif
+	//
     sum0+=nP0;
     sumC+=nPC;
     sumN+=nPions;
@@ -203,18 +216,13 @@ int main()
     if (nPhotons) nPions=11;
     if (nKaons==2&&npt==2) nPions=1;
     else if (nKaons) nPions=10;
-    //////histPi.fill(nPions);
-    delete pan; // Destruct theHadronVector (& theCandidateVector) of the Quasmon
+    output->clearAndDestroy();
   }
-  cout<<"The mean number of pions="<<sumN/fEvt<<", pi+-="<<sumC/fEvt<<", pi0="<<sum0/fEvt
-      <<", K="<<sumK/fEvt<<", eta="<<sumE/fEvt<<endl;
-  // Save all collected histograms
-  ///////cout<<"Save all collected histograms to the chips.hbook file"<<endl;
-  ///////chipshist.saveAndClose();
+  cout<<"The mean number of pions="<<sumN/fEvt<<", pi+-="<<sumC/fEvt<<", pi0="
+        <<sum0/fEvt<<", K="<<sumK/fEvt<<", eta="<<sumE/fEvt<<endl;
 
   return EXIT_SUCCESS;
 }
-
 
 
 
