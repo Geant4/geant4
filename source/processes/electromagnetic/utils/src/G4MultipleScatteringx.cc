@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.11 2001-09-03 15:46:30 urban Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.12 2001-09-10 13:21:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -33,6 +33,7 @@
 // 27-08-01 in BuildPhysicsTable:aParticleType.GetParticleName()=="mu+" (mma)
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved from .icc file (mma)
 // 03/09-01  value of data member factlim changed, L.Urban
+// 10/09/01  small change in GetContinuousStepLimit, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -398,9 +399,6 @@ G4double G4MultipleScatteringx::GetContinuousStepLimit(
   G4double KineticEnergy,tau,z0,kz;
   G4bool isOut;
 
-  static const G4double tlimmin = 1.e-6*mm;
-  G4double tlimit;
-
   // this process is not a candidate for selection by default !!!!!!!!
   valueGPILSelectionMSC = NotCandidateForSelection;
 
@@ -429,10 +427,8 @@ G4double G4MultipleScatteringx::GetContinuousStepLimit(
     // step limitation at boundary ?
     if(track.GetCurrentStepNumber() > 1)
     {
-      tlimit = G4std::max(fTransportMeanFreePath,tlimmin) ;
-
-      if((track.GetStep()->GetPreStepPoint()->GetSafety() < tlimit)
-              && (tPathLength > tlimit))
+      if((track.GetStep()->GetPreStepPoint()->GetSafety() < fTransportMeanFreePath)
+              && (tPathLength > fTransportMeanFreePath))
       {
         tPathLength = factlim*fTransportMeanFreePath ;
         valueGPILSelectionMSC = CandidateForSelection;
