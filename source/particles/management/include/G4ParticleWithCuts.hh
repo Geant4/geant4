@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.8 2001-07-11 10:01:58 gunter Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.9 2001-09-19 11:13:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,6 +188,8 @@ class G4ParticleWithCuts : public G4ParticleDefinition
 			    G4double ltaulow, G4double ltauhigh,
                             G4int nbin, G4int NumEl
                           );
+   
+  void SetEnergyCutValues(G4double energyCuts);
 };
 
 inline G4double	G4ParticleWithCuts::GetLengthCuts() const 

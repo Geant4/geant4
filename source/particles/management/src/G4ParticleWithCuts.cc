@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.10 2001-07-11 10:02:04 gunter Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.11 2001-09-19 11:13:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,16 +29,13 @@
 //      GEANT 4 class implementation file 
 //
 //      Hisaya Kurashige, 21 Oct 1996
-//      Hisaya Kurashige, 04 Jan 1997
-// --------------------------------------------------------------
 //   New Physics scheme           8 Jan. 1997  H.Kurahige
 //   The cut in kinetic energy is set to zero for vacuum,
 //   bug in ConvertCutToKineticEnergy is corrected . L.Urban 04/04/97
-//   remove sprintf              10 Nov. 1997 H.Kurashige
-//   remove BuildPhysicTabel()   06 June 1998 H.Kurashige
 //   bug in CalcEnergyCuts is corrected , 22 June 1998 L.Urban
 //   modify CalcEnergyCuts 09 Nov. 1998, L.Urban
 //   added  RestoreCuts  H.Kurashige 09 Mar. 2001
+//   modify for material-V03-02-02 (STL migration)  H.Kurashige 19 Sep. 2001
 // ------------------------------------------------------------
 #include "globals.hh"
 #include "G4ParticleWithCuts.hh"
@@ -121,7 +118,7 @@ G4double G4ParticleWithCuts::RangeLinSimpson(
     for (G4int j=0; j<NumEl; j++)
     {
       G4bool isOut;
-      G4int IndEl = (*elementVector)(j)->GetIndex();
+      G4int IndEl = (*elementVector)[j]->GetIndex();
       lossi += atomicNumDensityVector[j]*
               (*aLossTable)[IndEl]->GetValue(ti,isOut);
     }
@@ -164,7 +161,7 @@ G4double G4ParticleWithCuts::RangeLogSimpson(
     for (G4int j=0; j<NumEl; j++)
     {
       G4bool isOut;
-      G4int IndEl = (*elementVector)(j)->GetIndex();
+      G4int IndEl = (*elementVector)[j]->GetIndex();
       lossi += atomicNumDensityVector[j]*
               (*aLossTable)[IndEl]->GetValue(ti,isOut);
     }
@@ -305,8 +302,8 @@ void  G4ParticleWithCuts::RestoreCuts(G4double cutInLength,
 
   // Restore the vector of cuts in energy corresponding to the range cut
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-  for (size_t j=0; j<materialTable->length(); j +=1) {
+  theKineticEnergyCuts = new G4double [materialTable->size()];
+  for (size_t j=0; j<materialTable->size(); j +=1) {
     theKineticEnergyCuts[j] = cutInEnergy[j];
   } 
 }
@@ -343,7 +340,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
   // Create the vector of cuts in energy
   // corresponding to the stopping range cut
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
+  theKineticEnergyCuts = new G4double [materialTable->size()];
                     
   G4double Charge = this->GetPDGCharge() ;
 
@@ -395,7 +392,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
     G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
     G4double massRatio = proton_mass_c2/(this->GetPDGMass()) ;
     
-    for (size_t J=0; J<materialTable->length(); J +=1) {
+    for (size_t J=0; J<materialTable->size(); J +=1) {
       G4double protonEnergyCut = (theProton->GetEnergyCuts())[J] ;           
       // cut energy is rescaled by using charge and mass ratio
       theKineticEnergyCuts[J] = ChargeSquare*protonEnergyCut/massRatio ; 
@@ -417,7 +414,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
     // fill theKineticEnergyCuts and delete the range vector
     G4double tune = 0.025*mm*g/cm3 ,lowen = 30.*keV ; 
     G4double density ;
-    for (size_t J=0; J<materialTable->length(); J +=1){
+    for (size_t J=0; J<materialTable->size(); J +=1){
       G4RangeVector* rangeVector = new
 	G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
       G4Material* aMaterial = (*materialTable)[J];
@@ -530,7 +527,7 @@ void G4ParticleWithCuts::BuildRangeVector(
   for (i=0; i<NumEl; i++)
   {
     G4bool isOut;
-    G4int IndEl = (*elementVector)(i)->GetIndex();
+    G4int IndEl = (*elementVector)[i]->GetIndex();
     loss1 += atomicNumDensityVector[i]*
             (*aLossTable)[IndEl]->GetValue(t1,isOut);
     loss2 += atomicNumDensityVector[i]*
@@ -593,5 +590,20 @@ void G4ParticleWithCuts::BuildRangeVector(
       G4cout << "in the material " << aMaterial->GetName() << "." << G4endl;
     }
 #endif
+  }
+}
+
+void G4ParticleWithCuts::SetEnergyCutValues(G4double energyCut)
+{
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+
+  // Create the vector of cuts in energy
+  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
+  theKineticEnergyCuts = new G4double [materialTable->size()];
+
+  // fill theKineticEnergyCuts and delete the range vector
+  for (size_t J=0; J<materialTable->size(); J++)
+  {
+    theKineticEnergyCuts[J] = energyCut;
   }
 }
