@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.8 2000-11-20 17:58:01 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.9 2001-04-18 16:06:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -37,7 +37,7 @@
 //
 // Accuracy of coplanarity
 
-const G4double kCoplanar_Tolerance=1E-4;
+const G4double kCoplanar_Tolerance = 1E-4 ;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -67,28 +67,26 @@ G4Trap::G4Trap( const G4String& pName,
 	        G4double pDy2, G4double pDx3, G4double pDx4,
 	        G4double pAlp2) : G4CSGSolid(pName)
 {
-   if (pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0)
-   {
-	   fDz=pDz;
-	   fTthetaCphi=tan(pTheta)*cos(pPhi);
-	   fTthetaSphi=tan(pTheta)*sin(pPhi);
+  if ( pDz > 0 && pDy1 > 0 && pDx1 > 0 && 
+       pDx2 > 0 && pDy2 > 0 && pDx3 > 0 && pDx4 > 0 )
+  {
+    fDz=pDz;
+    fTthetaCphi=tan(pTheta)*cos(pPhi);
+    fTthetaSphi=tan(pTheta)*sin(pPhi);
 	    
-	   fDy1=pDy1;
-	   fDx1=pDx1;
-	   fDx2=pDx2;
-	   fTalpha1=tan(pAlp1);
+    fDy1=pDy1;
+    fDx1=pDx1;
+    fDx2=pDx2;
+    fTalpha1=tan(pAlp1);
 	   
-	   fDy2=pDy2;
-	   fDx3=pDx3;
-	   fDx4=pDx4;
-	   fTalpha2=tan(pAlp2);
+    fDy2=pDy2;
+    fDx3=pDx3;
+    fDx4=pDx4;
+    fTalpha2=tan(pAlp2);
 
-	   MakePlanes();
-    }
-    else
-    {
-       G4Exception("Error in G4Trap::G4Trap - Invalid Length G4Trap parameters");
-    }
+    MakePlanes();
+  }
+  else G4Exception("Error in G4Trap::G4Trap - Invalid Length G4Trap parameters");
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -561,282 +559,278 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
 //
 // Calculate extent under transform and specified limit
 
-G4bool G4Trap::CalculateExtent(const EAxis pAxis,
-                               const G4VoxelLimits& pVoxelLimit,
-                               const G4AffineTransform& pTransform,
-                               G4double& pMin, G4double& pMax) const
+G4bool G4Trap::CalculateExtent( const EAxis pAxis,
+                                const G4VoxelLimits& pVoxelLimit,
+                                const G4AffineTransform& pTransform,
+                                      G4double& pMin, G4double& pMax) const
 {
+  G4double xMin, xMax, yMin, yMax, zMin, zMax;
+  G4bool flag;
 
-    G4double xMin, xMax, yMin, yMax, zMin, zMax;
-    G4bool flag;
+  if (!pTransform.IsRotated())
+  {  
+    // Special case handling for unrotated trapezoids
+    // Compute z/x/y/ mins and maxs respecting limits, with early returns
+    // if outside limits. Then switch() on pAxis
 
-    if (!pTransform.IsRotated())
-   {  
-                      // Special case handling for unrotated trapezoids
-                      // Compute z/x/y/ mins and maxs respecting limits, with early returns
-                      // if outside limits. Then switch() on pAxis
-	  G4int i ; 
-          G4double xoffset;
-          G4double yoffset;
-          G4double zoffset;
-	  G4double temp[8] ;          // some points for intersection with zMin/zMax
+    G4int i ; 
+    G4double xoffset;
+    G4double yoffset;
+    G4double zoffset;
+    G4double temp[8] ;     // some points for intersection with zMin/zMax
+    G4ThreeVector pt[8];   // vertices after translation
 	  
-          xoffset=pTransform.NetTranslation().x();	    
-          yoffset=pTransform.NetTranslation().y();
-          zoffset=pTransform.NetTranslation().z();
+    xoffset=pTransform.NetTranslation().x();	    
+    yoffset=pTransform.NetTranslation().y();
+    zoffset=pTransform.NetTranslation().z();
  
-          G4ThreeVector pt[8];   // vertices after translation
-          pt[0]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+    pt[0]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
                		      yoffset-fDz*fTthetaSphi-fDy1,zoffset-fDz);
-          pt[1]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+    pt[1]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
 		              yoffset-fDz*fTthetaSphi-fDy1,zoffset-fDz);
-          pt[2]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+    pt[2]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
 		              yoffset-fDz*fTthetaSphi+fDy1,zoffset-fDz);
-          pt[3]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+    pt[3]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
 		              yoffset-fDz*fTthetaSphi+fDy1,zoffset-fDz);
-          pt[4]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+    pt[4]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
 		              yoffset+fDz*fTthetaSphi-fDy2,zoffset+fDz);
-          pt[5]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+    pt[5]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
 		              yoffset+fDz*fTthetaSphi-fDy2,zoffset+fDz);
-          pt[6]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+    pt[6]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
 		              yoffset+fDz*fTthetaSphi+fDy2,zoffset+fDz);
-          pt[7]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+    pt[7]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
 		              yoffset+fDz*fTthetaSphi+fDy2,zoffset+fDz);
-	    zMin=zoffset-fDz;
-	    zMax=zoffset+fDz;
-	    if (pVoxelLimit.IsZLimited())
-		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (zMin<pVoxelLimit.GetMinZExtent())
-				{
-				    zMin=pVoxelLimit.GetMinZExtent();
-				}
-			    if (zMax>pVoxelLimit.GetMaxZExtent())
-				{
-				    zMax=pVoxelLimit.GetMaxZExtent();
-				}
-			}
-		}
+    zMin=zoffset-fDz;
+    zMax=zoffset+fDz;
 
-            temp[0] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-       	    temp[1] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-	    temp[2] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-	    temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;	      
-	    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
-	    yMin = -yMax ;
-	    for(i=0;i<4;i++)
-	    {
-	       if(temp[i] > yMax) yMax = temp[i] ;
-	       if(temp[i] < yMin) yMin = temp[i] ;
-	    }
-	    
-	    if (pVoxelLimit.IsYLimited())
-		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (yMin<pVoxelLimit.GetMinYExtent())
-				{
-				    yMin=pVoxelLimit.GetMinYExtent();
-				}
-			    if (yMax>pVoxelLimit.GetMaxYExtent())
-				{
-				    yMax=pVoxelLimit.GetMaxYExtent();
-				}
-			}
-		}
+    if ( pVoxelLimit.IsZLimited() )
+    {
+      if ( zMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance ||
+           zMax < pVoxelLimit.GetMinZExtent() - kCarTolerance    )
+      {
+        return false;
+      }
+      else
+      {
+        if ( zMin < pVoxelLimit.GetMinZExtent() )
+	{
+	  zMin = pVoxelLimit.GetMinZExtent() ;
+	}
+	if ( zMax > pVoxelLimit.GetMaxZExtent() )
+	{
+	  zMax = pVoxelLimit.GetMaxZExtent() ;
+	}
+      }
+    }
+    temp[0] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[1] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[2] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
 
-            temp[0] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-       	    temp[1] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-	    temp[2] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-	    temp[3] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-            temp[4] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMin-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-       	    temp[5] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMax-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-	    temp[6] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMin-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-	    temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-	    
-	    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
-	    xMin = -xMax ;
-	    for(i=0;i<8;i++)
-	    {
-	       if(temp[i] > xMax) xMax = temp[i] ;
-	       if(temp[i] < xMin) xMin = temp[i] ;
-	    }
-	                                          // xMax/Min = f(yMax/Min) ?
-	    if (pVoxelLimit.IsXLimited())
-		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (xMin<pVoxelLimit.GetMinXExtent())
-				{
-				    xMin=pVoxelLimit.GetMinXExtent();
-				}
-			    if (xMax>pVoxelLimit.GetMaxXExtent())
-				{
-				    xMax=pVoxelLimit.GetMaxXExtent();
-				}
-			}
-		}
+    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
+    yMin = -yMax ;
 
-	    switch (pAxis)
-		{
-		case kXAxis:
-		    pMin=xMin;
-		    pMax=xMax;
-		    break;
-		case kYAxis:
-		    pMin=yMin;
-		    pMax=yMax;
-		    break;
-		case kZAxis:
-		    pMin=zMin;
-		    pMax=zMax;
-		    break;
-		default:
-		    break;
-		}
+    for( i = 0 ; i < 4 ; i++ )
+    {
+      if( temp[i] > yMax ) yMax = temp[i] ;
+      if( temp[i] < yMin ) yMin = temp[i] ;
+    }    
+    if ( pVoxelLimit.IsYLimited() )
+    {
+      if ( yMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance ||
+           yMax < pVoxelLimit.GetMinYExtent() - kCarTolerance    )
+      {
+        return false;
+      }
+      else
+      {
+	if ( yMin < pVoxelLimit.GetMinYExtent() )
+	{
+	  yMin = pVoxelLimit.GetMinYExtent() ;
+	}
+	if ( yMax > pVoxelLimit.GetMaxYExtent() )
+	{
+	  yMax = pVoxelLimit.GetMaxYExtent() ;
+	}
+      }
+    }
+    temp[0] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[1] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[2] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[3] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[4] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMin-pt[3].z())/(pt[7].z()-pt[3].z()) ;
+    temp[5] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMax-pt[3].z())/(pt[7].z()-pt[3].z()) ;
+    temp[6] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMin-pt[1].z())/(pt[5].z()-pt[1].z()) ;
+    temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
+	    
+    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
+    xMin = -xMax ;
 
-	    pMin-=kCarTolerance;
-	    pMax+=kCarTolerance;
+    for( i = 0 ; i < 8 ; i++ )
+    {
+      if( temp[i] > xMax) xMax = temp[i] ;
+      if( temp[i] < xMin) xMin = temp[i] ;
+    }	                                          
+    if (pVoxelLimit.IsXLimited())   // xMax/Min = f(yMax/Min) ?
+    {
+      if ( xMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance ||
+           xMax < pVoxelLimit.GetMinXExtent() - kCarTolerance    )
+      {
+	return false;
+      }
+      else
+      {
+        if ( xMin < pVoxelLimit.GetMinXExtent() )
+	{
+	  xMin = pVoxelLimit.GetMinXExtent() ;
+	}
+	if ( xMax > pVoxelLimit.GetMaxXExtent() )
+	{
+	  xMax = pVoxelLimit.GetMaxXExtent() ;
+	}
+      }
+    }
+    switch (pAxis)
+    {
+      case kXAxis:
+	   pMin=xMin;
+	   pMax=xMax;
+	   break;
 
-	    flag = true;
-   }
-    else
-   {
-// General rotated case - 
+      case kYAxis:
+	   pMin=yMin;
+	   pMax=yMax;
+	   break;
 
-	    G4bool existsAfterClip=false;
-	    G4ThreeVectorList *vertices;
+      case kZAxis:
+	   pMin=zMin;
+	   pMax=zMax;
+	   break;
+      default:
+	   break;
+    }
+    pMin -= kCarTolerance;
+    pMax += kCarTolerance;
 
-	    pMin=+kInfinity;
-	    pMax=-kInfinity;
+    flag = true;
+  }
+  else    // General rotated case - 
+  {
+    G4bool existsAfterClip = false ;
+    G4ThreeVectorList*       vertices;
+    pMin                   = +kInfinity;
+    pMax                   = -kInfinity;
 	    
-// Calculate rotated vertex coordinates
-	    vertices=CreateRotatedVertices(pTransform);
-	    
-	    xMin = +kInfinity; yMin = +kInfinity; zMin = +kInfinity;
-	    xMax = -kInfinity; yMax = -kInfinity; zMax = -kInfinity;
-	    
-	    for(G4int nv=0; nv<8; nv++){
-	    
-	       if((*vertices)[nv].x() > xMax){xMax = (*vertices)[nv].x();};
-	       if((*vertices)[nv].y() > yMax){yMax = (*vertices)[nv].y();};
-	       if((*vertices)[nv].z() > zMax){zMax = (*vertices)[nv].z();};
-	    
-	       if((*vertices)[nv].x() < xMin){xMin = (*vertices)[nv].x();};
-	       if((*vertices)[nv].y() < yMin){yMin = (*vertices)[nv].y();};
-	       if((*vertices)[nv].z() < zMin){zMin = (*vertices)[nv].z();};
-	       
-	    };
-	    
-	    if (pVoxelLimit.IsZLimited())
-		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (zMin<pVoxelLimit.GetMinZExtent())
-				{
-				    zMin=pVoxelLimit.GetMinZExtent();
-				}
-			    if (zMax>pVoxelLimit.GetMaxZExtent())
-				{
-				    zMax=pVoxelLimit.GetMaxZExtent();
-				}
-			}
-		}
-	    
-            if (pVoxelLimit.IsYLimited())
-		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (yMin<pVoxelLimit.GetMinYExtent())
-				{
-				    yMin=pVoxelLimit.GetMinYExtent();
-				}
-			    if (yMax>pVoxelLimit.GetMaxYExtent())
-				{
-				    yMax=pVoxelLimit.GetMaxYExtent();
-				}
-			}
-		}
+    // Calculate rotated vertex coordinates. Operator 'new' is called
 
-             if (pVoxelLimit.IsXLimited())
-		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (xMin<pVoxelLimit.GetMinXExtent())
-				{
-				    xMin=pVoxelLimit.GetMinXExtent();
-				}
-			    if (xMax>pVoxelLimit.GetMaxXExtent())
-				{
-				    xMax=pVoxelLimit.GetMaxXExtent();
-				}
-			}
-		}
-
-	    switch (pAxis)
-		{
-		case kXAxis:
-		    pMin=xMin;
-		    pMax=xMax;
-		    break;
-		case kYAxis:
-		    pMin=yMin;
-		    pMax=yMax;
-		    break;
-		case kZAxis:
-		    pMin=zMin;
-		    pMax=zMax;
-		    break;
-		default:
-		    break;
-		}
-
+    vertices = CreateRotatedVertices(pTransform);
 	    
-	    if (pMin!=kInfinity||pMax!=-kInfinity)
-		{
-		    existsAfterClip=true;
+    xMin = +kInfinity; yMin = +kInfinity; zMin = +kInfinity;
+    xMax = -kInfinity; yMax = -kInfinity; zMax = -kInfinity;
+	    
+    for( G4int nv = 0 ; nv < 8 ; nv++ )
+    { 
+      if( (*vertices)[nv].x() > xMax ) xMax = (*vertices)[nv].x();
+      if( (*vertices)[nv].y() > yMax ) yMax = (*vertices)[nv].y();
+      if( (*vertices)[nv].z() > zMax ) zMax = (*vertices)[nv].z();
+	    
+      if( (*vertices)[nv].x() < xMin ) xMin = (*vertices)[nv].x();
+      if( (*vertices)[nv].y() < yMin ) yMin = (*vertices)[nv].y();
+      if( (*vertices)[nv].z() < zMin ) zMin = (*vertices)[nv].z();
+    }
+    if ( pVoxelLimit.IsZLimited() )
+    {
+      if ( zMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance ||
+           zMax < pVoxelLimit.GetMinZExtent() - kCarTolerance    )
+      {
+        delete vertices ;    //  'new' in the function called
+	return false;
+      }
+      else
+      {
+        if ( zMin < pVoxelLimit.GetMinZExtent() )
+	{
+	  zMin = pVoxelLimit.GetMinZExtent() ;
+	}
+	if ( zMax > pVoxelLimit.GetMaxZExtent() )
+	{
+	  zMax = pVoxelLimit.GetMaxZExtent() ;
+	}
+      }
+    } 
+    if ( pVoxelLimit.IsYLimited() )
+    {
+      if ( yMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance ||
+           yMax < pVoxelLimit.GetMinYExtent() - kCarTolerance    )
+      {
+        delete vertices ;    //  'new' in the function called
+	return false;
+      }
+      else
+      {
+        if ( yMin < pVoxelLimit.GetMinYExtent() )
+	{
+	  yMin = pVoxelLimit.GetMinYExtent() ;
+	}
+	if ( yMax > pVoxelLimit.GetMaxYExtent() )
+        {
+	  yMax = pVoxelLimit.GetMaxYExtent() ;
+	}
+      }
+    }
+    if ( pVoxelLimit.IsXLimited() )
+    {
+      if ( xMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance ||
+           xMax < pVoxelLimit.GetMinXExtent() - kCarTolerance    )
+      {
+        delete vertices ;    //  'new' in the function called
+	return false ;
+      } 
+      else
+      {
+        if ( xMin < pVoxelLimit.GetMinXExtent() )
+	{
+	  xMin = pVoxelLimit.GetMinXExtent() ;
+	}
+	if ( xMax > pVoxelLimit.GetMaxXExtent() )
+	{
+	  xMax = pVoxelLimit.GetMaxXExtent() ;
+        }
+      }
+    }
+    switch (pAxis)
+    {
+      case kXAxis:
+	   pMin=xMin;
+	   pMax=xMax;
+	   break;
+
+      case kYAxis:
+	   pMin=yMin;
+	   pMax=yMax;
+	   break;
+
+      case kZAxis:
+	   pMin=zMin;
+	   pMax=zMax;
+	   break;
+
+      default:
+	   break;
+    }
+    if ( pMin != kInfinity || pMax != -kInfinity )
+    {
+      existsAfterClip=true;
 		    
-// Add tolerance to avoid precision troubles
-		    pMin-=kCarTolerance;
-		    pMax+=kCarTolerance;
-		    
-		};
+      // Add tolerance to avoid precision troubles
 
-	    delete vertices ;          //  'new' in the function called
-	    flag = existsAfterClip ;
-   }
-   return flag;
+      pMin -= kCarTolerance ;
+      pMax += kCarTolerance ;	    
+    }
+    delete vertices ;          //  'new' in the function called
+    flag = existsAfterClip ;
+  }
+  return flag;
 }
 
 
