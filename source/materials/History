@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2001-02-05 17:59:34 gcosmo Exp $
+$Id: History,v 1.14 2001-02-16 17:05:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+Feb     16, 01 M.Maire - materials-V03-00-04
+               G4SandiaTable : major bug in GetSandiaCofPerAtom (units!).
+	       redesign of ComputeMatSandiaMatrix.
+	       Include materials-V03-00-02 
+	       
 Feb     05, 01 G.Cosmo - materials-V03-00-03
                STL migration for G4OrderedTable and G4DataVector.
                Modified files: G4SandiaTable.cc.
