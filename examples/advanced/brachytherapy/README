@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.2 2000-12-10 08:39:39 chauvie Exp $
+$Id: README,v 1.3 2002-04-19 18:09:30 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,27 +12,122 @@ $Id: README,v 1.2 2000-12-10 08:39:39 chauvie Exp $
 0. Introduction.
 
 Brachytherapy example simulates energy deposition on a voxel grid
-for a MicroSelectron Ir-192 HDR brachytherapy source.
+for a Bebig I-125  brachytherapy source.
 
 1. Technical description
 
-1.0. MicroSelectron HDR Ir-192 source is constructed in the 
+1.0. Bebig  I-125 source is constructed in the 
 brachyDetectorConstruction class. The source is composed by
-an iridium core encapsulated in a stainless steel capsule 
-(body + tip). The source is put into a 30*cm water box.
+an iodium core encapsulated in a capsule (body + tip). 
+Inside the core there's a gold marker
+The source is put into a 30*cm water box.
 
 1.1. The water box is made sensitive detector. A longitudinal slice
 of it is associated to a planar read out geometry. At every hit
 energy deposition is read and stored into a voxel matrix.
 
-1.2. Voxel matrix is output to an ASCII file for further processing
-(e.g. anysotropy and isodose calculations).
-
+1.2. the  output is  the file  brachy2.hbk  
+(e.g. anysotropy and isodose calculations):
+ 1)1Dhistogram with the spectrum of initial energy of gamma
+ 2)2Dhistogram with the distribution of energy in the plane (x,z,energy)
 2. Make
 
 A standard Geant4 example GNUmakefile is provided.
 
 2. Usage
 
-Simply run "Brachy" executable. The ASCII "Brachy.out" file is
-produced.
+Simply run "Brachy" executable. The output is ("brachy2.hbk")
+
+
+
+
+------How to run the new version of AIDA:----------------------
+
+I used the new version of AIDA with  the last release of Geant4
+
+1)Aida platform for Linux:gcc compiler 2.95.2
+
+if you don't have this compiler,
+you can access  to it : 
+
+setenv GCC_PATH /usr/local/gcc-alt-2.95.2
+setenv PATH  "${GCC_PATH}/bin:${PATH}"
+setenv LD_LIBRARY_PATH  "${GCC_PATH}/lib:${LD_LIBRARY_PATH}"
+ 
+in this case,in your  geant4/source you have to do:
+
+clean up your geant4/lib
+setenv GCC_PATH /usr/local/gcc-alt-2.95.2
+setenv PATH  "${GCC_PATH}/bin:${PATH}"
+setenv LD_LIBRARY_PATH  "${GCC_PATH}/lib:${LD_LIBRARY_PATH}"
+setenv G4SYSTEM ...
+setenv G4WORKDIR ...
+gmake 
+
+*define the enviroment variables
+
+*after this step check that
+       g++ --version is 2.95.2
+       $PLATF  :  redhat61/gcc-2.95.2
+
+
+*in the GNUmakefile you have to add:
+ G4ANALYSIS_USE = 1
+ CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/
+(look at the GNUmakefile of the example)
+
+Now you should be able to compile your simulation
+
+this warning always appears but it's not important:
+/usr/bin/ld: warning: libGL.so.1, needed by /afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/lib/libqt-mt.so, not found (try using --rpath)
+
+
+the Lizard version,you have to use,is the old one : 
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+(the new version is not ready)
+the g++ version is egcs-2.91.66
+and 
+$PLATF is  redhat61/egcs_1.1.2
+ 
+
+the headerfiles of the new version of AIDA are in:
+/afs/cern.ch/sw/contrib/AIDA/2.2/cpp/AIDA
+
+
+these are the enviroment variables to be defined,
+the following  example shows a definition valid with a CERN account:
+#
+#in order to get the stuff from the alternate compiler installed on lxplus 
+#source for your simulation:
+#
+if ( -e "/usr/local/gcc-alt-2.95.2" ) then
+setenv PATH /usr/local/gcc-alt-2.95.2/bin:${PATH}
+if ( ${?LD_LIBRARY_PATH} == 0 ) then
+setenv LD_LIBRARY_PATH /usr/local/gcc-alt-2.95.2/lib
+else
+setenv LD_LIBRARY_PATH /usr/local/gcc-alt-2.95.2/lib:${LD_LIBRARY_PATH}
+endif
+endif
+#
+#enviroments for running the simulation
+#
+setenv  G4SYSTEM Linux-g++
+setenv G4WORKDIR ./workdir
+setenv G4VIS_BUILD 1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_USE 1
+setenv G4VIS_USE_DAWNFILE 1
+setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/${G4SYSTEM}
+set path=( $path $DAWN_HOME )
+setenv G4DAWNFILE_VIEWER dawn
+setenv  G4DAWN_NAMED_PIPE  1
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW0.5 
+setenv G4LIB /afs/cern.ch/user/g/guatelli/geant4/lib
+#
+# for the new version of Anaphe
+#
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.0/install/sharedstart.csh
+#
+setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --noLicense --include`
+setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
+
