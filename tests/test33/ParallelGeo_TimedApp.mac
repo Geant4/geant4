@@ -1,0 +1,4 @@
+# test parallel geometry with timed application
+/Tst33/ParallelGeometry
+/Tst33/Timed 1000
+/control/execute SamplingChange.mac

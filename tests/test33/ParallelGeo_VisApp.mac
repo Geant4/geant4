@@ -1,0 +1,4 @@
+# test mass geometry with visualization
+/Tst33/ParallelGeometry
+/Tst33/Visualization
+/control/execute SamplingChange.mac

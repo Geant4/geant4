@@ -1,0 +1,32 @@
+
+#sample with all options
+/Tst33/Scoring   
+/Tst33/ImportanceSampling
+/Tst33/WeightRoulette
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+#change sampling to use not use weight oulette
+/Tst33/ClearSampling
+/Tst33/Scoring   
+/Tst33/ImportanceSampling
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+
+#change sampling to use not use importance sampling
+/Tst33/ClearSampling
+/Tst33/Scoring   
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+
+#change to use importance sampling only
+/Tst33/ClearSampling
+/Tst33/ImportanceSampling
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
