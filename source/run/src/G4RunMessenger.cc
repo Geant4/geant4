@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.14 2003-03-11 05:00:48 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.15 2003-03-11 05:33:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -246,13 +246,17 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
   else if( command==dumpRegCmd )
   { 
+    runManager->UpdateRegionAndCouple();
     if(newValue=="**ALL**")
     { runManager->DumpRegion(); }
     else
     { runManager->DumpRegion(newValue); }
   }
   else if( command==dumpCoupleCmd)
-  { G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples(); }
+  {
+    runManager->UpdateRegionAndCouple();
+    G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+  }
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )

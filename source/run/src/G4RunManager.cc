@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.64 2003-03-11 05:00:47 asaim Exp $
+// $Id: G4RunManager.cc,v 1.65 2003-03-11 05:33:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -426,18 +426,21 @@ void G4RunManager::InitializeCutOff()
 
 void G4RunManager::BuildPhysicsTables()
 {
-  // Let G4RegionStore scan materials
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  // Let G4ProductionCutsTable update couples
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
-  /////G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+  UpdateRegionAndCouple();
 
   if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
   {
     physicsList->BuildPhysicsTable();
     G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   }
-  /////physicsList->DumpCutValuesTableIfRequested();
+}
+
+void G4RunManager::UpdateRegionAndCouple()
+{
+  // Let G4RegionStore scan materials
+  G4RegionStore::GetInstance()->UpdateMaterialList();
+  // Let G4ProductionCutsTable update couples
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
 }
   
 void G4RunManager::AbortRun(G4bool softAbort)
@@ -615,7 +618,7 @@ void G4RunManager::DumpRegion(G4Region* region) const
   }
   else
   {
-    G4cout << "Region <" << region->GetName() << G4endl;
+    G4cout << "Region " << region->GetName() << G4endl;
     G4cout << " Materials : ";
     G4std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();

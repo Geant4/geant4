@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.29 2003-03-11 05:00:47 asaim Exp $
+// $Id: G4RunManager.hh,v 1.30 2003-03-11 05:33:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,6 +193,12 @@ class G4RunManager
     // class is defined.
 
   public: // with description
+    void UpdateRegionAndCouple();
+    // Update region list and couple table. 
+    // This method is mandatory before invoking following two dump methods.
+    // At RunInitialization(), this method is automatically invoked, and thus
+    // the user needs not invoke.
+
     void DumpRegion(G4String rname) const;
     // Dump information of a region.
 
