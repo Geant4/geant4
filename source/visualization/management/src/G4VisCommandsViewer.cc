@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.20 2001-02-04 01:37:36 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.21 2001-02-04 20:26:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -15,6 +15,7 @@
 #include "G4VisManager.hh"
 #include "G4GraphicsSystemList.hh"
 #include "G4VisCommandsScene.hh"
+#include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
@@ -26,6 +27,17 @@
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
 G4VVisCommandViewer::~G4VVisCommandViewer () {}
+
+void G4VVisCommandViewer::SetViewParameters
+(G4VViewer* viewer, const G4ViewParameters& viewParams) {
+  viewer->SetViewParameters(viewParams);
+  if (viewParams.IsAutoRefresh()) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+  }
+  else {
+    G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  }
+}
 
 void G4VVisCommandViewer::UpdateCandidateLists () {
 
@@ -267,10 +279,7 @@ void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
     G4cout << "Dolly distance changed to " << vp.GetDolly() << G4endl;
   }
 
-  currentViewer->SetViewParameters(vp);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = vp;
+  SetViewParameters(currentViewer, vp);
 }
 
 //////// /vis/viewer/lightsThetaPhi and lightsVector /////////////
@@ -358,10 +367,7 @@ void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
     G4cout << "Lights direction set to " << fLightsVector << G4endl;
   }
 
-  currentViewer->SetViewParameters(vp);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = vp;
+  SetViewParameters(currentViewer, vp);
 }
 
 ////////////// /vis/viewer/list ///////////////////////////////////////
@@ -552,10 +558,7 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
 	   << G4endl;
   }
 
-  currentViewer->SetViewParameters(vp);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = vp;
+  SetViewParameters(currentViewer, vp);
 }
 
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
@@ -736,14 +739,7 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  if (fpVisManager -> IsValidView ()) {
-    G4ViewParameters vp;  // Default view parameters.
-    viewer->SetViewParameters(vp);
-    G4cout << "Viewer \"" << viewer -> GetName () << "\" reset.";
-    G4cout << "\nIssue \"/vis/viewer/refresh\" to see effect." << G4endl;
-    // For now...
-    fpVisManager->SetCurrentViewParameters() = vp;
-  }
+  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
 }
 
 ////////////// /vis/viewer/select ///////////////////////////////////////
@@ -953,10 +949,7 @@ void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
     }
   }
 
-  currentViewer->SetViewParameters(viewParams);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = viewParams;
+  SetViewParameters(currentViewer, viewParams);
 }
 
 ////////////// /vis/viewer/zoom and zoomTo ////////////////////////////
@@ -1027,8 +1020,5 @@ void G4VisCommandViewerZoom::SetNewValue (G4UIcommand* command,
     G4cout << "Zoom factor changed to " << vp.GetZoomFactor() << G4endl;
   }
 
-  currentViewer->SetViewParameters(vp);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = vp;
+  SetViewParameters(currentViewer, vp);
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.11 2001-02-04 01:37:29 johna Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.12 2001-02-04 20:26:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -15,6 +15,8 @@
 
 #include "G4VVisCommand.hh"
 
+class G4VViewer;
+class G4ViewParameters;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithADouble;
@@ -25,6 +27,7 @@ public:
   G4VVisCommandViewer ();
   virtual ~G4VVisCommandViewer ();
 protected:
+  void SetViewParameters(G4VViewer*, const G4ViewParameters&);
   void UpdateCandidateLists ();
 private:
   G4VVisCommandViewer (const G4VVisCommandViewer&);

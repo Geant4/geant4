@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.4 2001-02-04 01:37:38 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.5 2001-02-04 20:26:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -28,6 +28,15 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
      "\nCopies view parameters from from-viewer to current viewer.");
   fpCommandAll->SetParameterName ("from-viewer-name",omitable = false);
   viewerNameCommands.push_back (fpCommandAll);
+
+  fpCommandAutoRefresh = new G4UIcmdWithABool
+    ("/vis/viewer/set/autorefresh", this);
+  fpCommandAutoRefresh->SetGuidance
+    ("/vis/viewer/set/autorefresh [true|false]");
+  fpCommandAutoRefresh->SetGuidance
+    ("View is automatically refreshed after a change of view parameters.");
+  fpCommandAutoRefresh->SetParameterName("auto-refresh",omitable = true);
+  fpCommandAutoRefresh->SetDefaultValue(false);
 
   fpCommandCulling = new G4UIcommand("/vis/viewer/set/culling",this);
   fpCommandCulling->SetGuidance
@@ -89,6 +98,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAll;
+  delete fpCommandAutoRefresh;
   delete fpCommandCulling;
   delete fpCommandEdge;
   delete fpCommandHiddenEdge;
@@ -131,6 +141,15 @@ void G4VisCommandsViewerSet::SetNewValue
     G4cout << "View parameters of viewer \"" << currentViewer->GetName()
 	   << "\"\n  set to those of viewer \"" << fromViewer->GetName()
 	   << "\"."
+	   << G4endl;
+  }
+
+  else if (command == fpCommandAutoRefresh) {
+    G4bool autoRefresh = GetNewBoolValue(newValue);
+    vp.SetAutoRefresh(autoRefresh);
+    G4cout << "Views will ";
+    if (!vp.IsAutoRefresh()) G4cout << "not ";
+    G4cout << "be automatically refreshed after a change of view parameters."
 	   << G4endl;
   }
 
@@ -335,8 +354,5 @@ void G4VisCommandsViewerSet::SetNewValue
     return;
   }
 
-  currentViewer->SetViewParameters(vp);
-  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
-  // For now...
-  fpVisManager->SetCurrentViewParameters() = vp;
+  SetViewParameters(currentViewer, vp);
 }
