@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2002-04-22 16:13:20 maire Exp $
+$Id: History,v 1.47 2002-04-24 13:41:27 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+24 apr 02: Laszlo (utils-V04-00-05)
+- G4MultipleScattering.hh,.cc have been committed:
+  some minor changes in boundary algorithm to improve the backscattering.
+       
 22 apr 02: Laszlo (utils-V04-00-04)
 - G4MultipleScattering.hh,.cc have been committed:
   boundary algorithm has been modified resulting improvement ~10%
