@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.12 2003-03-25 14:56:17 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.13 2003-04-01 10:58:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,26 +145,29 @@ Type* G4Allocator<Type>::MallocSingle()
 template <class Type>
 void G4Allocator<Type>::FreeSingle(Type* anElement)
 {
-  G4AllocatorUnit<Type> * fUnit;
-
-  // The gcc-3.1 compiler will complain and not correctly handle offsets
-  // computed from non-POD types. Pointers to member data should be used
-  // instead. This advanced C++ feature seems not to work on earlier
-  // versions of the same compiler.
-  //
-  #if (__GNUC__==3) && (__GNUC_MINOR__>0)
-    Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
-    fUnit = (G4AllocatorUnit<Type> *) ((char *)anElement - size_t(pOffset));
-  #else
-    fUnit = (G4AllocatorUnit<Type> *)
-            ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
-  #endif
-
-  if (fUnit->deleted == Allocated)
+  if (anElement)
   {
-    fUnit->deleted = Deleted;
-    fUnit->fNext = fFreeList;
-    fFreeList = fUnit;
+    G4AllocatorUnit<Type> * fUnit;
+
+    // The gcc-3.1 compiler will complain and not correctly handle offsets
+    // computed from non-POD types. Pointers to member data should be used
+    // instead. This advanced C++ feature seems not to work on earlier
+    // versions of the same compiler.
+    //
+    #if (__GNUC__==3) && (__GNUC_MINOR__>0)
+      Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
+      fUnit = (G4AllocatorUnit<Type> *) ((char *)anElement - size_t(pOffset));
+    #else
+      fUnit = (G4AllocatorUnit<Type> *)
+              ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
+    #endif
+
+    if (fUnit->deleted == Allocated)
+    {
+      fUnit->deleted = Deleted;
+      fUnit->fNext = fFreeList;
+      fFreeList = fUnit;
+    }
   }
 }
 
