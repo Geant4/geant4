@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.1 2002-12-16 14:42:39 vnivanch Exp $
+// $Id: Em2RunAction.cc,v 1.2 2002-12-16 17:05:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -88,7 +88,7 @@ Em2RunAction::~Em2RunAction()
 
 void Em2RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -153,7 +153,7 @@ void Em2RunAction::bookHisto()
 
 void Em2RunAction::cleanHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
 
@@ -209,6 +209,11 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize track length
   sumChargTrLength=sum2ChargTrLength=sumNeutrTrLength=sum2NeutrTrLength=0.;
 
+  nTran = 0;
+  TranEnergy = 0.7;
+  sumTranEnergy = 0.0;
+  sum2TranEnergy = 0.0;
+
   //histograms
   //
   if (aRun->GetRunID() == 0) bookHisto();
@@ -250,12 +255,20 @@ void Em2RunAction::fillPerEvent()
   sum2ChargTrLength += ChargTrLength*ChargTrLength;
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
-  
-#ifndef G4NOHIST  
-  //fill histograms
-  //
+
   G4double Ekin=Em2Kin->GetParticleGun()->GetParticleEnergy();
   G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+
+  G4double e = dLCumul/(Ekin + mass);
+  if(e >= TranEnergy) {
+    nTran++;
+    sumTranEnergy += e; 
+    sum2TranEnergy += e*e; 
+  }
+  
+#ifdef G4ANALYSIS_USE  
+  //fill histograms
+  //
   G4double radl=Em2Det->GetMaterial()->GetRadlen();
   
   histo[0]->fill(100.*dLCumul/(Ekin+mass));
@@ -302,7 +315,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;                                    
 
-#ifndef G4NOHIST                                    
+#ifdef G4ANALYSIS_USE                                    
     G4double bin = i*dLradl;                                
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
@@ -332,7 +345,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i] 
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
                                  
-#ifndef G4NOHIST                                     
+#ifdef G4ANALYSIS_USE                                     
     G4double bin = i*dRradl;                                
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
@@ -415,12 +428,52 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << G4std::setw(42) << "neutral traklen: " 
          << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
+
+
+  G4double norm = (G4double)nTran;
+  if(nTran) norm = 1./norm;
+  sumTranEnergy *= norm;
+  sum2TranEnergy *= norm;
+  G4double rmsTranEnergy = sqrt(sum2TranEnergy - sumTranEnergy*sumTranEnergy);
+  G4double err = rmsTranEnergy*sqrt(norm);
+
+  rmsTranEnergy  *= 100.;
+  sumTranEnergy  *= 100.;
+  sum2TranEnergy *= 100.;
+  err            *= 100.;
+
+  G4double eMean = 95.0;
+  G4double rms   = 0.94;
+  G4double limit = 3.0;
+
+  sumTranEnergy  -= eMean; 
+  rmsTranEnergy  -= rms; 
+  sumTranEnergy  /= err; 
+  rmsTranEnergy  /= err; 
+
+  prec = G4cout.precision(3);
+  G4cout << G4endl;
+  G4cout << G4std::setw(37) << "SUMMARY TEST" << G4endl;
+  G4cout << G4std::setw(42) << "Mean energy deposit : " 
+         << G4std::setw(10)  << sumTranEnergy;
+  if(abs(sumTranEnergy) <= limit) G4cout << "     is accepted";
+  else                            G4cout << "     is NOT accepted";
+  G4cout << G4endl;         
+  G4cout << G4std::setw(42) << "RMS of mean energy  : " 
+         << G4std::setw(10)  << rmsTranEnergy; 
+  if(abs(rmsTranEnergy) <= limit) G4cout << "     is accepted";
+  else                            G4cout << "     is NOT accepted";
+  G4cout << G4endl;
                  
   G4cout.setf(mode,G4std::ios::floatfield);
   G4cout.precision(prec);
 
   // show Rndm status
   HepRandom::showEngineStatus();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+

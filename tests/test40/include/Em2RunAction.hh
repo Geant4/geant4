@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.1 2002-12-16 14:42:37 vnivanch Exp $
+// $Id: Em2RunAction.hh,v 1.2 2002-12-16 17:05:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #define Em2RunAction_h 1
 
 #include "G4UserRunAction.hh"
+
 
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"

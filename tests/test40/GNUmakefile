@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002-12-16 11:41:44 stesting Exp $
+# $Id: GNUmakefile,v 1.2 2002-12-16 17:05:07 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,16 +14,17 @@ endif
 .PHONY: all
 all: lib bin
 
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
-G4NOHIST := true
-ifdef G4NOHIST
-  CPPFLAGS += -DG4NOHIST
-else
-  # for the aida-config command see the README file
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config.py --include`
+  LDFLAGS  += `aida-config.py --lib`
 endif
+
 
 include $(G4INSTALL)/config/binmake.gmk
 
