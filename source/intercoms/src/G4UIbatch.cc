@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.10 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIbatch.cc,v 1.11 2002-06-07 17:37:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -104,7 +104,7 @@ G4UIsession * G4UIbatch::SessionStart()
   return previousSession;
 }
 
-void G4UIbatch::PauseSessionStart(const char* Prompt) 
+void G4UIbatch::PauseSessionStart(G4String Prompt) 
 {
   G4cout << "Pause session <" << Prompt << "> start." << G4endl;
   SessionStart();
