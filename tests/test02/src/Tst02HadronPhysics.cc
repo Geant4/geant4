@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02HadronPhysics.cc,v 1.4 2004-06-01 05:51:35 hpw Exp $
+// $Id: Tst02HadronPhysics.cc,v 1.5 2004-06-01 06:39:54 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,7 +191,7 @@ void Tst02HadronPhysics::ConstructProcess()
   thePElasticModel.SetMaxEnergy(3*GeV);
   theHEElasticModel.SetMinEnergy(2.8*GeV);
   theHEElasticModel.SetMaxEnergy(100*TeV);
-  // pManager->AddDiscreteProcess(&thePElasticProcess);
+  pManager->AddDiscreteProcess(&thePElasticProcess);
 
   theLEProtonModel = new G4LEProtonInelastic();
   theHEProtonModel = new G4HEProtonInelastic();
