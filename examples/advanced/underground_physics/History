@@ -8,6 +8,8 @@ $Id:
 
                       Category History file
                       ---------------------
+28.05.2003 - S. Guatelli (DMX-V06-01-00)
+             Migrated to AIDA 3.2.1 and PI 1.2.1
 
 02.12.2003 - G.Cosmo (DMX-V05-02-01)
              Migrated to new hadronic processes for release 6.0.

@@ -53,23 +53,23 @@
 #include "AIDA/IHistogram2D.h"
 #include "AIDA/IHistogram3D.h"
 
-#include "AIDA/IPlotterFactory.h"
-#include "AIDA/IPlotterRegion.h"
-#include "AIDA/IPlotter.h"
+// #include "AIDA/IPlotterFactory.h"
+// #include "AIDA/IPlotterRegion.h"
+// #include "AIDA/IPlotter.h"
 
 #include "AIDA/ITupleFactory.h"
 #include "AIDA/ITuple.h"
 
 #include "AIDA/IManagedObject.h"
 
-# include "AIDA/IFitter.h"
-# include "AIDA/IFitResult.h"
-# include "AIDA/IFitData.h"
-# include "AIDA/IRangeSet.h"
-# include "AIDA/IFitParameterSettings.h"
-# include "AIDA/IFunctionFactory.h"
-# include "AIDA/IFunction.h"
-# include "AIDA/IFitFactory.h"
+// # include "AIDA/IFitter.h"
+// # include "AIDA/IFitResult.h"
+// # include "AIDA/IFitData.h"
+// # include "AIDA/IRangeSet.h"
+// # include "AIDA/IFitParameterSettings.h"
+// # include "AIDA/IFunctionFactory.h"
+// # include "AIDA/IFunction.h"
+// # include "AIDA/IFitFactory.h"
 
 namespace AIDA {
   class IAnalysisFactory;
@@ -79,16 +79,15 @@ namespace AIDA {
   class ITuple;
   class IHistogram1D;
   class IHistogram2D;
-  class IPlotter;
-  class IFitter;
-  class IFitResult;
-  class IFitData;
-  class IRangeSet;
-  class IFitParameterSettings;
-  class IFunctionFactory;
-  class IFunction;
-  class IFitFactory;
-
+  //class IPlotter;
+  //  class IFitter;
+  //class IFitResult;
+  //class IFitData;
+  //class IRangeSet;
+  //class IFitParameterSettings;
+  //class IFunctionFactory;
+  //class IFunction;
+  //class IFitFactory;
 }
 
 
@@ -146,8 +145,21 @@ private:
   // Quantities for the ntuple
 
 
-  G4int event_id; G4double energy_pri; G4double totEnergy; G4int S_hits; G4double firstLXeHitTime; G4int P_hits; G4double aveTimePmtHits; G4String firstparticleName; G4double firstParticleE; G4bool gamma_ev; G4bool neutron_ev; G4bool positron_ev;G4bool electron_ev;G4bool other_ev; long seed1; long seed2;
-
+  G4int event_id; 
+  G4double energy_pri; 
+  G4double totEnergy; 
+  G4int S_hits; 
+  G4double firstLXeHitTime; 
+  G4int P_hits; 
+  G4double aveTimePmtHits; 
+  G4String firstparticleName; 
+  G4double firstParticleE; 
+  G4bool gamma_ev; 
+  G4bool neutron_ev; 
+  G4bool positron_ev;
+  G4bool electron_ev;
+  G4bool other_ev; 
+  long seed1; long seed2;
 
   G4int i; G4double x; G4double y; G4double z;
 
@@ -161,8 +173,6 @@ private:
   AIDA::ITree             *tree;
   AIDA::IHistogramFactory *hf;
   AIDA::ITupleFactory     *tpf;
-  AIDA::IPlotterFactory   *pf;
-  AIDA::IPlotter          *plotter;
   AIDA::ITuple            *ntuple1;
   AIDA::ITuple            *ntuple2;
   AIDA::ITuple            *ntuple3;
@@ -183,13 +193,12 @@ private:
   AIDA::IHistogram1D* hPositronEdep;
   AIDA::IHistogram1D* hOtherEdep;
 
-  AIDA::IFunctionFactory *funFact;
-  AIDA::IFitFactory      *fitFact;
-  AIDA::IFunction        *exponFun;
-  AIDA::IFunction        *gaussFun;
-  AIDA::IFitter          *e_fitter;
-  AIDA::IFitResult       *fitResult;
-
+  //AIDA::IFunctionFactory *funFact;
+  //AIDA::IFitFactory      *fitFact;
+  //AIDA::IFunction        *exponFun;
+  //AIDA::IFunction        *gaussFun;
+  //AIDA::IFitter          *e_fitter;
+  ///AIDA::IFitResult       *fitResult;
 };
 #endif
 #endif

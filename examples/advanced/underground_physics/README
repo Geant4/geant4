@@ -164,70 +164,22 @@ allow forward compatibility should the GPS change.
 
 ANALYSIS:
 
-In order to use the AIDA 3 compliant analysis set the environment variable
+In order to use the AIDA 3.2.1 compliant analysis set the environment variable
 G4ANALYSIS_USE before building.  If a previous build exists a gmake clean has
 to be executed.  
 
 setenv G4ANALYSIS_USE 1
 
-To link with anaphe, first execute the anaphe installation script
-(example for CERN installation):
-
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts
-
-[Have a look at the Anaphe web page, http://cern.ch/anaphe for more info]
-
 then gmake
 
-The program should then produce hbook histogram files as well as interactively
-two summary pages from QPLOTTER - outputing with postscript summary1.ps and
-summary2.ps
+The program should then produce hbook histogram files 
 
-In addition a lizard python script is included for reference:
-start lizard:
-lizard
-exe("DMX.py")
-
-Subsequent runs will require source of anaphe_start.sh
-
-source anaphe_start.sh
-
-before executing DMX
-
-
-NB: When running the program the output histogram file has to be "new"
-therefore if it has the same name as an existing file the program will crash.
-
-
-See http://cern.ch/anaphe for more information about ANAPHE/Lizard
-
-AIDA 2.2 information is available at http://www.aida.org
-
-Using AIDA 2.2 interfaces three different analysis packages can be utilised:
+Using AIDA 3.2.1 interfaces three different analysis packages can be utilised:
 Java Analysis Studio (JAS)
 OpenScientist
-Anaphe/Lizard
+PI
 
-At cern instead of executing the anaphe script see below:
-
-[
-	AT CERN the following has to be executed in order to pick-up anaphe:
-
-execute the following lines _before_ gmake, 
-select the Anaphe version you want to use (4.0.1-sec for RH61 "old" compiler,
-4.0.1 for RH61, new compiler (gcc-2.95.2)):
-export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.sh
-(for the new compiler, use (sh derivates):
-export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.1/bin
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1/install/sharedstart.sh)
-or, for [t]csh fans (still "old" compiler):
-
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.csh
-]
-
+Please for more information look at http://aida.freehep.org 
 
 SEEDS:
 
@@ -261,9 +213,6 @@ BooleanProcessor: boolean operation failed
 
 This is a "feature" of the visualisation of boolean volumes, but does not
 affect functionality/performance so can be ignored.
-
-
-
 
 NB:
 If using explicit libraries (?) i.e. non-shared then compilation time with

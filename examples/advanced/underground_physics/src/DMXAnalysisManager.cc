@@ -42,12 +42,12 @@ DMXAnalysisManager* DMXAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::DMXAnalysisManager() :
-  af(0), tree(0), hf(0), tpf(0), pf(0),
-  plotter(0), ntuple1(0), ntuple2(0), ntuple3(0), ntuple4(0),
+  af(0), tree(0), hf(0), tpf(0),
+   ntuple1(0), ntuple2(0), ntuple3(0), ntuple4(0),
   hEsourcep(0), hEdepp(0), hEdepRecoil(0), hNumPhLow(0), hNumPhHigh(0),
   hAvPhArrival(0), hPhArrival(0), hPMTHits(0), h1stPMTHit(0),hGammaEdep(0), 
-  hNeutronEdep(0), hElectronEdep(0), hPositronEdep(0), hOtherEdep(0), 
-  funFact(0),fitFact(0),exponFun(0),gaussFun(0),e_fitter(0),fitResult(0)
+  hNeutronEdep(0), hElectronEdep(0), hPositronEdep(0), hOtherEdep(0) 
+  //,funFact(0),fitFact(0),exponFun(0),gaussFun(0),e_fitter(0),fitResult(0)
 {
   // tree is created and booked inside book()
   ;
@@ -56,9 +56,12 @@ DMXAnalysisManager::DMXAnalysisManager() :
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::~DMXAnalysisManager() 
-{
-  Finish();
-}
+{ 
+  delete tpf;
+  delete hf;
+  delete tree;
+  delete af;
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,7 +73,7 @@ DMXAnalysisManager* DMXAnalysisManager::getInstance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void DMXAnalysisManager::book(G4String histogramfile, G4bool plotevent)
+void DMXAnalysisManager::book(G4String histogramfile, G4bool)
 
 {
   //  histoManager->selectStore("DMX.his");
@@ -82,7 +85,7 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool plotevent)
 
 
  //parameters for the TreeFactory
-  G4bool fileExists = false;
+  G4bool fileExists = true;
   G4bool readOnly   = false;
 
   AIDA::ITreeFactory     * tf = af->createTreeFactory();
@@ -102,27 +105,27 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool plotevent)
   ntuple1 = tpf->create( "1", "Particle Source Energy", 
 			     "double energy" );
 
-  assert(ntuple1);
+  //  assert(ntuple1);
 
   // ---- secondary ntuple ------   
 
   ntuple2 = tpf->create( "2", "Scintillation Hits Info", 
 				 "float Event,e_prim,tot_e,s_hits,xe_time,num_ph,avphtime,1stpart,1stparte,gamma,neutron,posi,elec,other,seed1,seed2" );
 
-  assert(ntuple2);
+  //assert(ntuple2);
 
   // ---- tertiary ntuple ------   
 
   ntuple3 = tpf->create( "3", "PMT Hits Info", 
 				"float event, hits, xpos, ypos, zpos" );
 
-  assert(ntuple3);
+  //assert(ntuple3);
 
   // ---- extra ntuple ------   
   ntuple4 = tpf->create( "4", "Particles energy type", 
 			     "float energy, NameIdx" );
 
-  assert(ntuple4);
+  //assert(ntuple4);
 
 
   // Creating an 1-dimensional histogram in the root directory of the tree
@@ -161,42 +164,42 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool plotevent)
   
   delete tf;
 
-  // Creating the plotter factory
-  pf = af->createPlotterFactory();
+ //  // Creating the plotter factory
+//   pf = af->createPlotterFactory();
 
-  if(pf && plotevent) {
-    plotter  = pf->create();
-    if(plotter) {
-      plotter->show();
-      plotter->setParameter("pageTitle","DMX Output Summary");
-    }
-    delete pf;
-  }
+//   if(pf && plotevent) {
+//     plotter  = pf->create();
+//     if(plotter) {
+//       plotter->show();
+//       plotter->setParameter("pageTitle","DMX Output Summary");
+//     }
+//     delete pf;
+//   }
 
   // create fitting factories ..
 
-  G4cout << " creating fit factories " << G4endl;
+ //  G4cout << " creating fit factories " << G4endl;
 
-  funFact = af->createFunctionFactory(*tree);
-  fitFact = af->createFitFactory();
+  //     funFact = af->createFunctionFactory(*tree);
+//   fitFact = af->createFitFactory();
 
-  G4cout << " creating Exponential Function " << G4endl;
-  exponFun = funFact->createFunctionByName("Exponential","E");
-  G4cout << " created " << G4endl;
+ //  G4cout << " creating Exponential Function " << G4endl;
+//   exponFun = funFact->createFunctionByName("Exponential","E");
+//   G4cout << " created " << G4endl;
 
-  G4cout << " creating Gaussian Function " << G4endl;
-  gaussFun = funFact->createFunctionByName("Gaussian","G");
-  G4cout << " created " << G4endl;
+//   G4cout << " creating Gaussian Function " << G4endl;
+//   gaussFun = funFact->createFunctionByName("Gaussian","G");
+//   G4cout << " created " << G4endl;
 
   //  assert(exponFun);
 
-  //  e_fitter = fitFact->createFitter("Chi2","","printLevel=-1  errorUP=1.0");
-  G4cout << " creating fitter " << G4endl;
-  e_fitter = fitFact->createFitter();
+ //  //  e_fitter = fitFact->createFitter("Chi2","","printLevel=-1  errorUP=1.0");
+//   G4cout << " creating fitter " << G4endl;
+//   e_fitter = fitFact->createFitter();
 
-  //  assert(e_fitter); 
+//   //  assert(e_fitter); 
 
-  G4cout << " Created e_fitter " << G4endl;
+//   G4cout << " Created e_fitter " << G4endl;
 
 }
 
@@ -212,25 +215,19 @@ void DMXAnalysisManager::Finish()
 {
 
   // Committing the transaction with the tree
-  std::cout << "Committing..." << std::endl;
+  G4cout << "Committing..." << G4endl;
   // write all histograms to file
   tree->commit();
 
-  std::cout << "Closing the tree..." << std::endl;
+  G4cout << "Closing the tree..." << G4endl;
 
   // close (will again commit)
   tree->close();
 
   // extra delete as objects are created in book() method rather than during
   // initialisation of class
-  delete pf;
-  delete tpf;
-  delete hf;
-  delete tree;
-  delete af;
-  delete plotter;
-  delete funFact;
-  delete fitFact;
+  //delete funFact;
+  //delete fitFact;
 
 }
 
@@ -240,74 +237,74 @@ void DMXAnalysisManager::PulseTimeFit()
 
   // created fitter factory then fitter 
 
-  if(!plotter) plotter  = pf->create();
-  if(plotter) {
-    plotter->show();
-    plotter->setParameter("pageTitle","DMX Fitting");
-  }
+//   if(!plotter) plotter  = pf->create();
+//   if(plotter) {
+//     plotter->show();
+//     plotter->setParameter("pageTitle","DMX Fitting");
+//   }
 
-  G4cout << " Started Pulse Time Fit " << G4endl;
-  int i;
-  for (i = 0; i <  2 ; ++i) 
-    G4cout << "\n Fit Parameters: " << i << ":\t" 
-	   << exponFun->parameterNames()[i] << G4endl;
-  // first fit to time histogram:
-  exponFun->setParameter("amp", 3.);
-  exponFun->setParameter("slope", -0.03);
-  G4cout << " parameters set " << G4endl;
+//   G4cout << " Started Pulse Time Fit " << G4endl;
+//   int i;
+//   for (i = 0; i <  2 ; ++i) 
+//     G4cout << "\n Fit Parameters: " << i << ":\t" 
+// 	   << exponFun->parameterNames()[i] << G4endl;
+//   // first fit to time histogram:
+//   exponFun->setParameter("amp", 3.);
+//   exponFun->setParameter("slope", -0.03);
+//   G4cout << " parameters set " << G4endl;
   
-  fitResult = e_fitter->fit(*hPhArrival,*exponFun);
+//   fitResult = e_fitter->fit(*hPhArrival,*exponFun);
    
-  G4cout << " Fit Completed " << G4endl;
-  G4cout << " chi2/ndf is: " << fitResult->quality() << " / "
-	 << fitResult->ndf() << G4endl;
+//   G4cout << " Fit Completed " << G4endl;
+//   G4cout << " chi2/ndf is: " << fitResult->quality() << " / "
+// 	 << fitResult->ndf() << G4endl;
   
-  // retrieve fitted parameters and errors and print them
+//   // retrieve fitted parameters and errors and print them
 
-  for (i = 0; i <  2 ; ++i) 
-    G4cout << fitResult->fittedParameterNames()[i] << "   =    " 
-	   << fitResult->fittedParameters()[i] << "   +/-  " 
-	   << fitResult->errors()[i];
+//   for (i = 0; i <  2 ; ++i) 
+//     G4cout << fitResult->fittedParameterNames()[i] << "   =    " 
+// 	   << fitResult->fittedParameters()[i] << "   +/-  " 
+// 	   << fitResult->errors()[i];
 
-  // plot function with its annotation and then histogram
+//   // plot function with its annotation and then histogram
 
-  plotter->currentRegion().plot(*exponFun,"[0,100] annotation");
-  plotter->currentRegion().plot(*hPhArrival, "overlay");
-  plotter->refresh();
-  plotter->writeToFile("ExponentialFit.ps","ps");
+//   plotter->currentRegion().plot(*exponFun,"[0,100] annotation");
+//   plotter->currentRegion().plot(*hPhArrival, "overlay");
+//   plotter->refresh();
+//   plotter->writeToFile("ExponentialFit.ps","ps");
 
 
-  for (i = 0; i <  3 ; ++i) 
-    G4cout << "\n Fit Parameters: " << i << ":\t" 
-	   << gaussFun->parameterNames()[i] << G4endl;
-  // first fit to time histogram:
-  gaussFun->setParameter("mean", 50.);
-  gaussFun->setParameter("sigma", 10.);
-  gaussFun->setParameter("amp", 2.);
-  G4cout << " parameters set " << G4endl;
+//   for (i = 0; i <  3 ; ++i) 
+//     G4cout << "\n Fit Parameters: " << i << ":\t" 
+// 	   << gaussFun->parameterNames()[i] << G4endl;
+//   // first fit to time histogram:
+//   gaussFun->setParameter("mean", 50.);
+//   gaussFun->setParameter("sigma", 10.);
+//   gaussFun->setParameter("amp", 2.);
+//   G4cout << " parameters set " << G4endl;
   
-  fitResult = e_fitter->fit(*hAvPhArrival,*gaussFun);
+//   fitResult = e_fitter->fit(*hAvPhArrival,*gaussFun);
    
-  G4cout << " Fit Completed " << G4endl;
-  G4cout << " chi2/ndf is: " << fitResult->quality() << " / "
-	 << fitResult->ndf() << G4endl;
+//   G4cout << " Fit Completed " << G4endl;
+//   G4cout << " chi2/ndf is: " << fitResult->quality() << " / "
+// 	 << fitResult->ndf() << G4endl;
   
-  // retrieve fitted parameters and errors and print them
+//   // retrieve fitted parameters and errors and print them
 
-  for (i = 0; i <  3 ; ++i) 
-    G4cout << fitResult->fittedParameterNames()[i] << "   =    " 
-	   << fitResult->fittedParameters()[i] << "   +/-  " 
-	   << fitResult->errors()[i];
+//   for (i = 0; i <  3 ; ++i) 
+//     G4cout << fitResult->fittedParameterNames()[i] << "   =    " 
+// 	   << fitResult->fittedParameters()[i] << "   +/-  " 
+// 	   << fitResult->errors()[i];
 
-  // plot function with its annotation and then histogram
+//   // plot function with its annotation and then histogram
 
-  plotter->createRegions(1,1);
-  plotter->currentRegion().plot(*gaussFun,"[0,100] annotation");
-  plotter->currentRegion().plot(*hAvPhArrival, "overlay");
-  plotter->refresh();
-  plotter->writeToFile("TimeConstantFit.ps","ps");
+//   plotter->createRegions(1,1);
+//   plotter->currentRegion().plot(*gaussFun,"[0,100] annotation");
+//   plotter->currentRegion().plot(*hAvPhArrival, "overlay");
+//   plotter->refresh();
+//   plotter->writeToFile("TimeConstantFit.ps","ps");
 
-  G4cout << " Fit finished " << G4endl;
+//   G4cout << " Fit finished " << G4endl;
 
 }
 
@@ -338,28 +335,28 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
   
   hAvPhArrival->fill(aveTimePmtHits/ns);
 
-  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("2") );
+  // AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("2") );
 
  // Fill the ntuple
-  ntuple->fill( ntuple->findColumn( "Event"   ), (G4float) event_id          );
-  ntuple->fill( ntuple->findColumn( "e_prim"  ), (G4float) energy_pri/keV    );
-  ntuple->fill( ntuple->findColumn( "tot_e"   ), (G4float) totEnergy         );
-  ntuple->fill( ntuple->findColumn( "s_hits"  ), (G4float) S_hits            );
-  ntuple->fill( ntuple->findColumn( "xe_time" ), (G4float) firstLXeHitTime   );
-  ntuple->fill( ntuple->findColumn( "num_ph"  ), (G4float) P_hits            );
-  ntuple->fill( ntuple->findColumn( "avphtime"), (G4float) aveTimePmtHits    );
-  ntuple->fill( ntuple->findColumn( "1stpart" ), (G4float) firstparticleIndex);
-  ntuple->fill( ntuple->findColumn( "1stparte"), (G4float) firstParticleE    );
-  ntuple->fill( ntuple->findColumn( "gamma"   ), (G4float) gamma_ev          );
-  ntuple->fill( ntuple->findColumn( "neutron" ), (G4float) neutron_ev        );
-  ntuple->fill( ntuple->findColumn( "posi"    ), (G4float) positron_ev       );
-  ntuple->fill( ntuple->findColumn( "elec"    ), (G4float) electron_ev       );
-  ntuple->fill( ntuple->findColumn( "other"   ), (G4float) other_ev          );
-  ntuple->fill( ntuple->findColumn( "seed1"   ), (G4float) seed1             );
-  ntuple->fill( ntuple->findColumn( "seed2"   ), (G4float) seed2             );
+  ntuple2->fill( ntuple2->findColumn( "Event"   ), (G4float) event_id          );
+  ntuple2->fill( ntuple2->findColumn( "e_prim"  ), (G4float) energy_pri/keV    );
+  ntuple2->fill( ntuple2->findColumn( "tot_e"   ), (G4float) totEnergy         );
+  ntuple2->fill( ntuple2->findColumn( "s_hits"  ), (G4float) S_hits            );
+  ntuple2->fill( ntuple2->findColumn( "xe_time" ), (G4float) firstLXeHitTime   );
+  ntuple2->fill( ntuple2->findColumn( "num_ph"  ), (G4float) P_hits            );
+  ntuple2->fill( ntuple2->findColumn( "avphtime"), (G4float) aveTimePmtHits    );
+  ntuple2->fill( ntuple2->findColumn( "1stpart" ), (G4float) firstparticleIndex);
+  ntuple2->fill( ntuple2->findColumn( "1stparte"), (G4float) firstParticleE    );
+  ntuple2->fill( ntuple2->findColumn( "gamma"   ), (G4float) gamma_ev          );
+  ntuple2->fill( ntuple2->findColumn( "neutron" ), (G4float) neutron_ev        );
+  ntuple2->fill( ntuple2->findColumn( "posi"    ), (G4float) positron_ev       );
+  ntuple2->fill( ntuple2->findColumn( "elec"    ), (G4float) electron_ev       );
+  ntuple2->fill( ntuple2->findColumn( "other"   ), (G4float) other_ev          );
+  ntuple2->fill( ntuple2->findColumn( "seed1"   ), (G4float) seed1             );
+  ntuple2->fill( ntuple2->findColumn( "seed2"   ), (G4float) seed2             );
 
   //Values of attributes are prepared; store them to the nTuple:
-  ntuple->addRow();
+  ntuple2->addRow();
 
 }
 
@@ -374,37 +371,30 @@ void DMXAnalysisManager::analysePMTHits(G4int event, G4int i, G4double x, G4doub
     h1stPMTHit->fill(x,y);
   }
 
-  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("3") );
+  //AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("3") );
   // Fill the secondaries ntuple
-  ntuple->fill( ntuple->findColumn( "event" ), (G4float) event );
-  ntuple->fill( ntuple->findColumn( "hits"  ), (G4float) i     );
-  ntuple->fill( ntuple->findColumn( "xpos"  ), (G4float) x     );
-  ntuple->fill( ntuple->findColumn( "ypos"  ), (G4float) y     );
-  ntuple->fill( ntuple->findColumn( "zpos"  ), (G4float) z     );
+  ntuple3->fill( ntuple3->findColumn( "event" ), (G4float) event );
+  ntuple3->fill( ntuple3->findColumn( "hits"  ), (G4float) i     );
+  ntuple3->fill( ntuple3->findColumn( "xpos"  ), (G4float) x     );
+  ntuple3->fill( ntuple3->findColumn( "ypos"  ), (G4float) y     );
+  ntuple3->fill( ntuple3->findColumn( "zpos"  ), (G4float) z     );
 
   // NEW: Values of attributes are prepared; store them to the nTuple:
-  ntuple->addRow(); // check for returning true ...
+  ntuple3->addRow(); // check for returning true ...
 
 }
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXAnalysisManager::analysePrimaryGenerator(G4double energy)
 {
 
-  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
+  // AIDA::ITuple * ntuple1 = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   // Fill energy ntple:
-  ntuple->fill( ntuple->findColumn( "energy" ), energy );
+  ntuple1->fill( ntuple1->findColumn( "energy" ), energy );
 
   // NEW: Values of attributes are prepared; store them to the nTuple:
-  ntuple->addRow(); // check for returning true ...
+  ntuple1->addRow(); // check for returning true ...
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXAnalysisManager::analyseParticleSource(G4double energy, G4String name)
 {
@@ -436,24 +426,23 @@ void DMXAnalysisManager::HistTime(G4double time)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void DMXAnalysisManager::PlotHistosInter(G4int flag) 
+void DMXAnalysisManager::PlotHistosInter(G4int) 
 {
-  // The plotter is updated only if there are some hits in the event
-  if(!flag) return;
-  //  Set the plotter ; set the number of regions and attach histograms
-  // to plot for each region.
-  //  It is done here, since then EndOfRun set regions
-  // for paper output.
-  if(plotter) {
-      plotter->currentRegion().plot(*hNumPhLow);
-      plotter->refresh();
-  }
+  // // The plotter is updated only if there are some hits in the event
+//   if(!flag) return;
+//   //  Set the plotter ; set the number of regions and attach histograms
+//   // to plot for each region.
+//   //  It is done here, since then EndOfRun set regions
+//   // for paper output.
+//   if(plotter) {
+//       plotter->currentRegion().plot(*hNumPhLow);
+//       plotter->refresh();
+//   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXAnalysisManager::PlotHistos(G4bool interactive)
+void DMXAnalysisManager::PlotHistos(G4bool)
 {   
-
+  /*
   if(!plotter) plotter  = pf->create();
   plotter->show();
   plotter->setParameter("pageTitle","DMX Output Summary");
@@ -492,12 +481,7 @@ void DMXAnalysisManager::PlotHistos(G4bool interactive)
       G4cout << "Press <ENTER> to exit" << G4endl;
       G4cin.get();
     }
-
+  */
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 #endif

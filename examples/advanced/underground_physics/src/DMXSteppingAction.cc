@@ -172,5 +172,5 @@ void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
   }
   
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 

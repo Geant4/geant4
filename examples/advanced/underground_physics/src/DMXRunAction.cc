@@ -94,8 +94,6 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
   analysis->book(savehistFile, plotevent);
   //  analysis->PlotHistosInit();
 #endif
-    
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,8 +103,8 @@ void DMXRunAction::EndOfRunAction(const G4Run*)
 
 #ifdef G4ANALYSIS_USE
   DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-  analysis->PlotHistos(interactplot);
-  analysis->PulseTimeFit();
+  //analysis->PlotHistos(interactplot);
+  //analysis->PulseTimeFit();
   analysis->Finish();
 #endif
 

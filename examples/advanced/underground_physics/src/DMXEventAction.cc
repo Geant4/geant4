@@ -255,14 +255,14 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
       G4cout << "     Number of PMT hits (photoelectron equivalent): " 
 	     << P_hits << G4endl;
-#ifdef G4ANALYSIS_USE
+      //#ifdef G4ANALYSIS_USE
       // plot histograms, interactively:
-      G4bool plotevent=runAct->Getplotevent();      
-      if(plotevent) {
-	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-	analysis->PlotHistosInter(P_hits);
-      }
-#endif
+      //G4bool plotevent=runAct->Getplotevent();      
+      //if(plotevent) {
+      //	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
+      //	analysis->PlotHistosInter(P_hits);
+      //}
+      //#endif
     }
     // write out (x,y,z) of PMT hits
     if (savePmtFlag)
