@@ -7,6 +7,7 @@
 #include "geant321/gctrak.inc"
 #include "calor.inc"
 #include "celoss.inc"
+#include "histo.inc"
 *
       CHARACTER*20 matnam
       CHARACTER*4 unitm,unitr
@@ -36,7 +37,7 @@
       CALL HPLEND
 *                                                                               
 * *** Save histo                                                  
-      CALL HRPUT(0,'testem3.paw','N')
+      CALL HRPUT(0,fileName,'N')
 
 *      
 *

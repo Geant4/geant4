@@ -21,16 +21,23 @@
  CUTPR  imed2  bcute/m   dcute/m  ppcutm
  ...etc............
  
- testem3 produces histograms which are saved as testem3.paw : 
-  histo 1 : energy deposit in absorber 1 (edep/Ebeam)
-  histo 2 : energy deposit in absorber 2 (edep/Ebeam)
+ testem3 can produces histograms : 
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
   ...etc...........
   
  One can control the binning of the histograms with the data card:
-  *HISTO  id1  nbin  vmin  vmax 
-  *HISTO  id2  nbin  vmin  vmax
-  ...etc...........
+  *HISTO  id1  nbBins  valMin  valMax  valUnit 
+  *HISTO  id2  nbBins  valMin  valMax  valUnit
+  ... etc ...........
   
+  valMin and ValMax are given in the desired unit, whose numerical value must
+  be specified in valUnit. Remember that Geant3 defaults are: GeV, cm, rad.
+  
+ The name of de histograms file must be defined with the data card:
+ FILE  fileName (character)   This data card is mandatory; it must be the first,
+			      with the format A4,A2,A25
+
  It is possible to set the max allowed step size STEMAX,
  via the data card:
  STEPMX  stepmax (in cm)
