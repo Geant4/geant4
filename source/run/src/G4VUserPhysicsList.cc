@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.49 2004-08-10 23:57:17 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.50 2004-10-25 13:13:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -347,8 +347,16 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable()
 {
+  //Prepare Physics table for all particles 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    PreparePhysicsTable(particle); 
+  }
+
+  // ask processes to prepare physics table 
   if (fRetrievePhysicsTable) {
-    if (!fIsRestoredCutValues) fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
+    fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
     // check if retrieve Cut Table successfully
     if (!fIsRestoredCutValues) {
 #ifdef G4VERBOSE
@@ -367,7 +375,13 @@ void G4VUserPhysicsList::BuildPhysicsTable()
       }
 #endif 
     }     
+  } else {
+#ifdef G4VERBOSE
+    G4cout << "G4VUserPhysicsList::BuildPhysicsTable";
+    G4cout << " does not retrieve Cut Table but calculate " << G4endl;
+#endif	    
   }
+
   // Sets a value to particle
   // set cut values for gamma at first and for e- and e+
   G4String particleName;
@@ -416,7 +430,6 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 #endif
       //  Retrieve PhysicsTable from files for proccesses
       RetrievePhysicsTable(particle, directoryPhysicsTable, fStoredInAscii);
-      return;
     }
   }
 
@@ -432,6 +445,19 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     G4ProcessVector* pVector = particle->GetProcessManager()->GetProcessList();
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*particle);
+    }
+  }
+}
+
+///////////////////////////////////////////////////////////////
+void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
+{
+  // Prepare the physics tables for every process for this particle type
+  // if particle is not ShortLived
+  if(!particle->IsShortLived()) {
+    G4ProcessVector* pVector = particle->GetProcessManager()->GetProcessList();
+    for (G4int j=0; j < pVector->size(); ++j) {
+      (*pVector)[j]->PreparePhysicsTable(*particle);
     }
   }
 }
@@ -623,5 +649,25 @@ G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
 
 
 
+/// obsolete methods
+
+
+void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name)
+{
+  G4cerr << "WARNING !" << G4endl;
+  G4cerr << " Obsolete DumpCutValues() method is invoked for " << particle_name << G4endl;
+  G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+  G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+  DumpCutValuesTable();
+}
+
+void G4VUserPhysicsList::DumpCutValues(G4ParticleDefinition* )
+{
+  G4cerr << "WARNING !" << G4endl;
+  G4cerr << " DumpCutValues() became obsolete." << G4endl;
+  G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+  G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+  DumpCutValuesTable();
+}
 
 

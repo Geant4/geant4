@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.26 2004-08-10 23:57:17 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.27 2004-10-25 13:13:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -176,22 +176,8 @@ class G4VUserPhysicsList
     // at the proper moment.
     void DumpCutValuesTableIfRequested();
 
-    void DumpCutValues(const G4String &particle_name = "ALL")
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " Obsolete DumpCutValues() method is invoked for " << particle_name << G4endl;
-    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-    DumpCutValuesTable();
-   }
-    void DumpCutValues(G4ParticleDefinition* )
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " DumpCutValues() became obsolete." << G4endl;
-    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-    DumpCutValuesTable();
-   }
+    void DumpCutValues(const G4String &particle_name = "ALL");
+    void DumpCutValues(G4ParticleDefinition* );
 
   public: // with description
     void  SetVerboseLevel(G4int value);
@@ -238,6 +224,8 @@ class G4VUserPhysicsList
     // do BuildPhysicsTable for make the integral schema
     void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
 
+   // do PreparePhysicsTable for the specified particle 
+   void PreparePhysicsTable(G4ParticleDefinition* );
 
   protected: 
     // Retrieve PhysicsTable from files for proccess belongng the particle.
@@ -305,16 +293,18 @@ class G4VUserPhysicsList
 // Following method is for backward compatibility and removed soon
 ////////////////////////////////////////////////////////////////////////////
   protected:
-   void SetCutValueForOthers(G4double)
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
-    G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-   }
+  void SetCutValueForOthers(G4double) const;
 
 };
 
+inline
+ void G4VUserPhysicsList::SetCutValueForOthers(G4double) const
+{
+  G4cerr << "WARNING !" << G4endl;
+  G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
+  G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
+  G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+}
 
 inline void G4VUserPhysicsList::Construct()
 {
