@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.72 2001-12-12 14:28:00 gcosmo Exp $
+# $Id: binmake.gmk,v 1.73 2001-12-12 16:21:41 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -119,7 +119,6 @@ ifndef INCFLAGS
 endif
 
 ifdef G4ODBMS
-# ifneq ($(G4INCLUDE_EXEC),1)
   INCFLAGS += \
               -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
@@ -131,7 +130,6 @@ ifdef G4ODBMS
               -I$(G4BASE)/persistency/geometry/solids/specific/include \
               -I$(G4BASE)/persistency/geometry/management/include \
               -I$(G4BASE)/persistency/management/include
-# endif
   INCFLAGS += -I$(G4SCHEMA_INCLUDE) \
               -I$(OBJY_DIR)/include \
               -I$(HEP_ODBMS_DIR)/include \
