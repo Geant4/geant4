@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.8 2003-05-22 10:01:08 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.9 2003-06-12 12:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -540,6 +540,14 @@ G4bool G4ReflectionFactory::IsReflection(const G4Scale3D& scale) const
     return true;
   else 
     return false;  
+}
+
+//_____________________________________________________________________________
+
+const G4ReflectedVolumesMap&
+G4ReflectionFactory::GetReflectedVolumesMap() const
+{
+  return fReflectedLVMap;
 }
 
 //_____________________________________________________________________________
