@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.1 2004-05-13 14:49:23 gcosmo Exp $
+// $Id: G4ReflectedSolid.hh,v 1.2 2004-10-10 10:15:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,6 +112,7 @@ class G4ReflectedSolid : public G4VSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
+    G4Polyhedron* GetPolyhedron    () const;
       // For creating graphical representations (ie for visualisation).
 
   protected:
@@ -139,6 +140,8 @@ class G4ReflectedSolid : public G4VSolid
 
     G4Transform3D*     fPtrTransform3D    ;
     G4Transform3D*     fDirectTransform3D ;
+
+    mutable G4Polyhedron* fpPolyhedron;  // Caches reflected G4Polyhedron.
 
   private:
 
