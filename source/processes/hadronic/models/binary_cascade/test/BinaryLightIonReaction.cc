@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.2 2003-05-06 14:03:34 hpw Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.3 2003-05-22 09:00:14 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -224,7 +224,7 @@ int j = 0;
 	   aStep.SetPostStepPoint(&aStepPoint);
 	   aTrack->SetStep(&aStep);
            ++hpw;
-           if(hpw == 1000*(hpw/1000))
+           if(hpw == 1*(hpw/1))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
