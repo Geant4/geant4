@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.10 2001-08-09 17:24:22 maire Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.11 2001-08-10 15:16:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 // 01-09-98, new method  PrintInfo() 
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
+// 09-08-01: new methods Store/Retrieve PhysicsTable (mma) 
 // ------------------------------------------------------------
 
 // Class description
