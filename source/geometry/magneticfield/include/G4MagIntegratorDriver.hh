@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.11 2002-04-19 17:31:41 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.12 2002-11-09 02:32:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -190,7 +190,9 @@ class G4MagInt_Driver
      G4double hminimum_val;
         // Minimum Step allowed in a Step.
 
-     G4int nvar;
+     const G4int  fNoIntegrationVariables;  // Number of Variables in integration
+     const G4int  fMinNoVars;               // Minimum number for FieldTrack
+     const G4int  fNoVars;                  // Full number of variable
 
      G4MagIntegratorStepper *pIntStepper;
      G4int   fMaxNoSteps;
