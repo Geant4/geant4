@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2002-11-09 03:34:09 japost Exp $
+$Id: History,v 1.66 2002-11-20 18:38:06 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 20th, 2002     J. Apostolakis - field-V04-01-03
+---------------------------------
+Further fixes for unitialised variables:
+
+* G4MagIntegratorStepper
+  -  Created instance variables for number of Integration, State variables
+
+* G4MagErrorStepper
+  -  Utilise number of State variables to initialise full state of Output.
+
+* G4Mag_SpinEqRhs
+  -  Initialise the values of dydx that we do not update.
+
+Note: Undoing these changes and the ones below would enable the user to see 
+        if undefined values are used in variables that he/she expects to 
+        have integrated.
+      BUT the fix assists us to find truly undefined values elsewhere
+        -- if they exist -- using valgrind.
+
 Nov  9th, 2002     J. Apostolakis - field-V04-01-02
 ---------------------------------
 Fixes to address use of uninitialised variable in seting values of FieldTrack
-(this was done by design, but was neither ideal or always well-behaved:
+(this was done by design, but was neither ideal or always well-behaved.)
+Changed:
 
 * G4MagIntegratorDriver
   - Added instance variables for number of Integration, State variables
