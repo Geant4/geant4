@@ -1,9 +1,9 @@
-# $Id: stt-ref+.sdb,v 1.18 1999-04-29 11:49:32 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.19 1999-04-30 16:33:10 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
-geant4/config           geant4-00-ref-05
+geant4/config           config-01-00-04
 # geant4/documents - not currently part of reference versions
 geant4/environments     geant4-00-ref-05
 geant4/examples         geant4-00-ref-05
@@ -26,13 +26,13 @@ geant4/source/intercoms        geant4-00-ref-05
 geant4/source/interfaces       geant4-00-ref-05
 geant4/source/materials        geant4-00-ref-05
 geant4/source/particles        geant4-00-ref-05
-geant4/source/persistency      geant4-00-ref-05
+geant4/source/persistency      persistency-01-00-01
 geant4/source/processes/GNUmakefile         geant4-00-ref-05
 geant4/source/processes/History             geant4-00-ref-05
 geant4/source/processes/decay	            geant4-00-ref-05
-geant4/source/processes/electromagnetic	    geant4-00-ref-05
+geant4/source/processes/electromagnetic	    em-01-00-04
 geant4/source/processes/hadronic            geant4-00-ref-05
-geant4/source/processes/management          geant4-00-ref-05
+geant4/source/processes/management          procman-01-00-03
 geant4/source/processes/optical	            geant4-00-ref-05
 geant4/source/processes/parameterisation    geant4-00-ref-05
 geant4/source/processes/transportation      geant4-00-ref-05
