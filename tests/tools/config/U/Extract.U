@@ -1,0 +1,171 @@
+?RCS: $Id: Extract.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.4  2000/12/19 07:23:31  sadilov
+?RCS: Moving 'extracted files'+'config.sh' to '.config/bin/$g4system'
+?RCS: (instead of [simple] 'bin/$g4system' previously).
+?RCS:
+?RCS: Revision 1.3  2000/12/16 14:50:32  sadilov
+?RCS: Comment out debug printing.
+?RCS:
+?RCS: Revision 1.2  2000/12/10 13:32:09  sadilov
+?RCS: Used '$abssrc' - absolute path for top dir.
+?RCS:
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.2  2000/12/02 02:49:10  sadilov
+?RCS: Some problems still exist.
+?RCS:
+?RCS: Revision 1.1.1.1  2000/11/05 18:34:52  sadilov
+?RCS: START.
+?RCS:
+?RCS: Revision 3.0.1.2  1997/02/28  14:58:52  ram
+?RCS: patch61: added support for src.U
+?RCS:
+?RCS: Revision 3.0.1.1  1994/10/29  15:51:46  ram
+?RCS: patch36: added ?F: line for metalint file checking
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:04:52  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X: 
+?X: This unit produces a shell script which can be doted in order to extract
+?X: .SH files with variable substitutions.
+?X:
+?X: When running Configure from a remote directory ($src is not '.'),
+?X: then the files will be created in that directory, so beware!
+?X: 
+?MAKE:Extract: src
+?MAKE:	-pick add $@ %<
+?F:./extract
+?T:CONFIG dir file name create mkdir_p
+: script used to extract .SH files with variable substitutions
+cat >extract <<'EOS'
+CONFIG=true
+#echo "Doing variable substitutions on .SH files..."
+if test -f $src/MANIFEST; then
+	set x `awk '{print $1}' <$src/MANIFEST | grep '\.SH'`
+else
+#	echo "(Looking for .SH files under the source directory.)"
+	set x `(cd $src; find . -name "*.SH" -print)`
+fi
+shift
+case $# in
+0) set x `(cd $src; echo *.SH)`; shift;;
+esac
+if test ! -f $src/$1; then
+	shift
+fi
+?X: script to emulate mkdir -p
+mkdir_p='
+name=$1;
+create="";
+while test $name; do
+	if test ! -d "$name"; then
+		create="$name $create";
+		name=`echo $name | sed -e "s|^[^/]*$||"`;
+		name=`echo $name | sed -e "s|\(.*\)/.*|\1|"`;
+	else
+		name="";
+	fi;
+done;
+for file in $create; do
+	mkdir $file;
+done
+'
+for file in $*; do
+	case "$src" in
+	".")
+		case "$file" in
+		*/*)
+			dir=`expr X$file : 'X\(.*\)/'`
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
+?X:			(cd $dir && . ./$file && set x $src/.config/bin/$g4system; shift; eval $mkdir_p $src/.config/bin/$g4system && cd $src/.config/bin/$g4system && touch ttt && cd $dir)
+			(cd $dir && . ./$file_SH && mkdir -p $abssrc/.config/bin/$g4system && mv $file_EX $abssrc/.config/bin/$g4system)
+#			echo Sergei_1
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_1
+			;;
+		*)
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
+?X:			(. ./$file && eval $mkdir_p && cd $src/.config/bin/$g4system && touch ttt && cd $dir)
+			(. ./$file && mkdir -p $abssrc/.config/bin/$g4system && mv file-SH $abssrc/.config/bin/$g4system)
+#			echo Sergei_2
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_2
+			;;
+		esac
+		;;
+	*)
+?X:
+?X: When running Configure remotely ($src is not '.'), we cannot source
+?X: the files directly, since that would wrongly cause the extraction
+?X: where the source lie instead of withing the current directory. Therefore,
+?X: we need to 'sh <file' then, which is okay since they will source the
+?X: existing config.sh file. It's not possible to use:
+?X:		../src/Configure -S -O -Dsomething
+?X: unfortunately since no new config.sh with the -Dsomething override
+?X: will be created before running the .SH files. A minor buglet.
+?X:
+?X: Note that we must create the directory hierarchy ourselves if it does
+?X: not exist already, and that is done through a shell emulation of the
+?X: 'mkdir -p' command. We don't want to use the $installdir metaconfig
+?X: symbol here since that would require too much to be configured for
+?X: this simple extraction task that may happen quickly with 'Configure -S'.
+?X:		-- RAM, 18/03/96
+?X:
+		case "$file" in
+		*/*)
+			dir=`expr X$file : 'X\(.*\)/'`
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
+			(set x $dir; shift; eval $mkdir_p)
+?X:			sh <$src/$dir/$file
+
+			(sh <$src/$dir/$file_SH && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
+
+#			echo Sergei_3
+#			echo "dir=$dir"
+#			echo "file=$file"
+
+#			echo Sergei_3
+			;;
+		*)
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
+			(sh <$src/$file && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
+			echo Sergei_4
+			;;
+		esac
+		;;
+	esac
+done
+if test -f $src/config_h.SH; then
+	if test ! -f config.h; then
+	: oops, they left it out of MANIFEST, probably, so do it anyway.
+	. $src/config_h.SH
+	fi
+fi
+EOS
+

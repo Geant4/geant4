@@ -1,0 +1,54 @@
+?RCS:
+?MAKE:g4use_ospace g4ospace_base_dir: \
+	Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4use_ospace" in
+'')
+	g4use_ospace=n
+	;;
+esac
+
+case "$g4ospace_base_dir" in
+'')
+	g4ospace_base_dir=""
+	;;
+esac
+
+#
+# Ask about g4install used. 
+#
+echo ""
+
+g4message=`cat << EOM
+
+In case your compiler do not provide 'native' STL and choose for a non
+ISO/ANSI installation, ObjectSpace STL (if available in your system) may
+be used and its installation path specified.
+
+Do you want to use ObjectSpace?
+EOM`
+
+dflt=$g4use_ospace
+rp=$g4message
+. ./myread
+g4use_ospace=$ans
+
+if [ X$g4use_ospace = Xy ] ; then
+		
+dflt=$g4ospace_base_dir
+fn='d~'
+rp="Where is OSPACE installed?"
+. ./getfile
+g4ospace_base_dir=$ans
+
+fi
+
+#if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
+#g4use_ospace=""
+#fi

@@ -1,0 +1,120 @@
+?RCS: $Id: Instruct.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.2  2000/12/16 14:57:04  sadilov
+?RCS: Remove "instructions" in USER mode (because there is no questions...yet).
+?RCS: But if we plan to ask about where $G4WORKDIR (and maybe where to "copy"
+?RCS: env.* files) it'll be needed!
+?RCS:
+?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 3.0.1.3  1997/02/28  15:02:55  ram
+?RCS: patch61: logname / whoami sequence rewritten to use case
+?RCS:
+?RCS: Revision 3.0.1.2  1995/02/15  14:11:34  ram
+?RCS: patch51: author name now appears at the end of the paragraph (WED)
+?RCS:
+?RCS: Revision 3.0.1.1  1995/01/11  15:12:05  ram
+?RCS: patch45: now documents the & escape to turn -d on at the read prompt
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:05:04  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X: 
+?X: This unit spew out the directions that we want everyone to read.  I try to
+?X: keep the first "pagefull" much less than a page since they don't know it
+?X: isn't going to go shooting off the top of the screen, and we don't want
+?X: to panic them yet.
+?X: 
+?MAKE:Instruct: Myread Configdir contains
+?MAKE:	-pick wipe $@ %<
+?T:user needman firsttime
+: general instructions
+needman=true
+firsttime=true
+user=`(logname) 2>/dev/null`
+case "$user" in
+'') user=`whoami 2>&1`;;
+esac
+if [ X$install = Xyes ] ; then
+if $contains "^$user\$" ../.config/instruct >/dev/null 2>&1; then
+	firsttime=false
+	echo " "
+	rp='Would you like to see the instructions?'
+	dflt=n
+	. ./myread
+	case "$ans" in
+	[yY]*) ;;
+	*) needman=false;;
+	esac
+fi
+fi
+
+if [ X$install = X ] ; then
+needman=false
+fi
+
+if $needman; then
+	cat <<EOH
+ 
+This installation shell script will examine your system and ask you questions
+to determine how the Geant4 Toolkit should be installed.  If you get stuck on
+a question, you may use a ! shell escape to start a subshell or execute a
+command.  Many of the questions will have default answers in square brackets;
+typing carriage return will set the default.
+
+If asked for a path or file name, you are allowed to use the ~username
+construct to specify the AFS path.
+Questions where this is allowed will be marked "(~username ok)".
+
+EOH
+	rp=''
+	dflt='Type carriage return to continue'
+	. ./myread
+	cat <<'EOH'
+
+The prompt used in this script allows you to use shell variables and backticks
+in your answers. You may use $1, $2, etc...  to refer to the words in the
+default answer, as if the default line was a set of arguments given to a
+script shell. This means you may also use $* to repeat the whole default line.
+
+Everytime there is a substitution, you will have to confirm.  If there is an
+error (e.g. an unmatched backtick), the default answer will remain unchanged
+and you will be prompted again.
+
+Running 'Configure -d' will bypass nearly all the questions and use the
+computed defaults (or the previous answers if there was already a config.sh
+file generated).
+
+Type 'Configure -h' for a list of options.
+
+You may also start interactively and then answer '& -d' at any prompt to turn
+on the non-interactive behaviour for the rest of the execution.
+
+EOH
+	. ./myread
+	cat <<EOH
+
+Much effort has been spent to ensure that this shell script will run on any
+Unix system. If despite that you can't run Configure for some reason, you'll
+have to set the proper environment variables by hand and follow the "manual"
+installation.
+
+EOH
+?X: In case they played with the prompter...
+	dflt='Type carriage return to continue'
+	. ./myread
+	case "$firsttime" in
+	true) echo $user >>../.config/instruct;;
+	esac
+fi
+

@@ -1,0 +1,151 @@
+?RCS: $Id: Finish.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.3  2000/12/16 14:54:25  sadilov
+?RCS: Corrections according to Gabriele's remarks.
+?RCS:
+?RCS: Revision 1.2  2000/12/12 23:38:17  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.3  2000/12/02 02:50:03  sadilov
+?RCS: installer vs. user
+?RCS:
+?RCS: Revision 1.2  2000/11/30 01:04:09  sadilov
+?RCS: Starting 'install.sh' at the end.
+?RCS:
+?RCS: Revision 1.1  2000/11/08 23:06:11  sadilov
+?RCS: Right path to 'config.sh'.
+?RCS:
+?RCS: Revision 3.0.1.6  1995/02/15  14:09:30  ram
+?RCS: patch51: now clearer about how to edit config.sh at the prompt (WED)
+?RCS:
+?RCS: Revision 3.0.1.5  1994/10/29  15:53:14  ram
+?RCS: patch36: added ?F: line for metalint file checking
+?RCS:
+?RCS: Revision 3.0.1.4  1994/05/06  14:19:37  ram
+?RCS: patch23: added blank lines around 'End of Configure'
+?RCS:
+?RCS: Revision 3.0.1.3  1993/10/16  13:46:09  ram
+?RCS: patch12: replaced Config_h by Magic_h in the dependency line
+?RCS:
+?RCS: Revision 3.0.1.2  1993/09/13  15:45:26  ram
+?RCS: patch10: fixed shell evaluation w/o shell escape while in silent mode
+?RCS:
+?RCS: Revision 3.0.1.1  1993/08/30  08:55:59  ram
+?RCS: patch8: prevents myread from blocking on empty answers, exceptionally
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:04:55  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X: 
+?X: This unit is the very last one in the Configure script.  It runs all the
+?X: SH files, which among other things produce config.h and (usually) Makefile.
+?X: It offers to do a make depend if the Makefile contains that target.
+?X: 
+?MAKE:Finish: Chk_MANI Extract Myread Oldsym Magic_h cat rm contains
+?MAKE:	-pick add $@ %<
+?F:!config.sh
+: Finish up by extracting the .SH files
+case "$alldone" in
+exit)
+	$rm -rf UU
+	echo "Done."
+	exit 0
+	;;
+cont)
+	;;
+'')
+	dflt=''
+	nostick=true
+	$cat <<EOM
+
+WARNING: You can check and edit!
+If you'd like to make any change to the $g4conf/config.sh file before the final
+configuration, do it as a shell escape now (e.g. !vi $g4conf/config.sh).
+
+EOM
+	rp="Press [Enter] to start installation or use a shell escape to edit config.sh:"
+	. UU/myread
+	nostick=''
+	case "$ans" in
+	'') ;;
+	*) : in case they cannot read
+		sh 1>&4 -c "$ans";;
+	esac
+	;;
+esac
+
+: if this fails, just run all the .SH files by hand
+. $g4conf/config.sh
+
+?X:
+?X: Turn silent mode off from now on (we want a verbose file extraction).
+?X: This means we have to explicitely test for '$silent' from now on to
+?X: strip off any verbose messages.
+?X:
+echo " "
+exec 1>&4
+. ./UU/extract
+
+if $contains '^depend:' [Mm]akefile >/dev/null 2>&1; then
+	dflt=y
+	case "$silent" in
+	true) ;;
+	*)
+		$cat <<EOM
+
+Now you need to generate make dependencies by running "make depend".
+You might prefer to run it in background: "make depend > makedepend.out &"
+It can take a while, so you might not want to run it right now.
+
+EOM
+		;;
+	esac
+	rp="Run make depend now?"
+	. UU/myread
+	case "$ans" in
+	y*)
+		make depend && echo "Now you must run a make."
+		;;
+	*)
+		echo "You must run 'make depend' then 'make'."
+		;;
+	esac
+elif test -f [Mm]akefile; then
+	echo " "
+	echo "Now you must run a make."
+elif test -f $g4conf/install.sh; then
+	echo " "
+	echo "Now starting Geant4 libraries installation..."
+	echo " "
+	. $g4conf/install.sh
+else
+	echo " "
+	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "You (or the administrator if you have not enough privileges)"
+	echo "should start with \$G4INSTALL/config/Configure -install"
+	echo "(where \$G4INSTALL is Geant4 install directory)."
+	echo " "
+fi
+
+?X:
+?X: kit*isdone files are left over by shell archives built using the makedist
+?X: script which comes from dist, while ark*isdone files are left over by
+?X: the cshar archive maker.
+?X:
+$rm -f kit*isdone ark*isdone
+$rm -rf UU
+
+: End of Configure
+

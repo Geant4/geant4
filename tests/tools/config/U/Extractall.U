@@ -1,0 +1,60 @@
+?RCS: $Id: Extractall.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.1  2000/11/08 11:31:52  sadilov
+?RCS: Really need to change?
+?RCS:
+?RCS: Revision 3.0.1.1  1997/02/28  15:00:43  ram
+?RCS: patch61: created
+?RCS:
+?X:
+?X: If extraction has been requested, load the configuration file, perform
+?X: the extraction and exit.
+?X:
+?X: This unit was originally a part of Options.U. It had to be removed from
+?X: it to prevent a dependency cycle: Extract -> src -> Options -> Extract
+?X: The Begin.U unit now requires us before beginning to do anything
+?X: interesting, to ensure proper semantics. -- RAM, 15/03/96
+?X:
+?MAKE:Extractall: Extract Options rsrc
+?MAKE:	-pick wipe $@ %<
+?T:config
+: extract files and exit if asked to do so
+case "$extractsh" in
+true)
+?X: Undo the forced silent=true when -S was supplied, by probing realsilent
+?X: which was set iff -s was also given. See Options.U for details.
+	case "$realsilent" in
+	true) ;;
+	*) exec 1>&4;;
+	esac
+	case "$config_sh" in
+	'') config_sh='$g4conf/config.sh'; config="$g4conf/config.sh";;
+	/*) config="$g4conf/$config_sh";;
+	*) config="$g4conf/$config_sh";;
+	esac
+	echo " "
+	echo "Fetching answers from $config_sh..."
+	. $config
+	test "$override" && . ./optdef.sh
+	echo " "
+?X: extract has to be run from the top directory, not within UU.
+	cd ..
+	. UU/extract
+	rm -rf UU
+	echo "Done."
+	exit 0
+	;;
+esac
+

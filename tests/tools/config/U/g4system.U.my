@@ -1,0 +1,190 @@
+?RCS:
+?MAKE:g4system g4osname g4compiler: \
+	Myread cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:
+?S:g4compiler:
+?S:	This variable contains the value of the 'g4compiler' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+echo " "
+case "$g4osname" in
+
+'')
+	case "$osname" in
+		'aix')		g4osname=AIX
+				;;
+		'dec_osf')	g4osname=DEC
+				;;
+		'hpux')		g4osname=HP
+				;;
+		'linux')	g4osname=Linux
+				;;
+		'irix')		g4osname=SGI
+				;;
+		'sunos')	g4osname=SUN
+				;;
+	esac
+esac
+
+echo " "
+
+case  "$g4compiler" in
+
+'')	
+	case "$g4osname" in
+		'AIX')
+				g4compiler=xlC
+				;;
+		'DEC')
+				g4compiler=cxx
+				;;
+		'HP')
+				g4compiler=aCC
+				;;
+		'Linux')
+				g4compiler=g++
+				;;
+		'SGI')
+				g4compiler=CC
+				;;
+		'SUN')
+				g4compiler=CC
+				;;
+	esac
+esac
+
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+We should now define G4SYSTEM. It's combined from
+your OS system name and compiler used: $g4osname-$g4compiler.
+
+1) OS		: $g4osname
+
+2) Compiler	: $g4compiler
+
+[eE])xit
+
+Select from list above (e.g. 2) 
+EOM`
+
+dflt="NO DEFAULT ANSWER"
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		case "$osname" in
+			'aix')
+					g4osnamerec=AIX
+					;;
+			'dec_osf')
+					g4osnamerec=DEC
+					;;
+			'hpux')	
+					g4osnamerec=HP
+					;;
+			'linux')
+					g4osnamerec=Linux
+					;;
+			'irix')	
+					g4osnamerec=SGI
+					;;
+			'sunos')
+					g4osnamerec=SUN
+					;;
+		esac
+		dflt=$g4osname
+		rp="What is your OS'?"
+		. ./myread
+		tans=$ans
+
+		if test X$tans != X$g4osnamerec ; then
+		echo ""
+
+cat << EOM
+
+		You are running 'Configure' on NOT native platform!
+		You are on your own way :)
+
+EOM
+
+		dflt=$tans
+		rp="Confirm your compiler selection or set native '$g4osnamerec'!"
+		. ./myread
+		tans=$ans
+		fi
+
+		g4osname=$tans
+		;;
+	2) 
+		case "$g4osname" in
+			'AIX')
+					g4compilerrec=xlC
+					;;
+			'DEC')
+					g4compilerrec=cxx
+					;;
+			'HP')
+					g4compilerrec=aCC
+					;;
+			'Linux')
+					g4compilerrec=g++
+					;;
+			'SGI')
+					g4compilerrec=CC
+					;;
+			'SUN')
+					g4compilerrec=CC
+					;;
+		esac
+		dflt=$g4compiler
+		rp="Use which C++ compiler?"
+		. ./myread
+		tans=$ans
+
+		if test X$tans != X$g4compilerrec ; then
+		echo ""
+
+cat << EOM
+
+		The recommmended compiler for this platform ($g4osname) is $g4compilerrec.
+		You are on your own way :)
+
+EOM
+
+		dflt=$tans
+		rp="Confirm your compiler selection or set recommended '$g4compilerrec'!"
+		. ./myread
+		tans=$ans
+		fi
+
+		g4compiler=$tans
+		;;
+	[eE]) 
+		break
+		;;
+	*) 
+		echo " "
+		;;
+	esac
+done
+
+#
+# Ask about compiler used. 
+#
+g4system=$g4osname-$g4compiler
+
+cat << EOM
+
+OK, your 'G4SYSTEM' will be $g4system.
+
+EOM

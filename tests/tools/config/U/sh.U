@@ -1,0 +1,92 @@
+?RCS: $Id: sh.U,v 1.1 2001-05-17 10:12:24 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1997, Chip Salzenberg
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS: 
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 3.0.1.1  1997/02/28  16:20:13  ram
+?RCS: patch61: created
+?RCS:
+?MAKE:sh: Head
+?MAKE:	-pick wipe $@ %<
+?S:sh:
+?S:	This variable contains the full pathname of the shell used
+?S:	on this system to execute Bourne shell scripts.  Usually, this will be
+?S:	/bin/sh, though it's possible that some systems will have /bin/ksh,
+?S:	/bin/pdksh, /bin/ash, /bin/bash, or even something such as
+?S:	D:/bin/sh.exe.
+?S:	This unit comes before Options.U, so you can't set sh with a -D
+?S:	option, though you can override this (and startsh)
+?S:	with -O -Dsh=/bin/whatever -Dstartsh=whatever
+?S:.
+?C:SH_PATH:
+?C:	This symbol contains the full pathname to the shell used on this
+?C:	on this system to execute Bourne shell scripts.  Usually, this will be
+?C:	/bin/sh, though it's possible that some systems will have /bin/ksh,
+?C:	/bin/pdksh, /bin/ash, /bin/bash, or even something such as
+?C:	D:/bin/sh.exe.
+?C:.
+?H:#define SH_PATH "$sh"  /**/
+?H:.
+?T:xxx try pth p SYSTYPE
+?LINT:extern maintloc maintname
+?X:
+?X: Be quiet unless something unusual happens because this gets
+?X: loaded up even before options are processed.
+?X:	Can't use ./loc because that depends on startsh, which, in turn
+?X:	depends on this unit.
+?X:
+: Find the basic shell for Bourne shell scripts
+case "$sh" in
+'')
+?X: SYSTYPE is for some older MIPS systems. 
+?X: I do not know if it is still needed.
+	case "$SYSTYPE" in
+	*bsd*|sys5*) xxx="/$SYSTYPE/bin/sh";;
+	*) xxx='/bin/sh';;
+	esac
+	if test -f "$xxx"; then
+		sh="$xxx"
+	else
+		: Build up a list and do a single loop so we can 'break' out.
+		pth=`echo $PATH | sed -e "s/$p_/ /g"`
+		for xxx in sh bash ksh pdksh ash; do
+			for p in $pth; do
+				try="$try ${p}/${xxx}"
+			done
+		done
+		for xxx in $try; do
+			if test -f "$xxx"; then
+				sh="$xxx";
+				break
+			elif test -f "$xxx.exe"; then
+				sh="$xxx";
+				break
+			fi
+		done
+	fi
+	;;
+esac
+
+?X: fd 4 isn't open yet...
+case "$sh" in
+'')	cat <<EOM >&2
+$me:  Fatal Error:  I can't find a Bourne Shell anywhere.  
+
+Usually it's in /bin/sh.
+Please contact <$maintloc> and 
+we'll try to straighten this all out.
+EOM
+	exit 1
+	;;
+esac
+

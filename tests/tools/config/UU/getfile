@@ -1,0 +1,201 @@
+#!/bin/sh
+tilde=''
+fullpath=''
+already=''
+skip=''
+none_ok=''
+exp_file=''
+nopath_ok=''
+orig_rp="$rp"
+orig_dflt="$dflt"
+
+case "$fn" in
+*\(*)
+	expr $fn : '.*(\(.*\)).*' | tr ',' '\012' >getfile.ok
+	fn=`echo $fn | sed 's/(.*)//'`
+	;;
+esac
+
+case "$fn" in
+*:*)
+	loc_file=`expr $fn : '.*:\(.*\)'`
+	fn=`expr $fn : '\(.*\):.*'`
+	;;
+esac
+
+case "$fn" in
+*~*) tilde=true;;
+esac
+case "$fn" in
+*/*) fullpath=true;;
+esac
+case "$fn" in
+*+*) skip=true;;
+esac
+case "$fn" in
+*n*) none_ok=true;;
+esac
+case "$fn" in
+*e*) exp_file=true;;
+esac
+case "$fn" in
+*p*) nopath_ok=true;;
+esac
+
+case "$fn" in
+*f*) type='File';;
+*d*) type='Directory';;
+*l*) type='Locate';;
+esac
+
+what="$type"
+case "$what" in
+Locate) what='File';;
+esac
+
+case "$exp_file" in
+'')
+	case "$d_portable" in
+	"$define") ;;
+	*) exp_file=true;;
+	esac
+	;;
+esac
+
+cd ..
+while test "$type"; do
+	redo=''
+	rp="$orig_rp"
+	dflt="$orig_dflt"
+	case "$tilde" in
+	true) rp="$rp (~name ok)";;
+	esac
+	. UU/myread
+	if test -f UU/getfile.ok && \
+		$contains "^$ans\$" UU/getfile.ok >/dev/null 2>&1
+	then
+		value="$ans"
+		ansexp="$ans"
+		break
+	fi
+	case "$ans" in
+	none)
+		value=''
+		ansexp=''
+		case "$none_ok" in
+		true) type='';;
+		esac
+		;;
+	*)
+		case "$tilde" in
+		'') value="$ans"
+			ansexp="$ans";;
+		*)
+			value=`UU/filexp $ans`
+			case $? in
+			0)
+				if test "$ans" != "$value"; then
+					echo "(That expands to $value on this system.)"
+				fi
+				;;
+			*) value="$ans";;
+			esac
+			ansexp="$value"
+			case "$exp_file" in
+			'') value="$ans";;
+			esac
+			;;
+		esac
+		case "$fullpath" in
+		true)
+			case "$ansexp" in
+			/*) value="$ansexp" ;;
+			*)
+				redo=true
+				case "$already" in
+				true)
+				echo "I shall only accept a full path name, as in /bin/ls." >&4
+				echo "Use a ! shell escape if you wish to check pathnames." >&4
+					;;
+				*)
+				echo "Please give a full path name, starting with slash." >&4
+					case "$tilde" in
+					true)
+				echo "Note that using ~username is ok provided it expands well." >&4
+						already=true
+						;;
+					esac
+				esac
+				;;
+			esac
+			;;
+		esac
+		case "$redo" in
+		'')
+			case "$type" in
+			File)
+				if test -f "$ansexp"; then
+					type=''
+				elif test -r "$ansexp" || (test -h "$ansexp") >/dev/null 2>&1
+				then
+					echo "($value is not a plain file, but that's ok.)"
+					type=''
+				fi
+				;;
+			Directory)
+				if test -d "$ansexp"; then
+					type=''
+				fi
+				;;
+			Locate)
+				if test -d "$ansexp"; then
+					echo "(Looking for $loc_file in directory $value.)"
+					value="$value/$loc_file"
+					ansexp="$ansexp/$loc_file"
+				fi
+				if test -f "$ansexp"; then
+					type=''
+				fi
+				case "$nopath_ok" in
+				true)	case "$value" in
+					*/*) ;;
+					*)	echo "Assuming $value will be in people's path."
+						type=''
+						;;
+					esac
+					;;
+				esac
+				;;
+			esac
+
+			case "$skip" in
+			true) type='';
+			esac
+
+			case "$type" in
+			'') ;;
+			*)
+				if test "$fastread" = yes; then
+					dflt=y
+				else
+					dflt=n
+				fi
+				rp="$what $value doesn't exist.  Use that name anyway?"
+				. UU/myread
+				dflt=''
+				case "$ans" in
+				y*) type='';;
+				*) echo " ";;
+				esac
+				;;
+			esac
+			;;
+		esac
+		;;
+	esac
+done
+cd UU
+ans="$value"
+rp="$orig_rp"
+dflt="$orig_dflt"
+rm -f getfile.ok

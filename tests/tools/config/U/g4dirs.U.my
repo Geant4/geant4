@@ -1,0 +1,167 @@
+?RCS:
+?MAKE:g4install g4base g4workdir g4tmp g4lib g4bin g4data g4levelgammadata g4conf: \
+	Myread Getfile cat rm g4system
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+echo " "
+
+case "$g4conf" in
+'')
+	g4conf=$src/bin/$g4system
+	;;
+esac
+
+echo "g4conf=$g4conf"
+
+case "$g4install" in
+'')
+	g4install=$HOME/geant4
+	;;
+esac
+
+case "$g4base" in
+'')
+	g4base=$g4install/source
+	;;
+esac
+
+case "$g4workdir" in
+'')
+	g4workdir=$g4install
+	;;
+esac
+
+case "$g4tmp" in
+'')
+	g4tmp=$g4workdir/tmp
+	;;
+esac
+
+case "$g4lib" in
+'')
+	g4lib=$g4install/lib
+	;;
+esac
+
+case "$g4bin" in
+'')
+	g4bin=$g4workdir/bin
+	;;
+esac
+
+case "$g4data" in
+'')
+	g4data=$g4install/data
+	;;
+esac
+
+case "$g4levelgammadata" in
+'')
+	g4levelgammadata=$g4data/PhotonEvaporation
+	;;
+esac
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+We should now define G4 directories:
+
+1) G4INSTALL:		$g4install
+
+2) G4BASE:		$g4base
+
+3) G4WORKDIR:		$g4workdir
+
+4) G4TMP:		$g4tmp
+
+5) G4LIB:		$g4lib
+
+6) G4BIN:		$g4bin
+
+7) G4DATA:		$g4data
+
+8) G4LEVELGAMMADATA:	$g4levelgammadata
+
+Select from list above (e.g. 2) 
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt="Press [Enter] for setting default answers and next configuration screen"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+
+	case $gans in
+
+	1) 
+		dflt=$g4install
+		fn='d~'
+		rp="Where is G4 installed?"
+		. ./getfile
+		g4install=$ans
+		;;
+	2) 
+		dflt=$g4base
+		fn='d~'
+		rp="Where is G4 source?"
+		. ./getfile
+		g4base=$ans
+		;;
+	3) 
+		dflt=$g4workdir
+		fn='d~'
+		rp="Where will be your G4 workdir?"
+		. ./getfile
+		g4workdir=$ans
+		;;
+	4) 
+		dflt=$g4tmp
+		fn='d~'
+		rp="Where will be your G4 tmp directory?"
+		. ./getfile
+		g4tmp=$ans
+		;;
+	5) 
+		dflt=$g4lib
+		fn='d~'
+		rp="Where will be your G4 lib directory?"
+		. ./getfile
+		g4lib=$ans
+		;;
+	6) 
+		dflt=$g4bin
+		fn='d~'
+		rp="Where will be your G4 bin directory?"
+		. ./getfile
+		g4bin=$ans
+		;;
+	7) 
+		dflt=$g4data
+		fn='d~'
+		rp="Where will be your G4 data directory?"
+		. ./getfile
+		g4data=$ans
+		;;
+	8) 
+		dflt=$g4levelgammadata
+		fn='d~'
+		rp="Where will be your G4 levelgamma data directory?"
+		. ./getfile
+		g4levelgammadata=$ans
+		;;
+
+#	[eE]) 
+#		break
+#		;;
+	*) 
+		break
+#		echo " "
+		;;
+	esac
+done

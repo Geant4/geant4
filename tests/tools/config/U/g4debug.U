@@ -1,0 +1,51 @@
+?RCS:
+?MAKE:g4debug: \
+	Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4debug" in
+'')
+	g4debug=""
+	;;
+esac
+
+#
+# Ask about g4debug - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to compile libraries in DEBUG mode (-g)?
+EOM`
+
+dflt="n"
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4debug=1
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done

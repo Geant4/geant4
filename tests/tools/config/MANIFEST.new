@@ -1,0 +1,5 @@
+config/scripts/install.sh.SH		Some .sh  file.
+config/scripts/install.csh.SH		Some .csh  file.
+config/scripts/env.sh.SH		Some .sh  file.
+config/scripts/env.csh.SH		Some .csh file.
+Configure				Portability tool

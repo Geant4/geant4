@@ -1,0 +1,886 @@
+?RCS: $Id: Oldconfig.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.6  2000/12/19 07:23:32  sadilov
+?RCS: Moving 'extracted files'+'config.sh' to '.config/bin/$g4system'
+?RCS: (instead of [simple] 'bin/$g4system' previously).
+?RCS:
+?RCS: Revision 1.5  2000/12/16 15:34:40  sadilov
+?RCS: Corrected "if...fi" for "install" check ("yes" but not "y"!)
+?RCS:
+?RCS: Revision 1.4  2000/12/16 14:59:03  sadilov
+?RCS: Eliminated (if...fi) some printings.
+?RCS:
+?RCS: Revision 1.3  2000/12/13 18:06:07  sadilov
+?RCS: Long description in case of 'NOT installed'.
+?RCS:
+?RCS: Revision 1.2  2000/12/12 23:38:18  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.6  2000/12/02 02:50:35  sadilov
+?RCS: installer vs. user
+?RCS:
+?RCS: Revision 1.5  2000/11/30 15:56:29  sadilov
+?RCS: Some changes for right 'config.sh' place.
+?RCS:
+?RCS: Revision 1.4  2000/11/28 12:36:04  sadilov
+?RCS: Enter=exit
+?RCS:
+?RCS: Revision 1.3  2000/11/10 11:31:03  sadilov
+?RCS: Reuse 'config.sh' on the same platform.
+?RCS:
+?RCS: Revision 1.2  2000/11/08 23:12:17  sadilov
+?RCS: Many chages...not last:)
+?RCS:
+?RCS: Revision 1.1  2000/11/08 11:33:13  sadilov
+?RCS: Work with 'config.h' in right directory - 'g4conf'.
+?RCS:
+?RCS: Revision 3.0.1.10  1997/02/28  15:06:39  ram
+?RCS: patch61: added support for src.U
+?RCS: patch61: new OSNAME define
+?RCS: patch61: can now sense new OSes
+?RCS:
+?RCS: Revision 3.0.1.9  1995/07/25  13:40:51  ram
+?RCS: patch56: now knows about OS/2 platforms
+?RCS:
+?RCS: Revision 3.0.1.8  1995/05/12  12:04:18  ram
+?RCS: patch54: config.sh reload logic now knows about new -K switch
+?RCS: patch54: cleaned up and extended osvers for DEC OSF/1 (ADO)
+?RCS: patch54: added MachTen detection (ADO)
+?RCS:
+?RCS: Revision 3.0.1.7  1995/02/15  14:13:41  ram
+?RCS: patch51: adapted osvers computation for AIX (ADO)
+?RCS:
+?RCS: Revision 3.0.1.6  1995/01/30  14:27:15  ram
+?RCS: patch49: unit Options.U now exports file optdef.sh, not a variable
+?RCS: patch49: update code for myuname changed (WED)
+?RCS:
+?RCS: Revision 3.0.1.5  1995/01/11  15:15:36  ram
+?RCS: patch45: added quotes around the INITPROG variable (ADO)
+?RCS: patch45: allows variable overriding after config file loading
+?RCS:
+?RCS: Revision 3.0.1.4  1994/10/29  15:57:05  ram
+?RCS: patch36: added ?F: line for metalint file checking
+?RCS: patch36: merged with the version used for perl5's Configure (ADO)
+?RCS:
+?RCS: Revision 3.0.1.3  1994/05/06  14:24:17  ram
+?RCS: patch23: added support for osf1 hints
+?RCS: patch23: new support for solaris and i386 systems (ADO)
+?RCS:
+?RCS: Revision 3.0.1.2  1994/01/24  14:05:02  ram
+?RCS: patch16: added post-processing on myuname for Xenix targets
+?RCS: patch16: message proposing config.sh defaults made consistent
+?RCS:
+?RCS: Revision 3.0.1.1  1993/09/13  15:56:32  ram
+?RCS: patch10: force use of config.sh when -d option is used (WAD)
+?RCS: patch10: complain about non-existent hint files (WAD)
+?RCS: patch10: added Options dependency for fastread variable
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:05:12  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X:
+?X: This unit tries to remember what we did last time we ran Configure, mostly
+?X: for the sake of setting defaults.
+?X:
+?MAKE:Oldconfig hint myuname osname osvers g4system g4osname g4compiler: Instruct Myread uname \
+	sh awk sed test cat rm lns n c contains Loc Options Tr src 
+?MAKE:	-pick wipe $@ %<
+?S:myuname:
+?S:	The output of 'uname -a' if available, otherwise the hostname. On Xenix,
+?S:	pseudo variables assignments in the output are stripped, thank you. The
+?S:	whole thing is then lower-cased.
+?S:.
+?S:hint:
+?S:	Gives the type of hints used for previous answers. May be one of
+?S:	"default", "recommended" or "previous".
+?S:.
+?S:osname:
+?S:	This variable contains the operating system name (e.g. sunos,
+?S:	solaris, hpux, etc.).  It can be useful later on for setting
+?S:	defaults.  Any spaces are replaced with underscores.  It is set
+?S:	to a null string if we can't figure it out.
+?S:.
+?S:osvers:
+?S:	This variable contains the operating system version (e.g.
+?S:	4.1.3, 5.2, etc.).  It is primarily used for helping select
+?S:	an appropriate hints file, but might be useful elsewhere for
+?S:	setting defaults.  It is set to '' if we can't figure it out.
+?S:	We try to be flexible about how much of the version number
+?S:	to keep, e.g. if 4.1.1, 4.1.2, and 4.1.3 are essentially the
+?S:	same for this package, hints files might just be os_4.0 or
+?S:	os_4.1, etc., not keeping separate files for each little release.
+?S:.
+?C:OSNAME:
+?C:	This symbol contains the name of the operating system, as determined
+?C:	by Configure.  You shouldn't rely on it too much; the specific
+?C:	feature tests from Configure are generally more reliable.
+?C:.
+?H:#define OSNAME "$osname"		/**/
+?H:.
+?F:!config.sh
+?T:tmp tmp_n tmp_c tmp_sh file 
+?T:xxxxfile xxxfile xxfile xfile hintfile newmyuname
+?T:tans _ isesix INITPROG
+?LINT:change n c sh
+: Try to determine whether config.sh was made on this system
+case "$config_sh" in
+'')
+?X: indentation wrong on purpose--RAM
+?X: Leave a white space between first two '(' for ksh. The sub-shell is needed
+?X: on some machines to avoid the error message when uname is not found; e.g.
+?X: old SUN-OS 3.2 would not execute hostname in (uname -a || hostname). Sigh!
+myuname=`( ($uname -a) 2>/dev/null || hostname) 2>&1`
+?X: Special mention for Xenix, whose 'uname -a' gives us output like this:
+?X:  sysname=XENIX
+?X:  nodename=whatever
+?X:  release=2.3.2 .. etc...
+?X: Therefore, we strip all this variable assignment junk and remove all the
+?X: new lines to keep the myuname variable sane... --RAM
+myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
+	./tr '[A-Z]' '[a-z]' | tr '\012' ' '`
+?X: Save the value we just computed to reset myuname after we get done here.
+newmyuname="$myuname"
+dflt=n
+case "$knowitall" in
+'')
+	if test -f ../config.sh; then
+		if $contains myuname= ../config.sh >/dev/null 2>&1; then
+			eval "`grep myuname= ../config.sh`"
+		fi
+		if test "X$myuname" = "X$newmyuname"; then
+			dflt=y
+		fi
+	fi
+	;;
+*) dflt=y;;
+esac
+
+@if {test -d ../hints}
+: Get old answers from old config file if Configure was run on the
+: same system, otherwise use the hints.
+hint=default
+cd ..
+?X: Since we are now at the root of the source tree, we must use $src
+?X: to access the sources and not $rsrc. See src.U for details...
+
+?X: if test ! -f config.sh; then
+?X:	$cat <<EOM
+?X:
+?X: First time through, eh?  I have some defaults handy for the following systems:
+?X:
+?X: EOM
+	(cd $src/hints; ls -C *.sh) | $sed 's/\.sh/   /g' >&4
+	dflt=''
+	: Half the following guesses are probably wrong... If you have better
+	: tests or hints, please send them to <MAINTLOC>
+	: The metaconfig authors would also appreciate a copy...
+	$test -f /irix && osname=irix
+	$test -f /xenix && osname=sco_xenix
+	$test -f /dynix && osname=dynix
+	$test -f /dnix && osname=dnix
+	$test -f /lynx.os && osname=lynxos
+	$test -f /unicos && osname=unicos && osvers=`$uname -r`
+	$test -f /unicosmk.ar && osname=unicosmk && osvers=`$uname -r`
+	$test -f /bin/mips && /bin/mips && osname=mips
+	$test -d /NextApps && set X `hostinfo | grep 'NeXT Mach.*:' | \
+		$sed -e 's/://' -e 's/\./_/'` && osname=next && osvers=$4
+	$test -d /usr/apollo/bin && osname=apollo
+	$test -f /etc/saf/_sactab && osname=svr4
+	$test -d /usr/include/minix && osname=minix
+	if $test -d /MachTen; then
+?X:		MachTen uname -a output looks like
+?X:		xxx 4 0.0 Macintosh
+?X:		MachTen /sbin/version output looks like
+?X:		MachTen 4.0 Mon Aug 28 10:18:00 1995
+?X:		MachTen 3.x had the 'version' command in /usr/etc/version.
+		osname=machten
+		if $test -x /sbin/version; then
+			osvers=`/sbin/version | $awk '{print $2}' |
+			$sed -e 's/[A-Za-z]$//'`
+		elif $test -x /usr/etc/version; then
+			osvers=`/usr/etc/version | $awk '{print $2}' |
+			$sed -e 's/[A-Za-z]$//'`
+		else
+			osvers="$2.$3"
+		fi
+	fi
+?X: If we have uname, we already computed a suitable uname -a output, correctly
+?X: formatted for Xenix, and it lies in $myuname.
+	if $test -f $uname; then
+		set X $myuname
+		shift
+
+		case "$5" in
+		fps*) osname=fps ;;
+		mips*)
+			case "$4" in
+			umips) osname=umips ;;
+			*) osname=mips ;;
+			esac;;
+		[23]100) osname=mips ;;
+		next*) osname=next ;;
+		news*) osname=news ;;
+?X: Interactive Unix.
+		i386*)
+			if $test -f /etc/kconfig; then
+				osname=isc
+				if test "$lns" = "ln -s"; then
+					osvers=4
+				elif $contains _SYSV3 /usr/include/stdio.h > /dev/null 2>&1 ; then
+					osvers=3
+				elif $contains _POSIX_SOURCE /usr/include/stdio.h > /dev/null 2>&1 ; then
+					osvers=2
+				fi
+			fi
+			;;
+		esac
+
+		case "$1" in
+		aix) osname=aix
+?X: aix 4.1 uname -a output looks like
+?X:		AIX  foo  1 4 000123456789   
+?X: where $4 is the major release number and $3 is the (minor) version.
+?X: More detail on the version is available with the oslevel command.
+?X: in 3.2.x, it output a string (see case statements below).  In 4.1,
+?X: it puts out something like  4.1.1.0
+			tmp=`( (oslevel) 2>/dev/null || echo "not found") 2>&1`
+			case "$tmp" in
+			'not found') osvers="$4"."$3" ;;
+			'<3240'|'<>3240') osvers=3.2.0 ;;
+			'=3240'|'>3240'|'<3250'|'<>3250') osvers=3.2.4 ;;
+			'=3250'|'>3250') osvers=3.2.5 ;;
+			*) osvers=$tmp;;
+			esac
+			;;
+		*dc.osx) osname=dcosx
+			osvers="$3"
+			;;
+		dnix) osname=dnix
+			osvers="$3"
+			;;
+		domainos) osname=apollo
+			osvers="$3"
+			;;
+		dgux) osname=dgux 
+			osvers="$3"
+			;;
+?X:		uname -a returns
+?X:		DYNIX/ptx xxx 4.0 V4.1.2 i386
+		dynixptx*) osname=dynixptx
+			osvers="$3"
+			;;
+		freebsd) osname=freebsd 
+			osvers="$3" ;;
+		genix) osname=genix ;;
+		hp*) osname=hpux 
+			case "$3" in
+			*.08.*) osvers=9 ;;
+			*.09.*) osvers=9 ;;
+			*.10.*) osvers=10 ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		irix*) osname=irix
+			case "$3" in
+			4*) osvers=4 ;;
+			5*) osvers=5 ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		linux) osname=linux
+			case "$3" in
+			1*) osvers=1 ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		netbsd*) osname=netbsd 
+			osvers="$3"
+			;;
+		bsd386) osname=bsd386
+			osvers=`$uname -r`
+			;;
+		next*) osname=next ;;
+		solaris) osname=solaris
+			case "$3" in
+			5*) osvers=`echo $3 | $sed 's/^5/2/g'` ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		sunos) osname=sunos
+			case "$3" in
+			5*) osname=solaris
+				osvers=`echo $3 | $sed 's/^5/2/g'` ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		titanos) osname=titanos
+			case "$3" in
+			1*) osvers=1 ;;
+			2*) osvers=2 ;;
+			3*) osvers=3 ;;
+			4*) osvers=4 ;;
+			*)	osvers="$3" ;;
+			esac
+			;;
+		ultrix) osname=ultrix
+			osvers="$3"
+			;;
+		osf1|mls+)	case "$5" in
+				alpha)
+?X: DEC OSF/1 myuname -a output looks like:  osf1 xxxx t3.2 123.4 alpha
+?X: where the version number can be either vn.n or tn.n.
+					osname=dec_osf
+					osvers=`echo "$3" | sed 's/^[vt]//'`
+					;;
+			hp*)	osname=hp_osf1	;;
+			mips)	osname=mips_osf1 ;;
+?X:	hp and mips were unsupported Technology Releases -- ADO, 24/10/94
+			esac
+			;;
+		uts) osname=uts 
+			osvers="$3"
+			;;
+		qnx) osname=qnx
+			osvers="$4"
+			;;
+		$2) case "$osname" in
+			*isc*) ;;
+			*freebsd*) ;;
+			svr*)
+				: svr4.x or possibly later
+				case "svr$3" in	
+				${osname}*)
+					osname=svr$3
+					osvers=$4
+					;;
+				esac
+				case "$osname" in
+				svr4.0)
+					: Check for ESIX
+					if test -f /stand/boot ; then
+						eval `grep '^INITPROG=[a-z/0-9]*$' /stand/boot`
+						if test -n "$INITPROG" -a -f "$INITPROG"; then
+			isesix=`strings -a $INITPROG|grep 'ESIX SYSTEM V/386 Release 4.0'`
+							if test -n "$isesix"; then
+								osname=esix4
+							fi
+						fi
+					fi
+					;;
+				esac
+				;;
+			*)	if test -f /etc/systemid; then
+					osname=sco
+					set `echo $3 | $sed 's/\./ /g'` $4
+					if $test -f sco_$1_$2_$3.sh; then
+						osvers=$1.$2.$3
+					elif $test -f sco_$1_$2.sh; then
+						osvers=$1.$2
+					elif $test -f sco_$1.sh; then
+						osvers=$1
+					fi
+				else
+					case "$osname" in
+					'') : Still unknown.  Probably a generic Sys V.
+						osname="sysv"
+						osvers="$3"
+						;;
+					esac
+				fi
+				;;
+			esac
+			;;
+		*)	case "$osname" in
+			'') : Still unknown.  Probably a generic BSD.
+				osname="$1"
+				osvers="$3"
+				;;
+			esac
+			;;
+		esac
+	else
+?X: Try to identify sony's NEWS-OS (BSD unix)
+		if test -f /vmunix -a -f $src/hints/news_os.sh; then
+			(what /vmunix | UU/tr '[A-Z]' '[a-z]') > UU/kernel.what 2>&1
+			if $contains news-os UU/kernel.what >/dev/null 2>&1; then
+				osname=news_os
+			fi
+			$rm -f UU/kernel.what
+?X: Maybe it's an OS/2
+		elif test -d c:/.; then
+			set X $myuname
+			osname=os2
+			osvers="$5"
+		fi
+	fi
+	: Now look for a hint file osname_osvers, unless one has been
+	: specified already.
+	case "$hintfile" in
+	''|' ')
+		file=`echo "${osname}_${osvers}" | $sed -e 's@\.@_@g' -e 's@_$@@'`
+		: Also try without trailing minor version numbers.
+		xfile=`echo $file | $sed -e 's@_[^_]*$@@'`
+		xxfile=`echo $xfile | $sed -e 's@_[^_]*$@@'`
+		xxxfile=`echo $xxfile | $sed -e 's@_[^_]*$@@'`
+		xxxxfile=`echo $xxxfile | $sed -e 's@_[^_]*$@@'`
+		case "$file" in
+		'') dflt=none ;;
+		*)  case "$osvers" in
+			'') dflt=$file
+				;;
+			*)  if $test -f $src/hints/$file.sh ; then
+					dflt=$file
+				elif $test -f $src/hints/$xfile.sh ; then
+					dflt=$xfile
+				elif $test -f $src/hints/$xxfile.sh ; then
+					dflt=$xxfile
+				elif $test -f $src/hints/$xxxfile.sh ; then
+					dflt=$xxxfile
+				elif $test -f $src/hints/$xxxxfile.sh ; then
+					dflt=$xxxxfile
+				elif $test -f "$src/hints/${osname}.sh" ; then
+					dflt="${osname}"
+				else
+					dflt=none
+				fi
+				;;
+			esac
+			;;
+		esac
+		;;
+	*)
+		dflt=`echo $hintfile | $sed 's/\.sh$//'`
+		;;
+	esac
+
+if [ X$install = Xnever ] ; then
+	$cat <<EOM
+
+You may give one or more space-separated answers, or "none" if appropriate.
+If your OS version has no hints, DO NOT give a wrong version -- say "none".
+
+EOM
+	rp="Which of these apply, if any?"
+	. UU/myread
+	tans=$ans
+	for file in $tans; do
+		if $test -f $src/hints/$file.sh; then
+			. $src/hints/$file.sh
+			$cat $src/hints/$file.sh >> UU/config.sh
+		elif $test X$tans = X -o X$tans = Xnone ; then
+			: nothing
+		else
+			: Give one chance to correct a possible typo.
+			echo "$file.sh does not exist"
+			dflt=$file
+			rp="hint to use instead?"
+			. UU/myread
+			for file in $ans; do
+				if $test -f "$src/hints/$file.sh"; then
+					. $src/hints/$file.sh
+					$cat $src/hints/$file.sh >> UU/config.sh
+				elif $test X$ans = X -o X$ans = Xnone ; then
+					: nothing
+				else
+					echo "$file.sh does not exist -- ignored."
+				fi
+			done
+		fi
+	done
+fi
+
+	hint=recommended
+	: Remember our hint file for later.
+	if $test -f "$src/hints/$file.sh" ; then
+		hintfile="$file"
+	else
+		hintfile=''
+	fi
+?X: fi
+	: Sadilov: g4system.U - inserted here.
+	: 'current' directory is where 'Configure' is started 
+echo " "
+case "$g4osname" in
+
+'')
+	case "$osname" in
+		'aix')		g4osname=AIX
+				;;
+		'dec_osf')	g4osname=DEC
+				;;
+		'hpux')		g4osname=HP
+				;;
+		'linux')	g4osname=Linux
+				;;
+		'irix')		g4osname=SGI
+				;;
+		'sunos')	g4osname=SUN
+				;;
+	esac
+esac
+
+echo " "
+
+case  "$g4compiler" in
+
+'')	
+	case "$g4osname" in
+		'AIX')
+				g4compiler=xlC
+				;;
+		'DEC')
+				g4compiler=cxx
+				;;
+		'HP')
+				g4compiler=aCC
+				;;
+		'Linux')
+				g4compiler=g++
+				;;
+		'SGI')
+				g4compiler=CC
+				;;
+		'SUN')
+				g4compiler=CC
+				;;
+	esac
+esac
+
+if [ X$install = Xyes ] ; then
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Definition of G4SYSTEM variable.
+
+1) OS		: $g4osname
+
+2) Compiler	: $g4compiler
+
+Select from list above (e.g. 2) 
+EOM`
+
+dflt="Press [Enter] for default settings"
+rp=$g4message
+. UU/myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		case "$osname" in
+			'aix')
+					g4osnamerec=AIX
+					;;
+			'dec_osf')
+					g4osnamerec=DEC
+					;;
+			'hpux')	
+					g4osnamerec=HP
+					;;
+			'linux')
+					g4osnamerec=Linux
+					;;
+			'irix')	
+					g4osnamerec=SGI
+					;;
+			'sunos')
+					g4osnamerec=SUN
+					;;
+		esac
+		dflt=$g4osname
+		rp="What is your OS'?"
+		. UU/myread
+		tans=$ans
+
+		if test X$tans != X$g4osnamerec ; then
+		echo ""
+
+cat << EOM
+
+		You are running 'Configure' on NOT native platform!
+		You are on your own way !!!
+
+EOM
+
+		dflt=$tans
+		rp="Confirm your selection or set native '$g4osnamerec'!"
+		. UU/myread
+		tans=$ans
+		fi
+
+		g4osname=$tans
+		;;
+	2) 
+		case "$g4osname" in
+			'AIX')
+					g4compilerrec=xlC
+					;;
+			'DEC')
+					g4compilerrec=cxx
+					;;
+			'HP')
+					g4compilerrec=aCC
+					;;
+			'Linux')
+					g4compilerrec=g++
+					;;
+			'SGI')
+					g4compilerrec=CC
+					;;
+			'SUN')
+					g4compilerrec=CC
+					;;
+		esac
+		dflt=$g4compiler
+		rp="Which C++ compiler?"
+		. UU/myread
+		tans=$ans
+
+		if test X$tans != X$g4compilerrec ; then
+		echo ""
+
+cat << EOM
+
+		The recommmended compiler for this platform ($g4osname) is $g4compilerrec.
+		You are on your own way !!!
+
+EOM
+
+		dflt=$tans
+		rp="Confirm your selection or set recommended '$g4compilerrec'!"
+		. UU/myread
+		tans=$ans
+		fi
+
+		g4compiler=$tans
+		;;
+#	[eE]) 
+#		break
+#		;;
+	*) 
+#		echo " "
+		break
+		;;
+	esac
+done
+fi
+
+#
+# Ask about compiler used. 
+#
+g4system=$g4osname-$g4compiler
+
+cat << EOM
+
+G4SYSTEM is now set to $g4system.
+
+EOM
+
+cd UU
+
+?X: indentation wrong on purpose--RAM
+?X: Leave a white space between first two '(' for ksh. The sub-shell is needed
+?X: on some machines to avoid the error message when uname is not found; e.g.
+?X: old SUN-OS 3.2 would not execute hostname in (uname -a || hostname). Sigh!
+myuname=`( ($uname -a) 2>/dev/null || hostname) 2>&1`
+?X: Special mention for Xenix, whose 'uname -a' gives us output like this:
+?X:  sysname=XENIX
+?X:  nodename=whatever
+?X:  release=2.3.2 .. etc...
+?X: Therefore, we strip all this variable assignment junk and remove all the
+?X: new lines to keep the myuname variable sane... --RAM
+myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
+	./tr '[A-Z]' '[a-z]' | tr '\012' ' '`
+?X: Save the value we just computed to reset myuname after we get done here.
+newmyuname="$myuname"
+dflt=n
+
+cd ..
+if [ X$install = X ] ; then
+	if test -f $src/.config/bin/$g4system/env.sh; then
+	cat >&2 <<EOM
+---------------------------------------------------
+For setting Geant4 environments you should make:
+
+source $src/.config/bin/$g4system/env.csh
+
+or
+
+. $src/.config/bin/$g4system/env.sh
+---------------------------------------------------
+EOM
+	$rm -rf UU
+	exit 1
+else
+	echo " "
+	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "You (or the administrator if you have not enough privileges)"
+	echo "should start with \$G4INSTALL/config/Configure -install."
+	echo "(where \$G4INSTALL is Geant4 install directory)."
+	echo " "
+	$rm -rf UU
+	exit 1
+	fi
+fi
+cd UU
+
+case "$knowitall" in
+'')
+	cd ..
+	if test -f $src/.config/bin/$g4system/config.sh; then
+		if $contains myuname= $src/.config/bin/$g4system/config.sh >/dev/null 2>&1; then
+			eval "`grep myuname= $src/.config/bin/$g4system/config.sh`"
+		fi
+		if test "X$myuname" = "X$newmyuname"; then
+			dflt=y
+		fi
+	fi
+	cd UU
+	;;
+*) dflt=y;;
+esac
+
+cd ..
+
+if test -f $src/.config/bin/$g4system/config.sh; then
+	echo " "
+	rp="There exists a config.sh file. Shall I use it to set the defaults?"
+	. UU/myread
+	case "$ans" in
+	n*|N*) echo "OK, I'll ignore it."; mv $src/.config/bin/$g4system/config.sh $src/.config/bin/$g4system/config.sh.old;;
+	*)  echo "Fetching default answers from your old config.sh file..." >&4
+		tmp_n="$n"
+		tmp_c="$c"
+		tmp_sh="$sh"
+		. $src/.config/bin/$g4system/config.sh
+		cp $src/.config/bin/$g4system/config.sh UU
+		n="$tmp_n"
+		c="$tmp_c"
+		: Older versions did not always set $sh.  Catch re-use of such
+		: an old config.sh.
+		case "$sh" in
+		'') sh="$tmp_sh" ;;
+		esac
+		hint=previous
+		;;
+	esac
+fi
+
+?X:
+cd UU
+?X: From here on, we must use $rsrc instead of $src
+@else
+: Get old answers, if there is a config file out there
+hint=default
+hintfile=''
+if test -f $src/bin/$g4conf/config.sh; then
+	echo " "
+	rp="I see a config.sh file.  Shall I use it to set the defaults?"
+	. ./myread
+	case "$ans" in
+	n*|N*) echo "OK, I'll ignore it.";;
+	*)  echo "Fetching default answers from your old config.sh file..." >&4
+		tmp_n="$n"
+		tmp_c="$c"
+		. $src/bin/$g4conf/config.sh
+		cp $src/bin/$g4conf/config.sh .
+		n="$tmp_n"
+		c="$tmp_c"
+		hint=previous
+		;;
+	esac
+fi
+@end
+?X: remember, indentation is wrong--RAM
+;;
+*)
+	echo " "
+	echo "Fetching default answers from $config_sh..." >&4
+	tmp_n="$n"
+	tmp_c="$c"
+	cd ..
+?X: preserve symbolic links, if any
+	cp $config_sh config.sh 2>/dev/null
+	chmod +w config.sh
+	. ./config.sh
+	cd UU
+	cp ../config.sh .
+	n="$tmp_n"
+	c="$tmp_c"
+	hint=previous
+	;;
+esac
+test "$override" && . ./optdef.sh
+myuname="$newmyuname"
+
+: Restore computed paths
+for file in $loclist $trylist; do
+	eval $file="\$_$file"
+done
+
+@if osname || osvers
+cat << EOM
+
+Configure uses the operating system name and version to set some defaults.
+The default value is probably right if the name rings a bell. Otherwise,
+since spelling matters for me, either accept the default or answer "none"
+to leave it blank.
+
+EOM
+@end
+@if osname
+case "$osname" in
+	''|' ')
+		case "$hintfile" in
+		''|' '|none) dflt=none ;;
+		*)  dflt=`echo $hintfile | $sed -e 's/\.sh$//' -e 's/_.*$//'` ;;
+		esac
+		;;
+	*) dflt="$osname" ;;
+esac
+rp="Operating system name?"
+. ./myread
+case "$ans" in
+none)  osname='' ;;
+*) osname=`echo "$ans" | $sed -e 's/[ 	][	]*/_/g' | ./tr '[A-Z]' '[a-z]'`;;
+esac
+@end
+@if osvers
+@if osname
+echo " "
+@end
+case "$osvers" in
+	''|' ')
+		case "$hintfile" in
+		''|' '|none) dflt=none ;;
+		*)	dflt=`echo $hintfile | $sed -e 's/\.sh$//' -e 's/^[^_]*//'`
+			dflt=`echo $dflt | $sed -e 's/^_//' -e 's/_/./g'`
+			case "$dflt" in
+			''|' ') dflt=none ;;
+			esac
+			;;
+		esac
+		;;
+	*) dflt="$osvers" ;;
+esac
+rp="Operating system version?"
+. ./myread
+case "$ans" in
+none)  osvers='' ;;
+*) osvers="$ans" ;;
+esac
+
+@end

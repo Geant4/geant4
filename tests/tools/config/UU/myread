@@ -1,0 +1,160 @@
+#!/bin/sh
+xxxm=$dflt
+case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+ans='!'
+case "$fastread" in
+yes) case "$dflt" in
+	'') ;;
+	*) ans='';
+		case "$silent-$rp" in
+		true-) ;;
+		*) echo " " >&4;;
+		esac;;
+	esac;;
+*) case "$silent" in
+	true) case "$rp" in
+		'') ans='';;
+		esac;;
+	esac;;
+esac
+while expr "X$ans" : "X!" >/dev/null; do
+	read answ
+	set x $xxxm
+	shift
+	aok=''; eval "ans=\"$answ\"" && aok=y
+	case  "$answ" in
+	"!")
+		sh 1>&4
+		echo " "
+		case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+		;;
+	!*)
+		set x `expr "X$ans" : "X!\(.*\)$"`
+		shift
+		sh 1>&4 -c "$*"
+		echo " "
+		case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+		;;
+	"$ans")
+		case "$ans" in
+		\&*)
+			set x `expr "X$ans" : "X&\(.*\)$"`
+			shift
+			case "$1" in
+			-d)
+				fastread=yes
+				echo "(OK, I'll run with -d after this question.)" >&4
+				;;
+			-*)
+				echo "*** Sorry, $1 not supported yet." >&4
+				;;
+			esac
+			case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+			ans=!
+			;;
+		esac;;
+	*)
+		case "$aok" in
+		y)
+			echo "*** Substitution done -- please confirm."
+			xxxm="$ans"
+			ans=`echo  "$ans\c" | tr '\012' ' '`
+			xxxm="$ans"
+			ans=!
+			;;
+		*)
+			echo "*** Error -- try again."
+			ans=!
+			;;
+		esac
+		case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+		;;
+	esac
+	case "$ans$xxxm$nostick" in
+	'')
+		ans=!
+		case "$xxxm" in
+'') echo  "$rp \c" >&4;;
+*) case "$rp" in
+	'') echo  "[$xxxm] \c";;
+	*)
+		if test `echo "$rp [$xxxm]  " | wc -c` -ge 80; then
+			echo "$rp" >&4
+			echo  "[$xxxm] \c" >&4
+		else
+			echo  "$rp [$xxxm] \c" >&4
+		fi
+		;;
+	esac;;
+esac
+		;;
+	esac
+done
+case "$ans" in
+'') ans="$xxxm";;
+esac

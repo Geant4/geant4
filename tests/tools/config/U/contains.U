@@ -1,0 +1,46 @@
+?RCS: $Id: contains.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:05:35  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?MAKE:contains: Nothing
+?MAKE:	-pick add $@ %<
+?S:contains:
+?S:	This variable holds the command to do a grep with a proper return
+?S:	status.  On most sane systems it is simply "grep".  On insane systems
+?S:	it is a grep followed by a cat followed by a test.  This variable
+?S:	is primarily for the use of other Configure units.
+?S:.
+: Some greps do not return status, grrr.
+echo "grimblepritz" >grimble
+if grep blurfldyick grimble >/dev/null 2>&1 ; then
+	contains=contains
+elif grep grimblepritz grimble >/dev/null 2>&1 ; then
+	contains=grep
+else
+	contains=contains
+fi
+rm -f grimble
+: the following should work in any shell
+case "$contains" in
+contains*)
+	echo " "
+	echo "Grep doesn't return a status!!  Attempting remedial action."
+	cat >contains <<'EOSS'
+grep "$1" "$2" >.greptmp && cat .greptmp && test -s .greptmp
+EOSS
+chmod +x contains
+esac
+

@@ -1,0 +1,106 @@
+?RCS:
+?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections: \
+	Myread Getfile cat rm g4system
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+echo " "
+
+case "$g4data" in
+'')
+	g4data=$g4install/data
+	;;
+esac
+
+case "$g4levelgammadata" in
+'')
+	g4levelgammadata=$g4data/PhotonEvaporation
+	;;
+esac
+
+case "$g4radioactivedata" in
+'')
+	g4radioactivedata=$g4data/RadiativeDecay
+	;;
+esac
+
+case "$g4ledata" in
+'')
+	g4ledata=$g4install/../G4EMLOW0.3
+	;;
+esac
+
+case "$g4neutronhpcrosssections" in
+'')
+	g4neutronhpcrosssections=$g4install/../G4NDL0.2
+	;;
+esac
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify directories where the Geant4 data is installed:
+
+1) G4LEVELGAMMADATA:		$g4levelgammadata
+
+2) G4RADIOACTIVEDATA:		$g4radioactivedata
+
+Data which is not part of the default Geant4 distribution:
+
+3) G4LEDATA:			$g4ledata
+
+4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+Select from list above (e.g. 2) 
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+
+	case $gans in
+
+	1) 
+		dflt=$g4levelgammadata
+		fn='f~'
+		rp="Where is Geant4 PhotonEvaporation data installed?"
+		. ./getfile
+		g4levelgammadata=$ans
+		;;
+	2) 
+		dflt=$g4radioactivedata
+		fn='f~'
+		rp="Where is Geant4 RadiativeDecay data installed?"
+		. ./getfile
+		g4radioactivedata=$ans
+		;;
+	3) 
+		dflt=$g4ledata
+		fn='f~'
+		rp="Where is G4EMLOW0.3 data installed ?"
+		. ./getfile
+		g4ledata=$ans
+		;;
+	4) 
+		dflt=$g4neutronhpcrosssections
+		fn='f~'
+		rp="Where is G4NDL0.2 installed?"
+		. ./getfile
+		g4neutronhpcrosssections=$ans
+		;;
+#	[eE]) 
+#		break
+#		;;
+	*) 
+		break
+#		echo " "
+		;;
+	esac
+done

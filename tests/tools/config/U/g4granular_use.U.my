@@ -1,0 +1,55 @@
+?RCS:
+?MAKE:g4lib_use_granular: \
+	Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=""
+	;;
+esac
+
+if [ X$g4granular = Xy ] ; then
+#
+# Ask about g4lib_use_granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Global libraries are used by defaults, you asked to build global
+compound libraries and granular libraries. 
+Do you want to use 'granular' libraries instead?
+EOM`
+
+dflt="n"
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4lib_use_granular=1
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+fi

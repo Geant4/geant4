@@ -1,0 +1,82 @@
+?RCS: $Id: Oldsym.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.3  2000/12/19 07:23:32  sadilov
+?RCS: Moving 'extracted files'+'config.sh' to '.config/bin/$g4system'
+?RCS: (instead of [simple] 'bin/$g4system' previously).
+?RCS:
+?RCS: Revision 1.2  2000/12/12 23:38:18  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.2  2000/11/10 12:00:36  sadilov
+?RCS: Right place for 'config.sh'.
+?RCS:
+?RCS: Revision 1.1  2000/11/08 11:31:04  sadilov
+?RCS: Seems only one string added to 'config.h' by this file.
+?RCS:
+?RCS: Revision 3.0.1.1  1997/02/28  15:06:58  ram
+?RCS: patch61: added support for src.U
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:05:13  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X: 
+?X: This unit follows the creation of the config.sh file. It adds some
+?X: special symbols: defines from patchlevel.h file if any and CONFIG,
+?X: which is set to true. Then, we try to keep all the new symbols that
+?X: may come from a hint file or a previous config.sh file.
+?X: 
+?MAKE:Oldsym: Config_sh test hint src
+?MAKE:	-pick add $@ %<
+?T:CONFIG sym tmp s
+: add special variables
+mkdir -p $g4conf
+$test -f $src/patchlevel.h && \
+awk '/^#define/ {printf "%s=%s\n",$2,$3}' $src/patchlevel.h >> $g4conf/config.sh
+echo "CONFIG=true" >> $g4conf/config.sh
+
+: propagate old symbols
+if $test -f UU/config.sh; then
+?X: Make sure each symbol is unique in oldconfig.sh
+	<UU/config.sh sort | uniq >UU/oldconfig.sh
+?X:
+?X: All the symbols that appear twice come only from config.sh (hence the
+?X: two config.sh in the command line). These symbols will be removed by
+?X: the uniq -u command. The oldsyms file thus contains all the symbols
+?X: that did not appear in the produced config.sh (Larry Wall).
+?X:
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh UU/oldconfig.sh |\
+	sort | uniq -u >UU/oldsyms
+	set X `cat UU/oldsyms`
+	shift
+	case $# in
+	0) ;;
+	*)
+		cat <<EOM
+		
+Hmm...You had some extra variables I don't know about...
+      I'll try to keep 'em...
+
+EOM
+		echo "# Variables propagated from previous config.sh file." >>.config/bin/$g4system/config.sh
+		for sym in `cat UU/oldsyms`; do
+			echo "    Propagating $hint variable "'$'"$sym..."
+			eval 'tmp="$'"${sym}"'"'
+			echo "$tmp" | \
+				sed -e "s/'/'\"'\"'/g" -e "s/^/$sym='/" -e "s/$/'/" >>.config/bin/$g4system/config.sh
+		done
+		;;
+	esac
+fi
+

@@ -1,0 +1,104 @@
+?RCS: $Id: Config_sh.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.2  2000/12/12 23:38:17  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
+?RCS: Start g4conf.
+?RCS:
+?RCS: Revision 1.2  2000/11/08 23:07:02  sadilov
+?RCS: Check&try 'mkdir -p' for right path to 'config.h'.
+?RCS:
+?RCS: Revision 1.1.1.1  2000/11/05 18:34:52  sadilov
+?RCS: START.
+?RCS:
+?RCS: Revision 3.0.1.3  1997/02/28  14:57:53  ram
+?RCS: patch61: added support for src.U
+?RCS:
+?RCS: Revision 3.0.1.2  1995/01/11  14:53:31  ram
+?RCS: patch45: moved path stripping from d_portable.U to end of Configure
+?RCS:
+?RCS: Revision 3.0.1.1  1994/10/29  15:50:37  ram
+?RCS: patch36: added ?F: line for metalint file checking
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:04:48  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X: 
+?X: This unit ends up producing the config.sh script, which contains all the
+?X: definitions figured out by Configure.  The add.Config_sh command knows
+?X: which variables need to be remembered.  It also adds the EOT (ends the
+?X: here document redirection with variable substitution).
+?X: 
+?MAKE:Config_sh: cf_time cf_by test spitshell startsh myuname Myread \
+	End Obsol_sh Loc +d_portable package src
+?MAKE:	-pick add.Config_sh $@ %<
+?MAKE:	-pick add $@ ./Obsol_sh
+?MAKE:	-pick close.Config_sh $@ %<
+?F:!config.over
+?T:file
+: back to where it started
+if test -d ../UU; then
+	cd ..
+fi
+
+: configuration may be patched via a 'config.over' file
+if $test -f config.over; then
+	echo " "
+	dflt=y
+	rp='A config.over file exists.  Do you wish to load it?'
+	. UU/myread
+	case "$ans" in
+	n*) echo "OK, I'll ignore it.";;
+	*)	. ./config.over
+		echo "Configuration settings have been loaded."
+		;;
+	esac
+fi
+
+@if d_portable
+: in case they want portability, strip down executable paths
+?X:
+?X: Strip down paths in located executables. For each file, e.g. vi, there
+?X: is a $vi variable whose value is for instance '/usr/bin/vi'. By resetting
+?X: $vi to 'vi', we rely on the PATH variable to locate the executable...
+?X:
+case "$d_portable" in
+"$define")
+	echo " "
+	echo "Stripping down executable paths..." >&4
+	for file in $loclist $trylist; do
+		eval $file="\$file"
+	done
+	;;
+esac
+
+@end
+: create config.sh file
+echo " "
+echo "Creating config.sh..." >&4
+mkdir -p $g4conf
+$spitshell <<EOT > $g4conf/config.sh
+$startsh
+#
+# This file was produced by running the Configure script. It holds all the
+# definitions figured out by Configure. Should you modify one of these values,
+# do not forget to propagate your changes by running "Configure -der". You may
+# instead choose to run each of the .SH files by yourself, or "Configure -S".
+#
+
+# Package name      : $package
+# Source directory  : $src
+# Configuration time: $cf_time
+# Configured by     : $cf_by
+# Target system     : $myuname
+

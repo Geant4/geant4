@@ -1,0 +1,96 @@
+CONFIG=true
+#echo "Doing variable substitutions on .SH files..."
+if test -f $src/MANIFEST; then
+	set x `awk '{print $1}' <$src/MANIFEST | grep '\.SH'`
+else
+#	echo "(Looking for .SH files under the source directory.)"
+	set x `(cd $src; find . -name "*.SH" -print)`
+fi
+shift
+case $# in
+0) set x `(cd $src; echo *.SH)`; shift;;
+esac
+if test ! -f $src/$1; then
+	shift
+fi
+mkdir_p='
+name=$1;
+create="";
+while test $name; do
+	if test ! -d "$name"; then
+		create="$name $create";
+		name=`echo $name | sed -e "s|^[^/]*$||"`;
+		name=`echo $name | sed -e "s|\(.*\)/.*|\1|"`;
+	else
+		name="";
+	fi;
+done;
+for file in $create; do
+	mkdir $file;
+done
+'
+for file in $*; do
+	case "$src" in
+	".")
+		case "$file" in
+		*/*)
+			dir=`expr X$file : 'X\(.*\)/'`
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
+			(cd $dir && . ./$file_SH && mkdir -p $abssrc/.config/bin/$g4system && mv $file_EX $abssrc/.config/bin/$g4system)
+#			echo Sergei_1
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_1
+			;;
+		*)
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
+			(. ./$file && mkdir -p $abssrc/.config/bin/$g4system && mv file-SH $abssrc/.config/bin/$g4system)
+#			echo Sergei_2
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_2
+			;;
+		esac
+		;;
+	*)
+		case "$file" in
+		*/*)
+			dir=`expr X$file : 'X\(.*\)/'`
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
+			(set x $dir; shift; eval $mkdir_p)
+
+			(sh <$src/$dir/$file_SH && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
+
+#			echo Sergei_3
+#			echo "dir=$dir"
+#			echo "file=$file"
+
+#			echo Sergei_3
+			;;
+		*)
+			file_SH=`expr X$file : 'X.*/\(.*\)'`
+			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
+			(sh <$src/$file && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
+			echo Sergei_4
+			;;
+		esac
+		;;
+	esac
+done
+if test -f $src/config_h.SH; then
+	if test ! -f config.h; then
+	: oops, they left it out of MANIFEST, probably, so do it anyway.
+	. $src/config_h.SH
+	fi
+fi

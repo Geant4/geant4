@@ -1,0 +1,48 @@
+?RCS: $Id: n.U,v 1.1 2001-05-17 10:12:24 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:09:19  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?MAKE:n c: contains
+?MAKE:	-pick add $@ %<
+?S:n:
+?S:	This variable contains the -n flag if that is what causes the echo
+?S:	command to suppress newline.  Otherwise it is null.  Correct usage is
+?S:	    $echo $n "prompt for a question: $c".
+?S:.
+?S:c:
+?S:	This variable contains the \c string if that is what causes the echo
+?S:	command to suppress newline.  Otherwise it is null.  Correct usage is
+?S:	    $echo $n "prompt for a question: $c".
+?S:.
+: first determine how to suppress newline on echo command
+echo " "
+#echo "Checking echo to see how to suppress newlines..."
+(echo "hi there\c" ; echo " ") >.echotmp
+if $contains c .echotmp >/dev/null 2>&1 ; then
+#	echo "...using -n."
+	n='-n'
+	c=''
+else
+#	cat <<'EOM'
+#...using \c
+#EOM
+	n=''
+	c='\c'
+fi
+#echo $n "The star should be here-->$c"
+#echo '*'
+rm -f .echotmp
+

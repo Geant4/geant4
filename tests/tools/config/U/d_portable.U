@@ -1,0 +1,74 @@
+?RCS: $Id: d_portable.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
+?RCS: Was added due to Gabriele's modification of Configure...
+?RCS:
+?RCS: Revision 3.0.1.2  1995/01/11  15:28:52  ram
+?RCS: patch45: executable path stripping moved to the end in Config_sh.U
+?RCS:
+?RCS: Revision 3.0.1.1  1993/12/15  08:21:17  ram
+?RCS: patch15: did not strip variables properly when needed
+?RCS: patch15: now also strips down variables from trylist
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:06:48  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?X:
+?X: The Loc unit is wanted to get the definition of all the locating variables.
+?X:
+?MAKE:d_portable: cat Loc Myread Oldconfig
+?MAKE:	-pick add $@ %<
+?S:d_portable:
+?S:	This variable conditionally defines the PORTABLE symbol, which
+?S:	indicates to the C program that it should not assume that it is
+?S:	running on the machine it was compiled on.
+?S:.
+?C:PORTABLE:
+?C:	This symbol, if defined, indicates to the C program that it should
+?C:	not assume that it is running on the machine it was compiled on.
+?C:	The program should be prepared to look up the host name, translate
+?C:	generic filenames, use PATH, etc.
+?C:.
+?H:#$d_portable PORTABLE	/**/
+?H:.
+?D:d_portable=''
+: decide how portable to be
+case "$d_portable" in
+"$define") dflt=y;;
+*)	dflt=n;;
+esac
+$cat <<'EOH'
+ 
+I can set things up so that your shell scripts and binaries are more portable,
+at what may be a noticable cost in performance.  In particular, if you
+ask to be portable, the following happens:
+
+     1) Shell scripts will rely on the PATH variable rather than using
+	the paths derived above.
+     2) ~username interpretations will be done at run time rather than
+	by Configure.
+@if PHOSTNAME
+     3) The system name will be determined at run time, if at all possible.
+@end
+
+EOH
+rp="Do you expect to run these scripts and binaries on multiple machines?"
+. ./myread
+case "$ans" in
+	y*) d_portable="$define"
+?X:
+?X: Paths will be stripped down (/usr/bin/vi -> vi) in Config_sh.U if needed.
+?X:
+	;;
+	*)  d_portable="$undef" ;;
+esac
+

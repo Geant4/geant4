@@ -1,0 +1,236 @@
+[pcgeant2] /home/sadilov/archive/g4conf.cvs/g4conf > ./Configure
+
+Checking echo to see how to suppress newlines...
+...using -n.
+The star should be here-->*
+
+Beginning of configuration questions for g4conf.
+
+Would you like to see the instructions? [n]
+
+Locating common programs...
+awk is in /usr/bin/awk.
+cat is in /bin/cat.
+expr is in /usr/bin/expr.
+rm is in /bin/rm.
+sed is in /bin/sed.
+touch is in /bin/touch.
+tr is in /usr/bin/tr.
+
+Don't worry if any of the following aren't found...
+date is in /bin/date.
+ln is in /bin/ln.
+test is in /usr/bin/test.
+uname is in /bin/uname.
+Using the test built into your sh.
+
+Symbolic links are supported.
+
+Good, your tr supports [:lower:] and [:upper:] to convert case.
+SADILOV
+/home/sadilov/archive/g4conf.cvs/g4conf/UU
+SADILOV
+ls: *.sh: No such file or directory
+
+You may give one or more space-separated answers, or "none" if appropriate.
+If your OS version has no hints, DO NOT give a wrong version -- say "none".
+
+Which of these apply, if any? [none]
+
+
+
+We should now define G4SYSTEM. It's combined from
+your OS system name and compiler used: Linux-g++.
+
+1) OS           : Linux
+
+2) Compiler     : g++
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+OK, your 'G4SYSTEM' will be Linux-g++.
+
+SADILOV
+.
+SADILOV
+
+I see a config.sh file.  Shall I use it to set the defaults? [n]
+OK, I'll ignore it.
+
+I can set things up so that your shell scripts and binaries are more portable,
+at what may be a noticable cost in performance.  In particular, if you
+ask to be portable, the following happens:
+
+     1) Shell scripts will rely on the PATH variable rather than using
+        the paths derived above.
+     2) ~username interpretations will be done at run time rather than
+        by Configure.
+
+Do you expect to run these scripts and binaries on multiple machines? [n]
+
+SSS
+/home/sadilov/archive/g4conf.cvs/g4conf/UU
+SSS
+g4conf=/home/sadilov/archive/g4conf.cvs/g4conf/bin/Linux-g++
+
+We should now define G4 directories:
+
+1) G4INSTALL:           /afs/cern.ch/user/s/sadilov/geant4
+
+2) G4WORKDIR:           /afs/cern.ch/user/s/sadilov/geant4
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+
+We should now define G4 directories:
+
+1) G4TMP:               /afs/cern.ch/user/s/sadilov/geant4/tmp
+
+2) G4LIB:               /afs/cern.ch/user/s/sadilov/geant4/lib
+
+3) G4BIN:               /afs/cern.ch/user/s/sadilov/geant4/bin
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+
+We should now define CLHEP directories:
+
+1) G4CLHEP_BASE_DIR:            /usr/local
+
+2) G4CLHEP_INCLUDE_DIR:         /usr/local/include
+
+3) G4CLHEP_LIB_DIR:             /usr/local/lib
+
+4) G4CLHEP_LIB:                 CLHEP
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+
+We should now define G4 directories:
+
+1) G4LEVELGAMMADATA:            /afs/cern.ch/user/s/sadilov/geant4/data/PhotonEvaporation
+
+2) G4RADIOACTIVEDATA:           /afs/cern.ch/user/s/sadilov/geant4/data/RadiativeDecay
+
+3) G4LEDATA:                    /afs/cern.ch/user/s/sadilov/geant4/../G4EMLOW0.3
+
+4) G4NeutronHPCrossSections:    /afs/cern.ch/user/s/sadilov/geant4/../G4NDL0.2
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+
+
+Do you want to set DEBUG flag? [n]
+
+
+
+Do you want to build 'global' libraries? [n]
+
+
+
+
+
+
+The default libraries are archive (static) libraries.
+
+Do you want to build 'shared' libraries?
+[n]
+
+
+
+Do you want to use 'granular' libraries? [n]
+
+
+
+We should now define G4USE_OSPACE and OSPACE_BASE_DIR.
+
+1) G4USE_OSPACE:        [NOT DEFINED]   (toggle by selection!)
+
+2) OSPACE_BASE_DIR:
+
+Select from list above (e.g. 2)
+[Press [Enter] for setting default answers and next configuration screen]
+
+End of configuration questions.
+
+
+Creating config.sh...
+
+If you'd like to make any changes to the config.sh file before I begin
+to configure things, do it as a shell escape now (e.g. !vi config.sh).
+
+Press return or use a shell escape to edit config.sh:
+
+Doing variable substitutions on .SH files...It's my file (life:)
+(Looking for .SH files under the source directory.)
+Extracting env.csh (with variable substitutions)
+Sergei_1
+file_SH=env.csh.SH
+file_EX=env.csh
+file=./env.csh.SH
+dir=.
+src=.
+g4system=Linux-g++
+Sergei_1
+Extracting install.csh (with variable substitutions)
+Sergei_1
+file_SH=install.csh.SH
+file_EX=install.csh
+file=./install.csh.SH
+dir=.
+src=.
+g4system=Linux-g++
+Sergei_1
+Extracting install.sh (with variable substitutions)
+Sergei_1
+file_SH=install.sh.SH
+file_EX=install.sh
+file=./install.sh.SH
+dir=.
+src=.
+g4system=Linux-g++
+Sergei_1
+Extracting env.sh (with variable substitutions)
+Sergei_1
+file_SH=env.sh.SH
+file_EX=env.sh
+file=./env.sh.SH
+dir=.
+src=.
+g4system=Linux-g++
+Sergei_1
+
+Now starting installation itself.
+
+On this machine the G4SYSTEM=Linux-g++
+On this machine the G4INSTALL=/afs/cern.ch/user/s/sadilov/geant4
+On this machine the G4BASE=/afs/cern.ch/user/s/sadilov/geant4/source
+On this machine the G4WORKDIR=/afs/cern.ch/user/s/sadilov/geant4
+On this machine the G4TMP=/afs/cern.ch/user/s/sadilov/geant4/tmp
+On this machine the G4LIB=/afs/cern.ch/user/s/sadilov/geant4/lib
+On this machine the G4BIN=/afs/cern.ch/user/s/sadilov/geant4/bin
+On this machine the G4DATA=/afs/cern.ch/user/s/sadilov/geant4/data
+On this machine the G4LEVELGAMMADATA=/afs/cern.ch/user/s/sadilov/geant4/data/PhotonEvaporation
+On this machine the G4CLHEP_BASE_DIR=/usr/local
+On this machine the G4CLHEP_INCLUDE_DIR=/usr/local/include
+On this machine the G4CLHEP_LIB_DIR=/usr/local/lib
+On this machine the G4CLHEP_LIB=CLHEP
+On this machine the G4USE_OSPACE=
+On this machine the G4OSPACE_BASE_DIR=
+On this machine the G4LIB_USE_GRANULAR=
+On this machine the G4DEBUG=
+On this machine the G4LIB_BUILD_SHARED=
+On this machine the G4LIB_BUILD_ARCHIVE=1
+On this machine the G4LIB_USE_SHARED=
+On this machine the G4LIB_USE_ARCHIVE=1
+
+OK, going to /afs/cern.ch/user/s/sadilov/geant4/source and start 'make'...
+
+./Configure: /afs/cern.ch/user/s/sadilov/geant4/source: No such file or directory
+/home/sadilov/archive/g4conf.cvs/g4conf
+make: *** No targets.  Stop.

@@ -1,0 +1,32 @@
+: This file was created by running packinit on Mon Oct 16 16:18:24 CEST 2000.
+: Do not hand edit -- run packinit again if changes are to be made.
+packver='3.036'
+: Basic variables
+package=g4conf
+baserev=1.1
+patchbranch=1
+copyright='COPYRIGHT'
+mydiff='diff -c'
+maintname='Serguei Sadilov'
+maintloc='Serguei.Sadilov@cern.ch'
+ftpsite=''
+orgname='GEANT4'
+newsgroups='""'
+recipients='""'
+ftpdir=''
+mailagent='false'
+changelog='ChangeLog'
+changercs=
+: File lookup extensions
+cext=''
+shext=''
+: Mailing list variables
+list_users='false'
+list_name=''
+list_addr=''
+list_request=''
+list_manager=''
+list_sub=''
+list_unsub=''
+: Derivative variables -- do not change
+revbranch="$baserev.$patchbranch"

@@ -1,0 +1,33 @@
+#!/bin/sh
+case $# in
+0) exit 1;;
+esac
+thing=$1
+shift
+dflt=$1
+shift
+for dir in $*; do
+	case "$thing" in
+	.)
+	if test -d $dir/$thing; then
+		echo $dir
+		exit 0
+	fi
+	;;
+	*)
+	for thisthing in $dir/$thing; do
+		: just loop through to pick last item
+	done
+	if test -f $thisthing; then
+		echo $thisthing
+		exit 0
+	elif test -f $dir/$thing.exe; then
+		: on Eunice apparently
+		echo $dir/$thing
+		exit 0
+	fi
+	;;
+	esac
+done
+echo $dflt
+exit 1
