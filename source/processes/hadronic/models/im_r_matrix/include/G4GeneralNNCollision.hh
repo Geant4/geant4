@@ -81,6 +81,19 @@ class G4GeneralNNCollision : public G4CollisionComposite
     G4ForEach<theChannels, G4CollisionComposite::Resolve>::Apply(aC); 
   }
   
+  template <int Np, class channelType, int Nn> 
+  void MakeNNToDeltaNstar(G4CollisionComposite * aC)
+  {
+    typedef INT4(channelType, NeutronPC, NeutronPC, D1232::D0,  Nn)  theC1;
+    typedef INT4(channelType, NeutronPC, NeutronPC, D1232::Dm,  Np)  theC2;
+    typedef INT4(channelType, ProtonPC,  ProtonPC,  D1232::Dp,  Np)  theC3;
+    typedef INT4(channelType, ProtonPC,  ProtonPC,  D1232::Dpp, Nn)  theC4;
+    typedef INT4(channelType, NeutronPC, ProtonPC,  D1232::D0,  Np)  theC5;
+    typedef INT4(channelType, NeutronPC, ProtonPC,  D1232::Dp,  Nn)  theC6;
+    typedef GROUP6(theC1, theC2, theC3, theC4, theC5, theC6) theChannels;
+    G4ForEach<theChannels, G4CollisionComposite::Resolve>::Apply(aC); 
+  }
+  
   template <int dm, int d0, int dp, int dpp, class channelType> 
   void MakeNNToDeltaDelta(G4CollisionComposite * aC)
   {

@@ -102,4 +102,16 @@ enum
   N2250nPC = 100012110
 
 };
+
+struct D1232
+{
+  enum
+  {
+    Dm=DeltamPC,
+    D0=Delta0PC,
+    Dp=DeltapPC,
+    Dpp=DeltappPC
+  };
+};
+
 #endif
