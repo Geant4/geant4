@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.hh,v 1.8 2001-11-29 11:28:07 maire Exp $
+// $Id: Em1RunAction.hh,v 1.9 2002-05-31 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,8 +41,8 @@
 class G4Run;
 
 #ifndef G4NOHIST
- class HepTupleManager;
- class HepHistogram;
+ class ITree;
+ class IHistogram1D;
 #endif
 
 class Em1RunAction : public G4UserRunAction
@@ -62,7 +62,7 @@ class Em1RunAction : public G4UserRunAction
     void CountProcesses(G4String);
 
 #ifndef G4NOHIST   
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
+    IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
            
   private:  
@@ -75,8 +75,8 @@ class Em1RunAction : public G4UserRunAction
     ProcessesCount*   ProcCounter;   
 
 #ifndef G4NOHIST       
-    HepTupleManager* hbookManager;
-    HepHistogram* histo[3];
+    ITree*        tree;
+    IHistogram1D* histo[3];
 #endif                     
 };
 

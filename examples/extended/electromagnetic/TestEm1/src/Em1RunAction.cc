@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.14 2001-12-07 11:49:10 maire Exp $
+// $Id: Em1RunAction.cc,v 1.15 2002-05-31 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,18 +43,22 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IAnalysisFactory.h"
+ #include "AIDA/ITreeFactory.h"
+ #include "AIDA/ITree.h"
+ #include "AIDA/IHistogramFactory.h"
+ #include "AIDA/IHistogram1D.h"
+ #include "AIDA/IAxis.h"
+ #include "AIDA/IAnnotation.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1RunAction::Em1RunAction()
   : ProcCounter(0)
-{
-#ifndef G4NOHIST
-  hbookManager = 0;
-#endif 
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,15 +72,30 @@ Em1RunAction::~Em1RunAction()
 void Em1RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  hbookManager = new HBookFile("testem1.paw", 68);
+ // Creating the analysis factory
+ IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ 
+ // Creating the tree factory
+ ITreeFactory* tf = af->createTreeFactory();
+ 
+ // Creating a tree mapped to an hbook file.
+ tree = tf->create("testem1.paw", false, false, "hbook");
 
-  // booking histograms
-  histo[0] = hbookManager->histogram
-                       ("track length (mm) of a charged particle",100,0.,50*cm);
-  histo[1] = hbookManager->histogram
-                       ("Nb of steps per track (charged particle)",100,0.,100.);
-  histo[2] = hbookManager->histogram
-                       ("step length (mm) charged particle",100,0.,10*mm);
+ // Creating a histogram factory, whose histograms will be handled by the tree
+ IHistogramFactory* hf = af->createHistogramFactory(*tree);
+
+
+ // booking histograms
+ histo[0] = hf->create1D("1","track length (mm) of a charged particle",
+                         100,0.,50*cm);
+ histo[1] = hf->create1D("2","Nb of steps per track (charged particle)",
+                         100,0.,100.);
+ histo[2] = hf->create1D("3","step length (mm) charged particle",
+                         100,0.,10*mm);
+		       
+ delete hf;
+ delete tf;
+ delete af;		       
 #endif   
 }
 
@@ -85,10 +104,11 @@ void Em1RunAction::bookHisto()
 void Em1RunAction::cleanHisto()
 {
 #ifndef G4NOHIST
-  // writing histogram file
-  hbookManager->write();
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+  
+  delete tree;
   delete [] histo;
-  delete hbookManager;
 #endif   
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1SteppingAction.cc,v 1.7 2001-10-26 12:51:26 maire Exp $
+// $Id: Em1SteppingAction.cc,v 1.8 2002-05-31 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 #include "G4VProcess.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ void Em1SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double steplen = aStep->GetStepLength();
  
 #ifndef G4NOHIST 
- if (charge != 0.) runAction->GetHisto(2)->accumulate(steplen);
+ if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
 #endif                    
 }
 

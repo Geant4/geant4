@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2001-12-07 11:49:08 maire Exp $
+$Id: README,v 1.6 2002-05-31 17:10:34 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -102,8 +102,24 @@ $Id: README,v 1.5 2001-12-07 11:49:08 maire Exp $
       2 : number of steps per track (charged particle)
       3 : step length (charged particle)
 
- Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
- Currently, histograms in this example are implemented through the obsolete
- CLHEP/Hist package, which is no longer supported. The implementation will
- be replaced by direct call to the "analysis" module in a near future.
+ Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ 
+7- Using the Anaphe implementation of the AIDA 2.2 histograms:
+ --------------------------------------------------------------
+
+ In order to use the Anaphe implementation of the AIDA 2.2 interfaces, 
+ prepare some environment variables by source-ing one of the following 
+ startup scripts (depending on your compiler version):
+
+ # gcc-2.95.2
+ source $LHCXXTOP/share/LHCXX/4.0.1/install/sharedstart.sh or .csh
+
+ # egcs_1.1.2 (aka gcc 2.91.66)
+ source $LHCXXTOP/share/LHCXX/4.0.1-sec/install/sharedstart.sh or .csh
+
+ At CERN, $LHCXXTOP is /afs/cern.ch/sw/lhcxx, you may want to use a
+ more recent release, check http:/cern.ch/anaphe for more information.
+
+ After this, you will have access to the 'aida-config' command which
+ is used in the GNUmakefile.
 

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.8 2001-12-07 11:49:09 maire Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.9 2002-05-31 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,13 +137,17 @@ density = 7.870*g/cm3;
 a = 55.85*g/mole;
 G4Material* Fe  = new G4Material(name="Iron"       , z=26., a, density);
 
+density = 19.30*g/cm3;
+a = 183.85*g/mole;
+G4Material* W   = new G4Material(name="Tungsten"   , z=74., a, density);
+
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"        , z=82., a, density);
 
 density = 18.95*g/cm3;
 a = 238.03*g/mole;
-G4Material*  U = new G4Material(name="Uranium"     , z=82., a, density);
+G4Material*  U = new G4Material(name="Uranium"     , z=92., a, density);
 
 
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;

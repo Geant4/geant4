@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1TrackingAction.cc,v 1.7 2001-10-26 12:51:26 maire Exp $
+// $Id: Em1TrackingAction.cc,v 1.8 2002-05-31 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 #include "G4Track.hh"
  
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,8 +59,8 @@ void Em1TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
        {runAction->CountTraks0(1); runAction->CountSteps0(nbSteps);}
   else {runAction->CountTraks1(1); runAction->CountSteps1(nbSteps);
 #ifndef G4NOHIST  
-        runAction->GetHisto(0)->accumulate(Trleng);
-        runAction->GetHisto(1)->accumulate((float)nbSteps);
+        runAction->GetHisto(0)->fill(Trleng);
+        runAction->GetHisto(1)->fill((float)nbSteps);
 #endif	
   }    
 }
