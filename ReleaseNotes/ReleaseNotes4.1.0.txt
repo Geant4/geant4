@@ -58,18 +58,25 @@ detailed list of fixes/additions, please refer to the related History files):
   o Visualization:
     - introduced visualization of *components* of a boolean solid.
       Visualisation of the *result* of the boolean operation will be
-      available soon as a patch;
-    - removed ray tracing, pending re-implementation;
+      available in a future release;
     - introduced new commands (use help <command name> for more information):
       /vis/scene/add/logicalVolume
       /vis/viewer/update
     - improvements to FukuiRenderer (DAWN):
       made destination directory of g4.prim and g4.eps customizable
       with the environmental variable G4DAWNFILE_DEST_DIR; auto
-      incrementation of output file names is now supported.
+      incrementation of output file names is now supported;
+    - removed ray tracing, pending re-implementation.
 
-Note: Geant4 1.0 is based on STL. All direct references to Rogue Wave have
-been removed from the code. See notes below.
+Notes: 
+
+  o  Geant4 1.0 is based on STL. All direct references to Rogue Wave have
+     been removed from the code. See notes below.
+
+  o  The code released in Geant4 1.0 is not ISO/ANSI C++ compliant.
+       A future minor release or patch will be provided that
+       will include the ability to choose between using namespaces in
+       ISO/ANSI mode or using traditional style "includes".
 
 This code and some binary libraries are available through our "Source
 Code" Web page:
@@ -119,9 +126,12 @@ Platforms configured but not tested and not supported:
 2. CLHEP 1.4
 ------------
 
-Geant4 1.0 requires the installation of <A
-href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">CLHEP
-1.4</A>.  The following platform specific instructions apply:
+Geant4 1.0 requires the installation of CLHEP 1.4. 
+
+See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
+CLHEP 1.4</A>.  
+
+The following platform specific instructions apply:
 
   DEC: Do *not* use the compiler option "-std strict_ansi".
 
@@ -135,8 +145,10 @@ href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">CLHEP
 
 The following versions of STL have been tested:
 
-   <A href="http://www.objectspace.com/">ObjectSpace</A> STL on: 
+   ObjectSpace STL on
           DEC, HP, NT and SUN.
+
+          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
 
    "Native" STL on: Linux, HP.
 
@@ -147,29 +159,34 @@ NOTES:
 - Be aware that by default, the installation scripts will expect to use
   the native STL implementation. You must set the G4USE_OSPACE variable
   in the environment in order to select the ObjectSpace implementation.
+
 - Platform specific setup:
-  o DEC: ObjectSpace is required for non-ISO/ANSI-compliant code.
-         Native STL will be used for ISO/ANSI installation (future patch
-	 or minor release).
-  o HP:  either ObjectSpace or native STL can be used for non-ISO/ANSI-
-         compliant code. The default setup for native STL will trigger by
-	 default the ISO/ANSI installation (set G4NO_STD_NAMESPACE in the
-	 environment to avoid that).
-  o SUN: ObjectSpace is required (non-ISO/ANSI installation).
-         Support for CC 5.0 compiler and native STL (ISO/ANSI installation)
-	 will be added soon (future patch or minor release).
-  o Linux: native STL is required (non-ISO/ANSI installation).
-  o NT:  ObjectSpace is required (non-ISO/ANSI installation).
-         Support for native STL and ISO/ANSI installation will be added
-	 soon (future patch or minor release).
+  o DEC:   ObjectSpace is required.
+  o HP:    either ObjectSpace or native STL can be used.  In order to use
+           native STL you must also set the environment variable 
+           G4NO_STD_NAMESPACE.   
+  o SUN:   ObjectSpace is required.
+  o Linux: native STL is required.
+  o NT:    ObjectSpace is required.
+           Support for native STL and ISO/ANSI installation will be added
+	   soon (future patch or minor release).
+
+- A future minor release or patch will allow ISO/ANSI compliant installations.
+  Their characteristics will be:
+  o DEC:  Native STL will be used 
+  o HP:   The setup for native STL will trigger by default the ISO/ANSI 
+          installation (set G4NO_STD_NAMESPACE in the environment to avoid it.)
+  o SUN:  Support for CC 5.0 compiler and native STL (ISO/ANSI installation)
+  o NT:   Support for native STL and ISO/ANSI installation 
+  The modifications to support these installations will be tested soon.
+  They will be made available in a patch or minor release.
 
 Geant4 1.0 is the first release requiring the Standard Template Library.
-To allow a smooth transition from Rogue Wave containers to STL, a good part
-of the code still makes use of the "STL Interface" wrapper classes for which
-the emphasis has been on correct behaviour, not on performance. Also, the
-size of libraries and executables may appear considerably larger than the
-previous Rogue-Wave based versions.
-
+In the interest of stability, a significant part of the code still makes use
+of the "STL Interface" wrapper classes.  For these the emphasis has remained
+on correct behaviour, rather than performance.  The size of libraries and
+executables can appear considerably larger than the previous Rogue-Wave based
+versions. 
 
 4. Persistency
 --------------
@@ -300,10 +317,11 @@ previous Rogue-Wave based versions.
   o In rare cases heavy ions appear not to be properly stopped and killed
     in tracking, therefore Geant4 sticks making many small steps. This
     behavior has been observed on SUN and is under investigation.
-  o There is a known problem reading the data files specified by
-    environment variable G4LEVELGAMMADATA (usually
-    $G4INSTALL/geant4/data/PhotonEvaporation).  A patch resolving this
-    problem will be issued soon.
+  o On WindowsNT, a problem can occur reading the data files associated with 
+    the environment variable G4LEVELGAMMADATA.  (Usually the value 
+    for this variable is  $G4INSTALL/geant4/data/PhotonEvaporation .)
+    A correction that resolves this anomalous behaviour will be issued 
+    soon, in a patch.
 
 
 7. Compilation Warnings
