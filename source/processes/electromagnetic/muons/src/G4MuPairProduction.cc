@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.12 2000-02-22 10:40:37 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.13 2000-03-01 09:05:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -660,13 +660,19 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
      }
    }
 
-   xc = log(CutInPairEnergy/MinPairEnergy)/log(MaxPairEnergy/MinPairEnergy) ;
-   yc = log(xc) ;
+   if( CutInPairEnergy <= MinPairEnergy)
+     iy = 0 ;
+   else
+   {
+     xc = log(CutInPairEnergy/MinPairEnergy)/log(MaxPairEnergy/MinPairEnergy) ;
+     yc = log(xc) ;
    
-   iy = -1 ;
-   do {
-       iy += 1 ;
-      } while ((ya[iy] < yc )&&(iy < NBINminus1)) ;
+     iy = -1 ;
+     do {
+         iy += 1 ;
+        } while ((ya[iy] < yc )&&(iy < NBINminus1)) ;
+   }
+
    G4double norm = proba[izz][itt][iy] ;
 
    G4double r = norm+G4UniformRand()*(1.-norm) ;
@@ -810,10 +816,10 @@ void G4MuPairProduction::PrintInfoDefinition()
            comments += "         Good description up to 1000 TeV.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
+         << "\n    PhysicsTables from " << G4BestUnit(LowerBoundLambda,
                                                      "Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
-         << " in " << TotBin << " bins. \n";
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy")
+         << " in " << NbinLambda << " bins. \n";
 }
 
 

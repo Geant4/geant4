@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.9 2000-02-22 10:40:37 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.10 2000-03-01 09:05:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -582,9 +582,9 @@ void G4MuBremsstrahlung::PrintInfoDefinition()
            comments += "         Good description up to 1000 TeV.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
+         << "\n    PhysicsTables from " << G4BestUnit(LowerBoundLambda,
                                                      "Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
-         << " in " << TotBin << " bins. \n";
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy")
+         << " in " << NbinLambda << " bins. \n";
 }
 
