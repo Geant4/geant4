@@ -20,8 +20,12 @@
 
 #include "vector"
 
+G4int test();
+
 int main() {
- 
+
+  test(); 
+
   //  G4double init = G4UniformRand();
   G4int verboseLevel = 1;
   
@@ -142,4 +146,11 @@ int main() {
   }
 
   return 0;       
-}
+};
+
+G4int test() {
+
+  G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
+
+  return 0;
+};
