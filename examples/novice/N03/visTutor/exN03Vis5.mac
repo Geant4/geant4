@@ -43,9 +43,6 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi   45 45 
 
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
-# Attach the just created Go scene graph to the viewer.
 /vis/viewer/update
 /vis/scene/notifyHandlers
 
