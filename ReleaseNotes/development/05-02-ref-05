@@ -33,7 +33,7 @@ geometry/biasing                        geombias-V05-02-03
 ----------------
 - Migrated calls to G4Exception to new scheme.
 
-geometry/divisions                      geomdiv-V05-02-03
+geometry/divisions                      geomdiv-V05-02-03a
 ------------------
 - Completed implementation for Para, Trd.
 - Corrections for cons and tubs.
